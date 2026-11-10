@@ -469,15 +469,15 @@ uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal) {
 }
 
 void __fastcall CLIENT_SetUnitFlag(D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
     if (bSet) {
-      *(uint16_t*)&pUnit->pUnitData.pUnitDataPlayer->unk0x28 |= wFlag;
+      *(uint16_t*)&pUnit->pUnitData.pUnitDataMonster->pAiGeneral |= wFlag;
       return;
     }
 
-    *(uint16_t*)&pUnit->pUnitData.pUnitDataPlayer->unk0x28 &= ~wFlag;
+    *(uint16_t*)&pUnit->pUnitData.pUnitDataMonster->pAiGeneral &= ~wFlag;
 }
 
 void __fastcall Unreferenced_00460760(D2UnitStrc * param_1, int param_2) {

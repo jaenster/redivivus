@@ -50,14 +50,11 @@ void __fastcall Q05_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, 
 // this player's record QUESTSTATE_Completed + QUESTSTATE_JustCompleted. Does NOT itself drop loot;
 // it stamps quest state so the kill/loot path treats the tower as cleared for this player.
 BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// 1.14d: 0x594e70 | A1Q5 "The Forgotten Tower" — Cairn Stone (Stony Field cairn marker) operate handler.
-// Fired when a player operates the cairn-stone object that introduces the quest. Plays the object's
-// open animation (SetEvent) when the operator unit is null/dead, then ensures the quest exists and is
-// past introduction. Sends the NPC-info packet (0x7f) to the operator. If the quest state flag is still
-// < 2, advances it to 2 (quest now active/in-log) and, if it was at the very first state (prev==0),
-// sets the A1Q5 bTalkedToNPC flag — this is the "quest log entry granted" transition.
+// A1Q5 "The Forgotten Tower" - Tower Tome operate fn (OperateFn 6), the book that starts the quest.
+// Plays the object's open animation (SetEvent) when the operator unit is null/dead, makes sure the quest exists and is past introduction, sends the NPC-info packet (0x7f) to the operator and moves the quest state flag to 2 (quest log entry granted), setting bTalkedToNPC on the first transition.
+// Slot from objects.txt OperateFn 6.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
-BOOL __fastcall OBJOP_A1Q5_ActivateCairnStone(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(struct D2ObjectOperateFnArg * pOperation);
 // A1Q5 (Forgotten Tower) per-player completion iterator callback (invoked from Q05_OnTowerComplete for each player). Skips players already Completed. If the player is in LEVEL_TowerCellarLevel5: sets JustCompleted+Completed, clears RewardAwaits, fires attach-sound event 0x25, and appends the player GUID into the quest's bounded reward-GUID array (capacity 0xc). Players outside the tower level receive QUESTSTATE_CannotCompleteQuestInGame instead.
 BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // 1.14d: 0x594fd3 | A1Q5 "The Forgotten Tower" — top-level completion handler (Countess slain).

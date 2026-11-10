@@ -2438,7 +2438,7 @@ D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(D2DrlgLevelStrc * pLev
     pRoomEx->sCoords.WorldPosition.x = nX;
     pRoomEx->sCoords.WorldPosition.y = nY;
     DrlgRoom::AddRoomExToLevel(pLevel, pRoomEx);
-    D2DrlgRoomExDataMazeStrc* pRoomExDataOutRoom = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     pRoomEx->eRoomExFlags = pRoomEx->eRoomExFlags | dwRoomFlags | 0x80000U;
     pRoomEx->nDT1Mask = dwDT1Mask;
     pRoomExDataOutRoom->dwFlags = dwOutdoorFlags;

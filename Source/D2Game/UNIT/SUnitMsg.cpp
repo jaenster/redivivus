@@ -1175,7 +1175,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
         }
       break;
       case UNIT_OBJECT:
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x51_NEWOBJECT(pClient, 'Q', '\x02', pUnit->nUnitGUID, (uint16_t)pUnit->nClassId, wPosX, wPosY, *(uint8_t*)&pUnit->eAnimMode, pUnit->pUnitData.pUnitDataMonster->Components[0]);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x51_NEWOBJECT(pClient, 'Q', '\x02', pUnit->nUnitGUID, (uint16_t)pUnit->nClassId, wPosX, wPosY, *(uint8_t*)&pUnit->eAnimMode, pUnit->pUnitData.pUnitDataObject->nShrineId);
       if (pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 4U) {
         GAME::SCmd::NET_D2GS_SERVER_Send_0x60_SETWARPDEST(pClient, pUnit);
         pGame_00 = pGameSaved;

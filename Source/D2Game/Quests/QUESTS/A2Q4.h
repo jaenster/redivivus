@@ -74,8 +74,9 @@ BOOL __fastcall Q12_IsSanctuaryComplete(::SGAMEDATA * pGame);
 BOOL __fastcall Q12_GetSummonerCoords(::SGAMEDATA * pGame, struct D2CoordStrc * pCoord);
 // A2Q4 - CheckJustCompleted. Per-player iterator: reads (queries, does not write) the JustCompleted(0xd) bit of the Sanctuary record for each player. Side-effect-free probe used during the staff-altar operate flow alongside CheckArcaneAndReward/SetCannotComplete.
 BOOL __fastcall Q12_CheckJustCompleted(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// A2Q4 - OBJOP_StaffOfKingsAltar (object operate fn 42). Operating the Staff/Sanctuary altar object: sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if quest is introduced and not yet at stateFlag 5 advances to 5 and runs the per-player iterators CheckArcaneAndReward (grant), SetCannotComplete, and CheckJustCompleted.
-BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(struct D2ObjectOperateFnArg * pOperation);
+// A2Q4 Horazon's Journal operate fn (OperateFn 42, Arcane Sanctuary). Sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if the quest is introduced and below state 5 advances it to 5 and runs the per-player iterators CheckArcaneAndReward, SetCannotComplete and CheckJustCompleted. Reading it opens the way to the Canyon of the Magi.
+// Slot from objects.txt OperateFn 42.
+BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(struct D2ObjectOperateFnArg * pOperation);
 // A2Q4 \"The Arcane Sanctuary\" — object init-fn for the Sanctuary portal and Palace Cellar Level 3 objects. Reads the A1Q4 quest-specific sSub to determine whether the object is in LEVEL_ArcaneSanctuary (syncs nPortalGUID[1] slot) or LEVEL_PalaceCellarLevel3 (syncs field_0x2C slot). Sets the object update flag and schedules its first activation event using the object's FrameCnt[1]. No quest-record state writes.
 void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(struct D2ObjectInitFnArg * pInitArg);
 // A2Q4 - SetObjectOperateState. Toggles the two paired Sanctuary-portal substate fields when an object is operated. nParam 0x4a: if Cellar field unset, set it to 1 and mark portal substate 2. nParam 0x36: if portal substate unset, set portal 1 and Cellar field 2. Keeps the Cellar<->Sanctuary portal pair consistent. No quest-record writes.

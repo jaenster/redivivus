@@ -97,11 +97,11 @@ void __fastcall SetLevelId(D2UnitStrc * pUnit, eD2LevelId eLevel) {
 }
 
 eD2LevelId __fastcall GetMonsterArea(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataPlayer : 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return LEVEL_None;
     }
 
-    return pUnit->pUnitData.pUnitDataPlayer->nAcceptTradeTick;
+    return pUnit->pUnitData.pUnitDataMonster->eLevelId;
 }
 
 uint32_t __fastcall GetMonsterFlags(D2UnitStrc * pUnit, uint16_t eFlag) {
@@ -307,26 +307,25 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
     pMonsterLevelData->nDifficulty = (uint32_t)pGame->nDifficulty;
 }
 
-// Randomises the 16 visual component slots of a monster unit. Two paths: if nParam is 0 or its byte[3] is 0, iterates all 16 component indices via GetComponentsData and seeds each slot by RNG (power-of-two fast-path uses bitmask; otherwise modulo). Writes results into pUnitData->szCharName+4. If nParam has a count in byte[3], uses RANDOM_RandomNumberSelector to pick one appearance entry from the nParam table and writes it into pUnitData->sSeed/nPlayerGUID/nModSeed fields. No-ops on null unit or non-monster.
-void __fastcall MONSTER_RollComponentAppearance(uint8_t * nParam, D2UnitStrc * pUnit) {
+// Randomises the 16 visual component slots of a monster unit. Two paths: if pMonRegionField is 0 or its byte[3] is 0, iterates all 16 component indices via GetComponentsData and seeds each slot by RNG (power-of-two fast-path uses bitmask; otherwise modulo). Writes results into pUnitData->szCharName+4. If pMonRegionField has a count in byte[3], uses RANDOM_RandomNumberSelector to pick one appearance entry from the pMonRegionField table and writes it into pUnitData->sSeed/nPlayerGUID/nModSeed fields. No-ops on null unit or non-monster.
+void __fastcall MONSTER_RollComponentAppearance(D2MonsterRegionFieldStrc * pMonRegionField, D2UnitStrc * pUnit) {
+    D2SeedStrc DVar2;
     uint32_t nRollResult;
     uint8_t byComponent;
     int nLoopCount;
     uint32_t nComponentIndex;
-    char* pComponentData;
+    uint8_t* pComponentData;
+    D2UnitDataMonsterStrc* pMonsterData;
     uint64_t nSeedHighU;
     uint32_t nSeedLow;
-    uint32_t* pAppearanceEntry;
-    D2UnitDataItemStrc* pItemData;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
-    if (!nParam || nParam[3] <= 0) {
-      D2SeedStrc DVar1;
-      if (false || !pUnit->pUnitData.pUnitDataPlayer) {
+    if (!pMonRegionField || pMonRegionField->pad <= 0) {
+      if (false || !pUnit->pUnitData.pUnitDataMonster) {
         pComponentData = 0;
       } else {
-        pComponentData = pUnit->pUnitData.pUnitDataPlayer->szCharName + 4;
+        pComponentData = pUnit->pUnitData.pUnitDataMonster->Components;
       }
 
       nComponentIndex = 0;
@@ -339,15 +338,15 @@ void __fastcall MONSTER_RollComponentAppearance(uint8_t * nParam, D2UnitStrc * p
           nSeedLow = pUnit->sSeed.nSeedLow;
           nSeedHighU = (uint64_t)pUnit->sSeed.nSeedHigh;
           if (nRollResult & nRollResult - 1) {
-            DVar1 = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighU);
-            pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-            pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-            byComponent = (uint8_t)(DVar1.nSeedLow % nRollResult);
+            DVar2 = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighU);
+            pUnit->sSeed.nSeedHigh = DVar2.nSeedHigh;
+            pUnit->sSeed.nSeedLow = DVar2.nSeedLow;
+            byComponent = (uint8_t)(DVar2.nSeedLow % nRollResult);
           } else {
-            DVar1 = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighU);
-            pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-            pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-            byComponent = (char)nRollResult - 1U & (uint8_t)DVar1.nSeedLow;
+            DVar2 = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighU);
+            pUnit->sSeed.nSeedHigh = DVar2.nSeedHigh;
+            pUnit->sSeed.nSeedLow = DVar2.nSeedLow;
+            byComponent = (char)nRollResult - 1U & (uint8_t)DVar2.nSeedLow;
           }
         }
 
@@ -356,15 +355,16 @@ void __fastcall MONSTER_RollComponentAppearance(uint8_t * nParam, D2UnitStrc * p
         nLoopCount--;
       } while (nLoopCount);
     } else {
-      nRollResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)nParam[3]);
-      pAppearanceEntry = (uint32_t*)(nParam + nRollResult * 0x10 + 4);
+      D2MonsterRegionFieldSubStrc* pDVar1;
+      nRollResult = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMonRegionField->pad);
+      pDVar1 = pMonRegionField->aArray + nRollResult;
       if (pUnit->eUnitType == UNIT_MONSTER) {
-        pItemData = pUnit->pUnitData.pUnitDataItem;
-        if (pItemData && &pItemData->sSeed) {
-          pItemData->sSeed.nSeedLow = *pAppearanceEntry;
-          pItemData->sSeed.nSeedHigh = pAppearanceEntry[1];
-          pItemData->nPlayerGUID = pAppearanceEntry[2];
-          pItemData->nModSeed = pAppearanceEntry[3];
+        pMonsterData = pUnit->pUnitData.pUnitDataMonster;
+        if (pMonsterData && pMonsterData->Components) {
+          *(uint32_t*)pMonsterData->Components = *(uint32_t*)pDVar1->aComponentVariants;
+          *(uint32_t*)(pMonsterData->Components + 4) = *(uint32_t*)(pDVar1->aComponentVariants + 4);
+          *(uint32_t*)(pMonsterData->Components + 8) = *(uint32_t*)(pDVar1->aComponentVariants + 8);
+          *(uint32_t*)(pMonsterData->Components + 0xc) = *(uint32_t*)(pDVar1->aComponentVariants + 0xc);
           return;
         }
       }
@@ -373,10 +373,10 @@ void __fastcall MONSTER_RollComponentAppearance(uint8_t * nParam, D2UnitStrc * p
 
 // 2022.01.09 - dzik
 BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
-    char* pComponents = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataPlayer ? 0 : pUnit->pUnitData.pUnitDataPlayer->szCharName + 4;
+    uint8_t* pComponents = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->Components;
     int i = 0;
     do {
-      if (*pComponents != '\0') {
+      if (*pComponents) {
         return 1;
       }
 
@@ -534,17 +534,17 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
     if (nTmpInt != 0x137) {
       if (nTmpInt == 0x138 && (dwTmpStat = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4) , pUnit->eUnitType == UNIT_MONSTER)) {
-        if (pUnit->pUnitData.pUnitDataPlayer) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[0xe] = (char)dwTmpStat;
+        if (pUnit->pUnitData.pUnitDataMonster) {
+          pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)dwTmpStat;
         }
-        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[0xf] = (char)dwTmpStat;
+        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+          pUnit->pUnitData.pUnitDataMonster->Components[0xb] = (uint8_t)dwTmpStat;
         }
       }
     } else {
       nTmpVal = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[0xe] = (char)nTmpVal;
+      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+        pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)nTmpVal;
       }
     }
 

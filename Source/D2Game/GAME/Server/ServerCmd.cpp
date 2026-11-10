@@ -42,8 +42,8 @@ void __fastcall Unreferenced_0053b140(D2BitBufferStrc * pBitBuffer, uint16_t nVa
 }
 
 int __fastcall Unreferenced_0053b180(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataPlayer) {
-      return (intptr_t)&param_1->pUnitData.pUnitDataPlayer->nOwnerGUID;
+    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster) {
+      return (intptr_t)&param_1->pUnitData.pUnitDataMonster->nOwnerGUID;
     }
 
     return 0;

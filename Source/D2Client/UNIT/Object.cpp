@@ -955,7 +955,7 @@ static void OBJECT_DispatchShrineClientFunc(D2UnitStrc * pUnit) {
 }
 
 void __fastcall SetShrineTextInfo(D2UnitStrc * pUnit) {
-    D2ShrinesTxt* pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine((uint32_t)pUnit->pUnitData.pUnitDataMonster->Components[0]);
+    D2ShrinesTxt* pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine((uint32_t)pUnit->pUnitData.pUnitDataObject->nShrineId);
     D2Common::Units::SetShrineTxtRecordInObjectData(pUnit, pShrinesTxt);
     OBJECT_DispatchShrineClientFunc(pUnit);
 }
@@ -1410,7 +1410,7 @@ void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
         exit(-1);
       }
 
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pMessage[2];
+      pUnit->pUnitData.pUnitDataObject->nShrineId = pMessage[2];
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
       if (pMessage[1] & 2) {
         byPortalFlags |= 2;

@@ -485,8 +485,8 @@ void __fastcall MONSTER_BuildUniqueName(D2UnitStrc * pUnit, uint16_t * wszText, 
 }
 
 uint32_t __fastcall MONSTER_GetNameModifierStringId(D2UnitStrc * pUnit, uint16_t wMask) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return (uint32_t)(*(uint16_t*)&pUnit->pUnitData.pUnitDataPlayer->unk0x28 & wMask);
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return (uint32_t)(*(uint16_t*)&pUnit->pUnitData.pUnitDataMonster->pAiGeneral & wMask);
     }
 
     return 0;
@@ -510,19 +510,19 @@ void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wPara
 // Returns the address of the monster data's AI slot (+0x30). The client never allocates a server AI there; it uses the slot as an int think-delay in frames, decremented each update and reloaded with 5..0x20.
 // Provenance: 1.14d asm 004ae123 LEA EAX,[ECX+0x30]; all 13 callers store small integers through it.
 int32_t * __fastcall GetMonsterAi(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataPlayer : 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
     }
 
-    return (int32_t*)&pUnit->pUnitData.pUnitDataPlayer->pMonsterAi;
+    return (int32_t*)&pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
 }
 
 int32_t __fastcall GetOwnerGUID(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataPlayer : 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return -1;
     }
 
-    return pUnit->pUnitData.pUnitDataPlayer->nOwnerGUID;
+    return pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
 }
 
 void __fastcall SetOwnerGUID(D2UnitStrc * pUnit, int32_t nOwnerGUID) {
@@ -534,11 +534,11 @@ void __fastcall SetOwnerGUID(D2UnitStrc * pUnit, int32_t nOwnerGUID) {
 }
 
 int * __fastcall MONSTER_GetAiDataPtr(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataPlayer : 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
     }
 
-    return (int*)&pUnit->pUnitData.pUnitDataPlayer->pArena;
+    return &pUnit->pUnitData.pUnitDataMonster->nAiRelated1;
 }
 
 void __fastcall Unreferenced_004ae190(D2UnitStrc * param_1, int param_2) {
@@ -2764,7 +2764,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\Monster.cpp", 0x946);
     }
     MONUNIQUE_DispatchModWalk(pUnit);
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataObject && pUnit->pUnitData.pUnitDataObject->szOwnerName[0] & 1U) {
+    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && (uintptr_t)pUnit->pUnitData.pUnitDataMonster->pAiGeneral & 1) {
       if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
         MONSTER_ResetToNeutralFacingTarget(pUnit);
       }
@@ -2798,9 +2798,9 @@ D2UnitStrc * __fastcall Unreferenced_004b1030(D2UnitStrc * param_1) {
 uint32_t __fastcall NPCMENU_ParseSpeechData(D2UnitStrc * pUnit, uint8_t * pParam, int * pnSpeechResult) {
     *pParam = 1;
     *pnSpeechResult = -1;
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
+    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       int nSpeechId;
-      nSpeechId = pUnit->pUnitData.pUnitDataPlayer->nOwnerGUID;
+      nSpeechId = pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
       if (nSpeechId != -1) {
         *pnSpeechResult = nSpeechId;
         *pParam = 0;

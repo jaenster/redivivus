@@ -1547,7 +1547,7 @@ int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheck
     if (!pAllyUnit) {
       return 1;
     }
-    if (!(pAllyUnit->eUnitType == UNIT_MONSTER && pAllyUnit->pUnitData.pUnitDataPlayer ? pAllyUnit->pUnitData.pUnitDataPlayer->pMonsterAi : 0)) {
+    if (!(pAllyUnit->eUnitType == UNIT_MONSTER && pAllyUnit->pUnitData.pUnitDataMonster ? pAllyUnit->pUnitData.pUnitDataMonster->pMonsterAi : 0)) {
       return 3;
     }
 
@@ -3457,7 +3457,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, D2
     if (!pNpc) {
       return SERVERSTATUS_BAD_TARGET;
     }
-    if (!(pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataPlayer ? pNpc->pUnitData.pUnitDataPlayer->pMonsterAi : 0)) {
+    if (!(pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster ? pNpc->pUnitData.pUnitDataMonster->pMonsterAi : 0)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
@@ -3493,7 +3493,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x30_NpcCancelDialog(::SGAMEDATA * pGame
     if (!pNpc) {
       return SERVERSTATUS_BAD_TARGET;
     }
-    if (!(pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataPlayer ? pNpc->pUnitData.pUnitDataPlayer->pMonsterAi : 0)) {
+    if (!(pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster ? pNpc->pUnitData.pUnitDataMonster->pMonsterAi : 0)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 

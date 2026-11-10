@@ -98,9 +98,10 @@ void __fastcall OBJMODE_SpawnSiegeMonsterA(::SGAMEDATA * pGame, struct D2UnitStr
 void __fastcall OBJMODE_SpawnSiegeMonsterB(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall OBJMODE_SpawnSiegeMonsterC(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall OBJMODE_SpawnSiegeMonsterD(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-// Object operate-fn for the Horadric Cube chest object. If the cube is closed (Death mode or null) and the player is not already trading: checks the player's inventory for a Gem-type item (required to open the cube); if absent plays a sound. If a gem is present, sets interact info to the cube's GUID, marks the cube open (SetupUpdateFlag 3), and sends SCMD 0x58 (OpenUI) to the client. If the cube is already open (Run mode) and it matches the current NPC interaction, closes it (ClearInteractInfo, SetupUpdateFlag 1). Always returns 1.
+// Obelisk operate fn (OperateFn 17). If the object is closed and the player is not trading, checks the player's inventory for a gem; without one it plays a sound, with one it sets the interact target, marks the object open (update flag 3) and sends SCMD 0x58 to open the UI. When open and matching the current interaction it closes it.
+// Slot from objects.txt OperateFn 17.
 // @sourcefile .\OBJECTS\ObjMode.cpp
-BOOL __fastcall OBJOP_OpenHoradricCube(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall OBJOP_UseObelisk(struct D2ObjectOperateFnArg * pOperation);
 uint32_t __fastcall UNIT_IsAlive(struct D2UnitStrc * pUnit, struct D2UnitFindArgStrc * pUnitFindArg);
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.
 uint32_t __fastcall OBJECT_CanTargetMonster(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);

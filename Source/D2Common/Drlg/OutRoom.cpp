@@ -24,14 +24,14 @@
 #define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
 #endif
 
-static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgRoomExDataMazeStrc) == 0x70, "D2_NEW_AT(D2DrlgRoomExDataMazeStrc): the 32-bit layout must be the 0x70 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgOutdoorRoomStrc) == 0x70, "D2_NEW_AT(D2DrlgOutdoorRoomStrc): the 32-bit layout must be the 0x70 bytes 1.14d allocates");
 
 
 namespace D2Common::Drlg::OutRoom {
 
 // @sourcefile .\DRLG\OutRoom.cpp
 void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc * pRoomEx) {
-    D2DrlgRoomExDataMazeStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     if (!pGrid) {
       return;
@@ -43,11 +43,11 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc * pRoomEx) {
     DrlgGrid::DRLGGRID_FreeGrid(pMemory, &pGrid->pCellGrid);
     DrlgVer::DRLGVER_FreeVertices(pMemory, (D2DrlgVertexStrc**)&pGrid->pVertex);
     D2_FREE_POOL_AT(pMemory, pGrid, ".\\DRLG\\OutRoom.cpp", 0xad);
-    pRoomEx->pRoomExData.pRoomExDataMazeRoom = 0;
+    pRoomEx->pRoomExData.pRoomExDataOutdoorRoom = 0;
 }
 
 void __fastcall DRLGOUTROOM_FreeOutRoomEx(D2RoomExStrc * pRoomEx) {
-    D2DrlgRoomExDataMazeStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     if (!pGrid) {
       return;
     }
@@ -62,9 +62,9 @@ void __fastcall DRLGOUTROOM_FreeOutRoomEx(D2RoomExStrc * pRoomEx) {
 
 // @sourcefile .\DRLG\OutRoom.cpp
 void __fastcall DRLGOUTROOM_AllocOutdoorRoomData(D2RoomExStrc * pRoomEx) {
-    D2DrlgRoomExDataMazeStrc* pRoomExDataOutRoom = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgRoomExDataMazeStrc, ".\\DRLG\\OutRoom.cpp", 0xc5);
+    D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgOutdoorRoomStrc, ".\\DRLG\\OutRoom.cpp", 0xc5);
     memset(pRoomExDataOutRoom, 0, 0x70);
-    pRoomEx->pRoomExData.pRoomExDataMazeRoom = pRoomExDataOutRoom;
+    pRoomEx->pRoomExData.pRoomExDataOutdoorRoom = pRoomExDataOutRoom;
 }
 
 } // namespace D2Common::Drlg::OutRoom

@@ -30,11 +30,11 @@
 namespace D2Client::UNIT::MonUnique {
 
 uint8_t * __fastcall GetMonUModList(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataPlayer : 0)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
     }
 
-    return (uint8_t*)pUnit->pUnitData.pUnitDataPlayer->pWaypoint;
+    return pUnit->pUnitData.pUnitDataMonster->MonUModList;
 }
 
 uint16_t __fastcall Unreferenced_004ac760(D2UnitStrc * pUnit) {
@@ -308,7 +308,7 @@ void __fastcall MONUNIQUE_ApplyModifierBishbosh(D2UnitStrc * pUnit, int32_t eMod
     CUnit::FreeLightMap(pUnit);
     if (pUnit) {
       D2SeedStrc sNewSeed;
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer && *(uint8_t*)((char*)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord + 6) & 4) {
+      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->eMonsterType & 4) {
         uSeedStep1 = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pUnit->sSeed.nSeedHigh;
         uSeedStep4 = (uSeedStep1 & 0xffffffff) * 0x6ac690c5 + (uSeedStep1 >> 0x20);
         sNewSeed = D2_SEED_NEXT_VAL(uSeedStep4);

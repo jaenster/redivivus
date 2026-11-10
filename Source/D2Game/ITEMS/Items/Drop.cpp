@@ -2442,7 +2442,7 @@ void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct) {
 
         pUnitNext = pUnit->pRoomNext;
         if (pUnit->eUnitType == UNIT_ITEM) {
-          nExpireFrame = pUnit->pUnitData.pUnitDataObject->nLinkedPortalY;
+          nExpireFrame = pUnit->pUnitData.pUnitDataItem->nActionStamp;
           if (nExpireFrame && nExpireFrame <= nGameFrame) {
             pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
             if (pRoom) {

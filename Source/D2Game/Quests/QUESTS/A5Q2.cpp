@@ -136,7 +136,7 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     bool bAnyRewardGiven;
     int32_t nErrorLine;
     uint16_t nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    D2QuestDataA1Q1Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q1;
+    D2QuestDataA5Q2Strc* pDVar1 = pQuestData->pQuestSpecificData.pA5Q2;
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0x203) {
       return;
     }
@@ -146,7 +146,7 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     *(uint32_t*)(char*)&pBitBuffer2 = (uint32_t)(uintptr_t)pBitBuffer;
     if (nMsgIndex == 0x4e80) {
-      pDVar1->bQuestCompleted = true;
+      pDVar1->bQuestCompleted = 1;
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q2.cpp", 0x100);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q32_UpdateQuestStep);
     } else {
@@ -773,7 +773,7 @@ int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, D2O
       pUnit = Monster::Create::SpawnMonsterAtRoomPos(pQuestData->pGame, nBarricadeObjPtr->pRoom, nBarricadeObjPtr->nX, nBarricadeObjPtr->nY, 0x216, eD2MonsterAnimMode_ns::Neutral, 5, 0);
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
-        pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroupIdx * 5 + nSpawned - 1] = pUnit->nUnitGUID;
+        pQuestData->pQuestSpecificData.pA5Q2->anBarricadeGUIDs[nBarricadeGroupIdx * 5 + nSpawned] = pUnit->nUnitGUID;
         nSpawned++;
         QUEST_AttachToUnitByQuestId(pQuestData->pGame, pUnit, QUESTINT_RescueOnMountArreat);
         if (nSpawned >= 5) {
@@ -877,7 +877,7 @@ BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
       int32_t nBarricadeGroup;
       nBarricadeGroup = Q32_FindBarricadeGroup(pQuestData, pUnit);
-      if (nBarricadeGroup >= 0 && pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1.aPlayerGUID[nBarricadeGroup + 0x18]) {
+      if (nBarricadeGroup >= 0 && pQuestData->pQuestSpecificData.pA5Q2->anWussieKillCount[nBarricadeGroup]) {
         return 1;
       }
     }

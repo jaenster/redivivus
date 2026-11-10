@@ -69,9 +69,10 @@ void __fastcall Q18_Callback04_ItemPickedUp(struct D2QuestDataStrc * pQuestData,
 // Q18_Callback_05 — Lam Esen's Tome, state-5 handler (counterpart to _04). Removes the player from the quest GUID sub-list (e.g. tome dropped/left) and, if active, sets live state flag back to 3 (a3q1.cpp:0x281) and broadcasts state 1. No record-bit writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_Callback05_ItemDropped(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-// OBJOP_A3Q1_KhalimsRelicAltar — Lam Esen's Tome object-operate fn (despite the "KhalimsRelicAltar" label this drops Lam Esen's Tome). When the source unit is dead/absent and the attacker has NOT yet Completed the quest: set the drop item code to the Tome (0x20626262) and ITEM_RewardItemToDrop it; on success update the quest-specific struct, install gossip/NPC handlers (Q18_Callback_00/_11), advance live state flag to 3, and broadcast state 1. If already Completed, just play the Moo sound. Reads record (Completed); does not write record bits.
+// A3Q1 Lam Esen's Tome operate fn (OperateFn 28). When the source unit is dead/absent and the attacker has not completed the quest, drops the tome (item code 0x20626262) via ITEM_RewardItemToDrop, installs the gossip/NPC handlers (Q18_Callback_00/_11), advances the state flag to 3 and broadcasts state 1. If already completed it only plays a sound.
+// Slot from objects.txt OperateFn 28.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
-BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall OBJOP_A3Q1_ActivateLamEsensTome(struct D2ObjectOperateFnArg * pOperation);
 // Q18_Callback_09 — Lam Esen's Tome, state-9 handler. Decrements a pending-update counter (nViperAmuletUpdateFlag, reused field) and, when it reaches 0 during an active quest with bSunDarkened set and live state < 4, marks initialized and broadcasts state 8. No quest-record bits. (Field names inherited from a sibling quest struct; here they gate a deferred object-update.)
 void __fastcall Q18_Callback09_PlayerDroppedWithQuestItem(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q18_Callback_14 — Lam Esen's Tome, state-0xe handler (counterpart to _09). If the player carries the Tome, increments the pending-update counter; on the first increment during an active quest that was initialized, clears the flag and broadcasts state 2. No quest-record bits.

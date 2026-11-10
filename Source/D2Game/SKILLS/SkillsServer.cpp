@@ -220,10 +220,10 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_035_ElementalChargeRelease,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_036_ChargeRelease_MissileRing,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_038_DragonTail_KickAoE,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_040_ChargeRelease_SingleMissile,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_041_BladeFury,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_042_DragonTalon,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_044_SummonBladeSentinel,
@@ -253,7 +253,7 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_068_WarCry,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_069_FindPotion,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_070_DoubleSwing,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_071_IronMaiden_GenericCurse,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_071_Taunt,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_072_FindItem,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_073_BlessedHammer,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_074_DoubleThrow,
@@ -1793,7 +1793,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
         exit(-1);
       }
 
-      pNewPortal->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eSrcLevelId;
+      pNewPortal->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eSrcLevelId;
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pNewPortal);
       byPortalFlags |= 3;
       D2Common::Units::SetObjectPortalFlags(pNewPortal, byPortalFlags);

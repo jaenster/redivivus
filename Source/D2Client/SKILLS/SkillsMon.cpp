@@ -1669,7 +1669,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
     return 0;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Mon_BaalTaunt_AnimCycle(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Mon_QueenDeath(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     int32_t nRepeatCount = D2Common::Skills::SKILL_GetParam1(pSkill);
     int nFrame = pUnit->nGfxCurrentFrame >> 8;

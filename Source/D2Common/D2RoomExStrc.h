@@ -20,8 +20,8 @@
 // Forward declarations
 struct D2DrlgLevelStrc;
 struct D2DrlgOrthStrc;
+struct D2DrlgOutdoorRoomStrc;
 struct D2DrlgPresetRoomStrc;
-struct D2DrlgRoomExDataMazeStrc;
 struct D2DrlgRoomExRoomTileNodeStrc;
 struct D2DrlgTileGridStrc;
 struct D2PresetUnitStrc;
@@ -45,8 +45,8 @@ struct __attribute__((packed)) D2DrlgCoordListStrc {
 union D2DrlgRoomExDataUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
-    /* 0x00 */ struct D2DrlgRoomExDataMazeStrc * pRoomExDataMazeRoom; // DRLG Type = RandomMaze (retyped to D2DrlgRoomExDataMazeStrc)
-    /* 0x00 */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset; // DRLG Type = PresetArea
+    /* 0x00 */ struct D2DrlgOutdoorRoomStrc * pRoomExDataOutdoorRoom; // nPresetType == 1: outdoor room (DRLGOUTROOM_AllocOutdoorRoomData)
+    /* 0x00 */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset; // nPresetType == 2: maze and preset rooms
 };
 
 #endif // D2_DEFINED_D2DrlgRoomExDataUnion
@@ -60,7 +60,7 @@ struct D2RoomExStrc {
     /* 0x0C */ uint16_t awRoomsInList[4]; // Max near rooms array capacity
     /* 0x14 */ D2SeedStrc sSeed; // Room seed (nSeedLow + nSeedHigh)
     /* 0x1C */ struct D2RoomExStrc * pStatusNext; // Forward link in activation priority doubly-linked list
-    /* 0x20 */ D2DrlgRoomExDataUnion pRoomExData; // struct D2DrlgRoomExDataMazeStrc* for maze and outdoor rooms (nPresetType==1), struct D2DrlgPresetRoomStrc* for preset rooms (nPresetType==2)
+    /* 0x20 */ D2DrlgRoomExDataUnion pRoomExData; // struct D2DrlgOutdoorRoomStrc* for outdoor rooms (nPresetType==1), struct D2DrlgPresetRoomStrc* for maze and preset rooms (nPresetType==2)
     /* 0x24 */ struct D2RoomExStrc * pRoomExNext; // Next room in level list
     /* 0x28 */ int eRoomExFlags; // D2DrlgRoomFlags bitmask
     /* 0x2C */ int nDrlgRoomsExNearCount; // Number of near rooms
@@ -70,7 +70,7 @@ struct D2RoomExStrc {
     /* 0x45 */ uint8_t field_0x45;
     /* 0x46 */ uint8_t field_0x46;
     /* 0x47 */ uint8_t field_0x47;
-    /* 0x48 */ int nPresetType; // 1=RandomMaze(outdoor), 2=PresetArea
+    /* 0x48 */ int nPresetType; // 1=outdoor room, 2=preset/maze room
     /* 0x4C */ struct D2DrlgRoomExRoomTileNodeStrc * pRoomTileNodes; // warp tile nodes (D2DrlgRoomExRoomTileNodeStrc, 0x18 each), linked via pRoomTileNext; DRLGROOMEX_AllocRoomTile pushes, FreeDrlgRoomTile frees
     /* 0x50 */ int nDT1Mask; // Bitmask of DT1 tile files to load
     /* 0x54 */ struct D2DrlgTileGridStrc * pRoomTiles; // Room tile data - holds walls/floors/shadows tile arrays

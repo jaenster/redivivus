@@ -1213,7 +1213,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
     D2UnitStrc* pTargetUnit;
     pTargetUnit = pUnderMouse->pTarget;
     if (!pTargetUnit || false) {
-      uint32_t* puVar1;
+      D2AiGeneralStrc** ppDVar1;
       use_default_range:
       nInteractRange = 5;
       approach_or_interact:
@@ -1237,9 +1237,9 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
         nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
         GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x59, nUnitType, nClassId, D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget), nTargetY);
         pTargetUnit = pUnderMouse->pTarget;
-        if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit->pUnitData.pUnitDataPlayer) {
-          puVar1 = &pTargetUnit->pUnitData.pUnitDataPlayer->unk0x28;
-          *(uint16_t*)puVar1 |= 1;
+        if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit->pUnitData.pUnitDataMonster) {
+          ppDVar1 = &pTargetUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+          *(uint16_t*)ppDVar1 |= 1;
         }
 
         UnitMode::UNITMODE_SetAnimMode(pUnderMouse->pTarget, eD2PlayerAnimMode_ns::Neutral);
@@ -2659,8 +2659,8 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
 }
 
 uint8_t * __fastcall Unreferenced_004637f0(D2UnitStrc * param_1) {
-    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataPlayer) {
-      return (uint8_t*)(param_1->pUnitData.pUnitDataPlayer->szCharName + 4);
+    if (param_1 && param_1->eUnitType == UNIT_MONSTER && param_1->pUnitData.pUnitDataMonster) {
+      return param_1->pUnitData.pUnitDataMonster->Components;
     }
 
     return nullptr;

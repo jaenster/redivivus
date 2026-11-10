@@ -1698,7 +1698,7 @@ D2ObjectsTxt * __stdcall GetObjectTxtRecordFromObject(D2UnitStrc * pUnit) {
       exit(-1);
     } else {
       if (pUnit->eUnitType == UNIT_OBJECT) {
-        return (D2ObjectsTxt*)pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+        return pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine;
       }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe43);
@@ -2077,7 +2077,7 @@ uint8_t __stdcall GetObjectPortalFlags(D2UnitStrc * pUnit) {
         exit(-1);
       }
 
-      return pUnit->pUnitData.pUnitDataMonster->Components[1];
+      return pUnit->pUnitData.pUnitDataObject->nPortalFlags;
     }
 }
 
@@ -2091,7 +2091,7 @@ void __stdcall SetObjectPortalFlags(D2UnitStrc * pUnit, uint8_t nPortalFlag) {
         exit(-1);
       }
 
-      pUnit->pUnitData.pUnitDataMonster->Components[1] = nPortalFlag;
+      pUnit->pUnitData.pUnitDataObject->nPortalFlags = nPortalFlag;
       return;
     }
 }
@@ -2106,7 +2106,7 @@ BOOL __stdcall CheckObjectPortalFlag(D2UnitStrc * pUnit, uint8_t nPortalFlag) {
         exit(-1);
       }
 
-      return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->Components[1] & nPortalFlag) != 0);
+      return (uint32_t)((pUnit->pUnitData.pUnitDataObject->nPortalFlags & nPortalFlag) != 0);
     }
 }
 

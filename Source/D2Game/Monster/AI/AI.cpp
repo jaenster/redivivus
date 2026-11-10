@@ -2963,15 +2963,15 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(D2UnitStrc * pSwitchParam, in
 
     switch (pSwitchAiParam) {
       case 1:
-        nTargetGUID = (uint32_t)(uintptr_t)MonsterAI::AI_GetSwitchAiParam2(pUnit);
+        nTargetGUID = MonsterAI::AI_GetSwitchAiParam2(pUnit);
       eTargetUnitType = UNIT_PLAYER;
       break;
       case 2:
-        nTargetGUID = (uint32_t)(uintptr_t)MonsterAI::AI_GetSwitchAiParam2(pUnit);
+        nTargetGUID = MonsterAI::AI_GetSwitchAiParam2(pUnit);
       eTargetUnitType = UNIT_MONSTER;
       break;
       case 4:
-        nTargetGUID = (uint32_t)(uintptr_t)MonsterAI::AI_GetSwitchAiParam2(pUnit);
+        nTargetGUID = MonsterAI::AI_GetSwitchAiParam2(pUnit);
       eTargetUnitType = UNIT_MISSILE;
       break;
       default:
@@ -8454,10 +8454,9 @@ void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pU
     int nPosCoord;
     int32_t bMoveOk1;
     BOOL BVar1;
-    D2MonsterPathParamStrc* pMonsterAiParam;
+    D2MonsterPathParamStrc* pDVar2;
     D2AiCmdArgumentsStrc sHomeCmdArgs;
     eD2UnitType eUnitType;
-    int nDVar2;
     int32_t nGameSaved;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (!pMonStats) {
@@ -8526,7 +8525,12 @@ void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pU
     bMoveOk1 = D2Common::DUNGEON::Dungeon::GetGridIndex(pRoom, bMoveOk1, nPosCoord);
     ::SGAMEDATA* pGameLocal = pGameSaved;
     if (nHomeGridIdx != bMoveOk1) {
-      D2MonsterPathParamStrc* pDVar2 = pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam : 0;
+      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+        pDVar2 = pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam;
+      } else {
+        pDVar2 = 0;
+      }
+
       MonsterMode::SetCombatAndMonStats(pDVar2, 1, 0, '\0');
       pGameLocal = pGameSaved;
       bMoveOk1 = MONSTERAI_CommandMoveToCoords(pGameSaved, pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2]);
@@ -8572,13 +8576,13 @@ void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pU
           return;
         }
       }
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-        nDVar2 = pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
+      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+        pDVar2 = pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam;
       } else {
-        nDVar2 = 0x0;
+        pDVar2 = 0;
       }
 
-      MonsterMode::SetCombatAndMonStats((D2MonsterPathParamStrc*)nDVar2, 1, 0, '\0');
+      MonsterMode::SetCombatAndMonStats(pDVar2, 1, 0, '\0');
       bMoveOk1 = MONSTERAI_CommandMoveToCoords(pGameLocal, pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2]);
       if (bMoveOk1) {
         return;
@@ -8589,12 +8593,7 @@ void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     uint32_t nDistToHome = MONSTERAI_GetDistanceToCoords(pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2]);
     if (nDistToHome > 0x28) {
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-        pMonsterAiParam = (D2MonsterPathParamStrc*)pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
-      } else {
-        pMonsterAiParam = 0;
-      }
-
+      D2MonsterPathParamStrc* pMonsterAiParam = pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam : 0;
       MonsterMode::SetCombatAndMonStats(pMonsterAiParam, 1, 0, '\0');
       bMoveOk1 = MONSTERAI_CommandMoveToCoords(pGameLocal, pUnit, pHomeCmd->nCmdArg[1], pHomeCmd->nCmdArg[2]);
       if (bMoveOk1) {

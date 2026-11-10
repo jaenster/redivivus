@@ -27,17 +27,17 @@ namespace D2Client::SKILLS::SkillsNec {
 BOOL __fastcall Skills_CltStFunc_SpawnCltMissileC(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side do-function for Necromancer curse skills that emit a streaming AoE center missile (e.g. Amplify Damage, Decrepify). Creates a MISSILE_Cursecenter at the target coordinates, frees its existing light map and allocates a new one, then sets the stream missile type and range (from aurarangecalc, clamped to min 2) so the missile fans out stream missiles over its radius. Returns TRUE on success.
 BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL __fastcall Skills_CltStFunc_SetBoneWallGraphics(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltStFunc_SpawnCltMissileCTowardTarget(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_CheckCorpseSetPositionParams(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Nec_TargetedMissileAtParam(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client StFunc for Necromancer corpse-targeting skills. Verifies current skill and confirmed target exist; if caster is the local player, requires target to be a selectable corpse. Writes target X, Y, and classId into skill params 1/2/3 for server use. Returns TRUE if all checks pass.
 BOOL __fastcall Skills_CltStFunc_CheckSelectableCorpseSetParams(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side missile creation for the Necromancer Teeth skill. Validates the skill and its cltmissilea against the missiles table and the target coords/monster (TXT_MonStats2 of nParam2), sets the unit's SKSRVDOFUNC flag, and builds a D2SkillArgStrc with seed-jittered spawn position. Emits a scatter of teeth missiles sized by the target's body size (isSmall/large), optionally swapping to the missile's SubMissile1/2 for larger targets, then fires the skill's cltmissileb/cltmissilec follow-up missiles and plays the skill target sound. Returns 1 on success, 0 if validation fails.
 int __fastcall SKILLSNEC_CltCreateTeethMissiles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nTargetX, int32_t nTargetY, int32_t nTargetClassId);
-BOOL __fastcall Skills_CltDoFunc_Nec_Teeth(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Nec_CorpseExplosion(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client helper that spawns the Bone Spear/Spirit missile on the caster side. Validates skill, primary missile (cltmissilea), and target monster class. Sets UNITFLAG_SKSRVDOFUNC, fires the primary missile, optionally fires a secondary cast-effect missile (cltmissilec), creates a radial burst (cltmissileb) on impact, and plays tgtsound if no confirmed target. Returns 1 on success.
 int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, int32_t nTargetX, int32_t nTargetY, int32_t nTargetClassId);
-BOOL __fastcall Skills_CltDoFunc_Nec_BoneSpear(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Nec_PoisonExplosion(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client StFunc prerequisite check for Necromancer skills that forbid casting in town. Resolves target coordinates, finds the best nearby room, and returns FALSE if the room is in town (unless skill flags2 bit 0 is set to allow town use). Returns TRUE only if caster room is valid and not in town.
 BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillsNec.cpp

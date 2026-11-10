@@ -34,8 +34,9 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(struct D2UnitStrc * pUnit
 BOOL __fastcall Skills_CltDoFunc_Bar_ThrowItem(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltStFunc_CheckTargetIsSelectableCorpse(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Client do-function for the Barbarian Whirlwind/Corpse Explosion skill action. Confirms the current target is a soft (corpse-explodable) monster, finds a free nearby coordinate, selects the appropriate size-based cltmissile (small/normal/large from MonStats2), and spawns both the size missile and a MISSILE_Corpseexplosion at that location. Sets UNITFLAG_SKSRVDOFUNC on the player unit.
-BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+// Client do-func 41: Grim Ward. Confirms the target is a usable corpse, finds a free nearby coordinate, picks the size-based cltmissile (small/normal/large from MonStats2) and spawns it plus MISSILE_Corpseexplosion there. Sets UNITFLAG_SKSRVDOFUNC on the player.
+// Slot from skills.txt cltdofunc 41.
+BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Skill client-state setup func for a teleport/leap-to-location skill: computes and commits the destination into the unit's current D2SkillStrc params. For the local player, aborts if uninterruptable or already casting this very skill. For non-monsters it reads the requested coords (GetCooordinates), checks SKILL_CanUseAtLocation and SKILL_ValidateTeleportDestination. For monsters it targets the confirmed target's mirrored position (2*target - self) or the requested coords. Snaps to a free cell, adds the unit's collision footprint at the destination, stores dest in SKILL param1/param2 (param3/param4 = target type/GUID for monsters), sets skill flags 0x1080 and rebuilds the active-skill stat list. Returns TRUE if a valid destination was set, else FALSE.
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -54,9 +55,10 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(struct D2UnitStrc
 BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(struct D2DynamicPathStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Renders pUnit at a rotated facing direction for skill animation (e.g. Whirlwind dual-weapon draw). Rotates the unit's dynamic-path direction by +0x2A (full) or +0x15 (half) steps depending on bHalfRotation, computes screen position in both perspective and orthographic modes, calls DRAW_WORLD_Unit_1 to draw the unit, then restores the original direction.
 void __fastcall SKILL_DrawUnitAtRotatedAngle(struct D2UnitStrc * pUnit, uint32_t nGamma, int32_t bHalfRotation);
-// Client start-func for a Leap-style skill (player or monster): computes and commits the leap destination via pathfinding. Validates the unit/skill/server path; for the local player rejects if the skill is already active (flag bit0) or the unit is in an uninterruptable state. If a confirmed target is in melee range it instead forwards a 0x16 unit message and returns. Otherwise it sets the server path's collision pattern (0xc01) and path type 7, runs PATH_CalculatePath, applies the class/monster walk velocity (CharStats WalkVelocity or MonStats Velocity), retakes the path's last point as the destination, adds a collision at that tile, sets the skill active (flag 1) with param1/param2 = dest X/Y, and creates the active-skill stat list. Returns TRUE if a destination was committed, 0 otherwise (restoring the collision pattern on failure).
+// Client start-func 31: Whirlwind. Computes and commits the whirlwind destination by pathfinding: validates unit, skill and server path; for the local player rejects when the skill is already active or the unit cannot be interrupted; with a confirmed target in melee range it forwards a 0x16 unit message instead. Otherwise sets collision pattern 0xc01 and path type 7 and runs the path calculation.
+// Slot from skills.txt cltstfunc 31.
 // @sourcefile .\SKILLS\SkillsBar.cpp
-BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_EndCollision(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILL_StopAndClearSound(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 #endif // D2_MODULE_D2Client

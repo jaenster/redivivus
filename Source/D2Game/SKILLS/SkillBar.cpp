@@ -346,8 +346,9 @@ BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
-// Generic server-side handler for targeted necromancer curses (Lower Resist, Amplify Damage, Life Tap, Iron Maiden, Weaken, Terror, etc). Reads curse stats and state from skills.txt aurastat/aurastatcalc/auratargetstate, applies via SKILLNEC_ApplyCurseToUnit, then forces monster AI re-evaluation.
-BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Server do-func 71: Taunt (Barbarian). Reads the skill's aura stats and target state from skills.txt, applies them to the target via SKILLNEC_ApplyCurseToUnit and forces the target monster's AI to re-evaluate.
+// Slot from skills.txt srvdofunc 71.
+BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bCanAttack;
     bool bCanAttack;
     BOOL nAuraStatIdx;

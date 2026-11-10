@@ -1215,11 +1215,11 @@ void __fastcall DRLGROOMEX_FreeRoomExDataPresetArea(D2RoomExStrc * pRoomEx) {
     }
 
     D2_FREE_POOL_AT(pMemory_00, pMemoryToFree, ".\\DRLG\\Preset.cpp", 0x6fa);
-    pRoomEx->pRoomExData.pRoomExDataMazeRoom = 0;
+    pRoomEx->pRoomExData.pRoomExDataPreset = 0;
 }
 
 void __fastcall DRLGPRESET_FreePresetRoomGridsFromRoomEx(D2RoomExStrc * pRoomEx) {
-    if (!pRoomEx->pRoomExData.pRoomExDataMazeRoom) {
+    if (!pRoomEx->pRoomExData.pRoomExDataOutdoorRoom) {
       return;
     }
 
@@ -1705,7 +1705,7 @@ D2DrlgGridStrc * __fastcall Unreferenced_00666ff0(D2RoomExStrc * param_1) {
 }
 
 int __fastcall Unreferenced_00667000(D2RoomExStrc * param_1) {
-    return (int)param_1->pRoomExData.pRoomExDataMazeRoom->pOrientationGrid.pCellsFlags;
+    return (int)param_1->pRoomExData.pRoomExDataOutdoorRoom->pOrientationGrid.pCellsFlags;
 }
 
 // DRLGPRESET_GetPickedFilePathFromRoomEx

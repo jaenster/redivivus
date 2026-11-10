@@ -169,7 +169,7 @@ static uint32_t __stdcall SKILLSNEC_CltSetBoneWallGfx(eD2Skills eSkill, int32_t 
     return 1;
 }
 
-BOOL __fastcall Skills_CltStFunc_SetBoneWallGraphics(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltStFunc_SpawnCltMissileCTowardTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t bResult;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt) {
@@ -379,7 +379,7 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
     return 1;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Nec_Teeth(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Nec_CorpseExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return 0;
@@ -457,7 +457,7 @@ int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills
     return 0;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Nec_BoneSpear(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Nec_PoisonExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return 0;

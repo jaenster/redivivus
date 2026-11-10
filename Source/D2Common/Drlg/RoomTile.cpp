@@ -1088,7 +1088,7 @@ void __fastcall InitializorForDrlgType(D2RoomExStrc * pRoomEx) {
     switch (pRoomEx->nPresetType) {
       case 1:
         {
-          DRLGROOMEX_InitializeMazeRoom(pRoomEx);
+          DRLGROOMEX_InitializeOutdoorRoom(pRoomEx);
           break;
         }
       case 2:

@@ -40,9 +40,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(struct D2UnitStrc * pUnit, eD2S
 BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side do-function for the Amazon Strafe skill. Each call fires one missile (cltmissilea or cltmissileb based on weapon class) toward the current or nearest valid target within aura range, decrements the remaining shot counter (SKILL_GetParam1), and if shots remain, finds the next closest target (excluding the one just shot), redirects the unit's dynamic path toward it, and updates the stored target GUID/type in skill params 2/3. Returns FALSE when no target or no shots left.
 BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Client do-function for Amazon Impale skill. Each call advances one hit of a multi-hit sequence: retrieves the stored target from skill params 2/3, finds the nearest valid melee target if the stored one is out of range, decrements the remaining hit count (param 1), and if hits remain, picks the next target, rotates the unit path toward it, applies damage reduction for the current hit, and plays the hit sound. Returns 1 while hits remain, 0 when exhausted or no target found.
+// Client do-func 21: Fend, also used by Zeal and Fury. Each call advances one hit of the multi-hit sequence: re-targets the nearest valid melee target when the stored one is out of range, decrements the remaining hit count (param 1), rotates the path toward the next target, applies the per-hit damage reduction and plays the hit sound. Returns 1 while hits remain.
+// Slot from skills.txt cltdofunc 21.
 // @sourcefile .\SKILLS\SkillsAma.cpp
-BOOL __fastcall Skills_CltDoFunc_Ama_Impale(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Ama_Fend(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client DoFunc for Amazon piercing shot skill. Finds the confirmed primary target, then searches within calc[0] range for a secondary target nearby (excluding the primary by GUID). If a secondary is found, spawns a missile aimed at the secondary with a pierce-range of calc[1] set via SetTargetX. Returns TRUE on success.
 BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 #endif // D2_MODULE_D2Client

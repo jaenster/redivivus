@@ -172,13 +172,9 @@ uint8_t __fastcall Q04_TimerDespawnRogueGuards(::SGAMEDATA * pGame, struct D2Que
 // loops and broadcasts step 6 (Cain freed). Asserts/halts if quest data missing.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-// A1Q4 — OBJOP_A1Q4_ActivateInifussTree (object OperateFn): player clicks the Tree
-// of Inifuss. If quest active and not already taken/done, plays the tree's open
-// animation, schedules its event frames, toggles the room's has-portal flag, marks
-// JustCompleted AND RewardAwaits, pushes quest info, and credits the whole party via
-// Q04_AutoCompleteForActIPlayer. Records the attacker's GUID. This is the act that
-// yields the Scroll of Inifuss and advances the quest.
-BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(struct D2ObjectOperateFnArg * pOperation);
+// A1Q4 Gibbet operate fn (OperateFn 10), the cage holding Deckard Cain in Tristram. If the quest is active and not done: plays the open animation, schedules its event frames, toggles the room's has-portal flag, marks JustCompleted and RewardAwaits, pushes quest info, credits the party via Q04_AutoCompleteForActIPlayer and records the attacker's GUID. Freeing Cain completes The Search for Cain.
+// Slot from objects.txt OperateFn 10.
+BOOL __fastcall OBJOP_A1Q4_OpenCainGibbet(struct D2ObjectOperateFnArg * pOperation);
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
 void __fastcall Objects_InitFn06_CairnStone(struct D2ObjectInitFnArg * pInitArg);
 // A1Q4 — Q04_HandleNpcInteraction (party-member callback).
@@ -186,24 +182,14 @@ void __fastcall Objects_InitFn06_CairnStone(struct D2ObjectInitFnArg * pInitArg)
 // Step0x04 (the Cairn-stones-solved sub-step) so the journal reflects the puzzle
 // solution. Driven by the party loop in OBJOP_A1Q4_ActivateHoradricMalusSmith.
 void __fastcall Q04_HandleNpcInteraction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// A1Q4 — OBJOP_A1Q4_ActivateHoradricMalusSmith (object OperateFn): the Cairn Stones
-// puzzle handler (player activates a stone). Lazily rolls the stone order, then checks
-// the player holds the Deciphered scroll ('bkd '). Validates each stone is activated in
-// the rolled order (aStones[nStoneIndex]); wrong stone -> ignore. When all 5 are hit in
-// order: consume the scroll, open the red portal to Tristram (creates the portal
-// missile/object), set step flag to 4, broadcast step 4, mark Step0x04 in records and
-// run the party Step0x04 loop (Q04_HandleNpcInteraction). Bails early if quest already
-// Completed/RewardAwaits or Cain not yet at the saved state.
+// A1Q4 Cairn Stones operate fn (OperateFn 9): lazily rolls the stone order, requires the deciphered scroll ('bkd ') and accepts the stones only in the rolled order. When all five are touched it consumes the scroll, opens the red portal to Tristram and sets step 4.
+// Slot from objects.txt OperateFn 9.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
-BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(struct D2ObjectOperateFnArg * pOperation);
-// A1Q4 — OBJOP_A1Q4_UseScrollOfInifuss (object OperateFn): reading the Scroll of
-// Inifuss at Akara (or its altar). If quest active, not done, and player doesn't
-// already hold a scroll: plays the use animation, drops the Deciphered scroll ('bks '
-// -> reward 'bkd '-style item), hooks Callback_09 to watch the scroll, broadcasts
-// step 2, and sets the puzzle-armed/stones-active sub-flags so the Cairn Stones become
-// interactive. Advances quest from "tree" stage to "decipher/stones" stage.
+BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(struct D2ObjectOperateFnArg * pOperation);
+// A1Q4 Tree of Inifuss operate fn (OperateFn 12). If the quest is active, not done and the player holds no scroll: plays the use animation, drops the Bark Scroll ('bks '), hooks Callback_09 to watch it, broadcasts step 2 and arms the Cairn Stones sub-flags. The scroll is an item, deciphered at Akara.
+// Slot from objects.txt OperateFn 12.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
-BOOL __fastcall OBJOP_A1Q4_UseScrollOfInifuss(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(struct D2ObjectOperateFnArg * pOperation);
 // A1Q4 — Q04_SendStonesOrderToClient: sends the rolled Cairn-Stones order to a
 // client via the 0x50 quest-special packet. Lazily rolls the order (RollStonesOrder)
 // if not done, normalizes each stone classId to 0..4 (subtract 0x11), asserts in range,

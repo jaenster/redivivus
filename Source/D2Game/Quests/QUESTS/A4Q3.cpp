@@ -215,7 +215,7 @@ void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    pHellsForgeQuest->pQuestSpecificData.pA2Q6->nStatusCode++;
+    pHellsForgeQuest->pQuestSpecificData.pA4Q3->nItemsToDrop++;
 }
 
 BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {

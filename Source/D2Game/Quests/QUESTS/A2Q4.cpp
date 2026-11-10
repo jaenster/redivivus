@@ -701,8 +701,9 @@ BOOL __fastcall Q12_CheckJustCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     return 0;
 }
 
-// A2Q4 - OBJOP_StaffOfKingsAltar (object operate fn 42). Operating the Staff/Sanctuary altar object: sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if quest is introduced and not yet at stateFlag 5 advances to 5 and runs the per-player iterators CheckArcaneAndReward (grant), SetCannotComplete, and CheckJustCompleted.
-BOOL __fastcall OBJOP_A2Q4_StaffOfKingsAltar(D2ObjectOperateFnArg * pOperation) {
+// A2Q4 Horazon's Journal operate fn (OperateFn 42, Arcane Sanctuary). Sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if the quest is introduced and below state 5 advances it to 5 and runs the per-player iterators CheckArcaneAndReward, SetCannotComplete and CheckJustCompleted. Reading it opens the way to the Canyon of the Magi.
+// Slot from objects.txt OperateFn 42.
+BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2RoomStrc* pAltarRoom;
     D2QuestDataA2Q4Strc* pA2Q4Specific;

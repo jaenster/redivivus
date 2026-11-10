@@ -440,7 +440,7 @@ void __stdcall DRLGLEVEL_ParseLevelData(struct D2DrlgLevelDataList * pLevelData,
 void __fastcall DRLGGRID_OrFlagOnCellList(struct D2DrlgGridStrc * nGridPtr, struct D2DrlgVertexStrc * pnCellNode, int32_t nFlag);
 // Initializes the DRLG collision/tile grids for a room during level generation. Allocates three D2DrlgGridStrc grids (tile-type, wall, floor) sized to the room's world dimensions from the room's memory pool, seeds the floor grid's border cells, and runs Act-1 outdoor room grid setup for ACT_I. Decodes the room's waypoint and shrine sub-counts from eRoomExFlags and lays out their sub-tiles via SubTypeWpShrine using the level's SubWaypoint/SubShrine ids. Applies a level-type-specific grid flag (special areas) to empty floor cells, then finalizes the wall and floor grids. __fastcall, no return value.
 void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(struct D2RoomExStrc * pRoomEx);
-void __fastcall DRLGROOMEX_InitializeMazeRoom(struct D2RoomExStrc * pRoomEx);
+void __fastcall DRLGROOMEX_InitializeOutdoorRoom(struct D2RoomExStrc * pRoomEx);
 // Returns nonzero if outdoor border flag (0x80) is set in room data.
 uint32_t __fastcall DRLGOUTROOM_HasOutdoorBorderFlag(struct D2RoomExStrc * pRoomEx);
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*

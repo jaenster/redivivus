@@ -1192,14 +1192,14 @@ static BOOL __stdcall SCMD_CheckMonsterPositionDesync(D2UnitStrc * pUnit, D2Unit
       return 0;
     }
 
-    D2UnitDataPlayerStrc* pDVar1 = pUnit2->pUnitData.pUnitDataPlayer;
+    D2UnitDataMonsterStrc* pDVar1 = pUnit2->pUnitData.pUnitDataMonster;
     if (!pDVar1) {
       return 0;
     }
     if (!&pDVar1->nOwnerGUID) {
       return 0;
     }
-    if (pDVar1->nNecroPet == nNewPos) {
+    if (pDVar1->nNecroPetGUID == nNewPos) {
       return 0;
     }
 
@@ -1801,7 +1801,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x60_SETWARPDEST(D2ClientStrc * pClient, D2
     D2GSPacketSrv0x60 aPacket;
     aPacket.nPacketId = '`';
     aPacket.nPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-    aPacket.nParam2 = pUnit->pUnitData.pUnitDataMonster->Components[0];
+    aPacket.nParam2 = pUnit->pUnitData.pUnitDataObject->nShrineId;
     aPacket.dwUnitGUID = pUnit->nUnitGUID;
     SCMD_QueuePacketForClient(&aPacket.nPacketId, 7, pClient);
 }
@@ -2238,7 +2238,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
     int32_t nSizeInBits;
     D2StatStrc aStatBuf[16];
     int nStatValue;
-    char* pComponentBytes;
+    uint8_t* pComponentBytes;
     int32_t nStatCount;
     D2BitBufferStrc bitBuffer;
     int bHasStats;
@@ -2286,8 +2286,8 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       BVar1 = Monster::CheckComponents(pUnit);
       if (BVar1) {
         Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, 1, 1);
-        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-          pComponentBytes = pUnit->pUnitData.pUnitDataPlayer->szCharName + 4;
+        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+          pComponentBytes = pUnit->pUnitData.pUnitDataMonster->Components;
           if (pComponentBytes) {
             nComponentIdx = 0;
             do {

@@ -95,32 +95,32 @@ static D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     &D2Game::Objects::ObjectsMode::OBJOP_OpenChestNoMonster,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenSparklyChest,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenTrapChestSkillTrigger,
-    &D2Game::Quests::QUESTS::A1Q5::OBJOP_A1Q5_ActivateCairnStone,
+    &D2Game::Quests::QUESTS::A1Q5::OBJOP_A1Q5_ReadTowerTome,
     &D2Game::Objects::ObjectsMode::OBJOP_DetonateExplosiveBarrel,
     &D2Game::Objects::ObjectsMode::OBJOP_ToggleDoor,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateHoradricMalusSmith,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateInifussTree,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateCairnStone,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_OpenCainGibbet,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateNoOp,
-    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_UseScrollOfInifuss,
+    &D2Game::Quests::QUESTS::A1Q4::OBJOP_A1Q4_ActivateInifussTree,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateSimple,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenLockedChest,
     &D2Game::Objects::ObjectsMode::Objects_OperateFn15_Portal,
     &D2Game::Objects::ObjectsMode::OBJOP_UseStairway,
-    &D2Game::Objects::ObjectsMode::OBJOP_OpenHoradricCube,
+    &D2Game::Objects::ObjectsMode::OBJOP_UseObelisk,
     &D2Game::Objects::ObjectsMode::OBJOP_DestroyDestructible,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnExceptionalItemDrop,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnNormalItemDrop,
     &D2Game::Quests::QUESTS::A1Q3::OBJOP_A1Q3_UseMalus,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateHealingWell,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivateWaypoint,
-    &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateHoradricStaffAltar,
-    &D2Game::Quests::QUESTS::A2Q6::OBJOP_A2Q7_OpenArcaneNpcTrade,
+    &D2Game::Quests::QUESTS::A2Q3::OBJOP_A2Q3_ActivateTaintedSunAltar,
+    &D2Game::Quests::QUESTS::A2Q6::OBJOP_A2Q6_UseHoradricOrifice,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnQuestItemReward,
     &D2Game::Objects::ObjectsMode::OBJOP_UseTeleportPad,
-    &D2Game::Quests::QUESTS::A3Q1::OBJOP_A3Q1_KhalimsRelicAltar,
+    &D2Game::Quests::QUESTS::A3Q1::OBJOP_A3Q1_ActivateLamEsensTome,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenBreakableContainer,
     &D2Game::Objects::ObjectsMode::OBJOP_ExplodingTrap,
-    &D2Game::Quests::QUESTS::A3Q3::OBJOP_A3Q5_NihlathakPortalTrigger,
+    &D2Game::Quests::QUESTS::A3Q3::OBJOP_A3Q3_ActivateGidbinn,
     &D2Game::PLAYER::PlayerTrade::Objects_OperateFn32_OpenStash,
     &D2Game::Objects::ObjectsMode::OBJOP_SpawnRewardItem,
     &D2Game::Objects::ObjectsMode::OBJOP_A2Q2_ArcaneGateLevelTransition,
@@ -128,13 +128,13 @@ static D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     nullptr,
     nullptr,
     nullptr,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2,
-    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3,
-    &D2Game::Quests::QUESTS::A2Q4::OBJOP_A2Q4_StaffOfKingsAltar,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_OpenHoradricCubeChest,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_OpenHoradricScrollChest,
+    &D2Game::Quests::QUESTS::A2Q2::OBJOP_A2Q2_OpenStaffOfKingsChest,
+    &D2Game::Quests::QUESTS::A2Q4::OBJOP_A2Q4_ReadHorazonsJournal,
     &D2Game::Objects::ObjectsMode::OBJOP_ActivatePortalObject,
     &D2Game::Quests::QUESTS::A3Q2::OBJOP_UseStairDirect,
-    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_KhalimRelicPedestal,
+    &D2Game::Quests::QUESTS::A3Q2::OBJOP_A3Q2_PullSewerLever,
     &D2Game::Objects::ObjectsMode::Objects_OperateFn46_PortalToAct4,
     &D2Game::Objects::ObjectsMode::OBJOP_UseWaygate,
     &D2Game::Objects::ObjectsMode::OBJOP_OpenUnlockedChest,
@@ -142,7 +142,7 @@ static D2ObjectOperateFnFunc OBJECTSOPERATEFN[101] = {
     &D2Game::Objects::ObjectsMode::OBJOP_UseStairAlias,
     &D2Game::Objects::ObjectsMode::OBJOP_TimedDestructible,
     &D2Game::Quests::QUESTS::A4Q2::OBJOP_A4Q2_DiabloSealActivateKillChaos,
-    &D2Game::Quests::QUESTS::A3Q5::OBJOP_A3Q5_NihlathakAltarLaunchOrb,
+    &D2Game::Quests::QUESTS::A3Q5::OBJOP_A3Q5_SmashCompellingOrb,
     &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow1,
     &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow2,
     &D2Game::Quests::QUESTS::OBJOP_A4Q2_DiabloSealCreateGlow3,
@@ -326,7 +326,7 @@ void __fastcall OBJMODE_DeactivateShrine(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Advances the fill-progress animation for fillable objects (e.g. Mana Wells, Healing Wells). Reads Components[0] as the current fill level, increments it each tick, then recomputes SetupUpdateFlag based on the ratio of current level to the doubled/default txt sizes. Halts with an unrecoverable error if fill level exceeds its expected bounds. Used by the object-mode update tick to drive incremental fill visuals.
 void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nErrorLine;
-    uint8_t byComponent = pUnit->pUnitData.pUnitDataMonster->Components[0];
+    uint8_t byComponent = pUnit->pUnitData.pUnitDataObject->nShrineId;
     D2ObjectsTxt* pObjectTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit);
     uint32_t uFillLevel = (uint32_t)byComponent;
     uint8_t bVar1 = OBJECT_GetDefaultSize();
@@ -339,11 +339,11 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
     } else {
       uint32_t nDoubledTxtSize;
       byComponent++;
-      pUnit->pUnitData.pUnitDataMonster->Components[0] = byComponent;
+      pUnit->pUnitData.pUnitDataObject->nShrineId = byComponent;
       nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
       if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
         nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nErrorLine;
+        pUnit->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nErrorLine;
         nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
         if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
@@ -428,7 +428,7 @@ void __fastcall OBJMODE_DispatchChestType(::SGAMEDATA * pGame, D2UnitStrc * pUni
     BOOL bBadCallback;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    uint8_t byChestType = pUnit->pUnitData.pUnitDataMonster->Components[0] & 0x7f;
+    uint8_t byChestType = pUnit->pUnitData.pUnitDataObject->nShrineId & 0x7f;
     uint32_t uChestType = (uint32_t)byChestType;
     if ((int)uChestType >= gnObjectOperateCallbackCount) {
       return;
@@ -486,18 +486,18 @@ void __fastcall OBJMODE_UpdateProximityStateMachine(::SGAMEDATA * pGame, D2UnitS
     eAnimMode = !pUnit ? eD2ObjectAnimMode_ns::Neutral : pUnit->eAnimMode.eObjectMode;
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    char cProximityState;
-    cProximityState = pUnit->pUnitData.pUnitDataPlayer->szCharName[4];
+    uint8_t cProximityState;
+    cProximityState = pUnit->pUnitData.pUnitDataObject->nShrineId;
     int nActivated;
     nActivated = 0;
-    if (cProximityState != '\0') {
-      if (cProximityState == '\x01') {
+    if (cProximityState) {
+      if (cProximityState == 1) {
         nActivated = 1;
         goto scan_nearby_players;
       }
-      if (cProximityState == '\x02' && eAnimMode != eD2ObjectAnimMode_ns::Neutral) {
+      if (cProximityState == 2 && eAnimMode != eD2ObjectAnimMode_ns::Neutral) {
         D2Common::Units::SetupUpdateFlag(pUnit, 0);
-        pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
+        pUnit->pUnitData.pUnitDataObject->nShrineId = 0;
       }
     } else {
       int32_t nCollisionDist;
@@ -525,7 +525,7 @@ void __fastcall OBJMODE_UpdateProximityStateMachine(::SGAMEDATA * pGame, D2UnitS
         } while (pTarget);
 
         if (eAnimMode != eD2ObjectAnimMode_ns::Neutral) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x01';
+          pUnit->pUnitData.pUnitDataObject->nShrineId = 1;
           nNextEventFrame = pGame->dwGameFrame + 0x19;
           GAME::Event::SetEvent(pGame, pUnit, 3, nNextEventFrame, 0, 0);
           return;
@@ -533,10 +533,10 @@ void __fastcall OBJMODE_UpdateProximityStateMachine(::SGAMEDATA * pGame, D2UnitS
       }
       if (nActivated) {
         if (nCounterAttacked == 1) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x02';
+          pUnit->pUnitData.pUnitDataObject->nShrineId = 2;
           D2Common::Units::SetupUpdateFlag(pUnit, 1);
         } else {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
+          pUnit->pUnitData.pUnitDataObject->nShrineId = 0;
         }
 
         GAME::Event::SetEvent(pGame, pUnit, 3, (D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId)->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
@@ -1160,9 +1160,10 @@ static BOOL OBJMODE_CheckInventoryHasItemType(eD2ItemTypes eItemType, D2UnitStrc
     return 1;
 }
 
-// Object operate-fn for the Horadric Cube chest object. If the cube is closed (Death mode or null) and the player is not already trading: checks the player's inventory for a Gem-type item (required to open the cube); if absent plays a sound. If a gem is present, sets interact info to the cube's GUID, marks the cube open (SetupUpdateFlag 3), and sends SCMD 0x58 (OpenUI) to the client. If the cube is already open (Run mode) and it matches the current NPC interaction, closes it (ClearInteractInfo, SetupUpdateFlag 1). Always returns 1.
+// Obelisk operate fn (OperateFn 17). If the object is closed and the player is not trading, checks the player's inventory for a gem; without one it plays a sound, with one it sets the interact target, marks the object open (update flag 3) and sends SCMD 0x58 to open the UI. When open and matching the current interaction it closes it.
+// Slot from objects.txt OperateFn 17.
 // @sourcefile .\OBJECTS\ObjMode.cpp
-BOOL __fastcall OBJOP_OpenHoradricCube(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall OBJOP_UseObelisk(D2ObjectOperateFnArg * pOperation) {
     BOOL _bHasGemInInventory;
     bool bHasGemInInventory;
     uint32_t nCubeUnitGUID;
@@ -2136,7 +2137,7 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
       }
     }
 
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szHoverName, "%d", (uint32_t)(uint16_t)(pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] + 0xe63));
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szHoverName, "%d", (uint32_t)(uint16_t)(pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId + 0xe63));
     pGame = pOperation->sArg.pGame;
     pHoverText = D2Common::Chat::Alloc(pGame->pMemoryPool, szHoverName, pGame->dwGameFrame);
     if (pHoverText) {
@@ -2230,7 +2231,7 @@ BOOL __fastcall OBJOP_TimedDestructible(D2ObjectOperateFnArg * pOperation) {
       D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
     }
 
-    OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] & 0x7f);
+    OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
     if (!pOperation->pAttacker) {
       OBJECTS_SetUnitIdInTimerArg(pOperation->sArg.pVictim, -1);
       return 1;
@@ -2765,7 +2766,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     D2UnitDataPlayerStrc* pPlayerData;
     pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
     __frame0.pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    if (!__frame0.pQuestRecord || (pTxtLevelDefs = D2Common::DATATBLS::LvlTbls::TXT_LevelDefs_GetLine((eD2LevelId)pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0]) , !pTxtLevelDefs)) {
+    if (!__frame0.pQuestRecord || (pTxtLevelDefs = D2Common::DATATBLS::LvlTbls::TXT_LevelDefs_GetLine((eD2LevelId)pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId) , !pTxtLevelDefs)) {
       refuse_portal:
       UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
       return 0;
@@ -2805,7 +2806,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
       }
 
       dest_from_level_spawn:
-      eLevelId = (eD2LevelId)pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0];
+      eLevelId = (eD2LevelId)pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId;
       nCollisionFlagsArg = 3;
       pnSpawnY = &__frame0.nSpawnPosY;
       pnSpawnX = (uint32_t*)&__frame0.pQuestRecord;
@@ -2949,7 +2950,7 @@ BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
             }
           case 0x179:
             {
-              eLevel = (eD2LevelId)pVictim->pUnitData.pUnitDataMonster->Components[0];
+              eLevel = (eD2LevelId)pVictim->pUnitData.pUnitDataObject->nShrineId;
               break;
             }
         }
@@ -3455,7 +3456,7 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
       OBJMODE_FinalizePortalLink_HaltTail(0x11ea);
     }
 
-    pBluePortal->pUnitData.pUnitDataMonster->Components[0] = (uint8_t)eLevel;
+    pBluePortal->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eLevel;
     uint8_t byPortalFlags = D2Common::Units::GetObjectPortalFlags(pBluePortal);
     byPortalFlags |= 1;
     D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags);
@@ -3574,17 +3575,16 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
     uint8_t bVar1;
     eD2UnitType eHealedType;
     int32_t nDoubledSize;
-    uint8_t byChargesLeft;
     D2ObjectsTxt* pTxtObjects = D2Common::Units::GetObjectTxtRecordFromObject(pOperation->sArg.pVictim);
-    char cCharges = pOperation->sArg.pVictim->pUnitData.pUnitDataPlayer->szCharName[4];
-    if (cCharges != '\0') {
+    uint8_t byChargesLeft = pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId;
+    if (byChargesLeft) {
       ::SGAMEDATA* pGame;
       eHealedType = OBJMODE_ApplyWellHealing(pOperation->sArg.pGame, pTxtObjects, pOperation->pAttacker);
       if (eHealedType == UNIT_PLAYER) {
         return 0;
       }
 
-      byChargesLeft = cCharges - 1;
+      byChargesLeft--;
       nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
       if (byChargesLeft <= (uint8_t)nDoubledSize) {
         bVar1 = OBJECT_GetDefaultSize();
@@ -3594,7 +3594,7 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
         }
       }
 
-      pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] = byChargesLeft;
+      pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId = byChargesLeft;
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 2, pGame->dwGameFrame + 1 + pTxtObjects->Parm[0], 0, 0);
       return 0;
@@ -3780,8 +3780,8 @@ void __fastcall KillUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         }
       case Opened:
         {
-          byHitCount = pUnit->pUnitData.pUnitDataMonster->Components[0] + 1;
-          pUnit->pUnitData.pUnitDataMonster->Components[0] = byHitCount;
+          byHitCount = pUnit->pUnitData.pUnitDataObject->nShrineId + 1;
+          pUnit->pUnitData.pUnitDataObject->nShrineId = byHitCount;
           if (byHitCount > 1) {
             sOperation.sArg.pGame = pGame;
             sOperation.sArg.pVictim = pUnit;
@@ -3901,7 +3901,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pTxtObjects;
     pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
     uint8_t byComponents0;
-    byComponents0 = pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0];
+    byComponents0 = pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId;
     int nDropCount;
     nDropCount = 0;
     uint8_t byNecroFlag;
@@ -4187,7 +4187,7 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
           D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
         }
 
-        OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] & 0x7f);
+        OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
       }
     }
 
@@ -4249,7 +4249,7 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
       D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
     }
 
-    OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] & 0x7f);
+    OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
     return 1;
 }
 
@@ -4295,7 +4295,7 @@ BOOL __fastcall OBJOP_OpenChestNoMonster(D2ObjectOperateFnArg * pOperation) {
         D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
       }
 
-      OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] & 0x7f);
+      OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
     }
 
     return 1;
@@ -4322,7 +4322,7 @@ BOOL __fastcall OBJOP_OpenLockedChest(D2ObjectOperateFnArg * pOperation) {
         D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
       }
 
-      OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataMonster->Components[0] & 0x7f);
+      OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
     }
 
     return 1;

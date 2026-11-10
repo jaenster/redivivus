@@ -5508,9 +5508,9 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
     if (!pPlayer) {
       return;
     }
-    if (pPlayer->eUnitType == UNIT_MONSTER && pPlayer->pUnitData.pUnitDataPlayer) {
-      uint32_t* pMonsterAnimFlags;
-      pMonsterAnimFlags = &pPlayer->pUnitData.pUnitDataPlayer->unk0x28;
+    if (pPlayer->eUnitType == UNIT_MONSTER && pPlayer->pUnitData.pUnitDataMonster) {
+      D2AiGeneralStrc** pMonsterAnimFlags;
+      pMonsterAnimFlags = &pPlayer->pUnitData.pUnitDataMonster->pAiGeneral;
       *(uint16_t*)pMonsterAnimFlags &= 0xfffe;
     }
 

@@ -101,8 +101,9 @@ BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame);
 void __fastcall Objects_InitFn21_HoradricOrifice(struct D2ObjectInitFnArg * pInitArg);
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
 void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
-BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(struct D2ObjectOperateFnArg * pOperation);
+// A2Q6 Horadric orifice operate fn (OperateFn 25, Tal Rasha's tomb). If the object is closed and the player is not trading: with the assembled Horadric Staff ('hsu ') it sets the interact target and sends 0x58 to open the staff-insert UI, otherwise it plays the "can't do that" sound. Closes the interaction when the object returns to Neutral; the quest record changes in Q14_OnStaffUsedInOrifice.
+// Slot from objects.txt OperateFn 25.
+BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(struct D2ObjectOperateFnArg * pOperation);
 // Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
 void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 #endif // D2_MODULE_D2Game

@@ -3250,7 +3250,7 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
     eD2LevelId eLevel = pLevel->eD2LevelId;
     eAct neAct = GetActNoFromLevelNumber(eLevel);
-    D2DrlgRoomExDataMazeStrc* pDrlgGrid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pDrlgGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     D2LevelDefsTxt* pLine = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel);
     int nHeight = pRoomEx->sCoords.WorldSize.y + 1;
     uint32_t nShrineFlagBits2 = (uint32_t)pRoomEx->eRoomExFlags >> 0x10 & 3;
@@ -3341,10 +3341,10 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
     DrlgGrid::FlagOperations(pFloorGrid, 4, 0);
 }
 
-void __fastcall DRLGROOMEX_InitializeMazeRoom(D2RoomExStrc * pRoomEx) {
+void __fastcall DRLGROOMEX_InitializeOutdoorRoom(D2RoomExStrc * pRoomEx) {
     int* pMazeData;
     RoomTile::DRLGROOMTILE_AllocRoomTileGrid(pRoomEx);
-    D2DrlgRoomExDataMazeStrc* pOrientGrid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pOrientGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     D2DrlgGridStrc* pFloorGrid = &pOrientGrid->pWallGrid;
     RoomTile::DRLGROOMTILE_CountWallTilesFromGrid(pRoomEx, pFloorGrid, &pOrientGrid->pOrientationGrid, 0, 0);
     RoomTile::DRLGROOMTILE_CountTilesFromGrid(pRoomEx, pFloorGrid, 0, 0, 0);
@@ -3361,7 +3361,7 @@ void __fastcall DRLGROOMEX_InitializeMazeRoom(D2RoomExStrc * pRoomEx) {
 
 // Returns nonzero if outdoor border flag (0x80) is set in room data.
 uint32_t __fastcall DRLGOUTROOM_HasOutdoorBorderFlag(D2RoomExStrc * pRoomEx) {
-    return pRoomEx->pRoomExData.pRoomExDataMazeRoom->dwFlags & 0x80;
+    return pRoomEx->pRoomExData.pRoomExDataOutdoorRoom->dwFlags & 0x80;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*
@@ -3677,10 +3677,11 @@ static void DRLGGRID_SetOutRoomEdgeFlags(D2DrlgLevelStrc * pDrlgLevelData, D2Roo
     D2DrlgLevelDataWildernessLevel* nDrlgLevelBase = pDrlgLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
     sCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x - 1;
     sCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y - 1;
+    struct D2DrlgOutdoorRoomStrc* t2_c8 = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     sCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x + 3;
     sCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y + 3;
     for (nIndex = 0; nIndex < nDrlgLevelBase->nExitCount; nIndex++) {
-      D2DrlgRoomExDataMazeStrc* pRoomExDataVoid = pRoomEx->pRoomExData.pRoomExDataMazeRoom;
+      D2DrlgOutdoorRoomStrc* pRoomExDataVoid = t2_c8;
       for (pVertex = nDrlgLevelBase->pAdjacentVertices[nIndex]; pVertex; pVertex = pVertex->pNext) {
         if (pVertex->pNext) {
           DrlgGrid::DRLGGRID_SetLineFlagsWithWidth(&pRoomExDataVoid->pCellGrid, pVertex, &sCoords, 1, 0, 2);
@@ -3695,7 +3696,7 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2RoomExStrc * pLevel) {
     int nY;
     int aNeighborFlags[9];
     int eCenterNextSaved;
-    D2DrlgRoomExDataMazeStrc* pDVar1 = pLevel->pRoomExData.pRoomExDataMazeRoom;
+    D2DrlgOutdoorRoomStrc* pDVar1 = pLevel->pRoomExData.pRoomExDataOutdoorRoom;
     int nRowOffset = 1;
     if (!(0 < pLevel->sCoords.WorldSize.x + 1)) {
       return;
@@ -3771,7 +3772,7 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2RoomExStrc * pLevel) {
 
 // Orchestrator: initializes grid, clips vertices, computes wall orientations for Act1 outdoor rooms.
 void __fastcall DRLGOUTROOM_InitAct1RoomGridCells(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pLevelRoom) {
-    DrlgGrid::DRLGGRID_InitGridCells(pLevel->pDrlg->pMemoryPool, &pLevelRoom->pRoomExData.pRoomExDataMazeRoom->pCellGrid, pLevelRoom->sCoords.WorldSize.x + 3, pLevelRoom->sCoords.WorldSize.y + 3);
+    DrlgGrid::DRLGGRID_InitGridCells(pLevel->pDrlg->pMemoryPool, &pLevelRoom->pRoomExData.pRoomExDataOutdoorRoom->pCellGrid, pLevelRoom->sCoords.WorldSize.x + 3, pLevelRoom->sCoords.WorldSize.y + 3);
     DRLGGRID_SetOutRoomEdgeFlags(pLevel, pLevelRoom);
     DRLGOUTROOM_ComputeWallOrientations(pLevelRoom);
 }

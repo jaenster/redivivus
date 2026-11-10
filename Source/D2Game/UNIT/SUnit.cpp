@@ -577,7 +577,7 @@ void __fastcall UNITS_SetStaticPathRoomCoords(D2UnitStrc * pUnit, D2RoomStrc * p
     pUnit->pUnitData.pUnitDataObject->nLinkedPortalX = nX;
     pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = nY;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pUnit->pUnitData.pUnitDataMonster->nDurielUnk = roomCoords.sTileRect.left;
+    pUnit->pUnitData.pUnitDataObject->nX = roomCoords.sTileRect.left;
     pUnit->pUnitData.pUnitDataObject->nY = roomCoords.sTileRect.top;
 }
 
@@ -592,7 +592,7 @@ D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, D2UnitStr
     }
 
     int32_t nX;
-    eActNo = D2Common::Drlg::GetActNoFromLevelNumber((eD2LevelId)pUnit->pUnitData.pUnitDataMonster->Components[0]);
+    eActNo = D2Common::Drlg::GetActNoFromLevelNumber((eD2LevelId)pUnit->pUnitData.pUnitDataObject->nShrineId);
     nErrorLine = pUnit->pUnitData.pUnitDataObject->nY;
     nX = pUnit->pUnitData.pUnitDataObject->nX;
     pFoundRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(pGame->pAct[eActNo], nX, nErrorLine);
@@ -1363,8 +1363,8 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
         return;
       }
     }
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      pUnit->pUnitData.pUnitDataPlayer->dwTradeState = 0;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      pUnit->pUnitData.pUnitDataMonster->pVision = 0;
     }
 
     uint32_t nNewClientIdx;
@@ -2187,7 +2187,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         case UNIT_OBJECT:
           Objects::OBJECT_FreeObjectData(pGame, pUnit);
         D2Common::Units::FreeStaticPath(pUnit);
-        D2_FREE_POOL_AT(pGame->pMemoryPool, pUnit->pUnitData.pUnitDataPlayer, ".\\UNIT\\SUnit.cpp", 0xa4);
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pUnit->pUnitData.pUnitDataObject, ".\\UNIT\\SUnit.cpp", 0xa4);
         break;
         case UNIT_MISSILE:
           if (pUnit->pPath.pStaticPath) {

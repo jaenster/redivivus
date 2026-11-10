@@ -335,7 +335,7 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     D2MonsterAiCmdStrc* pAiCmdNpc;
     int nBaseId;
     int32_t nArgNumber;
-    char byAiArgByte;
+    uint8_t byAiArgByte;
     int nMonStatsIdx;
     nMonStatsIdx = pUnit->nClassId;
     if (nMonStatsIdx < 0 || nMonStatsIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
@@ -394,17 +394,17 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
 
     restore_class_bytes_and_flags:
     if (nMonStatsIdx == 0x138) {
-      byAiArgByte = (char)pInactiveMonRec->nAiArgument;
+      byAiArgByte = (uint8_t)pInactiveMonRec->nAiArgument;
       if (pUnit->eUnitType == UNIT_MONSTER) {
-        if (pUnit->pUnitData.pUnitDataPlayer) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[0xe] = byAiArgByte;
+        if (pUnit->pUnitData.pUnitDataMonster) {
+          pUnit->pUnitData.pUnitDataMonster->Components[10] = byAiArgByte;
         }
-        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[0xf] = byAiArgByte;
+        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+          pUnit->pUnitData.pUnitDataMonster->Components[0xb] = byAiArgByte;
         }
       }
-    } else if (nMonStatsIdx == 0x137 && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[0xe] = (char)pInactiveMonRec->nAiArgument;
+    } else if (nMonStatsIdx == 0x137 && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)pInactiveMonRec->nAiArgument;
     }
     if (pInactiveMonRec->nAiArgument != gpInactiveMonsterStateFlagSentinel) {
       return;
@@ -1041,7 +1041,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
               }
             case UNIT_OBJECT:
               {
-                pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pCurUnitRecord->nShrineId;
+                pUnit->pUnitData.pUnitDataObject->nShrineId = pCurUnitRecord->nShrineId;
                 nLine = 0x15c;
                 continue;
               }
@@ -1094,14 +1094,14 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                       bObjectMode = byNewStage;
                       if (eActNo > 2) {
                         pUnit->eAnimMode.ePlayerMode = Death;
-                        pUnit->pUnitData.pUnitDataMonster->Components[0] = byMaxStage;
+                        pUnit->pUnitData.pUnitDataObject->nShrineId = byMaxStage;
                         goto free_spawned_record;
                       }
                     } else {
                       bObjectMode = pCurUnitRecord->nShrineId;
                     }
 
-                    pUnit->pUnitData.pUnitDataMonster->Components[0] = bObjectMode;
+                    pUnit->pUnitData.pUnitDataObject->nShrineId = bObjectMode;
                     if (bObjectMode < byMaxStage) {
                       nRemainingGrowSteps = (uint32_t)byMaxStage - (uint32_t)bObjectMode;
                       if (nRemainingGrowSteps > 0) {
@@ -1115,7 +1115,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                     }
                   }
                 } else {
-                  pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pCurUnitRecord->nShrineId;
+                  pUnit->pUnitData.pUnitDataObject->nShrineId = pCurUnitRecord->nShrineId;
                   pUnit->uSideData.pServerSide.bSparkChest = (uint8_t)pCurUnitRecord->nDropItemCode;
                   if (pCurUnitRecord->nLevelId) {
                     pUnit->dwDropItemCode = pCurUnitRecord->nLevelId;
@@ -1132,7 +1132,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                   GAME::Event::SetEvent(pGame, pUnit, 5, pRespawnFrame, 0, 0);
                 }
 
-                pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = pCurUnitRecord->nShrineId;
+                pUnit->pUnitData.pUnitDataObject->nShrineId = pCurUnitRecord->nShrineId;
                 pShrineTxtRec = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine((uint32_t)pCurUnitRecord->nShrineId);
                 D2Common::Units::SetShrineTxtRecordInObjectData(pUnit, pShrineTxtRec);
               }
@@ -1255,7 +1255,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
               }
 
               _Dst->nLevelId = pUnit->dwDropItemCode;
-              _Dst->nShrineId = pUnit->pUnitData.pUnitDataPlayer->szCharName[4];
+              _Dst->nShrineId = pUnit->pUnitData.pUnitDataObject->nShrineId;
               break;
             }
           default:

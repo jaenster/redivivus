@@ -410,8 +410,8 @@ void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->pStream;
-    D2MonsterAiSubStrc* pAiSub = (D2MonsterAiSubStrc*)((D2MissileStreamStrc*)pMonsterAi)->pStream;
+    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMonster ? 0 : pNpc->pUnitData.pUnitDataMonster->pMonsterAi;
+    D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (pAiSub) {
       if (pAiSub->pUnit == pUnit) {
         break;
@@ -431,8 +431,8 @@ void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMissile ? 0 : (D2MonsterAiStrc*)pNpc->pUnitData.pUnitDataMissile->pStream;
-    D2MonsterAiSubStrc* pAiSub = (D2MonsterAiSubStrc*)((D2MissileStreamStrc*)pMonsterAi)->pStream;
+    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMonster ? 0 : pNpc->pUnitData.pUnitDataMonster->pMonsterAi;
+    D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (true) {
       if (!pAiSub) {
         return 0;
@@ -548,19 +548,19 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAi
 }
 
 int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return (int32_t)pUnit->pUnitData.pUnitDataPlayer->pPlayerList;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return pUnit->pUnitData.pUnitDataMonster->nAiRelated2;
     }
 
     return 0;
 }
 
-D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return pUnit->pUnitData.pUnitDataPlayer->pArena;
+int __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return pUnit->pUnitData.pUnitDataMonster->nAiRelated1;
     }
 
-    return nullptr;
+    return 0;
 }
 
 void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
@@ -695,32 +695,32 @@ void __fastcall MERC_HireAndReplaceMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     if (pMinion->eUnitType != UNIT_MONSTER) {
       return;
     }
-    if (pMinion->pUnitData.pUnitDataPlayer) {
-      pMinion->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
+    if (pMinion->pUnitData.pUnitDataMonster) {
+      pMinion->pUnitData.pUnitDataMonster->Components[0] = 0;
     }
     if (pMinion->eUnitType != UNIT_MONSTER) {
       return;
     }
-    if (pMinion->pUnitData.pUnitDataPlayer) {
-      pMinion->pUnitData.pUnitDataPlayer->szCharName[9] = '\0';
+    if (pMinion->pUnitData.pUnitDataMonster) {
+      pMinion->pUnitData.pUnitDataMonster->Components[5] = 0;
     }
     if (pMinion->eUnitType != UNIT_MONSTER) {
       return;
     }
-    if (pMinion->pUnitData.pUnitDataPlayer) {
-      pMinion->pUnitData.pUnitDataPlayer->szCharName[10] = '\0';
+    if (pMinion->pUnitData.pUnitDataMonster) {
+      pMinion->pUnitData.pUnitDataMonster->Components[6] = 0;
     }
     if (pMinion->eUnitType != UNIT_MONSTER) {
       return;
     }
-    if (pMinion->pUnitData.pUnitDataPlayer) {
-      pMinion->pUnitData.pUnitDataPlayer->szCharName[0xb] = '\0';
+    if (pMinion->pUnitData.pUnitDataMonster) {
+      pMinion->pUnitData.pUnitDataMonster->Components[7] = 0;
     }
-    if (!(pMinion->eUnitType == UNIT_MONSTER && pMinion->pUnitData.pUnitDataPlayer)) {
+    if (!(pMinion->eUnitType == UNIT_MONSTER && pMinion->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    pMinion->pUnitData.pUnitDataPlayer->szCharName[5] = '\0';
+    pMinion->pUnitData.pUnitDataMonster->Components[1] = 0;
 }
 
 } // namespace D2Game::Monster::MonsterAI

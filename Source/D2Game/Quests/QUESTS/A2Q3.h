@@ -101,13 +101,9 @@ BOOL __fastcall Q11_PlayCompletionSound(::SGAMEDATA * pGame, struct D2UnitStrc *
 // For a player NOT holding the 'vip ' or 'hst ' quest item and whose Horadric-Staff quest isn't Completed,
 // increments the A2Q3 nQuestItemCount (drives how many reward items the altar drops). Read of HoradricStaff only.
 BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// A2Q3 - OBJOP_A2Q3_ActivateHoradricStaffAltar (Objects_OperateFn24): the Tainted Sun Altar operate handler
-// (in the Claw Viper Temple). If the player already finished (RewardAwaits/Completed) or has the staff/amulet
-// items, just plays a sound. Otherwise (altar/victim dead): records the room/level, ends the darkening
-// (DRLGENV_TaintedSunEnd + sun-restored packets), sets stateFlag 4 'Finished quest', then marks players'
-// records RewardAwaits+JustCompleted (clearing CannotComplete), runs the room-complete/party/sound iterators,
-// SetQuestRecordState JustCompleted, drops body-part reward items + gold, and arms Q11_OnEndCallback timer.
-BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(struct D2ObjectOperateFnArg * pOperation);
+// A2Q3 Tainted Sun altar operate fn (OperateFn 24, Claw Viper Temple). If the player already finished or holds the staff/amulet items it only plays a sound. Otherwise it ends the darkening (DRLGENV_TaintedSunEnd and the sun-restored packets), sets state flag 4 and marks the players' records RewardAwaits and JustCompleted.
+// Slot from objects.txt OperateFn 24.
+BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(struct D2ObjectOperateFnArg * pOperation);
 // A2Q3 - Q11_IsTaintedSunComplete: returns true if the Tainted Sun quest has progressed past stateFlag 3
 // (i.e. altar destroyed / quest finished), or true if quest data missing / intro not started. Read-only.
 bool __fastcall Q11_IsTaintedSunComplete(::SGAMEDATA * pGame);

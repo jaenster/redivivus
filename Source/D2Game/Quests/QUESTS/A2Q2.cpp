@@ -531,14 +531,11 @@ BOOL __fastcall Unreferenced_00599bf0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return (uint32_t)!pDVar1;
 }
 
-// OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2. Object-operate fn for the Tomb-chest /
-// portal object that yields the Book of Skill scroll ('rt1 '). Activates the portal,
-// sets victim dropItemCode='rt1 ', counts eligible players via Q10_OnScrollPickup,
-// drops that many PlayerBodyPart-table reward items, then rolls chest gold drops.
-// No QuestRecord writes (counting only).
-BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * pOperation) {
+// A2Q2 Horadric Scroll chest operate fn (OperateFn 40). Opens the chest, sets the drop item code 'rt1 ', counts eligible players via Q10_OnScrollPickup, drops that many scrolls, then rolls gold. No QuestRecord writes.
+// Slot from objects.txt OperateFn 40.
+BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA2Q2Strc* pA1Q1Scratch;
-    BOOL bPortalActive = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL bPortalActive = QUESTS_OpenQuestChest(pOperation);
     if (bPortalActive) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20317274;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
@@ -576,15 +573,12 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2(D2ObjectOperateFnArg * 
     return 0;
 }
 
-// OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3. Object-operate fn for the object that
-// yields the Amulet of the Viper ('msf '... here dropItemCode='msf '). Activates
-// portal, counts eligible players via Q10_OnStaffOrViperPickup, drops that many
-// reward items (marked identified, bumps nMsfCount/bHasViperAmulet), then rolls gold.
-// No QuestRecord writes.
-BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * pOperation) {
+// A2Q2 Staff of Kings chest operate fn (OperateFn 41). Opens the chest, sets the drop item code 'msf ', counts eligible players via Q10_OnStaffOrViperPickup, drops that many identified reward items (bumps nMsfCount/bHasViperAmulet), then rolls gold. No QuestRecord writes.
+// Slot from objects.txt OperateFn 41.
+BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL nDropIdx = QUESTS_OpenQuestChest(pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x2066736d;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
@@ -628,14 +622,12 @@ BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3(D2ObjectOperateFnArg * 
     return 0;
 }
 
-// OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1. Object-operate fn for the object that
-// yields the Horadric Cube ('box '). Activates portal, counts eligible players via
-// Q10_OnHoradricCubePickup, drops that many Shield-table reward items (bumps
-// nBoxCount/bHasCube), then rolls gold. No QuestRecord writes.
-BOOL __fastcall OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1(D2ObjectOperateFnArg * pOperation) {
+// A2Q2 Horadric Cube chest operate fn (OperateFn 39). Opens the chest, counts eligible players via Q10_OnHoradricCubePickup, drops that many cubes ('box ', bumps nBoxCount/bHasCube), then rolls gold. No QuestRecord writes.
+// Slot from objects.txt OperateFn 39.
+BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
-    BOOL nDropIdx = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL nDropIdx = QUESTS_OpenQuestChest(pOperation);
     if (nDropIdx) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x20786f62;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);

@@ -79,7 +79,7 @@ BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, int32_t pTargetUni
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheFallenAngel);
     if (pQuestData) {
       D2QuestDataA3Q3Strc* pQuestSpecificData;
-      pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q3;
+      pQuestSpecificData = (D2QuestDataA3Q3Strc*)pQuestData->pQuestSpecificData.pA3Q3;
       if (*(char*)((intptr_t)&pQuestSpecificData->nSerpentSpawnY + 2) != '\0') {
         pQuestSpecificData->bSerpentLocationValid = false;
         pQuestSpecificData->nSerpentObjectY = pTargetUnit;

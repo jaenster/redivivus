@@ -626,9 +626,10 @@ uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(D2UnitStrc * pUnit, eD2Skills 
     return nCalcResult;
 }
 
-// Dragon Tail SrvDoFunc. Applies direct melee damage to the current target via DAMAGE_ProcessCombatQueueEntry, then fires an AoE explosion at the target/cursor position. AoE radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc). Damage is set via SKILLS_AddRandomSkillDamage + SetDamageOnEvent with result/hit-flag bit 0 set.
+// Server do-func 38: the second charge release of Fists of Fire and Blades of Ice. Applies direct melee damage to the target via DAMAGE_ProcessCombatQueueEntry, then fires an area explosion at the target/cursor position; the radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc).
+// Slot from skills.txt srvdofunc 38.
 // @sourcefile .\SKILLS\SkillAss.cpp
-BOOL __fastcall Skills_SrvDoFunc_038_DragonTail_KickAoE(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -1278,8 +1279,9 @@ BOOL __fastcall Skills_SrvDoFunc_040_ChargeRelease_SingleMissile(::SGAMEDATA * p
     return 1;
 }
 
-// Server DoFunc for Blade Fury (skill 041, Assassin). Validates skill txt, gets target/cursor position, retrieves the charge-up missile type and count, then spawns that many missiles with seed-randomised ±20 unit offsets around the target. Stores the seed low and packed XY in each missile's target fields. Returns 1 on success, 0 if prerequisites missing.
-BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Server do-func 41: the third charge release of Royal Strike (Phoenix Strike). Gets the target/cursor position and the charge-up missile type and count, then spawns that many missiles at seeded +-20 offsets around the target, storing the seed and packed XY in each missile.
+// Slot from skills.txt srvdofunc 41.
+BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nSeedLow;
     D2SkillArgStrc sSkillArg;
     D2SeedStrc sSeedCopy;
@@ -1354,7 +1356,7 @@ BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
 // Server-side Assassin charge-up release: when a melee finishing-move combat entry fires (nCombatEntryParam flag bit 0 set) and a target is in melee range, scans the unit's active charge-up state stat-lists (pAllStatesDataTblFlag0x04). For each, reads the stored skill id and charge level, clamps charges to 1..3, and invokes the skill's per-charge srvprgfunc handlers (SKILLSRVDOFUNCS dispatch) up to the charge count, broadcasting a unit-message packet to the target. Consumes the charge by removing/freeing each charge-up stat-list afterward. Seed is rolled then restored to preserve determinism. No return.
 void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
     // Static local variables (originally global data)
-    static int gnSkillAssSpinDamage_RingAngle = 0xbf; D2_STATIC_GUARD(gnSkillAssSpinDamage_RingAngle, "D2Game::SKILLS::SkillAss::SKILLASS_ReleaseChargeUpAttack::gnSkillAssSpinDamage_RingAngle");
+    static int SKILLSRVDOFUNCS_SIZE = 0xbf; D2_STATIC_GUARD(SKILLSRVDOFUNCS_SIZE, "D2Game::SKILLS::SkillAss::SKILLASS_ReleaseChargeUpAttack::SKILLSRVDOFUNCS_SIZE");
 
     D2SeedStrc* pSeed;
     D2StatListExStrc* pStatList;
@@ -1432,7 +1434,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                   if (nChargeLvlMax > 0) {
                     pSrvPrgFunc = pDVar4->srvprgfunc;
                     do {
-                      if (*pSrvPrgFunc > 0 && *pSrvPrgFunc < gnSkillAssSpinDamage_RingAngle) {
+                      if (*pSrvPrgFunc > 0 && *pSrvPrgFunc < SKILLSRVDOFUNCS_SIZE) {
                         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatListSaved, (int)pDVar4->aurastat[0], i + 1, 0);
                         if (SKILLSRVDOFUNCS[*pSrvPrgFunc]) {
                           (*SKILLSRVDOFUNCS[*pSrvPrgFunc])(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
@@ -1448,7 +1450,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
                 }
 
                 eAuraStat = pDVar4->srvprgfunc[nChargeLvl - 1];
-                if (eAuraStat > 0 && eAuraStat < gnSkillAssSpinDamage_RingAngle && SKILLSRVDOFUNCS[eAuraStat]) {
+                if (eAuraStat > 0 && eAuraStat < SKILLSRVDOFUNCS_SIZE && SKILLSRVDOFUNCS[eAuraStat]) {
                   (*SKILLSRVDOFUNCS[eAuraStat])(pGameCopy, pUnit, eSkillId, nEffectiveSkillLvl);
                 }
 

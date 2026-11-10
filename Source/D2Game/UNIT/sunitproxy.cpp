@@ -52,8 +52,8 @@ static uint8_t gbaNpcItemTableBuilt[17] = {}; D2_STATIC_GUARD(gbaNpcItemTableBui
 namespace D2Game::UNIT::sunitproxy {
 
 D2MonsterAiStrc * __fastcall GetMonsterAI(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer) {
-      return (D2MonsterAiStrc*)pUnit->pUnitData.pUnitDataPlayer->pMonsterAi;
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+      return pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     }
 
     return nullptr;

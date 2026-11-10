@@ -1375,11 +1375,11 @@ uint8_t __stdcall INV_GetItemDescDirtyFlag() {
 }
 
 void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[2] = 0;
+    pUnit->pUnitData.pUnitDataMonster->nDurielUnk = 0;
 }
 
 void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {

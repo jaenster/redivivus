@@ -38,7 +38,7 @@ namespace D2Common::Units::Missile {
 
 // @sourcefile .\UNITS\Missile.cpp
 void __stdcall AllocMissileData(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && !pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && !pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
@@ -50,28 +50,28 @@ void __stdcall AllocMissileData(D2UnitStrc * pUnit) {
 
 // @sourcefile .\UNITS\Missile.cpp
 void __stdcall FreeMissileData(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataPlayer, ".\\UNITS\\Missile.cpp", 0x3e);
-    pUnit->pUnitData.pUnitDataPlayer = 0;
+    D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataMissile, ".\\UNITS\\Missile.cpp", 0x3e);
+    pUnit->pUnitData.pUnitDataMissile = 0;
 }
 
 int32_t __stdcall GetFlags(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return (int32_t)pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[1];
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return pUnit->pUnitData.pUnitDataMissile->dwMissileFlags;
     }
 
     return 0;
 }
 
 void __stdcall SetFlags(D2UnitStrc * pUnit, int32_t dwFlags) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataObject)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataObject->unk0x14 = dwFlags;
+    pUnit->pUnitData.pUnitDataMissile->dwMissileFlags = dwFlags;
 }
 
 void __stdcall SetLevel(D2UnitStrc * pUnit, int nLevel) {
@@ -231,32 +231,32 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
 }
 
 void __stdcall SetStreamMissile(D2UnitStrc * pUnit, int nStreamMissile) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    *(uint16_t*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 4) = (uint16_t)nStreamMissile;
+    *(uint16_t*)&pUnit->pUnitData.pUnitDataMissile->unk0x04 = (uint16_t)nStreamMissile;
 }
 
 int32_t __stdcall GetStreamMissile(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return (int)*(short int*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 4);
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return (int)(short int)pUnit->pUnitData.pUnitDataMissile->unk0x04;
     }
 
     return -1;
 }
 
 void __stdcall SetStreamRange(D2UnitStrc * pUnit, int16_t nStreamRange) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    *(int16_t*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 6) = nStreamRange;
+    *(int16_t*)((intptr_t)&pUnit->pUnitData.pUnitDataMissile->unk0x04 + 2) = nStreamRange;
 }
 
 int32_t __stdcall GetStreamRange(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return (int)*(short int*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 6);
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return (int)*(short int*)((intptr_t)&pUnit->pUnitData.pUnitDataMissile->unk0x04 + 2);
     }
 
     return 0;
@@ -339,8 +339,8 @@ void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {
 }
 
 D2MissileStreamStrc * __fastcall GetStream(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return (D2MissileStreamStrc*)pUnit->pUnitData.pUnitDataPlayer->pMonsterAi;
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return pUnit->pUnitData.pUnitDataMissile->pStream;
     }
 
     return nullptr;
@@ -355,24 +355,24 @@ void __stdcall SetTargetX(D2UnitStrc * pUnit, int32_t nTargetX) {
 }
 
 int32_t __stdcall GetTargetX(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return pUnit->pUnitData.pUnitDataPlayer->unk0x28;
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return pUnit->pUnitData.pUnitDataMissile->nHomeStatus;
     }
 
     return 0;
 }
 
 void __stdcall SetTargetY(D2UnitStrc * pUnit, int32_t nTargetY) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataPlayer->nPortalFlags = nTargetY;
+    pUnit->pUnitData.pUnitDataMissile->sCoords = nTargetY;
 }
 
 int32_t __stdcall GetTargetY(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataPlayer) {
-      return pUnit->pUnitData.pUnitDataPlayer->nPortalFlags;
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
+      return pUnit->pUnitData.pUnitDataMissile->sCoords;
     }
 
     return 0;

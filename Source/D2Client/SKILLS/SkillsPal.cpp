@@ -30,10 +30,11 @@ int gnPaladinSkillIndexTable[8] = { 0x0, -0x1, -0x2, -0x1, 0x0, 0x1, 0x2, 0x1 };
 
 namespace D2Client::SKILLS::SkillsPal {
 
-// Client DoFunc for Paladin Zeal directional offset missile. Determines the firing direction quadrant from the unit's movement direction (or a random quadrant if stationary), applies a random ±1 offset from gnPaladinSkillIndexTable/gnPaladinSkillOffsetTable, then spawns a missile of the skill's cltmissilea type (offset by a calc-driven random variant) at the computed position. Returns 1 on success, 0 if skill/missile data is invalid or no confirmed target.
-BOOL __fastcall Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Client do-func 34: Sacrifice, the blood splash on the caster. Picks the direction quadrant from the unit's movement direction (random when stationary), applies a random +-1 offset from gnPaladinSkillIndexTable/gnPaladinSkillOffsetTable and spawns the skill's cltmissilea at the computed position.
+// Slot from skills.txt cltdofunc 34.
+BOOL __fastcall Skills_CltDoFunc_Pal_Sacrifice(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
-    static int gnPaladinSkillOffsetTable[8] = { 0x2, 0x1, 0x0, -0x1, -0x2, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(gnPaladinSkillOffsetTable, "D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile::gnPaladinSkillOffsetTable");
+    static int gnPaladinSkillOffsetTable[8] = { 0x2, 0x1, 0x0, -0x1, -0x2, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(gnPaladinSkillOffsetTable, "D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_Sacrifice::gnPaladinSkillOffsetTable");
 
     int32_t nVelocity;
     uint32_t nRandOffset;
@@ -486,8 +487,9 @@ int32_t __fastcall SKILL_GetSequenceEventFrame(D2UnitStrc * pUnit) {
     return 7;
 }
 
-// Client-side skill DoFunc for the Paladin melee/charge sequence using HolyBolt-style targeting (Smite/Zeal-like): drives pUnit's attack animation and target acquisition each frame. Resolves the current skill, its flags, the sequence event frame and frame rate (merc-aware). When not on the action-frame hit, manages target state stored in skill Param1/Param2 (unit type + GUID): re-validates the current target, checks melee range, and on a flag-1/flag-2 state machine either locks onto an in-range target, re-times the swing, or searches for the closest valid target (SKILL_FindClosestTargetWithStats) and faces it. On the action frame it plays the attack sound. Returns 1 while sequencing, 0 if there is no current skill or the path/target resolves to none. Note: pFindResult/pClosestTarget appear read before assignment in the pseudocode (decompiler register-aliasing artifact).
-BOOL __fastcall Skills_CltDoFunc_Pal_HolyBolt_Melee(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Client do-func 37: Charge (and the monster SerpentCharge). Drives the attack animation and target acquisition each frame: resolves the skill, its flags, the sequence event frame and frame rate, keeps the target in skill Param1/Param2 (unit type + GUID), re-validates it and checks melee range.
+// Slot from skills.txt cltdofunc 37.
+BOOL __fastcall Skills_CltDoFunc_Pal_Charge(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitType eUnitType;
     BOOL bInMeleeRange;
     D2UnitStrc* pFindResult;

@@ -140,17 +140,19 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNPCClassId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    struct D2UnitStrc* t2_c5 = pQuestArgs->pPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(t2_c5);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (nNPCClassId != 0xb0) {
       return;
     }
 
-    D2QuestDataA1Q3Strc* pA2Q1Data = pQuestData->pQuestSpecificData.pA1Q3;
+    D2QuestDataA2Q1Strc* pA2Q1Data = pQuestData->pQuestSpecificData.pA2Q1;
     if (nMessageIndex == 0x130) {
-      pA2Q1Data->field_0x08 = '\x01';
+      pA2Q1Data->bSpokeToAtma = 1;
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q1.cpp", 0xef);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q09_UpdateQuestRecord);
+      QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
     } else {
       BOOL bQuestState;
       if (nMessageIndex != 0x14e) {
@@ -182,7 +184,7 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          (non-intro path) */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_RadamentsLair, QUESTSTATE_JustCompleted);
         }
       } else {
-        if (pA2Q1Data->field_0x10 != '\0') {
+        if (pA2Q1Data->bRewardPending) {
           pSeqQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
           if (pSeqQuestData) {
             /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
@@ -205,9 +207,8 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
 
       QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nErrorLine);
+      QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
     }
-
-    QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
 }
 
 // A2Q1 callback[0]: pick which gossip/quest-log line Atma speaks. Reads JustCompleted/Completed/RewardAwaits for the player. If RewardAwaits -> line 3 (come collect the book). Else if this player already participated in the kill -> line 4. Else, if not Completed and nStateFlag in 1..3 (or JustCompleted), looks up gdwQ09QuestStateMessages[nStateFlag] and, if valid (<9, !=0xffffffff), speaks that intro/progress line. AddGossipMessageOnMonster renders the chosen line.
@@ -527,7 +528,7 @@ void __fastcall Q09_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       /* GetQuestState RewardAwaits under FinishedInPreviousGame -> set bRewardPending
                          so Atma still hands over book */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_RadamentsLair, QUESTSTATE_RewardAwaits);
       if (bQuestState == 1) {
-        pQuestData->pQuestSpecificData.pA1Q3->field_0x10 = '\x01';
+        pQuestData->pQuestSpecificData.pA2Q1->bRewardPending = true;
       }
 
       pQuestData->nStateFlag = 0;

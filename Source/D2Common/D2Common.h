@@ -65,11 +65,11 @@ struct D2DrlgLevelWarpCoordinatesStrc;
 struct D2DrlgMapStrc;
 union D2DrlgOrthLinkUnion;
 struct D2DrlgOrthStrc;
+struct D2DrlgOutdoorRoomStrc;
 struct D2DrlgPresetRoomStrc;
 struct D2DrlgPresetTypeIndexStrc;
 struct D2DrlgPresetTypeStrc;
 struct D2DrlgRoomCoordsStrc;
-struct D2DrlgRoomExDataMazeStrc;
 union D2DrlgRoomExDataUnion;
 struct D2DrlgRoomExRoomTileNodeStrc;
 struct D2DrlgRoomTilesStrc;
@@ -1076,6 +1076,23 @@ struct __attribute__((packed)) D2DrlgOrthStrc {
     /* 0x14 */ struct D2DrlgOrthStrc * pNext; // Next node in linked list
 };
 #endif // D2_DEFINED_D2DrlgOrthStrc
+#ifndef D2_DEFINED_D2DrlgOutdoorRoomStrc
+#define D2_DEFINED_D2DrlgOutdoorRoomStrc
+struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
+    /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
+    /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
+    /* 0x28 */ D2DrlgGridStrc pFloorGrid; // Floor grid for outdoor tiles
+    /* 0x3C */ D2DrlgGridStrc pCellGrid; // Cell/shadow grid for outdoor tiles
+    /* 0x50 */ uint8_t * pVertex; // struct D2DrlgVertexStrc* - vertex linked list for path/border
+    /* 0x54 */ int dwFlags; // Outdoor room flags (bit 0x80 = border)
+    /* 0x58 */ int dwFlagsEx; // Extended outdoor room flags
+    /* 0x5C */ int field_5C; // Unknown
+    /* 0x60 */ int field_60; // Unknown
+    /* 0x64 */ int nSubType; // SubType from LevelDefs.txt
+    /* 0x68 */ int nSubTheme; // SubTheme from LevelDefs.txt
+    /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
+};
+#endif // D2_DEFINED_D2DrlgOutdoorRoomStrc
 #ifndef D2_DEFINED_D2DrlgPresetRoomStrc
 #define D2_DEFINED_D2DrlgPresetRoomStrc
 struct __attribute__((packed)) D2DrlgPresetRoomStrc {
@@ -1139,23 +1156,6 @@ struct D2DrlgRoomCoordsStrc {
     /* 0x10 */ RECT sTileRect;
 };
 #endif // D2_DEFINED_D2DrlgRoomCoordsStrc
-#ifndef D2_DEFINED_D2DrlgRoomExDataMazeStrc
-#define D2_DEFINED_D2DrlgRoomExDataMazeStrc
-struct __attribute__((packed)) D2DrlgRoomExDataMazeStrc {
-    /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
-    /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
-    /* 0x28 */ D2DrlgGridStrc pFloorGrid; // Floor grid for outdoor tiles
-    /* 0x3C */ D2DrlgGridStrc pCellGrid; // Cell/shadow grid for outdoor tiles
-    /* 0x50 */ uint8_t * pVertex; // struct D2DrlgVertexStrc* - vertex linked list for path/border
-    /* 0x54 */ int dwFlags; // Outdoor room flags (bit 0x80 = border)
-    /* 0x58 */ int dwFlagsEx; // Extended outdoor room flags
-    /* 0x5C */ int field_5C; // Unknown
-    /* 0x60 */ int field_60; // Unknown
-    /* 0x64 */ int nSubType; // SubType from LevelDefs.txt
-    /* 0x68 */ int nSubTheme; // SubTheme from LevelDefs.txt
-    /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
-};
-#endif // D2_DEFINED_D2DrlgRoomExDataMazeStrc
 #ifndef D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
 #define D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
 struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds {
@@ -1167,8 +1167,8 @@ struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds {
 union D2DrlgRoomExDataUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
-    /* 0x00 */ struct D2DrlgRoomExDataMazeStrc * pRoomExDataMazeRoom; // DRLG Type = RandomMaze (retyped to D2DrlgRoomExDataMazeStrc)
-    /* 0x00 */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset; // DRLG Type = PresetArea
+    /* 0x00 */ struct D2DrlgOutdoorRoomStrc * pRoomExDataOutdoorRoom; // nPresetType == 1: outdoor room (DRLGOUTROOM_AllocOutdoorRoomData)
+    /* 0x00 */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset; // nPresetType == 2: maze and preset rooms
 };
 #endif // D2_DEFINED_D2DrlgRoomExDataUnion
 #ifndef D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
@@ -1203,7 +1203,7 @@ struct D2RoomExStrc {
     /* 0x0C */ uint16_t awRoomsInList[4]; // Max near rooms array capacity
     /* 0x14 */ D2SeedStrc sSeed; // Room seed (nSeedLow + nSeedHigh)
     /* 0x1C */ struct D2RoomExStrc * pStatusNext; // Forward link in activation priority doubly-linked list
-    /* 0x20 */ D2DrlgRoomExDataUnion pRoomExData; // struct D2DrlgRoomExDataMazeStrc* for maze and outdoor rooms (nPresetType==1), struct D2DrlgPresetRoomStrc* for preset rooms (nPresetType==2)
+    /* 0x20 */ D2DrlgRoomExDataUnion pRoomExData; // struct D2DrlgOutdoorRoomStrc* for outdoor rooms (nPresetType==1), struct D2DrlgPresetRoomStrc* for maze and preset rooms (nPresetType==2)
     /* 0x24 */ struct D2RoomExStrc * pRoomExNext; // Next room in level list
     /* 0x28 */ int eRoomExFlags; // D2DrlgRoomFlags bitmask
     /* 0x2C */ int nDrlgRoomsExNearCount; // Number of near rooms
@@ -1213,7 +1213,7 @@ struct D2RoomExStrc {
     /* 0x45 */ uint8_t field_0x45;
     /* 0x46 */ uint8_t field_0x46;
     /* 0x47 */ uint8_t field_0x47;
-    /* 0x48 */ int nPresetType; // 1=RandomMaze(outdoor), 2=PresetArea
+    /* 0x48 */ int nPresetType; // 1=outdoor room, 2=preset/maze room
     /* 0x4C */ struct D2DrlgRoomExRoomTileNodeStrc * pRoomTileNodes; // warp tile nodes (D2DrlgRoomExRoomTileNodeStrc, 0x18 each), linked via pRoomTileNext; DRLGROOMEX_AllocRoomTile pushes, FreeDrlgRoomTile frees
     /* 0x50 */ int nDT1Mask; // Bitmask of DT1 tile files to load
     /* 0x54 */ struct D2DrlgTileGridStrc * pRoomTiles; // Room tile data - holds walls/floors/shadows tile arrays

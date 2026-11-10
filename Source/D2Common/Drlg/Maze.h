@@ -23,9 +23,9 @@ struct D2RoomExStrc;
 typedef uint32_t eDrlgDirection;
 
 // Data types
-#ifndef D2_DEFINED_D2DrlgRoomExDataMazeStrc
-#define D2_DEFINED_D2DrlgRoomExDataMazeStrc
-struct __attribute__((packed)) D2DrlgRoomExDataMazeStrc {
+#ifndef D2_DEFINED_D2DrlgOutdoorRoomStrc
+#define D2_DEFINED_D2DrlgOutdoorRoomStrc
+struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
     /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
     /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
     /* 0x28 */ D2DrlgGridStrc pFloorGrid; // Floor grid for outdoor tiles
@@ -40,7 +40,7 @@ struct __attribute__((packed)) D2DrlgRoomExDataMazeStrc {
     /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
 };
 
-#endif // D2_DEFINED_D2DrlgRoomExDataMazeStrc
+#endif // D2_DEFINED_D2DrlgOutdoorRoomStrc
 namespace D2Common::Drlg::Maze {
 
 // Function declarations

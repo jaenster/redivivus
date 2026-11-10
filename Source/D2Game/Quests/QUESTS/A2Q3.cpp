@@ -275,7 +275,7 @@ void __stdcall Q11_EndTaintedSun(D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGa
       return;
     }
 
-    pQuestData->pQuestSpecificData.pA1Q2->bRewardGiven = false;
+    pQuestData->pQuestSpecificData.pA2Q3->bSunDarkened = false;
     D2Common::Environment::DRLGENV_TaintedSunEnd(pGame->pAct[1]);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q11_SendSunRestoredPacket);
 }
@@ -510,13 +510,9 @@ BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     return 0;
 }
 
-// A2Q3 - OBJOP_A2Q3_ActivateHoradricStaffAltar (Objects_OperateFn24): the Tainted Sun Altar operate handler
-// (in the Claw Viper Temple). If the player already finished (RewardAwaits/Completed) or has the staff/amulet
-// items, just plays a sound. Otherwise (altar/victim dead): records the room/level, ends the darkening
-// (DRLGENV_TaintedSunEnd + sun-restored packets), sets stateFlag 4 'Finished quest', then marks players'
-// records RewardAwaits+JustCompleted (clearing CannotComplete), runs the room-complete/party/sound iterators,
-// SetQuestRecordState JustCompleted, drops body-part reward items + gold, and arms Q11_OnEndCallback timer.
-BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(D2ObjectOperateFnArg * pOperation) {
+// A2Q3 Tainted Sun altar operate fn (OperateFn 24, Claw Viper Temple). If the player already finished or holds the staff/amulet items it only plays a sound. Otherwise it ends the darkening (DRLGENV_TaintedSunEnd and the sun-restored packets), sets state flag 4 and marks the players' records RewardAwaits and JustCompleted.
+// Slot from objects.txt OperateFn 24.
+BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pPlayerData;
     D2RoomStrc* pRoom;
     D2SeedStrc* pQuestSeed;
@@ -567,7 +563,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateHoradricStaffAltar(D2ObjectOperateFnArg * pOp
           if (pTaintedSunQuestData->bIsNotIntroduction != '\0') {
             pGame3 = pTaintedSunQuestData->pGame;
             if (pGame3->pAct[1]) {
-              pTaintedSunQuestData->pQuestSpecificData.pA1Q2->bRewardGiven = false;
+              pTaintedSunQuestData->pQuestSpecificData.pA2Q3->bSunDarkened = false;
               D2Common::Environment::DRLGENV_TaintedSunEnd(pGame3->pAct[1]);
               UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame3, 0, nullptr, (::fpExecuteOnUnitFunction)Q11_SendSunRestoredPacket);
             }
@@ -723,7 +719,7 @@ void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo) {
 uint8_t __fastcall Q11_GetTaintedSunFlag(D2QuestDataStrc * pCallerQuestData) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pCallerQuestData->pGame, QUESTINT_TheTaintedSun);
     if (pQuestData) {
-      return pQuestData->pQuestSpecificData.pA2Q6->bOrificeObjectPresent;
+      return pQuestData->pQuestSpecificData.pA2Q3->bTaintedSunStartedFailed;
     }
 
     return 0;

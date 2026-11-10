@@ -201,6 +201,7 @@ D2UnitStrc * __fastcall MakeRandomShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     0xe
 }; D2_STATIC_GUARD(aOBJECTCLASSID, "D2Game::Objects::MakeRandomShrine::aOBJECTCLASSID");
 
+    void* nShrineId;
     int32_t nLine;
     if (nMonStatsId >= 0x23e && nMonStatsId <= 0x243) {
       int nObjClassOffset = nMonStatsId * 3;
@@ -216,7 +217,7 @@ D2UnitStrc * __fastcall MakeRandomShrine(::SGAMEDATA * pGame, D2RoomStrc * pRoom
         nLine = 2;
       }
 
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nLine;
+      pUnit->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nLine;
       D2ShrinesTxt* pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nLine);
       D2Common::Units::SetShrineTxtRecordInObjectData(pUnit, pShrinesTxt);
       return pUnit;
@@ -356,7 +357,7 @@ D2UnitStrc * __fastcall MakeRandomSparklyChest(::SGAMEDATA * pGame, D2RoomStrc *
 
     UNIT::SUnit::SetSparklyChestFlag(pUnit, '\x01');
     if (eLevelId == LEVEL_TowerCellarLevel5) {
-      pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x03';
+      pUnit->pUnitData.pUnitDataObject->nShrineId = 3;
     }
 
     mark_preoperate:
@@ -554,7 +555,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       }
     }
 
-    pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
+    pUnit->pUnitData.pUnitDataObject->nShrineId = 0;
     int nObjClassId = pUnit->nClassId;
     GAME::Event::EVENT_ClearTimerList(pGameCopy, pUnit);
     if (!((uint16_t)nObjClassId < 0x23d)) {
@@ -789,7 +790,7 @@ void __fastcall Objects_InitFn01_Shrine(D2ObjectInitFnArg * pInitArg) {
         }
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nShrineId;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nShrineId;
     pShrineLine = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
     D2Common::Units::SetShrineTxtRecordInObjectData(pInitArg->pObject, pShrineLine);
 }
@@ -823,23 +824,23 @@ void __fastcall Objects_InitFn02_Urn(D2ObjectInitFnArg * pInitArg) {
     if ((int)(seedRolled.nSeedLow % 100) < (int)(uint16_t)(pLevelsTxt->MonLvl[0] / 8 + 5U)) {
       int32_t nRolledFrame;
       nRolledFrame = Seed::SEED_RollRange(pInitArg->pSeed, 1, 9);
-      pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)nRolledFrame;
+      pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nRolledFrame;
       return;
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '\0';
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0;
 }
 
 void __fastcall Objects_InitFn27_GooPile(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc* pDVar1 = pInitArg->pSeed;
     D2SeedStrc DVar2 = D2_SEED_NEXT(*pDVar1);
     *pDVar1 = DVar2;
-    char byMode = '\x03';
+    uint8_t byMode = 3;
     if ((int)(DVar2.nSeedLow % 1000) >= 0x14d) {
-      byMode = '\0';
+      byMode = 0;
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = byMode;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byMode;
 }
 
 // Init callback for lockable chest objects (group 03). Calls Objects_InitFn02 for base setup, then reads the chest's current flags. If the object's txt Lockable flag is set, rolls a seed value against (MonLvl/2 + 8) percent chance; if the roll passes the chest is flagged as locked (bit 0x80). Finally seeds the object's own RNG state with a derived value and writes back the flags.
@@ -849,7 +850,7 @@ void __fastcall Objects_InitFn03_Chest(D2ObjectInitFnArg * pInitArg) {
     D2SeedStrc seedRolled;
     Objects_InitFn02_Urn(pInitArg);
     uint8_t byChestFlags;
-    byChestFlags = pInitArg->pObject->pUnitData.pUnitDataMonster->Components[0];
+    byChestFlags = pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId;
     eD2LevelId eLevelId;
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     D2LevelsTxt* pLevelsTxt;
@@ -871,7 +872,7 @@ void __fastcall Objects_InitFn03_Chest(D2ObjectInitFnArg * pInitArg) {
     nSeedHighDiv = (int)((uint64_t)seedRolled.nSeedLow * 0x20005 >> 0x20);
     *pDVar1 = seedRolled;
     D2Common::Seed::InitSeed_Param_666(&pInitArg->pObject->sSeed, seedRolled.nSeedLow + ((seedRolled.nSeedLow - nSeedHighDiv >> 1) + nSeedHighDiv >> 0xf) * -0xfffe + 1);
-    pInitArg->pObject->pUnitData.pUnitDataMonster->Components[0] = byChestFlags;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byChestFlags;
 }
 
 void __fastcall Objects_InitFn57_SparklyChest(D2ObjectInitFnArg * pInitArg) {
@@ -899,7 +900,7 @@ void __fastcall Objects_InitFn59_VileDogAfterglow(D2ObjectInitFnArg * pInitArg) 
 
 // Object initialisation callback for waypoint-type objects (init-fn index 12). If the object is null or in Death mode, blocks collision and schedules an animation event. Then switches on the current room's level ID to write a level-specific frame byte into the object's data slot (szCharName[4]), controlling which waypoint frame/state is active. For FrigidHighlands, ArreatPlateau, and FrozenTundra it also fires event 0xB to trigger a frame-change if the stored value differs from the new one. Horadric Tomb level is determined dynamically via GetHoradricStaffTombLevelId.
 void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
-    D2UnitDataPlayerStrc* pUnitData;
+    D2UnitDataObjectStrc* pUnitData;
     eD2LevelId eLevelId;
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     D2UnitStrc* pUnit;
@@ -913,72 +914,72 @@ void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
     eD2LevelId eHoradricTombLevelId;
     eHoradricTombLevelId = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pInitArg->pGame->pAct[1]);
     if (!false) {
-      char byPortalFrameVal;
+      uint8_t byPortalFrameVal;
       switch (eLevelId) {
         case LEVEL_RogueEncampment:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '\'';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x27;
         return;
         default:
           goto default_case;
         case LEVEL_MooMooFarm:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '\x01';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 1;
         return;
         case LEVEL_Tristram:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '\x04';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 4;
         return;
         case LEVEL_StonyField:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '&';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x26;
         return;
         case LEVEL_ArcaneSanctuary:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '.';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x2e;
         return;
         case LEVEL_CanyonOfTheMagi:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'J';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x4a;
         return;
         case LEVEL_DurielsLair:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eHoradricTombLevelId;
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eHoradricTombLevelId;
         return;
         case LEVEL_NihlathaksTemple:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'm';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6d;
         return;
         case LEVEL_Harrogath:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'y';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x79;
         return;
         case LEVEL_Abaddon:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'o';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6f;
         return;
         case LEVEL_PitOfAcheron:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'p';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x70;
         return;
         case LEVEL_InfernalPit:
-          pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'u';
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x75;
         return;
         case LEVEL_FrigidHighlands:
-          pUnitData = pInitArg->pObject->pUnitData.pUnitDataPlayer;
-        byPortalFrameVal = '}';
+          pUnitData = pInitArg->pObject->pUnitData.pUnitDataObject;
+        byPortalFrameVal = 0x7d;
         break;
         case LEVEL_ArreatPlateau:
-          if (pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] == '~') {
+          if (pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId == 0x7e) {
             return;
           }
-        pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = '~';
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x7e;
         GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
         return;
         case LEVEL_FrozenTundra:
-          pUnitData = pInitArg->pObject->pUnitData.pUnitDataPlayer;
-        byPortalFrameVal = '\x7f';
+          pUnitData = pInitArg->pObject->pUnitData.pUnitDataObject;
+        byPortalFrameVal = 0x7f;
         break;
       }
 
-      if (pUnitData->szCharName[4] != byPortalFrameVal) {
-        pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = byPortalFrameVal;
+      if (pUnitData->nShrineId != byPortalFrameVal) {
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byPortalFrameVal;
         GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
         return;
       }
     } else {
       default_case:
       if (eLevelId == eHoradricTombLevelId) {
-        pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = 'I';
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x49;
       }
     }
 }
@@ -1020,7 +1021,7 @@ void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
       exit(-1);
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)eLevelId;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eLevelId;
     if (!(pInitArg->pObject && pInitArg->pObject->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
       return;
     }
@@ -2936,7 +2937,7 @@ int32_t __fastcall GetUnitGUIDFromUnitTimerArg(D2UnitStrc * pUnit) {
 }
 
 void __fastcall Objects_InitFn16_Well(D2ObjectInitFnArg * pInitArg) {
-    pInitArg->pObject->pUnitData.pUnitDataPlayer->szCharName[4] = (char)pInitArg->pObjectTxt->Parm[2] * '\x02';
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (char)pInitArg->pObjectTxt->Parm[2] * '\x02';
 }
 
 // Server-side object spawner for one object class in a room. Reads ObjectsTxt for nObjectClassId (size/orientation/selectable), advances the room RNG seed, and decides whether to spawn: a density-region check (OBJECTRGN_CheckDensityThreshold) either forces placement (up to 30 retries) or gates it on nChancePercent vs the seed roll. On success calls OBJECT_PlaceAtBiasedPosition near a spawn point, sets/clears UNITFLAG_TARGETABLE from the Selectable column, and for density spawns remaps to a shrine (OBJECT_SelectRandomShrineType, ShrinesTxt line 2) and bumps the level spawn count. Finally records the placed object's X/Y into the level RNG point set via AddPointsToLevelRngPoints1.
@@ -3003,7 +3004,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
         }
 
         pGameLocal = pGameSave;
-        if (pUnit->pUnitData.pUnitDataPlayer->szCharName[4] != '\x02') {
+        if (pUnit->pUnitData.pUnitDataObject->nShrineId != 2) {
           if (bDensityThreshold == '\0') {
             goto record_spawn_point;
           }
@@ -3011,7 +3012,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
           OBJECT_RemapClassIdFromParm(pUnit);
           pGameLocal = pGameSave;
           OBJECT_SelectRandomShrineType(pGameSave, 1, 2, pRoom);
-          pUnit->pUnitData.pUnitDataPlayer->szCharName[4] = '\x02';
+          pUnit->pUnitData.pUnitDataObject->nShrineId = 2;
           pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(2);
           D2Common::Units::SetShrineTxtRecordInObjectData(pUnit, pShrinesTxt);
         }

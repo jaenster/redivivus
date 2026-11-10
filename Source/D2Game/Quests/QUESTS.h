@@ -287,7 +287,7 @@ void __fastcall NotifyPlayersAboutEvent(::SGAMEDATA * pGame, uint8_t nEventId);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_SendNpcGossipPacket(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 BOOL __fastcall IsPortalFromDuriel(::SGAMEDATA * pGame, POINT * pPoint, eD2LevelId eLevelId, struct D2RoomStrc * * ppRoom);
-BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(struct D2ObjectOperateFnArg * pOperation);
+BOOL __fastcall QUESTS_OpenQuestChest(struct D2ObjectOperateFnArg * pOperation);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall SendQuestState(struct D2UnitStrc * pUnit, int32_t nQuestId);
 // @sourcefile .\QUESTS\QUESTS.CPP

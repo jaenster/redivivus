@@ -48,8 +48,9 @@ void __fastcall SKILLBAR_ApplyWarCryBuff(::SGAMEDATA * pGame, struct D2UnitStrc 
 BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-// Generic server-side handler for targeted necromancer curses (Lower Resist, Amplify Damage, Life Tap, Iron Maiden, Weaken, Terror, etc). Reads curse stats and state from skills.txt aurastat/aurastatcalc/auratargetstate, applies via SKILLNEC_ApplyCurseToUnit, then forces monster AI re-evaluation.
-BOOL __fastcall Skills_SrvDoFunc_071_IronMaiden_GenericCurse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+// Server do-func 71: Taunt (Barbarian). Reads the skill's aura stats and target state from skills.txt, applies them to the target via SKILLNEC_ApplyCurseToUnit and forces the target monster's AI to re-evaluate.
+// Slot from skills.txt srvdofunc 71.
+BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLBAR_SrvStFn34_FindItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server do-func for Barbarian Find Item (skill 72). Validates the target corpse is selectable and not yet looted (STATE_corpse_noselect), rolls against calc[0] drop-chance, then draws a second RNG roll to select one of four gold-tier tiers (controlled by Param[0..3] thresholds), and calls BarbFindItemSkill to drop the gold. Returns TRUE on a successful drop attempt.
 BOOL __fastcall Skills_SrvDoFunc_072_FindItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

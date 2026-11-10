@@ -1348,7 +1348,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           if (pQuestData) {
             do {
               if (pQuestData->nQuestNoInternal == QUESTINT_KhalimsWill) {
-                A3Q2::Q19_UpdateCompellingOrbObject(pQuestData, pUnit);
+                A3Q2::Q19_UpdateSewerStairsObject(pQuestData, pUnit);
                 return;
               }
 
@@ -1946,7 +1946,7 @@ BOOL __fastcall IsPortalFromDuriel(::SGAMEDATA * pGame, POINT * pPoint, eD2Level
     return 0;
 }
 
-BOOL __fastcall PORTAL_ActivateOrDeactivatePortalObject(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall QUESTS_OpenQuestChest(D2ObjectOperateFnArg * pOperation) {
     POINT sCoords;
     D2UnitStrc* pObjectUnit = pOperation->sArg.pVictim;
     if (pObjectUnit && pObjectUnit->eAnimMode.ePlayerMode != Death) {

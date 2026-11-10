@@ -285,8 +285,9 @@ BOOL __fastcall Skills_CltDoFunc_Sor_HomingMissileVelocity(D2UnitStrc * pUnit, e
     return 0;
 }
 
-// Client-side skill effect for Sorceress Frost Nova. Resolves the primary and sub-missile from SkillsTxt, fetches caster coordinates, validates collision and room, then spawns two perpendicular radial frost missiles (offset by 90 degrees from the caster-to-target vector) plus a centred sub-missile ring. Returns 0 if any prerequisite check fails.
-BOOL __fastcall Skills_CltDoFunc_Sor_FrostNova(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Client do-func 26: Fire Wall and its monster copies. Resolves the primary and sub-missile from skills.txt, validates the caster's collision and room, then spawns two missiles running perpendicular to the caster-to-target vector plus a centred sub-missile.
+// Slot from skills.txt cltdofunc 26.
+BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int32_t nTargetPosX;
     int32_t nCoordsX;
@@ -580,8 +581,9 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
-// Client DoFunc for Sorceress Blizzard. Spawns the cltmissilea missile at the confirmed target's position with nSkillLvl as ToHit. Sets the missile's Z position vector shifted to 0x118 and Z offset to -0x28 (high-altitude spawn). Calls WEATHER_InitBlizzardState(0) and adds the skill overlay to the target unit.
-BOOL __fastcall Skills_CltDoFunc_Sor_Blizzard(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Client do-func 84: the Thunder Storm bolt, reached only as Thunder Storm's cltprgfunc1. Spawns the cltmissilea at the confirmed target's position with nSkillLvl as ToHit, sets its Z position to 0x118 and Z offset to -0x28 (strike from above), calls WEATHER_InitBlizzardState(0) and adds the skill overlay to the target.
+// Slot from skills.txt cltdofunc 84.
+BOOL __fastcall Skills_CltDoFunc_Sor_ThunderStormBolt(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {

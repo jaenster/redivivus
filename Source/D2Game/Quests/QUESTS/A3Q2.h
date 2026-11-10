@@ -50,12 +50,14 @@ void __fastcall Q19_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 BOOL __fastcall OBJOP_UseStairDirect(struct D2ObjectOperateFnArg * pOperation);
 // Q19_IsKhalimsWillNotComplete (Khalim's Will). Predicate: returns true when the in-memory A3Q2 quest data exists, is active, and its GUID-tracked completion marker (aPlayerGUID[2]) != 2 (i.e. relic-pedestal sequence not finished). Reads quest data struct only.
 BOOL __fastcall Q19_IsKhalimsWillNotComplete(::SGAMEDATA * pGame);
-// OBJOP_A3Q2_KhalimRelicPedestal (Khalim's Will object op, OperateFn45). Operate handler for the relic pedestal/Compelling Orb object. When triggered and the quest event flag is set, finds the associated object, schedules the orb's operate+death events, marks the GUID completion field (=2), and NotifyPlayersAboutEvent(9) (orb destroyed -> Mephisto path opens). Drives the physical quest-completion event; QuestRecord transition itself happens via the dialog/callbacks.
-BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(struct D2ObjectOperateFnArg * pOperation);
-// Q19_UpdateCompellingOrbObject (Khalim's Will). Per-frame/refresh updater for the Compelling Orb object: if the orb-event flag is set, locates the orb unit, syncs its update flag, and (if changed) schedules its operate event. Maintains orb object state; no QuestRecord transitions.
+// A3Q2 Kurast sewer lever operate fn (OperateFn 45). When triggered and the quest event flag is set, finds the sewer stairs object (GUID stored by Objects_InitFn41_SewerStairs), schedules its operate and death events, sets the stairs update mode to 2 and calls NotifyPlayersAboutEvent(9).
+// Slot from objects.txt OperateFn 45.
+BOOL __fastcall OBJOP_A3Q2_PullSewerLever(struct D2ObjectOperateFnArg * pOperation);
+// A3Q2 updater for the Kurast sewer stairs object. If the stairs event flag is set, finds the stairs unit (GUID stored by Objects_InitFn41_SewerStairs), syncs its update flag and schedules its operate event when it changed. Runs only from the sewer lever's timer event.
 // Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
-void __fastcall Q19_UpdateCompellingOrbObject(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pMonster);
-// Objects_InitFn41 (Khalim's Will, InitFn41). Object init for the Compelling Orb: marks the orb-event flag set, records the object's GUID, and sets the object's update flag (2 during intro, else the tracked GUID). Initializes orb object state; no QuestRecord transitions.
+void __fastcall Q19_UpdateSewerStairsObject(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pMonster);
+// Object init for the Kurast sewer stairs (InitFn 41): sets the stairs event flag, records the object's GUID and sets its update flag (2 during the intro, else the tracked GUID).
+// Slot from objects.txt InitFn 41.
 void __fastcall Objects_InitFn41_SewerStairs(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
 void __fastcall Objects_InitFn42_SewerLever(struct D2ObjectInitFnArg * pInitArg);

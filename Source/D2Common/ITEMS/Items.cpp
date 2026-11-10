@@ -136,8 +136,8 @@ void __stdcall SetBodyLoc(D2UnitStrc * pUnit, eD2BodyLoc eBodyLoc) {
 }
 
 D2SeedStrc * __stdcall GetItemSeed(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer) {
-      return (D2SeedStrc*)(pUnit->pUnitData.pUnitDataPlayer->szCharName + 4);
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+      return &pUnit->pUnitData.pUnitDataItem->sSeed;
     }
 
     return nullptr;
@@ -179,8 +179,8 @@ void __stdcall SetModSeed(D2UnitStrc * pUnit, int32_t nModSeed) {
 
 // Returns nQuality from D2UnitDataItemStrc. Returns 2 (NORMAL) if unit is null, not an item, or has no item data. Thirty-seven bytes reading the unit from [EBP+8] and touching EAX only, so it preserves ECX; CalculateTransactionCost_Impl carries a magic-or-better flag there across this call.
 int __stdcall GetItemQuality(D2UnitStrc * pUnit) {
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster) {
-      return (int)pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+      return pUnit->pUnitData.pUnitDataItem->eQuality;
     }
 
     return 2;
@@ -310,8 +310,8 @@ eD2ItemFlag __stdcall ITEM_GetItemData_eD2ItemFlag(D2UnitStrc * pUnit) {
 }
 
 uint32_t __stdcall ITEM_CheckItemData_eD2ItemCmd(D2UnitStrc * pUnit, eD2ItemCmd eItemCmd) {
-    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile) {
-      return pUnit->pUnitData.pUnitDataMissile->dwMissileFlags & eItemCmd;
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+      return pUnit->pUnitData.pUnitDataItem->eItemCmd & eItemCmd;
     }
 
     return 0;
@@ -427,11 +427,11 @@ char * __stdcall ITEM_GetItemData_szPlayerName(D2UnitStrc * pUnit) {
 
 void __stdcall ITEM_GetPlayerNameAkaNamedString(D2UnitStrc * pUnit, char * pCustomName) {
     char cCh;
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
     }
 
-    char* pDstName = (char*)((intptr_t)pUnit->pUnitData.pUnitDataPlayer + (0x4a - (intptr_t)pCustomName));
+    char* pDstName = (char*)((intptr_t)pUnit->pUnitData.pUnitDataItem + (0x4a - (intptr_t)pCustomName));
     do {
       cCh = *pCustomName;
       pDstName[(intptr_t)pCustomName] = cCh;
@@ -1676,12 +1676,12 @@ void __stdcall ITEM_SetItemData_nPlayerGUID(D2UnitStrc * pUnit, int32_t nPlayerG
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10bd);
       exit(-1);
     } else {
-      if (!pUnit->pUnitData.pUnitDataObject) {
+      if (!pUnit->pUnitData.pUnitDataItem) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10bf);
         exit(-1);
       }
 
-      pUnit->pUnitData.pUnitDataObject->nActivatingPlayerGUID = nPlayerGUID;
+      pUnit->pUnitData.pUnitDataItem->nPlayerGUID = nPlayerGUID;
       return;
     }
 }
@@ -1975,7 +1975,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
     BOOL bItemNotDisabledOrBroken;
     D2SetItemsTxt* pCurSetItemsTxt;
     D2InventoryStrc* pUnitInventory = nullptr;
-    if (!(!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM || !pItem->pUnitData.pUnitDataMonster || pItem->pUnitData.pUnitDataMonster->pMonStatsTxt != (D2MonStatsTxt*)0x5)) {
+    if (!(!pUnit || (pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem || pItem->pUnitData.pUnitDataItem->eQuality != QUALITY_SET)) {
       pUnitInventory = pUnit->pInventory;
     }
     if (!pUnitInventory) {
@@ -2022,7 +2022,7 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
 }
 
 D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && pUnit->pUnitData.pUnitDataItem->eQuality == QUALITY_SET)) {
       return nullptr;
     }
 
@@ -2035,7 +2035,7 @@ D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(D2UnitStrc * pUnit) {
-    if (pUnit && (pUnit->eUnitType != UNIT_ITEM || (!pUnit->pUnitData.pUnitDataMissile || (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_BROKEN) == UNIT_PLAYER) && (!pUnit->pUnitData.pUnitDataMissile || (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_DISABLED) == UNIT_PLAYER))) {
+    if (pUnit && (pUnit->eUnitType != UNIT_ITEM || (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) && (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_DISABLED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)))) {
       return 1;
     }
 
@@ -2054,7 +2054,7 @@ int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
       nCount = 0;
       do {
         pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pCurItem);
-        if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataMissile || (pCarriedItem->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_IDENTIFIED) == UNIT_PLAYER) {
+        if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataItem || (pCarriedItem->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_IDENTIFIED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
           iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pCurItem);
           if (iVar1 == INVENTORY_GRID_TYPE_INVENTORY) {
             if ((pCarriedItem ? pCarriedItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
@@ -2316,7 +2316,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     uint32_t uCoordOrBits;
-    eD2UnitType eItemFlags;
+    eD2ItemFlag eItemFlags;
     D2ItemsTxt* pItemsTxt;
     D2StatListExStrc* pMemory;
     D2PoolManagerStrc* pMemory_00;
@@ -2350,12 +2350,12 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     }
 
     Units::SetupUpdateFlag(pItem, dwReadValue);
-    if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataMissile) {
-      eItemFlags = UNIT_PLAYER;
+    if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem) {
+      eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     } else {
-      eItemFlags = pItem->pUnitData.pUnitDataMissile->eOwnerType;
+      eItemFlags = pItem->pUnitData.pUnitDataItem->dwItemFlags;
     }
-    if ((eItemFlags & 0x10000) != UNIT_PLAYER) {
+    if ((eItemFlags & ITEMFLAG_BODYPART) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem) {
         pcItemCodeOrName = 0;
       } else {
@@ -2452,11 +2452,11 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
     pItem->nInitSeed = 0;
     Seed::InitSeed_Param_666(&pItem->sSeed, 0);
     if (pItem->eUnitType == UNIT_ITEM) {
-      if (pItem->pUnitData.pUnitDataPlayer) {
-        pItem->pUnitData.pUnitDataPlayer->nPortalFlags = 1;
+      if (pItem->pUnitData.pUnitDataItem) {
+        pItem->pUnitData.pUnitDataItem->nItemLevel = 1;
       }
-      if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataMissile) {
-        pItem->pUnitData.pUnitDataMissile->unk0x00 = 2;
+      if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataItem) {
+        pItem->pUnitData.pUnitDataItem->eQuality = QUALITY_NORMAL;
       }
     }
 
@@ -2625,6 +2625,7 @@ void __fastcall ITEMS_WriteClampedValueToBitBuffer(int32_t nBits, uint32_t nValu
 // Serializes the "simple"/header portion of an item unit into a D2BitBuffer for the item save/network format. The item arrives in EAX (0062af85 MOV ESI,EAX) and the bit buffer in EBX; both were modelled as locals, so the reconstruction serialised items through uninitialised pointers. Writes item version (10 bits, clamped 0x3ff), anim mode (3 bits), and position - full 16-bit world X/Y for dropped items, otherwise 4-bit grid X/Y plus a 3-bit body-loc/inv-page. Then for non-player-owned items the 32-bit type code, and for gold a 1-bit large flag plus a clamped amount; for ear items the file index (3 bits), ear level (7 bits) and 7-bit-per-char name.
 static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatListEx) {
     uint32_t nClassId;
+    eD2ItemFlag eVar2;
     int nQuestDifficulty;
     eD2ItemAnimMode eAnimModeClamp;
     char* pcName;
@@ -2772,12 +2773,12 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       nErrLine = 3;
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, uVal, 3);
     }
-    if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataMissile) {
-      eUnitType = UNIT_PLAYER;
+    if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem) {
+      eVar2 = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     } else {
-      eUnitType = pItem->pUnitData.pUnitDataMissile->eOwnerType;
+      eVar2 = pItem->pUnitData.pUnitDataItem->dwItemFlags;
     }
-    if ((eUnitType & 0x10000) != UNIT_PLAYER) {
+    if ((eVar2 & ITEMFLAG_BODYPART) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       if (!pItem || pItem->eUnitType != UNIT_ITEM || !pItem->pUnitData.pUnitDataItem) {
         pcName = 0;
       } else {
@@ -2854,7 +2855,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
 }
 
 int32_t __stdcall ITEM_GetTxtSetItems_setIndex(D2UnitStrc * pUnit) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)QUALITY_SET)) {
+    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && pUnit->pUnitData.pUnitDataItem->eQuality == QUALITY_SET)) {
       return -1;
     }
 
@@ -3998,7 +3999,7 @@ BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(D2UnitStrc * pUnit) {
         return 0;
       }
     }
-    if (!(pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataMissile || (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_BROKEN) == UNIT_PLAYER)) {
+    if (!(pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
       return 0;
     }
 
@@ -4309,8 +4310,8 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         if (pUnit->pUnitData.pUnitDataItem) {
           pUnit->pUnitData.pUnitDataItem->nItemLevel = 1;
         }
-        if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile) {
-          pUnit->pUnitData.pUnitDataMissile->unk0x00 = 1;
+        if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+          pUnit->pUnitData.pUnitDataItem->eQuality = QUALITY_LOW;
         }
       }
 
@@ -5763,8 +5764,8 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     _bStrOk = 1;
     _bDexOk = 1;
     BOOL bLevelOk = 1;
-    if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataPlayer) {
-      eItemFlags = pUnit->pUnitData.pUnitDataMissile->eOwnerType & 0x10;
+    if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+      eItemFlags = pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_IDENTIFIED;
     } else {
       eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     }
@@ -5777,7 +5778,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
       nStrAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqStr, nReqPercentMod, 100);
       nDexAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqDex, nReqPercentMod, 100);
     }
-    if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataMissile && (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_ETHEREAL) != UNIT_PLAYER) {
+    if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_ETHEREAL) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       nStrAdjust += -10;
       nDexAdjust += -10;
     }
@@ -5970,7 +5971,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
         return 0;
       }
     }
-    if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataMissile && (pItem->pUnitData.pUnitDataMissile->eOwnerType & 0x20000) != UNIT_PLAYER) {
+    if (pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataItem && (pItem->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BEGINNER) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       return 1;
     }
 
@@ -6556,7 +6557,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
 }
 
 uint32_t __stdcall ITEM_IsActiveCharm(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    if (!(pUnit && (pUnit->eUnitType != UNIT_ITEM || (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) && (!pUnit->pUnitData.pUnitDataMissile || (pUnit->pUnitData.pUnitDataMissile->eOwnerType & ITEMFLAG_DISABLED) == UNIT_PLAYER)))) {
+    if (!(pUnit && (pUnit->eUnitType != UNIT_ITEM || (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) && (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_DISABLED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))))) {
       return 0;
     }
 
@@ -6580,12 +6581,12 @@ uint32_t __stdcall ITEM_IsActiveCharm(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 
 // Serialize item data to bit buffer including properties, stats, and identification flags
 void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatListEx, uint32_t bIncludeNorm) {
+    eInventoryPage eVar2;
+    int iVar3;
     eD2ItemQuality eQuality;
-    int nStatValue;
     uint32_t bIsOfType;
-    eD2ItemFlag eItemFlagsInner;
     D2RuneTableStrc* pRunewordTxt;
-    eD2UnitType eItemFlags;
+    eD2ItemFlag eItemFlags;
     BOOL bIsStackable;
     D2StatListExStrc* pCurStatList;
     int nCopiedCount;
@@ -6600,13 +6601,13 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     D2StatStrc aStat[511];
     int anStatSeenValues[511];
     int i;
+    D2UnitDataItemStrc* pUnitDataMissile;
+    D2UnitDataItemStrc* pUnitDataPlayer;
     char cCurChar;
     eD2States eState;
     eD2UnitType eUnitType;
     int32_t nErrLine;
     int nParamBitWidth;
-    D2UnitDataMissileStrc* pUnitDataMissile;
-    D2UnitDataPlayerStrc* pUnitDataPlayer;
     int nRunewordFlag;
     nRunewordFlag = 0x62fffd;
     bool bResetModeOnExit;
@@ -6672,7 +6673,6 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       nErrLine = 0x10;
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 0x10);
     } else {
-      eInventoryPage eVar1;
       if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
         nBitValue = (uint32_t)pItemUnit->pUnitData.pUnitDataItem->eBodyLoc;
       } else {
@@ -6687,15 +6687,15 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 4);
       eUnitType = pItemUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nStatValue = pItemUnit->pPath.pStaticPath->nPosX;
+        iVar3 = pItemUnit->pPath.pStaticPath->nPosX;
         clamp_grid_x:
-        if ((uint32_t)nStatValue <= 0 || (nBitValue = Units::GetXPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
+        if ((uint32_t)iVar3 <= 0 || (nBitValue = Units::GetXPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
           goto read_grid_x;
         }
         nBitValue = 0xf;
       } else {
         if (pItemUnit->pPath.pDynamicPath) {
-          nStatValue = PATH::DynamicPath::GetXPos(pItemUnit->pPath.pDynamicPath);
+          iVar3 = PATH::DynamicPath::GetXPos(pItemUnit->pPath.pDynamicPath);
           goto clamp_grid_x;
         }
 
@@ -6716,15 +6716,15 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 4);
       eUnitType = pItemUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nStatValue = pItemUnit->pPath.pStaticPath->nPosY;
+        iVar3 = pItemUnit->pPath.pStaticPath->nPosY;
         clamp_grid_y:
-        if ((uint32_t)nStatValue <= 0 || (nBitValue = Units::GetYPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
+        if ((uint32_t)iVar3 <= 0 || (nBitValue = Units::GetYPosFromDynamicPathUnit(pItemUnit) , nBitValue < 0xf)) {
           goto read_grid_y;
         }
         nBitValue = 0xf;
       } else {
         if (pItemUnit->pPath.pDynamicPath) {
-          nStatValue = PATH::DynamicPath::GetYPos(pItemUnit->pPath.pDynamicPath);
+          iVar3 = PATH::DynamicPath::GetYPos(pItemUnit->pPath.pDynamicPath);
           goto clamp_grid_y;
         }
 
@@ -6745,15 +6745,15 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 4);
       if (pItemUnit->eUnitType == UNIT_ITEM) {
         if (!pItemUnit->pUnitData.pUnitDataItem) {
-          eVar1 = INVPAGE_None;
+          eVar2 = INVPAGE_None;
         } else {
-          eVar1 = pItemUnit->pUnitData.pUnitDataItem->ePage;
+          eVar2 = pItemUnit->pUnitData.pUnitDataItem->ePage;
         }
       } else {
-        eVar1 = INVPAGE_None;
+        eVar2 = INVPAGE_None;
       }
 
-      nBitValue = (int)(char)(eVar1 + INVPAGE_CORPSE) ? (int)(char)(eVar1 + INVPAGE_CORPSE) : 0;
+      nBitValue = (int)(char)(eVar2 + INVPAGE_CORPSE) ? (int)(char)(eVar2 + INVPAGE_CORPSE) : 0;
       if (nBitValue >= 7) {
         nBitValue = 7;
       }
@@ -6781,26 +6781,27 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, pItemUnit->nInitSeed, 0x20);
     }
     if (pItemUnit->eUnitType == UNIT_ITEM) {
-      pUnitDataPlayer = pItemUnit->pUnitData.pUnitDataPlayer;
+      D2UnitDataItemStrc* pDVar1;
+      pUnitDataPlayer = pItemUnit->pUnitData.pUnitDataItem;
       if (pUnitDataPlayer) {
-        if (pUnitDataPlayer->nPortalFlags < 1) {
-          pUnitDataPlayer->nPortalFlags = 1;
+        if (pUnitDataPlayer->nItemLevel < 1) {
+          pUnitDataPlayer->nItemLevel = 1;
         }
-        if (pUnitDataPlayer->nPortalFlags < 99) {
+        if (pUnitDataPlayer->nItemLevel < 99) {
           goto use_item_level;
         }
 
         nBitValue = 99;
       } else {
         use_item_level:
-        if (pItemUnit->eUnitType != UNIT_ITEM || (pUnitDataPlayer = pItemUnit->pUnitData.pUnitDataPlayer , !pUnitDataPlayer)) {
+        if (pItemUnit->eUnitType != UNIT_ITEM || (pDVar1 = pItemUnit->pUnitData.pUnitDataItem , !pDVar1)) {
           goto default_item_level;
         }
-        if (pUnitDataPlayer->nPortalFlags < 1) {
-          pUnitDataPlayer->nPortalFlags = 1;
+        if (pDVar1->nItemLevel < 1) {
+          pDVar1->nItemLevel = 1;
         }
 
-        nBitValue = pUnitDataPlayer->nPortalFlags;
+        nBitValue = pDVar1->nItemLevel;
       }
     } else {
       default_item_level:
@@ -6847,14 +6848,14 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     D2MagicAffixTableStrc* pMagicAffixTableInfo;
     pMagicAffixTableInfo = DATATBLS::ItemTbls::TXT_MagicAffixes_GetTableInfo();
     uTmpBits = ((intptr_t)pMagicAffixTableInfo->pPrefixStart - (intptr_t)pMagicAffixTableInfo->pTable) / 0x90;
-    nStatValue = ((intptr_t)pMagicAffixTableInfo->pAutoMagicStart - (intptr_t)pMagicAffixTableInfo->pTable) / 0x90;
+    iVar3 = ((intptr_t)pMagicAffixTableInfo->pAutoMagicStart - (intptr_t)pMagicAffixTableInfo->pTable) / 0x90;
     if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
       wAutoMagic = pItemUnit->pUnitData.pUnitDataItem->wAutoMagic;
     } else {
       wAutoMagic = 0;
     }
-    if ((int)(uint32_t)wAutoMagic > nStatValue) {
-      wAutoMagic -= (short int)nStatValue;
+    if ((int)(uint32_t)wAutoMagic > iVar3) {
+      wAutoMagic -= (short int)iVar3;
     }
 
     bIncludeNorm = uTmpBits;
@@ -6867,14 +6868,14 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 0xb);
     }
-    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-      nStatValue = pItemUnit->pUnitData.pUnitDataMissile->unk0x00;
+    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+      eQuality = pItemUnit->pUnitData.pUnitDataItem->eQuality;
     } else {
-      nStatValue = 2;
+      eQuality = QUALITY_NORMAL;
     }
 
-    switch (nStatValue) {
-      case 1:
+    switch (eQuality) {
+      case QUALITY_LOW:
         nBitValue = ITEM_GetItemData_nFileIndex(pItemUnit);
       nBitValue = nBitValue ? nBitValue : 0;
       if (nBitValue >= 7) {
@@ -6884,7 +6885,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       write_3bit_quality_data:
       nErrLine = 3;
       goto write_quality_data;
-      case 3:
+      case QUALITY_SUPERIOR:
         nBitValue = ITEM_GetItemData_nFileIndex(pItemUnit);
       nBitValue = nBitValue ? nBitValue : 0;
       if (nBitValue < 7) {
@@ -6896,10 +6897,10 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       write_quality_data:
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, nErrLine);
       break;
-      case 6:
+      case QUALITY_RARE:
 
-      case 8:
-        if (pStatListEx || (eItemFlagsInner = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlagsInner & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
+      case QUALITY_CRAFTED:
+        if (pStatListEx || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
           wAutoMagic = GetRarePrefix(pItemUnit);
           nBitValue = wAutoMagic ? (uint32_t)wAutoMagic : 0;
           if (nBitValue >= 0xff) {
@@ -6915,10 +6916,10 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
           Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 8);
         }
-      nStatValue = 0x3e;
+      iVar3 = 0x3e;
       do {
-        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataPlayer) {
-          nBitValue = (uint32_t)*(uint16_t*)(pItemUnit->pUnitData.pUnitDataPlayer->szCharName + nStatValue - 6);
+        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+          nBitValue = (uint32_t)*(uint16_t*)((char*)pItemUnit->pUnitData.pUnitDataItem->wMagicPrefix + iVar3 - 0x3e);
         } else {
           nBitValue = 0;
         }
@@ -6940,7 +6941,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, nErrLine);
-        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataPlayer && (wAutoMagic = *(uint16_t*)(pItemUnit->pUnitData.pUnitDataPlayer->szCharName + nStatValue) , wAutoMagic != 0)) {
+        if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem && (wAutoMagic = *(uint16_t*)((char*)pItemUnit->pUnitData.pUnitDataItem->wMagicPrefix + iVar3 - 0x38) , wAutoMagic != 0)) {
           Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
           nBitValue = wAutoMagic ? (uint32_t)wAutoMagic : 0;
           if (nBitValue >= 0x7ff) {
@@ -6955,12 +6956,12 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 1);
         }
 
-        nStatValue += 2;
-      } while (nStatValue < 0x44);
+        iVar3 += 2;
+      } while (iVar3 < 0x44);
 
       break;
-      case 9:
-        if (pStatListEx || (eItemFlagsInner = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlagsInner & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
+      case QUALITY_TAMPERED:
+        if (pStatListEx || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
           wAutoMagic = GetRarePrefix(pItemUnit);
           nBitValue = wAutoMagic ? (uint32_t)wAutoMagic : 0;
           if (nBitValue >= 0xff) {
@@ -6978,8 +6979,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           goto write_quality_data;
         }
       break;
-      case 4:
-        if (pStatListEx || (eItemFlagsInner = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlagsInner & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
+      case QUALITY_MAGIC:
+        if (pStatListEx || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
           wAutoMagic = GetMagicPrefix(pItemUnit, 0);
           nBitValue = (uint32_t)wAutoMagic;
           wAutoMagic = GetMagicSuffix(pItemUnit, 0);
@@ -7002,10 +7003,10 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           goto write_quality_data;
         }
       break;
-      case 5:
+      case QUALITY_SET:
 
-      case 7:
-        if (pStatListEx || (eItemFlagsInner = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlagsInner & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
+      case QUALITY_UNIQUE:
+        if (pStatListEx || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
           nBitValue = ITEM_GetItemData_nFileIndex(pItemUnit);
           if ((int)nBitValue < 0) {
             nBitValue = 0xfff;
@@ -7021,15 +7022,15 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
       break;
       default:
-        if (pItemUnit->eUnitType == UNIT_ITEM && (pUnitDataMissile = pItemUnit->pUnitData.pUnitDataMissile , pUnitDataMissile != 0) && pUnitDataMissile->unk0x00 != 2) {
+        if (pItemUnit->eUnitType == UNIT_ITEM && (pUnitDataMissile = pItemUnit->pUnitData.pUnitDataItem , pUnitDataMissile != 0) && pUnitDataMissile->eQuality != QUALITY_NORMAL) {
           if (true && pUnitDataMissile) {
-            pUnitDataMissile->unk0x00 = 2;
+            pUnitDataMissile->eQuality = QUALITY_NORMAL;
           }
 
           bResetModeOnExit = true;
         }
       bIsOfType = ITEMS_IsA(pItemUnit, ITEMTYPE_Charm);
-      if (bIsOfType && (pStatListEx || (eItemFlagsInner = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlagsInner & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)))) {
+      if (bIsOfType && (pStatListEx || (eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItemUnit) , (eItemFlags & ITEMFLAG_IDENTIFIED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)))) {
         if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
           nBitValue = (uint32_t)(uint16_t)pItemUnit->pUnitData.pUnitDataItem->wMagicPrefix[0];
         } else {
@@ -7087,12 +7088,12 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       break;
     }
 
-    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-      eUnitType = pItemUnit->pUnitData.pUnitDataMissile->eOwnerType;
+    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+      eItemFlags = pItemUnit->pUnitData.pUnitDataItem->dwItemFlags;
     } else {
-      eUnitType = UNIT_PLAYER;
+      eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     }
-    if ((eUnitType & 0x4000000) != UNIT_PLAYER) {
+    if ((eItemFlags & ITEMFLAG_RUNEWORD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       pRunewordTxt = CalculateRunewordByItem(pItemUnit);
       if (pRunewordTxt) {
         nBitValue = (uint32_t)pRunewordTxt->wNameStr;
@@ -7109,12 +7110,12 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     }
 
     eUnitType = pItemUnit->eUnitType;
-    if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-      eItemFlags = pItemUnit->pUnitData.pUnitDataMissile->eOwnerType;
+    if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+      eItemFlags = pItemUnit->pUnitData.pUnitDataItem->dwItemFlags;
     } else {
-      eItemFlags = UNIT_PLAYER;
+      eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     }
-    if ((eItemFlags & 0x10000) != UNIT_PLAYER) {
+    if ((eItemFlags & ITEMFLAG_BODYPART) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
         szPlayerName = pItemUnit->pUnitData.pUnitDataItem->szPlayerName;
       } else {
@@ -7155,12 +7156,12 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         szPlayerName++;
       } while (cCurChar != '\0');
     } else {
-      if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-        eItemFlags = pItemUnit->pUnitData.pUnitDataMissile->eOwnerType;
+      if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+        eItemFlags = pItemUnit->pUnitData.pUnitDataItem->dwItemFlags;
       } else {
-        eItemFlags = UNIT_PLAYER;
+        eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
       }
-      if ((eItemFlags & 0x1000000) != UNIT_PLAYER) {
+      if ((eItemFlags & ITEMFLAG_PLAYERNAME) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
         if (eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
           szPlayerName = pItemUnit->pUnitData.pUnitDataItem->szPlayerName;
         } else {
@@ -7241,8 +7242,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         bySaveBits = pItemStatCostLine->saveBits[0];
-        nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_durability, 0);
-        nBitValue = nStatValue + pItemStatCostLine->saveAdd[0];
+        iVar3 = Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_durability, 0);
+        nBitValue = iVar3 + pItemStatCostLine->saveAdd[0];
         if (bySaveBits != 0x20) {
           nClampedValue = nBitValue ? nBitValue : 0;
           nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
@@ -7284,8 +7285,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
         }
 
         nBitValue = (uint32_t)pItemStatCostLine->saveBits[0];
-        nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_durability, 0);
-        uTmpBits = nStatValue + pItemStatCostLine->saveAdd[0];
+        iVar3 = Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_durability, 0);
+        uTmpBits = iVar3 + pItemStatCostLine->saveAdd[0];
       } else {
         uTmpBits = ITEMS_IsA(pItemUnit, ITEMTYPE_Gold);
         if (!uTmpBits) {
@@ -7311,12 +7312,12 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, 9);
     }
-    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-      eUnitType = pItemUnit->pUnitData.pUnitDataMissile->eOwnerType;
+    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+      eItemFlags = pItemUnit->pUnitData.pUnitDataItem->dwItemFlags;
     } else {
-      eUnitType = UNIT_PLAYER;
+      eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     }
-    if ((eUnitType & 0x800) != UNIT_PLAYER) {
+    if ((eItemFlags & ITEMFLAG_SOCKETED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       if (sgptDataTable->nTxtItemStatCostSize <= 0xc2) {
         pItemStatCostLine = 0;
       } else {
@@ -7336,29 +7337,29 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nBitValue, (uint32_t)bySaveBits);
     }
     if (!pStatListEx) {
-      if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile) {
-        eUnitType = pItemUnit->pUnitData.pUnitDataMissile->eOwnerType;
+      if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
+        eItemFlags = pItemUnit->pUnitData.pUnitDataItem->dwItemFlags;
       } else {
-        eUnitType = UNIT_PLAYER;
+        eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
       }
-      if ((eUnitType & 0x10) == UNIT_PLAYER) {
+      if ((eItemFlags & ITEMFLAG_IDENTIFIED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
         return;
       }
     }
 
     bIncludeNorm = 0;
-    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMonster && pItemUnit->pUnitData.pUnitDataMonster->pMonStatsTxt == (D2MonStatsTxt*)0x5) {
+    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem && pItemUnit->pUnitData.pUnitDataItem->eQuality == QUALITY_SET) {
       nBitValue = 0;
-      nStatValue = 0;
+      iVar3 = 0;
       do {
-        pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[nStatValue], 0x2040);
-        if (pCurStatList || (pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[nStatValue], 0x40) , pCurStatList != 0)) {
-          bIncludeNorm = nStatValue + 1;
-          nBitValue += 1 << D2_SHIFT_COUNT(nStatValue);
+        pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[iVar3], 0x2040);
+        if (pCurStatList || (pCurStatList = Stats::StatsEx::GetStatList(pItemUnit, aSetItemsStateList[iVar3], 0x40) , pCurStatList != 0)) {
+          bIncludeNorm = iVar3 + 1;
+          nBitValue += 1 << D2_SHIFT_COUNT(iVar3);
         }
 
-        nStatValue++;
-      } while (nStatValue < 5);
+        iVar3++;
+      } while (iVar3 < 5);
 
       if ((nBitValue ? nBitValue : 0) < 0x1f) {
         nBitValue = nBitValue ? nBitValue : 0;
@@ -7370,7 +7371,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     }
 
     nRunewordFlag = 0;
-    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataMissile && (pItemUnit->pUnitData.pUnitDataMissile->eOwnerType & 0x4000000) != UNIT_PLAYER) {
+    if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem && (pItemUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_RUNEWORD) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       bIncludeNorm++;
       nRunewordFlag = 1;
     }
@@ -7420,11 +7421,11 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                 continue;
               }
 
-              nStatValue = aStat[i].nStatValue >> D2_SHIFT_COUNT(pItemStatCostLine->valshift);
-              if (!nStatValue) {
+              iVar3 = aStat[i].nStatValue >> D2_SHIFT_COUNT(pItemStatCostLine->valshift);
+              if (!iVar3) {
                 continue;
               }
-              if (nStatValue == anStatSeenValues[eUnitStat]) {
+              if (iVar3 == anStatSeenValues[eUnitStat]) {
                 continue;
               }
 
@@ -7441,7 +7442,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   }
 
                   bySaveBits = pItemStatCostLine->saveBits[0];
-                  nBitValue = pItemStatCostLine->saveAdd[0] + nStatValue;
+                  nBitValue = pItemStatCostLine->saveAdd[0] + iVar3;
                   if (bySaveBits != 0x20) {
                     nClampedValue = nBitValue ? nBitValue : 0;
                     nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
@@ -7466,7 +7467,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   nSaveValue = nClampedValue;
                 } else {
                   bySaveBits = pItemStatCostLine->saveBits[0];
-                  nBitValue = pItemStatCostLine->saveAdd[0] + nStatValue;
+                  nBitValue = pItemStatCostLine->saveAdd[0] + iVar3;
                   if (bySaveBits != 0x20) {
                     nClampedValue = nBitValue ? nBitValue : 0;
                     nBitValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
@@ -7502,7 +7503,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                 if (!false) {
                   switch (eUnitStat) {
                     case UNITSTAT_lightmindam:
-                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
+                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + iVar3, pBitBuffer);
                     pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_lightmaxdam);
                     anStatSeenValues[0x33] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_lightmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x33], pBitBuffer);
@@ -7510,13 +7511,13 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                     default:
                       goto write_generic_stat;
                     case UNITSTAT_magicmindam:
-                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
+                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + iVar3, pBitBuffer);
                     pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_magicmaxdam);
                     anStatSeenValues[0x35] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_magicmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x35], pBitBuffer);
                     break;
                     case UNITSTAT_coldmindam:
-                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
+                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + iVar3, pBitBuffer);
                     pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_coldmaxdam);
                     anStatSeenValues[0x37] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_coldmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x37], pBitBuffer);
@@ -7525,7 +7526,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x38], pBitBuffer);
                     break;
                     case UNITSTAT_poisonmindam:
-                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + nStatValue, pBitBuffer);
+                      ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + iVar3, pBitBuffer);
                     pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(UNITSTAT_poisonmaxdam);
                     anStatSeenValues[0x3a] = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, UNITSTAT_poisonmaxdam, 0);
                     ITEMS_WriteClampedValueToBitBuffer((uint32_t)pItemStatCostLine->saveBits[0], pItemStatCostLine->saveAdd[0] + anStatSeenValues[0x3a], pBitBuffer);
@@ -7551,7 +7552,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
                   bySaveBits = pItemStatCostLine->saveBits[0];
                   if (bySaveBits > 0) {
                     nBitValue = (uint32_t)bySaveBits;
-                    nSaveValue = pItemStatCostLine->saveAdd[0] + nStatValue;
+                    nSaveValue = pItemStatCostLine->saveAdd[0] + iVar3;
                     if (nBitValue != 0x20) {
                       nClampedValue = nSaveValue ? nSaveValue : 0;
                       nSaveValue = (1 << D2_SHIFT_COUNT(bySaveBits)) - 1;
@@ -7581,13 +7582,13 @@ void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * p
     eD2ItemFlag eItemFlags;
     uint32_t nItemClassId;
     D2UnitStrc* pUnit_01;
-    if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataMissile) {
+    if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
       eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     } else {
-      eItemFlags = pUnit->pUnitData.pUnitDataMissile->eOwnerType;
+      eItemFlags = pUnit->pUnitData.pUnitDataItem->dwItemFlags;
     }
 
-    eD2ItemFlag nValue = eItemFlags & -524289 | ITEMFLAG_SAVED;
+    eD2ItemFlag nValue = eItemFlags & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | ITEMFLAG_SAVED;
     if (!pUnit) {
       nItemClassId = -1;
     } else {
@@ -7603,21 +7604,21 @@ void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * p
     {
       D2UnitStrc* pUnit_00;
       if (txtLine->bCompactSave != '\0') {
-        nValue = eItemFlags & -524289 | 0xa00000;
+        nValue = eItemFlags & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | ITEMFLAG_SAVED | ITEMFLAG_COMPACT;
       }
       if (bIsCrude) {
-        nValue = nValue & -4194305 | ITEMFLAG_CRUDE;
+        nValue = nValue & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | ITEMFLAG_CRUDE;
       }
       if (pStatListEx) {
         Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0x4d4a, 0x10);
       } else {
-        if ((nValue & ITEMFLAG_IDENTIFIED) == UNIT_PLAYER) {
-          nValue &= -2049;
+        if ((nValue & ITEMFLAG_IDENTIFIED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
+          nValue &= ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD;
         }
       }
 
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 0x20);
-      if ((nValue & ITEMFLAG_COMPACT) != UNIT_PLAYER) {
+      if ((nValue & ITEMFLAG_COMPACT) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
         SerializeSimpleItem(pUnit, pBitBuffer, pStatListEx);
       } else {
         SerializeComplexItem(pUnit, pBitBuffer, pStatListEx, bIsCrude);

@@ -339,7 +339,7 @@ void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffse
 }
 
 void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataPlayer && wszText)) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && wszText)) {
       return;
     }
 

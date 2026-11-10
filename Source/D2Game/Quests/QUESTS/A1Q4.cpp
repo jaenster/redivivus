@@ -576,8 +576,8 @@ static void __stdcall Q04_SpawnDeckardCainNpc(D2RoomStrc * pRoom, ::SGAMEDATA * 
       return;
     }
 
-    D2QuestDataA1Q1Strc* pA1Q4Specific;
-    pA1Q4Specific = pQuestData->pQuestSpecificData.pA1Q1;
+    D2QuestDataA1Q4Strc* pA1Q4Specific;
+    pA1Q4Specific = pQuestData->pQuestSpecificData.pA1Q4;
     D2RoomStrc* pSpawnRoomOut;
     pSpawnRoomOut = pRoom;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
@@ -640,9 +640,9 @@ static void __stdcall Q04_SpawnDeckardCainNpc(D2RoomStrc * pRoom, ::SGAMEDATA * 
 
     register_spawned_cain:
     pSpawnedCain->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
-    *(uint8_t*)((char*)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x51) = 1;
-    *(uint8_t*)((char*)pA1Q4Specific->sQuestGUID.aPlayerGUID + 0x52) = 0;
-    pA1Q4Specific->sQuestGUID.aPlayerGUID[0x1a] = pSpawnedCain->nUnitGUID;
+    pA1Q4Specific->sSub.bCairnMonsterSaved = '\x01';
+    pA1Q4Specific->sSub.bPendingCairnActivation = '\0';
+    pA1Q4Specific->sSub.nCainMonsterGUID = pSpawnedCain->nUnitGUID;
 }
 
 // A1Q4 — Q04_MarkCannotComplete (per-player iterate callback).
@@ -679,20 +679,17 @@ BOOL __fastcall Q04_MarkCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // 0x1f) for each of the deciphered scroll ('bkd ') and Scroll of Inifuss ('bks ')
 // the player currently carries. No quest-state transition.
 void __fastcall Q04_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int* pnCounter;
-    D2QuestDataA1Q1Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q1;
+    D2QuestDataA1Q4Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q4;
     D2UnitStrc* pDVar2 = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
     D2UnitStrc* pDVar3 = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20736b62);
     if (pDVar2) {
-      pnCounter = pDVar1->sQuestGUID.aPlayerGUID + 0x1f;
-      (*pnCounter)++;
+      pDVar1->sSub.nRewardRetryCount++;
     }
     if (!pDVar3) {
       return;
     }
 
-    pnCounter = pDVar1->sQuestGUID.aPlayerGUID + 0x1f;
-    (*pnCounter)++;
+    pDVar1->sSub.nRewardRetryCount++;
 }
 
 // A1Q4 — Q04_DeactivateCairnStones: tears down the Cairn Stones puzzle after it has
@@ -773,8 +770,8 @@ void __fastcall Q04_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     int nStonesY;
     int nStonesX;
-    D2QuestDataA4Q2Strc* pDVar1 = pQuestData->pQuestSpecificData.pA4Q2;
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pDVar1->nLastPortalObjectMode);
+    D2QuestDataA1Q4Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q4;
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pDVar1->sSub.nPortalGUID);
     if (pUnit) {
       eD2UnitType eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -802,15 +799,15 @@ uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc 
       nStonesX += 4;
       bIgnoreSpawnLoc = SKILLS::SkillsServer::SERVER_SpawnPortal(pGame, nullptr, D2Common::Units::UNITS_GetRoom(pUnit), nStonesX, nStonesY, eLevel, ppPortalUnitOut, nClassId, bIgnoreSpawnLoc);
       if (bIgnoreSpawnLoc) {
-        pDVar1->bPortalSpawned = 1;
-        pDVar1->bExpansionPortalCheck = 0;
+        *(uint8_t*)((intptr_t)&pDVar1->sSub.nStoneAttemptCount + 1) = 1;
+        *(uint8_t*)&pDVar1->sSub.nStoneAttemptCount = 0;
         return '\x01';
       }
 
       return '\0';
     }
 
-    pDVar1->bExpansionPortalCheck = 0;
+    *(uint8_t*)&pDVar1->sSub.nStoneAttemptCount = 0;
     return '\x01';
 }
 
@@ -1143,13 +1140,9 @@ void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, D2UnitStrc * p
     exit(-1);
 }
 
-// A1Q4 — OBJOP_A1Q4_ActivateInifussTree (object OperateFn): player clicks the Tree
-// of Inifuss. If quest active and not already taken/done, plays the tree's open
-// animation, schedules its event frames, toggles the room's has-portal flag, marks
-// JustCompleted AND RewardAwaits, pushes quest info, and credits the whole party via
-// Q04_AutoCompleteForActIPlayer. Records the attacker's GUID. This is the act that
-// yields the Scroll of Inifuss and advances the quest.
-BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation) {
+// A1Q4 Gibbet operate fn (OperateFn 10), the cage holding Deckard Cain in Tristram. If the quest is active and not done: plays the open animation, schedules its event frames, toggles the room's has-portal flag, marks JustCompleted and RewardAwaits, pushes quest info, credits the party via Q04_AutoCompleteForActIPlayer and records the attacker's GUID. Freeing Cain completes The Search for Cain.
+// Slot from objects.txt OperateFn 10.
+BOOL __fastcall OBJOP_A1Q4_OpenCainGibbet(D2ObjectOperateFnArg * pOperation) {
     BOOL _bQuestState;
     uint16_t nPartyId;
     bool bQuestState;
@@ -1295,16 +1288,10 @@ void __fastcall Q04_HandleNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Step0x04);
 }
 
-// A1Q4 — OBJOP_A1Q4_ActivateHoradricMalusSmith (object OperateFn): the Cairn Stones
-// puzzle handler (player activates a stone). Lazily rolls the stone order, then checks
-// the player holds the Deciphered scroll ('bkd '). Validates each stone is activated in
-// the rolled order (aStones[nStoneIndex]); wrong stone -> ignore. When all 5 are hit in
-// order: consume the scroll, open the red portal to Tristram (creates the portal
-// missile/object), set step flag to 4, broadcast step 4, mark Step0x04 in records and
-// run the party Step0x04 loop (Q04_HandleNpcInteraction). Bails early if quest already
-// Completed/RewardAwaits or Cain not yet at the saved state.
+// A1Q4 Cairn Stones operate fn (OperateFn 9): lazily rolls the stone order, requires the deciphered scroll ('bkd ') and accepts the stones only in the rolled order. When all five are touched it consumes the scroll, opens the red portal to Tristram and sets step 4.
+// Slot from objects.txt OperateFn 9.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
-BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation) {
     // Frame slots -16..-4 are ONE object: &ppRoomList is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1519,14 +1506,10 @@ BOOL __fastcall OBJOP_A1Q4_ActivateHoradricMalusSmith(D2ObjectOperateFnArg * pOp
     return 0;
 }
 
-// A1Q4 — OBJOP_A1Q4_UseScrollOfInifuss (object OperateFn): reading the Scroll of
-// Inifuss at Akara (or its altar). If quest active, not done, and player doesn't
-// already hold a scroll: plays the use animation, drops the Deciphered scroll ('bks '
-// -> reward 'bkd '-style item), hooks Callback_09 to watch the scroll, broadcasts
-// step 2, and sets the puzzle-armed/stones-active sub-flags so the Cairn Stones become
-// interactive. Advances quest from "tree" stage to "decipher/stones" stage.
+// A1Q4 Tree of Inifuss operate fn (OperateFn 12). If the quest is active, not done and the player holds no scroll: plays the use animation, drops the Bark Scroll ('bks '), hooks Callback_09 to watch it, broadcasts step 2 and arms the Cairn Stones sub-flags. The scroll is an item, deciphered at Akara.
+// Slot from objects.txt OperateFn 12.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
-BOOL __fastcall OBJOP_A1Q4_UseScrollOfInifuss(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA1Q4Strc* pDVar1;
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL BVar2;
@@ -1830,10 +1813,10 @@ void __fastcall Q04_InitializeCainGibbetObject(D2QuestDataStrc * pQuestData, D2O
       return;
     }
 
-    D2QuestDataA5Q5Strc* nQuestSpecific = pQuestData->pQuestSpecificData.pA5Q5;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, nQuestSpecific->nPlayersOnSummit);
-    nQuestSpecific->bAncientsSpawned = 1;
-    nQuestSpecific->anStatueMode[1] = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
+    D2QuestDataA1Q4Strc* nQuestSpecific = pQuestData->pQuestSpecificData.pA1Q4;
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, nQuestSpecific->sSub.nCairnAnimState);
+    nQuestSpecific->sSub.bCairnStonesObjectSaved = '\x01';
+    nQuestSpecific->sSub.nCairnStonesObjectGUID = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
 }
 
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player
@@ -1854,19 +1837,18 @@ void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg)
       return;
     }
 
-    D2QuestDataA1Q3Strc* pQuestData = pA1Q3Data->pQuestSpecificData.pA1Q3;
+    D2QuestDataA1Q4Strc* pQuestData = pA1Q3Data->pQuestSpecificData.pA1Q4;
     if (!pInitArg->pObject) {
       nObjectGUID = -1;
     } else {
       nObjectGUID = pInitArg->pObject->nUnitGUID;
     }
 
-    pQuestData->sQuestGUID.aPlayerGUID[0x16] = nObjectGUID;
-    char bRescueFlag = *(char*)((char*)pQuestData->sQuestGUID.aPlayerGUID + 0x3e);
-    *(uint8_t*)(pQuestData->sQuestGUID.aPlayerGUID + 0x17) = 1;
-    pQuestData->sQuestGUID.aPlayerGUID[0x1c] = pInitArg->nX;
-    pQuestData->sQuestGUID.aPlayerGUID[0x1d] = pInitArg->nY;
-    if (!(bRescueFlag == '\x01' && *(char*)((char*)pQuestData->sQuestGUID.aPlayerGUID + 0x3d) == '\0')) {
+    pQuestData->sSub.nCainSpawnObjectGUID = nObjectGUID;
+    pQuestData->sSub.bCairnObjectSaved = 1;
+    pQuestData->sSub.field_0x6C = pInitArg->nX;
+    pQuestData->sSub.field_0x70 = pInitArg->nY;
+    if (!(pQuestData->sSub.bPendingCairnActivation == '\x01' && pQuestData->sSub.bCairnMonsterSaved == '\0')) {
       return;
     }
 

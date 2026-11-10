@@ -501,14 +501,11 @@ BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, D2UnitStrc *
     return 0;
 }
 
-// 1.14d: 0x594e70 | A1Q5 "The Forgotten Tower" — Cairn Stone (Stony Field cairn marker) operate handler.
-// Fired when a player operates the cairn-stone object that introduces the quest. Plays the object's
-// open animation (SetEvent) when the operator unit is null/dead, then ensures the quest exists and is
-// past introduction. Sends the NPC-info packet (0x7f) to the operator. If the quest state flag is still
-// < 2, advances it to 2 (quest now active/in-log) and, if it was at the very first state (prev==0),
-// sets the A1Q5 bTalkedToNPC flag — this is the "quest log entry granted" transition.
+// A1Q5 "The Forgotten Tower" - Tower Tome operate fn (OperateFn 6), the book that starts the quest.
+// Plays the object's open animation (SetEvent) when the operator unit is null/dead, makes sure the quest exists and is past introduction, sends the NPC-info packet (0x7f) to the operator and moves the quest state flag to 2 (quest log entry granted), setting bTalkedToNPC on the first transition.
+// Slot from objects.txt OperateFn 6.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
-BOOL __fastcall OBJOP_A1Q5_ActivateCairnStone(D2ObjectOperateFnArg * pOperation) {
+BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {

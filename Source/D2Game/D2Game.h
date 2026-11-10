@@ -1711,12 +1711,12 @@ struct __attribute__((packed)) D2QuestDataA3Q1Strc {
 #ifndef D2_DEFINED_D2QuestDataA3Q2Strc
 #define D2_DEFINED_D2QuestDataA3Q2Strc
 struct __attribute__((packed)) D2QuestDataA3Q2Strc {
-    /* 0x00 */ uint8_t bOrbPlaced; // Compelling orb placed flag
+    /* 0x00 */ uint8_t bSewerStairsInitialized; // Set to 1 by Objects_InitFn41_SewerStairs
     /* 0x01 */ uint8_t bQuestCompleted; // Set true in Q19_Callback_11 (dialog 0x21f) via pA1Q2 cast; checked in Q19_Callback_02 to trigger RewardAwaits broadcast
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ int32_t nOrbGUID; // GUID of compelling orb object
-    /* 0x08 */ int32_t nOrbUpdateMode; // Orb animation/update mode
+    /* 0x04 */ int32_t nSewerStairsGUID; // GUID of the Kurast sewer stairs object (Objects_InitFn41_SewerStairs)
+    /* 0x08 */ int32_t nSewerStairsUpdateMode; // Update flag for the sewer stairs; set to 2 once the lever (OperateFn 45) opens them
     /* 0x0C */ int32_t nKhalimsEyeCount; // Incremented when player finds eye
     /* 0x10 */ int32_t nKhalimsFlailCount; // Khalim's Flail tracking
     /* 0x14 */ int32_t nKhalimsHeartCount; // Khalim's Heart tracking

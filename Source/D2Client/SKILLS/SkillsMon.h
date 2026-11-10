@@ -72,7 +72,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(struct D2UnitStrc * pUnit, eD2S
 BOOL __fastcall Skills_CltStFunc_SpawnCltMissileA(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client do-func that fires two overlapping scatter-missile waves: 2 missiles of type cltmissilea (SKILLS_CreateMissileScatter count=2, spread=1) and then 4 missiles of type cltmissileb (count=4, spread=5), if cltmissileb is valid. Uses flag 0x2021 with pUnit as both owner and missile reference. Sets UNITFLAG_SKSRVDOFUNC.
 BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL __fastcall Skills_CltDoFunc_Mon_BaalTaunt_AnimCycle(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Mon_QueenDeath(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client do-func that creates a MISSILE_Cursecenter missile at the target position, then configures it with cltmissileb as the stream missile ID and aurarangecalc as the stream range. Used for monster curse auras that project a centered streaming effect over a skill-level-scaled radius. Sets UNITFLAG_SKSRVDOFUNC on success.
 BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side skill state function for the Hell Meteor effect: spawns the full set of cosmetic/impact missiles (Hellmeteordown, Hellmeteorball x2, Hellmeteorup, launch1/launch2) at the caster's current X/Y (read from static path for objects/NPCs, dynamic path otherwise). Adjusts each spawned missile's particle offset/position vectors and sets launch-missile animation speed. Always returns TRUE.

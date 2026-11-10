@@ -144,13 +144,9 @@ uint8_t __fastcall Q20_QuestUpdate(::SGAMEDATA * pGame, struct D2QuestDataStrc *
 // the object's location/GUID into the A3Q3 state and, if the trigger already arrived but the drop
 // hasn't happened, spawns the unique serpent now.
 void __fastcall Objects_InitFn25_Gidbinn(struct D2ObjectInitFnArg * pInitArg);
-// A3Q3 "Khalim's Will" — object OPERATE fn (the Compelling-Orb / quest object trigger; name says
-// A3Q5 but it gates on QUEST_BladeOfTheOldReligion). Fires when the object's victim is null/dead.
-// Only proceeds if the attacker's quest is NOT Completed(0), NOT Step0x07, NOT Step0x08 (i.e. orb not
-// yet smashed). Then, during real play: bumps nStateFlag 0->1, schedules the object's open event,
-// sets the pending flag, and on first use installs the Q20_QuestUpdate quest timer. If those states
-// were already set it instead plays a rejection sound on the attacker. Read-only on quest bits.
-BOOL __fastcall OBJOP_A3Q5_NihlathakPortalTrigger(struct D2ObjectOperateFnArg * pOperation);
+// A3Q3 Gidbinn object operate fn (OperateFn 31, The Blade of the Old Religion). Fires when the object's victim is null/dead and the attacker's quest is not completed nor at steps 7/8: bumps the state flag 0->1, schedules the object's open event, sets the pending flag and on first use installs the Q20_QuestUpdate timer.
+// Slot from objects.txt OperateFn 31.
+BOOL __fastcall OBJOP_A3Q3_ActivateGidbinn(struct D2ObjectOperateFnArg * pOperation);
 // A3Q3 "Khalim's Will" — accessor: returns the recorded serpent-killer/spawn GUID into *pnParam
 // (and true) when the quest is in real play and the relevant flag is set; else false. Read-only.
 bool __fastcall Q20_GetSerpentKillerGUID(::SGAMEDATA * pGame, int * pnPlayerGUID);

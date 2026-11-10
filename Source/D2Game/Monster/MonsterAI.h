@@ -17,7 +17,6 @@
 // Forward declarations
 struct D2MercForHire;
 struct D2MonsterAiStrc;
-struct D2UnitDataPlayerArenaStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 #ifndef RECON_FPTD_fpAiClear
@@ -63,7 +62,7 @@ void __fastcall NPC_BeginInteractionFromUnit(::SGAMEDATA * pGame, struct D2UnitS
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
 BOOL __fastcall AI_SetSwitchAiTargetParams(struct D2UnitStrc * pUnit, int32_t nSwitchAiMode, uint32_t nTargetGUID);
 int32_t __fastcall AI_GetSwitchAiParam1(struct D2UnitStrc * pUnit);
-struct D2UnitDataPlayerArenaStrc * __fastcall AI_GetSwitchAiParam2(struct D2UnitStrc * pUnit);
+int __fastcall AI_GetSwitchAiParam2(struct D2UnitStrc * pUnit);
 void __fastcall AI_ClearSwitchAiTargetParams(struct D2UnitStrc * pUnit);
 uint32_t __fastcall NpcStateIsntZero(struct D2UnitStrc * pUnit, struct D2UnitStrc * pPlayer);
 // Tears down a monster's D2MonsterAiSubStrc list. For each sub-AI node: sends 0x62 MakeUnitTargetable packet to the interacting client, optionally clears that client's interact-info (if bClientSide and the client was interacting with this monster), calls an optional fpFunction cleanup callback, then frees the node. Sets pMonsterAi->pAiSub to NULL when done.

@@ -94,9 +94,10 @@ uint32_t __fastcall SKILLBAR_ApplyWarCryDamage(struct D2SkillCallbackContextStrc
 int32_t __fastcall SKILLASS_GetChargeUpMissile(struct D2UnitStrc * pUnit, int32_t nSkillId);
 // Returns the charge-level-indexed prgcalc value for a charge-up skill. If the skill has the charge-up flag (bit 2) and a valid aurastate with an active stat list, selects prgcalc[0..2] by clamped charge level (1/2/3); otherwise falls back to prgcalc[0]. Returns 0 if skill id is out of range.
 uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Dragon Tail SrvDoFunc. Applies direct melee damage to the current target via DAMAGE_ProcessCombatQueueEntry, then fires an AoE explosion at the target/cursor position. AoE radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc). Damage is set via SKILLS_AddRandomSkillDamage + SetDamageOnEvent with result/hit-flag bit 0 set.
+// Server do-func 38: the second charge release of Fists of Fire and Blades of Ice. Applies direct melee damage to the target via DAMAGE_ProcessCombatQueueEntry, then fires an area explosion at the target/cursor position; the radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc).
+// Slot from skills.txt srvdofunc 38.
 // @sourcefile .\SKILLS\SkillAss.cpp
-BOOL __fastcall Skills_SrvDoFunc_038_DragonTail_KickAoE(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server skill handler for Assassin charge-release skills (e.g. Dragon Tail / Tiger Strike release). Advances the unit RNG seed, resolves the accumulated charge-up missile id and radius (aurarangecalc fallback), then scatters radius^2 missiles randomly within a circle of that radius around the skill target using rejection sampling. Each candidate point is validated against the nearby room before spawning. Returns TRUE on success.
 BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILLASS_SetupMissilePath(struct D2UnitStrc * pUnit, intptr_t nInitSeed);
@@ -110,8 +111,9 @@ BOOL __fastcall Skills_SrvDoFunc_036_ChargeRelease_MissileRing(::SGAMEDATA * pGa
 BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_040_ChargeRelease_SingleMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-// Server DoFunc for Blade Fury (skill 041, Assassin). Validates skill txt, gets target/cursor position, retrieves the charge-up missile type and count, then spawns that many missiles with seed-randomised ±20 unit offsets around the target. Stores the seed low and packed XY in each missile's target fields. Returns 1 on success, 0 if prerequisites missing.
-BOOL __fastcall Skills_SrvDoFunc_041_BladeFury(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+// Server do-func 41: the third charge release of Royal Strike (Phoenix Strike). Gets the target/cursor position and the charge-up missile type and count, then spawns that many missiles at seeded +-20 offsets around the target, storing the seed and packed XY in each missile.
+// Slot from skills.txt srvdofunc 41.
+BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Server-side Assassin charge-up release: when a melee finishing-move combat entry fires (nCombatEntryParam flag bit 0 set) and a target is in melee range, scans the unit's active charge-up state stat-lists (pAllStatesDataTblFlag0x04). For each, reads the stored skill id and charge level, clamps charges to 1..3, and invokes the skill's per-charge srvprgfunc handlers (SKILLSRVDOFUNCS dispatch) up to the charge count, broadcasting a unit-message packet to the target. Consumes the charge by removing/freeing each charge-up stat-list afterward. Seed is rolled then restored to preserve determinism. No return.
 void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

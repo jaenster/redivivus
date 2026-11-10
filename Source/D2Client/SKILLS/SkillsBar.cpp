@@ -156,8 +156,9 @@ BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(D2UnitStrc * pUn
     return 1;
 }
 
-// Client do-function for the Barbarian Whirlwind/Corpse Explosion skill action. Confirms the current target is a soft (corpse-explodable) monster, finds a free nearby coordinate, selects the appropriate size-based cltmissile (small/normal/large from MonStats2), and spawns both the size missile and a MISSILE_Corpseexplosion at that location. Sets UNITFLAG_SKSRVDOFUNC on the player unit.
-BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+// Client do-func 41: Grim Ward. Confirms the target is a usable corpse, finds a free nearby coordinate, picks the size-based cltmissile (small/normal/large from MonStats2) and spawns it plus MISSILE_Corpseexplosion there. Sets UNITFLAG_SKSRVDOFUNC on the player.
+// Slot from skills.txt cltdofunc 41.
+BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     POINT nFreeCoordTmp;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -1057,9 +1058,10 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
 }
 
-// Client start-func for a Leap-style skill (player or monster): computes and commits the leap destination via pathfinding. Validates the unit/skill/server path; for the local player rejects if the skill is already active (flag bit0) or the unit is in an uninterruptable state. If a confirmed target is in melee range it instead forwards a 0x16 unit message and returns. Otherwise it sets the server path's collision pattern (0xc01) and path type 7, runs PATH_CalculatePath, applies the class/monster walk velocity (CharStats WalkVelocity or MonStats Velocity), retakes the path's last point as the destination, adds a collision at that tile, sets the skill active (flag 1) with param1/param2 = dest X/Y, and creates the active-skill stat list. Returns TRUE if a destination was committed, 0 otherwise (restoring the collision pattern on failure).
+// Client start-func 31: Whirlwind. Computes and commits the whirlwind destination by pathfinding: validates unit, skill and server path; for the local player rejects when the skill is already active or the unit cannot be interrupted; with a confirmed target in melee range it forwards a 0x16 unit message instead. Otherwise sets collision pattern 0xc01 and path type 7 and runs the path calculation.
+// Slot from skills.txt cltstfunc 31.
 // @sourcefile .\SKILLS\SkillsBar.cpp
-BOOL __fastcall Skills_CltStFunc_CalcLeapDestViaPathfind(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bPathFound;
     bool bPathFound;
     uint32_t nSkillFlags;

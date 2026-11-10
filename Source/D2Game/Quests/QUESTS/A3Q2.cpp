@@ -333,14 +333,15 @@ BOOL __fastcall OBJOP_UseStairDirect(D2ObjectOperateFnArg * pOperation) {
 BOOL __fastcall Q19_IsKhalimsWillNotComplete(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_KhalimsWill);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
-      return (uint32_t)(pQuestData->pQuestSpecificData.pA3Q2->nOrbUpdateMode != 2);
+      return (uint32_t)(pQuestData->pQuestSpecificData.pA3Q2->nSewerStairsUpdateMode != 2);
     }
 
     return 0;
 }
 
-// OBJOP_A3Q2_KhalimRelicPedestal (Khalim's Will object op, OperateFn45). Operate handler for the relic pedestal/Compelling Orb object. When triggered and the quest event flag is set, finds the associated object, schedules the orb's operate+death events, marks the GUID completion field (=2), and NotifyPlayersAboutEvent(9) (orb destroyed -> Mephisto path opens). Drives the physical quest-completion event; QuestRecord transition itself happens via the dialog/callbacks.
-BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation) {
+// A3Q2 Kurast sewer lever operate fn (OperateFn 45). When triggered and the quest event flag is set, finds the sewer stairs object (GUID stored by Objects_InitFn41_SewerStairs), schedules its operate and death events, sets the stairs update mode to 2 and calls NotifyPlayersAboutEvent(9).
+// Slot from objects.txt OperateFn 45.
+BOOL __fastcall OBJOP_A3Q2_PullSewerLever(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pKhalimsWillQuest;
     D2QuestDataA3Q2Strc* pQuestSpecific;
     ::SGAMEDATA* pGameInner;
@@ -350,14 +351,14 @@ BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation
       pGame = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_KhalimsWill);
       if (pGame) {
         pQuestSpecific = pGame->pQuestSpecificData.pA3Q2;
-        if (pQuestSpecific->bOrbPlaced == '\x01') {
-          pOrbUnit = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pQuestSpecific->nOrbGUID);
+        if (pQuestSpecific->bSewerStairsInitialized == '\x01') {
+          pOrbUnit = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pQuestSpecific->nSewerStairsGUID);
           if (pOrbUnit) {
             D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
             pKhalimsWillQuest = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
             pGameInner = pOperation->sArg.pGame;
             GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 1, (pKhalimsWillQuest->FrameCnt[1] >> 8) + pGameInner->dwGameFrame, 0, 0);
-            pQuestSpecific->nOrbUpdateMode = 2;
+            pQuestSpecific->nSewerStairsUpdateMode = 2;
             pGameInner = pOperation->sArg.pGame;
             GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 7, pGameInner->dwGameFrame + 0x1e, 0, 0);
             NotifyPlayersAboutEvent(pGame->pGame, 9);
@@ -369,31 +370,33 @@ BOOL __fastcall OBJOP_A3Q2_KhalimRelicPedestal(D2ObjectOperateFnArg * pOperation
     return 0;
 }
 
-// Q19_UpdateCompellingOrbObject (Khalim's Will). Per-frame/refresh updater for the Compelling Orb object: if the orb-event flag is set, locates the orb unit, syncs its update flag, and (if changed) schedules its operate event. Maintains orb object state; no QuestRecord transitions.
+// A3Q2 updater for the Kurast sewer stairs object. If the stairs event flag is set, finds the stairs unit (GUID stored by Objects_InitFn41_SewerStairs), syncs its update flag and schedules its operate event when it changed. Runs only from the sewer lever's timer event.
 // Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
-void __fastcall Q19_UpdateCompellingOrbObject(D2QuestDataStrc * pQuestData, D2UnitStrc * pMonster) {
+void __fastcall Q19_UpdateSewerStairsObject(D2QuestDataStrc * pQuestData, D2UnitStrc * pMonster) {
     D2QuestDataA3Q2Strc* pA1Q2Data = pQuestData->pQuestSpecificData.pA3Q2;
-    if (pA1Q2Data->bOrbPlaced != '\x01') {
+    if (pA1Q2Data->bSewerStairsInitialized != '\x01') {
       return;
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA1Q2Data->nOrbGUID);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA1Q2Data->nSewerStairsGUID);
     if (!pUnit) {
-      pA1Q2Data->nOrbUpdateMode = 2;
+      pA1Q2Data->nSewerStairsUpdateMode = 2;
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, pA1Q2Data->nOrbUpdateMode);
-    if (pA1Q2Data->nOrbUpdateMode == 2) {
+    D2Common::Units::SetupUpdateFlag(pUnit, pA1Q2Data->nSewerStairsUpdateMode);
+    if (pA1Q2Data->nSewerStairsUpdateMode == 2) {
       return;
     }
 
-    pA1Q2Data->nOrbUpdateMode = 2;
-    D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
+    pA1Q2Data->nSewerStairsUpdateMode = 2;
+    int t2_c6 = pUnit->nClassId;
+    D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c6);
     GAME::Event::SetEvent(pQuestData->pGame, pUnit, 1, (pObjTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
 }
 
-// Objects_InitFn41 (Khalim's Will, InitFn41). Object init for the Compelling Orb: marks the orb-event flag set, records the object's GUID, and sets the object's update flag (2 during intro, else the tracked GUID). Initializes orb object state; no QuestRecord transitions.
+// Object init for the Kurast sewer stairs (InitFn 41): sets the stairs event flag, records the object's GUID and sets its update flag (2 during the intro, else the tracked GUID).
+// Slot from objects.txt InitFn 41.
 void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_KhalimsWill);
@@ -402,20 +405,20 @@ void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
     }
 
     D2QuestDataA3Q2Strc* pDVar1 = pDVar2->pQuestSpecificData.pA3Q2;
-    pDVar1->bOrbPlaced = '\x01';
+    pDVar1->bSewerStairsInitialized = '\x01';
     if (!pInitArg->pObject) {
       nObjectGUID = -1;
     } else {
       nObjectGUID = pInitArg->pObject->nUnitGUID;
     }
 
-    pDVar1->nOrbGUID = nObjectGUID;
+    pDVar1->nSewerStairsGUID = nObjectGUID;
     if (pDVar2->bIsNotIntroduction == '\0') {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nOrbUpdateMode);
+    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nSewerStairsUpdateMode);
 }
 
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
@@ -511,7 +514,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
@@ -556,7 +559,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
@@ -601,7 +604,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     D2ObjectOperateFnArg* pOperationArg = pOperation;
-    BOOL nGoldPiles = PORTAL_ActivateOrDeactivatePortalObject(pOperation);
+    BOOL nGoldPiles = QUESTS_OpenQuestChest(pOperation);
     if (!nGoldPiles) {
       return 0;
     }
@@ -950,7 +953,7 @@ void __fastcall Q19_InitData(D2QuestDataStrc * pQuestData) {
     D2QuestDataA3Q2Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestDataInternal->pMemoryPool, D2QuestDataA3Q2Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q2.cpp", 0x39b);
     pQuestData->pQuestSpecificData.pA3Q2 = pQuestSpecificData;
     memset(pQuestSpecificData, 0, 0xb0);
-    pQuestSpecificData->nOrbUpdateMode = 0;
+    pQuestSpecificData->nSewerStairsUpdateMode = 0;
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
 }
 

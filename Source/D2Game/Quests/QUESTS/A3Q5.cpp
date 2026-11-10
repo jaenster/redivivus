@@ -47,7 +47,7 @@ void __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
     }
 
     D2QuestDataStrc* pQuestDataBladeOldReligion = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_BladeOfTheOldReligion);
-    if (!(!pQuestDataBladeOldReligion || !pQuestDataBladeOldReligion->pQuestSpecificData.pA2Q3->bTaintedSunStartedFailed)) {
+    if (!(!pQuestDataBladeOldReligion || pQuestDataBladeOldReligion->pQuestSpecificData.pA3Q3->nBladeGivenFlag == '\0')) {
       return;
     }
 
@@ -811,9 +811,9 @@ void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * 
                          now that both council + Khalim's Will are done */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
 }
 
-// OBJOP_A3Q5_NihlathakAltarLaunchOrb (BLACKENED TEMPLE) — object OperateFn53 for the Compelling Orb altar in Travincal: the player uses Khalim's Will (assembled flail "qf2") on it. Requires the equipped weapon to be Khalim's Will and 2 uses (counter @0x38); on the 2nd use it sets Khalim's Will record Completed + JustCompleted, removes the flail, and if Blackened Temple is at Step0x04 promotes it to Completed. Then commands the Council boss (Compelling Orb effect) to launch an orb, fires the object animation/event, activates Jerhyn/Ormus AI, notifies players (event 10), runs the sequence filter, and runs Q22_PlayerCompleteKhalimsWill for every party member.
-// State flow: set Khalim's Will Completed+JustCompleted; if Blackened Temple Step0x04 -> Completed; party-wide Khalim completion.
-BOOL __fastcall OBJOP_A3Q5_NihlathakAltarLaunchOrb(D2ObjectOperateFnArg * pOperation) {
+// A3Q5 Compelling Orb operate fn (OperateFn 53, Travincal): the player smashes the orb with Khalim's Will (flail 'qf2'). Needs Khalim's Will equipped and two uses (counter at 0x38); on the second use it completes Khalim's Will, removes the flail, promotes The Blackened Temple from step 4 to completed and triggers the orb effect.
+// Slot from objects.txt OperateFn 53.
+BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation) {
     BOOL _bQuestState;
     bool bQuestState;
     int32_t nItemCode;
@@ -922,7 +922,7 @@ void __fastcall Objects_InitFn53_MephistoDoor(D2ObjectInitFnArg * pInitArg) {
 // Objects_InitFn60 (BLACKENED TEMPLE) — object InitFn that spawns the Compelling-Orb amulet/guardian. If the in-memory init flag (field_0x0C) is set, marks the object updated. If the amulet hasn't been spawned yet (bHasViperAmulet false), spawns monster class 0x16e (the orb/amulet unit) Neutral, flags it, records its GUID, and marks bHasViperAmulet. No quest-record state calls.
 void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
-    D2QuestDataA2Q2Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q2;
+    D2QuestDataA2Q2Strc* pQuestSpecificData = (D2QuestDataA2Q2Strc*)pQuestData->pQuestSpecificData.pA2Q2;
     if ((char)pQuestSpecificData->field_0x0C != '\0') {
       D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
     }

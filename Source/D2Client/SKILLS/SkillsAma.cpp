@@ -474,9 +474,10 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     return 1;
 }
 
-// Client do-function for Amazon Impale skill. Each call advances one hit of a multi-hit sequence: retrieves the stored target from skill params 2/3, finds the nearest valid melee target if the stored one is out of range, decrements the remaining hit count (param 1), and if hits remain, picks the next target, rotates the unit path toward it, applies damage reduction for the current hit, and plays the hit sound. Returns 1 while hits remain, 0 when exhausted or no target found.
+// Client do-func 21: Fend, also used by Zeal and Fury. Each call advances one hit of the multi-hit sequence: re-targets the nearest valid melee target when the stored one is out of range, decrements the remaining hit count (param 1), rotates the path toward the next target, applies the per-hit damage reduction and plays the hit sound. Returns 1 while hits remain.
+// Slot from skills.txt cltdofunc 21.
 // @sourcefile .\SKILLS\SkillsAma.cpp
-BOOL __fastcall Skills_CltDoFunc_Ama_Impale(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInMeleeRange;
     int nExcludeGUID;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {

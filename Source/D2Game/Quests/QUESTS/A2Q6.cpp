@@ -1353,8 +1353,9 @@ void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, D2Un
     QUEST_RemoveQuestItemFromPlayer(pGame, pUnit, 0x2066736d);
 }
 
-// Q14 object OperateFn (OBJOP_A2Q7_OpenArcaneNpcTrade): player operates the Horadric orifice. If the object is closed (Death anim) and player not busy trading: if player holds the assembled Horadric Staff (item 'hsu '), set interact target + send packet 0x58 to open the staff-in-orifice UI; otherwise play the "can't do that" sound. Closes the interaction when the object returns to Neutral. No quest-record state change here (that happens in Q14_OnStaffUsedInOrifice).
-BOOL __fastcall OBJOP_A2Q7_OpenArcaneNpcTrade(D2ObjectOperateFnArg * pOperation) {
+// A2Q6 Horadric orifice operate fn (OperateFn 25, Tal Rasha's tomb). If the object is closed and the player is not trading: with the assembled Horadric Staff ('hsu ') it sets the interact target and sends 0x58 to open the staff-insert UI, otherwise it plays the "can't do that" sound. Closes the interaction when the object returns to Neutral; the quest record changes in Q14_OnStaffUsedInOrifice.
+// Slot from objects.txt OperateFn 25.
+BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation) {
     uint32_t nOrificeGUID;
     eD2ObjectAnimMode eOrificeAnimMode;
     D2GSPacketSrv0x58 sPacket;

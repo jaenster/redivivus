@@ -939,36 +939,36 @@ static void __stdcall SKILLNEC_SetSkeletonComponentsByMasteryLvl(D2UnitStrc * pS
     if (nMasteryLvl > 10) {
       nMasteryLvl = 10;
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[4] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][0];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[0] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][0];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[5] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][2];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[1] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][2];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[0xc] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][3];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[8] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][3];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[0xd] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][4];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[9] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][4];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[6] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][5];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[2] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][5];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[7] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][6];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[3] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][6];
     }
-    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[8] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][7];
+    if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[4] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][7];
     }
-    if (bHasExtraVariant && pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer) {
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[0xb] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][1];
+    if (bHasExtraVariant && pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster) {
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[7] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][1];
     }
     if (!bRollComponents) {
-      if (!(pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataPlayer)) {
+      if (!(pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER && pSkeletonUnit->pUnitData.pUnitDataMonster)) {
         return;
       }
 
-      pSkeletonUnit->pUnitData.pUnitDataPlayer->szCharName[9] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][8];
+      pSkeletonUnit->pUnitData.pUnitDataMonster->Components[5] = gaSkeletonComponentsByMasteryLvl[nMasteryLvl][8];
       return;
     }
 
