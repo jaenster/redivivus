@@ -7041,7 +7041,7 @@ BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
     return (uint32_t)(nTabIndex != 3);
 }
 
-static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMousePosX) {
+static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosX, int32_t nMousePosY) {
     int bInArea = UI_IsMouseInControlConfigArea(nMousePosX, nMousePosY);
     if (bInArea) {
       int32_t nRowIndex;
@@ -7798,11 +7798,11 @@ void __stdcall UI_ConfigKeyBindModeCancelAndRevert() {
 
 // Control config click handler. Reads mouse button from params, updates g_nControlConfigMouseButtonState[0] to track primary button state. Entry point for config UI mouse interaction.
 // ECX is not an argument: first written at 004a5e6e (MOV ECX,EBX) before any read.
-static void UI_ConfigHandleMouseClick(int32_t nMouseX, int32_t nMouseY) {
+static void UI_ConfigHandleMouseClick(int32_t nMouseY, int32_t nMouseX) {
     int32_t nTabIndex;
     if (gaControlConfigRegionMouseState[0]) {
       uint32_t bCellClickable;
-      bCellClickable = UI_IsControlConfigCellClickable(nMouseY, nMouseX);
+      bCellClickable = UI_IsControlConfigCellClickable(nMouseX, nMouseY);
       if (bCellClickable && gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex != 0x39) {
         UI_ConfigKeyBindModeEnable();
         Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
@@ -7831,7 +7831,7 @@ void __stdcall INPUT_ConfigMouseDown(D2UIMouseMsgStrc * pMsg) {
 
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    UI_ConfigHandleMouseClick(nMouseX, nMouseY);
+    UI_ConfigHandleMouseClick(nMouseY, nMouseX);
     gnUICtrlConfigMouseButtonState = 0;
     UI_UpdateConfigControlsState(nMouseX, nMouseY);
     pMsg->bHandled = 1;
