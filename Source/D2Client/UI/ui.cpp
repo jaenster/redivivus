@@ -3919,16 +3919,27 @@ void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     D2Common::Units::GetTargetCoords(pUnit, &ptScreen);
     ptScreen.x -= rcView.left;
     ptScreen.y += -0x46 - rcView.top;
-    if (eBorderType != 1) {
-      if (eBorderType == 2 && (ptScreen.x += ScreenSizeX / 4 , ptScreen.x < ScreenSizeX / 2)) {
-        return;
-      }
-    } else {
-      ptScreen.x -= ScreenSizeX / 4;
-      if (ptScreen.x > ScreenSizeX / 2) {
-        return;
-      }
+    switch (eBorderType) {
+      case 1:
+        {
+          ptScreen.x -= ScreenSizeX / 4;
+          if (ptScreen.x > ScreenSizeX / 2) {
+            return;
+          }
+
+          break;
+        }
+      case 2:
+        {
+          ptScreen.x += ScreenSizeX / 4;
+          if (ptScreen.x < ScreenSizeX / 2) {
+            return;
+          }
+
+          break;
+        }
     }
+
     if (!(ptScreen.y > 0 && ptScreen.y < ScreenSizeX && ptScreen.x > -0x32 && ptScreen.x < Inv::ScreenSizeY + 0x32)) {
       return;
     }
@@ -9806,129 +9817,6 @@ void __stdcall DRAW_UI_StatWindow_I() {
 
 void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004b3330() {
 
-}
-
-void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
-    short int nMessage;
-    bool bIsSideNpc;
-    uint16_t nMsgTypeToFind;
-    D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
-    BOOL bMonInteractFlag;
-    D2UnitStrc* pPlayerUnit_lcl;
-    int32_t nLine;
-    if (nUpdateType == 6) {
-      D2Common::QuestRecord::ReadQuestRecordFromBuffer(npcmenu::gpNpcMenuBitBuffer, pQuestBuffer, 0x60, 0);
-      return;
-    }
-
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)nUpdateType);
-    if (!pNpcUnit) {
-      pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-      if (pNpcUnit && pNpcUnit->eUnitType == UNIT_PLAYER && pNpcUnit->pUnitData.pUnitDataPlayer) {
-        pNpcUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 0;
-        pNpcUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = 0;
-        pNpcUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = 0;
-        pNpcUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = 0;
-      }
-
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, (uint32_t)nActionType, nUnitGUID);
-      npcmenu::NPCMENU_ClearHireListAndStopNpcSound(nUnitGUID);
-      return;
-    }
-
-    UNIT::CUnit::CUNIT_IterateMissilesWithCallback((fnUnitIterCallback)npcmenu::NPCMENU_ValidateNpcForShop);
-    pNpcUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
-    D2Common::QuestRecord::ReadQuestRecordFromBuffer(npcmenu::gpNpcMenuBitBuffer, pQuestBuffer, 0x60, 0);
-    npcmenu::NPCMENU_InitializeMenuOptions();
-    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x2f, (uint32_t)nUpdateType, nUnitGUID);
-    GAME::Game::UI_ResetInputState();
-    if (npcmenu::gbNpcMenuInitialized != '\0') {
-      npcmenu::gnNpcMenuActiveMode = 1;
-      npcmenu::SetInteractedUnitInfo(pNpcUnit);
-      pNpcUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-      return;
-    }
-
-    pOverheadTextPtr = Text::TEXT_GetOverheadGlobalPointer();
-    if (!pOverheadTextPtr) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 4192);
-      exit(-1);
-    }
-
-    nMessage = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadTextPtr, 0);
-    nLine = pNpcUnit->nClassId;
-    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
-    if (bMonInteractFlag && nLine != 0x219 && nLine != 0x21a && nLine != 0x21b && nLine != 0x20f) {
-      UNIT::CUnit::FacePlayer(pNpcUnit);
-    }
-
-    pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
-    if (pPlayerUnit_lcl) {
-      _Interaction::bInteractingWithNpc = 1;
-      _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
-      _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
-      npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-      SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-      return;
-    }
-
-    gnNpcMenuScrollMessageHead = 0;
-    if (nMessage != -1) {
-      UI_CloseActivePanels(0, 0);
-      gnNpcMenuRepairCostGold = nMessage;
-      Text::TEXT_ShowNpcDialog(pNpcUnit, nMessage, 1);
-      npcmenu::NPCMENU_AddHandledMessageId(nMessage);
-      gnNpcMenuTradeActionGold = npcmenu::NPCMENU_FindNextUnhandledMessage(nMessage);
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, (uint32_t)(uint16_t)nMessage);
-      npcmenu::gnNpcMenuActiveMode = 1;
-      Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)npcmenu::NPCMENU_OnScrollComplete, nullptr);
-      npcmenu::SetInteractedUnitInfo(pNpcUnit);
-      gnNpcMenuShopMode = 0;
-      return;
-    }
-
-    nMsgTypeToFind = D2Common::Text::OVERHEAD_GetMessageType1(pOverheadTextPtr, 0);
-    if (pNpcUnit->nClassId != 0x20f) {
-      UNIT::CUnit::CLIENT_TurnPlayerToFaceUnit(pNpcUnit);
-    }
-    if (pNpcUnit->pPath.pDynamicPath) {
-      D2Common::PATH::DynamicPath::ZeroPathPointsSize(pNpcUnit->pPath.pDynamicPath);
-    }
-    if (nMsgTypeToFind != 0xffff) {
-      Inv::INV_ResetHoverAndContextState();
-      UI_CloseActivePanels(0, 0);
-      gnNpcMenuRepairCostGold = nMsgTypeToFind;
-      gnNpcMenuTradeActionGold = npcmenu::NPCMENU_FindNextUnhandledMessage(nMsgTypeToFind);
-      npcmenu::NPCMENU_OpenInteraction(pNpcUnit);
-      gnNpcMenuShopMode = 0;
-      return;
-    }
-
-    nLine = pNpcUnit->nClassId;
-    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
-    if (bMonInteractFlag) {
-      bIsSideNpc = npcmenu::inline_NPC_IsInteractableSideNpc(nLine);
-      if (bIsSideNpc) {
-        _Interaction::bInteractingWithNpc = 1;
-        _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
-        _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
-        npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-        SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-        return;
-      }
-
-      Inv::INV_ResetHoverAndContextState();
-      UI_CloseActivePanels(0, 0);
-      npcmenu::NPCMENU_HandleMenuSelection(0, pNpcUnit);
-      gnNpcMenuShopMode = 0;
-      return;
-    }
-
-    npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-    gnNpcMenuShopMode = 0;
-    return;
 }
 
 void __stdcall UI_ResetTradeGlobals() {

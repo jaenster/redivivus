@@ -808,53 +808,64 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nCom
     int nFade;
     D2UnitStrc* pItem;
     D2UnitStrc* pCarriedItem;
-    D2ItemsTxt* pItemsTxt;
+    int nPlayerFade;
     D2UnitStrc* pDVar1;
     D2InventoryStrc* pInventory;
     eD2UnitType eUnitType = Source::ClientEngine::CLIENT_GetEffectiveUnitType(pUnit);
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && (nFade = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_fade, 0) , nFade > 0)) {
-        if (nFade > 0xf) {
-          if (!pUnit->pInventory) {
-            return 0;
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        {
+          nPlayerFade = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_fade, 0);
+          if (nPlayerFade) {
+            *pOutTransTable = 1;
+            return 1;
           }
 
-          pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
-          if (!pItem) {
-            return 0;
-          }
-
-          while (true) {
-            pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItem);
-            if (pCarriedItem) {
-              _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_ETHEREAL, 0x5e6, ".\\ENGINE\\GfxUtil.cpp");
-              if (_bIsEthereal) {
-                break;
-              }
-            }
-
-            pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
-            if (!pItem) {
-              return 0;
-            }
-          }
-
-          *pOutTransTable = 1;
-          return 1;
+          break;
         }
+      case UNIT_MONSTER:
+        {
+          nFade = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_fade, 0);
+          if (nFade > 0) {
+            if (nFade > 0xf) {
+              if (!pUnit->pInventory) {
+                return 0;
+              }
 
-        *pOutTransTable = 1;
-        return 1;
-      }
-    } else {
-      int nPlayerFade;
-      nPlayerFade = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_fade, 0);
-      if (nPlayerFade) {
-        *pOutTransTable = 1;
-        return 1;
-      }
+              pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
+              if (!pItem) {
+                return 0;
+              }
+
+              while (true) {
+                pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItem);
+                if (pCarriedItem) {
+                  _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pCarriedItem, ITEMFLAG_ETHEREAL, 0x5e6, ".\\ENGINE\\GfxUtil.cpp");
+                  if (_bIsEthereal) {
+                    break;
+                  }
+                }
+
+                pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
+                if (!pItem) {
+                  return 0;
+                }
+              }
+
+              *pOutTransTable = 1;
+              return 1;
+            }
+
+            *pOutTransTable = 1;
+            return 1;
+          }
+
+          break;
+        }
     }
+
     if (nItemClassId != -1) {
+      D2ItemsTxt* pItemsTxt;
       pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
       if (pItemsTxt && pItemsTxt->bTransparent != '\0') {
         *pOutTransTable = (uint32_t)pItemsTxt->bTransTbl;
@@ -872,31 +883,47 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nCom
     if (!pInventory) {
       return 0;
     }
-    if (nComponent != 5) {
-      if (nComponent != 6) {
-        if (nComponent == 7 && (pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 7) , pDVar1 != 0) && (_bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x627, ".\\ENGINE\\GfxUtil.cpp") , _bIsEthereal != 0)) {
-          *pOutTransTable = 2;
-          return 1;
-        }
-      } else {
-        pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
-        if (pDVar1) {
-          _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x61c, ".\\ENGINE\\GfxUtil.cpp");
-          if (_bIsEthereal) {
-            *pOutTransTable = 1;
-            return 1;
+
+    switch (nComponent) {
+      case 5:
+        {
+          pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
+          if (pDVar1) {
+            _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x611, ".\\ENGINE\\GfxUtil.cpp");
+            if (_bIsEthereal) {
+              *pOutTransTable = 1;
+              return 1;
+            }
           }
+
+          break;
         }
-      }
-    } else {
-      pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 5);
-      if (pDVar1) {
-        _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x611, ".\\ENGINE\\GfxUtil.cpp");
-        if (_bIsEthereal) {
-          *pOutTransTable = 1;
-          return 1;
+      case 6:
+        {
+          pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 6);
+          if (pDVar1) {
+            _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x61c, ".\\ENGINE\\GfxUtil.cpp");
+            if (_bIsEthereal) {
+              *pOutTransTable = 1;
+              return 1;
+            }
+          }
+
+          break;
         }
-      }
+      case 7:
+        {
+          pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_FindWornItemByType(pInventory, 7);
+          if (pDVar1) {
+            _bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pDVar1, ITEMFLAG_ETHEREAL, 0x627, ".\\ENGINE\\GfxUtil.cpp");
+            if (_bIsEthereal) {
+              *pOutTransTable = 2;
+              return 1;
+            }
+          }
+
+          break;
+        }
     }
 
     return 0;

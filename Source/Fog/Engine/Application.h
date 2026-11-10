@@ -106,7 +106,6 @@ namespace Fog::Engine::Application {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 int Unreferenced_004046d0();
 bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize);
 uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, struct D2FogDebugModuleEntryStrc * pModuleInfoOut);

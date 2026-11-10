@@ -415,7 +415,7 @@ static void CLIENT_SendGameFlagsAndSetState1(::SGAMEDATA * pGame, D2ClientStrc *
     Clients::CLIENT_SetConnectionState(pClient, 1);
 }
 
-void __stdcall RollSeed(::SGAMEDATA * pGamee) {
+static void __stdcall RollSeed(::SGAMEDATA * pGamee) {
     uint32_t nRandSeed;
     ::SGAMEDATA* pGame;
     LARGE_INTEGER sPerfCounter;

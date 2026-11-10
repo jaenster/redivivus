@@ -45,6 +45,33 @@ static D2SoundWavCacheEntryStrc * gpWavFileCacheListHead = 0; D2_STATIC_GUARD(gp
 
 namespace D2Sound::Src::D2SoundFast {
 
+static int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
+    if (!gbAmbientSoundLangInitialized) {
+      gbAmbientSoundLangInitialized = 1;
+      gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
+    }
+    if (gaAmbientSoundFlags != gnAmbientSoundCount) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
+      exit(-1);
+    }
+
+    {
+      int* pAmbientEntry;
+      if (!(nIndex < gaAmbientSoundFlags)) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
+        exit(-1);
+      }
+
+      pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
+      if (gnAmbientSoundLanguageCode) {
+        return pAmbientEntry;
+      }
+
+      pAmbientEntry = gAmbientSoundTable + nIndex * 2;
+      return pAmbientEntry;
+    }
+}
+
 BOOL __stdcall SOUND_IsAmbientStreaming() {
     if (gpMusicStreamBuffer) {
       uint32_t bIsStreaming;
@@ -156,7 +183,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       nAmbientIdx = 0;
       if (nAmbientCount > 0) {
         do {
-          pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(nAmbientIdx);
+          pAmbientEntry = SOUND_GetAmbientSoundEntry(nAmbientIdx);
           if (!pAmbientEntry[1]) {
             goto play_unplayed_track;
           }
@@ -210,7 +237,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
           break;
         }
       } else {
-        pAmbientEntry = Sound::SOUND_GetAmbientSoundEntry(0);
+        pAmbientEntry = SOUND_GetAmbientSoundEntry(0);
         gbSoundFastPathActive = 0;
         nAmbientCount = gaAmbientSoundFlags;
       }

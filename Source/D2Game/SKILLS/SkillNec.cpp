@@ -892,24 +892,13 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
 
 // Applies the necromancer's passive_summon_resist bonus as elemental resistances to a newly-created summon. Skips fire/light/cold if the summon already has the corresponding absorb stat. Called after revive/skeleton creation.
 void __fastcall SKILLNEC_ApplySummonResistPassive(D2UnitStrc * pUnit, D2UnitStrc * pSummon) {
-    D2PoolManagerStrc* pStatList;
-    eD2UnitType eUnitType;
     int nResistValue;
     int nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_summon_resist, 0);
     if (!nValue) {
       return;
     }
-    if (!pSummon) {
-      nResistValue = -1;
-      eUnitType = UNIT_COUNT;
-      pStatList = 0;
-    } else {
-      nResistValue = pSummon->nUnitGUID;
-      eUnitType = pSummon->eUnitType;
-      pStatList = pSummon->pMemory;
-    }
 
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pStatList, 0, 0, eUnitType, nResistValue);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(!pSummon ? 0 : pSummon->pMemory, 0, 0, !pSummon ? UNIT_COUNT : pSummon->eUnitType, !pSummon ? -1 : pSummon->nUnitGUID);
     if (!pStatsEx) {
       return;
     }
@@ -1777,20 +1766,12 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 static void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
     int32_t nOwnerGUID;
-    eD2UnitType eOwnerUnitType;
     D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (eSkill == SKILL_Attack) {
       return;
     }
-    if (!pUnit) {
-      eOwnerUnitType = UNIT_COUNT;
-      nOwnerGUID = -1;
-    } else {
-      eOwnerUnitType = pUnit->eUnitType;
-      nOwnerGUID = pUnit->nUnitGUID;
-    }
 
-    Ai::AiGeneral::AssignMinionOwner(pGame, pUnit2, nOwnerGUID, eOwnerUnitType, 0, 0);
+    Ai::AiGeneral::AssignMinionOwner(pGame, pUnit2, !pUnit ? -1 : pUnit->nUnitGUID, !pUnit ? UNIT_COUNT : pUnit->eUnitType, 0, 0);
     Monster::AI::MONSTERAI_SetTargetUnit(pUnit2, pUnit);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pUnit2, 2, pGame->dwGameFrame + 0xf, 0, 0);

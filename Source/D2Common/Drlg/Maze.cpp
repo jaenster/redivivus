@@ -2731,7 +2731,7 @@ static void DRLGMAZE_ReplaceSewerRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
 }
 
 // Randomises the stair/Nilathak spawn layout for the Halls of Pain / Halls of Vaught area (Act 5 Temple levels 0x7b-0x7c). Rolls a seed-derived value mod 3 to pick one of three room replacement sets, then calls ReplaceRoom with gaDrlgRoomReplacementsA (non-Vaught) and/or gaDrlgRoomReplacementsB (level 0x7b only). Halts with an internal error if the Vaught level did not have its replacement applied by replacement set A.
-void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
+static void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
     static D2DrlgReplaceRoomStrc gaDrlgRoomReplacementsA[3] = {
     {

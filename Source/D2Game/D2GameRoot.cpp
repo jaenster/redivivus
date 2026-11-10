@@ -341,24 +341,6 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
 }
 
-uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
-    D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
-    pA2Q3Data->bDarknessTimerArmed = 0;
-    if (pA2Q3Data->bSunDarkened) {
-      return '\x01';
-    }
-
-    bool nResult = (bool)Quests::QUESTS::A2Q3::Q11_BeginTaintedSun(pQuestData);
-    if (!nResult) {
-      pA2Q3Data->bViperAmuletInitPending = '\x01';
-      return '\x01';
-    }
-
-    pA2Q3Data->bSunDarkened = true;
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Quests::QUESTS::A2Q3::Q11_UpdateQuestRecord);
-    return '\x01';
-}
-
 void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;

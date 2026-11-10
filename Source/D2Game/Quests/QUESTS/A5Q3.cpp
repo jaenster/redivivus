@@ -622,14 +622,23 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_NORMAL;
       nPlayerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pQuestArgs->pPlayer, UNITSTAT_level, 0);
       pGame = pQuestArgs->pGame;
-      if (pGame->nDifficulty != 1) {
-        if (pGame->nDifficulty == 2 && (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x41)) {
-          pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_HELL;
-        }
-      } else {
-        if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x2d) {
-          pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_NIGHTMARE;
-        }
+      switch (pGame->nDifficulty) {
+        case 1:
+          {
+            if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x2d) {
+              pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_NIGHTMARE;
+            }
+
+            break;
+          }
+        case 2:
+          {
+            if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x41) {
+              pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_HELL;
+            }
+
+            break;
+          }
       }
 
       bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBufferRecord, QUEST_PrisonOfIce, QUESTSTATE_Step0x10);
@@ -1033,17 +1042,7 @@ bool __fastcall Q33_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // AddBonusResistances (PrisonOfIce reward effect): allocates a stat list and grants +nBonusValue to all four resistances
 // (fire/light/cold/poison) on the player, then sends the four attribute updates. This is the Scroll of Resistance reward.
 void __fastcall AddBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nBonusValue) {
-    eD2UnitType eUnitType;
-    int32_t nUnitGUID;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, eUnitType, nUnitGUID);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
       return;
     }

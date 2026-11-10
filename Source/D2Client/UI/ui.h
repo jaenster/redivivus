@@ -283,7 +283,6 @@ void __stdcall UI_PrecomputeStatDescriptionWidths();
 void __stdcall CHAR_FreePanelAssets_NoOp();
 void __stdcall DRAW_UI_StatWindow_I();
 void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004b3330();
-void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType);
 void __stdcall UI_ResetTradeGlobals();
 void __stdcall DRAW_UI_TradePrompt();
 void __stdcall UI_InitTradeState();

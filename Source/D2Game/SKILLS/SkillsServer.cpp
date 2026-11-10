@@ -2855,17 +2855,7 @@ int32_t __fastcall GetMeleeRangePlusFour(D2UnitStrc * pUnit) {
 
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_ApplyAttackRateBuff(D2UnitStrc * pUnit, int32_t nAttackRate) {
-    eD2UnitType eUnitType;
-    int nUnitGUID;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 4, 0, eUnitType, nUnitGUID);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 4, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
       return;
     }

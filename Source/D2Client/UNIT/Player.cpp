@@ -52,6 +52,43 @@ static BOOL bRecursionClick = 0; D2_STATIC_GUARD(bRecursionClick, "bRecursionCli
 
 namespace D2Client::UNIT::Player {
 
+static void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode, BOOL bMovePlayerUnit, D2UnitStrc * pUnit) {
+    int nX;
+    int nY;
+    UnitMode::UNITMODE_SetAnimMode(pUnit, nAnimMode);
+    if (!bMovePlayerUnit) {
+      return;
+    }
+
+    D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_Net();
+    if (pUnit != pPlayerUnit_lcl) {
+      return;
+    }
+
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nX = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nX = 0;
+    }
+
+    eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nY = pUnit->pPath.pStaticPath->nPosY;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nY = 0;
+    }
+    if (!(nX && nY)) {
+      return;
+    }
+
+    Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)nX, nY, 0, 0, 0);
+}
+
 // Client-side reaction handler invoked when a unit stat changes; dwStatIdAndSubIndex packs the stat id (high 16 bits, eD2UnitStat) and a sub-index (low 16 bits), nValue is the new value. Dispatches on stat id: item_lightradius/item_lightcolor update the unit's rendered light; item_nonclassskill/item_singleskill add or remove a granted skill on a player (AddSkill when newly granted and class-eligible, SKILL_RemoveSkillCallback when value drops to 0 and skill level is gone); item_charged_skill adds/removes a charged item skill (decoding charge level/max from the sub-index and item charge count, gated on the item owner matching the player). All other stats are no-ops here. Player/UI-side only.
 // @sourcefile .\UNIT\Player.cpp
 void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pItem, uint32_t dwStatIdAndSubIndex, uint32_t dwUnused2, int32_t nValue) {
@@ -661,7 +698,6 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
     uint32_t pMessageHandle;
     uint32_t bSkillValid;
     uint32_t dwMouseButtonState;
-    int32_t pnSoundId;
     eD2PlayerAnimMode eAnimMode;
     D2LightMapStrc* pLightMap;
     pLightMap = D2Common::Skills::SwapLightMap(pUnit, nullptr);
@@ -753,12 +789,7 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
         pUnit->dwLastHitClass = pMessage->nTargetUnitType;
       UnitMode::UNITMODE_ShowElementalHitOverlay(pUnit, 0x13);
       bIsInTown = D2Common::DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit);
-      pnSoundId = 3;
-      if (!bIsInTown) {
-        pnSoundId = 0x13;
-      }
-
-      UnitSnd::UNITSND_DispatchModeChangeSound(pUnit, pnSoundId, 1);
+      UnitSnd::UNITSND_DispatchModeChangeSound(pUnit, bIsInTown ? 3 : 0x13, 1);
       Path::PATH_MoveUnitToPoint(pUnit, *(uint16_t*)&pMessageSaved->nSkillId, (uint32_t)*(uint16_t*)&pMessageSaved->nItemId, 1, 0, 0);
       return 1;
       case 0x14:
@@ -838,7 +869,7 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
     }
 
     revert_to_neutral:
-    Engine::CLIENT_SetAnimModeAndMoveToCurrentPos(eAnimMode, 1, pUnit);
+    CLIENT_SetAnimModeAndMoveToCurrentPos(eAnimMode, 1, pUnit);
     return 0;
 }
 
@@ -2373,7 +2404,7 @@ static void CLIENT_CancelRunAndWalk(D2UnitStrc * pUnit) {
       return;
     }
 
-    Engine::CLIENT_SetAnimModeAndMoveToCurrentPos(eNeutralMode, 1, pUnit);
+    CLIENT_SetAnimModeAndMoveToCurrentPos(eNeutralMode, 1, pUnit);
 }
 
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
@@ -2849,22 +2880,6 @@ void __stdcall CLIENT_ClearServerAndClientUnitLists() {
       *ppUnit = 0;
       ppUnit++;
     }
-}
-
-void __stdcall CUNIT_IterateHashTableWithCallback(D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback) {
-    D2UnitStrc* pNextUnit;
-    int nBucketIndex = 0;
-    do {
-      D2UnitStrc* pCurUnit;
-      pCurUnit = UnitHashTable[nBucketIndex];
-      while (pCurUnit) {
-        pNextUnit = pCurUnit->pListNext;
-        (*pfnCallback)(pCurUnit);
-        pCurUnit = pNextUnit;
-      }
-
-      nBucketIndex++;
-    } while (nBucketIndex < 0x80);
 }
 
 // Iterates all 128 buckets of the server-side unit hash table. For each unit calls CLIENT_UpdateUnitFrame, then looks up the matching entry in the client-side hash table and dispatches CLIENT_DispatchMonsterAiBehavior (monsters) or OBJECT_ExecuteClientFunction (objects). Halts fatally on unit-type mismatch.

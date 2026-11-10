@@ -120,23 +120,10 @@ short __fastcall Unreferenced_006435d0(int nIndex) {
 
 // Gets or allocates a stat list associated with a given state on a unit. If arg1 is nonzero and no stat list exists for the state, allocates one and attaches it. If arg1 is zero, frees the existing stat list for that state.
 static D2StatListExStrc * __stdcall SKILLS_GetOrAllocStateStatList(int32_t bAlloc, D2UnitStrc * pUnit, eD2States eState) {
-    eD2UnitType eUnitType;
-    int32_t nUnitGUID;
     D2StatListExStrc* pStateStatList = Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (bAlloc) {
-      D2PoolManagerStrc* pMemory;
       if (!pStateStatList) {
-        if (!pUnit) {
-          nUnitGUID = -1;
-          eUnitType = UNIT_COUNT;
-          pMemory = 0;
-        } else {
-          nUnitGUID = pUnit->nUnitGUID;
-          eUnitType = pUnit->eUnitType;
-          pMemory = pUnit->pMemory;
-        }
-
-        pStateStatList = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pMemory, 0, 0, eUnitType, nUnitGUID);
+        pStateStatList = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(!pUnit ? 0 : pUnit->pMemory, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
         Stats::StatsEx::SetState(pStateStatList, eState);
         Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
       }

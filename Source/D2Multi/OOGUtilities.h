@@ -183,9 +183,7 @@ void Unreferenced_004414c0();
 int __stdcall JoinOrCreateGame(DWORD dwUnused);
 // Attempts to restore MCP connection: displays connection message, creates thread if peer data exists, sends CharLogon packet. Returns 1 on success, 0 on failure.
 uint32_t __stdcall OOGMENU_RestoreMCPConnection();
-int __fastcall CHATDLG_RunChatLobbyScreen(struct D2IniConfigStrc * pD2IniConfig);
 int32_t __fastcall fAPPMODE_multiplayer_ReturnAppMode_Caller(struct D2IniConfigStrc * pD2IniConfig);
-void __fastcall OOGUTIL_HandleChatCommands(char * szText);
 int __stdcall CHAT_SendOutOfGameMessage();
 // OnPress of the OK button (form 0x27, record 0070d5a0, string 0x13ee) of the chat password/CD-key warning popup that OOGUTIL_SendChatMessage opens: calls CHAT_SendOutOfGameMessage (the caller already emptied gszOogChatInputBuffer) and closes the popup (FORMS_DestroyListEx); returns 1.
 // Provenance: asm 004428b0..004428bf (RET 4); popup built by UIMENU_DrawTitleAndSubtitleOnCenterScreen, called only from OOGUTIL_SendChatMessage.

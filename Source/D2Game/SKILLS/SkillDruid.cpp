@@ -244,9 +244,7 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
     BOOL _bStateActive;
     bool bStateActive;
     D2StatListExStrc* pStatList;
-    eD2UnitType eUnitType;
     D2SkillStrc* pSkill;
-    int32_t nUnitGUID;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return 0;
@@ -263,15 +261,7 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
       nAuraLen = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
       if (!pStatList) {
-        if (!pUnit) {
-          nUnitGUID = -1;
-          eUnitType = UNIT_COUNT;
-        } else {
-          nUnitGUID = pUnit->nUnitGUID;
-          eUnitType = pUnit->eUnitType;
-        }
-
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, pGame->dwGameFrame + nAuraLen, eUnitType, nUnitGUID);
+        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, pGame->dwGameFrame + nAuraLen, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
         if (pStatList) {
           D2Common::Stats::StatsEx::SetState(pStatList, (int)pSkillTxt->aurastate);
           D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatList, SKILLDRUID_OnShapeshiftExpire);

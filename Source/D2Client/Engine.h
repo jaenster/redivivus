@@ -68,7 +68,6 @@ void __fastcall Unreferenced_00460760(struct D2UnitStrc * param_1, int param_2);
 int __fastcall Unreferenced_004607d0(struct D2UnitStrc * param_1);
 int __fastcall Unreferenced_004607f0(struct D2UnitStrc * param_1);
 int __fastcall Unreferenced_00460810(struct D2UnitStrc * param_1);
-void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode, BOOL bMovePlayerUnit, struct D2UnitStrc * pUnit);
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms();
 void __fastcall CLIENT_UpdateUnitLightRadius(struct D2UnitStrc * pUnit, int32_t nRadiusBonus);
 void __fastcall CLIENT_SetUnitLightColor(struct D2UnitStrc * pUnit, int32_t dwRGB);

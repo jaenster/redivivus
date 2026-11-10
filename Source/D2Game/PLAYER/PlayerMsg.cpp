@@ -1935,7 +1935,7 @@ eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(D2UnitStrc * pUnit,
 
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
 // @sourcefile .\PLAYER\PlrMsg.cpp
-static void __stdcall PLAYER_ProcessSkillOnEntity(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, eD2UnitType eUnitType, DWORD nTargetGUID, int32_t bMoveToTarget, D2SkillStrc * pSkill) {
+static void __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, eD2UnitType eUnitType, DWORD nTargetGUID, int32_t bMoveToTarget) {
     int32_t nSkillWeaponClass;
     eD2Skills eSkillId;
     BOOL bDualWieldOrMeleeCheck = D2Common::Units::CanDualWield(pUnit);
@@ -2028,22 +2028,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * p
 // [op:1][unitType:u32][GUID:u32]
 // Left skill on target, approach=1 (walk to target).
 eD2ServerIncomingStatus __fastcall SCMD_0x06_LeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x06_LeftSkillOnEntity * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType nPacket;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
-
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 1;
-    D2GSPacketClt0x06_LeftSkillOnEntity* pRawUnitType = pPacket;
-    uint32_t nTargetGUID = nSize;
-    pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    PLAYER_ProcessSkillOnEntity(pUnit, pGame, (eD2UnitType)pRawUnitType, nTargetGUID, nPierceIdx, pLeftSkill);
+    uint32_t nTargetGUID = (uint32_t)nPacket;
+    uint32_t nTargetGUID_00 = nSize;
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetLeftSkill(pUnit), nTargetGUID, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }
@@ -2052,22 +2050,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x06_LeftSkillOnEntity(::SGAMEDATA * pGa
 // [op:1][unitType:u32][GUID:u32]
 // Left skill on target, approach=0 (hold position).
 eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x07_LeftSkillOnEntityEx * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&pPacket, &nSize, pUnit, &pPacket->nCmd);
+    eD2UnitType nPacket;
+    eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
-
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 0;
-    D2GSPacketClt0x07_LeftSkillOnEntityEx* eUnitTypeParsed = pPacket;
-    uint32_t nTargetGUID = nSize;
-    pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    PLAYER_ProcessSkillOnEntity(pUnit, pGame, (eD2UnitType)eUnitTypeParsed, nTargetGUID, nPierceIdx, pLeftSkill);
+    uint32_t nTargetGUID = (uint32_t)nPacket;
+    uint32_t nTargetGUID_00 = nSize;
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetLeftSkill(pUnit), nTargetGUID, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }
@@ -2173,18 +2169,15 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pG
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
-
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 1;
-    D2GSPacketClt0x0D_RightSkillOnEntity* eUnitTypeParsed = pPacket;
-    uint32_t nTargetGUID = nSize;
-    pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    PLAYER_ProcessSkillOnEntity(pUnit, pGame, (eD2UnitType)eUnitTypeParsed, nTargetGUID, nPierceIdx, pRightSkill);
+    D2GSPacketClt0x0D_RightSkillOnEntity* nTargetGUID = pPacket;
+    uint32_t nTargetGUID_00 = nSize;
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), (eD2UnitType)nTargetGUID, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }
@@ -2197,18 +2190,15 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
     if (nStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)nStatus;
     }
-
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     int32_t nPierceIdx = 0;
-    D2GSPacketClt0x0E_RightSkillOnEntityEx* eUnitTypeParsed = pPacket;
-    uint32_t nTargetGUID = nSize;
-    pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    PLAYER_ProcessSkillOnEntity(pUnit, pGame, (eD2UnitType)eUnitTypeParsed, nTargetGUID, nPierceIdx, pRightSkill);
+    D2GSPacketClt0x0E_RightSkillOnEntityEx* nTargetGUID = pPacket;
+    uint32_t nTargetGUID_00 = nSize;
+    PLAYER_ProcessSkillOnEntity(pGame, pUnit, D2Common::Units::GetRightSkill(pUnit), (eD2UnitType)nTargetGUID, nTargetGUID_00, nPierceIdx);
     nStatus = SERVERSTATUS_OK;
     return (eD2ServerIncomingStatus)nStatus;
 }

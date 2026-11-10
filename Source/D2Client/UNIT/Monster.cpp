@@ -1567,35 +1567,50 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     } else {
       D2MonStats2Txt* pMonStats2;
       nSrvDoFunc = pSkillTxt->srvdofunc;
-      if (nSrvDoFunc != 0x5f) {
-        if (nSrvDoFunc != 0x7e) {
-          if (nSrvDoFunc == 0x98 && (pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0) && (eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno) , eState != 0)) {
-            nCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
-            if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
+      switch (nSrvDoFunc) {
+        case 0x5f:
+          {
+            pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+            if (pMonStats2) {
               SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
+              if (pUnit->nGfxCurrentFrame >> 8 > (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
+                pUnit->nGfxCurrentFrame = (uint32_t)(uint8_t)pMonStats2->byInfernoRollback << 8;
+                return;
+              }
             }
-            if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoRollback) {
-              bResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
-              pUnit->nGfxCurrentFrame = (bResult - 4 + (uint32_t)(uint8_t)pMonStats2->byInfernoRollback) * 0x100;
+
+            break;
+          }
+        case 0x7e:
+          {
+            SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
+            if ((int)(pUnit->nGfxCurrentFrame & 0xffffff00U) >= 0xc00) {
+              pUnit->nGfxCurrentFrame = 0x800;
               return;
             }
+
+            break;
           }
-        } else {
-          SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
-          if ((int)(pUnit->nGfxCurrentFrame & 0xffffff00U) >= 0xc00) {
-            pUnit->nGfxCurrentFrame = 0x800;
-            return;
+        case 0x98:
+          {
+            pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+            if (pMonStats2) {
+              eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+              if (eState) {
+                nCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
+                if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
+                  SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
+                }
+                if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoRollback) {
+                  bResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
+                  pUnit->nGfxCurrentFrame = (bResult - 4 + (uint32_t)(uint8_t)pMonStats2->byInfernoRollback) * 0x100;
+                  return;
+                }
+              }
+            }
+
+            break;
           }
-        }
-      } else {
-        pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-        if (pMonStats2) {
-          SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
-          if (pUnit->nGfxCurrentFrame >> 8 > (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
-            pUnit->nGfxCurrentFrame = (uint32_t)(uint8_t)pMonStats2->byInfernoRollback << 8;
-            return;
-          }
-        }
       }
     }
 }

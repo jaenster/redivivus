@@ -222,7 +222,6 @@ BOOL __fastcall Skills_CltStFunc_CheckAuraStateInactive(D2UnitStrc * pUnit, eD2S
 // Client-side function that initialises or refreshes the Assassin charge-up state (STATE_inferno) on a unit. On first charge: plays the skill's progress overlay and sound, allocates a permanent stat list, attaches it with SKILLSASS_StatExpireCallback_ClearState as the expire callback, and sets STATE_inferno. On subsequent charges: advances the sequence frame (seqinput - 1), resets the frame counter to 0x800, and refreshes the stat list timeout to 7 frames. Returns 1 on success, 0 if the skill txt entry is missing or alloc fails.
 BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nUnused) {
     D2SkillStrc* pSkill;
-    int nUnitGUID;
     short int nPrgOverlay;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -242,16 +241,7 @@ BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSki
 
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_inferno);
     if (!pStatListEx) {
-      eD2UnitType eUnitType;
-      if (!pUnit) {
-        nUnitGUID = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 2, 0x14, eUnitType, nUnitGUID);
+      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 2, 0x14, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatListEx) {
         return 0;
       }

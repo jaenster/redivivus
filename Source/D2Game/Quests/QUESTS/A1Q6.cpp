@@ -253,26 +253,40 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     } else {
       nPlayerGUIDLocal = pQuestArgs->pPlayer->nUnitGUID;
     }
-    if (nNPCClassId != 0x94) {
-      if (nNPCClassId != 0x96) {
-        if (nNPCClassId == 0x109 && (bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDCain, nPlayerGUIDLocal) , bFound != 0)) {
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 3);
-          return;
+
+    switch (nNPCClassId) {
+      case 0x94:
+        {
+          bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDAkara, nPlayerGUIDLocal);
+          if (bFound) {
+            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x94, 3);
+            return;
+          }
+
+          break;
         }
-      } else {
-        bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDKashya, nPlayerGUIDLocal);
-        if (bFound) {
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x96, 3);
-          return;
+      case 0x96:
+        {
+          bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDKashya, nPlayerGUIDLocal);
+          if (bFound) {
+            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x96, 3);
+            return;
+          }
+
+          break;
         }
-      }
-    } else {
-      bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDAkara, nPlayerGUIDLocal);
-      if (bFound) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x94, 3);
-        return;
-      }
+      case 0x109:
+        {
+          bFound = QUESTGUID_SearchForValueInIntArray32(&pQuestSpecific->sQuestGUIDCain, nPlayerGUIDLocal);
+          if (bFound) {
+            AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 3);
+            return;
+          }
+
+          break;
+        }
     }
+
     if (bRewardAwaits) {
       if (nNPCClassId != 0x109 && nNPCClassId != 0x94 && nNPCClassId != 0x96) {
         AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nNPCClassId, 3);

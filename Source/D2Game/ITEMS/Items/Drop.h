@@ -121,15 +121,6 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, struct D2See
 uint32_t __fastcall ITEM_IsUniqueAlreadyDropped(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Drop-time roller that promotes an item to a Unique. Looks up the item's itemstxt line; if durability-bearing and version 0, scales current/max durability x5 (capped 255). For modern items, scans uniqueitems.txt building a weighted candidate list (matching item code, enabled flag, qlvl<=ilvl, ladder/version gating), then picks one via seeded RollBetweenMinAndMax over the rarity-weight total (or a forced index from pItemGenCtx+0x40). Records the unique into the player's found-uniques bitmask (ITEM_MarkUniqueAsDropped) unless quest/already-found, sets the item's nFileIndex, clears IDENTIFIED, and applies unique mods via ApplyRuneAndGemStats. Returns 1 if the item became unique, 0 otherwise.
 BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
-// Drop-time socket roller: decides whether an item gets sockets and how many. Bails
-// for items below magic quality, items without an inventory graphic, stackables, or items with no
-// max socket count. Caps the max socket count by pGame->nDifficulty (+0x6D, MOVZX at 556ba9):
-// normal 3, nightmare 4, hell 6. Items with version < 100 that are armor get no sockets. Rolls
-// UNIT_GetModuloFromSeed(seed,100); the roll is forced to 0 when gen-context flag 0x10 is set and
-// any item with flag 0x8 is skipped. Unless the context forces sockets (0x800), the roll must be
-// below 0x21. On success sets ITEMFLAG_SOCKETED and calls the D2Common ITEM_RollSocketCount with
-// modseed % max + 1 (versioned items) or the max capped at 3, 2 for helms (version 0). No return value.
-void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 // Quality cascade (Unique→Set→Rare→Magic→Superior→Normal). Applies MF, TC quality bonuses. Never fails (fallback to Normal). Returns quality level [0-7]. Sets item.dwItemLevel and item.dwFileIndex.
 uint32_t __stdcall ITEM_RollItemQuality(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 // Apply quality tier to item and generate affixes based on quality type (magic/rare/set/unique/superior)

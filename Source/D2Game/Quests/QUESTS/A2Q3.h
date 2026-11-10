@@ -64,11 +64,6 @@ bool __fastcall Q11_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nT
 // already participated, otherwise pick a msg from gdwQ10QuestStateMessages[stateFlag] when the intro is done,
 // quest not Completed and stateFlag<=3. AddGossipMessageOnMonster shows the chosen line. Read-only on record.
 void __fastcall Q11_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-// A2Q3 - Q11_BeginTaintedSun: begins the Tainted-Sun darkening. Sets quest display state 1 (broadcast via
-// QUEST_SetStateAndBroadcast w/ Q11_NotifyTaintedSunComplete), bumps stateFlag to 1 on first run, then if
-// Act 2 DRLG is loaded calls DRLGENV_TaintedSunBegin() (darkens the act) and iterates players sending
-// Q11_SendDarknessPacket. Returns nonzero(low byte 1) on success; 0 if act not yet loaded (deferred).
-uint8_t __stdcall Q11_BeginTaintedSun(struct D2QuestDataStrc * pQuestData);
 // A2Q3 - Q11_EndTaintedSun: ends the darkening. Clears the darkened flag, calls DRLGENV_TaintedSunEnd()
 // (restores daylight in Act 2) and iterates players sending Q11_SendSunRestoredPacket. No quest-record writes.
 void __stdcall Q11_EndTaintedSun(struct D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGame);
@@ -121,6 +116,7 @@ uint8_t __fastcall Q11_GetTaintedSunFlag(struct D2QuestDataStrc * pCallerQuestDa
 // Completed (UnsetQuestState RewardAwaits), add player to participant GUID list, and if pre-intro set record
 // JustCompleted. This is the reward/turn-in finalization path.
 void __fastcall Q11_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
+uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // A2Q3 - state-3 quest-event callback (fpQuestStateHandler[3], Q11_Callback_03): reacts to map/level enters.
 // On indices 0x2c/0x2d with stateFlag 0 and intro done -> Q11_StartDarknessTimer (schedule darkening). On index
 // 0x28 with bAcceptedQuest -> Q11_BeginTaintedSun and, on success, sync records (Q11_UpdateQuestRecord) and

@@ -168,8 +168,6 @@ uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIn
 void __fastcall thunk_ExitGamePlayCutScene(uint8_t * pPacket);
 // Handles GS→client packet 0x89: forwards byte pBytes[1] (subcommand/type) to Storm::Source::ClientEngine::HandleIncoming0x89 for game-state update processing.
 void __fastcall NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER(char * pBytes);
-void __stdcall OBJECT_SetLightRGB(uint8_t byRed, uint8_t byGreen, uint8_t byBlue, uint16_t nRadius, struct D2UnitStrc * pUnit);
-BOOL __fastcall OBJECT_CheckAutoLight(struct D2UnitStrc * pUnit, int32_t bSkipCofLoad);
 int __stdcall TEXT_EmptyCallback();
 void __stdcall TEXT_InitializeTextSystem();
 void __stdcall TEXT_SetUnknownFlag(struct D2UIMouseMsgStrc * pMsg);

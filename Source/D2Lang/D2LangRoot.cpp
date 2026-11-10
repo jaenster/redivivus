@@ -131,7 +131,7 @@ void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, in
 }
 
 // Decodes next UTF-8 character from byte stream. Multi-byte decoding using table at gaUtf8DecodeTable. Returns character width in bytes or -1 on error. Validates continuation bytes (0x80 mask).
-int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int32_t nMaxBytes) {
+static int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int32_t nMaxBytes) {
     int nByteWidth = 0;
     if (nMaxBytes <= 0) {
       return -1;

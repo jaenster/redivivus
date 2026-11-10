@@ -172,16 +172,7 @@ static BOOL __stdcall SKILLASS_AddChargeUpStack(::SGAMEDATA * pGame, eD2Skills e
     int32_t nExpireFrame = pGame->dwGameFrame + nGuidOrDuration;
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatsEx) {
-      eD2UnitType eUnitType;
-      if (!pUnit) {
-        nGuidOrDuration = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nGuidOrDuration = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, eUnitType, nGuidOrDuration);
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatsEx) {
         return 0;
       }

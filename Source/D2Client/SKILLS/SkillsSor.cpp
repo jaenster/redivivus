@@ -64,8 +64,6 @@ BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(D2UnitStrc * pUnit, eD2S
 
 // Client StFunc for Sorceress Inferno. Checks if STATE_inferno is already active on pUnit; if not, adds the skill overlay and plays the prgsound. Retrieves or allocates a stat list for STATE_inferno, sets the expire callback to SKILLSSOR_StatExpireCallback_ClearState, attaches it to the unit, and sets the unit sequence frame to 8 with a frame count of 0x500. Maintains the continuous beam visual and state.
 BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2UnitType eUnitType;
-    int nUnitGUID;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -85,15 +83,7 @@ BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills
 
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_inferno);
     if (!pStatList) {
-      if (!pUnit) {
-        nUnitGUID = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 2, 0x15, eUnitType, nUnitGUID);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 2, 0x15, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatList) {
         return 0;
       }

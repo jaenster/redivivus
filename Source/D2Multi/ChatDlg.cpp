@@ -609,26 +609,6 @@ BOOL __stdcall CHATDLG_OnPressUserListNextLine(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize) {
-    DWORD dwValueType;
-    HKEY hKey;
-    /* PHKEY phkResult for RegOpenKeyExA */ /* REGSAM samDesired for RegOpenKeyExA */ /* DWORD ulOptions for RegOpenKeyExA */ /* LPCSTR lpSubKey for RegOpenKeyExA */ /* HKEY hKey for RegOpenKeyExA */ *pdwDataSize = 0;
-    LSTATUS lStatus = RegOpenKeyExA(HKEY_LOCAL_MACHINE, szSubKey, 0, 0x20019, &hKey);
-    if (lStatus) {
-      return 0;
-    }
-
-    /* LPDWORD lpcbData for RegQueryValueExA */ /* LPBYTE lpData for RegQueryValueExA */ /* LPDWORD lpType for RegQueryValueExA */ *pdwDataSize = dwDataSize;
-    /* LPDWORD lpReserved for RegQueryValueExA */ /* LPCSTR lpValueName for RegQueryValueExA */ /* HKEY hKey for RegQueryValueExA */ lStatus = RegQueryValueExA(hKey, szValueName, (LPDWORD)0x0, &dwValueType, pbData, pdwDataSize);
-    if (lStatus) {
-      /* HKEY hKey for RegCloseKey */ RegCloseKey(hKey);
-      return 0;
-    }
-
-    /* HKEY hKey for RegCloseKey */ lStatus = RegCloseKey(hKey);
-    return (uint32_t)!lStatus;
-}
-
 // Sets the active state of the game-list cache control pGameListCache via D2WINMAIN_SetControlActive. Returns TRUE (MOV EAX,1 at 0043dadd); the caller ignores it.
 // Provenance: asm 0043dad0; one caller, UIMENU_WaitInLine.
 BOOL __fastcall LAUNCHER_SetGameListCacheActive(BOOL bActive) {
@@ -668,7 +648,7 @@ int __stdcall isServerDown() {
     return 0;
 }
 
-void LAUNCHER_AllocCharSelectComponent(uint8_t * pCharInfo) {
+static void LAUNCHER_AllocCharSelectComponent(uint8_t * pCharInfo) {
     int32_t nComponentMode = 5;
     if (*(uint16_t*)(pCharInfo + 0x3cb) & 4 && !(*(uint16_t*)(pCharInfo + 0x3cb) & 8)) {
       BOOL bIsExpansion;
@@ -1161,7 +1141,7 @@ void __stdcall CHATDLG_UpdateChannelOkButtonState() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, bHasText);
 }
 
-int32_t __stdcall someStrCompare(char * szText1, char * szText2) {
+static int32_t __stdcall someStrCompare(char * szText1, char * szText2) {
     int nUpper1;
     int nUpper2;
     char cCur;
@@ -1192,7 +1172,7 @@ int32_t __stdcall someStrCompare(char * szText1, char * szText2) {
     return (uint32_t)(nUpper1 != nUpper2 && -1 < nUpper1 - nUpper2) * 2 - 1;
 }
 
-BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
+static BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
     uint16_t* pwszZeroFill;
     char* pszMsgDst;
     uint16_t wszMessage[256];
@@ -1725,7 +1705,7 @@ void __stdcall CHATDLG_ClearChatHistory() {
     gnChatHistoryEntryCount = 0;
 }
 
-void CHATDLG_AppendChatToHistory(char * szText) {
+static void CHATDLG_AppendChatToHistory(char * szText) {
     char cCurrent;
     memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, 0x900);
     strcpy((char*)gaChatDlgHistoryBuffer, szText);
@@ -1878,7 +1858,7 @@ int __stdcall CHATDLG_CancelGameCreate() {
     return 1;
 }
 
-void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSource, char * szDest) {
+static void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSource, char * szDest) {
     char* pszSpace = Storm::Source::SSTR::SStrChr(szSource, ' ');
     if (pszSpace) {
       Storm::Source::SSTR::SStrCopy(szDest, pszSpace + 1, nMaxLen);
@@ -2703,6 +2683,302 @@ void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength
     CHATDLG_RefreshGameNameDisplay();
 }
 
+int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
+    // Static local variables (originally global data)
+    static uint8_t gnOogReplyCommandIndex; D2_STATIC_GUARD_BSS(gnOogReplyCommandIndex, "D2Multi::ChatDlg::CHATDLG_RunChatLobbyScreen::gnOogReplyCommandIndex");
+    static uint8_t gnLobbyTabCompletionIndex; D2_STATIC_GUARD_BSS(gnLobbyTabCompletionIndex, "D2Multi::ChatDlg::CHATDLG_RunChatLobbyScreen::gnLobbyTabCompletionIndex");
+
+    D2ControlStrc* pCreatedForm;
+    ::D2WinButton* pUserListButton;
+    uint32_t dwFlags;
+    FORMS_PredefinedFormStrc* pPredefFormIter;
+    ::D2WinButton** ppUserListBtn;
+    D2ControlStrc** pForm;
+    D2LobbyControlsStrc* ppFormIter;
+    char nMusicLevel[256];
+    GetTickCount();
+    BOOL bSocketConnected = Fog::D2CheckExpansionGame();
+    int bExpansion = D2Lang::StrTable::strtable::TABLES_LoadStrings(D2Win::Src::D2WinArchive::ReturnZero(), nullptr, bSocketConnected);
+    if (!bExpansion) {
+      return 1;
+    }
+
+    OOGUtilities::gpChatFormList = 0;
+    pNetworkUnknown = pD2IniConfig->pBNetClientCallbacks;
+    gnOpenBNetMode = 0;
+    gbLobbyInitialized = 1;
+    if (!pNetworkUnknown) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce7);
+      exit(-1);
+    }
+
+    bSocketConnected = pNetworkUnknown->pfnIsSocketConnected();
+    if (!bSocketConnected) {
+      gnOpenBNetMode = 4;
+      D2Lang::StrTable::strtable::STRINGTABLE_FreeStringTables();
+      return 1;
+    }
+
+    IMAGE_LoadPredefinedImagesExEx();
+    D2Win::Src::D2WinMain::D2WINMAIN_SetCursorDC6(gpDC6CursorOpenHand);
+    gpChatMessagesTextBox = 0;
+    DC6* pBackgroundDC6 = gpDC6WaitingRoomBackground;
+    if (OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+      pBackgroundDC6 = gpDC6BnetBackground;
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetBackgroundDC6(pBackgroundDC6);
+    if (OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+      ppFormIter = &gpLobbyForm0;
+      pPredefFormIter = OOGUtilities::gaPredefinedForms_b;
+      do {
+        pCreatedForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(pPredefFormIter);
+        ppFormIter->pLobbyForm0 = pCreatedForm;
+        pPredefFormIter++;
+        ppFormIter = (D2LobbyControlsStrc*)&ppFormIter->pLobbyForm1;
+      } while ((intptr_t)pPredefFormIter < (intptr_t)((char*)&OOGUtilities::gaPredefinedForms_b + 816));
+
+      BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x17);
+    } else {
+      UIMENU_CantTestItBeacuseItCrash();
+      LAUNCHER_AllocCharSelectComponent((uint8_t*)pD2IniConfig);
+    }
+
+    gpChatMessagesTextBox = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x15);
+    if (OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+      gpChatDlgInputEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x16);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpChatDlgInputEditBox, (fpD2WinEditBoxFilter)CHATDLG_HandleTabCompletion);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpChatDlgInputEditBox, ComCallback::EDITBOX_Cb_COMCALLBACK_ClearChannelUserList);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpChatDlgInputEditBox, 200);
+      ComCallback::COMCALLBACK_ClearChannelUserList();
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevPageButton, 1);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextPageButton, 1);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevLineButton, 1);
+      D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextLineButton, 1);
+      ppUserListBtn = gaChatUserListButtonArray;
+      bExpansion = 0x28;
+      do {
+        pUserListButton = D2Win::Src::D2WinButton::D2WinButton(bExpansion, 0x24f, 0x3c, 100, nullptr, ComCallback::COMCALLBACK_HandleUserListClick, 0, 0, 4, 0, nullptr);
+        *ppUserListBtn = pUserListButton;
+        bExpansion += 0x3c;
+        ppUserListBtn++;
+      } while (bExpansion < 700);
+
+      gpCtlLobbyAccountList = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x14);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(gpCtlLobbyAccountList, 0);
+      gpCtlLobbyLadderNewsToggle = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1c);
+      if (gbLadderNewsExpanded) {
+        D2Win::Src::D2WinButton::D2WINBUTTON_SetImageIndex(gpCtlLobbyLadderNewsToggle, 2);
+      }
+    }
+
+    CHATDLG_ClearChatHistory();
+    CHATDLG_DestroyAllForms();
+    D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
+    D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
+    D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
+    D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyLadderButton, 0);
+    OOGUtilities::gpChatFormList = 0;
+    D2ControlStrc* pGameListForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x18);
+    ghWndGameNameEditBox = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x19);
+    pGameListCache = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1a);
+    D2MCPClient::McpConnect::MCPCONNECT_SetMessageCallback(CHATDLG_StorePlayerName);
+    D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x12_MOTD();
+    CHATDLG_RefreshGameNameDisplay();
+    D2ControlStrc* pGameInfoForm = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x1b);
+    if (OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Died && OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyCreateButton->sControl, 0);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyJoinButton->sControl, 0);
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    gnLobbyTabCompletionIndex = '\0';
+    gnOogReplyCommandIndex = 0;
+    D2Sound::Src::D2SoundFast::SOUND_InitSoundEffectBuffers();
+    D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\button.wav");
+    bExpansion = D2Sound::Src::D2SoundFast::SOUND_GetOptionsMusic();
+    if (bExpansion) {
+      D2Sound::Src::D2SoundFast::SOUND_SetMusicEnabled(1);
+    }
+
+    gbIsChannelScreen = (uint32_t)(OOGUtilities::D2IniData_multiplayer->nScreenToShow == 4);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyLadderButton->sControl, (uint32_t)!gbIsChannelScreen);
+    uint32_t bMcpRestored = OOGUtilities::OOGMENU_RestoreMCPConnection();
+    if (bMcpRestored) {
+      sprintf(nMusicLevel, "%s,%s", pD2IniConfig->szCharacterRealm, pD2IniConfig->szNAME);
+      dwFlags = (uint32_t)((pD2IniConfig->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Expansion) != 0);
+      if (OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+        dwFlags |= 2;
+      }
+
+      pNetworkUnknown->pfnEnterChatAndJoinChannel(pD2IniConfig->szNAME, nMusicLevel, (char*)0x25, (char*)(pD2IniConfig->padding_0x35F + 2), dwFlags);
+    } else {
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("[D2MULTI]  Could not restore MCP connection.");
+      pNetworkUnknown->pfnDisconnect();
+    }
+
+    bSocketConnected = pNetworkUnknown->pfnIsSocketConnected();
+    if (bSocketConnected) {
+      D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
+      /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_0077ae28);
+      if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+        pNetworkUnknown->pfnSendNewsInfo((uint32_t)(uintptr_t)CHATDLG_DisplayTimestampedMessage, (uint32_t)(uintptr_t)CHATDLG_EnqueueClearMessage);
+      }
+
+      /* Wait until game is either created or failed */ D2Win::Src::D2WinMain::MessagePump((pfnFramePump)OOGUtilities::JoinOrCreateGame);
+      bSocketConnected = D2MCPClient::McpConnect::getIsMPCJoinSuccesfull();
+      if (bSocketConnected) {
+        D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x13_CancelGameCreate();
+        D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
+      }
+      if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+        pNetworkUnknown->pfnNewsShutdown();
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_0077ae28);
+      pNetworkUnknown->pfnSendLeaveChat();
+      if (gnOpenBNetMode != 4) {
+        D2MCPClient::McpConnect::FreeMCP();
+      }
+    } else {
+      gnOpenBNetMode = 4;
+    }
+
+    GetTickCount();
+    D2Sound::Src::D2SoundFast::SOUND_FreeSoundEffectBuffers();
+    ComCallback::COMCALLBACK_ClearAllChannelUsers();
+    D2Win::Src::D2Comp::D2COMP_FreeAllCompositeUnits();
+    CHATDLG_DestroyAllForms();
+    CHATDLG_FreePlayerNameList();
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpChatMessagesTextBox);
+    if (BattleNetNews) {
+      D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&BattleNetNews);
+    }
+
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&pGameListForm);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&pGameInfoForm);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&ghWndGameNameEditBox);
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&pGameListCache);
+    if (gpCtlLobbyLadderNewsToggle) {
+      D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlLobbyLadderNewsToggle);
+    }
+    if (gpChatDlgInputEditBox) {
+      D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpChatDlgInputEditBox);
+    }
+
+    ppUserListBtn = gaChatUserListButtonArray;
+    do {
+      if (*ppUserListBtn) {
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)ppUserListBtn);
+      }
+
+      *ppUserListBtn = 0;
+      ppUserListBtn++;
+    } while ((intptr_t)ppUserListBtn < (intptr_t)((char*)&gaChatUserListButtonArray + sizeof(gaChatUserListButtonArray)));
+
+    D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlLobbyAccountList);
+    ppFormIter = &gpLobbyForm0;
+    do {
+      if (ppFormIter->pLobbyForm0) {
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&ppFormIter->pLobbyForm0);
+      }
+
+      ppFormIter->pLobbyForm0 = 0;
+      ppFormIter = (D2LobbyControlsStrc*)&ppFormIter->pLobbyForm1;
+    } while ((intptr_t)ppFormIter < (intptr_t)&gpLobbyForm0 + 68);
+
+    if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
+      pForm = gpCtlLobbyChat;
+      do {
+        if (*pForm) {
+          D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(pForm);
+          *pForm = 0;
+        }
+
+        pForm++;
+      } while ((intptr_t)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+
+      if (gpCtlConfirmDialog) {
+        D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlConfirmDialog);
+        gpCtlConfirmDialog = 0;
+      }
+    }
+
+    D2Win::Src::D2WinMain::D2WINMAIN_SetBackgroundDC6(nullptr);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetCursorDC6(nullptr);
+    LAUNCHER_FreeLauncherImages();
+    D2Lang::StrTable::strtable::STRINGTABLE_FreeStringTables();
+    return 1;
+}
+
+// Handles the /reply command for out-of-game chat. Parses the reply target from gszOogReplyCommandBuffer, validates token count is exactly 2 (command + message), and formats a whisper message ("/w *target message") to send via the network interface. Shows error messages if no reply target exists or if command syntax is incorrect.
+static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
+    BOOL BVar1;
+    int nTokenCount;
+    uint16_t* pwszErrorMsg;
+    char szCommandBuffer[256];
+    uint16_t wszOutputBuffer[256];
+    char szTokenBuffer[256];
+    char szMessageBuffer[260];
+    char szDelimiter[4];
+    char* pcScan = szText1;
+    pcScan = pcScan + strlen(pcScan) + 1;
+    int32_t nCmdCmp = someStrCompare(szText2, szText1);
+    if (!nCmdCmp && (szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == ' ' || szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == '\0')) {
+      char* pcEnd;
+      pcScan = gszOogReplyCommandBuffer;
+      pcEnd = pcScan + strlen(pcScan);
+      pcScan = pcEnd + 1;
+      if (pcEnd == gszOogReplyCommandBuffer) {
+        pwszErrorMsg = wszOutputBuffer;
+        for (nTokenCount = 0x80; nTokenCount; nTokenCount--) {
+          pwszErrorMsg[0] = L'\0';
+          pwszErrorMsg[1] = L'\0';
+          pwszErrorMsg += 2;
+        }
+
+        sprintf(szMessageBuffer, "Nobody to reply to!");
+      } else {
+        sprintf(szCommandBuffer, "%s ", szText1);
+        strcpy(szTokenBuffer, szText2);
+        szDelimiter[0] = ' ';
+        szDelimiter[1] = '\0';
+        pcScan = strtok(szTokenBuffer, szDelimiter);
+        nTokenCount = 0;
+        while (pcScan) {
+          nTokenCount++;
+          if (nTokenCount == 2) {
+            BVar1 = pNetworkUnknown->pfnIsSocketConnected();
+            if (!BVar1) {
+              pwszErrorMsg = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
+              UIMENU_DrawTitleOnCenterSmaller(pwszErrorMsg, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+              return 1;
+            }
+
+            sprintf(szMessageBuffer, "/w *%s %s", gszOogReplyCommandBuffer, szText2 + ((intptr_t)pcScan - (intptr_t)szTokenBuffer));
+            pNetworkUnknown->pfnSendChatCommand((uint8_t*)szMessageBuffer);
+            return 1;
+          }
+
+          pcScan = strtok(nullptr, szDelimiter);
+        }
+
+        Fog::File::CONTAINER_InitializeBuffer(wszOutputBuffer, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        sprintf(szMessageBuffer, "Correct usage is: %s (message)", szText1);
+      }
+
+      D2Lang::UTF8_ConvertToWideChar(wszOutputBuffer, szMessageBuffer, 0x100);
+      if (gpChatMessagesTextBox) {
+        D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszOutputBuffer, 1, false, 1);
+      }
+
+      return 1;
+    }
+
+    return 0;
+}
+
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) {
@@ -2711,6 +2987,173 @@ BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) 
     g_nLadderFilterMode = 0;
     gnLadderBoardSelectedRank = 0;
     return 1;
+}
+
+void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
+    bool bCmdResult;
+    ::IgnoreList* ppIgnoreListThis;
+    uint16_t* pwszMsg;
+    uint16_t nErrorStrId;
+    uint16_t* pwszFmtTemplate;
+    uint16_t wszOutputBuffer[520];
+    uint16_t wszFormatBuffer[520];
+    char szArgBuffer[260];
+    uint16_t wszNameWide[34];
+    char szChannelName[32];
+    IgnoreListVtable* pIgnoreVtbl;
+    char* szPattern;
+    CHATDLG_AppendChatToHistory(szText);
+    uint32_t nHandled;
+    nHandled = OOGUTIL_HandleReplyCommand("/r", szText);
+    if (nHandled) {
+      return;
+    }
+
+    nHandled = OOGUTIL_HandleReplyCommand("/reply", szText);
+    if (nHandled) {
+      return;
+    }
+
+    BOOL nResult;
+    nResult = CHATDLG_HandleNotifyCommand("/d2notify", szText);
+    if (nResult) {
+      return;
+    }
+
+    int32_t nCmdMatch;
+    nCmdMatch = someStrCompare(szText, "/ignorepersist");
+    if (!nCmdMatch) {
+      ::IgnoreList* ppIgnoreListB;
+      ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      ppIgnoreListB = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      pIgnoreVtbl = ppIgnoreListB->_vfptr;
+      nCmdMatch = ppIgnoreListThis->_vfptr->GetPersistentSetting(ppIgnoreListThis);
+      pIgnoreVtbl->SavePersistentSetting(ppIgnoreListB, (uint32_t)!nCmdMatch);
+      ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      nCmdMatch = ppIgnoreListThis->_vfptr->GetPersistentSetting(ppIgnoreListThis);
+      if (nCmdMatch) {
+        pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba1);
+        CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+        return;
+      }
+
+      pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba2);
+      CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+      return;
+    }
+
+    nCmdMatch = someStrCompare(szText, "/ignore ");
+    if (!nCmdMatch || (nCmdMatch = someStrCompare(szText, "/squelch ") , !nCmdMatch)) {
+      Fog::File::CONTAINER_InitializeBuffer(wszFormatBuffer, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszOutputBuffer, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszNameWide, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      szPattern = szChannelName + 0xc;
+      CHATDLG_ParseCommandArgument(0x11, szText, szPattern);
+      nCmdMatch = Storm::Source::SSTR::SStrCmpI(szChannelName + 0xd, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff);
+      if (!nCmdMatch) {
+        return;
+      }
+
+      D2Lang::UTF8_ConvertToWideChar(wszNameWide, szPattern, 0x22);
+      ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      nCmdMatch = ppIgnoreListThis->_vfptr->AddByPattern(ppIgnoreListThis, szPattern);
+      if (nCmdMatch) {
+        pwszMsg = wszNameWide;
+        pwszFmtTemplate = D2Lang::StrTable::strtable::GetLocaleString(0x2ba3);
+        goto print_ignore_result;
+      }
+
+      nErrorStrId = 0x2ba4;
+    } else {
+      nCmdMatch = someStrCompare(szText, "/unignore ");
+      if (nCmdMatch) {
+        nCmdMatch = someStrCompare(szText, "/unsquelch ");
+        if (nCmdMatch) {
+          nCmdMatch = someStrCompare(szText, "/filtermsg ");
+          if (!nCmdMatch) {
+            CHATDLG_ParseCommandArgument(0x104, szText, szArgBuffer);
+            ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+            nCmdMatch = ppIgnoreListThis->_vfptr->AddByAccountName(ppIgnoreListThis, szArgBuffer);
+            if (nCmdMatch) {
+              pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba7);
+              CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+              return;
+            }
+
+            pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba8);
+            CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+            return;
+          }
+
+          nCmdMatch = someStrCompare(szText, "/unfiltermsg ");
+          if (!nCmdMatch) {
+            CHATDLG_ParseCommandArgument(0x104, szText, szArgBuffer);
+            ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+            nCmdMatch = ppIgnoreListThis->_vfptr->RemoveByAccountName(ppIgnoreListThis, szArgBuffer);
+            if (nCmdMatch) {
+              pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2ba9);
+              CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+              return;
+            }
+
+            pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x2baa);
+            CHATDLG_AppendTextToTextBox(pwszMsg, 3);
+            return;
+          }
+
+          nCmdMatch = someStrCompare(szText, "/homechannel ");
+          if (!nCmdMatch || (nCmdMatch = someStrCompare(szText, "/defaultchannel ") , !nCmdMatch) || (nCmdMatch = someStrCompare(szText, "/home ") , !nCmdMatch)) {
+            CHATDLG_ParseCommandArgument(0x20, szText, szChannelName);
+            Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, szChannelName);
+            return;
+          }
+
+          nCmdMatch = someStrCompare(szText, "/home");
+          if (!nCmdMatch) {
+            nCmdMatch = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szChannelName, 0x20);
+            if (!nCmdMatch) {
+              return;
+            }
+
+            OOGUtilities::OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
+            return;
+          }
+
+          nResult = pNetworkUnknown->pfnIsSocketConnected();
+          if (!nResult) {
+            pwszMsg = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
+            UIMENU_DrawTitleOnCenterSmaller(pwszMsg, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+            return;
+          }
+
+          pNetworkUnknown->pfnSendChatCommand((uint8_t*)szText);
+          return;
+        }
+      }
+
+      Fog::File::CONTAINER_InitializeBuffer(wszFormatBuffer, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszOutputBuffer, 2, 0x208, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(wszNameWide, 2, 0x22, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      szPattern = szChannelName + 0xc;
+      CHATDLG_ParseCommandArgument(0x11, szText, szPattern);
+      D2Lang::UTF8_ConvertToWideChar(wszNameWide, szPattern, 0x22);
+      ppIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      nCmdMatch = ppIgnoreListThis->_vfptr->RemoveByPattern(ppIgnoreListThis, szPattern);
+      if (nCmdMatch) {
+        pwszMsg = wszNameWide;
+        pwszFmtTemplate = D2Lang::StrTable::strtable::GetLocaleString(0x2ba5);
+        goto print_ignore_result;
+      }
+
+      nErrorStrId = 0x2ba6;
+    }
+
+    pwszMsg = wszNameWide;
+    pwszFmtTemplate = D2Lang::StrTable::strtable::GetLocaleString(nErrorStrId);
+    print_ignore_result:
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszFormatBuffer, pwszFmtTemplate, pwszMsg);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszFormatBuffer);
+    CHATDLG_AppendTextToTextBox(wszOutputBuffer, 3);
 }
 
 void StaticInit_6ca960() {

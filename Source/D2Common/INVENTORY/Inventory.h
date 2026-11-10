@@ -270,8 +270,6 @@ void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pInventory);
 void __stdcall INVENTORY_InitializeItemTypeTable();
 uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2);
 struct D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-// Copies the backpack grid (grid index 2) cell array from pUnit's inventory into pInventory. Looks up the inventory page dimensions via GetInventoryPage + GetGridDimensions, ensures both grids exist and have matching Width x Height, then memcpys the source cell pointer array. Returns 1 on success, 0 if either inventory is invalid, grids are missing, or dimensions mismatch.
-BOOL CopyInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
 void __stdcall NullSub_Unref_00643610(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_006460c0(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_006460e0(struct D2InventoryStrc * pInventory);

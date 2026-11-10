@@ -262,6 +262,72 @@ void __stdcall TEXT_CleanupMessageLog_Unref_004b1d50() {
     UI::Dialog::gpNpcInteractionDialog = 0;
 }
 
+static void __stdcall OBJECT_SetLightRGB(uint8_t byRed, uint8_t byGreen, uint8_t byBlue, uint16_t nRadius, D2UnitStrc * pUnit) {
+    D2LightMapStrc* pLightMap = pUnit->uSideData.pClientSide.pLight;
+    if (!nRadius) {
+      if (pLightMap) {
+        CUnit::FreeLightMap(pUnit);
+        return;
+      }
+    } else {
+      if (!pLightMap) {
+        pLightMap = Draw::LightMap::AllocLightMap(pUnit, 2, (uint32_t)(nRadius >> 1), 0xff, byRed, byGreen, byBlue);
+        pUnit->uSideData.pClientSide.pLight = pLightMap;
+        if (!pLightMap) {
+          return;
+        }
+      }
+
+      Draw::LightMap::SetRadiusY(pLightMap, (uint32_t)(nRadius >> 1));
+    }
+}
+
+BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) {
+    D2ObjectsTxt* pTxtLine = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine;
+    if (!pTxtLine->EnvEffect) {
+      return 0;
+    }
+
+    int32_t nPeriodOfDay = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
+    if (nPeriodOfDay) {
+      if (nPeriodOfDay >= 0x1 && nPeriodOfDay <= 0x3) {
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          pUnit->eAnimMode.ePlayerMode = eD2PlayerAnimMode_ns::Neutral;
+          if (!bSkipCofLoad) {
+            Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
+          }
+
+          D2Common::Units::InitAnimMode(pUnit);
+          SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint32_t)pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]);
+        }
+
+        OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pUnit);
+        return 1;
+      }
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x66);
+      exit(-1);
+    }
+    if (!(pUnit->eAnimMode.ePlayerMode == Walk || pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+      return 0;
+    }
+
+    pUnit->eAnimMode.ePlayerMode = Death;
+    if (!bSkipCofLoad) {
+      Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
+    }
+
+    D2Common::Units::InitAnimMode(pUnit);
+    OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pUnit);
+    if (pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]) {
+      pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+      return 1;
+    }
+
+    pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+    return 1;
+}
+
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
 void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {
     uD2UnitMode uVar1;

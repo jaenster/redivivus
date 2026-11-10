@@ -141,7 +141,7 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
     uint8_t* nFpuDataOffset;
     CONTEXT sContext;
     char szLineBuffer[1024];
-    bool bVar1 = Engine::Application::DEBUG_CaptureThreadContext(dwThreadId, &sContext);
+    bool bVar1 = DEBUG_CaptureThreadContext(dwThreadId, &sContext);
     if (bVar1) {
       if (sContext.ContextFlags & 0x10002) {
         nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EAX", D2_CONTEXT_FIELD(sContext, Eax));
@@ -697,6 +697,32 @@ bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
 
     bool bCreated = FILETOOLS_CreateDirectoryW((LPWSTR)wszPath);
     return bCreated;
+}
+
+static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
+    pContext->ContextFlags = 0x1003f;
+    DWORD dwCurrentTid = GetCurrentThreadId();
+    if (dwCurrentTid == dwThreadId) {
+      RtlCaptureContext(pContext);
+      return true;
+    }
+
+    HANDLE hThread = OpenThread(0x4a, 0, dwThreadId);
+    if (!hThread) {
+      return false;
+    }
+
+    /* HANDLE hThread for SuspendThread */ dwCurrentTid = SuspendThread(hThread);
+    if (dwCurrentTid == -1) {
+      /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
+      return false;
+    }
+
+    BOOL bGotContext;
+    /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ bGotContext = GetThreadContext(hThread, pContext);
+    /* HANDLE hThread for ResumeThread */ ResumeThread(hThread);
+    /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
+    return bGotContext;
 }
 
 } // namespace Fog::File

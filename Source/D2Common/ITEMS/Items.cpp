@@ -6293,39 +6293,56 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
       iVar3 = iVar3 / 4;
       __frame0.nBuyPrice = iVar3;
     }
-    if (nTransactionType != 1) {
-      if (nTransactionType == 3 && (nResult = ITEM_GetTxtItemTypes_quiver(pItem) , !nResult) && (nResult = ITEM_GetTxtItemTypes_throwable(pItem) , !nResult) && (dwResult = ITEM_CheckIfItemHasDurability(pItem) , dwResult != 0)) {
-        iVar4 = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
-        nResult = Stats::StatsEx::GetTxtMaxDurability(pItem);
-        if (!nResult || iVar4 >= nResult) {
-          __frame0.nRepairPrice = 0;
-          iVar3 = __frame0.nBuyPrice;
-        } else {
-          nAffixRepairDelta = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_replenish_durability, 0);
-          iVar3 = __frame0.nBuyPrice;
-          if (nAffixRepairDelta) {
-            if (!(iVar4 < nResult - 1)) {
-              __frame0.nRepairPrice = 0;
-            } else {
-              __frame0.nRepairPrice = (nResult - 1) * __frame0.nRepairPrice / nResult;
+
+    switch (nTransactionType) {
+      case 1:
+        {
+          dwResult = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pItem);
+          if (dwResult) {
+            dwResult = ITEM_CheckIfItemHasDurability(pItem);
+            if (dwResult) {
+              nResult = Stats::StatsEx::GetTxtMaxDurability(pItem);
+              iVar4 = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
+              if (nResult && iVar4 <= 0) {
+                iVar3 = 0;
+              }
             }
-          } else {
-            __frame0.nRepairPrice = (nResult - iVar4) * __frame0.nRepairPrice / nResult;
           }
+
+          break;
         }
-      }
-    } else {
-      dwResult = ITEM_GetItemData_eD2ItemFlag_IsEthereal(pItem);
-      if (dwResult) {
-        dwResult = ITEM_CheckIfItemHasDurability(pItem);
-        if (dwResult) {
-          nResult = Stats::StatsEx::GetTxtMaxDurability(pItem);
-          iVar4 = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
-          if (nResult && iVar4 <= 0) {
-            iVar3 = 0;
+      case 3:
+        {
+          nResult = ITEM_GetTxtItemTypes_quiver(pItem);
+          if (!nResult) {
+            nResult = ITEM_GetTxtItemTypes_throwable(pItem);
+            if (!nResult) {
+              dwResult = ITEM_CheckIfItemHasDurability(pItem);
+              if (dwResult) {
+                iVar4 = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
+                nResult = Stats::StatsEx::GetTxtMaxDurability(pItem);
+                if (!nResult || iVar4 >= nResult) {
+                  __frame0.nRepairPrice = 0;
+                  iVar3 = __frame0.nBuyPrice;
+                } else {
+                  nAffixRepairDelta = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_replenish_durability, 0);
+                  iVar3 = __frame0.nBuyPrice;
+                  if (nAffixRepairDelta) {
+                    if (!(iVar4 < nResult - 1)) {
+                      __frame0.nRepairPrice = 0;
+                    } else {
+                      __frame0.nRepairPrice = (nResult - 1) * __frame0.nRepairPrice / nResult;
+                    }
+                  } else {
+                    __frame0.nRepairPrice = (nResult - iVar4) * __frame0.nRepairPrice / nResult;
+                  }
+                }
+              }
+            }
           }
+
+          break;
         }
-      }
     }
 
     D2NpcTxt* pNpcTxt;

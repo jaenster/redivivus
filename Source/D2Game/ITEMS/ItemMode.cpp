@@ -1556,9 +1556,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nDstQty;
     uint32_t nMaxStack;
     D2RoomStrc* pRoom;
-    eD2UnitType eUnitType;
     uint32_t nNewQty;
-    int32_t nUnitGUID;
     D2InventoryStrc* pInventory;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x622);
@@ -1615,15 +1613,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           ITEMMODE_UpdateBookSkillQuantity(nSrcQty, pUnit, pDstBook);
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
           if (pRoom) {
-            if (!pUnit2) {
-              nUnitGUID = -1;
-              eUnitType = UNIT_COUNT;
-            } else {
-              nUnitGUID = pUnit2->nUnitGUID;
-              eUnitType = pUnit2->eUnitType;
-            }
-
-            D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, nUnitGUID);
+            D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, !pUnit2 ? UNIT_COUNT : pUnit2->eUnitType, !pUnit2 ? -1 : pUnit2->nUnitGUID);
             D2Common::Units::RemoveCollision_Vector(pUnit2);
             D2Common::Unit::RemoveUnitFromRoom(pUnit2);
           }

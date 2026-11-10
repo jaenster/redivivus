@@ -332,39 +332,12 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
 }
 
-int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
-    if (!Src::D2SoundFast::gbAmbientSoundLangInitialized) {
-      Src::D2SoundFast::gbAmbientSoundLangInitialized = 1;
-      Src::D2SoundFast::gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
-    }
-    if (Src::D2SoundFast::gaAmbientSoundFlags != Src::D2SoundFast::gnAmbientSoundCount) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
-      exit(-1);
-    }
-
-    {
-      int* pAmbientEntry;
-      if (!(nIndex < Src::D2SoundFast::gaAmbientSoundFlags)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
-        exit(-1);
-      }
-
-      pAmbientEntry = Src::D2SoundFast::gaAmbientSoundEntryTable + nIndex * 2;
-      if (Src::D2SoundFast::gnAmbientSoundLanguageCode) {
-        return pAmbientEntry;
-      }
-
-      pAmbientEntry = Src::D2SoundFast::gAmbientSoundTable + nIndex * 2;
-      return pAmbientEntry;
-    }
-}
-
 void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     // Static local variables (originally global data)
     static uint32_t gnMusicBufferSize; D2_STATIC_GUARD_BSS(gnMusicBufferSize, "D2Sound::Sound::SOUND_InitMusicBuffer::gnMusicBufferSize");
 
     gnMusicBufferSize = bSoundInBackground;
-    IDirectSound* pArchive = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* pArchive = SOUND_GetDirectSoundDevice();
     Storm::Source::SFile::SFileDdaInitialize(pArchive);
     Src::D2SoundFast::gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
 }

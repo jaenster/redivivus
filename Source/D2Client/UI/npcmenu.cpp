@@ -3703,7 +3703,7 @@ D2UnitStrc * __stdcall GetInteractedUnit() {
     return nullptr;
 }
 
-void SetInteractedUnitInfo(D2UnitStrc * pUnit) {
+static void SetInteractedUnitInfo(D2UnitStrc * pUnit) {
     if (pUnit) {
       _Interaction::bInteractingWithNpc = 1;
       _Interaction::nCurrentInteractedNpcGUID = pUnit->nUnitGUID;
@@ -3915,7 +3915,7 @@ static int32_t __stdcall NPCMENU_CheckQuestDependentCallbacks(D2NpcQuestCallback
     return nResult;
 }
 
-bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
+static bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
     /* DeckardCain */ /* Drehya */ /* Ancient Statue 1 */ /* Ancient Statue 2 
                           */ /* Ancient Statue 3 */ /* tyrael */ /* navi */ /* act2guard5 */ /* tyrael1 */ /* act2guard4 */ /* act2guard2 */ /* izualghost */ /* malachai */ if (nNpcClassId != 146 && nNpcClassId != 527 && nNpcClassId != 537 && nNpcClassId != 538 && nNpcClassId != 539 && nNpcClassId != 521 && nNpcClassId != 266 && nNpcClassId != 378 && nNpcClassId != 251 && nNpcClassId != 377 && nNpcClassId != 331 && nNpcClassId != 406 && nNpcClassId != 408) {
       return false;
@@ -7324,7 +7324,7 @@ int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     return 1;
 }
 
-void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUnit) {
+static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t gNPCMenuSelectionPtrTable = 0x9; D2_STATIC_GUARD(gNPCMenuSelectionPtrTable, "D2Client::UI::npcmenu::NPCMENU_HandleMenuSelection::gNPCMenuSelectionPtrTable");
     static D2NpcQuestCallbackEntry gaNpcMenuQuestCallbackTable[9] = {
@@ -7712,6 +7712,129 @@ int __stdcall NPCMENU_EnableAkaraRespecOption() {
     NPC::D2NpcMenuOptions[0].nOptionCallback[2] = NPCMENU_AkaraRespecOptionCallback;
     NPC::D2NpcMenuOptions[0].nOptionStringId[2] = 0x2ba0;
     return 1;
+}
+
+void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
+    short int nMessage;
+    bool bIsSideNpc;
+    uint16_t nMsgTypeToFind;
+    D2GSPacketSrv0x27_TextStrc* pOverheadTextPtr;
+    BOOL bMonInteractFlag;
+    D2UnitStrc* pPlayerUnit_lcl;
+    int32_t nLine;
+    if (nUpdateType == 6) {
+      D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpNpcMenuBitBuffer, pQuestBuffer, 0x60, 0);
+      return;
+    }
+
+    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)nUpdateType);
+    if (!pNpcUnit) {
+      pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
+      if (pNpcUnit && pNpcUnit->eUnitType == UNIT_PLAYER && pNpcUnit->pUnitData.pUnitDataPlayer) {
+        pNpcUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 0;
+        pNpcUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = 0;
+        pNpcUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = 0;
+        pNpcUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = 0;
+      }
+
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, (uint32_t)nActionType, nUnitGUID);
+      NPCMENU_ClearHireListAndStopNpcSound(nUnitGUID);
+      return;
+    }
+
+    UNIT::CUnit::CUNIT_IterateMissilesWithCallback((fnUnitIterCallback)NPCMENU_ValidateNpcForShop);
+    pNpcUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+    D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpNpcMenuBitBuffer, pQuestBuffer, 0x60, 0);
+    NPCMENU_InitializeMenuOptions();
+    GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x2f, (uint32_t)nUpdateType, nUnitGUID);
+    GAME::Game::UI_ResetInputState();
+    if (gbNpcMenuInitialized != '\0') {
+      gnNpcMenuActiveMode = 1;
+      SetInteractedUnitInfo(pNpcUnit);
+      pNpcUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+      return;
+    }
+
+    pOverheadTextPtr = Text::TEXT_GetOverheadGlobalPointer();
+    if (!pOverheadTextPtr) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 4192);
+      exit(-1);
+    }
+
+    nMessage = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadTextPtr, 0);
+    nLine = pNpcUnit->nClassId;
+    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
+    if (bMonInteractFlag && nLine != 0x219 && nLine != 0x21a && nLine != 0x21b && nLine != 0x20f) {
+      UNIT::CUnit::FacePlayer(pNpcUnit);
+    }
+
+    pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
+    pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerUnit_lcl->pInventory);
+    if (pPlayerUnit_lcl) {
+      _Interaction::bInteractingWithNpc = 1;
+      _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
+      _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return;
+    }
+
+    gnNpcMenuScrollMessageHead = 0;
+    if (nMessage != -1) {
+      ui::UI_CloseActivePanels(0, 0);
+      gnNpcMenuRepairCostGold = nMessage;
+      Text::TEXT_ShowNpcDialog(pNpcUnit, nMessage, 1);
+      NPCMENU_AddHandledMessageId(nMessage);
+      gnNpcMenuTradeActionGold = NPCMENU_FindNextUnhandledMessage(nMessage);
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, pNpcUnit->nUnitGUID, (uint32_t)(uint16_t)nMessage);
+      gnNpcMenuActiveMode = 1;
+      Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)NPCMENU_OnScrollComplete, nullptr);
+      SetInteractedUnitInfo(pNpcUnit);
+      gnNpcMenuShopMode = 0;
+      return;
+    }
+
+    nMsgTypeToFind = D2Common::Text::OVERHEAD_GetMessageType1(pOverheadTextPtr, 0);
+    if (pNpcUnit->nClassId != 0x20f) {
+      UNIT::CUnit::CLIENT_TurnPlayerToFaceUnit(pNpcUnit);
+    }
+    if (pNpcUnit->pPath.pDynamicPath) {
+      D2Common::PATH::DynamicPath::ZeroPathPointsSize(pNpcUnit->pPath.pDynamicPath);
+    }
+    if (nMsgTypeToFind != 0xffff) {
+      Inv::INV_ResetHoverAndContextState();
+      ui::UI_CloseActivePanels(0, 0);
+      gnNpcMenuRepairCostGold = nMsgTypeToFind;
+      gnNpcMenuTradeActionGold = NPCMENU_FindNextUnhandledMessage(nMsgTypeToFind);
+      NPCMENU_OpenInteraction(pNpcUnit);
+      gnNpcMenuShopMode = 0;
+      return;
+    }
+
+    nLine = pNpcUnit->nClassId;
+    bMonInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(nLine, interact);
+    if (bMonInteractFlag) {
+      bIsSideNpc = inline_NPC_IsInteractableSideNpc(nLine);
+      if (bIsSideNpc) {
+        _Interaction::bInteractingWithNpc = 1;
+        _Interaction::nCurrentInteractedNpcGUID = pNpcUnit->nUnitGUID;
+        _Interaction::nCurrentInteractedNpcClassId = pNpcUnit->nClassId;
+        NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+        ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+        return;
+      }
+
+      Inv::INV_ResetHoverAndContextState();
+      ui::UI_CloseActivePanels(0, 0);
+      NPCMENU_HandleMenuSelection(0, pNpcUnit);
+      gnNpcMenuShopMode = 0;
+      return;
+    }
+
+    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+    gnNpcMenuShopMode = 0;
+    return;
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

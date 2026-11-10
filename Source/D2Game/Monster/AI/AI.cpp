@@ -2179,18 +2179,27 @@ static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStr
 
     bCheckResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_invis);
     if (bCheckResult) {
-      if (pTarget->eUnitType != UNIT_PLAYER) {
-        if (pTarget->eUnitType == UNIT_MONSTER && (bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0) , bCheckResult != 0)) {
-          return 0;
-        }
-      } else {
-        _bAttackable = D2Common::Seed::UNIT_GetModuloFromSeed(&pTarget->sSeed, 100);
-        if ((int)_bAttackable < 0x50) {
-          bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
-          if (!bCheckResult) {
-            return 0;
+      switch (pTarget->eUnitType) {
+        case UNIT_PLAYER:
+          {
+            _bAttackable = D2Common::Seed::UNIT_GetModuloFromSeed(&pTarget->sSeed, 100);
+            if ((int)_bAttackable < 0x50) {
+              bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
+              if (!bCheckResult) {
+                return 0;
+              }
+            }
+
+            break;
           }
-        }
+        case UNIT_MONSTER:
+          {
+            if (bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0) , bCheckResult != 0) {
+              return 0;
+            }
+
+            break;
+          }
       }
     }
 
@@ -3801,15 +3810,25 @@ D2UnitStrc * __fastcall MONSTERAI_GetAliveKillerUnit(::SGAMEDATA * pGame, D2Unit
     if (!pKillerUnit) {
       return nullptr;
     }
-    if (pKillerUnit->eUnitType != UNIT_PLAYER) {
-      if (pKillerUnit->eUnitType == UNIT_MONSTER && pKillerUnit->eAnimMode.ePlayerMode != Death && pKillerUnit->eAnimMode.ePlayerMode != Kick) {
-        bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pKillerUnit);
-        return bCanAttack ? (D2UnitStrc*)pKillerUnit : nullptr;
-      }
-    } else {
-      if (pKillerUnit->eAnimMode.ePlayerMode != Death && pKillerUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
-        return pKillerUnit;
-      }
+
+    switch (pKillerUnit->eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if (pKillerUnit->eAnimMode.ePlayerMode != Death && pKillerUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
+            return pKillerUnit;
+          }
+
+          break;
+        }
+      case UNIT_MONSTER:
+        {
+          if (pKillerUnit->eAnimMode.ePlayerMode != Death && pKillerUnit->eAnimMode.ePlayerMode != Kick) {
+            bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pKillerUnit);
+            return bCanAttack ? (D2UnitStrc*)pKillerUnit : nullptr;
+          }
+
+          break;
+        }
     }
 
     return nullptr;
@@ -12841,43 +12860,53 @@ void __fastcall AITHINK_Fn1_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         if ((int)eSkillScore >= 0 && (int)eSkillScore < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
           pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillScore;
           if (pSkillTxt) {
-            if (pSkillTxt->aitype != '\x01') {
-              if (pSkillTxt->aitype == '\x06' && (pSkillStrc = D2Common::Units::GetLeftSkill(pUnit) , !pSkillStrc)) {
-                sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-                pUnit->sSeed = sNewSeed;
-                if ((int)(sNewSeed.nSeedLow % 100) < 0x14) {
-                  D2Common::Skills::SelectSkillLeft(pUnit, eSkillScore, -1);
-                }
-              }
-            } else {
-              if (pSkillTxt->aurastate > 0) {
-                eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pSkillTxt->aurastate);
-                if (!eUnitState) {
-                  bHasTransformState = MONSTERAI_HasConflictingStateInGroup(pUnit, (int)pSkillTxt->aurastate);
-                  if (!bHasTransformState || (nFleeCheckRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)nFleeCheckRoll < 4)) {
-                    sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-                    pUnit->sSeed = sNewSeed;
-                    if ((int)(sNewSeed.nSeedLow % 100) < 0x3c) {
-                      pSkillStrc = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkillScore, -1);
-                      if (pSkillStrc) {
-                        nDistSqOrResult = D2Common::Skills::SKILLS_GetSkillWeaponClass(pUnit, pSkillStrc);
-                        if (nDistSqOrResult == 1 && !nParam1) {
-                          fCastResult = MONSTERAI_CommandRunToUnit(pGame, pUnit, nullptr, 4);
-                        } else {
-                          nTargetY = 0;
-                          nCastX = 0;
-                          pTmpUnit = 0;
-                          nDistSqOrResult = D2Common::Skills::SKILL_GetMode(pSkillStrc);
-                          fCastResult = SERVER_UNIT_CastSkill(pGame, pUnit, (uint8_t)nDistSqOrResult, eSkillScore, pTmpUnit, nCastX, nTargetY);
-                        }
-                        if (fCastResult) {
-                          return;
+            switch (pSkillTxt->aitype) {
+              case '\x01':
+                {
+                  if (pSkillTxt->aurastate > 0) {
+                    eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pSkillTxt->aurastate);
+                    if (!eUnitState) {
+                      bHasTransformState = MONSTERAI_HasConflictingStateInGroup(pUnit, (int)pSkillTxt->aurastate);
+                      if (!bHasTransformState || (nFleeCheckRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)nFleeCheckRoll < 4)) {
+                        sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
+                        pUnit->sSeed = sNewSeed;
+                        if ((int)(sNewSeed.nSeedLow % 100) < 0x3c) {
+                          pSkillStrc = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkillScore, -1);
+                          if (pSkillStrc) {
+                            nDistSqOrResult = D2Common::Skills::SKILLS_GetSkillWeaponClass(pUnit, pSkillStrc);
+                            if (nDistSqOrResult == 1 && !nParam1) {
+                              fCastResult = MONSTERAI_CommandRunToUnit(pGame, pUnit, nullptr, 4);
+                            } else {
+                              nTargetY = 0;
+                              nCastX = 0;
+                              pTmpUnit = 0;
+                              nDistSqOrResult = D2Common::Skills::SKILL_GetMode(pSkillStrc);
+                              fCastResult = SERVER_UNIT_CastSkill(pGame, pUnit, (uint8_t)nDistSqOrResult, eSkillScore, pTmpUnit, nCastX, nTargetY);
+                            }
+                            if (fCastResult) {
+                              return;
+                            }
+                          }
                         }
                       }
                     }
                   }
+
+                  break;
                 }
-              }
+              case '\x06':
+                {
+                  pSkillStrc = D2Common::Units::GetLeftSkill(pUnit);
+                  if (!pSkillStrc) {
+                    sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
+                    pUnit->sSeed = sNewSeed;
+                    if ((int)(sNewSeed.nSeedLow % 100) < 0x14) {
+                      D2Common::Skills::SelectSkillLeft(pUnit, eSkillScore, -1);
+                    }
+                  }
+
+                  break;
+                }
             }
           }
         }

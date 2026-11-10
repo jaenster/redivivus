@@ -35,32 +35,6 @@ namespace Fog::Engine::Application {
 static uint32_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
-bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
-    pContext->ContextFlags = 0x1003f;
-    DWORD dwCurrentTid = GetCurrentThreadId();
-    if (dwCurrentTid == dwThreadId) {
-      RtlCaptureContext(pContext);
-      return true;
-    }
-
-    HANDLE hThread = OpenThread(0x4a, 0, dwThreadId);
-    if (!hThread) {
-      return false;
-    }
-
-    /* HANDLE hThread for SuspendThread */ dwCurrentTid = SuspendThread(hThread);
-    if (dwCurrentTid == -1) {
-      /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
-      return false;
-    }
-
-    BOOL bGotContext;
-    /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ bGotContext = GetThreadContext(hThread, pContext);
-    /* HANDLE hThread for ResumeThread */ ResumeThread(hThread);
-    /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
-    return bGotContext;
-}
-
 int Unreferenced_004046d0() {
     return (intptr_t)&ExceptionList;
 }

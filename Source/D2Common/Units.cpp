@@ -1846,26 +1846,13 @@ int __stdcall GetDirectionToCoords(D2UnitStrc * pUnit, int32_t nNewX, int32_t nN
 }
 
 void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer) {
-    eD2UnitType eUnitType;
-    int32_t nUnitGUID;
     if (!((int)nOverlay >= 0 && (int)nOverlay < ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
     }
 
     D2StatListExStrc* pStatsEx = Stats::StatsEx::GetStatsByFlags(pUnit, 0x80);
     if (!pStatsEx) {
-      D2PoolManagerStrc* pMemPool;
-      if (!pUnit) {
-        nUnitGUID = -1;
-        eUnitType = UNIT_COUNT;
-        pMemPool = 0;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-        pMemPool = pUnit->pMemory;
-      }
-
-      pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pMemPool, 0x80, 0, eUnitType, nUnitGUID);
+      pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(!pUnit ? 0 : pUnit->pMemory, 0x80, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
     }
 
@@ -2356,6 +2343,7 @@ D2UnitStrc * __stdcall GetEquippedWeapon(D2UnitStrc * pUnit) {
 
 int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
     bool bHasWeapon;
+    uint8_t nRangeAdder;
     D2MonStats2Txt* pMonStats2;
     BOOL bEquippedWeapon;
     int32_t nBodyLoc;
@@ -2365,29 +2353,39 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11be);
       exit(-1);
     }
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      if (pUnit->eUnitType == UNIT_MONSTER && (pMonStats2 = DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) , pMonStats2 != 0)) {
-        if (pMonStats2->MeleeRng == 0xff) {
-          COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
-          return pUnit == (D2UnitStrc*)0x6 ? 0x2 : 0;
-        }
 
-        return (uint32_t)pMonStats2->MeleeRng;
-      }
-    } else {
-      uint8_t nRangeAdder;
-      bEquippedWeapon = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pUnit->pInventory, &pUnit, &nBodyLoc, &bWeaponSwitch);
-      if (bEquippedWeapon) {
-        nRangeAdder = ITEMS::Items::ITEM_GetItemsTxt_nRangeAdder(pUnit);
-        return (uint32_t)nRangeAdder;
-      }
+    switch (pUnit->eUnitType) {
+      case UNIT_PLAYER:
+        {
+          bEquippedWeapon = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pUnit->pInventory, &pUnit, &nBodyLoc, &bWeaponSwitch);
+          if (!bEquippedWeapon) {
+            break;
+          }
+
+          nRangeAdder = ITEMS::Items::ITEM_GetItemsTxt_nRangeAdder(pUnit);
+          return (uint32_t)nRangeAdder;
+        }
+      case UNIT_MONSTER:
+        {
+          pMonStats2 = DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
+          if (pMonStats2) {
+            if (pMonStats2->MeleeRng == 0xff) {
+              COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
+              return pUnit == (D2UnitStrc*)0x6 ? 0x2 : 0;
+            }
+
+            return (uint32_t)pMonStats2->MeleeRng;
+          }
+
+          break;
+        }
     }
 
     return 0;
 }
 
 // Tests whether the line segment from unit (x,y) with radius size to target (x2,y2) with radius size2 is blocked by room collision. Clamps both radii to 2, computes Manhattan-distance proximity rejection, then adjusts endpoints by the respective radii along the dominant axis before delegating to Collision::TestCollision with the supplied eCollisionFlag. Returns TRUE if a collision is detected.
-BOOL __stdcall TestCollision(int32_t x, int32_t size, int32_t x2, int32_t y, int32_t size2, int32_t y2, D2RoomStrc * pRoom, int32_t eCollisionFlag) {
+static BOOL __stdcall TestCollision(int32_t x, int32_t size, int32_t x2, int32_t y, int32_t size2, int32_t y2, D2RoomStrc * pRoom, int32_t eCollisionFlag) {
     POINT ptTarget;
     POINT ptUnit;
     int nOffsetY2;

@@ -1892,7 +1892,7 @@ int32_t __fastcall SKILL_ProcessCastFromPacket(D2UnitStrc * pUnit, int * pnCastA
 }
 
 // Spawns a full 360-degree ring of 64 missiles (one per 4-byte entry in ganMissileRingCosOffsets/ganMissileRingSinOffsets). When pSkillArg1 is NULL fires all from pSkillArg2 (toggling a flag for MISSILE_Diabfire). When pSkillArg1 is non-NULL, randomly assigns each missile to pSkillArg1 or pSkillArg2 using the owner's RNG seed (1-in-6 chance selects pSkillArg1). Used by Nova-style skills.
-void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2SkillArgStrc * pSkillArg2) {
+static void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2SkillArgStrc * pSkillArg2) {
     D2UnitStrc* pMissileUnit;
     D2SeedStrc sRandSeed;
     int nTableOffset = 0;
@@ -2369,17 +2369,7 @@ void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpi
 }
 
 void __fastcall SKILL_CreateActiveSkillStatList(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType;
-    int nUnitGUID;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 6, 0x32, eUnitType, nUnitGUID);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 6, 0x32, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
       return;
     }
@@ -2498,17 +2488,7 @@ int32_t __fastcall GetMeleeRangePlusFour(D2UnitStrc * pUnit) {
 
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_CltAllocStatListForSkill(D2UnitStrc * pUnit, int32_t nAttackRate) {
-    eD2UnitType eUnitType;
-    int nUnitGUID;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 4, 0, eUnitType, nUnitGUID);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 4, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
       return;
     }

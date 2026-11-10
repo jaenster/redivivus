@@ -158,7 +158,6 @@ static eD2PathTypes __stdcall GetPathCount(eD2PathTypes ePathType, uint8_t nDist
 
 // @sourcefile .\MONSTER\MonsterMode.cpp
 static void MONSTER_SetVelocityPercent(D2MonsterPathParamStrc * pPathParam, D2UnitStrc * pUnit) {
-    int32_t dwUnitGUID;
     int nVelocityPct = pPathParam->nVelocity;
     if (!nVelocityPct) {
       return;
@@ -166,16 +165,7 @@ static void MONSTER_SetVelocityPercent(D2MonsterPathParamStrc * pPathParam, D2Un
 
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 0x4000);
     if (!pStatList) {
-      D2PoolManagerStrc* pMemory;
-      if (!pUnit) {
-        dwUnitGUID = -1;
-        pMemory = 0;
-      } else {
-        dwUnitGUID = pUnit->nUnitGUID;
-        pMemory = pUnit->pMemory;
-      }
-
-      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, 0x4004, 0, UNIT_MONSTER, dwUnitGUID);
+      pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(!pUnit ? 0 : pUnit->pMemory, 0x4004, 0, UNIT_MONSTER, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatList) {
         return;
       }
@@ -450,7 +440,7 @@ void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnA
     }
 }
 
-void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
+static void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
     int nAiState = GetAiState(pUnit);
     if (nAiState >= 0x10) {
       D2Game::Monster::SetAiState(pUnit, nAiState - 0x10);

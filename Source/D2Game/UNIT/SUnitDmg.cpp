@@ -3713,14 +3713,25 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
     if (!_bCanAttack) {
       return 0;
     }
-    if (pUnit2->eUnitType != UNIT_PLAYER) {
-      if (pUnit2->eUnitType == UNIT_MONSTER && (nMeleeRange = Monsters::MONSTER_IsMonsterUnit(pUnit2) , !nMeleeRange)) {
-        return 0;
-      }
-    } else {
-      if (pUnit2->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
-        wHitFlags = 1;
-      }
+
+    switch (pUnit2->eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if (pUnit2->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
+            wHitFlags = 1;
+          }
+
+          break;
+        }
+      case UNIT_MONSTER:
+        {
+          nMeleeRange = Monsters::MONSTER_IsMonsterUnit(pUnit2);
+          if (!nMeleeRange) {
+            return 0;
+          }
+
+          break;
+        }
     }
 
     int32_t nRangeCheck;

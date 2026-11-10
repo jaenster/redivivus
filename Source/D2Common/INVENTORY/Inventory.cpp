@@ -4755,7 +4755,7 @@ void __stdcall FreeRecursiveInventorysWithChilds(D2InventoryStrc * pInventory) {
 }
 
 // Copies the backpack grid (grid index 2) cell array from pUnit's inventory into pInventory. Looks up the inventory page dimensions via GetInventoryPage + GetGridDimensions, ensures both grids exist and have matching Width x Height, then memcpys the source cell pointer array. Returns 1 on success, 0 if either inventory is invalid, grids are missing, or dimensions mismatch.
-BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
+static BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     D2GridScreenCoordinates sGridDims;
     uint8_t bWidth;
     if (!pInventory) {

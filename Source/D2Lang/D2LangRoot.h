@@ -38,8 +38,6 @@ uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, 
 char * __fastcall WideCharToUTF8(char * pDest, uint16_t * pSrc, int nMaxBytes);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Lang)
-// Decodes next UTF-8 character from byte stream. Multi-byte decoding using table at gaUtf8DecodeTable. Returns character width in bytes or -1 on error. Validates continuation bytes (0x80 mask).
-int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharOut, int32_t nMaxBytes);
 void __fastcall UTF8_EncodeCodePoint(uint16_t * pCodePoint);
 void __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars);
 // Compares two characters using UI character lookup table for case-insensitive comparison. If char < 0x100, maps via CharacterLookupTable, else uses raw value. Returns 1 if equal, 0 otherwise.

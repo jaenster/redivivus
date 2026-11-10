@@ -1949,14 +1949,23 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
     uint32_t dwSavedESI;
     uint32_t dwSavedRetAddr;
     eD2UnitType eUnitTypeCopy;
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]))) {
-        return nullptr;
-      }
-    } else {
-      if ((uint32_t)nClassId >= 7) {
-        return nullptr;
-      }
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if ((uint32_t)nClassId >= 7) {
+            return nullptr;
+          }
+
+          break;
+        }
+      case UNIT_MONSTER:
+        {
+          if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+            return nullptr;
+          }
+
+          break;
+        }
     }
 
     D2UnitStrc* pAllocUnit = D2Common::Units::AllocUnit(pGame->pMemoryPool, eUnitType);
@@ -2055,19 +2064,32 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
     }
 
     UNITS_PlaceUnitInRoom(pAllocUnit, nPosX, nPosY, pGame, pRoom, 1);
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && (bIsMonsterDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pAllocUnit) , bIsMonsterDead != 0) && (bIsMonsterDead = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, deadCol) , !bIsMonsterDead)) {
-        D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pAllocUnit, 1);
-        D2Common::PATH::DynamicPath::SetUnitWidth(pAllocUnit, 5);
-        D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pAllocUnit->pPath.pDynamicPath, 0x8000);
-        return pAllocUnit;
-      }
-    } else {
-      if (pAllocUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead || pAllocUnit->eAnimMode.ePlayerMode == Death) {
-        D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pAllocUnit, 1);
-        D2Common::PATH::DynamicPath::SetUnitWidth(pAllocUnit, 5);
-        D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pAllocUnit->pPath.pDynamicPath, 0x8000);
-      }
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        {
+          if (pAllocUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead || pAllocUnit->eAnimMode.ePlayerMode == Death) {
+            D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pAllocUnit, 1);
+            D2Common::PATH::DynamicPath::SetUnitWidth(pAllocUnit, 5);
+            D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pAllocUnit->pPath.pDynamicPath, 0x8000);
+          }
+
+          break;
+        }
+      case UNIT_MONSTER:
+        {
+          bIsMonsterDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pAllocUnit);
+          if (bIsMonsterDead) {
+            bIsMonsterDead = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, deadCol);
+            if (!bIsMonsterDead) {
+              D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pAllocUnit, 1);
+              D2Common::PATH::DynamicPath::SetUnitWidth(pAllocUnit, 5);
+              D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pAllocUnit->pPath.pDynamicPath, 0x8000);
+              return pAllocUnit;
+            }
+          }
+
+          break;
+        }
     }
 
     return pAllocUnit;

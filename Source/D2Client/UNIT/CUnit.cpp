@@ -54,6 +54,22 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client::UNIT::CUnit {
 
+static void __stdcall CUNIT_IterateHashTableWithCallback(D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback) {
+    D2UnitStrc* pNextUnit;
+    int nBucketIndex = 0;
+    do {
+      D2UnitStrc* pCurUnit;
+      pCurUnit = UnitHashTable[nBucketIndex];
+      while (pCurUnit) {
+        pNextUnit = pCurUnit->pListNext;
+        (*pfnCallback)(pCurUnit);
+        pCurUnit = pNextUnit;
+      }
+
+      nBucketIndex++;
+    } while (nBucketIndex < 0x80);
+}
+
 // Thunk callback for CUNIT_IterateHashTableWithCallback. Receives unit pointer in ECX and forwards to STATLIST_ClearChangedStatFlags. Called at end of CLIENT_UpdateUnitGfxState to clear changed-stat dirty flags on all client-side units (players, missiles, server units).
 void __fastcall CLIENT_ClearChangedStatFlags_Thunk(D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_ClearChangedStatFlags(pUnit);
@@ -539,7 +555,7 @@ void __stdcall UpdateObjectAutoLightOnPeriodChange() {
           exit(-1);
         }
 
-        OBJECT_CheckAutoLight(pObject, 0);
+        Object::OBJECT_CheckAutoLight(pObject, 0);
         pObject = pNextObject;
       }
 
@@ -556,7 +572,7 @@ void __stdcall UpdateObjectAutoLightOnPeriodChange() {
           exit(-1);
         }
 
-        OBJECT_CheckAutoLight(pObject, 0);
+        Object::OBJECT_CheckAutoLight(pObject, 0);
         pObject = pNextObject;
       }
 
@@ -691,7 +707,7 @@ void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallb
       exit(-1);
     }
 
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], pfnCallback);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], pfnCallback);
 }
 
 void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback) {
@@ -700,7 +716,7 @@ void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback
       exit(-1);
     }
 
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], pfnCallback);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], pfnCallback);
 }
 
 void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback) {
@@ -709,7 +725,7 @@ void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback) {
       exit(-1);
     }
 
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[2], pfnCallback);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[2], pfnCallback);
 }
 
 static D2UnitStrc * CUNIT_IterateUntilWarp(int * pUnit) {
@@ -1618,13 +1634,13 @@ void __stdcall FreeAllUnits() {
 // Client-side per-frame graphics update: iterates all client unit hash tables (objects, missiles, players, items) calling CLIENT_UpdateUnitFrame, then clears changed-stat flags on selected units/items/players. In singleplayer, also syncs server-side path data to client for players and missiles.
 void __stdcall CLIENT_UpdateUnitGfxState() {
     D2UnitStrc* pTmp;
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[3], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[3], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
     Player::CUNIT_UpdateClientFramesAndAI(ClientSideUnitHashTables[3]);
     Player::CUNIT_UpdateClientFramesAndAI(ClientSideUnitHashTables[2]);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[2], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[4], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[2], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[4], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
     Player::CUNIT_UpdateClientFramesAndAI(ClientSideUnitHashTables[1]);
     D2UnitStrc** ppBucket = ClientSideUnitHashTables[1];
     do {
@@ -1654,15 +1670,15 @@ void __stdcall CLIENT_UpdateUnitGfxState() {
       ppBucket++;
     } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 1024));
 
-    Player::CUNIT_IterateHashTableWithCallback(ClientSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[4], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
+    CUNIT_IterateHashTableWithCallback(ClientSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[4], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
     if (eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER) {
       return;
     }
 
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)CLIENT_SyncPathFromServer);
-    Player::CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_SyncPathFromServer);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], (fnUnitIterCallback)CLIENT_SyncPathFromServer);
+    CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_SyncPathFromServer);
 }
 
 void __fastcall FaceTarget(D2UnitStrc * pUnit, int32_t bImmediate) {
@@ -1819,7 +1835,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     return 1;
 }
 
-void RemoveObject(int32_t nIndex, D2UnitStrc * * ppUnitTable, eD2UnitType eUnitType, int32_t nUnitGUID) {
+static void RemoveObject(int32_t nIndex, D2UnitStrc * * ppUnitTable, eD2UnitType eUnitType, int32_t nUnitGUID) {
     D2UnitStrc** ppNextSlot;
     D2UnitStrc* pUnit = ppUnitTable[nIndex];
     D2UnitStrc* pPrevUnit = 0;

@@ -584,19 +584,34 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
       if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
         nValidClassId = -1;
       }
-      if (nValidClassId != 0x1f2) {
-        if (nValidClassId == 0x205 && (bSiegeIntroDone = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath) , bSiegeIntroDone != 0) && (eLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) , eLevelId2 == LEVEL_BloodyFoothills)) {
-          nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x206 ? -1 : 0x206;
-        }
-      } else {
-        bSiegeIntroDone2 = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath);
-        if (bSiegeIntroDone2) {
-          eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-          if (eRoomLevelId == LEVEL_BloodyFoothills) {
-            nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 499 ? -1 : 499;
+
+      switch (nValidClassId) {
+        case 0x1f2:
+          {
+            bSiegeIntroDone2 = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath);
+            if (bSiegeIntroDone2) {
+              eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+              if (eRoomLevelId == LEVEL_BloodyFoothills) {
+                nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 499 ? -1 : 499;
+              }
+            }
+
+            break;
           }
-        }
+        case 0x205:
+          {
+            bSiegeIntroDone = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGameLocal, QUESTINT_SiegeOnHaggorath);
+            if (bSiegeIntroDone) {
+              eLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+              if (eLevelId2 == LEVEL_BloodyFoothills) {
+                nMonCode = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x206 ? -1 : 0x206;
+              }
+            }
+
+            break;
+          }
       }
+
       if (pGameLocal->nDifficulty > 0) {
         if (nMonCode < 0 || (nValidClassId = nMonCode , nMonCode >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
           nValidClassId = -1;

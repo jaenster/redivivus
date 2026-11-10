@@ -100,7 +100,6 @@ void __stdcall CLIENT_UpdateUnitGfxState();
 void __fastcall FaceTarget(struct D2UnitStrc * pUnit, int32_t bImmediate);
 // Determines whether pUnit may interact with / target pUnit2 (hostility & targetability check). Returns nonzero if interaction allowed, 0 if not. Resolves pets to their player owner via RosterPets::GetRosterOwnerGUID and charmed/owned units. In town: only allows player-vs-player when ROSTER_CheckPlayerCanLoot permits looting a dead party member. Out of town: rejects self/same-unit; player-vs-player uses loot rights then PlayerList party flag (8); against monsters consults MonStats2 alSel/noSel flags (always-selectable / never-selectable); players may always interact with items and objects; otherwise falls back to Path::IsAllyOf (returns true only if NOT an ally). Also blocks a player from interacting with an enemy pet they don't own.
 uint32_t __fastcall CanInteractWith(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-void RemoveObject(int32_t nIndex, struct D2UnitStrc * * ppUnitTable, eD2UnitType eUnitType, int32_t nUnitGUID);
 void __fastcall RemoveObjectFromServerObjectTable(uint32_t nUnitGUID, eD2UnitType eUnitType);
 void __fastcall UNITS_RemoveFromClientHashTable(uint32_t dwUnitGUID, int32_t nUnitType);
 struct D2UnitStrc * __fastcall UNIT_CreateWarp(int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nItemAnimMode);

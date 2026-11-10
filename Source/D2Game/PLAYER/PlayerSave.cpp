@@ -955,7 +955,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
 }
 
 // Serializes the player unit to a .d2s file on disk (SP/LAN path). Calls MakeSaveFile into a stack buffer, then fopens "%sSaveDir%charName.d2s" in binary-write mode and fwrites the result. Guarded by DontNoSafeGameBool; logs an error if the file cannot be opened. Returns nothing; EAX is left over from fclose or the log call.
-void __fastcall SaveToFile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nParam, int nParamExtra, char * pCharName) {
+static void __fastcall SaveToFile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nParam, int nParamExtra, char * pCharName) {
     uint32_t dwCookieXor;
     uint32_t nSaveFileSize;
     size_t nSize;

@@ -209,8 +209,6 @@ BOOL __fastcall CheckIfObjectOrientationIs1(struct D2UnitStrc * pUnit);
 // Returns 1 if the monster unit is considered to have a shield for block/defense purposes. Hard-codes TRUE for Diablo, DoomKnight, and DiabloClone; FALSE for Wolf. For other monsters, reads the body component slot 7 code, resolves it via MONSTER_GetComponentOverlay, then looks up the item code: returns 1 if the resolved item's wType is 2 (shield base type). Returns 0 on any lookup failure.
 BOOL __fastcall HasShield(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetEquippedWeapon(struct D2UnitStrc * pUnit);
-// Tests whether the line segment from unit (x,y) with radius size to target (x2,y2) with radius size2 is blocked by room collision. Clamps both radii to 2, computes Manhattan-distance proximity rejection, then adjusts endpoints by the respective radii along the dominant axis before delegating to Collision::TestCollision with the supplied eCollisionFlag. Returns TRUE if a collision is detected.
-BOOL __stdcall TestCollision(int32_t x, int32_t size, int32_t x2, int32_t y, int32_t size2, int32_t y2, struct D2RoomStrc * pRoom, int32_t eCollisionFlag);
 void __stdcall Return(struct D2UnitStrc * pUnit, int32_t nParam);
 // Activates/deactivates item stat lists for dual-wield players based on the skill currently being cast (nParam). Calls GetWeaponBySkill to determine the active weapon, compares it to the equipped weapon, and calls STATLIST_SetItemStatActive to mark the correct weapon's stat list active (1) and the other inactive (0). No-ops if the unit cannot dual-wield.
 void __stdcall UpdateDualWieldStats(struct D2UnitStrc * pUnit, int32_t nParam);

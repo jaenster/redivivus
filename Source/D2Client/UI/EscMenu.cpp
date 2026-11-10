@@ -59145,16 +59145,26 @@ void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
     nItemIndex = gnEscMenuSelectedIndex;
     D2EscMenuItemStrc* pItemData;
     pItemData = gpEscMenuCurrentTable + gnEscMenuSelectedIndex;
-    if (pItemData->nMenuItemType != 1) {
-      if (pItemData->nMenuItemType == 2 && (pItemData->nImageIndex-- , (uint32_t)pItemData->nImageIndex > pItemData->nSubImageCount - 1U)) {
-        pItemData->nImageIndex = 0;
-      }
-    } else {
-      pItemData->nImageIndex--;
-      nLastImageIndex = pItemData->nSubImageCount - 1;
-      if ((uint32_t)pItemData->nImageIndex > nLastImageIndex) {
-        pItemData->nImageIndex = nLastImageIndex;
-      }
+    switch (pItemData->nMenuItemType) {
+      case 1:
+        {
+          pItemData->nImageIndex--;
+          nLastImageIndex = pItemData->nSubImageCount - 1;
+          if ((uint32_t)pItemData->nImageIndex > nLastImageIndex) {
+            pItemData->nImageIndex = nLastImageIndex;
+          }
+
+          break;
+        }
+      case 2:
+        {
+          pItemData->nImageIndex--;
+          if ((uint32_t)pItemData->nImageIndex > pItemData->nSubImageCount - 1U) {
+            pItemData->nImageIndex = 0;
+          }
+
+          break;
+        }
     }
 
     notify_if_changed:

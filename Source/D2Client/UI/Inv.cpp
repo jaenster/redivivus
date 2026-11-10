@@ -1448,30 +1448,60 @@ void __fastcall InitInventory() {
       if (pSlotItem) {
         D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pSlotItem, (char*)&nItemWidth, (char*)&nItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
         nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pInventory);
-        if (nBodySlot != 4) {
-          if (nBodySlot == 5 && (pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4) , nHandedness == 2) && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem) , !nSlotDrawY && (nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem) , !nSlotDrawY && (Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[4].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[4].nTop + nXpacOffsetY) , gaPlayerBodySlotScreenCoords[4].nLeft >= 0)) && gaPlayerBodySlotScreenCoords[4].nLeft < SpellSel::WindowSizeX) && gaPlayerBodySlotScreenCoords[4].nTop >= 0 && (nHandedness = gaPlayerBodySlotScreenCoords[4].nLeft , nSlotScreenY = gaPlayerBodySlotScreenCoords[4].nTop , nMaxSockets = gaPlayerBodySlotScreenCoords[4].nWidth , bySlotRectHeight = gaPlayerBodySlotScreenCoords[4].nHeight , gaPlayerBodySlotScreenCoords[4].nTop < ui::WindowSizeY)) {
-            Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)nMaxSockets, (uint32_t)bySlotRectHeight, (uint32_t)gaInvHighlightColors[0], DRAW_VERYTRANSPARENT);
-          }
-        } else {
-          pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-          if (nHandedness == 2) {
-            nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem);
-            if (!nSlotDrawY) {
-              nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem);
-              if (!nSlotDrawY) {
-                Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[5].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[5].nTop + nXpacOffsetY);
-                if (gaPlayerBodySlotScreenCoords[5].nLeft >= 0 && gaPlayerBodySlotScreenCoords[5].nLeft < SpellSel::WindowSizeX && gaPlayerBodySlotScreenCoords[5].nTop >= 0) {
-                  nHandedness = gaPlayerBodySlotScreenCoords[5].nLeft;
-                  nSlotScreenY = gaPlayerBodySlotScreenCoords[5].nTop;
-                  nMaxSockets = gaPlayerBodySlotScreenCoords[5].nWidth;
-                  bySlotRectHeight = gaPlayerBodySlotScreenCoords[5].nHeight;
-                  if (gaPlayerBodySlotScreenCoords[5].nTop < ui::WindowSizeY) {
-                    Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)nMaxSockets, (uint32_t)bySlotRectHeight, (uint32_t)gaInvHighlightColors[0], DRAW_VERYTRANSPARENT);
+        switch (nBodySlot) {
+          case 4:
+            {
+              pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+              if (nHandedness == 2) {
+                nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem);
+                if (!nSlotDrawY) {
+                  nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem);
+                  if (!nSlotDrawY) {
+                    Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[5].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[4].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[5].nTop + nXpacOffsetY);
+                    if (gaPlayerBodySlotScreenCoords[5].nLeft >= 0 && gaPlayerBodySlotScreenCoords[5].nLeft < SpellSel::WindowSizeX && gaPlayerBodySlotScreenCoords[5].nTop >= 0) {
+                      nHandedness = gaPlayerBodySlotScreenCoords[5].nLeft;
+                      nSlotScreenY = gaPlayerBodySlotScreenCoords[5].nTop;
+                      nMaxSockets = gaPlayerBodySlotScreenCoords[5].nWidth;
+                      bySlotRectHeight = gaPlayerBodySlotScreenCoords[5].nHeight;
+                      if (gaPlayerBodySlotScreenCoords[5].nTop < ui::WindowSizeY) {
+                        goto LAB_004847e1;
+                      }
+                    }
                   }
                 }
               }
+
+              break;
             }
-          }
+          case 5:
+            {
+              pPairedArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+              if (nHandedness == 2) {
+                nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pPairedArmItem);
+                if (!nSlotDrawY) {
+                  nSlotDrawY = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pSlotItem);
+                  if (!nSlotDrawY) {
+                    Engine::Gfx::DrawItemGfx(pSlotItem, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[4].nLeft + nXpacOffsetX, ((int)((uint32_t)gaPlayerBodySlotScreenCoords[5].nHeight - (uint32_t)pInventoryGridScreenCoordinated.nCellHeight * (uint32_t)nItemHeight) >> 1) + gaPlayerBodySlotScreenCoords[4].nTop + nXpacOffsetY);
+                    if (gaPlayerBodySlotScreenCoords[4].nLeft >= 0) {
+                      if (gaPlayerBodySlotScreenCoords[4].nLeft < SpellSel::WindowSizeX) {
+                        if (gaPlayerBodySlotScreenCoords[4].nTop >= 0) {
+                          nHandedness = gaPlayerBodySlotScreenCoords[4].nLeft;
+                          nSlotScreenY = gaPlayerBodySlotScreenCoords[4].nTop;
+                          nMaxSockets = gaPlayerBodySlotScreenCoords[4].nWidth;
+                          bySlotRectHeight = gaPlayerBodySlotScreenCoords[4].nHeight;
+                          if (gaPlayerBodySlotScreenCoords[4].nTop < ui::WindowSizeY) {
+                            LAB_004847e1:
+                            Engine::Gfx::D2GFX_DrawSolidRectExBySize(nHandedness, nSlotScreenY, (uint32_t)nMaxSockets, (uint32_t)bySlotRectHeight, (uint32_t)gaInvHighlightColors[0], DRAW_VERYTRANSPARENT);
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+
+              break;
+            }
         }
 
         nSlotDrawX = ((int)((uint32_t)gaPlayerBodySlotScreenCoords[nBodySlot].nWidth - (uint32_t)pInventoryGridScreenCoordinated.nCellWidth * (uint32_t)nItemWidth) >> 1) + gaPlayerBodySlotScreenCoords[nBodySlot].nLeft;

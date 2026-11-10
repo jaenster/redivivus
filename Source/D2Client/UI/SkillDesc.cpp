@@ -4048,7 +4048,7 @@ static D2UnitStrc * SKILLDESC_GetSecondaryWeapon(D2UnitStrc * pUnit) {
     return pEquippedWeapon;
 }
 
-static void __stdcall SKILLDESC_CalcDualWieldDamage(int32_t * pdwParam1, int32_t * pdwParam2, int32_t * dwParam1, int32_t * pdwParam3, int32_t * pdwParam4, int32_t * dwParam2, D2SkillStrc * pSkill, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t dwParam3, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void __stdcall SKILLDESC_CalcDualWieldDamage(D2UnitStrc * pUnit2, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * dwParam1, int32_t * pdwParam3, int32_t * pdwParam4, int32_t * dwParam2, D2SkillStrc * pSkill, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t dwParam3, D2UnitStrc * pUnit) {
     uint32_t bIsMissilePotion;
     D2UnitStrc* nParam = pUnit;
     D2InventoryStrc* pInventory = pUnit2->pInventory;
@@ -4103,13 +4103,13 @@ static void __stdcall SKILLDESC_CalcDualWieldDamage(int32_t * pdwParam1, int32_t
 }
 
 void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2) {
-    SKILLDESC_CalcDualWieldDamage(pdwParam1, pdwParam2, nullptr, pdwParam3, param_1, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)pUnit2, pUnit);
+    SKILLDESC_CalcDualWieldDamage(pUnit, pdwParam1, pdwParam2, nullptr, pdwParam3, param_1, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)pUnit2);
 }
 
 void __fastcall SKILLDESC_CalcDualWieldWithAR(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor) {
     BOOL bCanDualWield = D2Common::Units::CanDualWield(pUnit);
     if (bCanDualWield) {
-      SKILLDESC_CalcDualWieldDamage(pnMinDamage, pnMinColor, nullptr, pnMaxDamage, pnMaxColor, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)nSkillLevel, pUnit);
+      SKILLDESC_CalcDualWieldDamage(pUnit, pnMinDamage, pnMinColor, nullptr, pnMaxDamage, pnMaxColor, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)nSkillLevel);
       return;
     }
 
@@ -4130,7 +4130,7 @@ void __fastcall SKILLDESC_CalcDualWieldWithARState(D2UnitStrc * pUnit, D2SkillSt
 }
 
 void __fastcall SKILLDESC_CalcDualWieldSimple(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor) {
-    SKILLDESC_CalcDualWieldDamage(pnMinDamage, pnMinColor, nullptr, pnMaxDamage, pnMaxColor, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)nSkillLevel, pUnit);
+    SKILLDESC_CalcDualWieldDamage(pUnit, pnMinDamage, pnMinColor, nullptr, pnMaxDamage, pnMaxColor, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)nSkillLevel);
     *pnMinDamage = *pnMaxDamage;
     *pnMinColor = *pnMaxColor;
     *pnMaxDamage = 0;
@@ -4238,7 +4238,7 @@ static void __stdcall SKILLDESC_DrawSingleNumber(int32_t nColorIdx, int32_t nScr
     ui::UI_DrawTextCentered(nScreenX + Inv::gnPanelOffsetX, Inv::gnPanelOffsetY + Inv::ScreenSizeY - 0x1e0 + nScreenY, Inv::gnPanelOffsetX + nScreenZ, wszNumTextW16, nColorIdx);
 }
 
-static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2SkillStrc * pSkillRecord, D2UnitStrc * pUnit, int32_t nItemClassId, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t nExtraFlags, int pCompareUnit, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nElemDmg, D2SkillsTxt * pnDamageRange) {
+static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2UnitStrc * pUnit, D2SkillStrc * pSkillRecord, D2SkillsTxt * pSkillsTxt, int32_t nItemClassId, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t nExtraFlags, int pCompareUnit, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nElemDmg) {
     // Frame slots -20..-4 are ONE object: &nElemDmgTypeFlag is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -4257,7 +4257,7 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2SkillStrc * pSkillRecord,
     if (!pSkillRecord) {
       return;
     }
-    if (!pnDamageRange) {
+    if (!pSkillsTxt) {
       return;
     }
     if (!pfnCalcWeaponDmg) {
@@ -4271,17 +4271,17 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2SkillStrc * pSkillRecord,
     __frame0.nDmgTypeFlag = 0;
     __frame0.nElemDmgTypeFlag = 0;
     if (nElemDmg) {
-      SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &__frame0.nDmgTypeFlag, pnDamageRange, nItemClassId);
+      SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &__frame0.nDmgTypeFlag, pSkillsTxt, nItemClassId);
     }
 
     uint32_t nSrcDamPct;
-    nSrcDamPct = (uint32_t)(uint8_t)pnDamageRange->SrcDam;
+    nSrcDamPct = (uint32_t)(uint8_t)pSkillsTxt->SrcDam;
     __frame0.nElemDmgTypeFlag = __frame0.nDmgTypeFlag;
     __frame0.nMainMinDmg = 0;
     nElemDmg = 0;
     nItemClassId = 0;
     __frame0.nOffhandMaxDmg = 0;
-    SKILLDESC_CalcDualWieldDamage(&__frame0.nMainMinDmg, &nElemDmg, &__frame0.nDmgTypeFlag, &nItemClassId, &__frame0.nOffhandMaxDmg, &__frame0.nElemDmgTypeFlag, pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit, pUnit);
+    SKILLDESC_CalcDualWieldDamage(pUnit, &__frame0.nMainMinDmg, &nElemDmg, &__frame0.nDmgTypeFlag, &nItemClassId, &__frame0.nOffhandMaxDmg, &__frame0.nElemDmgTypeFlag, pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit);
     if (__frame0.nMainMinDmg && nElemDmg) {
       __frame0.nMainMinDmg = (int)(__frame0.nMainMinDmg * nSrcDamPct) / 128 + nElemMinDmg;
       nElemDmg = (int)(nElemDmg * nSrcDamPct) / 128 + nElemMaxDmg;
@@ -4502,7 +4502,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType1(D2UnitStrc * pUnit, D2SkillStrc * pS
       uDamCalc1 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9b8), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9b9), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 1, pSkillsTxt);
+      SKILLDESC_DrawSkillDmgPhysical(pUnit, pSkill, pSkillsTxt, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 1);
       return;
     }
 
@@ -4529,7 +4529,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType2(D2UnitStrc * pUnit, D2SkillStrc * pS
       uDamCalc1 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9dd), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0x9de), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 0, pSkillsTxt);
+      SKILLDESC_DrawSkillDmgPhysical(pUnit, pSkill, pSkillsTxt, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, uDamCalc1, pDamCalc2, nXLeft, nY, nXRight, 0);
       return;
     }
 
@@ -4556,7 +4556,7 @@ void __fastcall SKILLDESC_DrawSkillDmgType3(D2UnitStrc * pUnit, D2SkillStrc * pS
       nMinDamage = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa02), nSkillLevelTmp);
       nSkillLevelTmp = nSkillLevel;
       pDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xa03), nSkillLevelTmp);
-      SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, nMinDamage, pDamCalc2, nXLeft, nY, nXRight, 1, pSkillsTxt);
+      SKILLDESC_DrawSkillDmgPhysical(pUnit, pSkill, pSkillsTxt, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_DrawDamageWithRange, nMinDamage, pDamCalc2, nXLeft, nY, nXRight, 1);
       return;
     }
 
@@ -5070,7 +5070,7 @@ void __fastcall SKILLDESC_DrawSkillDmgRanged(D2UnitStrc * pUnit, D2SkillStrc * p
 
 void __fastcall SKILLDESC_DrawSkillDmgSimple(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
     int32_t nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], (int)pSkillsTxt->skill, nSkillLevel);
-    SKILLDESC_DrawSkillDmgPhysical(pSkill, pUnit, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_CalcAuraDamageRange, nSkillCalc, 0, nXLeft, nY, nXRight, 1, pSkillsTxt);
+    SKILLDESC_DrawSkillDmgPhysical(pUnit, pSkill, pSkillsTxt, nSkillLevel, (pfnSkillDescWeaponDmgCalc)SKILLDESC_CalcAuraDamageRange, nSkillCalc, 0, nXLeft, nY, nXRight, 1);
 }
 
 // @sourcefile .\UI\SkillDesc.cpp

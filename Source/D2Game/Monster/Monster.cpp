@@ -531,20 +531,31 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     if (nTmpInt >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nTmpInt = -1;
     }
-    if (nTmpInt != 0x137) {
-      if (nTmpInt == 0x138 && (dwTmpStat = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4) , pUnit->eUnitType == UNIT_MONSTER)) {
-        if (pUnit->pUnitData.pUnitDataMonster) {
-          pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)dwTmpStat;
+
+    switch (nTmpInt) {
+      case 0x137:
+        {
+          nTmpVal = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
+          if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+            pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)nTmpVal;
+          }
+
+          break;
         }
-        if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-          pUnit->pUnitData.pUnitDataMonster->Components[0xb] = (uint8_t)dwTmpStat;
+      case 0x138:
+        {
+          dwTmpStat = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
+          if (pUnit->eUnitType == UNIT_MONSTER) {
+            if (pUnit->pUnitData.pUnitDataMonster) {
+              pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)dwTmpStat;
+            }
+            if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+              pUnit->pUnitData.pUnitDataMonster->Components[0xb] = (uint8_t)dwTmpStat;
+            }
+          }
+
+          break;
         }
-      }
-    } else {
-      nTmpVal = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
-      if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-        pUnit->pUnitData.pUnitDataMonster->Components[10] = (uint8_t)nTmpVal;
-      }
     }
 
     MONSTER_InitLevelDifficultyScaling(pGame, &monLevelData, pRoom, pUnit);

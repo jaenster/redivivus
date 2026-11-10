@@ -742,7 +742,7 @@ static int __stdcall ITEM_RollForcedMagicAffix(D2ItemGenContextStrc * pItemGenCt
 // any item with flag 0x8 is skipped. Unless the context forces sockets (0x800), the roll must be
 // below 0x21. On success sets ITEMFLAG_SOCKETED and calls the D2Common ITEM_RollSocketCount with
 // modseed % max + 1 (versioned items) or the max capped at 3, 2 for helms (version 0). No return value.
-void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
+static void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     bool bHasInv;
     bool Var2;
     uint16_t wItemVersion;

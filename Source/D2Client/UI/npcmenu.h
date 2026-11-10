@@ -114,7 +114,6 @@ int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_00486e00();
 int32_t __stdcall GetInteractedUnitClassId_Unref_004b1020();
 void __thiscall NPCMENU_ConvertQuestId(short * nInput, uint16_t * pResult);
 struct D2UnitStrc * __stdcall GetInteractedUnit();
-void SetInteractedUnitInfo(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetInteractedUnitClassId();
 void __stdcall NPCMENU_SelectRandomDialogOption(struct D2NPCSpeechStrc * pSpeech);
 void __stdcall NPCMENU_RandomizeAllNpcDialogs();
@@ -122,7 +121,6 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind);
 int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, int bDismissed);
 void Unreferenced_004b1970();
 void __fastcall NPCMENU_AddHandledMessageId(short wMsgId);
-bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId);
 int __stdcall NPCMENU_ShowSelectedDialogOption();
 int __stdcall NPCMENU_ShowGossipDialog();
 int __stdcall NPCMENU_ShowIntroduceDialog();
@@ -299,7 +297,6 @@ int __stdcall NPCMENU_EnableQualKehkHireOption();
 // Tyrael (monstats 367) menu row 21: if CLIENT_CheckExpansion, adds option string 22738 (Travel_To_Harrogath) with callback 004b5200. Always returns 1.
 // NPC quest table entry 8: quest 28, state flag 0.
 int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption();
-void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, struct D2UnitStrc * pUnit);
 void __fastcall SetPlayersMercInfo(uint16_t wMercNameId, int32_t nReviveCost);
 void __stdcall NPCMENU_RefreshMenuDialog();
 int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int32_t nScrollState);
@@ -313,6 +310,7 @@ int __stdcall NPCMENU_AkaraRespecOptionCallback();
 // Akara (monstats 148) menu row 0: adds option string 11168 (respec) with callback NPCMENU_AkaraRespecOptionCallback.
 // NPC quest table entry 4: quest 1, state flag 0 (Den of Evil).
 int __stdcall NPCMENU_EnableAkaraRespecOption();
+void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca09b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_gNpcMenuConfirmDialogStrings();
 #endif // D2_MODULE_D2Client

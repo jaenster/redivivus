@@ -335,7 +335,6 @@ void __stdcall QSERVER_PutNewGameOnTokenList(::SGAMEDATA * dwGameServerAddr, uin
 uint16_t __stdcall QSERVER_GenerateToken();
 // Loads DRLG act and transitions client to state 2 (LoadingAct). Ensures act's dungeon generation is initialized, tells client to load act graphics/data, then advances connection state. Called after character validation during join flow.
 void __fastcall CLIENT_LoadActAndSetState2(::SGAMEDATA * pGame, struct D2ClientStrc * pClient);
-void __stdcall RollSeed(::SGAMEDATA * pGamee);
 BOOL __fastcall SetupGameChecks(int32_t nClientID2, struct D2GSMsg67GameLogonSPStrc * pMsg);
 void __stdcall QSERVER_InitializeMemoryCounters(uint32_t nInitialValue);
 void __fastcall NET_SendPong(uint32_t nClientID, int32_t nPingTime, int32_t nSeqNum, uint32_t dwPingData);

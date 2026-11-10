@@ -5717,36 +5717,46 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
 void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
     int nWaitStatus;
     Smack* pSmackHandle;
-    if (pContext->eMode != 'p') {
-      if (pContext->eMode == 's' && (pSmackHandle = (Smack*)pContext->hSmack , pSmackHandle != 0)) {
-        nWaitStatus = SmackWait(pSmackHandle);
-        if (!nWaitStatus) {
-          if (!gnGlideWindowHandle) {
+    switch (pContext->eMode) {
+      case 'p':
+        {
+          if (!gnRenderState) {
+            RENDERER_D3D_BlitSmackerFrame(0x1d4, pContext, 0x3c);
             return;
           }
 
-          SmackDoFrame(pSmackHandle);
-          RENDERER_D3D_PresentSmackerFrame();
-          if (pSmackHandle->FrameNum == pSmackHandle->Frames) {
-            Renderer::CloseSmacker(pContext);
-          } else {
-            SmackNextFrame(pSmackHandle);
-          }
-          if (gnRenderState) {
-            return;
+          break;
+        }
+      case 's':
+        {
+          pSmackHandle = (Smack*)pContext->hSmack;
+          if (pSmackHandle) {
+            nWaitStatus = SmackWait(pSmackHandle);
+            if (!nWaitStatus) {
+              if (!gnGlideWindowHandle) {
+                return;
+              }
+
+              SmackDoFrame(pSmackHandle);
+              RENDERER_D3D_PresentSmackerFrame();
+              if (pSmackHandle->FrameNum == pSmackHandle->Frames) {
+                Renderer::CloseSmacker(pContext);
+              } else {
+                SmackNextFrame(pSmackHandle);
+              }
+              if (gnRenderState) {
+                return;
+              }
+
+              RENDERER_D3D_ResetSmackerSurfaces();
+            }
+            if (!gnRenderState) {
+              RENDERER_D3D_BlitSmackerFrame(pSmackHandle->Width, pContext, pSmackHandle->Height);
+            }
           }
 
-          RENDERER_D3D_ResetSmackerSurfaces();
+          break;
         }
-        if (!gnRenderState) {
-          RENDERER_D3D_BlitSmackerFrame(pSmackHandle->Width, pContext, pSmackHandle->Height);
-        }
-      }
-    } else {
-      if (!gnRenderState) {
-        RENDERER_D3D_BlitSmackerFrame(0x1d4, pContext, 0x3c);
-        return;
-      }
     }
 }
 

@@ -73,7 +73,6 @@ void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, struct D2UnitSt
 void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);

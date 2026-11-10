@@ -512,43 +512,6 @@ int __fastcall Unreferenced_00460810(D2UnitStrc * param_1) {
     return 0;
 }
 
-void __stdcall CLIENT_SetAnimModeAndMoveToCurrentPos(eD2PlayerAnimMode nAnimMode, BOOL bMovePlayerUnit, D2UnitStrc * pUnit) {
-    int nX;
-    int nY;
-    UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, nAnimMode);
-    if (!bMovePlayerUnit) {
-      return;
-    }
-
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
-    if (pUnit != pPlayerUnit_lcl) {
-      return;
-    }
-
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-    if (!(nX && nY)) {
-      return;
-    }
-
-    UNIT::Path::PATH_MoveUnitToPoint(pUnit, (uint16_t)nX, nY, 0, 0, 0);
-}
-
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     BOOL eState;
     uint32_t nCount;
