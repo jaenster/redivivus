@@ -87,8 +87,8 @@ int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer) {
       dwTickCount = GetTickCount();
       if (dwTickCount >= gnTimerNextFireTick) {
         pOVar1 = pTimer->sControl.fpOnPress;
+        pCallbackArg.pControl = &pTimer->sControl;
         if (pOVar1) {
-          pCallbackArg.pControl = &pTimer->sControl;
           (*pOVar1)(&pCallbackArg);
         }
 
