@@ -14,20 +14,67 @@
 # include of a module the includer may not see, per module pair). It is printed
 # here and must exist; CHECK_BUILD_REPORTS=<dir> keeps a copy of it.
 #
-# CHECK_BUILD_WORK picks a fixed work directory instead of a fresh temporary one,
-# so the paths in every compile line stay the same between runs. When ccache is
-# installed it is used as the compiler launcher, and a fixed directory is what
-# lets it hit across runs.
+# CHECK_BUILD_WORK picks a fixed parent for an owned work directory instead of
+# a fresh temporary one, so the paths in every compile line stay the same
+# between runs. Other files in the parent are preserved. When ccache is
+# installed it is used as the compiler launcher, and a fixed path lets it hit.
 set -euo pipefail
 
 SRC=${1:-$(git -C "$(dirname "$0")/.." rev-parse --show-toplevel)}
 REF=${2:-HEAD}
 if [ -n "${CHECK_BUILD_WORK:-}" ]; then
-  WORK=$CHECK_BUILD_WORK; rm -rf "$WORK"; mkdir -p "$WORK"
+  mkdir -p "$CHECK_BUILD_WORK"
+  WORK_PARENT=$(cd "$CHECK_BUILD_WORK" && pwd -P)
+  WORK="$WORK_PARENT/.redivivus-check-build"
+  OWNER="$WORK/.redivivus-check-build-owned"
+  WORK_MARKER=redivivus-check-build-v1
+  LOCK="$WORK_PARENT/.redivivus-check-build.lock"
+  LOCK_OWNER="$LOCK/owner"
+  LOCK_TOKEN="$$:$RANDOM:$RANDOM"
+  WORK_OWNED=0
+  if ! mkdir "$LOCK" 2>/dev/null; then
+    echo "work path is in use: $LOCK (if stale, confirm no run is active before removing the lock)" >&2
+    exit 2
+  fi
+  if ! printf '%s\n' "$LOCK_TOKEN" > "$LOCK_OWNER"; then
+    rmdir "$LOCK" 2>/dev/null || true
+    echo "could not mark work lock: $LOCK" >&2
+    exit 2
+  fi
+  cleanup_fixed_work() {
+    if [ -d "$LOCK" ] && [ ! -L "$LOCK" ] &&
+       [ -f "$LOCK_OWNER" ] && [ ! -L "$LOCK_OWNER" ] &&
+       [ "$(cat "$LOCK_OWNER")" = "$LOCK_TOKEN" ]; then
+      if [ "$WORK_OWNED" = 1 ] && { [ -e "$WORK" ] || [ -L "$WORK" ]; }; then
+        if [ -d "$WORK" ] && [ ! -L "$WORK" ] &&
+           [ -f "$OWNER" ] && [ ! -L "$OWNER" ] &&
+           [ "$(cat "$OWNER")" = "$WORK_MARKER" ]; then
+          rm -rf "$WORK" || return 1
+        else
+          echo "leaving work path with changed ownership: $WORK" >&2
+        fi
+      fi
+      rm -f "$LOCK_OWNER"
+      rmdir "$LOCK"
+    fi
+  }
+  trap cleanup_fixed_work EXIT
+  if [ -e "$WORK" ] || [ -L "$WORK" ]; then
+    if [ ! -d "$WORK" ] || [ -L "$WORK" ] || [ ! -f "$OWNER" ] || [ -L "$OWNER" ] ||
+       [ "$(cat "$OWNER")" != "$WORK_MARKER" ]; then
+      echo "refusing to remove unowned work path: $WORK" >&2
+      exit 2
+    fi
+    WORK_OWNED=1
+    rm -rf "$WORK"
+  fi
+  mkdir "$WORK"
+  WORK_OWNED=1
+  printf '%s\n' "$WORK_MARKER" > "$OWNER"
 else
   WORK=$(mktemp -d)
+  trap 'rm -rf "$WORK"' EXIT
 fi
-trap 'rm -rf "$WORK"' EXIT
 
 for tool in git cmake i686-w64-mingw32-g++ i686-w64-mingw32-objdump; do
   command -v "$tool" >/dev/null || { echo "missing tool: $tool" >&2; exit 2; }
