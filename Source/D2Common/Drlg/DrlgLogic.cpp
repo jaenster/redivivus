@@ -247,12 +247,12 @@ void __stdcall DRLGLOGIC_FillTileGridFlags(D2RoomExStrc * pRoomEx) {
       nGridFlags = pRoomEx->sCoords.WorldPosition.x;
       pCoordList = pRoomEx->pDrlgCoordList;
       if (!pCoordList) {
-        *(uint32_t*)&pTileData[nTileIndex].nGridFlags = 0;
+        *(uint32_t*)&pTileData[nTileIndex].pRoomCoordList = 0;
       } else if (pCoordList->eFlags & 1) {
-        *(uint32_t*)&pTileData[nTileIndex].nGridFlags = 0;
+        *(uint32_t*)&pTileData[nTileIndex].pRoomCoordList = 0;
       } else {
         nGridFlags = DrlgGrid::GetGridFlags(&pCoordList->sCoordIndexGrid, pTileData[nTileIndex].nPosX + nGridFlags - nGridFlags, pTileData[nTileIndex].nPosY);
-        *(int*)&pTileData[nTileIndex].nGridFlags = nGridFlags;
+        *(int*)&pTileData[nTileIndex].pRoomCoordList = nGridFlags;
       }
 
       nTileIndex++;

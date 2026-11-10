@@ -346,7 +346,7 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
                   }
                   if ((int)eUnitStat >= 0x43 && (int)eUnitStat <= 0x44) {
                     pGame = UNIT::SUnit::GetGamePointer(pUnit);
-                    nDiffResistPenalty = UNIT::SUnitDmg::DAMAGE_GetMonsterDelayByDifficulty((D2UnitStrc*)pGame, pUnit);
+                    nDiffResistPenalty = UNIT::SUnitDmg::DAMAGE_GetMonsterDelayByDifficulty(pGame, pUnit);
                     if (nValue_00 < nDiffResistPenalty) {
                       nValue_00 = nDiffResistPenalty;
                     }

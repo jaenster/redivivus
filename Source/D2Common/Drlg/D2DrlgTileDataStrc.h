@@ -26,7 +26,7 @@ struct D2DrlgTileDataStrc {
     /* 0x04 */ int nScreenY; // Screen Y coordinate (from minimap->screen transform + 0x28)
     /* 0x08 */ int nPosX; // Tile X relative to room origin
     /* 0x0C */ int nPosY; // Tile Y relative to room origin
-    /* 0x10 */ struct D2RoomCoordListStrc * nGridFlags; // Grid cell flags from DrlgCoordList
+    /* 0x10 */ struct D2RoomCoordListStrc * pRoomCoordList; // Room coord-list entry this wall tile belongs to (from the coord-index grid), NULL when the room has none; used for player-occlusion tests
     /* 0x14 */ int nFlags; // Tile draw flags: 0x400 hidden while alpha is 0, 0x8 hidden after a fade-to-hide, 0x1c000 render-layer mask, 0x20000 drawn this frame (dWallPass)
     /* 0x18 */ struct D2TileLibraryEntryStrc * pTileLibraryEntry; // Pointer to DT1 tile library entry
     /* 0x1C */ int nTileType; // Tile orientation/type (0=floor, 3=left wall, 4=right wall, 0xD=shadow, etc)

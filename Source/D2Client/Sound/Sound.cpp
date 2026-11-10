@@ -699,8 +699,8 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
     return (uint32_t)(pChanB < pChanA);
 }
 
-uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * nSoundId) {
-    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (intptr_t)nSoundId);
+uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * pUnit) {
+    D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (intptr_t)pUnit);
     return (uint32_t)(pChannel != 0);
 }
 

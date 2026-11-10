@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2LevelsTxt;
+struct D2MonsterRegionFieldStrc;
 struct D2MonsterRegionStrc;
 struct D2PoolManagerStrc;
 struct D2RoomStrc;
@@ -45,7 +46,7 @@ void __fastcall AllocMonsterRegion(struct D2PoolManagerStrc * pMemory, struct D2
 void __fastcall FreeMonsterRegion(struct D2PoolManagerStrc * pMemory, struct D2MonsterRegionStrc * * ppMonsterRegion);
 struct D2MonsterRegionStrc * __fastcall ReturnMonsterRegionEntryForLevel(struct D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel);
 // Looks up a monster's entry in the region spawn table by class ID, or registers a new entry if the monster qualifies as a multi-piece champion (TxtMonStatsEx.TotalPieces > 2). Returns a pointer to the matching D2MonsterRegionFieldStrc, or NULL if the monster is a special-cased superunique (IDs 0xC3, 0xC4, 0x126, 0x128) or the table is full. Rolls champion-pack seed via SEED_RollChampionPack on insertion.
-short * __fastcall InitializeSpawnCount(struct D2MonsterRegionStrc * * ppMonsterRegion, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
+struct D2MonsterRegionFieldStrc * __fastcall InitializeSpawnCount(struct D2MonsterRegionStrc * * ppMonsterRegion, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
 // @wasnamed AllocMonsterRegion - one name on two different functions.
 // @evidence Derives pGame->dwMonSeed via the LCG multiplier 0x6ac690c5 with
 // seedHigh 0x29a, then calls 005479c0. A seeding wrapper, not the allocator.

@@ -1507,7 +1507,7 @@ void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nY, int32_t nX
       case UNIT_OBJECT:
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
       D2Common::Units::InitializeStaticPath(pUnit, pRoom, nY, nX);
-      if (pObjectsTxt->HasCollision[pUnit->eAnimMode.ePlayerMode]) {
+      if (pObjectsTxt->HasCollision[pUnit->eAnimMode.eObjectMode]) {
         D2Common::Units::BlockCollisionPath(pUnit, pRoom, nY, nX);
       }
       if (!pRoom) {
@@ -2022,7 +2022,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
         memset(pObjectData, 0, 0x38);
         pDVar1 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
         pAllocUnit->pUnitData.pUnitDataObject->pTxtObjectsLine = pDVar1;
-        pAllocUnit->eAnimMode.ePlayerMode = nInitialMode;
+        pAllocUnit->eAnimMode.eObjectMode = nInitialMode;
         D2Common::Units::AllocStaticPath(pAllocUnit);
         Objects::OBJECT_InitializeObject(pGame, pAllocUnit, pMonsterData, pRoom, nPosX, nPosY);
         break;

@@ -678,7 +678,7 @@ static int32_t __stdcall WALL2_IsTileOccludingPlayer(D2DrlgTileDataStrc * pTileD
     D2DrlgRoomCoordsStrc roomCoords;
     if (gbWall2UsePrecomputedOccluder) {
       D2RoomCoordListStrc* pDVar1;
-      pDVar1 = pTileData->nGridFlags;
+      pDVar1 = pTileData->pRoomCoordList;
       if (!pDVar1) {
         return 0;
       }

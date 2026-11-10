@@ -963,7 +963,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(::SGAMEDATA * 
 
 // Server-side handler that determines whether an NPC wants to initiate a quest interaction with a player unit. Validates that pUnit is a player and that the target NPC's MonStats.interact flag is set. Iterates the game's quest list for the player's current act; for each quest calls fpActiveFilter to check eligibility against the player's quest record. On first match, sends packet 0x8A (NpcWantsInteract) to the client and returns 1. Triggers fatal error if called with bad state (null quest-set, bad function pointer, null player data, null quest record).
 // @sourcefile .\QUESTS\QUESTS.CPP
-uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * nNpcClassId) {
+uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpcUnit) {
     D2QuestDataStrc* pQuestData;
     uint8_t nClientAct;
     bool bQuestActive;
@@ -973,9 +973,9 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2GSPacketSrv0x8A sPacket;
     int32_t nLine;
     D2QuestControlStrc* pQuestControl;
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (nNpcClassId ? nNpcClassId->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (pNpcUnit ? pNpcUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nTargetClassId;
-      nTargetClassId = nNpcClassId->nClassId;
+      nTargetClassId = pNpcUnit->nClassId;
       if (nTargetClassId < 0 || nTargetClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nTargetClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
@@ -1013,9 +1013,9 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
               exit(-1);
             }
 
-            bQuestActive = pQuestData->fpActiveFilter(pQuestData, nTargetClassId, pUnit, pPlayerData->pQuestRecord[pGame->nDifficulty], nNpcClassId);
+            bQuestActive = pQuestData->fpActiveFilter(pQuestData, nTargetClassId, pUnit, pPlayerData->pQuestRecord[pGame->nDifficulty], pNpcUnit);
             if (bQuestActive) {
-              sPacket.nUnitGUID = nNpcClassId->nUnitGUID;
+              sPacket.nUnitGUID = pNpcUnit->nUnitGUID;
               sPacket.nPacketId = 0x8a;
               sPacket.nUnitType = '\x01';
               pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0x80d);

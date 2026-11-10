@@ -367,13 +367,13 @@ static void __stdcall DAMAGE_ApplyBurning(D2UnitStrc * pUnit, int32_t nBurnRate,
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pBurnStatList, UNITSTAT_hpregen, -nBurnRate, 0);
 }
 
-int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(D2UnitStrc * pUnit, D2UnitStrc * pMonster) {
+int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(::SGAMEDATA * pGame, D2UnitStrc * pMonster) {
     if (pMonster && pMonster->eUnitType == UNIT_MONSTER) {
       int nVictimClassId;
       nVictimClassId = pMonster->nClassId;
       D2MonStatsTxt* pMonStatsTxt = nVictimClassId >= 0 && nVictimClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nVictimClassId : nullptr;
       if (pMonStatsTxt) {
-        return (int)pMonStatsTxt->aColdEffect[*(uint8_t*)((intptr_t)&pUnit->uSideData + 9)];
+        return (int)pMonStatsTxt->aColdEffect[pGame->nDifficulty];
       }
     }
 
@@ -551,7 +551,7 @@ static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFram
 
     D2StatListExStrc* pFreezeStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_freeze);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    int32_t nDelayCheckResult = DAMAGE_GetMonsterDelayByDifficulty((D2UnitStrc*)pGame, pUnit2);
+    int32_t nDelayCheckResult = DAMAGE_GetMonsterDelayByDifficulty(pGame, pUnit2);
     if (nDelayCheckResult >= 0) {
       return;
     }
@@ -1531,21 +1531,20 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
     pDmg->dwDmgTotal = pDmg->dwLifeLeech + nDrStatValue;
 }
 
-uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(void * pThis, D2UnitStrc * pUnit) {
-    if (!(!pThis || *(int*)pThis != 1)) {
-      if (!*(uint32_t**)((char*)pThis + 0x14)) {
-        return 0;
-      }
-
-      D2MonStatsTxt* nMonsterIndex = (D2MonStatsTxt*)**(uint32_t**)((char*)pThis + 0x14);
-      if (!nMonsterIndex) {
-        return 0;
-      }
-
-      return (uint32_t)nMonsterIndex->aDrain[*(uint8_t*)((intptr_t)&pUnit->uSideData + 9)];
+uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(D2UnitStrc * pMonster, ::SGAMEDATA * pGame) {
+    if ((pMonster ? pMonster->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 100;
+    }
+    if (!pMonster->pUnitData.pUnitDataMonster) {
+      return 0;
     }
 
-    return 100;
+    D2MonStatsTxt* nMonsterIndex = pMonster->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    if (!nMonsterIndex) {
+      return 0;
+    }
+
+    return (uint32_t)nMonsterIndex->aDrain[pGame->nDifficulty];
 }
 
 // LEECH CALCULATION: % of physical damage dealt, AFTER DR.

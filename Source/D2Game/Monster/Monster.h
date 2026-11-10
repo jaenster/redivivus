@@ -17,6 +17,7 @@
 // Forward declarations
 struct D2MonPropTxt;
 struct D2MonStats2Txt;
+struct D2MonsterRegionFieldStrc;
 struct D2RoomStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;

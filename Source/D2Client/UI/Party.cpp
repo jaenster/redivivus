@@ -213,7 +213,7 @@ int Unreferenced_0049a2a0() {
     return (uint32_t)((int)uVar1 >= 9);
 }
 
-static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * pUiParty, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
+static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * szPlayerName, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
     int i;
     uint16_t wszName[100];
     char szEllipsisUtf8[5];
@@ -222,7 +222,7 @@ static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * pUiParty, int32_t 
       wszName[i] = L'\0';
     }
 
-    D2Lang::UTF8_ConvertToWideChar(wszName, (char*)pUiParty, 100);
+    D2Lang::UTF8_ConvertToWideChar(wszName, (char*)szPlayerName, 100);
     uint16_t* pTruncate;
     pTruncate = wszName + 99;
     memcpy(szEllipsisUtf8, "...", 4);

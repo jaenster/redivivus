@@ -120,7 +120,7 @@ namespace D2Game::UNIT::SUnitDmg {
 uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int32_t nMonTypeB);
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall DAMAGE_OnColdExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
-int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster);
+int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(::SGAMEDATA * pGame, struct D2UnitStrc * pMonster);
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 // Computes the physical damage total in nParam throughout the body; the only caller (DAMAGE_CalculateOffensiveDamage) assigns the never-set local nPhysDmgResult straight from this call's result into pDmgStrc->dwPhysDamage, proving the value is meant to flow back. The final D2ApplyPercent(nParam,...) call (when bParam!=0x80) also drops its own int32_t return, which is this function's true final value.
 uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(struct D2UnitStrc * pUnit, int32_t bUseWeaponStats, struct D2UnitStrc * pWeapon, int32_t nMinDmg, int32_t nMaxDmg, int32_t nBonusPercent, uint32_t nFlatDamage, uint8_t byScale);
@@ -139,7 +139,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, struct D2Un
 // KEY: Absorb happens AFTER resist (less effective than it seems).
 // Table at 0x00732980 (12 entries, 44 bytes): resist/pierce/absorb stats per element.
 void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, struct D2DamageStrc * pBypassFlags);
-uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(void * pThis, struct D2UnitStrc * pUnit);
+uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(struct D2UnitStrc * pMonster, ::SGAMEDATA * pGame);
 // Core server-side damage-application routine. Validates the attacker can hit the victim (UNITS_CheckIfCanAttackTarget, town/killable rules) then optionally applies defensive reduction, dispatches hit/got-hit unit events, clamps physical damage to current HP, runs life/mana leech, healing, then subtracts total damage from the victim's hitpoints (clamping the sub-256 remainder to 0). Also applies drain (mana/stamina) and status effects: stun, cold, freeze, poison, burning. Sets wResultFlags death bit (2) when HP reaches 0, otherwise schedules HP-regen events for monsters and clears Assassin charge-up states; dispatches death events on kill. Mutates pDamage and victim stats in place.
 void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, int32_t bApplyDefenseReduction, struct D2DamageStrc * pDamage);
 // @sourcefile .\UNIT\SUnitDmg.cpp

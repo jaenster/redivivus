@@ -851,7 +851,7 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
 }
 
 // Core initialization of a freshly allocated monster unit from its MonStats/MonStats2 record. Validates nClassId against the MonStats table, allocates the unit stat list and sets base stats: level (per-difficulty from TreasureClass area), attackrate, velocity%, animrate, and the six per-difficulty resistances (dmg/magic/fire/light/cold/poison), then applies difficulty scaling and base maxhp/hitpoints. Allocates the dynamic path (room nParam1, mode/coords from params) and sets velocity. Creates a player inventory for NPCs/interactables (or special class ids). Sets the update flag (nParam2). For dead/no-deadCol monsters removes collision, shrinks width and switches to corpse collision. Randomizes start gfx frame; sets targetable/shadow/valid-target/can-be-attacked unit flags from MonStats2 isSel/shadow/isAtt. Sets monstats type, special-monster init, light map, creates skill list, applies unique modifiers, then adds the monster's up to 8 skills (level += difficulty MonsterSkillBonus) with their modes. Finally computes an initial facing direction (random or special-case per base/class id, e.g. catapult firing position) and sets the path direction. nParam1=room ptr, pSkillIdPtr/nOverrideMode feed path alloc.
-void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nOverrideMode, int32_t pSkillIdPtr, int32_t nClassId, uint32_t nAnimMode) {
+void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nOverrideMode, int32_t nY, int32_t nClassId, uint32_t nAnimMode) {
     D2InventoryStrc* pInventory;
     eD2UnitFlags eUpdatedFlags;
     D2SkillListStrc* pSkillsList;
@@ -897,7 +897,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2Common::Monsters::MONSTERS::MONSTER_ApplyDifficultyScaling(pUnit, GAME::Game::CLIENT_CheckExpansion(), byDifficulty);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, 0x6400, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0x6400, 0);
-    D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nOverrideMode, pSkillIdPtr, pUnit, 1);
+    D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nOverrideMode, nY, pUnit, 1);
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, (int)pMonStatsTxt->Velocity << 8, ".\\UNIT\\Monster.cpp", 0x208);
@@ -945,16 +945,16 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     MonUnique::MONUNIQUE_ApplyModifierEffects(pUnit);
     pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels(nDifficulty);
     nMonStats2Idx = pDiffLevels->MonsterSkillBonus;
-    pSkillIdPtr = (int32_t)pMonStatsTxt->aSkill;
+    nY = (int32_t)pMonStatsTxt->aSkill;
     i = 0;
     do {
-      if (*(short int*)pSkillIdPtr >= 0 && pMonStatsTxt->aSkLvl[i] > '\0') {
-        D2Common::Skills::AddSkill(pUnit, (int)*(short int*)pSkillIdPtr, pMonStatsTxt->aSkLvl[i] + nMonStats2Idx, 1, ".\\UNIT\\Monster.cpp", 0x23f);
+      if (*(short int*)nY >= 0 && pMonStatsTxt->aSkLvl[i] > '\0') {
+        D2Common::Skills::AddSkill(pUnit, (int)*(short int*)nY, pMonStatsTxt->aSkLvl[i] + nMonStats2Idx, 1, ".\\UNIT\\Monster.cpp", 0x23f);
         nRandStartFrame = (uint32_t)pMonStatsTxt->aSkMode[i];
-        D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)*(short int*)pSkillIdPtr), nRandStartFrame);
+        D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)*(short int*)nY), nRandStartFrame);
       }
 
-      pSkillIdPtr += 2;
+      nY += 2;
       i++;
     } while (i < 8);
 
@@ -964,7 +964,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
       return;
     }
 
-    *(uint8_t*)(char*)&pSkillIdPtr = 0;
+    *(uint8_t*)(char*)&nY = 0;
     if (pUnit->eUnitType == UNIT_MONSTER) {
       i = nMonStats2Idx;
       if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx) {
@@ -982,21 +982,21 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
       D2SeedStrc DVar1;
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
-      *(uint8_t*)(char*)&pSkillIdPtr = (uint8_t)DVar1.nSeedLow & 0x3f;
+      *(uint8_t*)(char*)&nY = (uint8_t)DVar1.nSeedLow & 0x3f;
     }
     if (i == 0x60) {
-      *(uint8_t*)(char*)&pSkillIdPtr = 7;
+      *(uint8_t*)(char*)&nY = 7;
     } else if (i == 0x12d) {
       nErrLine = Source::ClientEngine::CLIENT_ForEachUnitInAdjacentRooms(pUnit, nullptr, nullptr, (fnRoomUnitScanCallback)MONSTER_CheckCatapultFiringPosition);
-      *(uint8_t*)(char*)&pSkillIdPtr = (uint8_t)nErrLine;
+      *(uint8_t*)(char*)&nY = (uint8_t)nErrLine;
     }
     if (nClassId == 0x15f) {
-      *(uint8_t*)(char*)&pSkillIdPtr = 0x18;
+      *(uint8_t*)(char*)&nY = 0x18;
       goto apply_facing;
     }
     if (nClassId != 0x160) {
       if (nClassId == 0x161) {
-        *(uint8_t*)(char*)&pSkillIdPtr = 0x28;
+        *(uint8_t*)(char*)&nY = 0x28;
         goto apply_facing;
       }
       if (nClassId != 0x165 && nClassId != 0x158) {
@@ -1004,9 +1004,9 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
       }
     }
 
-    *(uint8_t*)(char*)&pSkillIdPtr = 0;
+    *(uint8_t*)(char*)&nY = 0;
     apply_facing:
-    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)pSkillIdPtr);
+    D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)nY);
 }
 
 void __fastcall FreeMonster(D2UnitStrc * pUnit) {

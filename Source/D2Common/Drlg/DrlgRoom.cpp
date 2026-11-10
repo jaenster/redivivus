@@ -1209,7 +1209,7 @@ static void DRLGROOM_FlagRoomExBorderingTown(D2RoomExStrc * pRoomEx) {
 
 // Grows pDrlgRoomEx->ppDrlgRoomsExNear by 1, appends pRoom, and reorders the near-room list. Halts on realloc failure.
 // @sourcefile .\DRLG\DrlgRoom.cpp
-static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDrlgRoomEx, D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomExStrc, D2RoomExStrc * pRoom) {
+static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDrlgRoomEx, D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoom) {
     pDrlgRoomEx->nDrlgRoomsExNearCount++;
     D2RoomExStrc** ppNewNearRooms = (D2RoomExStrc**)D2_REALLOC_POOL_AT(pMemory, pDrlgRoomEx->ppDrlgRoomsExNear, pDrlgRoomEx->nDrlgRoomsExNearCount * 4, ".\\DRLG\\DrlgRoom.cpp", 0x314);
     pDrlgRoomEx->ppDrlgRoomsExNear = ppNewNearRooms;
@@ -1247,7 +1247,7 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
       }
       if (pDstRoomExIter->eRoomExFlags & 1 << D2_SHIFT_COUNT(dstVisSlot + 4)) {
         if (warpDestLevel != -1) {
-          DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter, pDstRoomExIter);
+          DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter);
           DRLGROOMEX_AllocRoomTile(pDstRoomExIter, srcVisSlot, pRoomEx);
           return 1;
         }
@@ -1268,7 +1268,7 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
           nGapY = nGapY - pDstRoomExIter->sCoords.WorldSize.y - nDstRoomY;
         }
         if (nGapX < 6 && nGapY < 6) {
-          DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter, pDstRoomExIter);
+          DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter);
           bLinkAdded = 1;
         }
       }

@@ -1844,22 +1844,22 @@ static void __stdcall SKILLS_HandleDualWieldWeaponSwap(int * pSwapState, D2UnitS
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
-int32_t __fastcall SKILLS_CltStartSkillCast(D2UnitStrc * pDynamicPath, int * pnCastArgs) {
-    BOOL bCanDualWield = D2Common::Units::CanDualWield(pDynamicPath);
-    if (bCanDualWield && (!pDynamicPath || pDynamicPath->eUnitType != UNIT_MONSTER)) {
-      SKILLS_HandleDualWieldWeaponSwap(pnCastArgs, pDynamicPath);
+int32_t __fastcall SKILLS_CltStartSkillCast(D2UnitStrc * pUnit, int * pnCastArgs) {
+    BOOL bCanDualWield = D2Common::Units::CanDualWield(pUnit);
+    if (bCanDualWield && (!pUnit || pUnit->eUnitType != UNIT_MONSTER)) {
+      SKILLS_HandleDualWieldWeaponSwap(pnCastArgs, pUnit);
     }
 
     D2UnitStrc* pFoundTarget = UNIT::Player::UNITS_FindClientSideUnit(pnCastArgs[3], pnCastArgs[2]);
     if (pFoundTarget) {
       int32_t nCastResult;
-      D2Common::Units::SetTargetUnitForDynamicUnit(pDynamicPath, pFoundTarget);
-      UNIT::CUnit::FaceTarget(pDynamicPath, 0);
-      nCastResult = SKILLS_CastSkillClient(*pnCastArgs, pDynamicPath, pnCastArgs[1], pnCastArgs[4]);
+      D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pFoundTarget);
+      UNIT::CUnit::FaceTarget(pUnit, 0);
+      nCastResult = SKILLS_CastSkillClient(*pnCastArgs, pUnit, pnCastArgs[1], pnCastArgs[4]);
       return nCastResult;
     }
 
-    UNIT::UnitMode::HandleMessage(7, pDynamicPath, nullptr, 0);
+    UNIT::UnitMode::HandleMessage(7, pUnit, nullptr, 0);
     D2Common::Logging::LOGGING_LogLine(1, 2, 4, 0x40, ".\\SKILLS\\Skills.cpp", 0x7c2, "StartsStartSkillID - Invalid Target");
     return 0;
 }

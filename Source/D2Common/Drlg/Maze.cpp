@@ -1311,7 +1311,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
 }
 
 // Tests whether a new maze room can be placed adjacent to pRoomEx in the given direction. Allocates a temporary RoomEx, calls ReplaceRoomWithNewRoom to check placement; on failure frees the temp and returns 0. On success links nodes, registers the room in the level, picks a preset, then immediately frees the room — this is a probe-only check, not a commit. Returns 1 if placement would succeed, 0 otherwise.
-static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection param_eax, D2RoomExStrc * pRoomEx) {
+static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection eDirection, D2RoomExStrc * pRoomEx) {
     D2RoomExStrc* pTestRoom;
     int bReplaced;
     D2LvlMazeTxt* pLvlMazeTxt;
@@ -1326,12 +1326,12 @@ static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection param_eax, D2RoomExS
         pLvlMazeTxt = pTestRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
         pTestRoom->sCoords.WorldSize.x = pLvlMazeTxt->SizeX;
         pTestRoom->sCoords.WorldSize.y = pLvlMazeTxt->SizeY;
-        bReplaced = ReplaceRoomWithNewRoom(param_eax, pTestRoom, pRoomEx);
+        bReplaced = ReplaceRoomWithNewRoom(eDirection, pTestRoom, pRoomEx);
         if (!bReplaced) {
           DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
           pTestRoom = 0;
         } else {
-          DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomEx, pTestRoom, param_eax);
+          DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomEx, pTestRoom, eDirection);
           DrlgRoom::AddRoomExToLevel(pRoomEx->pLevel, pTestRoom);
           DRLGMAZE_PickRoomPreset(pTestRoom, 1);
         }
@@ -1341,7 +1341,7 @@ static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection param_eax, D2RoomExS
 
         return (uint32_t)(pTestRoom != 0);
       }
-      if (pOrth->neDrlgDirection == param_eax) {
+      if (pOrth->neDrlgDirection == eDirection) {
         break;
       }
 

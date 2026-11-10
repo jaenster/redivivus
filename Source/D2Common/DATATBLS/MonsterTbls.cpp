@@ -1644,7 +1644,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
     } while (nCounter < sgtDataTable.nTxtHirelingSize);
 }
 
-void __stdcall MONSTERTBLS_FreeMonLvlTxt() {
+void __stdcall MONSTERTBLS_FreeHirelingTxt() {
     DataTbls::UnloadBin(sgtDataTable.pTxtHireling);
     sgtDataTable.nTxtHirelingSize = 0;
     int* pIdLine = sgtDataTable.nTxtHirelingIdLines + 0x100;
@@ -2760,7 +2760,7 @@ void __stdcall MONSTERTBLS_FreeMonUModTxt() {
     }
 
     DataTbls::UnloadBin(sgtDataTable.pTxtNpc);
-    MONSTERTBLS_FreeMonLvlTxt();
+    MONSTERTBLS_FreeHirelingTxt();
     MONSTERTBLS_FreeMonPresetTxt();
     if (sgtDataTable.pTxtSuperUniquesLink) {
       Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtSuperUniquesLink);

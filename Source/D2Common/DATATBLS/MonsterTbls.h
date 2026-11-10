@@ -151,7 +151,7 @@ void __fastcall TXT_AllocTxt_superuniques(struct D2PoolManagerStrc * pMemory);
 void Unreferenced_006556a0();
 // Loads and compiles hireling.txt into sgtDataTable.pTxtHireling (record stride 0x118). Builds the column-binding descriptor (version/id/class/act/difficulty/seller/gold/level, namefirst/namelast, per-level stat-growth columns, 6 skill/mode/chance/level groups linked to the Skills table, hiredesc linked to the HireDesc table, equipment slots) and calls CompileTxt. Afterward initializes the nTxtHirelingIdLines lookup table to -1, resolves namefirst/namelast string-table ids, validates them on expansion games (error-halts on missing/ordering/range violations), and fills the (class,act-difficulty) -> row-index map. __fastcall(pMemory). Side effect: populates global hireling data table.
 void __fastcall TXT_AllocTxt_hireling(struct D2PoolManagerStrc * pMemory);
-void __stdcall MONSTERTBLS_FreeMonLvlTxt();
+void __stdcall MONSTERTBLS_FreeHirelingTxt();
 struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, int32_t pPrevEntry);
 struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry);
 // Loads and compiles the npc.txt data table (vendor pricing). Builds a D2BinFieldInputStrc field-definition array (npc name linked to MonStats, sell/buy/rep mult, questflag A/B/C, per-quest sell/buy/rep multipliers, and max buy gold per difficulty) and passes it to DataTbls::CompileTxt with row size 0x4C, storing the result into sgtDataTable.pTxtNpc and the row count into sgtDataTable.nTxtNpcSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.

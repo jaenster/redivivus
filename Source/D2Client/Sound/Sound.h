@@ -274,7 +274,7 @@ void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId);
 BOOL __fastcall SOUND_IsChannelAvailable(struct D2SoundChannelStrc * pChanA, struct D2SoundChannelStrc * pChanB, int32_t bComparePan, int32_t bCompareTime);
-uint32_t __fastcall SOUND_FindChannelForSound(struct D2UnitStrc * nSoundId);
+uint32_t __fastcall SOUND_FindChannelForSound(struct D2UnitStrc * pUnit);
 int Unreferenced_004b9eb0();
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration);
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime);
