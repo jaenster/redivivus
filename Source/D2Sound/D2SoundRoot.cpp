@@ -52,16 +52,16 @@ DWORD __stdcall SOUND_GetLanguageCode() {
     return LanguageCode;
 }
 
-IDirectSound * __stdcall SOUND_GetSpeakerConfigFlag() {
-    return gnDirectSoundInitStatus;
+IDirectSound * __stdcall SOUND_GetDirectSoundDevice() {
+    return gpDirectSound;
 }
 
-DWORD __stdcall SOUND_GetDirectSoundInitializedFlag() {
-    return gnDSoundPrimaryBufferDelay;
+DWORD __stdcall SOUND_GetPrimaryBufferModeFlag() {
+    return gbDSoundPrimaryBufferMode;
 }
 
 DWORD __stdcall SOUND_GetSound3DFlag() {
-    return gnSound3DLoudness;
+    return gbSound3DEnabled;
 }
 
 DWORD __stdcall SOUND_GetSoundQualityFlag() {

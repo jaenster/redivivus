@@ -90,7 +90,7 @@ void __stdcall SPELLSEL_ClearWaitingForSkillFlag();
 int __stdcall SPELLSEL_IsWaitingForSkill();
 void __stdcall ARCHIVE_LoadSpellsClassSkilltree();
 void __stdcall SPELLSEL_FreeSkilltreeGraphic();
-void __thiscall SPELLSEL_DrawTabHeader(void * pThis, int32_t nYOffset);
+void __thiscall SPELLSEL_DrawTabHeader(uint16_t * pThis, int32_t nYOffset);
 void __stdcall SPELLSEL_DrawSkilltreeBackground(struct DC6 * pDC6, int32_t nSkillTreeTab);
 void __stdcall DRAW_UI_SkillsWindow_II();
 void __stdcall thunk_D2GFX_GetColorFromPalette_C();

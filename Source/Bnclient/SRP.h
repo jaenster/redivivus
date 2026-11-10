@@ -95,7 +95,7 @@ void __thiscall SRP_SeedRandom(struct D2Srp * * ppSrp, uint32_t dwSeed);
 void __fastcall SRP_FreeParameters(struct D2Srp * * ppSrp);
 void __thiscall SRP_ClientGenerateVerifier(void * pThis, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut);
 void __thiscall SRP_GenerateAccountCredentials(struct D2Srp * * pThis, char * pCredsBuf, char * szUsername, char * szPassword);
-BOOL __thiscall SRP_ClientKeyExchange(void * pThis, struct D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes);
+BOOL __thiscall SRP_ClientKeyExchange(struct D2Srp * * pThis, struct D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes);
 BOOL __thiscall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, void * pSrpContext, uint8_t * pServerProof);
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
 void __thiscall SRP_ServerComputePublicB(struct D2Srp * * pThis, uint8_t * nContextBase);

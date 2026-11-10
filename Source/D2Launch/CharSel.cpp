@@ -94,7 +94,7 @@ static uint16_t pBetaRealmNames[7][256] = {}; D2_STATIC_GUARD(pBetaRealmNames, "
 
 namespace D2Launch::CharSel {
 
-static uint32_t CHARSEL_FindRealmByName(char * szText) {
+static BOOL CHARSEL_FindRealmByName(char * szText) {
     char* pszRealmName;
     int32_t nCmp;
     int nIndex = 0;
@@ -1810,7 +1810,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
     uint16_t* pwszLocaleStr;
     ::D2WinTextBox* pTitleForm;
     int32_t nRegResult;
-    uint32_t nTextLine;
+    BOOL nTextLine;
     D2BNetGatewayAccessStr* pBNetGateway;
     char* pszRealmName;
     uint16_t wErrorStrId;
@@ -2392,7 +2392,6 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     int nSlotIndex;
     uint16_t* pwszLabel;
     ::D2WinTextBox* pSlotControl;
-    uint32_t nFoundRealmIndex;
     D2BNetGatewayAccessStr* pGatewayAccess;
     char* szRealmName;
     int nSlotY;
@@ -2483,8 +2482,8 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       D2Win::Src::D2WinTextBox::SetText(pSlotControl, pwszLabel, nRegResult, (bool)byTmp, nSlotIndex);
       nRegResult = Storm::Source::SReg::SRegLoadString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm, 0x100);
       if (nRegResult) {
-        nFoundRealmIndex = CHARSEL_FindRealmByName(PreferredClosedRealm);
-        if (nFoundRealmIndex) {
+        bIsExpansion = CHARSEL_FindRealmByName(PreferredClosedRealm);
+        if (bIsExpansion) {
           goto load_char_list;
         }
       }
@@ -2492,8 +2491,8 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
       Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pGatewayAccess, pGatewayAccess->nCurGatewayIdx), 0x7fffffff);
       Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
-      nFoundRealmIndex = CHARSEL_FindRealmByName(PreferredClosedRealm);
-      if (!nFoundRealmIndex) {
+      bIsExpansion = CHARSEL_FindRealmByName(PreferredClosedRealm);
+      if (!bIsExpansion) {
         nSlotIndex = MainMenus::MAINMENU_GetRealmCount();
         if (nSlotIndex > 0) {
           szRealmName = MainMenus::MAINMENU_GetRealmName(0);

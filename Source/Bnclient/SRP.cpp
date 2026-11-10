@@ -350,7 +350,7 @@ void __thiscall SRP_GenerateAccountCredentials(D2Srp * * pThis, char * pCredsBuf
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
-BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes) {
+BOOL __thiscall SRP_ClientKeyExchange(D2Srp * * pThis, D2SrpCredentialsStrc * pContext, void * pSaltBytes, void * pServerPublicBytes) {
     int bSharedSecretOk;
     uint32_t nSecretByteLen;
     BigData* pServerPublicB;
@@ -362,11 +362,11 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
     BigData* pClientPublicA = pSharedSecret;
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pSharedSecret, 0);
     if (nCompareResult == 1) {
-      SRP_ComputePasswordHash(*(D2Srp**)pThis, pSalt, pContext->szUsername, pContext->szPassword, &pPasswordHash);
+      SRP_ComputePasswordHash(*pThis, pSalt, pContext->szUsername, pContext->szPassword, &pPasswordHash);
       pSharedSecret = SHA::SHA1_BigIntFromUnsigned(0);
       pSharedSecretOut = pSharedSecret;
       pServerPublicB = SHA::SHA1_FromBigIntBytes(pContext->aClientPrivateKey_a, 0x20);
-      bSharedSecretOk = SRP_ClientComputeSharedSecret(*(D2Srp**)pThis, &pServerPublicB, &pClientPublicA, &pPasswordHash, &pSharedSecretOut);
+      bSharedSecretOk = SRP_ClientComputeSharedSecret(*pThis, &pServerPublicB, &pClientPublicA, &pPasswordHash, &pSharedSecretOut);
       SHA::SHA1_BigIntFree(pServerPublicB);
       SHA::SHA1_BigIntFree(pClientPublicA);
       SHA::SHA1_BigIntFree(pPasswordHash);
@@ -374,7 +374,7 @@ BOOL __thiscall SRP_ClientKeyExchange(void * pThis, D2SrpCredentialsStrc * pCont
         nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
         SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)sessionKeyBytes, nSecretByteLen);
         SHA::SHA1_BigIntFree(pSharedSecretOut);
-        SRP_ComputeClientProof(*(D2Srp**)pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, pContext->aClientProof_M1);
+        SRP_ComputeClientProof(*pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, pContext->aClientProof_M1);
         return 1;
       }
     }

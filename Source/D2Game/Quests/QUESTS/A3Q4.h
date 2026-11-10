@@ -66,7 +66,7 @@ void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, struct D2
 // Q21_PartySetGoldenBirdState (custom regs) -- broadcast the player's current Golden Bird sub-state to
 // every party member. Gets the player's party id (SUnit::GetPartyId); if in a party, runs
 // Q21_PlayerSetGoldenBirdQuestState over all members (ExecuteFunctionForEveryPartyMember). No-op solo.
-int __thiscall Q21_PartySetGoldenBirdState(void * pThis, ::SGAMEDATA * pGame);
+int __thiscall Q21_PartySetGoldenBirdState(struct D2UnitStrc * pThis, ::SGAMEDATA * pGame);
 // Q21_Callback_11 (__fastcall) -- MAIN Golden Bird NPC-dialog state machine (quest event 0xb).
 // Dispatches on (NPC id, dialog message id). Bails if quest already Completed. Transitions:
 //   Meshif(0xf5) msg 0x20f (give Jade): SetState Step0x02; advance flag->2; sync party; cache state=2.

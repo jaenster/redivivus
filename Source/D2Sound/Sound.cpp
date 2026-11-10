@@ -58,7 +58,7 @@ void __stdcall SOUND_ReleaseEAXInterfaces() {
 // Applies EAX environment parameters to gpDirectSoundEAXInterface. Two modes: gnSoundQualityMode==1 (simple: vol/distance/flags), ==2 (full: 14 reverb properties including decay, reflections, room size). Calls Set() on EAX property GUIDs for each param.
 void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
     D2FloatIntUnion fAttenuation;
-    if (!(gnSound3DLoudness && gpDirectSoundEAXInterface)) {
+    if (!(gbSound3DEnabled && gpDirectSoundEAXInterface)) {
       return;
     }
     if (gnSoundQualityMode == 1) {
@@ -100,9 +100,9 @@ void __stdcall SOUND_ShutdownDirectSound() {
       gpDSoundPrimaryBuffer->lpVtbl->Release(gpDSoundPrimaryBuffer);
       gpDSoundPrimaryBuffer = 0;
     }
-    if (gnDirectSoundInitStatus) {
-      gnDirectSoundInitStatus->lpVtbl->Release(gnDirectSoundInitStatus);
-      gnDirectSoundInitStatus = 0;
+    if (gpDirectSound) {
+      gpDirectSound->lpVtbl->Release(gpDirectSound);
+      gpDirectSound = 0;
     }
     if (!gbDirectSoundCritSecInitialized) {
       return;
@@ -121,7 +121,7 @@ void __stdcall SOUND_InitDirectSound() {
     BOOL BVar2;
     WAVEFORMATEX tSecondaryFormat;
     uint8_t aEAXSupportCaps[4];
-    if (gnDSoundPrimaryBufferDelay && gbDirectSoundDelayWorkaround) {
+    if (gbDSoundPrimaryBufferMode && gbDirectSoundDelayWorkaround) {
       return;
     }
     if (gbDirectSoundCritSecInitialized) {
@@ -131,7 +131,7 @@ void __stdcall SOUND_InitDirectSound() {
 
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gSoundSmpCs);
     gbDirectSoundCritSecInitialized = 1;
-    int hResultCall = DirectSoundCreate(0, &gnDirectSoundInitStatus, 0);
+    int hResultCall = DirectSoundCreate(0, &gpDirectSound, 0);
     if (hResultCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on DirectSoundCreate", szErrorMsg);
@@ -139,10 +139,10 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    IDirectSoundVtbl* pIVar1 = gnDirectSoundInitStatus->lpVtbl;
+    IDirectSoundVtbl* pIVar1 = gpDirectSound->lpVtbl;
     uint32_t dwCoopLevel = 2;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gnDirectSoundInitStatus, hWnd, dwCoopLevel);
+    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, hWnd, dwCoopLevel);
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on SetCooperativeLevel", szErrorMsg);
@@ -153,13 +153,13 @@ void __stdcall SOUND_InitDirectSound() {
     DSBUFFERDESC tPrimaryBufferDesc = {0};
     tPrimaryBufferDesc.dwSize = 0x14;
     tPrimaryBufferDesc.dwFlags = 1;
-    if (gnDSoundPrimaryBufferDelay) {
+    if (gbDSoundPrimaryBufferMode) {
       tPrimaryBufferDesc.dwFlags = 0x11;
     }
 
     tPrimaryBufferDesc.dwBufferBytes = 0;
     tPrimaryBufferDesc.lpwfxFormat = 0;
-    hResultDSCall = gnDirectSoundInitStatus->lpVtbl->CreateSoundBuffer(gnDirectSoundInitStatus, &tPrimaryBufferDesc, (void**)&gpDSoundPrimaryBuffer, nullptr);
+    hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tPrimaryBufferDesc, (void**)&gpDSoundPrimaryBuffer, nullptr);
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed CreateSoundBuffer", szErrorMsg);
@@ -168,14 +168,14 @@ void __stdcall SOUND_InitDirectSound() {
     }
 
     gDSoundCapsBuffer.dwSize = 0x60;
-    hResultDSCall = gnDirectSoundInitStatus->lpVtbl->GetCaps(gnDirectSoundInitStatus, &gDSoundCapsBuffer);
+    hResultDSCall = gpDirectSound->lpVtbl->GetCaps(gpDirectSound, &gDSoundCapsBuffer);
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed GetCaps", szErrorMsg);
       SOUND_ShutdownDirectSound();
       return;
     }
-    if (gnDSoundPrimaryBufferDelay && gDSoundCapsBuffer.dwMaxHw3DAllBuffers < 0x10) {
+    if (gbDSoundPrimaryBufferMode && gDSoundCapsBuffer.dwMaxHw3DAllBuffers < 0x10) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %d buffers available is less than min needed %d buffers for 3d sound", gDSoundCapsBuffer.dwMaxHw3DAllBuffers, 0x10);
       SOUND_ShutdownDirectSound();
       return;
@@ -199,7 +199,7 @@ void __stdcall SOUND_InitDirectSound() {
     }
 
     gnSoundQualityMode = 0;
-    if (gnSound3DLoudness) {
+    if (gbSound3DEnabled) {
       Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tSecondaryFormat, 1);
       DSBUFFERDESC tEaxBufferDesc = {0};
       tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
@@ -207,11 +207,11 @@ void __stdcall SOUND_InitDirectSound() {
       tEaxBufferDesc.dwBufferBytes = 0x400;
       tEaxBufferDesc.dwFlags = 0x12;
       if (!gnSoundQualityMode) {
-        hResultDSCall = gnDirectSoundInitStatus->lpVtbl->CreateSoundBuffer(gnDirectSoundInitStatus, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
+        hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
         if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0) || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 1, (ULONG*)aEAXSupportCaps) , hResultDSCall < 0 || (aEAXSupportCaps[0] & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(2) , !BVar2)) {
           SOUND_ReleaseEAXInterfaces();
           if (!gnSoundQualityMode) {
-            hResultDSCall = gnDirectSoundInitStatus->lpVtbl->CreateSoundBuffer(gnDirectSoundInitStatus, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
+            hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
             if (hResultDSCall < 0 || (hResultDSCall = gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IDirectSound3DBuffer, (void**)&gpEAXInterface1) , hResultDSCall < 0) || (hResultDSCall = gpEAXInterface1->lpVtbl->QueryInterface(gpEAXInterface1, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) , hResultDSCall < 0 || (hResultDSCall = gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 0, (ULONG*)aEAXSupportCaps) , hResultDSCall < 0 || (aEAXSupportCaps[0] & 3) != 3) || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(1) , !BVar2))) {
               SOUND_ReleaseEAXInterfaces();
               if (!gnSoundQualityMode) {
@@ -308,22 +308,22 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
       return;
     }
 
-    gnDSoundPrimaryBufferDelay = 1;
-    gnSound3DLoudness = 1;
+    gbDSoundPrimaryBufferMode = 1;
+    gbSound3DEnabled = 1;
     SOUND_InitDirectSound();
     if (gnDirectSoundInitialized) {
       return;
     }
 
-    gnDSoundPrimaryBufferDelay = 1;
-    gnSound3DLoudness = 0;
+    gbDSoundPrimaryBufferMode = 1;
+    gbSound3DEnabled = 0;
     SOUND_InitDirectSound();
     if (gnDirectSoundInitialized) {
       return;
     }
 
-    gnDSoundPrimaryBufferDelay = 0;
-    gnSound3DLoudness = 0;
+    gbDSoundPrimaryBufferMode = 0;
+    gbSound3DEnabled = 0;
     SOUND_InitDirectSound();
     if (gnDirectSoundInitialized) {
       return;

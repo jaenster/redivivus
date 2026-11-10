@@ -30,7 +30,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::PLAYER::PlayerScreen {
 
 // Builds and sends a 0x5A event-message packet to a client. Zeroes a D2Packet0x5aEventStructure, fills packet ID 0x5A, message type 0x07, the target unit GID, and maps bParam (event subtype 1-11) to a color code. Dispatches via NET_D2GS_SERVER_Send_0x5A_EventMessages. Used for party/relationship notifications.
-void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode) {
+void __thiscall SendPlayerEvent(D2ClientStrc * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode) {
     D2Packet0x5aEventStructure sEventPacket;
     memset(&sEventPacket, 0, sizeof(sEventPacket));
     sEventPacket.nArg = pUnitGid;
@@ -67,7 +67,7 @@ void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t nPartyE
         sEventPacket.nColor = '\t';
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG((D2ClientStrc*)pThis, &sEventPacket);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(pThis, &sEventPacket);
 }
 
 static void __stdcall SendPlayerInfo(uint16_t wRelationFlag, uint32_t nRelationState, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {

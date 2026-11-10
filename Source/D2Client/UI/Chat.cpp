@@ -829,7 +829,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           if ((int)nInputLen >= (int)nCmdLen) {
             nCompareResult = Storm::Source::SSTR::SStrCmpI(pszCursor, gaChatCommandTable[nCmdIndex].pszCommand, nCmdLen);
             if (!nCompareResult) {
-              *pbCommandType = (char)gaChatCommandTable[nCmdIndex].nCommandType;
+              *pbCommandType = (uint8_t)gaChatCommandTable[nCmdIndex].nCommandType;
               return 1;
             }
           }
@@ -837,7 +837,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           pszCursor += nCmdLen;
           if (!gaChatCommandTable[nCmdIndex].bTakesParameter) {
             *ppszText += nCmdLen;
-            *pbCommandType = (char)gaChatCommandTable[nCmdIndex].nCommandType;
+            *pbCommandType = (uint8_t)gaChatCommandTable[nCmdIndex].nCommandType;
             return 1;
           }
 
@@ -853,7 +853,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
           pScan = szToken;
           pScan = pScan + strlen(pScan) + 1;
           *ppszText += (int)(pScan - (szToken + 1) + nCmdLen + 1);
-          *pbCommandType = (char)gaChatCommandTable[nCmdIndex].nCommandType;
+          *pbCommandType = (uint8_t)gaChatCommandTable[nCmdIndex].nCommandType;
           return 1;
         }
       }

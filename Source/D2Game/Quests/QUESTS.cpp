@@ -1640,7 +1640,7 @@ void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t 
     pQuestGUID->nPlayerCount++;
 }
 
-uint32_t __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
+BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
     uint32_t nPlayerCount = (uint32_t)pQuestGUID->nPlayerCount;
     int nSearchIdx = 0;
     if (!nPlayerCount) {
@@ -3285,7 +3285,7 @@ BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame) {
 }
 
 // A2Q7 server AI logic for the Jerhyn NPC, gating his movement to the palace and the Duriel reveal. Out-params *pdwParam1/*pdwParam2 tell the caller the desired idle/move outcome. Bails (idle: 1,0) unless the Arcane Sanctuary quest is in progress and Seven Tombs is appropriately staged. When conditions hold it walks Jerhyn toward the recorded target coords (WalkToCoords), and once close locates the Duriel-tomb portal object, finds free neighbouring-room coordinates and relocates Jerhyn there (SUNIT_RelocateUnit), updating the A2Q4 quest-specific data flag bytes that track his progress.
-void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pbRunDefaultAi, uint32_t * pbDelayNextMove) {
+void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL * pbRunDefaultAi, BOOL * pbDelayNextMove) {
     uint8_t uVar1;
     D2UnitStrc* pDurielPortalUnit;
     D2RoomStrc* pRoom;

@@ -1341,8 +1341,8 @@ static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cSkillColumn) {
     return 0;
 }
 
-void __thiscall SPELLSEL_DrawTabHeader(void * pThis, int32_t nYOffset) {
-    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY + Inv::ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - Inv::gnPanelOffsetX, (uint16_t*)pThis, 0);
+void __thiscall SPELLSEL_DrawTabHeader(uint16_t * pThis, int32_t nYOffset) {
+    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY + Inv::ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - Inv::gnPanelOffsetX, pThis, 0);
 }
 
 void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTab) {

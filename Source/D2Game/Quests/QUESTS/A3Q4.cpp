@@ -325,8 +325,8 @@ void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, D2UnitStr
 // Q21_PartySetGoldenBirdState (custom regs) -- broadcast the player's current Golden Bird sub-state to
 // every party member. Gets the player's party id (SUnit::GetPartyId); if in a party, runs
 // Q21_PlayerSetGoldenBirdQuestState over all members (ExecuteFunctionForEveryPartyMember). No-op solo.
-int __thiscall Q21_PartySetGoldenBirdState(void * pThis, ::SGAMEDATA * pGame) {
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId((D2UnitStrc*)pThis);
+int __thiscall Q21_PartySetGoldenBirdState(D2UnitStrc * pThis, ::SGAMEDATA * pGame) {
+    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pThis);
     if (nPartyId != 0xffff) {
       UNIT::Party::ExecuteFunctionForEveryPartyMember(pGame, nPartyId, (::fpExecuteOnUnitFunction)Q21_PlayerSetGoldenBirdQuestState, nullptr);
     }

@@ -2653,17 +2653,17 @@ static void __stdcall SKILLS_CalcSkillMinMaxToHit(int * pnMinMaxToHit, eD2Skills
     pnMinMaxToHit[2] = nToHit;
 }
 
-void __thiscall SKILLS_CalcPetSkillDamage(void * pThis, int * pnDamageOut) {
-    if (!(pThis && *(int*)pThis == 1)) {
+void __thiscall SKILLS_CalcPetSkillDamage(D2UnitStrc * pThis, int * pnDamageOut) {
+    if (!(pThis && pThis->eUnitType == UNIT_MONSTER)) {
       return;
     }
 
-    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit((D2UnitStrc*)pThis);
+    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pThis);
     if (!pOwner) {
       return;
     }
 
-    int nClassId = *(int*)((char*)pThis + 4);
+    int nClassId = pThis->nClassId;
     D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (!pMonStatsTxt) {
       return;
@@ -4398,10 +4398,10 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Applies STATE_stunned to a non-boss, non-special monster unit. Skips if already STATE_uninterruptable. Allocates a stat list expiring in 100 game frames, attaches STATE_stunned state, schedules a game event, then interrupts the monster's current AI by calling SetCurrentSkill(Neutral) and MONSTERAI_ExecuteLifecycleTransition. Extends existing stun timeout if a stun statlist is already present.
-void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States eState) {
+void __thiscall SKILL_ApplyStunState(::SGAMEDATA * pThis, D2UnitStrc * pUnit, eD2States eState) {
     int pExtendedExpiryFrame;
     D2MonsterKillStrc sMonsterKill;
-    ::SGAMEDATA* pGameSaved = (::SGAMEDATA*)pThis;
+    ::SGAMEDATA* pGameSaved = pThis;
     BOOL eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (!(!eExistingStunState && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
@@ -4420,25 +4420,25 @@ void __thiscall SKILL_ApplyStunState(void * pThis, D2UnitStrc * pUnit, eD2States
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatListEx) {
       uint32_t dwStunExpireFrame;
-      dwStunExpireFrame = *(int*)((char*)pThis + 0xa8) + 100;
-      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(*(D2PoolManagerStrc**)((char*)pThis + 0x1c), 2, dwStunExpireFrame, pUnit->eUnitType, pUnit->nUnitGUID);
-      pThis = (void*)pGameSaved;
+      dwStunExpireFrame = pThis->dwGameFrame + 100;
+      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pThis->pMemoryPool, 2, dwStunExpireFrame, pUnit->eUnitType, pUnit->nUnitGUID);
+      pThis = pGameSaved;
       if (pStatListEx) {
         GAME::Event::SetEvent(pGameSaved, pUnit, 0xc, dwStunExpireFrame, 0, 0);
         D2Common::Stats::StatsEx::SetState(pStatListEx, STATE_stunned);
         D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatListEx, DefaultExpireFunction);
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatListEx, 1);
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_stunned, 1);
-        pThis = (void*)pGameSaved;
+        pThis = pGameSaved;
       }
     } else {
-      pExtendedExpiryFrame = *(int*)((char*)pThis + 0xa8) + eState;
+      pExtendedExpiryFrame = pThis->dwGameFrame + eState;
       D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatListEx, pExtendedExpiryFrame);
-      GAME::Event::SetEvent((::SGAMEDATA*)pThis, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
+      GAME::Event::SetEvent(pThis, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
     }
 
     Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Neutral, &sMonsterKill);
-    Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition((::SGAMEDATA*)pThis, &sMonsterKill, 1);
+    Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pThis, &sMonsterKill, 1);
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
 

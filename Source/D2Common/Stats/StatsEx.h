@@ -163,7 +163,7 @@ void __stdcall STATLIST_SetStatValueSimple(struct D2StatListExStrc * pStatList, 
 int32_t __stdcall UNITS_CalcCombinedStatValue(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat);
 // Activates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently inactive (NOCALCBONUS flag set), clears the flag and propagates all damage-related stats upward. Otherwise delegates to STATLIST_SetItemStatActive. Returns 1 on success, 0 if already active or not attached.
 void __stdcall STATLIST_ActivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-void __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled);
+BOOL __stdcall STATLIST_ToggleStateDisabled(struct D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled);
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
 void __stdcall STATLIST_DeactivateItemStats(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 BOOL __fastcall SKILLS_ValidateSkillDescIndex(int32_t nSkillId);

@@ -4156,7 +4156,7 @@ static int NPCMENU_CanItemBeRepaired(D2UnitStrc * pUnit) {
       }
     }
 
-    BOOL BVar1 = D2Common::ITEMS::Items::ITEMS_CheckChargedSkillFullyCharged(pUnit, (bool*)&nChargeCount);
+    BOOL BVar1 = D2Common::ITEMS::Items::ITEMS_CheckChargedSkillFullyCharged(pUnit, &nChargeCount);
     if (!(BVar1 && !nChargeCount)) {
       return 0;
     }
@@ -4718,7 +4718,7 @@ void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID) {
     Inv::INV_ResetHoverAndContextState();
 }
 
-BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t nTransactionMode, int * pInventory, uint16_t * pszBuffer, int32_t nBufferMaxLen) {
+BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t nTransactionMode, int * pTransactionCost, uint16_t * pszBuffer, int32_t nBufferMaxLen) {
     uint8_t bVar1;
     D2UnitStrc* pNpcUnit;
     int iVar2;
@@ -4731,7 +4731,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
     char szCostValue[20];
     int bCanRepair;
     D2BitBufferStrc* pQuestBitBuf;
-    *pInventory = 0;
+    *pTransactionCost = 0;
     if (!pUnit) {
       return 0;
     }
@@ -4757,7 +4757,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
       nItemClassId = (uint32_t)bVar1;
       pNpcUnit = UNIT::Player::GetPlayerUnit_Net();
       nCalcCost = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pNpcUnit, pUnit, nItemClassId, pQuestBitBuf, iVar2, nCalcCost);
-      *pInventory = nCalcCost;
+      *pTransactionCost = nCalcCost;
       nStrTableId = 0xd01;
       goto format_cost;
     }
@@ -4825,7 +4825,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
           }
 
           bIsIdentified = D2Common::QuestRecord::GetQuestState(gpNpcMenuBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-          *pInventory = bIsIdentified ? 0 : 100;
+          *pTransactionCost = bIsIdentified ? 0 : 100;
           nStrTableId = 0xd04;
           goto format_cost;
         }
@@ -4867,7 +4867,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
         nItemClassId = (uint32_t)bVar1;
         pNpcUnit = UNIT::Player::GetPlayerUnit_Net();
         nCalcCost = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pNpcUnit, pUnit, nItemClassId, pQuestBitBuf, iVar2, nCalcCost);
-        *pInventory = nCalcCost;
+        *pTransactionCost = nCalcCost;
         nStrTableId = 0xd02;
         goto format_cost;
       }
@@ -4891,7 +4891,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
     nItemClassId = (uint32_t)bVar1;
     pNpcUnit = UNIT::Player::GetPlayerUnit_Net();
     nCalcCost = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pNpcUnit, pUnit, nItemClassId, pQuestBitBuf, iVar2, nCalcCost);
-    *pInventory = nCalcCost;
+    *pTransactionCost = nCalcCost;
     nStrTableId = 0xd03;
     format_cost:
     pszCostLabel = D2Lang::StrTable::strtable::GetLocaleString(nStrTableId);
@@ -4902,7 +4902,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
 
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(pszBuffer, pszCostLabel);
     Fog::File::CONTAINER_InitializeBuffer(wszCostValue, 2, 0x14, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szCostValue, "%d", *pInventory);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szCostValue, "%d", *pTransactionCost);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCostValue, szCostValue, 0x13);
     D2Lang::Unicode::UNISYS::AppendToBuffer(pszBuffer, wszCostValue);
     return 1;

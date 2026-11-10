@@ -21,7 +21,7 @@ BOOL __stdcall SOUND_IsAmbientStreaming();
 void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled);
 void __stdcall SOUND_StopMusic();
 void __stdcall SOUND_FadeOutMusic();
-uint32_t __stdcall SOUND_GetSoundMixer();
+int32_t __stdcall SOUND_GetSoundMixer();
 int32_t __fastcall SOUND_SetSoundMixer(int32_t nMixerType);
 int __stdcall SOUND_GetMasterVolume();
 int32_t __fastcall SOUND_SetMasterVolume(int32_t nVolume);

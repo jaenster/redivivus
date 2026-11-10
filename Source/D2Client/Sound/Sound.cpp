@@ -593,14 +593,14 @@ BOOL __stdcall SOUND_GetAmbientMusicState() {
     return 1;
 }
 
-int __fastcall SOUND_StopChannelById(int32_t nSoundId) {
+int __fastcall SOUND_GetSoundIdByChannelHandle(int32_t nChannelHandle) {
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-    if (!nSoundId) {
+    if (!nChannelHandle) {
       return 0;
     }
 
     for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nSoundId) {
+      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
         return pDVar1->pChannel->nSoundId;
       }
     }
@@ -1492,7 +1492,7 @@ BOOL __stdcall SOUND_IsDirectSoundAvailable() {
       return 0;
     }
 
-    DWORD DVar1 = D2Sound::SOUND_GetDirectSoundInitializedFlag();
+    DWORD DVar1 = D2Sound::SOUND_GetPrimaryBufferModeFlag();
     return DVar1;
 }
 
@@ -1511,7 +1511,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMous
     }
 
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007c8a74);
-    int nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+    int32_t nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer((uint32_t)!nMixer);
     if (!BVar1) {
@@ -1528,7 +1528,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     }
 
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007c8a74);
-    int nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+    int32_t nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer(nMixer != 2 ? 2 : 1);
     if (!BVar1) {

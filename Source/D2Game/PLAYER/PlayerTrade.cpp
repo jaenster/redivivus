@@ -1797,8 +1797,8 @@ void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __thiscall TRADE_SendTradeCompleteToPlayers(void * pThis, D2UnitStrc * pUnit, D2UnitDataPlayerStrc * pData, D2UnitDataPlayerStrc * pDataOther) {
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient((D2UnitStrc*)pThis, ".\\PLAYER\\PlrTrade.cpp", 0x976);
+void __thiscall TRADE_SendTradeCompleteToPlayers(D2UnitStrc * pThis, D2UnitStrc * pUnit, D2UnitDataPlayerStrc * pData, D2UnitDataPlayerStrc * pDataOther) {
+    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pThis, ".\\PLAYER\\PlrTrade.cpp", 0x976);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
     pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x977);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);

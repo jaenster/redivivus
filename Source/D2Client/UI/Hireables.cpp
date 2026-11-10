@@ -229,37 +229,37 @@ static void __fastcall UI_DrawHirelingNameFromString(char * szText, int32_t nX, 
     DrawHirelingName(nX, nY, 0, szString);
 }
 
-void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX) {
+void __stdcall UI_DrawSummonCount(int32_t nSummonCount, int32_t nDrawPositionX) {
     int32_t nStrLen;
     int nTextWidth;
     uint16_t* pwszTrunc;
-    char szGoldCostStr[32];
+    char szSummonCountStr[32];
     uint16_t wszConverted[32];
-    uint16_t wszGoldText[32];
+    uint16_t wszSummonCountText[32];
     for (int iFill = 0; iFill < 32; iFill++) {
       wszConverted[iFill] = L'\0';
     }
 
     for (int iFill2 = 0; iFill2 < 32; iFill2++) {
-      wszGoldText[iFill2] = L'\0';
+      wszSummonCountText[iFill2] = L'\0';
     }
 
-    sprintf(szGoldCostStr, "%d", nGoldCost);
-    memset(wszGoldText, 0, 0x40);
-    D2Lang::UTF8_ConvertToWideChar(wszConverted, szGoldCostStr, 0x20);
-    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszGoldText, wszConverted, 0x20);
-    *(uint32_t*)((char*)&wszGoldText + 60) &= 0xffff;
-    nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszGoldText);
-    pwszTrunc = wszGoldText + nStrLen;
-    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszGoldText);
+    sprintf(szSummonCountStr, "%d", nSummonCount);
+    memset(wszSummonCountText, 0, 0x40);
+    D2Lang::UTF8_ConvertToWideChar(wszConverted, szSummonCountStr, 0x20);
+    D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszSummonCountText, wszConverted, 0x20);
+    *(uint32_t*)((char*)&wszSummonCountText + 60) &= 0xffff;
+    nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszSummonCountText);
+    pwszTrunc = wszSummonCountText + nStrLen;
+    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszSummonCountText);
     while (nTextWidth > 0x2e) {
       pwszTrunc--;
       *pwszTrunc = L'\0';
-      nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszGoldText);
+      nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszSummonCountText);
     }
 
     nStrLen = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
-    D2Win::Src::D2WinFont::DRAW_text(wszGoldText, nDrawPositionX + 8, 0x37, 0, 0);
+    D2Win::Src::D2WinFont::DRAW_text(wszSummonCountText, nDrawPositionX + 8, 0x37, 0, 0);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nStrLen);
 }
 
@@ -904,7 +904,7 @@ static BOOL __stdcall HIRELING_DrawSummonIcon(D2UnitStrc * pUnit, int32_t * nY, 
       nRosterCount = nRosterCountSaved;
     }
 
-    UI_DrawHirelingGoldCost(nRosterCount, *nX);
+    UI_DrawSummonCount(nRosterCount, *nX);
     GetAndDrawHirelingName(*nX, *nY, nSkillId);
     if (*pnYToggle) {
       *nY -= *pnYToggle;

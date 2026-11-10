@@ -63,7 +63,7 @@ void __stdcall LoadClassIcons();
 void __stdcall FreeHireablesList();
 void __fastcall InitializeHealthBarColors(int32_t nForce);
 void __stdcall UnsetHealthBarInitialize();
-void __stdcall UI_DrawHirelingGoldCost(int nGoldCost, int32_t nDrawPositionX);
+void __stdcall UI_DrawSummonCount(int32_t nSummonCount, int32_t nDrawPositionX);
 struct DC6 * __fastcall GetRosterIcon(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut);
 void __stdcall DRAW_Overlay_PetsAndPartyMembers();
 void __stdcall INPUT_HireableInteract(struct D2UIMouseMsgStrc * pMsg);

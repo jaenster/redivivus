@@ -555,7 +555,7 @@ int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
     return 0;
 }
 
-int __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
+uint32_t __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       return pUnit->pUnitData.pUnitDataMonster->nAiRelated1;
     }

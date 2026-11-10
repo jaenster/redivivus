@@ -207,7 +207,7 @@ void __fastcall Send_0x26_Chat(D2ClientStrc * pClient, char * * ppMessage) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x26_CHATSTART(pClient, (D2GSPacketSrv0x26*)*ppMessage);
 }
 
-void __thiscall SendDebugMessageToEveryone(void * pThis, char * pMessage) {
+void __thiscall SendDebugMessageToEveryone(::SGAMEDATA * pThis, char * pMessage) {
     D2GSPacketSrv0x26 nMsgBuf;
     char cChar;
     nMsgBuf.szName[4] = '\0';
@@ -228,7 +228,7 @@ void __thiscall SendDebugMessageToEveryone(void * pThis, char * pMessage) {
     nMsgBuf.szName[1] = '\0';
     *(uint8_t*)((char*)&nMsgBuf.nUnitGUID + 3) = 2;
     *(uint8_t*)((char*)&nMsgBuf.nUnitGUID + 1) = 1;
-    GAME::Server::ForEachClient((::SGAMEDATA*)pThis, (fpForEachClientFn)Send_0x26_Chat, &nMsgBuf);
+    GAME::Server::ForEachClient(pThis, (fpForEachClientFn)Send_0x26_Chat, &nMsgBuf);
 }
 
 void __fastcall Debug(::SGAMEDATA * pGame) {

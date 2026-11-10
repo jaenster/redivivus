@@ -944,14 +944,13 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUni
 }
 
 // Client skill CltDoFunc for the Barbarian Leap/Leap-Attack: drives target acquisition, cast sound, and the leap arc particle. On the sound/init pass (skill flag 0x100) plays the cast sound, resolves the leap target from SKILL_GetParam3/4 or finds the closest target, faces it and plays the appropriate hit-class cast sound. Depending on the skill flags, either arms a pending state (flag 0x1000) or sets up the leap path and creates the leap arc particle (SKILL_SetupLeapPath / SKILL_CreateLeapArcParticle); the flag-2 branch plays the landing skill sound at the server-path destination. Returns TRUE when it performed work.
-BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitType eUnitType;
     D2UnitStrc* pTargetUnit;
-    int32_t nDestY;
+    int nDestY;
     int32_t nDestX;
-    int nUnitType;
     D2SkillStrc* pSkill;
-    pSkill = D2Common::Skills::SKILLS_GetSkillByEnum((D2UnitStrc*)pUnit, eSkill);
+    pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {
       return 0;
     }
@@ -962,7 +961,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
     nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (nSkillFlags & 0x100) {
       BOOL nPathModeOrResult;
-      nPathModeOrResult = CLIENT_PlaySkillSound(pSkill, 1, pUnit);
+      nPathModeOrResult = CLIENT_PlaySkillSound(pSkill, 1, (D2DynamicPathStrc*)pUnit);
       if (!nPathModeOrResult) {
         if (!(nSkillFlags & 2)) {
           return 0;
@@ -972,20 +971,20 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
       }
 
       eUnitType = D2Common::Skills::SKILL_GetParam3(pSkill);
-      nDestY = D2Common::Skills::SKILL_GetParam4(pSkill);
-      if ((eUnitType == UNIT_COUNT || (pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(nDestY, eUnitType) , !pTargetUnit)) && (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats((D2UnitStrc*)pUnit, 0, 0, 3, 0, -1, nullptr) , !pTargetUnit)) {
-        pUnit->nUnitWidth = 0x400;
+      nDestX = D2Common::Skills::SKILL_GetParam4(pSkill);
+      if ((eUnitType == UNIT_COUNT || (pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(nDestX, eUnitType) , !pTargetUnit)) && (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, -1, nullptr) , !pTargetUnit)) {
+        pUnit->nFrameCount = 0x400;
       } else {
-        D2Common::Units::SetTargetUnitForDynamicUnit((D2UnitStrc*)pUnit, pTargetUnit);
-        UNIT::CUnit::FaceTarget((D2UnitStrc*)pUnit, 0);
-        Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound((D2UnitStrc*)pUnit, D2Common::Units::GetHitClassForPlayerOrMonster((D2UnitStrc*)pUnit)), (D2UnitStrc*)pUnit, 0, 0, 0);
+        D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
+        UNIT::CUnit::FaceTarget(pUnit, 0);
+        Sound::SOUND_PlaySound(UNIT::UnitSnd::UNITSND_GetSkillCastSound(pUnit, D2Common::Units::GetHitClassForPlayerOrMonster(pUnit)), pUnit, 0, 0, 0);
         bFoundTarget = 1;
       }
     }
     if (!(nSkillFlags & 2)) {
       if ((char)nSkillFlags < 0) {
-        SKILL_SetupLeapPath((D2UnitStrc*)pUnit, pSkill);
-        SKILL_CreateLeapArcParticle((D2UnitStrc*)pUnit, pSkill);
+        SKILL_SetupLeapPath(pUnit, pSkill);
+        SKILL_CreateLeapArcParticle(pUnit, pSkill);
         return 1;
       }
 
@@ -994,25 +993,25 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2DynamicPathStrc * 
     }
 
     finish_landing:
-    nUnitType = pUnit->Coords.tFixed.x;
-    if (nUnitType == 2 || nUnitType > 3 && nUnitType <= 5) {
-      nDestY = (int32_t)((uint32_t)(uint16_t)pUnit->pServerPath->nTargetX | (uint32_t)(uint16_t)pUnit->pServerPath->nTargetY << 16);
-    } else if (pUnit->pServerPath) {
-      nDestY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pServerPath);
+    eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nDestY = pUnit->pPath.pStaticPath->nPosY;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nDestY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
       nDestY = 0;
     }
 
-    nUnitType = pUnit->Coords.tFixed.x;
-    if (nUnitType == 2 || nUnitType > 3 && nUnitType <= 5) {
-      nDestX = pUnit->pServerPath->ScreenPos.y;
-    } else if (pUnit->pServerPath) {
-      nDestX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pServerPath);
+    eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nDestX = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nDestX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
       nDestX = 0;
     }
 
-    PATH_ResetCollisionOnLanding(nDestY, nDestX, (D2UnitStrc*)pUnit);
+    PATH_ResetCollisionOnLanding(nDestY, nDestX, pUnit);
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     return 1;
 }

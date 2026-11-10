@@ -36,7 +36,7 @@ namespace D2Game::PLAYER::PlayerScreen {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 // Builds and sends a 0x5A event-message packet to a client. Zeroes a D2Packet0x5aEventStructure, fills packet ID 0x5A, message type 0x07, the target unit GID, and maps bParam (event subtype 1-11) to a color code. Dispatches via NET_D2GS_SERVER_Send_0x5A_EventMessages. Used for party/relationship notifications.
-void __thiscall SendPlayerEvent(void * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode);
+void __thiscall SendPlayerEvent(struct D2ClientStrc * pThis, uint32_t pUnitGid, uint8_t nPartyEventCode);
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTYSCREEN_SetCorpseLootPermission(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);
 void __fastcall PARTYSCREEN_UpdateMuteRelation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t bNewState, int * pnError);

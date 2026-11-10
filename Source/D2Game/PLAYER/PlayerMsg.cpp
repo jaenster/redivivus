@@ -1389,13 +1389,13 @@ static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGa
     return eVar1;
 }
 
-eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(void * pThis, D2UnitStrc * pUnit, uint32_t dwItemGUID) {
+eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, D2UnitStrc * pUnit, uint32_t dwItemGUID) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x463);
       exit(-1);
     }
 
-    D2UnitStrc* pItem = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)pThis, UNIT_ITEM, dwItemGUID);
+    D2UnitStrc* pItem = UNIT::SUnit::FindUnitFromTable(pThis, UNIT_ITEM, dwItemGUID);
     if ((pItem && pItem->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::GetHit) != 0) {
       D2UnitStrc* pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
       if (pCursorItem_lcl == pItem) {
@@ -1406,13 +1406,13 @@ eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(void * pThis, D2UnitStr
     return SERVERSTATUS_BAD_TARGET;
 }
 
-eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(void * pThis, D2UnitStrc * pOwner, uint32_t nItemGid) {
+eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(::SGAMEDATA * pThis, D2UnitStrc * pOwner, uint32_t nItemGid) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47a);
       exit(-1);
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)pThis, UNIT_ITEM, nItemGid);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pThis, UNIT_ITEM, nItemGid);
     if (pUnit && pUnit->eAnimMode.ePlayerMode == Death) {
       BOOL bBelongs = D2Common::INVENTORY::Inventory::INVENTORY_CheckDoItemBelongToInventory(pOwner->pInventory, pUnit);
       if (bBelongs) {
@@ -1423,13 +1423,13 @@ eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(void * pThis, D2UnitStrc * p
     return SERVERSTATUS_BAD_TARGET;
 }
 
-eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(void * pThis, D2UnitStrc * pOwner, uint32_t nItemGid) {
+eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(::SGAMEDATA * pThis, D2UnitStrc * pOwner, uint32_t nItemGid) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x491);
       exit(-1);
     }
 
-    D2UnitStrc* pItem = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)pThis, UNIT_ITEM, nItemGid);
+    D2UnitStrc* pItem = UNIT::SUnit::FindUnitFromTable(pThis, UNIT_ITEM, nItemGid);
     if (!pItem) {
       return SERVERSTATUS_BAD_TARGET;
     }
@@ -1470,13 +1470,13 @@ uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t nBodyL
     return !pBodyItem;
 }
 
-eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(void * pThis, D2UnitStrc * pPlayer, uint32_t nItemGid) {
+eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(::SGAMEDATA * pThis, D2UnitStrc * pPlayer, uint32_t nItemGid) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e8);
       exit(-1);
     }
 
-    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable((::SGAMEDATA*)pThis, UNIT_ITEM, nItemGid);
+    D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pThis, UNIT_ITEM, nItemGid);
     if (!pUnit) {
       return SERVERSTATUS_BAD_TARGET;
     }

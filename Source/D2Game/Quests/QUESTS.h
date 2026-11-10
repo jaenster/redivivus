@@ -259,7 +259,7 @@ void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdA
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
 void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eAct nActNo);
 void __fastcall QUESTGUID_AddPlayerToList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
-uint32_t __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
+BOOL __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID);
 // Returns 1 if iValue is one of the first nPlayerCount entries of
 // pQuestGUID->aPlayerGUID, else 0. ECX is a D2QuestGUIDStrc (int[32] at +0, word count at +0x80);
 // every caller passes a quest data block's sQuestGUID member.
@@ -336,7 +336,7 @@ BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame);
 // A2Q7 server AI logic for the Jerhyn NPC, gating his movement to the palace and the Duriel reveal. Out-params *pdwParam1/*pdwParam2 tell the caller the desired idle/move outcome. Bails (idle: 1,0) unless the Arcane Sanctuary quest is in progress and Seven Tombs is appropriately staged. When conditions hold it walks Jerhyn toward the recorded target coords (WalkToCoords), and once close locates the Duriel-tomb portal object, finds free neighbouring-room coordinates and relocates Jerhyn there (SUNIT_RelocateUnit), updating the A2Q4 quest-specific data flag bytes that track his progress.
-void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pbRunDefaultAi, uint32_t * pbDelayNextMove);
+void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, BOOL * pbRunDefaultAi, BOOL * pbDelayNextMove);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(struct D2ObjectOperateFnArg * pOperation);

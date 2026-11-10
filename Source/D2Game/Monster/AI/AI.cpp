@@ -9377,8 +9377,8 @@ bool __fastcall AI_Monster_ExecuteMapAiBehavior(::SGAMEDATA * pGame, D2UnitStrc 
 void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nClassId;
     BOOL BVar2;
+    D2MonsterAiCmdStrc* pHomeCmd;
     int32_t nGatewayOpen;
-    uint32_t nDistToTarget;
     D2CoordStrc sQuestCoord;
     int nJerhynMove;
     int nJerhynFlag;
@@ -9390,6 +9390,7 @@ void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStr
     if (!pUnit) {
       nClassId = -1;
     } else {
+      uint32_t nDistToTarget;
       nClassId = pUnit->nClassId;
       if (nClassId > 0xff) {
         if (nClassId != 0x109) {
@@ -9397,7 +9398,7 @@ void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStr
             Quests::QUESTS::A5Q4::Q34_NpcSpawnPortalInAct5(pGame, pUnit);
           }
         } else {
-          BVar2 = Quests::QUESTS::A1Q4::Q04_GetCainPortalCoordinates(pGame, (uint32_t*)&sQuestCoord.nX);
+          BVar2 = Quests::QUESTS::A1Q4::Q04_GetCainPortalCoordinates(pGame, &sQuestCoord.nX);
           if (BVar2) {
             nDistToTarget = MONSTERAI_GetDistanceToCoords(pUnit, sQuestCoord.nX, sQuestCoord.nY);
             if (nDistToTarget > 2) {
@@ -9428,40 +9429,50 @@ void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStr
         goto default_npc_behavior;
       }
     }
-    if (nClassId != 0xc9) {
-      if (nClassId == 0xfe && (BVar2 = Quests::QUESTS::A3Q5::Q22_IsGoldenBirdQuestActive(pGame) , BVar2 != 0)) {
-        MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 8, 0, 0);
-        Quests::QUESTS::A3Q5::Q22_ClearGoldenBirdQuestFlag(pGame);
-        return;
-      }
-    } else {
-      D2MonsterAiCmdStrc* pHomeCmd;
-      BVar2 = Quests::QUESTS::QUEST_ShouldBlockJerhyn(pGame);
-      if (!BVar2) {
-        PlanNextAiMove(pGame, pUnit, 0x28);
-        return;
-      }
 
-      Quests::QUESTS::QUEST_JerhynNpcAILogic(pGame, pUnit, (uint32_t*)&nJerhynMove, (uint32_t*)&nJerhynFlag);
-      if (nJerhynFlag) {
-        PlanNextAiMove(pGame, pUnit, 0x14);
-      }
-      if (!nJerhynMove) {
-        return;
-      }
+    switch (nClassId) {
+      case 0xc9:
+        {
+          BVar2 = Quests::QUESTS::QUEST_ShouldBlockJerhyn(pGame);
+          if (!BVar2) {
+            PlanNextAiMove(pGame, pUnit, 0x28);
+            return;
+          }
 
-      BVar2 = Quests::QUESTS::A2Q4::Q12_CheckJerhynGateOpen(pGame);
-      if (BVar2) {
-        pHomeCmd = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
-        if (pHomeCmd) {
-          nGatewayOpen = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-          pHomeCmd->nCmdArg[1] = nGatewayOpen + 9;
-          nGatewayOpen = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-          pHomeCmd->nCmdArg[2] = nGatewayOpen;
-          PlanNextAiMove(pGame, pUnit, 0x32);
-          return;
+          Quests::QUESTS::QUEST_JerhynNpcAILogic(pGame, pUnit, &nJerhynMove, &nJerhynFlag);
+          if (nJerhynFlag) {
+            PlanNextAiMove(pGame, pUnit, 0x14);
+          }
+          if (!nJerhynMove) {
+            return;
+          }
+
+          BVar2 = Quests::QUESTS::A2Q4::Q12_CheckJerhynGateOpen(pGame);
+          if (BVar2) {
+            pHomeCmd = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
+            if (pHomeCmd) {
+              nGatewayOpen = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+              pHomeCmd->nCmdArg[1] = nGatewayOpen + 9;
+              nGatewayOpen = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+              pHomeCmd->nCmdArg[2] = nGatewayOpen;
+              PlanNextAiMove(pGame, pUnit, 0x32);
+              return;
+            }
+          }
+
+          break;
         }
-      }
+      case 0xfe:
+        {
+          BVar2 = Quests::QUESTS::A3Q5::Q22_IsGoldenBirdQuestActive(pGame);
+          if (BVar2) {
+            MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 8, 0, 0);
+            Quests::QUESTS::A3Q5::Q22_ClearGoldenBirdQuestFlag(pGame);
+            return;
+          }
+
+          break;
+        }
     }
 
     default_npc_behavior:
@@ -11546,12 +11557,12 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
     return 0xb;
 }
 
-void __thiscall MONSTERAI_SpawnSpecificMinions(void * pThis, D2UnitStrc * pUnit) {
+void __thiscall MONSTERAI_SpawnSpecificMinions(::SGAMEDATA * pThis, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
     }
 
-    Create::SpawnMonsterAtUnit((::SGAMEDATA*)pThis, pUnit, 0x2c7, eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
+    Create::SpawnMonsterAtUnit(pThis, pUnit, 0x2c7, eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
 }
 
 void __fastcall AITHINK_Fn1_UberDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {

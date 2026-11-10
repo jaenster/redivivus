@@ -2827,7 +2827,7 @@ int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nSound) {
       }
 
       nSfxSoundId = pSfxNode->nItemKey;
-      nChannelId = Sound::SOUND_StopChannelById(nSfxSoundId);
+      nChannelId = Sound::SOUND_GetSoundIdByChannelHandle(nSfxSoundId);
       if (nChannelId >= nSoundId && nChannelId < nSoundGroupSize + nSoundId) {
         break;
       }
@@ -2882,7 +2882,7 @@ void __fastcall UNITSND_UpdatePositionalAudio(D2UnitStrc * pUnit) {
       while (pDVar1) {
         nChannelId = pDVar1->nItemKey;
         pDVar1 = pDVar1->pNext;
-        nSoundId_00 = Sound::SOUND_StopChannelById(nChannelId);
+        nSoundId_00 = Sound::SOUND_GetSoundIdByChannelHandle(nChannelId);
         nLoopFlag = Sound::SoundHdr::SOUNDHDR_GetSoundLoopFlag(nSoundId_00);
         if (nLoopFlag) {
           Sound::SOUND_StopUnitSoundByIndex(nChannelId, pUnit, 0);
@@ -3355,7 +3355,7 @@ void __fastcall UNITSND_StopAllSkillSounds(D2UnitStrc * pUnit) {
     while (pDVar1) {
       nSfxChannelId = pDVar1->nItemKey;
       pDVar1 = pDVar1->pNext;
-      nSoundField60 = Sound::SOUND_StopChannelById(nSfxChannelId);
+      nSoundField60 = Sound::SOUND_GetSoundIdByChannelHandle(nSfxChannelId);
       nSoundField60 = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nSoundField60);
       if (nSoundField60 == pMonSoundsLine->Skill[0] || nSoundField60 == pMonSoundsLine->Skill[1] || nSoundField60 == pMonSoundsLine->Skill[2] || nSoundField60 == pMonSoundsLine->Skill[3]) {
         Sound::SOUND_StopUnitSoundByIndex(nSfxChannelId, pUnit, 1);
@@ -3388,7 +3388,7 @@ void __stdcall UNITSND_UpdateNeutralSound(D2UnitStrc * pUnit, int32_t bForceStop
           nChanSoundBase = pMonSoundsLine->Neutral;
         }
 
-        nLine = Sound::SOUND_StopChannelById(nNeutralSoundId);
+        nLine = Sound::SOUND_GetSoundIdByChannelHandle(nNeutralSoundId);
         nLine = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nLine);
         pDVar1 = pSfxNodeNext;
         if (nLine == nChanSoundBase) {
@@ -3425,7 +3425,7 @@ void __stdcall UNITSND_StopAllCombatSounds(D2UnitStrc * pUnit) {
     while (pDVar1) {
       nSfxChannelId = pDVar1->nItemKey;
       pDVar1 = pDVar1->pNext;
-      nSoundField60 = Sound::SOUND_StopChannelById(nSfxChannelId);
+      nSoundField60 = Sound::SOUND_GetSoundIdByChannelHandle(nSfxChannelId);
       nSoundField60 = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nSoundField60);
       if (nSoundField60 == pMonSoundsLine->Attack1 || nSoundField60 == pMonSoundsLine->Attack2 || nSoundField60 == pMonSoundsLine->HitSound || nSoundField60 == pMonSoundsLine->Neutral || nSoundField60 == pMonSoundsLine->Skill[0] || nSoundField60 == pMonSoundsLine->Skill[1] || nSoundField60 == pMonSoundsLine->Skill[2] || nSoundField60 == pMonSoundsLine->Skill[3] || nSoundField60 == pMonSoundsLine->Init || nSoundField60 == pMonSoundsLine->Taunt || nSoundField60 == pMonSoundsLine->Flee) {
         Sound::SOUND_StopUnitSoundByIndex(nSfxChannelId, pUnit, 1);
@@ -3945,7 +3945,7 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
       nErrorLine = 0xc;
       play_and_show_overhead:
       nChannelId = Sound::SOUND_PlaySound(eSoundId, pUnit, nErrorLine, 0, 0);
-      nResult = Sound::SOUND_StopChannelById(nChannelId);
+      nResult = Sound::SOUND_GetSoundIdByChannelHandle(nChannelId);
       UI::Text::TEXT_SetUnitOverheadFromSoundTable(pUnit, nResult);
       return;
     }
@@ -4040,7 +4040,7 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
     gnSoundLastPlayerAnimModeTime = nAnimMode;
     geSoundLastPlayerAnimMode = eLastAnimMode;
     nChannelId = Sound::SOUND_PlaySound(eSoundId, pSoundTarget, 0, 0, 0);
-    nResult = Sound::SOUND_StopChannelById(nChannelId);
+    nResult = Sound::SOUND_GetSoundIdByChannelHandle(nChannelId);
     UI::Text::TEXT_SetUnitOverheadFromSoundTable(pUnit, nResult);
 }
 

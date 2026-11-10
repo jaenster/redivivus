@@ -121,7 +121,7 @@ void __fastcall SendEventMsg(struct D2UnitStrc * pUnit, uint8_t nMessageType, ch
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOtherUnit);
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __thiscall TRADE_SendTradeCompleteToPlayers(void * pThis, struct D2UnitStrc * pUnit, struct D2UnitDataPlayerStrc * pData, struct D2UnitDataPlayerStrc * pDataOther);
+void __thiscall TRADE_SendTradeCompleteToPlayers(struct D2UnitStrc * pThis, struct D2UnitStrc * pUnit, struct D2UnitDataPlayerStrc * pData, struct D2UnitDataPlayerStrc * pDataOther);
 // Called when player ends interaction with the Horadric Cube item. Clears the interact info and performs item level check. Ensures proper cleanup when cube UI is closed.
 void __fastcall CUBE_OnCubeInteractionEnd(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);
 // Server-side handler for a player picking up an item from the trade screen. Validates that the interact partner is a player; sends 0x77/0x0C error if not. Calls SERVER_TakeItemToCursor to move the item to the cursor slot. On success, resets the 10-second trade acceptance timer for both parties and sends 0x77/0x0E (unaccept) to both clients. If either party had committed gold (dwTradeState==4), zeroes out both gold totals via 0x79 packets and finalises the trade via TRADE_SendTradeCompleteToPlayers.

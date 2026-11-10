@@ -1093,16 +1093,16 @@ char * __fastcall GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc * pRoomEx) 
     return "None";
 }
 
-static void ReorderNearRoomList(int nRoomCount, D2RoomStrc * * ppRoomList) {
+static void ReorderNearRoomList(int nRoomCount, D2RoomExStrc * * ppRoomList) {
     int nIndex;
     int nPassRemaining;
-    D2RoomStrc* pRoomCurrent;
-    D2RoomStrc* pRoomNext;
+    D2RoomExStrc* pRoomCurrent;
+    D2RoomExStrc* pRoomNext;
     for (nPassRemaining = nRoomCount - 1; nPassRemaining > 0; nPassRemaining--) {
       for (nIndex = 0; nIndex < nRoomCount - 1; nIndex++) {
         pRoomNext = ppRoomList[nIndex + 1];
         pRoomCurrent = ppRoomList[nIndex];
-        if (pRoomCurrent->eFlags >= (int)(pRoomNext->nLastDeadGUIDs[1] + pRoomNext->eFlags) || (int)pRoomCurrent->nLastDeadGUIDs[0] >= (int)(pRoomNext->nLastDeadGUIDs[2] + pRoomNext->nLastDeadGUIDs[0])) {
+        if (pRoomCurrent->sCoords.WorldPosition.x >= pRoomNext->sCoords.WorldSize.x + pRoomNext->sCoords.WorldPosition.x || pRoomCurrent->sCoords.WorldPosition.y >= pRoomNext->sCoords.WorldSize.y + pRoomNext->sCoords.WorldPosition.y) {
           ppRoomList[nIndex] = pRoomNext;
           ppRoomList[nIndex + 1] = pRoomCurrent;
         }
@@ -1114,8 +1114,8 @@ static void ReorderNearRoomList(int nRoomCount, D2RoomStrc * * ppRoomList) {
 // @sourcefile .\DRLG\DrlgRoom.cpp
 static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
     int nGapX;
-    D2RoomStrc* apNearRoomExList[30];
-    uint32_t nPosY2;
+    D2RoomExStrc* apNearRoomExList[30];
+    int nPosY2;
     D2RoomExStrc* pRoomExIter = pRoomEx->pLevel->pRoomExFirst;
     pRoomEx->nDrlgRoomsExNearCount = 0;
     while (pRoomExIter) {
@@ -1130,14 +1130,14 @@ static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc 
 
       nGapY = pRoomEx->sCoords.WorldPosition.y;
       nPosY2 = pRoomExIter->sCoords.WorldPosition.y;
-      if (nGapY < (int)nPosY2) {
+      if (nGapY < nPosY2) {
         nGapY = nPosY2 - pRoomEx->sCoords.WorldSize.y - nGapY;
       } else {
         nGapY = nGapY - pRoomExIter->sCoords.WorldSize.y - nPosY2;
       }
       if (nGapX < 6 && nGapY < 6) {
         nGapX = pRoomEx->nDrlgRoomsExNearCount;
-        apNearRoomExList[nGapX] = (D2RoomStrc*)pRoomExIter;
+        apNearRoomExList[nGapX] = pRoomExIter;
         pRoomExIter = pRoomExIter->pRoomExNext;
         pRoomEx->nDrlgRoomsExNearCount = nGapX + 1;
       } else {
@@ -1150,7 +1150,7 @@ static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc 
     D2RoomExStrc** ppNearRooms = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemory, nGapX * 4, ".\\DRLG\\DrlgRoom.cpp", 0x2cb);
     pRoomEx->ppDrlgRoomsExNear = ppNearRooms;
     for (nGapX = 0; nGapX < pRoomEx->nDrlgRoomsExNearCount; nGapX++) {
-      pRoomEx->ppDrlgRoomsExNear[nGapX] = (D2RoomExStrc*)apNearRoomExList[nGapX];
+      pRoomEx->ppDrlgRoomsExNear[nGapX] = apNearRoomExList[nGapX];
     }
 }
 
@@ -1219,7 +1219,7 @@ static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDr
     }
 
     ppNewNearRooms[pDrlgRoomEx->nDrlgRoomsExNearCount - 1] = pRoom;
-    ReorderNearRoomList(pDrlgRoomEx->nDrlgRoomsExNearCount, (D2RoomStrc**)pDrlgRoomEx->ppDrlgRoomsExNear);
+    ReorderNearRoomList(pDrlgRoomEx->nDrlgRoomsExNearCount, pDrlgRoomEx->ppDrlgRoomsExNear);
 }
 
 // Allocates a tile-grid link for pSrcRoomEx that points to pLinkedRoomEx. Stores warp id for visSlot via DRLGLEVEL_GetWarpsIdIfExistsAndSetup, then prepends the new tile grid entry.

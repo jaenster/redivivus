@@ -444,21 +444,21 @@ char __stdcall DRLGROOMTILE_GetWarpDirectionByte(int nTileType) {
 }
 
 // Sets the warp tile direction by looking up the correct LvlWarp entry based on the destination direction, updating the tile link's warp data pointer.
-static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgTileLinkStrc * pTileLink, int nTileType) {
+static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgRoomExRoomTileNodeStrc * pTileLink, int nTileType) {
     uint8_t nDirection;
     uint8_t nCurrentDir;
     if (!pTileLink) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x273);
       exit(-1);
     } else {
-      D2DrlgTileDataStrc* pNewWarpEntry;
-      pNewWarpEntry = pTileLink[1].pTileData;
+      D2LvlWarpTxt* pNewWarpEntry;
+      pNewWarpEntry = pTileLink->pLvlWarpTxt;
       if (!pNewWarpEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x274);
         exit(-1);
       }
 
-      nCurrentDir = (uint8_t)pNewWarpEntry->nFadeEndTime;
+      nCurrentDir = (uint8_t)pNewWarpEntry->Direction;
       if (nCurrentDir == 0x62) {
         return;
       }
@@ -468,8 +468,8 @@ static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgTileLinkStrc * pTi
         return;
       }
 
-      pNewWarpEntry = (D2DrlgTileDataStrc*)DATATBLS::LvlTbls::TXT_LvlWarp_Setup(pNewWarpEntry->nScreenX, nDirection);
-      pTileLink[1].pTileData = pNewWarpEntry;
+      pNewWarpEntry = DATATBLS::LvlTbls::TXT_LvlWarp_Setup(pNewWarpEntry->Id, nDirection);
+      pTileLink->pLvlWarpTxt = pNewWarpEntry;
       return;
     }
 }
@@ -513,7 +513,7 @@ static void __stdcall DRLGROOMTILE_SetupWarpTile(D2RoomExStrc * pRoomExStrc, D2D
           return;
         }
 
-        DRLGROOMTILE_SetWarpTileDirection((D2DrlgTileLinkStrc*)pWarpCacheHead, nTileType);
+        DRLGROOMTILE_SetWarpTileDirection(pWarpCacheHead, nTileType);
         pTileData->pNext = pWarpCacheHead->pTileListSetOnSelect;
         pWarpCacheHead->pTileListSetOnSelect = pTileData;
         pDVar1 = pWarpCacheHead->pLvlWarpTxt;
@@ -567,7 +567,7 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
       }
     }
 
-    DRLGROOMTILE_SetWarpTileDirection((D2DrlgTileLinkStrc*)pWarpCacheIter, nTileType);
+    DRLGROOMTILE_SetWarpTileDirection(pWarpCacheIter, nTileType);
     if (!pWarpCacheIter->pLvlWarpTxt->LitVersion) {
       return;
     }

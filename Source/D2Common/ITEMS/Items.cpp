@@ -676,7 +676,7 @@ int32_t __stdcall IITEM_GetItemsTxt_dwNormCode(D2UnitStrc * pUnit) {
     }
 }
 
-static int __stdcall ITEMS_nullsub(int nMaxLvlReq, D2MagicAffixTxt * pAffixTxt, D2UnitStrc * pPlayer) {
+static int __stdcall ITEMS_AccumulateAffixLevelRequirement(int nMaxLvlReq, D2MagicAffixTxt * pAffixTxt, D2UnitStrc * pPlayer) {
     if (pAffixTxt) {
       uint8_t byLevelReq = pAffixTxt->class_ == 0xff || !pPlayer || (uint32_t)pAffixTxt->class_ != pPlayer->nClassId ? pAffixTxt->levelreq : pAffixTxt->classlevelreq;
       if (nMaxLvlReq <= (int)(uint32_t)byLevelReq) {
@@ -2220,17 +2220,14 @@ int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem)
 }
 
 // Checks whether all charged-skill stats (stat 0xCC) on pItem are at full charges. Returns true if the item has at least one charged stat and all are fully charged. Optionally writes a 4-byte result struct to pOutFullyCharged: byte[0]=hasChargedSkills, byte[1..3]=false if any charge is depleted.
-BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, bool * pOutFullyCharged) {
+BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, BOOL * pOutFullyCharged) {
     int _bResult;
     int _bHasCharged;
     bool bHasCharged;
     bool bResult;
     D2StatStrc aChargeStatBuf[64];
     if (pOutFullyCharged) {
-      pOutFullyCharged[0] = true;
-      pOutFullyCharged[1] = false;
-      pOutFullyCharged[2] = false;
-      pOutFullyCharged[3] = false;
+      *pOutFullyCharged = 1;
     }
 
     int32_t nStatCount = Stats::StatsEx::STATLIST_GetItemStatBonusValues(pItem, 0xcc, aChargeStatBuf, 0x40);
@@ -2244,10 +2241,7 @@ BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, bool * pO
         if (nStatCount > 0) {
           do {
             if ((int)(aChargeStatBuf[nStatIdx].nStatValue & 0xffU) < aChargeStatBuf[nStatIdx].nStatValue >> 8) {
-              pOutFullyCharged[0] = false;
-              pOutFullyCharged[1] = false;
-              pOutFullyCharged[2] = false;
-              pOutFullyCharged[3] = false;
+              *pOutFullyCharged = 0;
               return _bHasCharged;
             }
 
@@ -2990,9 +2984,9 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
       pSuffixTxt = DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wItemVersion);
       wItemVersion = GetAutoMagic(pUnit);
       pAffixTxt = DATATBLS::ItemTbls::TXT_magicaffixes_GetLine((uint32_t)wItemVersion);
-      nIdx = ITEMS_nullsub(0, pPrefixTxt, pUnit2);
-      nIdx = ITEMS_nullsub(nIdx, pSuffixTxt, pUnit2);
-      nMaxLvlReqTmp = ITEMS_nullsub(nIdx, pAffixTxt, pUnit2);
+      nIdx = ITEMS_AccumulateAffixLevelRequirement(0, pPrefixTxt, pUnit2);
+      nIdx = ITEMS_AccumulateAffixLevelRequirement(nIdx, pSuffixTxt, pUnit2);
+      nMaxLvlReqTmp = ITEMS_AccumulateAffixLevelRequirement(nIdx, pAffixTxt, pUnit2);
       break;
       case QUALITY_RARE:
         nAffixByteOffset = 0x3e;
@@ -5515,7 +5509,7 @@ uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    BOOL nCheckResult = ITEMS_CheckChargedSkillFullyCharged(pUnit, (bool*)&pUnit);
+    BOOL nCheckResult = ITEMS_CheckChargedSkillFullyCharged(pUnit, (BOOL*)&pUnit);
     if (!(!nCheckResult || pUnit)) {
       return 1;
     }
@@ -6517,7 +6511,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
     int nMaxStack;
     BOOL BVar1;
     int nCurStack;
-    int nChargedCount;
+    BOOL nChargedCount;
     bool bRepairNeeded;
     if (!pPlayer) {
       return 0;
@@ -6557,7 +6551,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
         }
 
         nChargedCount = 0;
-        BVar1 = ITEMS_CheckChargedSkillFullyCharged(pItem, (bool*)&nChargedCount);
+        BVar1 = ITEMS_CheckChargedSkillFullyCharged(pItem, &nChargedCount);
         if (BVar1 && !nChargedCount || bRepairNeeded) {
           nRepairCost = ITEMS_CalcTransactionCost(pPlayer, pItem, nDifficulty, pBitBuffer, nNpcId, 3);
           nTotalCost += nRepairCost;

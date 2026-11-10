@@ -760,7 +760,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
 }
 
 // Computes the monster class id, spawn X/Y position and spawn-mode for a unit that spawns/generates other monsters (super-uniques and generator-type monsters such as nests, spawners, statues, Blood Raven, Maggot Queen, Izual, etc.). Outputs via pnMonId/pnPosX/pnPosY/pdwSpawnMode. Resolves the unit's MonStats BaseId, then switches on it: each generator case picks the spawned monster (via GetMonsterClassByDifficulty/upgrade data, clamped to MonStats table size) and an offset position relative to the parent's path coords, using the unit seed for randomized cases. pfnCallback supplies the class id for hut/NPC cases. Default/unknown returns monId 0, pos (0,0), mode 1. Uses nRandSeed for seeded variants.
-void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uint32_t * pnPosX, uint32_t * pnPosY, uint32_t * pdwSpawnMode, int32_t nRandSeed, pfnMonsterSpawnClassIdCb pfnCallback) {
+void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uint32_t * pnPosX, uint32_t * pnPosY, eD2MonsterAnimMode * pdwSpawnMode, int32_t nRandSeed, pfnMonsterSpawnClassIdCb pfnCallback) {
     eD2MonsterClassId nMonStatsId;
     uint32_t nPosX;
     uint32_t nPosJitter;
@@ -804,7 +804,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
             *pnPosX = nPosX;
             nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
             *pnPosY = nErrorLine + 3;
-            *pdwSpawnMode = 1;
+            *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
             return;
             case MonsterUnitNihlathakNPC:
 
@@ -821,7 +821,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
             *pnPosX = nErrorLine + 2;
             nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
             *pnPosY = nErrorLine + 2;
-            *pdwSpawnMode = 1;
+            *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
             return;
             case MonsterUnitAncientStatue1:
               DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonStatsId, nullptr, (int32_t*)&nUnit5);
@@ -831,7 +831,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
             *pnPosX = nPosX;
             nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
             *pnPosY = nErrorLine + 2;
-            *pdwSpawnMode = 1;
+            *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
             DATATBLS::ItemStats::SetState(pUnitIn, STATE_invis, 1);
             return;
             case MonsterUnitCrab:
@@ -843,7 +843,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
               nPosJitter = Seed::UNIT_GetModuloFromSeed(pSeed, 0x18);
               nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
               *pnPosY = nPosJitter - 0xc + nErrorLine;
-              *pdwSpawnMode = 1;
+              *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
               return;
             }
 
@@ -856,7 +856,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
             nPosJitter = Seed::UNIT_GetModuloFromSeed(pSeed, 0x18);
             nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
             *pnPosY = nPosJitter - 0xc + nErrorLine;
-            *pdwSpawnMode = 4;
+            *pdwSpawnMode = eD2MonsterAnimMode_ns::Attack1;
             return;
           }
 
@@ -886,7 +886,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
           }
 
           *pnPosY = nClassId - 2;
-          *pdwSpawnMode = 1;
+          *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
           return;
         }
       }
@@ -906,7 +906,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nPosX;
       nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
       *pnPosY = nErrorLine + 3;
-      *pdwSpawnMode = 1;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
       return;
       case MonsterUnitMummyGenerator:
         nClassId = ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x60 ? -1 : 0x60;
@@ -916,7 +916,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nPosX;
       nErrorLine = Units::GetYPosFromDynamicPathUnit(pUnitIn);
       *pnPosY = nErrorLine + 2;
-      *pdwSpawnMode = 1;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
       return;
       case MonsterUnitBloodraven:
         *pnMonId = ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 6 ? -1 : 6;
@@ -925,7 +925,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nPosJitter;
       nPosJitter = PATH::DynamicPath::GetYSP1(pDynamicPath);
       *pnPosY = nPosJitter;
-      *pdwSpawnMode = 8;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Skill1;
       return;
       case MonsterUnitSandMaggotQueen:
         if (!pUnit) {
@@ -940,7 +940,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nErrorLine + 8;
       nPosX = Units::GetYPosFromDynamicPathUnit(pUnitIn);
       *pnPosY = nPosX;
-      *pdwSpawnMode = 8;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Skill1;
       return;
       case MonsterUnitIzual | MonsterUnitThornBeast:
         if (!pUnit || pUnit->nClassId != 0x2c7) {
@@ -952,7 +952,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nPosX;
       nPosX = Units::GetYPosFromDynamicPathUnit(pUnitIn);
       *pnPosY = nPosX;
-      *pdwSpawnMode = 1;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
       return;
       case MonsterUnitFleshSpawner1:
         if (!pUnit) {
@@ -968,7 +968,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
       *pnPosX = nPosJitter;
       nPosJitter = PATH::DynamicPath::GetYSP1(pDynamicPath);
       *pnPosY = nPosJitter;
-      *pdwSpawnMode = 1;
+      *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
       return;
     }
 
@@ -976,7 +976,7 @@ void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uin
     *pnMonId = (ITEMS::Items::sgptDataTable->nTxtMonStatsSize > 0) - 1;
     *pnPosX = 0;
     *pnPosY = 0;
-    *pdwSpawnMode = 1;
+    *pdwSpawnMode = eD2MonsterAnimMode_ns::Neutral;
 }
 
 } // namespace D2Common::Monsters::MONSTERS

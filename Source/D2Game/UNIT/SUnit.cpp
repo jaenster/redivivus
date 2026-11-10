@@ -1471,7 +1471,7 @@ void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Places an already-created unit into a room at world coordinates (nX, nY), dispatching on unit type: allocates a dynamic path for players/monsters/missiles, sets velocity and triggers AI think for monsters (or resets if room is unoccupied), initialises static paths and collision for objects/warps/items, inserts the unit into the game hash table, links it to the room update list, and sets anim mode 1 if nInitMode==0. Halts on NULL game or unit.
-void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nY, int32_t nX, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nInitMode) {
+void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nX, int32_t nY, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nInitMode) {
     int32_t iVar1;
     D2ObjectsTxt* pObjectsTxt;
     uint32_t nErrorLine;
@@ -1490,12 +1490,12 @@ void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nY, int32_t nX
     pUnit->pDrlgAct = pGame->pAct[neAct];
     switch (pUnit->eUnitType) {
       case UNIT_PLAYER:
-        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nY, nX, pUnit, 0);
-      PLAYER::Player::PLAYER_MoveToLocationWithTimeout(pGame, pUnit, nY, nX);
+        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
+      PLAYER::Player::PLAYER_MoveToLocationWithTimeout(pGame, pUnit, nX, nY);
       break;
       case UNIT_MONSTER:
-        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nY, nX, pUnit, 0);
-      D2Game::Monster::MONSTER_SetVelocityAndTransition(pGame, pUnit, nY, nX, nInitMode);
+        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
+      D2Game::Monster::MONSTER_SetVelocityAndTransition(pGame, pUnit, nX, nY, nInitMode);
       iVar1 = IsRoomOccupied(pUnit);
       if (iVar1) {
         D2Game::Monster::MONSTERAI_TriggerMageThink(pGame, pUnit);
@@ -1506,9 +1506,9 @@ void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nY, int32_t nX
       break;
       case UNIT_OBJECT:
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
-      D2Common::Units::InitializeStaticPath(pUnit, pRoom, nY, nX);
+      D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
       if (pObjectsTxt->HasCollision[pUnit->eAnimMode.eObjectMode]) {
-        D2Common::Units::BlockCollisionPath(pUnit, pRoom, nY, nX);
+        D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
       }
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x420);
@@ -1519,19 +1519,19 @@ void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nY, int32_t nX
       break;
       case UNIT_ITEM:
         if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
-          D2Common::Units::InitializeStaticPath(pUnit, pRoom, nY, nX);
-          D2Common::Units::BlockCollisionPath(pUnit, pRoom, nY, nX);
+          D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
+          D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
           if (pRoom) {
             D2Common::Unit::DRLGROOM_AddUnitToRoomList(pUnit, pRoom, UNIT_PLAYER);
           }
         }
       break;
       case UNIT_MISSILE:
-        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nY, nX, pUnit, 0);
+        D2Common::PATH::DynamicPath::AllocDynamicPath(pGame->pMemoryPool, pRoom, nX, nY, pUnit, 0);
       break;
       case UNIT_WARP:
-        D2Common::Units::InitializeStaticPath(pUnit, pRoom, nY, nX);
-      D2Common::Units::BlockCollisionPath(pUnit, pRoom, nY, nX);
+        D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
+      D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x442);
         exit(-1);

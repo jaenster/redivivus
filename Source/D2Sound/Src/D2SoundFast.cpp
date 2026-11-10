@@ -306,7 +306,7 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundOptionsMusic = dwRegValue;
 }
 
-uint32_t __stdcall SOUND_GetSoundMixer() {
+int32_t __stdcall SOUND_GetSoundMixer() {
     return g_nSoundMixerType;
 }
 
@@ -367,7 +367,7 @@ int32_t __fastcall SOUND_SetOptionsMusic(int32_t nOptionsMusic) {
 }
 
 void __stdcall SOUND_InitSoundEffectBuffers() {
-    IDirectSound* dwSpeakerFlag = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!(dwSpeakerFlag && !gnSoundEffectSampleCount)) {
       return;
     }

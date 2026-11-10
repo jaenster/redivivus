@@ -20,8 +20,8 @@ struct IDirectSound;
 namespace D2Sound {
 
 // Function declarations
-struct IDirectSound * __stdcall SOUND_GetSpeakerConfigFlag();
-DWORD __stdcall SOUND_GetDirectSoundInitializedFlag();
+struct IDirectSound * __stdcall SOUND_GetDirectSoundDevice();
+DWORD __stdcall SOUND_GetPrimaryBufferModeFlag();
 DWORD __stdcall SOUND_GetSound3DFlag();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Sound)

@@ -412,30 +412,25 @@ static void SpawnTownTransitionsAndCaves(D2DrlgLevelStrc * pLevel) {
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pDrlgLevelStrc (ESI): D2DrlgLevelStrc*
-static BOOL __stdcall DRLGOUTROOM_SpawnRandomOutdoorDecorations(int32_t nPresetType, D2DrlgLevelStrc * pDrlgLevelStrc, int bAllowDouble) {
-    uint32_t uVar1;
+static void __stdcall DRLGOUTROOM_SpawnRandomOutdoorDecorations(int32_t nPresetType, D2DrlgLevelStrc * pDrlgLevelStrc, int bAllowDouble) {
     D2SeedStrc newSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
     pDrlgLevelStrc->sSeed.nSeedHigh = newSeed.nSeedHigh;
     pDrlgLevelStrc->sSeed.nSeedLow = newSeed.nSeedLow;
     if (newSeed.nSeedLow & 3) {
-      BOOL BVar2;
-      uVar1 = Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
+      Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
       if (bAllowDouble) {
         newSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-        uVar1 = newSeed.nSeedLow;
         pDrlgLevelStrc->sSeed.nSeedHigh = newSeed.nSeedHigh;
         pDrlgLevelStrc->sSeed.nSeedLow = newSeed.nSeedLow;
         if (newSeed.nSeedLow & 1) {
-          BVar2 = Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, 0x31, -1);
-          return BVar2;
+          Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, 0x31, -1);
+          return;
         }
       }
     } else {
       Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
-      uVar1 = Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
+      Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
     }
-
-    return uVar1;
 }
 
 // Switch on level ID spawning Act1 level-specific presets (BloodMoor through MooMooFarm).

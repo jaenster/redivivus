@@ -2623,35 +2623,37 @@ void __stdcall STATLIST_SetItemStatActive(D2UnitStrc * pUnit, D2UnitStrc * pItem
     }
 }
 
-void __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled) {
+BOOL __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled) {
     if (eState == STATE_none) {
-      return;
+      return 0;
     }
 
     D2StatListExStrc* pStateStatList = pUnit->pStatsEx;
     if (!(pStateStatList && pStateStatList->sStatList.nFlags & 0x80000000U)) {
-      return;
+      return 0;
     }
 
     pStateStatList = GetStatListByState(pStateStatList, eState);
     if (!pStateStatList) {
-      return;
+      return 0;
     }
     if (bDisabled) {
       if (!(pStateStatList->sStatList.nFlags & 0x2000U)) {
         STATLIST_DetachAndRecalc(pStateStatList);
         pStateStatList->sStatList.nFlags |= 0x2000;
         STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
-        return;
+        return 1;
       }
     } else {
       if (pStateStatList->sStatList.nFlags & 0x2000U) {
         STATLIST_DetachAndRecalc(pStateStatList);
         pStateStatList->sStatList.nFlags &= -8193;
         STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
-        return;
+        return 1;
       }
     }
+
+    return 0;
 }
 
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.

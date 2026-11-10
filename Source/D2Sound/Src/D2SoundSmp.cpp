@@ -205,7 +205,7 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
 
     tBufferDesc.dwBufferBytes = nBufSize;
     tBufferDesc.lpwfxFormat = &tWaveFormat;
-    IDirectSound* pDSDevice = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* pDSDevice = SOUND_GetDirectSoundDevice();
     HRESULT nHResult = pDSDevice->lpVtbl->CreateSoundBuffer(pDSDevice, &tBufferDesc, (void**)&pSoundSmp->pDSBuffer, nullptr);
     if (nHResult < 0) {
       return 0;
@@ -257,7 +257,7 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
     g_nSoundSampleParam = dwSampleParam;
     if (nSoundFlags & 2) {
       DWORD dwDSInitFlag;
-      dwDSInitFlag = SOUND_GetDirectSoundInitializedFlag();
+      dwDSInitFlag = SOUND_GetPrimaryBufferModeFlag();
       if (!dwDSInitFlag) {
         return nullptr;
       }
@@ -537,7 +537,7 @@ void __fastcall SOUNDSMP_StartFade(D2SoundSmpStrc * pSoundSmp, uint32_t dwTarget
       exit(-1);
     }
 
-    IDirectSound* pIVar1 = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* pIVar1 = SOUND_GetDirectSoundDevice();
     if (!pIVar1) {
       return;
     }
@@ -554,7 +554,7 @@ void __fastcall SOUNDSMP_StartFade(D2SoundSmpStrc * pSoundSmp, uint32_t dwTarget
 
 void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume) {
     D2SoundListNodeStrc* pDVar1;
-    IDirectSound* nErrLineOrFlag = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* nErrLineOrFlag = SOUND_GetDirectSoundDevice();
     if (!(nErrLineOrFlag && nVolume != gnSoundGlobalVolume)) {
       return;
     }
@@ -581,7 +581,7 @@ void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume) {
 }
 
 uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
-    IDirectSound* dwSpeakerFlag = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     return dwSpeakerFlag ? gnSoundGlobalVolume : 0;
 }
 
@@ -650,7 +650,7 @@ void __fastcall SOUNDSMP_Stop(D2SoundSmpStrc * ppnParam) {
 }
 
 void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
-    IDirectSound* dwSpeakerFlag = SOUND_GetSpeakerConfigFlag();
+    IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!dwSpeakerFlag) {
       return;
     }
@@ -659,7 +659,7 @@ void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
       exit(-1);
     }
 
-    dwSpeakerFlag = SOUND_GetSpeakerConfigFlag();
+    dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     uint32_t nCurrentVolume;
     if (dwSpeakerFlag) {
       nCurrentVolume = gnSoundGlobalVolume;

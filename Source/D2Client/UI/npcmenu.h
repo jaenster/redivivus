@@ -167,7 +167,7 @@ void __fastcall NPCMENU_OnItemUnequip(int32_t nUnitGUID);
 void __fastcall NPCMENU_OnItemPutInContainer(int32_t nUnitGUID);
 void __fastcall NPCMENU_OnItemPutInBelt(int32_t nUnitGUID);
 void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID);
-BOOL __fastcall NPCMENU_CalculateItemTransactionCost(struct D2UnitStrc * pUnit, int32_t nTransactionMode, int * pInventory, uint16_t * pszBuffer, int32_t nBufferMaxLen);
+BOOL __fastcall NPCMENU_CalculateItemTransactionCost(struct D2UnitStrc * pUnit, int32_t nTransactionMode, int * pTransactionCost, uint16_t * pszBuffer, int32_t nBufferMaxLen);
 uint32_t __stdcall NPCMENU_IsShopActive();
 BOOL __stdcall NPCMENU_ConfirmTransactionCallback();
 int __stdcall NPCMENU_ConfirmTransactionReturn();

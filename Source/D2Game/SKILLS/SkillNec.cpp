@@ -1051,7 +1051,7 @@ void __fastcall SKILLNEC_DispatchSummonMastery(D2UnitStrc * pUnit, int * pSummon
 }
 
 // Server-side: applies a summon skill's full buff package onto a newly created pet/summon. Reads the skill's passivestat/passivecalc (5 entries) and aurastat/aurastatcalc (6 entries) from SkillsTxt, computing each value via D2GetSkillCalc and adding it to the summon's stat lists; for stats with itemevents it registers aura unit-events (D2SetAuraEvent). Sets the aurastate, scales the summon's max/current HP by the skill's calc[0] percentage, grants sumskill skills (auto-selecting flagged ones), wires auraevent callbacks, applies sumumod monster mods and sumoverlay. Finally calls SKILLASS_EquipSummonItems. pUnit=summoner, pSummonStatList/pSummon=the summon, eSkill=summon skill, nParam1=skill level, nParam2=item level (auto-derived from summoner level if 0). Returns 1 on success, 0 if skill is Attack or stat-list alloc fails.
-uint32_t __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSummonStatList, eD2Skills eSkill, int32_t nSkillLvl, int32_t nItemLevel) {
+BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSummonStatList, eD2Skills eSkill, int32_t nSkillLvl, int32_t nItemLevel) {
     int32_t nStatCalc;
     D2SUnitEventStrc* fEventSearchResult;
     int32_t nSummonGUID;

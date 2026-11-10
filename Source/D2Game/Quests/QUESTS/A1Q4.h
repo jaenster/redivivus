@@ -266,7 +266,7 @@ void __fastcall Q33_UpdateFrozenAnyaNpcState(struct D2QuestDataStrc * pQuestData
 // A1Q4 — Q04_GetCainPortalCoordinates: outputs the saved Cain-area portal coords
 // (field 0xA8/0xAC) into pOutCoords if the quest is active, the portal-placed flag is
 // set, and not suppressed. Returns 1 on success, 0 otherwise. Getter.
-BOOL __thiscall Q04_GetCainPortalCoordinates(void * pThis, uint32_t * pOutCoords);
+BOOL __thiscall Q04_GetCainPortalCoordinates(::SGAMEDATA * pThis, int32_t * pOutCoords);
 // A1Q4 — Q04_SpawnCainCage: spawns the Cain cage/gibbet object (object classId 0xbd)
 // at the saved coords the first time (guarded by a one-shot flag), retrying nearby rooms
 // and nudging the spawn position if no room is found. Records the cage GUID. No quest
@@ -296,7 +296,7 @@ uint32_t __fastcall Q04_IsTristramActive(::SGAMEDATA * pGame);
 void __fastcall Q04_DropShieldRewards(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // A1Q4 — Q04_SetCainUnitGUID: stores Cain's unit GUID into the quest sub-struct
 // (field_0xB0). Setter only.
-void __thiscall Q04_SetCainUnitGUID(void * pThis, int32_t nCainGUID);
+void __thiscall Q04_SetCainUnitGUID(::SGAMEDATA * pThis, int32_t nCainGUID);
 // A1Q4 — Q04_ForceStartQuestProgression: one-shot (guarded by flag 0x65) debug/forced
 // advance that activates the quest objects (Q04_ActivateCairnStonesAndTree) and jumps the
 // step flag straight to 6 (Cain freed). Halts if quest data missing.

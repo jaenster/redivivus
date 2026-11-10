@@ -268,7 +268,7 @@ void __fastcall SOUND_PlayItemSound(struct D2SoundChannelStrc * nChannelData, in
 int __fastcall SOUND_GetSoundChannel(int32_t nSoundId);
 int __stdcall SOUND_IsMusicPlaying();
 BOOL __stdcall SOUND_GetAmbientMusicState();
-int __fastcall SOUND_StopChannelById(int32_t nSoundId);
+int __fastcall SOUND_GetSoundIdByChannelHandle(int32_t nChannelHandle);
 void __fastcall Unreferenced_004b9cd0(int nChannelHandle, uint8_t nPriority);
 void __stdcall SOUND_PauseAll();
 void __stdcall SOUND_ResumeAll();

@@ -2007,8 +2007,8 @@ void __fastcall Q33_UpdateFrozenAnyaNpcState(D2QuestDataStrc * pQuestData, D2Uni
 // A1Q4 — Q04_GetCainPortalCoordinates: outputs the saved Cain-area portal coords
 // (field 0xA8/0xAC) into pOutCoords if the quest is active, the portal-placed flag is
 // set, and not suppressed. Returns 1 on success, 0 otherwise. Getter.
-BOOL __thiscall Q04_GetCainPortalCoordinates(void * pThis, uint32_t * pOutCoords) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_TheSearchForCain);
+BOOL __thiscall Q04_GetCainPortalCoordinates(::SGAMEDATA * pThis, int32_t * pOutCoords) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pThis, QUESTINT_TheSearchForCain);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
       D2QuestDataA1Q4Strc* pQuestSpecific;
       pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q4;
@@ -2205,8 +2205,8 @@ void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc *
 
 // A1Q4 — Q04_SetCainUnitGUID: stores Cain's unit GUID into the quest sub-struct
 // (field_0xB0). Setter only.
-void __thiscall Q04_SetCainUnitGUID(void * pThis, int32_t nCainGUID) {
-    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal((::SGAMEDATA*)pThis, QUESTINT_TheSearchForCain);
+void __thiscall Q04_SetCainUnitGUID(::SGAMEDATA * pThis, int32_t nCainGUID) {
+    D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pThis, QUESTINT_TheSearchForCain);
     if (!pQuestData) {
       return;
     }

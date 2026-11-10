@@ -6843,8 +6843,8 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
 }
 
-void __thiscall CloseScrollOfWhatever(void * pThis, int32_t nColor) {
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)gpInvRecipeScrollImage, (uint16_t*)pThis);
+void __thiscall CloseScrollOfWhatever(uint16_t * pThis, int32_t nColor) {
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)gpInvRecipeScrollImage, pThis);
     gbInvRecipeScrollOpen = nColor;
     ui::SetUIFlag(UI_RECIPESCROLL, UI_SET, 0);
 }
@@ -6933,7 +6933,6 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
     uint32_t _wszTokenBuf;
     va_list __va;
     va_start(__va, wszFormat);
-    uint16_t* pwTokenPtr;
     int nArgIdxA;
     uint16_t* pwArgDest;
     uint16_t* pwArgSrc;
@@ -6971,28 +6970,27 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
 
     nTotalArgs = nArgIdxA;
     pwColonSaved = (uint16_t*)(uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&pwColonSaved + 2) << 16 | (uint32_t)(uint16_t)0x3a);
-    uint16_t* pwColonPtr;
-    pwColonPtr = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, 0x3a);
-    pwColonSaved = pwColonPtr;
-    if (pwColonPtr) {
+    pwArgDest = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, L':');
+    pwColonSaved = pwArgDest;
+    if (pwArgDest) {
       __frame0.wszTokenBuf = 0x61;
       memcpy(wszMsToken, L"[ms]", 10);
       nArgIdxA = -1;
-      pwTokenPtr = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, 0x61);
-      if (pwTokenPtr && pwTokenPtr < pwColonPtr) {
-        nArgIdxA = pwTokenPtr[1] - 0x30;
+      pwArgSrc = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, L'a');
+      if (pwArgSrc && pwArgSrc < pwArgDest) {
+        nArgIdxA = (uint16_t)pwArgSrc[1] - 0x30;
       }
 
       _wszTokenBuf = (uint32_t)(uint32_t)(uint16_t)0x6e;
       nArgIdxN = -1;
-      pwTokenPtr = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, 0x6e);
-      if (pwTokenPtr && pwTokenPtr < pwColonPtr) {
-        nArgIdxN = pwTokenPtr[1] - 0x30;
+      pwArgSrc = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, L'n');
+      if (pwArgSrc && pwArgSrc < pwArgDest) {
+        nArgIdxN = (uint16_t)pwArgSrc[1] - 0x30;
       }
       if (nArgIdxA != -1) {
         if (nArgIdxN == -1) {
           INV_ExtractTextBetweenBrackets(awszArgs + nArgIdxA * 200, (short*)wszMsToken);
-          wszFormat = (uint16_t*)(pwColonPtr + 1);
+          wszFormat = pwArgDest + 1;
           goto substitute_args;
         }
 
@@ -7007,20 +7005,20 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
         }
 
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwArgDest, pwArgSrc);
-        pwColonPtr = pwColonSaved;
+        pwArgDest = pwColonSaved;
         if (awszArgs[nArgIdxA * 200] == L'[') {
           INV_ExtractTextBetweenBrackets(awszArgs + nArgIdxA * 200, (short*)wszContainerA);
-          pwColonPtr = pwColonSaved;
+          pwArgDest = pwColonSaved;
         }
       } else {
         if (nArgIdxN != -1) {
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszArgs + nArgIdxN * 200, awszArgs + nArgIdxN * 200 + 4);
-          wszFormat = (uint16_t*)(pwColonPtr + 1);
+          wszFormat = pwArgDest + 1;
           goto substitute_args;
         }
       }
 
-      wszFormat = (uint16_t*)(pwColonPtr + 1);
+      wszFormat = pwArgDest + 1;
     }
 
     substitute_args:

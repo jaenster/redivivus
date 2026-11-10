@@ -89,7 +89,7 @@ struct D2SeedStrc * __fastcall GetObjectControlSeed(::SGAMEDATA * pGame, struct 
 struct D2ObjectRngShrines * __fastcall GetShrinesRng(::SGAMEDATA * pGame);
 void __fastcall IncrementObjectTypeCount(int * pThis, uint32_t nObjectType);
 void __fastcall Send_0x26_Chat(struct D2ClientStrc * pClient, char * * ppMessage);
-void __thiscall SendDebugMessageToEveryone(void * pThis, char * pMessage);
+void __thiscall SendDebugMessageToEveryone(::SGAMEDATA * pThis, char * pMessage);
 // @sourcefile .\OBJECTS\objrgn.cpp
 void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom);
 // Object initializer for region-based objects (objrgn.cpp). Walks the pSub0x1110 linked list looking for an entry whose room matches pInitArg->pRoom (or whose coords fall inside that room). If found and the object is absent or dead, schedules a game event using the object's FrameCnt animation timing, then frees the entry. If not found and the room is a town room, calls SetupUpdateFlag(obj, 2).

@@ -277,7 +277,7 @@ void __stdcall INV_HandleMercInvLeftDown(struct D2UIMouseMsgStrc * pMsg);
 // Handles left-click events in mercenary inventory UI. Checks for close button click, then iterates through mercenary equipment slots to handle item equipping/unequipping. Validates item compatibility with mercenary, removes items client-side, sends 0x61 packet to server, and plays appropriate success/failure sounds.
 void __stdcall INV_HandleMercInvLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleMercInvMouseMove(struct D2UIMouseMsgStrc * pMsg);
-void __thiscall CloseScrollOfWhatever(void * pThis, int32_t nColor);
+void __thiscall CloseScrollOfWhatever(uint16_t * pThis, int32_t nColor);
 void __stdcall INV_DrawRecipeScroll();
 void __stdcall INV_HandleRecipeScrollClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_PanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);

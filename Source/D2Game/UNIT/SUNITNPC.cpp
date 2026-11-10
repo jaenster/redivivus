@@ -1738,7 +1738,7 @@ void __fastcall SUNITNPC_ProcessGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
     } else {
       check_needs_repair:
-      bCanAfford = D2Common::ITEMS::Items::ITEMS_CheckChargedSkillFullyCharged(pItemUnit, (bool*)&nItemGUID);
+      bCanAfford = D2Common::ITEMS::Items::ITEMS_CheckChargedSkillFullyCharged(pItemUnit, (BOOL*)&nItemGUID);
       if ((!bCanAfford || nItemGUID) && (!nParam || nCurDurability >= (int)nParam)) {
         bSuccess = 0;
         nErrorLine = -1;
