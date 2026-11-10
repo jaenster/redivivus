@@ -162,7 +162,8 @@ fn readFile(path: [*:0]const u8) ![]u8 {
 }
 
 pub fn main(init: std.process.Init.Minimal) !void {
-    var argv = std.process.Args.Iterator.init(init.args);
+    var argv = try std.process.Args.Iterator.initAllocator(init.args, gpa);
+    defer argv.deinit();
     _ = argv.next();
     const exe_path: [:0]const u8 = argv.next() orelse "../reference/Game.exe";
     const out_path: [:0]const u8 = argv.next() orelse "../build/ref/functions.tsv";
