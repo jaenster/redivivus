@@ -62,7 +62,7 @@ jobs:
         run: asm_matching/msvc8/oracle all
 
       - name: Classify every function that differs
-        run: python3 asm_matching/msvc8/scripts/classify.py --out classes.tsv | tee classify-summary.txt
+        run: asm_matching/msvc8/.venv/bin/python asm_matching/msvc8/scripts/classify.py --out classes.tsv | tee classify-summary.txt
 
       - name: Summary
         if: always()
