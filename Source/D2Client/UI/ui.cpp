@@ -7819,7 +7819,13 @@ static void UI_ConfigHandleMouseClick(int32_t nMouseX, int32_t nMouseY) {
     }
 
     gnUICtrlConfigButton3State = 0;
-    memset(gaControlConfigRegionMouseState, 0, 7 * sizeof(gaControlConfigRegionMouseState[0]));
+    gaControlConfigRegionMouseState[0] = 0;
+    gaControlConfigRegionMouseState[1] = 0;
+    gaControlConfigRegionMouseState[2] = 0;
+    gaControlConfigRegionMouseState[3] = 0;
+    gaControlConfigRegionMouseState[4] = 0;
+    gaControlConfigRegionMouseState[5] = 0;
+    gaControlConfigRegionMouseState[6] = 0;
 }
 
 void __stdcall INPUT_ConfigMouseDown(D2UIMouseMsgStrc * pMsg) {
