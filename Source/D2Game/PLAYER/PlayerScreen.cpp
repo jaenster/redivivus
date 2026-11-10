@@ -214,12 +214,12 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
     }
     if (nIsPartied == 0xffff) {
       uVar1 = UNIT::Party::PARTY_CreateParty(pGame);
-      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pInvitee, (int32_t)pUnit);
-      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pUnit, (int32_t)pUnit);
+      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pInvitee);
+      UNIT::Party::PARTY_AddUnitToParty(pGame, uVar1, pUnit);
       UNIT::PlayerList::PARTY_RefreshPlayerListRelationships(pGame, pInvitee);
       *(uint16_t*)(char*)&pInvitee = uVar1;
     } else {
-      UNIT::Party::PARTY_AddUnitToParty(pGame, nIsPartied, pUnit, (int32_t)pUnit);
+      UNIT::Party::PARTY_AddUnitToParty(pGame, nIsPartied, pUnit);
       *(uint16_t*)(char*)&pInvitee = nIsPartied;
     }
 

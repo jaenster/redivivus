@@ -53,7 +53,7 @@ int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame);
 void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId);
 // Adds a player unit to an existing party slot identified by nPartyId. Searches pGame->pPartyControl->pSub for the matching party, allocates a new D2UnitPartyControlSubSub node with the unit's GUID, prepends it to the party's member list, broadcasts 0x8D (AssignPlayerToParty), and clears hostile relations between the newcomer and all existing members. Returns 1 on success. Halts with an internal error if the party control, party slot, or unit is invalid.
 // @sourcefile .\UNIT\Party.cpp
-int __stdcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, struct D2UnitStrc * pUnit, int32_t nLine);
+int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, struct D2UnitStrc * pUnit);
 int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyId);
 BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, struct D2UnitStrc * pUnit, int * pLevelSum);
 void __fastcall CountModeZero(int32_t * pContext, struct D2UnitStrc * pUnit, int * pCount);
