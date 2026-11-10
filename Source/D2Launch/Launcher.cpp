@@ -7,7 +7,7 @@
 #include "Source/D2Launch/CharSel.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Launch/D2Launch.globals.h"
 #include "Source/D2Headers/d2_platform.h"

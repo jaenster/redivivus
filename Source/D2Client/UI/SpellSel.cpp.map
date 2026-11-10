@@ -905,6 +905,7 @@
         "UI_DrawTextCentered"
       ],
       "usedTypes": [
+        "WCHAR",
         "int32_t"
       ]
     },

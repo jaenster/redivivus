@@ -60,7 +60,7 @@ set(D2_MODULE_Fog_UNITS
     Source/Fog/Src/ErrorManager.cpp  # 004016b0, 9 runs
     Source/Fog/Debug.cpp  # 00401b00, 6 runs
     Source/Fog/File.cpp  # 00403040, 2 runs
-    Source/Fog/Engine/Application.cpp  # 00404660, 2 runs
+    Source/Fog/Engine/Application.cpp  # 004046d0, 2 runs
     Source/Fog/Source/SFile.cpp  # 00406870, 2 runs
     Source/Fog/Src/QServer/QServer.cpp  # 004080a0, 4 runs
     Source/Fog/FogRoot.cpp  # 00408f20, 10 runs
@@ -180,7 +180,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/ComCallback.cpp  # 004497f0 (outside the module's runs), 1 run
     Source/D2Client/McpConnect.cpp  # 0044b1f0 (outside the module's runs), 1 run
     Source/D2Client/ClientModeInGame.cpp  # 0044b430, 5 runs
-    Source/D2Client/D2ClientRoot.cpp  # 0044b550, 40 runs
+    Source/D2Client/D2ClientRoot.cpp  # 0044b550, 39 runs
     Source/D2Client/GAME/Game/Game.cpp  # 0044b870, 27 runs
     Source/D2Client/GAME/Server.cpp  # 0044cf20, 1 run
     Source/D2Client/GAME/stpl_SGAMEDATA.cpp  # 0044dd90, 7 runs
@@ -190,18 +190,18 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/GAME/Record.cpp  # 00451400, 1 run
     Source/D2Client/Message.cpp  # 00451a90, 1 run
     Source/D2Client/DataTbls/MonsterTbls.cpp  # 00451fb0, 1 run
-    Source/D2Client/UI/ui.cpp  # 00452090, 36 runs
+    Source/D2Client/UI/ui.cpp  # 00452090, 35 runs
     Source/D2Client/UI/stpl_SGAMEDATA.cpp  # 004545a0, 1 run
     Source/D2Client/UI/Draw.cpp  # 00456550, 2 runs
     Source/D2Client/UNIT.cpp  # 00457460, 1 run
     Source/D2Client/UI/Automap.cpp  # 004574d0, 2 runs
-    Source/D2Client/Engine.cpp  # 0045ae50, 7 runs
+    Source/D2Client/Engine.cpp  # 0045ae50, 8 runs
     Source/D2Client/UI/Path.cpp  # 0045ae60, 4 runs
     Source/D2Client/UI/Text.cpp  # 0045afe0, 9 runs
     Source/D2Client/GAME/SCmd.cpp  # 0045b090, 3 runs
     Source/D2Client/Archive.cpp  # 0045b960, 4 runs
-    Source/D2Client/UNIT/Player.cpp  # 004609f0, 4 runs
-    Source/D2Client/UNIT/CUnit.cpp  # 00463d80, 3 runs
+    Source/D2Client/UNIT/Player.cpp  # 00460830, 6 runs
+    Source/D2Client/UNIT/CUnit.cpp  # 00463c90, 4 runs
     Source/D2Client/GAME/Select.cpp  # 00466dc0, 2 runs
     Source/D2Client/Cursor.cpp  # 00467df0, 3 runs
     Source/D2Client/UI/Panel.cpp  # 00468f40, 7 runs
@@ -334,9 +334,9 @@ set(D2_MODULE_D2Multi_GENERATED ON)
 set(D2_MODULE_D2Multi_DATA "Source/globals/D2Multi.cpp")
 set(D2_MODULE_D2Multi_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Multi_UNITS
-    Source/D2Multi/ChatDlg.cpp  # 0043cc30, 12 runs
+    Source/D2Multi/ChatDlg.cpp  # 0043cc30, 15 runs
     Source/D2Multi/OOG.cpp  # 0043d9a0, 2 runs
-    Source/D2Multi/OOGUtilities.cpp  # 0043daf0, 7 runs
+    Source/D2Multi/OOGUtilities.cpp  # 0043da50, 9 runs
     Source/D2Multi/ComCallback.cpp  # 0043db90, 5 runs
     Source/D2Multi/OOG/ChatDlg.cpp  # 0043ed50, 2 runs
     Source/D2Multi/D2MultiRoot.cpp  # 0043f970, 6 runs
@@ -485,8 +485,8 @@ set(D2_MODULE_D2Sound_DATA "Source/globals/D2Sound.cpp")
 set(D2_MODULE_D2Sound_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Sound_UNITS
     Source/D2Sound/D2SoundRoot.cpp  # 00513a20, 4 runs
-    Source/D2Sound/Sound.cpp  # 00513af0, 4 runs
-    Source/D2Sound/Src/D2SoundFast.cpp  # 00514840, 1 run
+    Source/D2Sound/Sound.cpp  # 00513af0, 5 runs
+    Source/D2Sound/Src/D2SoundFast.cpp  # 00514710, 2 runs
     Source/D2Sound/Src/D2SoundSmp.cpp  # 00515180, 2 runs
     Source/D2Sound/D2SoundUntil.cpp  # 00516950, 1 run
 )
@@ -602,7 +602,7 @@ set(D2_MODULE_D2Game_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Game_UNITS
     Source/D2Game/Archive.cpp  # 0045c370 (outside the module's runs), 1 run
     Source/D2Game/GAME/Server.cpp  # 0052be20, 23 runs
-    Source/D2Game/D2GameRoot.cpp  # 0052cbb0, 20 runs
+    Source/D2Game/D2GameRoot.cpp  # 0052cbb0, 19 runs
     Source/D2Game/GAME/stpl_SGAMEDATA.cpp  # 0052e470, 4 runs
     Source/D2Game/PLAYER/PlayerSave.cpp  # 00530f40, 2 runs
     Source/D2Game/PLAYER/Player.cpp  # 00534800, 1 run
@@ -664,7 +664,7 @@ set(D2_MODULE_D2Game_UNITS
     Source/D2Game/Quests/QUESTS/A2Q0.cpp  # 00598640, 1 run
     Source/D2Game/Quests/QUESTS/A2Q1.cpp  # 005988b0, 1 run
     Source/D2Game/Quests/QUESTS/A2Q2.cpp  # 00599420, 2 runs
-    Source/D2Game/Quests/QUESTS/A2Q3.cpp  # 00599f50, 5 runs
+    Source/D2Game/Quests/QUESTS/A2Q3.cpp  # 00599f50, 4 runs
     Source/D2Game/Quests/QUESTS/A2Q4.cpp  # 0059aca0, 2 runs
     Source/D2Game/Quests/QUESTS/A2Q5.cpp  # 0059bb40, 1 run
     Source/D2Game/Quests/QUESTS/A2Q6.cpp  # 0059c330, 3 runs

@@ -43,6 +43,6 @@ void __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars);
 // Compares two characters using UI character lookup table for case-insensitive comparison. If char < 0x100, maps via CharacterLookupTable, else uses raw value. Returns 1 if equal, 0 otherwise.
 BOOL __stdcall UI_CompareCharsUsingLookupTable(uint16_t wChar1, uint16_t wChar2);
 #endif // D2_MODULE_D2Lang
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Lang

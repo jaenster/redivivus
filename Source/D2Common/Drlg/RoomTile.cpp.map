@@ -237,8 +237,8 @@
         "exit"
       ],
       "usedTypes": [
-        "D2DrlgTileDataStrc",
-        "D2DrlgTileLinkStrc",
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2LvlWarpTxt",
         "uint32_t",
         "uint8_t"
       ]

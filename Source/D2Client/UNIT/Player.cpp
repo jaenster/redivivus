@@ -42,10 +42,6 @@
 #define RECON_FPTD_fpStatListExChangeCb
 typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemOwner, eD2Skills eSkill, int32_t nOldValue, int32_t nNewValue);
 #endif
-#ifndef RECON_FPTD_fnUnitIterCallback
-#define RECON_FPTD_fnUnitIterCallback
-typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
-#endif
 
 static BOOL BOOL_007a5260 = 0; D2_STATIC_GUARD(BOOL_007a5260, "BOOL_007a5260");
 static BOOL bRecursionClick = 0; D2_STATIC_GUARD(bRecursionClick, "bRecursionClick");

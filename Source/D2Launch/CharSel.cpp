@@ -8,7 +8,7 @@
 #include "Source/D2Launch/Launcher.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
@@ -2131,7 +2131,6 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
     char cVar1;
     uint16_t* pwszHeader;
     char* pSaveDataCursor;
-    uint16_t nSubHeaderStrId;
     uint32_t dwCharFlags;
     uint32_t* szCharacterName;
     uint32_t dwScanByte;
@@ -2143,12 +2142,7 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
     if (!bIsExpansion) {
       uint16_t* pwszSubHeader;
       pwszHeader = D2Lang::StrTable::strtable::GetLocaleString(0x1419);
-      nSubHeaderStrId = 0x141b;
-      if (MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET) {
-        nSubHeaderStrId = 0x141a;
-      }
-
-      pwszSubHeader = D2Lang::StrTable::strtable::GetLocaleString(nSubHeaderStrId);
+      pwszSubHeader = D2Lang::StrTable::strtable::GetLocaleString(MainMenus::OogCurrentCharSelectionMode != CHAR_SELECTION_BNET ? 0x141a : 0x141b);
       gnCharSelLoadMoreEntryIndex = TotalCurrentChars;
       CHARSEL_CreateCharEntry(pwszHeader, pwszSubHeader, 1, '\f');
     }

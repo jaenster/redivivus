@@ -1169,7 +1169,6 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
       pCurSkillIter = pNextSkillIter;
       if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pTxtSkill = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-        pUnit = pUnit;
         if (pTxtSkill && pTxtSkill->pettype > '\0' && (int)pTxtSkill->pettype < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
           nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pTxtSkill->petmax, eSkill, nSkillLvl);
           pUnitOwner = pUnit;
@@ -1177,12 +1176,10 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
             nSkillCalc = 1;
           }
 
-          pUnit = pUnit;
           pCurSkillIter = pNextSkillIter;
           if (nSkillCalc > nPetMaxByType[pTxtSkill->pettype]) {
             nPetMaxByType[pTxtSkill->pettype] = nSkillCalc;
             PETS_SetMaxAndTrimExcess(pGameSaved, pUnitOwner, (int)pTxtSkill->pettype, nSkillCalc);
-            pUnit = pUnit;
             pCurSkillIter = pNextSkillIter;
           }
         }

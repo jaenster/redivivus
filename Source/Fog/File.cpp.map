@@ -408,6 +408,24 @@
         "WCHAR",
         "uint32_t"
       ]
+    },
+    {
+      "name": "DEBUG_CaptureThreadContext",
+      "address": "00404660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00404660"
+        }
+      ],
+      "namespace": "Fog::File",
+      "calledFunctions": [
+        "DEBUG_CaptureThreadContext"
+      ],
+      "usedTypes": [
+        "LPCONTEXT",
+        "uint32_t"
+      ]
     }
   ]
 }

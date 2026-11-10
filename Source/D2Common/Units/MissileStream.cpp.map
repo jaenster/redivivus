@@ -127,6 +127,7 @@
         "D2MissileStreamStrc",
         "D2PathPointStrc",
         "D2UnitStrc",
+        "MissileStream_Update_Slotm",
         "fpCreate",
         "fpUnknownMissileStream",
         "int32_t",

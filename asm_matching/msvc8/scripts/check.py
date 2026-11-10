@@ -46,6 +46,10 @@ CARVE = [
     (0x0069b7e3, 0x0069b85f, (0x0069b85d,), '_tsopen_helper'),
     (0x006a8b91, 0x006a92eb, (), '_tsopen_nolock (wopen)'),
     (0x006a92eb, 0x006a9367, (0x006a9365,), '_tsopen_helper (wopen)'),
+    # Reached only by a tail jump (the unwind thunk at 00604460), right after
+    # its predecessor's ret with no padding.
+    (0x006043a0, 0x006043b0, (), 'TSGrowableArray<CELLIST> constructor'),
+    (0x006043b0, 0x0060443a, (), 'TSGrowableArray<CELLIST>::New'),
     # A callback held in data, right after its predecessor's ret with no padding.
     (0x005ee040, 0x005ee260, (), 'AITHINK_Fn1_CatapultSpotter'),
     (0x005ee260, 0x005ee3b6, (), 'AITHINK_Fn1_DeathMauler'),

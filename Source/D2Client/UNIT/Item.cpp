@@ -1893,7 +1893,6 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
     BOOL bIsBroken;
     D2UnitStrc* pNewItem;
     uint32_t bResult;
-    int nInvSlot;
     uint32_t nSwappedBodyLoc;
     bool bNeedsGfxReload;
     D2UnitDataItemDetailsStrc stItemDetails;
@@ -2010,12 +2009,7 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
 
       D2Common::ITEMS::Items::SetBodyLoc(pNewItem, stItemDetails.nBodyLoc);
       pInvTmp = pInventory2;
-      nInvSlot = 3;
-      if (stItemDetails.nBodyLoc == BODYLOC_SWAPPED_R_ARM || stItemDetails.nBodyLoc == BODYLOC_SWAPPED_L_ARM) {
-        nInvSlot = 4;
-      }
-
-      bIsBroken = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory2, pNewItem, nInvSlot);
+      bIsBroken = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory2, pNewItem, stItemDetails.nBodyLoc == BODYLOC_SWAPPED_R_ARM || stItemDetails.nBodyLoc == BODYLOC_SWAPPED_L_ARM ? 4 : 3);
       if (!bIsBroken) {
         return;
       }
@@ -2165,7 +2159,6 @@ void __stdcall ITEM_HandleSwapBodyEquipItem(uint8_t * pPacket, D2UnitDataItemDet
     uint32_t bIsReload;
     int bPlaced;
     uint32_t bPlacedInBodyLoc;
-    int nPutSlot;
     bool bNeedsGfxReload;
     eInventoryPage eDropPage;
     D2InventoryStrc* pInventory;
@@ -2207,12 +2200,7 @@ void __stdcall ITEM_HandleSwapBodyEquipItem(uint8_t * pPacket, D2UnitDataItemDet
         exit(-1);
       }
 
-      nPutSlot = 3;
-      if (pItemDetails->nBodyLoc == 0xb || pItemDetails->nBodyLoc == 0xc) {
-        nPutSlot = 4;
-      }
-
-      bPlaced = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pItem, nPutSlot);
+      bPlaced = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pItem, pItemDetails->nBodyLoc == 0xb || pItemDetails->nBodyLoc == 0xc ? 4 : 3);
       if (!bPlaced) {
         return;
       }
@@ -2339,7 +2327,6 @@ static void __stdcall ITEM_HandleWeaponSwitchItems(D2UnitDataItemDetailsStrc * p
     D2UnitStrc* pNewItem;
     int iBodyLocSaved;
     BOOL nEquipReqCheck;
-    int nInvSlot;
     bool bNeedsGfxReload;
     D2InventoryStrc* pInventory;
     D2UnitStrc* pOwnerUnit = Player::UNITS_FindClientSideUnit(*(int32_t*)(pPacketData + 9), (eD2UnitType)pPacketData[8]);
@@ -2381,12 +2368,7 @@ static void __stdcall ITEM_HandleWeaponSwitchItems(D2UnitDataItemDetailsStrc * p
           }
 
           D2Common::ITEMS::Items::SetBodyLoc(pNewItem, pUnitDataItemDetails->nBodyLoc);
-          nInvSlot = 3;
-          if (pUnitDataItemDetails->nBodyLoc == 0xb || pUnitDataItemDetails->nBodyLoc == 0xc) {
-            nInvSlot = 4;
-          }
-
-          iBodyLocSaved = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pNewItem, nInvSlot);
+          iBodyLocSaved = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pNewItem, pUnitDataItemDetails->nBodyLoc == 0xb || pUnitDataItemDetails->nBodyLoc == 0xc ? 4 : 3);
           if (!iBodyLocSaved) {
             return;
           }
@@ -3303,7 +3285,6 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
     eD2InventoryGridType eInvGridType;
     D2UnitStrc* pCursorItem_lcl;
     uint32_t bFlag;
-    int nInvSlot;
     BOOL bAnyItemChanged;
     uint32_t nMaxModeComp;
     eD2UnitType eRemovedItemUnitType;
@@ -3414,12 +3395,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
 
       pCursorItem_lcl = ITEM_CreateItemFromBodyPacket(0, 0, 0, pbPacketSaved, &stItemDetails);
       D2Common::ITEMS::Items::SetBodyLoc(pCursorItem_lcl, stItemDetails.nBodyLoc);
-      nInvSlot = 3;
-      if (stItemDetails.nBodyLoc == 0xb || stItemDetails.nBodyLoc == 0xc) {
-        nInvSlot = 4;
-      }
-
-      bAnyItemChanged = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pCursorItem_lcl, nInvSlot);
+      bAnyItemChanged = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pCursorItem_lcl, stItemDetails.nBodyLoc == 0xb || stItemDetails.nBodyLoc == 0xc ? 4 : 3);
       if (!bAnyItemChanged) {
         return nullptr;
       }

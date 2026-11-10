@@ -146,6 +146,6 @@ uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize,
 // LPCWSTR - half of a designed rewrite. LPWSTR is outside that rewrite set, so both sides now agree.
 bool __fastcall FILETOOLS_CreateDirectoryW(LPWSTR lpPathName);
 #endif // D2_MODULE_Fog
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace Fog::File

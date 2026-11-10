@@ -64,6 +64,14 @@ suspicion is reportable from xrefs, the surrounding bytes and the table you foun
 
 - **Only default names are fair game.** Never replace a name someone already chose. If you think it is
   wrong, propose that with the evidence and let review decide.
+- **Reordering parameters is not renaming them.** A `set_prototype` that only puts the existing
+  parameters in another order (each keeps its name and type; same count, return type and convention;
+  storage may follow the convention or be custom) leaves every chosen name alone. It changes what every
+  call site passes, though, so it needs evidence of the new order: a `mac_pair` whose paired function
+  takes its parameters in that order (by name, or by type where that tells them apart; a swap of two
+  parameters of one type needs the pair's names), or a `call_site` for a call to the function (or to
+  its Mac pair) whose pushes show the order. A reorder that also renames or retypes a chosen-name
+  parameter is refused as any rename of a chosen name is.
 - Name by **meaning derived from field accesses and callee names**, never from a decompiler guess or a
   name that merely looks similar elsewhere.
 - **Unclear: use the type-based fallback** (`pTmp`, `nTmp`, `bTmp`, `dwTmp`). A wrong specific name is

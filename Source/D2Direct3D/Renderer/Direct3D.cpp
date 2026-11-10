@@ -11,7 +11,7 @@
 #include "Source/D2Gdi/Renderer/Windowed.h"
 #include "Source/D2Glide/Renderer/Glide.h"
 #include "Source/D2Hell/D2Hell.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.h"
@@ -479,7 +479,7 @@ BOOL __fastcall CheckCutScene() {
 }
 
 void __fastcall UpdateScaleFactor(int nScaleFactor) {
-    nScaleFactor = nScaleFactor;
+    gnScaleFactor = nScaleFactor;
 }
 
 int __fastcall CheckGamma() {
@@ -5173,19 +5173,8 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     RENDERER_D3D_SetBlendMode(1);
     char cAlphaByte;
     cAlphaByte = (char)nAlpha;
-    int iVar3;
-    iVar3 = 1;
-    if ((char)nAlpha != -1) {
-      iVar3 = 4;
-    }
-
-    SetBlendMode(iVar3);
-    iVar3 = 2;
-    if (!pTileData) {
-      iVar3 = 1;
-    }
-
-    RENDERER_D3D_SetTextureFilterMode(iVar3);
+    SetBlendMode((char)nAlpha != -1 ? 4 : 1);
+    RENDERER_D3D_SetTextureFilterMode(pTileData ? 2 : 1);
     D3DVB_Lock pVBLockFn;
     pVBLockFn = g_pD3DGroundTileVB->lpVtbl->Lock;
     if (pD2GFXRenderedDataStrc->bLowQuality) {

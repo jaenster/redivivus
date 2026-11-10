@@ -112,6 +112,13 @@ struct D2SoundWavCacheEntryStrc {
 
 #endif // D2_DEFINED_D2SoundWavCacheEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+union SOUND_UpdateChannelParams_Slotm0c {
+    /* 0x00 */ int nVolume;
+    /* 0x00 */ float fPosX;
+};
+
+#endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 union SOUND_UpdateChannelParams_Slotm14 {
     /* 0x00 */ struct D2SoundsTxt * pLife0;
     /* 0x00 */ float fPosZ;

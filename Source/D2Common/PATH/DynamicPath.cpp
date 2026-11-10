@@ -328,12 +328,17 @@ int32_t __stdcall PATH_GetDynamicPathField(int32_t nMonStatsIdx) {
         if (!((Fog::BitBuffer::gadwBitMasks[0] & dwMonStats2Flags || Fog::BitBuffer::gadwBitMasks[2] & dwMonStats2Flags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwMonStats2Flags))) {
           return nMonStatsExId;
         }
-        if (nMonStatsExId != 1) {
-          if (nMonStatsExId == 2) {
-            return 4;
-          }
-        } else {
-          nMonStatsExId = 3;
+
+        switch (nMonStatsExId) {
+          case 1:
+            {
+              nMonStatsExId = 3;
+              break;
+            }
+          case 2:
+            {
+              return 4;
+            }
         }
 
         return nMonStatsExId;

@@ -13,21 +13,34 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/D2ControlStrc.h"
 
 // Forward declarations
 struct D2ControlMsg;
-struct D2ControlStrc;
 struct D2IniConfigStrc;
 struct D2WinTextBox;
+struct DC6;
 struct mcp0x03data;
+typedef uint32_t eD2FormType;
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
 typedef int (__stdcall *ChatDlgCallback)(struct D2ControlMsg * pControlMsg);
+#endif
+#ifndef RECON_FPTD_Mouse
+#define RECON_FPTD_Mouse
+typedef BOOL (__stdcall *Mouse)(struct D2ControlMsg * pControlMsg);
+#endif
+#ifndef RECON_FPTD_OnPress
+#define RECON_FPTD_OnPress
+typedef BOOL (__stdcall *OnPress)(struct D2ControlMsg * pControlMsg);
 #endif
 #ifndef RECON_FPTD_fnAppModeRun
 #define RECON_FPTD_fnAppModeRun
 typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig);
 #endif
+
+struct D2WinButton;
+struct D2WinSmack;
 
 // Data types
 #ifndef D2_DEFINED_D2ChatDlgUnknown_0x10
@@ -47,6 +60,40 @@ struct D2LadderRowBufStrc {
 };
 
 #endif // D2_MODULE_D2Multi
+#ifndef D2_DEFINED_D2LobbyControlsStrc
+#define D2_DEFINED_D2LobbyControlsStrc
+struct D2LobbyControlsStrc {
+    /* 0x00 */ struct D2ControlStrc * pLobbyForm0;
+    /* 0x04 */ struct D2ControlStrc * pLobbyForm1;
+    /* 0x08 */ struct D2ControlStrc * pLobbyForm2;
+    /* 0x0C */ struct D2ControlStrc * pLobbyForm3;
+    /* 0x10 */ struct D2ControlStrc * pLobbyForm4;
+    /* 0x14 */ struct D2ControlStrc * pLobbyForm5;
+    /* 0x18 */ struct D2WinButton * pCtlLobbyCreateButton; // also gpCtlLobbyJoinGame
+    /* 0x1C */ struct D2WinButton * pCtlLobbyChannelButton; // also gpCtlLobbyConfirmJoin
+    /* 0x20 */ struct D2WinButton * pCtlLobbyJoinButton; // also gpCtlLobbyCreateGame
+    /* 0x24 */ struct D2WinButton * pCtlLobbyLadderButton; // also gpCtlLobbyChannelList
+    /* 0x28 */ struct D2ControlStrc * pCtlLobbyGameModePanel;
+    /* 0x2C */ struct D2ControlStrc * pCtlLobbyUserListPrevPageButton; // also gpCtlLobbyUserListPanel
+    /* 0x30 */ struct D2ControlStrc * pCtlLobbyUserListNextPageButton; // also gpCtlLobbyUserListPanel2
+    /* 0x34 */ struct D2ControlStrc * pCtlLobbyUserListPrevLineButton; // also gpCtlLobbyFormD
+    /* 0x38 */ struct D2ControlStrc * pCtlLobbyUserListNextLineButton; // also gpCtlLobbyFormE
+    /* 0x3C */ struct D2ControlStrc * pCtlLobbyUnknownPanel;
+    /* 0x40 */ struct D2WinSmack * pCtlLobbyLadderMode;
+};
+
+#endif // D2_DEFINED_D2LobbyControlsStrc
+#ifndef D2_DEFINED_D2SmackerContextStrc
+#define D2_DEFINED_D2SmackerContextStrc
+struct D2SmackerContextStrc {
+    /* 0x00 */ void * hSmack; // struct Smack* returned by _SmackOpen_12; NULL = not open. Passed straight to _SmackWait_4/_SmackDoFrame_4/_SmackNextFrame_4, whose parameter is void* - it is a pointer, not a handle id. Fields read off it match the published RAD Smack layout: +0x04 Width, +0x08 Height, +0x0C Frames, +0x68 NewPalette, +0x6C Palette, +0x374 FrameNum.
+    /* 0x04 */ char eMode; // 's'=smk video, 'p'=pcx/bitmap static
+    /* 0x05 */ uint8_t nPad[3]; // alignment padding
+    /* 0x08 */ int nX; // screen X / width used by blit functions
+    /* 0x0C */ int nY; // screen Y / height used by blit functions
+};
+
+#endif // D2_DEFINED_D2SmackerContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
 struct D2UiLevelLineTextStrc {
     /* 0x00 */ uint16_t wszLevelLine[100];
@@ -54,6 +101,45 @@ struct D2UiLevelLineTextStrc {
 };
 
 #endif // D2_MODULE_D2Multi
+struct __attribute__((packed)) D2WinButton {
+    /* 0x000 */ D2ControlStrc sControl;
+    /* 0x040 */ int nButtonFlags; // Button behaviour flags. Bits 0x3 (either bit): Push fires fpOnPress on mouse down (00501118), Mouse skips the release and the release callback (0050119b), Draw pins bPressedInside to 1 while pressed (00500e02). Bit1 0x2 additionally toggles bPressed/bPressedInside on each Push (005010d4). Bit2 0x4 skips button.wav (0050110a). Bits 3-6 unverified (scroll_up, scroll_down, transparent, hotkey_label). From asm of D2WINBUTTON Push/Mouse/Draw.
+    /* 0x044 */ BOOL bPressed; // Set by Push (mouse down; toggled for flag bit1 buttons), cleared by Mouse (mouse up) unless nButtonFlags & 3. Was pDC6Hover: never a DC6, only 0/1.
+    /* 0x048 */ BOOL bPressedInside; // Set with bPressed; while held Draw refreshes it from D2WINBUTTON_IsPointInside unless nButtonFlags & 3 (then pinned to 1); Mouse fires fpOnPress on release only if set. Was pDC6Click: never a DC6, only 0/1.
+    /* 0x04C */ int nClickAnimState; // Click animation counter: 0=idle, 1=clicked, 2=releasing
+    /* 0x050 */ int nHotkeyVK; // Hotkey virtual-key code (0 = none). A key message other than WM_CHAR (0x102) whose wParam equals it runs fpPush then fpMouse, i.e. a click (D2WINBUTTON_HandleHotkey 0050122d); set from D2WinButton nHotkeyVK (0050133a), which also installs that handler as fpKey only when non-zero.
+    /* 0x054 */ int nFrameOffsetSecondary; // Additional frame offset for secondary/alternate image set
+    /* 0x058 */ int nFrameOffsetDisabled; // Frame offset when button is disabled/not hovering
+    /* 0x05C */ int nCurrentImageIndex; // Current active image/frame index (set via D2WINBUTTON_SetImageIndex)
+    /* 0x060 */ int nFontId; // Font ID for label text rendering
+    /* 0x064 */ uint16_t wszLabel[256]; // Wide-char label text buffer (512 bytes, set via SetTextWithFont or SetLocalizedTextWithFont)
+    /* 0x264 */ int nTextColor; // Text color index for label rendering
+    /* 0x268 */ BOOL (__stdcall *fpHoverCallback)(struct D2ControlMsg *); // Optional callback invoked each frame when mouse is over button
+    /* 0x26C */ int bMouseOver; // Bool: 1 if mouse is currently over button, updated each Draw frame
+    /* 0x270 */ int32_t nHotkeyStringId; // String table ID for hotkey label (rendered below main label when flag bit6 set)
+};
+
+#ifndef D2_DEFINED_FORMS_PredefinedFormStrc
+#define D2_DEFINED_FORMS_PredefinedFormStrc
+struct __attribute__((packed)) FORMS_PredefinedFormStrc {
+    /* 0x00 */ eD2FormType neD2FormType;
+    /* 0x04 */ int aParams[4];
+    /* 0x14 */ int32_t nExtraParam; // AnimImage = D2WinAnimImage nStaticFrameDelay (40 ms units; records 0xb2/0xb3 give 1); struct DC6* for ImageEx; Button = hotkey virtual-key code passed as D2WinButton nHotkeyVK (0xd VK_RETURN on OK buttons, 0x1b VK_ESCAPE on Cancel/back buttons, 0x26/0x28 arrow keys, 0 = none); generic int for others
+    /* 0x18 */ int nLabelAsLocaleStringId;
+    /* 0x1C */ struct DC6 * * pDC6;
+    /* 0x20 */ BOOL (__stdcall *fpOnPressCallback)(struct D2ControlMsg *);
+    /* 0x24 */ void * pTypeArg1; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = fpD2WinEditBoxSubmit* submit callback (e.g. OOGUTIL_SendChatMessageWide); Image = struct D2WinImageHitArea*; AnimImage = FORMS_AnimFrameStrc[5] state table, D2WinAnimImage pAnimFrames (e.g. gaCharSelectAnimFramesAmazon); TextBox = int[3] scrollbar geometry x,y,height (gaMultiTextBoxScrollbarGeom*); Button = initial image index 0/2/4/6 (D2WinButton nCurrentImageIndex); List = item array. Unused (0) for the other types.
+    /* 0x28 */ void * pTypeArg2; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = font id pair (gaMenuFormFontParams*); Image = Key* handler; AnimImage = fpD2WinAnimImageNotify* (e.g. MAINMENU_SetAmazonDescription); TextBox = font params (gaMenuFormFontParams*/gaMultiFormFontParams*); Button = Mouse* hover callback (e.g. MAINMENU_DisableControlIfDataNonZero); List = font id pointer; AccountList = font data. Unused (0) for the other types.
+    /* 0x2C */ uint32_t nFlagsOrType; // Button = nButtonFlags (D2WinButton +0x40 bit flags: 0, 1, 2, 4, 6, 8, 0x10, 0x20, 0x40 occur); uint32 flags/count for TextBox/EditBox/AccountList
+};
+
+#endif // D2_DEFINED_FORMS_PredefinedFormStrc
+struct __attribute__((packed)) D2WinSmack {
+    /* 0x000 */ D2ControlStrc sControl;
+    /* 0x040 */ char szFilePath[256]; // strncpy(pSmack->szFilePath, szFilePath, 0x100) at D2WINSMACK_LoadAndDecodeSmacker 00506938; runs exactly to sSmackerCtx at 0x140
+    /* 0x140 */ D2SmackerContextStrc sSmackerCtx; // embedded smacker context buffer (hSmack+eMode+nX+nY)
+};
+
 namespace D2Multi::ChatDlg {
 
 // Function declarations
@@ -233,6 +319,6 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText);
 void StaticInit_6ca960();
 void StaticInit_gbChatLobbyInitialize();
 #endif // D2_MODULE_D2Multi
-// 7 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Multi::ChatDlg

@@ -2310,12 +2310,7 @@ void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     D2UnitStrc* pUnit_00 = Ai::AiGeneral::GetOwnerUnit(pUnit);
     if (pUnit_00 && pUnit_00->eUnitType == UNIT_PLAYER) {
-      if (!pUnit) {
-        PLAYER::PlayerPets::RemovePetByGuidAndNotify(pGame, pUnit_00, -1, 1);
-        return;
-      }
-
-      PLAYER::PlayerPets::RemovePetByGuidAndNotify(pGame, pUnit_00, pUnit->nUnitGUID, 1);
+      PLAYER::PlayerPets::RemovePetByGuidAndNotify(pGame, pUnit_00, !pUnit ? -1 : pUnit->nUnitGUID, 1);
       return;
     }
 

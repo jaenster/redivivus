@@ -41,12 +41,12 @@ static uint32_t IsOSCursorVisible = 0x1; D2_STATIC_GUARD(IsOSCursorVisible, "IsO
 static char * gpszDiabloIIClassNameSource = (char*)"Diablo II"; D2_STATIC_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
 static uint32_t gnD2GFX_RequestedScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_RequestedScaleFactor, "gnD2GFX_RequestedScaleFactor");
 static uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
-HINSTANCE hInstance = 0; D2_GLOBAL_GUARD(hInstance, "hInstance");
+static HINSTANCE ghD2GFXInstance = 0; D2_STATIC_GUARD(ghD2GFXInstance, "ghD2GFXInstance");
 namespace D2gfx::D2GFX {
 eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "D2gfx::D2GFX::eRendererMode");
 } // namespace D2gfx::D2GFX
 static BOOL bD2GFX_Windowed = 0; D2_STATIC_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
-uint32_t nResolutionMode = 0; D2_GLOBAL_GUARD(nResolutionMode, "nResolutionMode");
+uint32_t gnD2GFXResolutionMode = 0; D2_GLOBAL_GUARD(gnD2GFXResolutionMode, "gnD2GFXResolutionMode");
 static HWND hwndD2GFX_Window = 0; D2_STATIC_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
 D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions = 0; D2_GLOBAL_GUARD(RENDERER_CurrentRenderedFunctions, "RENDERER_CurrentRenderedFunctions");
 namespace D2gfx::D2GFX {
@@ -111,7 +111,7 @@ BOOL __stdcall D2GFX_Release() {
     char szErrorMsg[256];
     char* szErrorFmt;
     RENDERER_CurrentRenderedFunctions->nfpRelease();
-    /* HINSTANCE hInstance for UnregisterClassA */ /* LPCSTR lpClassName for UnregisterClassA */ UnregisterClassA(gpszWindowClassName, hInstance);
+    /* HINSTANCE hInstance for UnregisterClassA */ /* LPCSTR lpClassName for UnregisterClassA */ UnregisterClassA(gpszWindowClassName, ghD2GFXInstance);
     if (!ghWndMain) {
       RENDERER_CurrentRenderedFunctions = 0;
       return 1;
@@ -153,7 +153,7 @@ eD2RendererMode __stdcall D2GFX_GetRendererMode_Unref_004f5150() {
 }
 
 DWORD __stdcall D2GFX_GetResolutionMode() {
-    return nResolutionMode;
+    return gnD2GFXResolutionMode;
 }
 
 BOOL __stdcall D2GFX_GetPerspectiveCapable() {
@@ -246,7 +246,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
     WNDCLASSA wndClass;
-    hInstance = hInstance;
+    ghD2GFXInstance = hInstance;
     gpfnWndProc = pfWndProc;
     wndClass.lpfnWndProc = pfWndProc;
     wndClass.cbClsExtra = 0;
@@ -254,7 +254,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     wndClass.cbWndExtra = 0;
     wndClass.hInstance = hInstance;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(hInstance, bIsExpansion != 0 ? MAKEINTRESOURCEA(0x67) : MAKEINTRESOURCEA(0x66), 1, 0, 0, 0);
+    /* UINT fuLoad for LoadImageA */ /* int cy for LoadImageA */ /* int cx for LoadImageA */ /* UINT type for LoadImageA */ /* LPCSTR name for LoadImageA */ /* HINSTANCE hInst for LoadImageA */ wndClass.hIcon = (HICON)LoadImageA(ghD2GFXInstance, bIsExpansion != 0 ? MAKEINTRESOURCEA(0x67) : MAKEINTRESOURCEA(0x66), 1, 0, 0, 0);
     /* LPCSTR lpCursorName for LoadCursorA */ /* HINSTANCE hInstance for LoadCursorA */ wndClass.hCursor = LoadCursorA((HINSTANCE)0x0, MAKEINTRESOURCEA(0x7f00));
     /* int i for GetStockObject */ wndClass.hbrBackground = (HBRUSH)GetStockObject(5);
     /* WNDCLASSA * lpWndClass for RegisterClassA */ wndClass.lpszMenuName = (LPCSTR)0x0;
@@ -399,7 +399,7 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
       }
 
       bD2GFX_Windowed = bWindowed;
-      nResolutionMode = nResolution;
+      gnD2GFXResolutionMode = nResolution;
       WindowRectangle.left = 0;
       WindowRectangle.top = 0;
       D2GFX_GetWindowSizeByResolutionMode(nResolution, (int*)&WindowRectangle.right, (int*)&WindowRectangle.bottom);
@@ -463,7 +463,7 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
         ChangeDisplaySettingsA(&sDevMode, 0);
       }
 
-      /* LPVOID lpParam for CreateWindowExA */ /* HINSTANCE hInstance for CreateWindowExA */ /* HMENU hMenu for CreateWindowExA */ /* HWND hWndParent for CreateWindowExA */ /* int nHeight for CreateWindowExA */ /* int nWidth for CreateWindowExA */ /* int Y for CreateWindowExA */ /* int X for CreateWindowExA */ /* DWORD dwStyle for CreateWindowExA */ /* LPCSTR lpWindowName for CreateWindowExA */ /* LPCSTR lpClassName for CreateWindowExA */ /* DWORD dwExStyle for CreateWindowExA */ /* Create full screen window */ hwndD2GFX_Window = CreateWindowExA(0x40008, szWindowClassName, gpszWindowTitle, nResolution, bWindowed, nWindowX, nSystemResolutionX, nSystemResolutionXY, (HWND)0x0, (HMENU)0x0, hInstance, (LPVOID)0x0);
+      /* LPVOID lpParam for CreateWindowExA */ /* HINSTANCE hInstance for CreateWindowExA */ /* HMENU hMenu for CreateWindowExA */ /* HWND hWndParent for CreateWindowExA */ /* int nHeight for CreateWindowExA */ /* int nWidth for CreateWindowExA */ /* int Y for CreateWindowExA */ /* int X for CreateWindowExA */ /* DWORD dwStyle for CreateWindowExA */ /* LPCSTR lpWindowName for CreateWindowExA */ /* LPCSTR lpClassName for CreateWindowExA */ /* DWORD dwExStyle for CreateWindowExA */ /* Create full screen window */ hwndD2GFX_Window = CreateWindowExA(0x40008, szWindowClassName, gpszWindowTitle, nResolution, bWindowed, nWindowX, nSystemResolutionX, nSystemResolutionXY, (HWND)0x0, (HMENU)0x0, ghD2GFXInstance, (LPVOID)0x0);
       if (!hwndD2GFX_Window) {
         nErrorCode = GetLastError();
         D2Hell::FAULT_ShowFormattedErrorWithArgs(nErrorCode);
@@ -475,7 +475,7 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
       /* HWND hWnd for SetFocus */ SetFocus(hwndD2GFX_Window);
       /* DWORD dw for GdiSetBatchLimit */ GdiSetBatchLimit(1);
       HideOSCursor();
-      BVar1 = RENDERER_CurrentRenderedFunctions->nfpCreateWindow(hwndD2GFX_Window, nResolutionMode);
+      BVar1 = RENDERER_CurrentRenderedFunctions->nfpCreateWindow(hwndD2GFX_Window, gnD2GFXResolutionMode);
       if (!BVar1) {
         ghWndMain = 1;
         ShowOSCursor();
@@ -578,11 +578,11 @@ BOOL __stdcall D2GFX_ResizeWindow(int32_t nResolution, BOOL bForceResize) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e5);
       exit(-1);
     }
-    if (!bForceResize && nResolution == nResolutionMode) {
+    if (!bForceResize && nResolution == gnD2GFXResolutionMode) {
       return 1;
     }
 
-    nResolutionMode = nResolution;
+    gnD2GFXResolutionMode = nResolution;
     if (bD2GFX_Windowed == 1) {
       rcCurrentClient.top = 0;
       rcCurrentClient.right = 0;
@@ -627,7 +627,7 @@ BOOL __stdcall D2GFX_UpdateWindowSize(int32_t nResolutionMode) {
     }
 
     int cy;
-    nResolutionMode = nResolutionMode;
+    gnD2GFXResolutionMode = nResolutionMode;
     if (bD2GFX_Windowed == 1) {
       /* LPRECT lpRect for GetClientRect */ /* HWND hWnd for GetClientRect */ hWndLocal = hwndD2GFX_Window;
       rcCurrentClient.left = 0;
@@ -803,7 +803,7 @@ void __stdcall D2GFX_EndCutScene() {
       } while (nCursorDisplayCount >= 0);
     }
 
-    RENDERER_CurrentRenderedFunctions->nfpEndCutScene(hwndD2GFX_Window, nResolutionMode, ::D2GFX_EndCutScene);
+    RENDERER_CurrentRenderedFunctions->nfpEndCutScene(hwndD2GFX_Window, gnD2GFXResolutionMode, ::D2GFX_EndCutScene);
     if (::D2GFX_EndCutScene) {
       return;
     }
@@ -826,7 +826,7 @@ void __stdcall EndCutScene(int32_t nResolution) {
 
     D2GFX_EndCutScene();
     if (::D2GFX_EndCutScene) {
-      nResolutionMode = nResolution;
+      gnD2GFXResolutionMode = nResolution;
     } else {
       bResizeOk = D2GFX_ResizeWindow(nResolution, 1);
       if (!bResizeOk) {

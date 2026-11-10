@@ -48,7 +48,7 @@ D2SeedStrc gAncientsCloudSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gAncientsCloudSeed
 } // namespace D2Client::GAME::View
 static uint8_t gaArcaneStarColors[256] = {}; D2_STATIC_GUARD(gaArcaneStarColors, "gaArcaneStarColors");
 D2SeedStrc gArcaneStarSeed = D2SeedStrc(); D2_GLOBAL_GUARD(gArcaneStarSeed, "gArcaneStarSeed");
-int nScaleFactor = 0; D2_GLOBAL_GUARD(nScaleFactor, "nScaleFactor");
+int gnScaleFactor = 0; D2_GLOBAL_GUARD(gnScaleFactor, "gnScaleFactor");
 static int32_t gaArcaneStarYPos[256] = {}; D2_STATIC_GUARD(gaArcaneStarYPos, "gaArcaneStarYPos");
 static uint8_t gPaletteTransitionTable[12544] = {}; D2_STATIC_GUARD(gPaletteTransitionTable, "gPaletteTransitionTable");
 namespace D2Client::GAME::View {
@@ -877,7 +877,7 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
     }
 
     D2gfx::D2GFX::D2GFX_UpdateScaleFactor();
-    nScaleFactor = D2gfx::D2GFX::D2GFX_GetScaleFactor();
+    gnScaleFactor = D2gfx::D2GFX::D2GFX_GetScaleFactor();
     _bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (_bPerspective) {
       int32_t nXScale;

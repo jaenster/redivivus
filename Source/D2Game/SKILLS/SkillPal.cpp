@@ -884,12 +884,7 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    nAttackFrameIdx = 0;
-    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      nAttackFrameIdx = 3;
-    }
-
-    bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, nAttackFrameIdx);
+    bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, pUnit && pUnit->eUnitType == UNIT_MONSTER ? 3 : 0);
     if (!bInMeleeRange) {
       return 1;
     }

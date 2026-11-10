@@ -1099,20 +1099,29 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
           if (nPercent == 100) {
             nStatScaled = pExpireFrame;
           }
-          if (eUnitStat != UNITSTAT_hitpoints) {
-            if (eUnitStat == UNITSTAT_hpregen) {
-              eUnitType = D2Common::Units::GetType(pUnit);
-              if (eUnitType == UNIT_PLAYER) {
-                nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+
+          switch (eUnitStat) {
+            case UNITSTAT_hitpoints:
+              {
+                bHpModified = true;
+                eUnitType = D2Common::Units::GetType(pUnit);
+                if (eUnitType == UNIT_PLAYER) {
+                  nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+                }
+
+                break;
               }
-            }
-          } else {
-            bHpModified = true;
-            eUnitType = D2Common::Units::GetType(pUnit);
-            if (eUnitType == UNIT_PLAYER) {
-              nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
-            }
+            case UNITSTAT_hpregen:
+              {
+                eUnitType = D2Common::Units::GetType(pUnit);
+                if (eUnitType == UNIT_PLAYER) {
+                  nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
+                }
+
+                break;
+              }
           }
+
           if ((int)nItemDuration <= 0) {
             nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
             if (nCurStatVal + nStatScaled > pExpireFrame) {

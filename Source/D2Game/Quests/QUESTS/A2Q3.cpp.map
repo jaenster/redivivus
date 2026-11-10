@@ -552,6 +552,28 @@
       ]
     },
     {
+      "name": "Q11_TimerCheckDarkness",
+      "address": "0059ed80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059ed80"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A2Q3",
+      "calledFunctions": [
+        "Q11_TimerCheckDarkness",
+        "Q11_BeginTaintedSun",
+        "IteratePlayerOrMonsterUnits"
+      ],
+      "usedTypes": [
+        "D2QuestDataA2Q3Strc",
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "uint8_t"
+      ]
+    },
+    {
       "name": "Q11_StartDarknessTimer",
       "address": "0059edc0",
       "lines": [

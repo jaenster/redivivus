@@ -446,28 +446,6 @@
       ]
     },
     {
-      "name": "Q11_TimerCheckDarkness",
-      "address": "0059ed80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0059ed80"
-        }
-      ],
-      "namespace": "D2Game",
-      "calledFunctions": [
-        "Q11_TimerCheckDarkness",
-        "Q11_BeginTaintedSun",
-        "IteratePlayerOrMonsterUnits"
-      ],
-      "usedTypes": [
-        "D2QuestDataA2Q3Strc",
-        "D2QuestDataStrc",
-        "SGAMEDATA",
-        "uint8_t"
-      ]
-    },
-    {
       "name": "MONSTER_ScheduleDeathIfRunningOrDead",
       "address": "005a2eb0",
       "lines": [

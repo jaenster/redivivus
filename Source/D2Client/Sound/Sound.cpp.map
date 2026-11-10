@@ -562,7 +562,7 @@
       ]
     },
     {
-      "name": "SOUND_StopChannelById",
+      "name": "SOUND_GetSoundIdByChannelHandle",
       "address": "004b9ca0",
       "lines": [
         {
@@ -572,7 +572,7 @@
       ],
       "namespace": "D2Client::Sound",
       "calledFunctions": [
-        "SOUND_StopChannelById"
+        "SOUND_GetSoundIdByChannelHandle"
       ],
       "usedTypes": [
         "int32_t"
@@ -1024,7 +1024,7 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_IsDirectSoundAvailable",
-        "SOUND_GetDirectSoundInitializedFlag"
+        "SOUND_GetPrimaryBufferModeFlag"
       ]
     },
     {

@@ -7160,23 +7160,13 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
             switch (nAffixId) {
               case 0:
                 {
-                  wStringId = 0x897;
-                  if (eItemType != ITEMTYPE_Book) {
-                    wStringId = 0x898;
-                  }
-
-                  pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
+                  pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(eItemType != ITEMTYPE_Book ? 0x898 : 0x897);
                   D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
                   break;
                 }
               case 1:
                 {
-                  wStringId = 0x899;
-                  if (eItemType != ITEMTYPE_Book) {
-                    wStringId = 0x89a;
-                  }
-
-                  pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wStringId);
+                  pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(eItemType != ITEMTYPE_Book ? 0x89a : 0x899);
                   D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
                   break;
                 }
@@ -7680,7 +7670,6 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     BOOL bFlagCheck;
     uint16_t* pwAppendResult;
     int nSetItemLoopIdx;
-    int nColor;
     int32_t nReqAdjust;
     uint16_t* pwZeroCursor;
     uint16_t wszStatBuffs[1024];
@@ -7958,12 +7947,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
 
     GetItemName(pItemToDescribe, wszItemName, 0x100);
     bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_BROKEN, 0xddb, ".\\UI\\inv.cpp");
-    nSetItemLoopIdx = 1;
-    if (!bFlagCheck) {
-      nSetItemLoopIdx = 2;
-    }
-
-    ui::AppendAsWideChar(wszItemName, nSetItemLoopIdx);
+    ui::AppendAsWideChar(wszItemName, bFlagCheck ? 1 : 2);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszStatsBlock, wszItemName);
     wszStatBuffs[0] = L'\0';
     bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_SOCKETED, 0xde4, ".\\UI\\inv.cpp");
@@ -7996,12 +7980,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszWorkBuf, pwSeparator);
         }
 
-        nColor = 2;
-        if (!pOwnerUnit) {
-          nColor = 1;
-        }
-
-        ui::AppendAsWideChar(wszWorkBuf, nColor);
+        ui::AppendAsWideChar(wszWorkBuf, pOwnerUnit ? 2 : 1);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszSetBonusList, wszWorkBuf);
         uSlot8.ppSetItemsTxtEntry++;
         nSetItemLoopIdx++;

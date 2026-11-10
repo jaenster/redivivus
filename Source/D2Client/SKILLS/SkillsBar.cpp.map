@@ -617,7 +617,6 @@
         "PATH_ResetCollisionOnLanding"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills",

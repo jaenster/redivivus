@@ -63,7 +63,7 @@
       "calledFunctions": [
         "SOUNDSMP_CreateSoundBuffer",
         "SOUNDSMP_InitWaveFormat",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "SOUND_GetSound3DFlag",
         "SOUND_GetSoundQualityFlag"
       ],
@@ -89,7 +89,7 @@
       "namespace": "D2Sound::Src::D2SoundSmp",
       "calledFunctions": [
         "CallSounds",
-        "SOUND_GetDirectSoundInitializedFlag",
+        "SOUND_GetPrimaryBufferModeFlag",
         "AllocClientMemory",
         "memset",
         "SOUNDSMP_CreateSoundBuffer",
@@ -426,7 +426,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "GetTickCount"
       ],
       "usedTypes": [
@@ -447,7 +447,7 @@
       "namespace": "D2Sound::Src::D2SoundSmp",
       "calledFunctions": [
         "SOUNDSMP_SetGlobalVolume",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -472,7 +472,7 @@
       "namespace": "D2Sound::Src::D2SoundSmp",
       "calledFunctions": [
         "SOUNDSMP_GetEffectiveVolume",
-        "SOUND_GetSpeakerConfigFlag"
+        "SOUND_GetDirectSoundDevice"
       ],
       "usedTypes": [
         "IDirectSound",
@@ -561,7 +561,7 @@
       "namespace": "D2Sound::Src::D2SoundSmp",
       "calledFunctions": [
         "CleanupSoundBuffer",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",

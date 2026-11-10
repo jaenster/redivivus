@@ -25,7 +25,6 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
-#include "Source/D2Client/UI/Automap.data.h"
 #include "Source/D2Client/UI/EscMenu.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -58886,9 +58885,7 @@ void __fastcall UI_SLIDER_InitAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMs
 }
 
 void __fastcall UI_SLIDER_ApplyAutomapCenters(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    int32_t nValue = pItem->nImageIndex;
-    Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Centers", 0, nValue);
-    Automap::nAutoMapCenters = nValue;
+    Automap::AUTOMAP_SetCenters(pItem->nImageIndex);
 }
 
 void __fastcall ESCMENU_InitAutomapCenterItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
@@ -58897,9 +58894,7 @@ void __fastcall ESCMENU_InitAutomapCenterItem(D2EscMenuItemStrc * pItem, D2UIMou
 }
 
 void __fastcall UI_SLIDER_ApplyAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
-    int32_t nValue = pItem->nImageIndex;
-    Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Party", 0, nValue);
-    Automap::nAutoMapParty = nValue;
+    Automap::AUTOMAP_SetParty(pItem->nImageIndex);
 }
 
 void __fastcall ESCMENU_InitAutomapPartyItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
@@ -59019,35 +59014,40 @@ static void ESCMENU_HandleSliderDrag(int32_t nMouseY, int32_t nMouseX) {
       D2EscMenuItemStrc* pDVar1;
       nSelectedIndex = gnEscMenuSelectedIndex;
       pDVar1 = gpEscMenuCurrentTable + gnEscMenuSelectedIndex;
-      if (pDVar1->nMenuItemType == 2) {
-        nScreenCenterX = ui::ScreenSizeX / 2;
-        nTrackHitX = nScreenCenterX - 0x3b;
-        nSliderTrackX = nScreenCenterX - 0x3c;
-        if (!pDVar1->pDC6Main) {
-          nTrackHitX = nScreenCenterX - 0x90;
-          nSliderTrackX = nScreenCenterX - 0x91;
-        }
-        if (gnEscMenuSliderValue || nMouseX > nTrackHitX && nMouseX < nTrackHitX + 0x121) {
-          if (nMouseX < nSliderTrackX + 0xc) {
-            pDVar1->nImageIndex = 0;
-          } else {
-            if (nMouseX > nSliderTrackX + 0x115) {
-              nImageIndex = pDVar1->nSubImageCount - 1;
-            } else {
-              nLastIndex = pDVar1->nSubImageCount - 1;
-              fLastIndex = (float)nLastIndex;
-              if (nLastIndex < 0) {
-                fLastIndex += 4294967296.0;
+      switch (pDVar1->nMenuItemType) {
+        case 2:
+          {
+            nScreenCenterX = ui::ScreenSizeX / 2;
+            nTrackHitX = nScreenCenterX - 0x3b;
+            nSliderTrackX = nScreenCenterX - 0x3c;
+            if (!pDVar1->pDC6Main) {
+              nTrackHitX = nScreenCenterX - 0x90;
+              nSliderTrackX = nScreenCenterX - 0x91;
+            }
+            if (gnEscMenuSliderValue || nMouseX > nTrackHitX && nMouseX < nTrackHitX + 0x121) {
+              if (nMouseX < nSliderTrackX + 0xc) {
+                pDVar1->nImageIndex = 0;
+              } else {
+                if (nMouseX > nSliderTrackX + 0x115) {
+                  nImageIndex = pDVar1->nSubImageCount - 1;
+                } else {
+                  nLastIndex = pDVar1->nSubImageCount - 1;
+                  fLastIndex = (float)nLastIndex;
+                  if (nLastIndex < 0) {
+                    fLastIndex += 4294967296.0;
+                  }
+
+                  nImageIndex = (int)((float)(nMouseX - (nSliderTrackX + 0xc)) / (265.0 / fLastIndex * 0.5) + 1.0) / 2;
+                }
+
+                pDVar1->nImageIndex = nImageIndex;
               }
 
-              nImageIndex = (int)((float)(nMouseX - (nSliderTrackX + 0xc)) / (265.0 / fLastIndex * 0.5) + 1.0) / 2;
+              gnEscMenuSliderValue = 1;
             }
 
-            pDVar1->nImageIndex = nImageIndex;
+            break;
           }
-
-          gnEscMenuSliderValue = 1;
-        }
       }
     }
     if (nPrevItemValue == gpEscMenuCurrentTable[nSelectedIndex].nImageIndex) {

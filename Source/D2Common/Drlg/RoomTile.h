@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2DrlgGridStrc;
+struct D2DrlgRoomExRoomTileNodeStrc;
 struct D2DrlgTileDataStrc;
 struct D2DrlgTileGridStrc;
 struct D2PoolManagerStrc;

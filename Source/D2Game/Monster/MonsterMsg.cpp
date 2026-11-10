@@ -213,15 +213,21 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
       *(uint16_t*)(char*)&wTargetX = (uint16_t)pTargetUnit->eUnitType;
       nTargetY = pTargetUnit->nUnitGUID;
       dwTmp = 0x68;
-      if (eAnimMode == Walk || eAnimMode == eD2MonsterAnimMode_ns::Run) {
-        bIsNear = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
-        if (bIsNear >= 0x5 && bIsNear <= 0x6) {
-          *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];
-          nTmp2 = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-          *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;
-          nTargetY = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
-          dwTmp = 0x67;
-        }
+      switch (eAnimMode) {
+        case Walk:
+          case eD2MonsterAnimMode_ns::Run:
+            {
+              bIsNear = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
+              if (bIsNear >= 0x5 && bIsNear <= 0x6) {
+                *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];
+                nTmp2 = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
+                *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;
+                nTargetY = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
+                dwTmp = 0x67;
+              } else {
+                break;
+              }
+            }
       }
     } else {
       *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];

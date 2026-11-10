@@ -579,12 +579,7 @@ void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         QUEST_SendQuestInfoToUnit(pQuestData->pGame, pQuestArgs->pPlayer);
         /* UnsetQuestState(TheSevenTombs, 4=Step0x04) — clear in-progress bit now that
                          quest is Completed */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Step0x04);
-        if (!pQuestArgs->pPlayer) {
-          QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, -1);
-          return;
-        }
-
-        QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+        QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
         return;
       }
     }

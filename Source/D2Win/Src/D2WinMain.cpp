@@ -5,7 +5,7 @@
 #include "Source/D2Client/D2ControlStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/UI/EscMenu.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2WinAnimImage.h"
 #include "Source/D2Win/Forms.h"

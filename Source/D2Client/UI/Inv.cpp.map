@@ -3447,6 +3447,7 @@
         "SetUIFlag"
       ],
       "usedTypes": [
+        "WCHAR",
         "int32_t"
       ]
     },
@@ -3559,8 +3560,7 @@
       ],
       "usedTypes": [
         "WCHAR",
-        "WCHAR *",
-        "uint16_t"
+        "WCHAR *"
       ]
     },
     {

@@ -1237,7 +1237,9 @@
       ],
       "usedTypes": [
         "D2QuestDataA1Q4Strc",
-        "D2QuestDataStrc"
+        "D2QuestDataStrc",
+        "SGAMEDATA",
+        "int32_t"
       ]
     },
     {
@@ -1421,6 +1423,7 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc",
+        "SGAMEDATA",
         "int32_t"
       ]
     },

@@ -494,6 +494,6 @@ void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00650e90(int32_t pQServer);
 void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer);
 void StaticInit_Frames_TimeBetweenFrames();
 #endif // D2_MODULE_D2Game
-// 12 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Server

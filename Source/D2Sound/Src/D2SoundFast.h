@@ -50,5 +50,6 @@ int __stdcall SOUND_PlayNextAmbientSound();
 void __stdcall SOUND_LoadRegistrySettings();
 void Unreferenced_00514ff0();
 #endif // D2_MODULE_D2Sound
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Sound::Src::D2SoundFast

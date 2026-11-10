@@ -31,6 +31,7 @@ void * gpCurrentExceptionContext = 0; D2_GLOBAL_GUARD(gpCurrentExceptionContext,
 namespace Fog::File {
 
 static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * szSrc);
+static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback) {
     while (true) {

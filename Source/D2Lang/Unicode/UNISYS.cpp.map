@@ -107,8 +107,7 @@
         "UNICODE_FindWideChar"
       ],
       "usedTypes": [
-        "int16_t",
-        "uint16_t"
+        "WCHAR"
       ]
     },
     {

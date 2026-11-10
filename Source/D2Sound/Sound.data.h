@@ -21,9 +21,9 @@ struct IDirectSound;
 // lpCriticalSection parameter of LeaveCriticalSection
 // lpCriticalSection parameter of EnterCriticalSection
 extern _RTL_CRITICAL_SECTION gSoundSmpCs;
-extern IDirectSound * gnDirectSoundInitStatus;
-extern uint32_t gnDSoundPrimaryBufferDelay;
-extern uint32_t gnSound3DLoudness;
+extern IDirectSound * gpDirectSound;
+extern BOOL gbDSoundPrimaryBufferMode;
+extern BOOL gbSound3DEnabled;
 extern int gnSoundQualityMode;
 extern uint32_t g_bEAXEnabled;
 extern uint32_t g_bSoundDriverScanComplete;

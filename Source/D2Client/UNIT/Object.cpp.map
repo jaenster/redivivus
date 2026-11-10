@@ -19,6 +19,56 @@
       ]
     },
     {
+      "name": "OBJECT_SetLightRGB",
+      "address": "004bc580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc580"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Object",
+      "calledFunctions": [
+        "OBJECT_SetLightRGB",
+        "FreeLightMap",
+        "AllocLightMap",
+        "SetRadiusY"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint8_t"
+      ]
+    },
+    {
+      "name": "OBJECT_CheckAutoLight",
+      "address": "004bc5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004bc5e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Object",
+      "calledFunctions": [
+        "OBJECT_CheckAutoLight",
+        "DRLGENV_GetPeriodOfDayFromAct",
+        "GFX_LoadUnitModeCof",
+        "InitAnimMode",
+        "SetMonsterFlags",
+        "OBJECT_SetLightRGB",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ]
+    },
+    {
       "name": "AllocObjectData",
       "address": "004bc720",
       "lines": [

@@ -892,8 +892,8 @@
         "ReorderNearRoomList"
       ],
       "usedTypes": [
-        "D2RoomStrc",
-        "D2RoomStrc *"
+        "D2RoomExStrc",
+        "D2RoomExStrc *"
       ]
     },
     {
@@ -914,9 +914,7 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2RoomExStrc",
-        "D2RoomExStrc *",
-        "D2RoomStrc",
-        "uint32_t"
+        "D2RoomExStrc *"
       ]
     },
     {

@@ -292,7 +292,7 @@ BOOL __stdcall BNCLIENT_IsSocketConnected();
 DWORD __stdcall BNSEND_GetBNetThreadInitFlag();
 void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag);
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
-void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList);
+BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList);
 // lpStartAddress parameter of CreateThread
 int __stdcall BattleConnectFastest();
 HANDLE __fastcall ConnectingToBattleNet();

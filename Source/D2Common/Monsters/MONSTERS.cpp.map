@@ -479,6 +479,7 @@
         "D2RoomStrc",
         "D2SeedStrc",
         "D2UnitStrc",
+        "eD2MonsterAnimMode",
         "eD2MonsterClassId",
         "eD2UnitType",
         "int32_t",

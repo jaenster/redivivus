@@ -213,6 +213,6 @@ void __stdcall Return(struct D2UnitStrc * pUnit, int32_t nParam);
 // Activates/deactivates item stat lists for dual-wield players based on the skill currently being cast (nParam). Calls GetWeaponBySkill to determine the active weapon, compares it to the equipped weapon, and calls STATLIST_SetItemStatActive to mark the correct weapon's stat list active (1) and the other inactive (0). No-ops if the unit cannot dual-wield.
 void __stdcall UpdateDualWieldStats(struct D2UnitStrc * pUnit, int32_t nParam);
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 } // namespace D2Common::Units

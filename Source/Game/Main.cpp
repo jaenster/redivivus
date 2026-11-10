@@ -12,9 +12,9 @@
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/ClientModeInGame.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/D2LaunchRoot.h"
-#include "Source/D2Multi/ChatDlg.h"
 #include "Source/Game/Main.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

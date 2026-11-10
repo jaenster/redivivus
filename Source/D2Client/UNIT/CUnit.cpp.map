@@ -4,6 +4,25 @@
   "file": "Source/D2Client/UNIT/CUnit.cpp",
   "functions": [
     {
+      "name": "CUNIT_IterateHashTableWithCallback",
+      "address": "00463c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463c90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "CUNIT_IterateHashTableWithCallback"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "fnUnitIterCallback"
+      ]
+    },
+    {
       "name": "CLIENT_ClearChangedStatFlags_Thunk",
       "address": "00463d80",
       "lines": [

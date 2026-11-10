@@ -292,7 +292,7 @@
         "SOUND_IsInitializedDup",
         "SOUNDHDR_GetSoundField0x60",
         "SOUNDHDR_GetSoundGroupSize",
-        "SOUND_StopChannelById"
+        "SOUND_GetSoundIdByChannelHandle"
       ],
       "usedTypes": [
         "D2SoundListNodeStrc",
@@ -355,7 +355,7 @@
       "namespace": "D2Client::UNIT::UnitSnd",
       "calledFunctions": [
         "UNITSND_UpdatePositionalAudio",
-        "SOUND_StopChannelById",
+        "SOUND_GetSoundIdByChannelHandle",
         "SOUNDHDR_GetSoundLoopFlag",
         "SOUND_StopUnitSoundByIndex",
         "GetInstructionPointer",
@@ -812,7 +812,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SOUND_StopChannelById",
+        "SOUND_GetSoundIdByChannelHandle",
         "SOUNDHDR_GetSoundField0x60",
         "SOUND_StopUnitSoundByIndex"
       ],
@@ -836,7 +836,7 @@
       "calledFunctions": [
         "UNITSND_UpdateNeutralSound",
         "TxtGetSoundIdLineFromUnit",
-        "SOUND_StopChannelById",
+        "SOUND_GetSoundIdByChannelHandle",
         "SOUNDHDR_GetSoundField0x60",
         "SOUND_GetSoundChannel",
         "SOUND_StopUnitSoundByIndex",
@@ -869,7 +869,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SOUND_StopChannelById",
+        "SOUND_GetSoundIdByChannelHandle",
         "SOUNDHDR_GetSoundField0x60",
         "SOUND_StopUnitSoundByIndex"
       ],
@@ -1107,7 +1107,7 @@
         "SOUND_FindChannelForSound",
         "WALL2_ScheduleSoundSequence",
         "SOUND_PlaySound",
-        "SOUND_StopChannelById",
+        "SOUND_GetSoundIdByChannelHandle",
         "TEXT_SetUnitOverheadFromSoundTable",
         "gnRecordingIndex"
       ],

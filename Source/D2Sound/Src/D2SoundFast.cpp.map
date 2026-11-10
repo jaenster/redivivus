@@ -4,6 +4,27 @@
   "file": "Source/D2Sound/Src/D2SoundFast.cpp",
   "functions": [
     {
+      "name": "SOUND_GetAmbientSoundEntry",
+      "address": "00514710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00514710"
+        }
+      ],
+      "namespace": "D2Sound::Src::D2SoundFast",
+      "calledFunctions": [
+        "SOUND_GetAmbientSoundEntry",
+        "SOUND_GetLanguageCode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ]
+    },
+    {
       "name": "SOUND_IsAmbientStreaming",
       "address": "00514840",
       "lines": [
@@ -172,6 +193,9 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetSoundMixer"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {
@@ -364,7 +388,7 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_InitSoundEffectBuffers",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "SOUNDSMP_SetGlobalVolume",
         "CallSounds"
       ],

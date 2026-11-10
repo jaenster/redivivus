@@ -2968,12 +2968,20 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2UnitStrc * pUnit, D2ClientM
       if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId)) {
         return 0;
       }
-      if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].SplEndDeath == '\x01' && pUnit->eAnimMode.ePlayerMode == Death) {
-        nResult = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
-        if (nResult) {
-          D2ServerMessageHandleStrc nMsgOwnerGUID = {0};
-          MonsterMessage(9, pUnit, &nMsgOwnerGUID);
-        }
+
+      switch (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].SplEndDeath) {
+        case '\x01':
+          {
+            if (pUnit->eAnimMode.ePlayerMode == Death) {
+              nResult = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
+              if (nResult) {
+                D2ServerMessageHandleStrc nMsgOwnerGUID = {0};
+                MonsterMessage(9, pUnit, &nMsgOwnerGUID);
+              }
+            }
+
+            break;
+          }
       }
     }
 

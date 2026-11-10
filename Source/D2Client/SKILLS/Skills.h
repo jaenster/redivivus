@@ -134,7 +134,7 @@ int32_t __fastcall GetMeleeRangePlusFour(struct D2UnitStrc * pUnit);
 void __fastcall SKILLS_CltAllocStatListForSkill(struct D2UnitStrc * pUnit, int32_t nAttackRate);
 struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc * pUnit, int nClientEvent, int32_t nMsgParam1, int32_t nMsgParam2, uint32_t nHandlerIdx, int32_t nEventType, int32_t nEventState);
 #endif // D2_MODULE_D2Client
-// 5 internal functions (defined in .cpp)
+// 6 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, struct D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel);

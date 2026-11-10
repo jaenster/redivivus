@@ -5,7 +5,6 @@
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Hell/D2Hell.h"
 #include "Source/D2Sound/D2SoundRoot.h"
-#include "Source/D2Sound/Sound.h"
 #include "Source/D2Sound/Src/D2SoundSmp.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Sound/D2Sound.globals.h"

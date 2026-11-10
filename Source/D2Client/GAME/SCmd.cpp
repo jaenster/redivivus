@@ -3085,8 +3085,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
 
           pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pUnit, pStatList, eState, eUnitStat, eSkill, nStatParam);
           eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 9);
-          pUnit = pUnit;
-          eState = eState;
         }
       }
 

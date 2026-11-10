@@ -4045,57 +4045,6 @@
       ]
     },
     {
-      "name": "UI_HandleNpcInteractionPacket",
-      "address": "004b6dd0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004b6dd0"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "UI_HandleNpcInteractionPacket",
-        "ReadQuestRecordFromBuffer",
-        "UNITS_FindClientSideUnit",
-        "GetPlayerUnit_UI",
-        "NET_D2GS_CLIENT_Send_INT_INT",
-        "NPCMENU_ClearHireListAndStopNpcSound",
-        "CUNIT_IterateMissilesWithCallback",
-        "NPCMENU_InitializeMenuOptions",
-        "UI_ResetInputState",
-        "SetInteractedUnitInfo",
-        "TEXT_GetOverheadGlobalPointer",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "OVERHEAD_GetMessageType0",
-        "TXT_MonStats_GetFlagsByBitOffset",
-        "FacePlayer",
-        "INVENTORY_GetHandItem",
-        "NPCMENU_CloseNpcInteraction",
-        "SetUIFlag",
-        "UI_CloseActivePanels",
-        "TEXT_ShowNpcDialog",
-        "NPCMENU_AddHandledMessageId",
-        "NPCMENU_FindNextUnhandledMessage",
-        "TEXT_SetScrollCompleteCallback",
-        "OVERHEAD_GetMessageType1",
-        "CLIENT_TurnPlayerToFaceUnit",
-        "ZeroPathPointsSize",
-        "INV_ResetHoverAndContextState",
-        "NPCMENU_OpenInteraction",
-        "inline_NPC_IsInteractableSideNpc",
-        "NPCMENU_HandleMenuSelection"
-      ],
-      "usedTypes": [
-        "D2GSPacketSrv0x27_TextStrc",
-        "D2UnitStrc",
-        "int32_t",
-        "uint8_t"
-      ]
-    },
-    {
       "name": "UI_ResetTradeGlobals",
       "address": "004b8720",
       "lines": [

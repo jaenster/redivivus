@@ -205,24 +205,14 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     BOOL BVar3 = AllocateAndInitializeSid(&sNtAuthority, '\x02', 0x20, 0x220, 0, 0, 0, 0, 0, 0, &pAdminSid);
     if (BVar3) {
       /* PBOOL IsMember for CheckTokenMembership */ /* PSID SidToCheck for CheckTokenMembership */ /* HANDLE TokenHandle for CheckTokenMembership */ bIsAdmin = CheckTokenMembership((HANDLE)0x0, pAdminSid, &bIsAdmin);
-      szProcessName = "TRUE";
-      if (!bIsAdmin) {
-        szProcessName = "FALSE";
-      }
-
-      _3rdparty::crashy::Printf(pReport, "<Process.UserIsAdmin> %s\n", szProcessName);
+      _3rdparty::crashy::Printf(pReport, "<Process.UserIsAdmin> %s\n", bIsAdmin ? (char*)"TRUE" : (char*)"FALSE");
       /* PSID pSid for FreeSid */ FreeSid(pAdminSid);
     }
 
     _3rdparty::crashy::Printf(pReport, "<Process.Elevated> %s\n", "UNKNOWN");
     DWORD dwProcessId = GetCurrentProcessId();
     uint8_t bVar2 = GetModuleFileNameForProcess(dwProcessId, gszCrashReportProcessPath, 0x800);
-    szProcessName = gszCrashReportProcessPath;
-    if (!bVar2) {
-      szProcessName = "Unknown";
-    }
-
-    _3rdparty::crashy::Printf(pReport, "<Process.Path> %s\n", szProcessName);
+    _3rdparty::crashy::Printf(pReport, "<Process.Path> %s\n", bVar2 ? gszCrashReportProcessPath : (char*)"Unknown");
     szProcessName = strrchr(gszCrashReportProcessPath, 0x5c);
     if (!szProcessName || (szProcessName++ , !szProcessName) || !bVar2) {
       szProcessName = "Unknown";
@@ -231,12 +221,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     _3rdparty::crashy::Printf(pReport, "<Process.Name> %s\n", szProcessName);
     dwProcessId = GetParentProcessId(dwProcessId);
     bVar2 = GetModuleFileNameForProcess(dwProcessId, gszCrashReportProcessPath, 0x800);
-    szProcessName = gszCrashReportProcessPath;
-    if (!bVar2) {
-      szProcessName = "Unknown";
-    }
-
-    _3rdparty::crashy::Printf(pReport, "<Process.ParentProcessPath> %s\n", szProcessName);
+    _3rdparty::crashy::Printf(pReport, "<Process.ParentProcessPath> %s\n", bVar2 ? gszCrashReportProcessPath : (char*)"Unknown");
     szProcessName = strrchr(gszCrashReportProcessPath, 0x5c);
     if (!szProcessName || (szProcessName++ , !szProcessName) || !bVar2) {
       szProcessName = "Unknown";
@@ -245,12 +230,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     _3rdparty::crashy::Printf(pReport, "<Process.ParentProcessName> %s\n", szProcessName);
     dwProcessId = GetParentProcessId(dwProcessId);
     bVar2 = GetModuleFileNameForProcess(dwProcessId, gszCrashReportProcessPath, 0x800);
-    szProcessName = gszCrashReportProcessPath;
-    if (!bVar2) {
-      szProcessName = "Unknown";
-    }
-
-    _3rdparty::crashy::Printf(pReport, "<Process.GrandParentProcessPath> %s\n", szProcessName);
+    _3rdparty::crashy::Printf(pReport, "<Process.GrandParentProcessPath> %s\n", bVar2 ? gszCrashReportProcessPath : (char*)"Unknown");
     szProcessName = strrchr(gszCrashReportProcessPath, 0x5c);
     if (!szProcessName || (szProcessName++ , !szProcessName) || !bVar2) {
       szProcessName = "Unknown";

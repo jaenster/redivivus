@@ -63,7 +63,6 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Client/UI/Panel.data.h"
 #include "Source/D2Client/UI/UseItem.data.h"
-#include "Source/D2Client/UI/npcmenu.data.h"
 #include "Source/D2Client/UI/ui.data.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
@@ -90,10 +89,6 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #ifndef RECON_FPTD_fpSpinnerRepeatAction
 #define RECON_FPTD_fpSpinnerRepeatAction
 typedef void (*fpSpinnerRepeatAction)();
-#endif
-#ifndef RECON_FPTD_pfnTextScrollComplete
-#define RECON_FPTD_pfnTextScrollComplete
-typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, int bDismissed);
 #endif
 
 static D2UIFlagInitStrc gUIFlagDrawConsoleInit[4] = {
@@ -5245,7 +5240,6 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom;
     D2LvlWarpTxt* pShadow;
     uint16_t* pwszTemp;
-    uint16_t wWarpStrId;
     int nWarpTooltipY;
     uint16_t wszLevelNameBuf[256];
     uint8_t byObjSubClass;
@@ -5438,12 +5432,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
           pwszTemp = __frame0.pLevelTxtResult.pLevelsTxt->wszLevelWarp;
           if (eCurrentRoomLevel == LEVEL_DenOfEvil) {
             nResult = GetQuestAvailabilityByIndex(0, 1);
-            wWarpStrId = 0x13de;
-            if (!nResult) {
-              wWarpStrId = 0x13dd;
-            }
-
-            pwszTemp = D2Lang::StrTable::strtable::GetLocaleString(wWarpStrId);
+            pwszTemp = D2Lang::StrTable::strtable::GetLocaleString(nResult ? 0x13de : 0x13dd);
           }
 
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(&__frame0.wszWarpName, pwszTemp, 199);

@@ -16527,14 +16527,23 @@ void __fastcall AITHINK_Fn1_ClawViper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
       nStateType = pMonStats->aip[5][pGame->nDifficulty];
-      if (nStateType) {
-        if (nStateType != 2) {
-          eStateColor = STATE_blue;
-          D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 0);
-        } else {
-          eStateColor = STATE_red;
-          D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 0);
-        }
+      switch (nStateType) {
+        case 2:
+          {
+            eStateColor = STATE_red;
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 0);
+            break;
+          }
+        default:
+          {
+            eStateColor = STATE_blue;
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 0);
+            break;
+          }
+        case 0:
+          {
+            break;
+          }
       }
     }
     if (bEngagedInCombat) {
@@ -16566,14 +16575,23 @@ void __fastcall AITHINK_Fn1_ClawViper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         if (bSkillValidated) {
           SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
           nStateType = pMonStats->aip[5][pGame->nDifficulty];
-          if (nStateType) {
-            if (nStateType != 2) {
-              eStateColor = STATE_blue;
-              D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 1);
-            } else {
-              eStateColor = STATE_red;
-              D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 1);
-            }
+          switch (nStateType) {
+            case 2:
+              {
+                eStateColor = STATE_red;
+                D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 1);
+                break;
+              }
+            default:
+              {
+                eStateColor = STATE_blue;
+                D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 1);
+                break;
+              }
+            case 0:
+              {
+                break;
+              }
           }
 
           pAiParam->pMonsterAiGeneral->dwArg0 = 1;
@@ -16605,14 +16623,23 @@ void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
       nStateType = pMonStats->aip[5][pGame->nDifficulty];
-      if (nStateType) {
-        if (nStateType != 2) {
-          eStateColor = STATE_blue;
-          D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 0);
-        } else {
-          eStateColor = STATE_red;
-          D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 0);
-        }
+      switch (nStateType) {
+        case 2:
+          {
+            eStateColor = STATE_red;
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 0);
+            break;
+          }
+        default:
+          {
+            eStateColor = STATE_blue;
+            D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 0);
+            break;
+          }
+        case 0:
+          {
+            break;
+          }
       }
     }
     if (bEngagedInCombat) {
@@ -16650,14 +16677,23 @@ void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         if (bSkillValidated) {
           SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
           nStateType = pMonStats->aip[5][pGame->nDifficulty];
-          if (nStateType) {
-            if (nStateType != 2) {
-              eStateColor = STATE_blue;
-              D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 1);
-            } else {
-              eStateColor = STATE_red;
-              D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 1);
-            }
+          switch (nStateType) {
+            case 2:
+              {
+                eStateColor = STATE_red;
+                D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_red, 1);
+                break;
+              }
+            default:
+              {
+                eStateColor = STATE_blue;
+                D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 1);
+                break;
+              }
+            case 0:
+              {
+                break;
+              }
           }
 
           pAiParam->pMonsterAiGeneral->dwArg0 = 1;

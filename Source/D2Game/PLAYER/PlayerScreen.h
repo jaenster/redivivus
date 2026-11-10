@@ -15,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2ClientStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2ServerIncomingStatus;

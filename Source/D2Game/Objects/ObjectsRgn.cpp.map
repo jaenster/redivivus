@@ -172,7 +172,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "D2GSPacketSrv0x"
+        "D2GSPacketSrv0x",
+        "SGAMEDATA"
       ]
     },
     {

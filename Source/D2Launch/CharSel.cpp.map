@@ -20,8 +20,7 @@
         "SStrCmpI"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {
@@ -950,8 +949,7 @@
         "D2WinTimer",
         "WCHAR",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {
@@ -1356,8 +1354,7 @@
         "D2WinTextBox",
         "D2WinTimer",
         "WCHAR",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

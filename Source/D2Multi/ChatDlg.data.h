@@ -32,6 +32,7 @@ extern D2ControlStrc * gpCtlLobbyChat[2];
 extern D2LobbyControlsStrc gpLobbyForm0;
 extern D2BNetClientCallbacksStrc * pNetworkUnknown;
 extern uint32_t ghBannerAdProcess;
+extern char gszOogReplyCommandBuffer[256];
 extern uint32_t gbLadderNewsExpanded;
 extern uint32_t gdwGameJoinRequestTick;
 extern uint32_t gbLobbyInitialized;

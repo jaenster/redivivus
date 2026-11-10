@@ -70,7 +70,7 @@ static char gszSrcFileSpriteCache[22] = {
     'p',
     '\x00'
 }; D2_STATIC_GUARD(gszSrcFileSpriteCache, "gszSrcFileSpriteCache");
-static BOOL bUseCompressedData = 0x1; D2_STATIC_GUARD(bUseCompressedData, "bUseCompressedData");
+static BOOL gbUseCompressedData = 0x1; D2_STATIC_GUARD(gbUseCompressedData, "gbUseCompressedData");
 static void* gpszExtDcc = (void*)(char*)".dcc"; D2_STATIC_GUARD(gpszExtDcc, "gpszExtDcc");
 static void* gpszExtDc6 = (void*)&gszExtDc6; D2_STATIC_GUARD(gpszExtDc6, "gpszExtDc6");
 static D2LRUCacheStrc gSpriteCacheLru = {}; D2_STATIC_GUARD(gSpriteCacheLru, "gSpriteCacheLru");
@@ -221,7 +221,7 @@ void __fastcall SPRITECACHE_ReleaseHashEntry(D2GfxHashEntryStrc * pHashEntry) {
 
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc) {
     char* pszExtension;
-    if (!(!bUseDcc || (pszExtension = (char*)gpszExtDcc , !bUseCompressedData))) {
+    if (!(!bUseDcc || (pszExtension = (char*)gpszExtDcc , !gbUseCompressedData))) {
       return pszExtension;
     }
 
@@ -236,7 +236,7 @@ void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szT
     char cByte;
     char* pExtStart;
     vsprintf(szText1, szText2, vaArgs);
-    if (!bUseDcc || (pEndPtr = (char*)gpszExtDcc , pDstCursor = (char*)gpszExtDcc , !bUseCompressedData)) {
+    if (!bUseDcc || (pEndPtr = (char*)gpszExtDcc , pDstCursor = (char*)gpszExtDcc , !gbUseCompressedData)) {
       pEndPtr = (char*)gpszExtDc6;
       pDstCursor = (char*)gpszExtDc6;
     }
@@ -263,12 +263,12 @@ void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szT
 }
 
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData) {
-    Storm::Source::SReg::SRegLoadValue("Diablo II", "CompressedData", 1, &bUseCompressedData);
+    Storm::Source::SReg::SRegLoadValue("Diablo II", "CompressedData", 1, &gbUseCompressedData);
     if (bUseCompressedData) {
       return;
     }
 
-    bUseCompressedData = 0;
+    gbUseCompressedData = 0;
 }
 
 static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
@@ -295,7 +295,7 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         case UNIT_MISSILE:
           pWriteCursor = pGfxData->szFilename;
         if (pWriteCursor) {
-          if (bUseCompressedData) {
+          if (gbUseCompressedData) {
             pGfxData->dwRenderFlags |= 1;
           }
 
@@ -312,7 +312,7 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         break;
         case UNIT_COUNT:
           if (pGfxData->dwFlags & 2 && (pWriteCursor = pGfxData->szFilename , pWriteCursor != 0)) {
-            if (pGfxData->nOverlayId != 0x7a && bUseCompressedData) {
+            if (pGfxData->nOverlayId != 0x7a && gbUseCompressedData) {
               pGfxData->dwRenderFlags |= 1;
             }
 
@@ -479,7 +479,7 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
             }
         }
 
-        if (bUseCompressedData) {
+        if (gbUseCompressedData) {
           pGfxData->dwRenderFlags |= 1;
         }
 
@@ -500,7 +500,7 @@ static BOOL __stdcall SPRITECACHE_LoadDC6(char * szText, D2GfxDataStrc * pGfxDat
     int nClassId;
     char* szFormat;
     BOOL bUseCompressed;
-    bUseCompressed = bUseCompressedData;
+    bUseCompressed = gbUseCompressedData;
     if (*szText == '\0') {
       *szText2 = '\0';
       return 0;
@@ -519,7 +519,7 @@ static BOOL __stdcall SPRITECACHE_LoadDC6(char * szText, D2GfxDataStrc * pGfxDat
 
           szBasePath = "DATA\\GLOBAL\\MISSILES";
           build_flat_path:
-          if (bUseCompressedData) {
+          if (gbUseCompressedData) {
             /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szText2, "%s\\%s.dcc", szBasePath, szText);
             pGfxData->dwRenderFlags |= 1;
             return 1;
@@ -550,7 +550,7 @@ static BOOL __stdcall SPRITECACHE_LoadDC6(char * szText, D2GfxDataStrc * pGfxDat
         }
       default:
         {
-          if (bUseCompressedData) {
+          if (gbUseCompressedData) {
             nStrCmpResult = Storm::Source::SSTR::SStrCmpI(szText, "OYTRlitTNhth", 0x7fffffff);
             if (!nStrCmpResult) {
               bUseCompressed = 0;
@@ -926,7 +926,7 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
 }
 
 void __stdcall SPRITECACHE_Unlock_Unref_005fee00() {
-
+    GfxHash::IGNORELIST_Initialize_Unref_0060ab70();
 }
 
 uint32_t __stdcall SPRITECACHE_GetTotalEntries() {
@@ -941,7 +941,7 @@ uint32_t __stdcall SPRITECACHE_GetCacheSize() {
 }
 
 void __stdcall SPRITECACHE_Unlock_Unref_005fee50() {
-
+    CelDataHash::IGNORELIST_Initialize_Unref_0060b130();
 }
 
 int __stdcall SPRITECACHE_GetMaxSize() {

@@ -151,11 +151,13 @@ class Reference:
                 if not changed:
                     break
             starts = sorted(why)
-            reached, targets, ends = set(), set(), {}
+            reached, targets, ends, tails = set(), set(), {}, set()
             for i, s in enumerate(starts):
                 limit = starts[i + 1] if i + 1 < len(starts) else te
                 f = funcdecode.decode_function(code, ts, s, limit, self.reloc_at)
                 ends[s] = f.end
+                jmps = {ins.addr for ins in f.insns if ins.mnemonic == 'jmp'}
+                tails.update(t for a, t in f.exits if a in jmps and t is not None and self.in_text(t))
                 for ins in f.insns:
                     reached.add(ins.addr)
                     if ins.size < 5 or (ins.addr + ins.size - 4) not in self.relocs:
@@ -184,7 +186,20 @@ class Reference:
                     data.add(v)
             for v in data:
                 add(v, 'data')
-            if not new and not seh and not data:
+            # A function only ever reached by a tail jump (`jmp New` from an
+            # unwind thunk, 00604460 -> 006043b0) and placed right after a
+            # function that ends on the 16-byte grid has neither a call nor
+            # padding to mark it: its code belongs to no function at all.
+            # The same rule as a data pointer's: past the end of the
+            # function before it, with nothing but padding between.
+            tail = set()
+            for v in tails - reached - set(why):
+                i = bisect.bisect_right(starts, v) - 1
+                if i >= 0 and ends[starts[i]] <= v and all(b == 0xCC for b in code[ends[starts[i]] - ts:v - ts]):
+                    tail.add(v)
+            for v in tail:
+                add(v, 'jmp')
+            if not new and not seh and not data and not tail:
                 break
 
         starts = sorted(why)

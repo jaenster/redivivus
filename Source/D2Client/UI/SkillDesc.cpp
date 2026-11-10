@@ -2772,22 +2772,12 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
     char szBuf[32];
     if (bUseFormat) {
       if (nMinDamage >= 10000) {
-        pszPrefix = "+";
-        if (!bPrefixSign) {
-          pszPrefix = "";
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%dK-%dK", pszPrefix, (nMinDamage + 500) / 1000, (nMaxDamage + 500) / 1000);
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%dK-%dK", bPrefixSign ? (char*)"+" : (char*)"", (nMinDamage + 500) / 1000, (nMaxDamage + 500) / 1000);
         D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
         return;
       }
       if (nMaxDamage >= 10000) {
-        pszPrefix = "+";
-        if (!bPrefixSign) {
-          pszPrefix = "";
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%d-%dK", pszPrefix, nMinDamage, (nMaxDamage + 500) / 1000);
+        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%d-%dK", bPrefixSign ? (char*)"+" : (char*)"", nMinDamage, (nMaxDamage + 500) / 1000);
         D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
         return;
       }
@@ -3267,7 +3257,6 @@ static BOOL __stdcall SKILLDESC_FormatThreeValues(int32_t pThis, uint16_t nLabel
 
 static int __stdcall SKILLDESC_FormatDecimalSigned(int32_t nValue, uint16_t nLabelId, uint16_t * wszText) {
     uint16_t* pWszLabel;
-    uint16_t nPluralLabelId;
     uint16_t wszDecW[32];
     char szDecA[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3303,12 +3292,7 @@ static int __stdcall SKILLDESC_FormatDecimalSigned(int32_t nValue, uint16_t nLab
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszDecW);
-    nPluralLabelId = 0x10c0;
-    if (nDecInt != 1) {
-      nPluralLabelId = 0x10b6;
-    }
-
-    pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nPluralLabelId);
+    pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(nDecInt != 1 ? 0x10b6 : 0x10c0);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
     pWszLabel = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszLabel);
@@ -3317,7 +3301,6 @@ static int __stdcall SKILLDESC_FormatDecimalSigned(int32_t nValue, uint16_t nLab
 
 static int __stdcall DistanceToYardsText(uint16_t nLabelId, uint16_t * wszText, int32_t nDistance) {
     uint16_t* pszLocale;
-    uint16_t wStrIdYardsSingPlur;
     uint16_t wszYardsW16[32];
     char szYardsA[32];
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -3353,12 +3336,7 @@ static int __stdcall DistanceToYardsText(uint16_t nLabelId, uint16_t * wszText, 
     pszLocale = D2Lang::StrTable::strtable::GetLocaleString(nLabelId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pszLocale);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszYardsW16);
-    wStrIdYardsSingPlur = 0x10c0;
-    if (nYardsInt != 1) {
-      wStrIdYardsSingPlur = 0x10b6;
-    }
-
-    pszLocale = D2Lang::StrTable::strtable::GetLocaleString(wStrIdYardsSingPlur);
+    pszLocale = D2Lang::StrTable::strtable::GetLocaleString(nYardsInt != 1 ? 0x10b6 : 0x10c0);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pszLocale);
     pszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pszLocale);
@@ -7316,12 +7294,7 @@ void __fastcall SKILLDESC_BuildSkillTooltip(D2UnitStrc * pUnit, eD2Skills eSkill
       } while (nIter < 6);
 
       if (bSectionHasDescLine) {
-        wStrId = 0x109d;
-        if (!nSkillLevel) {
-          wStrId = 0x10ad;
-        }
-
-        pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(wStrId);
+        pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(nSkillLevel ? 0x109d : 0x10ad);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
         pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);

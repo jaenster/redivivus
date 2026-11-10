@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Common/Drlg/D2DrlgGridStrc.h"
 
 // Forward declarations
 struct D2DrlgCoordsStrc;
@@ -32,6 +33,24 @@ typedef uint32_t eDrlgDirection;
 struct D2LvlWarpTxt;
 
 // Data types
+#ifndef D2_DEFINED_D2DrlgOutdoorRoomStrc
+#define D2_DEFINED_D2DrlgOutdoorRoomStrc
+struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
+    /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
+    /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
+    /* 0x28 */ D2DrlgGridStrc pFloorGrid; // Floor grid for outdoor tiles
+    /* 0x3C */ D2DrlgGridStrc pCellGrid; // Cell/shadow grid for outdoor tiles
+    /* 0x50 */ uint8_t * pVertex; // struct D2DrlgVertexStrc* - vertex linked list for path/border
+    /* 0x54 */ int dwFlags; // Outdoor room flags (bit 0x80 = border)
+    /* 0x58 */ int dwFlagsEx; // Extended outdoor room flags
+    /* 0x5C */ int field_5C; // Unknown
+    /* 0x60 */ int field_60; // Unknown
+    /* 0x64 */ int nSubType; // SubType from LevelDefs.txt
+    /* 0x68 */ int nSubTheme; // SubTheme from LevelDefs.txt
+    /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
+};
+
+#endif // D2_DEFINED_D2DrlgOutdoorRoomStrc
 #ifndef D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
 #define D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc
 struct D2DrlgRoomExRoomTileNodeStrc {

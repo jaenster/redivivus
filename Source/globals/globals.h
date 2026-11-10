@@ -241,6 +241,7 @@ struct D2PoolBlockEntryStrc;
 struct D2PoolBlockStrc;
 struct D2ProfilingDumpFrequency;
 struct D2PropertiesTxt;
+struct D2QServerStrc;
 struct D2QualityItemsTableStrc;
 struct D2QualityItemsTxt;
 struct D2QuestAreaIntroStrc;

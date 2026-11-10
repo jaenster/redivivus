@@ -1288,12 +1288,7 @@ void __fastcall Objects_InitFn46(D2ObjectInitFnArg * pInitArg) {
         sSeedRoll = D2_SEED_NEXT(*pDVar1);
         pDVar1->nSeedHigh = sSeedRoll.nSeedHigh;
         pDVar1->nSeedLow = sSeedRoll.nSeedLow;
-        nMonClassId = 0x193;
-        if (sSeedRoll.nSeedLow & 1) {
-          nMonClassId = 0x194;
-        }
-
-        pSpawnedMon = Monster::Create::SpawnMonsterAtRoomPos(pInitArg->pGame, pInitArg->pRoom, pInitArg->nX, pInitArg->nY, nMonClassId, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+        pSpawnedMon = Monster::Create::SpawnMonsterAtRoomPos(pInitArg->pGame, pInitArg->pRoom, pInitArg->nX, pInitArg->nY, sSeedRoll.nSeedLow & 1 ? 0x194 : 0x193, eD2MonsterAnimMode_ns::Neutral, -1, 0);
         if (pSpawnedMon) {
           D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
           nRemainingToSpawn--;

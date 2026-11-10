@@ -18,7 +18,7 @@
 struct D2UnitStrc;
 #ifndef RECON_FPTD_fpCreate
 #define RECON_FPTD_fpCreate
-typedef int (__fastcall *fpCreate)(struct D2UnitStrc *, int, int, int, int, int);
+typedef int (__fastcall *fpCreate)(struct D2UnitStrc *, int, int, int, int, int, uint8_t nDirection);
 #endif
 #ifndef RECON_FPTD_fpHit
 #define RECON_FPTD_fpHit
@@ -29,6 +29,14 @@ typedef void (__fastcall *fpHit)(struct D2UnitStrc *, struct D2UnitStrc *);
 typedef void (__fastcall *fpUnknownMissileStream)(int);
 #endif
 
+// Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+union MissileStream_Update_Slotm14 {
+    /* 0x00 */ uint8_t nDirection;
+    /* 0x00 */ uint32_t dwPushed;
+};
+
+#endif // D2_MODULE_D2Common
 namespace D2Common::Units::MissileStream {
 
 // Function declarations

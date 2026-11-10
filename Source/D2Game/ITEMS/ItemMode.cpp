@@ -3238,17 +3238,24 @@ uint32_t __fastcall ITEMMODE_ResolveEquipConflict(D2UnitStrc * pUnit, D2UnitStrc
             if (pUnit->eUnitType == UNIT_MONSTER) {
               return 1;
             }
-            if (pUnit->nClassId == 4) {
-              return 1;
-            }
-            if (pUnit->nClassId == 6) {
-              _bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_HandtoHand);
-              if (_bIsWeaponType) {
-                _bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(*ppConflict2, ITEMTYPE_HandtoHand);
-                if (_bIsWeaponType) {
+
+            switch (pUnit->nClassId) {
+              case 4:
+                {
                   return 1;
                 }
-              }
+              case 6:
+                {
+                  _bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_HandtoHand);
+                  if (_bIsWeaponType) {
+                    _bIsWeaponType = D2Common::ITEMS::Items::ITEMS_IsA(*ppConflict2, ITEMTYPE_HandtoHand);
+                    if (_bIsWeaponType) {
+                      return 1;
+                    }
+                  }
+
+                  break;
+                }
             }
           } else {
             if (_bConflictIsWeapon) {
@@ -4197,7 +4204,6 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t bSkipRequirementsCheck, uint32_t * pbBadParams) {
     int32_t pConflictItem;
     D2UnitStrc* pWeapon;
-    int32_t nEquipMode;
     BOOL bIsDisabled;
     D2InventoryStrc* pInventory;
     bool bIsSwappedSlot = false;
@@ -4246,12 +4252,7 @@ BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUni
               return 1;
             }
 
-            nEquipMode = 3;
-            if (bIsSwappedSlot) {
-              nEquipMode = 4;
-            }
-
-            bIsDisabled = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pItem, nEquipMode);
+            bIsDisabled = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pItem, bIsSwappedSlot ? 4 : 3);
             if (bIsDisabled) {
               D2Common::ITEMS::Items::SetBodyLoc(pItem, eTargetBodyLoc);
               if (!bIsSwappedSlot) {

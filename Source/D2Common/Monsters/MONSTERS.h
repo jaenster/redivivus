@@ -18,6 +18,7 @@
 struct D2MonStatsTxt;
 struct D2RoomStrc;
 struct D2UnitStrc;
+typedef uint32_t eD2MonsterAnimMode;
 typedef uint32_t eMissilesId;
 #ifndef RECON_FPTD_pfnMonsterSpawnClassIdCb
 #define RECON_FPTD_pfnMonsterSpawnClassIdCb

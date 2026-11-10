@@ -205,27 +205,6 @@
       ]
     },
     {
-      "name": "LAUNCHER_ReadRegistryValue",
-      "address": "0043da50",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0043da50"
-        }
-      ],
-      "namespace": "D2Multi::ChatDlg",
-      "calledFunctions": [
-        "LAUNCHER_ReadRegistryValue"
-      ],
-      "usedTypes": [
-        "HKEY",
-        "LPBYTE",
-        "LPDWORD",
-        "LSTATUS",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "LAUNCHER_SetGameListCacheActive",
       "address": "0043dad0",
       "lines": [
@@ -2107,6 +2086,108 @@
       ]
     },
     {
+      "name": "CHATDLG_RunChatLobbyScreen",
+      "address": "00441b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00441b70"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "CHATDLG_RunChatLobbyScreen",
+        "GetTickCount",
+        "D2CheckExpansionGame",
+        "ReturnZero",
+        "TABLES_LoadStrings",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STRINGTABLE_FreeStringTables",
+        "IMAGE_LoadPredefinedImagesExEx",
+        "D2WINMAIN_SetCursorDC6",
+        "D2WINMAIN_SetBackgroundDC6",
+        "UIMENU_CantTestItBeacuseItCrash",
+        "LAUNCHER_AllocCharSelectComponent",
+        "FORMS_CreateAnyForm",
+        "D2WINEDITBOX_SetFilterCallback",
+        "D2WINEDITBOX_SetChangeCallback",
+        "D2WINMAIN_SetFocusedControl",
+        "D2WINEDITBOX_SetPasswordMode",
+        "COMCALLBACK_ClearChannelUserList",
+        "SetUnsetFlag0x08",
+        "D2WinButton",
+        "D2WINMAIN_SetControlActive",
+        "D2WINBUTTON_SetImageIndex",
+        "CHATDLG_ClearChatHistory",
+        "CHATDLG_DestroyAllForms",
+        "D2WINBUTTON_SetPressed",
+        "MCPCONNECT_SetMessageCallback",
+        "NET_MCP_CLIENT_Send_0x12_MOTD",
+        "CHATDLG_RefreshGameNameDisplay",
+        "D2WINMAIN_SetControlVisible",
+        "D2WINMAIN_SetFormFourth",
+        "SOUND_InitSoundEffectBuffers",
+        "SOUND_LoadWavFile",
+        "SOUND_GetOptionsMusic",
+        "SOUND_SetMusicEnabled",
+        "OOGMENU_RestoreMCPConnection",
+        "LOGFILE_WriteStringToFile",
+        "sprintf",
+        "SetIsMPCJoinSuccesfull",
+        "MessagePump",
+        "getIsMPCJoinSuccesfull",
+        "NET_MCP_CLIENT_Send_0x13_CancelGameCreate",
+        "FreeMCP",
+        "SOUND_FreeSoundEffectBuffers",
+        "COMCALLBACK_ClearAllChannelUsers",
+        "D2COMP_FreeAllCompositeUnits",
+        "CHATDLG_FreePlayerNameList",
+        "FORMS_DestroyAnyForm",
+        "LAUNCHER_FreeLauncherImages"
+      ],
+      "usedTypes": [
+        "D2ControlStrc",
+        "D2IniConfigStrc",
+        "D2LobbyControlsStrc",
+        "D2PoolManagerStrc",
+        "D2WinButton",
+        "D2WinButton *",
+        "DC6",
+        "FORMS_PredefinedFormStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleReplyCommand",
+      "address": "00442180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00442180"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "OOGUTIL_HandleReplyCommand",
+        "someStrCompare",
+        "sprintf",
+        "strtok",
+        "GetLocaleString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "CONTAINER_InitializeBuffer",
+        "UTF8_ConvertToWideChar",
+        "SetText"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "CHATDLG_OnPressLadderClassicHardcore",
       "address": "00442350",
       "lines": [
@@ -2123,6 +2204,45 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
+      ]
+    },
+    {
+      "name": "OOGUTIL_HandleChatCommands",
+      "address": "004423b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004423b0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "OOGUTIL_HandleChatCommands",
+        "CHATDLG_AppendChatToHistory",
+        "OOGUTIL_HandleReplyCommand",
+        "CHATDLG_HandleNotifyCommand",
+        "someStrCompare",
+        "MISC_GetIgnorelist",
+        "GetLocaleString",
+        "CHATDLG_AppendTextToTextBox",
+        "CONTAINER_InitializeBuffer",
+        "CHATDLG_ParseCommandArgument",
+        "SStrCmpI",
+        "UTF8_ConvertToWideChar",
+        "SRegSaveString",
+        "UIMENU_DrawTitleOnCenterSmaller",
+        "SRegLoadString",
+        "OOGUTIL_JoinChannelAndDestroyForms",
+        "UNICODE_FormatWideString",
+        "AppendToBuffer"
+      ],
+      "usedTypes": [
+        "IgnoreList",
+        "IgnoreListVtable",
+        "WCHAR",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
       ]
     },
     {

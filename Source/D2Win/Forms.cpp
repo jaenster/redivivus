@@ -24,20 +24,27 @@ void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, 
       switch (nHandlerType) {
         case 0:
           {
-            if (nMessage == 0x111) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17);
-              exit(-1);
-            } else if (nMessage == 0x101) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18);
-              exit(-1);
-            } else {
-              if (nMessage == 0x100) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19);
-                exit(-1);
-              }
-
-              Storm::WindowHandle::SMsgRegisterMessage(hHandle, nMessage, pCallback);
-              return;
+            switch (nMessage) {
+              case 0x111:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17);
+                  exit(-1);
+                }
+              case 0x101:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18);
+                  exit(-1);
+                }
+              default:
+                {
+                  Storm::WindowHandle::SMsgRegisterMessage(hHandle, nMessage, pCallback);
+                  return;
+                }
+              case 0x100:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19);
+                  exit(-1);
+                }
             }
           }
         case 1:
@@ -63,20 +70,27 @@ void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType
       switch (nHandlerType) {
         case 0:
           {
-            if (nMessage == 0x111) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
-              exit(-1);
-            } else if (nMessage == 0x101) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x35);
-              exit(-1);
-            } else {
-              if (nMessage == 0x100) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
-                exit(-1);
-              }
-
-              Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
-              return;
+            switch (nMessage) {
+              case 0x111:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
+                  exit(-1);
+                }
+              case 0x101:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x35);
+                  exit(-1);
+                }
+              default:
+                {
+                  Storm::WindowHandle::SMsgUnregisterMessage(hHandle, nMessage, (char*)pCallback);
+                  return;
+                }
+              case 0x100:
+                {
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x36);
+                  exit(-1);
+                }
             }
           }
         case 1:

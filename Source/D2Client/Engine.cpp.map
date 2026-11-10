@@ -645,30 +645,6 @@
       ]
     },
     {
-      "name": "CLIENT_SetAnimModeAndMoveToCurrentPos",
-      "address": "00460830",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00460830"
-        }
-      ],
-      "namespace": "D2Client::Engine",
-      "calledFunctions": [
-        "CLIENT_SetAnimModeAndMoveToCurrentPos",
-        "UNITMODE_SetAnimMode",
-        "GetPlayerUnit_Net",
-        "GetXPos",
-        "GetYPos",
-        "PATH_MoveUnitToPoint"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "eD2PlayerAnimMode",
-        "eD2UnitType"
-      ]
-    },
-    {
       "name": "CLIENT_PreloadMonsterCofsInAdjacentRooms",
       "address": "004608c0",
       "lines": [

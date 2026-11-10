@@ -8,7 +8,6 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "3rdparty/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Net/Game/Server.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -457,6 +457,7 @@
       ],
       "usedTypes": [
         "BigData",
+        "D2Srp *",
         "D2SrpCredentialsStrc",
         "int32_t",
         "uint32_t",

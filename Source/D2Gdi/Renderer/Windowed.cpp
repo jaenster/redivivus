@@ -7,13 +7,12 @@
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/Draw.h"
 #include "Source/D2DDraw/Renderer/DirectDraw.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/GAME/View.data.h"
 #include "Source/D2Gdi/Renderer/Windowed.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

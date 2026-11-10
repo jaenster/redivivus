@@ -3,14 +3,11 @@
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/mcp0x03data.h"
-#include "Source/D2Common/D2Common.h"
-#include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
 #include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Multi/ComCallback.h"
-#include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
@@ -31,17 +28,13 @@
 #define RECON_FPTD_fnGetTickCount
 typedef DWORD (__stdcall *fnGetTickCount)();
 #endif
-#ifndef RECON_FPTD_fpD2WinEditBoxFilter
-#define RECON_FPTD_fpD2WinEditBoxFilter
-typedef int (__stdcall *fpD2WinEditBoxFilter)(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
-#endif
-#ifndef RECON_FPTD_pfnFramePump
-#define RECON_FPTD_pfnFramePump
-typedef int (__stdcall *pfnFramePump)(int nFrameIndex);
-#endif
 #ifndef RECON_FPTD_ChatDlgCallback
 #define RECON_FPTD_ChatDlgCallback
 typedef int (__stdcall *ChatDlgCallback)(D2ControlMsg * pControlMsg);
+#endif
+#ifndef RECON_FPTD_fpD2WinEditBoxFilter
+#define RECON_FPTD_fpD2WinEditBoxFilter
+typedef int (__stdcall *fpD2WinEditBoxFilter)(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar);
 #endif
 
 static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e920 = {
@@ -83,7 +76,6 @@ static int32_t gnPendingGameInfoCharIndex = -0x1; D2_STATIC_GUARD(gnPendingGameI
 namespace D2Multi::OOGUtilities {
 char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "D2Multi::OOGUtilities::gszOogChatInputBuffer");
 } // namespace D2Multi::OOGUtilities
-char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
 static uint16_t gwLastGameInfoRequestId = 0; D2_STATIC_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
 namespace D2Multi::OOGUtilities {
 D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "D2Multi::OOGUtilities::gbLanGameListEntryNamePadding2");
@@ -121,8 +113,12 @@ D2ControlStrc * gUIGameListMaxPlayersInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameL
 D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersInactiveArrowButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersInactiveArrowButton");
 // also labelled: gpOOGLobbyControl4
 D2ControlStrc * gUIGameListMaxPlayersUpButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersUpButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersUpButton");
+// also labelled: gUIGameListPlayerCountLabel
+::D2WinButton * gUIGameListMaxPlayersDownButton = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersDownButton, "D2Multi::OOGUtilities::gUIGameListMaxPlayersDownButton");
 // also labelled: gUIGameListLevelRestrictionMinEditBox
 D2ControlStrc * gUIGameListLevelRestrictionUpButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionUpButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionUpButton");
+// also labelled: gUIGameListLevelRestrictionMaxEditBox
+::D2WinButton * gUIGameListLevelRestrictionDownButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionDownButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionDownButton");
 // also labelled: gUIGameListRefreshButton
 D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveArrowButton, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionInactiveArrowButton");
 D2ControlStrc * gUIGameListCreateButton = 0; D2_GLOBAL_GUARD(gUIGameListCreateButton, "D2Multi::OOGUtilities::gUIGameListCreateButton");
@@ -132,10 +128,18 @@ D2ControlStrc * gUIGameListCreateButton = 0; D2_GLOBAL_GUARD(gUIGameListCreateBu
 // also labelled: gpOogSelectedGameListControl
 ::D2WinEditBox * gUIGameListMaxPlayersEditBox = 0; D2_GLOBAL_GUARD(gUIGameListMaxPlayersEditBox, "D2Multi::OOGUtilities::gUIGameListMaxPlayersEditBox");
 ::D2WinEditBox * gUILevelRestrictionEditBox = 0; D2_GLOBAL_GUARD(gUILevelRestrictionEditBox, "D2Multi::OOGUtilities::gUILevelRestrictionEditBox");
+// also labelled: gUIGameListJoinButton
+::D2WinButton * gUIGameListLevelRestrictionCheckbox = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionCheckbox, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionCheckbox");
 // also labelled: gUIGameListCancelButton
 D2ControlStrc * gUIGameListLevelRestrictionInactiveImage = 0; D2_GLOBAL_GUARD(gUIGameListLevelRestrictionInactiveImage, "D2Multi::OOGUtilities::gUIGameListLevelRestrictionInactiveImage");
 // also labelled: gpOOGLobbyControl6
 D2ControlStrc * gpCtlCreateGameDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlCreateGameDlgCancelButton, "D2Multi::OOGUtilities::gpCtlCreateGameDlgCancelButton");
+// also labelled: gUIGameListGameListBox
+::D2WinButton * gUIGameListDifficultyNormalButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNormalButton, "D2Multi::OOGUtilities::gUIGameListDifficultyNormalButton");
+// also labelled: gUIGameListScrollbar
+::D2WinButton * gUIGameListDifficultyNightmareButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyNightmareButton, "D2Multi::OOGUtilities::gUIGameListDifficultyNightmareButton");
+// also labelled: gUIGameListExpandedDetailsText
+::D2WinButton * gUIGameListDifficultyHellButton = 0; D2_GLOBAL_GUARD(gUIGameListDifficultyHellButton, "D2Multi::OOGUtilities::gUIGameListDifficultyHellButton");
 ::D2WinTextBox * gUIGameListStatusLabel = 0; D2_GLOBAL_GUARD(gUIGameListStatusLabel, "D2Multi::OOGUtilities::gUIGameListStatusLabel");
 ::D2WinTextBox * gUIGameListPlayerListText = 0; D2_GLOBAL_GUARD(gUIGameListPlayerListText, "D2Multi::OOGUtilities::gUIGameListPlayerListText");
 ::D2WinTextBox * gUIGameListActLabel = 0; D2_GLOBAL_GUARD(gUIGameListActLabel, "D2Multi::OOGUtilities::gUIGameListActLabel");
@@ -560,13 +564,7 @@ int __stdcall JoinOrCreateGame(DWORD dwUnused) {
     /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcCursor, 0x91, 0xb, 0x28f, 0x47);
     BOOL bMouseInRect;
     bMouseInRect = D2Win::Src::D2WinMain::D2WINMAIN_TestMouseInRect(&rcCursor);
-    DC6* pCursorDC6;
-    pCursorDC6 = gpDC6CursorOpenHand;
-    if (bMouseInRect) {
-      pCursorDC6 = gpDC6CursorLRotate;
-    }
-
-    D2Win::Src::D2WinMain::D2WINMAIN_SetCursorDC6(pCursorDC6);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetCursorDC6(bMouseInRect ? gpDC6CursorLRotate : gpDC6CursorOpenHand);
     fnGetTickCount pfnGetTickCount;
     pfnGetTickCount = GetTickCount;
     if (gpChatFormList == (void*)0x2 && gdwGameJoinRequestTick > 0) {

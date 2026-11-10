@@ -664,12 +664,7 @@ void __fastcall Q18_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       pA1Q3Data->nPlayersInArea++;
       pA1Q3Data->nTomeObjectMode = 2;
       pA1Q3Data->bNotifiedPlayers = '\x01';
-      if (!pQuestArgs->pPlayer) {
-        QUESTGUID_AddPlayerToList(&pA1Q3Data->sQuestGUID, -1);
-        return;
-      }
-
-      QUESTGUID_AddPlayerToList(&pA1Q3Data->sQuestGUID, pQuestArgs->pPlayer->nUnitGUID);
+      QUESTGUID_AddPlayerToList(&pA1Q3Data->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
       return;
     }
 

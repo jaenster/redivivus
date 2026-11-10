@@ -199,7 +199,7 @@ int NET_D2GS_CLIENT_INCOMING_SIZE[181] = {
     -0x1,
     0x5
 }; D2_GLOBAL_GUARD(NET_D2GS_CLIENT_INCOMING_SIZE, "NET_D2GS_CLIENT_INCOMING_SIZE");
-D2QServerStrc * pQServer = 0; D2_GLOBAL_GUARD(pQServer, "pQServer");
+static D2QServerStrc * gpQServer = 0; D2_STATIC_GUARD(gpQServer, "gpQServer");
 static uint32_t gnDefaultClientGameToken = 0; D2_STATIC_GUARD(gnDefaultClientGameToken, "gnDefaultClientGameToken");
 
 namespace D2Net::Game::Server {
@@ -260,7 +260,7 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
       } else if (byOpcode < 0x71) {
         *pnPacketClass = 0;
       } else {
-        nTokenMatch = Fog::Src::MatchesGameTokenFilter_Thunk(pQServer, dwClientIpAddress);
+        nTokenMatch = Fog::Src::MatchesGameTokenFilter_Thunk(gpQServer, dwClientIpAddress);
         if (!nTokenMatch) {
           return 4;
         }
@@ -284,49 +284,49 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
 }
 
 void __stdcall WaitForEmptyEvent(DWORD dwTimeout) {
-    Fog::Src::WaitForEmptyEvent(pQServer, dwTimeout);
+    Fog::Src::WaitForEmptyEvent(gpQServer, dwTimeout);
 }
 
 void __stdcall NET_Thunk_QServerSwapWorkerSlotValue(int nWorkerIndex, int nNewSlotValueOrZero) {
-    Fog::Src::SwapWorkerSlotValue(pQServer, nWorkerIndex, nNewSlotValueOrZero);
+    Fog::Src::SwapWorkerSlotValue(gpQServer, nWorkerIndex, nNewSlotValueOrZero);
 }
 
 void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken, uint32_t nMaskTableIndex) {
-    Fog::Src::AddGameTokenFilter(pQServer, nMaskTableIndex, nExpectedMaskedToken);
+    Fog::Src::AddGameTokenFilter(gpQServer, nMaskTableIndex, nExpectedMaskedToken);
 }
 
 void __stdcall NET_SetPlayersCount(int32_t nCount) {
-    Fog::Src::SetPerIpConnectionLimit(pQServer, nCount);
+    Fog::Src::SetPerIpConnectionLimit(gpQServer, nCount);
 }
 
 void __stdcall _NullSub_Unref_0052b270() {
-    Fog::Src::GetConnectedClients(pQServer);
+    Fog::Src::GetConnectedClients(gpQServer);
 }
 
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
-    Fog::Src::SetHackMode(pQServer, bResult);
+    Fog::Src::SetHackMode(gpQServer, bResult);
 }
 
 void NET_QServer_FreeAndSend0xB0ToEveryone() {
     uint8_t aShutdownFrame[4];
     aShutdownFrame[3] = 0xb0;
     d2_store24((char*)&aShutdownFrame, 0);
-    Fog::Src::Shutdown(pQServer, (char*)(aShutdownFrame + 3), 1);
-    pQServer = 0;
+    Fog::Src::Shutdown(gpQServer, (char*)(aShutdownFrame + 3), 1);
+    gpQServer = 0;
 }
 
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSize) {
-    int nResult = Fog::Src::DequeueModePacket(pQServer, 1, pBytes, nSize);
+    int nResult = Fog::Src::DequeueModePacket(gpQServer, 1, pBytes, nSize);
     return nResult;
 }
 
 int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t nSize) {
-    int nResult = Fog::Src::DequeueModePacket(pQServer, 0, pBytes, nSize);
+    int nResult = Fog::Src::DequeueModePacket(gpQServer, 0, pBytes, nSize);
     return nResult;
 }
 
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, size_t nSize) {
-    int nResult = Fog::Src::DequeueModePacket(pQServer, 2, pBytes, nSize);
+    int nResult = Fog::Src::DequeueModePacket(gpQServer, 2, pBytes, nSize);
     return nResult;
 }
 
@@ -359,70 +359,70 @@ int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nCli
         pbCompressedSize = pbCompressedEnd + 1;
         if (pbCompressedSize < 0xf0) {
           pBuffer[1] = (char)pbCompressedSize;
-          nSendResult = Fog::Src::SendPacketByClientId(pQServer, nClientId, pBuffer + 1, pbCompressedSize);
+          nSendResult = Fog::Src::SendPacketByClientId(gpQServer, nClientId, pBuffer + 1, pbCompressedSize);
           return nSendResult ? pbCompressedSize : 0;
         }
 
         nSize_00 = pbCompressedEnd + 2;
         pBuffer[0] = (uint8_t)(nSize_00 >> 8) | 0xf0;
         pBuffer[1] = (char)nSize_00;
-        nSendResult = Fog::Src::SendPacketByClientId(pQServer, nClientId, pBuffer, nSize_00);
+        nSendResult = Fog::Src::SendPacketByClientId(gpQServer, nClientId, pBuffer, nSize_00);
         return nSendResult ? nSize_00 : 0;
       }
     }
 
-    nSendResult = Fog::Src::SendPacketByClientId(pQServer, nClientId, pBytes, nSize);
+    nSendResult = Fog::Src::SendPacketByClientId(gpQServer, nClientId, pBytes, nSize);
     return nSendResult ? nSize : 0;
 }
 
 void __stdcall NET_QServer_FindIpAddressByClientIdForQServer(int32_t nClientId, char * szIpAddress, int32_t nBufferSize) {
-    Fog::Src::GetClientIpStringByClientId(pQServer, nClientId, szIpAddress, nBufferSize);
+    Fog::Src::GetClientIpStringByClientId(gpQServer, nClientId, szIpAddress, nBufferSize);
 }
 
 void __stdcall GetIpFromToken(uint32_t nToken) {
-    Fog::Src::GetClientIpByToken(pQServer, nToken);
+    Fog::Src::GetClientIpByToken(gpQServer, nToken);
 }
 
 void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken) {
-    Fog::Src::GetClientSocketByToken(pQServer, nToken);
+    Fog::Src::GetClientSocketByToken(gpQServer, nToken);
 }
 
 void __stdcall NET_HACK_AddClientToHackList(int32_t nClientId, char * szText, int32_t nBanFlags) {
-    Fog::Src::BanClient(pQServer, nClientId, szText, nBanFlags);
+    Fog::Src::BanClient(gpQServer, nClientId, szText, nBanFlags);
 }
 
 void __stdcall NET_HACK_CloseAndBanHackerIP(in_addr addr, char * szFile, int32_t nLine) {
-    Fog::Src::DisconnectAndBanIp(pQServer, (uint32_t)addr.S_un, szFile, nLine);
+    Fog::Src::DisconnectAndBanIp(gpQServer, (uint32_t)addr.S_un, szFile, nLine);
 }
 
 void __stdcall NET_HACK_UnlistIP(in_addr addr, char * dwDuration, uint32_t dwFlags) {
-    Fog::Src::QSHackUnlistIP(pQServer, addr, dwDuration, dwFlags);
+    Fog::Src::QSHackUnlistIP(gpQServer, addr, dwDuration, dwFlags);
 }
 
 void __stdcall NET_DisconnectIP(in_addr addr, char * szText, int32_t nFlags) {
-    Fog::Src::QSDisconnectIP(pQServer, addr, szText, nFlags);
+    Fog::Src::QSDisconnectIP(gpQServer, addr, szText, nFlags);
 }
 
 // @sourcefile .\SRC\Server.cpp
 void __stdcall QSERVER_KillConnection(int32_t nClientId) {
-    Fog::Src::thunk_CloseRemoteConnection(pQServer, nClientId, ".\\SRC\\Server.cpp", 0x1d4);
+    Fog::Src::thunk_CloseRemoteConnection(gpQServer, nClientId, ".\\SRC\\Server.cpp", 0x1d4);
 }
 
 void __stdcall NET_Thunk_QServerSetHacklistAddLineHook(fpD2QServerLineHook pfnHook) {
-    if (!pQServer) {
+    if (!gpQServer) {
       return;
     }
 
-    Fog::Src::SetHacklistLineHook(pQServer, pfnHook);
+    Fog::Src::SetHacklistLineHook(gpQServer, pfnHook);
 }
 
 void __stdcall NET_SetQServerCallbackFunction(void * pfnCallback) {
-    Fog::Src::SetReservedHook(pQServer, pfnCallback);
+    Fog::Src::SetReservedHook(gpQServer, pfnCallback);
 }
 
 void __stdcall AssignClientToToken(int32_t nClientId, uint32_t nToken) {
     if (nClientId) {
-      Fog::Src::SetClientServerTokenByClientId(pQServer, nClientId, nToken);
+      Fog::Src::SetClientServerTokenByClientId(gpQServer, nClientId, nToken);
       return;
     }
 
@@ -432,7 +432,7 @@ void __stdcall AssignClientToToken(int32_t nClientId, uint32_t nToken) {
 uint32_t __stdcall QSERVER_GetClientGameToken(uint32_t nClientId) {
     if (nClientId) {
       uint32_t nToken;
-      nToken = Fog::Src::GetClientServerTokenByClientId(pQServer, nClientId);
+      nToken = Fog::Src::GetClientServerTokenByClientId(gpQServer, nClientId);
       return nToken;
     }
 
@@ -445,7 +445,7 @@ void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nSize, int32_t n
       exit(-1);
     }
 
-    Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nSize, nFlags);
+    Fog::Src::SendPacketToClient(gpQServer, szText, (uint32_t)nSize, nFlags);
 }
 
 uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize) {
@@ -454,23 +454,23 @@ uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize) {
       exit(-1);
     }
 
-    int nSendResult = Fog::Src::SendPacketToClient(pQServer, szText, (uint32_t)nSize, 0);
+    int nSendResult = Fog::Src::SendPacketToClient(gpQServer, szText, (uint32_t)nSize, 0);
     return (uint32_t)(nSendResult != 0);
 }
 
 void __stdcall NET_WaitForEmptyEvent(DWORD dwTimeout) {
-    Fog::Src::WaitForEmptyEventOrPumpIo(pQServer, dwTimeout);
+    Fog::Src::WaitForEmptyEventOrPumpIo(gpQServer, dwTimeout);
 }
 
 void __stdcall _NullSub() {
-    Fog::Src::_NullSubRet4(pQServer);
+    Fog::Src::_NullSubRet4(gpQServer);
 }
 
 // @wasnamed _NullSub - one name on two different functions.
 // @evidence Forwards to QServer::_NullSubRet8(pQServer, dwParam). 0052b6f0 forwards to
 // _NullSubRet4(pQServer). Two distinct stubs.
 void __stdcall _NullSubRet8(uint32_t dwParam) {
-    Fog::Src::_NullSubRet8(pQServer, dwParam);
+    Fog::Src::_NullSubRet8(gpQServer, dwParam);
 }
 
 int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
@@ -486,7 +486,7 @@ int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t 
     uint8_t aPacketFrame[4];
     d2_store24((char*)&aPacketFrame, (uint32_t)((uint32_t)(uintptr_t)pQServer & 0xffffffu));
     aPacketFrame[3] = 0x70;
-    Fog::Src::SendPacketToClient(pQServer, (char*)(aPacketFrame + 3), 1, nClientId);
+    Fog::Src::SendPacketToClient(gpQServer, (char*)(aPacketFrame + 3), 1, nClientId);
     return 1;
 }
 
@@ -500,7 +500,7 @@ void __stdcall NET_D2GS_SERVER_Send_0xAF00() {
 
 // Wrapper that creates and stores the global QServer instance. Calls NET_QServer_Init with port 4000, three packet modes (setup/in-game/system), and registers four callbacks: packet size classifier, client accepted (0xAF01), client freed (0x70), and single-player packet handler. Stores result in global pQServer variable.
 void __stdcall QSERVER_CreateAndInit(eD2GSConnectionType neD2GSConnectionType, eD2GSGameType eD2GameType) {
-    pQServer = Fog::Src::NET_QServer_Init(neD2GSConnectionType, 3, 4000, eD2GameType, NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect, NET_D2GS_SERVER_Send_0xAF01, NET_D2GS_CLIENT_Send_0x70, HandleIncomingPacketBuffer);
+    gpQServer = Fog::Src::NET_QServer_Init(neD2GSConnectionType, 3, 4000, eD2GameType, NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect, NET_D2GS_SERVER_Send_0xAF01, NET_D2GS_CLIENT_Send_0x70, HandleIncomingPacketBuffer);
 }
 
 BOOL __stdcall NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer() {

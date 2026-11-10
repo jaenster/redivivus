@@ -189,6 +189,6 @@ void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, str
 void __fastcall DROP_SpawnGoldOnGround(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 void __fastcall ITEM_GiveGoldOrDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 #endif // D2_MODULE_D2Game
-// 22 internal functions (defined in .cpp)
+// 23 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::Items::Drop

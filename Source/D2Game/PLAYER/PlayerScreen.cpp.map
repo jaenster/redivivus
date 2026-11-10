@@ -19,6 +19,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2ClientStrc",
         "D2Packet0x5aEventStructure",
         "uint32_t",
         "uint8_t"

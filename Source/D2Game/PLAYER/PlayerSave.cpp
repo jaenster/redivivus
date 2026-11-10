@@ -252,7 +252,6 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
     int32_t nItemGUID;
     eD2BodyLoc eBodyLoc;
     BOOL bPlaceResult;
-    int nInventorySlot;
     int nPlaceResult;
     DWORD dwContainerGUID;
     uint32_t nBodyLocId;
@@ -292,12 +291,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
             return 0xd;
           }
 
-          nInventorySlot = 3;
-          if (nBodyLocId == 0xb || nBodyLocId == 0xc) {
-            nInventorySlot = 4;
-          }
-
-          bPlaceResult = D2Common::INVENTORY::Inventory::PutItemInInventory(pCurInventory, pItem, nInventorySlot);
+          bPlaceResult = D2Common::INVENTORY::Inventory::PutItemInInventory(pCurInventory, pItem, nBodyLocId == 0xb || nBodyLocId == 0xc ? 4 : 3);
           if (!bPlaceResult) {
             return 0xd;
           }
@@ -354,7 +348,6 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
     eD2ItemAnimMode eAnimMode;
     int nPlaceResult;
     BOOL BVar1;
-    int nInventorySlot;
     int32_t nPosX;
     DWORD dwItemGUID;
     uint32_t nBodyLocId;
@@ -406,12 +399,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
             return 0xd;
           }
 
-          nInventorySlot = 3;
-          if (nBodyLocId == 0xb || nBodyLocId == 0xc) {
-            nInventorySlot = 4;
-          }
-
-          BVar1 = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pUnit, nInventorySlot);
+          BVar1 = D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pUnit, nBodyLocId == 0xb || nBodyLocId == 0xc ? 4 : 3);
           if (!BVar1) {
             return 0xd;
           }

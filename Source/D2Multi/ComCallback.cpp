@@ -17,7 +17,6 @@
 #include "Source/D2Multi/ChatDlg.data.h"
 #include "Source/D2Multi/ComCallback.data.h"
 #include "Source/D2Multi/OOG.h"
-#include "Source/D2Multi/OOGUtilities.data.h"
 #include "Source/D2Win/D2WinEditBox.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

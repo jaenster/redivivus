@@ -601,7 +601,7 @@
       "namespace": "D2Client::UI::EscMenu",
       "calledFunctions": [
         "UI_SLIDER_ApplyAutomapCenters",
-        "SRegSaveValue"
+        "AUTOMAP_SetCenters"
       ],
       "usedTypes": [
         "D2EscMenuItemStrc",
@@ -640,7 +640,7 @@
       "namespace": "D2Client::UI::EscMenu",
       "calledFunctions": [
         "UI_SLIDER_ApplyAutomapParty",
-        "SRegSaveValue"
+        "AUTOMAP_SetParty"
       ],
       "usedTypes": [
         "D2EscMenuItemStrc",

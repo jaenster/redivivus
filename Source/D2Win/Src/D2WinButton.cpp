@@ -4,7 +4,7 @@
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Launch/MainMenus.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"

@@ -4,24 +4,6 @@
   "file": "Source/Fog/Engine/Application.cpp",
   "functions": [
     {
-      "name": "DEBUG_CaptureThreadContext",
-      "address": "00404660",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00404660"
-        }
-      ],
-      "namespace": "Fog::Engine::Application",
-      "calledFunctions": [
-        "DEBUG_CaptureThreadContext"
-      ],
-      "usedTypes": [
-        "LPCONTEXT",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "Unreferenced_004046d0",
       "address": "004046d0",
       "lines": [

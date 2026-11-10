@@ -152,12 +152,7 @@ void __stdcall LoadPanelImages() {
 
       InvChar = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     } else {
-      ppszPath = "Panel\\InvChar6";
-      if (!bExpansion) {
-        ppszPath = "Panel\\InvChar";
-      }
-
-      InvChar = ui::ARCHIVE_LoadOverlayImageUsedInGame(ppszPath);
+      InvChar = ui::ARCHIVE_LoadOverlayImageUsedInGame(bExpansion ? (char*)"Panel\\InvChar6" : (char*)"Panel\\InvChar");
     }
 
     Arrow = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\Arrow");

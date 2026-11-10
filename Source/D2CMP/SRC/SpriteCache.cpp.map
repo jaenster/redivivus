@@ -422,7 +422,8 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_Unlock_Unref_005fee00"
+        "SPRITECACHE_Unlock_Unref_005fee00",
+        "IGNORELIST_Initialize_Unref_0060ab70"
       ]
     },
     {
@@ -470,7 +471,8 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_Unlock_Unref_005fee50"
+        "SPRITECACHE_Unlock_Unref_005fee50",
+        "IGNORELIST_Initialize_Unref_0060b130"
       ]
     },
     {

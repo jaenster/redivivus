@@ -599,7 +599,6 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
     char* szName;
     D2UnitStrc* pItemUnit;
     BOOL pGridSlot;
-    uint32_t dwParam;
     uint32_t uVar2;
     int iVar3;
     int nExpQuotient;
@@ -727,12 +726,7 @@ D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc 
               } else {
                 pGridSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pCorpseInventory, pItemUnit, nBodyLocIndex);
                 if (pGridSlot) {
-                  dwParam = 3;
-                  if (nBodyLocIndex == 0xb || nBodyLocIndex == 0xc) {
-                    dwParam = 4;
-                  }
-
-                  pGridSlot = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, dwParam);
+                  pGridSlot = D2Common::INVENTORY::Inventory::PutItemInInventory(pCorpseInventory, pItemUnit, nBodyLocIndex == 0xb || nBodyLocIndex == 0xc ? 4 : 3);
                   if (pGridSlot) {
                     D2Common::ITEMS::Items::SetBodyLoc(pItemUnit, (eD2BodyLoc)nBodyLocIndex);
                     if (pItemUnit) {

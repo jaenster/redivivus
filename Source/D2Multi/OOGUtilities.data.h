@@ -16,10 +16,9 @@
 // Forward declarations
 struct D2ControlStrc;
 struct D2GameListEntryStrc;
+struct D2WinButton;
 struct D2WinEditBox;
 struct D2WinTextBox;
-
-extern char gszOogReplyCommandBuffer[256];
 
 namespace D2Multi::OOGUtilities {
 // Former interior labels: gszLanGameListEntryName=+0x1 gszLanGameListEntryDescription=+0x11 gbOOGLobbyScreenStatePadding=+0x12 gwOOGLobbyScreenState=+0x31 gwGameListCacheEntryPort=+0x33 gdwGameListCacheEntryFlags=+0x37 gPlayerInputState1=+0x6e gbDamageModConfigLoaded=+0xa3a5
@@ -49,7 +48,9 @@ extern ::D2WinTextBox * gUIGameListLevelRestrictionLevelsLabel;
 extern D2ControlStrc * gUIGameListMaxPlayersInactiveImage;
 extern D2ControlStrc * gUIGameListMaxPlayersInactiveArrowButton;
 extern D2ControlStrc * gUIGameListMaxPlayersUpButton;
+extern ::D2WinButton * gUIGameListMaxPlayersDownButton;
 extern D2ControlStrc * gUIGameListLevelRestrictionUpButton;
+extern ::D2WinButton * gUIGameListLevelRestrictionDownButton;
 extern D2ControlStrc * gUIGameListLevelRestrictionInactiveArrowButton;
 extern D2ControlStrc * gUIGameListCreateButton;
 extern ::D2WinEditBox * gpOogGameNameEditControl;
@@ -58,8 +59,12 @@ extern ::D2WinEditBox * gUIGameListGamePasswordEditBox;
 extern ::D2WinEditBox * gUIGameListMaxPlayersEditBox;
 // Edit box control handle for level restriction field in Create Game dialog (TCP/IP mode only). Populated in OOGUTIL_OpenCreateGameDialog, read by NET_MCP_CLIENT_PrepareGameCreatePacket. Part of Create Game UI state cluster at 0x00798c28-0x00798c64.
 extern ::D2WinEditBox * gUILevelRestrictionEditBox;
+extern ::D2WinButton * gUIGameListLevelRestrictionCheckbox;
 extern D2ControlStrc * gUIGameListLevelRestrictionInactiveImage;
 extern D2ControlStrc * gpCtlCreateGameDlgCancelButton;
+extern ::D2WinButton * gUIGameListDifficultyNormalButton;
+extern ::D2WinButton * gUIGameListDifficultyNightmareButton;
+extern ::D2WinButton * gUIGameListDifficultyHellButton;
 extern ::D2WinTextBox * gUIGameListStatusLabel;
 extern ::D2WinTextBox * gUIGameListPlayerListText;
 extern ::D2WinTextBox * gUIGameListActLabel;

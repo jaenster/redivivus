@@ -32,7 +32,7 @@
       ]
     },
     {
-      "name": "SOUND_GetSpeakerConfigFlag",
+      "name": "SOUND_GetDirectSoundDevice",
       "address": "00513b50",
       "lines": [
         {
@@ -42,14 +42,14 @@
       ],
       "namespace": "D2Sound",
       "calledFunctions": [
-        "SOUND_GetSpeakerConfigFlag"
+        "SOUND_GetDirectSoundDevice"
       ],
       "usedTypes": [
         "IDirectSound"
       ]
     },
     {
-      "name": "SOUND_GetDirectSoundInitializedFlag",
+      "name": "SOUND_GetPrimaryBufferModeFlag",
       "address": "00513b60",
       "lines": [
         {
@@ -59,7 +59,7 @@
       ],
       "namespace": "D2Sound",
       "calledFunctions": [
-        "SOUND_GetDirectSoundInitializedFlag"
+        "SOUND_GetPrimaryBufferModeFlag"
       ]
     },
     {

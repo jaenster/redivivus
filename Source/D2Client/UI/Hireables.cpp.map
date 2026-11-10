@@ -160,7 +160,7 @@
       ]
     },
     {
-      "name": "UI_DrawHirelingGoldCost",
+      "name": "UI_DrawSummonCount",
       "address": "00493100",
       "lines": [
         {
@@ -170,7 +170,7 @@
       ],
       "namespace": "D2Client::UI::Hireables",
       "calledFunctions": [
-        "UI_DrawHirelingGoldCost",
+        "UI_DrawSummonCount",
         "sprintf",
         "memset",
         "UTF8_ConvertToWideChar",
@@ -574,7 +574,7 @@
         "GetRosterIcon",
         "GetRosterPetGUID",
         "DrawHealthBar",
-        "UI_DrawHirelingGoldCost",
+        "UI_DrawSummonCount",
         "GetAndDrawHirelingName",
         "D2GFX_DrawImage"
       ],

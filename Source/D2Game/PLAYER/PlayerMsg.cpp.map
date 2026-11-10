@@ -633,6 +633,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
@@ -658,6 +659,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
@@ -683,6 +685,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
@@ -754,6 +757,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"

@@ -32,10 +32,6 @@ typedef void (__fastcall *PFN_PlayerModeMoveFn)(::SGAMEDATA * pGame, struct D2Un
 #define RECON_FPTD_PFN_PlayerModeStartFn
 typedef void (__fastcall *PFN_PlayerModeStartFn)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nModeIndex, struct D2UnitStrc * pTargetUnit);
 #endif
-#ifndef RECON_FPTD_fnUnitIterCallback
-#define RECON_FPTD_fnUnitIterCallback
-typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
-#endif
 #ifndef RECON_FPTD_pfnPlayerModeNetMsg
 #define RECON_FPTD_pfnPlayerModeNetMsg
 typedef void (__fastcall *pfnPlayerModeNetMsg)(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, int32_t nModeIndex);
@@ -146,7 +142,7 @@ struct D2UnitStrc * __stdcall GetPlayerUnit_UI();
 struct D2UnitStrc * __stdcall GetPlayerUnit_Net();
 uint32_t __stdcall IsPlayerDead();
 #endif // D2_MODULE_D2Client
-// 27 internal functions (defined in .cpp)
+// 28 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 uint32_t __stdcall PLAYER_CheckSkillUsability_Extern(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2SkillStrc * * ppSkill);

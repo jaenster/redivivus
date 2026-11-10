@@ -17,7 +17,7 @@
 struct D2SeedStrc;
 
 extern D2SeedStrc gArcaneStarSeed;
-extern int nScaleFactor;
+extern int gnScaleFactor;
 
 namespace D2Client::GAME::View {
 extern D2SeedStrc gAncientsCloudSeed;

@@ -3,13 +3,12 @@
  * Binary: Game.exe
  */
 
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Multi/D2Multi.globals.h"
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Multi/ChatDlg.data.h"
-#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Multi/ComCallback.h"
 #include "Source/D2Multi/D2MultiRoot.h"
 

@@ -64,6 +64,10 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #define RECON_FPTD_fpListBoxItemActivated
 typedef void (*fpListBoxItemActivated)();
 #endif
+#ifndef RECON_FPTD_fnUnitIterCallback
+#define RECON_FPTD_fnUnitIterCallback
+typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
+#endif
 
 namespace D2Client::UI::npcmenu {
 short nMercNameId = -0x1; D2_GLOBAL_GUARD(nMercNameId, "D2Client::UI::npcmenu::nMercNameId");

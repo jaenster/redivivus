@@ -48,7 +48,7 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
@@ -2934,12 +2934,17 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
           bPlayCongrats = false;
         }
       } else {
-        if (byPlayerStatus != 8) {
-          if (byPlayerStatus == 0xc) {
-            bPlayCongrats = false;
-          }
-        } else {
-          bPlayCongrats = false;
+        switch (byPlayerStatus) {
+          case 0xc:
+            {
+              bPlayCongrats = false;
+              break;
+            }
+          case 8:
+            {
+              bPlayCongrats = false;
+              break;
+            }
         }
       }
 

@@ -8,7 +8,7 @@
 #include "Source/D2Launch/CharSel.h"
 #include "Source/D2Launch/Launcher.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Net/D2Net.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"

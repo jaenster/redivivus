@@ -162,7 +162,7 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "CleanUpGame",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "SOUNDSMP_SetGlobalVolume",
         "SOUNDSMP_GetStreamProgress",
         "SOUNDSMP_Stop"
@@ -272,6 +272,9 @@
       "calledFunctions": [
         "SOUND_Is3DMixerActive",
         "SOUND_GetSoundMixer"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {
@@ -289,6 +292,7 @@
         "SOUND_GetSoundMixer"
       ],
       "usedTypes": [
+        "int32_t",
         "uint32_t"
       ]
     },
@@ -361,7 +365,7 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "SOUND_InitStreamChannels",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -434,6 +438,7 @@
         "D2FloatIntUnion",
         "D2SoundChannelStrc",
         "SOUND_UpdateChannelParams_Slotm",
+        "SOUND_UpdateChannelParams_Slotm0c",
         "int32_t",
         "uint32_t"
       ]
@@ -450,7 +455,7 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "SOUND_SetSoundMixer",
-        "SOUND_GetDirectSoundInitializedFlag",
+        "SOUND_GetPrimaryBufferModeFlag",
         "SOUND_GetSound3DFlag",
         "SOUND_ShutdownAudio",
         "SOUND_InitStreamChannels",
@@ -473,11 +478,14 @@
       "calledFunctions": [
         "SOUND_SetBackgroundSoundsActive",
         "SOUND_GetSoundMixer",
-        "SOUND_GetDirectSoundInitializedFlag",
+        "SOUND_GetPrimaryBufferModeFlag",
         "SOUND_GetSound3DFlag",
         "SOUND_ShutdownAudio",
         "SOUND_InitStreamChannels",
         "SOUND_SetSoundMixer"
+      ],
+      "usedTypes": [
+        "int32_t"
       ]
     },
     {

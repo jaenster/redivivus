@@ -255,8 +255,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]), 0x28);
       nWideCharBufLen = 0x28;
       pDVar1[i].wszLevelName[39] = 0;
-      pWVar2 = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelWarp[0]);
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)&pDVar1[i].wszLevelWarp[0], pWVar2, nWideCharBufLen);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)&pDVar1[i].wszLevelWarp[0], D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelWarp[0]), nWideCharBufLen);
       pDVar1[i].wszLevelWarp[39] = 0;
       iLevelIdx = 0;
       /* Count mon, nmon, umon entries */ if (MonsterTbls::sgtDataTable.nTxtLevelsSize > 0) {

@@ -7,7 +7,6 @@
 #include "Source/Fog/Src/QServer/QServer.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Net/Game/Server.data.h"
 
 // Forward declarations (used only by pointer here)
 struct QServer;

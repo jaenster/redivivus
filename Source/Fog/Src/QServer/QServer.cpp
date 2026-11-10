@@ -9,7 +9,6 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Net/Game/Server.data.h"
 #include "Source/Fog/FogRoot.h"
 #include "Source/Fog/QServer.h"
 

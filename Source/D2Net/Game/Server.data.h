@@ -13,8 +13,4 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-// Forward declarations
-struct D2QServerStrc;
-
 extern int NET_D2GS_CLIENT_INCOMING_SIZE[181];
-extern D2QServerStrc * pQServer;

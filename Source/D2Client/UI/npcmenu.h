@@ -314,6 +314,6 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca09b(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_gNpcMenuConfirmDialogStrings();
 #endif // D2_MODULE_D2Client
-// 6 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::npcmenu

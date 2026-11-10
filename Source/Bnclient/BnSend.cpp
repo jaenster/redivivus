@@ -1633,7 +1633,7 @@ void __fastcall BNSEND_SetGlobalFlag(uint32_t dwThreadInitFlag) {
 }
 
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
-void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
+BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     // Frame slots -8496..-8 are ONE object: &nSIDState is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1677,7 +1677,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     memset(__frame0.aCandidates, 0, 0x2100);
     BnDownload::BNDOWNLOAD_ResetState(0x66);
     if (!szServerList) {
-      return;
+      return 1;
     }
 
     /* DWORD dwMilliseconds for Sleep */ gbBNetSocketConnected = 0;
@@ -1852,7 +1852,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     }
     if (!pNetData) {
       Bnet::BnetLog_WriteLine("no servers found");
-      return;
+      return 0;
     }
 
     gbBNetSocketConnected = 1;
@@ -1860,7 +1860,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     BVar1 = _net_sid::SID_GetReadyFlag();
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (lInterlockedResult = (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0) , !lInterlockedResult)) {
       Debug::DEBUG_Trace("  Error, not connected.");
-      return;
+      return 0;
     }
 
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAddrLen = 0x10;
@@ -1881,7 +1881,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     bAuthInfoAccepted = Fog::Src::Safesock::WSASocket2_Send(pNetData, &__frame0.bProtocolByte, 1);
     if (bAuthInfoAccepted <= 0) {
       Debug::DEBUG_Trace("  Failed send.");
-      return;
+      return 0;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x50);
@@ -1893,7 +1893,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (BVar1 || __frame0.nSIDState || (lInterlockedResult = (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, 0) , !lInterlockedResult)) {
         Fog::Src::Safesock::Free(pNetData);
         /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ (*pfnInterlocked)((LONG*)&g_pBNetSocketData, 0, (LONG)pNetData);
-        return;
+        return 0;
       }
     }
 
@@ -1908,7 +1908,7 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x51);
       bAuthInfoAccepted = _net_sid::NET_SID_CLIENT_Send_0x51_AuthCheck();
       if (!bAuthInfoAccepted || (BVar1 = _net_sid::NET_SID_CLIENT_WaitForPacketId(0x51) , !BVar1)) {
-        return;
+        return 0;
       }
 
       _net_sid::SID_GetState(nSIDStateCheck);
@@ -1920,6 +1920,8 @@ void __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         }
       }
     }
+
+    return 1;
 }
 
 // lpStartAddress parameter of CreateThread

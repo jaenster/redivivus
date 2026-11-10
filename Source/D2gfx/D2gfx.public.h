@@ -239,8 +239,6 @@ extern D2RenderStatisticsStrc gnTextureMemoryUsageBytes;
 extern BYTE * * gpPaletteTable;
 // ppvBits parameter of CreateDIBSection
 extern BYTE * gpRenderBackBufferBits;
-extern HINSTANCE hInstance;
-extern uint32_t nResolutionMode;
 extern D2GfxSettingsStrc * pD2GFXRenderedDataStrc;
 extern D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions;
 extern int RENDERER_nWindowHeight;

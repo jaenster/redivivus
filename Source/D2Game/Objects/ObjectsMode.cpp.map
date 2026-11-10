@@ -1929,6 +1929,7 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "POINT",
+        "SGAMEDATA",
         "eCollisionFlags",
         "eD2ObjectAnimMode",
         "int32_t",

@@ -2,7 +2,7 @@
 
 #include "Source/D2Win/Src/D2WinSmack.h"
 #include "Source/D2Launch/MainMenus.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Win/Src/D2Comp.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2gfx/D2gfx.public.h"

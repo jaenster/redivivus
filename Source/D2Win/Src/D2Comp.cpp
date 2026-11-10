@@ -1753,7 +1753,6 @@ static void __stdcall D2COMP_ReleaseCOFCacheEntry(int32_t bFreeData, D2CompCofCa
 
 static void __stdcall D2COMP_BuildCOFFilePath(int32_t nAnimMode, uint32_t dwWeaponClassToken, char * pszDestPath, int32_t nPlayerClassId) {
     uint8_t bMaskedTokenByte;
-    char* pszCOFPathBase;
     int nOpenResult;
     int* pArchiveHandle;
     char COFanimation[4];
@@ -1790,12 +1789,7 @@ static void __stdcall D2COMP_BuildCOFFilePath(int32_t nAnimMode, uint32_t dwWeap
       COFanimation[1] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
       bMaskedTokenByte = (uint8_t)(uAnimCode >> 0x10);
       COFanimation[2] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-      pszCOFPathBase = "DATA\\GLOBAL\\CHARS";
-      if ((uint32_t)nPlayerClassId >= 7) {
-        pszCOFPathBase = "DATA\\GLOBAL\\MONSTERS";
-      }
-
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", pszCOFPathBase, &dwWeaponClassToken, &dwWeaponClassToken, COFanimation, COFhitclass);
+      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", (uint32_t)nPlayerClassId >= 7 ? (char*)"DATA\\GLOBAL\\MONSTERS" : (char*)"DATA\\GLOBAL\\CHARS", &dwWeaponClassToken, &dwWeaponClassToken, COFanimation, COFhitclass);
       nOpenResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(pszDestPath, (D2MPQFileStrc**)&pArchiveHandle);
       if (nOpenResult) {
         Fog::Source::SFile::ERRORMANAGER_FCloseFile((D2MPQFileStrc*)pArchiveHandle);

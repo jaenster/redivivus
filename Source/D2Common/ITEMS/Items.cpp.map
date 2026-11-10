@@ -1070,7 +1070,7 @@
       ]
     },
     {
-      "name": "ITEMS_nullsub",
+      "name": "ITEMS_AccumulateAffixLevelRequirement",
       "address": "00628830",
       "lines": [
         {
@@ -1080,7 +1080,7 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEMS_nullsub"
+        "ITEMS_AccumulateAffixLevelRequirement"
       ],
       "usedTypes": [
         "D2MagicAffixTxt",
@@ -2969,7 +2969,7 @@
         "TXT_magicaffixes_GetLine",
         "GetMagicSuffix",
         "GetAutoMagic",
-        "ITEMS_nullsub",
+        "ITEMS_AccumulateAffixLevelRequirement",
         "ITEM_GetItemData_nFileIndex",
         "GetSetItemsLine",
         "INV_GetUniqueItemsTxtLine",

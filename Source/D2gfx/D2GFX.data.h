@@ -22,8 +22,7 @@ struct D2RendererCoreStrc;
 struct D2RendererFunctionsStrc;
 
 extern D2GfxSettingsStrc D2GFXRenderedData;
-extern HINSTANCE hInstance;
-extern uint32_t nResolutionMode;
+extern uint32_t gnD2GFXResolutionMode;
 extern D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions;
 extern uint8_t gaDirectDrawDitherPaletteRemap[1024];
 extern D2RenderStatisticsStrc gnTextureMemoryUsageBytes;

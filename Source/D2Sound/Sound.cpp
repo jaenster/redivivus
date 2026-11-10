@@ -26,9 +26,9 @@ static IDirectSoundBuffer * gpDSoundPrimaryBuffer = 0; D2_STATIC_GUARD(gpDSoundP
 // also labelled: lpCriticalSection_SoundPlay, lpCriticalSection_0088174c
 _RTL_CRITICAL_SECTION gSoundSmpCs = {}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
 static uint32_t gnDirectSoundInitialized = 0; D2_STATIC_GUARD(gnDirectSoundInitialized, "gnDirectSoundInitialized");
-IDirectSound * gnDirectSoundInitStatus = 0; D2_GLOBAL_GUARD(gnDirectSoundInitStatus, "gnDirectSoundInitStatus");
-uint32_t gnDSoundPrimaryBufferDelay = 0; D2_GLOBAL_GUARD(gnDSoundPrimaryBufferDelay, "gnDSoundPrimaryBufferDelay");
-uint32_t gnSound3DLoudness = 0; D2_GLOBAL_GUARD(gnSound3DLoudness, "gnSound3DLoudness");
+IDirectSound * gpDirectSound = 0; D2_GLOBAL_GUARD(gpDirectSound, "gpDirectSound");
+BOOL gbDSoundPrimaryBufferMode = 0; D2_GLOBAL_GUARD(gbDSoundPrimaryBufferMode, "gbDSoundPrimaryBufferMode");
+BOOL gbSound3DEnabled = 0; D2_GLOBAL_GUARD(gbSound3DEnabled, "gbSound3DEnabled");
 int gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
 uint32_t g_bEAXEnabled = 0; D2_GLOBAL_GUARD(g_bEAXEnabled, "g_bEAXEnabled");
 static uint32_t gbDirectSoundCritSecInitialized = 0; D2_STATIC_GUARD(gbDirectSoundCritSecInitialized, "gbDirectSoundCritSecInitialized");

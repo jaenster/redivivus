@@ -20,7 +20,6 @@ struct D2CharSelStrc;
 struct D2IniConfigStrc;
 struct D2WinEditBox;
 struct D2WinTextBox;
-struct DC6;
 struct FORMS_AnimFrameStrc;
 typedef uint16_t eD2PlayerStatus;
 typedef uint32_t DRAWMODE;
@@ -80,21 +79,6 @@ struct D2WinAnimImageNotifyStrc {
 };
 
 #endif // D2_DEFINED_D2WinAnimImageNotifyStrc
-#ifndef D2_DEFINED_FORMS_PredefinedFormStrc
-#define D2_DEFINED_FORMS_PredefinedFormStrc
-struct __attribute__((packed)) FORMS_PredefinedFormStrc {
-    /* 0x00 */ eD2FormType neD2FormType;
-    /* 0x04 */ int aParams[4];
-    /* 0x14 */ int32_t nExtraParam; // AnimImage = D2WinAnimImage nStaticFrameDelay (40 ms units; records 0xb2/0xb3 give 1); struct DC6* for ImageEx; Button = hotkey virtual-key code passed as D2WinButton nHotkeyVK (0xd VK_RETURN on OK buttons, 0x1b VK_ESCAPE on Cancel/back buttons, 0x26/0x28 arrow keys, 0 = none); generic int for others
-    /* 0x18 */ int nLabelAsLocaleStringId;
-    /* 0x1C */ struct DC6 * * pDC6;
-    /* 0x20 */ BOOL (__stdcall *fpOnPressCallback)(struct D2ControlMsg *);
-    /* 0x24 */ void * pTypeArg1; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = fpD2WinEditBoxSubmit* submit callback (e.g. OOGUTIL_SendChatMessageWide); Image = struct D2WinImageHitArea*; AnimImage = FORMS_AnimFrameStrc[5] state table, D2WinAnimImage pAnimFrames (e.g. gaCharSelectAnimFramesAmazon); TextBox = int[3] scrollbar geometry x,y,height (gaMultiTextBoxScrollbarGeom*); Button = initial image index 0/2/4/6 (D2WinButton nCurrentImageIndex); List = item array. Unused (0) for the other types.
-    /* 0x28 */ void * pTypeArg2; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = font id pair (gaMenuFormFontParams*); Image = Key* handler; AnimImage = fpD2WinAnimImageNotify* (e.g. MAINMENU_SetAmazonDescription); TextBox = font params (gaMenuFormFontParams*/gaMultiFormFontParams*); Button = Mouse* hover callback (e.g. MAINMENU_DisableControlIfDataNonZero); List = font id pointer; AccountList = font data. Unused (0) for the other types.
-    /* 0x2C */ uint32_t nFlagsOrType; // Button = nButtonFlags (D2WinButton +0x40 bit flags: 0, 1, 2, 4, 6, 8, 0x10, 0x20, 0x40 occur); uint32 flags/count for TextBox/EditBox/AccountList
-};
-
-#endif // D2_DEFINED_FORMS_PredefinedFormStrc
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
 struct tagPOINT {

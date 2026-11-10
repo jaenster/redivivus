@@ -3975,8 +3975,8 @@ bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSi
 } // namespace D2Client::Warden
 
 // Globals
+extern int gnScaleFactor;
 extern RGBQUAD nColor;
-extern int nScaleFactor;
 namespace D2Client::ClientModeInGame {
 // TODO: Register param types uncertain - needs manual analysis: pushort (EAX): ushort*, param_ecx (ECX): undefined4, pbyte (EDX): byte*
 extern char gCmdLineHelpText[154];

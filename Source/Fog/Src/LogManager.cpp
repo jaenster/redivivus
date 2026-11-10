@@ -1009,7 +1009,6 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
     BOOL bBadPtr;
     uint8_t byAsciiChar;
     char* pLineCursor;
-    char* pRecordBody;
     uint32_t nColumn;
     uint8_t* pDumpHeader;
     uint8_t* lp;
@@ -1054,12 +1053,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           pLineCursor = __frame0.szContPrefix;
         }
 
-        pRecordBody = "%s%s%04X:";
-        if (!*(int*)(pDumpHeader + 8)) {
-          pRecordBody = "%s%s%08X:";
-        }
-
-        fprintf(__frame0.pLogFile, pRecordBody, pLineCursor, pDumpHeader + 0x14, iVar1);
+        fprintf(__frame0.pLogFile, *(int*)(pDumpHeader + 8) ? (char*)"%s%s%04X:" : (char*)"%s%s%08X:", pLineCursor, pDumpHeader + 0x14, iVar1);
         __frame0.local_160 = 0;
         nChunkLen = __frame0.nBytesRemaining;
         if (__frame0.nBytesRemaining >= 0x10) {
@@ -1074,12 +1068,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           for (nColumn = 0; nColumn < nChunkLen; nColumn++) {
             pLineCursor = __frame0.szLineBuf;
             pLineCursor = pLineCursor + strlen(pLineCursor) + 1;
-            pRecordBody = "%02X";
-            if (!(nColumn & 3)) {
-              pRecordBody = " %02X";
-            }
-
-            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), pRecordBody, (uint32_t)lp[nColumn]);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), nColumn & 3 ? (char*)"%02X" : (char*)" %02X", (uint32_t)lp[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;

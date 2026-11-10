@@ -9,7 +9,7 @@
 #include "Source/D2Win/Src/D2WinPalette.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2GFX.data.h"

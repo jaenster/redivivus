@@ -42,7 +42,7 @@ typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pCon
 #endif
 #ifndef RECON_FPTD_fpCreate
 #define RECON_FPTD_fpCreate
-typedef int (__fastcall *fpCreate)(D2UnitStrc *, int, int, int, int, int);
+typedef int (__fastcall *fpCreate)(D2UnitStrc *, int, int, int, int, int, uint8_t nDirection);
 #endif
 #ifndef RECON_FPTD_fpUnknownMissileStream
 #define RECON_FPTD_fpUnknownMissileStream
@@ -131,6 +131,7 @@ void __stdcall ExecuteHit(D2UnitStrc * pUnit, int32_t eCollisionFlag, uint32_t n
 
 // Server-side per-frame update for a missile "stream" (e.g. lightning/firewall-like spread). Computes the dynamic path for pMissile, then walks path segments creating child missiles via the fpCreate callback into the unit's persistent D2MissileStreamStrc array (allocated/grown from the game-pool). Distributes nParam1 damage across segments in steps of nParam2 and spreads extra missiles using a spacing remainder so the stream covers the gap evenly. Recycles unused stream slots via fpUnknown. Halts with Fog error 0x8a if the stream struct is missing, 0xa9 if fpCreate is a bad code ptr.
 void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1, int32_t nParam2, fpCreate nfpCreate, fpUnknownMissileStream nfpUnknown) {
+    int nDivisions;
     int* pStreamArray;
     BOOL bBadPtr;
     uint32_t nDirection;
@@ -144,7 +145,7 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
     int nSegmentCount;
     uint32_t nCurX;
     uint32_t nCurY;
-    int32_t nDirection_20;
+    MissileStream_Update_Slotm14 nDirection_20;
     int nExtraCycleCounter;
     uint32_t bExtended;
     int nSubSegIdx;
@@ -161,7 +162,7 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8a);
       exit(-1);
     } else {
-      int nDivisions;
+      uint8_t nDirection_21;
       nDivisions = nParam1 / nParam2;
       nExtraPerSegment = nCurDamage - 1;
       nPathIdx = nExtraPerSegment;
@@ -200,14 +201,15 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
         nCurY = (uint32_t)pPathPoints[nPathIdx].nY;
         nCurX = (uint32_t)pPathPoints[nPathIdx].nX;
         nDirection = PATH::Path::DRLGPATH_GetDirectionFromCoords((uint32_t)pPathPoints[nPathIdx + 1].nX, (uint32_t)pPathPoints[nPathIdx + 1].nY, nCurX, nCurY);
-        nDirection_20 = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nDirection_20 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)(char)nDirection);
+        nDirection_21 = (uint8_t)nDirection;
+        nDirection_20.nDirection = nDirection_21;
         if (nSubSegIdx < nExtraPerSegment / nDivisions || !nParam1) {
           nSubSegIdx++;
-          nCreated = (*nfpCreate)(pUnit, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 0);
+          nCreated = (*nfpCreate)(pUnit, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 0, nDirection_21);
           pStream->pStream[nPathIdx] = nCreated;
         } else {
           nSubSegIdx = 1;
-          nCreated = (*nfpCreate)(pMissile, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 1);
+          nCreated = (*nfpCreate)(pMissile, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 1, nDirection_21);
           nCurDamage -= nParam2;
           pStream->pStream[nPathIdx] = nCreated;
           if (bExtended) {
@@ -224,7 +226,7 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
             if (nCreated > 0) {
               do {
                 nExtraMissiles = nCreated;
-                nCreated = (*nfpCreate)(pUnit, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 2);
+                nCreated = (*nfpCreate)(pUnit, pStream->pStream[nPathIdx], nCurX, nCurY, nCurDamage, 2, nDirection_20.nDirection);
                 nCurDamage -= nParam2;
                 pStream->pStream[nPathIdx] = nCreated;
                 nCreated = nExtraMissiles - 1;

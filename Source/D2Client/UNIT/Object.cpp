@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/D2ClientRoot.h"
+#include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/Sound/Sound.h"
@@ -541,7 +541,6 @@ static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
 
     bool bCycleAnim = pTxtLine->CycleAnim[eAnimMode];
     if (!bCycleAnim) {
-      int32_t nSpawnMonsterId;
       if (pTxtLine->IsDoor) {
         OBJECT_AnimateDoorTransition(pUnit);
         return;
@@ -563,12 +562,7 @@ static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
           pUnit->eUnitFlags |= UNITFLAG_PREDRAW;
         }
         if (pTxtLine->Parm[7]) {
-          nSpawnMonsterId = 0x153;
-          if (pTxtLine->Parm[7] != 0xff) {
-            nSpawnMonsterId = 0x97;
-          }
-
-          Source::ClientEngine::CLIENT_SpawnMonstersAroundUnit(pUnit, nSpawnMonsterId, 4);
+          Source::ClientEngine::CLIENT_SpawnMonstersAroundUnit(pUnit, pTxtLine->Parm[7] != 0xff ? 0x97 : 0x153, 4);
         }
 
         pUnit->nGfxCurrentFrame = (uint32_t)pTxtLine->Start[2] << 8;

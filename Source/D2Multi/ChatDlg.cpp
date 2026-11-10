@@ -4,11 +4,13 @@
 #include "Source/D2Client/D2IniConfigStrc.h"
 #include "Source/D2Client/UI/Chat.h"
 #include "Source/D2Client/mcp0x03data.h"
+#include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Chat/Ignorelist/IgnoreList.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Launch/MainMenus.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
 #include "Source/D2Multi/ComCallback.h"
 #include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Multi/D2Multi.globals.h"
@@ -16,6 +18,7 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Multi/ChatDlg.data.h"
 #include "Source/D2Multi/ComCallback.data.h"
+#include "Source/D2Multi/OOG.h"
 #include "Source/D2Multi/OOG/ChatDlg.h"
 #include "Source/D2Multi/OOGUtilities.data.h"
 #include "Source/D2Win/D2WinEditBox.h"
@@ -58,6 +61,10 @@ typedef int (__stdcall *fpD2WinEditBoxFilter)(::D2WinEditBox * pEditBox, int nTe
 #define RECON_FPTD_pfnMCPGameListEntry
 typedef void (__fastcall *pfnMCPGameListEntry)(uint32_t nEntryField0, uint32_t nEntryCount, uint32_t nEntryField2, uint32_t nListFlag, void * pEntryData);
 #endif
+#ifndef RECON_FPTD_pfnFramePump
+#define RECON_FPTD_pfnFramePump
+typedef int (__stdcall *pfnFramePump)(int nFrameIndex);
+#endif
 
 static char * gaszChatDlgProfileKeys[3] = { (char*)"profile\\sex", (char*)"profile\\location", (char*)"profile\\description" }; D2_STATIC_GUARD(gaszChatDlgProfileKeys, "gaszChatDlgProfileKeys");
 unsigned short CreateJoinGameRequestId = 0x1; D2_GLOBAL_GUARD(CreateJoinGameRequestId, "CreateJoinGameRequestId");
@@ -84,6 +91,7 @@ static int gnLadderScrollPageSize = 0; D2_STATIC_GUARD(gnLadderScrollPageSize, "
 uint32_t ghBannerAdProcess = 0; D2_GLOBAL_GUARD(ghBannerAdProcess, "ghBannerAdProcess");
 // also labelled: gbOogOptionButtonActive
 static char * gapszProfileReadBuffers[3] = {}; D2_STATIC_GUARD(gapszProfileReadBuffers, "gapszProfileReadBuffers");
+char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffer, "gszOogReplyCommandBuffer");
 static char gaChatDlgHistoryBuffer[10][256] = {}; D2_STATIC_GUARD(gaChatDlgHistoryBuffer, "gaChatDlgHistoryBuffer");
 static char gaChatDlgHistoryBuffer_1__0_[10][256] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gaChatDlgHistoryBuffer_1__0_, "gaChatDlgHistoryBuffer_1__0_");
 static int FORMS_nListExCount = 0; D2_STATIC_GUARD(FORMS_nListExCount, "FORMS_nListExCount");

@@ -730,12 +730,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pWriteMsg, (LPCSTR)ppFormat, pCustomMsgArg);
     nErrorCodeArg = SSTR::SStrLen(pWriteMsg);
     nMaxCopyLen = 0x7fffffff;
-    nErrStringIndex = 10;
-    if (!nMessageFlags) {
-      nErrStringIndex = 9;
-    }
-
-    ppFormat = SERR_GetString(nErrStringIndex);
+    ppFormat = SERR_GetString(nMessageFlags ? 10 : 9);
     SSTR::SStrCopy(pWriteMsg + nErrorCodeArg, (char*)ppFormat, nMaxCopyLen);
     if (pfnBlizzardErrorCallback) {
       pCustomMsgArg = (char*)__frame0.pStackTracePtr;

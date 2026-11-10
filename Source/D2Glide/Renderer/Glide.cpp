@@ -11,7 +11,7 @@
 #include "Source/D2Glide/glFloorCache.h"
 #include "Source/D2Glide/glSubtileCache.h"
 #include "Source/D2Glide/glTextureCache.h"
-#include "Source/D2Multi/OOGUtilities.h"
+#include "Source/D2Multi/ChatDlg.h"
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.h"
@@ -960,7 +960,7 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
 }
 
 void __fastcall UpdateScaleFactor(int32_t nScaleFactor) {
-    nScaleFactor = nScaleFactor;
+    gnScaleFactor = nScaleFactor;
 }
 
 BOOL __fastcall SetGamma(int32_t nGamma) {

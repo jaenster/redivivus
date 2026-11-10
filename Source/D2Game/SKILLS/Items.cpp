@@ -842,9 +842,9 @@ static BOOL __stdcall ITEMMOD_GenerateRareAffixes(D2ItemGenContextStrc * pItemGe
     // Static local variables (originally global data)
     static int gnSkillItemAffixPropertyBySkill[8] = { 0x3, 0x4, 0x4, 0x5, 0x5, 0x5, 0x6, 0x6 }; D2_STATIC_GUARD(gnSkillItemAffixPropertyBySkill, "D2Game::SKILLS::Items::ITEMMOD_GenerateRareAffixes::gnSkillItemAffixPropertyBySkill");
 
+    uint16_t nRarePrefixGroup;
     short int wRareSuffix;
     uint16_t uVar1;
-    uint32_t nRarePrefixGroup;
     int nAffixRollCount;
     uint32_t nRolledGroup;
     D2SeedStrc seedState;
@@ -855,11 +855,11 @@ static BOOL __stdcall ITEMMOD_GenerateRareAffixes(D2ItemGenContextStrc * pItemGe
     uint16_t wItemVersion;
     wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
     if (wItemVersion) {
-      nRarePrefixGroup = GetMaxToRoll(1, pUnit);
-      nRarePrefixGroup = (uint32_t)((uint32_t)nRarePrefixGroup & 0xffff0000u | (uint32_t)(uint16_t)(short int)nRarePrefixGroup);
+      nRolledGroup = GetMaxToRoll(1, pUnit);
+      nRarePrefixGroup = (uint16_t)nRolledGroup;
     } else {
       nRolledGroup = ITEMMOD_GetMaxAffixGroupClassic(1, pUnit);
-      *(uint16_t*)(char*)&nRarePrefixGroup = (short int)nRolledGroup;
+      nRarePrefixGroup = (uint16_t)nRolledGroup;
     }
 
     wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -870,11 +870,11 @@ static BOOL __stdcall ITEMMOD_GenerateRareAffixes(D2ItemGenContextStrc * pItemGe
       nRolledGroup = ITEMMOD_GetMaxAffixGroupClassic(0, pUnit);
       wRareSuffix = (short int)nRolledGroup;
     }
-    if (!((short int)nRarePrefixGroup && wRareSuffix)) {
+    if (!(nRarePrefixGroup && wRareSuffix)) {
       return 0;
     }
 
-    D2Common::ITEMS::Items::SetRarePrefix(pUnit, (short int)nRarePrefixGroup);
+    D2Common::ITEMS::Items::SetRarePrefix(pUnit, nRarePrefixGroup);
     D2Common::ITEMS::Items::SetRareSuffix(pUnit, wRareSuffix);
     int nPrefixCount;
     nPrefixCount = 0;

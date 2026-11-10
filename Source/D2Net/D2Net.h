@@ -13,9 +13,6 @@
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
 
-// Forward declarations
-struct D2QServerStrc;
-
 // Data types
 #ifndef D2_DEFINED_D2OnePacketClientStrc
 #define D2_DEFINED_D2OnePacketClientStrc
@@ -70,6 +67,3 @@ size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, size_t 
 size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_t nSize);
 uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t Unused, char * pBytes);
 } // namespace D2Net::SRC::Client
-
-// Globals
-extern D2QServerStrc * pQServer;

@@ -338,7 +338,7 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_Init",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "TXT_AllocTxt_sounds_soundenviron",
         "SOUND_SetBackgroundSoundsActive",
         "SOUND_PauseAll",
@@ -563,7 +563,7 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_ShutdownCleanup",
-        "SOUND_GetSpeakerConfigFlag",
+        "SOUND_GetDirectSoundDevice",
         "CleanUpGame",
         "SOUND_ShutdownSystem",
         "SOUND_ResumeAll",

@@ -766,6 +766,7 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
 
 // Server-side computation of a unit's full outgoing attack damage into pDmgStrc. Recalcs dual-wield/equipped weapon stats for weapon slot nParam, then accumulates: target-AC penetration and demon/undead/monster-type bonus vs monster targets; physical damage with crit/deadly-strike/critical-strike rolls (doubles phys, sets wResultFlags 0x2000); per-element (fire/light/cold/magic) rolls scaled by the bParam attack-rating-percent (0x80=100%); life/mana/stamina leech, poison (+length), cold/stun/burn lengths; and damage-conversion (nConvType) reallocating phys into an element. Dispatches the on-attack unit event and applies monster crit. bParam defaults to 0x80 if 0.
 void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDmgStrc, int32_t bResetWeaponStats, uint8_t byScale) {
+    uint32_t uVar1;
     int32_t nStatResult;
     int32_t nConvDmg;
     int nStatValue;
@@ -776,7 +777,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
     uint32_t nElemDmgResult;
     uint32_t nElemRoll;
     int nPoisMinStat;
-    uint32_t nWeaponScalePct;
+    int nWeaponScalePct;
     int nPoisMastery;
     uint32_t nLeechPct;
     if (!pUnit) {
@@ -827,15 +828,15 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
       }
     }
     if (byScale != 0x80) {
-      nWeaponScalePct = (uint32_t)byScale;
+      uVar1 = (uint32_t)byScale;
       nElemDmgResult = DAMAGE_RollElementalDamageWithBonus(UNITSTAT_firemindam, UNITSTAT_passive_fire_mastery, 0, 0, pDmgStrc->dwFireDmg, pUnit, UNITSTAT_firemaxdam);
-      pDmgStrc->dwFireDmg = (int)(nElemDmgResult * nWeaponScalePct) / 128;
+      pDmgStrc->dwFireDmg = (int)(nElemDmgResult * uVar1) / 128;
       nElemDmgResult = DAMAGE_RollElementalDamageWithBonus(UNITSTAT_lightmindam, UNITSTAT_passive_ltng_mastery, 0, 0, pDmgStrc->dwLtngDamage, pUnit, UNITSTAT_lightmaxdam);
-      pDmgStrc->dwLtngDamage = (int)(nElemDmgResult * nWeaponScalePct) / 128;
+      pDmgStrc->dwLtngDamage = (int)(nElemDmgResult * uVar1) / 128;
       nElemDmgResult = DAMAGE_RollElementalDamageWithBonus(UNITSTAT_coldmindam, UNITSTAT_passive_cold_mastery, 0, 0, pDmgStrc->dwColdDmg, pUnit, UNITSTAT_coldmaxdam);
-      pDmgStrc->dwColdDmg = (int)(nElemDmgResult * nWeaponScalePct) / 128;
+      pDmgStrc->dwColdDmg = (int)(nElemDmgResult * uVar1) / 128;
       nElemDmgResult = DAMAGE_RollElementalDamageWithBonus(UNITSTAT_magicmindam, UNITSTAT_passive_mag_mastery, 0, 0, pDmgStrc->dwMagDamage, pUnit, UNITSTAT_magicmaxdam);
-      nElemDmgResult = (int)(nElemDmgResult * nWeaponScalePct) / 128;
+      nElemDmgResult = (int)(nElemDmgResult * uVar1) / 128;
     } else {
       nElemDmgResult = DAMAGE_RollElementalDamageWithBonus(UNITSTAT_firemindam, UNITSTAT_passive_fire_mastery, 0, 0, pDmgStrc->dwFireDmg, pUnit, UNITSTAT_firemaxdam);
       pDmgStrc->dwFireDmg = nElemDmgResult;
@@ -900,9 +901,9 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
       nPoisMastery = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_pois_mastery, 0);
     }
 
-    nWeaponScalePct = (uint32_t)byScale;
+    uVar1 = (uint32_t)byScale;
     nElemRoll = DAMAGE_RollPhysicalDamageRange(nPoisMinStat, nPoisMastery, pUnit, nStatValue, nPoisMastery, pDmgStrc->dwPoisDamage);
-    nStatValue = (int)(nElemRoll * nWeaponScalePct) / 128;
+    nStatValue = (int)(nElemRoll * uVar1) / 128;
     pDmgStrc->dwPoisDamage = nStatValue;
     if (nStatValue) {
       nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_skill_poison_override_length, 0);
@@ -919,18 +920,18 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
     }
     if (pDmgStrc->dwColdDmg > 0) {
       nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldlength, 0);
-      pDmgStrc->dwColdLength += (int)(nStatValue * nWeaponScalePct) / 128;
+      pDmgStrc->dwColdLength += (int)(nStatValue * uVar1) / 128;
     }
     if (!pDmgStrc->dwStunLen) {
       nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stunlength, 0);
-      pDmgStrc->dwStunLen += (int)(nStatValue * nWeaponScalePct) / 128;
+      pDmgStrc->dwStunLen += (int)(nStatValue * uVar1) / 128;
     }
 
     nStatValue = pDmgStrc->dwBurnDmg;
     nElemRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, 1);
     nLeechPct = nStatValue * (uint32_t)byScale + 0x13c + nElemRoll;
     nWeaponScalePct = (int)nLeechPct < 0 ? 0 : nLeechPct;
-    pDmgStrc->dwBurnDmg += (int)nWeaponScalePct / 128;
+    pDmgStrc->dwBurnDmg += nWeaponScalePct / 128;
     if (pDmgStrc->dwBurnLen) {
       nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firelength, 0);
       pDmgStrc->dwBurnLen += (int)(nStatValue * (uint32_t)byScale) / 128;
