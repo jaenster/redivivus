@@ -405,7 +405,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2",
+      "name": "OBJOP_A2Q2_OpenHoradricScrollChest",
       "address": "00599c10",
       "lines": [
         {
@@ -415,8 +415,8 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop2",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "OBJOP_A2Q2_OpenHoradricScrollChest",
+        "QUESTS_OpenQuestChest",
         "GetQuestDataByQuestNoInternal",
         "IteratePlayerOrMonsterUnits",
         "ITEM_RewardItemToDrop",
@@ -432,7 +432,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3",
+      "name": "OBJOP_A2Q2_OpenStaffOfKingsChest",
       "address": "00599cf0",
       "lines": [
         {
@@ -442,8 +442,8 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop3",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "OBJOP_A2Q2_OpenStaffOfKingsChest",
+        "QUESTS_OpenQuestChest",
         "GetQuestDataByQuestNoInternal",
         "IteratePlayerOrMonsterUnits",
         "ITEM_RewardItemToDrop",
@@ -461,7 +461,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1",
+      "name": "OBJOP_A2Q2_OpenHoradricCubeChest",
       "address": "00599df0",
       "lines": [
         {
@@ -471,8 +471,8 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "OBJOP_A2Q2_ArcaneSanctuaryPortalAndDrop1",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "OBJOP_A2Q2_OpenHoradricCubeChest",
+        "QUESTS_OpenQuestChest",
         "GetQuestDataByQuestNoInternal",
         "IteratePlayerOrMonsterUnits",
         "ITEM_RewardItemToDrop",

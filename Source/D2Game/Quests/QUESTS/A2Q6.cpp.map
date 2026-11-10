@@ -874,7 +874,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q7_OpenArcaneNpcTrade",
+      "name": "OBJOP_A2Q6_UseHoradricOrifice",
       "address": "0059dc70",
       "lines": [
         {
@@ -884,7 +884,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q6",
       "calledFunctions": [
-        "OBJOP_A2Q7_OpenArcaneNpcTrade",
+        "OBJOP_A2Q6_UseHoradricOrifice",
         "GetQuestDataByQuestNoInternal",
         "GetInteractedNpc",
         "SUNIT_GetClient",

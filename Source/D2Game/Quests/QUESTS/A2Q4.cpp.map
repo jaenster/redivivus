@@ -524,7 +524,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q4_StaffOfKingsAltar",
+      "name": "OBJOP_A2Q4_ReadHorazonsJournal",
       "address": "0059b970",
       "lines": [
         {
@@ -534,7 +534,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "OBJOP_A2Q4_StaffOfKingsAltar",
+        "OBJOP_A2Q4_ReadHorazonsJournal",
         "SetupUpdateFlag",
         "TXT_Objects_GetLine",
         "SetEvent",

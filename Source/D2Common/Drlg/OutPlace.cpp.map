@@ -328,7 +328,7 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc",
-        "D2DrlgRoomExDataMazeStrc",
+        "D2DrlgOutdoorRoomStrc",
         "D2LevelDefsTxt",
         "D2RoomExStrc",
         "int32_t",

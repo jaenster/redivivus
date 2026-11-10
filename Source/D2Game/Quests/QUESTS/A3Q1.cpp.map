@@ -435,7 +435,7 @@
       ]
     },
     {
-      "name": "OBJOP_A3Q1_KhalimsRelicAltar",
+      "name": "OBJOP_A3Q1_ActivateLamEsensTome",
       "address": "005b7a60",
       "lines": [
         {
@@ -445,7 +445,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q1",
       "calledFunctions": [
-        "OBJOP_A3Q1_KhalimsRelicAltar",
+        "OBJOP_A3Q1_ActivateLamEsensTome",
         "GetQuestDataByQuestNoInternal",
         "GetPlayerData",
         "GetQuestState",

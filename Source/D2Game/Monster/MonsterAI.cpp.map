@@ -405,7 +405,6 @@
         "AI_GetSwitchAiParam2"
       ],
       "usedTypes": [
-        "D2UnitDataPlayerArenaStrc",
         "D2UnitStrc"
       ]
     },

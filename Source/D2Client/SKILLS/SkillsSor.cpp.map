@@ -191,7 +191,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Sor_FrostNova",
+      "name": "Skills_CltDoFunc_Sor_FireWall",
       "address": "004e3590",
       "lines": [
         {
@@ -201,7 +201,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsSor",
       "calledFunctions": [
-        "Skills_CltDoFunc_Sor_FrostNova",
+        "Skills_CltDoFunc_Sor_FireWall",
         "GetCooordinates",
         "SKILL_CheckMissileCollisionAtTarget",
         "UNITS_GetRoom",
@@ -385,7 +385,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Sor_Blizzard",
+      "name": "Skills_CltDoFunc_Sor_ThunderStormBolt",
       "address": "004e3c50",
       "lines": [
         {
@@ -396,7 +396,7 @@
       "namespace": "D2Client::SKILLS::SkillsSor",
       "calledFunctions": [
         "WEATHER_InitBlizzardState",
-        "Skills_CltDoFunc_Sor_Blizzard",
+        "Skills_CltDoFunc_Sor_ThunderStormBolt",
         "GetConfirmedTargetUnit",
         "memset",
         "GetXPosFromDynamicPathUnit",

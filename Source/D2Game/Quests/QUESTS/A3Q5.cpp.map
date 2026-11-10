@@ -534,7 +534,7 @@
       ]
     },
     {
-      "name": "OBJOP_A3Q5_NihlathakAltarLaunchOrb",
+      "name": "OBJOP_A3Q5_SmashCompellingOrb",
       "address": "005bb980",
       "lines": [
         {
@@ -544,7 +544,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q5",
       "calledFunctions": [
-        "OBJOP_A3Q5_NihlathakAltarLaunchOrb",
+        "OBJOP_A3Q5_SmashCompellingOrb",
         "GetEquipedWeapon",
         "ITEM_GetItemsTxt_szCode",
         "GetQuestDataByQuestNoInternal",

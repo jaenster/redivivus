@@ -72,8 +72,7 @@
         "D2BitBufferStrc",
         "eD2QuestState",
         "eD2Quests",
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {

@@ -239,7 +239,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_071_IronMaiden_GenericCurse",
+      "name": "Skills_SrvDoFunc_071_Taunt",
       "address": "005d8570",
       "lines": [
         {
@@ -249,7 +249,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillBar",
       "calledFunctions": [
-        "Skills_SrvDoFunc_071_IronMaiden_GenericCurse",
+        "Skills_SrvDoFunc_071_Taunt",
         "GetTargetEx",
         "SKILL_CheckCorpseCanBeConsumed",
         "UNITS_CheckIfCanAttackTarget",

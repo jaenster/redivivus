@@ -8,6 +8,7 @@
 #include "Source/D2Client/D2GSPacketSrv0x91.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/Msg.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/GAME/Select.h"
@@ -34,7 +35,6 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UI/npcmenu.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

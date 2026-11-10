@@ -909,7 +909,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Mon_BaalTaunt_AnimCycle",
+      "name": "Skills_CltDoFunc_Mon_QueenDeath",
       "address": "004e2630",
       "lines": [
         {
@@ -919,7 +919,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsMon",
       "calledFunctions": [
-        "Skills_CltDoFunc_Mon_BaalTaunt_AnimCycle",
+        "Skills_CltDoFunc_Mon_QueenDeath",
         "SKILLS_GetSkillByEnum",
         "SKILL_GetParam1",
         "SetSequenceFrame",

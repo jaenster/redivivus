@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "Skills_CltStFunc_SetBoneWallGraphics",
+      "name": "Skills_CltStFunc_SpawnCltMissileCTowardTarget",
       "address": "004f3810",
       "lines": [
         {
@@ -97,7 +97,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsNec",
       "calledFunctions": [
-        "Skills_CltStFunc_SetBoneWallGraphics",
+        "Skills_CltStFunc_SpawnCltMissileCTowardTarget",
         "SKILLSNEC_CltSetBoneWallGfx"
       ],
       "usedTypes": [
@@ -230,7 +230,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Nec_Teeth",
+      "name": "Skills_CltDoFunc_Nec_CorpseExplosion",
       "address": "004f3c80",
       "lines": [
         {
@@ -240,7 +240,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsNec",
       "calledFunctions": [
-        "Skills_CltDoFunc_Nec_Teeth",
+        "Skills_CltDoFunc_Nec_CorpseExplosion",
         "GetCurrentSkill",
         "SKILL_GetParam1",
         "SKILL_GetParam2",
@@ -282,7 +282,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Nec_BoneSpear",
+      "name": "Skills_CltDoFunc_Nec_PoisonExplosion",
       "address": "004f3e50",
       "lines": [
         {
@@ -292,7 +292,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsNec",
       "calledFunctions": [
-        "Skills_CltDoFunc_Nec_BoneSpear",
+        "Skills_CltDoFunc_Nec_PoisonExplosion",
         "GetCurrentSkill",
         "SKILL_GetParam1",
         "SKILL_GetParam2",

@@ -251,7 +251,7 @@
       ],
       "usedTypes": [
         "D2DrlgRoomCoordsStrc",
-        "D2QuestDataA1Q1Strc",
+        "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",
         "D2RoomStrc",
         "D2UnitStrc",
@@ -667,7 +667,7 @@
       ]
     },
     {
-      "name": "OBJOP_A1Q4_ActivateInifussTree",
+      "name": "OBJOP_A1Q4_OpenCainGibbet",
       "address": "00593480",
       "lines": [
         {
@@ -677,7 +677,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "OBJOP_A1Q4_ActivateInifussTree",
+        "OBJOP_A1Q4_OpenCainGibbet",
         "GetQuestDataByQuestNoInternal",
         "GetPlayerData",
         "GetQuestState",
@@ -756,7 +756,7 @@
       ]
     },
     {
-      "name": "OBJOP_A1Q4_ActivateHoradricMalusSmith",
+      "name": "OBJOP_A1Q4_ActivateCairnStone",
       "address": "00593710",
       "lines": [
         {
@@ -766,7 +766,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "OBJOP_A1Q4_ActivateHoradricMalusSmith",
+        "OBJOP_A1Q4_ActivateCairnStone",
         "GetQuestDataByQuestNoInternal",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -809,7 +809,7 @@
       ]
     },
     {
-      "name": "OBJOP_A1Q4_UseScrollOfInifuss",
+      "name": "OBJOP_A1Q4_ActivateInifussTree",
       "address": "00593af0",
       "lines": [
         {
@@ -819,7 +819,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "OBJOP_A1Q4_UseScrollOfInifuss",
+        "OBJOP_A1Q4_ActivateInifussTree",
         "GetQuestDataByQuestNoInternal",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -1060,7 +1060,7 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
-        "D2QuestDataA5Q5Strc",
+        "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ]
     },
@@ -1102,7 +1102,7 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
-        "D2QuestDataA1Q3Strc",
+        "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ]
     },

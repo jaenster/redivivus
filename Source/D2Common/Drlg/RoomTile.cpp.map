@@ -603,7 +603,7 @@
       "namespace": "D2Common::Drlg::RoomTile",
       "calledFunctions": [
         "InitializorForDrlgType",
-        "DRLGROOMEX_InitializeMazeRoom",
+        "DRLGROOMEX_InitializeOutdoorRoom",
         "DRLGROOMEX_InitializePresetRoom"
       ],
       "usedTypes": [

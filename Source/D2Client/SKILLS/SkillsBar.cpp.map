@@ -169,7 +169,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion",
+      "name": "Skills_CltDoFunc_Bar_GrimWard",
       "address": "004c7f50",
       "lines": [
         {
@@ -179,7 +179,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsBar",
       "calledFunctions": [
-        "Skills_CltDoFunc_Bar_Whirlwind_CorpseExplosion",
+        "Skills_CltDoFunc_Bar_GrimWard",
         "GetConfirmedTargetUnit",
         "IsSoftMonster",
         "GetXPosFromDynamicPathUnit",
@@ -661,7 +661,7 @@
       ]
     },
     {
-      "name": "Skills_CltStFunc_CalcLeapDestViaPathfind",
+      "name": "Skills_CltStFunc_CalcWhirlwindDestViaPathfind",
       "address": "004c9120",
       "lines": [
         {
@@ -671,7 +671,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsBar",
       "calledFunctions": [
-        "Skills_CltStFunc_CalcLeapDestViaPathfind",
+        "Skills_CltStFunc_CalcWhirlwindDestViaPathfind",
         "SKILLS_GetSkillByEnum",
         "GetPlayerUnit_UI",
         "GetSkillId",

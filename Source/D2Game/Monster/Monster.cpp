@@ -15,7 +15,6 @@
 #include "Source/D2Game/Monster/D2MonsterRegionStrc.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
-#include "Source/D2Game/Monster/MonsterRegion.h"
 #include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"

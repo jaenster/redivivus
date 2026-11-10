@@ -412,7 +412,7 @@
       ]
     },
     {
-      "name": "OBJOP_A2Q3_ActivateHoradricStaffAltar",
+      "name": "OBJOP_A2Q3_ActivateTaintedSunAltar",
       "address": "0059a7e0",
       "lines": [
         {
@@ -422,7 +422,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q3",
       "calledFunctions": [
-        "OBJOP_A2Q3_ActivateHoradricStaffAltar",
+        "OBJOP_A2Q3_ActivateTaintedSunAltar",
         "GetQuestDataByQuestNoInternal",
         "GetPlayerData",
         "GetQuestState",

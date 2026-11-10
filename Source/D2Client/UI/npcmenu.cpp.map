@@ -1378,6 +1378,7 @@
         "UNITMODE_SetAnimMode"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc *",
         "D2UnitStrc",
         "int32_t"
       ]

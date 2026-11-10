@@ -480,7 +480,7 @@
         "Q20_SpawnUniqueSerpent"
       ],
       "usedTypes": [
-        "D2QuestDataA1Q1Strc",
+        "D2QuestDataA3Q3Strc",
         "D2QuestDataStrc",
         "D2RoomStrc",
         "D2RoomStrc *",
@@ -513,7 +513,7 @@
       ]
     },
     {
-      "name": "OBJOP_A3Q5_NihlathakPortalTrigger",
+      "name": "OBJOP_A3Q3_ActivateGidbinn",
       "address": "005b9b40",
       "lines": [
         {
@@ -523,7 +523,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q3",
       "calledFunctions": [
-        "OBJOP_A3Q5_NihlathakPortalTrigger",
+        "OBJOP_A3Q3_ActivateGidbinn",
         "GetPlayerData",
         "GetQuestState",
         "GetQuestDataByQuestNoInternal",

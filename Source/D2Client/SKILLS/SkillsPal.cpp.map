@@ -4,7 +4,7 @@
   "file": "Source/D2Client/SKILLS/SkillsPal.cpp",
   "functions": [
     {
-      "name": "Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile",
+      "name": "Skills_CltDoFunc_Pal_Sacrifice",
       "address": "004c9490",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsPal",
       "calledFunctions": [
-        "Skills_CltDoFunc_Pal_Zeal_DirOffsetMissile",
+        "Skills_CltDoFunc_Pal_Sacrifice",
         "GetConfirmedTargetUnit",
         "GetVelocity",
         "UNIT_GetModuloFromSeed",
@@ -251,7 +251,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Pal_HolyBolt_Melee",
+      "name": "Skills_CltDoFunc_Pal_Charge",
       "address": "004c9db0",
       "lines": [
         {
@@ -261,7 +261,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsPal",
       "calledFunctions": [
-        "Skills_CltDoFunc_Pal_HolyBolt_Melee",
+        "Skills_CltDoFunc_Pal_Charge",
         "GetCurrentSkill",
         "SKILL_GetFlags",
         "MERC_GetSequenceTxt",

@@ -343,7 +343,8 @@
         "RANDOM_RandomNumberSelector"
       ],
       "usedTypes": [
-        "D2UnitDataItemStrc",
+        "D2MonsterRegionFieldStrc",
+        "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "uint32_t",
         "uint64_t",
@@ -364,7 +365,8 @@
         "CheckComponents"
       ],
       "usedTypes": [
-        "D2UnitStrc"
+        "D2UnitStrc",
+        "uint8_t"
       ]
     },
     {
@@ -480,6 +482,7 @@
         "D2MonStatsInitStrc",
         "D2MonStatsTxt",
         "D2MonsterLevelDataStrc",
+        "D2MonsterRegionFieldStrc",
         "D2RoomStrc",
         "D2SkillListStrc",
         "D2SkillStrc",
@@ -521,6 +524,7 @@
         "D2MonStatsTxt",
         "D2MonsterAiStrc",
         "D2MonsterPathParamStrc",
+        "D2MonsterRegionFieldStrc",
         "D2RoomStrc",
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",

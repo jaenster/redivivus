@@ -4,7 +4,6 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/Create.h"

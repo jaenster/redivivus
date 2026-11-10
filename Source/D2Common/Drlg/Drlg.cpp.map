@@ -1581,7 +1581,7 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc",
-        "D2DrlgRoomExDataMazeStrc",
+        "D2DrlgOutdoorRoomStrc",
         "D2DrlgWallLayerGridsStrc",
         "D2LevelDefsTxt",
         "D2RoomExStrc",
@@ -1592,7 +1592,7 @@
       ]
     },
     {
-      "name": "DRLGROOMEX_InitializeMazeRoom",
+      "name": "DRLGROOMEX_InitializeOutdoorRoom",
       "address": "0067d710",
       "lines": [
         {
@@ -1602,7 +1602,7 @@
       ],
       "namespace": "D2Common::Drlg",
       "calledFunctions": [
-        "DRLGROOMEX_InitializeMazeRoom",
+        "DRLGROOMEX_InitializeOutdoorRoom",
         "DRLGROOMTILE_AllocRoomTileGrid",
         "DRLGROOMTILE_CountWallTilesFromGrid",
         "DRLGROOMTILE_CountTilesFromGrid",
@@ -1876,7 +1876,7 @@
         "D2DrlgCoordsStrc",
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
-        "D2DrlgRoomExDataMazeStrc",
+        "D2DrlgOutdoorRoomStrc",
         "D2DrlgVertexStrc",
         "D2DrlgVertexStrc *",
         "D2RoomExStrc"

@@ -436,7 +436,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_038_DragonTail_KickAoE",
+      "name": "Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion",
       "address": "005d3e80",
       "lines": [
         {
@@ -447,7 +447,7 @@
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
         "SKILLASS_GetChargeUpCalcValue",
-        "Skills_SrvDoFunc_038_DragonTail_KickAoE",
+        "Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion",
         "GetTargetEx",
         "DAMAGE_ProcessCombatQueueEntry",
         "SKILLS_GetTargetOrCursorPos",
@@ -734,7 +734,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_041_BladeFury",
+      "name": "Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst",
       "address": "005d5080",
       "lines": [
         {
@@ -744,7 +744,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "Skills_SrvDoFunc_041_BladeFury",
+        "Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst",
         "InitSeed_Param_666",
         "SKILLS_GetTargetOrCursorPos",
         "SKILLASS_GetChargeUpMissile",

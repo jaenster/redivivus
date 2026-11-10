@@ -1,6 +1,6 @@
 # datatrend
 bucket	symbols	match_pct	bytes_pct	zero	size_small	reloc	value
-1-4	438	99.54	0.47	1	0	1	0
+1-4	437	99.54	0.47	1	0	1	0
 5-16	221	99.55	0.77	0	0	0	1
 17-64	650	99.54	8.28	1	0	0	1
 65-256	296	100.00	13.33	0	0	0	0

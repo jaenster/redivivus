@@ -571,6 +571,7 @@
         "CLIENT_SetUnitFlag"
       ],
       "usedTypes": [
+        "D2AiGeneralStrc *",
         "D2UnitStrc",
         "uint16_t"
       ]

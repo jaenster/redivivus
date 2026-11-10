@@ -304,7 +304,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Ama_Impale",
+      "name": "Skills_CltDoFunc_Ama_Fend",
       "address": "004f4c20",
       "lines": [
         {
@@ -314,7 +314,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsAma",
       "calledFunctions": [
-        "Skills_CltDoFunc_Ama_Impale",
+        "Skills_CltDoFunc_Ama_Fend",
         "GetCurrentSkill",
         "SKILL_GetParam3",
         "SKILL_GetParam2",

@@ -1124,7 +1124,7 @@
       "calledFunctions": [
         "SetTimerByMonsterId",
         "UNITS_GetRoom",
-        "Q19_UpdateCompellingOrbObject",
+        "Q19_UpdateSewerStairsObject",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
         "Q33_UpdateFrozenAnyaNpcState",
@@ -1694,7 +1694,7 @@
       ]
     },
     {
-      "name": "PORTAL_ActivateOrDeactivatePortalObject",
+      "name": "QUESTS_OpenQuestChest",
       "address": "00545850",
       "lines": [
         {
@@ -1704,7 +1704,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "QUESTS_OpenQuestChest",
         "GetCoords",
         "TXT_Objects_GetLine",
         "SetupUpdateFlag",

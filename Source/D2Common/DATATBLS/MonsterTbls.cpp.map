@@ -943,7 +943,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_FreeMonLvlTxt",
+      "name": "MONSTERTBLS_FreeHirelingTxt",
       "address": "006562b0",
       "lines": [
         {
@@ -953,7 +953,7 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_FreeMonLvlTxt",
+        "MONSTERTBLS_FreeHirelingTxt",
         "UnloadBin"
       ]
     },
@@ -1592,7 +1592,7 @@
       "calledFunctions": [
         "MONSTERTBLS_FreeMonUModTxt",
         "UnloadBin",
-        "MONSTERTBLS_FreeMonLvlTxt",
+        "MONSTERTBLS_FreeHirelingTxt",
         "MONSTERTBLS_FreeMonPresetTxt",
         "STRUCT_FreeTxtLink",
         "MONSTERTBLS_FreeMonPropTxt",

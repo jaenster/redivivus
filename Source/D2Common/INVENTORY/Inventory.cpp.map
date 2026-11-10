@@ -242,7 +242,7 @@
       ],
       "usedTypes": [
         "D2InventoryStrc",
-        "D2TradeRecordStrc *",
+        "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ]
     },
@@ -2330,7 +2330,7 @@
       ],
       "usedTypes": [
         "D2InventoryStrc",
-        "D2TradeRecordStrc *",
+        "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ]
     },

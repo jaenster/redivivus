@@ -2721,7 +2721,7 @@
         "D2ItemsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
-        "eD2UnitType",
+        "eD2ItemFlag",
         "int32_t",
         "uint32_t"
       ]
@@ -4179,8 +4179,7 @@
         "D2RuneTableStrc",
         "D2StatListExStrc",
         "D2StatStrc",
-        "D2UnitDataMissileStrc",
-        "D2UnitDataPlayerStrc",
+        "D2UnitDataItemStrc",
         "D2UnitStrc",
         "eD2ItemFlag",
         "eD2ItemQuality",

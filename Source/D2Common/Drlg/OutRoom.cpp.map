@@ -40,7 +40,7 @@
         "DRLGVER_FreeVertices"
       ],
       "usedTypes": [
-        "D2DrlgRoomExDataMazeStrc",
+        "D2DrlgOutdoorRoomStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
       ]
@@ -61,7 +61,7 @@
         "memset"
       ],
       "usedTypes": [
-        "D2DrlgRoomExDataMazeStrc",
+        "D2DrlgOutdoorRoomStrc",
         "D2RoomExStrc"
       ]
     }

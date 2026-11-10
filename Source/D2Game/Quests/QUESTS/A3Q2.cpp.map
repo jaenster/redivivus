@@ -244,7 +244,7 @@
       ]
     },
     {
-      "name": "OBJOP_A3Q2_KhalimRelicPedestal",
+      "name": "OBJOP_A3Q2_PullSewerLever",
       "address": "005b8530",
       "lines": [
         {
@@ -254,8 +254,8 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
-        "OBJOP_A3Q2_KhalimRelicPedestal",
         "NotifyPlayersAboutEvent",
+        "OBJOP_A3Q2_PullSewerLever",
         "GetQuestDataByQuestNoInternal",
         "FindUnitFromTable",
         "SetupUpdateFlag",
@@ -272,7 +272,7 @@
       ]
     },
     {
-      "name": "Q19_UpdateCompellingOrbObject",
+      "name": "Q19_UpdateSewerStairsObject",
       "address": "005b85e0",
       "lines": [
         {
@@ -282,7 +282,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
-        "Q19_UpdateCompellingOrbObject",
+        "Q19_UpdateSewerStairsObject",
         "FindUnitFromTable",
         "SetupUpdateFlag",
         "TXT_Objects_GetLine",
@@ -450,7 +450,7 @@
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
         "OBJOP_A3Q2_KhalimsRelicPortalDrop1",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "QUESTS_OpenQuestChest",
         "GetQuestControlSeed",
         "SpawnDrop",
         "GetQuestDataByQuestNoInternal",
@@ -477,7 +477,7 @@
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
         "OBJOP_A3Q2_KhalimsRelicPortalDrop2",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "QUESTS_OpenQuestChest",
         "GetQuestControlSeed",
         "SpawnDrop",
         "GetQuestDataByQuestNoInternal",
@@ -504,7 +504,7 @@
       "namespace": "D2Game::Quests::QUESTS::A3Q2",
       "calledFunctions": [
         "OBJOP_A3Q2_KhalimsRelicPortalDrop3",
-        "PORTAL_ActivateOrDeactivatePortalObject",
+        "QUESTS_OpenQuestChest",
         "GetQuestControlSeed",
         "SpawnDrop",
         "GetQuestDataByQuestNoInternal",

@@ -411,7 +411,8 @@
         "Objects_InitFn27_GooPile"
       ],
       "usedTypes": [
-        "D2ObjectInitFnArg"
+        "D2ObjectInitFnArg",
+        "uint8_t"
       ]
     },
     {
@@ -518,9 +519,10 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
-        "D2UnitDataPlayerStrc",
+        "D2UnitDataObjectStrc",
         "D2UnitStrc",
-        "eD2LevelId"
+        "eD2LevelId",
+        "uint8_t"
       ]
     },
     {

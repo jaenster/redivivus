@@ -199,7 +199,7 @@
       ]
     },
     {
-      "name": "OBJOP_A1Q5_ActivateCairnStone",
+      "name": "OBJOP_A1Q5_ReadTowerTome",
       "address": "00594e70",
       "lines": [
         {
@@ -209,7 +209,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q5",
       "calledFunctions": [
-        "OBJOP_A1Q5_ActivateCairnStone",
+        "OBJOP_A1Q5_ReadTowerTome",
         "SetupUpdateFlag",
         "TXT_Objects_GetLine",
         "SetEvent",
