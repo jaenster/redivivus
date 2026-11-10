@@ -1,0 +1,13 @@
+.{
+    .name = .refimage,
+    .version = "0.1.0",
+    .fingerprint = 0x8f6b35c3f2af5b1e,
+    .minimum_zig_version = "0.17.0",
+    .dependencies = .{
+        .capstone = .{
+            .url = "https://github.com/capstone-engine/capstone/archive/refs/tags/5.0.7.tar.gz",
+            .hash = "N-V-__8AAD-eSwP81ao_JqT4xjzAM5sTHOCodp6XmTRZZeAD",
+        },
+    },
+    .paths = .{ "build.zig", "build.zig.zon", "src" },
+}
