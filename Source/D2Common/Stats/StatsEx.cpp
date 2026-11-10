@@ -626,16 +626,14 @@ D2StatListExStrc * __stdcall GetStatListByState(D2StatListExStrc * pStatsEx, eD2
     if (eState == STATE_none) {
       return nullptr;
     }
-
-    uint32_t bIsFullList = pStatsEx->sStatList.nFlags & 0x80000000;
-    if (bIsFullList) {
+    if (pStatsEx->sStatList.nFlags & 0x80000000) {
       for (pCurList = pStatsEx->pActiveHead; pCurList; pCurList = pCurList->sStatList.pPrevLink) {
         if (pCurList->sStatList.eState == eState) {
           return pCurList;
         }
       }
     }
-    if (!bIsFullList) {
+    if (!(pStatsEx->sStatList.nFlags & 0x80000000)) {
       return nullptr;
     }
 

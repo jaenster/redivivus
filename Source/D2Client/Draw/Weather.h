@@ -74,7 +74,7 @@ void __stdcall LoadCustomSettingsPerAreaAct5();
 // Re-initialises the pEnvironmentParticles data array and halts (Env.cpp line 347, spParticleData->nTotalCount == 0) if entries remain in use.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall WEATHER_ResetEnvironmentParticles();
-int __stdcall WEATHER_InitializeRngParams();
+void __stdcall WEATHER_InitializeRngParams();
 int __stdcall WEATHER_UpdateStateAct5(int bForceDisable);
 void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel);
 void __stdcall WEATHER_FreeDC6Graphics();

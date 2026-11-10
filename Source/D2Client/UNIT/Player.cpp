@@ -388,9 +388,10 @@ void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX
 
     D2Common::Units::AllocPlayerData(pUnit);
     if (pUnit != pPlayerUnit_lcl) {
+      D2PathUnion t2_c6 = pUnit->pPath;
       sRandSeed = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = sRandSeed;
-      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, (uint8_t)sRandSeed.nSeedLow & 0x3f);
+      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(t2_c6.pDynamicPath, (uint8_t)sRandSeed.nSeedLow & 0x3f);
     }
 
     Engine::CLIENT_PreloadMonsterCofsInAdjacentRooms();

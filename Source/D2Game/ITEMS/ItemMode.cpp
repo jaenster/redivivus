@@ -491,6 +491,7 @@ static void __stdcall ITEMMODE_UpdateItemSkill(int32_t bAddCharges, D2UnitStrc *
     int32_t iVar1;
     int nUnitGUID;
     eD2Skills eSkill = ITEMMODE_GetItemSkillId(pUnit);
+    eD2UnitType t2_c0 = pUnit2->eUnitType;
     if (eSkill == ~SKILL_Attack) {
       return;
     }
@@ -537,7 +538,7 @@ static void __stdcall ITEMMODE_UpdateItemSkill(int32_t bAddCharges, D2UnitStrc *
       nUnitGUID = -1;
       *(uint8_t*)(char*)&bAddCharges = 6;
     } else {
-      *(uint8_t*)(char*)&bAddCharges = (uint8_t)pUnit2->eUnitType;
+      *(uint8_t*)(char*)&bAddCharges = (uint8_t)t2_c0;
       nUnitGUID = pUnit2->nUnitGUID;
     }
 
@@ -3836,7 +3837,8 @@ static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
         return bInserted;
       }
 
-      BVar1 = ITEM_InsertScrollIntoBook(pGame, pUnit, pScrollItem->nUnitGUID, pMatchingBook->nUnitGUID, (uint32_t*)&nInsertResult);
+      int t2_c2 = pScrollItem->nUnitGUID;
+      BVar1 = ITEM_InsertScrollIntoBook(pGame, pUnit, t2_c2, pMatchingBook->nUnitGUID, (uint32_t*)&nInsertResult);
       return BVar1;
     }
 

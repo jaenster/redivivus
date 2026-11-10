@@ -563,11 +563,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x51_NEWOBJECT(D2ClientStrc * pClient, uint
       exit(-1);
     }
 
-    aPacket.dwObjectGUID = dwObjectGUID;
     aPacket.nObjectType = nObjectType;
-    aPacket.wY = wY;
+    aPacket.dwObjectGUID = dwObjectGUID;
     aPacket.wClassId = wClassId;
     aPacket.wX = wX;
+    aPacket.wY = wY;
     aPacket.nPacketId = nPacketId;
     aPacket.nState = nState;
     aPacket.nInteraction = nInteraction;

@@ -1713,7 +1713,8 @@ int __fastcall Unreferenced_00667000(D2RoomExStrc * param_1) {
 // Accesses pRoomEx->pRoomExDataPreset->pMap->pTxtLevelPrest->File[nRandomMapFileSelector].
 // Called by GetPickedLevelPrestFilePathFromRoomEx.
 char * __fastcall DRLGPRESET_GetPickedFilePathFromRoomEx(D2RoomExStrc * pRoomEx) {
-    D2DrlgMapStrc* pMap = pRoomEx->pRoomExData.pRoomExDataPreset->pMap;
+    D2DrlgRoomExDataUnion t2_c2 = pRoomEx->pRoomExData;
+    D2DrlgMapStrc* pMap = t2_c2.pRoomExDataPreset->pMap;
     return pMap->pTxtLevelPrest->File[pMap->nRandomMapFileSelector];
 }
 

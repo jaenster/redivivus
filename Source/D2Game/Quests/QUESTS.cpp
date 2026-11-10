@@ -888,13 +888,14 @@ void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uin
 }
 
 static void QUEST_ResetQuestDataForReconnect(eD2QuestsInternal nQuestNoInternal, ::SGAMEDATA * pGame) {
+    struct D2QuestControlStrc* t2_c0 = pGame->pQuestControl;
     if ((int)nQuestNoInternal < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);
       exit(-1);
     } else {
       D2QuestDataStrc* pQuestData;
-      if (pGame->pQuestControl) {
-        for (pQuestData = pGame->pQuestControl->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
+      if (t2_c0) {
+        for (pQuestData = t2_c0->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
           if (pQuestData->nQuestNoInternal == nQuestNoInternal) {
             pQuestData->bIsNotIntroduction = '\0';
             pQuestData->bIsActive = '\0';
@@ -1104,7 +1105,8 @@ void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItemUnit->nClassId);
+    int t2_c0 = pItemUnit->nClassId;
+    D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(t2_c0);
     if (!pItemTxt) {
       return;
     }

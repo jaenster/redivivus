@@ -1223,8 +1223,6 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
     BOOL bIsWeaponSwap;
     BOOL bShowTooltips;
     memset(&gSpellSelGridRegion, 0, 0x3c5);
-    bool bIsRightHand;
-    bIsRightHand = !gbSpellSelMouseHandFlag;
     int32_t* pSlotPtr;
     pSlotPtr = gSpellSelGridRegion.aRightHandSlots;
     for (nStartX = 0x3c; nStartX; nStartX--) {
@@ -1232,7 +1230,7 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
       pSlotPtr++;
     }
 
-    if (!bIsRightHand) {
+    if (!!gbSpellSelMouseHandFlag) {
       bIsLeftHand = 0;
       bShowTooltips = 0;
       bIsWeaponSwap = 1;
@@ -1247,8 +1245,7 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
       bShowTooltips = 0;
       bIsWeaponSwap = 0;
       gSpellSelGridRegion.sGridIndex[0] = 0;
-      nStartX = ui::ScreenSizeX - 0x80;
-      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nStartX, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
+      SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
       if (!gbSpellSelMouseHandFlag) {
         goto draw_right_grid_tooltips;
       }
@@ -1263,8 +1260,7 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
     bIsLeftHand = 0;
     bShowTooltips = 1;
     bIsWeaponSwap = 0;
-    nStartX = ui::ScreenSizeX - 0x80;
-    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), nStartX, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
+    SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bIsWeaponSwap, bShowTooltips, bIsLeftHand);
 }
 
 void __stdcall SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0() {

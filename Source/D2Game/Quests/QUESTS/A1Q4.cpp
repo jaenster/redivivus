@@ -2242,7 +2242,8 @@ static void __stdcall Q04_ActivateCairnStonesAndTree(char bDeferGuardDespawn, ch
     D2UnitStrc* pTreeUnit;
     D2QuestDataA1Q4Strc* pA1Q4Sub = pQuestData->pQuestSpecificData.pA1Q4;
     if (pA1Q4Sub->sSub.bCairnStonesObjectSaved == '\x01' && (pTreeUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA1Q4Sub->sSub.nCairnStonesObjectGUID) , pTreeUnit != 0) && pTreeUnit->nClassId == 0x1a) {
-      if (pTreeUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Run) {
+      uD2UnitMode t2_c8 = pTreeUnit->eAnimMode;
+      if (t2_c8.ePlayerMode != eD2PlayerAnimMode_ns::Run) {
         D2Common::Units::SetupUpdateFlag(pTreeUnit, 3);
         pA1Q4Sub->sSub.nCairnAnimState = 3;
       }

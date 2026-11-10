@@ -186,8 +186,9 @@ void __fastcall Q06_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     } else if (nNPCClassId == 0x9b) {
       if (nMessageIndex == 0xb7) {
         QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pUnit, pQuestArgs->pTarget);
+        struct D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
         pGame = pQuestArgs->pGame;
-        pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+        pPlayerData = D2Common::Units::GetPlayerData(t2_c0);
         pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
         bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_RewardAwaits);
         if (bQuestState) {

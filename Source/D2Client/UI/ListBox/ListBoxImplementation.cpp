@@ -764,30 +764,30 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
         return 0;
       }
     } else {
-      if (pThis->bScrollTrackPressed != 1) {
-        if (!pThis->pfnOnItemActivated) {
+      if (pThis->bScrollTrackPressed == 1) {
+        pThis->bScrollTrackPressed = 0;
+        nIsOnTarget = IsMouseOnScrollTrack(pThis, pMsg);
+        if (nIsOnTarget == 1) {
+          HandleScrollTrackClick(pThis, pMsg);
+          pThis->nPressedItemIndex = -1;
           return 0;
         }
+      } else {
+        if (pThis->pfnOnItemActivated) {
+          nHitItemIdx = HitTestItem(pThis, pMsg);
+          if (pThis->nPressedItemIndex != nHitItemIdx) {
+            return 0;
+          }
+          if (pThis->nPressedItemIndex == -1) {
+            return 0;
+          }
 
-        nHitItemIdx = HitTestItem(pThis, pMsg);
-        if (pThis->nPressedItemIndex != nHitItemIdx) {
+          pThis->nPressedItemIndex = -1;
+          pThis->pfnOnItemActivated();
+          return 1;
+        } else {
           return 0;
         }
-        if (pThis->nPressedItemIndex == -1) {
-          return 0;
-        }
-
-        pThis->nPressedItemIndex = -1;
-        pThis->pfnOnItemActivated();
-        return 1;
-      }
-
-      pThis->bScrollTrackPressed = 0;
-      nIsOnTarget = IsMouseOnScrollTrack(pThis, pMsg);
-      if (nIsOnTarget == 1) {
-        HandleScrollTrackClick(pThis, pMsg);
-        pThis->nPressedItemIndex = -1;
-        return 0;
       }
     }
 

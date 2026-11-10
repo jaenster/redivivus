@@ -369,32 +369,30 @@ bool __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize2;
     int i = 0;
-    if (iVar2 <= 0) {
-      return true;
+    if (iVar2 > 0) {
+      LONG* pnPointY = &pDVar1->aPoints2[0].y;
+      do {
+        int pRngOrDelta;
+        pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
+        if (pRngOrDelta < 0) {
+          pRngOrDelta = -pRngOrDelta;
+        }
+        if (pRngOrDelta < 100) {
+          return false;
+        }
+
+        pRngOrDelta = *pnPointY - nY;
+        if (pRngOrDelta < 0) {
+          pRngOrDelta = -pRngOrDelta;
+        }
+        if (pRngOrDelta < 100) {
+          return false;
+        }
+
+        i++;
+        pnPointY += 2;
+      } while (i < iVar2);
     }
-
-    LONG* pnPointY = &pDVar1->aPoints2[0].y;
-    do {
-      int pRngOrDelta;
-      pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
-      if (pRngOrDelta < 0) {
-        pRngOrDelta = -pRngOrDelta;
-      }
-      if (pRngOrDelta < 100) {
-        return false;
-      }
-
-      pRngOrDelta = *pnPointY - nY;
-      if (pRngOrDelta < 0) {
-        pRngOrDelta = -pRngOrDelta;
-      }
-      if (pRngOrDelta < 100) {
-        return false;
-      }
-
-      i++;
-      pnPointY += 2;
-    } while (i < iVar2);
 
     return true;
 }
@@ -414,32 +412,30 @@ bool __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize1;
     int i = 0;
-    if (iVar2 <= 0) {
-      return true;
+    if (iVar2 > 0) {
+      LONG* pnPointY = &pDVar1->aPoints1[0].y;
+      do {
+        int pRngOrDelta;
+        pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
+        if (pRngOrDelta < 0) {
+          pRngOrDelta = -pRngOrDelta;
+        }
+        if (pRngOrDelta < 0x32) {
+          return false;
+        }
+
+        pRngOrDelta = *pnPointY - nY;
+        if (pRngOrDelta < 0) {
+          pRngOrDelta = -pRngOrDelta;
+        }
+        if (pRngOrDelta < 0x32) {
+          return false;
+        }
+
+        i++;
+        pnPointY += 2;
+      } while (i < iVar2);
     }
-
-    LONG* pnPointY = &pDVar1->aPoints1[0].y;
-    do {
-      int pRngOrDelta;
-      pRngOrDelta = ((POINT*)(pnPointY - 1))->x - nX;
-      if (pRngOrDelta < 0) {
-        pRngOrDelta = -pRngOrDelta;
-      }
-      if (pRngOrDelta < 0x32) {
-        return false;
-      }
-
-      pRngOrDelta = *pnPointY - nY;
-      if (pRngOrDelta < 0) {
-        pRngOrDelta = -pRngOrDelta;
-      }
-      if (pRngOrDelta < 0x32) {
-        return false;
-      }
-
-      i++;
-      pnPointY += 2;
-    } while (i < iVar2);
 
     return true;
 }

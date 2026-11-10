@@ -4404,10 +4404,10 @@ void __fastcall DrawRect(RECT * pRect, DWORD nPaletteIndex) {
         return;
       }
 
-      nXEnd_00 = nWidth + nXEnd;
-      nYEnd = nHeight + nYStart;
       nXStart = (nWidth >> 1) + nXEnd;
+      nXEnd_00 = nWidth + nXEnd;
       nYEnd_00 = (nHeight >> 1) + nYStart;
+      nYEnd = nHeight + nYStart;
       if (!(nXEnd_00 >= 0 && nXEnd <= RENDERER_nWindowWidth && nYEnd >= 0 && nYStart <= RENDERER_nWindowHeight)) {
         return;
       }

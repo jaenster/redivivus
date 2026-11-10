@@ -1445,7 +1445,8 @@ static int32_t __stdcall PANEL_GetPanelLayoutHeight(int32_t nMouseX, int32_t nMo
     D2BeltsTxt sBeltsTxt;
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);
     int nBoxId = 0;
-    if ((uint8_t)sBeltsTxt.nBoxes <= 0) {
+    int t1_c0 = sBeltsTxt.nBoxes;
+    if ((uint8_t)t1_c0 <= 0) {
       return -1;
     }
 
@@ -1457,7 +1458,7 @@ static int32_t __stdcall PANEL_GetPanelLayoutHeight(int32_t nMouseX, int32_t nMo
       }
 
       nBoxId++;
-    } while (nBoxId < (int)(uint32_t)(uint8_t)sBeltsTxt.nBoxes);
+    } while (nBoxId < (int)(uint32_t)(uint8_t)t1_c0);
 
     return -1;
 }

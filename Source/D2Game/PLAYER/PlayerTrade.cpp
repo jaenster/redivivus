@@ -1660,7 +1660,8 @@ void __fastcall TRADE_RestoreInventoryFromBackup(::SGAMEDATA * pGame, D2UnitStrc
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, 0);
       PlayerSave::PLRSAVE_DispatchItemLoadByFormat(pGame, pUnit, pTradeCopy->pSaveBuffer, 0x60, 0x2000, 0, &pSavePtr);
       iInvPage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      if (!(iInvPage > 0 && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead)) {
+      uD2UnitMode t1_c1 = pUnit->eAnimMode;
+      if (!(iInvPage > 0 && t1_c1.ePlayerMode != Death && t1_c1.ePlayerMode != eD2PlayerAnimMode_ns::Dead)) {
         return;
       }
 

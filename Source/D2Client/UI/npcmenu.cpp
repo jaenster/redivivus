@@ -4917,13 +4917,14 @@ static int32_t NPCMENU_FindMenuIndexByNpcId(D2UnitStrc * pNpcUnit) {
       return -1;
     }
 
+    int t2_c0 = pNpcUnit->nClassId;
     int nMenuIndex = 0;
     if (NPC::D2NpcMenuOptionsCount <= 0) {
       return 0;
     }
 
     do {
-      if (NPC::D2NpcMenuOptions[nMenuIndex].nNpcId == pNpcUnit->nClassId) {
+      if (NPC::D2NpcMenuOptions[nMenuIndex].nNpcId == t2_c0) {
         return nMenuIndex;
       }
 

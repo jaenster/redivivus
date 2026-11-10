@@ -68,7 +68,8 @@ void __fastcall thunk_PATH_SnapPositionToTile(D2UnitStrc * pUnit) {
 uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int16_t nTargetX, int16_t nTargetY) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nTargetX, nTargetY);
-    uint32_t nResult = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, pUnit->eUnitFlags >> 0x15 & 1);
+    eD2UnitFlags t2_c2 = pUnit->eUnitFlags;
+    uint32_t nResult = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, t2_c2 >> 0x15 & 1);
     return nResult;
 }
 

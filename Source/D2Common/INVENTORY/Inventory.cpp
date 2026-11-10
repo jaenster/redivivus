@@ -2761,11 +2761,13 @@ void __fastcall INVENTORY_SetOrClearCursorItem(D2InventoryStrc * pInventory, D2U
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304 && pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
     }
+
+    int t2_c3 = pUnit->nUnitGUID;
     if (bSet) {
-      pInventory->dwPrimaryWeaponGUID = pUnit->nUnitGUID;
+      pInventory->dwPrimaryWeaponGUID = t2_c3;
       return;
     }
-    if (pInventory->dwPrimaryWeaponGUID != pUnit->nUnitGUID) {
+    if (pInventory->dwPrimaryWeaponGUID != t2_c3) {
       return;
     }
 
@@ -4411,7 +4413,8 @@ static void __stdcall INVENTORY_SetEquippedItemAppearance(D2UnitStrc * pUnit, ch
     }
 
     uint8_t byComponent = ITEMS::Items::ITEM_GetItemsTxt_bComponent(pItem);
-    nAltGfxIdx = INVENTORY_GetAlternateGfxIndex(pItemsTxt->dwCode, pItemsTxt->dwAlternateGfx);
+    int t2_c2 = pItemsTxt->dwCode;
+    nAltGfxIdx = INVENTORY_GetAlternateGfxIndex(t2_c2, pItemsTxt->dwAlternateGfx);
     if (!nAltGfxIdx) {
       if (byComponent < 0x10) {
         szText1[byComponent] = -1;

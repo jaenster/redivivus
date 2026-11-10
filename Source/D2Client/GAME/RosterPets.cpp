@@ -351,11 +351,12 @@ int32_t __fastcall GetRosterPetGUID(D2UnitStrc * pUnit, int32_t nSkillId, int32_
     }
 
     pRosterPet = RosterPets::pRosterPet;
+    int t2_c1 = pUnit->nUnitGUID;
     while (true) {
       if (!pRosterPet) {
         return -1;
       }
-      if (pRosterPet->nSkillID == nSkillId && pRosterPet->nOwnerGUID == pUnit->nUnitGUID && (bAllowActive || !pRosterPet->bRemoved)) {
+      if (pRosterPet->nSkillID == nSkillId && pRosterPet->nOwnerGUID == t2_c1 && (bAllowActive || !pRosterPet->bRemoved)) {
         break;
       }
 

@@ -1664,12 +1664,12 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, D2RareAffixTxt * pRareA
     if (wVersion < 100) {
       uint32_t fStackableCheck;
       fStackableCheck = Items::IsStackable(pUnit);
-      if (fStackableCheck) {
-        return 0;
-      }
-
-      iVar1 = Items::ITEM_GetTxtItemTypes_throwable(pUnit);
-      if (iVar1) {
+      if (!fStackableCheck) {
+        iVar1 = Items::ITEM_GetTxtItemTypes_throwable(pUnit);
+        if (iVar1) {
+          return 0;
+        }
+      } else {
         return 0;
       }
     }
@@ -1710,9 +1710,11 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, D2RareAffixTxt * pRareA
 
       nLoopIdx++;
       pTypeEntry++;
-      if (nLoopIdx >= 7) {
-        return 0;
+      if (nLoopIdx < 7) {
+        continue;
       }
+
+      return 0;
     }
 
     return 1;

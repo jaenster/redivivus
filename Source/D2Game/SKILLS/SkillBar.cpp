@@ -564,7 +564,10 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTargetPos, 2, 0x1000, 1);
-    if (!(pRoom && pCorpse->eUnitType == UNIT_MONSTER)) {
+    if (!pRoom) {
+      return 0;
+    }
+    if (pCorpse->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
@@ -588,8 +591,8 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nX = sTargetPos.x;
       sSkillArg.nFlags = 1;
-      sSkillArg.nY = sTargetPos.y;
       sSkillArg.nMissileTxtNo = eMissileId;
+      sSkillArg.nY = sTargetPos.y;
       MISSILES::Missiles::CreatingMissile(pGameSave, &sSkillArg);
       D2Common::DATATBLS::ItemStats::SetState(pCorpse, STATE_corpse_nodraw, 1);
       D2Common::DATATBLS::ItemStats::SetState(pCorpse, STATE_corpse_noselect, 1);

@@ -349,9 +349,10 @@ static int32_t TEXT_CalculateTextHeight(uint16_t * szBuffer) {
 
     int nLineCount = 1;
     int nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szBuffer);
+    uint16_t t2_c0 = *szBuffer;
     if (nStrLen > 0) {
       do {
-        if (*szBuffer == L'\n') {
+        if (t2_c0 == L'\n') {
           nLineCount++;
         }
 

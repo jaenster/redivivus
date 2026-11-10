@@ -1440,10 +1440,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH(D2UnitStrc
 void __fastcall NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH(D2UnitStrc * pUnit, D2GSPacketSrv0x68 * pBytes) {
     D2ServerMessageHandleStrc msg;
     msg.nSkillId = (uint32_t)pBytes->nTargetType;
-    msg.nTargetUnitType = (uint32_t)pBytes->nParam1;
     msg.nItemId = pBytes->dwTargetGUID;
-    msg.nSkillLvl = (int)(short int)pBytes->wVelocityPct;
+    msg.nTargetUnitType = (uint32_t)pBytes->nParam1;
     msg.nTargetUnitId = (uint32_t)pBytes->nPathType;
+    msg.nSkillLvl = (int)(short int)pBytes->wVelocityPct;
     msg.nMaxDistance = (uint32_t)pBytes->nParam3;
     msg.nTargetX = (int32_t)pBytes->nReserved;
     UNIT::Path::PATH_MoveUnitToPoint(pUnit, pBytes->wX, (uint32_t)pBytes->wY, 0, 0, 0);
@@ -1558,7 +1558,8 @@ void __fastcall SCMD_Rcv0x72_UnitIgnore(D2UnitStrc * pUnit, char * pBytes) {
 // two callers, both PLAYER_SendOverlayToClient.
 void __fastcall NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay(D2GSPacketSrv0x11 * pBytes) {
     uint16_t nOverlayId = pBytes->wParam;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    uint32_t t2_c0 = pBytes->dwUnitGUID;
+    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(t2_c0, (eD2UnitType)pBytes->nUnitType);
     if (!(pUnit && (int)(uint32_t)nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
     }
@@ -2444,15 +2445,16 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST(D2GSPacketSrv0x4
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT(D2GSPacketSrv0x57 * pBytes) {
+    uint32_t t2_c5 = pBytes->dwUnitGUID;
     uint16_t wMod3 = pBytes->wParam10;
-    uint16_t wHasSuper = pBytes->wParam12;
     uint16_t wMods01 = pBytes->wParam8;
     uint16_t nNameSeed = pBytes->wNameSeed;
+    uint16_t wHasSuper = pBytes->wParam12;
     if (pBytes->nParam5 != '\x01') {
       return;
     }
 
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_MONSTER);
+    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(t2_c5, UNIT_MONSTER);
     if (!pUnit) {
       return;
     }
@@ -2661,12 +2663,13 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD(D2GSPacketSrv0x79 * pByte
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET(D2GSPacketSrv0x7A * pBytes) {
+    int t1_c0 = pBytes->nSummonGUID;
     if (pBytes->nAction) {
-      RosterPets::AddRosterPet(pBytes->nSummonGUID, pBytes->nPlayerGUID, (uint32_t)pBytes->nPetType, (uint32_t)(uint16_t)pBytes->wClassId);
+      RosterPets::AddRosterPet(t1_c0, pBytes->nPlayerGUID, (uint32_t)pBytes->nPetType, (uint32_t)(uint16_t)pBytes->wClassId);
       return;
     }
 
-    RosterPets::RemoveRosterPet(pBytes->nSummonGUID);
+    RosterPets::RemoveRosterPet(t1_c0);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x81(D2GSPacketSrv0x81 * pBytes) {
@@ -3036,19 +3039,16 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
     D2ItemStatCostTxt* pItemStatCost;
     D2BitBufferStrc bitBuffer;
     D2StatListExStrc* pStatList;
-    eD2States eStateCopy;
     uint8_t nSendBits;
     D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
 
-    D2UnitStrc* pFoundUnit = pUnit;
     Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBytes->aBitStream, pBytes->nPacketSize - 7);
     int32_t eState = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
     while (eState < 0xff) {
       uint32_t nStatParam;
-      eStateCopy = eState;
       UNIT::PlrSkills::STATES_SetStateOnUnit(pUnit, eState);
       nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 1);
       if (nStatParam) {
@@ -3083,10 +3083,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
             eSkill = Fog::BitBuffer::ReadUnsigned(&bitBuffer, (uint32_t)nSendBits);
           }
 
-          pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pFoundUnit, pStatList, eStateCopy, eUnitStat, eSkill, nStatParam);
+          pStatList = UNIT::PlrSkills::NET_D2GS_CLIENT_HandleAddSTatUnit(pUnit, pStatList, eState, eUnitStat, eSkill, nStatParam);
           eUnitStat = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 9);
-          pUnit = pFoundUnit;
-          eState = eStateCopy;
+          pUnit = pUnit;
+          eState = eState;
         }
       }
 

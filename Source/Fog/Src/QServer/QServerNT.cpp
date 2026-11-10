@@ -297,12 +297,13 @@ static int __stdcall BeginAsyncWriteForClient(D2QServerStrc * pQServer, D2QServe
     }
 
     IncrementClientRefCount(pQServer, pClient);
+    struct D2QServerClientPacketStrc* t2_c0 = pClient->pSendQueueHead;
     if ((HANDLE)pClient->socket == (HANDLE)-1) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x518);
       exit(-1);
     }
 
-    BOOL bWriteResult = WriteFile((HANDLE)pClient->socket, (LPCVOID)(pClient->pSendQueueHead + 1), pClient->pSendQueueHead->nPacketSize, &dwBytesWritten, &pClient->ovWrite);
+    BOOL bWriteResult = WriteFile((HANDLE)pClient->socket, (LPCVOID)(t2_c0 + 1), t2_c0->nPacketSize, &dwBytesWritten, &pClient->ovWrite);
     DWORD dwLastError = GetLastError();
     if (!bWriteResult) {
       if (dwLastError != 0x3e5) {

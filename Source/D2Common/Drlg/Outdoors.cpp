@@ -587,13 +587,15 @@ void __fastcall SetBlankGridCell(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t n
 // Called as a validation callback during Act 5 secondary border placement
 // via DRLGOUTROOM_PlaceAct5SecondaryBorder -> AddSecondaryBorder.
 BOOL __fastcall DRLGOUTDOOR_IsGridCellPresetFree(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
-    uint32_t uFlags = DrlgGrid::GetGridFlags(&pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
+    D2DrlgLevelDataUnion t2_c2 = pLevel->pDrlgLevelData;
+    uint32_t uFlags = DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
     return ~(uFlags >> 10) & 1;
 }
 
 // Tests grid flags against 0x1b81, returns 1 if cell is available.
 BOOL __fastcall DRLGOUTDOOR_IsGridCellEmpty(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
-    uint32_t uFlags = DrlgGrid::GetGridFlags(&pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
+    D2DrlgLevelDataUnion t2_c2 = pLevel->pDrlgLevelData;
+    uint32_t uFlags = DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
     return (uint32_t)!(uFlags & 0x1b81);
 }
 

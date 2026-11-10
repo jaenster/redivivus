@@ -285,12 +285,10 @@ uint32_t __stdcall LOADER_RunInsertDiscPopup() {
     D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(0);
     GAME::Game::GAMEDATA_SetDrawFunction(1);
     int32_t nHandlerCount = 4;
-    HWND pHVar1 = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_RegisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, nHandlerCount);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit, nHandlerCount);
     _Message::MessageGameLoop((::fpGameLoopFunction)Engine::fpGameLoopFunction);
     nHandlerCount = 4;
-    pHVar1 = D2gfx::D2GFX::GetHwnd();
-    _Message::MESSAGE_UnregisterEventHandlerBatch(pHVar1, gsUIEngineFlagInit, nHandlerCount);
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit, nHandlerCount);
     GAME::Game::GAMEDATA_SetDrawFunction(0);
     Engine::LOADER_FreePopupImages();
     return 1;

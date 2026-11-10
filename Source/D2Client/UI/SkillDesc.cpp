@@ -2923,7 +2923,6 @@ static int __stdcall SKILLDESC_FormatRangeDivided(uint16_t * wszText, uint16_t n
 }
 
 static int __stdcall SKILLDESC_FormatStringWithCalc(uint32_t dwSkillCalcCtx, uint16_t nFormatStringId, int pStatValues, uint16_t * wszText) {
-    uint16_t* pWszStr;
     int nClearCount;
     uint16_t wszResultBuf[256];
     for (nClearCount = 0; nClearCount < 0x100; nClearCount++) {
@@ -2931,15 +2930,11 @@ static int __stdcall SKILLDESC_FormatStringWithCalc(uint32_t dwSkillCalcCtx, uin
     }
 
     if (nFormatStringId == 0x1506) {
-      pWszStr = D2Lang::StrTable::strtable::GetLocaleString(0x1506);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszStr);
-      pWszStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pWszStr);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, D2Lang::StrTable::strtable::GetLocaleString(0x1506));
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xf9e));
     } else {
-      pWszStr = D2Lang::StrTable::strtable::GetLocaleString(nFormatStringId);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszResultBuf, pWszStr, pStatValues);
-      pWszStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-      D2Lang::Unicode::UNISYS::AppendToBuffer(wszResultBuf, pWszStr);
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszResultBuf, D2Lang::StrTable::strtable::GetLocaleString(nFormatStringId), pStatValues);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszResultBuf, D2Lang::StrTable::strtable::GetLocaleString(0xf9e));
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszResultBuf);
     }
 
@@ -3794,16 +3789,17 @@ static void __stdcall SKILLDESC_CalcAttackRateBonus(int * pnAttackRate, int32_t 
       return;
     }
 
+    struct D2InventoryStrc* t2_c2 = pUnit2->pInventory;
     *pnColor = 0;
     int32_t nAttackRate;
     nAttackRate = D2Common::Units::GetAttackRate(pUnit2);
     *pnAttackRate = nAttackRate;
     if (!pUnit) {
-      if (!pUnit2->pInventory) {
+      if (!t2_c2) {
         goto apply_tohit_bonuses;
       }
 
-      pUnit = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit2->pInventory);
+      pUnit = D2Common::INVENTORY::Inventory::GetEquipedWeapon(t2_c2);
       if (!pUnit) {
         goto apply_tohit_bonuses;
       }

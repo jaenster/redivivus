@@ -3420,10 +3420,12 @@ static void D2COMP_ValidateEquippedItemForClass(int32_t nEquipSlot, uint8_t * pb
         if (gnMaxCharacters > 0) {
           while (gaCompCharacterCompositeItems[nSearchIdx].nItemCode != gaCompDefaultCompositeItems[*pbyItemIndex].nItemCode) {
             nSearchIdx++;
-            if (nSearchIdx >= gnMaxCharacters) {
-              *pbyItemIndex = 1;
-              return;
+            if (nSearchIdx < gnMaxCharacters) {
+              continue;
             }
+
+            *pbyItemIndex = 1;
+            return;
           }
 
           *pbyItemIndex = (uint8_t)nSearchIdx;

@@ -1099,11 +1099,10 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSee
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    uint32_t nXSP1 = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    D2Common::Seed::InitSeed_Param_666(pSeed, nXSP1 + nSeedOffset);
+    D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nSeedOffset);
     D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
     *pSeed = sNewSeed;
-    if (!(0x13 < (int32_t)(sNewSeed.nSeedLow % 100))) {
+    if (!((int32_t)(sNewSeed.nSeedLow % 100) >= 0x14)) {
       return;
     }
 

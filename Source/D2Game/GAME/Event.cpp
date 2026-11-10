@@ -155,7 +155,8 @@ static void EVENT_RemoveAndRecycleTimer(D2TimerStrc * pTimer, ::SGAMEDATA * pGam
 
 // Allocates a timer and attaches it to a unit's timer linked list. Calls EVENT_GetTimerOrAllocNew to obtain a recycled timer, links it via pNextTimerOnUnit (head insertion), and copies the unit's GUID and type to the timer structure. Returns the allocated D2TimerStrc ready for configuration.
 static D2TimerStrc * EVENT_AllocTimerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2TimerStrc* pTimer = EVENT_GetTimerOrAllocNew(pGame, pGame->pTimerQueue);
+    struct D2TimerQueueStrc* t2_c0 = pGame->pTimerQueue;
+    D2TimerStrc* pTimer = EVENT_GetTimerOrAllocNew(pGame, t2_c0);
     pTimer->pUnit = pUnit;
     D2TimerStrc* pExistingHead = UNIT::SUnit::GetTimerList(pUnit);
     pTimer->pNextTimerOnUnit = pExistingHead;

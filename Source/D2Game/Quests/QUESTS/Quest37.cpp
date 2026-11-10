@@ -104,14 +104,12 @@ void __fastcall Q37_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     if (bSpokenBefore) {
       return;
     }
-
-    D2GSPacketSrv0x27_TextStrc* sTextMessage = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
     if (nPlayerClassId == nCharClass) {
-      AddGossipMessageOnMonster(pQuestData, sTextMessage, nMonStatsId, 1);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 1);
       return;
     }
 
-    AddGossipMessageOnMonster(pQuestData, sTextMessage, nMonStatsId, 0);
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 0);
 }
 
 bool __fastcall Q37_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {

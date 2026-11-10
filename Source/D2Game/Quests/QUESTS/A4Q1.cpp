@@ -70,6 +70,8 @@ BOOL __fastcall Q26_PlayerUpdateFallenAngelState(::SGAMEDATA * pGame, D2UnitStrc
     if (!pDVar3) {
       return 0;
     }
+
+    D2QuestSpecificDataUnion t2_c4 = pDVar3->pQuestSpecificData;
     if (pDVar3->nStateFlag == 2) {
       /* SetQuestState(rec=0x19 FallenAngel, Step0x02) — mirror global stateflag==2
                          (intro/Jerhyn portal step) into self player's record */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Step0x02);
@@ -78,7 +80,7 @@ BOOL __fastcall Q26_PlayerUpdateFallenAngelState(::SGAMEDATA * pGame, D2UnitStrc
     if (pDVar3->nStateFlag != 3) {
       return 0;
     }
-    if (pDVar3->pQuestSpecificData.pA4Q1->bHasStep4) {
+    if (t2_c4.pA4Q1->bHasStep4) {
       /* SetQuestState(rec=0x19 FallenAngel, Step0x04) — stateflag==3 &
                          Jerhyn-AI-active: player record marks the post-Jerhyn-talk substep */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Step0x04);
       return 0;

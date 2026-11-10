@@ -2215,8 +2215,7 @@ void __stdcall AUTOMAP_DrawGamePassword() {
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszPasswordLine, wPassWide);
       bMultiLineCenter = 0;
       dwColor = 4;
-      nY = AUTOMAP_TextHeightOffset;
-      D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, nY, dwColor, bMultiLineCenter);
+      D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, AUTOMAP_TextHeightOffset, dwColor, bMultiLineCenter);
       AUTOMAP_TextHeightOffset += 0x10;
     }
 
@@ -2232,8 +2231,7 @@ void __stdcall AUTOMAP_DrawGamePassword() {
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszPasswordLine, wPassWide);
     bMultiLineCenter = 0;
     dwColor = 4;
-    nY = AUTOMAP_TextHeightOffset;
-    D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, nY, dwColor, bMultiLineCenter);
+    D2Win::Src::D2WinFont::DRAW_text(wszPasswordLine, SpellSel::WindowSizeX - D2Win::Src::D2WinFont::DRAW_text0(wszPasswordLine) - 0x10, AUTOMAP_TextHeightOffset, dwColor, bMultiLineCenter);
     AUTOMAP_TextHeightOffset += 0x10;
 }
 

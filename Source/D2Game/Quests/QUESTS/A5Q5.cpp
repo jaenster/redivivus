@@ -62,7 +62,8 @@ uint8_t __fastcall Q35_ResetAncientsStatues(::SGAMEDATA * pGame, D2QuestDataStrc
           pAncient = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pAncientMode[-7]);
           if (pAncient) {
             D2Common::Units::SetupUpdateFlag(pAncient, 1);
-            pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pAncient->nClassId);
+            int t2_c6 = pAncient->nClassId;
+            pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c6);
             GAME::Event::SetEvent(pGame, pAncient, 1, (pObjectTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
             *pAncientAliveFlag = 0;
             *pAncientMode = 2;
@@ -1365,8 +1366,9 @@ BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOpera
     _bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_RiteOfPassage, QUESTSTATE_Completed);
     if (_bQuestCompleted) {
       ::SGAMEDATA* pGame2;
+      struct D2UnitStrc* t2_c2 = pOperation->pAttacker;
       pGame2 = pOperation->sArg.pGame;
-      D2BitBufferStrc* pQuestRecord2 = D2Common::Units::GetPlayerData(pOperation->pAttacker)->pQuestRecord[pGame2->nDifficulty];
+      D2BitBufferStrc* pQuestRecord2 = D2Common::Units::GetPlayerData(t2_c2)->pQuestRecord[pGame2->nDifficulty];
       _bQuestCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord2, QUEST_RiteOfPassage, QUESTSTATE_Step0x04);
       if (!_bQuestCompleted) {
         QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4ec9);

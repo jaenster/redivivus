@@ -389,8 +389,9 @@ void __fastcall Q18_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
       return;
     }
 
+    struct D2UnitStrc* t2_c7 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(t2_c7);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestCompleted == 1) {
@@ -542,8 +543,9 @@ void __fastcall Q18_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // Q18_Callback_05 — Lam Esen's Tome, state-5 handler (counterpart to _04). Removes the player from the quest GUID sub-list (e.g. tome dropped/left) and, if active, sets live state flag back to 3 (a3q1.cpp:0x281) and broadcasts state 1. No record-bit writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
+    D2QuestSpecificDataUnion t2_c3 = pQuestData->pQuestSpecificData;
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA3Q1->sQuestGUID, nPlayerGUID);
+    QUESTGUID_RemovePlayerFromList(&t2_c3.pA3Q1->sQuestGUID, nPlayerGUID);
     if (pQuestData->bIsNotIntroduction == '\0') {
       return;
     }
@@ -553,7 +555,8 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
     QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q18_PlayerNotifyCompleted, 1);
 }
 
-// OBJOP_A3Q1_KhalimsRelicAltar — Lam Esen's Tome object-operate fn (despite the "KhalimsRelicAltar" label this drops Lam Esen's Tome). When the source unit is dead/absent and the attacker has NOT yet Completed the quest: set the drop item code to the Tome (0x20626262) and ITEM_RewardItemToDrop it; on success update the quest-specific struct, install gossip/NPC handlers (Q18_Callback_00/_11), advance live state flag to 3, and broadcast state 1. If already Completed, just play the Moo sound. Reads record (Completed); does not write record bits.
+// A3Q1 Lam Esen's Tome operate fn (OperateFn 28). When the source unit is dead/absent and the attacker has not completed the quest, drops the tome (item code 0x20626262) via ITEM_RewardItemToDrop, installs the gossip/NPC handlers (Q18_Callback_00/_11), advances the state flag to 3 and broadcasts state 1. If already completed it only plays a sound.
+// Slot from objects.txt OperateFn 28.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 BOOL __fastcall OBJOP_A3Q1_KhalimsRelicAltar(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pDropCountOut;

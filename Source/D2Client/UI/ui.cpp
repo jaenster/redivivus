@@ -4520,7 +4520,6 @@ int UI_GoldInputCallback_ReturnZero() {
 }
 
 int __stdcall UI_GoldDialogScrollCallback() {
-    D2UnitStrc* pUnit;
     uint32_t uMaxGoldAvailable;
     int nScrollDirection = gpCurrentDialog->pVtable->GetValue(gpCurrentDialog);
     uint32_t uScrollDelta = gpCurrentDialog->pVtable->GetRepeatDelta(gpCurrentDialog, 0);
@@ -4531,11 +4530,9 @@ int __stdcall UI_GoldDialogScrollCallback() {
     uint32_t uGoldAmount = gnGoldDialogTransactionMode;
     uint16_t nLayer = 0;
     if (gnGoldDialogTransactionType == 4) {
-      pUnit = UNIT::Player::GetPlayerUnit_UI();
-      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldbank, nLayer);
+      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_goldbank, nLayer);
     } else {
-      pUnit = UNIT::Player::GetPlayerUnit_UI();
-      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, nLayer);
+      uMaxGoldAvailable = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_gold, nLayer);
     }
     if (nScrollDirection == 1) {
       uGoldAmount += uScrollDelta;
@@ -7997,7 +7994,7 @@ void __stdcall INPUT_ConfigMouseButtonHandler(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nMouseButton;
+    uint16_t nMouseButton;
     nMouseButton = *(short int*)((intptr_t)&pMsg->nWParam + 2);
     switch (nMouseButton) {
       case 1:

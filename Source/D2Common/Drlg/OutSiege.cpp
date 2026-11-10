@@ -612,9 +612,11 @@ void __stdcall DRLGOUTPLACE_PlaceAct5WallPresets(D2DrlgLevelStrc * pLevel) {
           Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, 0, nSegmentIndex + 0x361, 0, 0);
           nSegmentIndex++;
           nX -= nSegmentWidth;
-          if (nSegmentIndex >= 0xf) {
-            return;
+          if (nSegmentIndex < 0xf) {
+            continue;
           }
+
+          return;
         }
 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x294);

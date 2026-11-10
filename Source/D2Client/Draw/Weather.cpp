@@ -182,7 +182,7 @@ static void __stdcall WEATHER_SetEnabledState(int bForceReset, int bNewState) {
     nWeatherParticleCountAct5 = bNewState;
 }
 
-int __stdcall WEATHER_InitializeRngParams() {
+void __stdcall WEATHER_InitializeRngParams() {
     uint64_t seed64;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pPlayer) {
@@ -195,14 +195,13 @@ int __stdcall WEATHER_InitializeRngParams() {
       pPlayer->sSeed = sSeedUpdated;
       gnWeatherParticleOffsetYModulo = sSeedUpdated.nSeedLow % 0x47 + 0x5c;
       gnWeatherRngParam = gnWeatherParticleOffsetYModulo;
-      return (int)(sSeedUpdated.nSeedLow * 0xe6c2b449);
+      return;
     }
 
     gnWeatherRngCountdown = 0x138;
     gnWeatherTransitionCountdown = 0x4e2;
     gnWeatherParticleOffsetYModulo = 0x7f;
     gnWeatherRngParam = 0x7f;
-    return 0x7f;
 }
 
 int __stdcall WEATHER_UpdateStateAct5(int bForceDisable) {
@@ -969,7 +968,7 @@ uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags() {
     return 0;
 }
 
-static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
+static void WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
     uint64_t seed64;
     while (pEnvironmentParticles->nUsedCount < gnWeatherParticleState) {
       WEATHER_SpawnParticle(pSeed);
@@ -996,25 +995,25 @@ static int WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
         DVar1 = D2_SEED_NEXT(*pSeed);
         *pSeed = DVar1;
         gnWeatherRngCountdown = DVar1.nSeedLow % 0x36b + 0xfa;
-        nChangeRate = D2Game::Seed::RollBetweenMinAndMax(pSeed, gnWeatherRngRangeMin, gnWeatherRngRangeMax);
-        gnWeatherRngParam = nChangeRate;
+        gnWeatherRngParam = D2Game::Seed::RollBetweenMinAndMax(pSeed, gnWeatherRngRangeMin, gnWeatherRngRangeMax);
       } else {
         seed64 = (uint64_t)pSeed->nSeedLow * 0x6ac690c5 + (uint64_t)pSeed->nSeedHigh;
         gnWeatherRngCountdown = (int)((uint32_t)seed64 % 0x177) + 0x7d;
         DVar1 = D2_SEED_NEXT_VAL(seed64);
-        nChangeRate = (int)(DVar1.nSeedLow * 0xe6c2b449);
         *pSeed = DVar1;
         gnWeatherRngParam = DVar1.nSeedLow % 0x47 + 0x5c;
       }
     }
-    if (gnWeatherTransitionProgress) {
-      gnWeatherTransitionCountdown--;
-      if (!gnWeatherTransitionCountdown) {
-        gbWeatherTransitionTriggered = 1;
-      }
+    if (!gnWeatherTransitionProgress) {
+      return;
     }
 
-    return nChangeRate;
+    gnWeatherTransitionCountdown--;
+    if (gnWeatherTransitionCountdown) {
+      return;
+    }
+
+    gbWeatherTransitionTriggered = 1;
 }
 
 void __stdcall DRAW_Overlay_Weather() {
@@ -1234,7 +1233,7 @@ void __stdcall ENV_FreeClientSide_NoOp() {
 }
 
 void __fastcall WEATHER_TransitionState(uint32_t nState) {
-    if (nState <= 3) {
+    if (3 >= nState) {
       {
         D2UnitStrc* pPlayer;
         if (!((!gnWeatherTransitionLock || !nState) && (!gnWeatherStateAct5 || nState == 2))) {

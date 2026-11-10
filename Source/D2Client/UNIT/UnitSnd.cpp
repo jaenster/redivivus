@@ -2571,13 +2571,16 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
     }
 
     DWORD nMonStatsId = GetSndUnitClassId(pUnit);
-    if ((int)nMonStatsId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-      int16_t nBossId;
+    if ((int)nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::TxtGetMonSoundsLine(0);
+      return pMonSoundsResult;
+    } else {
+      int nBossId;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         BVar1 = Monster::IsMonsterSuperUnique(pUnit);
         if (BVar1) {
           nBossId = MonUnique::GetBossId(pUnit);
-          pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine((int)nBossId);
+          pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine(nBossId);
           if (pSuperUniquesTxt && pSuperUniquesTxt->MonSound > 0) {
             pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::TxtGetMonSoundsLine(pSuperUniquesTxt->MonSound);
             return pMonSoundsResult;
@@ -2607,9 +2610,6 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
       pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetMonSoundsTxtRecord(nMonStatsId);
       return pMonSoundsResult;
     }
-
-    pMonSoundsResult = D2Common::DATATBLS::MonsterTbls::TxtGetMonSoundsLine(0);
-    return pMonSoundsResult;
 }
 
 int __fastcall UNITSND_GetSkillCastSound(D2UnitStrc * pUnit, uint32_t nAnimMode) {

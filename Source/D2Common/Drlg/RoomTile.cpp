@@ -718,17 +718,16 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pR
     nTileLibEntry = DRLG_FindHTile(pRoomEx, nTileType, nGridInfo);
     if (!nTileType) {
       pTileData = DRLGROOMTILE_CreateFloorTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry);
-      return pTileData;
-    }
-    if (nTileType == 0xd) {
-      pTileData = DRLGROOMTILE_CreateShadowTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry);
-      return pTileData;
-    }
-
-    DRLGROOMTILE_CreateWallTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry, nTileType);
-    pTileData = pTileLink->pTileData;
-    if (nTileType == 0xb || nTileType == 10) {
-      DRLGROOMTILE_SetupWarpTile(pRoomEx, pTileData, nGridInfo, nTileType);
+    } else {
+      if (nTileType == 0xd) {
+        pTileData = DRLGROOMTILE_CreateShadowTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry);
+      } else {
+        DRLGROOMTILE_CreateWallTileData(pRoomEx, &pTileLink->pTileData, nX, nY, nGridInfo, nTileLibEntry, nTileType);
+        pTileData = pTileLink->pTileData;
+        if (nTileType == 0xb || nTileType == 10) {
+          DRLGROOMTILE_SetupWarpTile(pRoomEx, pTileData, nGridInfo, nTileType);
+        }
+      }
     }
 
     return pTileData;

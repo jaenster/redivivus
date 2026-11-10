@@ -83,8 +83,9 @@ void __fastcall Q19_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 void __fastcall Q19_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
+    struct D2UnitStrc* t2_c5 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(t2_c5);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (nNPCNo != 0xf5) {
       return;

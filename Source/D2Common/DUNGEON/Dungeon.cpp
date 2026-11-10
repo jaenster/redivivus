@@ -1007,12 +1007,13 @@ void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, D2ClientStrc * nClie
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x475);
         exit(-1);
       } else {
+        int t2_c1 = pRoom->nClientsCount;
         nClientsMaxSnapshot = pRoom->nClientsMax;
-        if (!((uint32_t)pRoom->nClientsCount <= nClientsMaxSnapshot)) {
+        if (!((uint32_t)t2_c1 <= nClientsMaxSnapshot)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x477);
           exit(-1);
         }
-        if (pRoom->nClientsCount == nClientsMaxSnapshot) {
+        if (t2_c1 == nClientsMaxSnapshot) {
           pRoom->nClientsMax = nClientsMaxSnapshot + 4;
           pNewClients = (D2ClientStrc**)D2_REALLOC_POOL_AT(pRoom->pDrlgAct->pMemory, pRoom->pClients, (nClientsMaxSnapshot + 4) * 4, ".\\DUNGEON\\Dungeon.cpp", 0x47b);
           pRoom->pClients = pNewClients;

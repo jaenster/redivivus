@@ -641,7 +641,8 @@ int32_t __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit,
       }
     }
 
-    int iVar1 = SAVE_SerializeInventoryItems(pGameStrc, pUnit, pUnit->pInventory, pBuffer, nBufSize, bParam1, bParam2, bParam3);
+    struct D2InventoryStrc* t2_c1 = pUnit->pInventory;
+    int iVar1 = SAVE_SerializeInventoryItems(pGameStrc, pUnit, t2_c1, pBuffer, nBufSize, bParam1, bParam2, bParam3);
     return iVar1;
 }
 

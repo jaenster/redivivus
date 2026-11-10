@@ -456,7 +456,8 @@ int32_t __fastcall GetPlayerTradeTickOrBusy(D2UnitStrc * pPlayer) {
         return 1;
       }
 
-      pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayer->pInventory);
+      struct D2InventoryStrc* t2_c1 = pPlayer->pInventory;
+      pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(t2_c1);
       if (pCursorItem_lcl) {
         return 1;
       }

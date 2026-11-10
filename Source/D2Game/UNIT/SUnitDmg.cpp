@@ -3570,7 +3570,7 @@ static void __stdcall SERVER_SEND_MercExperience(int32_t nExperience, D2UnitStrc
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_experience, nValue, 0);
     GAME::SCmd::NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUnitDmg.cpp", 0xfbd), pUnit2, 0xd, nMercGUID_00, nValue);
-    int32_t nLevel = nMercLevel;
+    int32_t nLevel;
     do {
       uint32_t nNewMercXp;
       nOwnerLevel = nLevel + 1;

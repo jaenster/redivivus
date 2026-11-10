@@ -817,11 +817,11 @@ void __fastcall AdjustRarities(D2ParsedTreasureClassStrc * pParsedTC, D2ParsedTr
     }
     if (nEntryIdx == pParsedTC->nEntriesCount - 1) {
       iVar1 = pParsedTC->nTotalWeightClassic;
+      nExpCumul = iVar1 - pParsedTCEntry->nCumulativeWeightClassic;
     } else {
       iVar1 = pParsedTC->pEntries[nEntryIdx + 1].nCumulativeWeightClassic;
+      nExpCumul = iVar1 - pParsedTCEntry->nCumulativeWeightClassic;
     }
-
-    nExpCumul = iVar1 - pParsedTCEntry->nCumulativeWeightClassic;
     if (nExpCumul == nRarity) {
       return;
     }

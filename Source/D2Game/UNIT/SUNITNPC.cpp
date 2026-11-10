@@ -439,7 +439,7 @@ void __fastcall SendMercForHireList(::SGAMEDATA * pGame, D2ClientStrc * pClient,
 int32_t __fastcall SUNITNPC_GetActCappedLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nLevel) {
     int aActLevels[5];
     int nNpcIndex;
-    int32_t nEffectiveLevel = nLevel;
+    int32_t nEffectiveLevel;
     if (pGame->nDifficulty) {
       return nEffectiveLevel;
     }
@@ -1116,6 +1116,7 @@ D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
       exit(-1);
     }
 
+    int t2_c5 = pHirelingTxt->seller;
     uint16_t nNameFirst = pHirelingTxt->nNameFirst;
     nMercActBase = (uint32_t)nNameFirst;
     if (!nClassIdOverride) {
@@ -1125,7 +1126,7 @@ D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
       nMercNameId = nNameFirst;
     }
 
-    D2GameNpcStrc* pSellerNpc = sunitproxy::GetGameNpcbyClassId(pGame, pHirelingTxt->seller, &nSellerNpcIdx);
+    D2GameNpcStrc* pSellerNpc = sunitproxy::GetGameNpcbyClassId(pGame, t2_c5, &nSellerNpcIdx);
     D2MercForHire* pDVar1 = pSellerNpc->pHirelingSlots;
     if (pDVar1 && !pDVar1[nMercNameId - nMercActBase].field5_0xc) {
       pDVar1[nMercNameId - nMercActBase].bActive = 1;

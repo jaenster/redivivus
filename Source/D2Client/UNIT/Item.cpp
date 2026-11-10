@@ -43,6 +43,7 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
       return;
     }
 
+    struct D2InventoryStrc* t2_c3 = pUnit->pInventory;
     uint32_t bIsGemOrRune = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_Gem);
     if (bIsGemOrRune) {
       if (pUnit->eUnitType != UNIT_ITEM) {
@@ -105,7 +106,7 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
     }
     if (pUnit->eUnitType == UNIT_PLAYER) {
       D2UnitStrc* pEquippedWeapon;
-      pEquippedWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
+      pEquippedWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(t2_c3);
       bDisabled = D2Common::Units::CanDualWield(pUnit);
       if (bDisabled) {
         bDualWieldActive = 1;
@@ -705,7 +706,8 @@ void __fastcall ITEM_SetAnimModeAndPlace(D2UnitStrc * pUnit, D2RoomStrc * pRoom,
 
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 1);
     D2Common::Stats::StatsEx::AllocStatListEx(pUnit, 0, nullptr, nullptr);
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, UNIT_ITEM, pUnit->nUnitGUID);
+    int t2_c3 = pUnit->nUnitGUID;
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0x40, 0, UNIT_ITEM, t2_c3);
     D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
     int32_t iVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
     if (!(iVar1 && !pUnit->pInventory)) {
@@ -2677,11 +2679,9 @@ static void __stdcall ITEM_HandleSwapContainerOldItem(uint8_t * pPacketData, D2U
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8a6);
       exit(-1);
     } else {
-      eInventoryPage eContainingPage;
       pItem = Player::UNITS_FindClientSideUnit(*(int32_t*)(pPacketData + 4), UNIT_ITEM);
-      eContainingPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
       pInventory = pPlayerUnit_lcl->pInventory;
-      nPageByte = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nPageByte + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eContainingPage);
+      nPageByte = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nPageByte + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem));
       if (!pInventory) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ab);
         exit(-1);
@@ -2706,7 +2706,7 @@ static void __stdcall ITEM_HandleSwapContainerOldItem(uint8_t * pPacketData, D2U
           }
 
           bIsBroken = GAME::Game::CLIENT_CheckExpansion();
-          nLine = D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, eContainingPage, bIsBroken);
+          nLine = D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem), bIsBroken);
           D2Common::INVENTORY::Inventory::UnusedDebug(".\\UNIT\\Item.cpp", 0x8b4, pInventory, (uint32_t)pUnitDataItemDetails->x, (uint32_t)pUnitDataItemDetails->y, (eInventoryPage)nLine, 1, nPageByte);
           UI::Inv::INV_ResetHoverAndContextState();
           bIsReload = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pUnitDataItemDetails->flags, ITEMFLAG_RELOAD);

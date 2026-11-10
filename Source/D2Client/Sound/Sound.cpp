@@ -84,11 +84,7 @@ void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp) {
 }
 
 float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2) {
-    if (fParam2 < fParam1) {
-      return fParam1;
-    }
-
-    return fParam2;
+    return fParam1 > fParam2 ? fParam1 : fParam2;
 }
 
 float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2) {

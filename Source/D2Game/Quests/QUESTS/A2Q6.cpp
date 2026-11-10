@@ -764,7 +764,8 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
       pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pDurielRoom->nTyraelObjectGUID);
       if (pUnit) {
         D2Common::Units::SetupUpdateFlag(pUnit, 1);
-        pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
+        int t2_c13 = pUnit->nClassId;
+        pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c13);
         GAME::Event::SetEvent(pQuestData->pGame, pUnit, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
       }
     }

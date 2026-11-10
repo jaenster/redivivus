@@ -43,14 +43,13 @@ void __stdcall SetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, e
     Fog::BitBuffer::SetBitAtOffset((char*)pBitBuffer->pBuffer, nQuestId * 0x10 + eQuestState);
 }
 
-bool __stdcall UnsetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, eD2QuestState eQuestState) {
+void __stdcall UnsetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, eD2QuestState eQuestState) {
     if (!pBitBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
       exit(-1);
     }
 
-    uint8_t bResult = Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, nQuestId * 0x10 + eQuestState);
-    return (bool)bResult;
+    Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, nQuestId * 0x10 + eQuestState);
 }
 
 void __stdcall UnsetQuestStepStates(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId) {

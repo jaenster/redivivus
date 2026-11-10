@@ -515,40 +515,42 @@ uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQues
         }
       }
     } else {
-      if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) == '\0') {
-        return '\x01';
-      }
-      if ((char)pDVar1->sQuestGUID.aPlayerGUID[1] != '\0') {
-        dwNowTick = GetTickCount();
-        if (pDVar1->sQuestGUID.aPlayerGUID[6] + 95000U < dwNowTick) {
-          *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
-          *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) = 0;
-          *(uint8_t*)(pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
-          if (pQuestData->pGame->bExpansion) {
+      if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) != '\0') {
+        if ((char)pDVar1->sQuestGUID.aPlayerGUID[1] != '\0') {
+          dwNowTick = GetTickCount();
+          if (pDVar1->sQuestGUID.aPlayerGUID[6] + 95000U < dwNowTick) {
+            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
+            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) = 0;
+            *(uint8_t*)(pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
+            if (pQuestData->pGame->bExpansion) {
+              return '\x01';
+            }
+
+            GAME::Server::LeaveServer(pGame, nullptr);
             return '\x01';
           }
-
-          GAME::Server::LeaveServer(pGame, nullptr);
-          return '\x01';
         }
-      }
 
-      dwNowTick = GetTickCount();
-      if (pDVar1->sQuestGUID.aPlayerGUID[6] + 90000U >= dwNowTick) {
         dwNowTick = GetTickCount();
-        if (pDVar1->sQuestGUID.aPlayerGUID[6] + 75000U < dwNowTick && *(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) == '\0') {
-          *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) = 1;
-          GAME::Server::SendSaveFileToClient(pGame);
-        }
+        if (pDVar1->sQuestGUID.aPlayerGUID[6] + 90000U < dwNowTick) {
+          if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) != '\0') {
+            if (!pQuestData->pGame->bExpansion) {
+              UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerEnterGame);
+            }
 
-        return '\0';
-      }
-      if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) != '\0') {
-        if (!pQuestData->pGame->bExpansion) {
-          UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerEnterGame);
-        }
+            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) = 0;
+          }
+        } else {
+          dwNowTick = GetTickCount();
+          if (pDVar1->sQuestGUID.aPlayerGUID[6] + 75000U < dwNowTick && *(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) == '\0') {
+            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) = 1;
+            GAME::Server::SendSaveFileToClient(pGame);
+          }
 
-        *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) = 0;
+          return '\0';
+        }
+      } else {
+        return '\x01';
       }
     }
 

@@ -2797,7 +2797,8 @@ static void __stdcall INV_FormatRunewordName(uint16_t * wszText, D2UnitStrc * pI
 
       bIsRune = D2Common::ITEMS::Items::ITEMS_IsA(pCarriedItem, ITEMTYPE_Rune);
       if (bIsRune) {
-        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pCarriedItem->nClassId);
+        int t2_c1 = pCarriedItem->nClassId;
+        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(t2_c1);
         if (pItemsTxt->dwGemOffset > 0) {
           pGemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Gems_GetLine(pItemsTxt->dwGemOffset);
           if (pGemsTxt) {

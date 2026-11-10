@@ -1338,7 +1338,8 @@ BOOL __fastcall ROSTER_HasIncomingHostile(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
       uint32_t bHostile;
-      bHostile = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, pPlayerUnit_lcl->nUnitGUID, 8);
+      int t2_c0 = pPlayerUnit_lcl->nUnitGUID;
+      bHostile = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, t2_c0, 8);
       if (bHostile) {
         return 1;
       }
@@ -1351,7 +1352,8 @@ BOOL __fastcall ROSTER_HasOutgoingHostile(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
       uint32_t bHostile;
-      bHostile = UNIT::PlayerList::GetFlag(pPlayerUnit_lcl->nUnitGUID, pRoster->nRosterGUID, 8);
+      int t2_c0 = pPlayerUnit_lcl->nUnitGUID;
+      bHostile = UNIT::PlayerList::GetFlag(t2_c0, pRoster->nRosterGUID, 8);
       if (bHostile) {
         return 1;
       }
@@ -1364,7 +1366,8 @@ BOOL __fastcall ROSTER_HasIncomingLoot(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
       uint32_t bHasLoot;
-      bHasLoot = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, pPlayerUnit_lcl->nUnitGUID, 1);
+      int t2_c0 = pPlayerUnit_lcl->nUnitGUID;
+      bHasLoot = UNIT::PlayerList::GetFlag(pRoster->nRosterGUID, t2_c0, 1);
       if (bHasLoot) {
         return 1;
       }
@@ -1377,7 +1380,8 @@ BOOL __fastcall ROSTER_HasOutgoingLoot(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
       uint32_t bHasLoot;
-      bHasLoot = UNIT::PlayerList::GetFlag(pPlayerUnit_lcl->nUnitGUID, pRoster->nRosterGUID, 1);
+      int t2_c0 = pPlayerUnit_lcl->nUnitGUID;
+      bHasLoot = UNIT::PlayerList::GetFlag(t2_c0, pRoster->nRosterGUID, 1);
       if (bHasLoot) {
         return 1;
       }

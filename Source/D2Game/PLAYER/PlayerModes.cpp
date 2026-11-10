@@ -334,11 +334,13 @@ void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, D2UnitStrc *
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16e);
       exit(-1);
     }
+
+    D2PathUnion t2_c3 = pUnit->pPath;
     if (!(nModeIndex != 0x13 || pUnit->eAnimMode.ePlayerMode != KnockBack)) {
       return;
     }
 
-    D2Common::PATH::DynamicPath::SetTarget(pUnit->pPath.pDynamicPath, pTargetUnit);
+    D2Common::PATH::DynamicPath::SetTarget(t2_c3.pDynamicPath, pTargetUnit);
     PLRMODES_StartPathAndChangeMode(pGame, nModeIndex, pUnit);
 }
 

@@ -1744,24 +1744,23 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
     return pLastSpawnedUnit;
 }
 
-D2UnitStrc * __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     POINT ptUnitPos;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
     D2SeedStrc DVar1 = D2_SEED_NEXT(*pCtrlSeed);
-    D2UnitStrc* pSpawnedUnit = (D2UnitStrc*)((uint64_t)DVar1.nSeedLow * 0x51eb851f);
     *pCtrlSeed = DVar1;
-    if (DVar1.nSeedLow % 100 > 0x46) {
-      D2Common::Units::GetCoords(pUnit, &ptUnitPos);
-      if (!pRoom) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79a);
-        exit(-1);
-      }
-
-      pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x67, ptUnitPos.x, ptUnitPos.y, pGame, pRoom, 1, 0, 0);
+    if (!(DVar1.nSeedLow % 100 > 0x46)) {
+      return;
     }
 
-    return pSpawnedUnit;
+    D2Common::Units::GetCoords(pUnit, &ptUnitPos);
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79a);
+      exit(-1);
+    }
+
+    UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x67, ptUnitPos.x, ptUnitPos.y, pGame, pRoom, 1, 0, 0);
 }
 
 // DRLG room object-population spawner (object placement function variant 7). Uses the per-game object-control seed (GetObjectControlSeed) so spawns are deterministic. Rolls nChancePercent to decide whether to spawn at all; if so, picks a random spawn-offset group, reads the target object's SizeX/SizeY from ObjectsTxt, and tries up to 8 random positions within the room rectangle (DRLGROOM_GetRoomCoordinates) checking ROOM_CheckSpawnCollision. On a clear position it iterates the chosen offset table and, per slot, creates a UNIT_OBJECT (random class 0x39/0x3a) via CreateUnit and seeds a bonus chest (OBJECT_SpawnBonusChest). Halts (ERROR) on null room. Side-effecting; no return.

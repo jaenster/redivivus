@@ -1635,8 +1635,8 @@ uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uin
 }
 
 void __fastcall NET_SID_CLIENT_SetCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex, uint8_t nNibbleValue) {
-    int nWordIndex = 3 - (nNibbleIndex >> 3);
     int32_t nBitShift = (nNibbleIndex & 7) * 4;
+    int nWordIndex = 3 - (nNibbleIndex >> 3);
     pCdKeyData[nWordIndex] = ~(0xf << nBitShift) & pCdKeyData[nWordIndex] | (nNibbleValue & 0xf) << nBitShift;
 }
 

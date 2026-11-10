@@ -188,7 +188,7 @@ uint32_t __stdcall FIELDTBLS_StepFieldTowardsPoint(POINT * pPoint, int * pX, int
       exit(-1);
     }
 
-    uint8_t bFieldValue = gpFieldDataTable[gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX];
+    int bFieldValue = gpFieldDataTable[gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX];
     *pX = gaFieldStepDeltaX[bFieldValue] + *pX;
     *pY += gaFieldStepDeltaY[bFieldValue];
     return (uint32_t)(gpFieldDataTable[gnFieldTableHalfWidth + ((*pY - pPoint->y + gnFieldTableHalfHeight) * 0x100 - pPoint->x) + *pX] != '\b');

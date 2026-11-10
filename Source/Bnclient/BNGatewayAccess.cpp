@@ -19,7 +19,7 @@ int32_t __thiscall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess) {
     /* LPTIME_ZONE_INFORMATION lpTimeZoneInformation for GetTimeZoneInformation */ GetTimeZoneInformation(&tziInfo);
     LANGID langId = GetUserDefaultLangID();
     if ((langId & 0x3ff) != 9 || (nTimeZoneBias = 0x1e0 , (langId & 0xfc00) != 0xc00)) {
-      nTimeZoneBias = tziInfo.Bias;
+      return tziInfo.Bias;
     }
 
     return nTimeZoneBias;

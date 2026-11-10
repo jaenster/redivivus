@@ -1816,7 +1816,10 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
     D2RoomStrc* pSpawnRoom;
     D2UnitStrc* pPortal;
     POINT ptSpawnPos;
-    if (pRoom) {
+    if (!pRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe42);
+      exit(-1);
+    } else {
       {
         LONG nPosX;
         if (ppPortal) {
@@ -1844,8 +1847,8 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
           return 0;
         }
 
-        nPosY = ptSpawnPos.y;
         nPosX = ptSpawnPos.x;
+        nPosY = ptSpawnPos.y;
         pSpawnRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, ptSpawnPos.x, ptSpawnPos.y);
         if (!pSpawnRoom) {
           return 0;
@@ -1870,9 +1873,6 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
         return 1;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe42);
-    exit(-1);
 }
 
 // Resolves the skill aim position into tile coordinates written to *pnOutX/*pnOutY. If the unit has a locked target, reads its static or dynamic path position. If no target, falls back to the unit's own SP1 (cursor/destination) position. Returns 1 if both coordinates are nonzero, 0 otherwise.

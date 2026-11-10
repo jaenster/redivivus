@@ -156,34 +156,34 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
       nCharIndex++;
     }
 
-    if (!pCharSel) {
-      return 0;
-    }
-
-    char* pbCommandAnsi = pCharSel->szCommandStringTable;
-    gbCharSelectInProgress = 1;
-    if (!pbCommandAnsi || !*(short int*)pbCommandAnsi) {
-      pbCommandAnsi = "";
-    } else {
-      BOOL BVar1;
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aszCommandAnsi, (uint16_t*)pbCommandAnsi, 0xff);
-      BVar1 = MainMenus::MAINMENU_DeleteCharacterOnRealm(pCharSel, aszCommandAnsi);
-      if (!BVar1) {
-        pwszErrorMsg = D2Lang::StrTable::strtable::GetLocaleString(0x145b);
-        MainMenus::MAINMENU_ShowPopupWithCancel(pwszErrorMsg, CharSel::UIMENU_CharacterSelectAllGameTypes);
-        gbCharSelectInProgress = 0;
-        return 1;
+    if (pCharSel) {
+      char* pbCommandAnsi = pCharSel->szCommandStringTable;
+      gbCharSelectInProgress = 1;
+      if (!pbCommandAnsi || !*(short int*)pbCommandAnsi) {
+        pbCommandAnsi = "";
+      } else {
+        BOOL BVar1;
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte((char*)aszCommandAnsi, (uint16_t*)pbCommandAnsi, 0xff);
+        BVar1 = MainMenus::MAINMENU_DeleteCharacterOnRealm(pCharSel, aszCommandAnsi);
+        if (BVar1) {
+          gnCharSelCreateNewButtonClickCount++;
+          gnCharSelLoadedCharCount = 0;
+          pbCommandAnsi = (char*)aszCommandAnsi;
+        } else {
+          pwszErrorMsg = D2Lang::StrTable::strtable::GetLocaleString(0x145b);
+          MainMenus::MAINMENU_ShowPopupWithCancel(pwszErrorMsg, CharSel::UIMENU_CharacterSelectAllGameTypes);
+          gbCharSelectInProgress = 0;
+          return 1;
+        }
       }
 
-      gnCharSelCreateNewButtonClickCount++;
-      gnCharSelLoadedCharCount = 0;
-      pbCommandAnsi = (char*)aszCommandAnsi;
+      LAUNCHER_DeleteCharacterFiles(pCharSel, pbCommandAnsi);
+      CharSel::UIMENU_CharacterSelectAllGameTypes();
+      gbCharSelectInProgress = 0;
+      return 1;
+    } else {
+      return 0;
     }
-
-    LAUNCHER_DeleteCharacterFiles(pCharSel, pbCommandAnsi);
-    CharSel::UIMENU_CharacterSelectAllGameTypes();
-    gbCharSelectInProgress = 0;
-    return 1;
 }
 
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {

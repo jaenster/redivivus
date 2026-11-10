@@ -1141,14 +1141,12 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
     int nPetId;
     int nPetMaxByType[256];
     D2SkillStrc* pNextSkillIter;
-    char nPetTypeIdx;
     D2UnitStrc* pUnitOwner;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
 
     ::SGAMEDATA* pGameSaved = pGame;
-    D2UnitStrc* pUnitSaved = pUnit;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!(pPlayerData && pPlayerData->pPets)) {
       return;
@@ -1171,21 +1169,20 @@ void __fastcall PETS_RecalculateAllPetLimits(::SGAMEDATA * pGame, D2UnitStrc * p
       pCurSkillIter = pNextSkillIter;
       if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pTxtSkill = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-        pUnit = pUnitSaved;
+        pUnit = pUnit;
         if (pTxtSkill && pTxtSkill->pettype > '\0' && (int)pTxtSkill->pettype < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
-          nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnitSaved, pTxtSkill->petmax, eSkill, nSkillLvl);
-          pUnitOwner = pUnitSaved;
+          nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pTxtSkill->petmax, eSkill, nSkillLvl);
+          pUnitOwner = pUnit;
           if (nSkillCalc < 1) {
             nSkillCalc = 1;
           }
 
-          pUnit = pUnitSaved;
+          pUnit = pUnit;
           pCurSkillIter = pNextSkillIter;
           if (nSkillCalc > nPetMaxByType[pTxtSkill->pettype]) {
-            nPetTypeIdx = pTxtSkill->pettype;
-            nPetMaxByType[nPetTypeIdx] = nSkillCalc;
-            PETS_SetMaxAndTrimExcess(pGameSaved, pUnitOwner, (int)nPetTypeIdx, nSkillCalc);
-            pUnit = pUnitSaved;
+            nPetMaxByType[pTxtSkill->pettype] = nSkillCalc;
+            PETS_SetMaxAndTrimExcess(pGameSaved, pUnitOwner, (int)pTxtSkill->pettype, nSkillCalc);
+            pUnit = pUnit;
             pCurSkillIter = pNextSkillIter;
           }
         }

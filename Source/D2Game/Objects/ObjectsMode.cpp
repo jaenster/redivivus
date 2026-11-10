@@ -935,7 +935,8 @@ BOOL __fastcall OBJOP_UseStairAlias(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictimUnit = pOperation->sArg.pVictim;
     if (pVictimUnit) {
       eCollisionFlags eCollision;
-      eCollision = pVictimUnit->eAnimMode.eMissileCollision;
+      uD2UnitMode t2_c3 = pVictimUnit->eAnimMode;
+      eCollision = t2_c3.eMissileCollision;
       if (eCollision != COLLIDE_NONE && eCollision == COLLIDE_BLOCK_MISSILE) {
         bWaygateResult = OBJOP_UseWaygate(pOperation);
         return bWaygateResult;
@@ -1127,9 +1128,10 @@ static void __stdcall OBJMODE_DispatchOperateCallback(D2ObjectOperateFnArg * pOp
       }
     }
 
+    struct D2UnitStrc* t2_c1 = pOperation->sArg.pVictim;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 4, pGame->dwGameFrame + 0x23, 0, 0);
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->sArg.pVictim, UNITEVENTCALLBACK_REFRESHVENDOR, nullptr);
+    GAME::Event::SetEvent(pGame, t2_c1, 4, pGame->dwGameFrame + 0x23, 0, 0);
+    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(t2_c1, UNITEVENTCALLBACK_REFRESHVENDOR, nullptr);
 }
 
 static BOOL OBJMODE_CheckInventoryHasItemType(eD2ItemTypes eItemType, D2UnitStrc * pUnit) {
@@ -2505,10 +2507,12 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     if (!pObject) {
       return nullptr;
     }
+
+    int t2_c1 = pObject->nClassId;
     if (pUnit) {
       D2ObjectsTxt* pTxtObjects;
       if (pUnit->eUnitType == UNIT_MONSTER) {
-        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pObject->nClassId);
+        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c1);
         if (!pTxtObjects->MonsterOK) {
           return (::SGAMEDATA*)0x1;
         }

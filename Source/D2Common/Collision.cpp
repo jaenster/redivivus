@@ -39,7 +39,6 @@ namespace D2Common::Collision {
 
 D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     uint32_t nRoomIdx;
-    D2RoomStrc* pTestRoom;
     if (!pRoom) {
       return nullptr;
     }
@@ -54,9 +53,8 @@ D2RoomStrc * __fastcall DRLGROOM_FindBetterNearbyRoom(D2RoomStrc * pRoom, int32_
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, (int*)&nRoomCount);
     for (nRoomIdx = 0; nRoomIdx < nRoomCount; nRoomIdx++) {
       if (ppRoomList[nRoomIdx]) {
-        pTestRoom = ppRoomList[nRoomIdx];
-        if (nX >= pTestRoom->sCoords.dwXStart && nX < pTestRoom->sCoords.dwXSize + pTestRoom->sCoords.dwXStart && nY >= pTestRoom->sCoords.dwYStart && nY < pTestRoom->sCoords.dwYSize + pTestRoom->sCoords.dwYStart) {
-          return pTestRoom;
+        if (nX >= ppRoomList[nRoomIdx]->sCoords.dwXStart && nX < ppRoomList[nRoomIdx]->sCoords.dwXSize + ppRoomList[nRoomIdx]->sCoords.dwXStart && nY >= ppRoomList[nRoomIdx]->sCoords.dwYStart && nY < ppRoomList[nRoomIdx]->sCoords.dwYSize + ppRoomList[nRoomIdx]->sCoords.dwYStart) {
+          return ppRoomList[nRoomIdx];
         }
       }
     }

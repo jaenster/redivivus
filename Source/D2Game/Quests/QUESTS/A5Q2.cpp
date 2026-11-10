@@ -371,7 +371,8 @@ void __fastcall Q32_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
     /* SetQuestState(RewardAwaits=1): party member may now claim reward from
                          Qual-Kehk */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_RewardAwaits);
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
-    int nSurvivalTier = pQuestData->pQuestSpecificData.pA5Q2->nPrisonersFreed;
+    D2QuestSpecificDataUnion t2_c3 = pQuestData->pQuestSpecificData;
+    int nSurvivalTier = t2_c3.pA5Q2->nPrisonersFreed;
     if (nSurvivalTier == 0xf) {
       /* SetQuestState(Step0x05): top survival tier (field_0xAC==0xf) -> best reward
                          tier */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_RescueOnMountArreat, QUESTSTATE_Step0x05);

@@ -472,7 +472,8 @@ void __fastcall MISSILES_SetDamageByElementType(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    eD2ElementalDamageType byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(pMissile->nClassId);
+    int t2_c0 = pMissile->nClassId;
+    eD2ElementalDamageType byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(t2_c0);
     switch (byElemType) {
       case ELEMENTAL_COLD:
         pDamageStruct->dwColdLength = nDuration;
@@ -2886,7 +2887,7 @@ int32_t __fastcall Missiles_SrvHitFunc_AlwaysPierce(::SGAMEDATA * pGame, D2UnitS
 }
 
 void __fastcall MISSILES_SetPathFromTotalFramesCallback(D2UnitStrc * pMissile, intptr_t nParam) {
-    uint8_t nDistance;
+    int nDistance;
     if (!pMissile) {
       return;
     }
@@ -2896,7 +2897,7 @@ void __fastcall MISSILES_SetPathFromTotalFramesCallback(D2UnitStrc * pMissile, i
       nDistance = 0xff;
     } else {
       nTotalFrames = D2Common::Units::Missile::GetTotalFrames(pMissile);
-      nDistance = (uint8_t)nTotalFrames;
+      nDistance = nTotalFrames;
     }
 
     D2DynamicPathStrc* pDynamicPath = pMissile->pPath.pDynamicPath;
@@ -6427,34 +6428,36 @@ int __fastcall MISSILESMODE_SrvDoFn19_RadamentDeath(::SGAMEDATA * pGame, D2UnitS
         nPosX = 0;
         pfnRedemptionHitFn = MISSMODE_RedemptionHitNoMana;
       }
+
+      SKILLS::SkillsServer::SKILLS_SetupBaalWaveParams(pGame, 0x3002, nPosX, nCurrentFrame, pUnit, SKILL_Redemption, 1, pfnRedemptionHitFn);
     } else {
-      if (nCurrentFrame != 1) {
+      if (nCurrentFrame == 1) {
+        eUnitType = pUnit->eUnitType;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nCurrentFrame = pUnit->pPath.pStaticPath->nPosY;
+        } else if (pUnit->pPath.pDynamicPath) {
+          nCurrentFrame = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+        } else {
+          nCurrentFrame = 0;
+        }
+
+        eUnitType = pUnit->eUnitType;
+        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+          nPosX = pUnit->pPath.pStaticPath->nPosX;
+        } else if (pUnit->pPath.pDynamicPath) {
+          nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+        } else {
+          nPosX = 0;
+        }
+
+        pfnRedemptionHitFn = MISSMODE_RedemptionHitWithMana;
+        SKILLS::SkillsServer::SKILLS_SetupBaalWaveParams(pGame, 0x3002, nPosX, nCurrentFrame, pUnit, SKILL_Redemption, 1, pfnRedemptionHitFn);
+      } else {
         nResult = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
         return nResult;
       }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCurrentFrame = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nCurrentFrame = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nCurrentFrame = 0;
-      }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nPosX = 0;
-      }
-
-      pfnRedemptionHitFn = MISSMODE_RedemptionHitWithMana;
     }
 
-    SKILLS::SkillsServer::SKILLS_SetupBaalWaveParams(pGame, 0x3002, nPosX, nCurrentFrame, pUnit, SKILL_Redemption, 1, pfnRedemptionHitFn);
     nResult = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
     return nResult;
 }

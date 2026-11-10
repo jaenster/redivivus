@@ -399,8 +399,9 @@ static void ITEM_RollBaseArmorClass(D2UnitStrc * pUnit) {
       exit(-1);
     } else {
       uint32_t nValue;
+      int t2_c3 = pItemsTxt->dwMinAc;
       nMaxAc = pItemsTxt->dwMaxAc;
-      nValue = Seed::RollBetweenMinAndMax(&pUnit->sSeed, pItemsTxt->dwMinAc, nMaxAc - pItemsTxt->dwMinAc + 1);
+      nValue = Seed::RollBetweenMinAndMax(&pUnit->sSeed, t2_c3, nMaxAc - t2_c3 + 1);
       if (!(nValue <= nMaxAc)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ce);
         exit(-1);
@@ -462,14 +463,7 @@ uint32_t __fastcall ITEM_IsUniqueAlreadyDropped(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     uint32_t nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-    if (!pGame) {
-      return 0;
-    }
-    if (nFileIndex <= 0x1000) {
-      return pGame->fUniqueSpawn[(int)nFileIndex >> 5] & Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f];
-    }
-
-    return 1;
+    return !pGame ? 0 : nFileIndex <= 0x1000 ? pGame->fUniqueSpawn[(int)nFileIndex >> 5] & Fog::BitBuffer::gadwBitMasks[nFileIndex & 0x1f] : 1;
 }
 
 static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

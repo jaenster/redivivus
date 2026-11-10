@@ -265,13 +265,14 @@ void __fastcall Q03_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
     ::SGAMEDATA* pGame;
+    int t2_c2 = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     if (pQuestData->bIsNotIntroduction == '\0') {
       pQuestData->sStateFunctions.fpQuestStateHandler[3] = (QUESTCALLBACKFN)0x0;
       return;
     }
 
     D2BitBufferStrc* pBitBuffer;
-    if (!(pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1 && pQuestData->nStateFlag == 2)) {
+    if (!(t2_c2 == 1 && pQuestData->nStateFlag == 2)) {
       return;
     }
 
@@ -526,13 +527,12 @@ static BOOL Q03_CheckPartyHasMalus(D2UnitStrc * pUnitStrc, D2QuestDataStrc * pQu
     }
 
     D2QuestDataA1Q3Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q3;
-    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnitStrc);
-    if (nPartyId == 0xffff) {
+    if (UNIT::SUnit::GetPartyId(pUnitStrc) == 0xffff) {
       return 0;
     }
 
     pQuestSpecific->bPartyHasMalus = false;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, nullptr);
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, UNIT::SUnit::GetPartyId(pUnitStrc), (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, nullptr);
     return (uint32_t)pQuestSpecific->bPartyHasMalus;
 }
 

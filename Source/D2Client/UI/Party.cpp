@@ -292,10 +292,8 @@ static void __stdcall UI_DrawPartyMemberClass(int32_t nScreenY, int32_t nCharTyp
         return;
     }
 
-    int nY = nScreenY - Inv::gnPanelOffsetY;
     BOOL bMultiLineCenter = 0;
-    int nX = Inv::gnPanelOffsetX + 0x24;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), nX, nY, nColor, bMultiLineCenter);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), Inv::gnPanelOffsetX + 0x24, nScreenY - Inv::gnPanelOffsetY, nColor, bMultiLineCenter);
 }
 
 void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY, int32_t bHostileMode, uint16_t nPartyId) {

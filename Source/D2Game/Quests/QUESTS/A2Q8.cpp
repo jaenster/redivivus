@@ -42,8 +42,7 @@ void __fastcall Q16_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 void __fastcall Q16_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nTargetClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pSevenTombsData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pSevenTombsData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
     if (nTargetClassId != 0x17a) {
       return;
     }

@@ -2877,23 +2877,22 @@ int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStr
     int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
-    if (nIndexMax <= 0) {
-      return 1;
-    }
-
-    D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
-    do {
-      int nPrevId = ACT2_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
-      if (i != nPrevId) {
-        _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-        if (!_bNoOverlap) {
-          return 0;
+    int t2_c0 = ACT2_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
+    if (nIndexMax > 0) {
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      do {
+        int nPrevId = t2_c0;
+        if (i != nPrevId) {
+          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
+          if (!_bNoOverlap) {
+            return 0;
+          }
         }
-      }
 
-      i++;
-      pCoords++;
-    } while (i < nIndexMax);
+        i++;
+        pCoords++;
+      } while (i < nIndexMax);
+    }
 
     return 1;
 }
@@ -2902,23 +2901,22 @@ int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
     int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
-    if (nIndexMax <= 0) {
-      return 1;
-    }
-
-    D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
-    do {
-      int nPrevId = ACT2_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
-      if (i != nPrevId) {
-        _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-        if (!_bNoOverlap) {
-          return 0;
+    int t2_c0 = ACT2_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
+    if (nIndexMax > 0) {
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      do {
+        int nPrevId = t2_c0;
+        if (i != nPrevId) {
+          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
+          if (!_bNoOverlap) {
+            return 0;
+          }
         }
-      }
 
-      i++;
-      pCoords++;
-    } while (i < nIndexMax);
+        i++;
+        pCoords++;
+      } while (i < nIndexMax);
+    }
 
     return 1;
 }
@@ -2927,23 +2925,22 @@ int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStr
     int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
-    if (nIndexMax <= 0) {
-      return 1;
-    }
-
-    D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
-    do {
-      int nPrevId = ACT5_D2DrlgLevelData3.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
-      if (i != nPrevId) {
-        _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-        if (!_bNoOverlap) {
-          return 0;
+    int t2_c0 = ACT5_D2DrlgLevelData3.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
+    if (nIndexMax > 0) {
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      do {
+        int nPrevId = t2_c0;
+        if (i != nPrevId) {
+          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
+          if (!_bNoOverlap) {
+            return 0;
+          }
         }
-      }
 
-      i++;
-      pCoords++;
-    } while (i < nIndexMax);
+        i++;
+        pCoords++;
+      } while (i < nIndexMax);
+    }
 
     return 1;
 }
@@ -2952,23 +2949,22 @@ int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStr
     int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
-    if (nIndexMax <= 0) {
-      return 1;
-    }
-
-    D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
-    do {
-      int nPrevId = ACT4_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
-      if (i != nPrevId) {
-        _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-        if (!_bNoOverlap) {
-          return 0;
+    int t2_c0 = ACT4_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
+    if (nIndexMax > 0) {
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      do {
+        int nPrevId = t2_c0;
+        if (i != nPrevId) {
+          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
+          if (!_bNoOverlap) {
+            return 0;
+          }
         }
-      }
 
-      i++;
-      pCoords++;
-    } while (i < nIndexMax);
+        i++;
+        pCoords++;
+      } while (i < nIndexMax);
+    }
 
     return 1;
 }
@@ -2977,23 +2973,22 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
     int _bNoOverlap;
     bool bNoOverlap;
     int i = 0;
-    if (nIndexMax <= 0) {
-      return 1;
-    }
-
-    D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
-    do {
-      int nPrevId = ACT4_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
-      if (i != nPrevId) {
-        _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
-        if (!_bNoOverlap) {
-          return 0;
+    int t2_c0 = ACT4_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
+    if (nIndexMax > 0) {
+      D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
+      do {
+        int nPrevId = t2_c0;
+        if (i != nPrevId) {
+          _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
+          if (!_bNoOverlap) {
+            return 0;
+          }
         }
-      }
 
-      i++;
-      pCoords++;
-    } while (i < nIndexMax);
+        i++;
+        pCoords++;
+      } while (i < nIndexMax);
+    }
 
     return 1;
 }
