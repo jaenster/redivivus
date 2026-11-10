@@ -1,0 +1,91 @@
+name: oracle
+
+# The byte-for-byte audit (asm_matching/msvc8) on every push to main: per-function
+# MATCH/diff and classify.py's tags. Game.exe is never committed: it is fetched from
+# files.typeguru.nl and checked against the SHA-256 in evidence/toolchain.md. The two
+# expensive inputs are cached: the VC8 toolchain (~3 GB download, once) and the carve of
+# Game.exe into functions (refimage.py, ~20 min in pure Python, depends only on Game.exe
+# and the carving scripts). Only names, tags and counts are uploaded, nothing holding the
+# original's bytes.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: oracle-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  GAME_EXE_URL: https://files.typeguru.nl/diablo/diablo2/windows/lod/1.14d/Game.exe
+  GAME_EXE_SHA256: 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf
+  VC8_TOOLCHAIN: ${{ github.workspace }}/../vc8-toolchain
+  D2_GAME_EXE: ${{ github.workspace }}/../ref114d/Game.exe
+
+jobs:
+  audit:
+    name: VC8 byte-match audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tools (wine, archive tools)
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq wine wine32:i386 wine64 p7zip-full cabextract msitools faketime curl >/dev/null
+
+      - name: Fetch Game.exe 1.14d (not committed; checked by hash)
+        run: |
+          mkdir -p "$(dirname "$D2_GAME_EXE")"
+          curl -sfL --retry 3 "$GAME_EXE_URL" -o "$D2_GAME_EXE"
+          echo "$GAME_EXE_SHA256  $D2_GAME_EXE" | sha256sum -c -
+
+      - name: Restore the VC8 toolchain
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.VC8_TOOLCHAIN }}
+          key: vc8-toolchain-${{ hashFiles('asm_matching/msvc8/scripts/setup_toolchain.sh') }}
+
+      - name: Restore the carve of Game.exe
+        uses: actions/cache@v4
+        with:
+          path: asm_matching/msvc8/build/ref
+          key: refimage-${{ env.GAME_EXE_SHA256 }}-${{ hashFiles('asm_matching/msvc8/scripts/refimage.py', 'asm_matching/msvc8/scripts/funcdecode.py') }}
+
+      - name: Setup (skips what the caches hold)
+        run: asm_matching/msvc8/oracle setup
+
+      - name: Build, map and audit every function
+        run: asm_matching/msvc8/oracle all
+
+      - name: Classify every function that differs
+        run: python3 asm_matching/msvc8/scripts/classify.py --out classes.tsv | tee classify-summary.txt
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## VC8 audit"
+            echo '```'
+            head -12 asm_matching/msvc8/evidence/audit.tsv.summary 2>/dev/null || true
+            echo '```'
+            echo "## classify.py"
+            echo '```'
+            cat classify-summary.txt 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep names, tags and counts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oracle-audit
+          path: |
+            classes.tsv
+            classify-summary.txt
+            asm_matching/msvc8/evidence/*.summary
+            asm_matching/msvc8/evidence/permodule.tsv
+          if-no-files-found: warn
