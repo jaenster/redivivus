@@ -196,4 +196,5 @@ test {
     _ = datamatch;
     _ = classify;
     _ = permodule;
+    _ = permute;
 }
