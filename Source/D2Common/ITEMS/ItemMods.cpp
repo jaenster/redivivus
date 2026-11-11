@@ -394,7 +394,7 @@ static void __stdcall ITEMMOD_MaximizeStatForEnhanced(eD2UnitStat eEnhancedProp,
 
         nCurrentAC = Items::ITEM_GetTxtItemTypes_throwable(pUnit);
         if (nCurrentAC && pItemsTxt->nMaxMisDam) {
-          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, (uint32_t)(uint8_t)pItemsTxt->nMaxMisDam, 0);
+          Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, (uint32_t)pItemsTxt->nMaxMisDam, 0);
           return;
         }
       }
@@ -1773,21 +1773,17 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     static uint32_t gaGemRuneTypeIds[6] = { 0x0, 0x1, 0x2, 0x3, 0x9, 0x7 }; D2_STATIC_GUARD(gaGemRuneTypeIds, "D2Common::ITEMS::ItemMods::ITEMMOD_RollGemRuneType::gaGemRuneTypeIds");
     static uint32_t gaGemRuneTypeTable = 0x6; D2_STATIC_GUARD(gaGemRuneTypeTable, "D2Common::ITEMS::ItemMods::ITEMMOD_RollGemRuneType::gaGemRuneTypeTable");
 
-    D2SeedStrc seedAdvanced;
+    uint32_t seedAdvanced;
     uint32_t nTableSize = gaGemRuneTypeTable;
     D2SeedStrc* pSeed = Items::GetItemSeed(pUnit);
     if ((int)nTableSize <= 0) {
       nTableSize = 0;
     } else if (nTableSize & nTableSize - 1) {
-      seedAdvanced = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = seedAdvanced.nSeedHigh;
-      pSeed->nSeedLow = seedAdvanced.nSeedLow;
-      nTableSize = (uint32_t)(seedAdvanced.nSeedLow % nTableSize);
+      seedAdvanced = D2_SeedRoll(pSeed);
+      nTableSize = (uint32_t)(seedAdvanced % nTableSize);
     } else {
-      seedAdvanced = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = seedAdvanced.nSeedHigh;
-      pSeed->nSeedLow = seedAdvanced.nSeedLow;
-      nTableSize = nTableSize - 1 & seedAdvanced.nSeedLow;
+      seedAdvanced = D2_SeedRoll(pSeed);
+      nTableSize = nTableSize - 1 & seedAdvanced;
     }
 
     Items::ITEM_SetItemData_nFileIndex(pUnit, gaGemRuneTypeIds[nTableSize]);
@@ -1797,10 +1793,8 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     }
 
     pSeed = Items::GetItemSeed(pUnit);
-    seedAdvanced = D2_SEED_NEXT(*pSeed);
-    pSeed->nSeedHigh = seedAdvanced.nSeedHigh;
-    pSeed->nSeedLow = seedAdvanced.nSeedLow;
-    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, ((seedAdvanced.nSeedLow & 3) + 1) * 0x100, 0);
+    seedAdvanced = D2_SeedRoll(pSeed);
+    Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, ((seedAdvanced & 3) + 1) * 0x100, 0);
 }
 
 D2ItemsTxt * __fastcall Unreferenced_0065e9b0(D2UnitStrc * pUnit, D2UnitStrc * pFallback) {
@@ -2144,7 +2138,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, D2UnitStrc * pUni
 
           nStatIdSaved = Items::ITEM_GetTxtItemTypes_throwable(pItem);
           if (nStatIdSaved && pBaseTxtLine->nMaxMisDam) {
-            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_maxdamage, (uint32_t)(uint8_t)pBaseTxtLine->nMaxMisDam, 0);
+            Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_item_throw_maxdamage, (uint32_t)pBaseTxtLine->nMaxMisDam, 0);
           }
         }
       }

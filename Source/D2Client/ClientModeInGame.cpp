@@ -527,13 +527,14 @@ void Unreferenced_0044bb70() {
     D2Game::GAME::Server::QSERVER_InitializeServerState();
 }
 
-void __stdcall FreeQServer() {
+int __stdcall FreeQServer() {
     if (!gbQServerRunning) {
-      return;
+      return 0;
     }
 
     gbQServerRunning = 0;
-    D2Game::GAME::Server::FreeServer();
+    int uResult = D2Game::GAME::Server::FreeServer();
+    return uResult;
 }
 
 int __stdcall CLIENTMODE_InitializeCallback() {

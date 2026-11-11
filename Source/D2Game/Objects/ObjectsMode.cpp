@@ -201,7 +201,7 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2SeedStrc* pSeed;
     D2ObjectsTxt* pObjTxt;
     eCollisionFlags eCollFlags;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (!pUnit) {
       eCollFlags = COLLIDE_NONE;
     } else {
@@ -219,9 +219,8 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
               {
                 pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
                 pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-                sNewSeed = D2_SEED_NEXT(*pSeed);
-                *pSeed = sNewSeed;
-                GAME::Event::SetEvent(pGame, pUnit, 8, sNewSeed.nSeedLow % 0xfa + 0x19 + pGame->dwGameFrame, 0, 0);
+                sNewSeed = D2_SeedRoll(pSeed);
+                GAME::Event::SetEvent(pGame, pUnit, 8, sNewSeed % 0xfa + 0x19 + pGame->dwGameFrame, 0, 0);
                 D2Common::Units::SetupUpdateFlag(pUnit, 1);
                 pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit->nClassId);
                 GAME::Event::SetEvent(pGame, pUnit, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
@@ -417,9 +416,8 @@ void __fastcall OBJMODE_UpdateTrapObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     D2SeedStrc* pControlSeed = ObjectsRgn::GetObjectControlSeed(pGame, D2Common::Units::UNITS_GetRoom(pUnit));
     OBJMODE_TriggerProximityEffect(pGame, pUnit);
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    uint32_t uRandLow = seedNext.nSeedLow;
-    *pControlSeed = seedNext;
+    uint32_t seedNext = D2_SeedRoll(pControlSeed);
+    uint32_t uRandLow = seedNext;
     GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + uRandLow / 0x23 * -0x23 + 0xf + uRandLow, 0, 0);
 }
 
@@ -734,8 +732,17 @@ BOOL __fastcall OBJOP_ToggleDoor(D2ObjectOperateFnArg * pOperation) {
     }
 
     switch (eAnimMode) {
-      default:
+      case Special4:
+        nEquipCheckResult = ITEMS::ItemMode::ITEMMODE_CheckEquipRestrictions(pOperation->sArg.pGame, pOperation->pAttacker);
+      if (!nEquipCheckResult) {
+        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x16, pOperation->pAttacker);
         return 1;
+      }
+
+      case eD2ObjectAnimMode_ns::Neutral:
+        D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
+      nNewAnimMode = 2;
+      break;
       case Opened:
 
       case Special3:
@@ -758,16 +765,8 @@ BOOL __fastcall OBJOP_ToggleDoor(D2ObjectOperateFnArg * pOperation) {
       }
 
       break;
-      case Special4:
-        nEquipCheckResult = ITEMS::ItemMode::ITEMMODE_CheckEquipRestrictions(pOperation->sArg.pGame, pOperation->pAttacker);
-      if (!nEquipCheckResult) {
-        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x16, pOperation->pAttacker);
+      default:
         return 1;
-      }
-
-      case eD2ObjectAnimMode_ns::Neutral:
-        D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
-      nNewAnimMode = 2;
     }
 
     D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, nNewAnimMode);
@@ -1030,9 +1029,8 @@ void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2ObjectOperateFnArg sOperation;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     sOperation.pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    D2SeedStrc seedNext = D2_SEED_NEXT(*sOperation.pSeed);
-    *sOperation.pSeed = seedNext;
-    int nSpawnCount = (seedNext.nSeedLow & 1) + 1;
+    uint32_t seedNext = D2_SeedRoll(sOperation.pSeed);
+    int nSpawnCount = (seedNext & 1) + 1;
     sOperation.sArg.pVictim = pUnit;
     sOperation.sArg.pGame = pGame;
     int32_t nMonClassId = ObjectsRgn::OBJECT_HandleObjectMode(&sOperation.sArg);
@@ -1484,10 +1482,8 @@ void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2S
     }
 
     pGemItem = pArguments->pAttacker;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pGemItem->sSeed);
-    pGemItem->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-    pGemItem->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    switch (sNewSeed.nSeedLow % 6) {
+    uint32_t sNewSeed = D2_SeedRoll(&pGemItem->sSeed);
+    switch (sNewSeed % 6) {
       case 0:
         acItemCode = 0x20776367;
       break;
@@ -2265,7 +2261,7 @@ BOOL __fastcall OBJOP_DestroyDestructible(D2ObjectOperateFnArg * pOperation) {
 BOOL __fastcall OBJOP_SpawnQuestItemReward(D2ObjectOperateFnArg * pOperation) {
     POINT ptPos;
     int32_t nDropArg;
-    D2SeedStrc seedNext;
+    uint32_t seedNext;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2SeedStrc* pDVar1;
@@ -2277,23 +2273,18 @@ BOOL __fastcall OBJOP_SpawnQuestItemReward(D2ObjectOperateFnArg * pOperation) {
 
       D2Common::Units::GetCoords(pOperation->sArg.pVictim, &ptPos);
       pDVar1 = pOperation->pSeed;
-      seedNext = D2_SEED_NEXT(*pDVar1);
-      *pDVar1 = seedNext;
+      seedNext = D2_SeedRoll(pDVar1);
       pDVar1 = pOperation->pSeed;
-      if ((int)(seedNext.nSeedLow % 0x14) > 0xc) {
-        seedNext = D2_SEED_NEXT(*pDVar1);
-        pDVar1->nSeedHigh = seedNext.nSeedHigh;
-        pDVar1->nSeedLow = seedNext.nSeedLow;
-        if (seedNext.nSeedLow & 1) {
+      if ((int)(seedNext % 0x14) > 0xc) {
+        seedNext = D2_SeedRoll(pDVar1);
+        if (seedNext & 1) {
           pOperation->sArg.pVictim->dwDropItemCode = 0x206b6269;
         } else {
           pOperation->sArg.pVictim->dwDropItemCode = 0x206b6274;
         }
       } else {
-        seedNext = D2_SEED_NEXT(*pDVar1);
-        pDVar1->nSeedHigh = seedNext.nSeedHigh;
-        pDVar1->nSeedLow = seedNext.nSeedLow;
-        if (seedNext.nSeedLow & 1) {
+        seedNext = D2_SeedRoll(pDVar1);
+        if (seedNext & 1) {
           pOperation->sArg.pVictim->dwDropItemCode = 0x20637369;
         } else {
           pOperation->sArg.pVictim->dwDropItemCode = 0x20637374;
@@ -3278,9 +3269,8 @@ static uint32_t __stdcall OBJMODE_DispatchOperateFunction(::SGAMEDATA * pGame, u
       return 0;
     }
 
-    D2SeedStrc ullSeedRoll = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = ullSeedRoll;
-    if (ullSeedRoll.nSeedLow % 100 < gaObjectsModeFuncTable[nModeIdx].nSpriteThreshold) {
+    uint32_t ullSeedRoll = D2_SeedRoll(&pUnit->sSeed);
+    if (ullSeedRoll % 100 < gaObjectsModeFuncTable[nModeIdx].nSpriteThreshold) {
       BOOL bBadCode;
       /* FARPROC lpfn for IsBadCodePtr */ bBadCode = IsBadCodePtr((FARPROC)gaObjectsModeFuncTable[nModeIdx].pfnHandler);
       if (bBadCode) {
@@ -3888,7 +3878,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     eD2ItemTypes eDropTypeSpark;
     int nCount;
     D2ObjectsTxt* pTxtObjectsFinal;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     D2UnitStrc* pVictim;
     pVictim = pOperation->sArg.pVictim;
     if (pVictim && pVictim->eAnimMode.ePlayerMode != Death) {
@@ -3931,10 +3921,9 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     bVar2 = UNIT::SUnit::GetSparklyChestFlag(pOperation->sArg.pVictim);
     if (bVar2 & 1) {
       pDVar1 = pOperation->pSeed;
-      sNextSeed = D2_SEED_NEXT(*pDVar1);
-      *pDVar1 = sNextSeed;
+      sNextSeed = D2_SeedRoll(pDVar1);
       nGoldDropped = 1;
-      eDropTypeSpark = (uint32_t)((int)(sNextSeed.nSeedLow % 100) < 5) * 2 + ITEMTYPE_Gold;
+      eDropTypeSpark = (uint32_t)((int)(sNextSeed % 100) < 5) * 2 + ITEMTYPE_Gold;
     } else {
       eDropTypeSpark = ITEMTYPE_None1;
     }
@@ -3944,9 +3933,8 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     pVictim = pOperation->sArg.pVictim;
     if (!pVictim || pVictim->nClassId != 0x18d) {
       pDVar1 = pOperation->pSeed;
-      sNextSeed = D2_SEED_NEXT(*pDVar1);
-      *pDVar1 = sNextSeed;
-      if ((int)(sNextSeed.nSeedLow % 100) >= 0x19 || nGoldDropped || byNecroFlag) {
+      sNextSeed = D2_SeedRoll(pDVar1);
+      if ((int)(sNextSeed % 100) >= 0x19 || nGoldDropped || byNecroFlag) {
         nCount = 0;
         for (; (uint32_t)nDropCount > 0; nDropCount--) {
           pRolledItem = (D2UnitStrc*)RollChestDrops(pOperation, eDropType);
@@ -3983,10 +3971,9 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     eDropTypeSpark = ITEMTYPE_None1;
     nGoldDropped = 0;
     pDVar1 = pOperation->pSeed;
-    sNextSeed = D2_SEED_NEXT(*pDVar1);
-    *pDVar1 = sNextSeed;
+    sNextSeed = D2_SeedRoll(pDVar1);
     int nRoll;
-    nRoll = sNextSeed.nSeedLow % 10000;
+    nRoll = sNextSeed % 10000;
     if (nRoll < 200) {
       pVictim = (D2UnitStrc*)RollChestDrops(pOperation, ITEMTYPE_PlayerBodyPart);
       if (pVictim) {
@@ -4159,7 +4146,7 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pTxtObjects;
     int32_t nObjectHandleResult;
     D2SeedStrc* pSeed;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2UnitStrc* pDVar1 = pOperation->sArg.pVictim;
     if (!pDVar1 || pDVar1->eAnimMode.ePlayerMode == Death) {
       ::SGAMEDATA* pGame;
@@ -4177,9 +4164,8 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
         pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
         pSeed = pOperation->pSeed;
-        sNewSeed = D2_SEED_NEXT(*pSeed);
-        *pSeed = sNewSeed;
-        if (sNewSeed.nSeedLow % 10000 & -8192) {
+        sNewSeed = D2_SeedRoll(pSeed);
+        if (sNewSeed % 10000 & -8192) {
           nObjectHandleResult = ObjectsRgn::OBJECT_HandleObjectMode(&pOperation->sArg);
           OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nObjectHandleResult, &pOperation->sArg);
         }
@@ -4223,9 +4209,8 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
     D2SeedStrc* pSeedState = pOperation->pSeed;
-    D2SeedStrc seedNextAlt = D2_SEED_NEXT(*pSeedState);
-    *pSeedState = seedNextAlt;
-    if (seedNextAlt.nSeedLow % 0xff <= (uint32_t)pTxtObjects->Parm[7]) {
+    uint32_t seedNextAlt = D2_SeedRoll(pSeedState);
+    if (seedNextAlt % 0xff <= (uint32_t)pTxtObjects->Parm[7]) {
       D2MonsterRegionStrc* pMonsterRegion;
       pMonsterRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pOperation->sArg.pGame->pMonsterRegion, eLevel);
       nMonCount = pMonsterRegion->nCounter;
@@ -4255,9 +4240,8 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
 
 D2UnitStrc ** __fastcall OBJMODE_RollChestDrops(D2ObjectOperateFnArg * pOperateArg) {
     D2SeedStrc* pSeedPtr = pOperateArg->pSeed;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pSeedPtr);
-    *pSeedPtr = seedNext;
-    if (seedNext.nSeedLow % 100 <= 0x14) {
+    uint32_t seedNext = D2_SeedRoll(pSeedPtr);
+    if (seedNext % 100 <= 0x14) {
       D2UnitStrc** ppItems;
       ppItems = RollChestDrops(pOperateArg, ITEMTYPE_None1);
       return ppItems;
@@ -4270,7 +4254,7 @@ BOOL __fastcall OBJOP_OpenChestNoMonster(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom;
     D2ObjectsTxt* pTxtObjects;
     D2SeedStrc* pSeedPtr;
-    D2SeedStrc seedNext;
+    uint32_t seedNext;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       ::SGAMEDATA* pGame;
@@ -4286,9 +4270,8 @@ BOOL __fastcall OBJOP_OpenChestNoMonster(D2ObjectOperateFnArg * pOperation) {
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
       pSeedPtr = pOperation->pSeed;
-      seedNext = D2_SEED_NEXT(*pSeedPtr);
-      *pSeedPtr = seedNext;
-      if (seedNext.nSeedLow % 100 <= 0x14) {
+      seedNext = D2_SeedRoll(pSeedPtr);
+      if (seedNext % 100 <= 0x14) {
         RollChestDrops(pOperation, ITEMTYPE_None1);
       }
       if (!pTxtObjects->HasCollision[1]) {
@@ -4348,7 +4331,7 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
     D2ObjectsTxt* pTxtObjects;
     eD2UnitType eUnitType;
     int32_t nSkillParam;
-    D2SeedStrc newSeed;
+    uint32_t newSeed;
     D2SeedStrc* pSeedPtr;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
@@ -4381,17 +4364,15 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
 
       D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
       pSeedPtr = pOperation->pSeed;
-      newSeed = D2_SEED_NEXT(*pSeedPtr);
-      *pSeedPtr = newSeed;
-      if (newSeed.nSeedLow % 10000 & -8192) {
+      newSeed = D2_SeedRoll(pSeedPtr);
+      if (newSeed % 10000 & -8192) {
         nObjectMode = ObjectsRgn::OBJECT_HandleObjectMode(&pOperation->sArg);
         OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nObjectMode, &pOperation->sArg);
       }
 
       pSeedPtr = pOperation->pSeed;
-      newSeed = D2_SEED_NEXT(*pSeedPtr);
-      *pSeedPtr = newSeed;
-      if (newSeed.nSeedLow % 100 <= 0x14) {
+      newSeed = D2_SeedRoll(pSeedPtr);
+      if (newSeed % 100 <= 0x14) {
         RollChestDrops(pOperation, ITEMTYPE_None1);
       }
 
@@ -4424,9 +4405,8 @@ BOOL __fastcall OBJOP_OpenUnlockedChest(D2ObjectOperateFnArg * pOperation) {
     open_chest:
     pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     D2SeedStrc* pSeedPtr = pOperation->pSeed;
-    D2SeedStrc newSeed = D2_SEED_NEXT(*pSeedPtr);
-    *pSeedPtr = newSeed;
-    if ((int)(newSeed.nSeedLow % 100) < 0x5a) {
+    uint32_t newSeed = D2_SeedRoll(pSeedPtr);
+    if ((int)(newSeed % 100) < 0x5a) {
       D2UnitStrc** pDroppedItem;
       pDroppedItem = RollChestDrops(pOperation, ITEMTYPE_None1);
       if (pDroppedItem) {

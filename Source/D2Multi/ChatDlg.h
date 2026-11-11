@@ -186,16 +186,15 @@ void CHATDLG_FreeChatMsgNode(void * * pChatNode);
 struct D2ChatDlgUnknown_0x10 * Unreferenced_0043e370();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();
-void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage);
+int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage);
 // @sourcefile .\Src\ChatDlg.cpp
-void __stdcall CHATDLG_EnqueueClearMessage();
+int __stdcall CHATDLG_EnqueueClearMessage();
 int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle);
 uint32_t __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle);
 int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText);
 // Shows gpCtlChannelOkButton only while gpCtlChannelNameEditBox holds a non-empty name: D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, name non-empty). Run by that edit box's change callback and once at the end of OOGUTIL_OpenChannelDialog.
 // Provenance: asm 0043e660..0043e6b6; change callback installed at 00441097, tail jump at 004411d7.
 void __stdcall CHATDLG_UpdateChannelOkButtonState();
-BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen, char * szText);
 BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText);
 void __stdcall FORMS_DestroyListEx();
 void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, uint16_t * wszSubTitle);
@@ -316,9 +315,10 @@ int __fastcall CHATDLG_RunChatLobbyScreen(struct D2IniConfigStrc * pD2IniConfig)
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(struct D2ControlMsg * pControlMsg);
 void __fastcall OOGUTIL_HandleChatCommands(char * szText);
+int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix);
 void StaticInit_6ca960();
 void StaticInit_gbChatLobbyInitialize();
 #endif // D2_MODULE_D2Multi
-// 13 internal functions (defined in .cpp)
+// 14 internal functions (defined in .cpp)
 
 } // namespace D2Multi::ChatDlg

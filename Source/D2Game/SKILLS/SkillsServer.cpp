@@ -417,6 +417,8 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       }
 
       break;
+      default:
+        return 0;
       case UNIT_MONSTER:
         if (!(nTargetFlags & 2)) {
           return 0;
@@ -482,8 +484,6 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
           return 0;
         }
       break;
-      default:
-        return 0;
     }
 
     if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
@@ -1448,10 +1448,9 @@ void __fastcall SERVER_AppendDamageToUnitEvent(D2UnitStrc * pUnit, D2DamageStrc 
     static int geSkillETypeTable[4] = { 0x1, 0x2, 0x4, 0x5 }; D2_STATIC_GUARD(geSkillETypeTable, "D2Game::SKILLS::SkillsServer::SERVER_AppendDamageToUnitEvent::geSkillETypeTable");
 
     if (eSkillType == unkwn5) {
-      D2SeedStrc sRolledSeed;
-      sRolledSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sRolledSeed;
-      eSkillType = geSkillETypeTable[sRolledSeed.nSeedLow & 3];
+      uint32_t sRolledSeed;
+      sRolledSeed = D2_SeedRoll(&pUnit->sSeed);
+      eSkillType = geSkillETypeTable[sRolledSeed & 3];
       if (nDuration <= 0) {
         nDuration = 0x32;
       }
@@ -3761,6 +3760,8 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
           bHasLOS = SKILLS_GetTargetOrCursorPos(pGameCtx, pUnit, &nTargetX, &nTargetY);
           if (bHasLOS) {
             switch (pSkillsTxt->lineofsight) {
+              default:
+                return 0;
               case '\x01':
                 eCollisionFlag = 4;
               break;
@@ -3776,8 +3777,6 @@ BOOL __fastcall SKILLS_SrvStartSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
               case '\x05':
                 eCollisionFlag = 0x805;
               break;
-              default:
-                return 0;
             }
 
             bHasMana = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nTargetX, nTargetY, pUnit, eCollisionFlag);

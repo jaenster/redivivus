@@ -505,519 +505,475 @@ BOOL __stdcall INV_IsPlayerInventoryMode() {
 
 void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates * pGridCoords, int32_t nBaseX, int32_t nBaseY) {
     // Static local variables (originally global data)
-    static D2SocketOffsetStrc gaSocketOffsets[288] = {
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x4
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x1
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x2
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x4
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x4
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x5
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x1
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x4
-    },
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x6
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x5
-    },
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x6
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x5
-    },
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x6
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x7
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x1
-    },
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x2
-    },
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x7
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x1
-    },
-    {},
-    {
-        /* .nX = */ 0x2,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x6
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x6
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x2
-    },
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {},
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x1
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x3
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x5
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x1,
-        /* .nY = */ 0x6
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x2
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x4
-    },
-    {
-        /* .nX = */ 0x3,
-        /* .nY = */ 0x6
+    static D2SocketOffsetStrc gaSocketOffsets[48][6] = {
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x4
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x1
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x2
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x4
+        },
+        {},
+        {},
+        {},
+        {},
+        {}
+    },
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x4
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x5
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x1
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x4
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x6
+        },
+        {},
+        {},
+        {},
+        {}
+    },
+    {},
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x5
+        },
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x6
+        },
+        {},
+        {},
+        {}
+    },
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x5
+        },
+        {},
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x6
+        },
+        {},
+        {},
+        {}
+    },
+    {},
+    {},
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x5
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x7
+        },
+        {},
+        {}
+    },
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x1
+        },
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x2
+        },
+        {},
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x5
+        },
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x7
+        },
+        {},
+        {}
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x5
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x5
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x1
+        },
+        {}
+    },
+    {
+        {
+            /* .nX = */ 0x2,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x6
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x6
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x2
+        },
+        {}
+    },
+    {},
+    {},
+    {},
+    {},
+    {},
+    {},
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x5
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x1
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x3
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x5
+        }
+    },
+    {
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x1,
+            /* .nY = */ 0x6
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x2
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x4
+        },
+        {
+            /* .nX = */ 0x3,
+            /* .nY = */ 0x6
+        }
     }
 }; D2_STATIC_GUARD(gaSocketOffsets, "D2Client::UI::Inv::INV_DrawSocketedItems::gaSocketOffsets");
 
@@ -1034,7 +990,7 @@ void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates
     D2UnitStrc* pSocketedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
     D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)&nItemWidth, (char*)&nItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
     uint32_t nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
-    int nSocketLayout = nItemHeight - 0xd + ((uint32_t)nItemWidth + (uint32_t)(uint8_t)nSocketCount * 2) * 4;
+    int iVar1 = nItemHeight - 0xd + ((uint32_t)nItemWidth + (uint32_t)(uint8_t)nSocketCount * 2) * 4;
     uint32_t nSocketIndex = 0;
     int32_t nSocketCountSigned = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
     if ((uint8_t)(char)nSocketCountSigned <= '\0') {
@@ -1043,8 +999,8 @@ void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates
 
     do {
       int nPositionY;
-      nPositionX = (int)((gaSocketOffsets[nSocketLayout * 6 + nSocketIndex].nX - 1) * (uint32_t)pGridCoords->nCellWidth) / 2 + nBaseX;
-      nPositionY = (int)((*(int*)(nSocketLayout * 0x30 + (char*)((char*)&gaSocketOffsets + 4) + nSocketIndex * 8) + 1) * (uint32_t)pGridCoords->nCellHeight) / 2 + nBaseY;
+      nPositionX = (int)((gaSocketOffsets[iVar1][nSocketIndex].nX - 1) * (uint32_t)pGridCoords->nCellWidth) / 2 + nBaseX;
+      nPositionY = (int)((*(int*)(iVar1 * 0x30 + (char*)((char*)&gaSocketOffsets + 4) + nSocketIndex * 8) + 1) * (uint32_t)pGridCoords->nCellHeight) / 2 + nBaseY;
       memset(&sGfxData, 0, 0x48);
       sGfxData.pDC6 = Panel::GemSocket;
       sGfxData.nDirection = 0;
@@ -1860,7 +1816,7 @@ static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqA
     wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    int nReqStr = (uint32_t)(uint16_t)pItemsTxt->nReqStr + nReqAdjust;
+    int nReqStr = (uint32_t)pItemsTxt->nReqStr + nReqAdjust;
     if (nReqStr <= 0) {
       *wszText = L'\0';
       return;
@@ -1891,7 +1847,7 @@ static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqA
     wszNumBuffer[9] = 0;
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    int nReqDex = (uint32_t)(uint16_t)pItemsTxt->wReqDex + nReqAdjust;
+    int nReqDex = (uint32_t)pItemsTxt->wReqDex + nReqAdjust;
     if (nReqDex <= 0) {
       *wszText = L'\0';
       return;
@@ -2245,7 +2201,7 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
 
     Storm::Source::SSTR::SStrPrintf(szNumBuffer, 0x20, "%d%%\n", nBlockChance);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszNumBuffer, szNumBuffer, 0x20);
-    if (nBlockChance > (int)(uint32_t)(uint8_t)pItemsTxt->bBlock) {
+    if (nBlockChance > (int)(uint32_t)pItemsTxt->bBlock) {
       ui::AppendAsWideChar(wszNumBuffer, 3);
     }
 
@@ -7856,8 +7812,8 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
       memset(&uSlot8, 0, sizeof(uSlot8));
       nAdjReqStr = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItemToDescribe, UNITSTAT_item_req_percent, 0);
       if (nAdjReqStr) {
-        nReqAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nAdjReqStr, 100);
-        uSlot8.nAdjReqDexValue = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nAdjReqStr, 100);
+        nReqAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)pItemsTxt->nReqStr, nAdjReqStr, 100);
+        uSlot8.nAdjReqDexValue = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)pItemsTxt->wReqDex, nAdjReqStr, 100);
       }
 
       bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_ETHEREAL, 0xd88, ".\\UI\\inv.cpp");
@@ -7866,14 +7822,14 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
         nReqAdjust += -10;
         uSlot8.nAdjReqDexValue += -10;
       }
-      if ((uint16_t)pItemsTxt->nReqStr > 0) {
+      if (pItemsTxt->nReqStr > 0) {
         if (!nAdjReqDex) {
           nReqStrColor = 1;
         }
 
         INV_FormatReqStrText(pItemsTxt, nReqAdjust, wszReqStr);
       }
-      if ((uint16_t)pItemsTxtCopy->wReqDex > 0) {
+      if (pItemsTxtCopy->wReqDex > 0) {
         if (!nReqDexFailColor) {
           nReqDexColor = 1;
         }
@@ -8496,8 +8452,8 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
         nTooltipFlag = 0;
         nTmpResult = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItemToDescribe, UNITSTAT_item_req_percent, 0);
         if (nTmpResult) {
-          nTooltipFlag = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->nReqStr, nTmpResult, 100);
-          nReqDexAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)(uint16_t)pItemsTxt->wReqDex, nTmpResult, 100);
+          nTooltipFlag = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)pItemsTxt->nReqStr, nTmpResult, 100);
+          nReqDexAdjust = D2Common::DATATBLS::DataTbls::D2ApplyPercent((uint32_t)pItemsTxt->wReqDex, nTmpResult, 100);
         }
 
         bFlagCheck = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_ETHEREAL, 0xffa, ".\\UI\\inv.cpp");
@@ -8505,14 +8461,14 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
           nTooltipFlag += -10;
           nReqDexAdjust += -10;
         }
-        if ((uint16_t)pItemsTxt->wReqDex > 0) {
+        if (pItemsTxt->wReqDex > 0) {
           if (!nReqDexMet) {
             nReqDexColor = 1;
           }
 
           INV_FormatReqDexText(pItemsTxt, nReqDexAdjust, wszReqDex);
         }
-        if ((uint16_t)pItemsTxt->nReqStr > 0) {
+        if (pItemsTxt->nReqStr > 0) {
           if (!nReqStrMet) {
             nReqStrColor = 1;
           }

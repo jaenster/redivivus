@@ -1130,9 +1130,9 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
       sStateArgs.pUnit = pUnit;
       sStateArgs.pTarget = pUnit;
       sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->auralencalc, eSkill, nSkillLvl);
-      sStateArgs.eAuraState = (eD2States)pDVar1->aurastate;
       sStateArgs.eStat = ~UNITSTAT_strength;
       sStateArgs.nSkillCalc = 0;
+      sStateArgs.eAuraState = (eD2States)pDVar1->aurastate;
       pStatsEx = SkillsServer::SetStateWithExpiryTime(&sStateArgs);
       if (pStatsEx) {
         D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkill, 0);

@@ -268,24 +268,6 @@
       ]
     },
     {
-      "name": "DebugThread",
-      "address": "00401a70",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00401a70"
-        }
-      ],
-      "namespace": "Fog::_3rdparty::crashy",
-      "calledFunctions": [
-        "DebugThread"
-      ],
-      "usedTypes": [
-        "EH4_EXCEPTION_REGISTRATION",
-        "THREADNAME_INFO"
-      ]
-    },
-    {
       "name": "SetCurrentThreadId",
       "address": "006ca6f0",
       "lines": [

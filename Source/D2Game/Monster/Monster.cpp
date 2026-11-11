@@ -625,7 +625,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
       exit(-1);
     } else {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       if (dwHpRegenRaw & -4096) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdf);
         exit(-1);
@@ -691,9 +691,8 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
           if ((uint8_t)uMonTxt.pMonPropTxt->chance[(int)pMonRegionField][nPlayerCount] <= '\0') {
             D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
           } else {
-            DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-            pUnit->sSeed = DVar1;
-            if ((int)(DVar1.nSeedLow % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[(int)pMonRegionField][nPlayerCount]) {
+            DVar1 = D2_SeedRoll(&pUnit->sSeed);
+            if ((int)(DVar1 % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[(int)pMonRegionField][nPlayerCount]) {
               D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
             }
           }

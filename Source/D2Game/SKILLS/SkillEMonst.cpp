@@ -165,7 +165,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
       sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
-      nVelTmp = (uint32_t)(uint8_t)pMissileRecord->VelLev * nSkillLvl;
+      nVelTmp = (uint32_t)pMissileRecord->VelLev * nSkillLvl;
       sSkillArg.nVelocityOverride = nVelTmp / 8 + (uint32_t)pMissileRecord->Vel;
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nUnitX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);

@@ -73,21 +73,14 @@ char * __thiscall Nth(void * pThis, int nIndex) {
     char* szDataCursor = *(char**)((char*)pThis + 0x10);
     if (szDataCursor && nIndex >= 1 && nIndex <= *(int*)((char*)pThis + 8)) {
       uint32_t nEntryStrLen;
-      nFieldIdx = 1;
       nTargetField = nIndex * 3;
       nIndex = 0;
-      if (1 < nTargetField) {
-        do {
-          if (nIndex >= *(int*)((char*)pThis + 0x14)) {
-            break;
-          }
-
-          nEntryStrLen = Storm::Source::SSTR::SStrLen(szDataCursor);
-          nIndex = nIndex + nEntryStrLen + 1;
-          szDataCursor = szDataCursor + nEntryStrLen + 1;
-          nFieldIdx++;
-        } while (nFieldIdx < nTargetField);
+      for (nFieldIdx = 1; nFieldIdx < nTargetField && nIndex < *(int*)((char*)pThis + 0x14); nFieldIdx++) {
+        nEntryStrLen = Storm::Source::SSTR::SStrLen(szDataCursor);
+        nIndex = nIndex + nEntryStrLen + 1;
+        szDataCursor = szDataCursor + nEntryStrLen + 1;
       }
+
       if (nIndex < *(int*)((char*)pThis + 0x14) && nFieldIdx <= nTargetField) {
         pThis = (void*)szDataCursor;
       }

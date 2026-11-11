@@ -434,33 +434,6 @@
       ]
     },
     {
-      "name": "OOGUTIL_SendChatMessage",
-      "address": "004428d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004428d0"
-        }
-      ],
-      "namespace": "D2Multi::OOGUtilities",
-      "calledFunctions": [
-        "OOGUTIL_SendChatMessage",
-        "SMemZero",
-        "OOGUTIL_GetAccountName",
-        "sprintf",
-        "CHATDLG_FindSubstringMatch",
-        "CHATDLG_DetectCDKeyInString",
-        "CHAT_SendOutOfGameMessage",
-        "GetLocaleString",
-        "UIMENU_DrawTitleAndSubtitleOnCenterScreen"
-      ],
-      "usedTypes": [
-        "WCHAR",
-        "int32_t",
-        "uint16_t"
-      ]
-    },
-    {
       "name": "OOGUTIL_SendChatMessageWide",
       "address": "004429a0",
       "lines": [

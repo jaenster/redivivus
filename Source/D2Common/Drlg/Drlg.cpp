@@ -4,7 +4,6 @@
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/D2UnkOutdoorStrc.h"
 #include "Source/D2Common/DATATBLS/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
@@ -35,7 +34,6 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/Drlg.data.h"
 #include "Source/D2Common/Drlg/OutPlace.data.h"
-#include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Txt/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -497,9 +495,8 @@ void __fastcall RollSeed(D2DrlgStrc * pDrlg, D2RoomExStrc * pRoomEx) {
       }
     }
 
-    D2SeedStrc sSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-    pRoomEx->sSeed = sSeed;
-    D2RoomStrc* pDrlgRoom = DUNGEON::Dungeon::AllocRoom(pDrlg->pAct, pRoomEx, &sCoordinatesAndSize, &pDrlgRoomExSub54->sRoomTiles, sSeed.nSeedLow, nRoomFlags);
+    uint32_t sSeed = D2_SeedRoll(&pRoomEx->sSeed);
+    D2RoomStrc* pDrlgRoom = DUNGEON::Dungeon::AllocRoom(pDrlg->pAct, pRoomEx, &sCoordinatesAndSize, &pDrlgRoomExSub54->sRoomTiles, sSeed, nRoomFlags);
     pRoomEx->pRoom = pDrlgRoom;
 }
 
@@ -1376,7 +1373,7 @@ D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int n
     uint32_t nRaritySum;
     uint32_t nRandom;
     D2TileLibraryEntryStrc* aTileResults[40];
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (nGridFlags) {
       nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
       nRaritySum = nGridFlags >> 8;
@@ -1415,15 +1412,11 @@ D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int n
     } else {
       nRandom = pRoomEx->sSeed.nSeedLow;
       if (nRaritySum & nRaritySum - 1) {
-        sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-        pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandom = (uint32_t)(sNewSeed.nSeedLow % nRaritySum);
+        sNewSeed = D2_SeedRoll(&pRoomEx->sSeed);
+        nRandom = (uint32_t)(sNewSeed % nRaritySum);
       } else {
-        sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-        pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandom = nRaritySum - 1 & sNewSeed.nSeedLow;
+        sNewSeed = D2_SeedRoll(&pRoomEx->sSeed);
+        nRandom = nRaritySum - 1 & sNewSeed;
       }
     }
 
@@ -1523,33 +1516,33 @@ int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(int * pLevelCtx, int32_t nG
     return 0;
 }
 
-void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnkOutdoor, D2LvlSubTxt * pLvlSub) {
-    D2DrlgFileStrc* pFile = pLvlSub->pDrlgFile;
-    uint32_t nModulo = pFile->nSubstGroups;
-    int nGroupIter = 0;
-    uint32_t nRandStartGroup = 0;
-    if (!nModulo) {
-      return;
-    }
-    if (pUnkOutdoor->nPrevBorderPresetId == -1) {
-      pUnkOutdoor->nPrevBorderPresetId = 0x3e;
-    }
-    if (!pLvlSub->BordType) {
-      nRandStartGroup = Seed::RANDOM_RandomNumberSelector(&pUnkOutdoor->pLevel->sSeed, nModulo);
-    }
-    if ((int)nModulo <= 0) {
-      return;
-    }
-
-    do {
-      BOOL bPlaced;
-      bPlaced = Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, pLvlSub, (int*)(pFile->pSubstGroups + (int)(nRandStartGroup + nGroupIter) % (int)nModulo));
-      if (bPlaced && !pLvlSub->BordType) {
-        return;
+// Paste preset units from a LvlSub definition into the active outdoor room. Converts bounds to world coordinates, then for each preset check if it falls inside the sub-rect and spawn a new preset unit offset into the room’s local space.
+static void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t roomY, D2DrlgWallLayerGridsStrc * pRoomCtx, D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSub, int * pRect) {
+    D2PresetUnitStrc* pCurrentPreset;
+    int presetY1;
+    int rectX0 = *pRect;
+    int rectY0 = pRect[1];
+    int rectX1 = pRect[2];
+    int rectY1 = pRect[3];
+    int worldYBase = roomX;
+    int worldXBase = roomY;
+    Transform::CoordsRoomToWorld(&worldYBase, &worldXBase);
+    Transform::CoordsRoomToWorld(&rectX0, &rectY0);
+    Transform::CoordsRoomToWorld(&rectX1, &rectY1);
+    int presetY0 = rectY0;
+    int presetX0 = rectX0;
+    for (pCurrentPreset = pLvlSub->pDrlgFile->pPresetUnit; pCurrentPreset; pCurrentPreset = pCurrentPreset->pPresetUnitNext) {
+      int presetX1;
+      presetX1 = pCurrentPreset->nPosX;
+      if (presetX1 > presetX0) {
+        presetY1 = pCurrentPreset->nPosY;
+        if (presetY1 > presetY0 && presetX1 < rectX1 + presetX0 && presetY1 < rectY1 + presetY0) {
+          DrlgRoom::AllocPresetUnit(pRoomCtx->pRoomEx, pMemory, pCurrentPreset->eType, pCurrentPreset->nClassId, pCurrentPreset->nMode, presetX1 - presetX0 + worldYBase, presetY1 - presetY0 + worldXBase);
+          presetX0 = rectX0;
+          presetY0 = rectY0;
+        }
       }
-
-      nGroupIter++;
-    } while (nGroupIter < (int)nModulo);
+    }
 }
 
 // Applies a LvlSub DS1 patch to the outdoor room: copies floor/wall/shadow flags into the room’s grids, grows the room tile array for flagged shadow tiles, and spawns shadow tiles plus preset units from the sub file.
@@ -1638,7 +1631,64 @@ void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(D2PoolManagerStrc * pMemory, int3
       } while (rectOffsetY < pRect[3]);
     }
 
-    Outdoors::DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(baseX, baseY, pRoomCtx, pMemory, pSubTxt, pRect);
+    DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(baseX, baseY, pRoomCtx, pMemory, pSubTxt, pRect);
+}
+
+// Checks whether a DS1 sub-tile strip can be placed at a given offset in an outdoor level room. For each cell in the strip, compares tile-type flags from the sub-tile grid against those of the destination room grids; if floor or wall special bits differ the function returns 0 (no match), otherwise 1. Called during outdoor level generation to validate sub-tile placement before objects are applied.
+static BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, D2LvlSubTxt * pLvlSubTxt, int * pnGroupEntry) {
+    int nSubTileType;
+    int nRoomTileType;
+    uint32_t uSubFlags;
+    uint32_t uRoomFlags;
+    uint32_t floorFlag;
+    int row;
+    int nY;
+    for (row = 0; row < pnGroupEntry[3]; row++) {
+      int nCol;
+      nCol = 0;
+      if (pnGroupEntry[2] > 0) {
+        nY = row + nRoomY;
+        do {
+          nSubTileType = DrlgGrid::GetGridFlags(pLvlSubTxt->pTileTypeGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          nRoomTileType = DrlgGrid::GetGridFlags(pDrlgUnkn->apTileTypeGrids[0], nRoomX + nCol, nY);
+          if (nSubTileType != nRoomTileType) {
+            return 0;
+          }
+          if (pLvlSubTxt->pDrlgFile->nFloorLayers) {
+            floorFlag = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          } else {
+            floorFlag = 0;
+          }
+          if (floorFlag & 2) {
+            uSubFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, nCol + nRoomX, nY);
+            if (!(uSubFlags & 2)) {
+              return 0;
+            }
+            if ((uSubFlags ^ floorFlag) & 0x3f0ff00) {
+              return 0;
+            }
+          }
+          if (pLvlSubTxt->pDrlgFile->nWallLayers) {
+            uSubFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          } else {
+            uSubFlags = 0;
+          }
+          if (uSubFlags & 1) {
+            uRoomFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[0], nCol + nRoomX, nY);
+            if (!(uRoomFlags & 1)) {
+              return 0;
+            }
+            if ((uRoomFlags ^ uSubFlags) & 0x3f0ff00) {
+              return 0;
+            }
+          }
+
+          nCol++;
+        } while (nCol < pnGroupEntry[2]);
+      }
+    }
+
+    return 1;
 }
 
 // Iterates all substitution groups in a DRLG level-sub file and attempts to place each group's tile pattern on the outdoor room grid. Act 1: sweeps interior grid positions, applies overlap-checked tiles directly. Act 2: matches tile types and applies a randomly selected variant (using pSubTxt probability and the room seed) at each matching grid cell. Writes tile data via DRLGOUTDOOR_ApplyLvlSubTileData.
@@ -1672,7 +1722,7 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt 
             nRowIter = 0;
             do {
               for (nColIter = 0; nColIter < nMaxX; nColIter++) {
-                bOverlapOk = Outdoors::DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pWallLayerGrids, pSubTxt, pGroupEntry);
+                bOverlapOk = DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pWallLayerGrids, pSubTxt, pGroupEntry);
                 if (bOverlapOk) {
                   DVar2 = D2_SEED_NEXT(pDVar1->sSeed);
                   pDVar1->sSeed = DVar2;
@@ -1952,7 +2002,7 @@ uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx,
     uint32_t dwSubMask;
     int nSubIndex;
     int nCurrentType;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (nSubType != -1 && nSubTheme != -1) {
       D2LvlSubTxt* pTxtLvlSubLine;
       pTxtLvlSubLine = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(nSubType);
@@ -1960,9 +2010,8 @@ uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx,
       dwSubMask = 0;
       nSubIndex = 0;
       while (nCurrentType == nSubType) {
-        sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-        pRoomEx->sSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < pTxtLvlSubLine->Prob[nSubTheme]) {
+        sNewSeed = D2_SeedRoll(&pRoomEx->sSeed);
+        if ((int)(sNewSeed % 100) < pTxtLvlSubLine->Prob[nSubTheme]) {
           dwSubMask |= 1 << D2_SHIFT_COUNT(nSubIndex);
           pRoomEx->nDT1Mask |= pTxtLvlSubLine->Dt1Mask;
         }
@@ -2153,15 +2202,6 @@ void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLevelCoor
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldSize.y + pLevelCoords->WorldPosition.y;
       goto shift_x_left_if_variant;
-      case 4:
-        pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
-      pOutCoords->WorldPosition.y = pLevelCoords->WorldPosition.y - pOutCoords->WorldSize.y;
-      shift_x_left_if_variant:
-      if (nVariant == 1) {
-        pOutCoords->WorldPosition.x += -8 - pOutCoords->WorldSize.x / 2;
-        return;
-      }
-      break;
       case 1:
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
       pOutCoords->WorldPosition.y = pLevelCoords->WorldSize.y + pLevelCoords->WorldPosition.y;
@@ -2190,6 +2230,15 @@ void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLevelCoor
         return;
       }
 
+      break;
+      case 4:
+        pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
+      pOutCoords->WorldPosition.y = pLevelCoords->WorldPosition.y - pOutCoords->WorldSize.y;
+      shift_x_left_if_variant:
+      if (nVariant == 1) {
+        pOutCoords->WorldPosition.x += -8 - pOutCoords->WorldSize.x / 2;
+        return;
+      }
       break;
       case 5:
         pOutCoords->WorldPosition.x = pLevelCoords->WorldPosition.x;
@@ -2235,12 +2284,11 @@ BOOL __fastcall fpLDE1(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 BOOL __fastcall fpLDE2(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     int nPrevWorldPosY;
     int nPrevWorldSizeY;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     int nCurrentNode = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nCurrentNode] == -1) {
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed.nSeedLow & 3;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed & 3;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     } else {
       uint32_t nNextDir;
@@ -2284,12 +2332,11 @@ BOOL __fastcall fpLDE2(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 // DRLG level-placement iterator: for the current node in pLevelUnknown, seeds or advances a directional-rotation state (8 compass directions, mod-8 wraparound) then computes the node's world-space position relative to its predecessor entry. Returns 0 when all 8 directions have been exhausted for this node (backtrack signal), 1 on a valid placement.
 BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     int nOffsetX;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     int nCurrentNode = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nCurrentNode] == -1) {
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed.nSeedLow & 7;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed & 7;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     } else {
       uint32_t nNextDir;
@@ -2356,16 +2403,14 @@ BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 BOOL __fastcall fpLDE4(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     uint32_t nFlipNext;
     LONG nOffsetX;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     int nCurrentNode = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nCurrentNode] == -1) {
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed.nSeedLow & 3;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed & 3;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aFlipState[pLevelUnknown->nCurrentNode] = sNextSeed.nSeedLow & 1;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aFlipState[pLevelUnknown->nCurrentNode] = sNextSeed & 1;
       nCurrentNode = pLevelUnknown->nCurrentNode;
       nFlipNext = pLevelUnknown->aFlipState[nCurrentNode];
     } else {
@@ -2441,14 +2486,12 @@ BOOL __fastcall fpLDE3(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     int nPrevSizeY;
     int nCurrentNode = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nCurrentNode] == -1) {
-      D2SeedStrc sNextSeed;
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed.nSeedLow & 3;
+      uint32_t sNextSeed;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nCurrentNode] = sNextSeed & 3;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aFlipState[pLevelUnknown->nCurrentNode] = sNextSeed.nSeedLow & 1;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aFlipState[pLevelUnknown->nCurrentNode] = sNextSeed & 1;
       nCurrentNode = pLevelUnknown->nCurrentNode;
       nNextFlip = pLevelUnknown->aFlipState[nCurrentNode];
     } else {
@@ -2558,12 +2601,11 @@ BOOL __fastcall fpLDE5(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 
 // Level-placement direction-enumeration callback restricted to 2 adjacent directions (dirs 1 and 2). On first call picks one of the two randomly from the seeded RNG; on the second call tries the other; returns FALSE when both are exhausted. Computes candidate world-position of the current node relative to its predecessor for each tried direction. Used by the placement backtracker for corridors/narrow-linkage nodes.
 BOOL __fastcall DRLGPLACE_Adjacent2DirRandom(D2DrlgLevelPlacementStrc * pLevelUnknown) {
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     int nNodeIdx = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nNodeIdx] == -1) {
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nNodeIdx] = (sNextSeed.nSeedLow & 1) + 1;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nNodeIdx] = (sNextSeed & 1) + 1;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     } else {
       int nNextDir;
@@ -2606,12 +2648,11 @@ BOOL __fastcall DRLGPLACE_Adjacent2DirRandom(D2DrlgLevelPlacementStrc * pLevelUn
 
 // For the current placement node, iterates through all 8 cardinal/diagonal directions (seeded randomly on first visit) and positions the node adjacent to its predecessor in the chosen direction. Returns FALSE when all 8 directions have been exhausted (backtrack signal).
 BOOL __fastcall DRLGPLACE_Adjacent8DirAligned(D2DrlgLevelPlacementStrc * pLevelUnknown) {
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     int nNodeIdx = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nNodeIdx] == -1) {
-      sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = sNextSeed;
-      pLevelUnknown->aInitialDir[nNodeIdx] = sNextSeed.nSeedLow & 7;
+      sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nNodeIdx] = sNextSeed & 7;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     } else {
       uint32_t nNextDir;
@@ -2661,10 +2702,9 @@ BOOL __fastcall DRLGPLACE_Adjacent4DirMirrored(D2DrlgLevelPlacementStrc * pLevel
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     int nNodeIdx = pLevelUnknown->nCurrentNode;
     int nPrevNodeIdx = pLevelUnknown->pLevelData->aEntry[nNodeIdx].nNodeLevelEntryIdPrev;
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-    pLevelUnknown->sSeed = sNextSeed;
+    uint32_t sNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
     D2DrlgCoordsStrc* pPrevCoordsEntry = pLevelUnknown->aCoordsAndSize + nPrevNodeIdx;
-    if (sNextSeed.nSeedLow & 1) {
+    if (sNextSeed & 1) {
       switch (pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode]) {
         case 0:
           pLevelUnknown->aCoordsAndSize[nNodeIdx].WorldPosition.x = pPrevCoordsEntry->WorldPosition.x;
@@ -3390,14 +3430,12 @@ int32_t __stdcall DRLGOUTROOM_SetupRoomCoordsFromTable(int * pOutCoords, int32_t
 }
 
 BOOL __fastcall DRLGPLACE_OrientedFixedOffset(D2DrlgLevelPlacementStrc * pLevelUnknown) {
-    D2SeedStrc tNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-    pLevelUnknown->sSeed.nSeedHigh = tNextSeed.nSeedHigh;
-    pLevelUnknown->sSeed.nSeedLow = tNextSeed.nSeedLow;
-    uint32_t nOrientation = tNextSeed.nSeedLow & 1;
+    uint32_t tNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+    uint32_t nOrientation = tNextSeed & 1;
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = nOrientation;
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = nOrientation;
     D2DrlgCoordsStrc* pCurNode = pLevelUnknown->aCoordsAndSize + pLevelUnknown->nCurrentNode;
-    if (tNextSeed.nSeedLow & 1) {
+    if (tNextSeed & 1) {
       switch (nOrientation) {
         case 1:
           {
@@ -3418,14 +3456,12 @@ BOOL __fastcall DRLGPLACE_OrientedFixedOffset(D2DrlgLevelPlacementStrc * pLevelU
 }
 
 BOOL __fastcall DRLGPLACE_OrientedAbsolutePos(D2DrlgLevelPlacementStrc * pLevelUnknown) {
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevelUnknown->sSeed);
-    pLevelUnknown->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevelUnknown->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nOrientDir = DVar1.nSeedLow & 1;
+    uint32_t DVar1 = D2_SeedRoll(&pLevelUnknown->sSeed);
+    uint32_t nOrientDir = DVar1 & 1;
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = nOrientDir;
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = nOrientDir;
     int nNodeIdx = pLevelUnknown->nCurrentNode;
-    if (DVar1.nSeedLow & 1) {
+    if (DVar1 & 1) {
       switch (nOrientDir) {
         case 1:
           {
@@ -3447,12 +3483,11 @@ BOOL __fastcall DRLGPLACE_OrientedAbsolutePos(D2DrlgLevelPlacementStrc * pLevelU
 
 // Chooses a binary orientation (0=vertical 0x40×0xA0, 1=horizontal 0xA0×0x40) for the current placement node, cycling through both on successive calls (returns FALSE when both tried). Positions the node relative to its predecessor using a 4-entry offset table indexed by (curDir*2 + prevDir), from gnDrlgLevelGenerationState/Flags globals.
 BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelUnknown) {
-    D2SeedStrc tNextSeed;
+    uint32_t tNextSeed;
     int nCurDir = pLevelUnknown->nCurrentNode;
     if (pLevelUnknown->aInitialDir[nCurDir] == -1) {
-      tNextSeed = D2_SEED_NEXT(pLevelUnknown->sSeed);
-      pLevelUnknown->sSeed = tNextSeed;
-      pLevelUnknown->aInitialDir[nCurDir] = tNextSeed.nSeedLow & 1;
+      tNextSeed = D2_SeedRoll(&pLevelUnknown->sSeed);
+      pLevelUnknown->aInitialDir[nCurDir] = tNextSeed & 1;
       pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
     } else {
       uint32_t nNextDir;
@@ -3491,6 +3526,7 @@ BOOL __fastcall DRLGPLACE_OrientedTableLookup(D2DrlgLevelPlacementStrc * pLevelU
 
 // Places border presets (Type A pattern) for Act 3 Kurast outdoor levels. Spawns north/south edge presets (0x25D-0x25E) with special portal variants, east/west walls (0x25F-0x260), and four corner presets (0x261-0x264). Called by BuildKurast.
 void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel) {
+    int nXIter;
     int nY = pLevel->sCoordinatesAndSize.WorldSize.x;
     int nYIter = pLevel->sCoordinatesAndSize.WorldSize.y;
     int nPortalX = nY / 8;
@@ -3501,12 +3537,9 @@ void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel)
     } else {
       nPortalX += -2;
     }
-    if (1 < nX) {
-      int nXIter = 1;
-      do {
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, 0, nXIter == nPortalX ? 0x265U : 0x25dU, -1, 0);
-        nXIter++;
-      } while (nXIter < nX);
+
+    for (nXIter = 1; nXIter < nX; nXIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, 0, nXIter == nPortalX ? 0x265U : 0x25dU, -1, 0);
     }
 
     for (nYIter = 1; nYIter < nX; nYIter = nYIter + 1 + (uint32_t)(nYIter == nX / 2)) {
@@ -3526,11 +3559,11 @@ void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel)
 
 // Places border presets (Type B pattern) for Act 3 Kurast outdoor levels. Similar to Type A but with different preset IDs (0x26B-0x272) and swapped portal placement logic on the borders. Called by BuildKurast.
 void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
+    int nIter;
     int nPortalX1;
     int nY = pLevel->sCoordinatesAndSize.WorldSize.x;
     int nX = pLevel->sCoordinatesAndSize.WorldSize.y;
     int nPortalX2 = nY / 8;
-    int nIter = 1;
     nY = nX / 8 - 1;
     nX = nPortalX2 - 1;
     if (pLevel->pDrlg->bJungleInterlink) {
@@ -3540,12 +3573,10 @@ void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
       nPortalX1 = nPortalX2 - 2;
       nPortalX2 = 1;
     }
-    if (1 < nX) {
-      do {
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nPortalX2 ? 0x273U : 0x26bU, -1, 0);
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, nY, nIter == nPortalX1 ? 0x274U : 0x26cU, -1, 0);
-        nIter++;
-      } while (nIter < nX);
+
+    for (nIter = 1; nIter < nX; nIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nPortalX2 ? 0x273U : 0x26bU, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, nY, nIter == nPortalX1 ? 0x274U : 0x26cU, -1, 0);
     }
 
     for (nIter = 1; nIter < nY; nIter++) {
@@ -3564,7 +3595,6 @@ void __fastcall DRLGOUTJUNG_BuildKurastCausewayBorders(D2DrlgLevelStrc * pLevel)
     int nIter = pLevel->sCoordinatesAndSize.WorldSize.x;
     int nY = pLevel->sCoordinatesAndSize.WorldSize.y;
     int nPortalX = nIter / 8;
-    nIter = 1;
     nY = nY / 8 - 1;
     int nX = nPortalX - 1;
     if (pLevel->pDrlg->bJungleInterlink) {
@@ -3572,11 +3602,9 @@ void __fastcall DRLGOUTJUNG_BuildKurastCausewayBorders(D2DrlgLevelStrc * pLevel)
     } else {
       nPortalX = 1;
     }
-    if (1 < nX) {
-      do {
-        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nX / 2 ? 0x284U : 0x27cU, -1, 0);
-        nIter = nIter + 1 + (uint32_t)(nIter == nX / 2);
-      } while (nIter < nX);
+
+    for (nIter = 1; nIter < nX; nIter = nIter + 1 + (uint32_t)(nIter == nX / 2)) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nX / 2 ? 0x284U : 0x27cU, -1, 0);
     }
 
     for (nIter = 1; nIter < nX; nIter++) {
@@ -3852,11 +3880,17 @@ void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
                   break;
                 }
               break;
+              case 0x19:
+                pExitPoint->eType = 0;
+              break;
               case 6:
                 if (nOutdoorGridFlags == 3) {
                   pExitPoint->eType = 1;
                   break;
                 }
+              break;
+              case 0x18:
+                pExitPoint->eType = 1;
               break;
               case 7:
                 bIsBorderEdge = nOutdoorGridFlags == 3;
@@ -3865,11 +3899,11 @@ void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
               }
 
               break;
-              case 0x18:
-                pExitPoint->eType = 1;
+              case 0x33:
+                pExitPoint->eType = nOutdoorGridFlags != 0;
               break;
-              case 0x19:
-                pExitPoint->eType = 0;
+              case 0x34:
+                pExitPoint->eType = nOutdoorGridFlags != 0;
               break;
               case 0x1c:
                 if (nOutdoorGridFlags == 1) {
@@ -3881,11 +3915,6 @@ void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
                   break;
                 }
               break;
-              case 0x33:
-                pExitPoint->eType = nOutdoorGridFlags != 0;
-              break;
-              case 0x34:
-                pExitPoint->eType = nOutdoorGridFlags != 0;
             }
 
             if (pExitPoint->eType != 4) {
@@ -4080,13 +4109,12 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
     int nGridY8;
     int nJitterDy;
     int nJitterX;
-    D2SeedStrc sSeedRollY;
+    uint32_t sSeedRollY;
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgVertexStrc* pVertex = pWildData->pAdjacentVertices[nPathIdx];
-    D2SeedStrc sSeedRollX = D2_SEED_NEXT(pLevel->sSeed);
-    uint32_t uVar1 = sSeedRollX.nSeedLow & 3;
-    pLevel->sSeed = sSeedRollX;
+    uint32_t sSeedRollX = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t uVar1 = sSeedRollX & 3;
     if (!pVertex) {
       return;
     }
@@ -4107,11 +4135,9 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
       }
 
       int nGridX8;
-      sSeedRollX = D2_SEED_NEXT(pLevel->sSeed);
-      pLevel->sSeed = sSeedRollX;
+      sSeedRollX = D2_SeedRoll(&pLevel->sSeed);
       nJitterX = gaDrlgPathJitterDX[uVar1];
-      sSeedRollY = D2_SEED_NEXT(pLevel->sSeed);
-      pLevel->sSeed = sSeedRollY;
+      sSeedRollY = D2_SeedRoll(&pLevel->sSeed);
       nJitterDy = gnDrlgLevelVersion[uVar1];
       uVar1 = uVar1 + 1 & 0x80000003;
       if ((int)uVar1 < 0) {
@@ -4122,8 +4148,8 @@ static void __stdcall DRLGOUTROOM_BuildVertexPathsWithJitter(D2DrlgLevelStrc * p
       pVertex->nPosX = nGridX8;
       nGridY8 = pVertex->nPosY * 8;
       pVertex->nPosY = nGridY8;
-      pVertex->nPosX = pLevel->sCoordinatesAndSize.WorldPosition.x + nGridX8 + 3 + ((sSeedRollX.nSeedLow & 1) + 2) * nJitterX;
-      pVertex->nPosY = pLevel->sCoordinatesAndSize.WorldPosition.y + nGridY8 + 3 + ((sSeedRollY.nSeedLow & 1) + 2) * nJitterDy;
+      pVertex->nPosX = pLevel->sCoordinatesAndSize.WorldPosition.x + nGridX8 + 3 + ((sSeedRollX & 1) + 2) * nJitterX;
+      pVertex->nPosY = pLevel->sCoordinatesAndSize.WorldPosition.y + nGridY8 + 3 + ((sSeedRollY & 1) + 2) * nJitterDy;
       pVertex = pVertex->pNext;
     }
 

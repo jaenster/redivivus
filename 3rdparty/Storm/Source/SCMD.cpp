@@ -183,9 +183,9 @@ static void __stdcall SCMD_GenerateError(uint32_t errorCode, pfnSCmdErrorCallbac
     }
 
     SErr::SErrSetLastError(errorCode);
-    sCallbackArgs.pszErrorText = szFmtBuf;
     sCallbackArgs.dwErrorCode = errorCode;
     sCallbackArgs.pszItem = szItem;
+    sCallbackArgs.pszErrorText = szFmtBuf;
     (*pfnCallback)(&sCallbackArgs.dwErrorCode);
 }
 

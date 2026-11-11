@@ -91,7 +91,7 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     int32_t nSwapTmpY;
     int64_t lSeedProduct;
     int32_t nFreeSrcLine;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2PoolManagerStrc* pMemory;
     pMemory = pLevel->pDrlg->pMemoryPool;
     uint32_t nSwapIdxA;
@@ -128,14 +128,11 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
           } else {
             nRandIdxA = pLevel->sSeed.nSeedLow;
             if (nTotalCells & nTotalCells - 1) {
-              sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-              nRandIdxA = sNewSeed.nSeedLow % nTotalCells;
-              pLevel->sSeed = sNewSeed;
+              sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+              nRandIdxA = sNewSeed % nTotalCells;
             } else {
-              sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-              pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-              pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
-              nRandIdxA = nTotalCells - 1 & sNewSeed.nSeedLow;
+              sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+              nRandIdxA = nTotalCells - 1 & sNewSeed;
             }
           }
           if ((int)nTotalCells <= 0) {

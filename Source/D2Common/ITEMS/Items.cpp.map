@@ -3915,7 +3915,6 @@
         "eD2ItemTypes",
         "eD2UnitType",
         "int32_t",
-        "uint16_t",
         "uint32_t"
       ]
     },

@@ -44,7 +44,7 @@ void __stdcall IGNORELIST_Initialize_Unref_00601b50();
 void __stdcall IGNORELIST_Initialize_Unref_0060ac50();
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, char * nDstBuf, int32_t nBufLen);
-void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize);
+int __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize);
 void __stdcall IGNORELIST_Initialize_Unref_0063a800();
 void __stdcall IGNORELIST_Initialize_Unref_0063b9c0();
 #endif // D2_MODULE_D2Common

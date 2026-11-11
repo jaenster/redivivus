@@ -134,7 +134,7 @@ struct __attribute__((packed)) D2QuestDataA1Q5Strc {
     /* 0x064 */ uint16_t nPlayersForRewardCount; // Number of players for reward; unsigned word: every read is MOVZX (Q05_Callback00_NpcActivate 00594c50)
     /* 0x066 */ int16_t field_0x66;
     /* 0x068 */ int32_t nCountessChestGUID_0[8]; // Countess chest object GUID [0]; array base at +0x68 iterated by Q05_SpawnCountessDeathEffect
-    /* 0x088 */ int16_t nCountessChestCount; // Count of valid chest GUIDs; checked as ushort gate in Q05_SpawnCountessDeathEffect
+    /* 0x088 */ uint16_t nCountessChestCount; // Count of valid chest GUIDs; checked as ushort gate in Q05_SpawnCountessDeathEffect
     /* 0x08A */ uint8_t field_0x8a;
     /* 0x08B */ uint8_t field_0x8b;
     /* 0x08C */ D2QuestGUIDStrc sQuestGUID; // Main quest player tracking

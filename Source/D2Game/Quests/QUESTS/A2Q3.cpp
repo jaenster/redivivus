@@ -524,7 +524,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
     ::SGAMEDATA* pGame3;
     int nDroppedItemCount;
     int32_t* ppDroppedBodyPartCount;
-    D2SeedStrc seedNext;
+    uint32_t seedNext;
     D2QuestDataStrc* pHoradricStaffQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheTaintedSun);
     if (!pHoradricStaffQuestData) {
       return 0;
@@ -619,9 +619,8 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
 
           Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
           pQuestSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-          seedNext = D2_SEED_NEXT(*pQuestSeed);
-          *pQuestSeed = seedNext;
-          iDropLoop = seedNext.nSeedLow % 5 + 5;
+          seedNext = D2_SeedRoll(pQuestSeed);
+          iDropLoop = seedNext % 5 + 5;
           if (iDropLoop > 0) {
             do {
               Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
@@ -659,9 +658,8 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
 
         Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
         pQuestSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-        seedNext = D2_SEED_NEXT(*pQuestSeed);
-        *pQuestSeed = seedNext;
-        iDropLoop = seedNext.nSeedLow % 5 + 5;
+        seedNext = D2_SeedRoll(pQuestSeed);
+        iDropLoop = seedNext % 5 + 5;
         if (iDropLoop > 0) {
           do {
             Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);

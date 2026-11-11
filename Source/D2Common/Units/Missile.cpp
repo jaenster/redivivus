@@ -417,28 +417,25 @@ void __stdcall GetHomeType(D2UnitStrc * pUnit, int * nHomeType, int * nHomeGUID)
 }
 
 static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     int nCritChance = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_passive_critical_strike, 0);
-    D2SeedStrc seedRng = D2_SEED_NEXT(pItem->sSeed);
-    pItem->sSeed = seedRng;
-    if ((int)(seedRng.nSeedLow % 100) < nCritChance) {
+    uint32_t seedRng = D2_SeedRoll(&pItem->sSeed);
+    if ((int)(seedRng % 100) < nCritChance) {
       return 1;
     }
 
     int32_t nItemBonusDamage = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItem, UNITSTAT_item_deadlystrike, 0);
     if (nItemBonusDamage) {
-      DVar1 = D2_SEED_NEXT(pItem->sSeed);
-      pItem->sSeed = DVar1;
-      if ((int)(DVar1.nSeedLow % 100) < nItemBonusDamage) {
+      DVar1 = D2_SeedRoll(&pItem->sSeed);
+      if ((int)(DVar1 % 100) < nItemBonusDamage) {
         return 1;
       }
     }
     if (pUnit) {
       nItemBonusDamage = Skills::SKILLS_GetItemBonusDamage(pItem, pUnit, nullptr, 2);
       if (nItemBonusDamage) {
-        DVar1 = D2_SEED_NEXT(pItem->sSeed);
-        pItem->sSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) < nItemBonusDamage) {
+        DVar1 = D2_SeedRoll(&pItem->sSeed);
+        if ((int)(DVar1 % 100) < nItemBonusDamage) {
           return 1;
         }
       }
@@ -1110,7 +1107,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
         return;
       }
 
-      nSourceDamage = (uint32_t)(uint8_t)pSkillTxt->SrcDam;
+      nSourceDamage = (uint32_t)pSkillTxt->SrcDam;
       nSrcMissDmgPct = 0;
       if (pMissileTxt->SrcDamage == 0xff) {
         nSourceDamage = 0;

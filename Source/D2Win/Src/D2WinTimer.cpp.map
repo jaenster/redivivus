@@ -136,7 +136,7 @@
       ]
     },
     {
-      "name": "D2WINEDITBOX_Destroy",
+      "name": "D2WINTIMER_SetRepeating",
       "address": "004fda50",
       "lines": [
         {
@@ -146,7 +146,7 @@
       ],
       "namespace": "D2Win::Src::D2WinTimer",
       "calledFunctions": [
-        "D2WINEDITBOX_Destroy",
+        "D2WINTIMER_SetRepeating",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"

@@ -94,11 +94,9 @@ void __fastcall SetSeed(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     D2SeedStrc* pSeed_00 = &pUnit->sSeed;
     D2Common::Seed::SEED_InitDefault(pSeed_00);
     if (pSeed) {
-      D2SeedStrc DVar1;
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      nSeedLow = DVar1.nSeedLow;
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
+      uint32_t DVar1;
+      DVar1 = D2_SeedRoll(pSeed);
+      nSeedLow = DVar1;
       pUnit->nInitSeed = nSeedLow;
       D2Common::Seed::InitSeed_Param_666(pSeed_00, nSeedLow);
       return;
@@ -113,10 +111,8 @@ void __fastcall SetSeed(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
 
 void __fastcall SetItemSeeds(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     D2Common::ITEMS::Items::ResetItemSeed(pUnit);
-    D2SeedStrc DVar1 = D2_SEED_NEXT(*pSeed);
-    pSeed->nSeedHigh = DVar1.nSeedHigh;
-    pSeed->nSeedLow = DVar1.nSeedLow;
-    D2Common::ITEMS::Items::SetModSeed(pUnit, DVar1.nSeedLow);
+    uint32_t DVar1 = D2_SeedRoll(pSeed);
+    D2Common::ITEMS::Items::SetModSeed(pUnit, DVar1);
     int32_t nModSeedVal = D2Common::ITEMS::Items::GetModSeed(pUnit);
     D2SeedStrc* pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
     D2Common::Seed::InitSeed_Param_666(pItemSeed, nModSeedVal);
@@ -2481,11 +2477,11 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa07);
         exit(-1);
       }
-
-      pCurItem = pNextItem;
       if ((int)pCarriedItem->eUnitType < 6) {
         FreeServerUnit(pGame, pCarriedItem);
       }
+
+      pCurItem = pNextItem;
     }
 
     pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);

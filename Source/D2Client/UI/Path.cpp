@@ -39,14 +39,15 @@ uint32_t __stdcall DRAW_GetTypeOfBorder() {
 void __fastcall TypeOfUiOverlayOverWorld(uint32_t eBorderType) {
     if (eBorderType <= 3) {
       switch (eBorderType) {
-        default:
-          MouseYRelatedB = 0;
-        break;
         case 1:
           MouseYRelatedB = -(ui::ScreenSizeX / 4);
         break;
         case 2:
           MouseYRelatedB = ui::ScreenSizeX / 4;
+        break;
+        default:
+          MouseYRelatedB = 0;
+        break;
       }
     }
 

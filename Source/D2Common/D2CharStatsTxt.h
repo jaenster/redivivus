@@ -29,18 +29,18 @@ struct __attribute__((packed)) D2CharStatsTxt {
     /* 0x37 */ char PercentInt;
     /* 0x38 */ char PercentDex;
     /* 0x39 */ char PercentVit;
-    /* 0x3A */ char ManaRegen;
+    /* 0x3A */ uint8_t ManaRegen;
     /* 0x3B */ uint8_t pad0x3B; // alignment padding before dwToHitFactor (no column binds)
     /* 0x3C */ int ToHitFactor;
     /* 0x40 */ uint8_t WalkVelocity;
-    /* 0x41 */ char RunVelocity;
+    /* 0x41 */ uint8_t RunVelocity;
     /* 0x42 */ uint8_t RunDrain;
     /* 0x43 */ char LifePerLevel;
     /* 0x44 */ char StaminaPerLevel;
     /* 0x45 */ char ManaPerLevel;
-    /* 0x46 */ char LifePerVitality;
-    /* 0x47 */ char StaminaPerVitality;
-    /* 0x48 */ char ManaPerMagic;
+    /* 0x46 */ uint8_t LifePerVitality;
+    /* 0x47 */ uint8_t StaminaPerVitality;
+    /* 0x48 */ uint8_t ManaPerMagic;
     /* 0x49 */ uint8_t BlockFactor;
     /* 0x4A */ uint16_t pad0x4A; // alignment padding before dwBaseWClass (no column binds); merges 0x4A-0x4B
     /* 0x4C */ char basewclass[4];

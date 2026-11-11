@@ -58,8 +58,8 @@ set(D2_MODULE_Fog_DATA "Source/globals/Fog.cpp")
 set(D2_MODULE_Fog_UNIT_ORDER "original-address")
 set(D2_MODULE_Fog_UNITS
     Source/Fog/Src/ErrorManager.cpp  # 004016b0, 9 runs
-    Source/Fog/Debug.cpp  # 00401b00, 6 runs
-    Source/Fog/File.cpp  # 00403040, 2 runs
+    Source/Fog/Debug.cpp  # 00401a70, 7 runs
+    Source/Fog/File.cpp  # 00403040, 3 runs
     Source/Fog/Engine/Application.cpp  # 004046d0, 2 runs
     Source/Fog/Source/SFile.cpp  # 00406870, 2 runs
     Source/Fog/Src/QServer/QServer.cpp  # 004080a0, 4 runs
@@ -200,8 +200,8 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/Text.cpp  # 0045afe0, 9 runs
     Source/D2Client/GAME/SCmd.cpp  # 0045b090, 3 runs
     Source/D2Client/Archive.cpp  # 0045b960, 4 runs
-    Source/D2Client/UNIT/Player.cpp  # 00460830, 6 runs
-    Source/D2Client/UNIT/CUnit.cpp  # 00463c90, 4 runs
+    Source/D2Client/UNIT/Player.cpp  # 00460830, 7 runs
+    Source/D2Client/UNIT/CUnit.cpp  # 00463940, 6 runs
     Source/D2Client/GAME/Select.cpp  # 00466dc0, 2 runs
     Source/D2Client/Cursor.cpp  # 00467df0, 3 runs
     Source/D2Client/UI/Panel.cpp  # 00468f40, 7 runs
@@ -334,9 +334,9 @@ set(D2_MODULE_D2Multi_GENERATED ON)
 set(D2_MODULE_D2Multi_DATA "Source/globals/D2Multi.cpp")
 set(D2_MODULE_D2Multi_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Multi_UNITS
-    Source/D2Multi/ChatDlg.cpp  # 0043cc30, 15 runs
+    Source/D2Multi/ChatDlg.cpp  # 0043cc30, 16 runs
     Source/D2Multi/OOG.cpp  # 0043d9a0, 2 runs
-    Source/D2Multi/OOGUtilities.cpp  # 0043da50, 9 runs
+    Source/D2Multi/OOGUtilities.cpp  # 0043da50, 10 runs
     Source/D2Multi/ComCallback.cpp  # 0043db90, 5 runs
     Source/D2Multi/OOG/ChatDlg.cpp  # 0043ed50, 2 runs
     Source/D2Multi/D2MultiRoot.cpp  # 0043f970, 6 runs
@@ -793,21 +793,21 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Environment.cpp  # 0061bb80, 1 run
     Source/D2Common/DATATBLS/LvlTbls.cpp  # 0061c540, 1 run
     Source/D2Common/Units.cpp  # 00620100, 2 runs
-    Source/D2Common/Logging.cpp  # 00624700, 3 runs
+    Source/D2Common/Logging.cpp  # 00624700, 2 runs
     Source/D2Common/Src/LogManager.cpp  # 00624b50, 1 run
-    Source/D2Common/Stats/StatsEx.cpp  # 00624bd0, 1 run
+    Source/D2Common/Stats/StatsEx.cpp  # 00624b90, 1 run
     Source/D2Common/ITEMS/Items.cpp  # 00627c20, 5 runs
     Source/D2Common/DATATBLS/ItemTbls.cpp  # 006314a0, 3 runs
     Source/D2Common/DATATBLS/ItemStats.cpp  # 00639db0, 1 run
     Source/D2Common/Monsters/MONSTERS.cpp  # 0063db80, 3 runs
     Source/D2Common/DATATBLS/ObjectTbls.cpp  # 0063f690, 1 run
     Source/D2Common/Collision.cpp  # 00641530, 3 runs
-    Source/D2Common/Drlg/Drlg.cpp  # 00641f20, 18 runs
+    Source/D2Common/Drlg/Drlg.cpp  # 00641f20, 17 runs
     Source/D2Common/Txt/Cube.cpp  # 006429d0, 11 runs
     Source/D2Common/Drlg/Transform.cpp  # 00643260, 1 run
     Source/D2Common/Txt/Skills.cpp  # 00643580, 7 runs
-    Source/D2Common/PATH/Path.cpp  # 00647fb0, 3 runs
-    Source/D2Common/PATH/DynamicPath.cpp  # 00648460, 1 run
+    Source/D2Common/PATH/Path.cpp  # 00647fb0, 2 runs
+    Source/D2Common/PATH/DynamicPath.cpp  # 006483a0, 2 runs
     Source/D2Common/Units/Missile.cpp  # 0064a100, 2 runs
     Source/D2Common/Unit.cpp  # 0064bf60, 1 run
     Source/D2Common/COMPOSIT/Composit.cpp  # 0064efe0, 1 run
@@ -834,8 +834,8 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Drlg/DrlgLogic.cpp  # 0066c580, 1 run
     Source/D2Common/Drlg/DrlgAnim.cpp  # 0066d290, 2 runs
     Source/D2Common/Drlg/RoomTile.cpp  # 0066d9e0, 1 run
-    Source/D2Common/Drlg/Outdoors.cpp  # 0066f380, 5 runs
-    Source/D2Common/Drlg/TileSub.cpp  # 006704e0, 2 runs
+    Source/D2Common/Drlg/Outdoors.cpp  # 0066f380, 4 runs
+    Source/D2Common/Drlg/TileSub.cpp  # 0066f990, 3 runs
     Source/D2Common/Drlg/Maze.cpp  # 00670880, 3 runs
     Source/D2Common/Drlg/Maze/Act3/Durance.cpp  # 00672f60, 1 run
     Source/D2Common/Drlg/Maze/Act5/IceCaves.cpp  # 00673530, 1 run

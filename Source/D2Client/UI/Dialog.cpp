@@ -1011,8 +1011,8 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
       pDialog->nDrawFrameCount++;
       sBgRect.right = pDialog->nBackgroundWidth - 1 + sBgRect.left;
       nBottom = sBgRect.top + pDialog->nBackgroundHeight;
-      sBgRect.bottom = nBottom - 1;
       sGfxData.nDirection = 0;
+      sBgRect.bottom = nBottom - 1;
       if (pDialog->bHasBackground) {
         if (pDialog->pBackgroundDC6) {
           sGfxData.nFrameNumber = 0;

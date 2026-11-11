@@ -23,14 +23,12 @@ void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
       return;
     }
 
-    D2SeedStrc sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-    pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
+    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
     if (!(pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
-    pUnit->pUnitData.pUnitDataMonster->nNameSeed = (uint16_t)sSeedNext.nSeedLow;
+    pUnit->pUnitData.pUnitDataMonster->nNameSeed = (uint16_t)sSeedNext;
 }
 
 static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {

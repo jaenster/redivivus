@@ -640,8 +640,8 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
           *(intptr_t*)(nBucketNextLink + 8) = ppDstHead->m_next;
           ppDstHead->m_next = nBucketNextLink;
           ppDstHead = pNextLink;
-          pThis = pHashTable;
           nTempSentinel.m_terminator.m_prevlink = pNextLink;
+          pThis = pHashTable;
         }
 
         nBucketOffset++;

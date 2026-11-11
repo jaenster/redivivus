@@ -90,7 +90,7 @@ int32_t __fastcall GetClientNo(struct D2ClientStrc * pClient);
 int __stdcall ReturnFFFFFFFF();
 void __stdcall ReturnVoid(uint32_t dwParam);
 uint32_t __fastcall GetPlayerClassId(struct D2ClientStrc * pClient);
-void __fastcall SetClassOfClient(struct D2ClientStrc * pClient, uint8_t nClass);
+void __fastcall SetClassOfClient(struct D2ClientStrc * pClient, int nClass);
 void __fastcall SetFileFlags(struct D2ClientStrc * pClient, int16_t nCharStatus);
 uint32_t __fastcall GetCharacterStatus(struct D2ClientStrc * pClient);
 void __fastcall SetFlagIf(struct D2ClientStrc * pClient, uint16_t nFlag, BOOL nSet);

@@ -2043,6 +2043,7 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
     D2ClientStrc* pClient;
     int aItemValidateSnapshot[7];
     int bAnyItemReenabled;
+    ::SGAMEDATA* pInventory2;
     if (!(pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitFlags >> 9 & 1))) {
       return;
     }
@@ -2158,6 +2159,7 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
           bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pCurItem, ITEMFLAG_BROKEN, 0xac2, ".\\ITEMS\\ItemMode.cpp");
           if (!bIsBrokenOrDisabled) {
             bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pCurItem, ITEMFLAG_DISABLED, 0xac3, ".\\ITEMS\\ItemMode.cpp");
+            pInventory2 = pGameSaved;
             if (!bIsBrokenOrDisabled) {
               ITEMMODE_UnequipItemStats(pGameSaved, pCurItem, pUnit, 1, 1);
               ITEMMODE_AddStatsList(pInventory2, pCurItem, pUnit, 1);
@@ -3301,14 +3303,16 @@ void __fastcall ITEMMODE_RecalcAllEquippedStats(::SGAMEDATA * pGameStrc, D2UnitS
       pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
       nStatOwnerFlags = 0;
-      pCurItem = pNextItem;
+      D2UnitStrc* pNextItem2;
       if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
-        pNextItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, &nStatOwnerFlags);
-        if (pNextItem) {
+        pNextItem2 = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, &nStatOwnerFlags);
+        if (pNextItem2) {
           D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pCarriedItem);
           D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pCarriedItem, nStatOwnerFlags);
         }
       }
+
+      pCurItem = pNextItem;
     }
 
     ITEMMODE_ValidateItemQuality(pUnit, aItemValidateSnapshot);
@@ -3963,7 +3967,7 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
     int pGridSlot;
     uint32_t bIsActiveCharm;
     uint32_t bIsActiveCharm2;
-    D2UnitStrc* pOwnerUnit = pUnit;
+    D2UnitStrc* pUnitSaved = pUnit;
     if (!pGame || !pUnit) {
       return 0;
     }
@@ -3976,14 +3980,14 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
 
     eInventoryPage eSrcPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
     uint32_t nUnit = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pUnit + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eSrcPage);
-    if (!(pInventory || (pInventory = pOwnerUnit->pInventory , pInventory != 0))) {
+    if (!(pInventory || (pInventory = pUnitSaved->pInventory , pInventory != 0))) {
       return 0;
     }
 
     bool bIsMerc = false;
     bool bCopyInv = true;
-    int32_t eInvPage = D2Common::Units::GetInventoryPage(pOwnerUnit, eSrcPage, pGame->bExpansion);
-    if (pOwnerUnit->eUnitType == UNIT_PLAYER) {
+    int32_t eInvPage = D2Common::Units::GetInventoryPage(pUnitSaved, eSrcPage, pGame->bExpansion);
+    if (pUnitSaved->eUnitType == UNIT_PLAYER) {
       switch (eSrcPage) {
         case INVPAGE_CORPSE:
           {
@@ -4020,11 +4024,11 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
 
     eSrcPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
     if (eSrcPage != INVPAGE_STASH) {
-      ITEMMODE_ApplyItemToOwner(pOwnerUnit, pItem);
+      ITEMMODE_ApplyItemToOwner(pUnitSaved, pItem);
     }
 
     pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-    bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pOwnerUnit);
+    bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pUnitSaved);
     if (bIsActiveCharm) {
       ITEMMODE_AddStatsList(pGame, pItem, pUnitSaved, 0);
     }
@@ -4045,17 +4049,17 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
         D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_DISABLED, 0);
       }
 
-      D2Common::Units::RefreshInventory(pOwnerUnit, 1);
+      D2Common::Units::RefreshInventory(pUnitSaved, 1);
       D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pItem);
     }
     if (bIsMerc) {
-      PLAYER::PlayerTrade::PLRTRADE_AddItemToTrade(pGame, pOwnerUnit, pItem);
+      PLAYER::PlayerTrade::PLRTRADE_AddItemToTrade(pGame, pUnitSaved, pItem);
     }
 
-    bIsActiveCharm2 = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pOwnerUnit);
+    bIsActiveCharm2 = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pUnitSaved);
     if (bIsActiveCharm2) {
-      ITEMS_RecalcEquippedItemStates(pGame, pOwnerUnit, 0);
-      D2Common::Units::RefreshInventory(pOwnerUnit, 1);
+      ITEMS_RecalcEquippedItemStates(pGame, pUnitSaved, 0);
+      D2Common::Units::RefreshInventory(pUnitSaved, 1);
     }
 
     return 1;

@@ -300,6 +300,14 @@ void __fastcall Q36_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         goto pick_menu_by_told_step;
         default:
           return;
+        case MonsterUnitTyrael3:
+          _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_JustCompleted);
+        if (!_bQuestState) {
+          return;
+        }
+
+        nGossipMenuIndex = 2;
+        break;
         case MonsterUnitQualkehk:
           eQuestState = QUESTSTATE_Step0x08;
         pick_menu_by_told_step:
@@ -316,14 +324,6 @@ void __fastcall Q36_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
         AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 3);
         return;
-        case MonsterUnitTyrael3:
-          _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_JustCompleted);
-        if (!_bQuestState) {
-          return;
-        }
-
-        nGossipMenuIndex = 2;
-        break;
         case MonsterUnitDrehya1:
           _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x09);
         if (_bQuestState) {
@@ -689,17 +689,6 @@ bool __fastcall Q36_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
         case MonsterUnitLarzuk:
           eQuestState = QUESTSTATE_Step0x04;
         break;
-        case MonsterUnitDrehya1:
-          eQuestState = QUESTSTATE_Step0x09;
-        break;
-        case MonsterUnitMalah:
-          eQuestState = QUESTSTATE_Step0x06;
-        break;
-        default:
-          return false;
-        case MonsterUnitQualkehk:
-          eQuestState = QUESTSTATE_Step0x08;
-        break;
         case MonsterUnitDeckardCain6:
           /* GetQuestState(QUEST_EveOfDestruction, 0xa=Step0x10) — NPC 0x208: suppress
                          gossip once final Step0x10 (left act) set */ BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Step0x10);
@@ -709,8 +698,20 @@ bool __fastcall Q36_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
 
         eQuestState = QUESTSTATE_Step0x05;
         break;
+        case MonsterUnitMalah:
+          eQuestState = QUESTSTATE_Step0x06;
+        break;
         case MonsterUnitTyrael3:
           eQuestState = QUESTSTATE_Step0x07;
+        break;
+        case MonsterUnitQualkehk:
+          eQuestState = QUESTSTATE_Step0x08;
+        break;
+        case MonsterUnitDrehya1:
+          eQuestState = QUESTSTATE_Step0x09;
+        break;
+        default:
+          return false;
       }
 
       /* GetQuestState(QUEST_EveOfDestruction, eStep) — per-NPC Step bit

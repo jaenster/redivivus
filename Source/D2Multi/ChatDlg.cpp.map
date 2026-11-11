@@ -1870,7 +1870,7 @@
         "D2WINTEXTBOX_SetColumnAlignment",
         "CHATDLG_ClearLadderBoard",
         "D2WINTIMER_Start",
-        "D2WINEDITBOX_Destroy"
+        "D2WINTIMER_SetRepeating"
       ],
       "usedTypes": [
         "D2ControlStrc",
@@ -2243,6 +2243,33 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
+      ]
+    },
+    {
+      "name": "OOGUTIL_SendChatMessage",
+      "address": "004428d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004428d0"
+        }
+      ],
+      "namespace": "D2Multi::ChatDlg",
+      "calledFunctions": [
+        "OOGUTIL_SendChatMessage",
+        "SMemZero",
+        "OOGUTIL_GetAccountName",
+        "sprintf",
+        "CHATDLG_FindSubstringMatch",
+        "CHATDLG_DetectCDKeyInString",
+        "CHAT_SendOutOfGameMessage",
+        "GetLocaleString",
+        "UIMENU_DrawTitleAndSubtitleOnCenterScreen"
+      ],
+      "usedTypes": [
+        "WCHAR",
+        "int32_t",
+        "uint16_t"
       ]
     },
     {

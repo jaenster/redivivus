@@ -65,7 +65,7 @@ void __fastcall Objects_InitFn47_CountessChest(D2ObjectInitFnArg * pInitArg) {
 
         i++;
         pListEntry++;
-      } while (i < (int)(uint32_t)(uint16_t)pQuestSpecific->nCountessChestCount);
+      } while (i < (int)(uint32_t)pQuestSpecific->nCountessChestCount);
     }
     if (nChestCount < 8) {
       pQuestSpecific->nCountessChestGUID_0[nChestCount] = nObjectGUID;
@@ -605,7 +605,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     int iQ37DropCount;
     ::SGAMEDATA* pGame;
     ::SGAMEDATA* pGame2;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     uint8_t bIsIntroduced = pQuestData->bIsNotIntroduction;
     D2QuestDataA1Q6Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q6;
     pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
@@ -626,18 +626,16 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             iQ37DropCount = 2;
             do {
               pQuestSeed = GetQuestControlSeed(pQuestData->pGame);
-              sNextSeed = D2_SEED_NEXT(*pQuestSeed);
-              *pQuestSeed = sNextSeed;
-              pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q37[sNextSeed.nSeedLow % 7];
+              sNextSeed = D2_SeedRoll(pQuestSeed);
+              pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q37[sNextSeed % 7];
               ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemGUID2, nullptr, -1, 0);
               iQ37DropCount--;
             } while (iQ37DropCount);
 
             pQuestSeed = GetQuestControlSeed(pQuestData->pGame);
             iQ37DropCount = 0;
-            sNextSeed = D2_SEED_NEXT(*pQuestSeed);
-            *pQuestSeed = sNextSeed;
-            pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q06[sNextSeed.nSeedLow % 7];
+            sNextSeed = D2_SeedRoll(pQuestSeed);
+            pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q06[sNextSeed % 7];
             ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemGUID2, nullptr, -1, 0);
             pQuestArgs->pTarget->dwDropItemCode = 0;
           }

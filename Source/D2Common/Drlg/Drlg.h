@@ -38,7 +38,6 @@ struct D2RoomExStrc;
 struct D2RoomStrc;
 struct D2TileLibraryEntryStrc;
 struct D2UnitStrc;
-struct D2UnkOutdoorStrc;
 struct SGAMEDATA;
 typedef uint32_t eD2GridCellFlags;
 typedef uint32_t eD2Skills;
@@ -379,7 +378,6 @@ void __fastcall FreeRoomEx(struct D2RoomExStrc * pRoomEx, BOOL bServerSide);
 void __fastcall DRLGROOMEX_InitTileData(struct D2RoomExStrc * pRoomEx);
 // Gets secondary floor grid flags at the given Y coordinate. Checks if the misc grid's sub-grid flag is set before reading from the embedded coords grid at 0xF4.
 int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX);
-void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(struct D2UnkOutdoorStrc * pUnkOutdoor, struct D2LvlSubTxt * pLvlSub);
 // Applies a LvlSub DS1 patch to the outdoor room: copies floor/wall/shadow flags into the room’s grids, grows the room tile array for flagged shadow tiles, and spawns shadow tiles plus preset units from the sub file.
 void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(struct D2PoolManagerStrc * pMemory, int32_t baseX, int32_t baseY, struct D2DrlgWallLayerGridsStrc * pRoomCtx, int * pRect, struct D2LvlSubTxt * pSubTxt, int32_t rectOffsetY);
 // DRLG outdoor preset placement - place multiple preset objects without overlap checking all positions
@@ -482,6 +480,6 @@ struct D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(struct D
 // DRLG level-generation: builds the room-graph path connecting wilderness level exit pair nExitIndex (aExitPoints2 start -> aExitPoints3 target, both converted from world to 8-unit grid coords). If the two exits are adjacent (Manhattan <=1) it just allocates two vertices directly. Otherwise runs an iterative A*-style search (DRLGOUTROOM_PathSearchStep over a ~9000-int node pool, growing the cost bound each pass) and, on success, walks the result node chain allocating a D2DrlgVertexStrc list into pWildData->pAdjacentVertices[nExitIndex] (positions from node[3]/[4]). Returns TRUE if a path was built, FALSE if no path within the cost budget. Vertices come from the level's DRLG memory pool.
 BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(struct D2DrlgLevelStrc * pLevel, int32_t nExitIndex);
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 12 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg

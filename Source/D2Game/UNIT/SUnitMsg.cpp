@@ -180,10 +180,10 @@ static void PLAYER_AddEnergyStatPoints(D2UnitStrc * pUnit, int32_t nPoints) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, -nPoints, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_energy, nPoints, 0);
     if (nPoints > 0) {
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, (uint32_t)(uint8_t)pCharStats->ManaPerMagic * nPoints * 0x40, 0);
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, (uint32_t)pCharStats->ManaPerMagic * nPoints * 0x40, 0);
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxmana, (uint32_t)(uint8_t)pCharStats->ManaPerMagic * nPoints * 0x40, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxmana, (uint32_t)pCharStats->ManaPerMagic * nPoints * 0x40, 0);
     nCharClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxmana, 0);
     int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     if (nCurMana <= nCharClassId) {
@@ -207,9 +207,9 @@ static void PLAYER_AddVitalityStatPoints(int32_t nPoints, D2UnitStrc * pUnit) {
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, -nPoints, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_vitality, nPoints, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxhp, (uint32_t)(uint8_t)pCharStats->LifePerVitality * nPoints * 0x40, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxhp, (uint32_t)pCharStats->LifePerVitality * nPoints * 0x40, 0);
     if (nPoints > 0) {
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_hitpoints, (uint32_t)(uint8_t)pCharStats->LifePerVitality * nPoints * 0x40, 0);
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_hitpoints, (uint32_t)pCharStats->LifePerVitality * nPoints * 0x40, 0);
     }
 
     nMaxStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxhp, 0);
@@ -218,9 +218,9 @@ static void PLAYER_AddVitalityStatPoints(int32_t nPoints, D2UnitStrc * pUnit) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxStat, 0);
     }
 
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxstamina, (uint32_t)(uint8_t)pCharStats->StaminaPerVitality * nPoints * 0x40, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_maxstamina, (uint32_t)pCharStats->StaminaPerVitality * nPoints * 0x40, 0);
     if (nPoints > 0) {
-      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)(uint8_t)pCharStats->StaminaPerVitality * nPoints * 0x40, 0);
+      D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)pCharStats->StaminaPerVitality * nPoints * 0x40, 0);
     }
 
     nMaxStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_maxstamina, 0);
@@ -365,7 +365,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                 pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nBitPosCheck > 0) {
                   do {
-                    nStatId = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wStatIndex;
+                    nStatId = (uint32_t)aStatBuf[nStatBufIdx].wStatIndex;
                     nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                     nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
                     pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
@@ -514,7 +514,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                       pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                       if (nCopiedStats > 0) {
                         do {
-                          nStatId = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wStatIndex;
+                          nStatId = (uint32_t)aStatBuf[nStatBufIdx].wStatIndex;
                           nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                           nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
                           pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;

@@ -552,6 +552,17 @@ static inline intptr_t D2_StormNextLink(const void* pLink, intptr_t nLinkOffset)
 // Diablo 2 PRNG — LCG with multiplier 0x6AC690C5
 #define D2_SEED_NEXT(seed) ((D2SeedStrc)((uint64_t)(uint32_t)(seed).nSeedLow * 0x6ac690c5u + (uint64_t)(uint32_t)(seed).nSeedHigh))
 #define D2_SEED_NEXT_VAL(sv) ((D2SeedStrc)((uint64_t)(uint32_t)(sv) * 0x6ac690c5u + ((uint64_t)(sv) >> 32)))
+#if defined(_MSC_VER)
+#define D2_SEED_ROLL_INLINE __forceinline
+#else
+#define D2_SEED_ROLL_INLINE inline __attribute__((always_inline))
+#endif
+template <class TSeed> static D2_SEED_ROLL_INLINE uint32_t D2_SeedRoll(TSeed* pSeed) {
+    uint64_t lNext = (uint64_t)(uint32_t)pSeed->nSeedLow * 0x6ac690c5u + (uint64_t)(uint32_t)pSeed->nSeedHigh;
+    pSeed->nSeedHigh = (uint32_t)(lNext >> 32);
+    pSeed->nSeedLow = (uint32_t)lNext;
+    return (uint32_t)lNext;
+}
 
 // A shift count as x86 takes it: SHL/SHR/SAR by CL use its low five bits. The decompiler
 // prints such a shift as `x << (n & 0x1f)`; the source shifted by n, and VC8 compiles the

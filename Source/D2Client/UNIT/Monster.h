@@ -132,7 +132,7 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x009 */ char SizeY;
     /* 0x00A */ char spawnCol;
     /* 0x00B */ char Height;
-    /* 0x00C */ char overlayHeight;
+    /* 0x00C */ uint8_t overlayHeight;
     /* 0x00D */ uint8_t pixHeight;
     /* 0x00E */ uint8_t MeleeRng;
     /* 0x00F */ uint8_t field_0xf;
@@ -158,8 +158,8 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x106 */ uint8_t field_0x106;
     /* 0x107 */ uint8_t field_0x107;
     /* 0x108 */ uint8_t byInfernoLen; // InfernoLen - number of inferno (channeled) sub-anims (struct+0x108)
-    /* 0x109 */ char byInfernoAnim; // InfernoAnim - inferno animation rate (struct+0x109)
-    /* 0x10A */ char byInfernoRollback; // InfernoRollback - inferno rollback frame (struct+0x10a)
+    /* 0x109 */ uint8_t byInfernoAnim; // InfernoAnim - inferno animation rate (struct+0x109)
+    /* 0x10A */ uint8_t byInfernoRollback; // InfernoRollback - inferno rollback frame (struct+0x10a)
     /* 0x10B */ char byResurrectMode; // ResurrectMode - mode code resurrected monster plays in (FIELDTYPE_CODE_CHAR via pTxtMonModeLink, struct+0x10b)
     /* 0x10C */ uint16_t wResurrectSkill; // ResurrectSkill — skill used when resurrecting
     /* 0x10E */ short nHtTop; // htTop — hit-test box top

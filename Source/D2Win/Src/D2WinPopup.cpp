@@ -165,8 +165,8 @@ BOOL __fastcall Draw(::D2WinPopup * pPopup) {
       sPopupRect.right = pPopup->sControl.dwPosX;
       sPopupRect.left = sPopupRect.right - 5;
       nMsgIdx = pPopup->sControl.dwPosY;
-      sPopupRect.bottom = nMsgIdx + 5;
       sPopupRect.top = nMsgIdx - pPopup->sControl.dwSizeY - 5;
+      sPopupRect.bottom = nMsgIdx + 5;
       sPopupRect.right = pPopup->sControl.dwSizeX + 5 + sPopupRect.right;
       D2gfx::D2GFX::D2GFX_DrawRectEx(&sPopupRect, 0xff);
       D2gfx::D2GFX::D2GFX_DrawSolidRectEx(sPopupRect.left, sPopupRect.bottom, sPopupRect.right, sPopupRect.top, dwFillColor, DRAW_LESSTRANSPARENT);

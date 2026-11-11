@@ -377,6 +377,19 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
         _bFlagActive = ui::GetUIFlag(UI_SKILLTREE);
       eUI = UI_SKILLTREE;
       goto toggle_panel;
+      case 3:
+        eGameType = GAME::Game::CLIENT_GetD2GSGameType();
+      if (eGameType != GAMETYPE_SINGLEPLAYER) {
+        _bFlagActive = ui::GetUIFlag(UI_PARTYSCREEN);
+        eUI = UI_PARTYSCREEN;
+        goto toggle_panel;
+      }
+
+      break;
+      case 4:
+        _bFlagActive = ui::GetUIFlag(UI_AUTOMAP);
+      eUI = UI_AUTOMAP;
+      goto toggle_panel;
       case 5:
         bFlagSet = ui::GetUIFlag(UI_BELTROWS);
       if (bFlagSet) {
@@ -392,19 +405,6 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
       }
       ui::SetUIFlag(eUI, UI_RESET, 0);
       return;
-      case 3:
-        eGameType = GAME::Game::CLIENT_GetD2GSGameType();
-      if (eGameType != GAMETYPE_SINGLEPLAYER) {
-        _bFlagActive = ui::GetUIFlag(UI_PARTYSCREEN);
-        eUI = UI_PARTYSCREEN;
-        goto toggle_panel;
-      }
-
-      break;
-      case 4:
-        _bFlagActive = ui::GetUIFlag(UI_AUTOMAP);
-      eUI = UI_AUTOMAP;
-      goto toggle_panel;
       case 6:
         /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA("Panel quest log toggle\n");
       QuestLog::QUESTLOG_ToggleQuestScreen(0);

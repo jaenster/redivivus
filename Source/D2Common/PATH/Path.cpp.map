@@ -108,29 +108,6 @@
       ]
     },
     {
-      "name": "PATH_CanMonsterPathInArea",
-      "address": "006483a0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006483a0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_CanMonsterPathInArea",
-        "MONSTER_IsBossOrChampion",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "DRLGROOM_IsRoomInTown"
-      ],
-      "usedTypes": [
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "uint16_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "DRLGPATH_UpdateUnitRoom",
       "address": "0064fad0",
       "lines": [

@@ -10,9 +10,9 @@
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2gfx/D2gfx.public.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -286,16 +286,15 @@ void __stdcall UI_FreeCursor() {
 }
 
 void __stdcall UI_AnimateCursorForward() {
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     int nSavedCursorIndex = nCursorDataIndex;
     if (!pPlayerUnit_lcl) {
       return;
     }
     if (ItemTypeOnHand == 1) {
-      sNewSeed = D2_SEED_NEXT(pPlayerUnit_lcl->sSeed);
-      pPlayerUnit_lcl->sSeed = sNewSeed;
-      if (((uint8_t)sNewSeed.nSeedLow & 0x3f) < 0x10) {
+      sNewSeed = D2_SeedRoll(&pPlayerUnit_lcl->sSeed);
+      if (((uint8_t)sNewSeed & 0x3f) < 0x10) {
         gCursorAnimationFrame += 0x20;
       }
     } else {

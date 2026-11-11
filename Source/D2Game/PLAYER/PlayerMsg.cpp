@@ -923,7 +923,7 @@ static uint8_t GetMPRegen(D2UnitStrc * pUnit) {
       nManaRegenBase = pUnit->nClassId;
       D2CharStatsTxt* pCharStatsTxt = !(nManaRegenBase < 0 || nManaRegenBase >= D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize) ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + nManaRegenBase : nullptr;
       if (pCharStatsTxt) {
-        nManaRegenBase = (uint32_t)(uint8_t)pCharStatsTxt->ManaRegen * 0x19;
+        nManaRegenBase = (uint32_t)pCharStatsTxt->ManaRegen * 0x19;
         if (!nManaRegenBase) {
           nManaRegenBase = 0x1d4c;
         }
@@ -2488,10 +2488,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
           pfnChatCallback = (fpForEachClientFn)CHAT_BroadcastToClient;
         }
 
-        replyPacket.pPacketData = &sPacket;
-        replyPacket.pChatMessage = &pBuffer;
         g_bWhisperDelivered = 0;
         g_bWhisperSquelched = 0;
+        replyPacket.pPacketData = &sPacket;
+        replyPacket.pChatMessage = &pBuffer;
         uint32_t nSenderGUIDValue;
         if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
           nSenderGUIDValue = -1;
@@ -4374,7 +4374,7 @@ static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc *
     int32_t nRandRemainder;
     int32_t dwUnitGUID;
     D2WarpChanceStrc* pWarpEntry;
-    D2SeedStrc sSeedNext;
+    uint32_t sSeedNext;
     int32_t bRelocSuccess = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, nullptr, nX, nY, 0, 1);
     if (!bRelocSuccess) {
       return 0;
@@ -4385,9 +4385,8 @@ static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc *
     BOOL BVar1 = GAME::Clients::CheckSyncWarpRateExceeded(pGame, pUnit);
     if (BVar1 && pGame->nGameType == SGAMETYPE_BNET_HOST) {
       int iVar2;
-      sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sSeedNext;
-      nRandRemainder = sSeedNext.nSeedLow % 100;
+      sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+      nRandRemainder = sSeedNext % 100;
       iVar2 = 0;
       do {
         pWarpEntry = gaWarpOffsetTable + iVar2;
@@ -4971,15 +4970,16 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 
       case 0x66:
         goto call_handler;
-      default:
-        nCancelResult = PlayerModes::PLRMODES_TryCancelModeAndMoveToLocation(pGame, pUnit, 1, 0, nullptr);
-      bAliveCheckPassed = nCancelResult != 0;
-      break;
       case 0x41:
         if (!pUnit) {
           return SERVERSTATUS_OK;
         }
       bAliveCheckPassed = pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead;
+      break;
+      default:
+        nCancelResult = PlayerModes::PLRMODES_TryCancelModeAndMoveToLocation(pGame, pUnit, 1, 0, nullptr);
+      bAliveCheckPassed = nCancelResult != 0;
+      break;
     }
 
     if (!bAliveCheckPassed) {

@@ -449,7 +449,7 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
       if (!nWeaponClass) {
         pInventory = pUnit->pInventory;
       } else {
-        pWeaponUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+        pWeaponUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
         if (!pWeaponUnit) {
           pInventory = pUnit->pInventory;
         } else {
@@ -875,7 +875,7 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nCom
     if (eUnitType != UNIT_PLAYER) {
       return 0;
     }
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (_bIsEthereal = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !_bIsEthereal || (pDVar1 = UNIT::Player::MISSILE_GetOwnerUnit(pUnit) , !pDVar1))) {
+    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (_bIsEthereal = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !_bIsEthereal || (pDVar1 = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pDVar1))) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pDVar1->pInventory;
@@ -948,7 +948,7 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t 
     if (eUnitType != UNIT_PLAYER) {
       return pDefaultColor;
     }
-    if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
+    if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pOwnerUnit->pInventory;
@@ -1037,7 +1037,7 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
     if (!pGfxInfo) {
       return 0;
     }
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState0x25 = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState0x25) || (pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState0x25 = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState0x25) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pOwnerUnit->pInventory;

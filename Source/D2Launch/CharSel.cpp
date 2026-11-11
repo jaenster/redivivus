@@ -366,9 +366,11 @@ static uint32_t CHARSEL_GetDaysUntilExpiry(uint32_t nExpiryTime) {
 
 // Draws local character slots in selection screen. Iterates gaCharSelScreenSlotControls[0-7] to render each slot's character name, level, class, and hardcore/expansion flags. Highlights selected slot, draws character preview sprite, and handles expired characters.
 void __stdcall DRAW_LocalCharsInSelectionScreen() {
+    uint16_t uVar1;
     uint32_t nLanguageCode;
+    uint32_t wCharFlags;
     uint16_t* pwszLocaleStr;
-    D2CharSelStrc* pDVar1;
+    D2CharSelStrc* pDVar2;
     uint32_t dwCompFlags;
     char* pcSrc;
     char* pcDst;
@@ -384,7 +386,6 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
     eD2PlayerClassID ePlayerClass;
     int nTextArg0;
     int32_t nTextLine;
-    uint16_t wCharFlags;
     D2CharSelStrc* pCharSel = D2CharSelStrcFirst;
     int nSlotBoxY = gnCharSlotYPositions[0] - 0xd;
     int nCharacterIndex = 0;
@@ -427,13 +428,14 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
         nCharacterIndex = nNavigationIndex - g_nCharSelNavigationIndex;
         D2Win::Src::D2Comp::D2COMP_SetScreenX(pCharSel->pCharSelCompStrc, nSlotBoxX + 0x1e);
         D2Win::Src::D2Comp::D2COMP_SetScreenY(pCharSel->pCharSelCompStrc, nSlotBoxY);
-        wCharFlags = pCharSel->nCharacterFlags;
-        if (wCharFlags & 8) {
+        uVar1 = pCharSel->nCharacterFlags;
+        wCharFlags = (uint32_t)uVar1;
+        if (uVar1 & 8) {
           dwCompFlags = Fog::BitBuffer::gadwBitMasks[4] | 1;
         } else {
           dwCompFlags = Fog::BitBuffer::gadwInvBitMasks[4] & 1;
         }
-        if (wCharFlags & 4) {
+        if (uVar1 & 4) {
           nLanguageCode = dwCompFlags | Fog::BitBuffer::gadwBitMasks[5];
         } else {
           nLanguageCode = dwCompFlags & Fog::BitBuffer::gadwInvBitMasks[5];
@@ -453,9 +455,9 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
           }
 
           pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
-          pDVar1 = pCharSel;
+          pDVar2 = pCharSel;
           if (pcSrc) {
-            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, 4 + (wCharFlags & 4 ? -3 : 0));
+            D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, 4 + (uVar1 & 4 ? -3 : 0));
           }
 
           strcat(szNameBuf, pCharSel->szCharname);
@@ -468,7 +470,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             sprintf(pcDst, " {%s}", pCharSel->szGuildTag);
           }
 
-          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, 4 + (wCharFlags & 4 ? -3 : 0));
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, 4 + (uVar1 & 4 ? -3 : 0));
           CHARSEL_GetClassNameString((uint32_t)pCharSel->ePlayerClassID, wszClassName);
           for (nTextArg0 = 0; nTextArg0 < 0x64; nTextArg0++) {
             wszLineBuf[nTextArg0] = L'\0';

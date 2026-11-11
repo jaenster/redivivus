@@ -2178,13 +2178,12 @@ uint32_t __thiscall DRLGPATH_IsPositionInBounds(D2DrlgAStarContextStrc * pThis, 
 
 // Advances a path node's direction by stepping through its direction delta table. Optionally applies a random perturbation from the seed. Used during A* node expansion.
 static void DRLGPATH_AdvanceNodeDirection(D2DrlgRoomAStarNodeStrc * pNode, D2DrlgAStarContextStrc * pAStarCtx) {
-    D2SeedStrc lSeedNext;
+    uint32_t lSeedNext;
     if (pAStarCtx->bRandomizeDirection) {
       D2SeedStrc* pDVar1;
       pDVar1 = pAStarCtx->pSeed;
-      lSeedNext = D2_SEED_NEXT(*pDVar1);
-      *pDVar1 = lSeedNext;
-      pNode->nDirection = gnDrlgMemoryMax[lSeedNext.nSeedLow & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
+      lSeedNext = D2_SeedRoll(pDVar1);
+      pNode->nDirection = gnDrlgMemoryMax[lSeedNext & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
       return;
     }
 
@@ -2194,7 +2193,7 @@ static void DRLGPATH_AdvanceNodeDirection(D2DrlgRoomAStarNodeStrc * pNode, D2Drl
 // Advances through a chain of path nodes, incrementing their visit count and updating their direction. When a node reaches visit count 5, moves to its parent. Returns the current node or 0 when the root is reached.
 static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AdvancePathNodeChain(D2DrlgAStarContextStrc * pAStarCtx, D2DrlgRoomAStarNodeStrc * pNode) {
     D2SeedStrc* pDVar1;
-    D2SeedStrc lSeedNext;
+    uint32_t lSeedNext;
     if (pNode->nFlags < 4) {
       pNode->pSeedPtr++;
       DRLGPATH_AdvanceNodeDirection(pNode, pAStarCtx);
@@ -2214,9 +2213,8 @@ static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AdvancePathNodeChain(D2DrlgA
       pNode->pSeedPtr++;
       if (pAStarCtx->bRandomizeDirection) {
         pDVar1 = pAStarCtx->pSeed;
-        lSeedNext = D2_SEED_NEXT(*pDVar1);
-        *pDVar1 = lSeedNext;
-        pNode->nDirection = gnDrlgMemoryMax[lSeedNext.nSeedLow & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
+        lSeedNext = D2_SeedRoll(pDVar1);
+        pNode->nDirection = gnDrlgMemoryMax[lSeedNext & 0x1f] + *pNode->pSeedPtr + pNode->nDirection & 7;
       } else {
         pNode->nDirection = pNode->nDirection + *pNode->pSeedPtr & 7;
       }

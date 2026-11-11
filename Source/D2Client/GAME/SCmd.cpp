@@ -1740,14 +1740,16 @@ void __fastcall SCMD_RecalcInventoryItemStats(D2UnitStrc * pUnit) {
       pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItem);
       nStatFlag = 0;
-      pItem = pNextItem;
+      D2UnitStrc* pNextItem2;
       if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
-        pNextItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, &nStatFlag);
-        if (pNextItem) {
+        pNextItem2 = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, &nStatFlag);
+        if (pNextItem2) {
           D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pCarriedItem);
           D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pCarriedItem, nStatFlag);
         }
       }
+
+      pItem = pNextItem;
     }
 
     D2Common::Skills::SelectSkillLeft(pUnit, nLeftSkill, -1);

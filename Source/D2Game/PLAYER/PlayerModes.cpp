@@ -111,16 +111,6 @@ static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * p
 
       case eD2PlayerAnimMode_ns::Dead:
         return 0;
-      default:
-        return 1;
-      case eD2PlayerAnimMode_ns::Attack1:
-
-      case eD2PlayerAnimMode_ns::Attack2:
-
-      case eD2PlayerAnimMode_ns::Cast:
-
-      case Throw:
-        break;
       case Kick:
         iVar1 = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
       return (uint32_t)(iVar1 != 0);
@@ -137,6 +127,16 @@ static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * p
       case eD2PlayerAnimMode_ns::Sequence:
         BVar2 = PLRMODES_HasEndAnimEventAndSeqInput(pGame, pUnit);
       return BVar2;
+      default:
+        return 1;
+      case eD2PlayerAnimMode_ns::Attack1:
+
+      case eD2PlayerAnimMode_ns::Attack2:
+
+      case eD2PlayerAnimMode_ns::Cast:
+
+      case Throw:
+        break;
     }
 
     iVar1 = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
@@ -580,12 +580,13 @@ static int32_t __stdcall PLRMODES_CleanupInvalidCorpses(::SGAMEDATA * pGame, D2U
       pNextCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pCorpseEntry);
       dwFindGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pCorpseEntry);
       pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwFindGUID);
-      pCorpseEntry = pNextCorpse;
       if (!pFoundUnit) {
         D2Common::INVENTORY::Inventory::INVENTORY_RemoveCorpse(pInventory, dwFindGUID, 1);
       } else {
         nCorpseCount++;
       }
+
+      pCorpseEntry = pNextCorpse;
     }
 
     return nCorpseCount;
@@ -1290,6 +1291,9 @@ static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
 
       case TownNeutral:
         break;
+      case TownWalk:
+        *(uint8_t*)(char*)&nShiftAmount = 9;
+      break;
       case Walk:
         *(uint8_t*)(char*)&nShiftAmount = 9;
       if (!(nCurrentStamina & -256)) {
@@ -1302,8 +1306,6 @@ static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
           return;
         }
       break;
-      case TownWalk:
-        *(uint8_t*)(char*)&nShiftAmount = 9;
     }
 
     int32_t nMaxStamina = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
@@ -1417,7 +1419,7 @@ static void PLRMODES_RegenMana(D2UnitStrc * pUnit) {
         return;
       }
 
-      nCharClassId = (uint32_t)(uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats[nCharClassId].ManaRegen * 0x19;
+      nCharClassId = (uint32_t)D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats[nCharClassId].ManaRegen * 0x19;
       if (!nCharClassId) {
         nCharClassId = 0x1d4c;
       }

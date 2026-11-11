@@ -1692,24 +1692,16 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                   break;
                 }
 
-                nBottomRow = 0;
-                if (iVar1 > 0) {
-                  do {
-                    if (bSwapped) {
-                      break;
-                    }
-                    if (pDistMap[nGridX + nBottomRow] == 2) {
-                      if (nRandExitIdx == pExitCount.nExitCount) {
-                        pDistMap[nGridX + nBottomRow] = 0;
-                        bSwapped = true;
-                        nRandIdx--;
-                      }
-
-                      pExitCount.nExitCount++;
+                for (nBottomRow = 0; nBottomRow < iVar1 && !bSwapped; nBottomRow++) {
+                  if (pDistMap[nGridX + nBottomRow] == 2) {
+                    if (nRandExitIdx == pExitCount.nExitCount) {
+                      pDistMap[nGridX + nBottomRow] = 0;
+                      bSwapped = true;
+                      nRandIdx--;
                     }
 
-                    nBottomRow++;
-                  } while (nBottomRow < iVar1);
+                    pExitCount.nExitCount++;
+                  }
                 }
 
                 nGridX += nWidth;

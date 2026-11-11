@@ -784,9 +784,9 @@ bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc
     }
 
     ptFrom.y = nFromY;
-    ptTo.y = nFromY + nOffsetY;
     ptFrom.x = nFromX;
     ptTo.x = nFromX + nDistance;
+    ptTo.y = nFromY + nOffsetY;
     BOOL bCollides = D2Common::Collision::TestCollision(pRoom, &ptFrom, &ptTo, 4);
     return (bool)(bCollides != 0 ? 0 : 1);
 }
@@ -2149,11 +2149,11 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea(::SGAMEDATA * p
         nAuraFilter = 0xa783;
       }
 
-      sSubMissileArgs.nSubMissileId = (int)pMissileTxt->HitSubMissile1;
-      sSubMissileArgs.pOwner = pOwnerUnit;
       sSubMissileArgs.pMissile = pUnit;
-      sSubMissileArgs.eSkill = eSkill;
       sSubMissileArgs.nSkillLevel = nSkillLvl;
+      sSubMissileArgs.eSkill = eSkill;
+      sSubMissileArgs.pOwner = pOwnerUnit;
+      sSubMissileArgs.nSubMissileId = (int)pMissileTxt->HitSubMissile1;
       SKILLS::SkillsServer::SKILLS_ApplyAreaEffect(pGame, pOwnerUnit, nX, nY, nRadius, nAuraFilter, MISSMODE_CreateSubMissileAtFrame, &sSubMissileArgs, 1, ".\\MISSILES\\MissMode.cpp", 0xec3);
       return 3;
     }
@@ -3649,9 +3649,8 @@ void __fastcall Missiles_SrvDmgFunc_RollChanceFlagBlessedAim(::SGAMEDATA * pGame
       return;
     }
 
-    D2SeedStrc seedNew = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = seedNew;
-    if ((int)(seedNew.nSeedLow & 0x7f) >= pMissilesTxt->dParam1) {
+    uint32_t seedNew = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(seedNew & 0x7f) >= pMissilesTxt->dParam1) {
       return;
     }
 
@@ -4330,12 +4329,12 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea(::SGAMEDATA
         dwFindGUID = 0xa683;
       }
 
-      sSubMissileArgs.nSubMissileId = (int)pMissilesTxt->HitSubMissile1;
-      sSubMissileArgs.nMaxCount = nMaxCount;
-      sSubMissileArgs.pOwner = pOwner;
-      sSubMissileArgs.pMissile = pUnit;
       sSubMissileArgs.eSkill = eSkillId;
       sSubMissileArgs.nSkillLevel = nSkillLvl;
+      sSubMissileArgs.pOwner = pOwner;
+      sSubMissileArgs.pMissile = pUnit;
+      sSubMissileArgs.nSubMissileId = (int)pMissilesTxt->HitSubMissile1;
+      sSubMissileArgs.nMaxCount = nMaxCount;
       SKILLS::SkillsServer::SKILLS_ApplyAreaEffect(pGame, pOwner, nX, nY, nRadius, dwFindGUID, MISSMODE_CreateSubMissileInvertFrame, &sSubMissileArgs, 0, ".\\MISSILES\\MissMode.cpp", 0xf65);
       return 1;
     }
@@ -4688,9 +4687,9 @@ int __fastcall MISSMODE_SrvDoFn05_FireWall(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     D2Common::Collision::AddCollision_Width(D2Common::Units::UNITS_GetRoom(pUnit), nUnitPosX, nUnitPosY, D2Common::Units::GetUnitSizeX(pUnit), 0x40);
-    if (nGfxFrame == (uint8_t)pMissilesTxt->SubStart - 1) {
+    if (nGfxFrame == pMissilesTxt->SubStart - 1) {
       uint32_t nRandOffset;
-      nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)(uint8_t)pMissilesTxt->SubStop - (uint32_t)(uint8_t)pMissilesTxt->SubStart);
+      nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMissilesTxt->SubStop - (uint32_t)pMissilesTxt->SubStart);
       pUnit->nGfxCurrentFrame = (nRandOffset + nGfxFrame) * 0x100;
       nGfxFrame = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
       return nGfxFrame;
@@ -4705,7 +4704,7 @@ int __fastcall MISSMODE_SrvDoFn05_FireWall(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     nUnitPosX = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-    if (nUnitPosX < (int)(uint32_t)(uint8_t)pMissilesTxt->SubStart) {
+    if (nUnitPosX < (int)(uint32_t)pMissilesTxt->SubStart) {
       nGfxFrame += -2;
       if (nGfxFrame < 0) {
         nGfxFrame = 0;
@@ -6191,7 +6190,7 @@ int __fastcall MISSILESMODE_SrvDoFn34_BaalTauntControl(::SGAMEDATA * pGame, D2Un
     uint32_t nSeedHigh;
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameLocal;
-    D2SeedStrc sSeedResult;
+    uint32_t sSeedResult;
     int nMissileClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nMissileClassId = pUnit->nClassId) >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
     if (!pMissileTxt) {
@@ -6231,14 +6230,11 @@ int __fastcall MISSILESMODE_SrvDoFn34_BaalTauntControl(::SGAMEDATA * pGame, D2Un
       pSeed = &pUnit->sSeed;
       D2Common::Seed::InitSeed_Param_666(pSeed, nSubMissileCount);
       if (nSelectedIndex & nSelectedIndex - 1) {
-        sSeedResult = D2_SEED_NEXT(*pSeed);
-        nSelectedIndex = sSeedResult.nSeedLow % nSelectedIndex;
-        *pSeed = sSeedResult;
+        sSeedResult = D2_SeedRoll(pSeed);
+        nSelectedIndex = sSeedResult % nSelectedIndex;
       } else {
-        sSeedResult = D2_SEED_NEXT(*pSeed);
-        pSeed->nSeedHigh = sSeedResult.nSeedHigh;
-        pSeed->nSeedLow = sSeedResult.nSeedLow;
-        nSelectedIndex = nSelectedIndex - 1 & sSeedResult.nSeedLow;
+        sSeedResult = D2_SeedRoll(pSeed);
+        nSelectedIndex = nSelectedIndex - 1 & sSeedResult;
       }
       if (!(nRemainingFrames % (&pMissileTxtSaved->Param2)[nSelectedIndex])) {
         memset(&sSkillArg, 0, 0x5c);
@@ -6301,10 +6297,8 @@ int __fastcall MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce(::SGAMEDATA * pGame, D
     nRemainingFrames = D2Common::Units::Missile::GetTargetY(pUnit);
     nMissileId = (int)(short int)nRemainingFrames;
     nFrameInterval = (int)(short int)((uint32_t)nRemainingFrames >> 0x10);
-    D2SeedStrc DVar1 = D2_SEED_NEXT(*pSeed);
-    pSeed->nSeedHigh = DVar1.nSeedHigh;
-    pSeed->nSeedLow = DVar1.nSeedLow;
-    if (DVar1.nSeedLow & 1) {
+    uint32_t DVar1 = D2_SeedRoll(pSeed);
+    if (DVar1 & 1) {
       nNewDirY = -nFrameInterval;
       nDirXSaved = nMissileId;
     } else {

@@ -1020,7 +1020,7 @@ static void __stdcall SKILLASSN_GetTrapHealthBonus(eD2Skills eSkill, D2UnitStrc 
     }
 
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pMissileUnit->pPath.pDynamicPath, (uint8_t)nLifetime);
-    D2Common::Units::SetAnimationSpeed(pMissileUnit, (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nLifetime));
+    D2Common::Units::SetAnimationSpeed(pMissileUnit, (int32_t)((pMissileTxt->AnimLen << 8) / nLifetime));
     D2Common::Units::Missile::SetTotalFrames(pMissileUnit, nLifetime);
     D2Common::Units::Missile::SetCurrentFrame(pMissileUnit, nLifetime);
 }
@@ -1059,12 +1059,12 @@ void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitS
         return;
       }
       if (pSkillsTxt->monanim == '\x0e') {
-        D2Common::Units::SetSequenceFrame(pUnit, (uint8_t)pMonStatsEx->byInfernoAnim - 1);
-        pUnit->nFrameCount = ((uint8_t)pMonStatsEx->byInfernoAnim + 1) * 0x100;
+        D2Common::Units::SetSequenceFrame(pUnit, pMonStatsEx->byInfernoAnim - 1);
+        pUnit->nFrameCount = (pMonStatsEx->byInfernoAnim + 1) * 0x100;
         return;
       }
 
-      pUnit->nGfxCurrentFrame = (uint32_t)(uint8_t)pMonStatsEx->byInfernoAnim << 8;
+      pUnit->nGfxCurrentFrame = (uint32_t)pMonStatsEx->byInfernoAnim << 8;
       return;
     }
 
@@ -1099,7 +1099,7 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.nSkillLevel = nSkillLvl;
-    int nVelCalc = (uint32_t)(uint8_t)pMissileTxt->VelLev * nSkillLvl;
+    int nVelCalc = (uint32_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
@@ -1161,7 +1161,7 @@ BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.nSkillLevel = nSkillLvl;
-    int nVelCalc = (uint32_t)(uint8_t)pMissileTxt->VelLev * nSkillLvl;
+    int nVelCalc = (uint32_t)pMissileTxt->VelLev * nSkillLvl;
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
@@ -1616,9 +1616,8 @@ void __fastcall SKILLMONST_RandomizeMissilePath(D2UnitStrc * pUnit, intptr_t nMi
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nMissileIdx);
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNewSeed;
-    if (!((int32_t)(sNewSeed.nSeedLow % 100) >= 0x14)) {
+    uint32_t sNewSeed = D2_SeedRoll(pSeed);
+    if (!((int32_t)(sNewSeed % 100) >= 0x14)) {
       return;
     }
 
@@ -2417,9 +2416,8 @@ BOOL __fastcall Skills_SrvDoFunc_112_RandomCurse(::SGAMEDATA * pGame, D2UnitStrc
     D2SkillsTxt* pSkillsTxt;
     D2SkillAuraCtxStrc sNecroSkillArg;
     int32_t nAuraLen;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNewSeed;
-    int iVar1 = sNewSeed.nSeedLow % 5;
+    uint32_t sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+    int iVar1 = sNewSeed % 5;
     eD2Skills eCurseSkill = gnSkillOffset_Necromancer_Curse[iVar1];
     pSkillsTxt = (int)eCurseSkill >= 0 && (int)eCurseSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eCurseSkill : nullptr;
     if (pSkillsTxt && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {

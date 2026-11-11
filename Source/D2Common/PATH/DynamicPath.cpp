@@ -296,6 +296,30 @@ static uint8_t DIFFDIRECTIONS[256] = {
 
 namespace D2Common::PATH::DynamicPath {
 
+static uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
+    uint16_t nMidY;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+      return 1;
+    }
+
+    uint32_t bIsBossOrChamp = Monsters::MONSTERS::MONSTER_IsBossOrChampion(pUnit);
+    if (bIsBossOrChamp) {
+      return 1;
+    }
+
+    D2RoomStrc* pRoom = *(D2RoomStrc**)(pPathData + 6);
+    if (!pRoom) {
+      uint16_t nMidX;
+      nMidX = pPathData[2];
+      nMidY = pPathData[3];
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(*(D2RoomStrc**)(pPathData + 4), (int)((uint32_t)nMidX - (uint32_t)*pPathData) / 2 + (uint32_t)*pPathData, (int)((uint32_t)nMidY - (uint32_t)pPathData[1]) / 2 + (uint32_t)pPathData[1]);
+      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nMidX, (uint32_t)nMidY);
+    }
+
+    BOOL bIsTown = DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
+    return (uint32_t)!bIsTown;
+}
+
 void __stdcall STRUCT_FreePath(D2PoolManagerStrc * pMemory, void * pPath) {
     D2_FREE_POOL_AT(pMemory, pPath, ".\\PATH\\Path.cpp", 0x3d9);
 }
@@ -1599,7 +1623,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
             sPathTypeArg.pRoom = pDynamicPath_00->pRoom;
             sPathTypeArg.pRoomNext = Collision::DRLGROOM_FindBetterNearbyRoom(sPathTypeArg.pRoom, (uint16_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4), (uint32_t)*(uint32_t*)((char*)&sPathTypeArg.pCoords + 4) >> 0x10);
             if (sPathTypeArg.pRoom && sPathTypeArg.pRoomNext) {
-              nResult = Path::PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
+              nResult = PATH_CanMonsterPathInArea(pUnit, (uint16_t*)&sPathTypeArg);
               if (nResult || bIgnoreAreaCheck) {
                 sPathTypeArg.ePathType = pDynamicPath_00->ePathType;
                 pTargetUnit = pDynamicPath_00->pTargetUnit;

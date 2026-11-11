@@ -54,6 +54,132 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client::UNIT::CUnit {
 
+D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex) {
+    D2UnitStrc* pCurUnit = ppUnitHashTable[nListIndex];
+    while (true) {
+      if (!pCurUnit) {
+        return nullptr;
+      }
+      if (pCurUnit->nUnitGUID == nUnitGUID) {
+        break;
+      }
+
+      pCurUnit = pCurUnit->pListNext;
+    }
+
+    if (pCurUnit->eUnitType == eUnitType) {
+      return pCurUnit;
+    }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
+    exit(-1);
+}
+
+D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
+    D2UnitStrc* pUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+    return pUnit;
+}
+
+D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
+    D2UnitStrc* pOwnerUnit;
+    eD2UnitType eOwnerType;
+    uint32_t nUnitGUID;
+    if (!pUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
+      exit(-1);
+    }
+    if (pUnit->eUnitFlagsEx >> 10 & 1) {
+      eD2UnitType eUnitType;
+      eUnitType = pUnit->eOwnerType;
+      nUnitGUID = pUnit->nOwnerGUID;
+      if (eUnitType == UNIT_MISSILE) {
+        pOwnerUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[3], UNIT_MISSILE, nUnitGUID & 0x7f);
+        return pOwnerUnit;
+      }
+
+      pOwnerUnit = FindUnit(nUnitGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+      return pOwnerUnit;
+    }
+
+    return nullptr;
+}
+
+// Inserts pUnit into the appropriate global unit hash table (server-side or client-side, selected by UNITFLAG bit 0x21). Computes bucket from nUnitGUID &amp; 0x7f and inserts in ascending GUID order. Halts (ERROR_UnrecoverableInternalError_Halt) if the unit already exists in the table. Returns 1 on successful insert, 0 if the unit was already present (duplicate path).
+static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
+    D2UnitStrc* pPrevUnit;
+    uint32_t nHashBucket;
+    D2UnitStrc* pCurUnit;
+    D2UnitStrc* pNextUnit;
+    if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      if (!pPrevUnit) {
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        if (pPrevUnit) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
+          exit(-1);
+        }
+
+        goto insert_sorted;
+      }
+    } else {
+      D2UnitStrc* (*papDVar1)[128];
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      if (!pPrevUnit) {
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        if (!pPrevUnit) {
+          insert_sorted:
+          UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
+          nHashBucket = pUnit->nUnitGUID & 0x7f;
+          if (pUnit->eUnitFlags >> 0x15 & 1) {
+            papDVar1 = ClientSideUnitHashTables;
+          } else {
+            papDVar1 = ServerSideUnitHashTables;
+          }
+
+          pNextUnit = papDVar1[pUnit->eUnitType][nHashBucket];
+          pPrevUnit = 0;
+          while (true) {
+            pCurUnit = pNextUnit;
+            if (!(pCurUnit && (uint32_t)pCurUnit->nUnitGUID > (uint32_t)pUnit->nUnitGUID)) {
+              break;
+            }
+
+            pPrevUnit = pCurUnit;
+            pNextUnit = pCurUnit->pListNext;
+          }
+
+          pUnit->pListNext = pCurUnit;
+          if (pPrevUnit) {
+            pPrevUnit->pListNext = pUnit;
+            return 1;
+          }
+
+          papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
+          return 1;
+        }
+
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9c);
+        exit(-1);
+      }
+    }
+
+    return 0;
+}
+
+static void CLIENT_SendIdlePlayerMessage(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+      return;
+    }
+
+    eD2PlayerAnimMode eAnimMode = pUnit->eAnimMode.ePlayerMode;
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!(pRoom && (eAnimMode == eD2PlayerAnimMode_ns::Neutral || eAnimMode == TownNeutral))) {
+      return;
+    }
+
+    Player::PlayerMessage(7, pUnit, nullptr, 1);
+}
+
 static void __stdcall CUNIT_IterateHashTableWithCallback(D2UnitStrc * * UnitHashTable, fnUnitIterCallback pfnCallback) {
     D2UnitStrc* pNextUnit;
     int nBucketIndex = 0;
@@ -349,7 +475,7 @@ BOOL __fastcall CUNIT_IsPlayerOrMonster(D2UnitStrc * pUnit) {
 }
 
 void __fastcall SetTargetByTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetGUID) {
-    D2UnitStrc* pTargetUnit = Player::FindUnit(nTargetGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nTargetGUID & 0x7f);
+    D2UnitStrc* pTargetUnit = FindUnit(nTargetGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nTargetGUID & 0x7f);
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
 }
 
@@ -484,6 +610,9 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
 
       case KnockBack:
         return 0;
+      case eD2PlayerAnimMode_ns::Sequence:
+        bSeqReady = SKILL_IsSequenceInputReady(pUnit, pSkill);
+      return bSeqReady;
       case eD2PlayerAnimMode_ns::Skill1:
         if (pUnit->nClassId == CLASS_PALADIN) {
           return 0;
@@ -514,9 +643,6 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
       }
 
       return 1;
-      case eD2PlayerAnimMode_ns::Sequence:
-        bSeqReady = SKILL_IsSequenceInputReady(pUnit, pSkill);
-      return bSeqReady;
     }
 
     return 1;
@@ -1430,7 +1556,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
         Draw::Weather::WEATHER_ClearParticleArrays(bWarpFade);
       }
 
-      Player::CLIENT_SendIdlePlayerMessage(pUnit);
+      CLIENT_SendIdlePlayerMessage(pUnit);
       return;
     }
 }
@@ -1875,12 +2001,12 @@ void __fastcall UNITS_RemoveFromClientHashTable(uint32_t dwUnitGUID, int32_t nUn
 
 // Inserts a newly allocated unit into the server-side hash table. If insertion fails due to a GUID collision, evicts the existing unit and retries. If the retry also fails, frees pUnit and returns null. Returns pUnit on success.
 static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
-    uint32_t bInserted = Player::InsertIntoHashTable(pUnit);
+    uint32_t bInserted = InsertIntoHashTable(pUnit);
     if (bInserted) {
       return pUnit;
     }
 
-    D2UnitStrc* pExisting = Player::FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+    D2UnitStrc* pExisting = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
     if (pExisting == pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c6);
       exit(-1);
@@ -1888,7 +2014,7 @@ static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
     if (pExisting) {
       D2UnitStrc* (*papDVar1)[128] = !(pExisting->eUnitFlags >> 0x15 & 1) ? ServerSideUnitHashTables : ClientSideUnitHashTables;
       CUnit::RemoveObject(pExisting->nUnitGUID & 0x7f, papDVar1[pExisting->eUnitType], pExisting->eUnitType, pExisting->nUnitGUID);
-      bInserted = Player::InsertIntoHashTable(pUnit);
+      bInserted = InsertIntoHashTable(pUnit);
       if (bInserted) {
         return pUnit;
       }
@@ -1905,7 +2031,7 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
     eD2LevelId eLevel;
     uint32_t nNewSeed;
     D2UnitStrc* pFinalUnit;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     BOOL bIsExpansion;
     bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
     D2RoomStrc* pRoom;
@@ -1938,10 +2064,8 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
       D2Common::ITEMS::Items::ResetItemSeed(pUnit);
     }
     if (pRoom) {
-      sNextSeed = D2_SEED_NEXT(pRoom->sSeed);
-      nNewSeed = sNextSeed.nSeedLow;
-      pRoom->sSeed.nSeedHigh = sNextSeed.nSeedHigh;
-      pRoom->sSeed.nSeedLow = sNextSeed.nSeedLow;
+      sNextSeed = D2_SeedRoll(&pRoom->sSeed);
+      nNewSeed = sNextSeed;
       pUnit->nInitSeed = nNewSeed;
       D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nNewSeed);
     }
@@ -2003,7 +2127,7 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
     eD2LevelId eLevel;
     uint32_t nNewSeed;
     D2RoomStrc* pRoom;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     D2UnitStrc* pUnit = D2Common::Units::AllocUnit(nullptr, UNIT_PLAYER);
     if (!pUnit) {
       return nullptr;
@@ -2034,10 +2158,8 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
 
     D2Common::Seed::SEED_InitDefault(&pUnit->sSeed);
     if (pRoom) {
-      sNextSeed = D2_SEED_NEXT(pRoom->sSeed);
-      nNewSeed = sNextSeed.nSeedLow;
-      pRoom->sSeed.nSeedHigh = sNextSeed.nSeedHigh;
-      pRoom->sSeed.nSeedLow = sNextSeed.nSeedLow;
+      sNextSeed = D2_SeedRoll(&pRoom->sSeed);
+      nNewSeed = sNextSeed;
       pUnit->nInitSeed = nNewSeed;
       D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nNewSeed);
     }
@@ -2088,11 +2210,11 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     int32_t nY;
     D2SeedStrc* pDropSeed;
     D2UnitDataMonsterStrc* pItemData;
-    D2SeedStrc nSeedLow;
+    uint32_t nSeedLow;
     uint32_t nPalShiftIdx = pCreateData->nUnitGUID;
     uint32_t nDifficulty = GAME::RosterPets::GetRosterPetGUID(pPlayerUnit, 7, 1);
     if (nPalShiftIdx == nDifficulty) {
-      pUnit = Player::FindUnit(nPalShiftIdx, ServerSideUnitHashTables[1], UNIT_MONSTER, nPalShiftIdx & 0x7f);
+      pUnit = FindUnit(nPalShiftIdx, ServerSideUnitHashTables[1], UNIT_MONSTER, nPalShiftIdx & 0x7f);
       if (pUnit) {
         Engine::Gfx::FreeGfxInfo(pUnit);
         GAME::Wall2::WALL2_InitUnitGfx(pUnit);
@@ -2132,10 +2254,8 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     D2RoomStrc* pRoom = FindRoom(nMercSkillId, nY_00);
     D2Common::Seed::SEED_InitDefault(&pUnit->sSeed);
     if (pRoom) {
-      nSeedLow = D2_SEED_NEXT(pRoom->sSeed);
-      pRoom->sSeed.nSeedHigh = nSeedLow.nSeedHigh;
-      pRoom->sSeed.nSeedLow = nSeedLow.nSeedLow;
-      pUnit->nInitSeed = nSeedLow.nSeedLow;
+      nSeedLow = D2_SeedRoll(&pRoom->sSeed);
+      pUnit->nInitSeed = nSeedLow;
     }
 
     D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, pUnit->nInitSeed);
@@ -2434,9 +2554,6 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       }
 
       break;
-      default:
-        pObjectsTxt = 0;
-      break;
       case UNIT_ITEM:
         if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Run) {
           return 0;
@@ -2450,6 +2567,9 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       case UNIT_WARP:
         uResult = WARP_IsPointInClickArea(pUnit, nClickXSaved, nClickY);
       return uResult;
+      default:
+        pObjectsTxt = 0;
+      break;
     }
 
     bool bMultiPiece;

@@ -416,9 +416,9 @@ uint8_t __stdcall DRAW_FindNearestPaletteColor(uint8_t nRed, uint8_t nGreen, uin
     } while (true);
 }
 
-void __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOut, int nPixelCount, pfnRGBToPaletteIndex pfnCustomColorFinder) {
+int __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOut, int nPixelCount, pfnRGBToPaletteIndex pfnCustomColorFinder) {
     if (!gbPaletteLoaded) {
-      return;
+      return 0;
     }
 
     pfnRGBToPaletteIndex pfnColorFinder = DRAW_FindNearestPaletteColor;
@@ -444,6 +444,8 @@ void __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOu
       pSrcPixel += 3;
       pDstPixel++;
     }
+
+    return 0;
 }
 
 void __stdcall DRAW_SetDarkThresholdEnabled(BOOL bEnabled) {

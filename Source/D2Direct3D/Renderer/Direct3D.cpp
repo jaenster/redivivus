@@ -3969,7 +3969,9 @@ void __stdcall RENDERER_D3D_CreateFontTextures() {
       int nPixelY;
       int nFontArrayOffset;
       IDirectDrawSurface7* pMemorySurface;
-      uint8_t __pad20[3];
+      uint8_t __pad20;
+      uint8_t __pad21;
+      uint8_t __pad22;
       char chChar;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 24, "frame group __frame0_t must reproduce the Ghidra frame layout");

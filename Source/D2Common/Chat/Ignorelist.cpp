@@ -116,7 +116,7 @@ void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, ch
     nDstBuf[nLen] = '\0';
 }
 
-void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize) {
+int __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize) {
     char cPatternBuf[256];
     if (!szText2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a0);
@@ -132,6 +132,7 @@ void __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, ch
     }
 
     Storm::Source::SSTR::SStrCopy(szText2, cPatternBuf, nBufferSize);
+    return 0;
 }
 
 // @sourcefile .\Chat\Ignorelist.cpp

@@ -794,7 +794,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
     int nCpickOffset;
     D2MonUModTxt* pUmodEntry;
     uint32_t nTotalWeight;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     uint16_t wCpick;
     if (!pGame) {
       return 0;
@@ -843,15 +843,11 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
       } else {
         nRoll = pUnit->sSeed.nSeedLow;
         if (nTotalWeight & nTotalWeight - 1) {
-          sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRoll = (uint32_t)(sNewSeed.nSeedLow % nTotalWeight);
+          sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+          nRoll = (uint32_t)(sNewSeed % nTotalWeight);
         } else {
-          sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRoll = nTotalWeight - 1 & sNewSeed.nSeedLow;
+          sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+          nRoll = nTotalWeight - 1 & sNewSeed;
         }
       }
 
@@ -1330,9 +1326,8 @@ void __fastcall MONSTER_OnDeathAmplifyDamageAura(::SGAMEDATA * pGame, D2UnitStrc
       return;
     }
 
-    D2SeedStrc sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedNext;
-    if (!(sSeedNext.nSeedLow & 3)) {
+    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+    if (!(sSeedNext & 3)) {
       return;
     }
 
@@ -1873,9 +1868,8 @@ void __fastcall UMOD_SetRandomElementalDamage(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    D2SeedStrc sSeedAdv = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedAdv;
-    int nElemIdx = sSeedAdv.nSeedLow % 5;
+    uint32_t sSeedAdv = D2_SeedRoll(&pUnit->sSeed);
+    int nElemIdx = sSeedAdv % 5;
     MONSTER_SetElementalDamageFromLevel(pUnit, gaMissileOffsets_ColdMinion[nElemIdx * 3], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 1], gaMissileOffsets_ColdMinion[nElemIdx * 3 + 2], pGame);
 }
 
@@ -1898,9 +1892,8 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     uint32_t nBeltSlotIdx = 0;
-    D2SeedStrc sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedNext;
-    if ((int)(sSeedNext.nSeedLow % 100) < 0x1e) {
+    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(sSeedNext % 100) < 0x1e) {
       return;
     }
 
@@ -2220,9 +2213,8 @@ void __fastcall MONSTER_OnDeathTryScheduleRevive(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MONUMOD, 0);
-    D2SeedStrc sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedNext;
-    if ((int)(sSeedNext.nSeedLow % 100) >= (int)pMonStatsTxt->aip[7][pGame->nDifficulty]) {
+    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(sSeedNext % 100) >= (int)pMonStatsTxt->aip[7][pGame->nDifficulty]) {
       return;
     }
 
@@ -2407,18 +2399,14 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if ((int)nDmgRange <= 0) {
       nDmgRoll = 0;
     } else {
-      D2SeedStrc sSeedNext;
+      uint32_t sSeedNext;
       nDmgRoll = pUnit->sSeed.nSeedLow;
       if (nDmgRange & nDmgRange - 1) {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDmgRoll = sSeedNext.nSeedLow % nDmgRange;
+        sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+        nDmgRoll = sSeedNext % nDmgRange;
       } else {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDmgRoll = nDmgRange - 1 & sSeedNext.nSeedLow;
+        sSeedNext = D2_SeedRoll(&pUnit->sSeed);
+        nDmgRoll = nDmgRange - 1 & sSeedNext;
       }
     }
 

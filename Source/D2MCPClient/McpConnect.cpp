@@ -555,9 +555,9 @@ void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int1
     sPacket.nDifference = pMcpData->nDifference;
     sPacket.nMaxPlayers = pMcpData->nMaxPlayers;
     char* pStrLen = 0;
-    sPacket.nPacketId = '\x03';
-    nMcpPacketSequence = nRequestId;
     sPacket.RequestId = nRequestId;
+    nMcpPacketSequence = nRequestId;
+    sPacket.nPacketId = '\x03';
     char* pszBufCursor = STRING_GetStringLength(pMcpData->szGameName, &pStrLen, (char*)0x400, sPacket.szStrings);
     pszBufCursor = STRING_GetStringLength(pMcpData->szGamePassword, &pStrLen, (char*)0x400, pszBufCursor);
     STRING_GetStringLength(pMcpData->szGameDescription, &pStrLen, (char*)0x400, pszBufCursor);
@@ -593,8 +593,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wReque
     sPacket.dwGameField = *(uint32_t*)(szText + 0x14);
     char* pStrLen = 0;
     sPacket.nPacketId = 5;
-    nMcpPacketSequence = wRequestIdArg;
     sPacket.wRequestId = wRequestIdArg;
+    nMcpPacketSequence = wRequestIdArg;
     STRING_GetStringLength(szText, &pStrLen, (char*)0x400, sPacket.szData);
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)(uintptr_t)pStrLen + 7);
 }
@@ -604,8 +604,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wReque
     SetD2GSJoinResult(0);
     char* pStrLen = 0;
     byPacketId.nPacketId = 6;
-    nMcpPacketSequence = wRequestIdArg;
     byPacketId.wRequestId = wRequestIdArg;
+    nMcpPacketSequence = wRequestIdArg;
     STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId.szData);
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)(uintptr_t)pStrLen + 3);
 }
@@ -645,8 +645,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x09(char * szText, uint16_t wRequestIdArg) 
 void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(char * szCharName, uint16_t wRequestIdArg) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
-    byPacketId.nPacketId = 10;
     nMcpPacketSequence = wRequestIdArg;
+    byPacketId.nPacketId = 10;
     byPacketId.wRequestId = wRequestIdArg;
     Storm::Source::SSTR::SStrCopy(byPacketId.szData, szCharName, 0x400);
     uint32_t pStrLen = Storm::Source::SSTR::SStrLen(byPacketId.szData);

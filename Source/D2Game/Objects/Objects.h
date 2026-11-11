@@ -104,8 +104,8 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x15F */ bool S7;
     /* 0x160 */ bool S8;
     /* 0x161 */ char TotalPieces;
-    /* 0x162 */ char XSpace;
-    /* 0x163 */ char YSpace;
+    /* 0x162 */ uint8_t XSpace;
+    /* 0x163 */ uint8_t YSpace;
     /* 0x164 */ char Red;
     /* 0x165 */ char Green;
     /* 0x166 */ char Blue;
@@ -114,7 +114,7 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x16C */ uint8_t field_0x16c;
     /* 0x16D */ bool MonsterOK;
     /* 0x16E */ char OperateRange;
-    /* 0x16F */ char ShrineFunction;
+    /* 0x16F */ uint8_t ShrineFunction; // read zero-extended (movzx) by OBJECT_DispatchShrineServerActivate 004bd5c0
     /* 0x170 */ char Act;
     /* 0x171 */ bool Lockable;
     /* 0x172 */ bool Gore;

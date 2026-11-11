@@ -1332,6 +1332,93 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
     }
 
     switch (aKeyBuffer[0]) {
+      case '$':
+        move_cursor_to_start:
+        pwszCursor = pEditBox->wszText;
+      if (bShiftHeld) {
+        pEditBox->nSelCursor = 0;
+      }
+
+      break;
+      case '#':
+        wChar = *pwszCursor;
+      pwszNewCursor = pwszCursor;
+      while (wChar != L'\0') {
+        pwszNewCursor++;
+        wChar = *pwszNewCursor;
+      }
+
+      move_cursor_and_select:
+      pwszCursor = pwszNewCursor;
+      if (bShiftHeld) {
+        pEditBox->nSelCursor = (intptr_t)pwszNewCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
+      }
+
+      break;
+      case '&':
+        if (!(pEditBox->nFlags & 8)) {
+          goto move_cursor_to_start;
+        }
+      D2WINEDITBOX_HandleTextSelection((int*)pEditBox, &nSelStart, &nSelEnd);
+      nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
+      bMouseResult = nSelEnd - nFontHeight;
+      nLine = nSelStart;
+      move_cursor_vertically:
+      pFocusControlArg.uMsg = 0;
+      pFocusControlArg.pControl = &pEditBox->sControl;
+      D2WINEDITBOX_CreateControl(&pFocusControlArg, nLine, bMouseResult);
+      pwszCursor = pEditBox->wszText + pEditBox->nCursorIndex;
+      break;
+      case 'p':
+        return 0;
+      case '(':
+        if (pEditBox->nFlags & 8) {
+          D2WINEDITBOX_HandleTextSelection((int*)pEditBox, &nSelEnd, &nSelStart);
+          nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
+          bMouseResult = nFontHeight + nSelStart;
+          nLine = nSelEnd;
+          goto move_cursor_vertically;
+        }
+      wChar = *pwszCursor;
+      while (wChar != L'\0') {
+        pwszCursor++;
+        wChar = *pwszCursor;
+      }
+
+      if (bShiftHeld) {
+        pEditBox->nSelCursor = (intptr_t)pwszCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
+      }
+
+      break;
+      case '%':
+        pwszNewCursor = pwszCursor - 1;
+      if (*pwszNewCursor == L'\n') {
+        pwszNewCursor = pwszCursor - 2;
+      }
+
+      pwszCursor = pEditBox->wszText;
+      if (pwszNewCursor >= pwszCursor) {
+        pwszCursor = pwszNewCursor;
+        if (bShiftHeld && pEditBox->nSelAnchor != -1) {
+          pEditBox->nSelCursor = (intptr_t)pwszNewCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
+        }
+      }
+
+      break;
+      case '\'':
+        if (*pwszCursor != L'\0') {
+          pwszNewCursor = pwszCursor + 1;
+          if (pwszCursor[1] != L'\0' && pwszCursor[1] == L'\n') {
+            pwszNewCursor = pwszCursor + 2;
+          }
+
+          pwszCursor = pwszNewCursor;
+          if (bShiftHeld) {
+            bShiftHeld = pEditBox->nSelAnchor + 1;
+            goto move_cursor_and_select;
+          }
+        }
+      break;
       case '\b':
         if (pwszCursor > pEditBox->wszText && !nSelEnd) {
           pwszNewCursor = pwszCursor - 1;
@@ -1351,6 +1438,40 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
           pwszCursor = pwszNewCursor;
         }
       break;
+      case '.':
+        if (*pwszCursor != L'\0' && !nSelEnd) {
+          nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszCursor + 1);
+          memmove(pwszCursor, pwszCursor + 1, (nLine + 1) * 2);
+          pwszNewCursor = pwszCursor;
+          if (*pwszCursor != L'\0' && *pwszCursor == L'\n') {
+            nMoveSize = nLine - 1 + nLine + 1;
+            goto delete_line_break_partner;
+          }
+
+          goto mark_text_changed;
+        }
+      break;
+      case '\r':
+        if (pEditBox->pfnSubmit) {
+          bShiftHeld = pEditBox->nFlags;
+          D2WinButton::gnFormControlCount++;
+          pEditBox->pfnSubmit(pEditBox->wszText);
+          D2WinButton::gnFormControlCount--;
+          if (!(bShiftHeld & 2)) {
+            return 1;
+          }
+
+          pwszCursor = pEditBox->wszText + pEditBox->nCursorIndex;
+        }
+      break;
+      case '\x1b':
+        if (!pEditBox->pfnSubmit) {
+          return 1;
+        }
+      D2WinButton::gnFormControlCount++;
+      pEditBox->pfnSubmit(nullptr);
+      D2WinButton::gnFormControlCount--;
+      return 1;
       case '\t':
         /* int nVirtKey for GetKeyState */ wTabKeyState = GetKeyState(0x10);
       if (wTabKeyState >= 0) {
@@ -1399,127 +1520,6 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
       D2WinMain::D2WINMAIN_SetFocusedControl(&pNextControl->sControl);
       D2WINEDITBOX_SelectAll(pNextControl);
       return 1;
-      case '\r':
-        if (pEditBox->pfnSubmit) {
-          bShiftHeld = pEditBox->nFlags;
-          D2WinButton::gnFormControlCount++;
-          pEditBox->pfnSubmit(pEditBox->wszText);
-          D2WinButton::gnFormControlCount--;
-          if (!(bShiftHeld & 2)) {
-            return 1;
-          }
-
-          pwszCursor = pEditBox->wszText + pEditBox->nCursorIndex;
-        }
-      break;
-      case '\x1b':
-        if (!pEditBox->pfnSubmit) {
-          return 1;
-        }
-      D2WinButton::gnFormControlCount++;
-      pEditBox->pfnSubmit(nullptr);
-      D2WinButton::gnFormControlCount--;
-      return 1;
-      case '#':
-        wChar = *pwszCursor;
-      pwszNewCursor = pwszCursor;
-      while (wChar != L'\0') {
-        pwszNewCursor++;
-        wChar = *pwszNewCursor;
-      }
-
-      move_cursor_and_select:
-      pwszCursor = pwszNewCursor;
-      if (bShiftHeld) {
-        pEditBox->nSelCursor = (intptr_t)pwszNewCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
-      }
-
-      break;
-      case '$':
-        move_cursor_to_start:
-        pwszCursor = pEditBox->wszText;
-      if (bShiftHeld) {
-        pEditBox->nSelCursor = 0;
-      }
-
-      break;
-      case '%':
-        pwszNewCursor = pwszCursor - 1;
-      if (*pwszNewCursor == L'\n') {
-        pwszNewCursor = pwszCursor - 2;
-      }
-
-      pwszCursor = pEditBox->wszText;
-      if (pwszNewCursor >= pwszCursor) {
-        pwszCursor = pwszNewCursor;
-        if (bShiftHeld && pEditBox->nSelAnchor != -1) {
-          pEditBox->nSelCursor = (intptr_t)pwszNewCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
-        }
-      }
-
-      break;
-      case '&':
-        if (!(pEditBox->nFlags & 8)) {
-          goto move_cursor_to_start;
-        }
-      D2WINEDITBOX_HandleTextSelection((int*)pEditBox, &nSelStart, &nSelEnd);
-      nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-      bMouseResult = nSelEnd - nFontHeight;
-      nLine = nSelStart;
-      move_cursor_vertically:
-      pFocusControlArg.uMsg = 0;
-      pFocusControlArg.pControl = &pEditBox->sControl;
-      D2WINEDITBOX_CreateControl(&pFocusControlArg, nLine, bMouseResult);
-      pwszCursor = pEditBox->wszText + pEditBox->nCursorIndex;
-      break;
-      case '\'':
-        if (*pwszCursor != L'\0') {
-          pwszNewCursor = pwszCursor + 1;
-          if (pwszCursor[1] != L'\0' && pwszCursor[1] == L'\n') {
-            pwszNewCursor = pwszCursor + 2;
-          }
-
-          pwszCursor = pwszNewCursor;
-          if (bShiftHeld) {
-            bShiftHeld = pEditBox->nSelAnchor + 1;
-            goto move_cursor_and_select;
-          }
-        }
-      break;
-      case '(':
-        if (pEditBox->nFlags & 8) {
-          D2WINEDITBOX_HandleTextSelection((int*)pEditBox, &nSelEnd, &nSelStart);
-          nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-          bMouseResult = nFontHeight + nSelStart;
-          nLine = nSelEnd;
-          goto move_cursor_vertically;
-        }
-      wChar = *pwszCursor;
-      while (wChar != L'\0') {
-        pwszCursor++;
-        wChar = *pwszCursor;
-      }
-
-      if (bShiftHeld) {
-        pEditBox->nSelCursor = (intptr_t)pwszCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
-      }
-
-      break;
-      case '.':
-        if (*pwszCursor != L'\0' && !nSelEnd) {
-          nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszCursor + 1);
-          memmove(pwszCursor, pwszCursor + 1, (nLine + 1) * 2);
-          pwszNewCursor = pwszCursor;
-          if (*pwszCursor != L'\0' && *pwszCursor == L'\n') {
-            nMoveSize = nLine - 1 + nLine + 1;
-            goto delete_line_break_partner;
-          }
-
-          goto mark_text_changed;
-        }
-      break;
-      case 'p':
-        return 0;
     }
 
     pEditBox->nCursorIndex = (intptr_t)pwszCursor + (-0x5c - (intptr_t)pEditBox) >> 1;
@@ -2037,8 +2037,8 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
         pEditBox->bPendingPush = 0;
       }
       if (pEditBox->bPendingPush) {
-        pPushEditBox.uMsg = 0x201;
         pPushEditBox.pControl = &pEditBox->sControl;
+        pPushEditBox.uMsg = 0x201;
         PushFlag0x8(&pPushEditBox);
       }
 

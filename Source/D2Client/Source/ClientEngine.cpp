@@ -1118,14 +1118,13 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
     int nSlotIndex = 0;
     short int* pMonsterPtr = pLevelsTxt->cmon;
     do {
-      D2SeedStrc newSeed;
+      uint32_t newSeed;
       if (*pMonsterPtr < 0) {
         return;
       }
 
-      newSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = newSeed;
-      if (newSeed.nSeedLow % 100 < (uint32_t)(int)pMonsterPtr[4]) {
+      newSeed = D2_SeedRoll(pSeed);
+      if (newSeed % 100 < (uint32_t)(int)pMonsterPtr[4]) {
         nSpawnCount = (int)*pMonsterPtr;
         if (nSpawnCount < 0 || nSpawnCount >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
           pMonStats = 0;
@@ -1563,7 +1562,7 @@ static void MONSTER_FindAndChaseNearestEnemy(D2UnitStrc * pUnit) {
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     int32_t* pnAiDelay;
-    D2SeedStrc nRng;
+    uint32_t nRng;
     if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
@@ -1586,9 +1585,8 @@ static void MONSTER_FindAndChaseNearestEnemy(D2UnitStrc * pUnit) {
         return;
       }
     } else {
-      nRng = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = nRng;
-      if ((int)(nRng.nSeedLow % 100) < 0x1e) {
+      nRng = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(nRng % 100) < 0x1e) {
         CLIENT_SendMonsterMoveToRandomNearbyPosMessage(2, 1, 0, pUnit);
         return;
       }
@@ -1605,10 +1603,9 @@ static void __stdcall CLIENT_MonsterAi_IdleWanderBehavior(D2UnitStrc * pTarget, 
       return;
     }
     if (nTargetDistance < 5) {
-      D2SeedStrc nSeedRng;
-      nSeedRng = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = nSeedRng;
-      if ((int)(nSeedRng.nSeedLow % 100) < 0x42) {
+      uint32_t nSeedRng;
+      nSeedRng = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(nSeedRng % 100) < 0x42) {
         MONSTER_TryMoveTowardTarget(pUnit, 8, 1, 0x1e, pTarget);
         return;
       }
@@ -1729,9 +1726,8 @@ static void __stdcall CLIENT_MonsterThinkBehavior(D2UnitStrc * pUnit, D2UnitStrc
       return;
     }
 
-    D2SeedStrc sSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeed;
-    if ((int)(sSeed.nSeedLow % 100) < 0x28) {
+    uint32_t sSeed = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(sSeed % 100) < 0x28) {
       int32_t* pnAiDelay;
       pnAiDelay = UNIT::Monster::GetMonsterAi(pUnit);
       if (pnAiDelay) {
@@ -1943,8 +1939,8 @@ static void CLIENT_SpawnWorldstoneChipDebris(D2UnitStrc * pUnit) {
     bool bDirFlag;
     eD2UnitType eUnitType;
     D2SeedStrc sSeed1;
-    D2SeedStrc sSeed2;
-    D2SeedStrc sSeed3;
+    uint32_t sSeed2;
+    uint32_t sSeed3;
     D2UnitStrc* pMissileOrPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pMissileOrPlayer) {
       int32_t* pnAiDelay;
@@ -1969,8 +1965,7 @@ static void CLIENT_SpawnWorldstoneChipDebris(D2UnitStrc * pUnit) {
           nX = 0;
         }
 
-        sSeed3 = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = sSeed3;
+        sSeed3 = D2_SeedRoll(&pUnit->sSeed);
         eUnitType = pUnit->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
           nY = pUnit->pPath.pStaticPath->nPosY;
@@ -1980,9 +1975,8 @@ static void CLIENT_SpawnWorldstoneChipDebris(D2UnitStrc * pUnit) {
           nY = 0;
         }
 
-        sSeed2 = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = sSeed2;
-        pMissileOrPlayer = UNIT::Missile::CastAttack(pUnit, (sSeed1.nSeedLow & 3) + MISSILE_WorldStoneChip1, sSeed3.nSeedLow % 0x3c - 0x1e + nX, sSeed2.nSeedLow % 0x3c - 0x1e + nY, SKILL_Attack, 1);
+        sSeed2 = D2_SeedRoll(&pUnit->sSeed);
+        pMissileOrPlayer = UNIT::Missile::CastAttack(pUnit, (sSeed1.nSeedLow & 3) + MISSILE_WorldStoneChip1, sSeed3 % 0x3c - 0x1e + nX, sSeed2 % 0x3c - 0x1e + nY, SKILL_Attack, 1);
         if (pMissileOrPlayer) {
           sSeed1 = D2_SEED_NEXT(pUnit->sSeed);
           bDirFlag = !(sSeed1.nSeedLow & 1);
@@ -2040,9 +2034,8 @@ static void MONSTER_ProcessPathCallback(D2UnitStrc * pUnit, D2UnitStrc * pTarget
       return;
     }
 
-    D2SeedStrc nRng = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = nRng;
-    int nRoll = nRng.nSeedLow % 100;
+    uint32_t nRng = D2_SeedRoll(&pUnit->sSeed);
+    int nRoll = nRng % 100;
     if (nRoll < 0x28) {
       pnAiDelay = UNIT::Monster::GetMonsterAi(pUnit);
       if (pnAiDelay) {

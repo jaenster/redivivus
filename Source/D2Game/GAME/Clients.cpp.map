@@ -377,8 +377,7 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -780,8 +779,7 @@
         "SetClassOfClient"
       ],
       "usedTypes": [
-        "D2ClientStrc",
-        "uint8_t"
+        "D2ClientStrc"
       ]
     },
     {

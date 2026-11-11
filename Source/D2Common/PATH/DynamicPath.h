@@ -137,6 +137,6 @@ uint32_t __stdcall GetDistanceCastedToInt(struct D2DynamicPathStrc * pDynamicPat
 void __stdcall AddToDistance(struct D2DynamicPathStrc * pDynamicPath, int32_t nValue);
 uint32_t __stdcall PATH_HasRemainingDistance(struct D2DynamicPathStrc * pDynamicPath);
 #endif // D2_MODULE_D2Common
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Common::PATH::DynamicPath

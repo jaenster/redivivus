@@ -1432,8 +1432,8 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
 
     sPetArgs.nPetClassId = nPetClassIdValue;
     sPetArgs.nSeed = pPetArgs->nSeed;
-    sPetArgs.nNameId = pPetArgs->nNameId;
     sPetArgs._pad0A = 0;
+    sPetArgs.nNameId = pPetArgs->nNameId;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SummonAndAssign, &sPetArgs);
     return;
 }

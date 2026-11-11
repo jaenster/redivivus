@@ -256,7 +256,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
     uint8_t bySecondCompIdx;
     uint8_t aCompIndices[17];
     bool bIsSlotDuplicate;
-    D2SeedStrc sSeedNext;
+    uint32_t sSeedNext;
     if (!pSeed) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa0);
       exit(-1);
@@ -345,15 +345,11 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
                     if (!nBytesToCompare) {
                       byCompVariant = 0;
                     } else if (nBytesToCompare & nBytesToCompare - 1) {
-                      sSeedNext = D2_SEED_NEXT(*pSeed);
-                      pSeed->nSeedHigh = sSeedNext.nSeedHigh;
-                      pSeed->nSeedLow = sSeedNext.nSeedLow;
-                      byCompVariant = (uint8_t)(sSeedNext.nSeedLow % nBytesToCompare);
+                      sSeedNext = D2_SeedRoll(pSeed);
+                      byCompVariant = (uint8_t)(sSeedNext % nBytesToCompare);
                     } else {
-                      sSeedNext = D2_SEED_NEXT(*pSeed);
-                      pSeed->nSeedHigh = sSeedNext.nSeedHigh;
-                      pSeed->nSeedLow = sSeedNext.nSeedLow;
-                      byCompVariant = byCompVariant - 1 & (uint8_t)sSeedNext.nSeedLow;
+                      sSeedNext = D2_SeedRoll(pSeed);
+                      byCompVariant = byCompVariant - 1 & (uint8_t)sSeedNext;
                     }
 
                     pNextSlot->aComponentVariants[byCompCount] = byCompVariant;
@@ -363,15 +359,11 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
                       if (!nBytesToCompare) {
                         byCompVariant = 0;
                       } else if (nBytesToCompare & nBytesToCompare - 1) {
-                        sSeedNext = D2_SEED_NEXT(*pSeed);
-                        pSeed->nSeedHigh = sSeedNext.nSeedHigh;
-                        pSeed->nSeedLow = sSeedNext.nSeedLow;
-                        byCompVariant = (uint8_t)(sSeedNext.nSeedLow % nBytesToCompare);
+                        sSeedNext = D2_SeedRoll(pSeed);
+                        byCompVariant = (uint8_t)(sSeedNext % nBytesToCompare);
                       } else {
-                        sSeedNext = D2_SEED_NEXT(*pSeed);
-                        pSeed->nSeedHigh = sSeedNext.nSeedHigh;
-                        pSeed->nSeedLow = sSeedNext.nSeedLow;
-                        byCompVariant = byCompVariant - 1 & (uint8_t)sSeedNext.nSeedLow;
+                        sSeedNext = D2_SeedRoll(pSeed);
+                        byCompVariant = byCompVariant - 1 & (uint8_t)sSeedNext;
                       }
 
                       pNextSlot->aComponentVariants[bySecondCompIdx] = byCompVariant;
@@ -471,7 +463,7 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
       pSeed = 0;
     }
     if (!bUseUMon || pGame->nDifficulty) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       if (!pMonsterRegion->nCounter) {
         *ppMonStatLine = 0;
         return 0;
@@ -497,9 +489,8 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
       nRarityBucket = (int)(short int)nClassId;
       pMonStatsTxt = nRarityBucket >= 0 && nRarityBucket < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nRarityBucket : nullptr;
       if (pMonStatsTxt && pMonStatsTxt->spawn >= 0 && *((uint8_t*)pMonStatsTxt + 0xe) & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
-        DVar1 = D2_SEED_NEXT(*pSeed);
-        *pSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) > (int)(uint32_t)byBaseClassChance) {
+        DVar1 = D2_SeedRoll(pSeed);
+        if ((int)(DVar1 % 100) > (int)(uint32_t)byBaseClassChance) {
           nClassId = pMonStatsTxt->spawn;
         }
       }
@@ -529,7 +520,7 @@ int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
     static void* gapSkillDispatchTableBase = (void*)&gaSkillLevelCaps; D2_STATIC_GUARD(gapSkillDispatchTableBase, "D2Game::SKILLS::SkillItem::RollRoomSeed::gapSkillDispatchTableBase");
 
     D2SeedStrc* pSeed = !pRoom ? 0 : &pRoom->sSeed;
-    *pSeed = D2_SEED_NEXT(*pSeed);
+    D2_SeedRoll(pSeed);
     return (int*)gapSkillDispatchTableBase;
 }
 
@@ -537,7 +528,7 @@ int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
 int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonterRegion, D2RoomStrc * pRoom) {
     D2SeedStrc* pSeed;
     int nTotalLevelRooms;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     uint8_t byUniqueCount = pMonterRegion->nBossMax;
     uint8_t byCurUniqueCount = (uint8_t)pMonterRegion->dwUniqueCount;
     if (byCurUniqueCount < pMonterRegion->nBossMin) {
@@ -551,9 +542,8 @@ int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonter
           pSeed = 0;
         }
 
-        sNextSeed = D2_SEED_NEXT(*pSeed);
-        *pSeed = sNextSeed;
-        if ((int)(sNextSeed.nSeedLow % 100) < nSpawnedRooms * 100 / nTotalLevelRooms) {
+        sNextSeed = D2_SeedRoll(pSeed);
+        if ((int)(sNextSeed % 100) < nSpawnedRooms * 100 / nTotalLevelRooms) {
           return 0;
         }
       }
@@ -565,9 +555,8 @@ int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonter
         pSeed = 0;
       }
 
-      sNextSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = sNextSeed;
-      if ((int)(sNextSeed.nSeedLow % 100) <= 5) {
+      sNextSeed = D2_SeedRoll(pSeed);
+      if ((int)(sNextSeed % 100) <= 5) {
         return 0;
       }
     }
@@ -577,9 +566,8 @@ int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonter
       pSeed = 0;
     }
 
-    sNextSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNextSeed;
-    return (int)(sNextSeed.nSeedLow % 100) > 0x23 ? 2 : 1;
+    sNextSeed = D2_SeedRoll(pSeed);
+    return (int)(sNextSeed % 100) > 0x23 ? 2 : 1;
 }
 
 // @sourcefile .\SKILLS\SkillItem.cpp
@@ -791,17 +779,18 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
         switch (eUnitStat) {
           default:
             goto apply_stat_value;
+          case UNITSTAT_hpregen:
+            nStatValue <<= 8;
+          case UNITSTAT_hitpoints:
+            nStatValue = D2Common::ITEMS::Items::ITEMS_ModifyPotionValueByDifficulty(pUnit, nStatValue);
+          eMaxStatId = UNITSTAT_vitality;
+          break;
           case UNITSTAT_manarecovery:
             nStatValue <<= 8;
           case UNITSTAT_mana:
             nStatValue = D2Common::ITEMS::Items::ITEMS_ModifyPotionSellValueByDifficulty(pUnit, nStatValue);
           eMaxStatId = UNITSTAT_energy;
           break;
-          case UNITSTAT_hpregen:
-            nStatValue <<= 8;
-          case UNITSTAT_hitpoints:
-            nStatValue = D2Common::ITEMS::Items::ITEMS_ModifyPotionValueByDifficulty(pUnit, nStatValue);
-          eMaxStatId = UNITSTAT_vitality;
         }
 
         nAttribVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eMaxStatId, 0);
@@ -836,8 +825,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 
           if ((int)nItemClassId <= 0) {
             nPotionDelay = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
-            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-              nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
+            if ((int)(uint32_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+              nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)pStatCost->maxstat, 0);
               if (nPotionDelay + nStatScaled > nCurStatVal) {
                 nStatScaled = nCurStatVal - nPotionDelay;
               }
@@ -983,8 +972,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
           if ((int)nItemClassId <= 0) {
             nCurStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
-            if ((int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-              nCurrentStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
+            if ((int)(uint32_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+              nCurrentStatVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)pStatCost->maxstat, 0);
               if (nCurStatVal + nStatScaled > nCurrentStatVal) {
                 nStatScaled = nCurrentStatVal - nCurStatVal;
               }
@@ -1091,10 +1080,10 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
     for (iStatSlot = 0; iStatSlot < 3; iStatSlot++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatSlot * 2 + 0x3e);
       pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
-      if (pStatCost && (int)(uint32_t)(uint16_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+      if (pStatCost && (int)(uint32_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         nPercent = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
         if ((int)nPercent > 0) {
-          pExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pStatCost->maxstat, 0);
+          pExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)pStatCost->maxstat, 0);
           nStatScaled = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pExpireFrame, nPercent, 100);
           if (nPercent == 100) {
             nStatScaled = pExpireFrame;
@@ -1734,9 +1723,8 @@ BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnit
       }
     }
 
-    D2SeedStrc sSeedNew = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedNew;
-    if ((sSeedNew.nSeedLow & 0x7f) < nSizeThreshMask) {
+    uint32_t sSeedNew = D2_SeedRoll(&pUnit->sSeed);
+    if ((sSeedNew & 0x7f) < nSizeThreshMask) {
       pDamage->wResultFlags |= 8;
       return 1;
     }
@@ -1872,9 +1860,8 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       nChancePct = 100;
     }
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
-    nRollMod = DVar1.nSeedLow % 100;
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
+    nRollMod = DVar1 % 100;
     if (nRollMod >= (int)nChancePct) {
       return 0;
     }
@@ -1930,10 +1917,9 @@ BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
       return 0;
     }
 
-    D2SeedStrc DVar1;
-    DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
-    if ((int)(DVar1.nSeedLow % 100) >= nWoundsChance) {
+    uint32_t DVar1;
+    DVar1 = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(DVar1 % 100) >= nWoundsChance) {
       return 0;
     }
 
@@ -1987,10 +1973,9 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    D2SeedStrc DVar1;
-    DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
-    if ((int)(DVar1.nSeedLow % 100) >= nChance) {
+    uint32_t DVar1;
+    DVar1 = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(DVar1 % 100) >= nChance) {
       return 0;
     }
 
@@ -2233,9 +2218,8 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
-    if ((int)(DVar1.nSeedLow % 100) >= nProcChance) {
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(DVar1 % 100) >= nProcChance) {
       return 0;
     }
 
@@ -2317,9 +2301,8 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
 
     eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
     uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
-    if (!((int)(DVar1.nSeedLow % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eProcSkill)) {
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
+    if (!((int)(DVar1 % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eProcSkill)) {
       return 0;
     }
 

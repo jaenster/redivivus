@@ -648,6 +648,11 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
               }
 
               switch (nUnitSizeX - 1 + nWidth) {
+                case 0:
+                  if (nX != nCandidatePosX || nY != nCandidatePosY) {
+                    break;
+                  }
+                goto try_candidate;
                 case 1:
 
                 case 3:
@@ -722,12 +727,6 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
                     iVar1 = nCandidatePosY + 2;
                     goto test_y_upper_bound;
                   }
-                break;
-                case 0:
-                  if (nX != nCandidatePosX || nY != nCandidatePosY) {
-                    break;
-                  }
-                goto try_candidate;
               }
             }
           }
@@ -1602,8 +1601,6 @@ static int32_t __stdcall CheckCollision_BlockPlayer_Cross(D2RoomStrc * pRoom, in
       eAdjacentResult = pCell[nGridStride] & eCollisionMask;
       nX = nXp1;
       goto check_neighbor_result;
-      default:
-        return 1;
       case '\x06':
         if ((*pCell & eCollisionMask) != COLBIT_NONE) {
           return 1;
@@ -1667,6 +1664,9 @@ static int32_t __stdcall CheckCollision_BlockPlayer_Cross(D2RoomStrc * pRoom, in
       if (eAdjacentResult != COLBIT_NONE) {
         return 1;
       }
+      break;
+      default:
+        return 1;
     }
 
     eCollisionFlags eCollisionResult = COLLISN_CheckCellMask_RegArgs(pRoom_00, nX, nY, eCollisionFlag);

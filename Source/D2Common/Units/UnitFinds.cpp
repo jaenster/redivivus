@@ -351,6 +351,8 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
       }
 
       break;
+      default:
+        return 0;
       case UNIT_MONSTER:
         nSearchFlags = pArgs->nFlags;
       if (!(nSearchFlags & 2)) {
@@ -406,8 +408,6 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
           return 0;
         }
       break;
-      default:
-        return 0;
     }
 
     nSearchFlags = pArgs->nFlags;

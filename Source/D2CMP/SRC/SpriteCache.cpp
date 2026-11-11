@@ -427,12 +427,6 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
                 }
 
                 switch (nSpriteCmpId) {
-                  case 0xf2:
-
-                  case 0xfb:
-
-                  case 0x16f:
-                    return 1;
                   case 0xf3:
 
                   case 0x11c:
@@ -442,6 +436,13 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
                     if (!pGfxData->nMode) {
                       return 1;
                     }
+                  break;
+                  case 0xf2:
+
+                  case 0xfb:
+
+                  case 0x16f:
+                    return 1;
                 }
               } else {
                 switch (nSpriteCmpId) {

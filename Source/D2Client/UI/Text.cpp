@@ -2603,18 +2603,11 @@ void __fastcall TEXT_DrawTextBoxAtPosition(D2TextBoxStrc * pTextBox, int32_t nSc
     }
 
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(nScreenX, nScreenY + 4, (uint32_t)pTextBox->nWidth, pTextBox->nHeight - 5, 0, DRAW_TRANSPARENT);
+    int nLineIdx = 0;
     int32_t nSavedFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
-    if (nLineCount > 0) {
-      int nLineIdx = 0;
-      do {
-        if (!pCurLine) {
-          break;
-        }
-
-        D2Win::Src::D2WinFont::DRAW_text(pCurLine->wszLine, nScreenX + 10, (nLineIdx - nLineCount + pTextBox->nLineCount) * 0xf + 0x12 + nScreenY, 0, 0);
-        pCurLine = pCurLine->pNext;
-        nLineIdx++;
-      } while (nLineIdx < nLineCount);
+    for (; nLineIdx < nLineCount && pCurLine; nLineIdx++) {
+      D2Win::Src::D2WinFont::DRAW_text(pCurLine->wszLine, nScreenX + 10, (nLineIdx - nLineCount + pTextBox->nLineCount) * 0xf + 0x12 + nScreenY, 0, 0);
+      pCurLine = pCurLine->pNext;
     }
 
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);

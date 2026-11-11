@@ -1625,10 +1625,15 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
     uint32_t uAnimFlag = gdwAnimModeValidFlagsTable[eAnimMode];
     while (nMonId < 0 || nMonId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (nMonStats2Id = (int)ITEMS::Items::sgptDataTable->pTxtMonStats[nMonId].MonStatsEx , nMonStats2Id < 0) || nMonStats2Id >= ITEMS::Items::sgptDataTable->nTxtMonStatsExSize || !(ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStats2Id) || !((uint32_t)ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStats2Id].mDT[(int)uAnimFlag >> 3] & Fog::BitBuffer::gadwBitMasks[uAnimFlag & 7])) {
       switch (uAnimFlag) {
-        case 1:
-          return uAnimFlag;
-        default:
-          uAnimFlag = 1;
+        case 0xf:
+          uAnimFlag = 2;
+        break;
+        case 9:
+
+        case 10:
+
+        case 0xb:
+          uAnimFlag = 8;
         break;
         case 5:
 
@@ -1638,15 +1643,11 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
         case 6:
           uAnimFlag = 3;
         break;
-        case 9:
-
-        case 10:
-
-        case 0xb:
-          uAnimFlag = 8;
+        default:
+          uAnimFlag = 1;
         break;
-        case 0xf:
-          uAnimFlag = 2;
+        case 1:
+          return uAnimFlag;
       }
     }
 
@@ -3819,7 +3820,7 @@ int32_t __stdcall SKILL_CalcMinDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
         nMinDmg = Stats::StatsEx::GetTxtMinDamage(pWeapon, 1);
       }
 
-      nMinDmg = (uint32_t)(uint8_t)pSkillTxt->SrcDam * nMinDmg;
+      nMinDmg = (uint32_t)pSkillTxt->SrcDam * nMinDmg;
       nMinDmg = nMinDmg / 128;
     }
 
@@ -3858,7 +3859,7 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
         nMaxDmg = Stats::StatsEx::GetTxtMaxDamage(pWeapon, 0x18);
       }
 
-      nMaxDmg = (uint32_t)(uint8_t)pSkillTxt->SrcDam * nMaxDmg;
+      nMaxDmg = (uint32_t)pSkillTxt->SrcDam * nMaxDmg;
       nMaxDmg = nMaxDmg / 128;
     }
 

@@ -594,10 +594,11 @@ void __fastcall CallForEachMinion(D2UnitStrc * pUnit, void * pContext, void * pA
       while (pMinionNode) {
         pMinionListHead = pMinionNode->pNext;
         pMinion = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMinionNode->nMinionGUID);
-        pMinionNode = pMinionListHead;
         if (pMinion) {
           (*pfnProc)(pMinion, pContext, pArgument);
         }
+
+        pMinionNode = pMinionListHead;
       }
 
       return;

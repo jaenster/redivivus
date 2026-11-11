@@ -84,7 +84,7 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath);
 BOOL __stdcall DRAW_InitPalette(LPCSTR szPaletteFile, int nStartIndex, int nEndIndex);
 void __stdcall DRAW_SetTransparentColorEnabled(BOOL bEnabled);
 uint8_t __stdcall DRAW_FindNearestPaletteColor(uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
-void __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOut, int nPixelCount, pfnRGBToPaletteIndex pfnCustomColorFinder);
+int __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOut, int nPixelCount, pfnRGBToPaletteIndex pfnCustomColorFinder);
 void __stdcall DRAW_SetDarkThresholdEnabled(BOOL bEnabled);
 void __stdcall DRAW_SetPaletteMask(uint8_t * pMaskData);
 void __stdcall DRAW_BuildAlphaBlendTables(LPPALETTEENTRY pPalette);

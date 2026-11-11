@@ -327,11 +327,11 @@ static void MONSTER_ApplySpecialUmods(D2UnitStrc * pUnit, D2UnknownCreateMonster
         return;
         default:
           break;
-        case 0x1b4:
-          Monsters::InitUmods(pGame, pUnit, 0x22, 0);
-        return;
         case 0x1cd:
           Monsters::InitUmods(pGame, pUnit, 0x21, 0);
+        return;
+        case 0x1b4:
+          Monsters::InitUmods(pGame, pUnit, 0x22, 0);
         return;
         case 0x1f5:
           Monsters::InitUmods(pGame, pUnit, 0x23, 0);
@@ -510,9 +510,8 @@ BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       nSpawnY = 0;
     }
 
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNextSeed;
-    int nRandSlot = sNextSeed.nSeedLow % 6;
+    uint32_t sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+    int nRandSlot = sNextSeed % 6;
     if (nMinionCount > 0) {
       int nPatternEntryIdx;
       nPatternSlotBase = nClampedPattern * 6;
@@ -1354,8 +1353,8 @@ BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int3
       pSeed = 0;
     }
 
-    uint32_t nMonTypeIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)(uint8_t)pLevelTxt->nValidMonCount);
-    uint32_t nLevelMonCount = (uint32_t)(uint8_t)pLevelTxt->nValidMonCount;
+    uint32_t nMonTypeIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)pLevelTxt->nValidMonCount);
+    uint32_t nLevelMonCount = (uint32_t)pLevelTxt->nValidMonCount;
     int nMonSearchAttempts = 0;
     if (!nLevelMonCount) {
       return 0;

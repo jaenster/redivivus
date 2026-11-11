@@ -1347,6 +1347,29 @@
       ]
     },
     {
+      "name": "SOUND_LocalizeSoundPath",
+      "address": "00482e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482e30"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "SOUND_LocalizeSoundPath",
+        "TABLES_GetLangAbbreviation",
+        "sprintf",
+        "SFileOpenFileEx",
+        "SFileCloseFile",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "ExitGamePlayCutScene",
       "address": "00482ef0",
       "lines": [

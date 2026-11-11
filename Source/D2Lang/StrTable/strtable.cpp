@@ -1018,11 +1018,11 @@ void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_
               }
             }
           }
-
-          nOutPos = nOutPos2;
           if (!nRawDigitCount) {
             return;
           }
+
+          nOutPos = nOutPos2;
         }
 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x500);
@@ -1077,11 +1077,11 @@ void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_
               wszText[nOutPos2] = L',';
             }
           }
-
-          nOutPos = nOutPos2;
           if (!nDigitCount) {
             return;
           }
+
+          nOutPos = nOutPos2;
         }
 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x533);
@@ -1166,11 +1166,11 @@ void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwVa
               wszText[nNextOutPos] = L',';
             }
           }
-
-          nOutPos = nNextOutPos;
           if (!nDigitCount) {
             return;
           }
+
+          nOutPos = nNextOutPos;
         }
 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x580);

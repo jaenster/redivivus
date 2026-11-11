@@ -658,7 +658,7 @@ BOOL __fastcall IsMonsterSuperUnique(D2UnitStrc * pUnit) {
 }
 
 void __fastcall MONSTER_ExplodeOwnerMissile(D2UnitStrc * pUnit) {
-    D2UnitStrc* pOwnerUnit = Player::MISSILE_GetOwnerUnit(pUnit);
+    D2UnitStrc* pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwnerUnit) {
       return;
     }
@@ -677,9 +677,8 @@ static void MONSTER_SpawnRandomAttachedMissile(D2UnitStrc * pUnit) {
 
     void* nPosX;
     int32_t nErrLine;
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNextSeed;
-    int nRandMissileIdx = sNextSeed.nSeedLow % 5;
+    uint32_t sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+    int nRandMissileIdx = sNextSeed % 5;
     if (nRandMissileIdx >= 5) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x174);
       exit(-1);
@@ -723,14 +722,13 @@ static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
     int32_t nMissileLevel;
     D2DynamicPathStrc* pDynamicPath;
     if (nClassId <= 0x158) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       if (nClassId == 0x158) {
         pTargetUnit = Player::GetPlayerUnit_UI();
-        DVar1 = D2_SEED_NEXT(pTargetUnit->sSeed);
-        pTargetUnit->sSeed = DVar1;
+        DVar1 = D2_SeedRoll(&pTargetUnit->sSeed);
         pDynamicPath = pUnit->pPath.pDynamicPath;
         D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pDynamicPath, 1);
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)DVar1.nSeedLow & 0x3f);
+        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)DVar1 & 0x3f);
         D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pDynamicPath, 0);
         return;
       }
@@ -979,10 +977,9 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
 
     nRandStartFrame = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nMonStats2Idx, 2);
     if (nRandStartFrame) {
-      D2SeedStrc DVar1;
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      *(uint8_t*)(char*)&nY = (uint8_t)DVar1.nSeedLow & 0x3f;
+      uint32_t DVar1;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      *(uint8_t*)(char*)&nY = (uint8_t)DVar1 & 0x3f;
     }
     if (i == 0x60) {
       *(uint8_t*)(char*)&nY = 7;
@@ -1156,10 +1153,9 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     } while (nMonStats2Idx < 8);
 
     if (!(*((uint8_t*)pMonStatsTxtNew + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
-      D2SeedStrc DVar1;
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)DVar1.nSeedLow & 0x3f);
+      uint32_t DVar1;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)DVar1 & 0x3f);
     }
 
     GAME::Wall2::WALL2_InitUnitGfx(pUnit);
@@ -1573,8 +1569,8 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
             pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
             if (pMonStats2) {
               SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
-              if (pUnit->nGfxCurrentFrame >> 8 > (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
-                pUnit->nGfxCurrentFrame = (uint32_t)(uint8_t)pMonStats2->byInfernoRollback << 8;
+              if (pUnit->nGfxCurrentFrame >> 8 > (int)(uint32_t)pMonStats2->byInfernoAnim) {
+                pUnit->nGfxCurrentFrame = (uint32_t)pMonStats2->byInfernoRollback << 8;
                 return;
               }
             }
@@ -1598,12 +1594,12 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
               eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
               if (eState) {
                 nCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
-                if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoAnim) {
+                if (nCurrentFrame >= (int)(uint32_t)pMonStats2->byInfernoAnim) {
                   SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
                 }
-                if (nCurrentFrame >= (int)(uint32_t)(uint8_t)pMonStats2->byInfernoRollback) {
+                if (nCurrentFrame >= (int)(uint32_t)pMonStats2->byInfernoRollback) {
                   bResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 4);
-                  pUnit->nGfxCurrentFrame = (bResult - 4 + (uint32_t)(uint8_t)pMonStats2->byInfernoRollback) * 0x100;
+                  pUnit->nGfxCurrentFrame = (bResult - 4 + (uint32_t)pMonStats2->byInfernoRollback) * 0x100;
                   return;
                 }
               }
@@ -1757,18 +1753,16 @@ void __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, int nDefaultCoun
     int64_t lSeedProduct;
     int pBloodOffsetX;
     int pBloodOffsetY;
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     if (nBloodDirSlot) {
-      sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sNextSeed;
-      if (sNextSeed.nSeedLow % 0x19 != 0) {
+      sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+      if (sNextSeed % 0x19 != 0) {
         return;
       }
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
-      sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sNextSeed;
-      if (sNextSeed.nSeedLow % 3 != 0) {
+      sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+      if (sNextSeed % 3 != 0) {
         return;
       }
     }
@@ -1803,14 +1797,12 @@ void __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, int nDefaultCoun
       nVelocity = D2Common::PATH::DynamicPath::GetVelocity(pUnit->pPath.pDynamicPath);
       if (nVelocity) {
         nDirection = D2Common::Units::GetDirection(pUnit);
-        sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-        nDirWeightedIdx = (int)((uint64_t)sNextSeed.nSeedLow * 0x24924925 >> 0x20);
-        nBloodCount = ((sNextSeed.nSeedLow - nDirWeightedIdx >> 1) + nDirWeightedIdx >> 2) + sNextSeed.nSeedLow - 3 + (uint32_t)(nDirection >> 3);
-        pUnit->sSeed = sNextSeed;
+        sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+        nDirWeightedIdx = (int)((uint64_t)sNextSeed * 0x24924925 >> 0x20);
+        nBloodCount = ((sNextSeed - nDirWeightedIdx >> 1) + nDirWeightedIdx >> 2) + sNextSeed - 3 + (uint32_t)(nDirection >> 3);
       } else {
-        sNextSeed = D2_SEED_NEXT(pUnit->sSeed);
-        nBloodCount = sNextSeed.nSeedLow;
-        pUnit->sSeed = sNextSeed;
+        sNextSeed = D2_SeedRoll(&pUnit->sSeed);
+        nBloodCount = sNextSeed;
       }
 
       nBloodDirSlot = nBloodCount & 7;
@@ -2186,7 +2178,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 1);
       bPathCalcResult = MONSTER_GetNameModifierStringId(pUnit, 1);
       if (!bPathCalcResult) {
-        bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+        bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
         if (bPathCalcResult) {
           bIsWalkMsg = nMsgType == 1;
           goto start_move_anim;
@@ -2312,7 +2304,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       UnitMode::UNITMODE_SetAnimMode(pUnit, pAnimModeEntry->eMode);
       bPathCalcResult = MONSTER_IsModeMoveFlagSet(pUnit, pAnimModeEntry);
       if (bPathCalcResult) {
-        Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+        Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
       }
       if (nClassId == 0x6e) {
         MONSTER_HandleBurrowTransition(pUnit, nMsgType);
@@ -2714,7 +2706,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
 
         bPathCalcResult = MONSTER_GetNameModifierStringId(pUnit, 1);
         if (!bPathCalcResult) {
-          bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+          bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
           if (bPathCalcResult) {
             bHasMaxState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_attached);
             if (!bHasMaxState) {

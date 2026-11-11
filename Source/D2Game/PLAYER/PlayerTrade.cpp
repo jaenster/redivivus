@@ -809,7 +809,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     ::SGAMEDATA* pGameTmp;
     D2CubeSetupStrc* pMatchedItemsTmp;
     D2InventoryStrc* pSourceInventory;
-    D2SeedStrc sRolledSeed;
+    uint32_t sRolledSeed;
     uint16_t wFlagsAndUpgrade;
     int nExtractedItemCount;
     nExtractedItemCount = 0;
@@ -1081,16 +1081,18 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
                 while (pClonedOutput) {
                   pClonedSocketItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pClonedOutput);
                   pExtractedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pClonedOutput);
-                  pClonedOutput = pClonedSocketItem;
+                  D2UnitStrc* pClonedSocketItem2;
                   if (pExtractedItem) {
-                    pClonedSocketItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameLocal, pExtractedItem, nullptr, 1);
-                    if (pClonedSocketItem) {
-                      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedSocketItem, INVPAGE_None);
-                      D2Common::Units::SetupUpdateFlag(pClonedSocketItem, 4);
-                      apExtractedItems[nExtractedItemCount] = pClonedSocketItem;
+                    pClonedSocketItem2 = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameLocal, pExtractedItem, nullptr, 1);
+                    if (pClonedSocketItem2) {
+                      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedSocketItem2, INVPAGE_None);
+                      D2Common::Units::SetupUpdateFlag(pClonedSocketItem2, 4);
+                      apExtractedItems[nExtractedItemCount] = pClonedSocketItem2;
                       nExtractedItemCount++;
                     }
                   }
+
+                  pClonedOutput = pClonedSocketItem;
                 }
               }
             }
@@ -1103,10 +1105,9 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           for (nTmp = 5; nTmp; pModEntry += 0xc , nTmp--) {
             if (*(int*)(pModEntry - 10) >= 0) {
               if (*pModEntry > 0 && *pModEntry < 100) {
-                sRolledSeed = D2_SEED_NEXT(pDVar2->sSeed);
-                pDVar2->sSeed = sRolledSeed;
+                sRolledSeed = D2_SeedRoll(&pDVar2->sSeed);
                 pOutputEntry = pOutput;
-                if ((int)(sRolledSeed.nSeedLow % 100) > (int)(uint32_t)*pModEntry) {
+                if ((int)(sRolledSeed % 100) > (int)(uint32_t)*pModEntry) {
                   continue;
                 }
               }

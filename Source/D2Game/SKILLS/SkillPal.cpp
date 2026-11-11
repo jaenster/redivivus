@@ -362,8 +362,8 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
                 } else {
                   nCurStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
                   nStatResult = nValue_00 + nCurStatValue;
-                  if ((int)(uint32_t)(uint16_t)pItemStatCostTxt->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-                    nStatMaxCap = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pItemStatCostTxt->maxstat, 0);
+                  if ((int)(uint32_t)pItemStatCostTxt->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+                    nStatMaxCap = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)pItemStatCostTxt->maxstat, 0);
                     if (nStatResult >= nStatMaxCap) {
                       nStatResult = nStatMaxCap;
                     }
@@ -594,11 +594,11 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
 
       nAuraTargetStateId.nSkillLvl = nSkillLvl;
       nAuraTargetStateId.eSkill = eSkill;
+      nAuraTargetStateId.nDelayFrame = nStatIdx;
       nAuraTargetStateId.nAuraState = (int32_t)pSkillsTxt->auratargetstate;
       nAuraTargetStateId.pExtra = 0;
       nAuraTargetStateId.nAppliedCount = 0;
       nAuraTargetStateId.nFlag = 0;
-      nAuraTargetStateId.nDelayFrame = nStatIdx;
       if (pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
         uSlotC.pnValue = pSkillsTxt->aurastatcalc;
         uSlot8.psAuraStat = pSkillsTxt->aurastat;
@@ -731,7 +731,7 @@ BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     if (pUnit->eUnitType == UNIT_PLAYER) {
       pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
       if (pCharStatsTxt) {
-        nBaseVel.nBaseVel2 = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity << 8;
+        nBaseVel.nBaseVel2 = (uint32_t)pCharStatsTxt->RunVelocity << 8;
       }
     } else {
       nChargeCalc = pUnit->nClassId;
@@ -1434,9 +1434,9 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
         pSrcCalc++;
       } while (nIdx < 6);
 
+      sContext.pUnit = pCaster;
       sContext.pCallbackArg = &uScratch.sAura.sAuraArg;
       sContext.pGame = pGame;
-      sContext.pUnit = pCaster;
       SKILLPAL_ApplyAuraStateToTarget(&sContext, pUnit);
     }
     if (pAuraArgs->pExtra) {
@@ -1452,9 +1452,8 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
       UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pUnit, &uScratch.sDamage);
     }
 
-    D2SeedStrc sSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeed;
-    if ((int)(sSeed.nSeedLow % 100) < 0x14) {
+    uint32_t sSeed = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(sSeed % 100) < 0x14) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 1);
     } else {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_shatter, 0);

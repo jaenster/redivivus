@@ -90,7 +90,7 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
       exit(-1);
     }
     if (nNpcUnit3 <= (int)nNameLast) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       nSlotCount = 0;
       pSlotEntry = &pNpcDataRaw->bActive;
       do {
@@ -99,10 +99,8 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
         }
 
         ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)nNpcUnit3 + (short int)nSlotCount;
-        DVar1 = D2_SEED_NEXT(*pNpcControl);
-        pNpcControl->nSeedHigh = DVar1.nSeedHigh;
-        pNpcControl->nSeedLow = DVar1.nSeedLow;
-        pSlotEntry[-1] = DVar1.nSeedLow;
+        DVar1 = D2_SeedRoll(pNpcControl);
+        pSlotEntry[-1] = DVar1;
         nSlotCount++;
         *pSlotEntry = 0;
         pSlotEntry[1] = 0;
@@ -652,7 +650,7 @@ int __fastcall SUNITNPC_RollTradeListItemCode(::SGAMEDATA * pGame, D2UnitStrc * 
       nModulo = pGameNpc->sTrade.nTradeList1;
       if (nModulo && pGameNpc->sTrade.pTradeList1) {
         pDVar1 = (D2SeedStrc*)D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nModulo);
-        *pSeedSave = D2_SEED_NEXT(*pSeedSave);
+        D2_SeedRoll(pSeedSave);
         pSeed = pDVar1;
         D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pGameNpc->sTrade.pTradeList1[(intptr_t)pDVar1].dwItemCode, (int*)&nSeed);
         D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x01(nSeed);
@@ -1068,14 +1066,16 @@ void __fastcall SUNITNPC_ProcessGambleResult(D2UnitStrc * pUnit) {
       pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
       pOwnerUnit = 0;
-      pCurItem = pNextItem;
+      D2UnitStrc* pNextItem2;
       if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
-        pNextItem = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, (uint32_t*)&pOwnerUnit);
-        if (pNextItem) {
+        pNextItem2 = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pCarriedItem, (uint32_t*)&pOwnerUnit);
+        if (pNextItem2) {
           D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pCarriedItem);
           D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pCarriedItem, (int32_t)pOwnerUnit);
         }
       }
+
+      pCurItem = pNextItem;
     }
 }
 

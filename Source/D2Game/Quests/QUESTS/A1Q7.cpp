@@ -58,9 +58,8 @@ void __fastcall Q07_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       nGossipSeedLow = pPlayer->sSeed.nSeedLow;
     }
 
-    D2SeedStrc seedNext = D2_SEED_NEXT(pPlayer->sSeed);
-    pPlayer->sSeed = seedNext;
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x10a, seedNext.nSeedLow % 3 + 2);
+    uint32_t seedNext = D2_SeedRoll(&pPlayer->sSeed);
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x10a, seedNext % 3 + 2);
 }
 
 // A1Q7 Q07_Callback_08: quest-state handler for state index 8. STUB / no-op (empty body). Registered into sStateFunctions[8] by Q07_InitData but does nothing; this pseudo-quest never reaches/uses state 8.

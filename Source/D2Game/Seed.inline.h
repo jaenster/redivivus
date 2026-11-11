@@ -20,42 +20,36 @@ namespace D2Game::Seed {
 #ifndef D2_DEFINED_INLINE_00472280
 #define D2_DEFINED_INLINE_00472280
 __attribute__((noinline)) inline int32_t __fastcall RollBetweenMinAndMax(D2SeedStrc * pSeed, int32_t nMin, uint32_t nMax) {
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if ((int)nMax <= 0) {
       return nMin;
     }
     if (nMax & nMax - 1) {
-      sNewSeed = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      return (int)(sNewSeed.nSeedLow % nMax) + nMin;
+      sNewSeed = D2_SeedRoll(pSeed);
+      return (int)(sNewSeed % nMax) + nMin;
     }
 
-    sNewSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNewSeed;
-    return (nMax - 1 & sNewSeed.nSeedLow) + nMin;
+    sNewSeed = D2_SeedRoll(pSeed);
+    return (nMax - 1 & sNewSeed) + nMin;
 }
 #endif // D2_DEFINED_INLINE_00472280
 
 #ifndef D2_DEFINED_INLINE_004bc500
 #define D2_DEFINED_INLINE_004bc500
 __attribute__((noinline)) inline int32_t __fastcall SEED_RollRange(D2SeedStrc * pSeed, int32_t nMin, int32_t nMax) {
-    D2SeedStrc dSeedResult;
+    uint32_t dSeedResult;
     if (nMax <= nMin) {
       return nMin;
     }
 
     uint32_t nRangeWidth = nMax - nMin;
     if (nRangeWidth & nRangeWidth - 1) {
-      dSeedResult = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = dSeedResult.nSeedHigh;
-      pSeed->nSeedLow = dSeedResult.nSeedLow;
-      return (int)(dSeedResult.nSeedLow % nRangeWidth) + nMin;
+      dSeedResult = D2_SeedRoll(pSeed);
+      return (int)(dSeedResult % nRangeWidth) + nMin;
     }
 
-    dSeedResult = D2_SEED_NEXT(*pSeed);
-    *pSeed = dSeedResult;
-    return (nRangeWidth - 1 & dSeedResult.nSeedLow) + nMin;
+    dSeedResult = D2_SeedRoll(pSeed);
+    return (nRangeWidth - 1 & dSeedResult) + nMin;
 }
 #endif // D2_DEFINED_INLINE_004bc500
 

@@ -62,7 +62,6 @@ DWORD __stdcall ILT_GetCurrentThreadId();
 void __stdcall thunk_InitializeDebugSubsystem();
 void __fastcall SYSTEM_SetGlobalString(char * szText);
 bool __fastcall ErrorReportingLaunch(char * szText, struct D2BlizzardErrorArgument * pArg);
-void __stdcall DebugThread();
 } // namespace Fog::_3rdparty::crashy
 
 // Globals

@@ -32,10 +32,10 @@ struct D2StatStrc {
     D2StatStrc() = default;
     D2StatStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2StatStrc(short a0, short a1, int a2) : wSubIndex(a0), wStatIndex(a1), nStatValue(a2) {}
+    D2StatStrc(short a0, uint16_t a1, int a2) : wSubIndex(a0), wStatIndex(a1), nStatValue(a2) {}
 
     /* 0x00 */ short wSubIndex;
-    /* 0x02 */ short wStatIndex;
+    /* 0x02 */ uint16_t wStatIndex;
     /* 0x04 */ int nStatValue;
 };
 

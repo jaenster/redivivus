@@ -82,7 +82,7 @@ BOOL __fastcall SKILLAMA_SrvStFn06_PowerStrike(::SGAMEDATA * pGame, D2UnitStrc *
 // Amazon skill helper that probabilistically consumes weapon quantity or durability on use. For stackable weapons: if the RNG roll (based on pUnit's seed vs. nParam1 threshold) triggers, removes one charge via RemoveQuanityOnUse. For non-stackable weapons with durability: on a trigger, decrements durability by nParam2 and sends stat update 0x3E to the client; if durability reaches zero, calls ITEMMODE_SendItemUpdate (item break). Returns non-zero if an action was taken.
 static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChancePct, int32_t nDurabilityLoss, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int nCurrentDurability;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     uint32_t bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pUnit2, ITEMTYPE_Weapon);
     if (!bIsWeapon) {
       return;
@@ -92,9 +92,8 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChan
     if (fIsStackableCheck) {
       nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_quantity, 0);
       if (nCurrentDurability > 0) {
-        sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < nChancePct) {
+        sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+        if ((int)(sNewSeed % 100) < nChancePct) {
           SkillsServer::RemoveQuanityOnUse(pGame, pUnit);
           return;
         }
@@ -102,9 +101,8 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChan
     } else {
       bIsWeapon = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit2);
       if (bIsWeapon) {
-        sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < nChancePct) {
+        sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+        if ((int)(sNewSeed % 100) < nChancePct) {
           nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_durability, 0);
           bIsWeapon = nCurrentDurability - nDurabilityLoss;
           if ((int)bIsWeapon >= 0 && bIsWeapon) {

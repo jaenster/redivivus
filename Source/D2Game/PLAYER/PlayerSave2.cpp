@@ -476,7 +476,7 @@ BOOL __fastcall SaveStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * p
         pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nBitStreamLen > 0) {
           do {
-            nStatId = (uint32_t)(uint16_t)statsBuf[iStat].wStatIndex;
+            nStatId = (uint32_t)statsBuf[iStat].wStatIndex;
             nSubIndex = statsBuf[iStat].wSubIndex;
             nRawStatValue = statsBuf[iStat].nStatValue;
             pStatCostTxt = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
@@ -964,10 +964,10 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
       return 4;
     }
 
-    D2SaveFileHeaderStrc* pDVar2 = (D2SaveFileHeaderStrc*)pSaveFile->dwChecksum;
+    D2SaveFileHeaderStrc* pDVar3 = (D2SaveFileHeaderStrc*)pSaveFile->dwChecksum;
     uint32_t nFileSize = (intptr_t)pHeader - (intptr_t)pSaveFile;
     pSaveFile->dwChecksum = 0;
-    pHeader = pDVar2;
+    pHeader = pDVar3;
     uint32_t nStoredChecksum = Fog::Save::CalculateChecksum((uint8_t*)pSaveFile, nFileSize);
     if ((D2SaveFileHeaderStrc*)nStoredChecksum != pHeader) {
       return 6;
@@ -992,12 +992,12 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
 
     nResult = CalculateGetFlags(pGame, (uint16_t)pSaveFile->dwCharacterStatus, pClient);
     if (!nResult) {
-      uint8_t byClassId = pSaveFile->nPlayerClassId;
-      if (byClassId > 7) {
+      uint8_t bVar2 = pSaveFile->nPlayerClassId;
+      if (bVar2 > 7) {
         return 4;
       }
 
-      GAME::Clients::SetClassOfClient(pClient, byClassId);
+      GAME::Clients::SetClassOfClient(pClient, (uint32_t)bVar2);
       uint32_t nCharStatus = pSaveFile->dwCharacterStatus;
       if (nCharStatus & 1) {
         pSaveFile->dwCharacterStatus = nCharStatus & -2;
@@ -1020,7 +1020,7 @@ int32_t __fastcall PLAYERSAVE_ParseHeaderAndCreateUnit(::SGAMEDATA * pGame, D2Cl
         pGame->pInitSeed.nSeedLow = pSaveFile->nInitSeed;
       }
 
-      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)byClassId, 0, 0, pGame, nullptr, 0, 0, 0);
+      D2UnitStrc* pUnit = UNIT::SUnit::CreateUnit(UNIT_PLAYER, (uint32_t)bVar2, 0, 0, pGame, nullptr, 0, 0, 0);
       *pOutUnit = pUnit;
       PLAYERSAVE_LinkPlayerToUnit(pGame, pUnit, pClient);
       D2ClientStrc* pClientLocal = pClient;

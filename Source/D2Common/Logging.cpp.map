@@ -149,24 +149,6 @@
         "CloseLogging",
         "fclose"
       ]
-    },
-    {
-      "name": "STATLIST_BinarySearchStatById",
-      "address": "00624b90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00624b90"
-        }
-      ],
-      "namespace": "D2Common::Logging::Logging",
-      "calledFunctions": [
-        "STATLIST_BinarySearchStatById"
-      ],
-      "usedTypes": [
-        "D2StatInfoStrc",
-        "int32_t"
-      ]
     }
   ]
 }

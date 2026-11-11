@@ -112,18 +112,14 @@ static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId
     if ((int)nVariants <= 0) {
       nRandVariantIdx = 0;
     } else {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       nRandVariantIdx = pLevel->sSeed.nSeedLow;
       if (nVariants & nVariants - 1) {
-        DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandVariantIdx = (uint32_t)(DVar1.nSeedLow % nVariants);
+        DVar1 = D2_SeedRoll(&pLevel->sSeed);
+        nRandVariantIdx = (uint32_t)(DVar1 % nVariants);
       } else {
-        DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandVariantIdx = nVariants - 1 & DVar1.nSeedLow;
+        DVar1 = D2_SeedRoll(&pLevel->sSeed);
+        nRandVariantIdx = nVariants - 1 & DVar1;
       }
     }
 
@@ -337,9 +333,8 @@ static void PlaceCliffs(D2DrlgLevelStrc * pLevel) {
     0x8
 }; D2_STATIC_GUARD(gaCliffWallGridOffsets, "D2Common::Drlg::OutDesr::PlaceCliffs::gaCliffWallGridOffsets");
 
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed = sNextSeed;
-    uint32_t* pCliffTableEntry = gaCliffWallGridOffsets + (sNextSeed.nSeedLow & 7) * 0x14 + 3;
+    uint32_t sNextSeed = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t* pCliffTableEntry = gaCliffWallGridOffsets + (sNextSeed & 7) * 0x14 + 3;
     int nEntriesLeft = 5;
     do {
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, pCliffTableEntry[-1], *pCliffTableEntry, pCliffTableEntry[-3], pCliffTableEntry[-2], 0);

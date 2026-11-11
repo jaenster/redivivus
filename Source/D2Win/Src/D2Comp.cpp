@@ -3840,16 +3840,16 @@ char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank,
           switch (nTitleRank) {
             case 1:
               return "Slayer ";
-            case 2:
-              return "Champion ";
-            case 3:
-              return "Matriarch ";
             case 4:
               return "Destroyer ";
             case 5:
               return "Conqueror ";
             case 6:
               return "Guardian ";
+            case 2:
+              return "Champion ";
+            case 3:
+              return "Matriarch ";
             default:
               return "";
           }
@@ -3858,8 +3858,6 @@ char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank,
       switch (nTitleRank) {
         case 1:
           return "Slayer ";
-        case 2:
-          return "Champion ";
         case 3:
           return "Patriarch ";
         case 4:
@@ -3868,6 +3866,8 @@ char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank,
           return "Conqueror ";
         case 6:
           return "Guardian ";
+        case 2:
+          return "Champion ";
       }
     } else {
       switch (nCharClass) {

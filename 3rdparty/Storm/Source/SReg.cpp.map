@@ -41,8 +41,7 @@
       ],
       "usedTypes": [
         "HKEY",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {
@@ -107,8 +106,7 @@
         "SREG_InternalDeleteEntry"
       ],
       "usedTypes": [
-        "int32_t",
-        "uint8_t"
+        "int32_t"
       ]
     },
     {

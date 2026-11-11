@@ -7,15 +7,47 @@
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
+#include "Source/D2Common/Drlg/Outdoors.h"
 #include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/Seed.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Seed.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
 namespace D2Common::Drlg::TileSub {
+
+static void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnkOutdoor, D2LvlSubTxt * pLvlSub) {
+    D2DrlgFileStrc* pFile = pLvlSub->pDrlgFile;
+    uint32_t nModulo = pFile->nSubstGroups;
+    int nGroupIter = 0;
+    uint32_t nRandStartGroup = 0;
+    if (!nModulo) {
+      return;
+    }
+    if (pUnkOutdoor->nPrevBorderPresetId == -1) {
+      pUnkOutdoor->nPrevBorderPresetId = 0x3e;
+    }
+    if (!pLvlSub->BordType) {
+      nRandStartGroup = Seed::RANDOM_RandomNumberSelector(&pUnkOutdoor->pLevel->sSeed, nModulo);
+    }
+    if ((int)nModulo <= 0) {
+      return;
+    }
+
+    do {
+      BOOL bPlaced;
+      bPlaced = Outdoors::DRLGOUTDOOR_PlaceRandomBorderSubTiles(pUnkOutdoor, pLvlSub, (int*)(pFile->pSubstGroups + (int)(nRandStartGroup + nGroupIter) % (int)nModulo));
+      if (bPlaced && !pLvlSub->BordType) {
+        return;
+      }
+
+      nGroupIter++;
+    } while (nGroupIter < (int)nModulo);
+}
 
 // Ensures pLvlSubTxtRecord->pDrlgFile is loaded, then initializes per-layer grids (wall/floor/shadow) from the DS1 tile-type layers. Also applies a per-wall-layer flag mask and validates that substitution groups exist.
 void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSubTxtRecord) {
@@ -30,10 +62,10 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
     Preset::AllocDrlgFile(ppDrlgFile, pMemory, pLvlSubTxtRecord->File);
     D2DrlgFileStrc* pDrlgFile = *ppDrlgFile;
     int nGridWidth = pDrlgFile->nWidth + 1;
-    gridInitCtx.nHeight = pDrlgFile->nHeight + 1;
     gridInitCtx.nPosX = 0;
     gridInitCtx.nPosY = 0;
     gridInitCtx.nWidth = nGridWidth;
+    gridInitCtx.nHeight = pDrlgFile->nHeight + 1;
     if (!pDrlgFile->nSubstGroups) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b6);
       exit(-1);

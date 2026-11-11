@@ -1066,8 +1066,8 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x15F */ bool S7;
     /* 0x160 */ bool S8;
     /* 0x161 */ char TotalPieces;
-    /* 0x162 */ char XSpace;
-    /* 0x163 */ char YSpace;
+    /* 0x162 */ uint8_t XSpace;
+    /* 0x163 */ uint8_t YSpace;
     /* 0x164 */ char Red;
     /* 0x165 */ char Green;
     /* 0x166 */ char Blue;
@@ -1076,7 +1076,7 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x16C */ uint8_t field_0x16c;
     /* 0x16D */ bool MonsterOK;
     /* 0x16E */ char OperateRange;
-    /* 0x16F */ char ShrineFunction;
+    /* 0x16F */ uint8_t ShrineFunction; // read zero-extended (movzx) by OBJECT_DispatchShrineServerActivate 004bd5c0
     /* 0x170 */ char Act;
     /* 0x171 */ bool Lockable;
     /* 0x172 */ bool Gore;
@@ -1452,7 +1452,7 @@ struct __attribute__((packed)) D2QuestDataA1Q5Strc {
     /* 0x064 */ uint16_t nPlayersForRewardCount; // Number of players for reward; unsigned word: every read is MOVZX (Q05_Callback00_NpcActivate 00594c50)
     /* 0x066 */ int16_t field_0x66;
     /* 0x068 */ int32_t nCountessChestGUID_0[8]; // Countess chest object GUID [0]; array base at +0x68 iterated by Q05_SpawnCountessDeathEffect
-    /* 0x088 */ int16_t nCountessChestCount; // Count of valid chest GUIDs; checked as ushort gate in Q05_SpawnCountessDeathEffect
+    /* 0x088 */ uint16_t nCountessChestCount; // Count of valid chest GUIDs; checked as ushort gate in Q05_SpawnCountessDeathEffect
     /* 0x08A */ uint8_t field_0x8a;
     /* 0x08B */ uint8_t field_0x8b;
     /* 0x08C */ D2QuestGUIDStrc sQuestGUID; // Main quest player tracking
@@ -2711,41 +2711,35 @@ namespace D2Game::Seed {
 #ifndef D2_DEFINED_INLINE_00472280
 #define D2_DEFINED_INLINE_00472280
 __attribute__((noinline)) inline int32_t __fastcall RollBetweenMinAndMax(D2SeedStrc * pSeed, int32_t nMin, uint32_t nMax) {
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if ((int)nMax <= 0) {
       return nMin;
     }
     if (nMax & nMax - 1) {
-      sNewSeed = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      return (int)(sNewSeed.nSeedLow % nMax) + nMin;
+      sNewSeed = D2_SeedRoll(pSeed);
+      return (int)(sNewSeed % nMax) + nMin;
     }
 
-    sNewSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNewSeed;
-    return (nMax - 1 & sNewSeed.nSeedLow) + nMin;
+    sNewSeed = D2_SeedRoll(pSeed);
+    return (nMax - 1 & sNewSeed) + nMin;
 }
 #endif // D2_DEFINED_INLINE_00472280
 #ifndef D2_DEFINED_INLINE_004bc500
 #define D2_DEFINED_INLINE_004bc500
 __attribute__((noinline)) inline int32_t __fastcall SEED_RollRange(D2SeedStrc * pSeed, int32_t nMin, int32_t nMax) {
-    D2SeedStrc dSeedResult;
+    uint32_t dSeedResult;
     if (nMax <= nMin) {
       return nMin;
     }
 
     uint32_t nRangeWidth = nMax - nMin;
     if (nRangeWidth & nRangeWidth - 1) {
-      dSeedResult = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = dSeedResult.nSeedHigh;
-      pSeed->nSeedLow = dSeedResult.nSeedLow;
-      return (int)(dSeedResult.nSeedLow % nRangeWidth) + nMin;
+      dSeedResult = D2_SeedRoll(pSeed);
+      return (int)(dSeedResult % nRangeWidth) + nMin;
     }
 
-    dSeedResult = D2_SEED_NEXT(*pSeed);
-    *pSeed = dSeedResult;
-    return (nRangeWidth - 1 & dSeedResult.nSeedLow) + nMin;
+    dSeedResult = D2_SeedRoll(pSeed);
+    return (nRangeWidth - 1 & dSeedResult) + nMin;
 }
 #endif // D2_DEFINED_INLINE_004bc500
 #ifndef D2_DEFINED_INLINE_004cc790

@@ -5,6 +5,7 @@
 #include "Source/D2Client/Draw/Weather.h"
 #include "Source/D2Client/GAME/Game/Game.h"
 #include "Source/D2Client/Source/ClientEngine.h"
+#include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
@@ -624,15 +625,6 @@ static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
     switch (gnLightmapInterpolationState[0]) {
       case 0:
         return;
-      case 1:
-        nNeighborIdx = gnLightmapInterpDirX + nBufferY * 0x40 + nBufferX;
-      nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
-      if (!nSample1) {
-        gLightMapBuffer[nBufferY * 0x40 + nBufferX] = gLightMapBuffer[nNeighborIdx];
-        return;
-      }
-
-      break;
       case 2:
         nNeighborIdx = nBufferY * 0x40 + gnLightmapInterpDirX + nBufferX;
       nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
@@ -664,6 +656,15 @@ static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
 
       gLightMapBuffer[nBufferY * 0x40 + nBufferX] = (int)((0x100 - gnLightmapInterpSubdivRatio) * nSample1 + gnLightmapInterpSubdivRatio * nSample2) >> 8;
       return;
+      case 1:
+        nNeighborIdx = gnLightmapInterpDirX + nBufferY * 0x40 + nBufferX;
+      nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
+      if (!nSample1) {
+        gLightMapBuffer[nBufferY * 0x40 + nBufferX] = gLightMapBuffer[nNeighborIdx];
+        return;
+      }
+
+      break;
       case 4:
         nNeighborIdx = (gnLightmapInterpDirY + nBufferY) * 0x40 + nBufferX;
       nSample1 = gaLightmapInterpBuffer[nNeighborIdx];
@@ -858,7 +859,7 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
       return;
     }
     if (pLightMap->bServerSideUnit != '\0') {
-      pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
+      pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
     } else {
       pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
     }
@@ -1063,7 +1064,7 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
       eUnitType = pLightMap->eUnitType;
       if (eUnitType != UNIT_COUNT) {
         if (pLightMap->bServerSideUnit != '\0') {
-          pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
+          pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
         } else {
           pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
         }
@@ -1301,7 +1302,7 @@ void __fastcall ACTCALLBACKFN(D2RoomStrc * pRoom) {
           exit(-1);
         }
         if (pLightMap->bServerSideUnit != '\0') {
-          pUnit = UNIT::Player::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eLightUnitType);
+          pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eLightUnitType);
         } else {
           pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eLightUnitType);
         }

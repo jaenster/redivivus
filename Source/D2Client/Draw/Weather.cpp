@@ -149,7 +149,7 @@ void __stdcall LoadCustomSettingsPerAreaAct5() {
       return;
     }
 
-    *pSeed = D2_SEED_NEXT(*pSeed);
+    D2_SeedRoll(pSeed);
 }
 
 // Re-initialises the pEnvironmentParticles data array and halts (Env.cpp line 347, spParticleData->nTotalCount == 0) if entries remain in use.
@@ -205,7 +205,7 @@ void __stdcall WEATHER_InitializeRngParams() {
 }
 
 int __stdcall WEATHER_UpdateStateAct5(int bForceDisable) {
-    D2SeedStrc sSeedUpdated;
+    uint32_t sSeedUpdated;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     int nSnowChanceThreshold = 0;
     if (!pPlayer) {
@@ -251,9 +251,8 @@ int __stdcall WEATHER_UpdateStateAct5(int bForceDisable) {
           gnWeatherAct5ParticleCount = 1;
       }
 
-      sSeedUpdated = D2_SEED_NEXT(pPlayer->sSeed);
-      pPlayer->sSeed = sSeedUpdated;
-      if ((int)(sSeedUpdated.nSeedLow % 100) >= nSnowChanceThreshold || bForceDisable) {
+      sSeedUpdated = D2_SeedRoll(&pPlayer->sSeed);
+      if ((int)(sSeedUpdated % 100) >= nSnowChanceThreshold || bForceDisable) {
         gnWeatherStateAct5 = bBlizzardWeather;
         if (bBlizzardWeather) {
           WEATHER_TransitionState(2);
@@ -528,9 +527,8 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
       *(int32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 8) = nRoll + nScreenY;
     }
 
-    D2SeedStrc sSeedNew = D2_SEED_NEXT(*pSeed);
-    nSlot = (sSeedNew.nSeedLow & 1) + 2;
-    *pSeed = sSeedNew;
+    uint32_t sSeedNew = D2_SeedRoll(pSeed);
+    nSlot = (sSeedNew & 1) + 2;
     *(uint32_t*)(pSplashArrayData + nSplashSlotIndex * 0x18 + 0xc) = nSlot;
     if (false || (int32_t)nSlot >= 4) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ea);
@@ -674,14 +672,13 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     pParticleArray[nParticleSlotIndex].nMaxY = nTemp;
     nTemp = D2Game::Seed::RollBetweenMinAndMax(pSeed, -0x14, nTemp + 0x14);
     pParticleArray[nParticleSlotIndex].nPosY = nTemp;
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNextSeed;
+    uint32_t sNextSeed = D2_SeedRoll(pSeed);
     int nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
-    pParticleArray[nParticleSlotIndex].nSinPhaseOffset = sNextSeed.nSeedLow & 0x1ff;
+    pParticleArray[nParticleSlotIndex].nSinPhaseOffset = sNextSeed & 0x1ff;
     float fDepthFactor = (float)(nLineIndex - 0x28) / (float)(UI::Inv::ScreenSizeY - 0x57);
     if (nWeatherParticleCountAct5) {
       pParticleArray[nParticleSlotIndex].nAlpha = 0xff;
-      *pSeed = D2_SEED_NEXT(*pSeed);
+      D2_SeedRoll(pSeed);
       pParticleArray[nParticleSlotIndex].nFadeCountdown = 1;
       nLineIndex = pParticleArray[nParticleSlotIndex].nMaxY;
       pParticleArray[nParticleSlotIndex].nSpeed = 8 - (int)(fDepthFactor * -28.0);
@@ -702,9 +699,8 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
       return;
     }
 
-    sNextSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNextSeed;
-    nLineIndex = sNextSeed.nSeedLow % 0xc;
+    sNextSeed = D2_SeedRoll(pSeed);
+    nLineIndex = sNextSeed % 0xc;
     nTemp = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, nullptr);
     switch (nTemp) {
       case 2:

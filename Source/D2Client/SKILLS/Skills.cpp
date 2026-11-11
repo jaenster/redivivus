@@ -570,7 +570,7 @@ void __fastcall AssignProperLight(D2UnitStrc * pUnit, int32_t nMissileId) {
     }
 
     D2LightMapStrc* pLightMap = Draw::LightMap::AllocLightMap(pUnit, 1, 1, 0xff, pMissileTxt->Red, pMissileTxt->Green, pMissileTxt->Blue);
-    Draw::LightMap::SetRadiusY(pLightMap, (uint32_t)(uint8_t)pMissileTxt->Light);
+    Draw::LightMap::SetRadiusY(pLightMap, (uint32_t)pMissileTxt->Light);
     pLightMap = D2Common::Skills::SwapLightMap(pUnit, pLightMap);
     if (!pLightMap) {
       return;
@@ -616,9 +616,8 @@ static int PLAYER_ChooseAttackAnimation(D2UnitStrc * pUnit) {
       return eAnimMode;
     }
 
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNewSeed;
-    if (!(((uint8_t)sNewSeed.nSeedLow & 0x3f) < 0x20)) {
+    uint32_t sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+    if (!(((uint8_t)sNewSeed & 0x3f) < 0x20)) {
       return eAnimMode;
     }
 
@@ -758,6 +757,8 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
       }
 
       break;
+      default:
+        return 0;
       case UNIT_MONSTER:
         if (!(nTargetFlags & 2)) {
           return 0;
@@ -823,8 +824,6 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
           return 0;
         }
       break;
-      default:
-        return 0;
     }
 
     if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
@@ -1889,16 +1888,15 @@ int32_t __fastcall SKILL_ProcessCastFromPacket(D2UnitStrc * pUnit, int * pnCastA
 // Spawns a full 360-degree ring of 64 missiles (one per 4-byte entry in ganMissileRingCosOffsets/ganMissileRingSinOffsets). When pSkillArg1 is NULL fires all from pSkillArg2 (toggling a flag for MISSILE_Diabfire). When pSkillArg1 is non-NULL, randomly assigns each missile to pSkillArg1 or pSkillArg2 using the owner's RNG seed (1-in-6 chance selects pSkillArg1). Used by Nova-style skills.
 static void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2SkillArgStrc * pSkillArg2) {
     D2UnitStrc* pMissileUnit;
-    D2SeedStrc sRandSeed;
+    uint32_t sRandSeed;
     int nTableOffset = 0;
     if (pSkillArg1) {
       int nRingTableOffset = 0;
       do {
         D2SkillArgStrc* pChosenArg;
         pMissileUnit = pSkillArg2->pOwner;
-        sRandSeed = D2_SEED_NEXT(pMissileUnit->sSeed);
-        pMissileUnit->sSeed = sRandSeed;
-        if (sRandSeed.nSeedLow % 6 != 0) {
+        sRandSeed = D2_SeedRoll(&pMissileUnit->sSeed);
+        if (sRandSeed % 6 != 0) {
           pSkillArg2->nUnitX = ganMissileRingCosOffsets[nRingTableOffset];
           pSkillArg2->nUnitY = ganMissileRingSinOffsets[nRingTableOffset];
           pChosenArg = pSkillArg2;
@@ -2120,12 +2118,10 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
     uint32_t nRandRange;
     int nOffsetY;
     int64_t lSeedNext;
-    D2SeedStrc lRngState = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed.nSeedHigh = lRngState.nSeedHigh;
-    pUnit->sSeed.nSeedLow = lRngState.nSeedLow;
+    uint32_t lRngState = D2_SeedRoll(&pUnit->sSeed);
     int nSavedX = pSkillArg->nX;
     int nSavedY = pSkillArg->nY;
-    uint32_t nQuadrantTmp = lRngState.nSeedLow & 3;
+    uint32_t nQuadrantTmp = lRngState & 3;
     if (nCount <= 0) {
       return;
     }
@@ -2183,14 +2179,11 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
       } else {
         nRandOffsetX = pUnit->sSeed.nSeedLow;
         if (nRandRange & nRandRange - 1) {
-          lRngState = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed = lRngState;
-          nRandRange = lRngState.nSeedLow % nRandRange;
+          lRngState = D2_SeedRoll(&pUnit->sSeed);
+          nRandRange = lRngState % nRandRange;
         } else {
-          lRngState = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed.nSeedHigh = lRngState.nSeedHigh;
-          pUnit->sSeed.nSeedLow = lRngState.nSeedLow;
-          nRandRange = nRadius * 2 - 1U & lRngState.nSeedLow;
+          lRngState = D2_SeedRoll(&pUnit->sSeed);
+          nRandRange = nRadius * 2 - 1U & lRngState;
         }
       }
 

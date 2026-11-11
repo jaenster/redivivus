@@ -188,7 +188,7 @@ struct __attribute__((packed)) D2SkillsTxt {
     /* 0x19C */ int LevToHit;
     /* 0x1A0 */ int ToHitCalc;
     /* 0x1A4 */ char HitShift;
-    /* 0x1A5 */ char SrcDam;
+    /* 0x1A5 */ uint8_t SrcDam;
     /* 0x1A6 */ uint8_t field_0x1a6;
     /* 0x1A7 */ uint8_t field_0x1a7;
     /* 0x1A8 */ int MinDam;

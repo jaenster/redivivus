@@ -5,7 +5,6 @@
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2DynamicPathStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/PATH/DynamicPath.h"
 #include "Source/D2Game/D2PathTypeArg.h"
 #include "Source/D2Game/Objects/Objects.h"
@@ -294,30 +293,6 @@ void __stdcall PATH_GetScreenVelocity(D2UnitStrc * pUnit, int * pnVelocityX, int
 
     *pnVelocityX = 0;
     *pnVelocityY = 0;
-}
-
-uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
-    uint16_t nMidY;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return 1;
-    }
-
-    uint32_t bIsBossOrChamp = Monsters::MONSTERS::MONSTER_IsBossOrChampion(pUnit);
-    if (bIsBossOrChamp) {
-      return 1;
-    }
-
-    D2RoomStrc* pRoom = *(D2RoomStrc**)(pPathData + 6);
-    if (!pRoom) {
-      uint16_t nMidX;
-      nMidX = pPathData[2];
-      nMidY = pPathData[3];
-      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(*(D2RoomStrc**)(pPathData + 4), (int)((uint32_t)nMidX - (uint32_t)*pPathData) / 2 + (uint32_t)*pPathData, (int)((uint32_t)nMidY - (uint32_t)pPathData[1]) / 2 + (uint32_t)pPathData[1]);
-      pRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint32_t)nMidX, (uint32_t)nMidY);
-    }
-
-    BOOL bIsTown = DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    return (uint32_t)!bIsTown;
 }
 
 // DRLGPATH_UpdateUnitRoom - Checks if a unit's current position is still within its room's bounds. If not, finds the correct room via DRLGROOM_FindBetterNearbyRoom and transfers the unit to the new room.

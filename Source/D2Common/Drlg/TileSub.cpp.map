@@ -4,6 +4,28 @@
   "file": "Source/D2Common/Drlg/TileSub.cpp",
   "functions": [
     {
+      "name": "DRLGOUTDOOR_ApplySubstitutionGroup",
+      "address": "0066f990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f990"
+        }
+      ],
+      "namespace": "D2Common::Drlg::TileSub",
+      "calledFunctions": [
+        "DRLGOUTDOOR_ApplySubstitutionGroup",
+        "RANDOM_RandomNumberSelector",
+        "DRLGOUTDOOR_PlaceRandomBorderSubTiles"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2LvlSubTxt",
+        "D2UnkOutdoorStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "InitializeDrlgFile",
       "address": "006704e0",
       "lines": [

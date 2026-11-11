@@ -3,13 +3,13 @@
 #include "Source/Fog/Debug.h"
 #include "3rdparty/crashy/crashyRoot.h"
 #include "Source/Fog/Engine/Application.h"
-#include "Source/Fog/File.h"
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/String/FogString.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.h"
+#include "3rdparty/crashy/crashy.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Debug.data.h"
 
@@ -218,6 +218,28 @@ char gszCrashLogTempDir[1024] = {}; D2_GLOBAL_GUARD(gszCrashLogTempDir, "gszCras
 namespace Fog::Debug {
 
 static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable);
+
+void __stdcall DebugThread() {
+    void* pSavedEsp;
+    EH4_EXCEPTION_REGISTRATION tSehFrame;
+    tSehFrame.TryLevel = -2;
+    tSehFrame.ExceptionHandler = _except_handler4;
+    tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
+    tSehFrame.EncodedScopeTable = DEFAULT_SECURITY_COOKIE ^ 0x702290;
+    ExceptionList = &tSehFrame;
+    BOOL bDebuggerPresent = IsDebuggerPresent();
+    if (bDebuggerPresent == 1) {
+      THREADNAME_INFO tThreadNameInfo;
+      tThreadNameInfo.dwType = 0x1000;
+      tThreadNameInfo.szName = "MiniDump Thread";
+      tThreadNameInfo.dwThreadID = -1;
+      tThreadNameInfo.dwFlags = 0;
+      tSehFrame.TryLevel = 0;
+      /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&tThreadNameInfo.dwType);
+    }
+
+    ExceptionList = tSehFrame.Next;
+}
 
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis() {
@@ -462,7 +484,10 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       DWORD dwDisplacement;
-      uint8_t __pad4[4];
+      uint8_t __pad4;
+      uint8_t __pad5;
+      uint8_t __pad6;
+      uint8_t __pad7;
       void* pPrevExceptionRecord;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -807,7 +832,7 @@ void __stdcall WriteCrashDumpViaThread() {
 
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
-    _3rdparty::crashy::DebugThread();
+    DebugThread();
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(hCrashDumpRequestEvent, -1);
     while (pCrashDumpInfo) {
       WriteCrashDumpViaThread();
@@ -1102,6 +1127,93 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
       pEntryCursor += 0x114;
       nRemaining--;
     } while (nRemaining >= 0);
+}
+
+void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames) {
+    D2CrashFrameStrc aFrames[128];
+    int nFrameCountClamped = 0x7f;
+    uint32_t* pFrameBufCursor = &aFrames[0].dw08;
+    do {
+      ((D2CrashFrameStrc*)(pFrameBufCursor - 2))->dwReturnAddr = 0;
+      pFrameBufCursor[-1] = 0;
+      *pFrameBufCursor = 0;
+      pFrameBufCursor[1] = 0;
+      *(uint8_t*)(pFrameBufCursor + 2) = '\0';
+      memset(pFrameBufCursor + 3, 0, 4 * sizeof(pFrameBufCursor[0]));
+      pFrameBufCursor += 9;
+      nFrameCountClamped--;
+    } while (nFrameCountClamped >= 0);
+
+    int32_t nFrameCount = Engine::Application::DEBUG_UnwindStackFrames((CONTEXT*)pContext, dwThreadId, aFrames, nMaxFrames);
+    if (nFrameCount <= 0) {
+      return;
+    }
+    if (nFrameCount > 0x80) {
+      nFrameCount = 0x80;
+    }
+
+    CRASH_FormatStackTrace(dwThreadId, aFrames, nFrameCount, pOutputCallback, pReport, bIncludeThreadName, bIncludeStackInfo);
+}
+
+// Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.
+void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFrameAddrs, int32_t nNumFrames, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo) {
+    // Frame slots -2012..-16 are ONE object: &dwStackBytesUsed is passed out and the callee reaches the rest by byte offset.
+    // Separate locals let the compiler reorder them, so the run is one struct.
+    struct __frame0_t {
+      uint32_t dwStackBytesUsed;
+      char szAddressInfo[840];
+      char szThreadName[128];
+      char szLineBuffer[1024];
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1996, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    __frame0_t __frame0;
+    int nWritten;
+    int nChunkLen;
+    uint32_t nLineLen;
+    LPCVOID pThreadStackBase;
+    LPCVOID pThreadEsp;
+    if (bIncludeStackInfo != '\0') {
+      char cTmp;
+      if (_3rdparty::crashy::dwCurrentThreadId == dwThreadId) {
+        strncpy_s(__frame0.szThreadName, 0x80, "Main Thread", -1);
+      } else {
+        __frame0.szThreadName[0] = '\0';
+      }
+
+      cTmp = _3rdparty::crashy::SYSTEM_CaptureThreadContext(&pThreadStackBase, dwThreadId, (int*)&__frame0.dwStackBytesUsed, &pThreadEsp);
+      nWritten = __snprintf_s(__frame0.szLineBuffer, 0x400, -1, "Thread 0x%08x", dwThreadId);
+      if (__frame0.szThreadName[0] != '\0') {
+        nChunkLen = __snprintf_s(__frame0.szLineBuffer + nWritten, 0x400 - nWritten, -1, " \"%s\"", __frame0.szThreadName);
+        nWritten += nChunkLen;
+      }
+      if (cTmp != '\0') {
+        nChunkLen = __snprintf_s(__frame0.szLineBuffer + nWritten, 0x400 - nWritten, -1, " [Stack Base: 0x%p Used Space: %llu/%llu bytes]", pThreadStackBase, (intptr_t)pThreadStackBase - (intptr_t)pThreadEsp, 0, __frame0.dwStackBytesUsed, 0);
+        nWritten += nChunkLen;
+      }
+
+      __snprintf_s(__frame0.szLineBuffer + nWritten, 0x400 - nWritten, -1, "\n");
+      (*pOutputCallback)(pReport, __frame0.szLineBuffer);
+    }
+
+    for (; (uint32_t)nNumFrames > 0; nNumFrames--) {
+      Engine::Application::DEBUG_FormatAddressInfo(aFrameAddrs->dwReturnAddr, __frame0.szAddressInfo);
+      if (bIncludeThreadName == '\0') {
+        __frame0.szAddressInfo[0] = '\0';
+      }
+
+      FormatAddressDebugString(aFrameAddrs, __frame0.szAddressInfo, __frame0.szLineBuffer);
+      nLineLen = (int)strlen(__frame0.szLineBuffer);
+      if (nLineLen >= 0x3ff) {
+        __frame0.szLineBuffer[0x3fe] = '\n';
+        __frame0.szLineBuffer[0x3ff] = '\0';
+      } else {
+        __frame0.szLineBuffer[nLineLen] = '\n';
+        __frame0.szLineBuffer[nLineLen + 1] = '\0';
+      }
+
+      (*pOutputCallback)(pReport, __frame0.szLineBuffer);
+      aFrameAddrs++;
+    }
 }
 
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {
@@ -1871,12 +1983,29 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
     struct __frame0_t {
       DWORD stackFrame[2];
       uint32_t nAddrPCMode;
-      uint8_t __pad12[12];
+      uint8_t __pad12;
+      uint8_t __pad13;
+      uint8_t __pad14;
+      uint8_t __pad15;
+      uint8_t __pad16;
+      uint8_t __pad17;
+      uint8_t __pad18;
+      uint8_t __pad19;
+      uint8_t __pad20;
+      uint8_t __pad21;
+      uint8_t __pad22;
+      uint8_t __pad23;
       DWORD nAddrStackOffset;
-      uint8_t __pad28[4];
+      uint8_t __pad28;
+      uint8_t __pad29;
+      uint8_t __pad30;
+      uint8_t __pad31;
       uint32_t nAddrStackMode;
       DWORD nAddrFrameOffset;
-      uint8_t __pad40[4];
+      uint8_t __pad40;
+      uint8_t __pad41;
+      uint8_t __pad42;
+      uint8_t __pad43;
       uint32_t nAddrFrameMode;
       uint8_t __pad48[116];
     };

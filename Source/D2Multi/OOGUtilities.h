@@ -108,7 +108,6 @@ int __stdcall CHAT_SendOutOfGameMessage();
 // OnPress of the OK button (form 0x27, record 0070d5a0, string 0x13ee) of the chat password/CD-key warning popup that OOGUTIL_SendChatMessage opens: calls CHAT_SendOutOfGameMessage (the caller already emptied gszOogChatInputBuffer) and closes the popup (FORMS_DestroyListEx); returns 1.
 // Provenance: asm 004428b0..004428bf (RET 4); popup built by UIMENU_DrawTitleAndSubtitleOnCenterScreen, called only from OOGUTIL_SendChatMessage.
 BOOL __stdcall OOGUTIL_OnPressChatWarningOk(struct D2ControlMsg * pControlMsg);
-int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix);
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText);
 int __fastcall Unreferenced_00442a70(uint32_t * param_1, int param_2);
 char * __fastcall OOGUTIL_GetStringEnd(char * szText);

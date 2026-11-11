@@ -35,7 +35,7 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
     int32_t nCorpseMissileFrames;
     int32_t nCorpseIdx;
     D2SkillsTxt* pSkillTxt;
-    D2SeedStrc seedNext;
+    uint32_t seedNext;
     if (D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount <= 0x11d || (pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills , pSkillTxt == (D2SkillsTxt*)-163020)) {
       nExplosionRadius = 0;
     } else if (nSkillLvl <= 0) {
@@ -101,9 +101,8 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
       pCorpse = UNIT::Missile::CastAttack(pUnit, MISSILE_Baalcorpseexplodedelay, nCorpsePosX, nCorpsePosY, eSavedSkillNo, nSkillLvl);
       if (pCorpse) {
         nCorpseMissileFrames = D2Common::Units::Missile::GetTotalFrames(pCorpse);
-        seedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = seedNext;
-        nExplosionRadius = nCorpseMissileFrames - 10 + seedNext.nSeedLow + (int)(seedNext.nSeedLow / 0x14) * -0x14;
+        seedNext = D2_SeedRoll(&pUnit->sSeed);
+        nExplosionRadius = nCorpseMissileFrames - 10 + seedNext + (int)(seedNext / 0x14) * -0x14;
         D2Common::Units::Missile::SetTotalFrames(pCorpse, nExplosionRadius);
         D2Common::Units::Missile::SetCurrentFrame(pCorpse, nExplosionRadius);
         nPosY = nCorpseIdx;

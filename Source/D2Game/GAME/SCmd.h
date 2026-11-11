@@ -36,6 +36,24 @@ typedef uint32_t eD2UnitType;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct __attribute__((packed)) D2GSPacketSrv0x07 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint16_t nTileX;
+    /* 0x03 */ uint16_t nTileY;
+    /* 0x05 */ uint8_t nLevelId;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct __attribute__((packed)) D2GSPacketSrv0x08 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint16_t nTileX;
+    /* 0x03 */ uint16_t nTileY;
+    /* 0x05 */ uint8_t nLevelId;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2GSPacketSrv0x1C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwExpDelta;
@@ -208,6 +226,17 @@ struct __attribute__((packed)) D2GSPacketSrv0x6A {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct __attribute__((packed)) D2GSPacketSrv0x75 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ uint16_t nPartyId;
+    /* 0x07 */ uint16_t nLevel;
+    /* 0x09 */ uint16_t wFlags;
+    /* 0x0B */ uint16_t wIsPartied;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2GSPacketSrv0x78 {
     /* 0x00 */ uint8_t nPacketId; // 0x78
     /* 0x01 */ char szName[16];
@@ -279,6 +308,21 @@ struct __attribute__((packed)) D2GSPacketSrv0x90 {
 };
 
 #endif // D2_DEFINED_D2GSPacketSrv0x90
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct __attribute__((packed)) D2GSPacketSrv0x93 {
+    D2GSPacketSrv0x93() = default;
+    D2GSPacketSrv0x93(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2GSPacketSrv0x93(uint8_t a0, uint32_t a1, int8_t a2, uint8_t a3, uint8_t a4) : nPacketId(a0), dwUnitGUID(a1), nBonusDelta(a2), nSkillElemType(a3), nSkillPage(a4) {}
+
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwUnitGUID;
+    /* 0x05 */ int8_t nBonusDelta;
+    /* 0x06 */ uint8_t nSkillElemType;
+    /* 0x07 */ uint8_t nSkillPage;
+};
+
+#endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2GSPacketSrv0x9C {
     /* 0x00 */ uint8_t nPacketId;

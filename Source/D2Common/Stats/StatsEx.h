@@ -183,6 +183,6 @@ int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, u
 int __fastcall MATH_RandomRange(int32_t nMin, int32_t nMax, uint32_t nRangeMax, struct D2ItemCalcContextStrc * pSeed);
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, struct D2UnitStrc * * ppUnit);
 #endif // D2_MODULE_D2Common
-// 13 internal functions (defined in .cpp)
+// 14 internal functions (defined in .cpp)
 
 } // namespace D2Common::Stats::StatsEx

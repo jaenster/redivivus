@@ -42,20 +42,17 @@ __attribute__((noinline)) inline uint32_t __fastcall UNIT_GetModuloFromSeed(D2Se
 #ifndef D2_DEFINED_INLINE_0045c3e0
 #define D2_DEFINED_INLINE_0045c3e0
 __attribute__((noinline)) inline uint32_t __fastcall RANDOM_RandomNumberSelector(D2SeedStrc * pSeed, uint32_t nModulo) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     if ((int)nModulo <= 0) {
       return 0;
     }
     if (nModulo & nModulo - 1) {
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
-      return (uint32_t)(DVar1.nSeedLow % nModulo);
+      DVar1 = D2_SeedRoll(pSeed);
+      return (uint32_t)(DVar1 % nModulo);
     }
 
-    DVar1 = D2_SEED_NEXT(*pSeed);
-    *pSeed = DVar1;
-    return nModulo - 1 & DVar1.nSeedLow;
+    DVar1 = D2_SeedRoll(pSeed);
+    return nModulo - 1 & DVar1;
 }
 #endif // D2_DEFINED_INLINE_0045c3e0
 

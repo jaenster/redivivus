@@ -1045,11 +1045,10 @@ void __fastcall ObjectMessage(int32_t eMessageType, D2UnitStrc * pUnit, D2Server
 // ClientFn 0x2 handler, slot 2 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Enters mode OP once every 64 calls (counter in dwTickCount, random start 0..63 on first call, flag at +0xc8); on mode ON re-seeds the counter and returns to NU.
 // Provenance: 1.14d asm 004bd730.
 bool __fastcall OBJECT_ClientFn_PeriodicOperate(D2UnitStrc * pUnit) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     if (!pUnit->eUnitFlagsEx) {
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      pUnit->dwTickCount = DVar1.nSeedLow & 0x3f;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      pUnit->dwTickCount = DVar1 & 0x3f;
       pUnit->eUnitFlagsEx = UNITFLAGEX_HASINV;
     }
     if (!(pUnit->dwTickCount & 0x3f) && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
@@ -1059,9 +1058,8 @@ bool __fastcall OBJECT_ClientFn_PeriodicOperate(D2UnitStrc * pUnit) {
 
     pUnit->dwTickCount++;
     if (pUnit->eAnimMode.ePlayerMode == Walk) {
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      pUnit->dwTickCount += DVar1.nSeedLow & 0x3f;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      pUnit->dwTickCount += DVar1 & 0x3f;
       pUnit->eAnimMode.ePlayerMode = Death;
       D2Common::Units::InitAnimMode(pUnit);
     }
@@ -1072,11 +1070,10 @@ bool __fastcall OBJECT_ClientFn_PeriodicOperate(D2UnitStrc * pUnit) {
 // ClientFn 0x3 handler, slot 3 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). OBJECT_ClientFn_PeriodicOperate followed by UpdateUnitSfxOnModeChange.
 // Provenance: 1.14d asm 004bd7c0.
 bool __fastcall OBJECT_ClientFn_PeriodicOperateWithSound(D2UnitStrc * pUnit) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     if (!pUnit->eUnitFlagsEx) {
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      pUnit->dwTickCount = DVar1.nSeedLow & 0x3f;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      pUnit->dwTickCount = DVar1 & 0x3f;
       pUnit->eUnitFlagsEx = UNITFLAGEX_HASINV;
     }
     if (!(pUnit->dwTickCount & 0x3f) && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
@@ -1086,9 +1083,8 @@ bool __fastcall OBJECT_ClientFn_PeriodicOperateWithSound(D2UnitStrc * pUnit) {
 
     pUnit->dwTickCount++;
     if (pUnit->eAnimMode.ePlayerMode == Walk) {
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      pUnit->dwTickCount += DVar1.nSeedLow & 0x3f;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      pUnit->dwTickCount += DVar1 & 0x3f;
       pUnit->eAnimMode.ePlayerMode = Death;
       D2Common::Units::InitAnimMode(pUnit);
     }
@@ -1127,7 +1123,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_7to12s(D2UnitStrc * pUnit) {
 // Provenance: 1.14d asm 004bd900.
 bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
     D2ObjectsTxt* pDVar1;
-    D2SeedStrc DVar2;
+    uint32_t DVar2;
     int32_t iVar4;
     DWORD DVar3 = GetTickCount();
     if (pUnit->dwTickCount < DVar3) {
@@ -1136,10 +1132,8 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
       iVar4 = D2Game::Seed::SEED_RollRange(pSeed, 23000, 33000);
       pUnit->dwTickCount = iVar4 + DVar3;
       pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[5];
-      DVar2 = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = DVar2.nSeedHigh;
-      pSeed->nSeedLow = DVar2.nSeedLow;
-      if (DVar2.nSeedLow & 1) {
+      DVar2 = D2_SeedRoll(pSeed);
+      if (DVar2 & 1) {
         iVar4 = 3;
         D2Common::Units::SetupUpdateFlag(pUnit, 3);
       } else {
@@ -1368,18 +1362,15 @@ bool __fastcall OBJECT_ClientFn_NeutralModeOverlay(D2UnitStrc * pUnit) {
 bool __fastcall OBJECT_ClientFn_ZooKeeper(D2UnitStrc * pUnit) {
     DWORD DVar2 = GetTickCount();
     if (DVar2 > pUnit->dwTickCount) {
-      D2SeedStrc DVar1;
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      if (DVar1.nSeedLow % 100 < 10) {
+      uint32_t DVar1;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      if (DVar1 % 100 < 10) {
         Sound::SOUND_PlaySound(SOUND_PALADIN_CANTCARRY_2, pUnit, 0, 0, 0);
       }
 
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-      pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
       DVar2 = GetTickCount();
-      pUnit->dwTickCount = DVar2 + DVar1.nSeedLow % 0x3c * 1000;
+      pUnit->dwTickCount = DVar2 + DVar1 % 0x3c * 1000;
     }
 
     return true;

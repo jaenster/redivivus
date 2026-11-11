@@ -70,18 +70,14 @@ static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDr
     if ((int)nUsableRows <= 0) {
       nStartYOffset = 0;
     } else {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       nGridFlags = pDrlgLevelStrc->sSeed.nSeedLow;
       if (nUsableRows & nY - 3U) {
-        DVar1 = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-        pDrlgLevelStrc->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pDrlgLevelStrc->sSeed.nSeedLow = DVar1.nSeedLow;
-        nStartYOffset = DVar1.nSeedLow % nUsableRows;
+        DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+        nStartYOffset = DVar1 % nUsableRows;
       } else {
-        DVar1 = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-        nStartYOffset = nY - 3U & DVar1.nSeedLow;
-        pDrlgLevelStrc->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pDrlgLevelStrc->sSeed.nSeedLow = DVar1.nSeedLow;
+        DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+        nStartYOffset = nY - 3U & DVar1;
       }
     }
 
@@ -262,7 +258,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
     int nSpawnResult;
     int nX;
     uint32_t dwFlags;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (pLevel->eD2LevelId == 0x27) {
       return;
     }
@@ -279,10 +275,8 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
     if (pWildData->dwFlags & 0x20 && !(pWildData->dwFlags & 0x40)) {
       nSpawnResult = 0;
       bColumnEmpty = 0;
-      sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-      pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-      pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
-      if (sNewSeed.nSeedLow & 1) {
+      sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+      if (sNewSeed & 1) {
         if (pWildData->nGridCoordsHeight <= 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x194);
           exit(-1);
@@ -293,16 +287,8 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
             goto spawn_cave_entrance;
           }
 
-          nX = 0;
-          if (pWildData->nGridCoordsWidth > 0) {
-            do {
-              if (bColumnEmpty) {
-                break;
-              }
-
-              bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
-              nX++;
-            } while (nX < pWildData->nGridCoordsWidth);
+          for (nX = 0; nX < pWildData->nGridCoordsWidth && !bColumnEmpty; nX++) {
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
           }
 
           nSpawnResult++;
@@ -319,16 +305,8 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
             goto spawn_cave_entrance;
           }
 
-          nSpawnResult = 0;
-          if (pWildData->nGridCoordsWidth > 0) {
-            do {
-              if (bColumnEmpty) {
-                break;
-              }
-
-              bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
-              nSpawnResult++;
-            } while (nSpawnResult < pWildData->nGridCoordsWidth);
+          for (nSpawnResult = 0; nSpawnResult < pWildData->nGridCoordsWidth && !bColumnEmpty; nSpawnResult++) {
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
           }
 
           nX++;
@@ -348,16 +326,15 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
 
     nSpawnResult = pWildData->nGridCoordsWidth;
     int nGridWidth = pWildData->nGridCoordsHeight;
-    sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed = sNewSeed;
-    bool bVar1 = !(sNewSeed.nSeedLow & 1);
+    sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+    bool bVar1 = !(sNewSeed & 1);
     int nX_00 = 3;
     if (bVar1) {
       nX_00 = nSpawnResult - (~(dwFlags >> 4) & 1 | 4);
     }
 
     nSpawnResult = 3;
-    if (!((sNewSeed.nSeedLow & 3) / 2)) {
+    if (!((sNewSeed & 3) / 2)) {
       nSpawnResult = nGridWidth - 4;
     }
 
@@ -413,16 +390,12 @@ static void SpawnTownTransitionsAndCaves(D2DrlgLevelStrc * pLevel) {
 
 // NOTE: Callee-saved register params inferred (medium confidence): pDrlgLevelStrc (ESI): D2DrlgLevelStrc*
 static void __stdcall DRLGOUTROOM_SpawnRandomOutdoorDecorations(int32_t nPresetType, D2DrlgLevelStrc * pDrlgLevelStrc, int bAllowDouble) {
-    D2SeedStrc newSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed.nSeedHigh = newSeed.nSeedHigh;
-    pDrlgLevelStrc->sSeed.nSeedLow = newSeed.nSeedLow;
-    if (newSeed.nSeedLow & 3) {
+    uint32_t newSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    if (newSeed & 3) {
       Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, nPresetType, -1);
       if (bAllowDouble) {
-        newSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-        pDrlgLevelStrc->sSeed.nSeedHigh = newSeed.nSeedHigh;
-        pDrlgLevelStrc->sSeed.nSeedLow = newSeed.nSeedLow;
-        if (newSeed.nSeedLow & 1) {
+        newSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+        if (newSeed & 1) {
           Outdoors::SpawnRandomOutdoorDS1(pDrlgLevelStrc, 0x31, -1);
           return;
         }

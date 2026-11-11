@@ -3390,7 +3390,6 @@ void __stdcall UNITSND_UpdateNeutralSound(D2UnitStrc * pUnit, int32_t bForceStop
 
         nLine = Sound::SOUND_GetSoundIdByChannelHandle(nNeutralSoundId);
         nLine = Sound::SoundHdr::SOUNDHDR_GetSoundField0x60(nLine);
-        pDVar1 = pSfxNodeNext;
         if (nLine == nChanSoundBase) {
           if (!bForceStop || (nChanSoundBase = Sound::SOUND_GetSoundChannel(nNeutralSoundId) , nChanSoundBase != 0)) {
             Sound::SOUND_StopUnitSoundByIndex(nNeutralSoundId, pUnit, 1);
@@ -3398,6 +3397,8 @@ void __stdcall UNITSND_UpdateNeutralSound(D2UnitStrc * pUnit, int32_t bForceStop
             Sound::SOUND_StopChannelGracefully(nNeutralSoundId, 0, 0, 6);
           }
         }
+
+        pDVar1 = pSfxNodeNext;
       }
 
       return;
@@ -3962,6 +3963,18 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
       case 0x13:
         eSoundId = pSoundTable[2];
       goto skip_if_unit_playing;
+      case 0x15:
+        eSoundId = pSoundTable[3];
+      goto skip_if_unit_playing;
+      case 0x16:
+        eSoundId = pSoundTable[4];
+      goto skip_if_unit_playing;
+      case 0x17:
+        eSoundId = pSoundTable[5];
+      goto skip_if_unit_playing;
+      case 0x14:
+        eSoundId = pSoundTable[6];
+      goto skip_if_unit_playing;
       case 0x18:
         eSoundId = pSoundTable[7];
       skip_if_unit_playing:
@@ -3986,18 +3999,6 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
       }
 
       break;
-      case 0x15:
-        eSoundId = pSoundTable[3];
-      goto skip_if_unit_playing;
-      case 0x16:
-        eSoundId = pSoundTable[4];
-      goto skip_if_unit_playing;
-      case 0x17:
-        eSoundId = pSoundTable[5];
-      goto skip_if_unit_playing;
-      case 0x14:
-        eSoundId = pSoundTable[6];
-      goto skip_if_unit_playing;
       case 1:
         eSoundId = SOUND_ITEM_WAND;
       break;

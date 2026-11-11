@@ -846,7 +846,7 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     int nRandomStoneSlot;
     int aStoneClassIds[5];
     char szDebugBuf[80];
-    D2SeedStrc sNextSeed;
+    uint32_t sNextSeed;
     D2QuestDataA1Q4SubStrc* pSubData = *(D2QuestDataA1Q4SubStrc**)pQuestSpecificData->sSub.aStones;
     memset(pSubData->aStones, 0, 5 * sizeof(pSubData->aStones[0]));
     pSubData->nStoneIndex = 0;
@@ -859,10 +859,8 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     D2QuestDataA1Q4Strc* pQuestSpecificDataCopy = pQuestSpecificData;
     D2SeedStrc* pSeed = GetQuestControlSeed(pQuestSpecificData->pGame);
     do {
-      sNextSeed = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = sNextSeed.nSeedHigh;
-      pSeed->nSeedLow = sNextSeed.nSeedLow;
-      nRandomStoneSlot = (int)(sNextSeed.nSeedLow % 5);
+      sNextSeed = D2_SeedRoll(pSeed);
+      nRandomStoneSlot = (int)(sNextSeed % 5);
       if (!pSubData->aStones[nRandomStoneSlot]) {
         sprintf(szDebugBuf, "stone %d is class %d", nRandomStoneSlot, aStoneClassIds[nStonesPlaced]);
         QUEST_DebugPrint(pQuestSpecificDataCopy->pGame, szDebugBuf, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x531);

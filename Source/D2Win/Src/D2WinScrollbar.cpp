@@ -319,8 +319,8 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
           pScrollbar->nWheelLockFlag = 0;
         }
         if (pScrollbar->nWheelLockFlag) {
-          pScrollbarArg.uMsg = 0x201;
           pScrollbarArg.pControl = &pScrollbar->sControl;
+          pScrollbarArg.uMsg = 0x201;
           D2WinScrollbar::Push(&pScrollbarArg);
         }
 

@@ -332,9 +332,8 @@ int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, ui
 
     D2SeedStrc* pSeed = &pUnitSeedBase->sSeed;
     D2Common::Seed::InitSeed_Param_666(pSeed, (uint32_t)nSeedInput + pUnitSeedBase->nClassId);
-    D2SeedStrc qwRandState = D2_SEED_NEXT(*pSeed);
-    *pSeed = qwRandState;
-    return qwRandState.nSeedLow % 0x1e + 9;
+    uint32_t qwRandState = D2_SeedRoll(pSeed);
+    return qwRandState % 0x1e + 9;
 }
 
 D2GamePalShiftGreenBloodStrc * __stdcall PALSHIFT_GetGreenBloodTable() {

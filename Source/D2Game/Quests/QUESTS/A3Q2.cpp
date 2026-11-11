@@ -521,9 +521,8 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
     int iHeartDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    uint32_t seedNext = D2_SeedRoll(pControlSeed);
+    int iVar2 = seedNext % 5 + 5;
     if (iVar2 > 0) {
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
@@ -566,9 +565,8 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
     int iEyeDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    uint32_t seedNext = D2_SeedRoll(pControlSeed);
+    int iVar2 = seedNext % 5 + 5;
     if (iVar2 > 0) {
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
@@ -611,9 +609,8 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOpera
 
     D2SeedStrc* pControlSeed = GetQuestControlSeed(pOperation->sArg.pGame);
     int iBrainDropIdx = 0;
-    D2SeedStrc seedNext = D2_SEED_NEXT(*pControlSeed);
-    *pControlSeed = seedNext;
-    int iVar2 = seedNext.nSeedLow % 5 + 5;
+    uint32_t seedNext = D2_SeedRoll(pControlSeed);
+    int iVar2 = seedNext % 5 + 5;
     if (iVar2 > 0) {
       do {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);

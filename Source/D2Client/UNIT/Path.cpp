@@ -65,9 +65,9 @@ void __fastcall thunk_PATH_SnapPositionToTile(D2UnitStrc * pUnit) {
     D2Common::PATH::Path::PATH_SnapPositionToTile(pUnit->pPath.pDynamicPath);
 }
 
-uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int16_t nTargetX, int16_t nTargetY) {
+uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int nTargetX, int nTargetY) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nTargetX, nTargetY);
+    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetX, (int16_t)nTargetY);
     eD2UnitFlags t2_c2 = pUnit->eUnitFlags;
     uint32_t nResult = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, t2_c2 >> 0x15 & 1);
     return nResult;
@@ -273,7 +273,7 @@ void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
       }
 
       if (bIsServerSide) {
-        pPlayerUnit_lcl = Player::UNITS_FindServerSideUnit(nUnitGUID, eUnitType);
+        pPlayerUnit_lcl = CUnit::UNITS_FindServerSideUnit(nUnitGUID, eUnitType);
       } else {
         pPlayerUnit_lcl = Player::UNITS_FindClientSideUnit(nUnitGUID, eUnitType);
       }

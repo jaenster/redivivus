@@ -1071,7 +1071,7 @@ namespace Storm::Source::SReg {
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, uint8_t byFlags);
+int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegLoadData"
 // @wasnamed SSTR_RegistryReadValueEx
 // @basis behaviour-confirmed. 6 params (keyname, valuename, flags, void *buffer, DWORD datalen, DWORD *bytesread) - the only 6-param shape in the SReg family, and the only one that passes a raw byte buffer plus an out-length straight through to the RegQueryValueExA worker at 00414b00 with no type interpretation. SRegLoadValue and SRegLoadString both interpret the REG type; this does not.

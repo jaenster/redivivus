@@ -3,7 +3,7 @@
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/Fog/Fog.h"
@@ -290,7 +290,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
     } else {
       D2UnitStrc* pOwner;
       if (nFlags & 0x10) {
-        pOwner = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+        pOwner = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
         if (!pOwner) {
           goto project_to_screen;
         }

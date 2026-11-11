@@ -958,6 +958,48 @@ static D2NpcGreetingSoundsStrc gaNpcGreetingSounds[29] = {
       }
 
       switch (nClassId) {
+        case 0x94:
+          return gaNpcGreetingSounds;
+        case 0xfe:
+          return gaNpcGreetingSounds + 1;
+        case 0xfc:
+          return gaNpcGreetingSounds + 2;
+        case 0xb0:
+          return gaNpcGreetingSounds + 3;
+        case 0x9a:
+          return gaNpcGreetingSounds + 5;
+        case 0xb1:
+          return gaNpcGreetingSounds + 6;
+        case 199:
+          return gaNpcGreetingSounds + 7;
+        case 0xb2:
+          return gaNpcGreetingSounds + 8;
+        case 200:
+          return gaNpcGreetingSounds + 9;
+        case 0x93:
+          return gaNpcGreetingSounds + 10;
+        case 0xc6:
+          return gaNpcGreetingSounds + 0xb;
+        case 0x101:
+          return gaNpcGreetingSounds + 0xc;
+        case 0xfd:
+          return gaNpcGreetingSounds + 0xd;
+        case 0xc9:
+          return gaNpcGreetingSounds + 0x10;
+        case 0x96:
+          return gaNpcGreetingSounds + 0x11;
+        case 0xca:
+          return gaNpcGreetingSounds + 0x12;
+        case 0xd2:
+          return gaNpcGreetingSounds + 0x13;
+        case 0x129:
+          return gaNpcGreetingSounds + 0x14;
+        case 0xff:
+          return gaNpcGreetingSounds + 0x15;
+        case 0x9b:
+
+        case 0xaf:
+          return gaNpcGreetingSounds + 0x17;
         case 0x92:
 
         case 0xf4:
@@ -968,67 +1010,25 @@ static D2NpcGreetingSoundsStrc gaNpcGreetingSounds[29] = {
 
         case 0x109:
           return gaNpcGreetingSounds + 4;
-        case 0x93:
-          return gaNpcGreetingSounds + 10;
-        case 0x94:
-          return gaNpcGreetingSounds;
-        case 0x96:
-          return gaNpcGreetingSounds + 0x11;
-        case 0x9a:
-          return gaNpcGreetingSounds + 5;
-        case 0x9b:
-
-        case 0xaf:
-          return gaNpcGreetingSounds + 0x17;
-        case 0xb0:
-          return gaNpcGreetingSounds + 3;
-        case 0xb1:
-          return gaNpcGreetingSounds + 6;
-        case 0xb2:
-          return gaNpcGreetingSounds + 8;
-        case 0xc6:
-          return gaNpcGreetingSounds + 0xb;
-        case 199:
-          return gaNpcGreetingSounds + 7;
-        case 200:
-          return gaNpcGreetingSounds + 9;
-        case 0xc9:
-          return gaNpcGreetingSounds + 0x10;
-        case 0xca:
-          return gaNpcGreetingSounds + 0x12;
-        case 0xd2:
-          return gaNpcGreetingSounds + 0x13;
         case 0xfb:
           return gaNpcGreetingSounds + 0x16;
-        case 0xfc:
-          return gaNpcGreetingSounds + 2;
-        case 0xfd:
-          return gaNpcGreetingSounds + 0xd;
-        case 0xfe:
-          return gaNpcGreetingSounds + 1;
-        case 0xff:
-          return gaNpcGreetingSounds + 0x15;
-        case 0x101:
-          return gaNpcGreetingSounds + 0xc;
-        case 0x129:
-          return gaNpcGreetingSounds + 0x14;
       }
     } else {
       switch (nClassId) {
-        case 0x1ff:
-          return gaNpcGreetingSounds + 0x1b;
-        case 0x200:
-          return gaNpcGreetingSounds + 0x18;
-        case 0x201:
-          return gaNpcGreetingSounds + 0x1a;
-        case 0x202:
-          return gaNpcGreetingSounds + 0x1c;
-        case 0x203:
-          return gaNpcGreetingSounds + 0x19;
         case 0x208:
           return gaNpcGreetingSounds + 4;
         case 0x209:
           return gaNpcGreetingSounds + 0x16;
+        case 0x200:
+          return gaNpcGreetingSounds + 0x18;
+        case 0x203:
+          return gaNpcGreetingSounds + 0x19;
+        case 0x202:
+          return gaNpcGreetingSounds + 0x1c;
+        case 0x1ff:
+          return gaNpcGreetingSounds + 0x1b;
+        case 0x201:
+          return gaNpcGreetingSounds + 0x1a;
       }
     }
 

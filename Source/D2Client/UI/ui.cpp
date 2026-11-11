@@ -2926,9 +2926,9 @@ DC6 * gpUIStatLevelUpPanelImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpPanelImages
 DC6 * gpUIStatLevelUpButtonImages = 0; D2_GLOBAL_GUARD(gpUIStatLevelUpButtonImages, "gpUIStatLevelUpButtonImages");
 static BOOL gbUIStatButtonHovered = 0; D2_STATIC_GUARD(gbUIStatButtonHovered, "gbUIStatButtonHovered");
 static BOOL gbUISkillButtonHovered = 0; D2_STATIC_GUARD(gbUISkillButtonHovered, "gbUISkillButtonHovered");
-static uint64_t gbUIGoldStashMode = 0; D2_STATIC_GUARD(gbUIGoldStashMode, "gbUIGoldStashMode");
+static int gbUIGoldStashMode = 0; D2_STATIC_GUARD(gbUIGoldStashMode, "gbUIGoldStashMode");
 static BOOL gbUIStatScreenMouseDown = 0; D2_STATIC_GUARD(gbUIStatScreenMouseDown, "gbUIStatScreenMouseDown");
-static uint64_t gbUIStatWindowDrawFlag = 0; D2_STATIC_GUARD(gbUIStatWindowDrawFlag, "gbUIStatWindowDrawFlag");
+static uint8_t gbUIStatWindowDrawFlag = 0; D2_STATIC_GUARD(gbUIStatWindowDrawFlag, "gbUIStatWindowDrawFlag");
 static uint8_t gbTradeWindowOpen = 0; D2_STATIC_GUARD(gbTradeWindowOpen, "gbTradeWindowOpen");
 
 namespace D2Client::UI::ui {
@@ -4244,9 +4244,6 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
         switch (gUIFlagDismissModeTable[eCurrentUI]->anDismissMode[nUIFlagToCheck]) {
           case 0:
             break;
-          case 1:
-            SetUIFlag(eCurrentUI, UI_RESET, 0);
-          break;
           case 2:
             return 0;
           default:
@@ -4256,6 +4253,11 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
           if (bGotInteractGuid) {
             npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
           }
+
+          break;
+          case 1:
+            SetUIFlag(eCurrentUI, UI_RESET, 0);
+          break;
         }
       }
 
@@ -4587,11 +4589,11 @@ int UI_GoldDialogConfirmCallback() {
       case 2:
         TRADE_SendGoldToPartner(gnGoldDialogTransactionMode);
       goto play_confirm_sound;
-      case 3:
-        nButtonId = 0x14;
-      break;
       case 4:
         nButtonId = 0x13;
+      break;
+      case 3:
+        nButtonId = 0x14;
       break;
       default:
         return 1;
@@ -4702,8 +4704,8 @@ void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
             pNextWordWrapLine = pWordWrapLine->pNext;
             D2_FREE_AT(pWordWrapLine->wszLine, ".\\UI\\ui.cpp", 0x1827);
             D2_FREE_AT(pWordWrapLine, ".\\UI\\ui.cpp", 0x1828);
-            pWordWrapLine = pNextWordWrapLine;
             nTransactionType = uSlot14.nTransactionTypeSaved;
+            pWordWrapLine = pNextWordWrapLine;
           }
 
           uSlot14.pAllocCtx = Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
@@ -6044,6 +6046,39 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
     int y;
     y = Cursor::GetMouseY();
     switch (eUI) {
+      case UI_ANVIL:
+        if (!iVar1) {
+          goto clear_world_overlay;
+        }
+      eOverlayMode = 1;
+      Path::TypeOfUiOverlayOverWorld(eOverlayMode);
+      break;
+      case UI_NPCSHOP:
+
+      case UI_STASH:
+
+      case UI_CUBE:
+
+      case UI_STEEGSTONE:
+
+      case UI_GUILDVAULT:
+
+      case UI_0x1D:
+
+      case UI_0x20:
+        if (!iVar1) {
+          clear_world_overlay:
+          Path::TypeOfUiOverlayOverWorld(0);
+          return 1;
+        }
+      Path::TypeOfUiOverlayOverWorld(3);
+      return 1;
+      case UI_CONFIG:
+        if (iVar1) {
+          return 1;
+        }
+      UI_ConfigKeyBindModeCancelAndRevert();
+      return 1;
       case UI_INVENTORY:
         Inv::INV_ResetHoverAndContextState();
       case UI_SKILLTREE:
@@ -6125,38 +6160,6 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
       break;
       default:
         break;
-      case UI_CONFIG:
-        if (iVar1) {
-          return 1;
-        }
-      UI_ConfigKeyBindModeCancelAndRevert();
-      return 1;
-      case UI_NPCSHOP:
-
-      case UI_STASH:
-
-      case UI_CUBE:
-
-      case UI_STEEGSTONE:
-
-      case UI_GUILDVAULT:
-
-      case UI_0x1D:
-
-      case UI_0x20:
-        if (!iVar1) {
-          clear_world_overlay:
-          Path::TypeOfUiOverlayOverWorld(0);
-          return 1;
-        }
-      Path::TypeOfUiOverlayOverWorld(3);
-      return 1;
-      case UI_ANVIL:
-        if (!iVar1) {
-          goto clear_world_overlay;
-        }
-      eOverlayMode = 1;
-      Path::TypeOfUiOverlayOverWorld(eOverlayMode);
     }
 
     return 1;
@@ -8717,7 +8720,7 @@ static void __fastcall DRAW_UI_StatWindow_III(int32_t nX, int32_t nY, int32_t nV
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMessage, wszFmt, pwszClear, nErrorLine);
     }
 
-    D2Win::Src::D2WinFont::D2WINFONT_DrawTextWithBackgroundRect(wszMessage, Inv::gnPanelOffsetX + 0x8b, Inv::gnPanelOffsetY - 0x13b + Inv::ScreenSizeY, (uint32_t)(uint8_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT, 0);
+    D2Win::Src::D2WinFont::D2WINFONT_DrawTextWithBackgroundRect(wszMessage, Inv::gnPanelOffsetX + 0x8b, Inv::gnPanelOffsetY - 0x13b + Inv::ScreenSizeY, (uint32_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT, 0);
 }
 
 static int32_t __stdcall CHAR_AddClassToHitFactor(D2UnitStrc * pUnit, int32_t nValue) {
@@ -9069,11 +9072,11 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall UI_ClearGoldStashMode() {
-    *(uint32_t*)(char*)&gbUIGoldStashMode = 0;
+    gbUIGoldStashMode = 0;
 }
 
 void __stdcall UI_SetGoldStashMode() {
-    *(uint32_t*)(char*)&gbUIGoldStashMode = 1;
+    gbUIGoldStashMode = 1;
 }
 
 void __stdcall UI_PrecomputeStatDescriptionWidths() {
@@ -9153,7 +9156,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
       bUpperEnabled = 0x5f;
     }
 
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(gaStatWindowRowLayout[nBtnIndex * 6] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 1] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0x9b, 0x1e, (uint32_t)(uint8_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(gaStatWindowRowLayout[nBtnIndex * 6] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 1] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0x9b, 0x1e, (uint32_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT);
     int nX = gaStatWindowRowLayout[nBtnIndex * 6 + 2] + Inv::gnPanelOffsetX;
     BOOL bMultiLineCenter = 0;
     int nMonsterIdx = gaStatWindowRowLayout[nBtnIndex * 6 + 3] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY;

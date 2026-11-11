@@ -2184,7 +2184,7 @@ uint8_t __stdcall QUESTLOG_GetZooSpawnFlag() {
 bool QUESTLOG_FindZooDummyMonster() {
     if (gQuestLog.bZooMonsterSpawned != '\0') {
       D2UnitStrc* pMonster;
-      pMonster = UNIT::Player::UNITS_FindServerSideUnit(gQuestLog.nZooMonsterGUID, UNIT_MONSTER);
+      pMonster = UNIT::CUnit::UNITS_FindServerSideUnit(gQuestLog.nZooMonsterGUID, UNIT_MONSTER);
       if (pMonster) {
         return true;
       }
@@ -2199,9 +2199,8 @@ void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY)
     }
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pPlayer->sSeed);
-    pPlayer->sSeed = sNewSeed;
-    int nZooMonsterCount = sNewSeed.nSeedLow % 3 + 2;
+    uint32_t sNewSeed = D2_SeedRoll(&pPlayer->sSeed);
+    int nZooMonsterCount = sNewSeed % 3 + 2;
     uint32_t i = 0;
     if (nZooMonsterCount <= 0) {
       return;

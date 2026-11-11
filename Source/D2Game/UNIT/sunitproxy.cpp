@@ -460,11 +460,9 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     pNpcControl->nNpcCount = 0;
     pNpcControl->nNpcCount2 = 0;
     D2Common::Seed::SEED_InitDefault(&pNpcControl->sSeed);
-    D2SeedStrc seedComputed;
-    seedComputed = D2_SEED_NEXT(pGame->pGameSeed);
-    pGame->pGameSeed.nSeedHigh = seedComputed.nSeedHigh;
-    pGame->pGameSeed.nSeedLow = seedComputed.nSeedLow;
-    D2Common::Seed::InitSeed_Param_666(&pNpcControl->sSeed, seedComputed.nSeedLow);
+    uint32_t seedComputed;
+    seedComputed = D2_SeedRoll(&pGame->pGameSeed);
+    D2Common::Seed::InitSeed_Param_666(&pNpcControl->sSeed, seedComputed);
     if (!SUNITNPC::gptItemCodeArmor) {
       D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20767163, (int*)&SUNITNPC::gptItemCodeArmor);
     }

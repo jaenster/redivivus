@@ -1349,29 +1349,6 @@
       ]
     },
     {
-      "name": "FindUnit",
-      "address": "00463940",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463940"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "FindUnit",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "D2UnitStrc *",
-        "eD2UnitType",
-        "int32_t"
-      ]
-    },
-    {
       "name": "UNITS_FindClientSideUnit",
       "address": "00463990",
       "lines": [
@@ -1389,95 +1366,6 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
-    },
-    {
-      "name": "UNITS_FindServerSideUnit",
-      "address": "004639b0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004639b0"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "UNITS_FindServerSideUnit",
-        "FindUnit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "eD2UnitType",
-        "int32_t"
-      ]
-    },
-    {
-      "name": "MISSILE_GetOwnerUnit",
-      "address": "004639d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004639d0"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "MISSILE_GetOwnerUnit",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "FindUnit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "eD2UnitType",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "InsertIntoHashTable",
-      "address": "00463a50",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463a50"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "InsertIntoHashTable",
-        "FindUnit",
-        "MuteOrUnmuteUnitSounds",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "CLIENT_SendIdlePlayerMessage",
-      "address": "00463b80",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463b80"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "CLIENT_SendIdlePlayerMessage",
-        "UNITS_GetRoom",
-        "PlayerMessage"
-      ],
-      "usedTypes": [
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "eD2PlayerAnimMode"
       ]
     },
     {

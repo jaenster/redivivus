@@ -4561,14 +4561,14 @@ static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1,
 
         bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_HandtoHand);
         break;
-        default:
-          return 0;
         case 0x21c:
 
         case 0x21d:
 
         case 0x21e:
           return 1;
+        default:
+          return 0;
       }
     }
     if (bItemTypeMatch) {

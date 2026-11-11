@@ -51,11 +51,11 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
     }
 
     uint32_t nValidMonCount;
-    nValidMonCount = (uint32_t)(uint8_t)pTxtLevels->nValidMonCount;
+    nValidMonCount = (uint32_t)pTxtLevels->nValidMonCount;
     int nRandPick;
     nRandPick = nValidMonCount;
     if (bIsNotNormalDifficulty) {
-      nRandPick = (int)(uint8_t)pTxtLevels->nValinNMonCount;
+      nRandPick = (int)pTxtLevels->nValinNMonCount;
     }
     if ((uint32_t)nRandPick < (uint32_t)nMaxMons) {
       nMaxMons = nRandPick;
@@ -64,7 +64,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
     D2MonsterRegionFieldStrc* pMonField;
     pMonField = pMonsterRegion->pMonData;
     if (bIsNotNormalDifficulty) {
-      nValidMonCount = (uint32_t)(uint8_t)pTxtLevels->nValinNMonCount;
+      nValidMonCount = (uint32_t)pTxtLevels->nValinNMonCount;
       if (!nValidMonCount) {
         goto pick_monsters;
       }
@@ -384,10 +384,8 @@ D2MonsterRegionFieldStrc * __fastcall InitializeSpawnCount(D2MonsterRegionStrc *
 void __fastcall AllocMonsterRegionForGame(::SGAMEDATA * pGame) {
     D2SeedStrc monSeed;
     D2Common::Seed::SEED_InitDefault(&monSeed);
-    D2SeedStrc seedNext = D2_SEED_NEXT(pGame->pGameSeed);
-    uint32_t nInitSeed = seedNext.nSeedLow;
-    pGame->pGameSeed.nSeedHigh = seedNext.nSeedHigh;
-    pGame->pGameSeed.nSeedLow = seedNext.nSeedLow;
+    uint32_t seedNext = D2_SeedRoll(&pGame->pGameSeed);
+    uint32_t nInitSeed = seedNext;
     D2Common::Seed::InitSeed_Param_666(&monSeed, nInitSeed);
     pGame->dwMonSeed = nInitSeed;
     AllocMonsterRegion(pGame->pMemoryPool, pGame->pMonsterRegion, &monSeed, nInitSeed, pGame->nDifficulty, pGame->bExpansion);

@@ -133,10 +133,9 @@ BOOL __fastcall Skills_SrvDoFunc_033_PsychicHammer(::SGAMEDATA * pGame, D2UnitSt
 
     nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, nAttackerLvl, eSkill, nSkillLvl);
     if (nCalcResult > 0) {
-      D2SeedStrc sNewSeed;
-      sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sNewSeed;
-      if ((int)(sNewSeed.nSeedLow % 100) < nCalcResult) {
+      uint32_t sNewSeed;
+      sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+      if ((int)(sNewSeed % 100) < nCalcResult) {
         sDamage.wResultFlags |= 8;
       }
     }
@@ -665,9 +664,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     D2SeedStrc sSeedCopy;
     uint32_t nTargetY;
     uint32_t nTargetX;
-    D2SeedStrc sSeedAdvanced = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed.nSeedHigh = sSeedAdvanced.nSeedHigh;
-    pUnit->sSeed.nSeedLow = sSeedAdvanced.nSeedLow;
+    uint32_t sSeedAdvanced = D2_SeedRoll(&pUnit->sSeed);
     if ((int)eSkill < 0) {
       return 0;
     }
@@ -702,7 +699,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     sSkillArg.pOwner = pUnit;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nMissileTxtNo = eMissileId;
-    D2Common::Seed::InitSeed_Param_666(&sSeedCopy, sSeedAdvanced.nSeedLow);
+    D2Common::Seed::InitSeed_Param_666(&sSeedCopy, sSeedAdvanced);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     int iVar1 = nRadius * nRadius;
     nSkillLvl = iVar1;
@@ -1177,9 +1174,7 @@ BOOL __fastcall Skills_SrvDoFunc_036_ChargeRelease_MissileRing(::SGAMEDATA * pGa
 BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     eD2Skills eSkillSaved = eSkill;
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
     if ((int)eSkill < 0) {
       return 0;
     }
@@ -1208,16 +1203,14 @@ BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDA
       nScatterRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkillSaved, nSkillLvl);
     }
 
-    SKILLASS_SpawnMissileRing(nChargeUpMissileId, DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nScatterRadius);
+    SKILLASS_SpawnMissileRing(nChargeUpMissileId, DVar1, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nScatterRadius);
     return 1;
 }
 
 BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     eD2Skills eSkillSaved = eSkill;
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
     if ((int)eSkill < 0) {
       return 0;
     }
@@ -1246,7 +1239,7 @@ BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pG
       nStrikeRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkillSaved, nSkillLvl);
     }
 
-    SKILLASS_SpawnSpiralMissileRing(nChargeUpMissileId, DVar1.nSeedLow, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nStrikeRadius);
+    SKILLASS_SpawnSpiralMissileRing(nChargeUpMissileId, DVar1, pGameCopy, pUnit, nChargeUpMissileId, nTargetX, eSkill, eSkillSaved, nSkillLvl, nStrikeRadius);
     return 1;
 }
 
@@ -1279,10 +1272,9 @@ BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDAT
     uint32_t nTargetY;
     uint32_t nTargetX;
     uint64_t uSeedRoll;
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = DVar1;
+    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
     ::SGAMEDATA* pGameCopy = pGame;
-    D2Common::Seed::InitSeed_Param_666(&sSeedCopy, DVar1.nSeedLow);
+    D2Common::Seed::InitSeed_Param_666(&sSeedCopy, DVar1);
     if ((int)eSkill < 0) {
       return 0;
     }
@@ -1478,7 +1470,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     uint32_t nMaxDmg;
     int nMinDmgKick;
     D2InventoryStrc* pInventory;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2UnitStrc* pUnit3;
     SKILLASS_ApplyProgressiveDamageToTarget(pUnit2, pDamage);
     pDamage->dwHitFlags |= 3;
@@ -1580,15 +1572,11 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     } else {
       nMinDmg = pUnit2->sSeed.nSeedLow;
       if (nEnhDmgPctWork & nEnhDmgPctWork - 1) {
-        sNewSeed = D2_SEED_NEXT(pUnit2->sSeed);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nEnhDmgPctWork = sNewSeed.nSeedLow % nEnhDmgPctWork;
+        sNewSeed = D2_SeedRoll(&pUnit2->sSeed);
+        nEnhDmgPctWork = sNewSeed % nEnhDmgPctWork;
       } else {
-        sNewSeed = D2_SEED_NEXT(pUnit2->sSeed);
-        pUnit2->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit2->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nEnhDmgPctWork = nEnhDmgPctWork - 1 & sNewSeed.nSeedLow;
+        sNewSeed = D2_SeedRoll(&pUnit2->sSeed);
+        nEnhDmgPctWork = nEnhDmgPctWork - 1 & sNewSeed;
       }
     }
 

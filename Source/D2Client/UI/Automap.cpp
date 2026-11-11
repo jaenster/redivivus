@@ -2098,7 +2098,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
             if (eTransformType == UNIT_PLAYER) {
               bIsNPC = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
               if (bIsNPC) {
-                pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+                pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
                 if (pOwnerUnit) {
                   pOwnerUnit = UNIT::Player::GetPlayerUnit_UI();
                   nMyPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pOwnerUnit);
@@ -2821,7 +2821,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
             return;
           }
 
-          pNameUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+          pNameUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
           if (!pNameUnit) {
             return;
           }

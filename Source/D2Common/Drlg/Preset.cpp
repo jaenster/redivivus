@@ -1645,7 +1645,7 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     int nSizeY;
     uint32_t nFileSelector;
     uint32_t seedProduct;
-    D2SeedStrc newSeed;
+    uint32_t newSeed;
     D2DrlgMapStrc* pDrlgMap = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgMapStrc, ".\\DRLG\\Preset.cpp", 0x9ad);
     memset(pDrlgMap, 0, 0x58);
     D2LvlPrestTxt* pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
@@ -1655,15 +1655,11 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     if ((int)nFiles <= 0) {
       nFileSelector = 0;
     } else if (nFiles & nFiles - 1) {
-      newSeed = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = newSeed.nSeedHigh;
-      pSeed->nSeedLow = newSeed.nSeedLow;
-      nFileSelector = newSeed.nSeedLow % nFiles;
+      newSeed = D2_SeedRoll(pSeed);
+      nFileSelector = newSeed % nFiles;
     } else {
-      newSeed = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = newSeed.nSeedHigh;
-      pSeed->nSeedLow = newSeed.nSeedLow;
-      nFileSelector = nFiles - 1 & newSeed.nSeedLow;
+      newSeed = D2_SeedRoll(pSeed);
+      nFileSelector = nFiles - 1 & newSeed;
     }
 
     pDrlgMap->nRandomMapFileSelector = nFileSelector;
@@ -2040,22 +2036,29 @@ void __fastcall DRLGPRESET_AddPresetUnitToDrlgMap(D2PoolManagerStrc * pMemory, D
                 nTableSize = ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
                 nMonExtraBase = DATATBLS::MonsterTbls::MONSTERTBLS_GetSuperUniquesTxtCount();
                 nTableSize = pPresetUnit->nClassId - nTableSize - nMonExtraBase;
-                if (nTableSize == 0x21) {
-                  goto roll_quarter_skip;
-                }
-                if (nTableSize == 0x22) {
-                  nSeedLowProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-                  newSeed = (D2SeedStrc)(nSeedLowProduct + (uint64_t)pSeed->nSeedHigh);
-                  bInclude2 = !((int)nSeedLowProduct + pSeed->nSeedHigh & 1);
-                  goto commit_roll;
-                }
-                if (nTableSize == 0x23) {
-                  newSeed = D2_SEED_NEXT(*pSeed);
-                  pSeed->nSeedHigh = newSeed.nSeedHigh;
-                  pSeed->nSeedLow = newSeed.nSeedLow;
-                  if (newSeed.nSeedLow & 3) {
-                    continue;
-                  }
+                switch (nTableSize) {
+                  case 0x21:
+                    {
+                      goto roll_quarter_skip;
+                    }
+                  case 0x22:
+                    {
+                      nSeedLowProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
+                      newSeed = (D2SeedStrc)(nSeedLowProduct + (uint64_t)pSeed->nSeedHigh);
+                      bInclude2 = !((int)nSeedLowProduct + pSeed->nSeedHigh & 1);
+                      goto commit_roll;
+                    }
+                  case 0x23:
+                    {
+                      newSeed = D2_SEED_NEXT(*pSeed);
+                      pSeed->nSeedHigh = newSeed.nSeedHigh;
+                      pSeed->nSeedLow = newSeed.nSeedLow;
+                      if (newSeed.nSeedLow & 3) {
+                        continue;
+                      }
+
+                      break;
+                    }
                 }
               }
             }

@@ -34,7 +34,7 @@ float thunk___CIsqrt(float fValue) {
 }
 
 int32_t __fastcall RollRandomNumerUpToArgument(int32_t nNumber) {
-    D2SeedStrc seedResult;
+    uint32_t seedResult;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     D2SeedStrc* pSeed = &pPlayerUnit_lcl->sSeed;
     if (nNumber <= 0) {
@@ -43,15 +43,12 @@ int32_t __fastcall RollRandomNumerUpToArgument(int32_t nNumber) {
 
     uint32_t uSeedCalc = pPlayerUnit_lcl->sSeed.nSeedHigh;
     if (nNumber & nNumber - 1U) {
-      seedResult = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = seedResult.nSeedHigh;
-      pSeed->nSeedLow = seedResult.nSeedLow;
-      return (int32_t)(seedResult.nSeedLow % (uint32_t)nNumber);
+      seedResult = D2_SeedRoll(pSeed);
+      return (int32_t)(seedResult % (uint32_t)nNumber);
     }
 
-    seedResult = D2_SEED_NEXT(*pSeed);
-    *pSeed = seedResult;
-    return nNumber - 1U & seedResult.nSeedLow;
+    seedResult = D2_SeedRoll(pSeed);
+    return nNumber - 1U & seedResult;
 }
 
 int32_t __fastcall RollRandomNumber(int32_t nMin, int32_t nMax) {

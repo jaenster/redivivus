@@ -14,9 +14,6 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
-// Forward declarations
-struct D2StatInfoStrc;
-
 namespace D2Common::Logging {
 
 // Function declarations
@@ -34,8 +31,6 @@ void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_
 void StoreGameLogging(int32_t nGame, int32_t nFrame, void * pClient, int32_t nLogType, int32_t nLogTypeArg, char * szFormat, ...);
 bool __fastcall LOGGING_OpenLogFile(char * szLogFileName);
 void __stdcall CloseLogging();
-// Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
-long STATLIST_BinarySearchStatById(int32_t nStatKey, struct D2StatInfoStrc * pStatInfo);
 #endif // D2_MODULE_D2Common
 // 1 internal function (defined in .cpp)
 

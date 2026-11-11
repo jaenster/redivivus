@@ -94,16 +94,6 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaS
 
         nArgCount = (*pFunction)((uint32_t)*pbNext2, pContext);
         goto push_and_skip_byte_operand;
-        case 7:
-          if ((intptr_t)pbNext2 - (intptr_t)pFormula >= nFormulaSize) {
-            return 0;
-          }
-        nArgCount = (int)(char)*pbNext2;
-        push_and_skip_byte_operand:
-        SKILLS_PushValue(aFormulaValueStack, nArgCount);
-        pbNext2 = pbReadPtr + 2;
-        nArgCount = aFormulaValueStack[0x40];
-        break;
         case 5:
           if (!pFunction) {
             return 0;
@@ -128,6 +118,16 @@ uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaS
         uFuncResult = (*pFunction)(*(int32_t*)pbNext2, pContext);
         SKILLS_PushValue(aFormulaValueStack, uFuncResult);
         pbNext2 = pbReadPtr + 5;
+        nArgCount = aFormulaValueStack[0x40];
+        break;
+        case 7:
+          if ((intptr_t)pbNext2 - (intptr_t)pFormula >= nFormulaSize) {
+            return 0;
+          }
+        nArgCount = (int)(char)*pbNext2;
+        push_and_skip_byte_operand:
+        SKILLS_PushValue(aFormulaValueStack, nArgCount);
+        pbNext2 = pbReadPtr + 2;
         nArgCount = aFormulaValueStack[0x40];
         break;
         case 8:
@@ -913,7 +913,9 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
     struct __frame0_t {
       uint32_t dwTokenValue;
       int bLastWasValue;
-      uint8_t __pad8[3];
+      uint8_t __pad8;
+      uint8_t __pad9;
+      uint8_t __pad10;
       uint8_t aTokenBuf;
       D2SkillCalcOperandStackStrc sOpStack;
       int nPrecedenceDepth;

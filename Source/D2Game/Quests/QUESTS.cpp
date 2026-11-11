@@ -2320,10 +2320,8 @@ void __fastcall AllocQuestControl(::SGAMEDATA * pGame) {
     pQuestControl->pTimer = 0;
     pQuestControl->nTickcount = 0;
     D2Common::Seed::SEED_InitDefault(&pQuestControl->sSeed);
-    D2SeedStrc sSeedNext = D2_SEED_NEXT(pGame->pGameSeed);
-    int32_t nSeedLow = sSeedNext.nSeedLow;
-    pGame->pGameSeed.nSeedHigh = sSeedNext.nSeedHigh;
-    pGame->pGameSeed.nSeedLow = sSeedNext.nSeedLow;
+    uint32_t sSeedNext = D2_SeedRoll(&pGame->pGameSeed);
+    int32_t nSeedLow = sSeedNext;
     D2Common::Seed::InitSeed_Param_666(&pQuestControl->sSeed, nSeedLow);
     pQuestControl->bExecuting = 0;
     D2BitBufferStrc* pQuestFlags = D2Common::QuestRecord::CreateBitBuffer(pGame->pMemoryPool);

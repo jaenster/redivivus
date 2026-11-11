@@ -440,12 +440,11 @@ void __fastcall GAMEVIEW_PrepareScene(D2GameViewStrc * pGameView, uint32_t nFlag
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn) {
     uint32_t nStarXPos;
     uint32_t nYPos;
-    D2SeedStrc seed;
+    uint32_t seed;
     D2SeedStrc* pStarSeed = gpArcaneStarsSeed;
     if (bRespawn) {
-      seed = D2_SEED_NEXT(*gpArcaneStarsSeed);
-      *gpArcaneStarsSeed = seed;
-      nStarXPos = (seed.nSeedLow & 7) - 1 + UI::SpellSel::WindowSizeX;
+      seed = D2_SeedRoll(gpArcaneStarsSeed);
+      nStarXPos = (seed & 7) - 1 + UI::SpellSel::WindowSizeX;
     } else {
       nStarXPos = D2Common::Seed::UNIT_GetModuloFromSeed(gpArcaneStarsSeed, UI::SpellSel::WindowSizeX);
     }
@@ -455,24 +454,18 @@ void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespaw
     if (nWindowHeight <= 0) {
       nYPos = 0;
     } else if (nWindowHeight & nWindowHeight - 1U) {
-      seed = D2_SEED_NEXT(*pStarSeed);
-      pStarSeed->nSeedHigh = seed.nSeedHigh;
-      pStarSeed->nSeedLow = seed.nSeedLow;
-      nYPos = (uint32_t)(seed.nSeedLow % (uint32_t)nWindowHeight);
+      seed = D2_SeedRoll(pStarSeed);
+      nYPos = (uint32_t)(seed % (uint32_t)nWindowHeight);
     } else {
-      seed = D2_SEED_NEXT(*pStarSeed);
-      pStarSeed->nSeedHigh = seed.nSeedHigh;
-      pStarSeed->nSeedLow = seed.nSeedLow;
-      nYPos = nWindowHeight - 1U & seed.nSeedLow;
+      seed = D2_SeedRoll(pStarSeed);
+      nYPos = nWindowHeight - 1U & seed;
     }
 
     gaArcaneStarYPos[nStarIndex] = nYPos;
-    seed = D2_SEED_NEXT(*pStarSeed);
-    *pStarSeed = seed;
-    gaArcaneStarXVelocity[nStarIndex] = (int)(seed.nSeedLow / 5) * 5 - seed.nSeedLow - 1;
-    seed = D2_SEED_NEXT(*pStarSeed);
-    *pStarSeed = seed;
-    gaArcaneStarColors[nStarIndex] = gaArcaneStarColorTable[seed.nSeedLow & 7];
+    seed = D2_SeedRoll(pStarSeed);
+    gaArcaneStarXVelocity[nStarIndex] = (int)(seed / 5) * 5 - seed - 1;
+    seed = D2_SeedRoll(pStarSeed);
+    gaArcaneStarColors[nStarIndex] = gaArcaneStarColorTable[seed & 7];
 }
 
 // Renders the animated star-field overlay used in the Arcane Sanctuary. On first call, seeds a PRNG from SHAKE_StartTickcount, generates 8 brightness-graduated palette entries into gaArcaneStarColorTable, then calls VIEW_GenerateRandomViewParams for each of the 256 stars. Each frame, draws all 256 stars as single-pixel lines using D2GFX_DrawLine. Every 40 ms (tick delta > 0x28), advances each star's X position by its velocity; stars that fall off-screen are re-randomised via VIEW_GenerateRandomViewParams.
@@ -584,7 +577,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     uint32_t nTileFrame3;
     char szFilePath[260];
     D2GfxDataStrc sGfxData;
-    D2SeedStrc ullSeedValue;
+    uint32_t ullSeedValue;
     if (D2CLIENT_ExitVar3) {
       return;
     }
@@ -696,12 +689,10 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       do {
         nCloudSeedVal = D2Common::Seed::UNIT_GetModuloFromSeed(pAncientsCloudSeed, UI::SpellSel::WindowSizeX << 4);
         *(uint32_t*)((char*)gaAncientsCloudXPos + nScrollOffset) = nCloudSeedVal;
-        ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
-        *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 0xfa;
-        ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
-        *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((char*)gaAncientsCloudVelocities + nScrollOffset) = (ullSeedValue.nSeedLow & 0xf) + 8;
+        ullSeedValue = D2_SeedRoll(pAncientsCloudSeed);
+        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue % 0xfa;
+        ullSeedValue = D2_SeedRoll(pAncientsCloudSeed);
+        *(uint32_t*)((char*)gaAncientsCloudVelocities + nScrollOffset) = (ullSeedValue & 0xf) + 8;
         nScrollOffset += 4;
       } while (nScrollOffset < 0x28);
 
@@ -714,9 +705,8 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       *(int*)((char*)gaAncientsCloudXPos + nScrollOffset) += *(int*)((char*)gaAncientsCloudVelocities + nScrollOffset);
       if (*(int*)((char*)gaAncientsCloudXPos + nScrollOffset) > (nCloudIdx + 0x170) * 0x10) {
         *(uint32_t*)((char*)gaAncientsCloudXPos + nScrollOffset) = -5888;
-        ullSeedValue = D2_SEED_NEXT(*pAncientsCloudSeed);
-        *pAncientsCloudSeed = ullSeedValue;
-        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue.nSeedLow % 300;
+        ullSeedValue = D2_SeedRoll(pAncientsCloudSeed);
+        *(uint32_t*)((char*)gaAncientsCloudYPos + nScrollOffset) = ullSeedValue % 300;
       }
 
       nScrollOffset += 4;

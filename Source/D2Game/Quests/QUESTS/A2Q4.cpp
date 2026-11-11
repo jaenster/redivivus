@@ -311,7 +311,7 @@ void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     int32_t nPlayerGUID;
     int32_t nTargetClassId;
     uint32_t nGossipLineIndex;
-    D2SeedStrc seedNext;
+    uint32_t seedNext;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pControlSeed = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer = pControlSeed->pQuestRecord[pGame->nDifficulty];
@@ -323,9 +323,8 @@ void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nTargetClassId == 0x14b) {
         pA2Q4Specific = GetQuestControlSeed(pQuestData->pGame);
         if (pQuestData->pQuestSpecificData.pA2Q4->bDrognanSummonerHint) {
-          seedNext = D2_SEED_NEXT(*pA2Q4Specific);
-          *pA2Q4Specific = seedNext;
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x14b, seedNext.nSeedLow % 3 + 8);
+          seedNext = D2_SeedRoll(pA2Q4Specific);
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x14b, seedNext % 3 + 8);
           return;
         }
 

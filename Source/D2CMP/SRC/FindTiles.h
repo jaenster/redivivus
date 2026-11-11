@@ -46,7 +46,7 @@ namespace D2CMP::SRC::FindTiles {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 // Computes a 0-127 hash byte in AL/EAX (masked and range-checked before the halt-on-overflow guard); the caller reads it as a hash-table index (nHashIdx).
-int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubType);
+int __fastcall FINDTILE_ComputeHash(int cSubIndex, int cIndex, char cTileSubType);
 struct D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable();
 void __fastcall FINDTILE_FreeHashTable(struct D2TileLibraryHashStrc * pHashTable);
 void __fastcall FINDTILE_Register(struct D2TileLibraryHashStrc * pHashTable, struct D2TileLibraryEntryStrc * pTileData);

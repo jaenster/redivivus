@@ -632,17 +632,11 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
 }
 
 uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestination, char * szSource, int32_t nSize) {
-    int i = 0;
-    if (nSize > 0) {
-      do {
-        if (!szSource[i]) {
-          break;
-        }
-
-        pDestination[i] = (uint16_t)(uint8_t)szSource[i];
-        i++;
-      } while (i < nSize);
+    int i;
+    for (i = 0; i < nSize && szSource[i]; i++) {
+      pDestination[i] = (uint16_t)(uint8_t)szSource[i];
     }
+
     if (szSource[i] != '\0') {
       pDestination[i - 1] = L'\0';
       return pDestination;
@@ -892,6 +886,12 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         pszSuffix = szSuffix;
         pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
         goto append_possessive_suffix;
+        case 1:
+          STRING_CopyWideString(wszText1, wszSuffix);
+        memcpy(szSuffix, " de ", 5);
+        pszSuffix = szSuffix;
+        pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
+        break;
         case 2:
           STRING_CopyWideString(wszText1, wszText2);
         bIsPunct = UNICODE_CheckLeadingPunctuation((char*)&gnUIMinWidth, wszText2);
@@ -913,12 +913,6 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         append_joiner:
         AppendToBuffer(wszText1, pWszSuffix);
         goto append_last_part;
-        case 1:
-          STRING_CopyWideString(wszText1, wszSuffix);
-        memcpy(szSuffix, " de ", 5);
-        pszSuffix = szSuffix;
-        pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
-        break;
         case 3:
           STRING_CopyWideString(wszText1, wszSuffix);
         bIsPunct = UNICODE_CheckTrailingPunctuation("aeiou", (uint16_t*)wszText2);

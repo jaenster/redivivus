@@ -336,28 +336,6 @@ void __stdcall LeaveCriticalSection_System() {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
 }
 
-void __stdcall DebugThread() {
-    void* pSavedEsp;
-    EH4_EXCEPTION_REGISTRATION tSehFrame;
-    tSehFrame.TryLevel = -2;
-    tSehFrame.ExceptionHandler = _except_handler4;
-    tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
-    tSehFrame.EncodedScopeTable = DEFAULT_SECURITY_COOKIE ^ 0x702290;
-    ExceptionList = &tSehFrame;
-    BOOL bDebuggerPresent = IsDebuggerPresent();
-    if (bDebuggerPresent == 1) {
-      THREADNAME_INFO tThreadNameInfo;
-      tThreadNameInfo.dwType = 0x1000;
-      tThreadNameInfo.szName = "MiniDump Thread";
-      tThreadNameInfo.dwThreadID = -1;
-      tThreadNameInfo.dwFlags = 0;
-      tSehFrame.TryLevel = 0;
-      /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0x406d1388, 0, 4, (ULONG_PTR*)&tThreadNameInfo.dwType);
-    }
-
-    ExceptionList = tSehFrame.Next;
-}
-
 void __stdcall SetCurrentThreadId() {
     dwCurrentThreadId = GetCurrentThreadId();
 }

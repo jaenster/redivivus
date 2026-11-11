@@ -28,5 +28,6 @@ namespace D2Common::Drlg::TileSub {
 void __fastcall InitializeDrlgFile(struct D2PoolManagerStrc * pMemory, struct D2LvlSubTxt * pLvlSubTxtRecord);
 void __fastcall AddSecondaryBorder(struct D2UnkOutdoorStrc * pOutdoorCtx);
 #endif // D2_MODULE_D2Common
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Drlg::TileSub

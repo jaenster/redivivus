@@ -455,7 +455,7 @@ int32_t __stdcall MISSILETBLS_CalculateVelocity(int32_t nMissileId, int32_t nLev
     pMissileTxt = nMissileId >= 0 && nMissileId < MonsterTbls::sgtDataTable.nTxtMissilesSize ? MonsterTbls::sgtDataTable.pTxtMissiles + nMissileId : nullptr;
     if (pMissileTxt) {
       int nVelLevProduct;
-      nVelLevProduct = (uint32_t)(uint8_t)pMissileTxt->VelLev * nLevel;
+      nVelLevProduct = (uint32_t)pMissileTxt->VelLev * nLevel;
       return nVelLevProduct / 8 + (uint32_t)pMissileTxt->Vel;
     }
 

@@ -1566,6 +1566,9 @@ static D2ControlStrc * FORMS_pListEx[32] = {}; D2_STATIC_GUARD(FORMS_pListEx, "F
 namespace D2Multi::ChatDlg {
 _RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "D2Multi::ChatDlg::lpCriticalSection_0077ae28");
 } // namespace D2Multi::ChatDlg
+namespace D2Multi::OOGUtilities {
+char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "D2Multi::OOGUtilities::gszOogChatInputBuffer");
+} // namespace D2Multi::OOGUtilities
 static char gszLadderCharNameFilter[16] = {}; D2_STATIC_GUARD(gszLadderCharNameFilter, "gszLadderCharNameFilter");
 static D2ControlStrc * gpCtlLobbyChat[2] = {}; D2_STATIC_GUARD(gpCtlLobbyChat, "gpCtlLobbyChat");
 D2LobbyControlsStrc gpLobbyForm0 = {}; D2_GLOBAL_GUARD(gpLobbyForm0, "gpLobbyForm0");
@@ -2546,47 +2549,49 @@ static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t
     D2Lang::WideCharToUTF8(szText, wszWideBuf, nBufSize);
 }
 
-void __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage) {
+int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage) {
     char szDateStr[64];
     _FILETIME localFileTime;
+    FILETIME utcFileTime;
     char* pszMsgLocal = pszMessage;
     if (!pszMessage) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca4);
       exit(-1);
     }
-    if (!nUnixTime) {
-      return;
+    if (nUnixTime) {
+      utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
+      /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
+      CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
+      StoreData(0, 0, szDateStr);
+      StoreData(4, 0, pszMsgLocal);
+      StoreData(0, 0, "");
     }
 
-    FILETIME utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
-    /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
-    CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
-    StoreData(0, 0, szDateStr);
-    StoreData(4, 0, pszMsgLocal);
-    StoreData(0, 0, "");
+    return 1;
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
-void __stdcall CHATDLG_EnqueueClearMessage() {
+int __stdcall CHATDLG_EnqueueClearMessage() {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
-    if (!pNode) {
-      return;
+    if (pNode) {
+      D2ChatDlgUnknown_0x10* pNewHead;
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pNode->pszText = 0;
+      pNode->nColor = 0;
+      pNode->nLength = 1;
+      EnterCriticalSection(&lpCriticalSection_0077ae28);
+      pNewHead = pNode;
+      if (gpChatMessageQueueHead) {
+        gpChatMessageQueueTail->pNext = pNode;
+        pNewHead = gpChatMessageQueueHead;
+      }
+
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gpChatMessageQueueHead = pNewHead;
+      gpChatMessageQueueTail = pNode;
+      LeaveCriticalSection(&lpCriticalSection_0077ae28);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pNode->pszText = 0;
-    pNode->nColor = 0;
-    pNode->nLength = 1;
-    EnterCriticalSection(&lpCriticalSection_0077ae28);
-    D2ChatDlgUnknown_0x10* pNewHead = pNode;
-    if (gpChatMessageQueueHead) {
-      gpChatMessageQueueTail->pNext = pNode;
-      pNewHead = gpChatMessageQueueHead;
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gpChatMessageQueueHead = pNewHead;
-    gpChatMessageQueueTail = pNode;
-    LeaveCriticalSection(&lpCriticalSection_0077ae28);
+    return 1;
 }
 
 int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyle) {
@@ -2719,7 +2724,7 @@ static BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
     return 0;
 }
 
-BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen, char * szText) {
+static BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nWordLen, char * szText) {
     int nStart;
     char cSaved;
     if (!nWordLen) {
@@ -4645,6 +4650,48 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszFormatBuffer, pwszFmtTemplate, pwszMsg);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszFormatBuffer);
     CHATDLG_AppendTextToTextBox(wszOutputBuffer, 3);
+}
+
+int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix) {
+    char* pszSrc;
+    uint16_t* wszSubTitle;
+    int nSendResult;
+    uint16_t nTitleStrId;
+    char cFirstChar = *szText;
+    Storm::Source::SMem::SMemZero(OOGUtilities::gszOogChatInputBuffer, 0x200);
+    if (!bUseChannelPrefix || cFirstChar == '/' || !gpCurrentChatRoomContext) {
+      pszSrc = szText;
+      do {
+        cFirstChar = *pszSrc;
+        pszSrc[(intptr_t)OOGUtilities::gszOogChatInputBuffer - (intptr_t)szText] = cFirstChar;
+        pszSrc++;
+      } while (cFirstChar != '\0');
+    } else {
+      char* pszChannelName;
+      pszSrc = szText;
+      pszChannelName = OOGUtilities::OOGUTIL_GetAccountName(gpCurrentChatRoomContext->szUsername);
+      sprintf(OOGUtilities::gszOogChatInputBuffer, "/whisper *%s %s", pszChannelName, pszSrc);
+    }
+
+    BOOL nMatch = CHATDLG_FindSubstringMatch(*(int32_t*)OOGUtilities::D2IniData_multiplayer->padding_0x3C3, *(int32_t*)(OOGUtilities::D2IniData_multiplayer->padding_0x3C3 + 4), szText);
+    if (nMatch) {
+      wszSubTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b38);
+      nTitleStrId = 0x2b37;
+    } else {
+      nMatch = CHATDLG_DetectCDKeyInString(szText);
+      if (!nMatch) {
+        nSendResult = OOGUtilities::CHAT_SendOutOfGameMessage();
+        return nSendResult;
+      }
+
+      wszSubTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b7b);
+      nTitleStrId = 0x2b7a;
+    }
+
+    uint16_t* wszTitle = D2Lang::StrTable::strtable::GetLocaleString(nTitleStrId);
+    UIMENU_DrawTitleAndSubtitleOnCenterScreen(wszTitle, wszSubTitle);
+    OOGUtilities::gszOogChatInputBuffer[0] = '\0';
+    return 0;
 }
 
 void StaticInit_6ca960() {

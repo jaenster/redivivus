@@ -34,11 +34,11 @@ struct __attribute__((packed)) D2MagicAffixTxt {
     /* 0x65 */ uint8_t levelreq;
     /* 0x66 */ char classspecific;
     /* 0x67 */ uint8_t class_;
-    /* 0x68 */ char classlevelreq;
+    /* 0x68 */ uint8_t classlevelreq;
     /* 0x69 */ uint8_t pad0x69; // alignment padding after classlevelreq
     /* 0x6A */ short include_type[7];
     /* 0x78 */ short exclude_type[5];
-    /* 0x82 */ char frequency;
+    /* 0x82 */ uint8_t frequency;
     /* 0x83 */ uint8_t pad0x83; // alignment padding after frequency
     /* 0x84 */ int divide;
     /* 0x88 */ int multiply;

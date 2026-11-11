@@ -4,7 +4,6 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
-#include "Source/D2Common/Logging.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
@@ -46,6 +45,32 @@ typedef void (__fastcall *fpStatListExChangeCb)(::SGAMEDATA * pGame, D2UnitStrc 
 #endif
 
 namespace D2Common::Stats::StatsEx {
+
+// Binary search for a stat entry by ID in a sorted stat array. Takes stat ID in EDI and pointer to stat array descriptor in EAX. Returns index on success, -1 if not found.
+static long STATLIST_BinarySearchStatById(int32_t nStatKey, D2StatInfoStrc * pStatInfo) {
+    int nMid;
+    int nCount = (int)pStatInfo->wStatCount;
+    int nLo = 0;
+    if (nCount <= 0) {
+      return -1;
+    }
+
+    do {
+      int iVar1;
+      nMid = (nCount - nLo) / 2 + nLo;
+      iVar1 = (int)((uint32_t)(uint16_t)pStatInfo->pStatInfo[nMid].wSubIndex | (uint32_t)(uint16_t)pStatInfo->pStatInfo[nMid].wStatIndex << 16);
+      if (nStatKey > iVar1) {
+        nLo = nMid + 1;
+        nMid = nCount;
+      } else if (iVar1 <= nStatKey) {
+        return nMid;
+      }
+
+      nCount = nMid;
+    } while (nLo < nMid);
+
+    return -1;
+}
 
 static int32_t STATLIST_BinarySearchInsertPos(int32_t nStatKey, D2StatInfoStrc * pStatInfo) {
     int nMid;
@@ -225,7 +250,7 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
 // Binary-searches the base stat array of pStatList for a packed stat key (wStatIndex:wSubIndex = nParam). If found and the ItemStatCost entry has FMIN flag set, the stat list is owned by a player/monster unit, and the raw value is below the minaccr threshold, returns minaccr left-shifted by valshift instead. Otherwise returns the raw stat value, or 0 if not found. Uses a custom calling convention (pStatList in EBX, nParam in EDI).
 static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatList, int32_t nStatKey) {
     D2StatInfoStrc* pStatInfo = &pStatList->sStatList.sBaseStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nStatKey, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nStatKey, pStatInfo);
     D2StatStrc* pDVar1 = nStatIdx >= 0 ? pStatInfo->pStatInfo + nStatIdx : nullptr;
     if (!pDVar1) {
       return 0;
@@ -259,7 +284,7 @@ static int32_t __stdcall TXT_ItemStatCost_GetMinimumStatValueShifted(D2ItemStatC
       pStatInfoArray = &pStatEx->sStatList.sBaseStats;
     }
 
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nStatKey, pStatInfoArray);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nStatKey, pStatInfoArray);
     D2StatStrc* pStatInfoRecord = nStatIdx >= 0 ? pStatInfoArray->pStatInfo + nStatIdx : nullptr;
     if (!pStatInfoRecord) {
       return 0;
@@ -289,7 +314,7 @@ static int32_t __stdcall STATLIST_CalcFullStatFromChildren(int32_t nStatId, D2It
     D2StatInfoStrc* pChildStatArray;
     pChildStatArray = &pStatListEx->sStatList.sBaseStats;
     long int lVar2;
-    lVar2 = Logging::STATLIST_BinarySearchStatById(nStatId, pChildStatArray);
+    lVar2 = STATLIST_BinarySearchStatById(nStatId, pChildStatArray);
     if (lVar2 < 0 || (pDVar1 = pChildStatArray->pStatInfo + lVar2 , !pDVar1)) {
       nTotalValue = 0;
     } else {
@@ -347,7 +372,7 @@ static int32_t __stdcall STATLIST_PropagateStatDelta(int32_t nShiftedStat, int32
     D2StatStrc* pStatEntry;
     D2StatInfoStrc* pStatArray;
     D2StatInfoStrc* pStatInfo = &pSkillsTxt->sFullStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
       pStatEntry = STATLIST_InsertStatIntoArray(pStatInfo, nShiftedStat, pSkillsTxt->sStatList.pMemory);
     }
@@ -375,7 +400,7 @@ static void __stdcall STATLIST_SetFullStatValue(int32_t nStatKey, int32_t nNewVa
     D2StatStrc* pStatEntry;
     D2StatInfoStrc* pStatArray;
     D2StatInfoStrc* pStatInfo = &pSkillsTxt->sFullStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nStatKey, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nStatKey, pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
       if (!nNewValue) {
         return;
@@ -791,7 +816,7 @@ void __stdcall STATLIST_DispatchUnchangedStatToCallback(D2UnitStrc * pUnit, D2Un
     }
 
     D2StatInfoStrc* pBaseStats = &pDVar2->sStatList.sBaseStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(eUnitStat << 0x10, pBaseStats);
+    long int nStatIdx = STATLIST_BinarySearchStatById(eUnitStat << 0x10, pBaseStats);
     D2StatStrc* pDVar1 = nStatIdx >= 0 ? pBaseStats->pStatInfo + nStatIdx : nullptr;
     if (!pDVar1) {
       return;
@@ -823,7 +848,7 @@ void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUn
     do {
       D2StatStrc* pDVar1;
       nStatKey = pDVar2->sChangedStats.pChangedStatIds[nChangedIdx];
-      nStatIdx = Logging::STATLIST_BinarySearchStatById(nStatKey, &pDVar2->sStatList.sBaseStats);
+      nStatIdx = STATLIST_BinarySearchStatById(nStatKey, &pDVar2->sStatList.sBaseStats);
       if (nStatIdx < 0 || (pDVar1 = pDVar2->sStatList.sBaseStats.pStatInfo + nStatIdx , !pDVar1)) {
         nSearchLo = 0;
         nStatId = (uint16_t)((uint32_t)nStatKey >> 0x10);
@@ -1021,7 +1046,7 @@ int32_t __stdcall STATLIST_CopyStatsToBuffer(D2UnitStrc * pUnit, D2StatStrc * pS
     D2StatStrc* pStatCur = pStatsEx->sFullStats.pStatInfo;
     D2StatStrc* pStatEnd = pStatCur + nCopyCount;
     for (; pStatCur < pStatEnd; pStatCur++) {
-      short int nStatIndex;
+      uint16_t nStatIndex;
       nStatIndex = pStatCur->wStatIndex;
       pStatBuf->wSubIndex = pStatCur->wSubIndex;
       pStatBuf->wStatIndex = nStatIndex;
@@ -1045,7 +1070,7 @@ int32_t __stdcall CopyStatsToBuffer(D2StatListExStrc * pStatListEx, D2StatStrc *
     D2StatStrc* pStatCur = pStatListEx->sStatList.sBaseStats.pStatInfo;
     D2StatStrc* pDVar1 = pStatCur + nStatsCount;
     for (; pStatCur < pDVar1; pStatCur++) {
-      short int wStatIndex;
+      uint16_t wStatIndex;
       wStatIndex = pStatCur->wStatIndex;
       pOutput->wSubIndex = pStatCur->wSubIndex;
       pOutput->wStatIndex = wStatIndex;
@@ -1393,24 +1418,6 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
         }
 
         break;
-        case 4:
-          pOwner = pStatList->sStatList.pUnitAttached;
-        if (pOwner) {
-          eOwnerType = pOwner->eUnitType;
-          if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
-            wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
-            if (wBaseStat != 0xffff) {
-              pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
-              if (pItemStatCostLine) {
-                nApplyResult3 = STATSEX_GetCurrentStat(pStatList->sStatList.pUnitAttached, (eD2UnitStat)wBaseStat, 0);
-                byValShift = pItemStatCostLine->valshift;
-                goto add_opbase_scaled;
-              }
-            }
-          }
-        }
-
-        break;
         case 3:
           eOwnerType = pStatList->sStatList.eOwnerType;
         if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
@@ -1428,6 +1435,24 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
                   nApplyResult = nRelatedStatVal * nApplyResult3 >> D2_SHIFT_COUNT(*(uint8_t*)((char*)pOpRelation + 3));
                   goto add_percent;
                 }
+              }
+            }
+          }
+        }
+
+        break;
+        case 4:
+          pOwner = pStatList->sStatList.pUnitAttached;
+        if (pOwner) {
+          eOwnerType = pOwner->eUnitType;
+          if (eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) {
+            wBaseStat = ((D2ItemStatCostOpRelationStrc*)(pOpRelation - 1))->nOpBaseStat;
+            if (wBaseStat != 0xffff) {
+              pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
+              if (pItemStatCostLine) {
+                nApplyResult3 = STATSEX_GetCurrentStat(pStatList->sStatList.pUnitAttached, (eD2UnitStat)wBaseStat, 0);
+                byValShift = pItemStatCostLine->valshift;
+                goto add_opbase_scaled;
               }
             }
           }
@@ -1479,7 +1504,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           if (pCharStatsTxt) {
             wBaseStat = *pOpRelation;
             pBaseStatInfo = &pStatList->sStatList.sBaseStats;
-            nSearchResult = Logging::STATLIST_BinarySearchStatById((uint32_t)wBaseStat << 0x10, pBaseStatInfo);
+            nSearchResult = STATLIST_BinarySearchStatById((uint32_t)wBaseStat << 0x10, pBaseStatInfo);
             if (nSearchResult < 0 || !(pBaseStatInfo->pStatInfo + nSearchResult)) {
               nApplyResult3 = 0;
             } else {
@@ -1489,7 +1514,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
             nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)wBaseStat << 0x10);
             pOpRelation = pOpRelationSaved;
             if (nRelatedStatVal - nApplyResult3) {
-              nCombinedValue += (uint32_t)(uint8_t)pCharStatsTxt->ManaPerMagic * (nRelatedStatVal - nApplyResult3) * 0x40;
+              nCombinedValue += (uint32_t)pCharStatsTxt->ManaPerMagic * (nRelatedStatVal - nApplyResult3) * 0x40;
             }
           }
         }
@@ -1502,7 +1527,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           if (pCharStatsTxt) {
             pListBaseStats = &pStatList->sStatList.sBaseStats;
             nRelatedStatShifted = (uint32_t)(uint16_t)*pOpRelation << 0x10;
-            nRelatedStatIdx = Logging::STATLIST_BinarySearchStatById(nRelatedStatShifted, pListBaseStats);
+            nRelatedStatIdx = STATLIST_BinarySearchStatById(nRelatedStatShifted, pListBaseStats);
             if (nRelatedStatIdx < 0 || (pRelatedStatEntry = pListBaseStats->pStatInfo + nRelatedStatIdx , !pRelatedStatEntry)) {
               nApplyResult3 = 0;
             } else {
@@ -1514,9 +1539,9 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
             pOpRelation = pOpRelationSaved;
             if (nApplyResult3) {
               if (eStatType == UNITSTAT_maxstamina) {
-                nCombinedValue += (uint32_t)(uint8_t)pCharStatsTxt->StaminaPerVitality * nApplyResult3 * 0x40;
+                nCombinedValue += (uint32_t)pCharStatsTxt->StaminaPerVitality * nApplyResult3 * 0x40;
               } else {
-                nCombinedValue += (uint32_t)(uint8_t)pCharStatsTxt->LifePerVitality * nApplyResult3 * 0x40;
+                nCombinedValue += (uint32_t)pCharStatsTxt->LifePerVitality * nApplyResult3 * 0x40;
               }
             }
           }
@@ -2062,7 +2087,7 @@ void __stdcall STATLIST_AddStatValue(D2StatListExStrc * pStatsEx, eD2UnitStat eU
 
     int32_t nShiftedStat = eUnitStat * 0x10000 + (uint32_t)nSubIndex;
     D2StatInfoStrc* pStatInfo = &pStatsEx->sStatList.sBaseStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
       pStatEntry = STATLIST_InsertStatIntoArray(pStatInfo, nShiftedStat, pStatsEx->sStatList.pMemory);
     }
@@ -2093,7 +2118,7 @@ BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUn
 
     int32_t nShiftedStat = eUnitStat * 0x10000 + (uint32_t)low;
     D2StatInfoStrc* pStatInfo = &pStatEx->sStatList.sBaseStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
       if (!nValue) {
         return 0;
@@ -2142,7 +2167,7 @@ void __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD
 
     int32_t nShiftedStat = eUnitStat * 0x10000 + (uint32_t)nLayer;
     D2StatInfoStrc* pStatInfo = &pStatList->sStatList.sBaseStats;
-    long int nStatIdx = Logging::STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
+    long int nStatIdx = STATLIST_BinarySearchStatById(nShiftedStat, pStatInfo);
     if (nStatIdx < 0 || (pStatEntry = pStatInfo->pStatInfo + nStatIdx , !pStatEntry)) {
       if (!nValue) {
         return;
@@ -2364,7 +2389,7 @@ void __stdcall CopyStatListEx(D2StatListExStrc * pStatListExDest, D2StatListExSt
     D2StatStrc* pStatInfo = pStatListExSource->sStatList.sBaseStats.pStatInfo;
     D2StatStrc* pStatEnd = pStatInfo + pStatListExSource->sStatList.sBaseStats.wStatCount;
     for (; pStatInfo < pStatEnd; pStatInfo++) {
-      STATLIST_AddStatValue(pStatListExDest, (eD2UnitStat)(uint16_t)pStatInfo->wStatIndex, pStatInfo->nStatValue, pStatInfo->wSubIndex);
+      STATLIST_AddStatValue(pStatListExDest, (eD2UnitStat)pStatInfo->wStatIndex, pStatInfo->nStatValue, pStatInfo->wSubIndex);
     }
 }
 
@@ -2470,7 +2495,7 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
     D2StatStrc* pStatEnd = pStatCur + pItemStatsEx->sFullStats.wStatCount;
     D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
     for (; pStatCur < pStatEnd; pStatCur++) {
-      D2ItemStatCostTxt* pStatCostTxt = false || (int)(uint32_t)(uint16_t)pStatCur->wStatIndex >= pDataTable->nTxtItemStatCostSize ? 0 : pDataTable->pTxtItemStatCost + (uint16_t)pStatCur->wStatIndex;
+      D2ItemStatCostTxt* pStatCostTxt = false || (int)(uint32_t)pStatCur->wStatIndex >= pDataTable->nTxtItemStatCostSize ? 0 : pDataTable->pTxtItemStatCost + pStatCur->wStatIndex;
       if ((uint8_t)(pStatCostTxt->op - 6) <= 1) {
         pUnit = (D2UnitStrc*)&pStatCostTxt->opStat1;
         nUnit2 = 0x0;

@@ -840,8 +840,8 @@ uint32_t __fastcall GetPlayerClassId(D2ClientStrc * pClient) {
     return (uint32_t)pClient->nClass;
 }
 
-void __fastcall SetClassOfClient(D2ClientStrc * pClient, uint8_t nClass) {
-    pClient->nClass = nClass;
+void __fastcall SetClassOfClient(D2ClientStrc * pClient, int nClass) {
+    pClient->nClass = (uint8_t)nClass;
 }
 
 void __fastcall SetFileFlags(D2ClientStrc * pClient, int16_t nCharStatus) {

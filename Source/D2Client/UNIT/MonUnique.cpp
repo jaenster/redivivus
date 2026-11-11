@@ -11,7 +11,6 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Unit.h"
@@ -248,25 +247,6 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
       }
     } else {
       switch (nMonClassId) {
-        case 0x2c0:
-          set_name_mephisto:
-          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0xbf6);
-        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
-        return;
-        case 0x2c1:
-          set_name_diablo:
-          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0xbf4);
-        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
-        return;
-        case 0x2c2:
-          set_name_izual:
-          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0x3f6);
-        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
-        return;
-        case 0x2c3:
-          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0x2b92);
-        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
-        return;
         case 0x2c4:
           set_name_duriel:
           pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0xbee);
@@ -274,6 +254,25 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
         return;
         case 0x2c5:
           goto name_baal;
+        case 0x2c0:
+          set_name_mephisto:
+          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0xbf6);
+        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
+        return;
+        case 0x2c2:
+          set_name_izual:
+          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0x3f6);
+        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
+        return;
+        case 0x2c1:
+          set_name_diablo:
+          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0xbf4);
+        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
+        return;
+        case 0x2c3:
+          pLocaleName = D2Lang::StrTable::strtable::GetLocaleString(0x2b92);
+        D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, pLocaleName);
+        return;
       }
     }
 
@@ -628,7 +627,7 @@ void __fastcall MONUNIQUE_SpawnDeathMissile(D2UnitStrc * pUnit, int32_t eModifie
 
 void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod, int32_t nParam2) {
     int nCurrentFrame;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -648,9 +647,8 @@ void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod,
         return;
       }
     } else if (pUnit->eAnimMode.ePlayerMode == Kick) {
-      sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sNewSeed;
-      if (sNewSeed.nSeedLow % 100 == 0 && (intptr_t)pMonData->pQuestRecord[2] < 100) {
+      sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+      if (sNewSeed % 100 == 0 && (intptr_t)pMonData->pQuestRecord[2] < 100) {
         D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         Source::ClientEngine::CLIENT_SpawnMonstersAroundUnit(pUnit, 0xe3, 4);
@@ -798,7 +796,7 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
     eMissilesId eMissileClass = pUnit->nClassId;
     eMissilesId eMissileId = eMissileClass;
     D2UnitStrc* pMissileSelf = pUnit;
-    D2UnitStrc* pOwnerUnit = Player::MISSILE_GetOwnerUnit(pUnit);
+    D2UnitStrc* pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!(pOwnerUnit && (int)eMissileClass >= 0 && (int)eMissileClass < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileClass && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[eMissileClass] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }

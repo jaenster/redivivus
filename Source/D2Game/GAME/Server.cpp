@@ -419,7 +419,7 @@ static void __stdcall RollSeed(::SGAMEDATA * pGamee) {
     uint32_t nRandSeed;
     ::SGAMEDATA* pGame;
     LARGE_INTEGER sPerfCounter;
-    D2SeedStrc seedResult;
+    uint32_t seedResult;
     uint32_t nGameSeedValue = GameSeed;
     if (GameSeed == -1) {
       D2SeedStrc* pSeed;
@@ -429,10 +429,8 @@ static void __stdcall RollSeed(::SGAMEDATA * pGamee) {
       D2Common::Seed::SEED_InitDefault(pSeed);
       nRandSeed = D2Common::Seed::SEED_GenerateRandomSeed(sPerfCounter.u.LowPart);
       D2Common::Seed::InitSeed_Param_666(pSeed, nRandSeed);
-      seedResult = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = seedResult.nSeedHigh;
-      pSeed->nSeedLow = seedResult.nSeedLow;
-      nRandSeed = D2Common::Seed::SEED_GenerateRandomSeed(seedResult.nSeedLow);
+      seedResult = D2_SeedRoll(pSeed);
+      nRandSeed = D2Common::Seed::SEED_GenerateRandomSeed(seedResult);
       pGamee->pInitSeed.nSeedLow = nRandSeed;
       return;
     }
@@ -568,10 +566,6 @@ static uint32_t STRING_CheckIfPlayerNameDoNotContainForbidenChars(char * szText,
       cCurrentChar = *szText;
       szText++;
       switch (cCurrentChar) {
-        case '\0':
-          return (uint32_t)(nCharCount != 0);
-        default:
-          return 0;
         case '\'':
 
         case '-':
@@ -699,6 +693,10 @@ static uint32_t STRING_CheckIfPlayerNameDoNotContainForbidenChars(char * szText,
 
         case 'z':
           goto accept_char;
+        default:
+          return 0;
+        case '\0':
+          return (uint32_t)(nCharCount != 0);
       }
     } while (true);
 }
@@ -3080,8 +3078,8 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
           while (pClient) {
             pClientNext = pClient->pNext;
             FlushClientPackets(pGame, 1, pClient);
-            pClient = pClientNext;
             dwTickCount = dwThisFrameTick;
+            pClient = pClientNext;
           }
 
           if (!pGame->nClientsCount) {

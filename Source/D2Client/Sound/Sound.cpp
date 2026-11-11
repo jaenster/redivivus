@@ -11,7 +11,6 @@
 #include "Source/D2Client/Utils.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.h"
-#include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -53,34 +52,6 @@ uint32_t __fastcall SOUND_FileExists(char * szFileName) {
 
     Storm::Source::SFile::SFileCloseFile(pFile);
     return 1;
-}
-
-void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp) {
-    D2MPQFileStrc* pFile;
-    char szLangAbbrev[4];
-    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
-    sprintf(pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
-    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-    if (bOpened) {
-      Storm::Source::SFile::SFileCloseFile(pFile);
-      return;
-    }
-
-    uint32_t dwLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    if (dwLanguageCode) {
-      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-      if (bOpened) {
-        Storm::Source::SFile::SFileCloseFile(pFile);
-        return;
-      }
-    } else {
-      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-      if (bOpened) {
-        Storm::Source::SFile::SFileCloseFile(pFile);
-      }
-    }
 }
 
 float __stdcall SOUND_CalculateAngle1(float fParam1, float fParam2) {

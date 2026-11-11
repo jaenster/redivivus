@@ -9,7 +9,6 @@
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -112,7 +111,7 @@ void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFra
       return;
     }
 
-    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)(((uint8_t)pMissilesTxt->AnimLen << 8) / nTotalFrames));
+    D2Common::Units::SetAnimationSpeed(pUnit, (int32_t)((pMissilesTxt->AnimLen << 8) / nTotalFrames));
 }
 
 // Client-side: spawns an Inferno (or Hydra-fire variant) missile for the Sorceress. Looks up cltmissilea/cltmissileb from SkillsTxt; randomly picks between them using the unit seed (50/50). Reads target coords via GetCooordinates, evaluates calc[0] for frame count (min 1), fires MakeMissile with nFlags=0x8020. If the missile is created and the unit has STATE_inferno active: advances the animation sequence to frame 8 (or decrements nGfxCurrentFrame by 0x200 if no anim sequence).
@@ -629,7 +628,7 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
     }
     if (pUnit && pMissile) {
       D2UnitStrc* pOwnerUnit;
-      pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pMissile);
+      pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pMissile);
       if (!pOwnerUnit) {
         return 0;
       }

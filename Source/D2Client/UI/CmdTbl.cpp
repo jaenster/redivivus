@@ -1525,6 +1525,12 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
     }
     if (wKeyLookup > 0xdf) {
       switch (wKeyLookup) {
+        case 0x103:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb9);
+        return pName;
+        case 0x104:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeba);
+        return pName;
         case 0x100:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb6);
         return pName;
@@ -1534,15 +1540,14 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         case 0x102:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb8);
         return pName;
-        case 0x103:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb9);
-        return pName;
-        case 0x104:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeba);
-        return pName;
       }
     } else {
       switch (wKeyLookup) {
+        case 4:
+          {
+            pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb6);
+            return pName;
+          }
         case 1:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb3);
         return pName;
@@ -1551,38 +1556,6 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         return pName;
         case 3:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb5);
-        return pName;
-        case 4:
-          {
-            pName = D2Lang::StrTable::strtable::GetLocaleString(0xeb6);
-            return pName;
-          }
-        case 8:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xece);
-        return pName;
-        case 9:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecf);
-        return pName;
-        case 0xc:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed0);
-        return pName;
-        case 0xd:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed1);
-        return pName;
-        case 0x10:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed2);
-        return pName;
-        case 0x11:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed3);
-        return pName;
-        case 0x12:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed4);
-        return pName;
-        case 0x13:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed5);
-        return pName;
-        case 0x14:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed6);
         return pName;
         case 0x15:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xebb);
@@ -1611,21 +1584,6 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         case 0x1f:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xec3);
         return pName;
-        case 0x20:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed7);
-        return pName;
-        case 0x21:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed8);
-        return pName;
-        case 0x22:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed9);
-        return pName;
-        case 0x23:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeda);
-        return pName;
-        case 0x24:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xedb);
-        return pName;
         case 0x25:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xec4);
         return pName;
@@ -1641,11 +1599,65 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         case 0x29:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xec8);
         return pName;
-        case 0x2a:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xedc);
-        return pName;
         case 0x2b:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xec9);
+        return pName;
+        case 0x5b:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeca);
+        return pName;
+        case 0x5c:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecb);
+        return pName;
+        case 0x5d:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecc);
+        return pName;
+        case 0x90:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecd);
+        return pName;
+        case 8:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xece);
+        return pName;
+        case 9:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecf);
+        return pName;
+        case 0xc:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed0);
+        return pName;
+        case 0xd:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed1);
+        return pName;
+        case 0x10:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed2);
+        return pName;
+        case 0x11:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed3);
+        return pName;
+        case 0x12:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed4);
+        return pName;
+        case 0x13:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed5);
+        return pName;
+        case 0x14:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed6);
+        return pName;
+        case 0x20:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed7);
+        return pName;
+        case 0x21:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed8);
+        return pName;
+        case 0x22:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xed9);
+        return pName;
+        case 0x23:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeda);
+        return pName;
+        case 0x24:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xedb);
+        return pName;
+        case 0x2a:
+          pName = D2Lang::StrTable::strtable::GetLocaleString(0xedc);
         return pName;
         case 0x2c:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xedd);
@@ -1658,15 +1670,6 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         return pName;
         case 0x2f:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xee0);
-        return pName;
-        case 0x5b:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xeca);
-        return pName;
-        case 0x5c:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecb);
-        return pName;
-        case 0x5d:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecc);
         return pName;
         case 0x60:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xee1);
@@ -1787,9 +1790,6 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
         return pName;
         case 0x87:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xf08);
-        return pName;
-        case 0x90:
-          pName = D2Lang::StrTable::strtable::GetLocaleString(0xecd);
         return pName;
         case 0x91:
           pName = D2Lang::StrTable::strtable::GetLocaleString(0xf09);

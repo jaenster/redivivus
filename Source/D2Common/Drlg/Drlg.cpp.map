@@ -923,25 +923,26 @@
       ]
     },
     {
-      "name": "DRLGOUTDOOR_ApplySubstitutionGroup",
-      "address": "0066f990",
+      "name": "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+      "address": "0066fa10",
       "lines": [
         {
           "line": 1,
-          "address": "0066f990"
+          "address": "0066fa10"
         }
       ],
       "namespace": "D2Common::Drlg",
       "calledFunctions": [
-        "DRLGOUTDOOR_ApplySubstitutionGroup",
-        "RANDOM_RandomNumberSelector",
-        "DRLGOUTDOOR_PlaceRandomBorderSubTiles"
+        "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit"
       ],
       "usedTypes": [
-        "D2DrlgFileStrc",
+        "D2DrlgWallLayerGridsStrc",
         "D2LvlSubTxt",
-        "D2UnkOutdoorStrc",
-        "uint32_t"
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t"
       ]
     },
     {
@@ -969,6 +970,27 @@
         "D2LvlSubTxt",
         "D2PoolManagerStrc",
         "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_MatchSubTileTypes",
+      "address": "0066fe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fe00"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTDOOR_MatchSubTileTypes",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
         "int32_t",
         "uint32_t"
       ]

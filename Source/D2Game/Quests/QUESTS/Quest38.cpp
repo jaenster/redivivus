@@ -99,12 +99,6 @@ void __fastcall Q38_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         break;
       default:
         return;
-      case MonsterUnitDrognan:
-        nExpectedPlayerClass = 1;
-      break;
-      case MonsterUnitFara:
-        nExpectedPlayerClass = 3;
-      break;
       case MonsterUnitElzix:
         nExpectedPlayerClass = 2;
       break;
@@ -113,6 +107,13 @@ void __fastcall Q38_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       break;
       case MonsterUnitMeshif:
         nExpectedPlayerClass = 0;
+      break;
+      case MonsterUnitFara:
+        nExpectedPlayerClass = 3;
+      break;
+      case MonsterUnitDrognan:
+        nExpectedPlayerClass = 1;
+      break;
     }
 
     BOOL bSpoken = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestArgs->pGame, nMonStatsId);

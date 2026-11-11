@@ -73,9 +73,6 @@ static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e980 = {
 static char gszOogLevelRestrictionText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogLevelRestrictionText, "gszOogLevelRestrictionText");
 static char gszOogMaxPlayersText[4] = { '4', '\x00', '\x00', '\x00' }; D2_STATIC_GUARD(gszOogMaxPlayersText, "gszOogMaxPlayersText");
 static int32_t gnPendingGameInfoCharIndex = -0x1; D2_STATIC_GUARD(gnPendingGameInfoCharIndex, "gnPendingGameInfoCharIndex");
-namespace D2Multi::OOGUtilities {
-char gszOogChatInputBuffer[512] = {}; D2_GLOBAL_GUARD(gszOogChatInputBuffer, "D2Multi::OOGUtilities::gszOogChatInputBuffer");
-} // namespace D2Multi::OOGUtilities
 static uint16_t gwLastGameInfoRequestId = 0; D2_STATIC_GUARD(gwLastGameInfoRequestId, "gwLastGameInfoRequestId");
 namespace D2Multi::OOGUtilities {
 D2GameListEntryStrc gbLanGameListEntryNamePadding2[1000] = {}; D2_GLOBAL_GUARD(gbLanGameListEntryNamePadding2, "D2Multi::OOGUtilities::gbLanGameListEntryNamePadding2");
@@ -878,48 +875,6 @@ BOOL __stdcall OOGUTIL_OnPressChatWarningOk(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix) {
-    char* pszSrc;
-    uint16_t* wszSubTitle;
-    int nSendResult;
-    uint16_t nTitleStrId;
-    char cFirstChar = *szText;
-    Storm::Source::SMem::SMemZero(gszOogChatInputBuffer, 0x200);
-    if (!bUseChannelPrefix || cFirstChar == '/' || !gpCurrentChatRoomContext) {
-      pszSrc = szText;
-      do {
-        cFirstChar = *pszSrc;
-        pszSrc[(intptr_t)gszOogChatInputBuffer - (intptr_t)szText] = cFirstChar;
-        pszSrc++;
-      } while (cFirstChar != '\0');
-    } else {
-      char* pszChannelName;
-      pszSrc = szText;
-      pszChannelName = OOGUTIL_GetAccountName(gpCurrentChatRoomContext->szUsername);
-      sprintf(gszOogChatInputBuffer, "/whisper *%s %s", pszChannelName, pszSrc);
-    }
-
-    BOOL nMatch = ChatDlg::CHATDLG_FindSubstringMatch(*(int32_t*)D2IniData_multiplayer->padding_0x3C3, *(int32_t*)(D2IniData_multiplayer->padding_0x3C3 + 4), szText);
-    if (nMatch) {
-      wszSubTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b38);
-      nTitleStrId = 0x2b37;
-    } else {
-      nMatch = ChatDlg::CHATDLG_DetectCDKeyInString(szText);
-      if (!nMatch) {
-        nSendResult = CHAT_SendOutOfGameMessage();
-        return nSendResult;
-      }
-
-      wszSubTitle = D2Lang::StrTable::strtable::GetLocaleString(0x2b7b);
-      nTitleStrId = 0x2b7a;
-    }
-
-    uint16_t* wszTitle = D2Lang::StrTable::strtable::GetLocaleString(nTitleStrId);
-    ChatDlg::UIMENU_DrawTitleAndSubtitleOnCenterScreen(wszTitle, wszSubTitle);
-    gszOogChatInputBuffer[0] = '\0';
-    return 0;
-}
-
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
     char* pszCur;
     char szTokenCopy[256];
@@ -951,7 +906,7 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
       return 1;
     }
 
-    nCopyIndex = OOGUTIL_SendChatMessage(szMultiByte, 0);
+    nCopyIndex = ChatDlg::OOGUTIL_SendChatMessage(szMultiByte, 0);
     return nCopyIndex;
 }
 
@@ -3332,7 +3287,7 @@ int __stdcall OOGUTIL_ValidateUsername1(D2ControlMsg * pControlMsg) {
     if (nLength) {
       int nSendResult;
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMessage, (uint16_t*)pwszInput, 0x100);
-      nSendResult = OOGUTIL_SendChatMessage(szMessage, 0);
+      nSendResult = ChatDlg::OOGUTIL_SendChatMessage(szMessage, 0);
       return nSendResult;
     }
 
@@ -3350,7 +3305,7 @@ int __stdcall OOGUTIL_ValidateUsername2(D2ControlMsg * pControlMsg) {
     if (nLength) {
       int nSendResult;
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMessage, (uint16_t*)pwszInput, 0x100);
-      nSendResult = OOGUTIL_SendChatMessage(szMessage, 1);
+      nSendResult = ChatDlg::OOGUTIL_SendChatMessage(szMessage, 1);
       return nSendResult;
     }
 
@@ -3372,7 +3327,7 @@ int __stdcall OOGUTIL_ValidateUsername3(D2ControlMsg * pControlMsg) {
           if (dwTickNow >= gdwLastChatSendTick + 1000) {
             gdwLastChatSendTick = dwTickNow;
             sprintf(szFormattedMsg, "/me %s", szMessage);
-            OOGUTIL_SendChatMessage(szFormattedMsg, 0);
+            ChatDlg::OOGUTIL_SendChatMessage(szFormattedMsg, 0);
           }
         }
       }

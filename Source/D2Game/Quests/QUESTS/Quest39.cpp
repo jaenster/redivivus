@@ -88,17 +88,18 @@ void __fastcall Q39_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         break;
       default:
         return;
-      case MonsterUnitAsheara:
-        nAmazonClassId = 0;
-      break;
       case MonsterUnitAlkor:
         nAmazonClassId = 2;
+      break;
+      case MonsterUnitMeshif2:
+        nAmazonClassId = 4;
+      break;
+      case MonsterUnitAsheara:
+        nAmazonClassId = 0;
       break;
       case MonsterUnitOrmus:
         nAmazonClassId = 3;
       break;
-      case MonsterUnitMeshif2:
-        nAmazonClassId = 4;
     }
 
     BOOL bSpokenBefore = PLAYER::PlayerIntro::PLAYER_CheckIfSpokenWithNPC(pUnit, pQuestArgs->pGame, nMonStatsId);

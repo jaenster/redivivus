@@ -145,10 +145,8 @@ void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_FIVE, "D2Common::Drlg::Maze::Act5::IceCaves::ReplaceRooms::DRLG_ICECAVES_REPLACE_FIVE");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(DRLG_ICECAVES_REPLACE_ONE + nRoll, pLevel, &nRoll);
     ReplaceRoom(DRLG_ICECAVES_REPLACE_TWO + nRoll, pLevel, &nRoll);
     ReplaceRoom(DRLG_ICECAVES_REPLACE_THREE + nRoll, pLevel, &nRoll);

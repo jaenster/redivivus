@@ -670,7 +670,7 @@ static void __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2Unit
     }
 
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pUnit2->pPath.pDynamicPath, (uint8_t)nTotalFrames);
-    D2Common::Units::SetAnimationSpeed(pUnit2, (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nTotalFrames));
+    D2Common::Units::SetAnimationSpeed(pUnit2, (int32_t)((pMissileTxt->AnimLen << 8) / nTotalFrames));
     D2Common::Units::Missile::SetTotalFrames(pUnit2, nTotalFrames);
     D2Common::Units::Missile::SetCurrentFrame(pUnit2, nTotalFrames);
 }
@@ -766,7 +766,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
     int nMissileCountDown;
     int32_t nTargetX;
     int32_t nTargetY;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -787,11 +787,9 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
       do {
         nSelectedMissileId = nMissileA;
         if (nMissileB > 0) {
-          sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
+          sNewSeed = D2_SeedRoll(&pUnit->sSeed);
           eSkill = eSkillSaved;
-          if (sNewSeed.nSeedLow & 1) {
+          if (sNewSeed & 1) {
             nSelectedMissileId = nMissileB;
           }
         }
@@ -955,12 +953,12 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(D2SkillsTxt * pSkillsTxt, D2UnitS
         return;
       }
       if (pSkillsTxt->monanim == '\x0e') {
-        D2Common::Units::SetSequenceFrame(pUnit, (uint8_t)pMonStats2Txt->byInfernoAnim - 1);
-        pUnit->nFrameCount = ((uint8_t)pMonStats2Txt->byInfernoAnim + 1) * 0x100;
+        D2Common::Units::SetSequenceFrame(pUnit, pMonStats2Txt->byInfernoAnim - 1);
+        pUnit->nFrameCount = (pMonStats2Txt->byInfernoAnim + 1) * 0x100;
         return;
       }
 
-      pUnit->nGfxCurrentFrame = (uint32_t)(uint8_t)pMonStats2Txt->byInfernoAnim * 0x100 - 0x100;
+      pUnit->nGfxCurrentFrame = (uint32_t)pMonStats2Txt->byInfernoAnim * 0x100 - 0x100;
       return;
     }
 
@@ -1100,9 +1098,8 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSee
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SeedStrc* pSeed = &pUnit->sSeed;
     D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nSeedOffset);
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNewSeed;
-    if (!((int32_t)(sNewSeed.nSeedLow % 100) >= 0x14)) {
+    uint32_t sNewSeed = D2_SeedRoll(pSeed);
+    if (!((int32_t)(sNewSeed % 100) >= 0x14)) {
       return;
     }
 

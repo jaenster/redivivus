@@ -195,7 +195,7 @@ static void __stdcall DAMAGE_ApplyStun(D2UnitStrc * pUnit, int32_t nStunFrames, 
     D2StatListExStrc* pStunStatList;
     eD2UnitType eAttackerType;
     int32_t nAttackerGUID;
-    D2SeedStrc sSeedResult;
+    uint32_t sSeedResult;
     if (nStunFrames <= 0) {
       return;
     }
@@ -203,9 +203,8 @@ static void __stdcall DAMAGE_ApplyStun(D2UnitStrc * pUnit, int32_t nStunFrames, 
       uint32_t nMonCheck;
       nMonCheck = Monsters::CheckMonsterType(pUnit2, 8);
       if (nMonCheck) {
-        sSeedResult = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed = sSeedResult;
-        if ((int)(sSeedResult.nSeedLow % 100) < 0x5a) {
+        sSeedResult = D2_SeedRoll(&pUnit->sSeed);
+        if ((int)(sSeedResult % 100) < 0x5a) {
           return;
         }
       }
@@ -443,9 +442,8 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
       }
     }
 
-    D2SeedStrc sSeedResult = D2_SEED_NEXT(pUnit2->sSeed);
-    pUnit2->sSeed = sSeedResult;
-    if ((int)(sSeedResult.nSeedLow % 100) < 0x14 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER) {
+    uint32_t sSeedResult = D2_SeedRoll(&pUnit2->sSeed);
+    if ((int)(sSeedResult % 100) < 0x14 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER) {
       _bCanShatter = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit2->nClassId, deadCol);
       if (!_bCanShatter) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 1);
@@ -2784,7 +2782,7 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
     int32_t nDefenderLevel;
     int32_t nBaseAR;
     short int nMonType;
-    D2SeedStrc sSeedResult;
+    uint32_t sSeedResult;
     if (!pUnit2 || !pUnit) {
       return 0;
     }
@@ -2878,9 +2876,8 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
       iVar1 = 5;
     }
 
-    sSeedResult = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sSeedResult;
-    nDexBonus = sSeedResult.nSeedLow % 100;
+    sSeedResult = D2_SeedRoll(&pUnit->sSeed);
+    nDexBonus = sSeedResult % 100;
     pActiveWeapon = pDefender;
     nAcTotal = iVar1;
     iVar2 = nDexBonus;
@@ -2976,7 +2973,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
     uint32_t nWeaponClass2;
     nWeaponClass2 = 0;
     if (pUnit) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       eAnimMode = pUnit->eAnimMode.ePlayerMode;
       if (pUnit->eUnitType == UNIT_PLAYER) {
         if (eAnimMode == eD2PlayerAnimMode_ns::Run || eAnimMode == Walk) {
@@ -2987,9 +2984,8 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
 
           dwSeedLow = pUnit->sSeed.nSeedLow;
           roll_evade:
-          DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-          pUnit->sSeed = DVar1;
-          nAvoidChance = DVar1.nSeedLow % 100;
+          DVar1 = D2_SeedRoll(&pUnit->sSeed);
+          nAvoidChance = DVar1 % 100;
           nSeedMod = "evades";
           nParryBonus = bIsMissile;
           SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit2), pUnit2, pUnit, nParryBonus, nAvoidChance, nSeedMod);
@@ -3091,9 +3087,8 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
       }
     }
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pDefUnit->sSeed);
-    pDefUnit->sSeed = DVar1;
-    int nSeedMod = DVar1.nSeedLow % 100;
+    uint32_t DVar1 = D2_SeedRoll(&pDefUnit->sSeed);
+    int nSeedMod = DVar1 % 100;
     char* nDebugAddr = "blocks";
     D2UnitStrc* nRandRoll = pDefUnit;
     SUNITDMG_DebugTraceAvoidRoll(SUnit::GetGamePointer(pUnit), pUnit, nRandRoll, nBlockRate, nSeedMod, nDebugAddr);

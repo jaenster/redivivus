@@ -1401,9 +1401,9 @@ void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     int nScreenHeight;
     D2UIMouseMsgStrc* pDVar1 = phWnd;
     if (!gbMouseInWindow) {
-      sTrackMouseEvent.hwndTrack = phWnd->hWnd;
       /* LPTRACKMOUSEEVENT lpEventTrack for TrackMouseEvent */ sTrackMouseEvent.cbSize = 0x10;
       sTrackMouseEvent.dwFlags = 2;
+      sTrackMouseEvent.hwndTrack = phWnd->hWnd;
       sTrackMouseEvent.dwHoverTime = 0;
       TrackMouseEvent(&sTrackMouseEvent);
       gbMouseInWindow = 1;

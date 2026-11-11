@@ -377,7 +377,7 @@ void __fastcall CLIENT_OnStatChanged(uint32_t dwUnused, D2UnitStrc * pUnit, D2Un
 // Initialises a player unit entering a room on the client side: registers the unit in the active slot, allocates a dynamic path, creates inventory and skill list, allocates stat list with base rates at 100, sets unit flags, handles dead/corpse collision state, allocates a light map (dimmed for other players), seeds the RNG direction for non-local players, and preloads adjacent-room monster COFs.
 void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2InventoryStrc* pInventory;
-    D2SeedStrc sRandSeed;
+    uint32_t sRandSeed;
     Source::ClientEngine::CLIENT_RegisterActiveUnitInSlot(pUnit);
     D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nX, nY, pUnit, 1);
     if (!pUnit->pInventory) {
@@ -422,9 +422,8 @@ void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX
     D2Common::Units::AllocPlayerData(pUnit);
     if (pUnit != pPlayerUnit_lcl) {
       D2PathUnion t2_c6 = pUnit->pPath;
-      sRandSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sRandSeed;
-      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(t2_c6.pDynamicPath, (uint8_t)sRandSeed.nSeedLow & 0x3f);
+      sRandSeed = D2_SeedRoll(&pUnit->sSeed);
+      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(t2_c6.pDynamicPath, (uint8_t)sRandSeed & 0x3f);
     }
 
     Engine::CLIENT_PreloadMonsterCofsInAdjacentRooms();
@@ -755,13 +754,13 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
       bIsActive = SKILLS::Skills::SKILL_ProcessCastFromPacket(pUnit, (int*)pMessageSaved);
       goto check_cast_started;
       case 1:
-        pMessageHandle = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+        pMessageHandle = Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
       break;
       case 0:
         pMessageHandle = Path::PATH_SetTargetUnitAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
       break;
       case 0x17:
-        bSkillValid = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)pMessage->nSkillId, (int16_t)pMessage->nItemId);
+        bSkillValid = Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
       if (bSkillValid) {
         UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Run);
         return 1;
@@ -1096,7 +1095,7 @@ uint32_t __fastcall SKILL_CheckAuraRange(D2SkillStrc * pSkill, D2UnitStrc * pUni
 }
 
 // Client-side aura movement handler: checks SKILL_CheckAuraRange for the active aura skill; if the caster is in range, records last skill hits for unk1 and unk3|Poison aura types, then interpolates the caster's position along the remaining steps toward the target and calls CLIENT_MovePlayerToPosition. Falls back to PLAYER_ExecuteModeBasedAction if the caster has left range.
-static void PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetUnitType, D2UnderMouseStrc * pUnderMouse) {
+static int PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetUnitType, D2UnderMouseStrc * pUnderMouse) {
     int32_t nSrcXPos;
     int32_t nDstX;
     int32_t nDstY;
@@ -1138,13 +1137,13 @@ static void PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTarget
             nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
             nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
             CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (short int)((nDstX - nSrcXPos) * nStepsRemaining / nTotalDist) + (short int)nSrcXPos, (int16_t)nCurDist, pUnderMouse->nMoveActionType);
-            return;
+            return 1;
           }
         }
       }
 
       PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
-      return;
+      return 1;
     }
 }
 
@@ -2389,7 +2388,7 @@ static void CLIENT_CancelRunAndWalk(D2UnitStrc * pUnit) {
       nAnimMode = Walk;
     }
 
-    uint32_t bTargetSet = Path::PATH_SetTargetAndCalculate(pUnit, (int16_t)nStaminaOrDestX.nSkillId, (int16_t)nStaminaOrDestX.nItemId);
+    uint32_t bTargetSet = Path::PATH_SetTargetAndCalculate(pUnit, nStaminaOrDestX.nSkillId, nStaminaOrDestX.nItemId);
     if (bTargetSet) {
       UnitMode::UNITMODE_SetAnimMode(pUnit, nAnimMode);
       return;
@@ -2696,135 +2695,9 @@ uint16_t * __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
-D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex) {
-    D2UnitStrc* pCurUnit = ppUnitHashTable[nListIndex];
-    while (true) {
-      if (!pCurUnit) {
-        return nullptr;
-      }
-      if (pCurUnit->nUnitGUID == nUnitGUID) {
-        break;
-      }
-
-      pCurUnit = pCurUnit->pListNext;
-    }
-
-    if (pCurUnit->eUnitType == eUnitType) {
-      return pCurUnit;
-    }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);
-    exit(-1);
-}
-
 D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+    D2UnitStrc* pUnit = CUnit::FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
     return pUnit;
-}
-
-D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, CUnit::ClientSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
-    return pUnit;
-}
-
-D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
-    D2UnitStrc* pOwnerUnit;
-    eD2UnitType eOwnerType;
-    uint32_t nUnitGUID;
-    if (!pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
-      exit(-1);
-    }
-    if (pUnit->eUnitFlagsEx >> 10 & 1) {
-      eD2UnitType eUnitType;
-      eUnitType = pUnit->eOwnerType;
-      nUnitGUID = pUnit->nOwnerGUID;
-      if (eUnitType == UNIT_MISSILE) {
-        pOwnerUnit = FindUnit(nUnitGUID, CUnit::ClientSideUnitHashTables[3], UNIT_MISSILE, nUnitGUID & 0x7f);
-        return pOwnerUnit;
-      }
-
-      pOwnerUnit = FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
-      return pOwnerUnit;
-    }
-
-    return nullptr;
-}
-
-// Inserts pUnit into the appropriate global unit hash table (server-side or client-side, selected by UNITFLAG bit 0x21). Computes bucket from nUnitGUID &amp; 0x7f and inserts in ascending GUID order. Halts (ERROR_UnrecoverableInternalError_Halt) if the unit already exists in the table. Returns 1 on successful insert, 0 if the unit was already present (duplicate path).
-uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
-    D2UnitStrc* pPrevUnit;
-    uint32_t nHashBucket;
-    D2UnitStrc* pCurUnit;
-    D2UnitStrc* pNextUnit;
-    if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
-      if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
-        if (pPrevUnit) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
-          exit(-1);
-        }
-
-        goto insert_sorted;
-      }
-    } else {
-      D2UnitStrc* (*papDVar1)[128];
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
-      if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, CUnit::ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
-        if (!pPrevUnit) {
-          insert_sorted:
-          UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
-          nHashBucket = pUnit->nUnitGUID & 0x7f;
-          if (pUnit->eUnitFlags >> 0x15 & 1) {
-            papDVar1 = CUnit::ClientSideUnitHashTables;
-          } else {
-            papDVar1 = CUnit::ServerSideUnitHashTables;
-          }
-
-          pNextUnit = papDVar1[pUnit->eUnitType][nHashBucket];
-          pPrevUnit = 0;
-          while (true) {
-            pCurUnit = pNextUnit;
-            if (!(pCurUnit && (uint32_t)pCurUnit->nUnitGUID > (uint32_t)pUnit->nUnitGUID)) {
-              break;
-            }
-
-            pPrevUnit = pCurUnit;
-            pNextUnit = pCurUnit->pListNext;
-          }
-
-          pUnit->pListNext = pCurUnit;
-          if (pPrevUnit) {
-            pPrevUnit->pListNext = pUnit;
-            return 1;
-          }
-
-          papDVar1[pUnit->eUnitType][nHashBucket] = pUnit;
-          return 1;
-        }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9c);
-        exit(-1);
-      }
-    }
-
-    return 0;
-}
-
-void CLIENT_SendIdlePlayerMessage(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return;
-    }
-
-    eD2PlayerAnimMode eAnimMode = pUnit->eAnimMode.ePlayerMode;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!(pRoom && (eAnimMode == eD2PlayerAnimMode_ns::Neutral || eAnimMode == TownNeutral))) {
-      return;
-    }
-
-    PlayerMessage(7, pUnit, nullptr, 1);
 }
 
 void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nY) {

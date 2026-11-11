@@ -236,8 +236,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
           *(intptr_t*)(nBucketNextLink + 8) = pPendingHead2->m_next;
           pPendingHead2->m_next = nBucketNextLink;
           pPendingHead2 = pBackLink;
-          pThis = pQServerStateSaved;
           pendingList.m_terminator.m_prevlink = pBackLink;
+          pThis = pQServerStateSaved;
         }
 
         nOldBucketIdx++;

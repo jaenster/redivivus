@@ -871,7 +871,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
 
     int i;
     i = 0;
-    if ((uint16_t)pA1Q5Data->nCountessChestCount <= 0) {
+    if (pA1Q5Data->nCountessChestCount <= 0) {
       return;
     }
 
@@ -931,7 +931,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
       next_chest:
       pnChestGUIDList++;
       i++;
-    } while (i < (int)(uint32_t)(uint16_t)pA1Q5Data->nCountessChestCount);
+    } while (i < (int)(uint32_t)pA1Q5Data->nCountessChestCount);
 }
 
 // 1.14d: 0x5956c0 | A1Q5 "The Forgotten Tower" — death-effect trigger (timer-driven thunk).

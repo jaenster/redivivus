@@ -30,8 +30,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashNodeStrc) == 0x14,
 namespace D2CMP::SRC::FindTiles {
 
 // Computes a 0-127 hash byte in AL/EAX (masked and range-checked before the halt-on-overflow guard); the caller reads it as a hash-table index (nHashIdx).
-int __fastcall FINDTILE_ComputeHash(char cSubIndex, char cIndex, char cTileSubType) {
-    uint32_t uVar1 = (int)(uint8_t)(cSubIndex * '\x02' - cTileSubType + cIndex) % 128;
+int __fastcall FINDTILE_ComputeHash(int cSubIndex, int cIndex, char cTileSubType) {
+    uint32_t uVar1 = (int)(uint8_t)((char)cSubIndex * '\x02' - cTileSubType + (char)cIndex) % 128;
     if ((uint8_t)uVar1 >= 0x80) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e);
       exit(-1);
@@ -150,7 +150,7 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
         exit(-1);
       }
 
-      nHashIdx = FINDTILE_ComputeHash((char)pTileData->nSubIndex, (char)pTileData->nIndex, (char)pTileData->nOrientation);
+      nHashIdx = FINDTILE_ComputeHash(pTileData->nSubIndex, pTileData->nIndex, (char)pTileData->nOrientation);
       pHashSlot = pHashTable->pNodes + (uint32_t)(uint8_t)nHashIdx;
       pHashEntry = *pHashSlot;
       if (pHashEntry) {
@@ -196,7 +196,7 @@ int32_t __fastcall FINDTILE_Lookup(D2TileLibraryHashStrc * pHashTable, D2TileLib
         return 0;
       }
 
-      i = FINDTILE_ComputeHash((char)nSubIndex, (char)nTileSubType, (char)nTileType);
+      i = FINDTILE_ComputeHash(nSubIndex, nTileSubType, (char)nTileType);
       pEntry = pHashTable->pNodes[(uint8_t)i];
       if (!pEntry) {
         return nResultCount;

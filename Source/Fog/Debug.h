@@ -15,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2CrashFrameStrc;
 struct D2SkillsTxt;
 struct Report;
 #ifndef RECON_FPTD_fnCrashOutputLine
@@ -78,6 +77,21 @@ struct __attribute__((packed)) D2CrashDumpRequestStrc {
 };
 
 #endif // D2_DEFINED_D2CrashDumpRequestStrc
+#ifndef D2_DEFINED_D2CrashFrameStrc
+#define D2_DEFINED_D2CrashFrameStrc
+struct __attribute__((packed)) D2CrashFrameStrc {
+    /* 0x00 */ uintptr_t dwReturnAddr;
+    /* 0x04 */ uint32_t dw04;
+    /* 0x08 */ uint32_t dw08;
+    /* 0x0C */ uint32_t dw0C;
+    /* 0x10 */ uint8_t b10;
+    /* 0x11 */ uint8_t field_0x11;
+    /* 0x12 */ uint8_t field_0x12;
+    /* 0x13 */ uint8_t field_0x13;
+    /* 0x14 */ uint32_t a14[4];
+};
+
+#endif // D2_DEFINED_D2CrashFrameStrc
 #ifndef D2_DEFINED_D2FogDebugModuleEntryStrc
 #define D2_DEFINED_D2FogDebugModuleEntryStrc
 struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
@@ -236,6 +250,15 @@ struct MINIDUMP_EXCEPTION_INFORMATION {
 };
 
 #endif // D2_MODULE_Fog
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+struct THREADNAME_INFO {
+    /* 0x00 */ DWORD dwType; // must be 0x1000
+    /* 0x04 */ char * szName;
+    /* 0x08 */ DWORD dwThreadID; // -1 = calling thread
+    /* 0x0C */ DWORD dwFlags;
+};
+
+#endif // D2_MODULE_Fog
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
 struct _CONTEXT {
@@ -305,6 +328,7 @@ int __fastcall CleanupSymbolsWithRefcount(int32_t bForceCleanup);
 BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+void __stdcall DebugThread();
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis();
 void __stdcall Unreferenced_00401c80();
@@ -335,6 +359,9 @@ int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
 bool __fastcall Unreferenced_00402c30(struct D2FogDebugModuleEntryStrc * pSrcEntry, struct D2FogDebugModuleTableStrc * pTable);
 void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
+void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames);
+// Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.
+void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, struct D2CrashFrameStrc * aFrameAddrs, int32_t nNumFrames, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo);
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp();
 void __fastcall DumpThreadContext(HANDLE hHandle);
 // @sourcefile .\Src\Exceptions.cpp

@@ -88,21 +88,6 @@ union CRASH_DumpRegisters_Slotm6e0 {
 };
 
 #endif // D2_MODULE_Fog
-#ifndef D2_DEFINED_D2CrashFrameStrc
-#define D2_DEFINED_D2CrashFrameStrc
-struct __attribute__((packed)) D2CrashFrameStrc {
-    /* 0x00 */ uintptr_t dwReturnAddr;
-    /* 0x04 */ uint32_t dw04;
-    /* 0x08 */ uint32_t dw08;
-    /* 0x0C */ uint32_t dw0C;
-    /* 0x10 */ uint8_t b10;
-    /* 0x11 */ uint8_t field_0x11;
-    /* 0x12 */ uint8_t field_0x12;
-    /* 0x13 */ uint8_t field_0x13;
-    /* 0x14 */ uint32_t a14[4];
-};
-
-#endif // D2_DEFINED_D2CrashFrameStrc
 namespace Fog::File {
 
 // Function declarations
@@ -121,9 +106,6 @@ bool FILETOOLS_GetTempPath_UTF8(LPSTR szDest);
 bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames);
-// Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.
-void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, struct D2CrashFrameStrc * aFrameAddrs, int32_t nNumFrames, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo);
 void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputCallback, ::Report * pReport);
 void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Report * pReport, DWORD dwSkipThreadId);
 // FOG top-level unhandled-exception filter (SetUnhandledExceptionFilter target) — shows the Blizzard "application encountered an unexpected error" crash dialog.

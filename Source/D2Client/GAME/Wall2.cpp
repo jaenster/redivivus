@@ -164,6 +164,11 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
         }
 
         break;
+        default:
+          {
+            pOtherUnit->eUnitFlagsEx |= UNITFLAGEX_ISINLOS;
+            return 1;
+          }
         case UNIT_MONSTER:
           if (pOtherUnit->eAnimMode.ePlayerMode == Death || pOtherUnit->eAnimMode.ePlayerMode == Kick) {
             pOtherUnit->eUnitFlagsEx |= UNITFLAGEX_ISINLOS;
@@ -174,11 +179,6 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
         case UNIT_ITEM:
           pUnit = UNIT::Player::GetPlayerUnit_Net();
         break;
-        default:
-          {
-            pOtherUnit->eUnitFlagsEx |= UNITFLAGEX_ISINLOS;
-            return 1;
-          }
       }
 
       if (pUnit) {
@@ -943,8 +943,8 @@ static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
         break;
       }
 
-      pDVar2 = pNextNode;
       pPrevNode = pCurNode;
+      pDVar2 = pNextNode;
     }
 
     if (pCurNode->pNext) {

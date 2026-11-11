@@ -2846,8 +2846,6 @@
         "eD2LevelId",
         "eD2ServerIncomingStatus",
         "eD2UnitType",
-        "int32_t",
-        "uint16_t",
         "uint32_t"
       ]
     },

@@ -850,7 +850,7 @@
         "D2WINMAIN_SetControlActive",
         "D2WINMAIN_SetFormFourth",
         "D2WINTIMER_Start",
-        "D2WINEDITBOX_Destroy",
+        "D2WINTIMER_SetRepeating",
         "MAINMENU_UpdateIPAddressDisplay"
       ],
       "usedTypes": [
@@ -1651,7 +1651,7 @@
         "FORMS_CreateAnyFormFromListExEx",
         "D2CheckExpansionGame",
         "D2WINTIMER_Start",
-        "D2WINEDITBOX_Destroy",
+        "D2WINTIMER_SetRepeating",
         "MAINMENU_DisplayCredits",
         "D2WINTEXTBOX_ScrollToLine"
       ],
@@ -2082,7 +2082,7 @@
         "FORMS_DestroyList",
         "FORMS_CreateAnyFormFromListExEx",
         "D2WINTIMER_Start",
-        "D2WINEDITBOX_Destroy"
+        "D2WINTIMER_SetRepeating"
       ],
       "usedTypes": [
         "D2ControlMsg"

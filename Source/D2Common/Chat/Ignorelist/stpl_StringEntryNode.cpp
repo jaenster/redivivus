@@ -549,8 +549,8 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
           *(intptr_t*)(nBucketNextLink + 8) = ppTempHead->m_next;
           ppTempHead->m_next = nBucketNextLink;
           ppTempHead = pBucket;
-          pThis = nHashTableBase;
           tempList.m_terminator.m_prevlink = pBucket;
+          pThis = nHashTableBase;
         }
 
         nBucketByteOff++;

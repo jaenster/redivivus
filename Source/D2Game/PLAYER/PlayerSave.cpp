@@ -111,6 +111,8 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
       nItemGUID = pItem->nUnitGUID;
       bRestored = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0xea, pGame, pUnit, nItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), 0, 1, 0);
       break;
+      default:
+        return 0xc;
       case eD2PlayerAnimMode_ns::Neutral:
         D2Common::Units::SetupUpdateFlag(pItem, 4);
       bRestored = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nEquipLoc, 1, (uint32_t*)&pItemUnknownStructure);
@@ -121,8 +123,6 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
       D2Common::Units::SetYForStaticUnit(pItem, pSavedItemData->nPosY);
       bRestored = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nPosX, 0, (uint32_t*)&pItemUnknownStructure);
       break;
-      default:
-        return 0xc;
       case eD2PlayerAnimMode_ns::GetHit:
         D2Common::Units::SetupUpdateFlag(pItem, 4);
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pUnit->pInventory, pItem);
@@ -1209,7 +1209,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
 
       GAME::Clients::SetWeaponSwap(pClient, (uint8_t)(sOldSaveHeader.dwCharFlags >> 0xd) & 1);
       *pBnetFlagOut = 0;
-      GAME::Clients::SetClassOfClient(pClient, (uint8_t)sOldSaveHeader.wClassId);
+      GAME::Clients::SetClassOfClient(pClient, (uint32_t)sOldSaveHeader.wClassId);
       GAME::Clients::SetFileFlags(pClient, wCharFlags);
       pGameCopy = pGameLocal;
       byActId = sOldSaveHeader.byDifficulty & 0xf;

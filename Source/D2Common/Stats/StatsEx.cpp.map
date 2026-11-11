@@ -4,6 +4,24 @@
   "file": "Source/D2Common/Stats/StatsEx.cpp",
   "functions": [
     {
+      "name": "STATLIST_BinarySearchStatById",
+      "address": "00624b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624b90"
+        }
+      ],
+      "namespace": "D2Common::Stats::StatsEx",
+      "calledFunctions": [
+        "STATLIST_BinarySearchStatById"
+      ],
+      "usedTypes": [
+        "D2StatInfoStrc",
+        "int32_t"
+      ]
+    },
+    {
       "name": "STATLIST_BinarySearchInsertPos",
       "address": "00624bd0",
       "lines": [
@@ -1065,7 +1083,8 @@
         "D2StatListExStrc",
         "D2StatStrc",
         "D2UnitStrc",
-        "int32_t"
+        "int32_t",
+        "uint16_t"
       ]
     },
     {
@@ -1084,7 +1103,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2StatStrc",
-        "int32_t"
+        "int32_t",
+        "uint16_t"
       ]
     },
     {

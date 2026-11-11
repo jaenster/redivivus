@@ -528,9 +528,9 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
           }
         }
         if ((D2CrashFrameStrc*)pCrashInfo->apFrameAddrs) {
-          File::CRASH_FormatStackTrace(pCrashInfo->dwThreadId, (D2CrashFrameStrc*)pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01');
+          Debug::CRASH_FormatStackTrace(pCrashInfo->dwThreadId, (D2CrashFrameStrc*)pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01');
         } else {
-          File::CRASH_DumpThreadContext(pCrashInfo->dwThreadId, pExceptionContext, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01', dwDumpFlags);
+          Debug::CRASH_DumpThreadContext(pCrashInfo->dwThreadId, pExceptionContext, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01', dwDumpFlags);
         }
 
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
@@ -544,9 +544,9 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.HashBlock:>\n");
         _3rdparty::crashy::Printf(&crashFile, "DBG-OPTIONS<FunctionsOnly>\n");
         if ((D2CrashFrameStrc*)pCrashInfo->apFrameAddrs) {
-          File::CRASH_FormatStackTrace(pCrashInfo->dwThreadId, (D2CrashFrameStrc*)pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\0');
+          Debug::CRASH_FormatStackTrace(pCrashInfo->dwThreadId, (D2CrashFrameStrc*)pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\0');
         } else {
-          File::CRASH_DumpThreadContext(pCrashInfo->dwThreadId, pExceptionContext, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\0', dwDumpFlags);
+          Debug::CRASH_DumpThreadContext(pCrashInfo->dwThreadId, pExceptionContext, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\0', dwDumpFlags);
         }
 
         _3rdparty::crashy::Printf(&crashFile, "DBG-OPTIONS<>\n");
@@ -647,7 +647,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
 
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Assertion:>\n");
         dwThreadId = GetCurrentThreadId();
-        File::CRASH_DumpThreadContext(dwThreadId, nullptr, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01', 4);
+        Debug::CRASH_DumpThreadContext(dwThreadId, nullptr, FILETOOLS_WriteOneStringToFile, &crashFile, '\0', '\x01', 4);
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
         _3rdparty::crashy::Printf(&crashFile, "Registers:\n");
         File::CRASH_DumpRegisters(dwThreadId, FILETOOLS_WriteOneStringToFile, &crashFile);

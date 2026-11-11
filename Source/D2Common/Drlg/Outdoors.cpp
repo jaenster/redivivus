@@ -16,7 +16,6 @@
 #include "Source/D2Common/Drlg/OutWild.h"
 #include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Common/Drlg/TileSub.h"
-#include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Seed.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
@@ -369,35 +368,6 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
     return 0;
 }
 
-// Paste preset units from a LvlSub definition into the active outdoor room. Converts bounds to world coordinates, then for each preset check if it falls inside the sub-rect and spawn a new preset unit offset into the room’s local space.
-void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t roomY, D2DrlgWallLayerGridsStrc * pRoomCtx, D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSub, int * pRect) {
-    D2PresetUnitStrc* pCurrentPreset;
-    int presetY1;
-    int rectX0 = *pRect;
-    int rectY0 = pRect[1];
-    int rectX1 = pRect[2];
-    int rectY1 = pRect[3];
-    int worldYBase = roomX;
-    int worldXBase = roomY;
-    Transform::CoordsRoomToWorld(&worldYBase, &worldXBase);
-    Transform::CoordsRoomToWorld(&rectX0, &rectY0);
-    Transform::CoordsRoomToWorld(&rectX1, &rectY1);
-    int presetY0 = rectY0;
-    int presetX0 = rectX0;
-    for (pCurrentPreset = pLvlSub->pDrlgFile->pPresetUnit; pCurrentPreset; pCurrentPreset = pCurrentPreset->pPresetUnitNext) {
-      int presetX1;
-      presetX1 = pCurrentPreset->nPosX;
-      if (presetX1 > presetX0) {
-        presetY1 = pCurrentPreset->nPosY;
-        if (presetY1 > presetY0 && presetX1 < rectX1 + presetX0 && presetY1 < rectY1 + presetY0) {
-          DrlgRoom::AllocPresetUnit(pRoomCtx->pRoomEx, pMemory, pCurrentPreset->eType, pCurrentPreset->nClassId, pCurrentPreset->nMode, presetX1 - presetX0 + worldYBase, presetY1 - presetY0 + worldXBase);
-          presetX0 = rectX0;
-          presetY0 = rectY0;
-        }
-      }
-    }
-}
-
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.
 BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnGroupEntry, D2LvlSubTxt * pLvlSubTxt) {
     uint32_t uFlags;
@@ -423,63 +393,6 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D
             }
           }
         }
-      }
-    }
-
-    return 1;
-}
-
-// Checks whether a DS1 sub-tile strip can be placed at a given offset in an outdoor level room. For each cell in the strip, compares tile-type flags from the sub-tile grid against those of the destination room grids; if floor or wall special bits differ the function returns 0 (no match), otherwise 1. Called during outdoor level generation to validate sub-tile placement before objects are applied.
-BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, D2LvlSubTxt * pLvlSubTxt, int * pnGroupEntry) {
-    int nSubTileType;
-    int nRoomTileType;
-    uint32_t uSubFlags;
-    uint32_t uRoomFlags;
-    uint32_t floorFlag;
-    int row;
-    int nY;
-    for (row = 0; row < pnGroupEntry[3]; row++) {
-      int nCol;
-      nCol = 0;
-      if (pnGroupEntry[2] > 0) {
-        nY = row + nRoomY;
-        do {
-          nSubTileType = DrlgGrid::GetGridFlags(pLvlSubTxt->pTileTypeGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
-          nRoomTileType = DrlgGrid::GetGridFlags(pDrlgUnkn->apTileTypeGrids[0], nRoomX + nCol, nY);
-          if (nSubTileType != nRoomTileType) {
-            return 0;
-          }
-          if (pLvlSubTxt->pDrlgFile->nFloorLayers) {
-            floorFlag = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
-          } else {
-            floorFlag = 0;
-          }
-          if (floorFlag & 2) {
-            uSubFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, nCol + nRoomX, nY);
-            if (!(uSubFlags & 2)) {
-              return 0;
-            }
-            if ((uSubFlags ^ floorFlag) & 0x3f0ff00) {
-              return 0;
-            }
-          }
-          if (pLvlSubTxt->pDrlgFile->nWallLayers) {
-            uSubFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
-          } else {
-            uSubFlags = 0;
-          }
-          if (uSubFlags & 1) {
-            uRoomFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[0], nCol + nRoomX, nY);
-            if (!(uRoomFlags & 1)) {
-              return 0;
-            }
-            if ((uRoomFlags ^ uSubFlags) & 0x3f0ff00) {
-              return 0;
-            }
-          }
-
-          nCol++;
-        } while (nCol < pnGroupEntry[2]);
       }
     }
 
@@ -740,7 +653,7 @@ BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * p
     uint32_t nRandOffsetY;
     uint32_t nRandOffsetX;
     uint32_t nSeedLow;
-    D2SeedStrc newSeed;
+    uint32_t newSeed;
     int nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x;
     int nGridWidth = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsHeight;
     int nGridHeight = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth;
@@ -752,15 +665,11 @@ BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * p
     } else {
       nSeedLow = pLevel->sSeed.nSeedLow;
       if (nRangeX & nGridHeight - 3U) {
-        newSeed = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = newSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = newSeed.nSeedLow;
-        nRandOffsetY = newSeed.nSeedLow % nRangeX;
+        newSeed = D2_SeedRoll(&pLevel->sSeed);
+        nRandOffsetY = newSeed % nRangeX;
       } else {
-        newSeed = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = newSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = newSeed.nSeedLow;
-        nRandOffsetY = nGridHeight - 3U & newSeed.nSeedLow;
+        newSeed = D2_SeedRoll(&pLevel->sSeed);
+        nRandOffsetY = nGridHeight - 3U & newSeed;
       }
     }
     if ((int)nRangeY <= 0) {
@@ -768,15 +677,11 @@ BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * p
     } else {
       nSeedLow = pLevel->sSeed.nSeedLow;
       if (nRangeY & nGridWidth - 3U) {
-        newSeed = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = newSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = newSeed.nSeedLow;
-        nRandOffsetX = newSeed.nSeedLow % nRangeY;
+        newSeed = D2_SeedRoll(&pLevel->sSeed);
+        nRandOffsetX = newSeed % nRangeY;
       } else {
-        newSeed = D2_SEED_NEXT(pLevel->sSeed);
-        pLevel->sSeed.nSeedHigh = newSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = newSeed.nSeedLow;
-        nRandOffsetX = nGridWidth - 3U & newSeed.nSeedLow;
+        newSeed = D2_SeedRoll(&pLevel->sSeed);
+        nRandOffsetX = nGridWidth - 3U & newSeed;
       }
     }
 

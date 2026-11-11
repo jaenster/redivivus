@@ -12,7 +12,6 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -89,7 +88,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
     int32_t nDestY;
     int32_t nDestX;
     int32_t nTmp;
-    D2SeedStrc sSeedNext;
+    uint32_t sSeedNext;
     int32_t nTargetUnit;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -136,10 +135,10 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
       nTargetUnit = nTmp + nInitPosZ;
       nAnimTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->cltcalc[1], eSkill, nSkillLvl);
       nAnimTotalFrames += pMissileTxt->Param2;
-      nSkillLvl = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
+      nSkillLvl = (uint32_t)pMissileTxt->AnimLen << 8;
       nZStepPerFrame = (nTmp + nInitPosZ) * -2;
       if (nAnimTotalFrames) {
-        nSkillLvl = (int32_t)(((uint8_t)pMissileTxt->AnimLen << 8) / nAnimTotalFrames);
+        nSkillLvl = (int32_t)((pMissileTxt->AnimLen << 8) / nAnimTotalFrames);
         nZStepPerFrame /= nAnimTotalFrames;
       }
 
@@ -152,9 +151,8 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
         }
       }
 
-      sSeedNext = D2_SEED_NEXT(*pSeed);
-      *pSeed = sSeedNext;
-      sSkillArg.nVelocityOverride = (uint32_t)pMissileTxt->Vel + gnSkillEMonFallingMissileZ[sSeedNext.nSeedLow % 5];
+      sSeedNext = D2_SeedRoll(pSeed);
+      sSkillArg.nVelocityOverride = (uint32_t)pMissileTxt->Vel + gnSkillEMonFallingMissileZ[sSeedNext % 5];
       pNewMissile = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pNewMissile) {
         D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pNewMissile->pPath.pDynamicPath, (uint8_t)nAnimTotalFrames);
@@ -773,7 +771,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtParamSP1(D2UnitStrc * pUnit, eD2S
 }
 
 BOOL __fastcall Skills_CltDoFunc_EMon_HomingToOwner(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2UnitStrc* pOwnerUnit = UNIT::Player::MISSILE_GetOwnerUnit(pUnit);
+    D2UnitStrc* pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwnerUnit) {
       return 0;
     }

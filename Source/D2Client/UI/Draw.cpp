@@ -123,8 +123,8 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
         }
 
         sLoadGfx.pDC6 = gnLoadedActIndex;
-        sLoadGfx.nDirection = 0;
         sLoadGfx.nFrameNumber = gnLoadScreenAnimFrame;
+        sLoadGfx.nDirection = 0;
         D2gfx::D2GFX::D2GFX_DrawImage(&sLoadGfx, ui::ScreenSizeX / 2 - 0x80, Inv::ScreenSizeY / 2 + 0x80, -1, DRAW_SOLID, nullptr);
         D2gfx::D2GFX::D2GFX_EndScene();
         GAME::Game::UI_ResetInputState();
@@ -172,16 +172,18 @@ void __stdcall UI_ToggleMiniPanel() {
             switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0x15]) {
               case 0:
                 break;
-              case 1:
-                ui::SetUIFlag(eUI, UI_RESET, 0);
-              break;
-              default:
-                return;
               case 4:
                 bIsExpansion = npcmenu::GetInteractedUnitGuid(&nInteractGuid);
               if (bIsExpansion) {
                 npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
               }
+
+              break;
+              case 1:
+                ui::SetUIFlag(eUI, UI_RESET, 0);
+              break;
+              default:
+                return;
             }
           }
 
@@ -286,6 +288,13 @@ void __stdcall InitializeUI() {
               switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0]) {
                 case 0:
                   break;
+                case 4:
+                  bResult = npcmenu::GetInteractedUnitGuid(&nInteractGuid);
+                if (bResult) {
+                  npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
+                }
+
+                break;
                 case 1:
                   ui::SetUIFlag(eUI, UI_RESET, 0);
                 break;
@@ -296,11 +305,6 @@ void __stdcall InitializeUI() {
                     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13e6);
                     exit(-1);
                   }
-                case 4:
-                  bResult = npcmenu::GetInteractedUnitGuid(&nInteractGuid);
-                if (bResult) {
-                  npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
-                }
               }
             }
 
@@ -337,16 +341,18 @@ void __stdcall InitializeUI() {
                 switch (gUIFlagDismissModeTable[eUI]->anDismissMode[0x22]) {
                   case 0:
                     break;
-                  case 1:
-                    ui::SetUIFlag(eUI, UI_RESET, 0);
-                  break;
-                  default:
-                    goto load_ui_resources;
                   case 4:
                     bResult2 = npcmenu::GetInteractedUnitGuid(&nInteractGuid);
                   if (bResult2) {
                     npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
                   }
+
+                  break;
+                  case 1:
+                    ui::SetUIFlag(eUI, UI_RESET, 0);
+                  break;
+                  default:
+                    goto load_ui_resources;
                 }
               }
 
@@ -615,16 +621,18 @@ void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
                 switch (gUIFlagDismissModeTable[eUIIndex]->anDismissMode[0x21]) {
                   case 0:
                     break;
-                  case 1:
-                    ui::SetUIFlag(eUIIndex, UI_RESET, 0);
-                  break;
-                  default:
-                    goto draw_help_menu;
                   case 4:
                     bIsExpansion = npcmenu::GetInteractedUnitGuid(&nInteractGuid);
                   if (bIsExpansion) {
                     npcmenu::NPCMENU_CloseNpcInteraction(nInteractGuid);
                   }
+
+                  break;
+                  case 1:
+                    ui::SetUIFlag(eUIIndex, UI_RESET, 0);
+                  break;
+                  default:
+                    goto draw_help_menu;
                 }
               }
 

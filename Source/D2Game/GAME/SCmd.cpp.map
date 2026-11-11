@@ -525,8 +525,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "uint16_t",
-        "uint8_t"
+        "D2GSPacketSrv0x",
+        "uint16_t"
       ]
     },
     {
@@ -545,8 +545,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "uint16_t",
-        "uint8_t"
+        "D2GSPacketSrv0x",
+        "uint16_t"
       ]
     },
     {
@@ -1015,6 +1015,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2GSPacketSrv0x",
         "int32_t",
         "int8_t",
         "uint32_t",
@@ -2320,10 +2321,10 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
+        "D2GSPacketSrv0x",
         "D2UnitStrc",
         "uint16_t",
-        "uint32_t",
-        "uint8_t"
+        "uint32_t"
       ]
     },
     {

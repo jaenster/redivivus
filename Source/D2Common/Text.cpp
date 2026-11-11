@@ -267,7 +267,8 @@ void __thiscall TEXT_SortMessages(uint16_t nCount, uint16_t * pEntries, pfnTextM
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint16_t wNextCode;
-      uint8_t __pad2[2];
+      uint8_t __pad2;
+      uint8_t __pad3;
       uint32_t dwNextData;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");

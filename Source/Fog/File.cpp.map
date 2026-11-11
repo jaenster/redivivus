@@ -22,56 +22,6 @@
       ]
     },
     {
-      "name": "CRASH_DumpThreadContext",
-      "address": "00403070",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00403070"
-        }
-      ],
-      "namespace": "Fog::File",
-      "calledFunctions": [
-        "CRASH_DumpThreadContext",
-        "DEBUG_UnwindStackFrames",
-        "CRASH_FormatStackTrace"
-      ],
-      "usedTypes": [
-        "D2CrashFrameStrc",
-        "Report",
-        "fnCrashOutputLine",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
-      "name": "CRASH_FormatStackTrace",
-      "address": "00403100",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00403100"
-        }
-      ],
-      "namespace": "Fog::File",
-      "calledFunctions": [
-        "CRASH_FormatStackTrace",
-        "strncpy_s",
-        "SYSTEM_CaptureThreadContext",
-        "__snprintf_s",
-        "DEBUG_FormatAddressInfo",
-        "FormatAddressDebugString",
-        "__security_check_cookie"
-      ],
-      "usedTypes": [
-        "D2CrashFrameStrc",
-        "Report",
-        "fnCrashOutputLine",
-        "int32_t",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "CRASH_DumpRegisters",
       "address": "004032f0",
       "lines": [

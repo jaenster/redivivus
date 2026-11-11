@@ -555,9 +555,8 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOpera
 
       Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = sNewSeed;
-      nDropCount = sNewSeed.nSeedLow % 5 + 5;
+      uint32_t sNewSeed = D2_SeedRoll(pSeed);
+      nDropCount = sNewSeed % 5 + 5;
       if (nDropCount <= 0) {
         return 0;
       }
@@ -604,9 +603,8 @@ BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperati
 
       Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = sNewSeed;
-      int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
+      uint32_t sNewSeed = D2_SeedRoll(pSeed);
+      int nGoldDropsLeft = sNewSeed % 5 + 5;
       if (nGoldDropsLeft <= 0) {
         return 0;
       }
@@ -652,9 +650,8 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperati
 
       Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      D2SeedStrc sNewSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = sNewSeed;
-      int nGoldDropsLeft = sNewSeed.nSeedLow % 5 + 5;
+      uint32_t sNewSeed = D2_SeedRoll(pSeed);
+      int nGoldDropsLeft = sNewSeed % 5 + 5;
       if (nGoldDropsLeft <= 0) {
         return 0;
       }

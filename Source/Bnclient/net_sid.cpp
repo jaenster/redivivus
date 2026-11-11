@@ -406,8 +406,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse(char * pBytes, size_t nSiz
 BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse2(char * pBytes, size_t nSize) {
     g_nRealmLogonResult = *(uint32_t*)pBytes;
     switch (g_nRealmLogonResult) {
-      case 0:
-        return 1;
       case 1:
         BNMESSQUEUE_SetStateIfZero(0xd);
       return 1;
@@ -420,6 +418,8 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse2(char * pBytes, size_t nSi
       case 6:
         BNMESSQUEUE_SetStateWithString(0x1b, pBytes + 4);
       return 1;
+      case 0:
+        return 1;
     }
 
     BNMESSQUEUE_SetStateIfZero(0x12);

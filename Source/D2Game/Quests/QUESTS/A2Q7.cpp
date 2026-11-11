@@ -199,7 +199,7 @@ void __fastcall Q15_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // Q15 (Act2Guard4Gossip / Jerhyn gossip) primary dialog-select handler for Jerhyn (NPC 0x179). Chooses which gossip text to play based on Radament's Lair progress: if the Jerhyn-spoke record is unset and Radament is done/in-progress it picks a "post-Radament" line; otherwise a generic seeded line. Read-only on quest records (only Gets); advances the player RNG seed when speaking. Drives Jerhyn's act-progression chatter, not a real quest.
 void __fastcall Q15_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     D2QuestDataStrc* pRadamentsQuestData;
     uint32_t nLineIndex;
     uint32_t nSeedLowTmp;
@@ -250,9 +250,8 @@ void __fastcall Q15_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     pPlayer = pQuestArgs->pPlayer;
     nSeedLowTmp = pPlayer->sSeed.nSeedLow;
     pick_random_gossip:
-    DVar1 = D2_SEED_NEXT(pPlayer->sSeed);
-    pPlayer->sSeed = DVar1;
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x179, DVar1.nSeedLow % 3 + 2);
+    DVar1 = D2_SeedRoll(&pPlayer->sSeed);
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x179, DVar1 % 3 + 2);
 }
 
 // Q15 (Act2Guard4Gossip) state-8 handler: empty stub. No behavior.

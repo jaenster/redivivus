@@ -335,15 +335,13 @@ uint8_t __fastcall Q24_TimerCallback_SpawnPortals(::SGAMEDATA * pGame, D2QuestDa
     pQuestSpecificData->bTimerStarted = false;
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pQuestSpecificData->nDarkWandererGUID);
     if (pUnit) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       pSeed = GetQuestControlSeed(pGame);
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
+      DVar1 = D2_SeedRoll(pSeed);
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       D2Common::Units::GetCoords(pUnit, &ptUnitPos);
       pGameSaved = pSpawnRoom;
-      for (uVar2 = DVar1.nSeedLow & 1; uVar2 < 8; uVar2++) {
+      for (uVar2 = DVar1 & 1; uVar2 < 8; uVar2++) {
         ptPortalPos.y = ptUnitPos.y + gnA3Q7ArchonState2[uVar2 * 2 + 1];
         ptPortalPos.x = gnA3Q7ArchonState2[uVar2 * 2] + ptUnitPos.x;
         FindSpawnableLocation(pRoom, &ptPortalPos, 3, 0x3f11, (D2RoomStrc**)&pSpawnRoom, 0xb, 100);

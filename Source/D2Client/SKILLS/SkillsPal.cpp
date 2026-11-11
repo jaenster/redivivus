@@ -428,7 +428,7 @@ BOOL __fastcall Skills_CltStFunc_SetupHolyChargeMovement(D2UnitStrc * pUnit, eD2
       D2CharStatsTxt* pCharStatsTxt;
       pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
       if (pCharStatsTxt) {
-        nBaseVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity << 8;
+        nBaseVelocity = (uint32_t)pCharStatsTxt->RunVelocity << 8;
       }
     } else {
       nClassId = pUnit->nClassId;

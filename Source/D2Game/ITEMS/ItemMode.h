@@ -235,6 +235,6 @@ void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct 
 BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
 #endif // D2_MODULE_D2Game
-// 29 internal functions (defined in .cpp)
+// 28 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::ItemMode

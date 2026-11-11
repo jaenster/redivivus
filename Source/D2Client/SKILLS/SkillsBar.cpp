@@ -514,7 +514,7 @@ void __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       nRunVelocity = (uint32_t)pMonStatsTxt->Run;
     } else {
       pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
-      nRunVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity;
+      nRunVelocity = (uint32_t)pCharStatsTxt->RunVelocity;
     }
 
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, nRunVelocity << 8, ".\\SKILLS\\SkillsBar.cpp", 0x237);

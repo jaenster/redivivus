@@ -1000,7 +1000,7 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
     if (nStatCount > 0) {
       uint32_t nStatVal;
       for (; nStatIdx < nStatCount; nStatIdx++ , pItem = pItemSaved , pnSellPrice = pnSellPriceSaved) {
-        eUnitStat = (eD2UnitStat)(uint16_t)aStatBuf[nStatIdx].wStatIndex;
+        eUnitStat = (eD2UnitStat)aStatBuf[nStatIdx].wStatIndex;
         nStatVal = Stats::StatsEx::STATLIST_GetStatBonusFromLists(pItem, eUnitStat, (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex);
         pStatCostTxt = nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
         if (pStatCostTxt) {
@@ -3755,7 +3755,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 
         bValidColor = ITEMS_ValidateItemQualityCode((int)pUniqueTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
         *pColor = bValidColor;
-        pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)(uint8_t)pItemsTxt->bInvTrans, (int)pUniqueTxt->invtransform);
+        pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (int)pUniqueTxt->invtransform);
         return pPaletteResult;
       }
       if (pUniqueTxt->chrtransform < '\0') {
@@ -3793,7 +3793,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 
       bValidColor = ITEMS_ValidateItemQualityCode((int)pSetItemTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
       *pColor = bValidColor;
-      pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)(uint8_t)pItemsTxt->bInvTrans, (int)pSetItemTxt->invtransform);
+      pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (int)pSetItemTxt->invtransform);
       return pPaletteResult;
       default:
         if (pItem->eUnitType != UNIT_ITEM || (pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId) , !pItemsTxt) || !pItemsTxt->bHasInv || (cTransColor = ITEM_GetMaxSockCount(pItem) , cTransColor <= 0)) {
@@ -3818,7 +3818,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
                 bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)(uint8_t)pDVar2->transform, (uint32_t)pItemsTxt->bTransform);
                 *pColor = bValidColor;
                 if (nTransType) {
-                  pPaletteData = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)(uint8_t)pItemsTxt->bInvTrans, (uint32_t)(uint8_t)pDVar2->transform);
+                  pPaletteData = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (uint32_t)(uint8_t)pDVar2->transform);
                   return (uint8_t*)pPaletteData;
                 }
 
@@ -3850,7 +3850,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 
     *pColor = bValidColor;
     if (nTransType) {
-      pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)(uint8_t)pItemsTxt->bInvTrans, (uint32_t)pAffix->transformcolor);
+      pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (uint32_t)pAffix->transformcolor);
       return pPaletteResult;
     }
 
@@ -4700,7 +4700,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         exit(-1);
       }
 
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)(uint8_t)pItemsTxt->bBlock, 0);
+      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_toblock, (uint32_t)pItemsTxt->bBlock, 0);
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, -pItemsTxt->dwSpeed, 0);
       if (sgptDataTable->nTxtItemStatCostSize <= 0x49) {
         bIsExtended = 0;
@@ -4787,7 +4787,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
             }
 
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nClassId, 0);
-            nTmpVal2 = (int)((uint32_t)(uint8_t)pItemsTxt->nMaxMisDam * 3) >> 2;
+            nTmpVal2 = (int)((uint32_t)pItemsTxt->nMaxMisDam * 3) >> 2;
             if ((int32_t)nTmpVal2 < 2) {
               nTmpVal2 = 2;
             }
@@ -4801,7 +4801,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
           Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, (uint32_t)pItemsTxt->n2HandMinDam, 0);
           if (pItemsTxt->nMaxMisDam != '\0') {
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)pItemsTxt->nMinMisDam, 0);
-            nTmpVal2 = (uint32_t)(uint8_t)pItemsTxt->nMaxMisDam;
+            nTmpVal2 = (uint32_t)pItemsTxt->nMaxMisDam;
             Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nTmpVal2, 0);
           }
         }
@@ -5728,9 +5728,9 @@ void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2B
 BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCharUnit, int32_t bIncludeSocketedStats, int * pnStrength, int * pnDexterity, int * pnLevel) {
     int _bStrOk;
     int _bDexOk;
+    D2UnitStrc* pOwner;
     eD2ItemTypes eItemType;
-    eD2PlayerClassIDDWORD eVar1;
-    int nAdjustedReq;
+    eD2PlayerClassIDDWORD eVar2;
     int nSocketedStrSum;
     eD2ItemFlag eItemFlags;
     bool bDexOk;
@@ -5764,13 +5764,13 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
       eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
     }
 
-    uint16_t wReqStr = pItemsTxt->nReqStr;
-    uint16_t wReqDex = pItemsTxt->wReqDex;
+    uint32_t wReqStr = (uint32_t)pItemsTxt->nReqStr;
+    uint32_t wReqDex = (uint32_t)pItemsTxt->wReqDex;
     int nDexAdjust = 0;
     int32_t nReqPercentMod = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_req_percent, 0);
     if (nReqPercentMod) {
-      nStrAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqStr, nReqPercentMod, 100);
-      nDexAdjust = DATATBLS::DataTbls::D2ApplyPercent((uint32_t)wReqDex, nReqPercentMod, 100);
+      nStrAdjust = DATATBLS::DataTbls::D2ApplyPercent(wReqStr, nReqPercentMod, 100);
+      nDexAdjust = DATATBLS::DataTbls::D2ApplyPercent(wReqDex, nReqPercentMod, 100);
     }
     if (pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_ETHEREAL) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       nStrAdjust += -10;
@@ -5780,17 +5780,13 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pCharUnit, UNITSTAT_strength, 0);
     if (nStatValue <= 0) {
       _bStrOk = 0;
-    } else {
-      D2UnitStrc* pOwner;
-      nAdjustedReq = (uint32_t)wReqStr + nStrAdjust;
-      if (nStatValue < nAdjustedReq) {
+    } else if (nStatValue < (int)(wReqStr + nStrAdjust)) {
+      _bStrOk = 0;
+    } else if (bIncludeSocketedStats && (pOwner = Stats::StatsEx::SEVER_ITEM_GetOwner(pUnit, nullptr) , pOwner != 0)) {
+      nSocketedStrSum = 0;
+      ITEMS_SumSocketedItemStats(UNITSTAT_strength, &nSocketedStrSum, pUnit);
+      if (nStatValue - nSocketedStrSum <= 0 || nStatValue - nSocketedStrSum < (int)(wReqStr + nStrAdjust)) {
         _bStrOk = 0;
-      } else if (bIncludeSocketedStats && (pOwner = Stats::StatsEx::SEVER_ITEM_GetOwner(pUnit, nullptr) , pOwner != 0)) {
-        nSocketedStrSum = 0;
-        ITEMS_SumSocketedItemStats(UNITSTAT_strength, &nSocketedStrSum, pUnit);
-        if (nStatValue - nSocketedStrSum <= 0 || nStatValue - nSocketedStrSum < nAdjustedReq) {
-          _bStrOk = 0;
-        }
       }
     }
 
@@ -5798,8 +5794,9 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     if (nStatValue <= 0) {
       _bDexOk = 0;
     } else {
-      nAdjustedReq = nDexAdjust + (uint32_t)wReqDex;
-      if (nStatValue < nAdjustedReq) {
+      int iVar1;
+      iVar1 = nDexAdjust + wReqDex;
+      if (nStatValue < iVar1) {
         _bDexOk = 0;
       } else if (bIncludeSocketedStats) {
         bIncludeSocketedStats = 0;
@@ -5807,7 +5804,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
         if (nStatValue - bIncludeSocketedStats <= 0) {
           _bDexOk = 0;
         }
-        if (nStatValue - bIncludeSocketedStats < nAdjustedReq) {
+        if (nStatValue - bIncludeSocketedStats < iVar1) {
           _bDexOk = 0;
         }
       }
@@ -5832,8 +5829,8 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     if (_bStrOk && _bDexOk && bLevelOk && eItemFlags != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
       eItemType = ITEM_GetItemData_wType(pUnit);
       if (eItemType != ITEMTYPE_Book || (nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0) , nStatValue > 0)) {
-        eVar1 = TXT_ItemTypes_GetClass(pUnit);
-        if (eVar1 == CLASS_COUNT || pCharUnit && ((eUnitType = pCharUnit->eUnitType , eUnitType == UNIT_MONSTER && eVar1 == CLASS_BARBARIAN) && (nReqPercentMod = DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId) , nReqPercentMod - 0x230U < 2) || eUnitType == UNIT_PLAYER && eVar1 == pCharUnit->nClassId)) {
+        eVar2 = TXT_ItemTypes_GetClass(pUnit);
+        if (eVar2 == CLASS_COUNT || pCharUnit && ((eUnitType = pCharUnit->eUnitType , eUnitType == UNIT_MONSTER && eVar2 == CLASS_BARBARIAN) && (nReqPercentMod = DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId) , nReqPercentMod - 0x230U < 2) || eUnitType == UNIT_PLAYER && eVar2 == pCharUnit->nClassId)) {
           return 1;
         }
       }
@@ -7421,7 +7418,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
           i = 0;
           if (nCopiedCount > 0) {
             for (; i < nCopiedCount; i++) {
-              eUnitStat = (eD2UnitStat)(uint16_t)aStat[i].wStatIndex;
+              eUnitStat = (eD2UnitStat)aStat[i].wStatIndex;
               nBitValue = (uint32_t)(uint16_t)aStat[i].wSubIndex;
               if (false || (int)eUnitStat >= sgptDataTable->nTxtItemStatCostSize) {
                 pItemStatCostLine = 0;

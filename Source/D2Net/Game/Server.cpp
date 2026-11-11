@@ -551,11 +551,6 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
             return 1;
           }
         break;
-        default:
-          {
-            *pExpectedSize = 0;
-            return 1;
-          }
         case 0x26:
           if ((int)pBytesSize >= 10) {
             pcStrBase = pBytes + 10;
@@ -569,12 +564,6 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
                 return 1;
               }
             }
-          }
-        break;
-        case 0x3e:
-          if (pBytesSize >= 2) {
-            *pExpectedSize = (uint32_t)(uint8_t)pBytes[1];
-            return 1;
           }
         break;
         case 0x5b:
@@ -593,6 +582,12 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
         case 0x9c:
           if (pBytesSize >= 3) {
             *pExpectedSize = (uint32_t)(uint8_t)pBytes[2];
+            return 1;
+          }
+        break;
+        case 0x3e:
+          if (pBytesSize >= 2) {
+            *pExpectedSize = (uint32_t)(uint8_t)pBytes[1];
             return 1;
           }
         break;
@@ -651,6 +646,12 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
         case 0xb3:
           if (pBytesSize >= 8) {
             *pExpectedSize = (uint8_t)pBytes[1] + 7;
+            return 1;
+          }
+        break;
+        default:
+          {
+            *pExpectedSize = 0;
             return 1;
           }
       }

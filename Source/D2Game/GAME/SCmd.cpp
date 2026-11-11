@@ -523,22 +523,22 @@ void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(D2ClientStrc * pClient, uint8_t
 
 // Server-to-client map reveal. Opcode 0x07, 6 bytes. Reveals automap area around tile coordinate.
 void __fastcall NET_D2GS_SERVER_Send_0x07_MapReveal(D2ClientStrc * pClient, int nAreaId, uint16_t nTileX, uint16_t nTileY) {
-    uint8_t aPacket[6];
-    aPacket[5] = (uint8_t)nAreaId;
-    *(uint16_t*)((char*)&aPacket + 1) = nTileX;
-    aPacket[0] = 7;
-    *(uint16_t*)((char*)&aPacket + 3) = nTileY;
-    SCMD_QueuePacketForClient(pClient, aPacket, 6);
+    D2GSPacketSrv0x07 aPacket;
+    aPacket.nLevelId = (uint8_t)nAreaId;
+    aPacket.nTileX = nTileX;
+    aPacket.nPacketId = '\a';
+    aPacket.nTileY = nTileY;
+    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
 // Server-to-client map hide. Opcode 0x08, 6 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x08_REMOVEROOM(D2ClientStrc * pClient, int nLevelId, uint16_t nTileX, uint16_t nTileY) {
-    uint8_t aPacket[6];
-    aPacket[5] = (uint8_t)nLevelId;
-    *(uint16_t*)((char*)&aPacket + 1) = nTileX;
-    aPacket[0] = 8;
-    *(uint16_t*)((char*)&aPacket + 3) = nTileY;
-    SCMD_QueuePacketForClient(pClient, aPacket, 6);
+    D2GSPacketSrv0x08 aPacket;
+    aPacket.nLevelId = (uint8_t)nLevelId;
+    aPacket.nTileX = nTileX;
+    aPacket.nPacketId = '\b';
+    aPacket.nTileY = nTileY;
+    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
 // Server-to-client level warp assignment. Opcode 0x09.
@@ -973,18 +973,18 @@ void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D
 
 // Builds and sends S2C packet 0x93 (8 bytes) to adjust skill level bonuses filtered by element type and skill tree page. Used for item mods like "+1 to Fire Skills" or "+2 to [class] Skill Tab". If bAllPages is 0, nSkillPage is overridden to 4 (all pages). Appears to be dead code in 1.14d — zero callers, superseded by packet 0x94 bulk skill sync.
 void __fastcall NET_D2GS_SERVER_SendSkillTabBonusDelta(D2ClientStrc * pClient, uint32_t dwPlayerGUID, int8_t nBonusDelta, uint8_t neSkillEType, int32_t bAllPages, uint8_t nSkillPage) {
-    uint8_t aPacket[8];
-    aPacket[0] = 0x93;
-    aPacket[5] = nBonusDelta;
-    aPacket[6] = neSkillEType;
+    D2GSPacketSrv0x93 aPacket;
+    aPacket.nPacketId = 0x93;
+    aPacket.nBonusDelta = nBonusDelta;
+    aPacket.nSkillElemType = neSkillEType;
     if (bAllPages) {
-      aPacket[7] = nSkillPage;
+      aPacket.nSkillPage = nSkillPage;
     } else {
-      aPacket[7] = 4;
+      aPacket.nSkillPage = '\x04';
     }
 
-    *(uint32_t*)((char*)&aPacket + 1) = dwPlayerGUID;
-    SCMD_QueuePacketForClient(pClient, aPacket, 8);
+    aPacket.dwUnitGUID = dwPlayerGUID;
+    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 8);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x26_CHATSTART(D2ClientStrc * pClient, D2GSPacketSrv0x26 * pPacket) {
@@ -1877,28 +1877,32 @@ void __fastcall NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY(D2ClientStrc * pClient, 
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     int nGUID;
-    uint8_t aPacket[13];
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\GAME\\SCmd.cpp", 0xafa);
-    memset(aPacket + 5, 0, 8 * sizeof(aPacket[0]));
+    D2GSPacketSrv0x75 aPacket = {0};
+    *(uint8_t*)(char*)&aPacket.nLevel = 0;
+    *(uint8_t*)((char*)&aPacket.nLevel + 1) = 0;
+    aPacket.wFlags = 0;
+    *(uint8_t*)(char*)&aPacket.wIsPartied = 0;
+    *(uint8_t*)((char*)&aPacket.wIsPartied + 1) = 0;
     if (!pTargetUnit) {
       nGUID = -1;
     } else {
       nGUID = pTargetUnit->nUnitGUID;
     }
 
-    d2_store24((char*)&aPacket + 1, (uint32_t)nGUID & 0xffffffu);
-    aPacket[0] = 0x75;
-    aPacket[4] = (uint8_t)((uint32_t)nGUID >> 0x18);
+    d2_store24((char*)&aPacket.dwUnitGUID, (uint32_t)nGUID & 0xffffffu);
+    aPacket.nPacketId = 'u';
+    *(uint8_t*)((char*)&aPacket.dwUnitGUID + 3) = (uint8_t)((uint32_t)nGUID >> 0x18);
     nGUID = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_level, 0);
-    aPacket[7] = (uint8_t)nGUID;
-    aPacket[8] = (uint8_t)((uint32_t)nGUID >> 8);
-    *(uint16_t*)((char*)&aPacket + 5) = UNIT::SUnit::GetPartyId(pTargetUnit);
+    *(uint8_t*)(char*)&aPacket.nLevel = (uint8_t)nGUID;
+    *(uint8_t*)((char*)&aPacket.nLevel + 1) = (uint8_t)((uint32_t)nGUID >> 8);
+    aPacket.nPartyId = UNIT::SUnit::GetPartyId(pTargetUnit);
     uint32_t dwFlags = UNIT::PlayerList::PLAYERLIST_GetFlags(pUnit, pTargetUnit);
-    *(uint16_t*)((char*)&aPacket + 9) = (uint16_t)dwFlags;
+    aPacket.wFlags = (uint16_t)dwFlags;
     uint16_t wIsPartied = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTargetUnit);
-    aPacket[0xb] = (uint8_t)wIsPartied;
-    aPacket[0xc] = (uint8_t)(wIsPartied >> 8);
-    SCMD_QueuePacketForClient(pClient, aPacket, 0xd);
+    *(uint8_t*)(char*)&aPacket.wIsPartied = (uint8_t)wIsPartied;
+    *(uint8_t*)((char*)&aPacket.wIsPartied + 1) = (uint8_t)(wIsPartied >> 8);
+    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 0xd);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x7B_SYNCHOTKEYS(D2ClientStrc * pClient, uint8_t nHotkeySlot, int32_t nSkillId, int32_t bIsLeftSkill, uint32_t dwHotkeyArg) {
@@ -2386,7 +2390,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
           nScratch = 0;
         } else {
           do {
-            nStatIndex = (uint32_t)(uint16_t)aStatBuf[nIndex].wStatIndex;
+            nStatIndex = (uint32_t)aStatBuf[nIndex].wStatIndex;
             nComponentBytes = (uint32_t)(uint16_t)aStatBuf[nIndex].wSubIndex;
             nStatValue = aStatBuf[nIndex].nStatValue;
             pStatCostTxt = (int)nStatIndex < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatIndex : nullptr;

@@ -81,7 +81,7 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, struct D2IniCon
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe);
 uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused);
 void Unreferenced_0044bb70();
-void __stdcall FreeQServer();
+int __stdcall FreeQServer();
 int __stdcall CLIENTMODE_InitializeCallback();
 bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
 int __fastcall Unreferenced_0044bc10(int param_1, char * param_2);

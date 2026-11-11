@@ -262,8 +262,8 @@ struct __attribute__((packed)) D2LevelsTxt {
     /* 0x030 */ char Quest;
     /* 0x031 */ char rangedspawn;
     /* 0x032 */ uint8_t NumMon;
-    /* 0x033 */ char nValidMonCount;
-    /* 0x034 */ char nValinNMonCount;
+    /* 0x033 */ uint8_t nValidMonCount;
+    /* 0x034 */ uint8_t nValinNMonCount;
     /* 0x035 */ char nValidUMonCount;
     /* 0x036 */ short mon[25];
     /* 0x068 */ short nmon[25];
@@ -671,7 +671,7 @@ struct D2SkillDescTxt {
     /* 0x00C */ uint16_t strLong;
     /* 0x00E */ short strAlt;
     /* 0x010 */ short strMana;
-    /* 0x012 */ short descdam;
+    /* 0x012 */ uint16_t descdam;
     /* 0x014 */ uint16_t descatt;
     /* 0x016 */ uint8_t field_0x16;
     /* 0x017 */ uint8_t field_0x17;
@@ -911,7 +911,7 @@ struct __attribute__((packed)) D2ItemStatCostTxt {
     /* 0x02C */ int minaccr;
     /* 0x030 */ uint8_t encode;
     /* 0x031 */ uint8_t pad_31;
-    /* 0x032 */ short maxstat;
+    /* 0x032 */ uint16_t maxstat;
     /* 0x034 */ short descpriority;
     /* 0x036 */ char descfunc;
     /* 0x037 */ char descval;

@@ -961,11 +961,10 @@ static void __stdcall SKILLNEC_SetSkeletonComponentsByMasteryLvl(D2UnitStrc * pS
       return;
     }
 
-    D2SeedStrc llRandState;
-    llRandState = D2_SEED_NEXT(pSeedUnit->sSeed);
+    uint32_t llRandState;
+    llRandState = D2_SeedRoll(&pSeedUnit->sSeed);
     int32_t byRandComponent;
-    byRandComponent = llRandState.nSeedLow & 3;
-    pSeedUnit->sSeed = llRandState;
+    byRandComponent = llRandState & 3;
     if (pSkeletonUnit && pSkeletonUnit->eUnitType == UNIT_MONSTER) {
       if (pSkeletonUnit->pUnitData.pUnitDataMonster) {
         pSkeletonUnit->pUnitData.pUnitDataMonster->Components[0xb] = byRandComponent;
@@ -988,7 +987,7 @@ static void __stdcall SKILLNEC_SetSkeletonComponentsByMasteryLvl(D2UnitStrc * pS
 
 static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSummon, int32_t nSkillLvl, int32_t eSkillMastery) {
     int nExtraVariantChance;
-    D2SeedStrc sSeedNew;
+    uint32_t sSeedNew;
     int32_t nMasteryLvlState = 1;
     eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_skel_mastery);
     if (eState != STATE_none) {
@@ -1008,10 +1007,9 @@ static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSu
         nExtraVariantChance = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillMastery].Param[0];
       }
 
-      sSeedNew = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sSeedNew;
+      sSeedNew = D2_SeedRoll(&pUnit->sSeed);
       bHasExtraVariant = 1;
-      if ((int)(sSeedNew.nSeedLow % 100) >= nExtraVariantChance) {
+      if ((int)(sSeedNew % 100) >= nExtraVariantChance) {
         bHasExtraVariant = 0;
       }
     }

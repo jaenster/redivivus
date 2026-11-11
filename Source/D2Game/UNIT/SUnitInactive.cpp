@@ -1378,7 +1378,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     D2UnitStrc* pOwnerUnit;
     D2SeedStrc* pRoomSeed;
     uint8_t cMonStatsExField;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     D2RoomStrc* pUnitRoom;
     pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2PlayerAnimMode eAnimMode;
@@ -1404,10 +1404,9 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
         pRoomSeed = 0;
       }
 
-      sNewSeed = D2_SEED_NEXT(*pRoomSeed);
-      *pRoomSeed = sNewSeed;
+      sNewSeed = D2_SeedRoll(pRoomSeed);
       bShouldSave = bIsResurrect || nAlignmentOrSave;
-      if (sNewSeed.nSeedLow % 3 != 0) {
+      if (sNewSeed % 3 != 0) {
         bShouldSave = false;
       }
     }

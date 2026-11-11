@@ -164,8 +164,8 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
       return;
     }
 
-    packet.nId = 0x6d;
     gdwLastPingSentTick = dwTick;
+    packet.nId = 0x6d;
     packet.nTickCount = GetTickCount();
     uint32_t nGameDataDelay = Game::GAME_GetAveragePing();
     packet.nDelay = nGameDataDelay >> 1;

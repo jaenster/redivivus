@@ -174,9 +174,8 @@ static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(::SGAMEDATA * pGame,
     }
 
     int nActDiffIdx = (uint32_t)eVar1 + (uint32_t)pGame->nDifficulty * 5;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNewSeed;
-    int nRoll = sNewSeed.nSeedLow % 100;
+    uint32_t sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+    int nRoll = sNewSeed % 100;
     int32_t nBoltChance1 = D2Common::Skills::GetSkilParam2(eSkill);
     if (nRoll < nBoltChance1) {
       nBoltCountOffset = 1;
@@ -929,10 +928,9 @@ static BOOL SKILLAMZ_GetPlagueJavelinCloudCount(D2UnitStrc * pUnit) {
 static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
     int nAttackFrames;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      D2SeedStrc sNewSeed;
-      sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sNewSeed;
-      return (uint8_t)~(uint8_t)sNewSeed.nSeedLow & 1;
+      uint32_t sNewSeed;
+      sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+      return (uint8_t)~(uint8_t)sNewSeed & 1;
     }
     if (!pGame->bExpansion) {
       return 1;
@@ -1489,7 +1487,7 @@ static BOOL __stdcall SKILL_InitTransportPath(D2SkillStrc * pSkill, D2UnitStrc *
       nRunSpeed = (uint32_t)pMonStats->Run;
     } else {
       pCharStats = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
-      nRunSpeed = (uint32_t)(uint8_t)pCharStats->RunVelocity;
+      nRunSpeed = (uint32_t)pCharStats->RunVelocity;
     }
 
     D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, nRunSpeed << 8, ".\\SKILLS\\SkillBar.cpp", 0x6c2);

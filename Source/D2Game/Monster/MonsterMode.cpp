@@ -1454,8 +1454,6 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
 
         case MonsterUnitUberBaal:
           goto baal_family;
-        default:
-          return DropHandlerArray + nAnimMode;
         case MonsterUnitUberDiablo:
           diablo_family:
           if (nAnimMode == 0xb) {
@@ -1466,6 +1464,8 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
         }
 
         return DropHandlerArray + 0x11;
+        default:
+          return DropHandlerArray + nAnimMode;
       }
     }
     if (nMonClassId != MonsterUnitThroneBaal) {

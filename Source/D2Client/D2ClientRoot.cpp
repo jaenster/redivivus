@@ -72,6 +72,7 @@
 #include "Source/D2Game/UNIT/SUnitInactive.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Lang/D2Lang.h"
+#include "Source/D2Lang/StrTable/strtable.h"
 #include "Source/D2Lang/Unicode/UNISYS.h"
 #include "Source/D2Launch/MainMenus.h"
 #include "Source/D2Win/D2Win.h"
@@ -1146,6 +1147,34 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UI
     UI::Automap::AUTOMAP_SetPartyNames(pItem->nImageIndex);
 }
 
+static void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp) {
+    D2MPQFileStrc* pFile;
+    char szLangAbbrev[4];
+    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
+    sprintf(pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
+    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
+    if (bOpened) {
+      Storm::Source::SFile::SFileCloseFile(pFile);
+      return;
+    }
+
+    uint32_t dwLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+    if (dwLanguageCode) {
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
+      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
+      if (bOpened) {
+        Storm::Source::SFile::SFileCloseFile(pFile);
+        return;
+      }
+    } else {
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
+      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
+      if (bOpened) {
+        Storm::Source::SFile::SFileCloseFile(pFile);
+      }
+    }
+}
+
 // The ECX slot that carries a function pointer was one variable holding three callees with two
 // different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
 // NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
@@ -1251,7 +1280,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
       if (bConnectionLost) {
         bVideoLoaded = 1;
         if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
-          Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
+          SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
         } else {
           sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
         }
@@ -1298,7 +1327,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
             sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x146");
           }
           if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
-            Sound::SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
+            SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
           } else {
             sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
           }

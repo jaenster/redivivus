@@ -316,7 +316,7 @@ void __stdcall DRLGMAZE_PickRoomPresets(D2RoomExStrc * pRoomEx) {
     int nDeltaX;
     D2RoomExStrc* pNeighbor;
     D2DrlgOrthStrc* pOrth;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     if (!(~(pRoomEx->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1)) {
       return;
     }
@@ -335,9 +335,8 @@ void __stdcall DRLGMAZE_PickRoomPresets(D2RoomExStrc * pRoomEx) {
             }
           }
 
-          sNewSeed = D2_SEED_NEXT(pNeighbor->sSeed);
-          pNeighbor->sSeed = sNewSeed;
-          if ((int)(sNewSeed.nSeedLow % 1000) < pMazeTxt->Merge) {
+          sNewSeed = D2_SeedRoll(&pNeighbor->sSeed);
+          if ((int)(sNewSeed % 1000) < pMazeTxt->Merge) {
             nDirection = GetDirectionFromCoordinates(&pNeighbor->sCoords, &pRoomEx->sCoords);
             if (nDirection != DIRECTION_INVALID) {
               DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pNeighbor, pRoomEx, nDirection);
@@ -606,7 +605,7 @@ void __stdcall ActualLevelGeneration(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pRoomExNew;
     int bReplaceResult;
     D2LvlMazeTxt* pMazeTxt;
-    D2SeedStrc nSeed;
+    uint32_t nSeed;
     int nTargetRoomCount = pLevel->pDrlgLevelData.pTxtLvlMaze->Rooms[pLevel->pDrlg->nDifficulty];
     if (pLevel->eD2LevelId == pLevel->pDrlg->nStaffTombLevel) {
       nTargetRoomCount *= 3;
@@ -619,9 +618,8 @@ void __stdcall ActualLevelGeneration(D2DrlgLevelStrc * pLevel) {
     /* Generating rooms as long we dont have enough yet */ while (nCurrentRooms < nTargetRoomCount) {
       D2RoomExStrc* pRoomEx;
       pRoomEx = GetRandomRoomExFromLevel(pLevel);
-      nSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-      nRandDirection = nSeed.nSeedLow & 3;
-      pRoomEx->sSeed = nSeed;
+      nRandDirection = D2_SeedRoll(&pRoomEx->sSeed);
+      nRandDirection &= 3;
       /* DRLGMAZE_HasMapDS1 */ if (~(pRoomEx->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
         pRoomExNew = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomEx->pLevel, 2);
         pMazeTxt = pRoomExNew->pLevel->pDrlgLevelData.pTxtLvlMaze;
@@ -730,9 +728,8 @@ static void SetupBaalChamber(D2DrlgLevelStrc * pLevel) {
 }; D2_STATIC_GUARD(gaBaalChamberPresets, "D2Common::Drlg::Maze::SetupBaalChamber::gaBaalChamberPresets");
 
     D2RoomExStrc* pSourceRoom = pLevel->pRoomExFirst;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pSourceRoom->sSeed);
-    uint32_t nDirection = sNewSeed.nSeedLow & 3;
-    pSourceRoom->sSeed = sNewSeed;
+    uint32_t sNewSeed = D2_SeedRoll(&pSourceRoom->sSeed);
+    uint32_t nDirection = sNewSeed & 3;
     if ((int32_t)(nDirection * 2) >= 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ab);
       exit(-1);
@@ -825,10 +822,8 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
       return;
     }
 
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-    pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    if (sNewSeed.nSeedLow & 1) {
+    uint32_t sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+    if (sNewSeed & 1) {
       pNewRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pStartRoom->pLevel, 2);
       pRoomSizeData = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
       pNewRoom->sCoords.WorldSize.x = pRoomSizeData->SizeX;
@@ -933,9 +928,8 @@ void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
     int bReplaceResult;
     D2LvlMazeTxt* pLvlMazeTxt;
     D2RoomExStrc* pRoomExStrc = pLevel->pRoomExFirst;
-    D2SeedStrc sNextSeed = D2_SEED_NEXT(pLevel->sSeed);
-    uint32_t nRollValue = sNextSeed.nSeedLow & 3;
-    pLevel->sSeed = sNextSeed;
+    uint32_t sNextSeed = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRollValue = sNextSeed & 3;
     int nLoopCount = 3;
     do {
       D2RoomExStrc* pNew;
@@ -991,9 +985,8 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
     D2LvlMazeTxt* pLvlMazeTxt;
     D2LvlMazeTxt* pLvlMazeTxtArm;
     D2RoomExStrc* pRoomExStrc = pLevel->pRoomExFirst;
-    D2SeedStrc seedRoll = D2_SEED_NEXT(pLevel->sSeed);
-    uint32_t nBaseDir = seedRoll.nSeedLow & 3;
-    pLevel->sSeed = seedRoll;
+    uint32_t seedRoll = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nBaseDir = seedRoll & 3;
     memset(nRoomPtrs, 0, 0xf0);
     D2RoomExStrc** ppRoomPtrs = nRoomPtrs;
     D2RoomExStrc** pArmRoomWalker = (D2RoomExStrc**)((uint8_t*)&nRoomPtrs - 8);
@@ -1586,10 +1579,8 @@ static void Caves(D2DrlgLevelStrc * pLevel) {
 }; D2_STATIC_GUARD(gaDrlgCavesReplacements_E, "D2Common::Drlg::Maze::Caves::gaDrlgCavesReplacements_E");
 
     D2DrlgReplaceRoomStrc* pReplaceTable;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-    pLevel->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    uint32_t nRoll = sNewSeed.nSeedLow & 3;
+    uint32_t sNewSeed = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = sNewSeed & 3;
     ReplaceRoom(gaDrlgCavesReplacements_A + nRoll, pLevel, &nRoll);
     if (pLevel->eD2LevelId == 8) {
       pReplaceTable = gaDrlgCavesReplacements_B;
@@ -1716,10 +1707,8 @@ static void Crypt(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(gaDrlgCryptReplacements_D, "D2Common::Drlg::Maze::Crypt::gaDrlgCryptReplacements_D");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(gaDrlgCryptReplacements_A + nRoll, pLevel, &nRoll);
     if (pLevel->eD2LevelId == 0x12) {
       ReplaceRoom(gaDrlgCryptReplacements_B + nRoll, pLevel, &nRoll);
@@ -1868,10 +1857,8 @@ static void RollRooms(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(gaDrlgCatacombsRollRooms_D, "D2Common::Drlg::Maze::RollRooms::gaDrlgCatacombsRollRooms_D");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(gaDrlgCatacombsRollRooms_E + nRoll, pLevel, &nRoll);
     if (pLevel->eD2LevelId == 0x1d) {
       ReplaceRoom(gaDrlgCatacombsRollRooms_C + nRoll, pLevel, &nRoll);
@@ -1943,10 +1930,8 @@ static void DRLGMAZE_ReplaceCatacombsRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
     }
 }; D2_STATIC_GUARD(gaDrlgCatacombsReplacements_B, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceCatacombsRooms::gaDrlgCatacombsReplacements_B");
 
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-    pDrlgLevelStrc->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    uint32_t nVariant = sNewSeed.nSeedLow & 3;
+    uint32_t sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    uint32_t nVariant = sNewSeed & 3;
     ReplaceRoom(gaDrlgCatacombsReplacements_A + nVariant, pDrlgLevelStrc, &nVariant);
     if (pDrlgLevelStrc->eD2LevelId != 0x23) {
       return;
@@ -2096,12 +2081,10 @@ static void DRLGMAZE_GenerateSewerLevel(D2DrlgLevelStrc * pDrlgLevelStrc) {
     D2RoomExStrc* pTempRoom;
     D2LvlMazeTxt* pLvlMazeTxt;
     D2LvlMazeTxt* pLvlData;
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed = sNewSeed;
-    eDrlgDirection eDir = (sNewSeed.nSeedLow & 1) * 2 | DIRECTION_NORTHEAST;
-    sNewSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed = sNewSeed;
-    uint32_t nVariant = sNewSeed.nSeedLow & 3;
+    uint32_t sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    eDrlgDirection eDir = (sNewSeed & 1) * 2 | DIRECTION_NORTHEAST;
+    sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    uint32_t nVariant = sNewSeed & 3;
     switch (pDrlgLevelStrc->eD2LevelId) {
       case 0x2f:
         pNewRoom = DRLGMAZE_FindTopMostRoom(pDrlgLevelStrc);
@@ -2550,9 +2533,8 @@ static void Lair(D2DrlgLevelStrc * pLevel) {
 }; D2_STATIC_GUARD(D2DrlgReplaceRoomStrc_006f00e8, "D2Common::Drlg::Maze::Lair::D2DrlgReplaceRoomStrc_006f00e8");
 
     D2DrlgReplaceRoomStrc* pReplaceEntry;
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    uint32_t nRoll = DVar1.nSeedLow & 3;
-    pLevel->sSeed = DVar1;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     if (pLevel->eD2LevelId == 0x40) {
       ReplaceRoom(&D2DrlgReplaceRoomStrc_006f00e8, pLevel, &nRoll);
       nRoll = 3;
@@ -2595,10 +2577,8 @@ void __fastcall PickSummonerLocation(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(AncientPickLocation, "D2Common::Drlg::Maze::PickSummonerLocation::AncientPickLocation");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(AncientPickLocation + nRoll, pLevel, &nRoll);
 }
 
@@ -2658,10 +2638,8 @@ static void DungeonRoll(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(DRLG_ACT3_DUNGEON_PRESETS2, "D2Common::Drlg::Maze::DungeonRoll::DRLG_ACT3_DUNGEON_PRESETS2");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(DRLG_ACT3_DUNGEON_PRESETS + nRoll, pLevel, &nRoll);
     ReplaceRoom(DRLG_ACT3_DUNGEON_PRESETS2 + nRoll, pLevel, &nRoll);
 }
@@ -2722,10 +2700,8 @@ static void DRLGMAZE_ReplaceSewerRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
     }
 }; D2_STATIC_GUARD(DRLG_ACT3_SEWERS_REPLACE_TWO, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceSewerRooms::DRLG_ACT3_SEWERS_REPLACE_TWO");
 
-    D2SeedStrc sNewSeed = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-    pDrlgLevelStrc->sSeed.nSeedLow = sNewSeed.nSeedLow;
-    uint32_t nVariant = sNewSeed.nSeedLow & 3;
+    uint32_t sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    uint32_t nVariant = sNewSeed & 3;
     ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_ONE + nVariant, pDrlgLevelStrc, &nVariant);
     ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_TWO + nVariant, pDrlgLevelStrc, &nVariant);
 }
@@ -2781,9 +2757,8 @@ static void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
 }; D2_STATIC_GUARD(gaDrlgRoomReplacementsB, "D2Common::Drlg::Maze::ReplaceRooms::gaDrlgRoomReplacementsB");
 
     int32_t nRetValAfterA;
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed = DVar1;
-    uint32_t nRollMod3 = DVar1.nSeedLow % 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRollMod3 = DVar1 % 3;
     uint32_t nRoll = nRollMod3;
     if (pLevel->eD2LevelId != 0x7c) {
       ReplaceRoom(gaDrlgRoomReplacementsA + nRollMod3, pLevel, &nRoll);
@@ -2855,10 +2830,8 @@ static void PutRedNextLevelAreasInPlace(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(DRLG_WORLDSTONE_WAYPOINT_ROOMS, "D2Common::Drlg::Maze::PutRedNextLevelAreasInPlace::DRLG_WORLDSTONE_WAYPOINT_ROOMS");
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-    uint32_t nRoll = DVar1.nSeedLow & 3;
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
     ReplaceRoom(DRLG_WORLDSTONE_REPLACEMENT + nRoll, pLevel, &nRoll);
     if (pLevel->eD2LevelId != 0x81) {
       return;
@@ -2963,10 +2936,8 @@ static void __stdcall DRLGMAZE_GenerateBarracksLayout(D2DrlgLevelStrc * pDrlgLev
         }
     }
 
-    D2SeedStrc DVar1 = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed.nSeedHigh = DVar1.nSeedHigh;
-    pDrlgLevelStrc->sSeed.nSeedLow = DVar1.nSeedLow;
-    if (DVar1.nSeedLow & 1) {
+    uint32_t DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    if (DVar1 & 1) {
       ReplaceRoom(gaDrlgBarracksReplacements_A + nJailExitVariant, pDrlgLevelStrc, &nJailExitVariant);
       pReplaceData = gaDrlgBarracksReplacements_B + nJailExitVariant;
     } else {
@@ -3064,10 +3035,8 @@ static void DRLGMAZE_GenerateRiverOfFlames(D2DrlgLevelStrc * pDrlgLevelStrc) {
     int nChaosLevelY = pChaosLevel->sCoordinatesAndSize.WorldPosition.y;
     int nRoomPosX = pNewRoom->sCoords.WorldPosition.x;
     int nChaosLevelX = pChaosLevel->sCoordinatesAndSize.WorldPosition.x;
-    D2SeedStrc DVar2 = D2_SEED_NEXT(pDrlgLevelStrc->sSeed);
-    pDrlgLevelStrc->sSeed.nSeedHigh = DVar2.nSeedHigh;
-    pDrlgLevelStrc->sSeed.nSeedLow = DVar2.nSeedLow;
-    ReplaceRoom(gaDrlgRiverOfFlamesReplacements + (DVar2.nSeedLow & 1), pDrlgLevelStrc, nullptr);
+    uint32_t DVar2 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
+    ReplaceRoom(gaDrlgRiverOfFlamesReplacements + (DVar2 & 1), pDrlgLevelStrc, nullptr);
     DRLGMAZE_ExpandRoomsWithPresets(pDrlgLevelStrc, 0x344, pNewRoom);
     for (pNewRoom = pDrlgLevelStrc->pRoomExFirst; pNewRoom; pNewRoom = pNewRoom->pRoomExNext) {
       pNewRoom->sCoords.WorldPosition.x = pNewRoom->sCoords.WorldPosition.x + (nRoomSizeX * 2 - nRoomPosX) + nChaosLevelX;
@@ -3133,9 +3102,8 @@ void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
     }
 
     aShuffleTable[8] = 8;
-    D2SeedStrc DVar3 = D2_SEED_NEXT(pLevel->sSeed);
-    pLevel->sSeed = DVar3;
-    aShuffleTable[0xf] = DVar3.nSeedLow % 0xf;
+    uint32_t DVar3 = D2_SeedRoll(&pLevel->sSeed);
+    aShuffleTable[0xf] = DVar3 % 0xf;
     int nTargetCount = pLevel->nRoomExCount / 5 + 1;
     aShuffleTable[0] = 0;
     aShuffleTable[1] = 1;
@@ -3158,16 +3126,14 @@ void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
     int nMaxTries = pLevel->nRoomExCount * 2;
     int nShuffleCount = 0xf;
     do {
-      D2SeedStrc DVar4;
-      DVar3 = D2_SEED_NEXT(pLevel->sSeed);
-      pLevel->sSeed = DVar3;
-      DVar4 = D2_SEED_NEXT(pLevel->sSeed);
-      pLevel->sSeed = DVar4;
+      uint32_t DVar4;
+      DVar3 = D2_SeedRoll(&pLevel->sSeed);
+      DVar4 = D2_SeedRoll(&pLevel->sSeed);
       nSwapTemp = nShuffleCount - 1;
       nShuffleCount = nSwapTemp;
-      nShufflePos = aShuffleTable[DVar3.nSeedLow % 0xf];
-      aShuffleTable[DVar3.nSeedLow % 0xf] = aShuffleTable[DVar4.nSeedLow % 0xf];
-      aShuffleTable[DVar4.nSeedLow % 0xf] = nShufflePos;
+      nShufflePos = aShuffleTable[DVar3 % 0xf];
+      aShuffleTable[DVar3 % 0xf] = aShuffleTable[DVar4 % 0xf];
+      aShuffleTable[DVar4 % 0xf] = nShufflePos;
       nShufflePos = aShuffleTable[0xf];
     } while (nSwapTemp);
 
@@ -3349,11 +3315,6 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
         ActualLevelGeneration(pLevel);
       Crypt(pLevel);
       break;
-      default:
-        {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x883);
-          exit(-1);
-        }
       case 7:
         DRLGMAZE_BuildRoomGrid(2, pLevel);
       case 0x1c:
@@ -3488,10 +3449,6 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x849);
       exit(-1);
-      case 0x20:
-        /* Temples picker */ DRLGMAZE_BuildRoomGrid(2, pLevel);
-      Maze::ReplaceRooms(pLevel);
-      break;
       case 0x21:
         /* Ice caves */ eLevelId = pLevel->eD2LevelId;
       switch (eLevelId) {
@@ -3534,6 +3491,10 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
       }
 
       break;
+      case 0x20:
+        /* Temples picker */ DRLGMAZE_BuildRoomGrid(2, pLevel);
+      Maze::ReplaceRooms(pLevel);
+      break;
       case 0x22:
         /* Worldstone */ GenerateWolrdstoneAndTombs(pLevel);
       ActualLevelGeneration(pLevel);
@@ -3541,6 +3502,12 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
       break;
       case 0x23:
         SetupBaalChamber(pLevel);
+      break;
+      default:
+        {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x883);
+          exit(-1);
+        }
     }
 
     finish_level:

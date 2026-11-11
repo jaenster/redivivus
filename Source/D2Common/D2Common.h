@@ -5710,7 +5710,7 @@ struct __attribute__((packed)) D2ItemStatCostTxt {
     /* 0x02C */ int minaccr;
     /* 0x030 */ uint8_t encode;
     /* 0x031 */ uint8_t pad_31;
-    /* 0x032 */ short maxstat;
+    /* 0x032 */ uint16_t maxstat;
     /* 0x034 */ short descpriority;
     /* 0x036 */ char descfunc;
     /* 0x037 */ char descval;
@@ -5793,18 +5793,18 @@ struct D2ItemsTxt {
     /* 0x0FE */ uint8_t nMinDam;
     /* 0x0FF */ uint8_t nMaxDam;
     /* 0x100 */ uint8_t nMinMisDam;
-    /* 0x101 */ char nMaxMisDam;
+    /* 0x101 */ uint8_t nMaxMisDam;
     /* 0x102 */ uint8_t n2HandMinDam;
     /* 0x103 */ uint8_t n2HandMaxDam;
     /* 0x104 */ short nRangeAdder;
     /* 0x106 */ short nStrBonus;
     /* 0x108 */ short nDexBonus;
-    /* 0x10A */ short nReqStr;
-    /* 0x10C */ short wReqDex;
+    /* 0x10A */ uint16_t nReqStr;
+    /* 0x10C */ uint16_t wReqDex;
     /* 0x10E */ char bAbsorbs;
     /* 0x10F */ char bInvWidth;
     /* 0x110 */ char bInvHeight;
-    /* 0x111 */ char bBlock;
+    /* 0x111 */ uint8_t bBlock;
     /* 0x112 */ uint8_t bDurability;
     /* 0x113 */ char bNoDurability;
     /* 0x114 */ char bMissile;
@@ -5848,7 +5848,7 @@ struct D2ItemsTxt {
     /* 0x13F */ char bLevelReq;
     /* 0x140 */ uint8_t bMagicLvl;
     /* 0x141 */ uint8_t bTransform;
-    /* 0x142 */ char bInvTrans;
+    /* 0x142 */ uint8_t bInvTrans;
     /* 0x143 */ uint8_t bCompactSave;
     /* 0x144 */ char bSkipName;
     /* 0x145 */ bool bNameable;
@@ -6041,8 +6041,8 @@ struct __attribute__((packed)) D2LevelsTxt {
     /* 0x030 */ char Quest;
     /* 0x031 */ char rangedspawn;
     /* 0x032 */ uint8_t NumMon;
-    /* 0x033 */ char nValidMonCount;
-    /* 0x034 */ char nValinNMonCount;
+    /* 0x033 */ uint8_t nValidMonCount;
+    /* 0x034 */ uint8_t nValinNMonCount;
     /* 0x035 */ char nValidUMonCount;
     /* 0x036 */ short mon[25];
     /* 0x068 */ short nmon[25];
@@ -6202,11 +6202,11 @@ struct __attribute__((packed)) D2MagicAffixTxt {
     /* 0x65 */ uint8_t levelreq;
     /* 0x66 */ char classspecific;
     /* 0x67 */ uint8_t class_;
-    /* 0x68 */ char classlevelreq;
+    /* 0x68 */ uint8_t classlevelreq;
     /* 0x69 */ uint8_t pad0x69; // alignment padding after classlevelreq
     /* 0x6A */ short include_type[7];
     /* 0x78 */ short exclude_type[5];
-    /* 0x82 */ char frequency;
+    /* 0x82 */ uint8_t frequency;
     /* 0x83 */ uint8_t pad0x83; // alignment padding after frequency
     /* 0x84 */ int divide;
     /* 0x88 */ int multiply;
@@ -6313,7 +6313,7 @@ struct __attribute__((packed)) D2MissilesTxt {
     /* 0x096 */ short Range;
     /* 0x098 */ short LevRange;
     /* 0x09A */ uint8_t Vel;
-    /* 0x09B */ char VelLev;
+    /* 0x09B */ uint8_t VelLev;
     /* 0x09C */ char MaxVel;
     /* 0x09D */ uint8_t field_0x9d;
     /* 0x09E */ short Accel;
@@ -6359,27 +6359,27 @@ struct __attribute__((packed)) D2MissilesTxt {
     /* 0x120 */ int ELevLen1;
     /* 0x124 */ int ELevLen2;
     /* 0x128 */ int ELevLen3;
-    /* 0x12C */ char CltSrcTown;
+    /* 0x12C */ uint8_t CltSrcTown;
     /* 0x12D */ uint8_t SrcDamage;
     /* 0x12E */ uint8_t SrcMissDmg;
     /* 0x12F */ char Holy;
-    /* 0x130 */ char Light;
+    /* 0x130 */ uint8_t Light;
     /* 0x131 */ uint8_t Flicker;
     /* 0x132 */ char Red;
     /* 0x133 */ char Green;
     /* 0x134 */ char Blue;
-    /* 0x135 */ char InitSteps;
+    /* 0x135 */ uint8_t InitSteps;
     /* 0x136 */ uint8_t Activate;
     /* 0x137 */ char LoopAnim;
     /* 0x138 */ char CelFile[64];
-    /* 0x178 */ char AnimLen;
+    /* 0x178 */ uint8_t AnimLen;
     /* 0x179 */ uint8_t field_0x179;
     /* 0x17A */ uint8_t field_0x17a;
     /* 0x17B */ uint8_t field_0x17b;
     /* 0x17C */ int RandStart;
     /* 0x180 */ char SubLoop;
-    /* 0x181 */ char SubStart;
-    /* 0x182 */ char SubStop;
+    /* 0x181 */ uint8_t SubStart;
+    /* 0x182 */ uint8_t SubStop;
     /* 0x183 */ uint8_t CollideType;
     /* 0x184 */ char Collision;
     /* 0x185 */ char ClientCol;
@@ -7295,7 +7295,7 @@ struct D2SkillDescTxt {
     /* 0x00C */ uint16_t strLong;
     /* 0x00E */ short strAlt;
     /* 0x010 */ short strMana;
-    /* 0x012 */ short descdam;
+    /* 0x012 */ uint16_t descdam;
     /* 0x014 */ uint16_t descatt;
     /* 0x016 */ uint8_t field_0x16;
     /* 0x017 */ uint8_t field_0x17;
@@ -7549,7 +7549,7 @@ struct __attribute__((packed)) D2SkillsTxt {
     /* 0x19C */ int LevToHit;
     /* 0x1A0 */ int ToHitCalc;
     /* 0x1A4 */ char HitShift;
-    /* 0x1A5 */ char SrcDam;
+    /* 0x1A5 */ uint8_t SrcDam;
     /* 0x1A6 */ uint8_t field_0x1a6;
     /* 0x1A7 */ uint8_t field_0x1a7;
     /* 0x1A8 */ int MinDam;
@@ -7735,10 +7735,10 @@ struct D2StatStrc {
     D2StatStrc() = default;
     D2StatStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-    D2StatStrc(short a0, short a1, int a2) : wSubIndex(a0), wStatIndex(a1), nStatValue(a2) {}
+    D2StatStrc(short a0, uint16_t a1, int a2) : wSubIndex(a0), wStatIndex(a1), nStatValue(a2) {}
 
     /* 0x00 */ short wSubIndex;
-    /* 0x02 */ short wStatIndex;
+    /* 0x02 */ uint16_t wStatIndex;
     /* 0x04 */ int nStatValue;
 };
 #endif // D2_DEFINED_D2StatStrc
@@ -9695,20 +9695,17 @@ __attribute__((noinline)) inline uint32_t __fastcall UNIT_GetModuloFromSeed(D2Se
 #ifndef D2_DEFINED_INLINE_0045c3e0
 #define D2_DEFINED_INLINE_0045c3e0
 __attribute__((noinline)) inline uint32_t __fastcall RANDOM_RandomNumberSelector(D2SeedStrc * pSeed, uint32_t nModulo) {
-    D2SeedStrc DVar1;
+    uint32_t DVar1;
     if ((int)nModulo <= 0) {
       return 0;
     }
     if (nModulo & nModulo - 1) {
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      pSeed->nSeedHigh = DVar1.nSeedHigh;
-      pSeed->nSeedLow = DVar1.nSeedLow;
-      return (uint32_t)(DVar1.nSeedLow % nModulo);
+      DVar1 = D2_SeedRoll(pSeed);
+      return (uint32_t)(DVar1 % nModulo);
     }
 
-    DVar1 = D2_SEED_NEXT(*pSeed);
-    *pSeed = DVar1;
-    return nModulo - 1 & DVar1.nSeedLow;
+    DVar1 = D2_SeedRoll(pSeed);
+    return nModulo - 1 & DVar1;
 }
 #endif // D2_DEFINED_INLINE_0045c3e0
 } // namespace D2Common::Seed

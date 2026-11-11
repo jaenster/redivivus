@@ -113,11 +113,11 @@ void __stdcall UI_FormatNumberWithCommas(uint16_t * wszText, int32_t nNumber, in
               }
             }
           }
-
-          nFormattedLen = nWritePos;
           if (!nDigitCount) {
             return;
           }
+
+          nFormattedLen = nWritePos;
         }
 
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d3);

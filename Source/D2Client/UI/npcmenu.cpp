@@ -6234,7 +6234,7 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
     fpDialogFunc pfnRepairOnClick;
     int32_t bOptionEnabled;
     int32_t nCallbackParam;
-    D2SeedStrc seedUpdated;
+    uint32_t seedUpdated;
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
       pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
@@ -6279,12 +6279,10 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
         nDialogPosY[3] = 0xd3d;
         nDialogPosY[4] = 0xd3e;
         pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-        seedUpdated = D2_SEED_NEXT(pNpcUnit->sSeed);
-        pNpcUnit->sSeed.nSeedHigh = seedUpdated.nSeedHigh;
-        pNpcUnit->sSeed.nSeedLow = seedUpdated.nSeedLow;
+        seedUpdated = D2_SeedRoll(&pNpcUnit->sSeed);
         nCallbackParam = 1;
         pfnOptionCallback = NPCMENU_TradeDrawCallback;
-        Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(nDialogPosY[(int)(seedUpdated.nSeedLow % 5)]), 0xf, 0, 0, 1, pfnOptionCallback, nCallbackParam);
+        Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(nDialogPosY[(int)(seedUpdated % 5)]), 0xf, 0, 0, 1, pfnOptionCallback, nCallbackParam);
         nCallbackParam = 1;
         pfnRepairOnClick = NPCMENU_RepairDrawCallback;
         Dialog::AddStringData(Dialog::gpNpcMainMenuDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, pfnRepairOnClick, nCallbackParam);

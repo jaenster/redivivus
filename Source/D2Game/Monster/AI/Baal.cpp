@@ -751,7 +751,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
       return nCombatAiState;
     }
     if (!pUnit2) {
-      D2SeedStrc DVar1;
+      uint32_t DVar1;
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nAction = pUnit->pPath.pStaticPath->nPosY;
@@ -777,9 +777,8 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
         return 4;
       }
 
-      DVar1 = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = DVar1;
-      return (int)(DVar1.nSeedLow % 100) < 8 ? 0x9U : 0x1U;
+      DVar1 = D2_SeedRoll(&pUnit->sSeed);
+      return (int)(DVar1 % 100) < 8 ? 0x9U : 0x1U;
     }
     if (!pGame) {
       pGame = UNIT::SUnit::GetGamePointer(pUnit);

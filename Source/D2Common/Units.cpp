@@ -983,7 +983,7 @@ void __stdcall SetAnimSpeedForMonster(D2UnitStrc * pUnit) {
 void __stdcall GetRunAndWalkVelocityForPlayer(D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity) {
     D2CharStatsTxt* pCharStatsTxt = ePlayerClassId < 0 || ePlayerClassId >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? 0 : ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId;
     *pWalkVelocity = (uint32_t)pCharStatsTxt->WalkVelocity;
-    *pRunVelocity = (uint32_t)(uint8_t)pCharStatsTxt->RunVelocity;
+    *pRunVelocity = (uint32_t)pCharStatsTxt->RunVelocity;
 }
 
 static void AddWalkVelocityStatIfExistToPlayer(D2UnitStrc * pUnit, int32_t ePlayerClassId) {
@@ -1011,7 +1011,7 @@ static void AddWalkVelocityStatIfExistToPlayer(D2UnitStrc * pUnit, int32_t ePlay
       return;
     }
 
-    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, (int)((int)((uint32_t)(uint8_t)pCharStatsTxt->RunVelocity * 100) / (int)(uint32_t)pCharStatsTxt->WalkVelocity) - 100, 0);
+    Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_velocitypercent, (int)((int)((uint32_t)pCharStatsTxt->RunVelocity * 100) / (int)(uint32_t)pCharStatsTxt->WalkVelocity) - 100, 0);
     Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatEx, 1);
 }
 
@@ -2123,7 +2123,7 @@ int32_t __stdcall GetOverlayHeight(D2UnitStrc * pUnit) {
             break;
           }
 
-          return (uint8_t)pMonStats2Txt->overlayHeight - 1;
+          return pMonStats2Txt->overlayHeight - 1;
         }
     }
 
@@ -4067,7 +4067,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
         }
 
         pUnit_00->nAnimSpeed = wAnimSpeed;
-        pUnit_00->nFrameCount = (uint32_t)(uint8_t)pMissileTxt->AnimLen << 8;
+        pUnit_00->nFrameCount = (uint32_t)pMissileTxt->AnimLen << 8;
         break;
       }
 

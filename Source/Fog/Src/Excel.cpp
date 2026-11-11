@@ -1117,10 +1117,6 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
 
                     case FIELDTYPE_UINT:
                       goto store_int;
-                    case FIELDTYPE_SHORT:
-                      case_FIELDTYPE_SHORT:
-                      *(short int*)pFieldCursor = (short int)nFieldValue;
-                    break;
                     case FIELDTYPE_CHAR:
 
                     case FIELDTYPE_BYTE:
@@ -1138,6 +1134,11 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
                       } else {
                         BitBuffer::SetBitAtOffset(pFieldCursor, nFieldSize);
                       }
+                    break;
+                    case FIELDTYPE_SHORT:
+                      case_FIELDTYPE_SHORT:
+                      *(short int*)pFieldCursor = (short int)nFieldValue;
+                    break;
                   }
 
                   break;

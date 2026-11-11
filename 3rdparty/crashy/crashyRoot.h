@@ -32,15 +32,6 @@ struct _MEMORY_BASIC_INFORMATION {
 
 #endif // _WIN32
 
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_crashy)
-struct THREADNAME_INFO {
-    /* 0x00 */ DWORD dwType; // must be 0x1000
-    /* 0x04 */ char * szName;
-    /* 0x08 */ DWORD dwThreadID; // -1 = calling thread
-    /* 0x0C */ DWORD dwFlags;
-};
-
-#endif // D2_MODULE_crashy
 namespace Fog::_3rdparty::crashy {
 
 // Function declarations
@@ -59,7 +50,6 @@ DWORD __stdcall ILT_GetCurrentThreadId();
 void __stdcall thunk_InitializeDebugSubsystem();
 void __fastcall SYSTEM_SetGlobalString(char * szText);
 bool __fastcall ErrorReportingLaunch(char * szText, struct D2BlizzardErrorArgument * pArg);
-void __stdcall DebugThread();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_crashy)
 void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime);

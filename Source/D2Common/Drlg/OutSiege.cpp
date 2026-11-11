@@ -451,7 +451,7 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
     uint32_t nStartY;
     uint32_t nStartX;
     int nPlacedCount;
-    D2SeedStrc tNewSeed2;
+    uint32_t tNewSeed2;
     uint32_t nSeedLowTmp;
     if (pLevel->eD2LevelId != 0x6f) {
       return;
@@ -460,7 +460,7 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     if (pLevelData) {
       {
-        D2SeedStrc DVar1;
+        uint32_t DVar1;
         nAttempts = 0;
         nPlacedCount = 0;
         do {
@@ -485,15 +485,11 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         } else {
           nSeedLowTmp = pLevel->sSeed.nSeedLow;
           if (nStartX & nStartX - 1) {
-            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-            nStartX = DVar1.nSeedLow % nStartX;
+            DVar1 = D2_SeedRoll(&pLevel->sSeed);
+            nStartX = DVar1 % nStartX;
           } else {
-            tNewSeed2 = D2_SEED_NEXT(pLevel->sSeed);
-            nStartX = nStartX - 1 & tNewSeed2.nSeedLow;
-            pLevel->sSeed.nSeedHigh = tNewSeed2.nSeedHigh;
-            pLevel->sSeed.nSeedLow = tNewSeed2.nSeedLow;
+            tNewSeed2 = D2_SeedRoll(&pLevel->sSeed);
+            nStartX = nStartX - 1 & tNewSeed2;
           }
         }
 
@@ -503,15 +499,11 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
         } else {
           nSeedLowTmp = pLevel->sSeed.nSeedLow;
           if (nStartY & nStartY - 1) {
-            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
-            nStartY = DVar1.nSeedLow % nStartY;
+            DVar1 = D2_SeedRoll(&pLevel->sSeed);
+            nStartY = DVar1 % nStartY;
           } else {
-            DVar1 = D2_SEED_NEXT(pLevel->sSeed);
-            nStartY = nStartY - 1 & DVar1.nSeedLow;
-            pLevel->sSeed.nSeedHigh = DVar1.nSeedHigh;
-            pLevel->sSeed.nSeedLow = DVar1.nSeedLow;
+            DVar1 = D2_SeedRoll(&pLevel->sSeed);
+            nStartY = nStartY - 1 & DVar1;
           }
         }
 
@@ -521,24 +513,16 @@ static void DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(D2DrlgLevelStrc *
           }
 
           nGridWidth = pLevelData->nGridCoordsWidth;
-          nXIter = 0;
-          if (nGridWidth > 0) {
-            do {
-              if (nPlacedCount >= 3) {
-                break;
-              }
+          for (nXIter = 0; nXIter < nGridWidth && nPlacedCount < 3; nXIter++) {
+            nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
+            nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
+            nGridPresetId = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
+            if (nGridPresetId >= 0x393 && nGridPresetId <= 0x39a) {
+              Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, nGridPresetId + 0x10, -1, 0);
+              nPlacedCount++;
+            }
 
-              nGridWidth = (int)(nXIter + nStartX * 2) % nGridWidth;
-              nY = (int)(nAttempts + nStartY * 2) % pLevelData->nGridCoordsHeight;
-              nGridPresetId = Outdoors::DRLGOUTDOOR_GetPresetCoordFromGrid(pLevel, nGridWidth, nY);
-              if (nGridPresetId >= 0x393 && nGridPresetId <= 0x39a) {
-                Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nGridWidth, nY, nGridPresetId + 0x10, -1, 0);
-                nPlacedCount++;
-              }
-
-              nGridWidth = pLevelData->nGridCoordsWidth;
-              nXIter++;
-            } while (nXIter < nGridWidth);
+            nGridWidth = pLevelData->nGridCoordsWidth;
           }
         }
 

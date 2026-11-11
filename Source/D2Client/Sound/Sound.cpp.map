@@ -41,29 +41,6 @@
       ]
     },
     {
-      "name": "SOUND_LocalizeSoundPath",
-      "address": "00482e30",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00482e30"
-        }
-      ],
-      "namespace": "D2Client::Sound",
-      "calledFunctions": [
-        "SOUND_LocalizeSoundPath",
-        "TABLES_GetLangAbbreviation",
-        "sprintf",
-        "SFileOpenFileEx",
-        "SFileCloseFile",
-        "MISC_GetLanguageCode"
-      ],
-      "usedTypes": [
-        "D2MPQFileStrc",
-        "uint32_t"
-      ]
-    },
-    {
       "name": "SOUND_CalculateAngle1",
       "address": "004b9340",
       "lines": [

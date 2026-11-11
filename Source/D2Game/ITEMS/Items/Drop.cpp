@@ -161,7 +161,7 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      D2SeedStrc seedNext;
+      uint32_t seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
@@ -176,15 +176,11 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
 
       if ((int)nCandidateIdx > 0) {
         if (nCandidateIdx & nCandidateIdx - 1) {
-          seedNext = D2_SEED_NEXT(*pSeedLocal);
-          pSeedLocal->nSeedHigh = seedNext.nSeedHigh;
-          pSeedLocal->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = (uint32_t)(seedNext.nSeedLow % nCandidateIdx);
+          seedNext = D2_SeedRoll(pSeedLocal);
+          nRandIndex = (uint32_t)(seedNext % nCandidateIdx);
         } else {
-          seedNext = D2_SEED_NEXT(*pSeedLocal);
-          pSeedLocal->nSeedHigh = seedNext.nSeedHigh;
-          pSeedLocal->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = nCandidateIdx - 1 & seedNext.nSeedLow;
+          seedNext = D2_SeedRoll(pSeedLocal);
+          nRandIndex = nCandidateIdx - 1 & seedNext;
         }
 
         goto return_candidate;
@@ -226,7 +222,7 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      D2SeedStrc seedNext;
+      uint32_t seedNext;
       do {
         _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nLevelFilter, nMonsterLevel, pItemTxt, nTCFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
@@ -241,15 +237,11 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
 
       if ((int)nCandidateIdx > 0) {
         if (nCandidateIdx & nCandidateIdx - 1) {
-          seedNext = D2_SEED_NEXT(*pSeedLocal);
-          pSeedLocal->nSeedHigh = seedNext.nSeedHigh;
-          pSeedLocal->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = (uint32_t)(seedNext.nSeedLow % nCandidateIdx);
+          seedNext = D2_SeedRoll(pSeedLocal);
+          nRandIndex = (uint32_t)(seedNext % nCandidateIdx);
         } else {
-          seedNext = D2_SEED_NEXT(*pSeedLocal);
-          pSeedLocal->nSeedHigh = seedNext.nSeedHigh;
-          pSeedLocal->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = nCandidateIdx - 1 & seedNext.nSeedLow;
+          seedNext = D2_SeedRoll(pSeedLocal);
+          nRandIndex = nCandidateIdx - 1 & seedNext;
         }
 
         goto return_candidate;
@@ -289,7 +281,7 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
     int nLoopIdx;
     nLoopIdx = 0;
     if (nItemCount > 0) {
-      D2SeedStrc seedNext;
+      uint32_t seedNext;
       do {
         if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
           _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
@@ -308,15 +300,11 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
 
       if ((int)nCandidateCount > 0) {
         if (nCandidateCount & nCandidateCount - 1) {
-          seedNext = D2_SEED_NEXT(*pSeed);
-          pSeed->nSeedHigh = seedNext.nSeedHigh;
-          pSeed->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = (uint32_t)(seedNext.nSeedLow % nCandidateCount);
+          seedNext = D2_SeedRoll(pSeed);
+          nRandIndex = (uint32_t)(seedNext % nCandidateCount);
         } else {
-          seedNext = D2_SEED_NEXT(*pSeed);
-          pSeed->nSeedHigh = seedNext.nSeedHigh;
-          pSeed->nSeedLow = seedNext.nSeedLow;
-          nRandIndex = nCandidateCount - 1 & seedNext.nSeedLow;
+          seedNext = D2_SeedRoll(pSeed);
+          nRandIndex = nCandidateCount - 1 & seedNext;
         }
 
         goto return_candidate;
@@ -442,7 +430,7 @@ static void ITEM_SetBaseDamageStats(D2UnitStrc * pUnit) {
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, (uint32_t)pItemsTxt->nMinMisDam, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, (uint32_t)(uint8_t)pItemsTxt->nMaxMisDam, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, (uint32_t)pItemsTxt->nMaxMisDam, 0);
 }
 
 static uint32_t ITEM_CheckUniqueBitmask(uint32_t nUniqueFileIndex, ::SGAMEDATA * pGame) {
@@ -1338,55 +1326,6 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       }
 
       break;
-      case 4:
-        pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
-      nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
-      nCrudeResult = ITEM_RollMagicPrefixSuffix(pItemGenContext, ppItem);
-      if (!nCrudeResult) {
-        nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
-        if (!nCrudeResult) {
-          ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
-        }
-      }
-
-      break;
-      case 5:
-        D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(*ppItem, -1);
-      pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
-      nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
-      nCrudeResult = SKILLS::Items::ITEMMOD_GenerateSetOrUniqueVersioned(*ppItem, pItemGenContext);
-      if (!nCrudeResult) {
-        bTypeCheck = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(*ppItem);
-        if (bTypeCheck) {
-          wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(*ppItem);
-          if (wItemVersion >= 1) {
-            nAffixLoopIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(*ppItem, UNITSTAT_durability, 0);
-            iVar1 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(*ppItem, UNITSTAT_maxdurability, 0);
-            nAffixLoopIdx *= 2;
-            if (nAffixLoopIdx >= 0xff) {
-              nAffixLoopIdx = 0xff;
-            }
-
-            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_durability, nAffixLoopIdx, 0);
-            nAffixLoopIdx = iVar1 * 2;
-            if (nAffixLoopIdx >= 0xff) {
-              nAffixLoopIdx = 0xff;
-            }
-
-            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_maxdurability, nAffixLoopIdx, 0);
-          }
-        }
-
-        nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
-        if (!nCrudeResult) {
-          nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
-          if (!nCrudeResult) {
-            goto fallback_to_normal;
-          }
-        }
-      }
-
-      break;
       case 6:
         D2Common::ITEMS::Items::SetRarePrefix(*ppItem, 0);
       D2Common::ITEMS::Items::SetRareSuffix(*ppItem, 0);
@@ -1400,6 +1339,18 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
           if (!nCrudeResult) {
             ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
           }
+        }
+      }
+
+      break;
+      case 4:
+        pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
+      nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
+      nCrudeResult = ITEM_RollMagicPrefixSuffix(pItemGenContext, ppItem);
+      if (!nCrudeResult) {
+        nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+        if (!nCrudeResult) {
+          ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
         }
       }
 
@@ -1468,6 +1419,43 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       } else {
         D2Common::ITEMS::Items::SetRarePrefix(*ppItem, (short int)bTypeCheck);
         D2Common::ITEMS::Items::SetRareSuffix(*ppItem, (short int)uVar2);
+      }
+
+      break;
+      case 5:
+        D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(*ppItem, -1);
+      pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppItem);
+      nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
+      nCrudeResult = SKILLS::Items::ITEMMOD_GenerateSetOrUniqueVersioned(*ppItem, pItemGenContext);
+      if (!nCrudeResult) {
+        bTypeCheck = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(*ppItem);
+        if (bTypeCheck) {
+          wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(*ppItem);
+          if (wItemVersion >= 1) {
+            nAffixLoopIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(*ppItem, UNITSTAT_durability, 0);
+            iVar1 = D2Common::Stats::StatsEx::SERVER_GetUnitStat(*ppItem, UNITSTAT_maxdurability, 0);
+            nAffixLoopIdx *= 2;
+            if (nAffixLoopIdx >= 0xff) {
+              nAffixLoopIdx = 0xff;
+            }
+
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_durability, nAffixLoopIdx, 0);
+            nAffixLoopIdx = iVar1 * 2;
+            if (nAffixLoopIdx >= 0xff) {
+              nAffixLoopIdx = 0xff;
+            }
+
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_maxdurability, nAffixLoopIdx, 0);
+          }
+        }
+
+        nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
+        if (!nCrudeResult) {
+          nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+          if (!nCrudeResult) {
+            goto fallback_to_normal;
+          }
+        }
       }
 
       break;
@@ -1609,7 +1597,7 @@ int __fastcall ITEM_InitItemBaseStats(::SGAMEDATA * pGame, D2UnitStrc * * ppItem
 
         nTmp = D2Common::ITEMS::Items::ITEMS_IsA(*ppItem, ITEMTYPE_AnyArmor);
         if (nTmp) {
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_toblock, (uint32_t)(uint8_t)pItemsTxt->bBlock, 0);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_toblock, (uint32_t)pItemsTxt->bBlock, 0);
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(*ppItem, UNITSTAT_velocitypercent, -pItemsTxt->dwSpeed, 0);
           nMaxDurability = (uint32_t)pItemsTxt->bDurability;
           nCurDurability = (uint32_t)(pItemsTxt->bDurability >> 1);
@@ -3182,7 +3170,7 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     BOOL _bDurabilityBelowOne;
     bool bIsThrowable;
     bool bDurabilityBelowOne;
-    D2SeedStrc sNewSeed;
+    uint32_t sNewSeed;
     uint16_t wStatLayer;
     D2UnitStrc* pItemUnit;
     pItemUnit = pItem;
@@ -3214,9 +3202,8 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     nItem = 0xa;
     roll_durability_loss:
-    sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-    pUnit->sSeed = sNewSeed;
-    if ((int)(sNewSeed.nSeedLow % 100) >= nItem) {
+    sNewSeed = D2_SeedRoll(&pUnit->sSeed);
+    if ((int)(sNewSeed % 100) >= nItem) {
       return;
     }
 
