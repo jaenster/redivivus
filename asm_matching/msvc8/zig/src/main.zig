@@ -91,7 +91,8 @@ const USAGE =
 ;
 
 pub fn main(init: std.process.Init.Minimal) !void {
-    var it = std.process.Args.Iterator.init(init.args);
+    var it = try std.process.Args.Iterator.initAllocator(init.args, util.gpa);
+    defer it.deinit();
     _ = it.next();
     var args: std.ArrayList([]const u8) = .empty;
     while (it.next()) |a| try args.append(util.gpa, try util.gpa.dupe(u8, a));
