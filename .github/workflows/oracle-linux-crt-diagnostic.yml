@@ -103,6 +103,15 @@ jobs:
           cat asm_matching/msvc8/evidence/libmap.tsv.summary
           cat asm_matching/msvc8/evidence/audit.tsv.summary
 
+      - name: Hash the complete mapping and audit rows
+        run: |
+          set -euo pipefail
+          for name in funcmap.tsv libmap.tsv audit.tsv datamap.tsv; do
+            file="asm_matching/msvc8/evidence/$name"
+            hash=$(sha256sum "$file" | cut -d ' ' -f 1)
+            printf '%s  %s\n' "$hash" "$name"
+          done | tee oracle-row-digests.sha256
+
       - name: Keep names, addresses, counts, and hashes only
         if: always()
         uses: actions/upload-artifact@v4
@@ -111,6 +120,7 @@ jobs:
           path: |
             crt-libraries.sha256
             oracle-checkout.sha
+            oracle-row-digests.sha256
             asm_matching/msvc8/evidence/crtmap.tsv
             asm_matching/msvc8/evidence/crtmap.tsv.summary
             asm_matching/msvc8/evidence/libmap.tsv.summary
