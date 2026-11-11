@@ -1,16 +1,16 @@
-tree 0e372dc10-dirty; Ghidra v2021 extents (dataextent.tsv); 464 objects (build/obj/ + Source/globals/)
-Initialised game data: 1764 of 1987 symbols MATCH (88.78%), 342759 of 345635 bytes (99.17%); bytes equal in place 342843 (99.19%)
+tree f4aa096b2-dirty; Ghidra v2021 extents (dataextent.tsv); 464 objects (build/obj/ + Source/globals/)
+Initialised game data: 1766 of 1989 symbols MATCH (88.79%), 342815 of 345691 bytes (99.17%); bytes equal in place 342899 (99.19%)
   uncompared: 217 game items (2756 bytes) that no data symbol of ours pairs with
-  left out: 603 runtime-only items (17002 bytes), 371 import slots, 336 compiler EH/RTTI items
+  left out: 601 runtime-only items (16946 bytes), 371 import slots, 336 compiler EH/RTTI items
 Uninitialised (.bss), size and alignment only: 2319 of 2319 symbols agree, 2371830 of 2371830 bytes
 Interior labels (a name inside a larger Ghidra item): 78 paired, 78 emitted as an object of their own (65 .bss, 13 initialised, 11 of those all zero)
 Compiler literals (__real@, ??_C@, ??_7) paired by datamap: 25 of 25 MATCH, 136 of 136 bytes
 String literals (read-only strings the generator spells at their uses; its byte rule, strings v2034): 4888 of 4895 MATCH, 73230 of 73397 bytes; MISSING 7; content compared, placement not
   left out: 409 the original never references (UNUSED), 344 used only by code or data no symbol of ours pairs with (UNPAIRED: the runtime's)
   paired by: tu 3, use 4885; 211 typed (dataextent), 5437 untyped (datastrings)
-Initialised game data with the typed string literals: 1958 of 2181 symbols MATCH (89.78%), 343984 of 346860 bytes (99.17%)
+Initialised game data with the typed string literals: 1960 of 2183 symbols MATCH (89.78%), 344040 of 346916 bytes (99.17%)
 status of the initialised game data compared (symbols, original bytes):
-  MATCH         1764    342759
+  MATCH         1766    342815
   ZERO             2        36
   SIZE_SMALL       0         0
   RELOC            1         4
@@ -21,11 +21,11 @@ status of the initialised game data compared (symbols, original bytes):
   ALIGN            0         0
 flags (a symbol may carry several): VALUE 4, ZERO 2, SIZE_LARGE 1, RELOC 1
 symbols holding a raw 1.14d address where the original relocates: 1
-pointer fields compared, by what ours names: data agree 1545; func agree 3513, thunk 2; none null 121, raw 1; string agree 724; unknown unverified 2
+pointer fields compared, by what ours names: data agree 1546; func agree 3527, thunk 2; none null 121, raw 1; string agree 724; unknown unverified 1
 by module (initialised; symbols MATCH/total, bytes MATCH/total):
   Bnclient        18/18        2704/2704     100.00%
   D2CMP           40/40       11036/11036    100.00%
-  D2Client       629/630     130733/130741    99.99%
+  D2Client       631/632     130789/130797    99.99%
   D2Common       337/339      41577/41657     99.81%
   D2DDraw          7/7          292/292      100.00%
   D2Direct3D      16/16        1380/1380     100.00%
@@ -48,9 +48,9 @@ by module (initialised; symbols MATCH/total, bytes MATCH/total):
   compiler         1/1            8/8        100.00%
   crashy           1/1            4/4        100.00%
 by section (symbols MATCH/total, bytes MATCH/total):
-  .rdata    619/622      84359/84447   
+  .rdata    621/624      84415/84503   
   .data    1145/1148    258400/258432  
   .bss     2319/2319   2371830/2371830 
 floating-point constants judged by the literals of their readers' objects: 29, 28 MATCH
-pairings: name 4034, datamap 79, tu-literal 29, name-address-noitem 26, name-address 21, datamap-noitem 3; data symbols of ours unpaired 5212 (5172 of them compiler literals); defined twice 542
-name pair disagrees with the datamap address: 31
+pairings: name 4034, datamap 81, tu-literal 29, name-address-noitem 26, name-address 21, datamap-noitem 3; data symbols of ours unpaired 5210 (5172 of them compiler literals); defined twice 542
+name pair disagrees with the datamap address: 30
