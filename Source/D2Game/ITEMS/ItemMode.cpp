@@ -787,7 +787,7 @@ static uint32_t __stdcall ITEMMODE_CanUseSkillWithWeapon(D2UnitStrc * pUnit, D2S
 static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
     D2UnitStrc* pRightWeapon;
     D2UnitStrc* pLeftWeapon;
-    bool bIsThrownOnly;
+    BOOL bIsThrownOnly;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
@@ -799,9 +799,9 @@ static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
 
     uint32_t bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, ITEMTYPE_ThrownWeapon);
     if (!bIsItemType || (bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, ITEMTYPE_MeleeWeapon) , bIsItemType != 0)) {
-      bIsThrownOnly = false;
+      bIsThrownOnly = 0;
     } else {
-      bIsThrownOnly = true;
+      bIsThrownOnly = 1;
     }
 
     D2SkillStrc* pDVar3 = D2Common::Units::GetLeftSkill(pUnit);
@@ -825,9 +825,9 @@ static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
     }
 
     if (!pRightWeapon || (bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, ITEMTYPE_ThrownWeapon) , !bIsItemType) || (bIsItemType = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, ITEMTYPE_MeleeWeapon) , bIsItemType != 0)) {
-      bIsThrownOnly = false;
+      bIsThrownOnly = 0;
     } else {
-      bIsThrownOnly = true;
+      bIsThrownOnly = 1;
     }
 
     pDVar3 = D2Common::Units::GetRightSkill(pUnit);
@@ -2309,7 +2309,7 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
 static void __stdcall ITEMMODE_CastItemSkill(eD2Skills eSkill, D2UnitStrc * pUnit) {
     int32_t nRemainingQty;
     int nUnitGUID;
-    uint8_t byUnitType;
+    int32_t byUnitType;
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
     if (pSkill) {
       D2SkillStrc* pRightSkill;
@@ -2330,7 +2330,7 @@ static void __stdcall ITEMMODE_CastItemSkill(eD2Skills eSkill, D2UnitStrc * pUni
         byUnitType = 6;
       } else {
         nUnitGUID = pUnit->nUnitGUID;
-        byUnitType = (uint8_t)pUnit->eUnitType;
+        byUnitType = pUnit->eUnitType;
       }
 
       GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xfc2), byUnitType, nUnitGUID, eSkill, (uint8_t)nRemainingQty);
@@ -3563,9 +3563,9 @@ void __fastcall ITEMMODE_SetItemFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2Common::Skills::SKILL_SetQuantity(pSkill, 0);
     if (!pUnit) {
       nOwnerGUID = -1;
-      *(uint8_t*)(char*)&byUnitType = 6;
+      byUnitType = 6;
     } else {
-      *(uint8_t*)(char*)&byUnitType = (uint8_t)pUnit->eUnitType;
+      byUnitType = pUnit->eUnitType;
       nOwnerGUID = pUnit->nUnitGUID;
     }
 
@@ -4323,7 +4323,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     uint32_t nSrcPage;
     D2RoomStrc* pBestDropRoom;
     D2InventoryStrc* pReinventory;
-    uint32_t nBeltSlotIdx;
+    int nBeltSlotIdx;
     D2BeltsTxt beltRecord;
     uint32_t nItemGUID;
     uint32_t bCharmActive;
@@ -4354,7 +4354,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     do {
       pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlotIdx);
-      if ((int)nBeltSlotIdx >= (int)(uint32_t)(uint8_t)beltRecord.nBoxes && pSlotItem) {
+      if (nBeltSlotIdx >= (int)(uint32_t)(uint8_t)beltRecord.nBoxes && pSlotItem) {
         eItemFlagMask = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
         D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&eItemFlagMask, 0x20, 1);
         pItemInInv = pSlotItem;
@@ -4469,7 +4469,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
       next_belt_slot:
       nBeltSlotIdx++;
       pInventory = pInventorySaved;
-      if ((int)nBeltSlotIdx >= 0x10) {
+      if (nBeltSlotIdx >= 0x10) {
         return;
       }
     } while (true);

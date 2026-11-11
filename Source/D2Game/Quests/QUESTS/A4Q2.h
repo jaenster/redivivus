@@ -113,6 +113,6 @@ uint32_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame);
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(struct D2ObjectOperateFnArg * pOperation);
 #endif // D2_MODULE_D2Game
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A4Q2

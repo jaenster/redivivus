@@ -2,9 +2,9 @@
 
 The oracle in Zig: one executable, a subcommand per stage or tool. Each replaced its Python
 script once its output equalled the script's byte for byte, and the script was then deleted;
-`oracle` and the setup scripts need zig and stop without it. What is still Python: the fixers
-(`oracle fix`, `scripts/fix_*.py`, `tidy_blanks.py`) and the modules they import, and
-`build.py` with `vc8_translate.py` for a machine with no ghidra-reconstruct checkout.
+`oracle` and the setup scripts need zig and stop without it. What is still Python: `build.py`
+with `vc8_translate.py` and the modules it imports, for a machine with no ghidra-reconstruct
+checkout. The Python fixers are retired: their rules are ghidra-reconstruct's.
 
 ```sh
 zig build --release=fast                   # zig-out/bin/oracle-zig (capstone 5.0.7 from source)
@@ -98,7 +98,7 @@ original bytes (`bh`) a vc8form tag records.
 
 ## Modules
 
-One file per Python module, named after it; the functions keep the Python names in
+One file per Python module (most of them since deleted), named after it; the functions keep the Python names in
 camelCase, so a port reads side by side with its original.
 
 |File|Python|What|

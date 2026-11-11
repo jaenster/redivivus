@@ -142,7 +142,7 @@ bool QUESTLOG_FindZooDummyMonster();
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY);
 uint8_t * __fastcall Unreferenced_004a3200(uint8_t * param_1);
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
-void __stdcall QUESTLOG_LoadQuestIconsForAct(uint32_t nActIndex, int32_t bResetSelection);
+void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelection);
 void __stdcall GameOverWtf();
 // Draws quest log UI. Uses gQuestIconsPerActTable to map act to quest icon ranges, draws quest list with completion status, highlights selected quest. Main rendering loop for quest UI panel.
 void __stdcall DRAW_UI_Quest();

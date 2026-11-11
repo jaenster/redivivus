@@ -949,7 +949,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
       return 0;
     }
 
-    int nRebuildReason;
+    uint32_t nRebuildReason;
     nRebuildReason = 0;
     EnterCriticalSection(&lpCriticalSection_00881894);
     CACHE_RemoveEntry(szCacheKey);

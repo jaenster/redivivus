@@ -164,6 +164,6 @@ void __fastcall ESCMENU_ShowControlConfig(struct D2EscMenuItemStrc * pItem, stru
 void __fastcall ESCMENU_SwitchToMainMenu_alt(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 void __fastcall ESCMENU_SwitchToOptionsMenu(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Client
-// 5 internal functions (defined in .cpp)
+// 6 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::EscMenu

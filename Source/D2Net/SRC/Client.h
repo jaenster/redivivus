@@ -1375,6 +1375,6 @@ void __fastcall NET_CLIENT_SendPacketToServer(void * pUnused, uint16_t nPacketSi
 // @sourcefile .\SRC\Client.cpp
 void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pBytes, size_t pBytesSize);
 #endif // D2_MODULE_D2Net
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Net::SRC::Client

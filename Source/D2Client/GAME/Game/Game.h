@@ -380,5 +380,6 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0060e610(struct StormLi
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(struct StormLinkedListStrc * pListHead);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_D2Client
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Client::GAME::Game

@@ -974,8 +974,8 @@ BOOL __stdcall CLIENT_MovePlayerToPosition_Extern(D2UnitStrc * pUnit, int16_t nX
 
 // Client-side handler for a player attempting to interact with a world object (by unit ID nParam1). Looks up the object, checks the just_portaled curse state for waypoints (classId 0x3b). If within range and line-of-sight, executes UNITMODEACTION_ITEM_INTERACT; otherwise moves the player toward the object's tile position. Stores last skill hit via D2Client for the interaction. Returns without action if object not found.
 static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMouseStrc * pUnderMouse) {
-    int16_t nY;
-    int16_t nX;
+    int32_t nY;
+    int32_t nX;
     eD2States eCurseState;
     eD2States eState;
     int32_t nLine;
@@ -1015,10 +1015,10 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     pObject = pUnderMouse->pTarget;
     eD2UnitType eUnitType = pObject->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = (int16_t)pObject->pPath.pStaticPath->nPosY;
+      nY = pObject->pPath.pStaticPath->nPosY;
     } else if (pObject->pPath.pDynamicPath) {
       nLine = D2Common::PATH::DynamicPath::GetYPos(pObject->pPath.pDynamicPath);
-      nY = (int16_t)nLine;
+      nY = nLine;
     } else {
       nY = 0;
     }
@@ -1026,10 +1026,10 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     pObject = pUnderMouse->pTarget;
     eUnitType = pObject->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = (int16_t)pObject->pPath.pStaticPath->nPosX;
+      nX = pObject->pPath.pStaticPath->nPosX;
     } else if (pObject->pPath.pDynamicPath) {
       nLine = D2Common::PATH::DynamicPath::GetXPos(pObject->pPath.pDynamicPath);
-      nX = (int16_t)nLine;
+      nX = nLine;
     } else {
       nX = 0;
     }
@@ -1582,8 +1582,8 @@ static BOOL __stdcall PLAYER_CalculateMovementTarget(D2UnitStrc * pPlayerUnit, D
       }
     }
 
-    uint32_t nApproxDist = Draw::Weather::WEATHER_ApproximateDistance(nDeltaX, nDeltaY);
-    if ((int)nApproxDist <= 1) {
+    int nApproxDist = Draw::Weather::WEATHER_ApproximateDistance(nDeltaX, nDeltaY);
+    if (nApproxDist <= 1) {
       nApproxDist = 1;
     }
 
@@ -1600,9 +1600,9 @@ static BOOL __stdcall PLAYER_CalculateMovementTarget(D2UnitStrc * pPlayerUnit, D
     } else {
       nMinMoveDist = 5;
     }
-    if ((int)nApproxDist < (int)nMinMoveDist) {
-      nDeltaX = (uint32_t)((float)nMinMoveDist / (float)(int)nApproxDist * (float)(int)nDeltaX);
-      nDeltaY = (uint32_t)((float)nMinMoveDist / (float)(int)nApproxDist * (float)(int)nDeltaY);
+    if (nApproxDist < (int)nMinMoveDist) {
+      nDeltaX = (uint32_t)((float)nMinMoveDist / (float)nApproxDist * (float)(int)nDeltaX);
+      nDeltaY = (uint32_t)((float)nMinMoveDist / (float)nApproxDist * (float)(int)nDeltaY);
     }
 
     pMouseCtx->nX = nSrcX + nDeltaX;
@@ -2499,7 +2499,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     uint32_t _bStepDone;
     BOOL _bHasDmgState;
     bool bHasDmgState;
-    uint16_t nX;
+    int32_t nX;
     D2UnitStrc* pPlayerUnit_lcl;
     D2SkillStrc* pSkill;
     uint32_t dwSkillFlags;
@@ -2592,10 +2592,10 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
       if (pUnit->eAnimMode.ePlayerMode == KnockBack) {
         eUnitType = pUnit->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+          nX = pUnit->pPath.pStaticPath->nPosX;
         } else if (pUnit->pPath.pDynamicPath) {
           nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-          nX = (uint16_t)nPosX;
+          nX = nPosX;
         } else {
           nX = 0;
         }

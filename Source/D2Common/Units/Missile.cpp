@@ -975,7 +975,7 @@ int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t
       return 0;
     }
 
-    uint32_t nSkillLevel = 0;
+    int nSkillLevel = 0;
     if (pMissileCalc->pOwner) {
       D2SkillStrc* pSkill;
       pSkill = Skills::SKILLS_GetSkillByEnum(pMissileCalc->pOwner, eSkill);
@@ -984,8 +984,8 @@ int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t
       }
     }
 
-    nSkillLevel = Skills::SKILLDESC_EvalDescCalcValue(pMissileCalc->pOwner, nParamId, eSkill, nSkillLevel);
-    return nSkillLevel;
+    uint32_t uVar1 = Skills::SKILLDESC_EvalDescCalcValue(pMissileCalc->pOwner, nParamId, eSkill, nSkillLevel);
+    return uVar1;
 }
 
 // Evaluates missile calc expression using missile/owner context and resolved missile id/level; dispatches into the calc VM callback path.

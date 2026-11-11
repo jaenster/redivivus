@@ -63,6 +63,6 @@ void __fastcall BuildKurast(struct D2DrlgLevelStrc * pLevel);
 void __fastcall BuildTravincal(struct D2DrlgLevelStrc * pLevel);
 void __fastcall InitAct3OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 5 internal functions (defined in .cpp)
+// 6 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::OutPlace

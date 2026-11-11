@@ -596,8 +596,8 @@ void __fastcall CLIENT_SetUnitLightColor(D2UnitStrc * pUnit, int32_t dwRGB) {
     uint8_t byGreen = 0xff;
     uint8_t byBlue = 0xff;
     if (dwRGB) {
-      byRed = (uint8_t)((uint32_t)dwRGB >> 0x10);
-      byGreen = (uint8_t)((uint32_t)dwRGB >> 8);
+      byRed = (uint8_t)(dwRGB >> 0x10);
+      byGreen = (uint8_t)(dwRGB >> 8);
       byBlue = (uint8_t)dwRGB;
     }
 

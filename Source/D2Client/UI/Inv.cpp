@@ -1896,7 +1896,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
       nMaxDamage = nMinDamage;
     }
 
-    uint32_t nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
+    int nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
     if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x110 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88128 && pUnit->pDrlgAct) {
       eMinDmgStat = UNITSTAT_strength;
       nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&eMinDmgStat);
@@ -1953,12 +1953,9 @@ void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
     uint32_t nTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_MissilePotion);
     if (nTypeCheck) {
       nTypeCheck = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wMissileType(pUnit);
-      pszBufCursor = wszDamageTextBuf;
       nMinDamage = nTypeCheck;
-      for (iDurationFrames = 0x80; iDurationFrames; iDurationFrames--) {
-        pszBufCursor[0] = L'\0';
-        pszBufCursor[1] = L'\0';
-        pszBufCursor += 2;
+      for (iDurationFrames = 0; iDurationFrames < 0x100; iDurationFrames++) {
+        wszDamageTextBuf[iDurationFrames] = L'\0';
       }
 
       int nUnit = 0x0;
@@ -2321,7 +2318,7 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
       bIsModified = 1;
     }
 
-    uint32_t nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pEffectiveUnit, UNITSTAT_item_armor_bytime, 0);
+    int nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pEffectiveUnit, UNITSTAT_item_armor_bytime, 0);
     if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10c && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-86832 && pUnit->pDrlgAct) {
       nPeriodOfDay = 0;
       nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&nPeriodOfDay);
@@ -6992,7 +6989,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
     } while (nArgIdxA < nTotalArgs);
 }
 
-void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize) {
+void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
     // Frame slots -988..-56 are ONE object: &wszRareName is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -7006,6 +7003,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
     __frame0_t __frame0;
     uint16_t wStringId;
     uint8_t byEarLevel;
+    uint16_t* pwLocaleStr;
     D2LowQualityItemsTxt* pDVar1;
     uint32_t nIsOfType;
     char* pcNameSrc;
@@ -7044,13 +7042,10 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
       wszPrefix[iScratch] = L'\0';
     }
 
-    uint16_t* pwLocaleStr = wszSuffix;
     D2UnitStrc* pUnitSaved = pUnit;
     uint16_t* pwOutBuffer = wBuffer;
-    for (iScratch = 0x100; iScratch; iScratch--) {
-      pwLocaleStr[0] = L'\0';
-      pwLocaleStr[1] = L'\0';
-      pwLocaleStr += 2;
+    for (iScratch = 0; iScratch < 0x200; iScratch++) {
+      wszSuffix[iScratch] = L'\0';
     }
 
     for (iScratch = 0; iScratch < 0x200; iScratch++) {
@@ -7280,7 +7275,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
 
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= (int)nSize) {
+          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x822);
             exit(-1);
           }
@@ -7449,7 +7444,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize
           pItemsTxt = pItemsTxtSaved;
           pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pItemsTxtSaved->wNameStr);
           nErrorLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
-          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= (int)nSize) {
+          if ((intptr_t)(pwRareNameSuffix + nErrorLine + 3) >= nSize) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c5);
             exit(-1);
           }

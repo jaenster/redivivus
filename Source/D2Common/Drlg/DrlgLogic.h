@@ -69,6 +69,6 @@ struct D2RoomCoordListStrc * __fastcall GetCoordList(struct D2RoomExStrc * pRoom
 // @sourcefile .\DRLG\DrlgLogic.cpp
 void __fastcall DRLGLOGIC_BuildRoomCoordList(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * nOrientGridFlags, struct D2DrlgGridStrc * nFloorGridFlags, struct D2DrlgGridStrc * pGrid);
 #endif // D2_MODULE_D2Common
-// 4 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::DrlgLogic

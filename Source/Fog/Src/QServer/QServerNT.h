@@ -127,6 +127,6 @@ int __fastcall PumpIoCompletionQueues(struct D2QServerStrc * pQServer, uint32_t 
 SOCKET __fastcall StartListening(struct D2QServerStrc * pQServer, uint32_t nPort);
 SOCKET __fastcall CreateSocketLocal(struct D2QServerStrc * pQServer, int nPort);
 #endif // D2_MODULE_Fog
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace Fog::Src::QServer::QServerNT

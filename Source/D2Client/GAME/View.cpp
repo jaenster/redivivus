@@ -95,14 +95,15 @@ void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * 
     }
 
     nCellX = nCellY * 0x30 + nCellX;
-    *pOutIntensity = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nCellIntensity;
+    D2LightMapCellStrc* t2_r0 = &D2Client::Draw::LightMap::gaLightMapCells[nCellX];
+    *pOutIntensity = t2_r0->nCellIntensity;
     if (!D2Client::Draw::LightMap::gbLightmapColorEnabled) {
       return;
     }
 
-    *pOutRed = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nRed;
-    *pOutGreen = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nGreen;
-    *pOutBlue = D2Client::Draw::LightMap::gaLightMapCells[nCellX].nBlue;
+    *pOutRed = t2_r0->nRed;
+    *pOutGreen = t2_r0->nGreen;
+    *pOutBlue = t2_r0->nBlue;
 }
 
 void __stdcall DrawLight() {
@@ -139,7 +140,7 @@ uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
         do {
           nAccum = nOuter << 0x10;
           for (nStepLeft = nSteps; (uint32_t)nStepLeft > 0; nStepLeft--) {
-            *pWrite = (uint8_t)(nAccum + (nAccum >> 0x1f & 0xffffU) >> 0x10);
+            *pWrite = (uint8_t)(nAccum / 65536);
             pWrite++;
             nAccum += nMidScaled / nSteps;
           }
@@ -613,14 +614,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     if (!gnDrawBackgroundRenderOffset) {
       pStrSrc = "data\\global\\ui\\cloud01";
       pStrDst = szFilePath;
-      for (nCloudIdx = 5; nCloudIdx; nCloudIdx--) {
-        *(uint32_t*)pStrDst = *(uint32_t*)pStrSrc;
-        pStrSrc += 4;
-        pStrDst += 4;
-      }
-
-      *(uint16_t*)pStrDst = *(uint16_t*)pStrSrc;
-      pStrDst[2] = pStrSrc[2];
+      memcpy(pStrDst, pStrSrc, 23);
       gnDrawBackgroundRenderOffset = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
 

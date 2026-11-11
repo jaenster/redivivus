@@ -40,6 +40,6 @@ BOOL __fastcall CheckIfBaseIsFallenOrScarabAndSet(int32_t nMonstatId);
 void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom);
 void __fastcall MONSTER_TrySpawnWanderingMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom);
 #endif // D2_MODULE_D2Game
-// 12 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Game::Monsters::Spawn

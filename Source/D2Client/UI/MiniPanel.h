@@ -38,6 +38,6 @@ void __stdcall SetupMiniPanel();
 BOOL __stdcall WAYPOINT_IsMouseInMiniPanel();
 void __stdcall DRAW_UI_MiniPanel();
 #endif // D2_MODULE_D2Client
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::MiniPanel

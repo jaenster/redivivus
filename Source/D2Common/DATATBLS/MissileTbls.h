@@ -36,6 +36,6 @@ void __fastcall TXT_AllocTxt_missiles(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\MissileTbls.cpp
 void __stdcall MISSILETBLS_FreeTxt();
 #endif // D2_MODULE_D2Common
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::MissileTbls

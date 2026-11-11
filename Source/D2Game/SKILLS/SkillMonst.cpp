@@ -229,7 +229,7 @@ BOOL __fastcall Skills_SrvDoFunc_084_SpawnMinionsAndSuicide(::SGAMEDATA * pGame,
 
 BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nClassId;
-    eD2Skills eSkillOrig = eSkill;
+    eD2Skills eSkillSlot;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
@@ -245,10 +245,10 @@ BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2
       nClassId = -1;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (int32_t*)&eSkill);
-    eMissilesId eMissileUpgraded = nMissileBase + eSkill;
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (int32_t*)&eSkillSlot);
+    eMissilesId eMissileUpgraded = nMissileBase + eSkillSlot;
     if ((int)eMissileUpgraded >= 0 && (int)eMissileUpgraded < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkillOrig, nSkillLvl, 0, 0, 0, 0, 0);
+      SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 
@@ -346,7 +346,7 @@ BOOL __fastcall SKILLMONST_SrvStFn45_MaggotDown(::SGAMEDATA * pGame, D2UnitStrc 
 BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nValue_00;
     int32_t nAnimFrameCount;
-    eD2Skills eSkillOrig = eSkill;
+    eD2Skills eSkillSlot;
     D2SkillsTxt* pSkillsTxt = nullptr;
     if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
@@ -358,12 +358,12 @@ BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * 
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&eSkill, &nAnimFrameCount);
-    if ((int)eSkill <= 0) {
+    D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&eSkillSlot, &nAnimFrameCount);
+    if ((int)eSkillSlot <= 0) {
       pUnit->nSeqAnimSpeed = 0;
     }
 
-    int32_t nHealAmt = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkillOrig, nSkillLvl);
+    int32_t nHealAmt = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
     if (nHealAmt > 0) {
       int nValue;
       nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);

@@ -2793,41 +2793,39 @@ int __fastcall inflateReset(z_stream * pStream) {
 
 int __fastcall inflateReset2(z_stream * pStream, uint32_t nWindowBits) {
     int32_t nWrap;
-    if (!pStream) {
-      return -2;
-    }
-
-    inflate_state* pState = (inflate_state*)pStream->state;
-    if (!pState) {
-      return -2;
-    }
-    if ((int)nWindowBits < 0) {
-      nWrap = 0;
-      nWindowBits = -nWindowBits;
-    } else {
-      nWrap = ((int)nWindowBits >> 4) + 1;
-      if ((int)nWindowBits < 0x30) {
-        nWindowBits &= 0xf;
+    if (pStream) {
+      inflate_state* pState = (inflate_state*)pStream->state;
+      if (!pState) {
+        return -2;
       }
-    }
-    if (!(!nWindowBits || (int)nWindowBits >= 8 && (int)nWindowBits <= 0xf)) {
-      return -2;
-    }
-    if (pState->window && pState->wbits != nWindowBits) {
-      pStream->zfree(pStream->opaque, pState->window);
-      pState->window = 0;
-    }
+      if ((int)nWindowBits < 0) {
+        nWrap = 0;
+        nWindowBits = -nWindowBits;
+      } else {
+        nWrap = ((int)nWindowBits >> 4) + 1;
+        if ((int)nWindowBits < 0x30) {
+          nWindowBits &= 0xf;
+        }
+      }
+      if (!(!nWindowBits || (int)nWindowBits >= 8 && (int)nWindowBits <= 0xf)) {
+        return -2;
+      }
+      if (pState->window && pState->wbits != nWindowBits) {
+        pStream->zfree(pStream->opaque, pState->window);
+        pState->window = 0;
+      }
 
-    pState->wrap = nWrap;
-    pState->wbits = nWindowBits;
-    inflate_state* pCurState = (inflate_state*)pStream->state;
-    if (pCurState) {
-      int nRet;
-      pCurState->wsize = 0;
-      pCurState->whave = 0;
-      pCurState->wnext = 0;
-      nRet = inflateResetKeep(pStream);
-      return nRet;
+      pState->wrap = nWrap;
+      pState->wbits = nWindowBits;
+      inflate_state* pCurState = (inflate_state*)pStream->state;
+      if (pCurState) {
+        int nRet;
+        pCurState->wsize = 0;
+        pCurState->whave = 0;
+        pCurState->wnext = 0;
+        nRet = inflateResetKeep(pStream);
+        return nRet;
+      }
     }
 
     return -2;
@@ -4362,12 +4360,7 @@ uint32_t __fastcall inflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
         }
 
         pDstCursor = pDestStream;
-        for (nFieldCopyCount = 0xe; nFieldCopyCount; nFieldCopyCount--) {
-          pDstCursor->next_in = pSrcStream->next_in;
-          pSrcStream = (z_stream*)&pSrcStream->avail_in;
-          pDstCursor = (z_stream*)&pDstCursor->avail_in;
-        }
-
+        *pDstCursor = *pSrcStream;
         memcpy(pDstState, _Src, 0x1bcc);
         nSrcNextOff = *(uint32_t*)((char*)_Src + 0x4c);
         if (nSrcNextOff >= (intptr_t)_Src + 0x530U && nSrcNextOff <= (intptr_t)_Src + 0x1bbcU) {

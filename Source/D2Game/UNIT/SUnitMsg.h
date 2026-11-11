@@ -205,6 +205,6 @@ void __fastcall SERVER_UnitQueuePacketFree(struct D2UnitStrc * pUnit);
 // Server-side: sends the full set of init packets describing one unit (pUnit) to a single client when the unit enters that client's view. Switches on unit type: players get 0x59 AssignPlayer; monsters get 0xAC AddMonster plus seeded pierce stat, optional 0x98 EvilHut, and 0x21 oskill grants for each SendSkills bit; objects get 0x51 WorldObject and, for portals, 0x60 state and 0x82 ownership; missiles get a missile packet; ground items get 0x9C add/refresh. A second switch then sends follow-up state: player attributes/items/corpse-assign/state-list/mode/hover-text, monster updates and item lists, item drop packets. Halts via Fog ErrorManager if a player corpse's cursor item owner can't be found.
 void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 #endif // D2_MODULE_D2Game
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUnitMsg

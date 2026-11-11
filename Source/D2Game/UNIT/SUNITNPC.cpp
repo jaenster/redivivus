@@ -328,7 +328,7 @@ D2UnitStrc * __fastcall SUNITNPC_GenerateNpcItems(D2UnitStrc * pUnit, uint32_t d
 }
 
 void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * pUnit, D2UnitStrc * pItem, ::SGAMEDATA * pGame, int32_t nParam2) {
-    D2UnitStrc* pItemSaved = pItem;
+    D2UnitStrc* pItemSlot;
     if (!(pItem && pUnit)) {
       return;
     }
@@ -338,16 +338,16 @@ void __fastcall SUNITNPC_RefreshNpcItem(D2UnitStrc * pPlayerUnit, D2UnitStrc * p
       return;
     }
 
-    ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, pItemSaved->nUnitGUID, (uint32_t*)&pItem, 0, 0, pInventory, 0);
+    ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pUnit, pItem->nUnitGUID, (uint32_t*)&pItemSlot, 0, 0, pInventory, 0);
     if (nParam2) {
-      pItemSaved->eUnitFlagsEx |= UNITFLAGEX_ITEMINIT;
+      pItem->eUnitFlagsEx |= UNITFLAGEX_ITEMINIT;
       D2Common::Units::RefreshInventory(pUnit, 1);
-      D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pItemSaved);
-      D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItemSaved, ITEMCMD_DELETE, 1);
+      D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pItem);
+      D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE, 1);
       return;
     }
 
-    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItemSaved);
+    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItem);
 }
 
 void __fastcall SUNITNPC_FillNpcInventory(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, int32_t bDeleteItem) {
@@ -497,7 +497,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     int32_t nNpcIndex;
     uint32_t nItemClassId;
     D2ItemsTxt* pTradeItemTxt;
-    int32_t nItemsToGen;
+    uint32_t nItemsToGen;
     int32_t nTradeItemTxt;
     ::SGAMEDATA* pGame2 = pGame;
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
@@ -523,7 +523,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
             }
             if ((uint16_t)pTradeItemTxt->wVersion < 100 || (pItemTxtTmp = pTradeItemTxt , 99 < pGame2->wItemFormat)) {
               pTradeItemTxt = 0;
-              if ((uint32_t)nItemsToGen > 0) {
+              if (nItemsToGen > 0) {
                 do {
                   eQuality = SUNITNPC_RollStoreItemQuality(pNpcControl, nStoreItemLevel);
                   pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, pGameNpc->sTrade.pTradeList1[nTradeIdx].dwItemCode, pGame2, 1, eQuality, nStoreItemLevel, nPlayerLevel);
@@ -535,7 +535,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
                   }
 
                   pTradeItemTxt = (D2ItemsTxt*)(pTradeItemTxt->szFlippyFile + 1);
-                } while ((uintptr_t)pTradeItemTxt < (uint32_t)nItemsToGen);
+                } while ((uintptr_t)pTradeItemTxt < nItemsToGen);
               }
 
               D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(pTradeState->pTradeList1[nTradeIdx].dwItemCode, (int*)&nItemClassId);
@@ -2952,8 +2952,8 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
 
 // Confirms and activates a mercenary hire: dismisses any existing PETTYPE_hireable merc (unlinks minion ownership, removes the pet, deletes the DRLG unit, frees the server unit), then resurrects pMerc at full HP via PETS_ResummonPetByUnit, clears frozen/shattered/recycled states, sets the appropriate unit flags (targetable, draw, no-nodraw), recalculates gamble result, positions the merc near the hiring player, and broadcasts merc packets to the game.
 void __fastcall SUNITNPC_ProcessSellConfirmation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMerc) {
-    uint16_t wPosY;
-    uint16_t nPosX;
+    int32_t wPosY;
+    int32_t nPosX;
     int32_t nMaxHp;
     int32_t nPosTemp;
     eD2UnitType eMonsterType;
@@ -2984,20 +2984,20 @@ void __fastcall SUNITNPC_ProcessSellConfirmation(::SGAMEDATA * pGame, D2UnitStrc
     SUNITNPC_ProcessGambleResult(pMerc);
     eMonsterType = pUnit->eUnitType;
     if (eMonsterType == UNIT_OBJECT || (int)eMonsterType > 3 && (int)eMonsterType <= 5) {
-      wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      wPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nPosTemp = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPosTemp;
+      wPosY = nPosTemp;
     } else {
       wPosY = 0;
     }
 
     eMonsterType = pUnit->eUnitType;
     if (eMonsterType == UNIT_OBJECT || (int)eMonsterType > 3 && (int)eMonsterType <= 5) {
-      nPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+      nPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
       nPosTemp = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      nPosX = (uint16_t)nPosTemp;
+      nPosX = nPosTemp;
     } else {
       nPosX = 0;
     }

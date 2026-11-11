@@ -197,6 +197,6 @@ void __fastcall SKILLSASS_StatExpireCallback_ClearState(struct D2UnitStrc * pUni
 _EXCEPTION_DISPOSITION SehHandler_6ca218(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION SehHandler_6ca238(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_D2Client
-// 1 internal function (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Client

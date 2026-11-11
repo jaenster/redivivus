@@ -970,7 +970,7 @@ namespace D2Game::Save {
 uint8_t * pRawSaveBuffer = 0; D2_GLOBAL_GUARD(pRawSaveBuffer, "D2Game::Save::pRawSaveBuffer");
 uint32_t nRawSaveBufferSize = 0; D2_GLOBAL_GUARD(nRawSaveBufferSize, "D2Game::Save::nRawSaveBufferSize");
 } // namespace D2Game::Save
-static size_t nD2PacketsClientBufferSize = 0; D2_STATIC_GUARD(nD2PacketsClientBufferSize, "nD2PacketsClientBufferSize");
+static int nD2PacketsClientBufferSize = 0; D2_STATIC_GUARD(nD2PacketsClientBufferSize, "nD2PacketsClientBufferSize");
 
 namespace D2Client::GAME::SCmd {
 
@@ -2270,25 +2270,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5A(char * pBytes) {
     int nWords;
     D2Packet0x5aEventStructure packet;
     D2Packet0x5aEventStructure* pDst = &packet;
-    for (nWords = 10; nWords; nWords--) {
-      *(uint32_t*)pDst = *(uint32_t*)pBytes;
-      pBytes += 4;
-      pDst = (D2Packet0x5aEventStructure*)((intptr_t)&pDst->nArg + 1);
-    }
-
+    memcpy(pDst, pBytes, 40);
     UI::Text::TEXT_HandleEventMessagePacket(&packet);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x27_PRESETTALK(D2GSPacketSrv0x27 * pBytes) {
     int nWords;
-    D2GSPacketSrv0x27 packet;
-    D2GSPacketSrv0x27* pDst = &packet;
-    for (nWords = 10; nWords; nWords--) {
-      *(uint32_t*)pDst = *(uint32_t*)pBytes;
-      pBytes = (D2GSPacketSrv0x27*)((intptr_t)&pBytes->nUnitGUID + 2);
-      pDst = (D2GSPacketSrv0x27*)((intptr_t)&pDst->nUnitGUID + 2);
-    }
-
+    D2GSPacketSrv0x27* pDst;
+    D2GSPacketSrv0x27 packet = *pBytes;
     UI::Text::TEXT_HandleOverheadTextPacket(&packet);
 }
 
@@ -2511,24 +2500,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5E(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK(D2GSPacketSrv0x91 * pBytes) {
+    uint16_t uVar1;
     int nCount;
-    D2GSPacketSrv0x91 packet;
+    D2GSPacketSrv0x91* pDst;
     uint8_t cAct;
-    D2GSPacketSrv0x91* pDst = &packet;
-    for (nCount = 6; nCount; nCount--) {
-      uint16_t uVar1;
-      cAct = pBytes->nAct;
-      uVar1 = pBytes->nNpcID[0];
-      pDst->nPacketId = pBytes->nPacketId;
-      pDst->nAct = cAct;
-      pDst->nNpcID[0] = uVar1;
-      pBytes = (D2GSPacketSrv0x91*)(pBytes->nNpcID + 1);
-      pDst = (D2GSPacketSrv0x91*)(pDst->nNpcID + 1);
-    }
-
-    cAct = pBytes->nAct;
-    pDst->nPacketId = pBytes->nPacketId;
-    pDst->nAct = cAct;
+    D2GSPacketSrv0x91 packet = *pBytes;
     UI::npcmenu::NPCMENU_MarkNpcSpeechesUpdated(&packet);
 }
 
@@ -2875,13 +2851,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9D(uint8_t * pBytes) {
     int nWordsRemaining;
     uint8_t pBytesCopy[257];
     uint8_t* pWriteCursor = pBytesCopy;
-    for (nWordsRemaining = 0x40; nWordsRemaining; nWordsRemaining--) {
-      *(uint32_t*)pWriteCursor = *(uint32_t*)pBytes;
-      pBytes += 4;
-      pWriteCursor += 4;
-    }
-
-    *pWriteCursor = *pBytes;
+    memcpy(pWriteCursor, pBytes, 0x101);
     switch (pBytesCopy[1]) {
       case 0:
 
@@ -3404,7 +3374,7 @@ static void __stdcall NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure(siz
     if (!pServerCmd || pServerCmd->nUsedBuffersCount + 1 == pServerCmd->nBufferArraySize) {
       pServerCmd = STRUCT_CreateAndPreprareServerCmd(pUnit);
     }
-    if ((int)nExpectedSize > (int)nD2PacketsClientBufferSize) {
+    if ((int)nExpectedSize > nD2PacketsClientBufferSize) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127f);
       exit(-1);
     }
@@ -3441,11 +3411,11 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize)
       return;
     }
 
-    size_t nTotalSize;
+    int nTotalSize;
     nTotalSize = nSize;
     uint8_t* pCurrentPacket;
     pCurrentPacket = (uint8_t*)pBytes;
-    size_t nRemaining;
+    int nRemaining;
     nRemaining = nSize;
     GetTickCount();
     if ((int)nSize > 500) {
@@ -3530,7 +3500,7 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize)
         gbyLastProcessedPacketId = byPacketId;
         nSize = nTotalSize;
         pCurrentPacket = (uint8_t*)pBytes;
-        if ((int)nRemaining <= 0) {
+        if (nRemaining <= 0) {
           gnNetPacketZeroSizeCount++;
           return;
         }

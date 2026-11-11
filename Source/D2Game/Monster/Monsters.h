@@ -158,7 +158,7 @@ void __fastcall InitUmods(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_
 void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char uMod);
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side spawner for SuperUnique (named boss) monsters from the superuniques.txt entry nClassId. Bails if already spawned (boss-flag bitset in pGame->nBossFlagList) unless Stacks allows; applies AutoPos. Creates the base monster via SERVER_SpawnMonsterInternal, marks it superunique, sets boss flags, and rolls its UMod (monster modifier) list: copies the txt's fixed Mod entries (noting aura-enchant 0x1e), then rolls difficulty-scaled random mods via MONUMOD_RollRandomModifier, and applies them with UMOD_ApplyEnchantmentsToMonster and group min/max minion counts. A switch on the superunique's hardcoded index drives quest hooks and special minion spawns (e.g. Countess/ForgottenTower, Diablo, Baal-act bosses). Wraps return in Fog stack guard; returns the spawned unit or 0.
-struct D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, uint32_t nClassId);
+struct D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int nClassId);
 int32_t __fastcall MONSTER_IsMonsterUnit(struct D2UnitStrc * pUnit);
 void __fastcall SERVER_AwardKillExperience(struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim, ::SGAMEDATA * pGame);
 int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_t nPlayerCount);

@@ -127,17 +127,7 @@ void __stdcall GetBeltsLine(int32_t nIndex, int32_t bHigherRes, D2BeltsTxt * pRe
     }
 
     D2BeltsTxt* pSrcEntry = pTxtBelts + bHigherRes * 7 + nIndex;
-    for (iLoop = 0x42; iLoop; iLoop--) {
-      byPadByte0 = pSrcEntry->pad0x01[0];
-      byPadByte1 = pSrcEntry->pad0x01[1];
-      byPadByte2 = pSrcEntry->pad0x01[2];
-      pRecord->nIndex = pSrcEntry->nIndex;
-      pRecord->pad0x01[0] = byPadByte0;
-      pRecord->pad0x01[1] = byPadByte1;
-      pRecord->pad0x01[2] = byPadByte2;
-      pSrcEntry = (D2BeltsTxt*)&pSrcEntry->nBoxes;
-      pRecord = (D2BeltsTxt*)&pRecord->nBoxes;
-    }
+    *pRecord = *pSrcEntry;
 }
 
 void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_t * pInvRect, int32_t nBoxId) {

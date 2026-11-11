@@ -53,6 +53,6 @@ void __fastcall DRLGMAZE_InitializeLevel(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLGMAZE_GenerateLevel(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLGMAZE_ResetMazeRecord(struct D2DrlgLevelStrc * pLevel, BOOL bKeepRecord);
 #endif // D2_MODULE_D2Common
-// 25 internal functions (defined in .cpp)
+// 28 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::Maze

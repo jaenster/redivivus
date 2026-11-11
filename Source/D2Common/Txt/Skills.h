@@ -1430,7 +1430,7 @@ int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal,
 int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkillId);
 int __stdcall SKILL_CalcAttackFrames(struct D2UnitStrc * pUnit);
 // Evaluates one skill-description calc code (bParam selects which, 0..0x48) for skill eSkill at level/param nParam, optionally for unit pUnit; returns the computed value. Dispatches a large switch over the calc selector to skill range, mana cost (and shifted variants), to-hit, min/max/synergy damage (>>8 for display scaling), per-element min/max damage and length from the skill's descmissile entries, missile range, unit level/skill-level, aura/passive radii, and the raw skills.txt calc-column fields (auralencalc, calc[0..3], aurarangecalc, aurastatcalc[0..5], passivecalc[0..4], petmax, skpoints). For the raw-field cases it then runs the value through SKILLS_CompileSkillFormula against the skills calc-code blob. Bounds-checks eSkill; returns 0 on invalid skill/missile or out-of-range selector.
-uint32_t __stdcall SKILLDESC_EvalDescCalcValue(struct D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, uint32_t nSkillLevel);
+uint32_t __stdcall SKILLDESC_EvalDescCalcValue(struct D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, int nSkillLevel);
 uint32_t __fastcall SKILLS_DescCalcCallback_Eval(uint8_t nCalcCode, struct D2SkillCalcContextStrc * pCalcCtx);
 int __fastcall SKILLS_EvalSkillDescCalc_CurrentLevel(eD2Skills eSkill, uint8_t byCalcType, uint32_t nUnused, struct D2UnitStrc * * ppUnit);
 uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t byInnerCalcType, uint8_t bCalcIndex, struct D2SkillCalcContextStrc * ppUnit);
@@ -1442,6 +1442,6 @@ uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(struct D2SkillStrc * pSki
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.
 uint32_t __stdcall SKILL_GetPassiveElementCalc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nElementType);
 #endif // D2_MODULE_D2Common
-// 16 internal functions (defined in .cpp)
+// 18 internal functions (defined in .cpp)
 
 } // namespace D2Common::Skills

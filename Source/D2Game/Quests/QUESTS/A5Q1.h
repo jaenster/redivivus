@@ -79,5 +79,6 @@ void __fastcall Q31_OnOverseerDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUn
 // A5Q1 preset-object load hook: when the Shenk preset object loads, copies its preset object list into the quest data; if Shenk was already spawned and his unit still exists, re-attaches the DRLG map file to his AI. No quest-record bit changes.
 void __thiscall Q31_OnPresetObjectLoad(void * pThis, struct D2MapAIStrc * pMapAI);
 #endif // D2_MODULE_D2Game
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A5Q1

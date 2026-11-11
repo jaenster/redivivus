@@ -384,13 +384,13 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
     static HMODULE HMODULE_007a043c; D2_STATIC_GUARD_BSS(HMODULE_007a043c, "D2Client::ClientModeInGame::fAPPMODE_client_ReturnAppMode::HMODULE_007a043c");
     static int LastReturnTypeClientMode; D2_STATIC_GUARD_BSS(LastReturnTypeClientMode, "D2Client::ClientModeInGame::fAPPMODE_client_ReturnAppMode::LastReturnTypeClientMode");
 
-    D2IniConfigStrc* pIniData = D2IniData;
+    D2IniConfigStrc* D2IniDataSlot;
     D2IniData_client = D2IniData;
     Fog::Memory::InitializeMemoryManagers(nullptr);
     Fog::Memory::SetPoolIdForMemoryManager(nullptr, 1);
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ HMODULE_007a043c = hModule;
     GetModuleFileNameA(hModule, gszModuleFileName, 0x104);
-    BOOL bIsExpansion = LoadDataForGameAndSetupServer(pIniData);
+    BOOL bIsExpansion = LoadDataForGameAndSetupServer(D2IniData);
     if (!bIsExpansion) {
       return 0;
     }
@@ -408,8 +408,8 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
       return 0;
     }
 
-    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&D2IniData, 0);
-    uint32_t bIsOBNetHost = (uint32_t)(pIniData->nGAMETYPE == GAMETYPE_OBNET_HOST);
+    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&D2IniDataSlot, 0);
+    uint32_t bIsOBNetHost = (uint32_t)(D2IniData->nGAMETYPE == GAMETYPE_OBNET_HOST);
     D2Common::DATATBLS::DataTbls::TXT_InitTxtFiles(D2Win::Src::D2WinArchive::ReturnZero(), 0, bIsOBNetHost);
     gdwAppMode = APPMODE_SAVE;
     gbQuitGame = 1;
@@ -431,7 +431,7 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
         D2Common::Logging::ProfCore::D2ProfileDump();
         FreeQServer();
         if (!gbQuitGame) {
-          switch (pIniData->nGAMETYPE) {
+          switch (D2IniData->nGAMETYPE) {
             case GAMETYPE_BNET_BETA:
 
             case GAMETYPE_BNET:

@@ -578,32 +578,29 @@ D2WaypointStrc * __fastcall GetWaypointsForCurrentDifficulty(::SGAMEDATA * pGame
 }
 
 void __fastcall UpgradeLifeAndHitClass(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
-    uint16_t wPosY;
-    uint16_t wPosX;
-    int32_t nPos;
+    uint32_t wPosY;
+    uint32_t wPosX;
     uint32_t dwLastHitClass = pUnit->dwLastHitClass;
     int32_t nPlayerLife = D2Common::Units::GetCurrentLifePercentage(pUnit);
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      wPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPos;
+      wPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
       wPosY = 0;
     }
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+      wPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
       wPosX = 0;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, '\x13', wPosX, wPosY, (uint8_t)dwLastHitClass, (uint8_t)nPlayerLife);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, '\x13', (uint16_t)wPosX, (uint16_t)wPosY, (uint8_t)dwLastHitClass, (uint8_t)nPlayerLife);
 }
 
 void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClient, uint8_t bWarpFade) {
@@ -687,7 +684,7 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     uint32_t dwTargetGUID;
     eD2UnitType eUnitType;
     int32_t nPos;
-    uint16_t wPosX;
+    int32_t wPosX;
     D2UnitStrc* pSelfUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit == pSelfUnit) {
       return;
@@ -726,10 +723,10 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+      wPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = nPos;
     } else {
       wPosX = 0;
     }
@@ -744,7 +741,7 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2ClientStrc * pClient, int32_t nModeIndex) {
     int32_t nPos;
-    uint16_t wPosX;
+    int32_t wPosX;
     uint16_t wPosY;
     uint8_t byHitClass = (uint8_t)pUnitRaw->dwLastHitClass;
     D2DynamicPathStrc* pDynamicPath = pUnitRaw->pPath.pDynamicPath;
@@ -760,10 +757,10 @@ void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2Cli
 
     nUnitType = pUnitRaw->eUnitType;
     if (nUnitType == UNIT_OBJECT || (int)nUnitType > 3 && (int)nUnitType <= 5) {
-      wPosX = (uint16_t)pUnitRaw->pPath.pStaticPath->nPosX;
+      wPosX = pUnitRaw->pPath.pStaticPath->nPosX;
     } else if (pUnitRaw->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetXPos(pUnitRaw->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = nPos;
     } else {
       wPosX = 0;
     }
@@ -776,28 +773,28 @@ void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2Cli
 }
 
 void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, eD2MonsterAnimMode eAnimMode) {
-    uint16_t wPosY;
-    uint16_t wPosX;
+    int32_t wPosY;
+    int32_t wPosX;
     int32_t nPos;
     uint32_t dwLastHitClass = pUnit->dwLastHitClass;
     int32_t dwMoveMode = gaPlayerModeNetMsgTable[eAnimMode].nMoveModeByte;
     int32_t nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      wPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPos;
+      wPosY = nPos;
     } else {
       wPosY = 0;
     }
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+      wPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = nPos;
     } else {
       wPosX = 0;
     }
@@ -806,8 +803,8 @@ void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Client
 }
 
 void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex) {
-    uint16_t wPosY;
-    uint16_t wPosX;
+    int32_t wPosY;
+    int32_t wPosX;
     int32_t nPos;
     D2UnitStrc* pSelfUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit == pSelfUnit) {
@@ -818,20 +815,20 @@ void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitSt
     eD2UnitType eUnitType = pUnit->eUnitType;
     int32_t dwMoveMode = gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      wPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPos;
+      wPosY = nPos;
     } else {
       wPosY = 0;
     }
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+      wPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
       nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = nPos;
     } else {
       wPosX = 0;
     }
@@ -1020,11 +1017,11 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
     uint8_t mpregen;
     mpregen = GetMPRegen(pUnit);
     uint16_t wCurrentStamina;
-    wCurrentStamina = (uint16_t)((uint32_t)nStamina >> 8);
+    wCurrentStamina = (uint16_t)(nStamina >> 8);
     uint16_t wCurrentHp;
-    wCurrentHp = (uint16_t)((uint32_t)nHpDiff >> 8);
+    wCurrentHp = (uint16_t)(nHpDiff >> 8);
     uint16_t wPosY;
-    wPosY = (uint16_t)((uint32_t)nMana >> 8);
+    wPosY = (uint16_t)(nMana >> 8);
     uint16_t wMana;
     wMana = (uint16_t)nUnitPosY;
     uint16_t wPosX;
@@ -1620,7 +1617,7 @@ static eD2ServerIncomingStatus __stdcall OrficeStaffCheck(uint32_t pUid, uint16_
 // Validates whether a player can interact with a waypoint object. Returns 1 if waypoint GID not found, 2 if waypoint is in a different act, nonzero range error if player is too far (range 10, or 22 for Sorceress). If in range and nAreaId is provided, looks up the waypoint ID for that level and checks whether the player already has it unlocked; returns 0 if activating new waypoint, 2 if already owned, 3 if level has no waypoint entry.
 static int32_t __stdcall PlayerCanInteractWithWaypoint(::SGAMEDATA * pGame, uint16_t nAreaId, DWORD nGid, D2UnitStrc * pUnit) {
     bool bHasWaypoint;
-    uint16_t nWpY;
+    int32_t nWpY;
     BOOL bFound;
     int16_t eWaypointId;
     int nWpX;
@@ -1652,10 +1649,10 @@ static int32_t __stdcall PlayerCanInteractWithWaypoint(::SGAMEDATA * pGame, uint
 
     eWpUnitType = pWaypointObj->eUnitType;
     if (eWpUnitType == UNIT_OBJECT || (int)eWpUnitType > 3 && (int)eWpUnitType <= 5) {
-      nWpY = (uint16_t)pWaypointObj->pPath.pStaticPath->nPosY;
+      nWpY = pWaypointObj->pPath.pStaticPath->nPosY;
     } else if (pWaypointObj->pPath.pDynamicPath) {
       nRangeOrStatus = D2Common::PATH::DynamicPath::GetYPos(pWaypointObj->pPath.pDynamicPath);
-      nWpY = (uint16_t)nRangeOrStatus;
+      nWpY = nRangeOrStatus;
     } else {
       nWpY = 0;
     }
@@ -3773,22 +3770,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3E_QuestItemPickup(::SGAMEDATA * pGame
 
       eUnitType = pQuestItem->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&nPosX = (uint16_t)pQuestItem->pPath.pStaticPath->nPosX;
+        nPosX = pQuestItem->pPath.pStaticPath->nPosX;
       } else if (pQuestItem->pPath.pDynamicPath) {
         nPosX = D2Common::PATH::DynamicPath::GetXPos(pQuestItem->pPath.pDynamicPath);
-        nPosX = (uint32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)nPosX);
       } else {
-        *(uint16_t*)(char*)&nPosX = 0;
+        nPosX = 0;
       }
 
       eUnitType = pQuestItem->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&nPosY = (uint16_t)pQuestItem->pPath.pStaticPath->nPosY;
+        nPosY = pQuestItem->pPath.pStaticPath->nPosY;
       } else if (pQuestItem->pPath.pDynamicPath) {
         nPosY = D2Common::PATH::DynamicPath::GetYPos(pQuestItem->pPath.pDynamicPath);
-        nPosY = (uint32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)nPosY);
       } else {
-        *(uint16_t*)(char*)&nPosY = 0;
+        nPosY = 0;
       }
 
       eVar1 = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nPosX, (uint16_t)nPosY);

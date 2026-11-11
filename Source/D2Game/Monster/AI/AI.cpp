@@ -3137,7 +3137,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2UnitStrc* pBestTarget = 0;
-    int32_t nNearestPlayerDist = 0x7fffffff;
+    uint32_t nNearestPlayerDist = 0x7fffffff;
     BOOL bCheckResult = MONSTERAI_FindSwitchAiTarget((D2UnitStrc*)bNeedLOS, 0, &pBestTarget, &nBestDist, pGame, pUnit);
     if (!bCheckResult) {
       D2RoomStrc* pUnitRoom;
@@ -3175,7 +3175,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
                 bCheckResult = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom);
                 if (!bCheckResult) {
                   nDist = GetCollisionDistanceFromXY(pPlayerUnit_lcl, nScanOriginX, nScanOriginY);
-                  if (nDist < (uint32_t)nNearestPlayerDist) {
+                  if (nDist < nNearestPlayerDist) {
                     nNearestPlayerDist = nDist;
                   }
 
@@ -8951,7 +8951,7 @@ bool __fastcall AI_Monster_CheckReturnToHome(::SGAMEDATA * pGame, D2UnitStrc * p
     D2MonsterAiCmdStrc* pHomeCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
     if (!pHomeCmd) {
       uint32_t nInitResult;
-      *(uint8_t*)(char*)&nInitResult = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
+      nInitResult = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
       return *(uint8_t*)(char*)&nInitResult;
     }
 
@@ -17254,14 +17254,14 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     nMonStatsTxtAddr = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral;
     pAiGeneral = pAiParam->pMonsterAiGeneral;
-    uint32_t nAiArg0;
+    int nAiArg0;
     nAiArg0 = pAiGeneral->dwArg0;
     ::SGAMEDATA* pGameCopy;
     pGameCopy = pGame;
     D2UnitStrc* pTargetCopy;
     pTargetCopy = pTarget;
     if (!pTarget) {
-      if ((int)nAiArg0 < 1) {
+      if (nAiArg0 < 1) {
         goto schedule_rethink;
       }
 
@@ -17281,7 +17281,7 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
       pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       pTarget = pTargetCopy;
       if (pTargetRoom != pUnitRoom && nUnitPosY) {
-        if ((int)nAiArg0 < 1) {
+        if (nAiArg0 < 1) {
           CastSkillWithDistanceOffset(pGame, pUnit, pTargetCopy, 9, 0);
           return;
         }
@@ -17316,8 +17316,8 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     DStack_4c.nBestDistance = 0x79;
     DStack_4c.pLOSFlagOrSecondary = (D2UnitStrc*)(int)nMonStatsTxtAddr->aip[2][pGame->nDifficulty];
     ForEach(pGame, pUnit, &DStack_4c, (fpMonsterAiForEach)MONSTERAI_FindLowHpTarget, 1);
-    if ((int)nAiArg0 <= 1) {
-      if (0 < (int)nAiArg0) {
+    if (nAiArg0 <= 1) {
+      if (0 < nAiArg0) {
         goto try_landing;
       }
     } else {
@@ -17980,7 +17980,10 @@ void __fastcall AITHINK_Fn1_Arach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     if (bEngagedInCombat) {
       pMonsterAiGeneral->dwArg0 = 2;
       DVar1 = D2_SeedRoll(pSeed);
-      if ((int)(DVar1 % 100) >= (int)pMonStats->aip[0][pGame->nDifficulty]) {
+      if ((int)(DVar1 % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
+        return;
+      } else {
         if (!(nUnitLifePct >= pMonStats->aip[4][pGame->nDifficulty])) {
           pMonsterAiGeneral->dwArg0 = 1;
           if (pMonStats->aSkill[0] >= 0) {
@@ -18004,9 +18007,6 @@ void __fastcall AITHINK_Fn1_Arach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         PlanNextAiMove(pGame, pUnit, 0xf);
         return;
       }
-
-      AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
-      return;
     }
 
     eSpiderLayState = MONSTERAI_IsMonsterAttacking(pUnit);

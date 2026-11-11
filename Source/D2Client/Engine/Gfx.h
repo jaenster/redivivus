@@ -7378,6 +7378,6 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(struct D2UnitStrc * pUnit);
 BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, int32_t pPalShift, int32_t bDrawStates);
 int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0();
 #endif // D2_MODULE_D2Client
-// 24 internal functions (defined in .cpp)
+// 25 internal functions (defined in .cpp)
 
 } // namespace D2Client::Engine::Gfx

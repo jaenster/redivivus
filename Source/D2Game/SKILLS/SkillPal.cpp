@@ -1086,7 +1086,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, D2DynamicPathStrc * nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
-    eD2Skills eSkillSaved = eSkill;
+    eD2Skills eSkillSlot;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
@@ -1097,7 +1097,7 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
       return 0;
     }
 
-    BOOL bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &eSkill, &nTargetY);
+    BOOL bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &eSkillSlot, &nTargetY);
     if (!bGotTargetPos) {
       return 0;
     }
@@ -1109,8 +1109,8 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     sSkillArg.nUnitY = nTargetY;
     sSkillArg.nSkillLevel = (int32_t)nSkillLvl;
     sSkillArg.nFlags = 0x20;
-    sSkillArg.nUnitX = eSkill;
-    sSkillArg.eSkillNo = eSkillSaved;
+    sSkillArg.nUnitX = eSkillSlot;
+    sSkillArg.eSkillNo = eSkill;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = eSkillId;
@@ -1122,7 +1122,7 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     nSkillLvl = pUnit_00->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::PATH_SetPathType(nSkillLvl, 0xe);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(nSkillLvl, pUnit_00, 0);
-    int32_t nConcentrationBonusPct = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, eSkillSaved);
+    int32_t nConcentrationBonusPct = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, eSkill);
     if (nConcentrationBonusPct) {
       int32_t nConcentrationBonus;
       nConcentrationBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0), nConcentrationBonusPct + 100, 100);

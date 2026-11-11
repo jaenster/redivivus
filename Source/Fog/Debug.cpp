@@ -855,7 +855,7 @@ bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, 
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
     if (!hDbgHelpDll) {
-      *(uint8_t*)(char*)&bLoadOk = DEBUG_LoadDbgHelp64Apis();
+      bLoadOk = DEBUG_LoadDbgHelp64Apis();
       if (!*(uint8_t*)(char*)&bLoadOk) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
         return false;
@@ -1030,12 +1030,7 @@ bool __fastcall Unreferenced_00402c30(D2FogDebugModuleEntryStrc * pSrcEntry, D2F
     }
 
     D2FogDebugModuleEntryStrc* pDVar2 = pTable->aEntries + pTable->nCount;
-    for (iVar1 = 0x8a; iVar1; iVar1--) {
-      pDVar2->pImageBase = pSrcEntry->pImageBase;
-      pSrcEntry = (D2FogDebugModuleEntryStrc*)&pSrcEntry->nImageSize;
-      pDVar2 = (D2FogDebugModuleEntryStrc*)&pDVar2->nImageSize;
-    }
-
+    *pDVar2 = *pSrcEntry;
     pTable->nCount++;
     return pTable->nCount < 0x100;
 }
@@ -1375,7 +1370,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
     _MODULEINFO sModuleInfo;
     pfnGetModuleInformation pGetModuleInformation;
     uint32_t nBytesNeeded;
-    uint32_t nModuleCount;
+    int nModuleCount;
     char szModuleName[256];
     char szModulePath[260];
     D2FogModuleNodeStrc* pCurModule;
@@ -1410,10 +1405,10 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       }
 
       nModuleCount = nBytesNeeded >> 2;
-      if ((int32_t)nModuleCount <= 0x100) {
+      if ((int32_t)(uint32_t)nModuleCount <= 0x100) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
         nModuleIdx = 0;
-        if ((int)nModuleCount > 0) {
+        if (nModuleCount > 0) {
           do {
             bCallOk = (*pFVar1)(hProcessLocal2, ahModules[nModuleIdx], &sModuleInfo, 0xc);
             if (!bCallOk) {
@@ -1466,7 +1461,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
 
             nModuleIdx++;
             hProcessLocal2 = hProcessLocal;
-          } while (nModuleIdx < (int)nModuleCount);
+          } while (nModuleIdx < nModuleCount);
         }
 
         /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hPsapi);
@@ -2613,5 +2608,8 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca695(EHExceptionRecord * pException
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca6c5(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
+
+static void * keep_00402b80 = (0 ? (ZeroStruct16Bytes(*(void * *)0), (void *)0) : (void *)0);
+static void * keep_00402ba0 = (0 ? (ZeroStruct16BytesDuplicate(*(void * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::Debug

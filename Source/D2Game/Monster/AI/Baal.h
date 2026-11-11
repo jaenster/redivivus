@@ -57,6 +57,6 @@ void __fastcall AI_Fn1_UberBaal(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, 
 // Baal Crab Clone AI tick. Verifies its owner (both AI-general owner and unit owner) is still alive; kills itself via SERVER_KillMonster if owner is dead. If alive, runs the same SelectTargetBaal + anchor + AI_BaalEvaluateCombatAction loop as the real crab, but suppresses action ids 7/9/14/15 (special Baal-only actions), replacing them with action 2. Walks to idle position if no target found.
 void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 #endif // D2_MODULE_D2Game
-// 9 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace D2Game::Monster::AI::Baal

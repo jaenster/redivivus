@@ -127,6 +127,6 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
 // LPCWSTR - half of a designed rewrite. LPWSTR is outside that rewrite set, so both sides now agree.
 bool __fastcall FILETOOLS_CreateDirectoryW(LPWSTR lpPathName);
 #endif // D2_MODULE_Fog
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace Fog::File

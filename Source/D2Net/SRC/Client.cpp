@@ -276,7 +276,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
     int32_t pCompressedConsumed;
     fd_set fdSetRead;
     timeval tvSelectTimeout;
-    int32_t pCompressedEnd;
+    uint32_t pCompressedEnd;
     uint8_t aCompressedBuf[2496];
     uint8_t bLenHeaderByte;
     char* lpOutputString;

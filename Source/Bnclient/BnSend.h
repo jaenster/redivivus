@@ -339,6 +339,6 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
 void StaticInit_gpBNetNewsCache();
 void StaticFini_gpBNetNewsCache();
 #endif // D2_MODULE_Bnclient
-// 2 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace Bnclient::BnSend

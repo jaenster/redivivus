@@ -60,7 +60,7 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
     bool bHasTarget;
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetYOrX;
-    eD2Skills eSkillId = eSkill;
+    eD2Skills eSkillSlot;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
       return 0;
     }
@@ -71,7 +71,7 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameLocal, pUnit, &eSkill, &nTargetYOrX);
+    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameLocal, pUnit, &eSkillSlot, &nTargetYOrX);
     if (!_bHasTarget) {
       return 0;
     }
@@ -85,9 +85,9 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
     sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
-    sSkillArg.eSkillNo = eSkillId;
+    sSkillArg.eSkillNo = eSkill;
     int32_t nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    sSkillArg.nUnitX = eSkill - nTmpPos;
+    sSkillArg.nUnitX = eSkillSlot - nTmpPos;
     nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sSkillArg.nUnitY = nTargetYOrX - nTmpPos;
     D2UnitStrc* pUnit_00 = MISSILES::Missiles::CreatingMissile(pGameLocal, &sSkillArg);

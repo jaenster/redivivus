@@ -48,6 +48,6 @@ void __fastcall _tr_flush_bits(deflate_state * pDeflateState);
 void __fastcall _tr_align(deflate_state * pDeflateState);
 void __fastcall _tr_flush_block(deflate_state * pDeflateState, char * pbBuf, uint32_t nStoredLen, int32_t nLast);
 #endif // D2_MODULE_Storm
-// 13 internal functions (defined in .cpp)
+// 14 internal functions (defined in .cpp)
 
 } // namespace Storm::_3rdparty::zlib::trees

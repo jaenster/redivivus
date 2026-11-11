@@ -30,5 +30,6 @@ void DEBUG_Trace(char * str, ...);
 void DEBUG_Trace_Unref_0051d2d0(char * str);
 void DEBUG_Trace_Unref_0051d2e0(char * str);
 #endif // D2_MODULE_Bnclient
+// 1 internal function (defined in .cpp)
 
 } // namespace Bnclient::Debug

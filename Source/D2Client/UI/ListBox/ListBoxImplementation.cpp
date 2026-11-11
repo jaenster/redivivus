@@ -63,10 +63,9 @@ void __thiscall Clear(::ListBoxImplementation * pThis) {
 }
 
 void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
-    uint32_t nThumbEnd;
     D2GfxDataStrc sGfxData;
     int nThumbSegCount;
-    uint32_t nScrollStart;
+    int nScrollStart;
     int nFirstVisible = pThis->nFirstVisibleIndex;
     uint32_t nItemCount = (uint32_t)pThis->nItemCount;
     int nVisibleCount = 0;
@@ -119,16 +118,16 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     } else {
       nScrollStart = pThis->nScrollTrackSegments;
       if (!(nVisibleCount < (int)(nItemCount - nFirstVisible))) {
-        nItemCount = nScrollStart - (nScrollStart * nThumbRatio >> 7);
-        if ((int)nScrollStart < (int)nItemCount) {
+        nItemCount = nScrollStart - ((uint32_t)(nScrollStart * nThumbRatio) >> 7);
+        if (nScrollStart < (int)nItemCount) {
           nItemCount = nScrollStart;
         }
       } else {
-        nItemCount = (int)(nScrollStart * nVisibleCount) / (int)nItemCount;
+        nItemCount = nScrollStart * nVisibleCount / (int)nItemCount;
         nItemCount = (int)nItemCount < 0 ? 0 : nItemCount;
-        nThumbEnd = (nScrollStart * nThumbRatio >> 7) + nItemCount;
-        if ((int)nScrollStart >= (int)nThumbEnd) {
-          nScrollStart = nThumbEnd;
+        nFirstVisible = ((uint32_t)(nScrollStart * nThumbRatio) >> 7) + nItemCount;
+        if (nScrollStart >= nFirstVisible) {
+          nScrollStart = nFirstVisible;
         }
       }
     }
@@ -142,8 +141,8 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     sGfxData.nFrameNumber = 0x10;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nVisibleCount, nThumbTop, -1, DRAW_SOLID, nullptr);
     sGfxData.nFrameNumber = 0xe;
-    nThumbEnd = nItemCount;
-    if ((int)nItemCount < (int)nScrollStart) {
+    uint32_t nThumbEnd = nItemCount;
+    if ((int)nItemCount < nScrollStart) {
       nThumbSegCount = nScrollStart - nItemCount;
       nThumbEnd = nThumbSegCount + nItemCount;
       do {

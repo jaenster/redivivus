@@ -464,6 +464,6 @@ int __fastcall CheckIfPlayerIsBannedByAddress(struct D2QServerStrc * pQServer, i
 // @sourcefile .\Src\QServer\QServer.cpp
 void __fastcall RecvForClient(struct D2QServerStrc * pQServer, struct D2QServerClientConnectionStrc * pClient);
 #endif // D2_MODULE_Fog
-// 9 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace Fog::Src

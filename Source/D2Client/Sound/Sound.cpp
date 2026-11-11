@@ -1195,7 +1195,7 @@ static void SOUND_StopUnitSound(D2SoundChannelStrc * pChannel) {
 }
 
 void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * pUnit, int32_t bForceStop) {
-    bool bForceStopNeeded;
+    BOOL bForceStopNeeded;
     D2SoundChannelStrc* nChanDataPtr;
     if (!nChannelHandle || !pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce);
@@ -1220,9 +1220,9 @@ void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * 
     D2SoundsTxt* pSoundsTxtLine = SoundHdr::TXT_sounds_GetLineBySoundId(nChanDataPtr->nSoundId);
     D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&nChanDataPtr->pUnitList, (intptr_t)pUnit);
     if (!pSoundsTxtLine->Loop || nChanDataPtr->bFadeActive && !nChanDataPtr->nFadeDir) {
-      bForceStopNeeded = true;
+      bForceStopNeeded = 1;
     } else {
-      bForceStopNeeded = false;
+      bForceStopNeeded = 0;
     }
     if (nChanDataPtr->pUnitList) {
       return;
@@ -1510,7 +1510,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007c8a74);
 }
 
-int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus) {
+int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, int nModulus) {
     int nMinDist;
     uint32_t nMod1;
     int nWrapDist;
@@ -1519,8 +1519,8 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFr
       nMod1 = nMod2 & nFrame;
       nMod2 &= nFootstepFrame;
     } else {
-      nMod1 = (int)nFrame % (int)nModulus;
-      nMod2 = (int)nFootstepFrame % (int)nModulus;
+      nMod1 = (int)nFrame % nModulus;
+      nMod2 = (int)nFootstepFrame % nModulus;
     }
 
     int nDiff = nMod2 - nMod1;

@@ -187,6 +187,6 @@ void __stdcall DRLGROOMEX_LinkNearRoomsByVis(struct D2PoolManagerStrc * pMemory,
 // Defines near rooms, then for each vis flag bit (0x10..0x800) links rooms across levels via DRLGROOMEX_LinkNearRoomsByVis unless in level 0x85. Finally sets town-related flag based on near rooms.
 void __fastcall DRLGROOMEX_InitNearRoomsAndVisTiles(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx);
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::DrlgRoom

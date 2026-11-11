@@ -533,6 +533,6 @@ BOOL __fastcall ActivateWindow_Unref_00513b80();
 void __fastcall SetDefaultPerspectiveFactor_Unref_00514040();
 void __fastcall SetDefaultPerspectiveFactor_Unref_00514050();
 #endif // D2_MODULE_D2DDraw
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2DDraw::Renderer::DirectDraw

@@ -432,13 +432,7 @@ static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char
           }
           if (nModel == 6) {
             pSrcName = "Athlon MP, XP, or Mobile";
-            for (nCopyCount = 6; nCopyCount; nCopyCount--) {
-              *(uint32_t*)pOutName = *(uint32_t*)pSrcName;
-              pSrcName += 4;
-              pOutName += 4;
-            }
-
-            *pOutName = *pSrcName;
+            memcpy(pOutName, pSrcName, 25);
             return;
           }
           if (nModel == 7) {
@@ -505,14 +499,7 @@ static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char
           }
           if (nModel >= 8) {
             pSrcName = "Pentium III (no brand)";
-            for (nCopyCount = 5; nCopyCount; nCopyCount--) {
-              *(uint32_t*)pOutName = *(uint32_t*)pSrcName;
-              pSrcName += 4;
-              pOutName += 4;
-            }
-
-            *(uint16_t*)pOutName = *(uint16_t*)pSrcName;
-            pOutName[2] = pSrcName[2];
+            memcpy(pOutName, pSrcName, 23);
             return;
           }
         } else if (nFamily == 0xf) {
@@ -865,7 +852,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     pSavedFileName = szFileName;
     uint32_t dwNow;
     dwNow = GetTickCount();
-    uint32_t nEmptySlot;
+    int nEmptySlot;
     nEmptySlot = -1;
     uint32_t nFreeHandleSlot;
     nFreeHandleSlot = -1;
@@ -897,7 +884,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
 
         nFreeHandleSlotTmp = nFreeHandleSlot;
         if (!*pSlotNameBase) {
-          if ((int)nEmptySlot < 0) {
+          if (nEmptySlot < 0) {
             nEmptySlot = nSlot;
           }
         } else if (!*(int*)((char*)globalOpenFileHandleArray + nSlotOffset)) {
@@ -922,7 +909,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
       } while ((intptr_t)pStoredName < (intptr_t)((char*)&gLogFileNameArray + sizeof(gLogFileNameArray)));
 
       nSlot = nEmptySlot;
-      if ((int)nEmptySlot >= 0) {
+      if (nEmptySlot >= 0) {
         goto open_in_slot;
       }
       if ((int)nFreeHandleSlot >= 0) {

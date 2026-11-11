@@ -1781,7 +1781,7 @@ void __stdcall D2GFX_InitializeLineBuffer() {
             nBlendValue = 0x1f000000;
           }
 
-          (*(uint8_t (*)[32])*pbTileRowPtr)[iPixel] = (uint8_t)((uint32_t)nBlendValue >> 0x18);
+          (*(uint8_t (*)[32])*pbTileRowPtr)[iPixel] = (uint8_t)(nBlendValue >> 0x18);
           iPixel++;
           uVar1 = nBlendValue + (nColorStep >> 5);
         } while (iPixel < 0x20);

@@ -181,6 +181,6 @@ int32_t __fastcall deflateInit2_(z_stream * pStream, uint32_t nLevel, int32_t nM
 uint32_t __fastcall deflateParams(z_stream * pStream, int32_t nLevel, uint32_t nStrategy);
 int __fastcall deflateInit_(z_stream * pStream, uint32_t nLevel, char * szVersion, int32_t nStreamSize);
 #endif // D2_MODULE_Storm
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace Storm::_3rdparty::zlib::deflate

@@ -487,8 +487,9 @@ void __fastcall Q10_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
     }
 
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+    D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(t2_c0);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     if (pItemsTxt->dwCode == 0x20706976) {
       /* GetQuestState Step0x04 (viper dropped: is the "told" bit set?) */ bQuestStateFlag = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x04);

@@ -828,6 +828,6 @@ void __fastcall FreeServerCmd(struct D2UnitStrc * pUnit);
 // Drains the per-unit incoming packet queue (D2ServerCmdStrc). For each buffered packet: determines its size via NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize, validates opcode (≤0xAE), checks the expected size from the dispatch table, asserts the handler pointer is non-null, then calls the handler (NET_D2GS_CLIENT_INCOMING[opcode].fpIncomingHandlerUnit). After all packets are dispatched, zeroes the buffer and resets nUsedBuffersCount.
 void __fastcall SCMD_ProcessIncomingPacketBuffer(struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Client
-// 8 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::GAME::SCmd

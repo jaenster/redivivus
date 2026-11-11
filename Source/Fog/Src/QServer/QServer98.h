@@ -43,5 +43,6 @@ BOOL __fastcall SendToClientOnline(struct D2QServerStrc * pQServer, struct D2QSe
 DWORD __stdcall SocketThreadMain(void * lpThreadParam);
 BOOL __fastcall CreateSocketOnline(struct D2QServerStrc * pQServer, u_short nPort);
 #endif // D2_MODULE_Fog
+// 1 internal function (defined in .cpp)
 
 } // namespace Fog::Src::QServer::QServer98

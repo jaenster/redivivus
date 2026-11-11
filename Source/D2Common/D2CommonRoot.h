@@ -39,5 +39,6 @@ int32_t __stdcall DRLGPRESET_GetObjectTableActCount(uint8_t nActNo);
 // to remap object preset IDs to actual object class IDs.
 int32_t __stdcall DRLGPRESET_GetObjectIdFromActTable(uint8_t nActNo, int32_t nIndex);
 #endif // D2_MODULE_D2Common
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Common

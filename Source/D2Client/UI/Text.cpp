@@ -3241,7 +3241,7 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
     pNewMsg->pNext = 0;
     DWORD dwNow = GetTickCount();
     pNewMsg->dwMessageExpiration = dwNow + 10000;
-    size_t nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+    int nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     pNewMsg->nLineCount = 0;
     size_t nSegLen = nTotalLen;
     size_t nOffset = 0;
@@ -3487,6 +3487,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
     D2MonStatsTxt* pMonStatsTxt;
     D2SuperUniquesTxt* pSuperUniqueTxt;
     uint16_t* pwszArg;
+    uint16_t* pwszLocale;
     uint16_t nNameStrId;
     int nNameCmp;
     uint16_t nKillFmtStrId;
@@ -3502,14 +3503,10 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
     uint32_t pnFmtArg;
     char* pszName;
     pszName = pMessageCtx->szName1;
-    uint16_t* pwszLocale;
-    pwszLocale = awszMessage;
     D2Packet0x5aEventStructure* pMsgCtxSaved;
     pMsgCtxSaved = pMessageCtx;
-    for (nNameCmp = 0x99; nNameCmp; nNameCmp--) {
-      pwszLocale[0] = L'\0';
-      pwszLocale[1] = L'\0';
-      pwszLocale += 2;
+    for (nNameCmp = 0; nNameCmp < 0x132; nNameCmp++) {
+      awszMessage[nNameCmp] = L'\0';
     }
 
     memset(awszName, 0, 16 * sizeof(awszName[0]));

@@ -28,7 +28,7 @@ template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32
     int nLinkOffset;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
-    int32_t iBucket = 0;
+    uint32_t iBucket = 0;
     if (this->tSlotListArray.m_count <= 0) {
       return;
     }
@@ -63,7 +63,7 @@ template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32
       }
 
       iBucket++;
-    } while ((uint32_t)iBucket < this->tSlotListArray.m_count);
+    } while (iBucket < this->tSlotListArray.m_count);
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns

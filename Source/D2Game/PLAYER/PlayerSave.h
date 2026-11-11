@@ -209,6 +209,6 @@ int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, struct D2C
 BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, char * pClientCharName, BOOL bLoadFromSave, struct D2UnitStrc * * ppUnitOut, struct D2RoomStrc * pRoomOrNull, uint32_t nX, uint32_t nY);
 void __stdcall WapperSaveGameAllGameTypes(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * szText);
 #endif // D2_MODULE_D2Game
-// 13 internal functions (defined in .cpp)
+// 14 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::PlayerSave

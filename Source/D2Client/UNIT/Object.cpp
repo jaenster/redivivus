@@ -931,22 +931,24 @@ void __fastcall OBJECT_UpdateShrineOverlay(D2UnitStrc * pUnit, D2ShrinesTxt * pS
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x337);
       exit(-1);
     }
-    if (aShrineDispatchTable[nShrineCode].nOverlayIdActive != -1) {
-      Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, aShrineDispatchTable[nShrineCode].nOverlayIdActive);
+
+    D2ShrineDispatchEntryStrc* t2_r0 = &aShrineDispatchTable[nShrineCode];
+    if (t2_r0->nOverlayIdActive != -1) {
+      Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, t2_r0->nOverlayIdActive);
       if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, aShrineDispatchTable[nShrineCode].nOverlayIdActive, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, t2_r0->nOverlayIdActive, 3, 0, 0, 0, 0, 0);
       }
     }
-    if (aShrineDispatchTable[nShrineCode].nOverlayIdInactive == -1) {
+    if (t2_r0->nOverlayIdInactive == -1) {
       return;
     }
 
-    Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, aShrineDispatchTable[nShrineCode].nOverlayIdInactive);
+    Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, t2_r0->nOverlayIdInactive);
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }
 
-    Engine::Gfx::GFX_AddOverlayToUnit(pUnit, aShrineDispatchTable[nShrineCode].nOverlayIdInactive, 3, 0, 0, 0, 0, 0);
+    Engine::Gfx::GFX_AddOverlayToUnit(pUnit, t2_r0->nOverlayIdInactive, 3, 0, 0, 0, 0, 0);
 }
 
 static void __stdcall OBJECT_PlayShrineSound(D2UnitStrc * pUnit, D2UnitStrc * pSourceUnit) {
@@ -959,11 +961,13 @@ static void __stdcall OBJECT_PlayShrineSound(D2UnitStrc * pUnit, D2UnitStrc * pS
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34e);
         exit(-1);
       }
-      if (aShrineDispatchTable[pShrinesTxt->nCode].nSoundId == SOUND_NONE) {
+
+      D2ShrineDispatchEntryStrc* t2_r0 = &aShrineDispatchTable[pShrinesTxt->nCode];
+      if (t2_r0->nSoundId == SOUND_NONE) {
         return;
       }
 
-      Sound::SOUND_PlaySound(aShrineDispatchTable[pShrinesTxt->nCode].nSoundId, pUnit, 0, 0, 0);
+      Sound::SOUND_PlaySound(t2_r0->nSoundId, pUnit, 0, 0, 0);
       return;
     }
 }
@@ -1005,11 +1009,13 @@ static void OBJECT_DispatchShrineClientFunc(D2UnitStrc * pUnit) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37b);
         exit(-1);
       }
-      if (!aShrineDispatchTable[pShrinesTxt->nCode].fpClientOverlayUpdate) {
+
+      D2ShrineDispatchEntryStrc* t2_r0 = &aShrineDispatchTable[pShrinesTxt->nCode];
+      if (!t2_r0->fpClientOverlayUpdate) {
         return;
       }
 
-      aShrineDispatchTable[pShrinesTxt->nCode].fpClientOverlayUpdate(pUnit, pShrinesTxt);
+      t2_r0->fpClientOverlayUpdate(pUnit, pShrinesTxt);
       return;
     }
 }

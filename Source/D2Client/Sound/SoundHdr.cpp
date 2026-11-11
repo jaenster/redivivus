@@ -245,7 +245,7 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     uint8_t* pSoundRow;
     int nEnvRemaining;
     char szPath[260];
-    uint32_t nGroupSize;
+    int nGroupSize;
     uint32_t nFileSize;
     int32_t nLine;
     int nSong;
@@ -343,13 +343,13 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       if (1 < nTxtSoundsSize) {
         pSoundRow = &pTxtSounds[1].Group_Size;
         do {
-          if (!nMaxSong || nEnvRemaining < nMaxSong || nEnvRemaining >= (int)(nGroupSize + nMaxSong)) {
+          if (!nMaxSong || nEnvRemaining < nMaxSong || nEnvRemaining >= nGroupSize + nMaxSong) {
             *(int*)(pSoundRow + 0x23) = nEnvRemaining;
           } else {
             *(int*)(pSoundRow + 0x23) = nMaxSong;
           }
           if (*pSoundRow) {
-            nGroupSize = (uint32_t)*pSoundRow;
+            nGroupSize = (int)*pSoundRow;
             nMaxSong = nEnvRemaining;
           } else {
             *pSoundRow = 1;

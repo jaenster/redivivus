@@ -24,7 +24,6 @@
 #   oracle all                build, map, libmap, audit
 #   oracle quick [--verify]   all, doing only what changed; prints gained/lost MATCH
 #                             (--verify: then the full run too, and diff the two)
-#   oracle fix [PATTERN]      run every fixer over the tree (scripts/fix_all.py), then build, audit
 #   oracle crt                re-derive evidence/crtmap.tsv (the linked CRT)
 #   oracle ref                re-carve the original into functions (cached; automatic; zig/)
 #   oracle rich <pe>          decode a PE's Rich header
@@ -56,7 +55,8 @@ set -euo pipefail
 # zig/ (oracle-zig, have_zig and oracle_zig in scripts/env.sh) is the oracle in Zig: every
 # stage and tool. It needs zig 0.17 on PATH. The Python left is build.py, for a machine with
 # no ghidra-reconstruct checkout to translate with (it then translates with vc8_translate.py),
-# and the fixers (`oracle fix`, scripts/fix_*.py) with the modules they import.
+# with the modules it imports. The source fixes are ghidra-reconstruct's: its generator
+# passes, and the vc8form permuter (recon/runs/vc8form-permute.sh) for per-function forms.
 need_zig() {
     echo "oracle: '$1' needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2
     exit 2
@@ -82,8 +82,6 @@ carve() {
     local ref="$ORACLE_ROOT/build/ref"
     mkdir -p "$ref"
     oracle_zig carve "$REFERENCE_EXE" "$ref/functions.tsv.new"
-    # model.pkl (the fixers' decoded carve) is stale once the carve differs.
-    cmp -s "$ref/functions.tsv.new" "$ref/functions.tsv" || rm -f "$ref/model.pkl"
     mv "$ref/functions.tsv.new" "$ref/functions.tsv"
 }
 
@@ -153,8 +151,9 @@ case "$cmd" in
     objdiff) zigtool_noroot objdiff "$@" ;;
     abcompare) zigtool_noroot abcompare "$@" ;;
     commit) zigtool_noroot commit "$@" ;;
-    fix)    if is_experiment; then echo "oracle fix: not in an experiment - it edits the tree" >&2; exit 2; fi
-            ensure_ref; oracle_python "$SCRIPTS/fix_all.py" "$@" ;;
+    fix)    echo "oracle fix: removed - the source fixers moved into ghidra-reconstruct (its" >&2
+            echo "  generator passes; per-function forms: recon/runs/vc8form-permute.sh)" >&2
+            exit 2 ;;
     all)    "$0" build "$@"; "$0" map; "$0" libmap; "$0" audit ;;
     quick)  ensure_ref
             if is_experiment; then echo "oracle quick: not in an experiment" >&2; exit 2; fi

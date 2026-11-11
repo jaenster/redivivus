@@ -925,12 +925,12 @@ void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoo
               }
               if (nDensityResult) {
                 if (nDensityResult != 1) {
-                  *(uint8_t*)(char*)&nMinGrp = 1;
-                  *(uint8_t*)(char*)&nMaxGrp = 1;
+                  nMinGrp = 1;
+                  nMaxGrp = 1;
                   bIsFallenOrScarab = CheckIfBaseIsFallenOrScarabAndSet(dwClassId);
                   if (!bIsFallenOrScarab) {
-                    *(uint8_t*)(char*)&nMinGrp = pMonStatLine->MinGrp;
-                    *(uint8_t*)(char*)&nMaxGrp = pMonStatLine->MaxGrp;
+                    nMinGrp = pMonStatLine->MinGrp;
+                    nMaxGrp = pMonStatLine->MaxGrp;
                   }
                   if (pMonStatLine->sparsePopulate != '\0') {
                     seedNext = D2_SeedRoll(&pGame->pGameSeed);

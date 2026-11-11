@@ -1284,9 +1284,8 @@ int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2Unit
 // Ticks stamina recovery for a player unit each game loop. Reads current stamina and UNITSTAT_staminarecoverybonus; recovery shift is 8 (standing/town-walk) or 9 (walking). Applies bonus percentage, clamps to max stamina, then writes back via STATLIST_SetUnitStat. Returns early if already at max or if in a non-recovery anim mode (e.g. attacking).
 static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
     eD2PlayerAnimMode eAnimMode;
-    int32_t nShiftAmount;
     uint32_t nCurrentStamina = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0);
-    *(uint8_t*)(char*)&nShiftAmount = 8;
+    int32_t nShiftAmount = 8;
     int nRecoveryBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_staminarecoverybonus, 0);
     if (!pUnit) {
       eAnimMode = Death;

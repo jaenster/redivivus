@@ -117,6 +117,6 @@ bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput);
 int Unreferenced_004067c0();
 uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
 #endif // D2_MODULE_Fog
-// 7 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 } // namespace Fog::Engine::Application

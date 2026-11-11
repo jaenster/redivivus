@@ -80,11 +80,11 @@ int __fastcall ReadWaypoints(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit,
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 int __fastcall LoadPlayerIntro(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwParam);
 // Deserialises a bitmask-encoded stat block from the save buffer into the unit's stat list. Reads a presence bitmask (bParam2 stats wide) followed by packed 32-bit values for set stats only; delegates to ReadStatsLong for stat counts above 0x5e. Returns 0 on success, 0x12 on format/bounds error.
-int __fastcall ReadStats(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFormat, uint32_t nStatCount);
+int __fastcall ReadStats(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFormat, int nStatCount);
 void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, struct D2UnitStrc * pUnit, eD2Skills eSkill, uint8_t nSkillLevel);
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, uint32_t nSkillCount);
+int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, int nSkillCount);
 int __fastcall PLRSAVE_LoadItemsFromBuffer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint8_t * * ppItemList, uint8_t * nItemMode, uint32_t nFormat, uint32_t dwParam, int * pnLoadResult);
 // Deserializes the player's saved corpse(s) from the .d2s save stream during game/character load. ppCorpseList points at the current read cursor; validates the 'JM' (0x4D4A) corpse block header and a count <2 (at most one corpse). For each corpse: creates a UNIT_PLAYER unit of the loading player's class, clears CANBEATTACKED, binds the owning client, copies the char name, seeds it from the game seed, sets STATE_playerbody, links its inventory owner GUID to the player, then loads the corpse's items via PLRSAVE_LoadItemsFromBuffer. Registers an inventory notification and sends the 0x8E corpse-assign packet. Advances *ppCorpseList past the consumed bytes. Returns 0 on success or 0x15 on error; on error writes a granular error code (0x65-0x6A or the item-load error) into *pnParam when non-null.
 // @sourcefile .\PLAYER\PlrSave2.cpp
@@ -108,6 +108,6 @@ void __fastcall SetStatsAndHotkeys(::SGAMEDATA * pGameStrc, struct D2UnitStrc * 
 // Loads a player from a modern .d2s save buffer into a live server unit (fastcall pGame,pClient,pSaveHeader,nSaveDataOffset,ppUnit). Parses the header and creates the unit (PLAYERSAVE_ParseHeaderAndCreateUnit), then sequentially reads quests, waypoints, intro/NPC-greeting flags, stats, hard skills, items, corpse, mercenary, and golem from the buffer, threading a moving read pointer between pSaveHeader and the buffer end. Records pre-load HP/mana and restores them via SetStatsAndHotkeys on success. On parse error 2 at end-of-buffer it creates a fresh character. On any failure it frees the partially-built unit (and its DRLG room) and unlinks it from the client; returns gdwPlayerSaveVersion[errorCode] (0 = success). Writes the loaded unit to *ppUnit.
 int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, struct D2ClientStrc * pClient, struct D2SaveFileHeaderStrc * pSaveHeader, int32_t nSaveDataOffset, struct D2UnitStrc * * ppUnit, struct D2RoomStrc * dwParam6, uint32_t dwParam7, uint32_t dwParam8);
 #endif // D2_MODULE_D2Game
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::PlayerSave2

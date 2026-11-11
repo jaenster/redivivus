@@ -77,6 +77,6 @@ uint32_t __fastcall ARENA_GetTemplate(::SGAMEDATA * pGame);
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall ARENA_IsFlag0x200Set(::SGAMEDATA * pGame);
 #endif // D2_MODULE_D2Game
-// 5 internal functions (defined in .cpp)
+// 6 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Arena

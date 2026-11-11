@@ -185,6 +185,6 @@ void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, struct D2RoomStrc *
 void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);
 void __stdcall ReturnVoid_Unref_0053c740(uint32_t dwParam);
 #endif // D2_MODULE_D2Game
-// 4 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Clients

@@ -41,7 +41,7 @@ void __fastcall UNITMODE_SendWalkToPosition(struct D2UnitStrc * pUnit, int32_t n
 void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, struct D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nTargetGUIDOrY, uint32_t dwUnused);
 void __fastcall UNITMODE_ExecuteDeferredAction(struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Client
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 uint32_t UNITMODE_CanInterruptSkill_Extern(struct D2UnitStrc * pUnit);

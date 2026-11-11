@@ -549,12 +549,7 @@ int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, D2C
     if (pContext) {
       pCtxCopy = &threadContext;
       pSavedEsp = &uStack800;
-      for (nCtxCopyCount = 0xb3; nCtxCopyCount; nCtxCopyCount--) {
-        pCtxCopy->ContextFlags = pContext->ContextFlags;
-        pContext = (CONTEXT*)&pContext->Dr0;
-        pCtxCopy = (CONTEXT*)&pCtxCopy->Dr0;
-      }
-
+      *pCtxCopy = *pContext;
       walk_stack:
       __frame0.nFramesWritten = 0;
       __frame0.nCurEip = D2_CONTEXT_FIELD(threadContext, Eip);

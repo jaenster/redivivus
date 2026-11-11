@@ -5039,13 +5039,9 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
 
     pMonStats = 0;
     draw_hover_unit_label:
-    pwszStr = wszNameBuf;
-    for (i = 0x400; i; i--) {
-      pwszStr[0] = L'\0';
-      pwszStr[1] = L'\0';
-      pwszStr += 2;
+    for (i = 0; i < 0x800; i++) {
+      wszNameBuf[i] = L'\0';
     }
-
     int bIsMercenary = 0;
     if (!(Fog::BitBuffer::gadwBitMasks[1] & (uint8_t)*((uint8_t*)pMonStats + 0xd)) && Fog::BitBuffer::gadwBitMasks[7] & (uint8_t)*((uint8_t*)pMonStats + 0xd) && pMonStats->NameStr) {
       D2RoomStrc* pRoom;

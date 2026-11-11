@@ -20,12 +20,7 @@ int32_t __stdcall CurGateway(D2BNetGatewayAccessStr * pGatewayAccess) {
 D2BNetGatewayAccessStr * __thiscall operator_(D2BNetGatewayAccessStr * pDst, D2BNetGatewayAccessStr * pSrc) {
     int nCopyCount;
     D2BNetGatewayAccessStr* pDstCursor = pDst;
-    for (nCopyCount = 9; nCopyCount; nCopyCount--) {
-      pDstCursor->nCurrentGateway = pSrc->nCurrentGateway;
-      pSrc = (D2BNetGatewayAccessStr*)&pSrc->bDirty;
-      pDstCursor = (D2BNetGatewayAccessStr*)&pDstCursor->bDirty;
-    }
-
+    *pDstCursor = *pSrc;
     return pDst;
 }
 

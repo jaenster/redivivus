@@ -1064,6 +1064,7 @@ void __fastcall BigData_Destructor(BigData * pBigData) {
     ExceptionList = pExceptionList;
 }
 
+// Builds the big-number object's stack of 16 TSFixedArray<unsigned int> buffers through the compiler's array iterator.
 BigData * __fastcall SBIG_Constructor(BigData * pBigData) {
     pfnEHHandlerRoutine pEhHandler = __GSHandlerCheck_EH_6c9f88;
     void* pExceptionList = ExceptionList;
@@ -4514,5 +4515,8 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9fc1(EHExceptionRecord * pException
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ff0(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
+
+static void * keep_00420f30 = (0 ? (SBIG_Accumulator_MulAndAdd(*(uint32_t * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_00420f60 = (0 ? (SBIG_Accumulator_ComputeOffset(*(uint32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::Source::SBig

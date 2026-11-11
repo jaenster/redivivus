@@ -127,5 +127,6 @@ void __stdcall FreeTokenTables();
 void __fastcall TXT_AllocTxt_inventory(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeInventoryTable();
 #endif // D2_MODULE_D2Common
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::TokTbls

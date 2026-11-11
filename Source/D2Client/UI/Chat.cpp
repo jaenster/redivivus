@@ -566,7 +566,7 @@ void __stdcall CHAT_DrawIMECandidates() {
     DWORD* pdwCurOffset = pCandidateList->dwOffset + dwOffset;
     int nPosY = 0;
     int nDisplayNumber = 0;
-    DWORD dwIndex = dwOffset;
+    int dwIndex = dwOffset;
     do {
       uint16_t wszCandidate[256];
       dwOffset = *pdwCurOffset;
@@ -594,7 +594,7 @@ void __stdcall CHAT_DrawIMECandidates() {
 
       pdwCurOffset++;
       dwIndex++;
-    } while ((int)dwIndex < (int)nEndIndex);
+    } while (dwIndex < (int)nEndIndex);
 }
 
 void __stdcall DRAW_UI_ChatInput() {
@@ -819,21 +819,21 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     char* pszCursor = szInputCopy;
     *szOutParam = '\0';
     strncpy(szInputCopy, *ppszText, 0x100);
-    uint32_t nInputLen = Storm::Source::SSTR::SStrLen(pszCursor);
+    int nInputLen = Storm::Source::SSTR::SStrLen(pszCursor);
     int nCmdIndex = 0;
     do {
       uint32_t nCmdLen;
       nCmdLen = Storm::Source::SSTR::SStrLen(gaChatCommandTable[nCmdIndex].pszCommand);
       if (gaChatCommandTable[nCmdIndex].bAllowedInSinglePlayer || (eGameType = GAME::Game::CLIENT_GetD2GSGameType() , eGameType != GAMETYPE_SINGLEPLAYER)) {
         if (gaChatCommandTable[nCmdIndex].nCommandType == 3) {
-          if ((int)nInputLen >= (int)nCmdLen) {
+          if (nInputLen >= (int)nCmdLen) {
             nCompareResult = Storm::Source::SSTR::SStrCmpI(pszCursor, gaChatCommandTable[nCmdIndex].pszCommand, nCmdLen);
             if (!nCompareResult) {
               *pbCommandType = (uint8_t)gaChatCommandTable[nCmdIndex].nCommandType;
               return 1;
             }
           }
-        } else if ((int)nInputLen > (int)nCmdLen && (nCompareResult = Storm::Source::SSTR::SStrCmpI(pszCursor, gaChatCommandTable[nCmdIndex].pszCommand, nCmdLen) , !nCompareResult) && pszCursor[nCmdLen] != '\0') {
+        } else if (nInputLen > (int)nCmdLen && (nCompareResult = Storm::Source::SSTR::SStrCmpI(pszCursor, gaChatCommandTable[nCmdIndex].pszCommand, nCmdLen) , !nCompareResult) && pszCursor[nCmdLen] != '\0') {
           pszCursor += nCmdLen;
           if (!gaChatCommandTable[nCmdIndex].bTakesParameter) {
             *ppszText += nCmdLen;

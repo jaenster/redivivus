@@ -119,7 +119,7 @@ void __fastcall fpDrawVisTile(uint8_t * pbTileData, int32_t nScreenX, int32_t nS
     } while (nRowsLeft < 0x20);
 }
 
-void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, int32_t nLightLevel) {
+void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, uint32_t nLightLevel) {
     if (!(nScreenY >= gnMinTileDrawY && nScreenY < gnTileClipYMin && nScreenX >= gnTileInnerClipXMin && nScreenX < gnTileInnerClipYMin)) {
       return;
     }
@@ -130,21 +130,21 @@ void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nS
       exit(-1);
     }
     if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
-      D2GFX::D2GFX_DrawWallTileBasic(nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
+      D2GFX::D2GFX_DrawWallTileBasic(nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[nLightLevel >> 3 & 0x1f], 0x20);
       return;
     }
 
-    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[(uint32_t)nLightLevel >> 3 & 0x1f], 0x20);
+    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[nLightLevel >> 3 & 0x1f], 0x20);
 }
 
 // Stack-slot reuse: with perspective on, the low byte of the pCoords slot caches the first byte read through pCoords (tested against 0xf8).
 void __fastcall fpDrawWallTile(uint8_t * pTileData, int32_t nScreenX, int32_t nScreenY, uint8_t * pCoords) {
     uint8_t* pDst;
     uint8_t byFirstCoord;
-    int32_t nCoords;
+    uint32_t nCoords;
     if (gbPerspectiveRenderEnabled) {
       byFirstCoord = *pCoords;
-      nCoords = (int32_t)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pCoords + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byFirstCoord);
+      nCoords = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pCoords + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byFirstCoord);
       if ((byFirstCoord & 0xf8) == 0xf8) {
         fpDrawVisTile(pTileData, nScreenX, nScreenY);
         return;

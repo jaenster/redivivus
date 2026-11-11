@@ -1410,12 +1410,7 @@ uint32_t __fastcall SKILLNEC_ApplyCorpseExplosionToUnit(D2SkillCallbackContextSt
     eD2UnitType eUnitType = pUnit->eUnitType;
     uint32_t* pDmgDataSrc = (uint32_t*)pExplosionArgs->pDamage;
     uint32_t* pDmgDataDst = (uint32_t*)&sDamage;
-    for (nDwordsLeft = 0x1c; nDwordsLeft; nDwordsLeft--) {
-      *pDmgDataDst = *pDmgDataSrc;
-      pDmgDataSrc++;
-      pDmgDataDst++;
-    }
-
+    memcpy(pDmgDataDst, pDmgDataSrc, 0x70);
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {

@@ -54,8 +54,8 @@ namespace D2Client::Draw::LightMap {
 
 // Approximate 2D distance used by the weather and lightmap code. Non-standard convention: the X delta arrives in EAX and the Y delta on the stack, and the callee cleans up (RET 4). Declaring only the stack argument left the EAX delta looking like an unassigned local inside the abs() at the top.
 static uint32_t __stdcall WEATHER_ApproximateDistanceCustomCC(uint32_t nDeltaX, uint32_t nDeltaY) {
-    int nAbsX = (nDeltaX ^ (int)nDeltaX >> 0x1f) - ((int)nDeltaX >> 0x1f);
-    int nAbsY = (nDeltaY ^ (int)nDeltaY >> 0x1f) - ((int)nDeltaY >> 0x1f);
+    int nAbsX = (uint32_t)abs((int)nDeltaX);
+    int nAbsY = (uint32_t)abs((int)nDeltaY);
     if (nAbsX >= nAbsY) {
       return (uint32_t)(nAbsX * 0x3d7 + nAbsY * 0x197) >> 10;
     }
@@ -798,8 +798,8 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
             nDistX = -nDistX;
           }
 
-          nRadiusCells = (nDistX ^ (int)nDistX >> 0x1f) - ((int)nDistX >> 0x1f);
-          nGridCellX = (nDistY ^ (int)nDistY >> 0x1f) - ((int)nDistY >> 0x1f);
+          nRadiusCells = (uint32_t)abs((int)nDistX);
+          nGridCellX = (uint32_t)abs((int)nDistY);
           if (!(nRadiusCells < nGridCellX)) {
             nDistX = nRadiusCells * 0x3d7 + nGridCellX * 0x197;
           } else {

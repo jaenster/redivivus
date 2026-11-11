@@ -1004,9 +1004,9 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
           }
 
           pDVar1->bLastKilledCouncilByte0 = (bool)(char)nTargetGUID;
-          pDVar1->bCouncilMemberKillNotify = (bool)(char)((uint32_t)nTargetGUID >> 8);
-          pDVar1->bCouncilMemberTracking = (char)((uint32_t)nTargetGUID >> 0x10);
-          pDVar1->byLastKilledCouncilGUIDByte3 = (bool)(char)((uint32_t)nTargetGUID >> 0x18);
+          pDVar1->bCouncilMemberKillNotify = (bool)(char)(nTargetGUID >> 8);
+          pDVar1->bCouncilMemberTracking = (char)(nTargetGUID >> 0x10);
+          pDVar1->byLastKilledCouncilGUIDByte3 = (bool)(char)(nTargetGUID >> 0x18);
           pQuestData->nQuestPacketFlags = '\0';
           if (pDVar1->bJerhynAiActive) {
             QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x3cc);

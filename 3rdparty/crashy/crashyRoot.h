@@ -67,6 +67,6 @@ LPCRITICAL_SECTION __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCr
 void __stdcall LeaveCriticalSection_System();
 void __stdcall SetCurrentThreadId();
 #endif // D2_MODULE_crashy
-// 1 internal function (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace Fog::_3rdparty::crashy

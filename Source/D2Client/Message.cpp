@@ -64,11 +64,11 @@ void __stdcall MESSAGE_OnClose(HWND * phWnd) {
 }
 
 LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lParam) {
+    BOOL bHandled = 0;
     int32_t lDispatchResult = 0;
     GAME::Record::HandleWinProcMsg(uMsg, wParam, lParam);
     BOOL nHandled = GAME::Record::IsPlaybackActive();
     if (!nHandled || uMsg == 0x10) {
-      BOOL bHandled = 0;
       nHandled = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, wParam, lParam, &bHandled, (LRESULT*)&lDispatchResult);
       if (nHandled && bHandled) {
         return lDispatchResult;

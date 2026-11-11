@@ -129,6 +129,6 @@ int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a490();
 int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a4a0();
 void __stdcall FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0();
 #endif // D2_MODULE_D2Common
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Common::Txt::Cube

@@ -90,7 +90,7 @@ BOOL __fastcall Objects_OperateFn32_OpenStash(D2ObjectOperateFnArg * pOperation)
 }
 
 // Server-side handler for player stash gold transactions. Validates the target unit (nUnitGUID) is a stash object (classId 0x10b) and both player and stash are in town. Dispatches on nParam: 0x12 = close stash interaction (clears interact info, calls ITEMMODE_CheckItemLevel); 0x13 = withdraw nGoldAmount from stash (UNITSTAT_goldbank) to inventory (UNITSTAT_gold), capped by inventory gold limit; 0x14 = deposit nGoldAmount from inventory to stash, capped by stash gold limit (partial deposit fills remaining space). Sends sound event 0x13 on inventory-full condition.
-static void __stdcall GOLD_HandleStashGoldTransaction(int32_t nGoldAmount, ::SGAMEDATA * pGame, int16_t nStashAction, D2UnitStrc * pUnit, uint32_t nUnitGUID) {
+static void __stdcall GOLD_HandleStashGoldTransaction(int32_t nGoldAmount, ::SGAMEDATA * pGame, uint16_t nStashAction, D2UnitStrc * pUnit, uint32_t nUnitGUID) {
     int nCurrentGold;
     uint32_t nGoldLimit;
     uint32_t nBankGold;
@@ -794,7 +794,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     uint32_t pSourceItem;
     eD2ItemQuality eItemFlags;
     uint32_t nILvlPercent;
-    uint32_t nItemLevelClamped;
+    int nItemLevelClamped;
     uint8_t* pModEntry;
     int64_t nMulDivResult;
     D2UnitStrc* apExtractedItems[18];
@@ -803,7 +803,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
     D2UnitStrc* apDStack_c8[4];
     uint32_t nOutputClassId;
     uint32_t nTmp;
-    uint32_t nOutItemLevel;
+    int nOutItemLevel;
     D2CubeOutputStrc* pOutput;
     D2ItemGenContextStrc sItemGenContext;
     ::SGAMEDATA* pGameTmp;
@@ -843,72 +843,72 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
 
       nOutItemLevel = 0;
       if (pOutputEntry->nLvl) {
-        nOutItemLevel = (uint32_t)pOutputEntry->nLvl;
+        nOutItemLevel = (int)pOutputEntry->nLvl;
       } else {
         if (pOutputEntry->nPLvl) {
-          nItemLevelClamped = (uint32_t)pOutputEntry->nPLvl;
+          nILvlPercent = (uint32_t)pOutputEntry->nPLvl;
           pSourceItem = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayer, UNITSTAT_level, 0);
           pOutputEntry = pOutput;
           if ((int)pSourceItem > 0x100000) {
             if ((int)(pSourceItem & -16) < 0x640) {
-              nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nItemLevelClamped / 100;
-              nOutItemLevel = (uint32_t)nMulDivResult;
+              nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nILvlPercent / 100;
+              nOutItemLevel = (int)nMulDivResult;
               pOutputEntry = pOutput;
             } else {
-              nOutItemLevel = (int)pSourceItem / 100 * nItemLevelClamped;
-            }
-          } else {
-            if ((int32_t)nItemLevelClamped > 0x10000) {
-              if ((int32_t)(nItemLevelClamped & -16) < 0x640) {
-                nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nItemLevelClamped / 100;
-                nOutItemLevel = (uint32_t)nMulDivResult;
-                pOutputEntry = pOutput;
-              } else {
-                nOutItemLevel = nItemLevelClamped / 100 * pSourceItem;
-              }
-            } else {
-              nOutItemLevel = (int)(pSourceItem * nItemLevelClamped) / 100;
-            }
-          }
-        }
-
-        pSourceItem = nOutItemLevel;
-        if (pOutputEntry->nILvl) {
-          nItemLevelClamped = pMatchedItemsLocal->entry[nAffixIdx].nItemLevel;
-          nILvlPercent = (uint32_t)pOutputEntry->nILvl;
-          if ((int)nItemLevelClamped > 0x100000) {
-            if ((int)(nItemLevelClamped & -16) < 0x640) {
-              nMulDivResult = (int64_t)(int)nItemLevelClamped * (int64_t)(int)nILvlPercent / 100;
-              nAffixIdx = (int)nMulDivResult;
-            } else {
-              nAffixIdx = (int)nItemLevelClamped / 100 * nILvlPercent;
+              nOutItemLevel = (int)pSourceItem / 100 * nILvlPercent;
             }
           } else {
             if ((int32_t)nILvlPercent > 0x10000) {
               if ((int32_t)(nILvlPercent & -16) < 0x640) {
-                nMulDivResult = (int64_t)(int)nItemLevelClamped * (int64_t)(int)nILvlPercent / 100;
-                nAffixIdx = (int)nMulDivResult;
+                nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nILvlPercent / 100;
+                nOutItemLevel = (int)nMulDivResult;
+                pOutputEntry = pOutput;
               } else {
-                nAffixIdx = nILvlPercent / 100 * nItemLevelClamped;
+                nOutItemLevel = nILvlPercent / 100 * pSourceItem;
               }
             } else {
-              nAffixIdx = (int)(nItemLevelClamped * nILvlPercent) / 100;
+              nOutItemLevel = (int)(pSourceItem * nILvlPercent) / 100;
+            }
+          }
+        }
+
+        nItemLevelClamped = nOutItemLevel;
+        if (pOutputEntry->nILvl) {
+          pSourceItem = pMatchedItemsLocal->entry[nAffixIdx].nItemLevel;
+          nILvlPercent = (uint32_t)pOutputEntry->nILvl;
+          if ((int)pSourceItem > 0x100000) {
+            if ((int)(pSourceItem & -16) < 0x640) {
+              nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nILvlPercent / 100;
+              nAffixIdx = (int)nMulDivResult;
+            } else {
+              nAffixIdx = (int)pSourceItem / 100 * nILvlPercent;
+            }
+          } else {
+            if ((int32_t)nILvlPercent > 0x10000) {
+              if ((int32_t)(nILvlPercent & -16) < 0x640) {
+                nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nILvlPercent / 100;
+                nAffixIdx = (int)nMulDivResult;
+              } else {
+                nAffixIdx = nILvlPercent / 100 * pSourceItem;
+              }
+            } else {
+              nAffixIdx = (int)(pSourceItem * nILvlPercent) / 100;
             }
           }
 
-          nOutItemLevel = pSourceItem + nAffixIdx;
+          nOutItemLevel = nItemLevelClamped + nAffixIdx;
         }
       }
 
-      pSourceItem = nOutItemLevel;
+      nAffixIdx = nOutItemLevel;
       nItemLevelClamped = nOutItemLevel;
-      if ((int)nOutItemLevel <= 1) {
+      if (nOutItemLevel <= 1) {
         nItemLevelClamped = 1;
       }
 
       pMaxExpTxt = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-      if ((int)nItemLevelClamped < pMaxExpTxt) {
-        if ((int)pSourceItem <= 1) {
+      if (nItemLevelClamped < pMaxExpTxt) {
+        if (nAffixIdx <= 1) {
           nOutItemLevel = 1;
         }
       } else {
@@ -933,9 +933,9 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
         byOutputType = pOutput->nType;
         pSourceItem = 0;
         if (byOutputType == 0xfe) {
-          nItemLevelClamped = pMatchedItemsTmp->entry[nAffixIdx].nClassId;
-          if ((int)nItemLevelClamped >= 0) {
-            pSourceItem = nItemLevelClamped;
+          nILvlPercent = pMatchedItemsTmp->entry[nAffixIdx].nClassId;
+          if ((int)nILvlPercent >= 0) {
+            pSourceItem = nILvlPercent;
           }
         } else {
           switch (byOutputType) {

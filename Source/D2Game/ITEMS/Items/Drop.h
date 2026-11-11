@@ -175,7 +175,7 @@ struct D2UnitStrc * __fastcall ITEM_CreateFromTemplate(struct D2UnitStrc * pUnit
 // @sourcefile .\ITEMS\Items.cpp
 void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // Splits nGoldAmount across up to nMaxPiles gold-item units dropped near pUnit's position. Each iteration creates a gold item via ITEM_CreateFromTemplate, caps the pile amount to the inventory gold limit if the recipient is a player, sets UNITSTAT_gold, and calls DropItem to place it at a collision-free nearby tile. Fills pUnitTable with created item pointers and updates *pnUnitCount. Uses the room collision system to find free coordinates; exits early if no free tile is found or the pile cap is reached.
-void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount, struct D2UnitStrc * * pUnitTable, int * pnUnitCount, int32_t nMaxPiles);
+void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t nGoldAmount, struct D2UnitStrc * * pUnitTable, int * pnUnitCount, int32_t nMaxPiles);
 // Creates and drops an 'ear' trophy item when a player dies in PvP. Converts "ear " item code, finds spawn spot near corpse, creates item with victim's level (stat 0xC), drops it on the ground. Called from PLRMODES_Death.
 void __fastcall ITEM_DropEarOnPvpDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Two explicit GuardStack tails: GuardStack((int)pClonedItem) on success, GuardStack(0) on failure. Returns the cloned item unit or NULL.
@@ -186,6 +186,6 @@ void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, str
 void __fastcall DROP_SpawnGoldOnGround(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 void __fastcall ITEM_GiveGoldOrDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nGoldAmount);
 #endif // D2_MODULE_D2Game
-// 23 internal functions (defined in .cpp)
+// 26 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::Items::Drop

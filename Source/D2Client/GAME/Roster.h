@@ -149,6 +149,6 @@ void __fastcall ROSTER_UpdatePlayerPartyInfo(int32_t nUnitGuid, int16_t nPartyId
 // @sourcefile .\GAME\Roster.cpp
 void __fastcall PlayerLeft(int32_t nPlayerUid);
 #endif // D2_MODULE_D2Client
-// 8 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace D2Client::GAME::Roster

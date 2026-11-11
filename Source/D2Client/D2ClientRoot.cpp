@@ -213,6 +213,7 @@
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Game/GAME/Arena.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Objects/ObjectsRgn.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -4001,5 +4002,8 @@ _EXCEPTION_DISPOSITION SehHandler_6ca218(EHExceptionRecord * pExceptionRecord, E
 _EXCEPTION_DISPOSITION SehHandler_6ca238(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
+
+static void * keep_00468b20 = (0 ? (CMD_SelectSkillHotkeySlot(*(int *)0), (void *)0) : (void *)0);
+static void * keep_004dde40 = (0 ? (DFLOOR_IsPointInRect(*(RECT * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client

@@ -102,5 +102,6 @@ void __thiscall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, uint8_t * nContext
 void __stdcall SRP_GlobalInit();
 void SRP_AtexitCleanup();
 #endif // D2_MODULE_Bnclient
+// 1 internal function (defined in .cpp)
 
 } // namespace Bnclient::SRP

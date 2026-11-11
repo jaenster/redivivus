@@ -1030,25 +1030,14 @@ void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(D2ClientStrc * pClient, D2Pa
     }
 
     uint8_t* pbyDst = pktBuf;
-    for (nCopyCount = 10; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pbyDst = *(uint32_t*)pEventPacket;
-      pEventPacket = (D2Packet0x5aEventStructure*)((intptr_t)&pEventPacket->nArg + 1);
-      pbyDst += 4;
-    }
-
+    memcpy(pbyDst, pEventPacket, 40);
     SCMD_QueuePacketForClient(pClient, pktBuf, 0x28);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0x27_NpcInfo(D2ClientStrc * pClient, D2GSPacketSrv0x27 * pPacket) {
     int nCopyCount;
-    D2GSPacketSrv0x27 packetBuf;
-    D2GSPacketSrv0x27* pDst = &packetBuf;
-    for (nCopyCount = 10; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pDst = *(uint32_t*)pPacket;
-      pPacket = (D2GSPacketSrv0x27*)((intptr_t)&pPacket->nUnitGUID + 2);
-      pDst = (D2GSPacketSrv0x27*)((intptr_t)&pDst->nUnitGUID + 2);
-    }
-
+    D2GSPacketSrv0x27* pDst;
+    D2GSPacketSrv0x27 packetBuf = *pPacket;
     SCMD_QueuePacketForClient(pClient, &packetBuf.nId, 0x28);
 }
 
@@ -1364,11 +1353,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(D2
     aPacket.p7F.nUnitLife = (uint16_t)(dwUnitGUID >> 8);
     nErrLineOrAddr = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     d2_store24((char*)&aPacket.p7F.nUnitGUID + 1, (uint32_t)nErrLineOrAddr & 0xffffffu);
-    *(uint8_t*)(char*)&aPacket.p7F.nAreaID = (uint8_t)((uint32_t)nErrLineOrAddr >> 0x18);
+    *(uint8_t*)(char*)&aPacket.p7F.nAreaID = (uint8_t)(nErrLineOrAddr >> 0x18);
     nErrLineOrAddr = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     *(uint8_t*)((char*)&aPacket.p7F.nAreaID + 1) = (uint8_t)nErrLineOrAddr;
-    *(uint16_t*)((char*)&aPacket.p90.nPlayerY + 1) = (uint16_t)((uint32_t)nErrLineOrAddr >> 8);
-    *(uint8_t*)((char*)&aPacket.p90.nPlayerY + 3) = (uint8_t)((uint32_t)nErrLineOrAddr >> 0x18);
+    *(uint16_t*)((char*)&aPacket.p90.nPlayerY + 1) = (uint16_t)(nErrLineOrAddr >> 8);
+    *(uint8_t*)((char*)&aPacket.p90.nPlayerY + 3) = (uint8_t)(nErrLineOrAddr >> 0x18);
     SCMD_QueuePacketForClient(pClient, (uint8_t*)&aPacket, 0xd);
 }
 
@@ -1848,14 +1837,8 @@ void __stdcall SCMD_Unused_HaltLine2740() {
 
 void __fastcall NET_D2GS_SERVER_Send_0x73_MissileData(D2ClientStrc * pClient, D2GSPacketSrv0x73 * pMissileData) {
     int nCopyCount;
-    D2GSPacketSrv0x73 aPacketBuf;
-    D2GSPacketSrv0x73* pDstCursor = &aPacketBuf;
-    for (nCopyCount = 8; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pDstCursor = *(uint32_t*)pMissileData;
-      pMissileData = (D2GSPacketSrv0x73*)((intptr_t)&pMissileData->nUnused + 3);
-      pDstCursor = (D2GSPacketSrv0x73*)((intptr_t)&pDstCursor->nUnused + 3);
-    }
-
+    D2GSPacketSrv0x73* pDstCursor;
+    D2GSPacketSrv0x73 aPacketBuf = *pMissileData;
     SCMD_QueuePacketForClient(pClient, &aPacketBuf.nPacketId, 0x20);
 }
 
@@ -1900,10 +1883,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(D2UnitStrc * pUnit, D2Uni
 
     d2_store24((char*)&aPacket.dwUnitGUID, (uint32_t)nGUID & 0xffffffu);
     aPacket.nPacketId = 'u';
-    *(uint8_t*)((char*)&aPacket.dwUnitGUID + 3) = (uint8_t)((uint32_t)nGUID >> 0x18);
+    *(uint8_t*)((char*)&aPacket.dwUnitGUID + 3) = (uint8_t)(nGUID >> 0x18);
     nGUID = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_level, 0);
     *(uint8_t*)(char*)&aPacket.nLevel = (uint8_t)nGUID;
-    *(uint8_t*)((char*)&aPacket.nLevel + 1) = (uint8_t)((uint32_t)nGUID >> 8);
+    *(uint8_t*)((char*)&aPacket.nLevel + 1) = (uint8_t)(nGUID >> 8);
     aPacket.nPartyId = UNIT::SUnit::GetPartyId(pTargetUnit);
     uint32_t dwFlags = UNIT::PlayerList::PLAYERLIST_GetFlags(pUnit, pTargetUnit);
     aPacket.wFlags = (uint16_t)dwFlags;
@@ -2109,23 +2092,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(D2ClientStrc * pClient)
 
 void __fastcall NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(D2ClientStrc * pClient, D2GSPacketSrv0x91 * pD2GSPacketSrv0x91) {
     int i;
-    D2GSPacketSrv0x91 nD2GSPacketSrv0x91;
+    D2GSPacketSrv0x91* pDstPacket;
     uint8_t byField;
-    D2GSPacketSrv0x91* pDstPacket = &nD2GSPacketSrv0x91;
-    for (i = 6; i; i--) {
-      uint16_t wNpcID;
-      byField = pD2GSPacketSrv0x91->nAct;
-      wNpcID = pD2GSPacketSrv0x91->nNpcID[0];
-      pDstPacket->nPacketId = pD2GSPacketSrv0x91->nPacketId;
-      pDstPacket->nAct = byField;
-      pDstPacket->nNpcID[0] = wNpcID;
-      pD2GSPacketSrv0x91 = (D2GSPacketSrv0x91*)(pD2GSPacketSrv0x91->nNpcID + 1);
-      pDstPacket = (D2GSPacketSrv0x91*)(pDstPacket->nNpcID + 1);
-    }
-
-    byField = pD2GSPacketSrv0x91->nAct;
-    pDstPacket->nPacketId = pD2GSPacketSrv0x91->nPacketId;
-    pDstPacket->nAct = byField;
+    uint16_t wNpcID;
+    D2GSPacketSrv0x91 nD2GSPacketSrv0x91 = *pD2GSPacketSrv0x91;
     SCMD_QueuePacketForClient(pClient, &nD2GSPacketSrv0x91.nPacketId, 0x1a);
 }
 

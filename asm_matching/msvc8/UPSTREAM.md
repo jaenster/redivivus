@@ -2,11 +2,12 @@
 
 The oracle finds differences between the tree and `Game.exe` that the
 generator (ghidra-reconstruct) or the Ghidra database produces the same way
-everywhere. Each is fixed in this tree by a fixer (`scripts/fix_*.py`) that
-keeps an edit only where the oracle confirms it, and `evidence/fixes.tsv`
-records every run: sites proposed, edits kept, functions that came to match.
-A regeneration undoes those edits unless the rule lands where it belongs:
-here is each rule, with the evidence it rests on.
+everywhere. Each was first fixed in this tree by a Python fixer (the
+`fix_*.py` named with each rule, since retired: the rules are
+ghidra-reconstruct passes, Ghidra database fixes, or forms the vc8form
+permuter finds), and `evidence/fixes.tsv` records every run: sites proposed,
+edits kept, functions that came to match. Here is each rule, with the
+evidence it rests on.
 
 ## The generator
 
@@ -234,7 +235,7 @@ arguments in ECX and EDX (`__fastcall`). The branch restores them, and
 first arguments in ECX and EDX and pops what `__fastcall` leaves on the
 stack (LeaveCriticalSection_Safesock, 0040dde0). Reading a register as an
 argument takes care: VC8 reserves a 4-byte local with `push ecx`, and
-`cpuid` reads ECX, so neither is evidence of an ECX argument (classify.py's
+`cpuid` reads ECX, so neither is evidence of an ECX argument (the classifier's
 live-in analysis discounts both; DEBUG_CrashDumpRequestThreadProc,
 004027c0, and DetectCpuVendor, 0040e250, take none).
 
@@ -276,7 +277,7 @@ arithmetic on `void *`, which GCC takes as byte arithmetic and VC8 refuses
 (C2036), so every function doing it was quarantined (ITEMS_IsA, 00629bb0,
 and more); the tree now casts to `uint8_t *` at those sites, the database
 should type the members as byte pointers. The signedness of variables is the
-other recurring type difference: `scripts/classify.py --tag signedness` lists
+other recurring type difference: `oracle classify --tag signedness` lists
 the functions whose comparison is signed where the original's is unsigned, or
 the other way round.
 

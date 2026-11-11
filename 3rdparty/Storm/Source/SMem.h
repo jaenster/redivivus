@@ -157,6 +157,6 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
 // @blizzard SMemMove (Storm ordinal 493)
 void __stdcall SMemMove(void * pDest, void * pSrc, size_t nSize);
 #endif // D2_MODULE_Storm
-// 20 internal functions (defined in .cpp)
+// 21 internal functions (defined in .cpp)
 
 } // namespace Storm::Source::SMem

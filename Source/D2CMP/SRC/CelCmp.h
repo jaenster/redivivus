@@ -86,5 +86,6 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca286(struct EHExceptionRecord * pEx
 void StaticInit_gCelCmpCacheHandler();
 void StaticFini_gCelCmpCacheHandler();
 #endif // D2_MODULE_D2CMP
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::CelCmp

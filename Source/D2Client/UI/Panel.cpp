@@ -248,7 +248,7 @@ void __stdcall FreePanelImages() {
 void __stdcall PANEL_DrawHostileIndicator() {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, 0x48);
-    bool bSuppressed = false;
+    BOOL bSuppressed = 0;
     int nYOffset = 0;
     BOOL bUIFlag = GAME::Roster::ROSTER_CheckAnyPlayerHostileToMe();
     if (!bUIFlag) {
@@ -257,7 +257,7 @@ void __stdcall PANEL_DrawHostileIndicator() {
 
     bUIFlag = ui::GetUIFlag(UI_STASH);
     if (bUIFlag || (bUIFlag = ui::GetUIFlag(UI_NPCSHOP) , bUIFlag != 0) || (bUIFlag = ui::GetUIFlag(UI_MSGLOG) , bUIFlag != 0) || (bUIFlag = ui::GetUIFlag(UI_INVENTORY) , bUIFlag || (bUIFlag = ui::GetUIFlag(UI_SKILLTREE) , bUIFlag != 0))) {
-      bSuppressed = true;
+      bSuppressed = 1;
     }
 
     bUIFlag = ui::GetUIFlag(UI_MPTRADE);
@@ -669,7 +669,6 @@ void __stdcall PANEL_DrawRunButton() {
 void __stdcall PANEL_DrawStaminaBar() {
     BOOL eState;
     int nClearCount;
-    uint16_t* pwszCursor;
     uint16_t wszTooltip[100];
     D2UnitStrc* pUnit;
     pUnit = UNIT::Player::GetPlayerUnit_UI();
@@ -721,13 +720,9 @@ void __stdcall PANEL_DrawStaminaBar() {
     nCurStamina = 3;
     nCurStaminaUnits = nMaxStaminaUnits;
     show_stamina_tooltip:
-    pwszCursor = wszTooltip;
-    for (nClearCount = 0x32; nClearCount; nClearCount--) {
-      pwszCursor[0] = L'\0';
-      pwszCursor[1] = L'\0';
-      pwszCursor += 2;
+    for (nClearCount = 0; nClearCount < 0x64; nClearCount++) {
+      wszTooltip[nClearCount] = L'\0';
     }
-
     if (!(nMouseX >= ui::ScreenSizeX / 2 - 0x7f && nMouseX <= ui::ScreenSizeX / 2 - 0x19 && nMouseY >= Inv::ScreenSizeY - 0x1b && nMouseY <= Inv::ScreenSizeY - 9)) {
       return;
     }
@@ -1254,12 +1249,9 @@ void __stdcall PANEL_DrawPanelLayout() {
       wszHpFormatted[nClearCount] = L'\0';
     }
 
-    uint16_t* pwszBuf = wszMpFormatted;
     int nMouseYSaved = nMouseY;
-    for (nClearCount = 0x32; nClearCount; nClearCount--) {
-      pwszBuf[0] = L'\0';
-      pwszBuf[1] = L'\0';
-      pwszBuf += 2;
+    for (nClearCount = 0; nClearCount < 0x64; nClearCount++) {
+      wszMpFormatted[nClearCount] = L'\0';
     }
 
     if (bShowHpText || nMouseX - 0x1eU <= 0x50 && nMouseY >= Inv::ScreenSizeY - 0x4b && nMouseY <= Inv::ScreenSizeY - 0xf) {

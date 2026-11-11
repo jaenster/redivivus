@@ -50,7 +50,7 @@ BOOL __stdcall STATES_HasArmorState(struct D2UnitStrc * pUnit);
 BOOL __stdcall UNITS_IsShapeshifted(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray11(eD2States eState);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId);
-uint32_t __stdcall STATES_IsStateActive(struct D2UnitStrc * pUnit, uint32_t nStateId);
+uint32_t __stdcall STATES_IsStateActive(struct D2UnitStrc * pUnit, int nStateId);
 BOOL __stdcall STATES_HasFireState(struct D2UnitStrc * pUnit);
 BOOL __stdcall STATES_HasLifeState(struct D2UnitStrc * pUnit);
 BOOL __stdcall STATES_HasManaState(struct D2UnitStrc * pUnit);

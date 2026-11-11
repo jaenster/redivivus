@@ -128,7 +128,7 @@ static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId
       return;
     }
 
-    uint32_t nIterCountdown = nVariants;
+    int nIterCountdown = nVariants;
     do {
       if (bIterateFiles) {
         pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(pLevelPrestIds[nRandVariantIdx]);

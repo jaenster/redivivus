@@ -239,11 +239,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
       if (pCallback) {
         pCallbackTable = &pAsyncData->tCallback;
         pCallbackDst = pCallbackTable;
-        for (i = 7; i; i--) {
-          pCallbackDst->pfnCallback = pCallback->pfnCallback;
-          pCallback = (D2AsyncDataCallbackStrc*)pCallback->aUserData;
-          pCallbackDst = (D2AsyncDataCallbackStrc*)pCallbackDst->aUserData;
-        }
+        *pCallbackDst = *pCallback;
       }
       if (!bAsync || !gbAsyncDataInitialized) {
         Source::SFile::ERRORMANAGER_FReadFile(pAsyncData->pFile, pAsyncData->pReadBuffer, pAsyncData->nReadSize, nullptr, (LPOVERLAPPED)0x0, nullptr, nPriority);

@@ -1184,10 +1184,10 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
         break;
       }
 
-      *(uint16_t*)(char*)&nStatSubIndex = 0;
+      nStatSubIndex = 0;
       if ((uint8_t)pStatCostTxt->csvparam > 0) {
         nSubIndexRaw = Fog::BitBuffer::ReadSigned(&bitBuf, (uint32_t)(uint8_t)pStatCostTxt->csvparam);
-        *(uint16_t*)(char*)&nStatSubIndex = (uint16_t)nSubIndexRaw;
+        nStatSubIndex = nSubIndexRaw;
       }
 
       byCsvBitWidth = pStatCostTxt->csvbits;
@@ -1205,7 +1205,7 @@ static int __fastcall ReadStatsLong(D2UnitStrc * pUnit, short * * ppReadPos, sho
 }
 
 // Deserialises a bitmask-encoded stat block from the save buffer into the unit's stat list. Reads a presence bitmask (bParam2 stats wide) followed by packed 32-bit values for set stats only; delegates to ReadStatsLong for stat counts above 0x5e. Returns 0 on success, 0x12 on format/bounds error.
-int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFormat, uint32_t nStatCount) {
+int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t nFormat, int nStatCount) {
     int32_t nValue;
     if (nFormat > 0x5e) {
       int nResult;
@@ -1214,7 +1214,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
     }
 
     uint8_t* pReadCursor = (uint8_t*)*ppReadPos;
-    int32_t nBitmaskBytes = (int)(nStatCount + 7) / 8;
+    int32_t nBitmaskBytes = (nStatCount + 7) / 8;
     if (pReadCursor + nBitmaskBytes + 2 > (unsigned char*)pEndBuf) {
       return 0x12;
     }
@@ -1231,7 +1231,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
 
     int32_t nPresentStats = 0;
     eD2UnitStat eUnitStat = UNITSTAT_strength;
-    if ((int)nStatCount > 0) {
+    if (nStatCount > 0) {
       do {
         if ((uint8_t)Fog::BitBuffer::gadwBitMasks[eUnitStat & UNITSTAT_maxhp] & pBitmaskBase[(int)eUnitStat >> 3]) {
           nValue = *(int32_t*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
@@ -1242,7 +1242,7 @@ int __fastcall ReadStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * 
 
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
         eUnitStat += UNITSTAT_energy;
-      } while ((int)eUnitStat < (int)nStatCount);
+      } while ((int)eUnitStat < nStatCount);
     }
 
     *ppReadPos = (short int*)(pBitmaskBase + nPresentStats * 4 + nBitmaskBytes);
@@ -1259,7 +1259,7 @@ void __fastcall PLRSAVE_SetSkillIfNonZero(uint32_t dwParam, D2UnitStrc * pUnit, 
 
 // Deserialises hard skill allocations (magic 0x6669) from the save buffer and applies them to the unit via SetSkill for each non-zero entry. After loading, sends the 0x94 skills-list packet to the client and recomputes all passive and pet bonuses. Returns 0x13 on header mismatch or missing client.
 // @sourcefile .\PLAYER\PlrSave2.cpp
-int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, uint32_t nSkillCount) {
+int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short * * ppReadPos, short * pEndBuf, uint32_t dwFileVersion, int nSkillCount) {
     int32_t nTotalClassSkills;
     int32_t iSkill;
     short int* pSkillLevels = *ppReadPos + 1;
@@ -1276,7 +1276,7 @@ int __fastcall LoadHardSkills(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, short
     }
 
     uint32_t nClassId = GAME::Clients::GetPlayerClassId(pClient);
-    for (iSkill = 0; iSkill < (int)nSkillCount; iSkill++) {
+    for (iSkill = 0; iSkill < nSkillCount; iSkill++) {
       eD2Skills eSkill;
       eSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, iSkill);
       nTotalClassSkills = D2Common::Skills::AmountOfSkillsByClassId(nClassId);
@@ -1429,19 +1429,12 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     uint32_t exp;
     uint32_t nMinExp;
     int nCopyCount;
-    D2MercSaveDataStrc sMercSave;
     D2PetDataStrc sPetData;
     if (!pMercSaveData->dwExperience && !pMercSaveData->dwSeed && !pMercSaveData->wNameIndex) {
       return nullptr;
     }
 
-    D2MercSaveDataStrc* pSaveCopyDst = &sMercSave;
-    for (nCopyCount = 8; nCopyCount; nCopyCount--) {
-      pSaveCopyDst->dwFlags = pMercSaveData->dwFlags;
-      pMercSaveData = (D2MercSaveDataStrc*)&pMercSaveData->dwSeed;
-      pSaveCopyDst = (D2MercSaveDataStrc*)&pSaveCopyDst->dwSeed;
-    }
-
+    D2MercSaveDataStrc sMercSave = *pMercSaveData;
     D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, 1);
     if (!pHirelingTxt) {
       return nullptr;
@@ -1473,6 +1466,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
     UNIT::SUnitMsg::UnitQueuePacket0x9E(pMerc, 0xd, nMinExp);
     pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, (uint32_t)sMercSave.wHirelingId, 1);
     while (pHirelingTxt) {
+      D2MercSaveDataStrc* pSaveCopyDst;
       pSaveCopyDst = (D2MercSaveDataStrc*)((intptr_t)&pMercSaveData->dwFlags + 1);
       if ((intptr_t)pSaveCopyDst > nMaxLevel || (nMinExp = D2Common::Merc::GetBaseExperience((int32_t)pSaveCopyDst, pHirelingTxt->expPerLvl) , (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&sMercSave.dwExperience + 2) << 16 | (uint32_t)(uint16_t)sMercSave.dwExperience) < nMinExp)) {
         Monster::MonsterAI::MERC_ApplyLevelStats(pGame, pUnit, pMerc, (int32_t)pMercSaveData);
@@ -1551,7 +1545,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       int32_t nPutItemResult;
-      uint32_t nUsedSockets;
+      int nUsedSockets;
       D2UnitStrc* pOwnerUnit;
       CreateItemIronGolemItem_Slotm10 uSlot10;
       D2UnitStrc* pGolemItem;
@@ -1614,7 +1608,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         }
 
         __frame0.uSlot10.nSocketIdx++;
-      } while (__frame0.uSlot10.nSocketIdx < (int)__frame0.nUsedSockets);
+      } while (__frame0.uSlot10.nSocketIdx < __frame0.nUsedSockets);
     }
 
     eItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(__frame0.pGolemItem);

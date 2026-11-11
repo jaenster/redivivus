@@ -282,7 +282,7 @@ void __stdcall INV_HandleRecipeScrollClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_PanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDelimStart);
 void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...);
-void __fastcall GetItemName(struct D2UnitStrc * pUnit, uint16_t * wBuffer, size_t nSize);
+void __fastcall GetItemName(struct D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize);
 void __stdcall INV_ShowBookTooltip();
 void __fastcall ITEM_BuildSetItemTooltip(struct D2UnitStrc * pUnit);
 // Displays tooltip for transmogrifiable items showing the target item type they will transform into. Checks item's bTransmogrify flag, looks up dwTMogType from ItemsTxt, formats tooltip with "Transforms into:" string followed by target item name, and positions tooltip based on current inventory page and screen coordinates.
@@ -310,6 +310,6 @@ void __stdcall INPUT_CubeLeftClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DrawMercInventory();
 void StaticInit_gpInvRecipeScrollImage();
 #endif // D2_MODULE_D2Client
-// 50 internal functions (defined in .cpp)
+// 51 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Inv

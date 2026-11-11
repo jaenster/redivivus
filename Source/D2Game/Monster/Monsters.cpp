@@ -734,7 +734,7 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
 
     BOOL nExpansion = pGame->bExpansion;
     int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize;
-    uint32_t nTotalWeight = 0;
+    int nTotalWeight = 0;
     if (nTxtSize <= 0) {
       return 0;
     }
@@ -748,14 +748,14 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
     int nUmodIdx = 0;
     int nTxtSizeSaved = nTxtSize;
     do {
-      uint32_t nCpickWeight;
+      int nCpickWeight;
       wCpick = *(uint16_t*)((char*)pUmodEntry->cpick + aCandidateTable[0x200] - 0xe);
-      nCpickWeight = (uint32_t)wCpick;
+      nCpickWeight = (int)wCpick;
       if ((short int)wCpick > 0 && pUmodEntry->champion != '\0') {
         _bCanApply = MONSTER_CanApplyUniqueModifier(pUmodEntry, nExpansion, pUnit);
         nTxtSize = nTxtSizeSaved;
         if (_bCanApply) {
-          nTotalWeight += (int)(short int)nCpickWeight;
+          nTotalWeight += (short int)nCpickWeight;
           aCandidateTable[nCandidates * 2] = nUmodIdx;
           aCandidateTable[nCandidates * 2 + 1] = (int)(short int)nCpickWeight;
           nCandidates++;
@@ -798,7 +798,7 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
     int aCandidateTable[512];
     BOOL nExpansion;
     int nTxtSizeSaved;
-    uint32_t nCpickWeight;
+    int nCpickWeight;
     int nCpickOffset;
     D2MonUModTxt* pUmodEntry;
     uint32_t nTotalWeight;
@@ -2974,7 +2974,7 @@ void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 }
 
 // Server-side spawner for SuperUnique (named boss) monsters from the superuniques.txt entry nClassId. Bails if already spawned (boss-flag bitset in pGame->nBossFlagList) unless Stacks allows; applies AutoPos. Creates the base monster via SERVER_SpawnMonsterInternal, marks it superunique, sets boss flags, and rolls its UMod (monster modifier) list: copies the txt's fixed Mod entries (noting aura-enchant 0x1e), then rolls difficulty-scaled random mods via MONUMOD_RollRandomModifier, and applies them with UMOD_ApplyEnchantmentsToMonster and group min/max minion counts. A switch on the superunique's hardcoded index drives quest hooks and special minion spawns (e.g. Countess/ForgottenTower, Diablo, Baal-act bosses). Wraps return in Fog stack guard; returns the spawned unit or 0.
-D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, uint32_t nClassId) {
+D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int nClassId) {
     int32_t nUModCount;
     int nUModIdx;
     uint32_t nBoneCount;
@@ -2991,7 +2991,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     }
 
     D2SuperUniquesTxt* pSuperUniquesTxt = D2Common::DATATBLS::MonsterTbls::TXT_SuperUniques_GetLine(nClassId);
-    if (!pSuperUniquesTxt || pSuperUniquesTxt->Class < 0 || pSuperUniquesTxt->Stacks == '\0' && (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7] & pGame->nBossFlagList[(int)nClassId >> 3]) {
+    if (!pSuperUniquesTxt || pSuperUniquesTxt->Class < 0 || pSuperUniquesTxt->Stacks == '\0' && (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7] & pGame->nBossFlagList[nClassId >> 3]) {
       return nullptr;
     }
     if (pSuperUniquesTxt->AutoPos != '\0') {
@@ -3009,7 +3009,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
       return pUnit;
     }
 
-    pGame->nBossFlagList[(int)nClassId >> 3] |= (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7];
+    pGame->nBossFlagList[nClassId >> 3] |= (uint8_t)Fog::BitBuffer::gadwBitMasks[nClassId & 7];
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       uint16_t* pMonsterType;
       pMonsterType = &pUnit->pUnitData.pUnitDataMonster->eMonsterType;
@@ -3079,7 +3079,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     } else {
       pMonsterAiGeneral = 0;
     }
-    if ((int)nClassId < 0 || (int)nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSuperUniquesSize) {
       nGroupMin = -1;
     } else {
       nGroupMin = D2Common::ITEMS::Items::sgptDataTable->pTxtSuperUniques[nClassId].hcIdx;
@@ -3211,7 +3211,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       int nElModeFieldOffset;
       int bExpansion;
       ::SGAMEDATA* pGame;
-      uint32_t nScalingMode;
+      int nScalingMode;
       uint8_t* pElModeCur;
       D2UnitStrc* pUnitSaved;
       D2MonStatsTxt* pMonStats;
@@ -3281,7 +3281,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       __frame0.nExpansionMod = MONSTER_CalculateCorpseBombDamage(pGameFromUnit, nClassId);
     }
     if (__frame0.nScalingMode != 5) {
-      if ((int)__frame0.nScalingMode > 6 && (int)__frame0.nScalingMode <= 8) {
+      if (__frame0.nScalingMode > 6 && __frame0.nScalingMode <= 8) {
         memset(&sMonStats, 0, 0x38);
         nClassId = pUnit->nClassId;
         pScaledStats = &sMonStats;
@@ -3343,7 +3343,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       __frame0.pUnitSaved = pUnit;
       pUnitEl = __frame0.pUnitSaved;
       __frame0.pElModeCur = pElMode;
-      if (*pElMode > 0 && __frame0.nScalingMode == *pElMode && *__frame0.pElChance > 0 && (*__frame0.pElChance >= 100 || (nElDifficultyIdx = D2Common::Seed::UNIT_GetModuloFromSeed(&__frame0.pUnitSaved->sSeed, 100) , (int)nElDifficultyIdx < (int)(uint32_t)*__frame0.pElChance))) {
+      if (*pElMode > 0 && __frame0.nScalingMode == (uint32_t)*pElMode && *__frame0.pElChance > 0 && (*__frame0.pElChance >= 100 || (nElDifficultyIdx = D2Common::Seed::UNIT_GetModuloFromSeed(&__frame0.pUnitSaved->sSeed, 100) , (int)nElDifficultyIdx < (int)(uint32_t)*__frame0.pElChance))) {
         memset(&sMonStats, 0, 0x38);
         pScaledStats = &sMonStats;
         pElMode += __frame0.nElModeFieldOffset;
@@ -3438,7 +3438,6 @@ void __fastcall MONSTER_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    uint32_t nHitCheckFlags;
     D2DamageStrc sDamage;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -3446,7 +3445,7 @@ void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     }
 
     memset(&sDamage, 0, 0x70);
-    *(uint16_t*)(char*)&nHitCheckFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, 0, 0);
+    uint32_t nHitCheckFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, 0, 0);
     sDamage.wResultFlags = (uint16_t)nHitCheckFlags;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
 }

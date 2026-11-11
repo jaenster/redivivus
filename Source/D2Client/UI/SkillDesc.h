@@ -177,6 +177,6 @@ void __fastcall SKILLDESC_BuildSkillTooltip(struct D2UnitStrc * pUnit, eD2Skills
 void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nScreenX, int32_t nScreenY);
 void __fastcall SKILLDESC_BuildSkillShortTooltip(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nParam1, int32_t nScreenX, int32_t nScreenY);
 #endif // D2_MODULE_D2Client
-// 65 internal functions (defined in .cpp)
+// 68 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::SkillDesc

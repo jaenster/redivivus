@@ -1330,7 +1330,6 @@ int32_t __stdcall STATLIST_GetItemStatBonusValues(D2UnitStrc * pItem, uint32_t n
 // Calculates the combined value of a stat for a D2StatListExStrc, including all ItemStatCost formula operations (op types 1-13). Reads base value from CalcFullStatFromChildren, then applies complex stat formulas involving other stats, character class bonuses, and time-of-day modifiers.
 int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, int32_t nStatShifted) {
     int32_t nBaseValue;
-    uint32_t uTimeModStat;
     int32_t nBaseStatLookup;
     int32_t nSearchResult;
     D2CharStatsTxt* pCharStatsTxt;
@@ -1478,23 +1477,23 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
 
         break;
         case 6:
-          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (uTimeModStat = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , uTimeModStat != 0)) {
+          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , nRelatedStatVal != 0)) {
             nPeriod = 0;
-            nRelatedStatVal = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod);
-            nApplyResult2 = ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(uTimeModStat, nRelatedStatVal, nPeriod, nullptr, nullptr, nullptr);
+            nBaseStatLookup = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod);
+            nApplyResult2 = ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nRelatedStatVal, nBaseStatLookup, nPeriod, nullptr, nullptr, nullptr);
             add_to_total:
             nCombinedValue += nApplyResult2;
           }
         break;
         case 7:
-          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (uTimeModStat = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , uTimeModStat != 0)) {
+          if (pStatList->pOwner && (pDrlgAct = pStatList->pOwner->pDrlgAct , pDrlgAct != 0) && (nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)(uint16_t)*pOpRelation << 0x10) , nRelatedStatVal != 0)) {
             nPeriod2 = 0;
-            nRelatedStatVal = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod2);
+            nBaseStatLookup = Environment::DRLGENV_GetPeriodOfDayFromAct(pDrlgAct, &nPeriod2);
             n100Percent = 100;
-            nBaseStatLookup = ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(uTimeModStat, nRelatedStatVal, nPeriod2, nullptr, nullptr, nullptr);
+            nBaseStatLookup = ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nRelatedStatVal, nBaseStatLookup, nPeriod2, nullptr, nullptr, nullptr);
             nRelatedStatVal = nCombinedValue;
-            nRelatedStatVal += (int32_t)DATATBLS::DataTbls::D2ApplyPercent(nCombinedValue, nBaseStatLookup, n100Percent);
-            nCombinedValue = nRelatedStatVal;
+            nBaseStatLookup = DATATBLS::DataTbls::D2ApplyPercent(nCombinedValue, nBaseStatLookup, n100Percent);
+            nCombinedValue = nRelatedStatVal + nBaseStatLookup;
           }
         break;
         case 8:
@@ -2634,27 +2633,25 @@ BOOL __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState
     }
 
     D2StatListExStrc* pStateStatList = pUnit->pStatsEx;
-    if (!(pStateStatList && pStateStatList->sStatList.nFlags & 0x80000000U)) {
-      return 0;
-    }
-
-    pStateStatList = GetStatListByState(pStateStatList, eState);
-    if (!pStateStatList) {
-      return 0;
-    }
-    if (bDisabled) {
-      if (!(pStateStatList->sStatList.nFlags & 0x2000U)) {
-        STATLIST_DetachAndRecalc(pStateStatList);
-        pStateStatList->sStatList.nFlags |= 0x2000;
-        STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
-        return 1;
+    if (pStateStatList && pStateStatList->sStatList.nFlags & 0x80000000U) {
+      pStateStatList = GetStatListByState(pStateStatList, eState);
+      if (!pStateStatList) {
+        return 0;
       }
-    } else {
-      if (pStateStatList->sStatList.nFlags & 0x2000U) {
-        STATLIST_DetachAndRecalc(pStateStatList);
-        pStateStatList->sStatList.nFlags &= -8193;
-        STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
-        return 1;
+      if (bDisabled) {
+        if (!(pStateStatList->sStatList.nFlags & 0x2000U)) {
+          STATLIST_DetachAndRecalc(pStateStatList);
+          pStateStatList->sStatList.nFlags |= 0x2000;
+          STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
+          return 1;
+        }
+      } else {
+        if (pStateStatList->sStatList.nFlags & 0x2000U) {
+          STATLIST_DetachAndRecalc(pStateStatList);
+          pStateStatList->sStatList.nFlags &= -8193;
+          STATLIST_AttachStatListToUnit(pUnit, pStateStatList, 1);
+          return 1;
+        }
       }
     }
 

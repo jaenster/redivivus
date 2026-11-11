@@ -271,6 +271,6 @@ int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(struct D2PathPointStrc * 
 // Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
 int32_t __fastcall PATH_FindPathTowardFallback(struct D2PathTypeArg * pPathTypeArg);
 #endif // D2_MODULE_D2Common
-// 20 internal functions (defined in .cpp)
+// 21 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::Path

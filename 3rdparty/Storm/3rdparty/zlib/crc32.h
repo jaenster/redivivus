@@ -26,6 +26,6 @@ uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t n
 void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp);
 void __fastcall crc32_combine64(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength);
 #endif // D2_MODULE_Storm
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace Storm::_3rdparty::zlib::crc32

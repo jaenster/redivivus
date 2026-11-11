@@ -1161,7 +1161,6 @@
         "SGAMEDATA",
         "eD2Skills",
         "eD2UnitType",
-        "int16_t",
         "int32_t"
       ]
     },

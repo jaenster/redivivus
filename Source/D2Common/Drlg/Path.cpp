@@ -894,7 +894,7 @@ void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
 uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(D2PathTypeArg * pPathTypeArg, uint32_t * pPathData) {
     eCollisionFlags eCollisionResult;
     int nTmp;
-    uint32_t nStepSize;
+    int nStepSize;
     D2RoomStrc* pRoom;
     if (!pPathData[6]) {
       return 0;
@@ -940,18 +940,20 @@ uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(D2PathTypeArg * pPathTyp
       nAbsVelY = -nVelY;
     }
     if ((int)nAbsVelX > (int)nAbsVelY) {
-      nStepSize = nVelX;
+      nAbsVelX = nVelX;
       if ((int)nVelX >= 0) {
+        nStepSize = nVelX;
         goto walk_path;
       }
     } else {
-      nStepSize = nVelY;
+      nAbsVelX = nVelY;
       if ((int)nVelY >= 0) {
+        nStepSize = nVelY;
         goto walk_path;
       }
     }
 
-    nStepSize = -nStepSize;
+    nStepSize = -nAbsVelX;
     walk_path:
     pRoom = pPathTypeArg->pRoom;
     eD2CollisionUnitSize nWidth = pPathTypeArg->nUnitSize;
@@ -966,13 +968,13 @@ uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(D2PathTypeArg * pPathTyp
       if (nRemainY < 0) {
         nRemainY = nIterX - nFpSrcX;
       }
-      if (nRemainY < (int)nStepSize) {
+      if (nRemainY < nStepSize) {
         nRemainY = nFpDstX + nFpSrcY;
         nTmp = nIterY - nFpSrcY;
         if (nRemainY >= 0) {
           nTmp = nRemainY;
         }
-        if (nTmp < (int)nStepSize) {
+        if (nTmp < nStepSize) {
           if (nFpDstY == -0x7fff8000) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1df);
             exit(-1);
@@ -1041,7 +1043,7 @@ void __fastcall DRLGPATH_ApplyMissileOffset(D2UnitStrc * pMissileStrc) {
 void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2UnitStrc * pMissileStrc) {
     int iVar2;
     uint8_t byDirection;
-    short int nCoord;
+    int32_t nCoord;
     uint32_t findex;
     float fVar3;
     short int nOffsetRadius;
@@ -1062,10 +1064,10 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2UnitStrc * 
 
       eUnitType = pOwner->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCoord = (short int)pOwner->pPath.pStaticPath->nPosX;
+        nCoord = pOwner->pPath.pStaticPath->nPosX;
       } else if (pOwner->pPath.pDynamicPath) {
         nLine = PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
-        nCoord = (short int)nLine;
+        nCoord = nLine;
       } else {
         nCoord = 0;
       }
@@ -1074,10 +1076,10 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2UnitStrc * 
       piVar1 = (int*)pMissileStrc->pGfxDataCopy;
       iVar2 = *piVar1;
       if (iVar2 == 2 || iVar2 > 3 && iVar2 <= 5) {
-        nCoord = (short int)*(uint32_t*)(piVar1[0xb] + 0x10);
+        nCoord = *(uint32_t*)(piVar1[0xb] + 0x10);
       } else if ((D2DynamicPathStrc*)piVar1[0xb]) {
         nLine = PATH::DynamicPath::GetYPos((D2DynamicPathStrc*)piVar1[0xb]);
-        nCoord = (short int)nLine;
+        nCoord = nLine;
       } else {
         nCoord = 0;
       }
@@ -2431,7 +2433,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
     D2DrlgAStarContextStrc* pDVar1;
     D2DrlgAStarContextStrc sAStarCtx;
     D2DrlgRoomAStarNodeStrc sStartNode;
-    uint32_t nCostMax;
+    int nCostMax;
     int32_t nErrorLine;
     short int nHCost;
     if (pRoomCoords->dwXSize * pRoomCoords->dwYSize > 50000) {
@@ -2478,7 +2480,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
           nInitCostClamped = nCostLimit;
         }
 
-        nCostMax = (uint32_t)(short int)nInitCostClamped;
+        nCostMax = (int)(short int)nInitCostClamped;
       }
     } else {
       nInitCostClamped = (uint32_t)(uint8_t)pPathTypeArg->nIdaStarInitCopy;
@@ -2486,7 +2488,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
         nInitCostClamped = nCostLimit;
       }
 
-      nCostMax = (uint32_t)(short int)nInitCostClamped;
+      nCostMax = (int)(short int)nInitCostClamped;
     }
 
     do {
@@ -2501,7 +2503,7 @@ int32_t __thiscall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, D2
 
       pFoundNode = DRLGPATH_AStarExpandNode(nCostLimit, pPathTypeArg, &sAStarCtx);
       nCostLimit += 5;
-    } while ((pFoundNode || true) && !pFoundNode && (int)nCostLimit < (int)nCostMax);
+    } while ((pFoundNode || true) && !pFoundNode && (int)nCostLimit < nCostMax);
 
     nErrorLine = 0;
     if (pFoundNode) {
@@ -2528,12 +2530,7 @@ int32_t __fastcall PATH_FindPathAStar(D2PathTypeArg * pPathTypeArg) {
     pNextRoom = pPathTypeArg->pRoomNext;
     pNextRoomCoords = &aCurRoomCoords;
     pCoordsIter = aCoordsSnapshot;
-    for (nAStarResult = 8; nAStarResult; nAStarResult--) {
-      *pCoordsIter = pNextRoomCoords->dwXStart;
-      pNextRoomCoords = (D2DrlgRoomCoordsStrc*)&pNextRoomCoords->dwYStart;
-      pCoordsIter++;
-    }
-
+    memcpy(pCoordsIter, pNextRoomCoords, 32);
     if (pNextRoom && pPathTypeArg->pRoom != pNextRoom) {
       D2DrlgRoomCoordsStrc aNextRoomCoords;
       DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pNextRoom, &aNextRoomCoords);

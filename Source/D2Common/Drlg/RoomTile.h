@@ -78,6 +78,6 @@ int __fastcall Unreferenced_0066f030(struct D2RoomStrc * param_1);
 // @sourcefile .\DRLG\RoomTile.cpp
 void __fastcall DRLGROOMTILE_FreeRoomTilesAll(struct D2RoomExStrc * pRoomEx);
 #endif // D2_MODULE_D2Common
-// 14 internal functions (defined in .cpp)
+// 15 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::RoomTile

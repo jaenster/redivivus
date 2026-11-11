@@ -55,6 +55,6 @@ BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
 struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * param_1);
 uint32_t __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 #endif // D2_MODULE_D2Common
-// 12 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Common::PATH::Path

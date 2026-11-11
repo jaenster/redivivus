@@ -15,6 +15,14 @@
 
 namespace D2Game::Quests::QUESTS::A4Q4 {
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Q30_Callback_00 — gossip handler for Tyrael (MonStats 0x198) in Act 4 Pandemonium Fortress.
 // This file is the internal Q30 "Spoke to Malachai" pseudo-quest (nQuestIdReal=QUEST_SpokeToMalachai),
 // the hidden 4th Act-4 slot beyond the 3 public quests; it drives Tyrael's Act4->Act5 transition dialog.

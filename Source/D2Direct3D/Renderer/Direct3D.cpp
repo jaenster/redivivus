@@ -3638,12 +3638,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
     nPosY += gd3dVertexBufferOffset * 0x20;
     pfDst = aQuadVertexData;
     pfSrc = (float*)nPosY;
-    for (nCopyCount = 0x20; nCopyCount; nCopyCount--) {
-      *pfSrc = pfDst->fX;
-      pfDst = (D2D3DVertexStrc*)&pfDst->fY;
-      pfSrc++;
-    }
-
+    memcpy(pfSrc, pfDst, 0x80);
     g_pD3DSpriteQuadVB->lpVtbl->Unlock(g_pD3DSpriteQuadVB);
     g_pD3DDevice->lpVtbl->DrawPrimitiveVB(g_pD3DDevice, 6, g_pD3DSpriteQuadVB, gd3dVertexBufferOffset, 4, 0x1c);
     gd3dVertexBufferOffset += 4;

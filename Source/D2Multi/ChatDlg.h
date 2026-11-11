@@ -316,6 +316,6 @@ int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix)
 void StaticInit_6ca960();
 void StaticInit_gbChatLobbyInitialize();
 #endif // D2_MODULE_D2Multi
-// 14 internal functions (defined in .cpp)
+// 16 internal functions (defined in .cpp)
 
 } // namespace D2Multi::ChatDlg

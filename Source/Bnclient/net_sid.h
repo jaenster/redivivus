@@ -392,6 +392,6 @@ void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pEx
 void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * pDecryptKey);
 void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphertext, uint16_t * pSubkeys);
 #endif // D2_MODULE_Bnclient
-// 3 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace Bnclient::_net_sid

@@ -67,6 +67,6 @@ uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t *
 int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxChars);
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile);
 #endif // D2_MODULE_D2Lang
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Lang::Unicode::UNISYS

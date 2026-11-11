@@ -69,5 +69,6 @@ void __fastcall CLIENT_UpdateUnitLightRadius(struct D2UnitStrc * pUnit, int32_t 
 void __fastcall CLIENT_SetUnitLightColor(struct D2UnitStrc * pUnit, int32_t dwRGB);
 void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost);
 #endif // D2_MODULE_D2Client
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Client::Engine

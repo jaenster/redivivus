@@ -2695,22 +2695,11 @@ static BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
       if (gnNotifyEnabled) {
         pcCmdEnd = "Player entering/leaving notifications are enabled.";
         pszMsgDst = szMessage;
-        for (i = 0xc; i; i--) {
-          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-          pcCmdEnd += 4;
-          pszMsgDst += 4;
-        }
-
-        *(uint16_t*)pszMsgDst = *(uint16_t*)pcCmdEnd;
-        pszMsgDst[2] = pcCmdEnd[2];
+        memcpy(pszMsgDst, pcCmdEnd, 0x33);
       } else {
         pcCmdEnd = "Player entering/leaving notifications are disabled.";
         pszMsgDst = szMessage;
-        for (i = 0xd; i; i--) {
-          *(uint32_t*)pszMsgDst = *(uint32_t*)pcCmdEnd;
-          pcCmdEnd += 4;
-          pszMsgDst += 4;
-        }
+        memcpy(pszMsgDst, pcCmdEnd, 0x34);
       }
 
       D2Lang::UTF8_ConvertToWideChar(wszMessage, szMessage, 0x200);
@@ -2760,7 +2749,7 @@ BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText) {
     pnStrLen = Storm::Source::SSTR::SStrLen(szText);
     int nPos;
     nPos = 0;
-    uint32_t nRemaining;
+    int nRemaining;
     nRemaining = pnStrLen;
     if ((int)pnStrLen <= 0) {
       return 0;
@@ -2768,7 +2757,7 @@ BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText) {
 
     do {
       char szKeyBuf[1024];
-      if ((int)nRemaining < 0x10 - nCharsCollected) {
+      if (nRemaining < 0x10 - nCharsCollected) {
         return 0;
       }
 

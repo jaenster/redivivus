@@ -247,6 +247,6 @@ void __fastcall CloseSmacker(struct D2SmackerContextStrc * pContext);
 void __fastcall DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pBuffer, int nVersion);
 void __fastcall PlayerSmacker(struct D2SmackerContextStrc * pContext);
 #endif // D2_MODULE_D2Gdi
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Gdi::Renderer::Windowed

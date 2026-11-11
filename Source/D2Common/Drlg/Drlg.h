@@ -448,6 +448,6 @@ struct D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(struct D
 // DRLG level-generation: builds the room-graph path connecting wilderness level exit pair nExitIndex (aExitPoints2 start -> aExitPoints3 target, both converted from world to 8-unit grid coords). If the two exits are adjacent (Manhattan <=1) it just allocates two vertices directly. Otherwise runs an iterative A*-style search (DRLGOUTROOM_PathSearchStep over a ~9000-int node pool, growing the cost bound each pass) and, on success, walks the result node chain allocating a D2DrlgVertexStrc list into pWildData->pAdjacentVertices[nExitIndex] (positions from node[3]/[4]). Returns TRUE if a path was built, FALSE if no path within the cost budget. Vertices come from the level's DRLG memory pool.
 BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(struct D2DrlgLevelStrc * pLevel, int32_t nExitIndex);
 #endif // D2_MODULE_D2Common
-// 12 internal functions (defined in .cpp)
+// 21 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg

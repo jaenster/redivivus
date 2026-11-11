@@ -272,6 +272,6 @@ BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00643880(::SGAMEDATA * pGame, str
 BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646260(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
 BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646270(::SGAMEDATA * pGame, struct D2UnitStrc * pMissile, struct D2UnitStrc * pTarget);
 #endif // D2_MODULE_D2Game
-// 11 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Game::MISSILES::MissilesMode

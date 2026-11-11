@@ -135,6 +135,6 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(struct D2UnitStrc * pUnit);
 BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 BOOL __fastcall ITEMMOD_ApplyCrudeQualityVersioned(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 #endif // D2_MODULE_D2Game
-// 7 internal functions (defined in .cpp)
+// 8 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::Items

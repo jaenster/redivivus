@@ -3427,12 +3427,11 @@ uint32_t __stdcall CLIENT_OnDatabaseCharacterReceived(uint32_t nClientId, void *
 // GAME_CreateBattleNetGame - Creates BNet multiplayer game. Same subsystem init as SP but with 0x8000 pool size. Registers token on QSERVER, sets game metadata (name/pass/desc/difficulty/expansion/itemformat/seed).
 // @sourcefile .\GAME\Game.cpp
 uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePassword, char * szGameDescription, eD2ArenaFlags flags, uint8_t bTemplate, uint8_t bReserved, uint8_t bLadder, uint16_t * pServerTokenOut) {
-    uint32_t nQServerToken;
     if (!gpQServerGameState) {
       return 0;
     }
 
-    *(uint16_t*)(char*)&nQServerToken = QSERVER_GenerateToken();
+    uint32_t nQServerToken = QSERVER_GenerateToken();
     TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
     if (!(uint16_t)nQServerToken) {
       return 0;

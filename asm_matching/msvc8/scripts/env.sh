@@ -83,7 +83,8 @@ oracle_zig() {
 }
 
 # Python with capstone, in a venv private to the oracle: for build.py (a machine with no
-# ghidra-reconstruct checkout to translate with) and the fixers (`oracle fix`), nothing else.
+# ghidra-reconstruct checkout to translate with), nothing else. capstone is funcdecode.py's,
+# which build.py reaches through ours.py and objfuncs.py to decode each object it compiles.
 ORACLE_VENV="$ORACLE_ROOT/.venv"
 oracle_python() {
     if [ ! -x "$ORACLE_VENV/bin/python" ]; then

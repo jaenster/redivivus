@@ -175,9 +175,9 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
     byMoveParam1 = 0;
     uint8_t uVar1;
     uVar1 = '\0';
-    uint8_t byLastHitClass;
-    byLastHitClass = '\0';
-    uint8_t byExtraParam;
+    int32_t byLastHitClass;
+    byLastHitClass = 0;
+    int32_t byExtraParam;
     byExtraParam = 0;
     uint8_t byStepNum;
     byStepNum = '\0';
@@ -209,8 +209,8 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
       exit(-1);
     }
     if (pTargetUnit) {
-      *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 5];
-      *(uint16_t*)(char*)&wTargetX = (uint16_t)pTargetUnit->eUnitType;
+      byMoveParam2 = gaUnitModeUpdateFields[eAnimMode * 6 + 5];
+      wTargetX = pTargetUnit->eUnitType;
       nTargetY = pTargetUnit->nUnitGUID;
       dwTmp = 0x68;
       switch (eAnimMode) {
@@ -219,9 +219,9 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
             {
               bIsNear = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
               if (bIsNear >= 0x5 && bIsNear <= 0x6) {
-                *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];
+                byMoveParam2 = gaUnitModeUpdateFields[eAnimMode * 6 + 4];
                 nTmp2 = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-                *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;
+                wTargetX = nTmp2;
                 nTargetY = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
                 dwTmp = 0x67;
               } else {
@@ -230,14 +230,14 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
             }
       }
     } else {
-      *(uint8_t*)(char*)&byMoveParam2 = (uint8_t)gaUnitModeUpdateFields[eAnimMode * 6 + 4];
+      byMoveParam2 = gaUnitModeUpdateFields[eAnimMode * 6 + 4];
       if (gaUnitModeUpdateFields[eAnimMode * 6 + 1]) {
         nTmp2 = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-        *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;
+        wTargetX = nTmp2;
         nTargetY = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
       } else {
         nTmp2 = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-        *(uint16_t*)(char*)&wTargetX = (uint16_t)nTmp2;
+        wTargetX = nTmp2;
         nTargetY = D2Common::PATH::DynamicPath::GetYPos(pDynamicPath);
       }
 
@@ -247,13 +247,13 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
       switch (eAnimMode) {
         case eD2MonsterAnimMode_ns::Block:
           if (!pTargetUnit) {
-            *(uint16_t*)(char*)&wTargetX = 0;
+            wTargetX = 0;
             nTargetY = -1;
           }
         break;
         case Death:
           byMoveParam1 = D2Common::PATH::DynamicPath::GetDirection(pDynamicPath);
-        byLastHitClass = (uint8_t)pUnit->dwLastHitClass;
+        byLastHitClass = pUnit->dwLastHitClass;
         break;
         default:
           goto default_case;
@@ -263,7 +263,7 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
         case Knockback:
           byDistance = D2Common::PATH::DynamicPath::GetDistance(pDynamicPath);
         uVar1 = Monsters::MONSTER_GetHpPercent128(pUnit);
-        byExtraParam = (uint8_t)pUnit->dwLastHitClass;
+        byExtraParam = pUnit->dwLastHitClass;
         goto send_path_ex_packet;
         case eD2MonsterAnimMode_ns::GetHit:
           byMoveParam1 = Monsters::MONSTER_GetHpPercent128(pUnit);
@@ -276,7 +276,7 @@ void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUn
           byMoveParam1 |= 0x80;
         }
 
-        byLastHitClass = (uint8_t)pUnit->dwLastHitClass;
+        byLastHitClass = pUnit->dwLastHitClass;
         break;
       }
     } else {

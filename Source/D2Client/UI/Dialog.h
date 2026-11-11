@@ -151,6 +151,6 @@ int __stdcall GetDialogCounter();
 void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
 void __stdcall DIALOG_InitializeSystem_Unref_004b9200();
 #endif // D2_MODULE_D2Client
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Dialog

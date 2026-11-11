@@ -1128,7 +1128,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
     D2ChannelUserStrc* pNextScan;
     D2ChannelUserStrc* pPrevNode;
     bool bInserted;
-    uint32_t nUserIndex;
+    int nUserIndex;
     bool bUserExpansionWeClassic;
     bool bUserHardcoreWeSoftcore;
     bool bWeExpansionUserClassic;
@@ -1176,7 +1176,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
       if (!pCurUser) {
         return;
       }
-      if ((int)nUserIndex < gnChannelUserListScrollOffset || (int)nUserIndex >= gnChannelUserListScrollOffset + 0xb) {
+      if (nUserIndex < gnChannelUserListScrollOffset || nUserIndex >= gnChannelUserListScrollOffset + 0xb) {
         dwCompFlags = pCurUser->nStatusFlags & 9 ? Fog::BitBuffer::gadwBitMasks[0xb] : 0;
         nUserFlags = pCurUser->nFlags;
         if (nUserFlags & 8) {
@@ -1337,7 +1337,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
         } else {
           dwCompFlags &= Fog::BitBuffer::gadwInvBitMasks[7];
         }
-        if (nUserIndex & 1) {
+        if (nUserIndex & 1U) {
           dwCompFlags |= Fog::BitBuffer::gadwBitMasks[8];
         }
         if (pCurUser->nStatusFlags & 0x20) {
@@ -1380,7 +1380,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
           }
         }
       }
-      if (dwCompFlags < nUserIndex) {
+      if (dwCompFlags < (uint32_t)nUserIndex) {
         pCurUser = pSortNode->pNext;
         pSortNode->pNext = pScanNode;
         pNextScan = pScanNode;

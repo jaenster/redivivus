@@ -4045,7 +4045,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nFlagsOrType = */ 0x0
     }
 }; D2_STATIC_GUARD(gaPredefinedForms, "gaPredefinedForms");
-static int gnClassDescriptionTooltipState = -0x1; D2_STATIC_GUARD(gnClassDescriptionTooltipState, "gnClassDescriptionTooltipState");
+static unsigned int gnClassDescriptionTooltipState = 0xffffffff; D2_STATIC_GUARD(gnClassDescriptionTooltipState, "gnClassDescriptionTooltipState");
 static uint32_t gbTermsOfServiceCancelled = 0; D2_STATIC_GUARD(gbTermsOfServiceCancelled, "gbTermsOfServiceCancelled");
 static D2ControlStrc * bCharacterCreationInProgress = 0; D2_STATIC_GUARD(bCharacterCreationInProgress, "bCharacterCreationInProgress");
 // also labelled: gbPasswordChangeInProgress
@@ -5781,6 +5781,7 @@ void __stdcall Unreferenced_00431020() {
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
+    uint16_t* bCopied1;
     int i;
     ::D2WinTextBox* pTargetBox;
     uint32_t nRemaining;
@@ -5790,12 +5791,9 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
     int32_t nLine;
     uint32_t nCharCount = 0;
     uint16_t* pwCursor = MAINMENU_LoadCreditsFile(&nCharCount);
-    uint16_t* bCopied1 = awLineBuf;
     uint16_t* pwTextBuf = pwCursor;
-    for (i = 0x200; i; i--) {
-      bCopied1[0] = L'\0';
-      bCopied1[1] = L'\0';
-      bCopied1 += 2;
+    for (i = 0; i < 0x400; i++) {
+      awLineBuf[i] = L'\0';
     }
 
     if (!pwCursor) {
@@ -7342,9 +7340,9 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
       } while ((intptr_t)ppAnimIter < (intptr_t)((char*)&gaAnimImgCharCreateByClass + 20));
     }
 
-    int nPrevClassId;
+    uint32_t nPrevClassId;
     nPrevClassId = gnClassDescriptionTooltipState;
-    int nNewClassId;
+    uint32_t nNewClassId;
     nNewClassId = -1;
     bool bHadClassSelected;
     bHadClassSelected = gnClassDescriptionTooltipState != -1;

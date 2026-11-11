@@ -2455,7 +2455,7 @@ void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
             bNeedSpecialMsg = true;
             dwErrorLine = A5Q2::Q32_GetRemainingPrisonersCount(pGameQuestData);
             *(uint8_t*)(char*)&__frame0.sPacket50.aPayload[2] = (uint8_t)dwErrorLine;
-            *(uint8_t*)((char*)&__frame0.sPacket50.aPayload[2] + 1) = (uint8_t)((uint32_t)dwErrorLine >> 8);
+            *(uint8_t*)((char*)&__frame0.sPacket50.aPayload[2] + 1) = (uint8_t)(dwErrorLine >> 8);
             break;
           }
         }

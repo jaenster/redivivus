@@ -92,6 +92,6 @@ void __fastcall Q05_InitData(struct D2QuestDataStrc * pQuestData);
 // A1Q6 (Sisters to the Slaughter) object init-fn 04. Marks the quest object (Andariel-related) as updatable while the Forgotten Tower quest is still in its intro phase (!bIsNotIntroduction). Halts if quest data missing. No quest-state transitions.
 void __fastcall Objects_InitFn04_TowerTome(struct D2ObjectInitFnArg * pInitArg);
 #endif // D2_MODULE_D2Game
-// 1 internal function (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A1Q5

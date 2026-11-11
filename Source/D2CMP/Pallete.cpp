@@ -79,14 +79,7 @@ void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) 
     D2MPQFileStrc* pArchive;
     char* pSrcWord = "Data\\Global\\Items\\Palette\\";
     char* szPathDst = nStrEndOffset1;
-    for (nPrefixWords = 6; nPrefixWords; nPrefixWords--) {
-      *(uint32_t*)szPathDst = *(uint32_t*)pSrcWord;
-      pSrcWord += 4;
-      szPathDst += 4;
-    }
-
-    *(uint16_t*)szPathDst = *(uint16_t*)pSrcWord;
-    szPathDst[2] = pSrcWord[2];
+    memcpy(szPathDst, pSrcWord, 27);
     strcat(nStrEndOffset1, szPaletteName);
     strcat(nStrEndOffset1, ".dat");
     uint32_t nPaletteDataSize = 0x1500;

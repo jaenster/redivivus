@@ -208,7 +208,7 @@ void __fastcall GFXUTIL_FreeGfxNodeList(D2GfxUtilNodeStrc * * ppListHead, int * 
 }
 
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, eUnitType (EDX): eD2UnitType
-int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, uint32_t nId) {
+int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, int nId) {
     D2ObjTypeTxt* pTokenLine;
     switch (eUnitType) {
       case UNIT_PLAYER:
@@ -218,10 +218,10 @@ int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUni
         }
       case UNIT_MONSTER:
         {
-          if ((int)nId < 0) {
+          if (nId < 0) {
             return 0;
           }
-          if ((int)nId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+          if (nId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             return 0;
           }
           if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nId) {
@@ -327,7 +327,6 @@ uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDr
 // @sourcefile .\ENGINE\GfxUtil.cpp
 static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit) {
     bool bIsIdentified;
-    uint32_t nVariant;
     D2SetItemsTxt* pSetItemsTxt;
     int iVar1;
     D2UniqueItemsTxt* pUniqueItemsTxt;
@@ -345,7 +344,7 @@ static void GFXUTIL_SetItemGfxFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit)
       return;
     }
     if (pGfxData->nMode == 4) {
-      *(uint8_t*)(char*)&nVariant = D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
+      uint32_t nVariant = D2Common::ITEMS::Items::ITEM_GetItemData_bVariant(pUnit);
       BOOL bItemIdentified = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x196, ".\\ENGINE\\GfxUtil.cpp");
       if (bItemIdentified) {
         int eQuality;

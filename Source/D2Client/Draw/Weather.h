@@ -109,6 +109,6 @@ void __stdcall WEATHER_UpdateTransition(struct D2SeedStrc * pSeed);
 void __stdcall WeatherEffects();
 uint32_t __fastcall WEATHER_ApproximateDistance(uint32_t nDeltaX, uint32_t nDeltaY);
 #endif // D2_MODULE_D2Client
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Client::Draw::Weather

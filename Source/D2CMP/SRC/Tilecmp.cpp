@@ -1136,12 +1136,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
         memset(pDstHeader, 0, 0x114);
         pCopySrc = pSrcTileCmpHdr;
         pCopyDst = pDstHeader;
-        for (nCopyWords = 0x45; nCopyWords; nCopyWords--) {
-          pCopyDst->nVersion = pCopySrc->nVersion;
-          pCopySrc = (D2TileLibraryHeaderStrc*)&pCopySrc->dwFlags;
-          pCopyDst = (D2TileLibraryHeaderStrc*)&pCopyDst->dwFlags;
-        }
-
+        *pCopyDst = *pCopySrc;
         pDstHeader->dwFlags &= -2;
         nAllocSize = pDstHeader->nTiles * 0x60;
         pDstHeader->pTiles = 0;

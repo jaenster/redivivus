@@ -96,6 +96,6 @@ void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, struct D2UnitStrc * p
 int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, struct D2MonsterKillStrc * pMonsterKill, int32_t bResetSkillOnSameMode);
 void __stdcall SetCurrentSkill(struct D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode, struct D2MonsterKillStrc * pMonsterKill);
 #endif // D2_MODULE_D2Game
-// 8 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Game::Monster::MonsterMode

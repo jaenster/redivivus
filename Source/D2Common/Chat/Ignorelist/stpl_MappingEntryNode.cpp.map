@@ -22,7 +22,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "int32_t",
-        "intptr_t"
+        "intptr_t",
+        "uint32_t"
       ]
     },
     {

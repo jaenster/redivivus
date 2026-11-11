@@ -64,6 +64,6 @@ void __fastcall PlayUnitInitSound(struct D2UnitStrc * pUnit);
 // Dispatches the appropriate sound event when a unit changes animation mode. For players: plays mode-change, attack, or get-hit sounds keyed on mode and class (e.g. Druid kick at mode 0xF, Assassin at 0x10). For monsters: applies MonSounds CvtMo/CvtTgt remapping, then plays mode-change, attack, skill, or stop-combat sound. nMode==0 uses the unit's current mode.
 void __fastcall UNITSND_DispatchModeChangeSound(struct D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nMode);
 #endif // D2_MODULE_D2Client
-// 21 internal functions (defined in .cpp)
+// 28 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::UnitSnd

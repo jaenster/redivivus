@@ -68,14 +68,11 @@ under the same callee addresses) is kept per pair (`ours.PairMemo`).
 
 Needs: wine (here wine 9.17 run by box64 on aarch64; any x86 wine works),
 `7z`, `cabextract`, `msitools`, `curl`, and `zig` (0.17; `zig/`, built on
-first use). Every step runs oracle-zig, and stops when zig is missing. Two
-things are still Python, and need `python3` with `venv` (a private venv with
-capstone, `.venv/`, is created on first use): the fixers (`oracle fix`), and
-`oracle build` on a machine with no ghidra-reconstruct checkout to translate
-with (then `scripts/build.py` with `vc8_translate.py`). `oracle fix` also
-needs what the game builds with - `cmake`, `ninja` and the mingw-w64 i686
-cross compiler - for `fix_refile.py`'s syntax check, without which it
-stops, saying so.
+first use). Every step runs oracle-zig, and stops when zig is missing. One
+thing is still Python, and needs `python3` with `venv` (a private venv with
+capstone, `.venv/`, is created on first use): `oracle build` on a machine with
+no ghidra-reconstruct checkout to translate with (then `scripts/build.py` with
+`vc8_translate.py`).
 
 * **The reference.** `scripts/fetch_reference.sh` downloads Blizzard's
   `LODPatch_114d.exe` (6 MB) and extracts `Game.exe` with a self-contained
@@ -174,7 +171,7 @@ skipped unless `build.py --with-data` asks for them.
 ## Which original function is which
 
 The tree carries no addresses and the original no symbols, so
-`scripts/funcmap.py` derives the map from evidence, strongest tier first, and
+`zig/src/funcmap.zig` derives the map from evidence, strongest tier first, and
 records the tier on every row of `evidence/funcmap.tsv`:
 
 | tier | evidence |
@@ -254,7 +251,7 @@ leaves the function: in an object its field holds 0, which reads as a jump to
 the next instruction, and a tail jump followed by a switch table would
 otherwise decode the table as code.
 
-`scripts/compare.py` reduces both to the same view: per instruction, the bytes
+`zig/src/compare.zig` reduces both to the same view: per instruction, the bytes
 with every reference field zeroed, and per reference a token for what it
 names - a function by its original address, an import by name, a string by
 content (from the referenced byte on: ours applies the addend, so a reference
@@ -331,7 +328,7 @@ mnemonics (`compare.aligned_bytes`); `audit.tsv` carries the per-function
 and `-dark.svg`, for a README's `<picture>`.
 
 The runtime is code we link, not code the tree holds, and it is measured like
-the rest. `scripts/libmap.py` (`oracle libmap`, run by `oracle all` after
+the rest. `zig/src/libmap.zig` (`oracle libmap`, run by `oracle all` after
 `map`) pairs every original function the funcmap leaves unpaired with a
 function of the SP1 libraries, and writes `evidence/libmap.tsv` in the
 funcmap's format, `tu` being `<library>/<member>`:
@@ -566,53 +563,14 @@ one:
 | `oracle tulayout` | does each TU correspond to one original object: its functions in one range, in order, nothing foreign inside |
 
 A difference that the generator produces the same way everywhere is fixed
-the same way everywhere, by a fixer: a script that finds the sites in the
-aligned code, edits the tree, rebuilds, re-judges, and keeps an edit only if
-nothing that matched stops matching and the function it is for gets no less
-similar (`scripts/fixlib.py`; without `--apply` each lists what it would do).
-An edit that only removes what the original provably lacks (a statement
-standing for code the compiler emits by itself) is *neutral*: kept even if
-the registers shuffle and the similarity dips, unless a function stops
-matching. An edit that other functions prove - a static promotion, whose
-convention its callers' code depends on - may leave its function less
-similar when one of those callers comes to match. Each fixer's docstring
-names the evidence its rule rests on.
-
-| fixer | the generator wrote | the original has |
-|-|-|-|
-| `fix_static.py` | every function extern | a file-local function `static`: VC8 then gives it a register convention of its own (an argument in EAX, ESI, ..., or a `__fastcall` that leaves EDX or ECX unused), which the original shows - a register it reads, or pushes on and never pops, at entry |
-| `fix_refile.py` | a function in the file of its Ghidra namespace, though the original passes it arguments in registers from callers filed elsewhere (`evidence/objects.tsv`, kind `object`) | the function and its callers in one file - the one the annotations around them name, else the one holding most of them - at their addresses, `static` where only that file calls them, each in a block of its own namespace: names stay, files change |
-| `fix_compare.py` | Ghidra's canonical comparison: `-1 < x`, `x < 5`, `b <= a`; `x != 0` where the original's unsigned jump shows `x > 0` (with the if/else swapped where the jump is inverted too) | the form the instruction shows: `x >= 0`, `x <= 4`, `a >= b`, `(uint32_t)x > 0` |
-| `fix_assert.py` | `if (ok) { return x; } halt(); exit(-1);` | the assertion first: `if (!ok) { halt(); exit(-1); } return x;` |
-| `fix_ifelse.py` | `if (!c) { B } else { A }`, where a jump shows it - or, kept only where its function gets more similar, any `if (!x)` or `if (x == 0)` of one operand | the branches in the order VC8 lays out: `if (c) { A } else { B }` |
-| `fix_return.py` | `void` where the original returns one constant on every path (EAX at each `ret`, by constant propagation over its control flow: `classify.eax_at_returns`), or one argument (`arg_at_returns`) | `int` returning that constant; `bool` where only AL holds it; the parameter, as its type |
-| `fix_gsbuffer.py` | `uint8_t aPacket[9]` in a function the original gives no stack cookie (`/GS` protects byte arrays); with `--members` a byte array inside a local's struct type, such as D2DamageStrc's padding `uint8_t nReserved66[2]` | a struct of scalar fields, `struct { uint8_t e0, …, e8; }`, addressed through a byte pointer |
-| `fix_order.py` | independent stores in an order of its own, `p[2] = x; p[1] = y; p[0] = 0x0c;` | the order VC8 schedules the original's from: fields in member order (`--by offset`), or the original's store order (`--by store`) |
-| `fix_idioms.py` | operators Ghidra could not fold back, e.g. `s.nSeedLow + (int)(((uint64_t)d2_bits_of(s) & 0xffffffff) / 100) * -100` | the operator: `s.nSeedLow % 100`; `__alldiv((uint32_t)E, (uint32_t)((uint64_t)E >> 0x20), 100, 0)` is `(int64_t)E / 100`; `(int)(x + (x >> 0x1f & 3U)) >> 2` is `x / 4`; `x & 0xff` is `(uint8_t)x` (each idiom documented with why the value is the same) |
-| `fix_bitmask.py` | a flag tested or set with a constant mask, `dwState & 4`, or read through a one-bit bitfield, `if (pMonStats2->isSmall)` | the mask read from Blizzard's table, as the original loads it: `dwState & gadwBitMasks[2]`, `(*((uint8_t *)pMonStats2 + 0xOFF) & gadwBitMasks[n])` - as many sites per bit as the original reads the table at that bit; with `--inverse` a flag cleared, `dwState &= -2`, as `dwState &= gadwInvBitMasks[0]`, each function with its gadwBitMasks sites in one edit |
-| `fix_shiftbit.py` | a flag test as a mask, `f & 8` or `f >> 3 & 1`, which VC8 compiles to `test byte ptr [R + N], 8` | the bool the original makes of the shifted bit, `((bool)(f >> 3 & 1))`: `shr eax, 3; test al, 1` |
-| `fix_stringops.py` | the string instructions as library calls or pointer loops: `memset(a, 0, 32 * sizeof(a[0]))`, `for (n = 25; n; n--) { p[0] = 0; p[1] = 0; p += 2; }`, `for (n = K; n; n--) { *d = *s; s++; d++; }` | what VC8 compiles to those instructions: `for (int i = 0; i < 32; i++) a[i] = 0;` (VC8 expands no memset beyond 32 bytes), `memcpy(d, s, K * sizeof(*d))` |
-| `fix_nestcall.py` | a call's result in a temporary, `pGame = GetGamePointer(pUnit); HasQuestItem(pGame, pUnit, code);` (with `--runs`, several temporaries feeding one call) | the call nested in the argument list, which VC8 evaluates after the arguments to its right: `HasQuestItem(GetGamePointer(pUnit), pUnit, code)` |
-| `fix_permute.py` | a run of independent assignments in the order Ghidra listed the original's stores, which is VC8's schedule, not the source order | the order that compiles to the original's: searched, every order of each run tried, one trial per function per round |
-| `fix_fastcall.py` | `__cdecl`/`__stdcall` on a function whose original takes its first arguments in ECX (and EDX) and pops what `__fastcall` leaves on the stack | `__fastcall`, judged on the function and every caller; `--thiscall`: a function taking `this` in ECX that no original code calls directly becomes `__fastcall(this, int32_t nEdxUnused, ...)` |
-| `fix_paramtype.py` | a `uint8_t` or `uint16_t` parameter of a `__fastcall` function, where the original's callers load the whole of ECX or EDX (`mov edx, 5` against our `mov dl, 5`) | `int32_t`, judged on the function and every caller |
-| `fix_restore.py` | after a regeneration, the generator's body again for a function that matched before it | the body it matched with, from the old tree's commit (`fix_restore.py REV OLD_AUDIT`), kept only where the function then matches again |
-
-`oracle fix` runs them all (`scripts/fix_all.py`): conventions first
-(`fix_refile`, `fix_paramtype`; static linkage and register conventions are the generator's since 2026-11-11), the local rewrites after, the whole cycle
-again while a round still keeps edits - their rules interact (a static
-function changes its callers; a comparison written back lets an if/else line
-up). It is also what a regenerated tree is put through, and what
-the fixers do not find again `fix_restore.py` takes from the tree before it,
-where the oracle confirms it. Fixers keep a file's
-line count while they work (a removed statement becomes an empty line, so
-the line tables of everything after it stay valid between builds);
-`scripts/tidy_blanks.py --apply` drops those lines once the fixing is done.
-
-They edit generated files. The durable home of each rule is the generator
-or the Ghidra database the tree is generated from - [UPSTREAM.md](UPSTREAM.md)
-states each for its maintainers, `evidence/fixes.tsv` records every run - and
-the fixers are what the next regeneration is re-run through until then.
+where it is produced: a ghidra-reconstruct pass, or the Ghidra database
+([UPSTREAM.md](UPSTREAM.md) states each rule with its evidence;
+`evidence/fixes.tsv` records the runs of the Python fixers that found them,
+since retired). A form that only trial compilation finds - a statement order,
+a comparison's spelling - is the vc8form permuter's (ghidra-reconstruct's
+`scripts/vc8form-permute/`, run by `recon/runs/vc8form-permute.sh` against
+this checkout's `oracle-zig trial`/`judge`), which records the winning form as
+a Ghidra tag the generator reads.
 
 Our objects lay a TU's functions out in an order of their own: VC8 compiles
 a caller only after the same-TU functions it calls, and emits a function
@@ -641,12 +599,11 @@ map (`bracket`, `align`) and `oracle tulayout` order our functions by source lin
 | | |
 |-|-|
 | `oracle` | the entry point; `oracle help` |
-| `zig/` (`oracle-zig`) | the oracle in Zig: every stage and tool that is not a fixer - setup helpers, carve, build, map, libmap, crt, audit, data, classify, permodule, check, snippet, diff, the analyses, svg, rich/compid, commit (`zig/README.md`) |
+| `zig/` (`oracle-zig`) | the oracle in Zig: every stage and tool - setup helpers, carve, build, map, libmap, crt, audit, data, classify, permodule, check, snippet, diff, the analyses, svg, rich/compid, commit (`zig/README.md`) |
 | `scripts/env.sh` | shared settings, drive mapping, `have_zig`/`oracle_zig`, the venv |
 | `scripts/fetch_reference.sh` | Game.exe 1.14d from Blizzard's patch |
 | `scripts/setup_toolchain.sh`, `setup_psdk.sh`, `smoke_test.sh` | the toolchain from Microsoft's packages |
 | `scripts/vc8.sh` | run one VC8 tool under wine with the oracle's INCLUDE/LIB |
 | `scripts/vc8_translate.py`, `vc8_compat.h`, `shim_include/` | the source the compiler sees (`vc8_translate.py`: where no ghidra-reconstruct checkout translates, and the public CI) |
 | `scripts/build.py`, `ts_translate.py`, `objcache.py`, `oracle_config.py` | the compile with no ghidra-reconstruct checkout (`oracle build` picks it then) |
-| `scripts/fixlib.py`, `fix_static.py`, `fix_refile.py`, `fix_compare.py`, `fix_assert.py`, `fix_ifelse.py`, `fix_idioms.py`, `fix_bitmask.py`, `fix_shiftbit.py`, `fix_return.py`, `fix_gsbuffer.py`, `fix_stringops.py`, `fix_nestcall.py`, `fix_order.py`, `fix_permute.py`, `fix_fastcall.py`, `fix_paramtype.py`, `fix_restore.py`, `fix_all.py`, `tidy_blanks.py` | systematic fixes, kept only where confirmed; `oracle fix` runs them all |
-| `scripts/audit.py`, `check.py`, `classify.py`, `compare.py`, `funcmap.py`, `libmap.py`, `objects.py`, `modules.py`, `ours.py`, `objfuncs.py`, `coffobj.py`, `refimage.py`, `peimage.py`, `funcdecode.py` | the fixers' library: the oracle's judgement in-process (each has its Zig counterpart in `zig/src`) |
+| `scripts/modules.py`, `ours.py`, `objfuncs.py`, `coffobj.py`, `funcdecode.py` | what `build.py` imports: link order, and decoding each object it compiles (capstone, hence the venv) |

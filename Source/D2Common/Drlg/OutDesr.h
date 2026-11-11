@@ -28,6 +28,6 @@ void __fastcall AddExits(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor-level generator dispatcher for Act 2 wilderness levels. Applies common outdoor setup (SetOutGridLinkFlags, PlaceAct1245OutdoorBorders) then switches on pLevel->eD2LevelId to run the per-level placement for Rocky Waste (0x29), Dry Hills (0x2a), Far Oasis (0x2b), Lost City (0x2c), Canyon of the Magi (0x2e), etc.: placing cliffs/ruins/tomb-entries/preset variants, secondary borders, exits, waypoints, Act1/2 shrines, and level-specific fills. Level 0x86 spawns an extra outdoor preset. Out-of-range/intermediate ids fall through to a no-op return.
 void __fastcall InitAct2OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::OutDesr

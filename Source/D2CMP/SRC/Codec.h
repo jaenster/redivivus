@@ -109,6 +109,6 @@ BOOL __fastcall CODEC_EncodeRLE(struct D2CodecFrameComponentStrc * pSrcImage, st
 int __fastcall CODEC_LoadPaletteFromFile(char * szText, struct D2CelFileCacheEntryStrc * pCelEntry);
 void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, struct D2PoolManagerStrc * pMemory, int32_t nReadSize, uint8_t * pCelHeader, struct D2CelDecodeStateStrc * pDecodeState, int32_t nStartFrame, int32_t nFrameCount, size_t * pnSize, char * szFileName);
 #endif // D2_MODULE_D2CMP
-// 5 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::Codec

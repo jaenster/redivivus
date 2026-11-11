@@ -35,6 +35,6 @@ void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, struct D2UnitS
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, int32_t nIsNew);
 #endif // D2_MODULE_D2Game
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT

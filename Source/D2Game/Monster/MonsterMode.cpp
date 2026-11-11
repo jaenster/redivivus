@@ -641,10 +641,12 @@ static uint32_t MONSTER_HasAnimModeSequence(D2UnitStrc * pUnit, eD2MonsterAnimMo
     if (!(pUnit && (int)eAnimMode < 0x10)) {
       return 0;
     }
-    if (gnMonsterAnimModeSequenceFlags[eAnimMode].nSequenceFlags) {
+
+    D2MonsterAnimModeFlagsStrc* t2_r0 = &gnMonsterAnimModeSequenceFlags[eAnimMode];
+    if (t2_r0->nSequenceFlags) {
       return 1;
     }
-    if (!(!gnMonsterAnimModeSequenceFlags[eAnimMode].nAltFlags && gnMonsterAnimModeSequenceFlags[eAnimMode].bHasMonStats)) {
+    if (!(!t2_r0->nAltFlags && t2_r0->bHasMonStats)) {
       return 0;
     }
 

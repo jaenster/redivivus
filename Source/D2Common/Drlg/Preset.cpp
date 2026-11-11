@@ -591,7 +591,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
     uint32_t i;
     int* pPathEntry;
     int32_t pClassId;
-    uint32_t nUnitCount;
+    int nUnitCount;
     uint32_t nPresetCount;
     int szItemCode;
     int nWallLayerIdx;
@@ -719,7 +719,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
       nUnitCount = *pCursor2;
       pCursor2++;
       pCursor = pCursor2;
-      if ((int)nUnitCount > 0) {
+      if (nUnitCount > 0) {
         do {
           eUnitType = *pCursor;
           pClassId = pCursor[1];
@@ -908,7 +908,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
 
     nUnitCount = *pCursor2;
     pCursor2++;
-    if ((int)nUnitCount <= 0) {
+    if (nUnitCount <= 0) {
       return;
     }
 

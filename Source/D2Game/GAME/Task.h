@@ -109,6 +109,6 @@ void StaticInit_aTaskQueueCriticalSections();
 void StaticFini_CriticalSection_0088caa8();
 void StaticFini_aTaskQueueCriticalSections();
 #endif // D2_MODULE_D2Game
-// 1 internal function (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace D2Game::GAME::Task

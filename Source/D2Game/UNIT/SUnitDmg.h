@@ -182,6 +182,6 @@ void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, struct D2UnitStrc * p
 // Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
 uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t nExtraRange);
 #endif // D2_MODULE_D2Game
-// 35 internal functions (defined in .cpp)
+// 36 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUnitDmg

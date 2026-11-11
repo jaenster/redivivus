@@ -297,15 +297,15 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId) {
     return 0;
 }
 
-uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, uint32_t nStateId) {
-    if ((int)nStateId < 0 || (int)nStateId >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, int nStateId) {
+    if (nStateId < 0 || nStateId >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
+      return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xe]->nStateBitmask[nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
     }
 
-    return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[(int)nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
+    return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
 }
 
 BOOL __fastcall STATES_HasPoisonState(D2UnitStrc * pUnit) {

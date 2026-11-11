@@ -175,6 +175,6 @@ void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, struct D2UnitStrc 
 void __fastcall Clear_Unref_005de320(struct D2UnitStrc * pUnit, eD2TimerTypeDWORD nUpdateType);
 void StaticInit_gnSeedCounter();
 #endif // D2_MODULE_D2Game
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Game::UNIT::SUnit

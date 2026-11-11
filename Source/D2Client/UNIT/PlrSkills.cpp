@@ -1205,14 +1205,13 @@ void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eSta
 
 // @sourcefile .\UNIT\PlrSkills.cpp
 D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, eD2States eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
-    int byOldAlignment;
     if (!pUnit) {
       return nullptr;
     }
 
-    *(uint8_t*)(char*)&byOldAlignment = '\0';
+    int byOldAlignment = '\0';
     if (eUnitStat == UNITSTAT_alignment) {
-      *(uint8_t*)(char*)&byOldAlignment = '\x04';
+      byOldAlignment = '\x04';
     }
     if (!pStatList) {
       int nBaseStatVal;
@@ -1223,8 +1222,7 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
         D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       } else {
         nBaseStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, eUnitStat, nLayer);
-        nBaseStatVal = (int)((uint32_t)nBaseStatVal & 0xffffff00u | (uint32_t)(uint8_t)nBaseStatVal);
-        *(uint8_t*)(char*)&byOldAlignment = (uint8_t)nBaseStatVal;
+        byOldAlignment = nBaseStatVal;
       }
     }
 

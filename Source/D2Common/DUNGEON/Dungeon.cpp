@@ -195,11 +195,7 @@ void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsS
     }
 
     D2DrlgRoomCoordsStrc* pSrcCoords = &pRoom->sCoords;
-    for (nDwordsLeft = 8; nDwordsLeft; nDwordsLeft--) {
-      pCoords->dwXStart = pSrcCoords->dwXStart;
-      pSrcCoords = (D2DrlgRoomCoordsStrc*)&pSrcCoords->dwYStart;
-      pCoords = (D2DrlgRoomCoordsStrc*)&pCoords->dwYStart;
-    }
+    *pCoords = *pSrcCoords;
 }
 
 void __stdcall DRLGROOM_GetAdjacentRoomsList(D2RoomStrc * pRoom, D2RoomStrc * * * pppRoomList, int * pNumRooms) {
@@ -263,12 +259,7 @@ D2RoomStrc * __fastcall AllocRoom(D2DrlgActStrc * pDrlgAct, D2RoomExStrc * pRoom
     Seed::InitSeed_Param_666(&pDrlgRoom->sSeed, nInitSeed);
     pDrlgRoom->pRoomEx = pRoomEx;
     D2DrlgRoomCoordsStrc* pDestCoords = &pDrlgRoom->sCoords;
-    for (i = 8; i; i--) {
-      pDestCoords->dwXStart = pDrlgCoords->dwXStart;
-      pDrlgCoords = (D2DrlgRoomCoordsStrc*)&pDrlgCoords->dwYStart;
-      pDestCoords = (D2DrlgRoomCoordsStrc*)&pDestCoords->dwYStart;
-    }
-
+    *pDestCoords = *pDrlgCoords;
     pDrlgRoom->pRoomTiles = pRoomTiles;
     pDrlgRoom->pDrlgRoomNext = pDrlgAct->pRoom;
     pDrlgAct->pRoom = pDrlgRoom;

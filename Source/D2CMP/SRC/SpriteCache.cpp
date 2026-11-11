@@ -99,7 +99,7 @@ void __stdcall SPRITECACHE_Init(BOOL bFreeAll) {
 }
 
 BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t dwFlags, uint32_t dwReserved) {
-    D2TileLibraryEntryStrc* pTileEntry = pTile;
+    D2TileLibraryEntryStrc* pTileSlot;
     if (pTile->pLruNode) {
       LRUCache::LRUCACHE_MoveToFront(&gSpriteCacheLru, pTile->pLruNode);
       return 1;
@@ -109,19 +109,19 @@ BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t d
     }
 
     D2LRUCacheNodeStrc* ppCacheNode = LRUCache::LRUCACHE_GetOrAlloc(&gSpriteCacheLru, pTile->nBlockDataSize, pTile);
-    pTileEntry->pLruNode = ppCacheNode;
+    pTile->pLruNode = ppCacheNode;
     D2GroundSubTileStrc* pCacheData = (D2GroundSubTileStrc*)ppCacheNode->pBuf;
-    pTileEntry->pSubTiles = pCacheData;
-    memset(pCacheData, 0, pTileEntry->nBlockDataSize);
-    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, pTileEntry->szFilePath, (D2MPQFileStrc**)&pTile, 0);
+    pTile->pSubTiles = pCacheData;
+    memset(pCacheData, 0, pTile->nBlockDataSize);
+    BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, pTile->szFilePath, (D2MPQFileStrc**)&pTileSlot, 0);
     if (!bFileExists) {
       return 0;
     }
 
-    D2Hell::D2FILE_SeekFile(nullptr, (D2MPQFileStrc*)pTile, pTileEntry->dwBlockDataOffset, nullptr, 0);
-    D2Hell::D2FILE_ReadFile(nullptr, (D2MPQFileStrc*)pTile, pTileEntry->pSubTiles, pTileEntry->nBlockDataSize);
-    D2Hell::D2FILE_CloseFile(nullptr, (D2MPQFileStrc*)pTile);
-    Tilecmp::TILECMP_RelocateSubTilePixelData(pTileEntry);
+    D2Hell::D2FILE_SeekFile(nullptr, (D2MPQFileStrc*)pTileSlot, pTile->dwBlockDataOffset, nullptr, 0);
+    D2Hell::D2FILE_ReadFile(nullptr, (D2MPQFileStrc*)pTileSlot, pTile->pSubTiles, pTile->nBlockDataSize);
+    D2Hell::D2FILE_CloseFile(nullptr, (D2MPQFileStrc*)pTileSlot);
+    Tilecmp::TILECMP_RelocateSubTilePixelData(pTile);
     return 1;
 }
 
@@ -336,11 +336,11 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         if ((char)nSpriteCmpId != ' ') {
           *szText = (char)nSpriteCmpId;
           pWriteCursor = szText + 1;
-          cCurrent = (char)((uint32_t)nSpriteCmpId >> 8);
+          cCurrent = (char)(nSpriteCmpId >> 8);
           if (cCurrent != ' ') {
             *pWriteCursor = cCurrent;
             pWriteCursor = szText + 2;
-            cCurrent = (char)((uint32_t)nSpriteCmpId >> 0x10);
+            cCurrent = (char)(nSpriteCmpId >> 0x10);
             if (cCurrent != ' ') {
               *pWriteCursor = cCurrent;
               pWriteCursor = szText + 3;
@@ -353,11 +353,11 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         if ((char)nSpriteCmpId != ' ') {
           *pWriteCursor = (char)nSpriteCmpId;
           pWriteCursor2 = pWriteCursor + 1;
-          cCurrent = (char)((uint32_t)nSpriteCmpId >> 8);
+          cCurrent = (char)(nSpriteCmpId >> 8);
           if (cCurrent != ' ') {
             *pWriteCursor2 = cCurrent;
             pWriteCursor2 = pWriteCursor + 2;
-            cCurrent = (char)((uint32_t)nSpriteCmpId >> 0x10);
+            cCurrent = (char)(nSpriteCmpId >> 0x10);
             if (cCurrent != ' ') {
               *pWriteCursor2 = cCurrent;
               pWriteCursor2 = pWriteCursor + 3;
@@ -370,11 +370,11 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         if ((char)nSpriteCmpId != ' ') {
           *pWriteCursor2 = (char)nSpriteCmpId;
           pWriteCursor = pWriteCursor2 + 1;
-          cCurrent = (char)((uint32_t)nSpriteCmpId >> 8);
+          cCurrent = (char)(nSpriteCmpId >> 8);
           if (cCurrent != ' ') {
             *pWriteCursor = cCurrent;
             pWriteCursor = pWriteCursor2 + 2;
-            cCurrent = (char)((uint32_t)nSpriteCmpId >> 0x10);
+            cCurrent = (char)(nSpriteCmpId >> 0x10);
             if (cCurrent != ' ') {
               *pWriteCursor = cCurrent;
               pWriteCursor = pWriteCursor2 + 3;
@@ -387,11 +387,11 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         if ((char)nSpriteCmpId != ' ') {
           *pWriteCursor = (char)nSpriteCmpId;
           pWriteCursor2 = pWriteCursor + 1;
-          cCurrent = (char)((uint32_t)nSpriteCmpId >> 8);
+          cCurrent = (char)(nSpriteCmpId >> 8);
           if (cCurrent != ' ') {
             *pWriteCursor2 = cCurrent;
             pWriteCursor2 = pWriteCursor + 2;
-            cCurrent = (char)((uint32_t)nSpriteCmpId >> 0x10);
+            cCurrent = (char)(nSpriteCmpId >> 0x10);
             if (cCurrent != ' ') {
               *pWriteCursor2 = cCurrent;
               pWriteCursor2 = pWriteCursor + 3;
@@ -404,11 +404,11 @@ static BOOL SPRITECACHE_FindOrLoad(char * szText, D2GfxDataStrc * pGfxData) {
         if ((char)nSpriteCmpId != ' ') {
           *pWriteCursor2 = (char)nSpriteCmpId;
           pWriteCursor = pWriteCursor2 + 1;
-          cCurrent = (char)((uint32_t)nSpriteCmpId >> 8);
+          cCurrent = (char)(nSpriteCmpId >> 8);
           if (cCurrent != ' ') {
             *pWriteCursor = cCurrent;
             pWriteCursor = pWriteCursor2 + 2;
-            cCurrent = (char)((uint32_t)nSpriteCmpId >> 0x10);
+            cCurrent = (char)(nSpriteCmpId >> 0x10);
             if (cCurrent != ' ') {
               *pWriteCursor = cCurrent;
               pWriteCursor = pWriteCursor2 + 3;

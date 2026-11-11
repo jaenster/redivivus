@@ -56,5 +56,6 @@ void __stdcall HELP_OnEscapeOrSpace(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1);
 void __stdcall HELP_MiniPanelKeyNoOp_Unref_004e4040(struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Client
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Help

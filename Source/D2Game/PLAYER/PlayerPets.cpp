@@ -305,14 +305,14 @@ static void __stdcall KillingPets(uint32_t nTargetGUID, D2PetListStrc * pPetList
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall SummonAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetArgStrc * pSummonArgs) {
     uint32_t uVar1;
-    uint8_t byIndexId2;
+    int32_t byIndexId2;
     uint16_t wMinionClassId2;
     uint32_t uVar2 = pSummonArgs->nSeed;
     if (!uVar2 && !pSummonArgs->nNameId) {
       wMinionClassId2 = pSummonArgs->nPetClassId;
       uVar2 = pSummonArgs->nOwnerGUID;
       uVar1 = pSummonArgs->nPetGUID;
-      byIndexId2 = (uint8_t)pSummonArgs->nPetType;
+      byIndexId2 = pSummonArgs->nPetType;
       GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x33e), '\x01', byIndexId2, uVar1, uVar2, wMinionClassId2);
       return;
     }
@@ -321,7 +321,7 @@ void __fastcall SummonAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PetAr
     wMinionClassId2 = pSummonArgs->nPetClassId;
     uint32_t nMercFlags = pSummonArgs->nOwnerGUID;
     uint32_t dwPetGUID = pSummonArgs->nPetGUID;
-    byIndexId2 = (uint8_t)pSummonArgs->nPetType;
+    byIndexId2 = pSummonArgs->nPetType;
     GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x345), '\x01', byIndexId2, dwPetGUID, nMercFlags, wMinionClassId2, uVar2, uVar1);
 }
 

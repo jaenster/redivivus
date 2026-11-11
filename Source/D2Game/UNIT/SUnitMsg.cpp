@@ -312,7 +312,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
     uint32_t* pCurFlagDword;
     int nStatBufIdx;
     int nDwordIdx;
-    uint32_t nStatId;
+    int nStatId;
     int nStateBaseIdx;
     D2GSPacketSrv0xAA sPacket;
     uint32_t nFlagDwordVal;
@@ -365,10 +365,10 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                 pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nBitPosCheck > 0) {
                   do {
-                    nStatId = (uint32_t)aStatBuf[nStatBufIdx].wStatIndex;
+                    nStatId = (int)aStatBuf[nStatBufIdx].wStatIndex;
                     nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                     nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
-                    pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                    pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
                     if (pItemStatCost) {
                       bySendBits = pItemStatCost->sendBits;
                       if (bySendBits > 0) {
@@ -461,7 +461,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
     int nStatBufIdx;
     int nDwordIdx;
     int nStateBaseIdx;
-    uint32_t nStatId;
+    int nStatId;
     eD2UnitType eUnitType;
     uint32_t* pCurFlagDword;
     D2GSPacketSrv0xA8 sPacket;
@@ -514,10 +514,10 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                       pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                       if (nCopiedStats > 0) {
                         do {
-                          nStatId = (uint32_t)aStatBuf[nStatBufIdx].wStatIndex;
+                          nStatId = (int)aStatBuf[nStatBufIdx].wStatIndex;
                           nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                           nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].wSubIndex;
-                          pItemStatCost = (int)nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                          pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
                           if (pItemStatCost) {
                             bySendBits = pItemStatCost->sendBits;
                             if (bySendBits > 0) {

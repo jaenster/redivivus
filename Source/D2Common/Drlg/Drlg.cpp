@@ -3284,7 +3284,7 @@ void __fastcall DRLGROOMEX_AllocAndInitRoomGrids(D2RoomExStrc * pRoomEx) {
     int nColX;
     D2DrlgWallLayerGridsStrc sUnkn;
     uint32_t nShrineCount;
-    uint32_t nWaypointCount;
+    int nWaypointCount;
     uint8_t byUnknTmp;
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;

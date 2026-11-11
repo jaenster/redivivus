@@ -502,16 +502,16 @@ static int __fastcall RENDERER_WINDOWED_CalculateCropRect(uint32_t * pCropRect, 
     int32_t nSpriteWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     uint32_t uClampedLeft = (int)*pCropRect <= 0 ? 0 : *pCropRect;
-    uint32_t nClippedRight = pCropRect[1];
-    if ((int)nClippedRight >= RENDERER_nWindowWidth) {
+    int nClippedRight = pCropRect[1];
+    if (nClippedRight >= RENDERER_nWindowWidth) {
       nClippedRight = RENDERER_nWindowWidth;
     }
-    if ((int)uClampedLeft > (int)nClippedRight) {
+    if ((int)uClampedLeft > nClippedRight) {
       return 1;
     }
 
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nPosX + nSpriteHeight < (int)nClippedRight && nSpriteWidth + nPosX + nSpriteHeight >= (int)uClampedLeft)) {
+    if (!(nPosX + nSpriteHeight < nClippedRight && nSpriteWidth + nPosX + nSpriteHeight >= (int)uClampedLeft)) {
       return 1;
     }
 
@@ -639,9 +639,9 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     }
 
     uint32_t pLookupTable2 = 0;
-    int nClipBottom = nDrawLines;
-    uint8_t* pBlendTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLines);
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, nViewportHeight, RENDERER_nWindowWidth, 0, pBlendTable, nSkipLines, nClipBottom, pLookupTable2);
+    int nDrawLinesSlot;
+    uint8_t* pBlendTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLinesSlot);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, nViewportHeight, RENDERER_nWindowWidth, 0, pBlendTable, nSkipLines, nDrawLines, pLookupTable2);
 }
 
 void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode) {

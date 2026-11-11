@@ -1097,7 +1097,7 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient, int32_t nStopReason);
 #endif // D2_MODULE_D2Game
-// 24 internal functions (defined in .cpp)
+// 26 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, struct D2SkillStrc * pSkill);

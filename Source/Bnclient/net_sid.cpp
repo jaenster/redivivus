@@ -2260,12 +2260,7 @@ int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSi
       while (nAlignedLen) {
         pSrcCopyPtr = (uint32_t*)pnData;
         pEncWorkPtr = (uint32_t*)abEncBlock;
-        for (nLoopIdx = 0x10; nLoopIdx; nLoopIdx--) {
-          *pEncWorkPtr = *pSrcCopyPtr;
-          pSrcCopyPtr++;
-          pEncWorkPtr++;
-        }
-
+        memcpy(pEncWorkPtr, pSrcCopyPtr, 0x40);
         NET_SID_CLIENT_GetSHAState(0, shaState);
         if (!(nBlockCounter & 7)) {
           nLoopIdx = 0;
@@ -2725,7 +2720,7 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
     uint32_t uB = pShaCtx[1];
     uint32_t uC = pShaCtx[2];
     uint32_t uE = pShaCtx[3];
-    uint32_t uD = uA;
+    int uD = uA;
     uint32_t uPrev = pShaCtx[4];
     nExpandIdx = 0;
     do {

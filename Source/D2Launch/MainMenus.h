@@ -401,6 +401,6 @@ uint32_t __fastcall MAINMENU_TestFlag0x20(uint32_t dwFlags);
 uint32_t __fastcall MAINMENU_GetFlagBits8To12(uint32_t dwFlags);
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex);
 #endif // D2_MODULE_D2Launch
-// 7 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Launch::MainMenus

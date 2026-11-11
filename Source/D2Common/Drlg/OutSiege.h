@@ -61,6 +61,6 @@ void __stdcall DRLGOUTROOM_PlaceAct5SceneryPresets(struct D2DrlgLevelStrc * pLev
 void __stdcall DRLGOUTPLACE_PlaceAct5WallPresets(struct D2DrlgLevelStrc * pLevel);
 void __fastcall InitAct5OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::OutSiege

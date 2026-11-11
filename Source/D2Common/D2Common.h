@@ -8250,7 +8250,7 @@ BOOL __stdcall STATES_HasArmorState(struct D2UnitStrc * pUnit);
 BOOL __stdcall UNITS_IsShapeshifted(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray11(eD2States eState);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId);
-uint32_t __stdcall STATES_IsStateActive(struct D2UnitStrc * pUnit, uint32_t nStateId);
+uint32_t __stdcall STATES_IsStateActive(struct D2UnitStrc * pUnit, int nStateId);
 BOOL __stdcall STATES_HasFireState(struct D2UnitStrc * pUnit);
 BOOL __stdcall STATES_HasLifeState(struct D2UnitStrc * pUnit);
 BOOL __stdcall STATES_HasManaState(struct D2UnitStrc * pUnit);
@@ -8640,7 +8640,7 @@ namespace D2Common::ITEMS::ItemMods {
 int __stdcall ITEMMOD_FindChargedSkill(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, uint32_t * pnCharges, struct D2StatListExStrc * * ppStatList);
 // Sets the current charge count of a charged skill on an item. Searches stat lists (flag 0x40) for UNITSTAT_item_charged_skill keyed by nSkillId+nChargeSlot. Clamps nNewChargeCount to [0, maxCharges], packs as (maxCharges*0x100 | newCharges), and writes back via STATLIST_SetStatValueInBaseArraySafe. Recurses into socketed/carried items if not found on the item directly.
 BOOL __stdcall ITEMMOD_SetChargedSkillCharges(struct D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nChargeSlot, uint32_t nNewChargeCount);
-int32_t __stdcall ITEMMODS_CalculateRepairCost(uint32_t nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
+int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
 void __stdcall ITEMMOD_ApplyEtherealBonus(struct D2UnitStrc * pUnit);
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.
 BOOL __stdcall ITEMMOD_CanApplyAutomod(struct D2UnitStrc * pUnit, struct D2MagicAffixTxt * pMagicAffixTxt);
@@ -8785,7 +8785,7 @@ int __stdcall ITEM_GetSpellIcon(struct D2UnitStrc * pUnit);
 int32_t __stdcall ITEM_GetTxtItemTypes_staffmods(struct D2UnitStrc * pUnit);
 uint8_t __stdcall ITEM_GetMaxSockCount(struct D2UnitStrc * pUnit);
 // Determines and assigns the socket count for an item unit during socketing. Computes the maximum allowed sockets from the item's grid area (width*height, capped at 6), then clamps further by item quality (magic=4, rare=2, crafted/tampered=3, set/unique use existing stat or force 1). Calls ITEM_GetMaxSockCount for a hard cap, rolls the final count, sets ITEMFLAG_SOCKETED, and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
-void __stdcall ITEM_RollSocketCount(struct D2UnitStrc * pUnit, uint32_t nMaxSocksRandom);
+void __stdcall ITEM_RollSocketCount(struct D2UnitStrc * pUnit, int nMaxSocksRandom);
 uint32_t __stdcall ITEM_IsSocketable(struct D2UnitStrc * pUnit);
 // Determines which runeword (if any) an item currently forms from its socketed runes. Collects the class-ids of the items socketed into pItem, then scans the runes.txt rune table for a completed row whose rune sequence exactly matches the socketed runes (in order, count == socket count) and whose itype/etype constraints the base item satisfies (must be of an allowed itype and not of any excluded etype) via IsOfType. Returns the matching D2RuneTableStrc row, or NULL if none / the item is ineligible (not a normal-quality non-quest socketed item, or has no inventory). Read-only lookup, no state change.
 struct D2RuneTableStrc * __stdcall CalculateRunewordByItem(struct D2UnitStrc * pItem);

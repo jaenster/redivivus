@@ -56,6 +56,6 @@ void __stdcall ANIMDATA_SetAnimSpeedForUnit(struct D2UnitStrc * pUnit, int32_t n
 // fallback to default record.
 BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(char * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame);
 #endif // D2_MODULE_D2Common
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::AnimTbls

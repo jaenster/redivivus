@@ -992,6 +992,6 @@ int32_t __fastcall AI_Monster_CastItemEffectSkill(::SGAMEDATA * pGame, struct D2
 BOOL __fastcall SKILL_CastOnTargetUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSubSkill, struct D2UnitStrc * pTarget, int32_t nParam);
 BOOL __fastcall MONSTERAI_CastItemEffectSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSubSkill, uint32_t nCoordX, uint32_t nCoordY, int32_t nParam2);
 #endif // D2_MODULE_D2Game
-// 8 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Game::Monster::AI

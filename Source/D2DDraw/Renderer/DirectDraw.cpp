@@ -121,14 +121,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
     gdwDDrawInitFlags = Fog::BitBuffer::gadwBitMasks[0];
     char* pSrc = "Fallback DirectDraw Device";
     char* pDst = gszRendererDeviceName;
-    for (bRegFlagsOk = 6; bRegFlagsOk; bRegFlagsOk--) {
-      *(uint32_t*)pDst = *(uint32_t*)pSrc;
-      pSrc += 4;
-      pDst += 4;
-    }
-
-    *(uint16_t*)pDst = *(uint16_t*)pSrc;
-    pDst[2] = pSrc[2];
+    memcpy(pDst, pSrc, 27);
     return 1;
 }
 
@@ -1167,16 +1160,16 @@ static BOOL __stdcall RENDERER_DDRAW_ComputeDC6ClipRect(int32_t nY, DC6Block * p
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     uint32_t nClipLeft = (int)*pInClipBounds <= 0 ? 0 : *pInClipBounds;
-    uint32_t nClipRight = pInClipBounds[1];
-    if ((int)nClipRight >= RENDERER_nWindowWidth) {
+    int nClipRight = pInClipBounds[1];
+    if (nClipRight >= RENDERER_nWindowWidth) {
       nClipRight = RENDERER_nWindowWidth;
     }
-    if ((int)nClipLeft > (int)nClipRight) {
+    if ((int)nClipLeft > nClipRight) {
       return 1;
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nX + nOffsetX < (int)nClipRight && nWidth + nX + nOffsetX >= (int)nClipLeft)) {
+    if (!(nX + nOffsetX < nClipRight && nWidth + nX + nOffsetX >= (int)nClipLeft)) {
       return 1;
     }
 

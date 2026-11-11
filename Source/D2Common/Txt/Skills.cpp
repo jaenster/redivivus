@@ -2597,7 +2597,7 @@ void __stdcall SKILL_CalcKickDamage(D2UnitStrc * pUnit, int * pnMinDamage, int *
 }
 
 // Evaluates one skill-description calc code (bParam selects which, 0..0x48) for skill eSkill at level/param nParam, optionally for unit pUnit; returns the computed value. Dispatches a large switch over the calc selector to skill range, mana cost (and shifted variants), to-hit, min/max/synergy damage (>>8 for display scaling), per-element min/max damage and length from the skill's descmissile entries, missile range, unit level/skill-level, aura/passive radii, and the raw skills.txt calc-column fields (auralencalc, calc[0..3], aurarangecalc, aurastatcalc[0..5], passivecalc[0..4], petmax, skpoints). For the raw-field cases it then runs the value through SKILLS_CompileSkillFormula against the skills calc-code blob. Bounds-checks eSkill; returns 0 on invalid skill/missile or out-of-range selector.
-uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, uint32_t nSkillLevel) {
+uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, int nSkillLevel) {
     int32_t nRawDamage;
     D2SkillStrc* pSkillInst;
     D2SkillDescTxt* pSkillDescTxt;
@@ -2677,15 +2677,15 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         uResult = SKILLS_CalcToHit(pUnit, eSkill, nSkillLevel);
       return uResult;
       case 0x15:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
-      return (int)((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift)) >> 8;
+      return (int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift) >> 8;
       case 0x16:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
-      return (int)(((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana) * 0x19) / 2 << D2_SHIFT_COUNT(pSkillTxt->manashift) >> 8;
+      return ((int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana) * 0x19 / 2 << D2_SHIFT_COUNT(pSkillTxt->manashift) >> 8;
       case 0x17:
         uResult = SKILL_GetPassiveElementCalc(pUnit, eSkill, nSkillLevel, 0);
       return uResult;
@@ -2700,7 +2700,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       case 0x1d:
 
       case 0x20:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       pSkillDescTxt = GetSkillDescription(eSkill);
@@ -2721,7 +2721,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       case 0x1e:
 
       case 0x21:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       pSkillDescTxt = GetSkillDescription(eSkill);
@@ -2742,7 +2742,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       case 0x1f:
 
       case 0x22:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       pSkillDescTxt = GetSkillDescription(eSkill);
@@ -2773,7 +2773,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
         return 0;
       }
 
-      return (int)pMissileTxt->LevRange * nSkillLevel + (int)pMissileTxt->Range;
+      return pMissileTxt->LevRange * nSkillLevel + (int)pMissileTxt->Range;
       case 0x26:
         uResult = SERVER_MinDamage(pUnit, eSkill, nSkillLevel, 0);
       return uResult;
@@ -2798,7 +2798,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       uResult = D2Common::Skills::GetSkillLevel(pUnit, pSkillInst, 0);
       return uResult;
       case 0x2a:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       return (int)pSkillTxt->lvlmana * (nSkillLevel - 1) + (int)pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
@@ -2807,7 +2807,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       case 0x2d:
 
       case 0x2f:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       pSkillDescTxt = GetSkillDescription(eSkill);
@@ -2828,7 +2828,7 @@ uint32_t __stdcall SKILLDESC_EvalDescCalcValue(D2UnitStrc * pUnit, uint8_t byCal
       case 0x2e:
 
       case 0x30:
-        if ((int)nSkillLevel <= 0) {
+        if (nSkillLevel <= 0) {
           return 0;
         }
       pSkillDescTxt = GetSkillDescription(eSkill);
@@ -2947,7 +2947,7 @@ int __fastcall SKILLS_EvalSkillDescCalc_CurrentLevel(eD2Skills eSkill, uint8_t b
     }
 
     D2UnitStrc* pUnit = *ppUnit;
-    uint32_t nSkillLevel = 0;
+    int nSkillLevel = 0;
     if (pUnit) {
       D2SkillStrc* pSkill;
       pSkill = GetSkill(pUnit, eSkill);
@@ -2956,8 +2956,8 @@ int __fastcall SKILLS_EvalSkillDescCalc_CurrentLevel(eD2Skills eSkill, uint8_t b
       }
     }
 
-    nSkillLevel = SKILLDESC_EvalDescCalcValue(*ppUnit, byCalcType, eSkill, nSkillLevel);
-    return nSkillLevel;
+    uint32_t uVar1 = SKILLDESC_EvalDescCalcValue(*ppUnit, byCalcType, eSkill, nSkillLevel);
+    return uVar1;
 }
 
 uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t byInnerCalcType, uint8_t bCalcIndex, D2SkillCalcContextStrc * ppUnit) {

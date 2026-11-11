@@ -334,6 +334,6 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(struct D2ObjectOperateFnArg * p
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(struct D2ObjectOperateFnArg * pOperation);
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(struct D2ObjectOperateFnArg * pOperation);
 #endif // D2_MODULE_D2Game
-// 9 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS

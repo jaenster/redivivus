@@ -468,6 +468,6 @@ int32_t __stdcall DRLGPRESET_FindPresetTypeIndex(int32_t nLevelType, uint32_t nO
 void StaticInit_CriticalSection_0096d610();
 void StaticFini_CriticalSection_0096d610();
 #endif // D2_MODULE_D2Common
-// 10 internal functions (defined in .cpp)
+// 11 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::Preset

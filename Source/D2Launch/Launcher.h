@@ -69,6 +69,6 @@ void __fastcall LAUNCHER_DeleteCharacterFiles(struct D2CharSelStrc * pCharSel, c
 uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterName, uint8_t * pOutputBuffer);
 BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname);
 #endif // D2_MODULE_D2Launch
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace D2Launch::Launcher

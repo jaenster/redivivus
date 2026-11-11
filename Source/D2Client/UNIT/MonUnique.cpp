@@ -128,6 +128,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
 }; D2_STATIC_GUARD(gaChampionModifierTitles, "D2Client::UNIT::MonUnique::DefineSuperMonster::gaChampionModifierTitles");
 
     D2SuperUniquesTxt* pSuperUniqueTxt;
+    uint16_t* pLocaleName;
     uint16_t* wszFormat;
     uint16_t wNameId;
     int nClassId;
@@ -142,14 +143,10 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
       return;
     }
 
-    uint16_t* pLocaleName;
-    pLocaleName = wszName;
     uint32_t pModifier;
     pModifier = eModifier;
-    for (nClassId = 0x96; nClassId; nClassId--) {
-      pLocaleName[0] = L'\0';
-      pLocaleName[1] = L'\0';
-      pLocaleName += 2;
+    for (nClassId = 0; nClassId < 0x12c; nClassId++) {
+      wszName[nClassId] = L'\0';
     }
 
     szSpace[0] = ' ';

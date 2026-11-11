@@ -933,7 +933,7 @@ void __fastcall LAUNCHER_DeleteCharacterFiles(D2CharSelStrc * pCharSel, char * s
 uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterName, uint8_t * pOutputBuffer) {
     int i;
     char* pbEquipSrc;
-    uint8_t byOutPlayerClass;
+    int32_t byOutPlayerClass;
     uint8_t cPlayerClass;
     uint8_t* pbWritePtr;
     uint8_t* pbVisualSrc;
@@ -973,7 +973,7 @@ uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterNa
         pbEquipSrc = (char*)((intptr_t)&sSaveFile.sHeader.dwCharacterStatus + 2);
         pbVisualSrc = (uint8_t*)((intptr_t)&sSaveFile.sHeader.nTimeEx + 2);
         cPlayerClass = sSaveFile.sHeader.szCharacterName[0xe];
-        byOutPlayerClass = (uint8_t)sSaveFile.sHeader.dwCharacterStatus;
+        byOutPlayerClass = sSaveFile.sHeader.dwCharacterStatus;
       } else {
         if (nBytesRead < 0x14f || sSaveFile.sHeader.dwFileVersion > 0x60) {
           goto cleanup;

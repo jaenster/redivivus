@@ -33,5 +33,6 @@ void __fastcall GetSeed(struct D2SeedStrc * pSeed, uint32_t * nSeedLow, uint32_t
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 uint32_t __fastcall GetSeed_nSeedLow_Unref_0060dcf0(struct D2SeedStrc * pSeed);
 #endif // D2_MODULE_D2Common
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Seed

@@ -741,6 +741,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     int32_t nTargetX;
     D2UnitStrc* pDVar6;
     int32_t nDistX;
+    uint32_t nVelFinal;
     uint32_t nFramesByDist;
     D2LightMapStrc* pLightMap;
     int nMissileX;
@@ -818,7 +819,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
 
     uint32_t nSlowPct;
     nSlowPct = 100;
-    uint32_t nVelForPath;
+    int nVelForPath;
     nVelForPath = nVelocityRaw;
     if (pSkillArg->pOwner && *((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       BOOL eSlowState;
@@ -833,28 +834,27 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
       }
     }
 
-    uint32_t nVelFinal;
-    nVelFinal = 0;
+    nPosY = 0;
     if (nVelocityRaw) {
       if ((int)nVelocityRaw > 0x100000) {
         if ((int)(nVelocityRaw & -16) < 0x640) {
           ullVelDiv = (int64_t)(int)nVelocityRaw * 0x4b;
           ullVelDiv = ullVelDiv / 100;
-          nVelFinal = (uint32_t)ullVelDiv;
-          nVelForPath = nVelFinal;
+          nPosY = (int)ullVelDiv;
+          nVelForPath = nPosY;
         } else {
-          nVelFinal = (int)nVelocityRaw / 100 * 0x4b;
-          nVelForPath = nVelFinal;
+          nPosY = (int)nVelocityRaw / 100 * 0x4b;
+          nVelForPath = nPosY;
         }
       } else {
-        nVelFinal = (int)(nVelocityRaw * 0x4b) / 100;
-        nVelForPath = nVelFinal;
+        nPosY = (int)(nVelocityRaw * 0x4b) / 100;
+        nVelForPath = nPosY;
       }
     }
 
     D2UnitStrc* pTargetUnit;
     pTargetUnit = pSkillArg->pTarget;
-    if (nVelFinal) {
+    if (nPosY) {
       pDVar6 = pSkillArg->pOwner;
       if (!pDVar6) {
         if (pTargetUnit) {
@@ -975,7 +975,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
         nMissileX = 1;
       }
       if (nVelForPath << 4) {
-        nFramesByDist = (uint32_t)(nMissileX << 0x10) / (nVelForPath << 4);
+        nFramesByDist = (uint32_t)(nMissileX << 0x10) / (uint32_t)(nVelForPath << 4);
         D2Common::Units::Missile::SetCurrentFrame(pDVar6, nFramesByDist);
         D2Common::Units::Missile::SetTotalFrames(pDVar6, nFramesByDist);
       }
@@ -9023,23 +9023,21 @@ void __fastcall MISSILE_CltDoFn63_NehlithakOrbit(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType = pUnit->eUnitType;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      *(uint16_t*)(char*)&nCurX = (short int)pDynamicPath->ScreenPos.y;
+      nCurX = pDynamicPath->ScreenPos.y;
     } else if (pDynamicPath) {
       nPosX = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-      nPosX = (int32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosX);
-      *(uint16_t*)(char*)&nCurX = (short int)nPosX;
+      nCurX = nPosX;
     } else {
-      *(uint16_t*)(char*)&nCurX = 0;
+      nCurX = 0;
     }
 
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      *(uint16_t*)(char*)&nPosY = (short int)pUnit->pPath.pStaticPath->nPosY;
+      nPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosY);
     } else {
-      *(uint16_t*)(char*)&nPosY = 0;
+      nPosY = 0;
     }
 
     int32_t nTargetX = D2Common::Units::Missile::GetTargetX(pUnit);

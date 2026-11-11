@@ -2839,7 +2839,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     LONG nDestY = ptDest.y;
     LONG nDestX = ptDest.x;
     if (pRoom) {
-      uint8_t byAttackerUnitType;
+      int32_t byAttackerUnitType;
       BVar1 = UNIT::SUnit::SUNIT_RelocateUnit(pOperation->sArg.pGame, pOperation->pAttacker, pRoom, ptDest.x, ptDest.y, 0, 0);
       if (!BVar1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf52);
@@ -2855,7 +2855,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
         byAttackerUnitType = '\x06';
       } else {
         nCollisionFlagsArg = pUnit->nUnitGUID;
-        byAttackerUnitType = (uint8_t)pUnit->eUnitType;
+        byAttackerUnitType = pUnit->eUnitType;
       }
 
       GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', byAttackerUnitType, nCollisionFlagsArg, '\x01', (short int)nDestX + 5, (short int)nDestY + 5, '\0', '\0');

@@ -765,12 +765,7 @@ uint32_t __fastcall SKILLS_ApplyDamageCallback(D2SkillCallbackContextStrc * pCon
     D2DamageStrc sDamage;
     uint32_t* pDamageSrc = (uint32_t*)pContext->pCallbackArg;
     uint32_t* pDamageDstCopy = (uint32_t*)&sDamage;
-    for (nDwordsToCopy = 0x1c; nDwordsToCopy; nDwordsToCopy--) {
-      *pDamageDstCopy = *pDamageSrc;
-      pDamageSrc++;
-      pDamageDstCopy++;
-    }
-
+    memcpy(pDamageDstCopy, pDamageSrc, 0x70);
     SKILLS_ApplyDamageToTarget(pContext->pGame, pContext->pUnit, pUnit, &sDamage, 0);
     return 1;
 }

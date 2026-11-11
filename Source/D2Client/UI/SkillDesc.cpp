@@ -6191,7 +6191,7 @@ void __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
     uint32_t nElemPctBonus = 0;
     int32_t* pCalcIdIter = (int32_t*)(pSkillsTxt + 0x34);
     short int* pElemTypeIter = pSkillsTxt + 0x2a;
-    uint32_t nMinDmgFinal = sMonStats.nA1MaxD;
+    int nMinDmgFinal = sMonStats.nA1MaxD;
     int nLoopCount = 6;
     nMinDamage = sMonStats.nA1MinD;
     do {
@@ -6255,17 +6255,17 @@ void __stdcall SKILLDESC_DescLine22_SkillSynergies(D2UnitStrc * pUnit, uint16_t 
       }
 
       nMinDamage += nMonStatIdx;
-      if ((int)nMinDmgFinal > 0x100000) {
-        if ((int)(nMinDmgFinal & -16) < 0x640) {
-          uDivResult = (int64_t)(int)nElemPctBonus * (int64_t)(int)nMinDmgFinal / 100;
+      if (nMinDmgFinal > 0x100000) {
+        if ((int)(nMinDmgFinal & 0xfffffff0U) < 0x640) {
+          uDivResult = (int64_t)(int)nElemPctBonus * (int64_t)nMinDmgFinal / 100;
           nMonStatIdx = (int)uDivResult;
         } else {
-          nMonStatIdx = (int)nMinDmgFinal / 100 * nElemPctBonus;
+          nMonStatIdx = nMinDmgFinal / 100 * nElemPctBonus;
         }
       } else {
         if ((int)nElemPctBonus > 0x10000) {
           if ((int)(nElemPctBonus & -16) < 0x640) {
-            uDivResult = (int64_t)(int)nElemPctBonus * (int64_t)(int)nMinDmgFinal / 100;
+            uDivResult = (int64_t)(int)nElemPctBonus * (int64_t)nMinDmgFinal / 100;
             nMonStatIdx = (int)uDivResult;
           } else {
             nMonStatIdx = (int)nElemPctBonus / 100 * nMinDmgFinal;
@@ -6712,7 +6712,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
     pSkillDescLocal = pSkillDesc;
     int32_t nCalcA;
     nCalcA = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnitLocal, pSkillDesc->desccalca[nDescLineIndex], eSkill, nSkillLevel);
-    uint32_t nCalcB;
+    int nCalcB;
     nCalcB = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnitLocal, pSkillDesc->desccalcb[nDescLineIndex], eSkill, nSkillLevel);
     uint16_t wDescTextA;
     wDescTextA = pSkillDesc->desctexta[nDescLineIndex];
@@ -7142,7 +7142,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
         if (!nCalcA) {
           return 0;
         }
-      if ((int)nCalcB <= 0) {
+      if (nCalcB <= 0) {
         return 0;
       }
 
@@ -7157,7 +7157,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
         if (!nCalcA) {
           return 0;
         }
-      if ((int)nCalcB <= 0) {
+      if (nCalcB <= 0) {
         return 0;
       }
 

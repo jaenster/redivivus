@@ -1137,7 +1137,7 @@ uint32_t __stdcall PATH_HasRemainingDistance(D2DynamicPathStrc * pDynamicPath) {
 
 // Attempts to build a single-step direct path from pDynamicPath's current position to its target unit. Snapshots the target's current X/Y into pDynamicPath-&gt;nTargetX/Y, validates both axes are within 99 units and non-zero, then writes a one-point path and advances along it. Sets flag bit 1 if the target falls outside the current room bounds. Returns dwPathPoints (1 on success, 0 on rejection).
 static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
-    short int sTargetY;
+    int32_t sTargetY;
     int32_t nCoord;
     int32_t nRoomBound;
     eD2UnitType eUnitType;
@@ -1146,13 +1146,13 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
     uint16_t wCurX = pDynamicPath->Coords.tSubtile.nPosX;
     pDynamicPath->nPathPointIndex = 0;
     if (pTargetUnit) {
-      short int sTargetCoord;
+      int32_t sTargetCoord;
       eUnitType = pTargetUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sTargetCoord = (short int)pTargetUnit->pPath.pStaticPath->nPosX;
+        sTargetCoord = pTargetUnit->pPath.pStaticPath->nPosX;
       } else if (pTargetUnit->pPath.pDynamicPath) {
         nCoord = GetXPos(pTargetUnit->pPath.pDynamicPath);
-        sTargetCoord = (short int)nCoord;
+        sTargetCoord = nCoord;
       } else {
         sTargetCoord = 0;
       }
@@ -1161,10 +1161,10 @@ static uint32_t PATH_BuildDirectPathToTarget(D2DynamicPathStrc * pDynamicPath) {
       pDynamicPath->nTargetX = sTargetCoord;
       eUnitType = pTargetUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        sTargetY = (short int)pTargetUnit->pPath.pStaticPath->nPosY;
+        sTargetY = pTargetUnit->pPath.pStaticPath->nPosY;
       } else if (pTargetUnit->pPath.pDynamicPath) {
         nRoomBound = GetYPos(pTargetUnit->pPath.pDynamicPath);
-        sTargetY = (short int)nRoomBound;
+        sTargetY = nRoomBound;
       } else {
         sTargetY = 0;
       }

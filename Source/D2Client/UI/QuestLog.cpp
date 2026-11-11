@@ -2233,7 +2233,7 @@ uint8_t * __fastcall Unreferenced_004a3200(uint8_t * param_1) {
 }
 
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
-void __stdcall QUESTLOG_LoadQuestIconsForAct(uint32_t nActIndex, int32_t bResetSelection) {
+void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelection) {
     // Static local variables (originally global data)
     static char * gaszQuestIconNames[27] = {
     (char*)"a1q1",
@@ -2312,7 +2312,7 @@ void __stdcall QUESTLOG_LoadQuestIconsForAct(uint32_t nActIndex, int32_t bResetS
       uint8_t* pQuestIconEntry;
       pQuestIconEntry = &gaQuestInfoTable[0].nIconIndex;
       do {
-        if (pQuestIconEntry[2] == nActIndex && ((D2QuestLogInfoStrc*)(pQuestIconEntry - 1))->bValid && *pQuestIconEntry < 0x1b && gQuestLog.pQuestLogActImages[*pQuestIconEntry]) {
+        if ((uint32_t)pQuestIconEntry[2] == nActIndex && ((D2QuestLogInfoStrc*)(pQuestIconEntry - 1))->bValid && *pQuestIconEntry < 0x1b && gQuestLog.pQuestLogActImages[*pQuestIconEntry]) {
           pQuestEntryBuf = (int32_t*)byQuestEntryHeader.wszDescription;
           for (nIconIndex = 0x96; nIconIndex; nIconIndex--) {
             *pQuestEntryBuf = 0;

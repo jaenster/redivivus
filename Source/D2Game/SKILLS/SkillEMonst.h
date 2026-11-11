@@ -81,6 +81,6 @@ BOOL __fastcall Skills_SrvDoFunc_141_BaalCorpseExplosionWave(::SGAMEDATA * pGame
 // Searches for a useable, attackable corpse within nSearchRadius of pUnit. Iterates UnitFind results from neighboring rooms, checks IsCorpseUseable and UNITS_CheckIfCanAttackTarget for each candidate, and returns the first match (or NULL). Excludes pExcludeUnit via find flags.
 struct D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pExcludeUnit, int32_t nSearchRadius);
 #endif // D2_MODULE_D2Game
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::SkillEMonst

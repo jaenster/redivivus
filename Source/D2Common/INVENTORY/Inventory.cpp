@@ -1074,7 +1074,7 @@ static BOOL __stdcall INVENTORY_FindGridPositionByOwner3(uint8_t byItemWidth, ui
 int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t byPage) {
     BOOL nResultSlot;
     D2GridScreenCoordinates sGridDims;
-    D2InventoryStrc* pInventorySaved = pInventory;
+    char pInventorySlot;
     if (!pInventory) {
       return 0;
     }
@@ -1091,8 +1091,8 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
       return 0;
     }
 
-    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)((intptr_t)&pInventory + 3), (char*)((intptr_t)&pUnit + 3), ".\\INVENTORY\\Inventory.cpp", 0x5ac);
-    if (!((uint8_t)*(uint8_t*)((char*)&pInventory + 3) > '\0')) {
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)&pInventorySlot, (char*)((intptr_t)&pUnit + 3), ".\\INVENTORY\\Inventory.cpp", 0x5ac);
+    if (!((uint8_t)(uint8_t)pInventorySlot > '\0')) {
       return 0;
     }
     if (!((uint8_t)*(uint8_t*)((char*)&pUnit + 3) > '\0')) {
@@ -1100,25 +1100,25 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
     }
 
     DATATBLS::TokTbls::GetGridDimensions(eInvPage, 0, &sGridDims);
-    D2InventoryGridInfoStrc* pGridInfoLocal = ReinitializeInventoryGrid(pInventorySaved, (D2InventorySizesStrc*)&sGridDims, byPage + 2);
+    D2InventoryGridInfoStrc* pGridInfoLocal = ReinitializeInventoryGrid(pInventory, (D2InventorySizesStrc*)&sGridDims, byPage + 2);
     if (!pGridInfoLocal) {
       return 0;
     }
     if (*(uint8_t*)((char*)&pUnit + 3) == 1) {
-      nResultSlot = INVENTORY_FindPlacementSlot(1, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
+      nResultSlot = INVENTORY_FindPlacementSlot(1, (uint8_t)pInventorySlot, pInventory, pnOutY, (int**)ppnOutX, pGridInfoLocal);
       return nResultSlot;
     }
     if (*(uint8_t*)((char*)&pUnit + 3) == 3) {
-      if (*(uint8_t*)((char*)&pInventory + 3) <= 2) {
-        nResultSlot = INVENTORY_FindGridPositionByOwner(3, *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
+      if ((uint8_t)pInventorySlot <= 2) {
+        nResultSlot = INVENTORY_FindGridPositionByOwner(3, (uint8_t)pInventorySlot, pInventory, pnOutY, (int**)ppnOutX, pGridInfoLocal);
         return nResultSlot;
       }
-    } else if (*(uint8_t*)((char*)&pUnit + 3) == 2 && *(uint8_t*)((char*)&pInventory + 3) == 2) {
-      nResultSlot = INVENTORY_FindGridPositionByOwner2(2, 2, pInventorySaved, pnOutY, (int**)ppnOutX, pGridInfoLocal);
+    } else if (*(uint8_t*)((char*)&pUnit + 3) == 2 && (uint8_t)pInventorySlot == 2) {
+      nResultSlot = INVENTORY_FindGridPositionByOwner2(2, 2, pInventory, pnOutY, (int**)ppnOutX, pGridInfoLocal);
       return nResultSlot;
     }
 
-    nResultSlot = INVENTORY_FindGridPositionByOwner3(*(uint8_t*)((char*)&pUnit + 3), *(uint8_t*)((char*)&pInventory + 3), pInventorySaved, (int**)ppnOutX, pnOutY, pGridInfoLocal);
+    nResultSlot = INVENTORY_FindGridPositionByOwner3(*(uint8_t*)((char*)&pUnit + 3), (uint8_t)pInventorySlot, pInventory, (int**)ppnOutX, pnOutY, pGridInfoLocal);
     return nResultSlot;
 }
 
@@ -1864,7 +1864,7 @@ static BOOL INVENTORY_PlaceItemInBeltSlot(uint32_t nBeltSlot, D2InventoryStrc * 
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, uint32_t nBeltSlot) {
     char byItemHeight;
-    D2UnitStrc* pItem = pUnit;
+    char pUnitSlot;
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
     }
@@ -1874,10 +1874,10 @@ BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2Unit
       return 0;
     }
 
-    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, (char*)((intptr_t)&pUnit + 3), &byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0xaab);
-    if (*(uint8_t*)((char*)&pUnit + 3) == '\x01' && byItemHeight == '\x01') {
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)&pUnitSlot, &byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0xaab);
+    if ((uint8_t)pUnitSlot == '\x01' && byItemHeight == '\x01') {
       BOOL bPlaceResult;
-      bPlaceResult = INVENTORY_PlaceItemInBeltSlot(nBeltSlot, (D2InventoryStrc*)pItem, &pInventory->nSignatureMagic);
+      bPlaceResult = INVENTORY_PlaceItemInBeltSlot(nBeltSlot, (D2InventoryStrc*)pUnit, &pInventory->nSignatureMagic);
       return bPlaceResult;
     }
 
@@ -2042,7 +2042,7 @@ D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory,
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(D2InventoryStrc * pInventory, D2UnitStrc * pItemUnit, uint32_t nBeltSlot, D2UnitStrc * * ppOutItem) {
     char byItemHeight;
-    D2InventoryStrc* pInventorySaved = pInventory;
+    char pInventorySlot;
     if (!pInventory) {
       return 0;
     }
@@ -2064,14 +2064,14 @@ BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(D2InventoryStrc * pInventory, D
       return 0;
     }
 
-    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCurItem, (char*)((intptr_t)&pInventory + 3), &byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0xbc9);
-    if (!(*(uint8_t*)((char*)&pInventory + 3) == '\x01' && byItemHeight == '\x01')) {
+    ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCurItem, (char*)&pInventorySlot, &byItemHeight, ".\\INVENTORY\\Inventory.cpp", 0xbc9);
+    if (!((uint8_t)pInventorySlot == '\x01' && byItemHeight == '\x01')) {
       return 0;
     }
 
     D2ItemsTxt* pItemsTxtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(pCurItem->nClassId);
     if (pItemsTxtLine && pItemsTxtLine->bUseable == '\x01' && pItemsTxtLine->bBelt == '\x01') {
-      pCurItem = INVENTORY_GetItemInBeltSlot(pInventorySaved, nBeltSlot);
+      pCurItem = INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlot);
       *ppOutItem = pCurItem;
       return 1;
     }
@@ -4699,6 +4699,14 @@ D2UnitStrc * __stdcall INVENTORY_GetNextItem(D2UnitStrc * pUnit) {
     }
 
     return pItemData->sInvNode.pNextItem;
+}
+
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
 }
 
 // Returns the item unit if pUnit is of type ITEM (unitType == 4), otherwise returns null.

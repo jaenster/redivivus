@@ -302,6 +302,6 @@ void __fastcall SKILL_StunExpireAndRestoreAi(struct D2UnitStrc * pUnit, eD2State
 struct D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, eD2States eState, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance);
 #endif // D2_MODULE_D2Game
-// 8 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Game::SKILLS::SkillsServer

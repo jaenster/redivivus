@@ -71,7 +71,6 @@ BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
 
 // Adds a message entry to the popup. Validates message count (max 8), copies 132-byte message data into next slot, calculates text width using font 1, updates popup width/height. Returns TRUE on success.
 uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pEntry) {
-    int nCopyCount;
     int32_t nLine;
     ::D2WinPopup* pPopup = gpD2WinPopupControl;
     if (gpD2WinPopupControl->sControl.neD2FormType != FORM_Popup) {
@@ -84,15 +83,10 @@ uint32_t __stdcall D2WINPOPUP_AddMessage(D2WinPopupEntry * pEntry) {
 
     D2WinPopupEntry* pMsgSrc = pEntry;
     D2WinPopupEntry* pMsgDst = gpD2WinPopupControl->wszMessages + gpD2WinPopupControl->nMessageCount;
-    for (nCopyCount = 0x21; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pMsgDst->wszText = *(uint32_t*)pMsgSrc->wszText;
-      pMsgSrc = (D2WinPopupEntry*)(pMsgSrc->wszText + 2);
-      pMsgDst = (D2WinPopupEntry*)(pMsgDst->wszText + 2);
-    }
-
+    *pMsgDst = *pMsgSrc;
     D2WinFont::SetAndReturnLastFont(1);
     nLine = D2WinFont::DRAW_text0(pEntry->wszText);
-    nCopyCount = pPopup->sControl.dwSizeX;
+    int nCopyCount = pPopup->sControl.dwSizeX;
     if (nCopyCount > nLine) {
       nLine = nCopyCount;
     }

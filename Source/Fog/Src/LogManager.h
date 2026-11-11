@@ -154,6 +154,6 @@ void StaticFini_gLogFileCS();
 // Runs at exit: removes every element still on the log message queue gLogMessageQueueHead, then unlinks the list head itself.
 void StaticFini_gLogMessageQueueHead();
 #endif // D2_MODULE_Fog
-// 1 internal function (defined in .cpp)
+// 2 internal functions (defined in .cpp)
 
 } // namespace Fog::Src::LogManager

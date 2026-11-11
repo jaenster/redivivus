@@ -285,7 +285,7 @@ void __stdcall SOUND_ShutdownSystem();
 void __stdcall SoundChaosDebug();
 BOOL __stdcall SOUND_IsDirectSoundAvailable();
 BOOL __stdcall SOUND_IsEaxAvailable();
-int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, uint32_t nModulus);
+int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, int nModulus);
 int Unreferenced_004e41e0();
 float __stdcall Unreferenced_004e4200();
 void __stdcall Unreferenced_004e4220();
@@ -295,6 +295,6 @@ void __stdcall SOUND_TogglePauseAll();
 // WEATHER_CanHaveRain, SOUND_SetEaxEnvironment, Material_1/2. It touches no channel list at all.
 void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick);
 #endif // D2_MODULE_D2Client
-// 6 internal functions (defined in .cpp)
+// 7 internal functions (defined in .cpp)
 
 } // namespace D2Client::Sound

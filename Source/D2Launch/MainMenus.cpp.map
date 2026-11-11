@@ -2973,7 +2973,8 @@
         "D2ControlMsg",
         "D2ControlStrc",
         "D2ControlStrc *",
-        "int32_t"
+        "int32_t",
+        "uint32_t"
       ]
     },
     {

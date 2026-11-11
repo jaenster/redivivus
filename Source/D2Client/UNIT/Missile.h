@@ -322,6 +322,6 @@ void __fastcall MISSILE_CltDoFn55_AncientDeathCenter(struct D2UnitStrc * pUnit);
 // Client-side tick for a rotating/orbiting missile. Every other remaining frame (odd frames skipped), recomputes SP1 by rotating the missile's current position around its stored TargetX/Y pivot using a 90-degree perpendicular offset, then calls PATH_CalculatePath to follow the updated waypoint — effectively making the missile orbit its target point. Falls through to CltDoFunc_001.
 void __fastcall MISSILE_CltDoFn60_Hurricane(struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Client
-// 18 internal functions (defined in .cpp)
+// 19 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::Missile

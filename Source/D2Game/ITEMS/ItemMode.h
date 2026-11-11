@@ -233,6 +233,6 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, str
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
 #endif // D2_MODULE_D2Game
-// 28 internal functions (defined in .cpp)
+// 30 internal functions (defined in .cpp)
 
 } // namespace D2Game::ITEMS::ItemMode

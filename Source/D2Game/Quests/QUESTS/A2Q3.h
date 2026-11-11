@@ -126,6 +126,6 @@ void __fastcall Q11_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData,
 // stateFlag 0, and zero-inits the participant GUID list. No quest-record access.
 void __fastcall Q11_InitData(struct D2QuestDataStrc * pQuestData);
 #endif // D2_MODULE_D2Game
-// 3 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace D2Game::Quests::QUESTS::A2Q3

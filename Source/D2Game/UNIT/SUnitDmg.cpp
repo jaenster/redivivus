@@ -2067,13 +2067,12 @@ void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
       int32_t nAttackerYPos;
       nAttackerYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pAttacker);
       nDirection = D2Common::Units::GetDirectionToCoords(pUnit, D2Common::Units::GetXPosFromDynamicPathUnit(pAttacker), nAttackerYPos);
-      nDirection = (int32_t)((uint32_t)nDirection & 0xffffff00u | (uint32_t)(uint8_t)nDirection);
     } else {
-      *(uint8_t*)(char*)&nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
+      nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
     }
 
-    pMonsterKill.pAttacker = pAttacker;
     pMonsterKill.nAnimatedMode1 = (uint8_t)nDirection;
+    pMonsterKill.pAttacker = pAttacker;
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &pMonsterKill, 1);
     if ((int)pUnit->eUnitFlags >= 0) {
       Quests::QUESTS::QUEST_OnMonsterKilled(pGame, pUnit, pAttacker);
@@ -2511,7 +2510,7 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
     int32_t nGUID;
     int32_t nDefenderGUID;
     int nAttackerGUID;
-    D2DamageStrc sDamage;
+    D2DamageStrc* pDstDmgData;
     if (!(pUnit && pVictim)) {
       return;
     }
@@ -2531,13 +2530,7 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
 
     eEntryAttackerType = pUnit->eUnitType;
     D2DamageStrc* pSrcDmgData = &pCombatEntry->sDamage;
-    D2DamageStrc* pDstDmgData = &sDamage;
-    for (nAttackerGUID = 0x1c; nAttackerGUID; nAttackerGUID--) {
-      pDstDmgData->dwHitFlags = pSrcDmgData->dwHitFlags;
-      pSrcDmgData = (D2DamageStrc*)&pSrcDmgData->wResultFlags;
-      pDstDmgData = (D2DamageStrc*)&pDstDmgData->wResultFlags;
-    }
-
+    D2DamageStrc sDamage = *pSrcDmgData;
     _bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pVictim, eEntryAttackerType == UNIT_MONSTER ? 0x3U : 0x1U);
     ::SGAMEDATA* pGameLocal = pGameCopy;
     if (_bInMeleeRange) {
@@ -3141,13 +3134,7 @@ void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, D2UnitStrc *
               bCanAttack = D2Common::Skills::SKILLS_HasLineOfSightToUnit(nCenterX, nCenterY, sUnitFindData.pUnitsArray->aFoundUnitsList[nUnitIdx], 0x805);
               if (bCanAttack) {
                 pDmgSrc = pDamage;
-                pDmgDst = &sDamage;
-                for (nCopyIdx = 0x1c; nCopyIdx; nCopyIdx--) {
-                  pDmgDst->dwHitFlags = pDmgSrc->dwHitFlags;
-                  pDmgSrc = (D2DamageStrc*)&pDmgSrc->wResultFlags;
-                  pDmgDst = (D2DamageStrc*)&pDmgDst->wResultFlags;
-                }
-
+                sDamage = *pDmgSrc;
                 if (pfnProc) {
                   /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
                   if (bBadCodePtr) {

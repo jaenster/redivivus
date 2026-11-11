@@ -1044,7 +1044,7 @@ void __stdcall SFileEnableSeekOptimization(BOOL bEnable) {
 // @blizzard SFileGetArchiveInfo (SFILE.CPP)
 int __stdcall SFileGetArchiveInfo(D2ArchiveStrc * pArchive, int * pnArchiveType, uint32_t * pnIsPriority) {
     uint32_t* pnIsPrioritySaved = pnIsPriority;
-    int* pnArchiveTypeSaved = pnArchiveType;
+    int* pnArchiveTypeSlot;
     if (pnArchiveType) {
       *pnArchiveType = 0;
     }
@@ -1053,16 +1053,16 @@ int __stdcall SFileGetArchiveInfo(D2ArchiveStrc * pArchive, int * pnArchiveType,
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&pnArchiveType);
+    int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&pnArchiveTypeSlot);
     if (!bValid) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    if (pnArchiveTypeSaved) {
-      *pnArchiveTypeSaved = pnArchiveType[0x46];
+    if (pnArchiveType) {
+      *pnArchiveType = pnArchiveTypeSlot[0x46];
     }
     if (pnIsPrioritySaved) {
-      *pnIsPrioritySaved = (uint32_t)(pnArchiveType[0x44] == 3);
+      *pnIsPrioritySaved = (uint32_t)(pnArchiveTypeSlot[0x44] == 3);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
@@ -1079,17 +1079,17 @@ int __stdcall SFileGetArchiveInfo(D2ArchiveStrc * pArchive, int * pnArchiveType,
 // @wasnamed SFILE_GetFileInfo
 // Copies an open archive's name into the caller's buffer, bounded by nBufferSize.
 int __stdcall SFileGetArchiveName(D2ArchiveStrc * pArchive, char * szOutBuffer, int32_t nBufferSize) {
-    char* szBufferOutput = szOutBuffer;
+    char* szOutBufferSlot;
     if (szOutBuffer) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szOutBuffer = '\0';
       EnterCriticalSection(&lpCriticalSection_00779068);
-      int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&szOutBuffer);
+      int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&szOutBufferSlot);
       if (!bValid) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
         return 0;
       }
 
-      SSTR::SStrCopy(szBufferOutput, szOutBuffer + 8, nBufferSize);
+      SSTR::SStrCopy(szOutBuffer, szOutBufferSlot + 8, nBufferSize);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 1;
     }
@@ -1113,17 +1113,17 @@ int32_t __stdcall SFileGetBasePath(char * szText, int32_t nMaxLength) {
 }
 
 int32_t __stdcall SFILE_GetFileTime(D2MPQFileStrc * pArchive, void * pFileTime) {
-    void* pParamSaved = pFileTime;
+    void* pFileTimeSlot;
     if (pFileTime) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *(uint32_t*)pFileTime = 0;
       EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTime);
+      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!bIsValidHandle) {
         LeaveCriticalSection(&lpCriticalSection_00779068);
         return 0;
       }
 
-      *(uint32_t*)pParamSaved = *(uint32_t*)((char*)pFileTime + 0x114);
+      *(uint32_t*)pFileTime = *(uint32_t*)((char*)pFileTimeSlot + 0x114);
       LeaveCriticalSection(&lpCriticalSection_00779068);
       return 1;
     }
@@ -1187,17 +1187,17 @@ int __stdcall SFILE_GetFilePlatform(D2ArchiveStrc * pArchive, uint32_t * pPlatfo
 // @oracle Mac PPC 1.10b Storm -- PPC export vector SFileGetFileName -> 1001bd80, 140B: NullAppFatal, SErrSetLastError, EnterCriticalSection, SStrCopy, LeaveCriticalSection. D2's own PPC binary imports SFileGetFileName by name, so D2 source calls this API; in 1.14d the only file-name getter D2 code calls is this one (D2FILE_GetFileSize, D2FILE_SeekFile, D2FILE_ReadFile). The rival 004162a0 has zero callers and stays descriptively named as the internal alias-aware variant.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 int __stdcall SFileGetFileName(D2MPQFileStrc * pFile, char * szText, int32_t nBufferSize) {
-    char* szSrc = szText;
+    char* szTextSlot;
     if (szText) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szText = '\0';
       EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pFile, (D2MPQFileStrc**)&szText);
+      int bIsValidHandle = SFILE_CheckFileHandle(pFile, (D2MPQFileStrc**)&szTextSlot);
       if (!bIsValidHandle) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
         return 0;
       }
 
-      SSTR::SStrCopy(szSrc, szText + 8, nBufferSize);
+      SSTR::SStrCopy(szText, szTextSlot + 8, nBufferSize);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 1;
     }
@@ -1217,22 +1217,22 @@ int __stdcall SFileGetFileName(D2MPQFileStrc * pFile, char * szText, int32_t nBu
 // @oracle-note 2026-08-28 pass 4. NOT SFileGetFileName - that is 00416230, settled because D2's PowerPC binary imports SFileGetFileName by name and 00416230 is the only file-name getter 1.14d D2 code calls (D2FILE_GetFileSize / SeekFile / ReadFile). This one has zero callers and returns the +0x10c alias when set, falling back to +8; it is the internal variant. Storm's 337-name export table has exactly one file-name getter, so this is not an export. Left descriptively named.
 int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, char * szOutName, int32_t nBufferOutputLength) {
     char* szBufferInput;
-    char* pParamSaved = szOutName;
+    char* szOutNameSlot;
     if (szOutName) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szOutName = '\0';
       EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&szOutName);
+      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&szOutNameSlot);
       if (!bIsValidHandle) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
         return 0;
       }
-      if (*(int*)(szOutName + 0x10c)) {
-        szBufferInput = *(char**)(szOutName + 0x10c);
+      if (*(int*)(szOutNameSlot + 0x10c)) {
+        szBufferInput = *(char**)(szOutNameSlot + 0x10c);
       } else {
-        szBufferInput = szOutName + 8;
+        szBufferInput = szOutNameSlot + 8;
       }
 
-      SSTR::SStrCopy(pParamSaved, szBufferInput, nBufferOutputLength);
+      SSTR::SStrCopy(szOutName, szBufferInput, nBufferOutputLength);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 1;
     }
@@ -1270,51 +1270,51 @@ int __stdcall SFileGetFileCompressedSize(D2MPQFileStrc * pArchive, void * pdwSiz
 // @blizzard SFileGetFileSize (SFILE.CPP)
 DWORD __stdcall SFileGetFileSize(D2MPQFileStrc * pMPQFile, LPDWORD pdwFileSizeHigh) {
     DWORD dwFileSize;
-    LPDWORD pdwSizeHighSaved = pdwFileSizeHigh;
+    LPDWORD pdwFileSizeHighSlot;
     if (pdwFileSizeHigh) {
       *pdwFileSizeHigh = 0;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, (D2MPQFileStrc**)&pdwFileSizeHigh);
+    int bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, (D2MPQFileStrc**)&pdwFileSizeHighSlot);
     if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return -1;
     }
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pdwFileSizeHigh[0x44] != -1) {
-      LPDWORD pMPQFileSaved = pdwFileSizeHigh;
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pdwFileSizeHighSlot[0x44] != -1) {
+      LPDWORD pMPQFileSaved = pdwFileSizeHighSlot;
       LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ dwFileSize = GetFileSize((HANDLE)pMPQFileSaved[0x44], pdwSizeHighSaved);
+      /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ dwFileSize = GetFileSize((HANDLE)pMPQFileSaved[0x44], pdwFileSizeHigh);
       return dwFileSize;
     }
 
-    dwFileSize = *(DWORD*)(pdwFileSizeHigh[0x46] + 8);
+    dwFileSize = *(DWORD*)(pdwFileSizeHighSlot[0x46] + 8);
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return dwFileSize;
 }
 
 int __stdcall SFILE_GetFileTimestamp(D2MPQFileStrc * pArchive, LPFILETIME pFileTime) {
-    LPFILETIME ftLastWrite = pFileTime;
+    LPFILETIME pFileTimeSlot;
     D2_CHECKS_BEGIN;
     D2_CHECK(pFileTime);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTime);
-    LPFILETIME pMPQFileSaved = pFileTime;
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
+    LPFILETIME pMPQFileSaved = pFileTimeSlot;
     if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pFileTime[0x22].dwLowDateTime != -1) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (pFileTimeSlot[0x22].dwLowDateTime != -1) {
       BOOL bGotFileTime;
       LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* LPFILETIME lpLastWriteTime for GetFileTime */ /* LPFILETIME lpLastAccessTime for GetFileTime */ /* LPFILETIME lpCreationTime for GetFileTime */ /* HANDLE hFile for GetFileTime */ bGotFileTime = GetFileTime((HANDLE)pMPQFileSaved[0x22].dwLowDateTime, (LPFILETIME)0x0, (LPFILETIME)0x0, ftLastWrite);
+      /* LPFILETIME lpLastWriteTime for GetFileTime */ /* LPFILETIME lpLastAccessTime for GetFileTime */ /* LPFILETIME lpCreationTime for GetFileTime */ /* HANDLE hFile for GetFileTime */ bGotFileTime = GetFileTime((HANDLE)pMPQFileSaved[0x22].dwLowDateTime, (LPFILETIME)0x0, (LPFILETIME)0x0, pFileTime);
       return bGotFileTime;
     }
 
-    DWORD pMpqFileRecord = pFileTime[0x23].dwLowDateTime;
-    ftLastWrite->dwLowDateTime = *(DWORD*)(pMpqFileRecord + 0x10);
-    ftLastWrite->dwHighDateTime = *(DWORD*)(pMpqFileRecord + 0x14);
+    DWORD pMpqFileRecord = pFileTimeSlot[0x23].dwLowDateTime;
+    pFileTime->dwLowDateTime = *(DWORD*)(pMpqFileRecord + 0x10);
+    pFileTime->dwHighDateTime = *(DWORD*)(pMpqFileRecord + 0x14);
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }

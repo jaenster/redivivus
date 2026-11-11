@@ -88,6 +88,6 @@ int32_t __fastcall PLRSKILLS_CanUseSkillCheck(struct D2UnitStrc * pUnit, struct 
 void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070(struct D2UnitStrc * pUnit);
 void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20(struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Client
-// 3 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::PlrSkills

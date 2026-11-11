@@ -3028,7 +3028,7 @@ static void __stdcall copy_block(int32_t nLen, uint8_t * pbBuf, int32_t bWriteHe
     if (bWriteHeader) {
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)nLen;
       pDeflateState->pending++;
-      byLenHi = (uint8_t)((uint32_t)nLen >> 8);
+      byLenHi = (uint8_t)(nLen >> 8);
       pDeflateState->pending_buf[pDeflateState->pending] = byLenHi;
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = ~(uint8_t)nLen;

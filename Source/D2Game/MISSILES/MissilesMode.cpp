@@ -1017,8 +1017,8 @@ void __fastcall SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId 
 
 static void MISSILES_UpdatePathToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nCoord;
-    int16_t wOwnerPosY;
-    int16_t wOwnerPosX;
+    int32_t wOwnerPosY;
+    int32_t wOwnerPosX;
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
     if (!(pOwnerUnit && pDynPath)) {
@@ -1027,20 +1027,20 @@ static void MISSILES_UpdatePathToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit) 
 
     eD2UnitType eOwnerUnitType = pOwnerUnit->eUnitType;
     if (eOwnerUnitType == UNIT_OBJECT || (int)eOwnerUnitType > 3 && (int)eOwnerUnitType <= 5) {
-      wOwnerPosY = (int16_t)pOwnerUnit->pPath.pStaticPath->nPosY;
+      wOwnerPosY = pOwnerUnit->pPath.pStaticPath->nPosY;
     } else if (pOwnerUnit->pPath.pDynamicPath) {
       nCoord = D2Common::PATH::DynamicPath::GetYPos(pOwnerUnit->pPath.pDynamicPath);
-      wOwnerPosY = (int16_t)nCoord;
+      wOwnerPosY = nCoord;
     } else {
       wOwnerPosY = 0;
     }
 
     eOwnerUnitType = pOwnerUnit->eUnitType;
     if (eOwnerUnitType == UNIT_OBJECT || (int)eOwnerUnitType > 3 && (int)eOwnerUnitType <= 5) {
-      wOwnerPosX = (int16_t)pOwnerUnit->pPath.pStaticPath->nPosX;
+      wOwnerPosX = pOwnerUnit->pPath.pStaticPath->nPosX;
     } else if (pOwnerUnit->pPath.pDynamicPath) {
       nCoord = D2Common::PATH::DynamicPath::GetXPos(pOwnerUnit->pPath.pDynamicPath);
-      wOwnerPosX = (int16_t)nCoord;
+      wOwnerPosX = nCoord;
     } else {
       wOwnerPosX = 0;
     }

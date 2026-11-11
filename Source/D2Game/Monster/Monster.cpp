@@ -574,7 +574,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       pMonRegionField = 0;
     }
 
-    uint32_t nPlayerCount = 1;
+    int nPlayerCount = 1;
     if ((int)monLevelData.nPlayerMultiplyer3 >= 1) {
       nPlayerCount = monLevelData.nPlayerMultiplyer3;
     }
@@ -699,7 +699,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
           pRoom = (D2RoomStrc*)&pRoom->pRoomEx;
           nPlayerCount++;
-        } while ((int)nPlayerCount < 6);
+        } while (nPlayerCount < 6);
       }
 
       SKILLS::SkillAss::SKILLASS_EquipSummonItems(pGame, nullptr, pUnit, -1, nMonLevel, nMonLevel, 1);

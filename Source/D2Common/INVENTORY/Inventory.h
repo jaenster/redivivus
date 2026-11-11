@@ -270,6 +270,6 @@ void __stdcall NullSub_Unref_00643610(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_006460c0(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_006460e0(struct D2InventoryStrc * pInventory);
 #endif // D2_MODULE_D2Common
-// 27 internal functions (defined in .cpp)
+// 30 internal functions (defined in .cpp)
 
 } // namespace D2Common::INVENTORY::Inventory

@@ -3071,6 +3071,8 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(EHExceptionRecord * pException
     return ExceptionContinueSearch;
 }
 
+static void * keep_0044d320 = (0 ? (GAMEDATA_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+
 } // namespace D2Client::GAME::Game
 
 // =============================================================================

@@ -133,6 +133,6 @@ void __fastcall DRAW_WORLD_UnderFloor(struct D2GameViewStrc * pGameView);
 // Iterates every Wall2 grid cell and renders all shadow-list nodes for that cell. For each node: if flags==0, samples lighting via DRAW_CoordIsInCoord and calls DRAW_WORLD_Unit; if flag bit 1 set, calls DrawUnitShadows; if flag bit 0 set and not perspective, calls D2GFX_DrawShadowTile with view-relative coords; if perspective, calls D2GFX_DrawShadowTile with raw node coords. After shadows, draws any alpha wall tiles for the cell.
 void __fastcall dShadowPass(struct D2GameViewStrc * pGameView);
 #endif // D2_MODULE_D2Client
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Client::GAME::Draw

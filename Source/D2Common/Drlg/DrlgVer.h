@@ -39,5 +39,6 @@ void __fastcall DRLGVER_FreeVertices(struct D2PoolManagerStrc * pMemory, struct 
 int __fastcall Unreferenced_0067d250(struct D2DrlgVertexStrc * * param_1);
 void __fastcall GetCoordDiff(struct D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY);
 #endif // D2_MODULE_D2Common
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Common::Drlg::DrlgVer

@@ -1931,6 +1931,14 @@ D2UnitStrc * __fastcall Objects_PopulateFn6_Corpse(::SGAMEDATA * pGame, D2RoomSt
     return pUnit;
 }
 
+// GetAnimMode as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eAnimMode.ePlayerMode;
+    }
+    return (eD2PlayerAnimMode)0;
+}
+
 // Room-population helper (populate function index 8). Skips the room if a level quest-status check fails or nDensity exceeds 0x80. Advances the room seed and bails if the seed mod 100 exceeds nChancePercent. Otherwise calls OBJECT_PlaceWithCallback to spawn the object (nObjectClassId) in the room using a 2*SizeX+1 by 2*SizeY+1 footprint, sets UNITFLAG_TARGETABLE based on the object's Selectable field, then registers the spawn position via AddPointsToLevelRngPoints2.
 D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     int nY;

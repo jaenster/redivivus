@@ -103,6 +103,6 @@ uint32_t __fastcall inflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
 int __fastcall inflateUndermine(z_stream * pStream, int nSubvert);
 int32_t __fastcall inflateMark(z_stream * pStream);
 #endif // D2_MODULE_Storm
-// 2 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 } // namespace Storm::_3rdparty::zlib::inflate

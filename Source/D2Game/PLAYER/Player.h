@@ -113,6 +113,6 @@ struct D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(struct D2UnitStrc 
 void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
 void __fastcall WEAPON_ApplyEquippedWeaponStats(struct D2UnitStrc * pUnit, int32_t bResetWeaponStats);
 #endif // D2_MODULE_D2Game
-// 7 internal functions (defined in .cpp)
+// 8 internal functions (defined in .cpp)
 
 } // namespace D2Game::PLAYER::Player

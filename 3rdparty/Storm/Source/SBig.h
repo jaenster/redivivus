@@ -307,6 +307,7 @@ void __stdcall BigBuffer_ToBinaryAppend(struct TSGrowableArray_Uc * pByteBuffer,
 // BigBuffer = {+0 nCapacity, +4 nCount, +8 pData, +0xc nGrowStep, +0x10 nStartWord}; Count() = nCount - nStartWord (PPC oracle .Count__9BigBuffer).
 // Provenance: asm 00421d80; the PPC Storm has no destructor symbol to confirm the name.
 void __fastcall BigData_Destructor(struct BigData * pBigData);
+// Builds the big-number object's stack of 16 TSFixedArray<unsigned int> buffers through the compiler's array iterator.
 struct BigData * __fastcall SBIG_Constructor(struct BigData * pBigData);
 void __thiscall SBIG_EnsureCapacity(struct BigBuffer * pDwordArray, uint32_t nIndex, int32_t bZeroFill);
 // @was SBIG_SetLength (pass 6, 2026.08.28)
@@ -478,6 +479,6 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9f88(struct EHExceptionRecord * pEx
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9fc1(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ff0(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_Storm
-// 39 internal functions (defined in .cpp)
+// 41 internal functions (defined in .cpp)
 
 } // namespace Storm::Source::SBig

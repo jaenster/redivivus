@@ -624,8 +624,9 @@ void __fastcall Q03_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       pA1Q3Data->bSequenceReady = 1;
     }
 
+    D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(t2_c0);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState) {

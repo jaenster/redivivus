@@ -3683,14 +3683,7 @@ static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFil
     char cCharScan;
     char* pSrcScan = "Data\\Global\\Items\\Palette\\";
     char* pPathEnd = szFullPath;
-    for (nCopyIter = 6; nCopyIter; nCopyIter--) {
-      *(uint32_t*)pPathEnd = *(uint32_t*)pSrcScan;
-      pSrcScan += 4;
-      pPathEnd += 4;
-    }
-
-    *(uint16_t*)pPathEnd = *(uint16_t*)pSrcScan;
-    pPathEnd[2] = pSrcScan[2];
+    memcpy(pPathEnd, pSrcScan, 27);
     pSrcScan = szPaletteFilename;
     pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
     pPathEnd = (char*)((uint8_t*)&szFullPath - 1);

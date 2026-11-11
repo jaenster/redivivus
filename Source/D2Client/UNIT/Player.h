@@ -135,7 +135,7 @@ struct D2UnitStrc * __stdcall GetPlayerUnit_UI();
 struct D2UnitStrc * __stdcall GetPlayerUnit_Net();
 uint32_t __stdcall IsPlayerDead();
 #endif // D2_MODULE_D2Client
-// 28 internal functions (defined in .cpp)
+// 29 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
 uint32_t __stdcall PLAYER_CheckSkillUsability_Extern(int * pnUsabilityCode, struct D2UnitStrc * pUnit, struct D2SkillStrc * * ppSkill);

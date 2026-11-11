@@ -49,6 +49,6 @@ void __stdcall FreePartyDC6();
 void __stdcall UI_DrawPartyMembers();
 void __stdcall DRAW_UI_PartyWindow();
 #endif // D2_MODULE_D2Client
-// 12 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::Party

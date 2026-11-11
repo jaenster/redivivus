@@ -124,6 +124,6 @@ void StaticInit_DisplayedTooltip();
 void StaticInit_gwFontHeightDefault();
 void StaticInit_gnFontTableCharWidthCache();
 #endif // D2_MODULE_D2Win
-// 9 internal functions (defined in .cpp)
+// 10 internal functions (defined in .cpp)
 
 } // namespace D2Win::Src::D2WinFont

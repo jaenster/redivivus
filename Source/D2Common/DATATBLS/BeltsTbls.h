@@ -29,5 +29,6 @@ void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_
 void __fastcall LoadBeltsTxt(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeBeltsTxt();
 #endif // D2_MODULE_D2Common
+// 1 internal function (defined in .cpp)
 
 } // namespace D2Common::DATATBLS::BeltsTbls

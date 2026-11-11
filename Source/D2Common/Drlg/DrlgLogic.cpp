@@ -118,14 +118,14 @@ void __fastcall InitializeDrlgCoordList(D2RoomExStrc * pRoomEx, int nMatchIndex,
     }
 
     D2RoomCoordListStrc* pRoomCoordList = pDrlgCoordList->pCoord;
-    bool bFoundMatch = false;
+    BOOL bFoundMatch = 0;
     if (!pRoomCoordList) {
       return;
     }
 
     do {
       if (pRoomCoordList->nIndex == nMatchIndex) {
-        bFoundMatch = true;
+        bFoundMatch = 1;
         pRoomCoordList->nIndex = nNewIndex;
       }
 

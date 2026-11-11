@@ -1051,12 +1051,7 @@ void __stdcall CMD_WriteKeyFile() {
 
     D2KeyBindStrc* pSrc = g_KeyBindingsTable;
     int32_t* pCopyDst = (int32_t*)(szBuffer + 2);
-    for (nCount = 0x11d; nCount; nCount--) {
-      *pCopyDst = pSrc->nCmdIndex;
-      pSrc = (D2KeyBindStrc*)&pSrc->wKeyCode;
-      pCopyDst++;
-    }
-
+    memcpy(pCopyDst, pSrc, 0x474);
     Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)szBuffer, 0x476, &nWritten, (LPOVERLAPPED)0x0);
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0xdc);
@@ -1162,12 +1157,7 @@ void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD bUseInstallDir) {
 
     int* pSrcDefault = gaKeyBindingsDefault;
     D2KeyBindStrc* pDstBinding = g_KeyBindingsTable;
-    for (nCount = 0x11d; nCount; nCount--) {
-      pDstBinding->nCmdIndex = *pSrcDefault;
-      pSrcDefault++;
-      pDstBinding = (D2KeyBindStrc*)&pDstBinding->wKeyCode;
-    }
-
+    memcpy(pDstBinding, pSrcDefault, 0x474);
     CMD_RebuildDerivedBindings();
 }
 
@@ -1458,12 +1448,7 @@ void __stdcall CMD_AcceptKeyBindings() {
     int nCount;
     D2KeyBindStrc* pSrc = g_KeyBindingsTable;
     D2KeyBindStrc* pDst = gaKeyBindingsBackup;
-    for (nCount = 0x11d; nCount; nCount--) {
-      pDst->nCmdIndex = pSrc->nCmdIndex;
-      pSrc = (D2KeyBindStrc*)&pSrc->wKeyCode;
-      pDst = (D2KeyBindStrc*)&pDst->wKeyCode;
-    }
-
+    memcpy(pDst, pSrc, 0x474);
     CMD_RebuildDerivedBindings();
 }
 
@@ -2058,7 +2043,7 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
 void __stdcall CMD_LoadUserKeyBindings() {
     D2KeyBindStrc* pBindingRow;
     uint16_t* pDstTable;
-    int nCmdIndex;
+    uint16_t* psInnerKey;
     int nInnerIndex;
     D2KeyBindStrc* pDstCopy;
     D2KeyFileStrc wFileMagic;
@@ -2067,7 +2052,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
     HANDLE hFile;
     hFile = GetKeyFileHandle(3, 0x80000000);
     if (hFile != (HANDLE)-1) {
-      uint16_t* psInnerKey;
+      int nCmdIndex;
       wFileMagic.wVersion = 0;
       memset(wFileMagic.aBindings, 0, 0x474);
       dwBytesRead = 0;
@@ -2123,12 +2108,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
 
                 pBindingRow = wFileMagic.aBindings;
                 pDstCopy = g_KeyBindingsTable;
-                for (nCmdIndex = 0x11d; nCmdIndex; nCmdIndex--) {
-                  pDstCopy->nCmdIndex = pBindingRow->nCmdIndex;
-                  pBindingRow = (D2KeyBindStrc*)&pBindingRow->wKeyCode;
-                  pDstCopy = (D2KeyBindStrc*)&pDstCopy->wKeyCode;
-                }
-
+                memcpy(pDstCopy, pBindingRow, 0x474);
                 CMD_RebuildDerivedBindings();
                 return;
               }
@@ -2148,12 +2128,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
 
     int* pDefaultSrc = gaKeyBindingsDefault;
     pBindingRow = g_KeyBindingsTable;
-    for (nCmdIndex = 0x11d; nCmdIndex; nCmdIndex--) {
-      pBindingRow->nCmdIndex = *pDefaultSrc;
-      pDefaultSrc++;
-      pBindingRow = (D2KeyBindStrc*)&pBindingRow->wKeyCode;
-    }
-
+    memcpy(pBindingRow, pDefaultSrc, 0x474);
     CMD_RebuildDerivedBindings();
     CMD_WriteKeyFile();
 }

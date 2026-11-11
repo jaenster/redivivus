@@ -1267,51 +1267,49 @@ BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperati
 BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eAnimMode;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
-    if (!pQuestData) {
-      return 0;
-    }
-
-    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    if (!bQuestState) {
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
+    if (pQuestData) {
+      ::SGAMEDATA* pGame = pOperation->sArg.pGame;
+      D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
+      D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+      BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
       if (!bQuestState) {
+        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
+        if (!bQuestState) {
+          UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
+          return 0;
+        }
+      }
+
+      D2QuestDataA5Q5Strc* pA5Q5Specific = pQuestData->pQuestSpecificData.pA5Q5;
+      if (pQuestData->bIsNotIntroduction != '\0' && !pA5Q5Specific->bAncientsDefeated || pA5Q5Specific->bAncientsSpawned && !pA5Q5Specific->bAncientsDefeated) {
         UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
         return 0;
       }
-    }
 
-    D2QuestDataA5Q5Strc* pA5Q5Specific = pQuestData->pQuestSpecificData.pA5Q5;
-    if (pQuestData->bIsNotIntroduction != '\0' && !pA5Q5Specific->bAncientsDefeated || pA5Q5Specific->bAncientsSpawned && !pA5Q5Specific->bAncientsDefeated) {
-      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
-      return 0;
-    }
+      D2ObjectsTxt* pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+      D2UnitStrc* pUnit = pOperation->sArg.pVictim;
+      if (!pUnit) {
+        eAnimMode = eD2ObjectAnimMode_ns::Neutral;
+      } else {
+        eAnimMode = pUnit->eAnimMode.ePlayerMode;
+      }
 
-    D2ObjectsTxt* pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    D2UnitStrc* pUnit = pOperation->sArg.pVictim;
-    if (!pUnit) {
-      eAnimMode = eD2ObjectAnimMode_ns::Neutral;
-    } else {
-      eAnimMode = pUnit->eAnimMode.ePlayerMode;
-    }
-
-    switch (eAnimMode) {
-      case eD2ObjectAnimMode_ns::Neutral:
-        {
-          D2Common::Units::SetupUpdateFlag(pUnit, 1);
-          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0);
-          pGame = pOperation->sArg.pGame;
-          GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
-          break;
-        }
-      case Opened:
-        {
-          A2Q6::TakeStairs(pOperation);
-          D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 1);
-          return 0;
-        }
+      switch (eAnimMode) {
+        case eD2ObjectAnimMode_ns::Neutral:
+          {
+            D2Common::Units::SetupUpdateFlag(pUnit, 1);
+            D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 0);
+            pGame = pOperation->sArg.pGame;
+            GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
+            break;
+          }
+        case Opened:
+          {
+            A2Q6::TakeStairs(pOperation);
+            D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), 1);
+            return 0;
+          }
+      }
     }
 
     return 0;

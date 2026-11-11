@@ -250,11 +250,11 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
     return 0;
 }
 
-int32_t __stdcall ITEMMODS_CalculateRepairCost(uint32_t nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue) {
-    int nMaxRepairLevel = ((int)nPackedRepairData >> 0xc & 0x3ffU) - 0x100;
-    int nMinRepairLevel = ((int)nPackedRepairData >> 2 & 0x3ffU) - 0x100;
+int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue) {
+    int nMaxRepairLevel = (nPackedRepairData >> 0xc & 0x3ffU) - 0x100;
+    int nMinRepairLevel = (nPackedRepairData >> 2 & 0x3ffU) - 0x100;
     if (pnTimePeriod) {
-      *pnTimePeriod = nPackedRepairData & 3;
+      *pnTimePeriod = nPackedRepairData & 3U;
     }
     if (pnMinValue) {
       *pnMinValue = nMinRepairLevel;
@@ -263,7 +263,7 @@ int32_t __stdcall ITEMMODS_CalculateRepairCost(uint32_t nPackedRepairData, uint3
       *pnMaxValue = nMaxRepairLevel;
     }
 
-    int nDurabilityDelta = nDurability + (nPackedRepairData & 3) * -0x5a;
+    int nDurabilityDelta = nDurability + (nPackedRepairData & 3U) * -0x5a;
     if (nDurabilityDelta < 0) {
       nDurabilityDelta = -nDurabilityDelta;
     }
@@ -2312,7 +2312,7 @@ uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, D2UnitStrc * pUnit,
 }
 
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.
-uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
+uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, uint32_t nSet, int32_t nStatId, uint32_t nVal, int nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     uint32_t nDimProduct;
     uint32_t uVar1;
     uint32_t nSocketMin;
@@ -2343,7 +2343,7 @@ uint32_t __fastcall ITEMPROP_SetSockets(uint32_t dwParam1, D2UnitStrc * pUnit, D
       }
 
       uVar1 = nRolledValue;
-      if ((int)nRolledValue <= 0) {
+      if (nRolledValue <= 0) {
         uVar1 = ITEMMOD_RollRandomValue(pItemUnit2, pProperty->fmin, pProperty->fmax);
         if ((int)uVar1 <= 0) {
           uVar1 = pProperty->fparam;

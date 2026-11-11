@@ -1014,14 +1014,14 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
     int nStatIdx;
     nStatIdx = 0;
     if (nStatCount > 0) {
-      uint32_t nStatVal;
+      int32_t nStatVal;
       for (; nStatIdx < nStatCount; nStatIdx++ , pItem = pItemSaved , pnSellPrice = pnSellPriceSaved) {
         eUnitStat = (eD2UnitStat)aStatBuf[nStatIdx].wStatIndex;
         nStatVal = Stats::StatsEx::STATLIST_GetStatBonusFromLists(pItem, eUnitStat, (uint32_t)(uint16_t)aStatBuf[nStatIdx].wSubIndex);
         pStatCostTxt = nStatVal && (int)eUnitStat < sgptDataTable->nTxtItemStatCostSize ? sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
         if (pStatCostTxt) {
           if (pStatCostTxt->valshift) {
-            nStatVal = (int)nStatVal >> D2_SHIFT_COUNT(pStatCostTxt->valshift);
+            nStatVal >>= D2_SHIFT_COUNT(pStatCostTxt->valshift);
           }
 
           switch (pStatCostTxt->encode) {
@@ -1043,8 +1043,8 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
               nCostAdd = pSkillsTxt->costmult;
               nRepairCostTmp = pSkillsTxt->costadd;
               nSellCostSum = nSellCostSum + nCostTmp / 1024 * nCostAdd + nRepairCostTmp;
-              nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 4096 * nCostAdd + nRepairCostTmp;
-              nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nCostAdd + nRepairCostTmp;
+              nBuyCostSum = nBuyCostSum + *pnBuyPrice * nStatVal / 4096 * nCostAdd + nRepairCostTmp;
+              nRepairCostTmp = *pnRepairPrice * nStatVal / 1024 * nCostAdd + nRepairCostTmp;
             }
 
             nRepairCostSum += nRepairCostTmp;
@@ -1123,8 +1123,8 @@ void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice,
             nRepairCostTmp = pStatCostTxt->multiply;
             nCostAdd = pStatCostTxt->add;
             nSellCostSum = nSellCostSum + nCostTmp / 1024 * nRepairCostTmp + nCostAdd;
-            nBuyCostSum = nBuyCostSum + (int)(*pnBuyPrice * nStatVal) / 1024 * nRepairCostTmp + nCostAdd;
-            nRepairCostTmp = (int)(*pnRepairPrice * nStatVal) / 1024 * nRepairCostTmp;
+            nBuyCostSum = nBuyCostSum + *pnBuyPrice * nStatVal / 1024 * nRepairCostTmp + nCostAdd;
+            nRepairCostTmp = *pnRepairPrice * nStatVal / 1024 * nRepairCostTmp;
           }
 
           nRepairCostTmp += nCostAdd;
@@ -3357,7 +3357,7 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
 }
 
 // Determines and assigns the socket count for an item unit during socketing. Computes the maximum allowed sockets from the item's grid area (width*height, capped at 6), then clamps further by item quality (magic=4, rare=2, crafted/tampered=3, set/unique use existing stat or force 1). Calls ITEM_GetMaxSockCount for a hard cap, rolls the final count, sets ITEMFLAG_SOCKETED, and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
-void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom) {
+void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, int nMaxSocksRandom) {
     eD2ItemQuality nQuality;
     D2UnitStrc* pUnit_00 = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
@@ -3443,7 +3443,7 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 }
 
 // Sets the socket count on an item, clamping to [1, min(6, itemArea, ITEM_GetMaxSockCount)]. Only acts on UNIT_ITEM with nonzero grid area (width*height). Sets ITEMFLAG_SOCKETED on item flags and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
-void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, uint32_t nSockCount) {
+void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, int nSockCount) {
     D2UnitStrc* pUnit_00 = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
@@ -3468,10 +3468,10 @@ void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, uint32_t nSockCount) {
       bDim = ITEM_GetMaxSockCount(pUnit_00);
       nMaxAllowed = (uint32_t)bDim;
     }
-    if ((int)nSockCount <= 1) {
+    if (nSockCount <= 1) {
       nSockCount = 1;
     }
-    if ((int)nSockCount >= (int)nMaxAllowed) {
+    if (nSockCount >= (int)nMaxAllowed) {
       nSockCount = nMaxAllowed;
     }
     if (pUnit_00->eUnitType == UNIT_ITEM && pUnit_00->pUnitData.pUnitDataItem) {
@@ -6014,7 +6014,7 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
     }
 
     __frame0.nRepairPrice = 0;
-    uint32_t nMaxStack;
+    int nMaxStack;
     nMaxStack = 1;
     eD2ItemFlag eItemFlags;
     eItemFlags = ITEM_GetItemData_eD2ItemFlag(pItem);
@@ -6157,19 +6157,19 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
               if (nPrice <= 0xffff || !pMagicAffixTxt->multiply) {
                 iVar1 = pMagicAffixTxt->multiply;
                 nAffixRepairDelta = pMagicAffixTxt->add;
-                nAffixSellDelta = iVar1 * nPrice / 1024 + nAffixRepairDelta;
-                nAffixBuyDelta = iVar1 * __frame0.nBuyPrice / 1024 + nAffixRepairDelta;
+                nAffixBuyDelta = iVar1 * nPrice / 1024 + nAffixRepairDelta;
+                nAffixSellDelta = iVar1 * __frame0.nBuyPrice / 1024 + nAffixRepairDelta;
                 nAffixRepairDelta = iVar1 * __frame0.nRepairPrice / 1024 + nAffixRepairDelta;
               } else {
                 iVar1 = pMagicAffixTxt->multiply;
                 nAffixRepairDelta = pMagicAffixTxt->add;
-                nAffixSellDelta = ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
-                nAffixBuyDelta = __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
+                nAffixBuyDelta = ((int)(nPrice + (uVar2 & 0x3ff)) >> 10) * iVar1 + nAffixRepairDelta;
+                nAffixSellDelta = __frame0.nBuyPrice / 1024 * iVar1 + nAffixRepairDelta;
                 nAffixRepairDelta = __frame0.nRepairPrice / 1024 * iVar1 + nAffixRepairDelta;
               }
 
-              iVar4 += nAffixSellDelta;
-              iVar3 += nAffixBuyDelta;
+              iVar4 += nAffixBuyDelta;
+              iVar3 += nAffixSellDelta;
               __frame0.nQualityMod += nAffixRepairDelta;
             }
 
@@ -6280,9 +6280,9 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
       }
 
       apply_price_mods:
-      __frame0.nSellPrice = nPrice + iVar4 / (int)nMaxStack;
-      __frame0.nBuyPrice += iVar3 / (int)nMaxStack;
-      __frame0.nRepairPrice += __frame0.nQualityMod / (int)nMaxStack;
+      __frame0.nSellPrice = nPrice + iVar4 / nMaxStack;
+      __frame0.nBuyPrice += iVar3 / nMaxStack;
+      __frame0.nRepairPrice += __frame0.nQualityMod / nMaxStack;
       if (nResult) {
         ITEMS_CalcStaffModsPriceModifier(&__frame0.nSellPrice, &__frame0.nBuyPrice, &__frame0.nRepairPrice, nMaxStack, pItem);
       }

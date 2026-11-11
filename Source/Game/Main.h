@@ -64,6 +64,6 @@ BOOL StartDiablo2ServerAsService();
 // WinMain: decide server/service vs client, load advapi, then PreInitApplication.
 int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32_t nShowCmd);
 #endif // D2_MODULE_Game
-// 2 internal functions (defined in .cpp)
+// 4 internal functions (defined in .cpp)
 
 } // namespace Game::Main

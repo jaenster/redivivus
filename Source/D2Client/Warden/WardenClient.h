@@ -166,6 +166,6 @@ void __fastcall WARDEN_Initialize(uint32_t dwModuleParam);
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam);
 void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule);
 #endif // D2_MODULE_D2Client
-// 4 internal functions (defined in .cpp)
+// 5 internal functions (defined in .cpp)
 
 } // namespace D2Client::Warden

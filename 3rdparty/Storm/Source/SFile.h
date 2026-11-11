@@ -681,6 +681,6 @@ void StaticFini_gSFileAudioStreamList();
 // Runs at exit: removes every element from the stream record list gSFileStreamRecordList, then unlinks the list head itself.
 void StaticFini_gSFileStreamRecordList();
 #endif // D2_MODULE_Storm
-// 19 internal functions (defined in .cpp)
+// 20 internal functions (defined in .cpp)
 
 } // namespace Storm::Source::SFile

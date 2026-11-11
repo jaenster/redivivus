@@ -242,6 +242,6 @@ char __fastcall Get0x44FromRoomEx(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGROOMEX_DemoteIfReady(struct D2RoomExStrc * pRoomEx);
 void __fastcall thunk_DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
 #endif // D2_MODULE_D2Common
-// 7 internal functions (defined in .cpp)
+// 13 internal functions (defined in .cpp)
 
 } // namespace D2Common::DUNGEON::Dungeon

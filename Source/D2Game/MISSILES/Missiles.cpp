@@ -379,7 +379,7 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
 
     nTmp = D2Common::Units::Missile::GetCurrentFrame(pUnit);
     *(uint8_t*)(char*)&sPacket.nCurrentFrame = (uint8_t)nTmp;
-    *(uint8_t*)((char*)&sPacket.nCurrentFrame + 1) = (uint8_t)((uint32_t)nTmp >> 8);
+    *(uint8_t*)((char*)&sPacket.nCurrentFrame + 1) = (uint8_t)(nTmp >> 8);
     sPacket.nOwnerType = (uint8_t)pOwnerUnit->eUnitType;
     *(uint16_t*)(char*)&sPacket.nOwnerGUID = (uint16_t)pOwnerUnit->nUnitGUID;
     *(uint16_t*)((char*)&sPacket.nOwnerGUID + 2) = (uint16_t)((uint32_t)pOwnerUnit->nUnitGUID >> 0x10);

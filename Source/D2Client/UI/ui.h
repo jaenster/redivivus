@@ -301,6 +301,6 @@ void StaticInit_WindowSizeX();
 void StaticInit_WindowSizeY();
 void StaticInit_gnUICtrlConfigScrollPosition();
 #endif // D2_MODULE_D2Client
-// 24 internal functions (defined in .cpp)
+// 30 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::ui

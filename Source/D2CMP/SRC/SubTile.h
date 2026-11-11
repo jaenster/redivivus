@@ -48,7 +48,7 @@ int __fastcall SUBTILE_CountRunLength(char byRunValue, char * pCur, char * pEnd,
 char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompressedEnd);
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw);
 void __fastcall SUBTILE_ConvertToIndexed(struct D2GroundSubTileStrc * pDstFrame, struct D2GroundSubTileStrc * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
-char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
+char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, int nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex);
 int __fastcall Unreferenced_0060d7c0(uint8_t * param_1);
 void __stdcall SUBTILE_ExtractIsometricPixels(struct D2GroundSubTileStrc * pSubTileEntry, uint8_t * pSrcPixelData);
 void __fastcall SUBTILE_RecompressExisting(struct D2GroundSubTileStrc * pSubTileEntry);

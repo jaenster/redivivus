@@ -998,7 +998,7 @@ uint32_t __stdcall ITEM_RollItemQuality(D2UnitStrc * pUnit, D2ItemGenContextStrc
       exit(-1);
     } else {
       int32_t nQualityRatioBase;
-      *(uint16_t*)(char*)&nQualityRatioBase = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
+      nQualityRatioBase = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
       if (!pUnit) {
         nQualityThreshold = -1;
       } else {
@@ -2738,12 +2738,7 @@ void __fastcall DROP_SpawnRandomItemInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRo
       ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       if (ppUnitTable) {
         pCtxIter = &sItemGenCtx;
-        for (nOffsetY = 0x21; nOffsetY; nOffsetY--) {
-          *ppUnitTable = pCtxIter->pUnit;
-          pCtxIter = (D2ItemGenContextStrc*)&pCtxIter->pSeed;
-          ppUnitTable++;
-        }
-
+        memcpy(ppUnitTable, pCtxIter, 0x84);
         return;
       }
     }
@@ -3089,12 +3084,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
       pDVar1 = ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       if (ppUnit) {
         pCtxIter = &sItemGenCtx;
-        for (i = 0x21; i; i--) {
-          *ppUnit = pCtxIter->pUnit;
-          pCtxIter = (D2ItemGenContextStrc*)&pCtxIter->pSeed;
-          ppUnit++;
-        }
-
+        memcpy(ppUnit, pCtxIter, 0x84);
         return pDVar1;
       }
     } else {
@@ -3277,7 +3267,7 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Splits nGoldAmount across up to nMaxPiles gold-item units dropped near pUnit's position. Each iteration creates a gold item via ITEM_CreateFromTemplate, caps the pile amount to the inventory gold limit if the recipient is a player, sets UNITSTAT_gold, and calls DropItem to place it at a collision-free nearby tile. Fills pUnitTable with created item pointers and updates *pnUnitCount. Uses the room collision system to find free coordinates; exits early if no free tile is found or the pile cap is reached.
-void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nGoldAmount, D2UnitStrc * * pUnitTable, int * pnUnitCount, int32_t nMaxPiles) {
+void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nGoldAmount, D2UnitStrc * * pUnitTable, int * pnUnitCount, int32_t nMaxPiles) {
     D2UnitStrc* pGoldItem;
     int32_t nGoldCapacity;
     int nY;
@@ -3297,7 +3287,7 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     D2RoomStrc* pCurrentRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     int32_t nGoldAllocated = 0;
     uint32_t nGoldRemaining = nGoldAmount;
-    if ((uint32_t)nGoldAmount <= 0) {
+    if (nGoldAmount <= 0) {
       return;
     }
 
@@ -3308,7 +3298,7 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
       }
 
       nPileAmount = 2000000000;
-      if ((uint32_t)nGoldAmount <= 2000000000) {
+      if (nGoldAmount <= 2000000000) {
         nPileAmount = nGoldAmount;
       }
 

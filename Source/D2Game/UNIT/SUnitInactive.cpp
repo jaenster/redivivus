@@ -104,7 +104,7 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
     int nNewDespawnFrame;
     size_t nBytesRemaining;
     D2UnitDataItemDetailsStrc sItemDetails;
-    uint32_t nSocketCount;
+    int nSocketCount;
     int iSocket;
     D2InventoryStrc* pInventory;
     int32_t nItemDataSize;
@@ -153,7 +153,7 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
       D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pSocketedItem, 1);
       ITEMS::ItemMode::ITEMMODE_IsItemOnCursor(pGame, pSocketedItem, pUnit);
       iSocket++;
-    } while (iSocket < (int)nSocketCount);
+    } while (iSocket < nSocketCount);
 
     return pUnit;
 }

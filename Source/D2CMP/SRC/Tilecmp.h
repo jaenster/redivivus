@@ -130,6 +130,6 @@ void __stdcall TILECMP_DeepCopyWithRecompression(struct D2TileLibraryHeaderStrc 
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_ShallowCopyZeroPointers(struct D2TileLibraryHeaderStrc * pSrcDt1, void * * ppDt1Copy, size_t * pnSize);
 #endif // D2_MODULE_D2CMP
-// 10 internal functions (defined in .cpp)
+// 12 internal functions (defined in .cpp)
 
 } // namespace D2CMP::SRC::Tilecmp

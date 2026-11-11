@@ -80,7 +80,7 @@ struct D2GfxUtilNodeStrc * __fastcall GFXUTIL_FindGfxNodeByTypeAndId(struct D2Gf
 // @sourcefile .\ENGINE\GfxUtil.cpp
 void __fastcall GFXUTIL_FreeGfxNodeList(struct D2GfxUtilNodeStrc * * ppListHead, int * pnBytesAllocated);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, eUnitType (EDX): eD2UnitType
-int32_t __fastcall GFXUTIL_GetUnitToken(struct D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, uint32_t nId);
+int32_t __fastcall GFXUTIL_GetUnitToken(struct D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, int nId);
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pnMode (EDX): uint32_t *
 void __fastcall GFXUTIL_NormalizeItemMode(struct D2UnitStrc * pUnitStrc, uint32_t * pnMode);
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, pInventory (EDX): D2InventoryStrc *

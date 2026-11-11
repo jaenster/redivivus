@@ -490,7 +490,7 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
     }
 
     D2UnitStrc* pWeapon = D2Common::Units::GetWeaponBySkill(pUnit, 0);
-    bool bWeaponIsAmmo = true;
+    BOOL bWeaponIsAmmo = 1;
     if (!pWeapon) {
       return 1;
     }
@@ -500,7 +500,7 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
       eD2Skills eSkillId;
       nShoots = 0xb6;
       szName = ".\\SKILLS\\Skills.cpp";
-      bWeaponIsAmmo = false;
+      bWeaponIsAmmo = 0;
       eSkillId = D2Common::Skills::GetSkillId(D2Common::Units::GetCurrentSkill(pUnit), szName, nShoots);
       if (eSkillId == SKILL_Attack) {
         nShoots = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_magicarrow, 0);
@@ -1929,8 +1929,7 @@ static void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2Sk
 
 // Fires one or two missile types at a target unit's world position. Builds a D2SkillArgStrc from the target's path (static or dynamic), sets owner/skill/level. If eMissilesId2 is -2 (sentinel), fires a full 360° ring via ganMissileRingCosOffsets/SinOffsets (64 missiles). Otherwise copies the arg and fires a second missile ring via SKILLS_CreateMissileRing using eMissilesId2. Optional nParam overrides missile velocity.
 void __fastcall SKILL_SpawnMissilesAtTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId neMissilesId, eMissilesId eMissilesId2, eD2Skills eSkill, int32_t nSkillLevel, int32_t nVelocity) {
-    int nRingIdx;
-    D2SkillArgStrc sSkillArg2;
+    D2SkillArgStrc* pArgDst;
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
     eD2UnitType eTargetUnitType = pUnit2->eUnitType;
@@ -1965,29 +1964,24 @@ void __fastcall SKILL_SpawnMissilesAtTarget(D2UnitStrc * pUnit, D2UnitStrc * pUn
       sSkillArg.nVelocityOverride = nVelocity;
     }
     if (eMissilesId2 == ~MISSILE_Arrow) {
+      int nRingIdx;
       nRingIdx = 0;
       do {
-        sSkillArg.nUnitX = *(int*)((char*)ganMissileRingCosOffsets + nRingIdx);
-        sSkillArg.nUnitY = *(int*)((char*)ganMissileRingSinOffsets + nRingIdx);
+        sSkillArg.nUnitX = ganMissileRingCosOffsets[nRingIdx];
+        sSkillArg.nUnitY = ganMissileRingSinOffsets[nRingIdx];
         if (sSkillArg.nMissileTxtNo == MISSILE_Diabfire) {
           sSkillArg.nFlags ^= 0x4000;
         }
 
         UNIT::Missile::MakeMissile(&sSkillArg);
-        nRingIdx += 4;
-      } while (nRingIdx < 0x100);
+        nRingIdx++;
+      } while (nRingIdx < 64);
 
       return;
     }
 
     D2SkillArgStrc* pArgSrc = &sSkillArg;
-    D2SkillArgStrc* pArgDst = &sSkillArg2;
-    for (nRingIdx = 0x17; nRingIdx; nRingIdx--) {
-      pArgDst->nFlags = pArgSrc->nFlags;
-      pArgSrc = (D2SkillArgStrc*)&pArgSrc->pOwner;
-      pArgDst = (D2SkillArgStrc*)&pArgDst->pOwner;
-    }
-
+    D2SkillArgStrc sSkillArg2 = *pArgSrc;
     sSkillArg2.nMissileTxtNo = eMissilesId2;
     Skills::SKILLS_CreateMissileRing(&sSkillArg2, &sSkillArg);
 }

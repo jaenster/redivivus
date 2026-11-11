@@ -241,10 +241,10 @@ void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2Grou
     }
 }
 
-char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex) {
+char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, int nRGBDataSize, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex) {
     uint8_t* pDstIdx;
     uint8_t* pSrcRGB;
-    size_t nAllocSize = (int)nRGBDataSize / 3;
+    size_t nAllocSize = nRGBDataSize / 3;
     uint8_t* pIndexedBuf = (uint8_t*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\SubTile.cpp", 0xd8);
     if (!pIndexedBuf) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd9);
@@ -272,7 +272,7 @@ char * __stdcall SUBTILE_ConvertRGBToIndexed(char * pSrcRGBData, uint32_t nRGBDa
         nRGBDataSize++;
         pDstIdx++;
         pSrcRGB += 3;
-      } while ((int)nRGBDataSize < (int)nAllocSize);
+      } while (nRGBDataSize < (int)nAllocSize);
     }
 
     return (char*)pIndexedBuf;

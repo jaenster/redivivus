@@ -925,7 +925,6 @@
         "D2SkillStrc",
         "eD2Skills",
         "int32_t",
-        "uint32_t",
         "uint8_t"
       ]
     },

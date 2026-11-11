@@ -29,6 +29,6 @@ int __fastcall Unreferenced_006801f0(struct D2DrlgLevelStrc * param_1);
 void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(struct D2DrlgLevelStrc * pLevel);
 void __fastcall InitAct1OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common
-// 7 internal functions (defined in .cpp)
+// 8 internal functions (defined in .cpp)
 
 } // namespace D2Common::Drlg::OutWild

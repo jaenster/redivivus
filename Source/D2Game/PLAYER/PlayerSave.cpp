@@ -1329,23 +1329,17 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, ui
 }
 
 int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
-    int nDiffIndex;
     D2SaveFileWaypointsStrc aWaypointBlock;
     int16_t wWaypointVersion;
     *pnBytesConsumed = 0;
     D2SaveFileWaypointsStrc* pCopyDst = &aWaypointBlock;
-    for (nDiffIndex = 0x14; nDiffIndex; nDiffIndex--) {
-      *(uint32_t*)pCopyDst = *pdwSaveData;
-      pdwSaveData++;
-      pCopyDst = (D2SaveFileWaypointsStrc*)((intptr_t)&pCopyDst->nVersion + 2);
-    }
-
+    memcpy(pCopyDst, pdwSaveData, 0x50);
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (aWaypointBlock.szMagic != 0x5357) {
       return 3;
     }
 
-    nDiffIndex = 0;
+    int nDiffIndex = 0;
     D2WaypointStrc** ppWaypoint = pPlayerData->pWaypoint;
     D2SaveWaypointListStrc* pWaypointBits = &aWaypointBlock.pActWaypoints;
     while ((wWaypointVersion = pWaypointBits->pWaypoints[0].pWaypoints.nSignature , wWaypointVersion == 0x102 || wWaypointVersion == 0x101) || !wWaypointVersion) {
@@ -1788,7 +1782,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     eD2ItemFlag eItemFlags;
     D2RuneTableStrc* pRuneTable;
     D2UnitDataItemDetailsStrc itemDetails;
-    uint32_t nUsedSockets;
+    int nUsedSockets;
     int nBytesConsumed;
     int nRestoreResult;
     uint8_t* nBytesLeft;
@@ -1797,7 +1791,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0xe;
     }
 
-    uint32_t nItemCount = (uint32_t)(uint16_t)*(uint16_t*)((intptr_t)&pItem->eUnitType + 2);
+    int nItemCount = (int)(uint16_t)*(uint16_t*)((intptr_t)&pItem->eUnitType + 2);
     uint8_t* pStreamCursor = (uint8_t*)&pItem->nClassId;
     int nItemIndex = 0;
     D2UnitStrc* pCurrentUnit = pUnit;
@@ -1835,7 +1829,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
           pItem = 0;
         }
 
-        for (nRestoreResult = 0; nRestoreResult < (int)nUsedSockets; nRestoreResult++) {
+        for (nRestoreResult = 0; nRestoreResult < nUsedSockets; nRestoreResult++) {
           nBytesLeft = pItemLocal + (nStreamEnd - (intptr_t)pStreamCursor);
           D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, eItemFormat);
           pSocketItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pStreamCursor, (size_t)nBytesLeft, 1, &itemDetails, &nBytesConsumed, eItemFormat);
@@ -1869,7 +1863,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
         }
 
         nItemIndex++;
-      } while (nItemIndex < (int)nItemCount);
+      } while (nItemIndex < nItemCount);
     }
     if (ppnBytesConsumed) {
       *ppnBytesConsumed = (short int*)((intptr_t)pStreamCursor - (intptr_t)pItemLocal);

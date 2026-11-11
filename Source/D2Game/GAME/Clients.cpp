@@ -472,18 +472,18 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
 
 // Serialises a proximity-sorted unit list into the client's nPacketBuffer for the visibility update packet. Iterates slots in the sort list writing 9-byte records: unit type (byte), GUID (dword), X position (word), Y position (word). Increments the buffer count per slot and follows the linked sort-list until a null slot is encountered. Called by GAME_CollectNearbyUnitPositions after building the sorted list.
 static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeStrc * pNodes, D2ClientStrc * pClient) {
-    int32_t wCoord;
     int32_t nPosY;
     uint32_t byUnitType;
+    int nCoord;
     eD2UnitType eUnitType;
     D2UnitStrc* pSlotUnit;
     pClient->nPacketBuffer.nCount = 0;
     D2UnitProximityNodeStrc* ppnSlotCursor = pNodes;
     do {
-      int nCoord;
-      *(uint8_t*)(char*)&byUnitType = '\x06';
+      int32_t wCoord;
+      byUnitType = '\x06';
       if (ppnSlotCursor->pUnit) {
-        *(uint8_t*)(char*)&byUnitType = (uint8_t)ppnSlotCursor->pUnit->eUnitType;
+        byUnitType = ppnSlotCursor->pUnit->eUnitType;
       }
 
       pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nUnitType = (uint8_t)byUnitType;
@@ -497,24 +497,22 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&wCoord = (uint16_t)pSlotUnit->pPath.pStaticPath->nPosX;
+        wCoord = pSlotUnit->pPath.pStaticPath->nPosX;
       } else if (pSlotUnit->pPath.pDynamicPath) {
         wCoord = D2Common::PATH::DynamicPath::GetXPos(pSlotUnit->pPath.pDynamicPath);
-        wCoord = (int32_t)((uint32_t)wCoord & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)wCoord);
       } else {
-        *(uint16_t*)(char*)&wCoord = 0;
+        wCoord = 0;
       }
 
       *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x23) = (uint16_t)wCoord;
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&nPosY = (uint16_t)pSlotUnit->pPath.pStaticPath->nPosY;
+        nPosY = pSlotUnit->pPath.pStaticPath->nPosY;
       } else if (pSlotUnit->pPath.pDynamicPath) {
         nPosY = D2Common::PATH::DynamicPath::GetYPos(pSlotUnit->pPath.pDynamicPath);
-        nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)nPosY);
       } else {
-        *(uint16_t*)(char*)&nPosY = 0;
+        nPosY = 0;
       }
 
       *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x25) = (uint16_t)nPosY;
@@ -1655,7 +1653,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
     eD2ArenaFlags eArenaFlagsCheck;
     uint32_t uPortalFlags;
     D2UnitDataPlayerStrc* pPlayerData;
-    uint8_t byUnitType;
+    int32_t byUnitType;
     int nHotkeyIdx;
     uint32_t dwHotkeyUnused;
     D2ClientHotKeyStrc* pHotKey;
@@ -1753,7 +1751,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
           byUnitType = '\x06';
         } else {
           uPortalFlags = pPlayerUnitOut->nUnitGUID;
-          byUnitType = (uint8_t)pPlayerUnitOut->eUnitType;
+          byUnitType = pPlayerUnitOut->eUnitType;
         }
 
         SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, byUnitType, uPortalFlags, '\x01', (short int)pPlayerData->eLeftSkillId, pPlayerData->nLeftSkillOwnerGUID);
@@ -1762,7 +1760,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
           byUnitType = '\x06';
         } else {
           uPortalFlags = pPlayerUnitOut->nUnitGUID;
-          byUnitType = (uint8_t)pPlayerUnitOut->eUnitType;
+          byUnitType = pPlayerUnitOut->eUnitType;
         }
 
         SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, byUnitType, uPortalFlags, '\0', (short int)pPlayerData->eRightSkillId, pPlayerData->nRightSkillOwnerGUID);

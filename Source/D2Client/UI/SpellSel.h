@@ -105,6 +105,6 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills();
 void __stdcall SKILLTREE_DrawAllSkillNodes();
 void __stdcall DRAW_UI_SkillWindow();
 #endif // D2_MODULE_D2Client
-// 8 internal functions (defined in .cpp)
+// 9 internal functions (defined in .cpp)
 
 } // namespace D2Client::UI::SpellSel

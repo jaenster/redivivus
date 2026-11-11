@@ -350,12 +350,7 @@ uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream) {
       pSrcState = (deflate_state*)pSrcStream->state;
       if (pSrcState) {
         pDestCursor = pDestStream;
-        for (nCopyWords = 0xe; nCopyWords; nCopyWords--) {
-          pDestCursor->next_in = pSrcStream->next_in;
-          pSrcStream = (z_stream*)&pSrcStream->avail_in;
-          pDestCursor = (z_stream*)&pDestCursor->avail_in;
-        }
-
+        *pDestCursor = *pSrcStream;
         pDestState = (deflate_state*)pDestStream->zalloc(pDestStream->opaque, 1, 0x16c4);
         if (!pDestState) {
           return -4;
@@ -1546,7 +1541,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
     deflate_state* pState;
     bool bDone;
     gz_header* pGzHead;
-    uint16_t wAdlerHalf;
+    int32_t wAdlerHalf;
     if (!pStream) {
       return -2;
     }
@@ -1660,7 +1655,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
 
         nLevelFlag = (nHeader / 0x1f + 1) * 0x1f;
         pDeflateState->status = 0x71;
-        pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint32_t)nLevelFlag >> 8);
+        pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)(nLevelFlag >> 8);
         pDeflateState->pending++;
         pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)nLevelFlag;
         pDeflateState->pending++;
@@ -1670,7 +1665,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
           pDeflateState->pending++;
-          wAdlerHalf = (uint16_t)pStream->adler;
+          wAdlerHalf = pStream->adler;
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
           pDeflateState->pending++;
           pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
@@ -1896,7 +1891,7 @@ uint32_t __fastcall deflate(z_stream * pStream, int32_t nFlush) {
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
       pDeflateState->pending++;
-      wAdlerHalf = (uint16_t)pStream->adler;
+      wAdlerHalf = pStream->adler;
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)((uint16_t)wAdlerHalf >> 8);
       pDeflateState->pending++;
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wAdlerHalf;
