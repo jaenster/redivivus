@@ -8,7 +8,7 @@ const util = @import("util.zig");
 const gpa = util.gpa;
 
 // Reasons, in the alphabetical order Python's sorted() joins them.
-const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "pad", "seh", "vtbl" };
+const WHY = [_][]const u8{ "call", "data", "entry", "export", "fptr", "jmp", "pad", "seed", "seh", "vtbl" };
 const W = struct {
     const call = 1 << 0;
     const data = 1 << 1;
@@ -17,8 +17,9 @@ const W = struct {
     const fptr = 1 << 4;
     const jmp = 1 << 5;
     const pad = 1 << 6;
-    const seh = 1 << 7;
-    const vtbl = 1 << 8;
+    const seed = 1 << 7;
+    const seh = 1 << 8;
+    const vtbl = 1 << 9;
 };
 
 /// One row of functions.tsv.
@@ -195,6 +196,9 @@ pub const Reference = struct {
         try add(&why, ts, W.pad);
         var a: u32 = ts + 16;
         while (a < te) : (a += 16) if (r.code[a - ts - 1] == 0xCC and r.code[a - ts] != 0xCC) try add(&why, a, W.pad);
+        // Isolated experiment: Ghidra confirms NewNode starts here immediately
+        // after a ret 4, without the CC byte the pad-seed rule expects.
+        if (r.inText(0x00610630)) try add(&why, 0x00610630, W.seed);
         const entry = img.base + img.entry_rva;
         if (r.inText(entry)) try add(&why, entry, W.entry);
         for (try img.exports(gpa)) |v| if (r.inText(v)) try add(&why, v, W.exp);
