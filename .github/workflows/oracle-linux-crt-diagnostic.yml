@@ -1,7 +1,7 @@
-name: oracle-linux-crt-diagnostic
+name: oracle-linux-parity-diagnostic
 
-# Temporary PR diagnostic: same Redivivus commit, retail-media VC8 libraries,
-# and Zig CRT matcher as the main oracle workflow. CRT does not translate source.
+# Temporary PR diagnostic: retail VC8 libraries and the same pinned TypeScript
+# translator as the Windows oracle workflow, followed by a fresh CRT and full audit.
 on:
   pull_request:
     paths:
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   crt:
-    name: Linux retail VC8 CRT rows
+    name: Linux retail VC8 oracle parity
     runs-on: ubuntu-latest
     timeout-minutes: 120
     env:
@@ -23,6 +23,27 @@ jobs:
       D2_GAME_EXE: ${{ github.workspace }}/../ref114d/Game.exe
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check out the pinned VC8 translator
+        run: |
+          git clone https://github.com/jaenster/ghidra-reconstruct.git "$RUNNER_TEMP/ghidra-reconstruct"
+          git -C "$RUNNER_TEMP/ghidra-reconstruct" checkout --detach 29d57d412d15ef7bcd671bce0731ba303221c2aa
+          test "$(git -C "$RUNNER_TEMP/ghidra-reconstruct" rev-parse HEAD)" = 29d57d412d15ef7bcd671bce0731ba303221c2aa
+          echo "GR=$RUNNER_TEMP/ghidra-reconstruct" >> "$GITHUB_ENV"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build the pinned translator
+        run: |
+          cd "$GR"
+          pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Tools used by the existing Linux oracle
         run: |
@@ -74,6 +95,14 @@ jobs:
           asm_matching/msvc8/oracle crt
           cat asm_matching/msvc8/evidence/crtmap.tsv.summary
 
+      - name: Run full oracle with the pinned translator
+        run: |
+          asm_matching/msvc8/zig/zig-out/bin/oracle-zig build --probe
+          git rev-parse HEAD | tee oracle-checkout.sha
+          asm_matching/msvc8/oracle all
+          cat asm_matching/msvc8/evidence/libmap.tsv.summary
+          cat asm_matching/msvc8/evidence/audit.tsv.summary
+
       - name: Keep names, addresses, counts, and hashes only
         if: always()
         uses: actions/upload-artifact@v4
@@ -81,6 +110,9 @@ jobs:
           name: oracle-linux-crt-diagnostic
           path: |
             crt-libraries.sha256
+            oracle-checkout.sha
             asm_matching/msvc8/evidence/crtmap.tsv
             asm_matching/msvc8/evidence/crtmap.tsv.summary
+            asm_matching/msvc8/evidence/libmap.tsv.summary
+            asm_matching/msvc8/evidence/audit.tsv.summary
           if-no-files-found: warn

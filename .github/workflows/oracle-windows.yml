@@ -30,6 +30,10 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Record source checkout
+        shell: pwsh
+        run: git rev-parse HEAD | Set-Content -LiteralPath oracle-checkout.sha
+
       - name: Check out the VC8 translator outside the source tree
         shell: pwsh
         run: |
@@ -69,7 +73,9 @@ jobs:
         with:
           version: '14.00.50727.42'
           runner: native
-          cache: 'true'
+          # Restoring the action's installed-tree cache can recreate an existing
+          # PlatformSDK symlink and fail before the compiler runs.
+          cache: 'false'
 
       - name: Set up Visual C++ 2005 SP1
         id: sp1
@@ -77,7 +83,7 @@ jobs:
         with:
           version: '14.00.50727.762'
           runner: native
-          cache: 'true'
+          cache: 'false'
 
       - name: Verify and stage the exact CRT archives
         shell: pwsh
@@ -205,6 +211,7 @@ jobs:
         with:
           name: oracle-windows-summaries
           path: |
+            oracle-checkout.sha
             asm_matching/msvc8/evidence/*.summary
             asm_matching/msvc8/evidence/crtmap.tsv
           if-no-files-found: warn
