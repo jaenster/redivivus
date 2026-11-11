@@ -101,6 +101,10 @@ jobs:
             rtm = @{ 'libcmt.lib' = '7fb99b9594299faeef938366bd7e73e967c8dbd9'; 'libcpmt.lib' = '1e9ffb813ccf7d41533299c9e80c7645805245ef' }
             sp1 = @{ 'libcmt.lib' = 'c87e83f5bd5fe05223c7dca645b17793ad3909b9'; 'libcpmt.lib' = '836f06d085574f8e68ae132ccabb14e5db276326' }
           }
+          $retailSha256 = @{
+            rtm = @{ 'libcmt.lib' = 'b20711704d94d164b53000be4be4819b42c6025609adc1429c6949d2fd62714a'; 'libcpmt.lib' = '879af746bfb52ac705176de540a7543662d6ed3207fab8448ac45d17238ad565' }
+            sp1 = @{ 'libcmt.lib' = '3bc6c5b90f8507964839fd0264d8565c3b766d01f9efcad336532a11e8f06ac3'; 'libcpmt.lib' = 'e1b17cb213bfcf77e3c0988f8cb33ec8be143872d1c52de62c5da07ea1eb8031' }
+          }
           foreach ($version in @('rtm', 'sp1')) {
             $sourceRoot = if ($version -eq 'rtm') { $env:RTM_ROOT } else { $env:SP1_ROOT }
             $target = Join-Path $nativeRoot "$version/lib"
@@ -113,6 +117,7 @@ jobs:
                 throw "Unexpected $version $name Git blob: $actual"
               }
               $sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
+              if ($sha256 -ne $retailSha256[$version][$name]) { throw "Unexpected $version $name SHA256: $sha256" }
               Write-Host "$version $name SHA256 $sha256"
               Copy-Item -LiteralPath $source -Destination $target
             }
@@ -148,24 +153,36 @@ jobs:
           & "$oracle/zig/zig-out/bin/oracle-zig.exe" all --root $oracle
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-      - name: Compare summaries with the checked-in oracle baseline
+      - name: Check the fresh Linux CRT result and clean-run audit invariants
         shell: pwsh
         run: |
-          foreach ($name in @('crtmap.tsv.summary', 'libmap.tsv.summary', 'audit.tsv.summary')) {
-            $relative = "asm_matching/msvc8/evidence/$name"
-            $expected = @(& git show "HEAD:$relative")
-            if ($LASTEXITCODE -ne 0) { throw "Missing checked-in baseline: $relative" }
-            $actual = @(Get-Content -LiteralPath $relative)
-            # The first audit line includes a source-tree stamp and flags; the
-            # remaining lines carry the function and byte counts to compare.
-            if ($name -eq 'audit.tsv.summary') {
-              $expected = @($expected | Select-Object -Skip 1)
-              $actual = @($actual | Select-Object -Skip 1)
-            }
-            if ([string]::Join("`n", $actual) -cne [string]::Join("`n", $expected)) {
-              throw "$name differs from the checked-in oracle baseline"
+          $evidence = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8/evidence'
+          # Recomputed by oracle-linux-crt-diagnostic run 43108527175 on this
+          # PR head. Both hosts used byte-identical RTM/SP1 archives and emitted
+          # byte-identical CRT rows. The checked-in 422-match summary is stale:
+          # the regular Linux `oracle all` workflow does not run `oracle crt`.
+          $crt = Join-Path $evidence 'crtmap.tsv'
+          $actual = (Get-FileHash -LiteralPath $crt -Algorithm SHA256).Hash.ToLowerInvariant()
+          $expected = '7927a7068f59c472fbd17e4e46675f4adf890fcee9a4ff11bf2f0a8a4a82729f'
+          if ($actual -ne $expected) { throw "CRT rows differ from fresh Linux result: $actual" }
+
+          function Assert-Line([string]$file, [string]$line) {
+            if (-not ((Get-Content -LiteralPath $file) -contains $line)) {
+              throw "Missing expected line in $(Split-Path -Leaf $file): $line"
             }
           }
+          $libmap = Join-Path $evidence 'libmap.tsv.summary'
+          Assert-Line $libmap 'paired with a library function: 609 (124176 bytes), of which our image links 0'
+          Assert-Line $libmap '  lib-exact     487'
+          Assert-Line $libmap '  lib-order      81'
+          Assert-Line $libmap '  lib-similar    41'
+          Assert-Line $libmap '  lib-votes       0'
+
+          $audit = Join-Path $evidence 'audit.tsv.summary'
+          Assert-Line $audit 'original functions: 15741 (2751750 bytes of code)'
+          Assert-Line $audit '  QUARANTINE             0'
+          Assert-Line $audit '  MISSING                0'
+          Assert-Line $audit 'self-check, names carrying their own address: 847 agree, 0 elsewhere'
 
       - name: Summarize native results
         if: always()

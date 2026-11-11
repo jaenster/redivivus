@@ -71,6 +71,9 @@ jobs:
       - name: Setup (skips what the caches hold)
         run: asm_matching/msvc8/oracle setup
 
+      - name: Recompute CRT matches from the current retail libraries
+        run: asm_matching/msvc8/oracle crt
+
       - name: Build, map and audit every function
         run: asm_matching/msvc8/oracle all
 
