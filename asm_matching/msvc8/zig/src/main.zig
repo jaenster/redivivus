@@ -154,7 +154,10 @@ pub fn main(init: std.process.Init.Minimal) !void {
     const rest = args.items[1..];
     if (std.mem.eql(u8, cmd, "carve")) return refimage.carveMain(rest);
     if (std.mem.eql(u8, cmd, "audit")) return audit.main(rest);
-    if (std.mem.eql(u8, cmd, "crt")) return crtmap.main(rest);
+    if (std.mem.eql(u8, cmd, "crt")) {
+        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root));
+        return crtmap.main(rest);
+    }
     if (std.mem.eql(u8, cmd, "map")) {
         if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root));
         return funcmap.main(rest);
