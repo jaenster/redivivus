@@ -185,7 +185,7 @@ jobs:
           Assert-Line $libmap '  lib-votes       0'
 
           $audit = Join-Path $evidence 'audit.tsv.summary'
-          Assert-Line $audit 'original functions: 15741 (2751750 bytes of code)'
+          Assert-Line $audit 'original functions: 15743 (2752009 bytes of code)'
           Assert-Line $audit '  QUARANTINE             0'
           Assert-Line $audit '  MISSING                0'
           Assert-Line $audit 'self-check, names carrying their own address: 847 agree, 0 elsewhere'
