@@ -1,12 +1,14 @@
 //! The statically linked runtime's side (the parts of libmap.py the audit reads): every
 //! function of the VC8 runtime libraries, and the import-thunk test.
 const std = @import("std");
+const builtin = @import("builtin");
 const coff = @import("coff.zig");
 const objfuncs = @import("objfuncs.zig");
 const ours = @import("ours.zig");
 const dec = @import("decode.zig");
 const refimage = @import("refimage.zig");
 const util = @import("util.zig");
+const proc = @import("proc.zig");
 
 const gpa = util.gpa;
 
@@ -15,6 +17,17 @@ pub const LIBVC = "sp1"; // the runtime the original links: evidence/toolchain.m
 
 /// The runtime libraries' directory, from the environment as libmap.lib_dir has it.
 pub fn libDir() ![]const u8 {
+    if (builtin.os.tag == .windows) {
+        const root = util.getenv("VC8_NATIVE_ROOT") orelse {
+            std.debug.print("Windows libmap requires VC8_NATIVE_ROOT (the tree containing sp1/lib and rtm/lib)\n", .{});
+            return error.NativeRuntimeRootRequired;
+        };
+        if (root.len == 0) {
+            std.debug.print("VC8_NATIVE_ROOT must not be empty\n", .{});
+            return error.NativeRuntimeRootRequired;
+        }
+        return std.fmt.allocPrint(gpa, "{s}/{s}/lib", .{ root, LIBVC });
+    }
     const prefix = util.getenv("VC8_WINEPREFIX") orelse blk: {
         const tc = util.getenv("VC8_TOOLCHAIN") orelse try util.join(util.getenv("HOME") orelse "", "q2-dev/asm-matching-toolchain");
         break :blk try util.join(tc, "wine-vc8");
@@ -616,6 +629,7 @@ const LibMatcher = struct {
 };
 
 fn realpathOf(p: []const u8) ![]const u8 {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     var buf: [4096]u8 = undefined;
     const pz = try util.z(p);
     const r = c.realpath(pz.ptr, &buf) orelse return p;

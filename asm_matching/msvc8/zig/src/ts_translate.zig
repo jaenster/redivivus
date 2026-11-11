@@ -7,6 +7,7 @@
 //! One process serves the whole build: it mirrors the tree into build/src, then translates
 //! single files on request (a quarantine round, a support TU) with the same per-tree state.
 const std = @import("std");
+const builtin = @import("builtin");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
 const objcache = @import("objcache.zig");
@@ -45,7 +46,12 @@ pub const Translator = struct {
     /// Translate every source into `out`; returns (written, unchanged).
     pub fn mirror(t: *Translator, out: []const u8, quarantine_tsv: []const u8) ![2]u64 {
         var args: std.ArrayList([]const u8) = .empty;
-        try args.appendSlice(gpa, &.{ "pnpm", "--silent", "--dir", t.gr, "exec", "tsx", CLI, t.repo, out, "--serve" });
+        if (builtin.os.tag == .windows) {
+            // CreateProcess does not execute pnpm.cmd; invoke tsx's JS entry directly.
+            try args.appendSlice(gpa, &.{ "node", try util.join(t.gr, "node_modules/tsx/dist/cli.mjs"), try util.join(t.gr, CLI), t.repo, out, "--serve" });
+        } else {
+            try args.appendSlice(gpa, &.{ "pnpm", "--silent", "--dir", t.gr, "exec", "tsx", CLI, t.repo, out, "--serve" });
+        }
         if (util.exists(quarantine_tsv)) try args.appendSlice(gpa, &.{ "--quarantine", quarantine_tsv });
         t.pipe = try proc.Pipe.spawn(args.items);
         const line = try t.pipe.?.readLine();

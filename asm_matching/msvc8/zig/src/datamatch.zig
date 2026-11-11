@@ -8,7 +8,9 @@
 //! The same rows, summary, trend and fixes as datamatch.py, byte for byte; its docstring
 //! defines every status. Function names follow the Python's in camelCase.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
+const proc = @import("proc.zig");
 const audit = @import("audit.zig");
 const coff = @import("coff.zig");
 const pe_mod = @import("pe.zig");
@@ -250,6 +252,7 @@ fn sortedStrs(xs: []const Str) ![]Str {
 const BSet = std.StringArrayHashMapUnmanaged(void);
 
 fn realpath(p: Str) !Str {
+    if (builtin.os.tag == .windows) return proc.realpath(p);
     var buf: [4096]u8 = undefined;
     const pz = try util.z(p);
     const r = c.realpath(pz.ptr, &buf) orelse return p;
@@ -534,6 +537,17 @@ const OursMap = std.StringArrayHashMapUnmanaged(*Ours);
 /// sorted(glob.glob(os.path.join(root, '**', '*.obj'), recursive=True)), relative to root.
 fn globObjs(root: Str, rel: Str, out: *std.ArrayList(Str)) !void {
     const dir_path = if (rel.len == 0) root else try util.join(root, rel);
+    if (builtin.os.tag == .windows) {
+        for (try proc.listDir(dir_path)) |name| {
+            if (name.len == 0 or name[0] == '.') continue;
+            const sub = if (rel.len == 0) name else try util.join(rel, name);
+            const full = try util.join(dir_path, name);
+            if (proc.isDir(full)) {
+                if (!proc.isLink(full)) try globObjs(root, sub, out);
+            } else if (std.mem.endsWith(u8, name, ".obj")) try out.append(gpa, sub);
+        }
+        return;
+    }
     const dz = try util.z(dir_path);
     const dp = c.opendir(dz.ptr) orelse return;
     defer _ = c.closedir(dp);

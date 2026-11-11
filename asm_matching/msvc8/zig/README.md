@@ -144,6 +144,27 @@ camelCase, so a port reads side by side with its original.
 |`layout.zig`|`msi_paths.py`, `vc8_layout.py`, `setup_psdk.sh`|the toolchain trees from the installer cabinets|
 |`projectjson.zig`|`publish-kit/tools/public-project-json.py`|the public module table, as `json.dumps(indent=2)`|
 
+## Windows host inputs (experimental)
+
+The native Windows compile driver requires `VC8_NATIVE_CL` to name an absolute VC8
+`cl.exe`. Set `INCLUDE` and `LIB` for that installation as you would for a VC8 command
+prompt. `VC8_NATIVE_ROOT` names a VC8 runtime tree with `rtm/lib` and `sp1/lib`;
+`crt` and `libmap` require it on Windows. The Unix GCC `tucache` subcommand is not
+available on a Windows host. The Windows port is still being validated against the
+full oracle; these settings describe its input contract, not a completed parity claim.
+Provide `reference/Game.exe` and a translating `ghidra-reconstruct` checkout (`GR`).
+`oracle-zig all --root <asm_matching/msvc8>` runs native build, map, libmap, and audit
+in order. `oracle-zig quick --root <asm_matching/msvc8>` runs the incremental pipeline;
+both require the VC8 inputs above. On Windows, `all`, `quick`, and `map` carve a missing
+`build/ref/functions.tsv` from the local Game.exe; they do not download the image.
+These commands check Game.exe against the oracle's pinned 1.14d SHA-256 before use.
+The Unix `oracle` Bash wrapper and its build.py fallback are not used by these native
+commands. `all` and `quick` require baseline settings (default `ORACLE_VC=sp1` and no
+custom `ORACLE_CFLAGS`) because they write the baseline evidence directory.
+On Windows, module ordering currently uses the built-in lexical fallback in `sort1`;
+the original Unix `sort(1)` can use locale collation, so link-order parity needs a
+measured full-oracle comparison.
+
 ## Porting the next stage
 
 - Read the Python whole and port the algorithm, including its orderings: dict iteration is

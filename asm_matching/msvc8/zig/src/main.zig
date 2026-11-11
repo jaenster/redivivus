@@ -28,6 +28,9 @@
 //!   rich, compid, commit; and the setup and export helpers mpq-extract, msi-paths,
 //!   vc8-layout, psdk-layout, project-json.
 const std = @import("std");
+const builtin = @import("builtin");
+const cli = @import("cli.zig");
+const proc = @import("proc.zig");
 const util = @import("util.zig");
 const refimage = @import("refimage.zig");
 const audit = @import("audit.zig");
@@ -73,6 +76,7 @@ const USAGE =
     \\       oracle-zig trial --root <asm_matching/msvc8> --out DIR [-j N] [--batch N] [--expect KEY] < trials
     \\       oracle-zig judge --root <asm_matching/msvc8> < requests
     \\       oracle-zig quick [-j N] [--verify] [--exe-map F]
+    \\       oracle-zig all --root <asm_matching/msvc8> [build options]  (Windows host)
     \\       oracle-zig check [--update] [PATTERN ...]
     \\       oracle-zig diff [--funcmap F] <name|addr>
     \\       oracle-zig snippet FILE [--func NAME [--ref ADDR]] [--cflags FLAGS] [--tu TU]
@@ -90,6 +94,52 @@ const USAGE =
     \\
 ;
 
+fn mapRoot(args: []const []const u8) ?[]const u8 {
+    for (args, 0..) |arg, i| {
+        if (std.mem.eql(u8, arg, "--root") and i + 1 < args.len) return args[i + 1];
+    }
+    return null;
+}
+
+fn runAllStep(name: []const u8, argv: []const []const u8) !void {
+    util.say(try std.fmt.allocPrint(util.gpa, "all: {s}\n", .{name}));
+    const result = try proc.run(argv, .{});
+    util.say(result.out);
+    cli.sayErr(result.err);
+    if (result.timed_out or result.status != 0)
+        cli.exitMsg("all: {s} failed (rc={d})", .{ name, result.status });
+}
+
+fn allWindows(args: []const []const u8) !void {
+    var given_root: ?[]const u8 = null;
+    var build_args: std.ArrayList([]const u8) = .empty;
+    var i: usize = 0;
+    while (i < args.len) : (i += 1) {
+        const arg = args[i];
+        if (std.mem.eql(u8, arg, "--root")) {
+            i += 1;
+            if (i >= args.len or args[i].len == 0) cli.exitMsg("all: --root requires a directory", .{});
+            given_root = args[i];
+        } else if (std.mem.startsWith(u8, arg, "--root=")) {
+            if (arg.len == "--root=".len) cli.exitMsg("all: --root requires a directory", .{});
+            given_root = arg["--root=".len..];
+        } else try build_args.append(util.gpa, arg);
+    }
+    const root = try cli.root(given_root);
+    const cfg = try audit.Config.init(root);
+    if (cfg.experiment) cli.exitMsg("all: the baseline only (map, libmap, and audit write evidence/)", .{});
+    try refimage.ensureFunctions(root);
+
+    const self = try cli.selfExe();
+    var build: std.ArrayList([]const u8) = .empty;
+    try build.appendSlice(util.gpa, &.{ self, "build", "--root", root });
+    try build.appendSlice(util.gpa, build_args.items);
+    try runAllStep("build", build.items);
+    try runAllStep("map", &.{ self, "map", "--root", root });
+    try runAllStep("libmap", &.{ self, "libmap", "--root", root });
+    try runAllStep("audit", &.{ self, "audit", "--root", root });
+}
+
 pub fn main(init: std.process.Init.Minimal) !void {
     var it = try std.process.Args.Iterator.initAllocator(init.args, util.gpa);
     defer it.deinit();
@@ -105,7 +155,10 @@ pub fn main(init: std.process.Init.Minimal) !void {
     if (std.mem.eql(u8, cmd, "carve")) return refimage.carveMain(rest);
     if (std.mem.eql(u8, cmd, "audit")) return audit.main(rest);
     if (std.mem.eql(u8, cmd, "crt")) return crtmap.main(rest);
-    if (std.mem.eql(u8, cmd, "map")) return funcmap.main(rest);
+    if (std.mem.eql(u8, cmd, "map")) {
+        if (builtin.os.tag == .windows) if (mapRoot(rest)) |root| try refimage.ensureFunctions(try cli.root(root));
+        return funcmap.main(rest);
+    }
     if (std.mem.eql(u8, cmd, "libmap")) return libmap.main(rest);
     if (std.mem.eql(u8, cmd, "objects")) return objects.main(rest);
     if (std.mem.eql(u8, cmd, "modules")) return modules.main(rest);
@@ -128,6 +181,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
     if (std.mem.eql(u8, cmd, "project-json")) return projectjson.main(rest);
     if (std.mem.eql(u8, cmd, "snippet")) return snippet.main(rest);
     if (std.mem.eql(u8, cmd, "quick")) return quick.main(rest);
+    if (builtin.os.tag == .windows and std.mem.eql(u8, cmd, "all")) return allWindows(rest);
     if (std.mem.eql(u8, cmd, "mpq-extract")) return mpq.main(rest);
     if (std.mem.eql(u8, cmd, "msi-paths")) return layout.msiPathsMain(rest);
     if (std.mem.eql(u8, cmd, "vc8-layout")) return layout.vc8LayoutMain(rest);

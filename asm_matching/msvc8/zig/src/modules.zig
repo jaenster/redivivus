@@ -3,6 +3,7 @@
 //! of our TUs follows from it (`linkOrder`), and with it which copy of a COMDAT the link keeps.
 //! `linked` and `moduleOf` by repository are what permodule reads.
 const std = @import("std");
+const builtin = @import("builtin");
 const c = @import("c");
 const util = @import("util.zig");
 const coff = @import("coff.zig");
@@ -248,6 +249,8 @@ pub fn sort1(tus_in: []const []const u8) ![][]const u8 {
     for (tus_in) |t| try uniq.put(gpa, t, {});
     const tus = try gpa.dupe([]const u8, uniq.keys());
     std.mem.sort([]const u8, tus, {}, lessStr);
+    // Windows has no POSIX sort(1); use the documented fallback ordering.
+    if (builtin.os.tag == .windows) return tus;
     var input: std.ArrayList(u8) = .empty;
     for (tus) |t| {
         try input.appendSlice(gpa, t);

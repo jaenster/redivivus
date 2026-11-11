@@ -2,6 +2,7 @@
 //! libcmt.lib and libcpmt.lib, RTM and SP1, reduced to the audit's masked view and looked up
 //! among the original's functions. Writes evidence/crtmap.tsv and its .summary.
 const std = @import("std");
+const builtin = @import("builtin");
 const coff = @import("coff.zig");
 const compare = @import("compare.zig");
 const dec = @import("decode.zig");
@@ -39,6 +40,18 @@ fn prefix() ![]const u8 {
     return util.join(tc, "wine-vc8");
 }
 
+fn nativeRoot() ![]const u8 {
+    const root = util.getenv("VC8_NATIVE_ROOT") orelse {
+        std.debug.print("Windows crt map requires VC8_NATIVE_ROOT (the tree containing rtm/lib and sp1/lib)\n", .{});
+        return error.NativeRuntimeRootRequired;
+    };
+    if (root.len == 0) {
+        std.debug.print("VC8_NATIVE_ROOT must not be empty\n", .{});
+        return error.NativeRuntimeRootRequired;
+    }
+    return root;
+}
+
 pub fn main(args: []const []const u8) !void {
     var root: ?[]const u8 = null;
     var out_path: ?[]const u8 = null;
@@ -60,6 +73,8 @@ pub fn main(args: []const []const u8) !void {
         std.process.exit(2);
     };
     const out_file = out_path orelse try util.join(oracle, "evidence/crtmap.tsv");
+    const native_root = if (builtin.os.tag == .windows) try nativeRoot() else "";
+    const pfx = if (native_root.len > 0) "" else try prefix();
     const ref = try refimage.Reference.open(try util.join(oracle, "reference/Game.exe"));
     try ref.load(try util.join(oracle, "build/ref/functions.tsv"));
     var model = try ref.model();
@@ -75,13 +90,15 @@ pub fn main(args: []const []const u8) !void {
         try g.value_ptr.append(gpa, s);
     }
 
-    const pfx = try prefix();
     const versions = [_][]const u8{ "rtm", "sp1" };
     var hits: [2]std.AutoHashMapUnmanaged(u32, std.StringArrayHashMapUnmanaged(void)) = .{ .empty, .empty };
     var totals: [2]usize = .{ 0, 0 };
     for (versions, 0..) |version, vi| {
         for (LIBS) |lib| {
-            const path = try std.fmt.allocPrint(gpa, "{s}/drive_c/vc8/{s}/lib/{s}", .{ pfx, version, lib });
+            const path = if (native_root.len > 0)
+                try std.fmt.allocPrint(gpa, "{s}/{s}/lib/{s}", .{ native_root, version, lib })
+            else
+                try std.fmt.allocPrint(gpa, "{s}/drive_c/vc8/{s}/lib/{s}", .{ pfx, version, lib });
             const data = try util.readFile(path);
             for (try coff.readArchive(data)) |m| {
                 if (m.body.len >= 4 and std.mem.eql(u8, m.body[0..4], "\x00\x00\xff\xff")) continue;
