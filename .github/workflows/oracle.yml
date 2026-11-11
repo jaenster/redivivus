@@ -36,11 +36,13 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update -qq
           sudo apt-get install -y -qq wine wine32:i386 wine64 p7zip-full cabextract msitools faketime curl >/dev/null
-          # Ubuntu's wine package keeps wineserver out of PATH (as wineserver64/wineserver32
-          # under /usr/lib/wine); setup_toolchain.sh and build.py call it by name.
+          # Ubuntu's wine package keeps wineserver out of PATH (24.04: wineserver64/32 under
+          # /usr/lib/wine; 26.04: wineserver under /usr/lib/<triplet>/wine); setup_toolchain.sh
+          # and build.py call it by name.
           if ! command -v wineserver >/dev/null; then
-            ws=$(ls /usr/lib/wine/wineserver64 /usr/lib/wine/wineserver /usr/lib/wine/wineserver32 2>/dev/null | head -1)
-            [ -n "$ws" ] || { echo "no wineserver in /usr/lib/wine" >&2; exit 1; }
+            ws=$(ls /usr/lib/x86_64-linux-gnu/wine/wineserver /usr/lib/wine/wineserver64 /usr/lib/wine/wineserver \
+                    /usr/lib/i386-linux-gnu/wine/wineserver /usr/lib/wine/wineserver32 2>/dev/null | head -1)
+            [ -n "$ws" ] || { echo "no wineserver under /usr/lib" >&2; exit 1; }
             mkdir -p "$HOME/.local/bin" && ln -sf "$ws" "$HOME/.local/bin/wineserver"
             echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           fi
