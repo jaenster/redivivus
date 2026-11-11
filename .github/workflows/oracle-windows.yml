@@ -112,6 +112,8 @@ jobs:
               if ($LASTEXITCODE -ne 0 -or $actual -ne $expected[$version][$name]) {
                 throw "Unexpected $version $name Git blob: $actual"
               }
+              $sha256 = (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
+              Write-Host "$version $name SHA256 $sha256"
               Copy-Item -LiteralPath $source -Destination $target
             }
           }
@@ -180,10 +182,12 @@ jobs:
             }
           }
 
-      - name: Keep summaries only
+      - name: Keep names and summaries for parity diagnosis
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: oracle-windows-summaries
-          path: asm_matching/msvc8/evidence/*.summary
+          path: |
+            asm_matching/msvc8/evidence/*.summary
+            asm_matching/msvc8/evidence/crtmap.tsv
           if-no-files-found: warn
