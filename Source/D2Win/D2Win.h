@@ -612,7 +612,7 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer);
 BOOL __stdcall Key(struct D2ControlMsg * pTimer);
 // @sourcefile .\Src\D2WinTimer.cpp
 ::D2WinTimer * __fastcall D2WinTimer(int32_t nTimeoutInSeconds, OnPress pfnOnPress);
-void __fastcall D2WINEDITBOX_Destroy(::D2WinTimer * pEditBox);
+void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer);
 } // namespace D2Win::Src::D2WinTimer
 
 // Globals

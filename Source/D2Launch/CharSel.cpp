@@ -1824,7 +1824,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
         if (nRealmCount) {
           pTimerForm = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
           D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerForm);
-          D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy(pTimerForm);
+          D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimerForm);
           gpCharSelStatusTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x94);
           gnCharSelScrollOffset = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x95);
           MainMenus::FORMS_CreateAnyFormFromListExEx(0x69);
@@ -2432,7 +2432,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     ::D2WinTimer* pTimerControl;
     pTimerControl = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerControl);
-    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy(pTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimerControl);
     MainMenus::D2IniData_launcher->nDifficulty = 0;
     gpCharSelExitButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7c);
     gpCtlCharSelDownArrow = (::D2WinButton*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7d);

@@ -3937,7 +3937,7 @@ void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     CHATDLG_ClearLadderBoard();
     ::D2WinTimer* pTimer = (::D2WinTimer*)FORMS_CreateAnyFormFromListEx(0x80);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimer);
-    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy(pTimer);
+    D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimer);
     gszLadderCharNameFilter[0] = '\0';
 }
 

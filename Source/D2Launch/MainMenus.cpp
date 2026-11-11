@@ -5148,7 +5148,7 @@ void __stdcall UIMENU_TCPIPOptions() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pFormFourth);
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
-    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy(gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(gpMainMenuTcpIpTimerControl);
     gpCtlTcpIpLocalIpTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x105);
     MAINMENU_UpdateIPAddressDisplay();
 }
@@ -5910,7 +5910,7 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
     gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormIndex);
     gpMainMenuCreditTimerControl = FORMS_CreateAnyFormFromListExEx(0x2e);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuCreditTimerControl);
-    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy((::D2WinTimer*)gpMainMenuCreditTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating((::D2WinTimer*)gpMainMenuCreditTimerControl);
     MAINMENU_DisplayCredits(0);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuCreditsLineTextBox, 0x14);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuCreditsPairLeftTextBox, 0x14);
@@ -6339,7 +6339,7 @@ BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(D2ControlMsg * pControlMsg) {
     FORMS_DestroyList();
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
     D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
-    D2Win::Src::D2WinTimer::D2WINEDITBOX_Destroy(gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(gpMainMenuTcpIpTimerControl);
     return 1;
 }
 

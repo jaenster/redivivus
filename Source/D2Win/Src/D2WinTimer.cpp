@@ -139,13 +139,13 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     return pTimer;
 }
 
-void __fastcall D2WINEDITBOX_Destroy(::D2WinTimer * pEditBox) {
-    if (pEditBox->sControl.neD2FormType != FORM_Timer) {
+void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer) {
+    if (pTimer->sControl.neD2FormType != FORM_Timer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);
       exit(-1);
     }
 
-    pEditBox->sControl.fpDrawEx = (::DrawEx)D2WINTIMER_GetElapsed;
+    pTimer->sControl.fpDrawEx = (::DrawEx)D2WINTIMER_GetElapsed;
 }
 
 } // namespace D2Win::Src::D2WinTimer
