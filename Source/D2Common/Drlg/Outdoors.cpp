@@ -954,7 +954,7 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
         nGridX = aCellShuffleTable[nGridWidthM2 * 2] + 1;
         nSwapCellY = nGridX;
         i = DrlgGrid::GetGridFlags(pDrlgGrid, nGridX, nSeedHighTmp);
-        if ((char)i < '\0') {
+        if (i & 0x80) {
           nSubPresetOffset = 0;
           do {
             nDsOffset = gaOutdoorsGridWidthByLevel_0[nSubPresetOffset];

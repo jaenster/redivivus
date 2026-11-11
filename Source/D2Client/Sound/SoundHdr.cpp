@@ -919,7 +919,7 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
       if (dwVersionBuild & 1) {
         byCurrentVersionFlag = 7;
       } else {
-        if ((char)dwVersionBuild < '\0') {
+        if (dwVersionBuild & 0x80) {
           byCurrentVersionFlag = 6;
         } else if (dwVersionBuild & 0x10) {
           byCurrentVersionFlag = 5;

@@ -257,11 +257,11 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
       return 1;
     }
 
-    uint32_t nRequiredQty;
-    nRequiredQty = (uint32_t)pRecipe->pInputItem[nInputSlotIndex].nQuantity;
+    int nRequiredQty;
+    nRequiredQty = (int)pRecipe->pInputItem[nInputSlotIndex].nQuantity;
     bool bAllSingular;
     bAllSingular = true;
-    uint32_t nMatched;
+    int nMatched;
     nMatched = 0;
     if (!nRequiredQty) {
       nRequiredQty = 1;
@@ -299,7 +299,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
             if (wInputFlags & 1) {
               wClassId = pRecipe->pInputItem[nInputSlotIndex].nItemClassId;
               if (wClassId != 0xffff) {
-                if ((char)wInputFlags < '\0') {
+                if (wInputFlags & 0x80) {
                   nMaxSockCount = pCubeItemTxt->dwNormCode;
                   if (nItemCode == nMaxSockCount) {
                     if (pInputItemTxt->dwCode == nMaxSockCount) {
@@ -593,7 +593,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   nItemCode = D2Common::Units::GetClassId(pCubeItem);
                                   *ppOutputEntry = nItemCode;
                                   wInputFlags = pRecipe->pOutputItem[0].wFlagsAndUpgrade;
-                                  if ((char)wInputFlags < '\0') {
+                                  if (wInputFlags & 0x80) {
                                     nItemCode = pCubeItemTxt->dwUberCode;
                                     if (nItemCode != 0x20202020) {
                                       pTxtLink = D2Common::ITEMS::Items::sgptDataTable->sTxtItemsLink;
@@ -621,7 +621,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
                                   ((D2CubeSetupEntryStrc*)(ppOutputEntry - 1))->pUnit1 = pCubeItem;
                                   *ppOutputEntry = -1;
                                   wInputFlags = pRecipe->pOutputItem[0].wFlagsAndUpgrade;
-                                  if ((char)wInputFlags >= 0) {
+                                  if (!(wInputFlags & 0x80)) {
                                     goto try_ultra_upgrade;
                                   }
 
@@ -671,7 +671,7 @@ uint32_t __fastcall CUBE_MatchInputDescriptorToCubeItems(::SGAMEDATA * pGame, D2
     }
 
     if (!bAllSingular) {
-      return (uint32_t)((int)nMatched >= (int)nRequiredQty);
+      return (uint32_t)(nMatched >= nRequiredQty);
     }
 
     return (uint32_t)(nMatched == nRequiredQty);

@@ -38,7 +38,7 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     uint8_t byPetType = pSkillTxt->pettype;
-    if (!((char)byPetType >= 0 && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
+    if (!(!(byPetType & 0x80) && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
     if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
@@ -91,7 +91,7 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
     }
 
     uint8_t byPetType = pSkillTxt->pettype;
-    if (!((char)byPetType >= 0 && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
+    if (!(!(byPetType & 0x80) && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
     if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
@@ -469,7 +469,7 @@ BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitS
     }
 
     uint8_t byPetType = pSkillTxt->pettype;
-    if (!((char)byPetType >= 0 && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
+    if (!(!(byPetType & 0x80) && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
     if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
@@ -526,7 +526,7 @@ uint32_t __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     uint8_t byPetType = pSkillTxt->pettype;
-    if (!((char)byPetType >= 0 && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
+    if (!(!(byPetType & 0x80) && (int)(char)byPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
       return 0;
     }
     if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {

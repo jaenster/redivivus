@@ -1651,7 +1651,7 @@ BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUni
         return 1;
       }
     } else {
-      if ((char)nFlags < '\0') {
+      if (nFlags & 0x80) {
         bArrived = SKILL_InitTransportPath(pSkill, pUnit);
         return bArrived;
       }
@@ -1842,7 +1842,7 @@ BOOL __fastcall Skills_SrvDoFunc_078_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc 
         return 1;
       }
     } else {
-      if ((char)nFlags < '\0') {
+      if (nFlags & 0x80) {
         bArrived = SKILL_InitTransportPath(pSkill, pUnit);
         return bArrived;
       }

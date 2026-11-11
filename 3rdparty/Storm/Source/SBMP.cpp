@@ -163,7 +163,7 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
 
           byPacketHeader = *pSrcEnd;
           nColRemaining = pSrcEnd + 1;
-          if ((char)byPacketHeader < '\0') {
+          if (byPacketHeader & 0x80) {
             break;
           }
 

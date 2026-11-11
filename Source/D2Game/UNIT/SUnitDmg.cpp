@@ -1762,7 +1762,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         if (!(pDamage->dwHitFlags & 0x20U)) {
           goto clamp_and_apply_damage;
         }
-        if ((char)pDamage->dwHitFlags >= 0) {
+        if (!(pDamage->dwHitFlags & 0x80)) {
           SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 6, pUnit, pUnit_00, pDamage);
         }
 
@@ -2300,7 +2300,7 @@ void __fastcall SERVER_GetHitCalculation(::SGAMEDATA * pGameIn, D2UnitStrc * pUn
         }
       } else {
         wDmgResultFlags = pDamage->wResultFlags;
-        if ((char)wDmgResultFlags < '\0') {
+        if (wDmgResultFlags & 0x80) {
           pStatList = D2Common::Stats::StatsEx::GetStatsByState(pVictim, STATE_dodge);
         } else {
           if (!(wDmgResultFlags & 0x100)) {

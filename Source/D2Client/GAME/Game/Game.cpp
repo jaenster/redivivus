@@ -652,7 +652,7 @@ void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
         uint16_t wVirtualKey;
         wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1);
         /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)wVirtualKey);
-        if (keyState >= 0) {
+        if (!(keyState & 0x8000)) {
           gRunKeyDown = 0;
         }
       }
@@ -1113,7 +1113,7 @@ void __stdcall UpdateMouseModifierKeyState() {
       wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x24, 1);
       if (wVirtualKey != 0xffff) {
         nKeyState = GetAsyncKeyState((uint32_t)wVirtualKey);
-        if (nKeyState < 0) {
+        if (nKeyState & 0x8000) {
           gClickModifierDown = 1;
           return;
         }
@@ -1125,7 +1125,7 @@ void __stdcall UpdateMouseModifierKeyState() {
       wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x24, 0);
       if (wVirtualKey != 0xffff) {
         nKeyState = GetAsyncKeyState((uint32_t)wVirtualKey);
-        if (nKeyState < 0) {
+        if (nKeyState & 0x8000) {
           gClickModifierDown = 1;
           return;
         }

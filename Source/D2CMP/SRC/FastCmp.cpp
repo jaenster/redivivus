@@ -104,7 +104,7 @@ void __fastcall FASTCMP_RemapFramePaletteIndices(DC6Block * pFrame, BYTE * pPale
       while (true) {
         byRleControl = (uint8_t)((DC6Block*)pStreamCursor)->nFlip;
         pStreamCursor = (uint8_t*)((intptr_t)&((DC6Block*)pStreamCursor)->nFlip + 1);
-        if ((char)byRleControl < '\0') {
+        if (byRleControl & 0x80) {
           break;
         }
 
@@ -198,7 +198,7 @@ uint8_t * __fastcall FASTCMP_SkipRLERows(uint8_t * pbRLEData, int32_t nRowsToSki
         while (true) {
           bRLEToken = *pbRLEData;
           pbRLEData++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -219,7 +219,7 @@ void __fastcall FASTCMP_DecompressRLE(uint8_t * pImageHeader, uint8_t * pbDstBuf
         while (true) {
           bRLEToken = *pImageHeader;
           pImageHeader++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -258,7 +258,7 @@ void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, uint8_t * 
         while (true) {
           bRLEToken = *pImageHeader;
           pImageHeader++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -314,7 +314,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * 
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -388,7 +388,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, uint8_
         while (true) {
           bRLEToken = *pRLEData;
           pRLEData++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -482,7 +482,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t 
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -555,7 +555,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbSrcStream, u
         while (true) {
           bRLEToken = *pbSrcStream;
           pbSrcStream++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -649,7 +649,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1(uint8_t * pbSrcStream, uint8_t 
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -722,7 +722,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbSrcStream, u
         while (true) {
           bRLEToken = *pbSrcStream;
           pbSrcStream++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -816,7 +816,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t *
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -888,7 +888,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbSrcStream, ui
         while (true) {
           bRLEToken = *pbSrcStream;
           pbSrcStream++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -982,7 +982,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1_v2(uint8_t * pbSrcStream, uint8
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -1055,7 +1055,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbSrcStream
         while (true) {
           bRLEToken = *pbSrcStream;
           pbSrcStream++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -1149,7 +1149,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t *
           pbSrc = pbSrcStream;
           byRunToken = *pbSrc;
           pbSrcStream = pbSrc + 1;
-          if ((char)byRunToken < '\0') {
+          if (byRunToken & 0x80) {
             break;
           }
 
@@ -1222,7 +1222,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, ui
         while (true) {
           bRLEToken = *pbSrcStream;
           pbSrcStream++;
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -1410,7 +1410,7 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
           while (true) {
             bRLEToken = *pbRLEData;
             pbDstFallback = pbRLEData + 1;
-            if ((char)bRLEToken >= 0) {
+            if (!(bRLEToken & 0x80)) {
               break;
             }
 
@@ -1779,7 +1779,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
         while (true) {
           bRLEToken = (uint8_t)pbRLEData->nFlip;
           pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + 1);
-          if ((char)bRLEToken < '\0') {
+          if (bRLEToken & 0x80) {
             break;
           }
 
@@ -1795,7 +1795,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
         while (true) {
           bRLEToken = (uint8_t)pbRLEData->nFlip;
           pbRLEData = (DC6Block*)((intptr_t)&pbRLEData->nFlip + 1);
-          if ((char)bRLEToken >= 0) {
+          if (!(bRLEToken & 0x80)) {
             break;
           }
 

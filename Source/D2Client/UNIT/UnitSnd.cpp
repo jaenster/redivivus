@@ -3050,7 +3050,7 @@ static uint32_t UNITSND_GetGroundMaterialType(D2DrlgTileDataStrc * pUnit) {
       if (wTileFlags & 0x40) {
         return 4;
       }
-      if ((char)wTileFlags < '\0') {
+      if (wTileFlags & 0x80) {
         return 6;
       }
       if (wTileFlags & 0x400) {

@@ -2572,7 +2572,7 @@ int32_t __fastcall RENDERER_GLIDE_InitDebugFont(FxU32 dwTexMemStart, int32_t nTe
     GrChipID_t tmu;
     uint32_t nSizeMask = nTexMemAlignment - 1;
     int nTexStride = 0x80;
-    if ((char)nSizeMask < '\0') {
+    if (nSizeMask & 0x80) {
       nTexStride = (nSizeMask | 0x80) + 1;
     }
     if (dwTexMemStart & nSizeMask) {

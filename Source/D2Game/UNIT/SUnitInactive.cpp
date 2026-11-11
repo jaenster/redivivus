@@ -763,7 +763,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
           if ((eInactiveFlags & LEVEL_MaggotLairLevel3) != LEVEL_None) {
             nSpawnFlags = 0x6a;
           }
-          if ((eInactiveFlags & 0x400) == LEVEL_None || (eInactiveFlags & 0x100) == LEVEL_None && (char)eInactiveFlags >= 0) {
+          if ((eInactiveFlags & 0x400) == LEVEL_None || (eInactiveFlags & 0x100) == LEVEL_None && !(eInactiveFlags & 0x80)) {
             if (uSlot18.nClassId < 0 || uSlot18.nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
               pMonStatsTxt = 0;
             } else {
@@ -816,7 +816,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
             if (dwInactiveFlags & 0x100) {
               nAlignmentVal = 2;
             }
-            if ((char)dwInactiveFlags < '\0') {
+            if (dwInactiveFlags & 0x80) {
               nAlignmentVal = 1;
             }
             if (pSpawnedMonster) {

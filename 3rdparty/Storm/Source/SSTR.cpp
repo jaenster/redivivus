@@ -3009,7 +3009,7 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
       nContinuationBytesNeeded = 2;
     } else {
       if ((bByte & 0xe0) != 0xc0) {
-        if ((char)bByte >= 0) {
+        if (!(bByte & 0x80)) {
           return dwCodepoint;
         }
 

@@ -1474,7 +1474,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cV
       return 1;
       case '\t':
         /* int nVirtKey for GetKeyState */ wTabKeyState = GetKeyState(0x10);
-      if (wTabKeyState >= 0) {
+      if (!(wTabKeyState & 0x8000)) {
         pNextControl = pEditBox->pNextTabEditBox;
         if (!pNextControl) {
           return 1;

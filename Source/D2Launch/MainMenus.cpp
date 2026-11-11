@@ -6005,7 +6005,7 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
       if (nFlagsOrForm52 & 1) {
         byCineLevel = 7;
       } else {
-        if ((char)nFlagsOrForm52 < '\0') {
+        if (nFlagsOrForm52 & 0x80) {
           byCineLevel = 6;
         } else if (nFlagsOrForm52 & 0x10) {
           byCineLevel = 5;

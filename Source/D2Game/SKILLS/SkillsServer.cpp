@@ -486,7 +486,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       break;
     }
 
-    if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+    if ((!(nTargetFlags & 0x80) || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
       D2RoomStrc* pRoom;
       if (nTargetFlags & 0x100) {
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);

@@ -853,7 +853,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
                 D2WinFont::D2WINFONT_DrawWideStringRightToLeft(pCurLine->apwszCells[nColIndex], nColDrawX, nCurY, pCurLine->nLineStyle, pTextBox->nExtraLineSpacingA, uFontHeight);
               } else {
                 dwColor = pCurLine->nLineStyle;
-                if ((char)dwState < '\0') {
+                if (dwState & 0x80) {
                   nLineStride = pTextBox->nExtraLineSpacingA + nCurY;
                 }
 

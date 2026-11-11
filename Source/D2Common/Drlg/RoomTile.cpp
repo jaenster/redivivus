@@ -115,7 +115,7 @@ static void __stdcall DRLGROOMTILE_SetWallTileFlags(D2DrlgTileDataStrc * pTileDa
     } else if (nTileType == 0xb || nTileType == 10 || nTileType == 9 || nTileType == 8) {
       pTileData->nFlags |= 2;
     }
-    if ((char)nRawTileFlags < '\0') {
+    if (nRawTileFlags & 0x80) {
       pTileData->nFlags |= 1;
     }
     if (nRawTileFlags & 0x10000000) {
@@ -202,7 +202,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
     D2TileLibraryEntryStrc* nShadowTileLibEntry = DRLG_FindHTile(pRoomEx, 4, nGridFlags);
     D2DrlgTileDataStrc* pShadowTile = DRLGROOMTILE_CreateWallTileData(pRoomEx, ppTileHead, nPosX, nPosY, nGridFlags, nShadowTileLibEntry, 4);
     pShadowTile->nFlags |= (nGridFlags >> 0x12 & 3) * 0x4000 + 0x4000;
-    if ((char)nGridFlags < '\0') {
+    if (nGridFlags & 0x80) {
       pShadowTile->nFlags |= 1;
     }
     if (nGridFlags & 0x10000000) {
@@ -264,7 +264,7 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
     }
 
     pTileData->nFlags |= (nGridFlags >> 0x12 & 3) * 0x4000 + 0x4000;
-    if ((char)nGridFlags < '\0') {
+    if (nGridFlags & 0x80) {
       pTileData->nFlags |= 1;
     }
     if (nGridFlags & 0x10000000) {
@@ -347,7 +347,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
     pTileData->nTileType = 0xd;
     pTileData->nFlags = 0;
     pTileData->nTransitionFlags = 0;
-    if ((char)nGridFlags < '\0') {
+    if (nGridFlags & 0x80) {
       pTileData->nFlags = 1;
     }
     if (nGridFlags & 0x10000000) {

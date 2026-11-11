@@ -529,7 +529,7 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
 
         byCode = *pInCur;
         pInCur++;
-        if ((char)byCode < '\0') {
+        if (byCode & 0x80) {
           nStepSize = byCode & 0x7f;
           if (byCode & 0x7f) {
             switch (nStepSize) {
@@ -951,7 +951,7 @@ uint32_t __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t *
     } else {
       uint32_t nMethodBit;
       nSrcLen = (uint32_t)((nMethodMask & 0x40) != 0);
-      if ((char)nMethodMask < '\0') {
+      if (nMethodMask & 0x80) {
         nSrcLen++;
       }
       if (nMethodMask & 1) {
@@ -1077,7 +1077,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
       if (byCompressionMask & 1) {
         nSrcSizeIn++;
       }
-      if ((char)byCompressionMask < '\0') {
+      if (byCompressionMask & 0x80) {
         nSrcSizeIn++;
       }
       if (byCompressionMask & 0x40) {

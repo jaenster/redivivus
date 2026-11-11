@@ -5389,7 +5389,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
             D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(&__frame0.wszObjectName, nHealthBarScreenX, gnMercenaryHealthBarScreenY + __frame0.nScreenX, 0, 1);
             return;
           }
-          if ((char)byObjSubClass >= 0) {
+          if (!(byObjSubClass & 0x80)) {
             if (!(byObjSubClass & 0x40)) {
               D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTemp, nHealthBarScreenX, gnMercenaryHealthBarScreenY + __frame0.nScreenX, 0, 1);
               return;
@@ -9039,7 +9039,7 @@ void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
         if (nMouseY > nBtnY - 0x1f6 && nMouseY < nBtnY - 0x1e0 && nMouseX > (int)(pBtnEntry[-1] + Inv::gnPanelOffsetX) && nMouseX < (int)(pBtnEntry[-1] + Inv::gnPanelOffsetX + 0x28)) {
           dwScreenSizeY = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_statpts, 0);
           /* int nVirtKey for GetKeyState */ wShiftKey = GetKeyState(0x10);
-          if (wShiftKey >= 0) {
+          if (!(wShiftKey & 0x8000)) {
             dwScreenSizeY = 1;
           } else {
             if (!dwScreenSizeY) {

@@ -411,7 +411,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
     }
 
     nSearchFlags = pArgs->nFlags;
-    if (!((char)nSearchFlags >= 0 || (bAttackable = CheckFlags(pTestUnit, UNITFLAG_CANBEATTACKED) , bAttackable != 0))) {
+    if (!(!(nSearchFlags & 0x80) || (bAttackable = CheckFlags(pTestUnit, UNITFLAG_CANBEATTACKED) , bAttackable != 0))) {
       return 0;
     }
     if (!(!(nSearchFlags & 0x400) || (bValidTarget = CheckFlags(pTestUnit, UNITFLAG_ISVALIDTARGET) , bValidTarget != 0))) {

@@ -9408,7 +9408,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       }
 
       /* int vKey for GetAsyncKeyState */ /* 0x11 GetAsyncKeyState = Control Button */ sCtrlKeyState = GetAsyncKeyState(0x11);
-      if (sCtrlKeyState < 0) {
+      if (sCtrlKeyState & 0x8000) {
         nItemType = npcmenu::GetInteractedUnitGuid((int*)&nInventory2);
         if (nItemType) {
           pTargetItem = UNIT::Player::UNITS_FindClientSideUnit(nInventory2, UNIT_MONSTER);

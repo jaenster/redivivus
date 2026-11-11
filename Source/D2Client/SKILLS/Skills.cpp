@@ -826,7 +826,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
       break;
     }
 
-    if (((char)nTargetFlags >= 0 || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+    if ((!(nTargetFlags & 0x80) || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
       D2RoomStrc* pCasterRoom;
       if (nTargetFlags & 0x100) {
         pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit2);

@@ -1386,7 +1386,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
     D2DrlgSubLevelPlaceStrc aSwapBuffer;
     D2DrlgSubLevelPlaceStrc aSubLevelRecords[3];
     int* pSubLevelRowPtr;
-    uint32_t nRandExitIdx;
+    int nRandExitIdx;
     uint32_t nFlipState;
     int nSortPass;
     int nSubOffset;
@@ -1673,7 +1673,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                 sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
                 pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
                 pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
-                nRandExitIdx = (uint32_t)(sNewSeed.nSeedLow % nRandIdx);
+                nRandExitIdx = (int)(sNewSeed.nSeedLow % nRandIdx);
               } else {
                 sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
                 pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
@@ -1737,7 +1737,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
                 nBottomRow = (nRowIter + 1) * nWidth + nExitCol;
                 nGridX = pDistWorkMap[nBottomRow];
-                if (nGridX && nGridX < (int)nRandExitIdx) {
+                if (nGridX && nGridX < nRandExitIdx) {
                   nCellPtr = (uint32_t)pExitCount.pExitCount2;
                   if (pSubLevelMap[nBottomRow] == nGridY) {
                     pExitCount.pExitCount2 = (D2DrlgSubLevelPlaceStrc**)0x4;
@@ -1747,7 +1747,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                 }
 
                 nGridX = *nSubIdx.pSubIdx;
-                if (nGridX && nGridX < (int)nRandExitIdx) {
+                if (nGridX && nGridX < nRandExitIdx) {
                   nCellPtr = (uint32_t)pExitCount.pExitCount2;
                   if (*(int*)((char*)pSubLevelMap + ((intptr_t)nSubIdx.pSubIdx - (intptr_t)pDistWorkMap)) == nGridY) {
                     nRandExitIdx = nGridX;
@@ -1756,7 +1756,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                 }
 
                 nGridX = *(int*)((intptr_t)pDistWorkMap - (intptr_t)pSubLevelDistMap + (char*)pFlagsRow);
-                if (nGridX && nGridX < (int)nRandExitIdx && *(int*)((intptr_t)pSubLevelMap - (intptr_t)pSubLevelDistMap + (char*)pFlagsRow) == nGridY) {
+                if (nGridX && nGridX < nRandExitIdx && *(int*)((intptr_t)pSubLevelMap - (intptr_t)pSubLevelDistMap + (char*)pFlagsRow) == nGridY) {
                   nCellPtr = 0x1;
                 }
                 if (nCellPtr & 8) {
@@ -1963,7 +1963,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
                     switch (uVar4) {
                       case 0:
-                        if (pSubLevelDistMap[(nGridY - 1) * nWidth + nExitCol] && pSubLevelDistMap[(nGridY - 1) * nWidth + nExitCol] < 0xf && (char)nConnFlags >= 0) {
+                        if (pSubLevelDistMap[(nGridY - 1) * nWidth + nExitCol] && pSubLevelDistMap[(nGridY - 1) * nWidth + nExitCol] < 0xf && !(nConnFlags & 0x80)) {
                           nConnFlags |= 0x80;
                           stop_extra_link_search:
                           bFoundExit = false;
@@ -1991,7 +1991,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                     nSubIdx.nSubIdx2++;
                   } while (nSubIdx.nSubIdx2 < 4);
                 }
-                if ((char)nConnFlags < '\0') {
+                if (nConnFlags & 0x80) {
                   pSubLevelDistMap[(nGridY - 1) * nWidth + nExitCol] |= 0x40;
                 }
                 if (nConnFlags & 0x40) {
@@ -2035,7 +2035,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                     if (nConnFlags & 0x40) {
                       uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x68];
                     }
-                    if ((char)nConnFlags < '\0') {
+                    if (nConnFlags & 0x80) {
                       uVar4 = gaWildernessLevelSeedOffsets[uVar4 * 4 + 0x69];
                     }
                     if (!uVar4) {

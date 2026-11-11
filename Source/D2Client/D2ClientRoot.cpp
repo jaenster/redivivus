@@ -3690,7 +3690,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
             }
 
             nRelocEntryByte = *pRelocationEntry;
-            if ((char)nRelocEntryByte < '\0') {
+            if (nRelocEntryByte & 0x80) {
               nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
               pRelocationEntry += 4;
               *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
@@ -3836,7 +3836,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
             }
 
             nRelocEntryByte = *pRelocationEntry;
-            if ((char)nRelocEntryByte < '\0') {
+            if (nRelocEntryByte & 0x80) {
               nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
               pRelocationEntry += 4;
               D2_SEH_FENCE();

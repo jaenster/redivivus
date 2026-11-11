@@ -833,7 +833,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
       }
     }
     if (!(nSkillFlags & 2)) {
-      if ((char)nSkillFlags < '\0') {
+      if (nSkillFlags & 0x80) {
         SKILL_SetupLeapPath((D2UnitStrc*)pUnit, pSkill);
         SKILL_CreateLeapArcParticle((D2UnitStrc*)pUnit, pSkill);
         return 1;
@@ -872,6 +872,22 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2DynamicPathStrc * pUnit,
     PATH_ResetCollisionOnLanding(nSrvPathX, pUnit->pServerPath->ScreenPos.y, (D2UnitStrc*)pUnit);
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     return 1;
+}
+
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
 }
 
 // Client-side state function for Barbarian Leap Attack teleport targeting. For the local player, checks that the unit is not in an uninterruptable state and the skill is not already flagged active. Calls SKILL_FindTeleportPosition to locate a valid destination near the confirmed target; on success, registers the collision tile, stores destination coords in skill params 1-2, stores target type/GUID in params 3-4, sets skill flags 0x1080, and creates the active skill stat list. If already in melee range, triggers the melee hit message instead. Plays sound 0x13 when no position is found.
@@ -982,7 +998,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, 
       }
     }
     if (!(nSkillFlags & 2)) {
-      if ((char)nSkillFlags < 0) {
+      if (nSkillFlags & 0x80) {
         SKILL_SetupLeapPath(pUnit, pSkill);
         SKILL_CreateLeapArcParticle(pUnit, pSkill);
         return 1;

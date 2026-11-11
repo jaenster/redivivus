@@ -891,7 +891,7 @@ static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData,
         if (nTileFlags & 0x40) {
           eCollisionFlag |= 1;
         }
-        if ((char)nTileFlags < '\0') {
+        if (nTileFlags & 0x80) {
           eCollisionFlag |= 4;
         }
         if (eCollisionFlag) {

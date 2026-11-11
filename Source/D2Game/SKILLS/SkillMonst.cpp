@@ -678,7 +678,7 @@ BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2Uni
         D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
         return 1;
       }
-      if ((char)nSkillFlags < '\0') {
+      if (nSkillFlags & 0x80) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0x101);
         D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
