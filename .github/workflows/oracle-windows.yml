@@ -23,7 +23,6 @@ jobs:
     env:
       GAME_EXE_URL: https://files.typeguru.nl/diablo/diablo2/windows/lod/1.14d/Game.exe
       GAME_EXE_SHA256: 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf
-      GR: ${{ github.workspace }}/ghidra-reconstruct
     steps:
       - name: Preserve source line endings
         shell: pwsh
@@ -31,12 +30,17 @@ jobs:
 
       - uses: actions/checkout@v4
 
-      - name: Check out the VC8 translator
-        uses: actions/checkout@v4
-        with:
-          repository: jaenster/ghidra-reconstruct
-          ref: 29d57d412d15ef7bcd671bce0731ba303221c2aa
-          path: ghidra-reconstruct
+      - name: Check out the VC8 translator outside the source tree
+        shell: pwsh
+        run: |
+          $gr = Join-Path $env:RUNNER_TEMP 'ghidra-reconstruct'
+          git clone https://github.com/jaenster/ghidra-reconstruct.git $gr
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          git -C $gr checkout --detach 29d57d412d15ef7bcd671bce0731ba303221c2aa
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $actual = (& git -C $gr rev-parse HEAD).Trim()
+          if ($actual -ne '29d57d412d15ef7bcd671bce0731ba303221c2aa') { throw "Wrong translator commit: $actual" }
+          "GR=$gr" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - uses: pnpm/action-setup@v4
         with:
@@ -45,13 +49,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: pnpm
-          cache-dependency-path: ghidra-reconstruct/pnpm-lock.yaml
 
       - name: Build the translator
-        working-directory: ghidra-reconstruct
         shell: pwsh
         run: |
+          Set-Location -LiteralPath $env:GR
           pnpm install --frozen-lockfile
           pnpm build
 
