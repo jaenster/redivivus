@@ -14,7 +14,7 @@ REPO = os.path.dirname(os.path.dirname(ORACLE))
 DEFAULT_CFLAGS = '/O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS'
 # Flags for the oracle's own use, not a claim about the original: /Z7 puts
 # CodeView line tables in each object, so a diff can name the source line of
-# every instruction. Codegen-neutral: objdiff.py found all 318 functions of 8
+# every instruction. Codegen-neutral: `oracle objdiff` found all 318 functions of 8
 # objects identical with and without it.
 TOOL_CFLAGS = '/Z7'
 

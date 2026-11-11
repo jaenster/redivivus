@@ -17,6 +17,7 @@
 set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
+. "$HERE/env.sh"
 REF="$(cd "$HERE/.." && pwd)/reference"
 mkdir -p "$REF"
 
@@ -48,8 +49,9 @@ else
         check "$REF/LODPatch_114d.exe.tmp" "$PATCH_SHA256"
         mv "$REF/LODPatch_114d.exe.tmp" "$REF/LODPatch_114d.exe"
     fi
-    echo "extracting Game.exe (PKWARE DCL in pure Python, a few seconds)"
-    python3 -I "$HERE/mpq_extract.py" "$REF/LODPatch_114d.exe" Game.exe "$REF/Game.exe.tmp"
+    have_zig || { echo "fetch_reference.sh: needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
+    echo "extracting Game.exe (PKWARE DCL, read-only, never executed)"
+    oracle_zig mpq-extract "$REF/LODPatch_114d.exe" Game.exe "$REF/Game.exe.tmp"
 fi
 check "$REF/Game.exe.tmp" "$GAME_SHA256"
 mv "$REF/Game.exe.tmp" "$REF/Game.exe"

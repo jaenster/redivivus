@@ -10,6 +10,7 @@
 # nothing else on the DVD is unpacked. Called by setup_toolchain.sh.
 set -euo pipefail
 . "$(dirname "$0")/env.sh"
+have_zig || { echo "setup_psdk.sh: needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
 
 PRO_ISO="$VC8_SRC/pro-iso/en_vs_2005_pro_dvd.iso"
 PRO_ISO_URL=https://archive.org/download/en_vs_2005_pro_dvd_202303/en_vs_2005_pro_dvd.iso
@@ -30,7 +31,7 @@ PSDK='Program Files/Microsoft Visual Studio 8/VC/PlatformSDK/'
 if [ ! -f "$W/psdk.tsv" ]; then
     rm -rf "$W" && mkdir -p "$W/keyed" "$W/cabs"
     7z x -y -o"$W" "$PRO_ISO" vs/vs_setup.msi >/dev/null
-    python3 -I "$SCRIPTS/msi_paths.py" --cabs "$W/vs/vs_setup.msi" > "$W/paths.tsv"
+    oracle_zig msi-paths --cabs "$W/vs/vs_setup.msi" > "$W/paths.tsv"
     # Headers recursively; libraries at the top of Lib only (AMD64/IA64 below it).
     awk -F'\t' -v p="$PSDK" 'index($2, p "Include/") == 1 ||
         (index($2, p "Lib/") == 1 && substr($2, length(p "Lib/") + 1) !~ /\//)' \
@@ -46,20 +47,4 @@ if [ ! -f "$W/psdk.tsv" ]; then
 fi
 
 rm -rf "$DEST"
-python3 -I - "$W/psdk.tsv" "$W/keyed" "$DEST" "$PSDK" <<'EOF'
-import os, shutil, sys
-tsv, keyed, dest, prefix = sys.argv[1:5]
-n = 0
-for line in open(tsv, encoding='latin1'):
-    key, path, _cab = line.rstrip('\n').split('\t')
-    rest = path[len(prefix):]
-    sub, tail = rest.split('/', 1)
-    out = os.path.join(dest, sub.lower(), tail)
-    src = os.path.join(keyed, key)
-    if not os.path.isfile(src):
-        sys.exit('missing cabinet member %s for %s' % (key, path))
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    shutil.copyfile(src, out)
-    n += 1
-print('%s: %d files' % (dest, n))
-EOF
+oracle_zig psdk-layout "$W/psdk.tsv" "$W/keyed" "$DEST" "$PSDK"

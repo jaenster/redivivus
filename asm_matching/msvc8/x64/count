@@ -20,6 +20,8 @@
 set -euo pipefail
 X64="$(cd "$(dirname "$0")" && pwd)"
 . "$X64/../scripts/env.sh"
+# The compile and the count are oracle-zig's (zig/, `oracle-zig x64`).
+have_zig || { echo "x64/count needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
 
 JOBS=6; KEEP=0
 while [ $# -gt 0 ]; do
@@ -52,55 +54,15 @@ python3 "$SCRIPTS/vc8_translate.py" "$REPO_ROOT" "$W/src" >/dev/null
 
 # The x64 compiler has no inline assembly (C4235). The compat header's two __asm
 # helpers get x64 bodies in a copy; the oracle's own header stays as it is.
-python3 - "$ORACLE_ROOT/vc8_compat.h" "$W/vc8_compat.h" <<'EOF'
-import sys
-src, dst = sys.argv[1:3]
-s = open(src).read()
-a = 'static __forceinline void* vc8_frame_address(void) { void* p; __asm { mov p, ebp } return p; }'
-b = 'inline double nearbyint(double x) { double r; __asm { fld x } __asm { frndint } __asm { fstp r } return r; }'
-if a in s:
-    s = s.replace(a, '#ifdef _WIN64\nextern "C" void* _AddressOfReturnAddress(void);\n#pragma intrinsic(_AddressOfReturnAddress)\n'
-                     'static __forceinline void* vc8_frame_address(void) { return _AddressOfReturnAddress(); }\n#else\n' + a + '\n#endif')
-if b in s:
-    s = s.replace(b, '#ifdef _WIN64\ninline double nearbyint(double x) { return (double)(__int64)(x < 0 ? x - 0.5 : x + 0.5); }\n#else\n' + b + '\n#endif')
-open(dst, 'w').write(s)
-EOF
+oracle_zig x64 compat "$ORACLE_ROOT/vc8_compat.h" "$W/vc8_compat.h"
 
-python3 "$X64/compile64.py" "$W/src" "$W/out" --oracle "$ORACLE_ROOT" --compat "$W/vc8_compat.h" \
+oracle_zig x64 compile "$W/src" "$W/out" --oracle "$ORACLE_ROOT" --compat "$W/vc8_compat.h" \
     --zs --jobs "$JOBS" >"$W/compile.log"
 tail -1 "$W/compile.log"
 
 GHIDRA=$(sed -n 's/.*g_szGhidraVersion\[\] = "\([0-9]*\)".*/\1/p' "$REPO_ROOT/Redivivus/ghidra_version.cpp" 2>/dev/null || true)
 if [ -n "$DIRTY" ]; then OUT="$W/x64.json"; else OUT="$EV/x64.json"; fi
-python3 - "$W/out" "$OUT" "$SHA" "$GHIDRA" "$BANNER" <<'EOF'
-import csv, datetime, json, sys
-out, dst, sha, ghidra, banner = sys.argv[1:6]
-lines = {'C4311': set(), 'C4312': set()}
-with open(out + '/diag.tsv', newline='') as f:
-    for r in csv.DictReader(f, delimiter='\t', quoting=csv.QUOTE_NONE):
-        if r['code'] in lines:
-            lines[r['code']].add((r['file'], r['line']))
-with open(out + '/status.tsv', newline='') as f:
-    status = list(csv.DictReader(f, delimiter='\t', quoting=csv.QUOTE_NONE))
-failing = sorted(r['tu'] for r in status if r['status'] != 'ok')
-compiler = banner.split('Version ', 1)[-1] if 'Version ' in banner else banner
-doc = {
-    'compiler': 'cl ' + compiler + ', /Zs /W3 /Wp64',
-    'commit': sha,
-    'ghidra': ghidra or None,
-    'measured': datetime.date.today().isoformat(),
-    'c4311': len(lines['C4311']),
-    'c4312': len(lines['C4312']),
-    'lines': len(lines['C4311'] | lines['C4312']),
-    'tus_total': len(status),
-    'tus_failing': len(failing),
-    'failing': failing,
-}
-with open(dst, 'w') as f:
-    json.dump(doc, f, indent=2)
-    f.write('\n')
-print('C4311 %(c4311)d, C4312 %(c4312)d, %(lines)d lines; %(tus_failing)d of %(tus_total)d TUs fail' % doc)
-EOF
+oracle_zig x64 json "$W/out" "$OUT" "$SHA" "$GHIDRA" "$BANNER"
 if [ -n "$DIRTY" ]; then
     echo "uncommitted changes: written to $OUT, not to evidence/"
 else

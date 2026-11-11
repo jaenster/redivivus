@@ -1,7 +1,7 @@
 # Compiler flags: what was measured
 
 Each flag decision here is an A/B: the whole tree built both ways, both audited
-with the same function map, compared per module (`scripts/abcompare.py`).
+with the same function map, compared per module (`oracle abcompare`).
 A flag is adopted only where it wins. Settled questions are marked DONE so
 nobody re-runs them; numbers are as measured at the time and are not updated.
 
@@ -293,7 +293,7 @@ when nothing but the number of declarations ahead of a symbol it refers to
 does. D2COMP_DestroyCompositeUnit (005041b0) matched on tree ece1012 and
 stopped matching on 674b9c2, its TU untouched: that commit removed
 declarations from headers the precompiled header includes. On the bench
-(`snippet.py`), `extern int` declarations inserted ahead of its TU's code
+(`oracle snippet`), `extern int` declarations inserted ahead of its TU's code
 flip it back and forth - none to three of them differ, four to 52 match,
 period 64 (68 and 132 match, 64 and 128 differ) - and so do function
 declarations and a struct, while macros, comments and declarations after the
@@ -315,7 +315,7 @@ k     MATCH a   MATCH b   only a   only b
 ```
 
 At k = 64, 159 of the tree's 14266 functions still compile differently
-(`objdiff.py`; the residue is not the only input for a few), all of them
+(`oracle objdiff`; the residue is not the only input for a few), all of them
 differing from the original either way; at 16 and 32 the one function
 gained is D2COMP_DestroyCompositeUnit. The effect is
 real and rare: it decides about one function's match, and it is not

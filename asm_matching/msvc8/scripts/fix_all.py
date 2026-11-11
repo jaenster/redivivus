@@ -18,10 +18,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIXERS = [['fix_refile.py'], ['fix_paramtype.py'], ['fix_compare.py'],
-          ['fix_assert.py'], ['fix_ifelse.py'], ['fix_switch.py'], ['fix_switch.py', '--single'], ['fix_caseorder.py'], ['fix_forloop.py'],
-          ['fix_idioms.py'], ['fix_bitmask.py'], ['fix_bitmask.py', '--inverse'], ['fix_shiftbit.py'], ['fix_localtype.py'], ['fix_return.py'],
-          ['fix_gsbuffer.py'], ['fix_stringops.py'], ['fix_nestcall.py'], ['fix_inplace.py'], ['fix_boolarith.py'], ['fix_order.py'],
-          ['fix_order.py', '--by', 'store'], ['fix_permute.py']]
+          ['fix_ifelse.py'], ['fix_idioms.py'], ['fix_shiftbit.py'], ['fix_return.py'],
+          ['fix_gsbuffer.py'], ['fix_stringops.py'], ['fix_nestcall.py'], ['fix_permute.py']]
 
 
 def run(args):

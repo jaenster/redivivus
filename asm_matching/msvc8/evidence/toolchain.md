@@ -22,7 +22,7 @@ whole-file member `Game.exe` of Blizzard's `LODPatch_114d.exe`
 ## 1. The Rich header names the tools and their builds
 
 ```
-scripts/decode_rich_header.py reference/Game.exe
+oracle rich reference/Game.exe
 ```
 
 ```
@@ -51,7 +51,7 @@ build number is the third version component only: RTM (14.00.50727.42) and SP1
 ## 2. The linked CRT is SP1's, function by function
 
 ```
-scripts/crtmap.py          # writes evidence/crtmap.tsv and .summary
+oracle crt                 # writes evidence/crtmap.tsv and .summary
 ```
 
 Every function of `libcmt.lib` and `libcpmt.lib` from both installs is
@@ -80,7 +80,7 @@ RTM one that SP1 does not ([flags.md](flags.md)).
 
 ```
 P=~/q2-dev/asm-matching-toolchain/wine-vc8/drive_c/vc8/psdk/lib
-scripts/compid.py $P/Kernel32.Lib $P/User32.Lib ...
+oracle compid $P/Kernel32.Lib $P/User32.Lib ...
 Kernel32.Lib: Implib710/4035 x3
 ```
 

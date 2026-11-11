@@ -7,6 +7,7 @@ pub const Section = struct {
     vsize: u32,
     raw: u32,
     rawsize: u32,
+    flags: u32 = 0,
     pub fn end(s: Section) u32 {
         return s.va + @max(s.vsize, s.rawsize);
     }
@@ -16,6 +17,7 @@ pub const Image = struct {
     data: []const u8,
     base: u32,
     entry_rva: u32,
+    timestamp: u32 = 0,
     dirs: [16][2]u32,
     sections: []Section,
     /// VAs of every HIGHLOW base relocation.
@@ -33,6 +35,7 @@ pub const Image = struct {
         const opt = pe + 24;
         if (rd(data, u16, opt) != 0x10b) return error.NotPE32;
         var img = Image{ .data = data, .base = rd(data, u32, opt + 28), .entry_rva = rd(data, u32, opt + 16), .dirs = std.mem.zeroes([16][2]u32), .sections = try gpa.alloc(Section, nsec) };
+        img.timestamp = rd(data, u32, pe + 8);
         const ndirs = @min(rd(data, u32, opt + 92), 16);
         for (0..ndirs) |i| img.dirs[i] = .{ rd(data, u32, opt + 96 + 8 * i), rd(data, u32, opt + 100 + 8 * i) };
         const sh = opt + optsize;
@@ -40,7 +43,7 @@ pub const Image = struct {
             const o = sh + 40 * i;
             const raw_name = data[o .. o + 8];
             const n = std.mem.indexOfScalar(u8, raw_name, 0) orelse 8;
-            img.sections[i] = .{ .name = raw_name[0..n], .vsize = rd(data, u32, o + 8), .va = rd(data, u32, o + 12), .rawsize = rd(data, u32, o + 16), .raw = rd(data, u32, o + 20) };
+            img.sections[i] = .{ .name = raw_name[0..n], .vsize = rd(data, u32, o + 8), .va = rd(data, u32, o + 12), .rawsize = rd(data, u32, o + 16), .raw = rd(data, u32, o + 20), .flags = rd(data, u32, o + 36) };
         }
         try img.loadRelocs(gpa);
         return img;
@@ -110,6 +113,44 @@ pub const Image = struct {
             }
             p += block;
         }
+    }
+
+    /// The NUL-terminated bytes at va, up to `limit` and the end of its section (peimage.cstring).
+    pub fn cstring(img: *const Image, gpa: std.mem.Allocator, va: u32, limit: u32) !?[]u8 {
+        const s = img.sectionAt(va) orelse return null;
+        const n = @min(limit, img.base + s.end() - va);
+        const buf = try gpa.alloc(u8, n);
+        if (!img.read(va, buf)) return null;
+        return buf[0 .. std.mem.indexOfScalar(u8, buf, 0) orelse n];
+    }
+
+    /// IAT slot VA -> 'dll!name' (or 'dll!#ordinal'), as peimage.imports.
+    pub fn imports(img: *const Image, gpa: std.mem.Allocator) !std.AutoHashMapUnmanaged(u32, []const u8) {
+        var out: std.AutoHashMapUnmanaged(u32, []const u8) = .empty;
+        const rva = img.dirs[1][0];
+        if (rva == 0) return out;
+        var p = img.base + rva;
+        while (true) : (p += 20) {
+            var d: [20]u8 = undefined;
+            if (!img.read(p, &d)) return error.OutsideImage;
+            const olt = rd(&d, u32, 0);
+            const name_rva = rd(&d, u32, 12);
+            const iat = rd(&d, u32, 16);
+            if (name_rva == 0) break;
+            const dll = (try img.cstring(gpa, img.base + name_rva, 4096)) orelse return error.OutsideImage;
+            const lookup = if (olt != 0) olt else iat;
+            var i: u32 = 0;
+            while (true) : (i += 1) {
+                const ent = img.u32At(img.base + lookup + 4 * i) orelse return error.OutsideImage;
+                if (ent == 0) break;
+                const nm = if (ent & 0x80000000 != 0)
+                    try std.fmt.allocPrint(gpa, "#{d}", .{ent & 0xffff})
+                else
+                    (try img.cstring(gpa, img.base + ent + 2, 4096)) orelse return error.OutsideImage;
+                try out.put(gpa, img.base + iat + 4 * i, try std.fmt.allocPrint(gpa, "{s}!{s}", .{ dll, nm }));
+            }
+        }
+        return out;
     }
 
     /// VAs of the named exports.

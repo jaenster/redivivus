@@ -47,7 +47,7 @@ the build as an experiment, and status rows say so.
 The shared prefix every TU parses - vc8_compat.h, Source/D2Headers/d2_platform.h and
 Source/globals/globals.h - is compiled once into a precompiled header (build/pch/),
 cutting each TU's compile time about threefold. A precompiled header is parse
-state, not code: objdiff.py over 19 objects from nine modules found all 741
+state, not code: `oracle objdiff` over 19 objects from nine modules found all 741
 functions identical with and without it. ORACLE_PCH=0 turns it off.
 """
 import argparse

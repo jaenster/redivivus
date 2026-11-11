@@ -7,6 +7,7 @@
 # carry. With the Platform SDK installed it also compiles against windows.h.
 set -euo pipefail
 . "$(dirname "$0")/env.sh"
+have_zig || { echo "smoke_test.sh: needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
 map_drive
 
 T="$ORACLE_BUILD/smoke"
@@ -30,12 +31,8 @@ for vc in rtm sp1; do
     ORACLE_VC=$vc "$SCRIPTS/vc8.sh" cl /nologo /c /O2 "$(win_path "$T/smoke.cpp")" \
         "/Fo$(win_path "$T/smoke_$vc.obj")" >/dev/null || true
     if [ ! -s "$T/smoke_$vc.obj" ]; then echo "   FAIL: no object"; rc=1; continue; fi
-    cid=$(oracle_python -c "
-import sys; sys.path.insert(0, '$SCRIPTS')
-import coffobj
-o = coffobj.CoffObject(open('$T/smoke_$vc.obj', 'rb').read())
-c = o.comp_id(); print('0x%04x/%d' % (c >> 16, c & 0xffff))")
-    if [ "$cid" = "0x006e/50727" ]; then echo "   object stamped Utc1400_CPP/50727: OK"; else echo "   FAIL: @comp.id $cid"; rc=1; fi
+    cid=$(oracle_zig compid "$T/smoke_$vc.obj"); cid=${cid#*: }; cid=${cid% x1}
+    if [ "$cid" = "Utc1400_CPP/50727" ]; then echo "   object stamped Utc1400_CPP/50727: OK"; else echo "   FAIL: @comp.id $cid"; rc=1; fi
     if [ -n "$(find "$WINEPREFIX/drive_c/vc8/psdk/include" -maxdepth 1 -iname windows.h 2>/dev/null)" ]; then
         rm -f "$T/smoke_win_$vc.obj"
         ORACLE_VC=$vc "$SCRIPTS/vc8.sh" cl /nologo /c /O2 "$(win_path "$T/smoke_win.cpp")" \

@@ -14,6 +14,8 @@
 #   X64_DEST=<dir> x64/setup.sh   lay out under <dir> instead of the prefix's C:\vc8
 set -euo pipefail
 . "$(dirname "$0")/../scripts/env.sh"
+# msi-paths and the layout are oracle-zig's (zig/).
+have_zig || { echo "x64/setup.sh needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
 
 PRO_ISO="$VC8_SRC/pro-iso/en_vs_2005_pro_dvd.iso"
 PRO_ISO_MD5=d8391b57b355def0530eceb03dc41ba4
@@ -33,7 +35,7 @@ if [ ! -f "$W/x64.tsv" ]; then
     if [ ! -f "$PATHS" ]; then
         PATHS="$W/paths.tsv"
         7z x -y -o"$W" "$PRO_ISO" vs/vs_setup.msi >/dev/null
-        python3 -I "$SCRIPTS/msi_paths.py" --cabs "$W/vs/vs_setup.msi" > "$PATHS"
+        oracle_zig msi-paths --cabs "$W/vs/vs_setup.msi" > "$PATHS"
     fi
     MSI="$(dirname "$PATHS")/vs/vs_setup.msi"
     [ -f "$MSI" ] || 7z x -y -o"$(dirname "$PATHS")" "$PRO_ISO" vs/vs_setup.msi >/dev/null
@@ -50,25 +52,7 @@ if [ ! -f "$W/x64.tsv" ]; then
 fi
 
 rm -rf "$DEST/rtm-x64" "$DEST/psdk-x64"
-python3 -I - "$W/x64.tsv" "$W/keyed" "$DEST" "$VS" <<'EOF'
-import os, shutil, sys
-tsv, keyed, dest, prefix = sys.argv[1:5]
-where = (('bin/x86_amd64/', 'rtm-x64/bin/'), ('lib/amd64/', 'rtm-x64/lib/'),
-         ('PlatformSDK/Lib/AMD64/', 'psdk-x64/lib/'))
-n = 0
-for line in open(tsv, encoding='latin1'):
-    key, path, _cab = line.rstrip('\n').split('\t')
-    rest = path[len(prefix):]
-    out = next(d + rest[len(s):] for s, d in where if rest.startswith(s))
-    src = os.path.join(keyed, key)
-    if not os.path.isfile(src):
-        sys.exit('missing cabinet member %s for %s' % (key, path))
-    out = os.path.join(dest, out)
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    shutil.copyfile(src, out)
-    n += 1
-print('%s: %d files' % (dest, n))
-EOF
+oracle_zig x64 layout "$W/x64.tsv" "$W/keyed" "$DEST" "$VS"
 # The x64 tools load the x86 PDB writer and resource converter of the same build,
 # which Professional installs once, under VC\bin. The headers serve both targets.
 for f in mspdb80.dll msobj80.dll mspdbcore.dll mspdbsrv.exe cvtres.exe; do

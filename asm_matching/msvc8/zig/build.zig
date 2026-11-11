@@ -1,7 +1,7 @@
 const std = @import("std");
 
-// The oracle's carve (refimage.py) in Zig. Capstone 5.0.7, the version the Python side
-// used, is compiled from source: same decoder, same instructions, comparable output.
+// oracle-zig: the oracle's core (carve, decode, compare, audit) in Zig. Capstone 5.0.7, the
+// version the Python side uses, is compiled from source: same decoder, same text, same rows.
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{ .preferred_optimize_mode = .ReleaseFast });
@@ -22,6 +22,9 @@ pub fn build(b: *std.Build) void {
     tc.addIncludePath(cs.path(b, "include"));
     mod.addImport("c", tc.createModule());
 
-    const exe = b.addExecutable(.{ .name = "refimage", .root_module = mod });
+    const exe = b.addExecutable(.{ .name = "oracle-zig", .root_module = mod });
     b.installArtifact(exe);
+
+    const tests = b.addTest(.{ .root_module = mod });
+    b.step("test", "run the unit tests").dependOn(&b.addRunArtifact(tests).step);
 }

@@ -66,7 +66,7 @@ mapped, contradict the original's is dropped at the end.
             round of mapping makes more references known)
 
 Callees in the statically linked CRT are known on both sides through
-evidence/crtmap.tsv (crtmap.py), so they anchor sequences like imports do.
+evidence/crtmap.tsv (`oracle crt`), so they anchor sequences like imports do.
 
 Every pairing is one-to-one; a function claimed twice at the same tier keeps
 neither. Output (tab-separated, sorted by address):

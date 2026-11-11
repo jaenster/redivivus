@@ -213,7 +213,7 @@ another TU, the two belong in one file - the generator files by Ghidra
 namespace (`fix_refile.py` refiles them, see "Files by object" above).
 UI_ShowMonsterNameBar (00452be0) takes its argument in ESI and is called
 from Source/D2Client/UI/Draw, whose functions lie inside the range of the
-original's `ui.cpp` object (`scripts/tulayout.py`). What objects.tsv still
+original's `ui.cpp` object (`oracle tulayout`). What objects.tsv still
 lists are groups no object can hold, or whose functions' names other files
 use.
 

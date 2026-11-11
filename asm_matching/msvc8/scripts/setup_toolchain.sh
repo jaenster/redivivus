@@ -20,7 +20,7 @@
 # needed only because Express ships no Platform SDK (windows.h).
 #
 # Idempotent: re-running re-lays the trees from the unpacked packages.
-# Needs: wine (box64 on aarch64), 7z, cabextract, msitools, python3.
+# Needs: wine (box64 on aarch64), 7z, cabextract, msitools, and zig 0.17 (oracle-zig).
 set -euo pipefail
 . "$(dirname "$0")/env.sh"
 
@@ -35,9 +35,13 @@ PRO_ISO="$VC8_SRC/pro-iso/en_vs_2005_pro_dvd.iso"
 PRO_ISO_URL="$AO/en_vs_2005_pro_dvd_202303/en_vs_2005_pro_dvd.iso"
 PRO_ISO_MD5=d8391b57b355def0530eceb03dc41ba4
 
-for tool in wine 7z cabextract msiinfo python3; do
+for tool in wine 7z cabextract msiinfo; do
     command -v "$tool" >/dev/null || { echo "missing tool: $tool" >&2; exit 2; }
 done
+have_zig || { echo "missing tool: zig 0.17 (asm_matching/msvc8/zig builds oracle-zig)" >&2; exit 2; }
+
+msi_paths() { oracle_zig msi-paths "$@"; }
+vc8_layout() { oracle_zig vc8-layout "$@"; }
 
 fetch() {  # fetch <file> <url> <md5|sha1> <digest>
     local file="$1" url="$2" kind="$3" want="$4" got
@@ -70,11 +74,11 @@ if [ ! -f "$W/rtm/paths.tsv" ]; then
     7z x -y -o"$W/rtm" "$RTM_ISO" Ixpvc.exe >/dev/null
     cabextract -q -d "$W/rtm/ixp" "$W/rtm/Ixpvc.exe"
     cabextract -q -d "$W/rtm/keyed" "$W/rtm/ixp/vcsetup1.cab"
-    python3 -I "$SCRIPTS/msi_paths.py" "$W/rtm/ixp/vcsetup.msi" > "$W/rtm/paths.tsv.tmp"
+    msi_paths "$W/rtm/ixp/vcsetup.msi" > "$W/rtm/paths.tsv.tmp"
     mv "$W/rtm/paths.tsv.tmp" "$W/rtm/paths.tsv"
 fi
 rm -rf "$VC8/rtm"
-python3 -I "$SCRIPTS/vc8_layout.py" "$W/rtm/paths.tsv" "$W/rtm/keyed" "$VC8/rtm"
+vc8_layout "$W/rtm/paths.tsv" "$W/rtm/keyed" "$VC8/rtm"
 
 # ---- SP1: the RTM tree with every file the patch carries replaced ---------------
 if [ ! -d "$W/sp1/keyed" ]; then
@@ -85,7 +89,7 @@ if [ ! -d "$W/sp1/keyed" ]; then
 fi
 rm -rf "$VC8/sp1"
 cp -a "$VC8/rtm" "$VC8/sp1"
-python3 -I "$SCRIPTS/vc8_layout.py" "$W/rtm/paths.tsv" "$W/sp1/keyed" "$VC8/sp1"
+vc8_layout "$W/rtm/paths.tsv" "$W/sp1/keyed" "$VC8/sp1"
 
 # ---- the tools' own CRT: Microsoft's, as a side-by-side assembly ------------------
 # cl.exe, c1xx.dll, c2.dll and link.exe bind MSVCR80/MSVCP80 through an embedded

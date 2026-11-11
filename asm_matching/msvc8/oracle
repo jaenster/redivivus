@@ -11,7 +11,16 @@
 #                             evidence/data-audit.tsv (extents: re-read Ghidra's data
 #                             extents from a codegen snapshot, evidence/dataextent.tsv;
 #                             strings: its untyped strings, evidence/datastrings.tsv)
-#   oracle diff <name|addr>   one function, ours beside the original
+#   oracle classify [--out F] [--tag T [--single]]
+#                             tag why each mapped function differs (build/classes.tsv)
+#   oracle permodule --map M  the figures per module: evidence/permodule.tsv and .md
+#   oracle diff [--funcmap F] <name|addr>
+#                             one function, ours beside the original
+#   oracle check [--update] [PATTERN ...]
+#                             re-judge those TUs' functions against evidence/audit.tsv
+#                             (exit 1 on a lost MATCH); first the carve's known extents
+#   oracle snippet FILE [--func NAME [--ref ADDR]] [--cflags FLAGS] [--tu TU]
+#                             compile a variant in the tree's context, compare it
 #   oracle all                build, map, libmap, audit
 #   oracle quick [--verify]   all, doing only what changed; prints gained/lost MATCH
 #                             (--verify: then the full run too, and diff the two)
@@ -20,31 +29,73 @@
 #   oracle ref                re-carve the original into functions (cached; automatic; zig/)
 #   oracle rich <pe>          decode a PE's Rich header
 #   oracle compid <obj|lib>   the tool stamps inside objects / libraries
+#   oracle objdiff <objdir A> <objdir B> [PATTERN ...]
+#                             do two builds contain the same code, function by function
+#   oracle diffgrams [--top N] [--max-len K] [--examples]
+#                             the most frequent differing stretches, by shape
+#   oracle sizetrend [--audit A] [--funcmap F] [--out O] [--label T]
+#                             MATCH rate and closeness by function size
+#   oracle abcompare <baseline audit.tsv> <experiment audit.tsv> [--depth N] [--list]
+#                             baseline vs experiment, module by module
+#   oracle tulayout [--tu PATTERN] [--intruders]
+#                             does each TU correspond to one original object
+#   oracle svg [--summary S] [--out O]
+#                             the summary's byte kinds as evidence/byte-match-{light,dark}.svg
+#   oracle commit [--base B] [--tooling LINE] [-m MESSAGE]
+#                             commit the oracle branch's way (tooling amended into its first commit)
 #
 # Settings are environment variables (scripts/env.sh): ORACLE_VC (sp1|rtm),
 # ORACLE_CFLAGS, ORACLE_DRIVE, VC8_TOOLCHAIN, ORACLE_CACHE (the shared
-# compile cache, scripts/objcache.py), ORACLE_NOCACHE=1 (a full run). A non-default ORACLE_VC or
+# compile cache, zig/src/objcache.zig), ORACLE_NOCACHE=1 (a full run). A non-default ORACLE_VC or
 # ORACLE_CFLAGS is an experiment: it builds in build/experiment-*/, and its
 # audit uses the baseline's evidence/funcmap.tsv (the same pairs, other code)
 # and writes beside its objects. Evidence/ only ever holds the baseline.
 set -euo pipefail
 . "$(dirname "$0")/scripts/env.sh"
 
-# The carve: zig/ (refimage in Zig, about a second) when zig is installed, else refimage.py
-# (the same rows, 20+ minutes).
+# zig/ (oracle-zig, have_zig and oracle_zig in scripts/env.sh) is the oracle in Zig: every
+# stage and tool. It needs zig 0.17 on PATH. The Python left is build.py, for a machine with
+# no ghidra-reconstruct checkout to translate with (it then translates with vc8_translate.py),
+# and the fixers (`oracle fix`, scripts/fix_*.py) with the modules they import.
+need_zig() {
+    echo "oracle: '$1' needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2
+    exit 2
+}
+
+# zigtool <subcommand> [args]: oracle-zig's subcommand, told where the oracle is.
+zigtool() {
+    local sub="$1"; shift
+    have_zig || need_zig "$sub"
+    oracle_zig "$sub" --root "$ORACLE_ROOT" "$@"
+}
+
+# The same for the tools that take no --root (their arguments name every file they read).
+zigtool_noroot() {
+    local sub="$1"; shift
+    have_zig || need_zig "$sub"
+    oracle_zig "$sub" "$@"
+}
+
+# The carve: oracle-zig, about a second.
 carve() {
-    if command -v zig >/dev/null 2>&1; then
-        local bin="$ORACLE_ROOT/zig/zig-out/bin/refimage"
-        (cd "$ORACLE_ROOT/zig" && zig build --release=fast)
-        local ref="$ORACLE_ROOT/build/ref"
-        mkdir -p "$ref"
-        "$bin" "$REFERENCE_EXE" "$ref/functions.tsv.new"
-        # model.pkl decodes the carve's functions: a different carve makes it stale.
-        cmp -s "$ref/functions.tsv.new" "$ref/functions.tsv" || rm -f "$ref/model.pkl"
-        mv "$ref/functions.tsv.new" "$ref/functions.tsv"
+    have_zig || need_zig carve
+    local ref="$ORACLE_ROOT/build/ref"
+    mkdir -p "$ref"
+    oracle_zig carve "$REFERENCE_EXE" "$ref/functions.tsv.new"
+    # model.pkl (the fixers' decoded carve) is stale once the carve differs.
+    cmp -s "$ref/functions.tsv.new" "$ref/functions.tsv" || rm -f "$ref/model.pkl"
+    mv "$ref/functions.tsv.new" "$ref/functions.tsv"
+}
+
+# The compile: oracle-zig build when a ghidra-reconstruct checkout can translate (GR, else
+# ~/code/ts/gr-daemon), else build.py (which then translates with vc8_translate.py). The same
+# build/src, objects, quarantine.tsv and cache entries.
+build() {
+    have_zig || need_zig build
+    if oracle_zig build --probe; then
+        oracle_zig build --root "$ORACLE_ROOT" "$@"
     else
-        rm -f "$ORACLE_ROOT/build/ref/model.pkl"
-        oracle_python "$SCRIPTS/refimage.py" "$@"
+        oracle_python "$SCRIPTS/build.py" "$@"
     fi
 }
 
@@ -58,19 +109,20 @@ is_experiment() { [ "$ORACLE_VC" != sp1 ] || [ -n "${ORACLE_CFLAGS:-}" ]; }
 cmd="${1:-help}"; [ $# -gt 0 ] && shift
 case "$cmd" in
     setup)  "$SCRIPTS/fetch_reference.sh"; "$SCRIPTS/setup_toolchain.sh" ;;
-    build)  oracle_python "$SCRIPTS/build.py" "$@" ;;
+    build)  build "$@" ;;
     ref)    [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"; carve "$@" ;;
-    crt)    ensure_ref; oracle_python "$SCRIPTS/crtmap.py" "$@" ;;
+    crt)    ensure_ref
+            zigtool crt "$@" ;;
     map)    ensure_ref
             if is_experiment; then
                 echo "oracle map: not in an experiment - an A/B audit must use the baseline's map" >&2; exit 2
             fi
-            oracle_python "$SCRIPTS/funcmap.py" "$@" ;;
+            zigtool map "$@" ;;
     libmap) ensure_ref
             if is_experiment; then
                 echo "oracle libmap: not in an experiment - an A/B audit must use the baseline's map" >&2; exit 2
             fi
-            oracle_python "$SCRIPTS/libmap.py" "$@" ;;
+            zigtool libmap "$@" ;;
     audit)  ensure_ref
             with_data="${ORACLE_DATA:-0}"
             args=()
@@ -80,23 +132,34 @@ case "$cmd" in
             if is_experiment; then
                 # Same pairs as the baseline, this experiment's objects: a fair A/B.
                 echo "*** experiment: auditing $ORACLE_BUILD/obj -> $ORACLE_BUILD/audit.tsv" >&2
-                oracle_python "$SCRIPTS/audit.py" --out "$ORACLE_BUILD/audit.tsv" ${args[@]+"${args[@]}"}
+                zigtool audit --out "$ORACLE_BUILD/audit.tsv" ${args[@]+"${args[@]}"}
             else
-                oracle_python "$SCRIPTS/audit.py" ${args[@]+"${args[@]}"}
+                zigtool audit ${args[@]+"${args[@]}"}
             fi
             if [ "$with_data" = 1 ]; then
                 # After the function audit: it rewrites the datamap the data audit pairs by.
-                oracle_python "$SCRIPTS/datamatch.py" audit
+                zigtool data audit
             fi ;;
-    data)   ensure_ref; oracle_python "$SCRIPTS/datamatch.py" "${@:-audit}" ;;
-    diff)   ensure_ref; oracle_python "$SCRIPTS/asmdiff.py" "$@" ;;
+    data)   ensure_ref; zigtool data "${@:-audit}" ;;
+    classify) ensure_ref; zigtool classify "$@" ;;
+    permodule) ensure_ref; zigtool permodule "$@" ;;
+    diff)   ensure_ref; zigtool diff "$@" ;;
+    check)  ensure_ref; zigtool check "$@" ;;
+    snippet) ensure_ref; zigtool snippet "$@" ;;
+    diffgrams) ensure_ref; zigtool diffgrams "$@" ;;
+    sizetrend) ensure_ref; zigtool sizetrend "$@" ;;
+    tulayout) ensure_ref; zigtool tulayout "$@" ;;
+    svg)    zigtool svg "$@" ;;
+    objdiff) zigtool_noroot objdiff "$@" ;;
+    abcompare) zigtool_noroot abcompare "$@" ;;
+    commit) zigtool_noroot commit "$@" ;;
     fix)    if is_experiment; then echo "oracle fix: not in an experiment - it edits the tree" >&2; exit 2; fi
             ensure_ref; oracle_python "$SCRIPTS/fix_all.py" "$@" ;;
     all)    "$0" build "$@"; "$0" map; "$0" libmap; "$0" audit ;;
     quick)  ensure_ref
             if is_experiment; then echo "oracle quick: not in an experiment" >&2; exit 2; fi
-            oracle_python "$SCRIPTS/quick.py" "$@" ;;
-    rich)   oracle_python "$SCRIPTS/decode_rich_header.py" "${1:-$REFERENCE_EXE}" ;;
-    compid) oracle_python "$SCRIPTS/compid.py" "$@" ;;
+            zigtool quick "$@" ;;
+    rich)   zigtool_noroot rich "${1:-$REFERENCE_EXE}" ;;
+    compid) zigtool_noroot compid "$@" ;;
     *)      sed -n '2,/^set -euo/p' "$0" | sed '$d; s/^# \{0,1\}//' ;;
 esac

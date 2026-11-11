@@ -1,11 +1,11 @@
 name: oracle
 
 # The byte-for-byte audit (asm_matching/msvc8) on every push to main: per-function
-# MATCH/diff and classify.py's tags. Game.exe is never committed: it is fetched from
+# MATCH/diff and classify's tags. Game.exe is never committed: it is fetched from
 # files.typeguru.nl and checked against the SHA-256 in evidence/toolchain.md. The two
-# expensive inputs are cached: the VC8 toolchain (~3 GB download, once) and the carve of
-# Game.exe into functions is the Zig refimage (asm_matching/msvc8/zig, about a second), so
-# it is not cached. Only names, tags and counts are uploaded, nothing holding the original's
+# expensive inputs are cached: the VC8 toolchain (~3 GB download, once). The carve, the
+# audit and classify are oracle-zig (asm_matching/msvc8/zig, seconds each), so nothing of
+# theirs is cached. Only names, tags and counts are uploaded, nothing holding the original's
 # bytes.
 
 on:
@@ -47,10 +47,14 @@ jobs:
             echo "$HOME/.local/bin" >> "$GITHUB_PATH"
           fi
 
-      - name: Zig (the carve)
+      - name: Zig (oracle-zig)
         uses: mlugg/setup-zig@v2
         with:
           version: 0.17.0
+
+      - name: Build oracle-zig
+        working-directory: asm_matching/msvc8/zig
+        run: zig build --release=fast
 
       - name: Fetch Game.exe 1.14d (not committed; checked by hash)
         run: |
@@ -71,7 +75,7 @@ jobs:
         run: asm_matching/msvc8/oracle all
 
       - name: Classify every function that differs
-        run: asm_matching/msvc8/.venv/bin/python asm_matching/msvc8/scripts/classify.py --out classes.tsv | tee classify-summary.txt
+        run: asm_matching/msvc8/oracle classify --out "$PWD/classes.tsv" | tee classify-summary.txt
 
       - name: Summary
         if: always()
@@ -81,7 +85,7 @@ jobs:
             echo '```'
             head -12 asm_matching/msvc8/evidence/audit.tsv.summary 2>/dev/null || true
             echo '```'
-            echo "## classify.py"
+            echo "## classify"
             echo '```'
             cat classify-summary.txt 2>/dev/null || true
             echo '```'

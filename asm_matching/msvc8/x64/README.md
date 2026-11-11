@@ -30,7 +30,7 @@ a pointer tagged in its low or sign bit, an address sent over the wire.
 ## What it runs
 
 `count` translates the checkout for VC8 the way the oracle does (`scripts/vc8_translate.py`),
-then compiles each translation unit with
+then compiles each translation unit (`oracle-zig x64 compile`, which needs zig 0.17) with
 
 ```
 cl /nologo /c /Zs /O2 /Oy- /Ob1 /EHsc /GS /MT /W3 /Wp64 /D WIN32 /D NDEBUG /D _WINDOWS
@@ -61,7 +61,7 @@ Traps:
 
 From the Visual Studio 2005 Professional DVD image the oracle's `setup` already reads for the
 Platform SDK (`$VC8_SRC/pro-iso/en_vs_2005_pro_dvd.iso`, MD5-checked), by MSI file key, without
-running an installer (`../scripts/msi_paths.py` resolves each cabinet member to its path):
+running an installer (`oracle-zig msi-paths` resolves each cabinet member to its path, `oracle-zig x64 layout` places it):
 
 ```
 C:\vc8\rtm-x64\bin      VC\bin\x86_amd64: cl, c1, c1xx, c2, link, lib, dumpbin, editbin, ml64, 1033\
