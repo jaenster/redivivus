@@ -159,6 +159,19 @@ jobs:
           & "$oracle/zig/zig-out/bin/oracle-zig.exe" all --root $oracle
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+      # Preserve full-table evidence even if a seeded carve changes a strict
+      # aggregate gate below. This is only for the combined CI probe.
+      - name: Hash the complete mapping and audit rows
+        shell: pwsh
+        run: |
+          $evidence = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8/evidence'
+          $lines = foreach ($name in @('funcmap.tsv', 'libmap.tsv', 'audit.tsv', 'datamap.tsv')) {
+            $sha = (Get-FileHash -LiteralPath (Join-Path $evidence $name) -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$sha  $name"
+          }
+          $lines | Set-Content -LiteralPath oracle-row-digests.sha256 -Encoding ascii
+          $lines | Write-Host
+
       - name: Check the fresh Linux CRT result and clean-run audit invariants
         shell: pwsh
         run: |
@@ -189,17 +202,6 @@ jobs:
           Assert-Line $audit '  QUARANTINE             0'
           Assert-Line $audit '  MISSING                0'
           Assert-Line $audit 'self-check, names carrying their own address: 847 agree, 0 elsewhere'
-
-      - name: Hash the complete mapping and audit rows
-        shell: pwsh
-        run: |
-          $evidence = Join-Path $env:GITHUB_WORKSPACE 'asm_matching/msvc8/evidence'
-          $lines = foreach ($name in @('funcmap.tsv', 'libmap.tsv', 'audit.tsv', 'datamap.tsv')) {
-            $sha = (Get-FileHash -LiteralPath (Join-Path $evidence $name) -Algorithm SHA256).Hash.ToLowerInvariant()
-            "$sha  $name"
-          }
-          $lines | Set-Content -LiteralPath oracle-row-digests.sha256 -Encoding ascii
-          $lines | Write-Host
 
       - name: Summarize native results
         if: always()
