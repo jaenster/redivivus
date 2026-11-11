@@ -59,6 +59,10 @@ void __fastcall PacketUpdateForClient(struct D2UnitStrc * pUnit, struct D2Client
 void __fastcall SERVER_ITEM_SendStackableUsagePackets(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
 void __fastcall Unreferenced_0055bfe0(struct D2UnitStrc * pUnit);
 void __fastcall ITEMMODE_ApplyItemToOwner(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
+// Applies a socketed item (gem/rune/jewel) to its host item then refreshes the owner. If the inserted item is a Gem or Rune, looks up its gems.txt line and calls ApplyRuneAndGemStats (mode 2 for gems, 5 for runes); a quality-5 (set) item instead runs ITEM_ProcessSetItemEquip. Then re-applies the host item to the owner unit, handles dual-wield/broken-weapon checks to decide if the stats become active (STATLIST_SetItemStatActive), and updates anim speed. No-op unless pUnit is an ITEM and the owner is not a player with the playerbody state set.
+// @sourcefile .\ITEMS\ItemMode.cpp
+// @blizzard sITEMSAddStatsList
+void __fastcall ITEMMODE_AddStatsList(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
 void __fastcall ITEMMODE_AddStatsList_ForMercSwap(::SGAMEDATA * dwParam, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nApply);
 void __fastcall ITEMMODE_RemoveItemStates(struct D2UnitStrc * pOwner, struct D2UnitStrc * pItem);
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.

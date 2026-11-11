@@ -122,7 +122,7 @@ void __fastcall FORMS_DestroyListJmp_Unref_0041f930(uint32_t * pEncoder);
 void __fastcall FORMS_DestroyListJmp_Unref_0041f940(uint32_t * pEncoder);
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
-void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
+uint16_t * __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue);
 int __fastcall Unreferenced_0042e620(uint16_t * param_1);
 int __fastcall Unreferenced_0042e630(uint16_t * param_1);
 void __thiscall CRYPTO_ByteSwap64Array(uint16_t * pwIn, uint16_t * pwOut);

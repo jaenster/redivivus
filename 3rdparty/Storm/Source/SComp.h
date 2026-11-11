@@ -141,7 +141,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(struct D2CompressEncoderStrc * pE
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(struct StormLinkStrc * pNode);
-void __thiscall LINKEDLIST_Unlink(struct D2BitStreamReaderStrc * pList, uint32_t * pNode);
+struct D2BitStreamReaderStrc * __thiscall LINKEDLIST_Unlink(struct D2BitStreamReaderStrc * pList, uint32_t * pNode);
 int __fastcall Unreferenced_0041d8a0(struct D2BitStreamReader32Strc * param_1);
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask);
 void __thiscall LINKEDLIST_Clear(uint8_t * pBitBuffer, int32_t nBits);

@@ -472,22 +472,21 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
 
 // Serialises a proximity-sorted unit list into the client's nPacketBuffer for the visibility update packet. Iterates slots in the sort list writing 9-byte records: unit type (byte), GUID (dword), X position (word), Y position (word). Increments the buffer count per slot and follows the linked sort-list until a null slot is encountered. Called by GAME_CollectNearbyUnitPositions after building the sorted list.
 static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeStrc * pNodes, D2ClientStrc * pClient) {
-    uint16_t nUnitTypeRaw;
-    uint8_t byUnitType;
-    int nCoord;
-    int32_t nPos;
+    int32_t wCoord;
+    int32_t nPosY;
+    uint32_t byUnitType;
     eD2UnitType eUnitType;
     D2UnitStrc* pSlotUnit;
     pClient->nPacketBuffer.nCount = 0;
     D2UnitProximityNodeStrc* ppnSlotCursor = pNodes;
     do {
-      short int wCoord;
-      byUnitType = '\x06';
+      int nCoord;
+      *(uint8_t*)(char*)&byUnitType = '\x06';
       if (ppnSlotCursor->pUnit) {
-        byUnitType = (uint8_t)ppnSlotCursor->pUnit->eUnitType;
+        *(uint8_t*)(char*)&byUnitType = (uint8_t)ppnSlotCursor->pUnit->eUnitType;
       }
 
-      pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nUnitType = byUnitType;
+      pClient->nPacketBuffer.aEntries[pClient->nPacketBuffer.nCount].nUnitType = (uint8_t)byUnitType;
       if (!ppnSlotCursor->pUnit) {
         nCoord = -1;
       } else {
@@ -498,27 +497,27 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        wCoord = (short int)pSlotUnit->pPath.pStaticPath->nPosX;
+        *(uint16_t*)(char*)&wCoord = (uint16_t)pSlotUnit->pPath.pStaticPath->nPosX;
       } else if (pSlotUnit->pPath.pDynamicPath) {
-        nPos = D2Common::PATH::DynamicPath::GetXPos(pSlotUnit->pPath.pDynamicPath);
-        wCoord = (short int)nPos;
+        wCoord = D2Common::PATH::DynamicPath::GetXPos(pSlotUnit->pPath.pDynamicPath);
+        wCoord = (int32_t)((uint32_t)wCoord & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)wCoord);
       } else {
-        wCoord = 0;
+        *(uint16_t*)(char*)&wCoord = 0;
       }
 
-      *(short int*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x23) = wCoord;
+      *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x23) = (uint16_t)wCoord;
       pSlotUnit = ppnSlotCursor->pUnit;
       eUnitType = pSlotUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nUnitTypeRaw = (uint16_t)pSlotUnit->pPath.pStaticPath->nPosY;
+        *(uint16_t*)(char*)&nPosY = (uint16_t)pSlotUnit->pPath.pStaticPath->nPosY;
       } else if (pSlotUnit->pPath.pDynamicPath) {
-        nPos = D2Common::PATH::DynamicPath::GetYPos(pSlotUnit->pPath.pDynamicPath);
-        nUnitTypeRaw = (uint16_t)nPos;
+        nPosY = D2Common::PATH::DynamicPath::GetYPos(pSlotUnit->pPath.pDynamicPath);
+        nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(uint16_t)nPosY);
       } else {
-        nUnitTypeRaw = 0;
+        *(uint16_t*)(char*)&nPosY = 0;
       }
 
-      *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x25) = nUnitTypeRaw;
+      *(uint16_t*)(pClient->nPad1AE + pClient->nPacketBuffer.nCount * 9 + 0x25) = (uint16_t)nPosY;
       pClient->nPacketBuffer.nCount++;
       ppnSlotCursor = pNodes + ppnSlotCursor->nNext;
     } while (ppnSlotCursor->nNext);

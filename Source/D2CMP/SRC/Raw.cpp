@@ -18,15 +18,15 @@
 
 namespace D2CMP::SRC::Raw {
 
-uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
+void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
     uint32_t nDirAngle;
     uint32_t nDirIndex;
     ::TCELENTRY* nDirCount;
     size_t nFrameDataSize;
     uint32_t nFramesPerDir = pRawFile->nFrameCount / pRawFile->nDirections;
     uint32_t iFrame = 0;
-    uint32_t pDirNode = pRawFile->m_frames.m_terminator.m_next;
-    for (nDirCount = (::TCELENTRY*)((int)pDirNode <= 0 ? 0 : pDirNode); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
+    uint32_t uVar1 = pRawFile->m_frames.m_terminator.m_next;
+    for (nDirCount = (::TCELENTRY*)((int)uVar1 <= 0 ? 0 : uVar1); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
       DC6Block* pNewFrame;
       nFrameDataSize = nDirCount->nWidth * nDirCount->nHeight * 3;
       pNewFrame = (DC6Block*)D2_ALLOC_AT(nFrameDataSize + 0x23, ".\\SRC\\Raw.cpp", 0x22);
@@ -39,21 +39,18 @@ uint32_t __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
       pNewFrame->nNextBlock = 0;
       pNewFrame->nLength = nFrameDataSize;
       memcpy(pNewFrame + 1, nDirCount->pPixels, nFrameDataSize);
-      pDirNode = pRawFile->nDirections;
-      if (pDirNode > 1) {
-        nDirAngle = (iFrame / nFramesPerDir << 6) / pDirNode;
+      uVar1 = pRawFile->nDirections;
+      if (uVar1 > 1) {
+        nDirAngle = (iFrame / nFramesPerDir << 6) / uVar1;
       } else {
         nDirAngle = 1;
       }
 
-      nDirIndex = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirAngle, pDirNode);
-      pDirNode = iFrame / nFramesPerDir;
-      nDirAngle = iFrame % nFramesPerDir;
+      nDirIndex = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirAngle, uVar1);
+      uVar1 = iFrame % nFramesPerDir;
+      *(DC6Block**)(pCelFile[1].nTerm + (nDirIndex * nFramesPerDir + uVar1) * 4 - 0xc) = (DC6Block*)pNewFrame;
       iFrame++;
-      *(DC6Block**)(pCelFile[1].nTerm + (nDirIndex * nFramesPerDir + nDirAngle) * 4 - 0xc) = (DC6Block*)pNewFrame;
     }
-
-    return pDirNode;
 }
 
 } // namespace D2CMP::SRC::Raw

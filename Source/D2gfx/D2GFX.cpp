@@ -39,7 +39,7 @@ static BOOL bAspect = 0x1; D2_STATIC_GUARD(bAspect, "bAspect");
 static uint32_t IsOSCursorVisible = 0x1; D2_STATIC_GUARD(IsOSCursorVisible, "IsOSCursorVisible");
 // also labelled: gnGFXUnknownA
 static char * gpszDiabloIIClassNameSource = (char*)"Diablo II"; D2_STATIC_GUARD(gpszDiabloIIClassNameSource, "gpszDiabloIIClassNameSource");
-static uint32_t gnD2GFX_RequestedScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_RequestedScaleFactor, "gnD2GFX_RequestedScaleFactor");
+static int gnD2GFX_RequestedScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_RequestedScaleFactor, "gnD2GFX_RequestedScaleFactor");
 static uint32_t gnD2GFX_ActiveScaleFactor = 0x100; D2_STATIC_GUARD(gnD2GFX_ActiveScaleFactor, "gnD2GFX_ActiveScaleFactor");
 static HINSTANCE ghD2GFXInstance = 0; D2_STATIC_GUARD(ghD2GFXInstance, "ghD2GFXInstance");
 namespace D2gfx::D2GFX {
@@ -1056,7 +1056,7 @@ int Unreferenced_004f6610() {
 
 int Unreferenced_004f6640() {
     int iVar1 = gnD2GFX_RequestedScaleFactor;
-    if ((int32_t)gnD2GFX_RequestedScaleFactor > 0x100) {
+    if (gnD2GFX_RequestedScaleFactor > 0x100) {
       iVar1 = gnD2GFX_RequestedScaleFactor - 0x20;
       gnD2GFX_RequestedScaleFactor = iVar1;
       if (iVar1 < 0x100) {

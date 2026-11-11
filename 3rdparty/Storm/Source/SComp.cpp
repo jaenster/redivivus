@@ -205,11 +205,12 @@ void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(StormLinkStrc * pNode) 
     pNode->pNext = 0;
 }
 
-void __thiscall LINKEDLIST_Unlink(D2BitStreamReaderStrc * pList, uint32_t * pNode) {
+D2BitStreamReaderStrc * __thiscall LINKEDLIST_Unlink(D2BitStreamReaderStrc * pList, uint32_t * pNode) {
     pList->pCur = (uint16_t*)pNode;
     pList->dwBitBuffer = *pNode;
     pList->pCur = (uint16_t*)(pNode + 1);
     pList->nBitCount = 0x20;
+    return pList;
 }
 
 int __fastcall Unreferenced_0041d8a0(D2BitStreamReader32Strc * param_1) {

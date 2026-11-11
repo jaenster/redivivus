@@ -916,13 +916,14 @@ void __stdcall CleanupDebugSymbols() {
     ExceptionList = pExceptionListSaved;
 }
 
-void __fastcall ZeroStruct36Bytes(uint32_t * pStruct) {
+uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct) {
     *pStruct = 0;
     pStruct[1] = 0;
     pStruct[2] = 0;
     pStruct[3] = 0;
     *(uint8_t*)(pStruct + 4) = 0;
     memset(pStruct + 5, 0, 4 * sizeof(pStruct[0]));
+    return pStruct;
 }
 
 void __stdcall ZeroStruct16Bytes(void * pStruct) {

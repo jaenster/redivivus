@@ -581,14 +581,13 @@ void __fastcall ITEMMODE_ApplyItemToOwner(D2UnitStrc * pOwner, D2UnitStrc * pIte
 // Applies a socketed item (gem/rune/jewel) to its host item then refreshes the owner. If the inserted item is a Gem or Rune, looks up its gems.txt line and calls ApplyRuneAndGemStats (mode 2 for gems, 5 for runes); a quality-5 (set) item instead runs ITEM_ProcessSetItemEquip. Then re-applies the host item to the owner unit, handles dual-wield/broken-weapon checks to decide if the stats become active (STATLIST_SetItemStatActive), and updates anim speed. No-op unless pUnit is an ITEM and the owner is not a player with the playerbody state set.
 // @sourcefile .\ITEMS\ItemMode.cpp
 // @blizzard sITEMSAddStatsList
-static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
+void __fastcall ITEMMODE_AddStatsList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
     uint32_t _bIsGem;
     bool bIsGem;
     D2ItemsTxt* pItemsTxt;
     D2GemsTxt* pGemTxt;
     int nItemQuality;
     BOOL bDualWield;
-    ::SGAMEDATA* pGame;
     int32_t nGemApplyIdx;
     D2UnitStrc* pUnit_00 = pUnit2;
     if (!pUnit2) {
@@ -686,7 +685,7 @@ static void __stdcall ITEMMODE_AddStatsList(D2UnitStrc * pUnit, D2UnitStrc * pUn
 }
 
 void __fastcall ITEMMODE_AddStatsList_ForMercSwap(::SGAMEDATA * dwParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
-    ITEMMODE_AddStatsList(pUnit, pUnit2, nApply);
+    ITEMMODE_AddStatsList(dwParam, pUnit, pUnit2, nApply);
 }
 
 static void ITEMMODE_GetEquippedWeapons(D2UnitStrc * * ppUnit1, D2UnitStrc * * ppUnit2, D2UnitStrc * pUnit) {
@@ -1897,7 +1896,7 @@ static void __stdcall ITEMMODE_CheckCanPickup(::SGAMEDATA * pGame, D2UnitStrc * 
       }
     }
 
-    ITEMMODE_AddStatsList(pUnit2, pUnit, 1);
+    ITEMMODE_AddStatsList(pGame, pUnit2, pUnit, 1);
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
@@ -2133,7 +2132,7 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
                     D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pSocketedItem);
                     bMeetsRequirements = D2Common::Units::GetAnimOrSeqMode(pSocketedItem);
                     if (bMeetsRequirements == 1 || (bMeetsRequirements = D2Common::Units::GetAnimOrSeqMode(pSocketedItem) , !bMeetsRequirements && (bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pSocketedItem, pUnit) , bIsActiveCharm != 0))) {
-                      ITEMMODE_AddStatsList(pSocketedItem, pUnit, 1);
+                      ITEMMODE_AddStatsList(pGameSaved, pSocketedItem, pUnit, 1);
                     }
                   }
                 }
@@ -2161,7 +2160,7 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
             bIsBrokenOrDisabled = D2Common::ITEMS::Items::CheckItemFlag(pCurItem, ITEMFLAG_DISABLED, 0xac3, ".\\ITEMS\\ItemMode.cpp");
             if (!bIsBrokenOrDisabled) {
               ITEMMODE_UnequipItemStats(pGameSaved, pCurItem, pUnit, 1, 1);
-              ITEMMODE_AddStatsList(pCurItem, pUnit, 1);
+              ITEMMODE_AddStatsList(pInventory2, pCurItem, pUnit, 1);
               nBodyLocIdx = bAnyItemReenabled;
             }
           }
@@ -2758,7 +2757,7 @@ BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
         pBeltItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
         _bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pBeltItem, pUnit);
         if (_bIsActiveCharm) {
-          ITEMMODE_AddStatsList(pBeltItem, pUnit, 0);
+          ITEMMODE_AddStatsList(pGame, pBeltItem, pUnit, 0);
         }
 
         D2Common::Units::SetupUpdateFlag(pBeltItem, 2);
@@ -2844,7 +2843,7 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
             pNewItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
             nSlotX = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pNewItem, pUnit);
             if (nSlotX) {
-              ITEMMODE_AddStatsList(pNewItem, pUnit, 0);
+              ITEMMODE_AddStatsList(pGame, pNewItem, pUnit, 0);
             }
 
             D2Common::Units::SetupUpdateFlag(pNewItem, 2);
@@ -3777,13 +3776,13 @@ void __fastcall ITEMMODE_GetItemCursorMode(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    ITEMMODE_AddStatsList(pUnit, pOwner, 0);
+    ITEMMODE_AddStatsList(pGame, pUnit, pOwner, 0);
     ITEMS_RecalcEquippedItemStates(pGame, pOwner, 0);
     D2Common::Units::RefreshInventory(pOwner, 1);
 }
 
 void __fastcall ITEMMODE_IsItemOnCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
-    ITEMMODE_AddStatsList(pUnit, pOwner, 0);
+    ITEMMODE_AddStatsList(pGame, pUnit, pOwner, 0);
 }
 
 // Recharges all charged-skill stats (stat 0xCC) on an item that are below their maximum charge count. For each under-charged skill, calls ITEMMOD_SetChargedSkillCharges and sends a 0x3E UpdateItemStats packet to the owning player's client. Returns 1 if any charge was restored, 0 otherwise.
@@ -3922,7 +3921,7 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
             ITEMMODE_ApplyItemToOwner(pUnit, pUnit2);
             bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pUnit2, pUnit);
             if (bIsActiveCharm) {
-              ITEMMODE_AddStatsList(pUnit2, pUnit, 0);
+              ITEMMODE_AddStatsList(pGame, pUnit2, pUnit, 0);
             }
             if (pUnit2) {
               pUnit2->eUnitFlags &= ~UNITFLAG_TARGETABLE;
@@ -4027,7 +4026,7 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
     pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pOwnerUnit);
     if (bIsActiveCharm) {
-      ITEMMODE_AddStatsList(pItem, pOwnerUnit, 0);
+      ITEMMODE_AddStatsList(pGame, pItem, pUnitSaved, 0);
     }
     if (bCopyInv) {
       D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
@@ -4257,7 +4256,7 @@ BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUni
               D2Common::ITEMS::Items::SetBodyLoc(pItem, eTargetBodyLoc);
               if (!bIsSwappedSlot) {
                 D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pItem);
-                ITEMMODE_AddStatsList(pItem, pUnit, 0);
+                ITEMMODE_AddStatsList(pGame, pItem, pUnit, 0);
               }
 
               D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
@@ -4406,7 +4405,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
                   pItemInInv->eUnitFlags &= ~UNITFLAG_TARGETABLE;
                   bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItemInInv, pUnit);
                   if (bIsActiveCharm) {
-                    ITEMMODE_AddStatsList(pItemInInv, pUnit, 0);
+                    ITEMMODE_AddStatsList(pGameSaved, pItemInInv, pUnit, 0);
                   }
                   if (bCopyInv) {
                     D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pReinventory, nullptr);
@@ -4615,7 +4614,7 @@ BOOL __fastcall SERVER_Swap2HandItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DW
             if (!nForceEquip) {
               nPutResult = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 0, nullptr, nullptr, nullptr);
               if (!nPutResult) {
-                ITEMMODE_AddStatsList(pBodyLocItem, pUnit, 0);
+                ITEMMODE_AddStatsList(pGame, pBodyLocItem, pUnit, 0);
                 UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x14, nullptr);
                 return 0;
               }
@@ -4660,7 +4659,7 @@ BOOL __fastcall SERVER_Swap2HandItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DW
                 if (nPutResult) {
                   D2Common::ITEMS::Items::SetBodyLoc(pItem, eTargetBodyLoc);
                   D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pItem);
-                  ITEMMODE_AddStatsList(pItem, pUnit, 0);
+                  ITEMMODE_AddStatsList(pGame, pItem, pUnit, 0);
                   pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
                   D2Common::Units::SetupUpdateFlag(pItem, 1);
                   D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
@@ -4809,7 +4808,7 @@ BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pU
           ITEMMODE_UnequipItemStats(pGame, pSwapArmItem, pUnit, 0, 1);
           nPutResult = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 0, nullptr, nullptr, nullptr);
           if (!nPutResult) {
-            ITEMMODE_AddStatsList(pSwapArmItem, pUnit, 0);
+            ITEMMODE_AddStatsList(pGame, pSwapArmItem, pUnit, 0);
             D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pItem);
             ITEMMODE_ApplyQuestReward(pGame, pUnit, pItem);
             UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x14, nullptr);
@@ -4847,7 +4846,7 @@ BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pU
             if (nPutResult) {
               D2Common::ITEMS::Items::SetBodyLoc(pItem, eTargetBodyLoc);
               D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pItem);
-              ITEMMODE_AddStatsList(pItem, pUnit, 0);
+              ITEMMODE_AddStatsList(pGame, pItem, pUnit, 0);
               pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
               D2Common::Units::SetupUpdateFlag(pItem, 1);
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
@@ -5013,7 +5012,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
           D2Common::ITEMS::Items::SetBodyLoc(pCurItem, (eD2BodyLoc)*pSwapBodyLocIter);
           if (*pSwapBodyLocIter == BODYLOC_R_ARM || *pSwapBodyLocIter == BODYLOC_L_ARM) {
             D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventorySaved, pCurItem);
-            ITEMMODE_AddStatsList(pCurItem, pUnit, 0);
+            ITEMMODE_AddStatsList(pGameSaved, pCurItem, pUnit, 0);
             D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCurItem, ITEMFLAG_ADDED, 1);
           } else {
             D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCurItem, ITEMFLAG_TAKEN, 1);
@@ -5192,7 +5191,7 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
               ITEMMODE_ApplyItemToOwner(pUnit, pSrcItem);
               bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pSrcItem, pUnit);
               if (bIsActiveCharm) {
-                ITEMMODE_AddStatsList(pSrcItem, pUnit, 0);
+                ITEMMODE_AddStatsList(pGame, pSrcItem, pUnit, 0);
               }
 
               D2Common::Units::SetupUpdateFlag(pSrcItem, 0);
@@ -5716,7 +5715,7 @@ BOOL __fastcall PutItemInItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nIt
               D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pUnit->pInventory, nullptr);
             }
 
-            ITEMMODE_AddStatsList(pSocketable, pContainer, 0);
+            ITEMMODE_AddStatsList(pGame, pSocketable, pContainer, 0);
             D2Common::Stats::StatsEx::ItemUpdateStatsAfterSocketing(pSocketable, pContainer);
             D2Common::Units::SetupUpdateFlag(pSocketable, 6);
             pRuneTable = D2Common::ITEMS::Items::CalculateRunewordByItem(pContainer);
@@ -5880,7 +5879,7 @@ BOOL __fastcall ITEMMODE_ProcessItemBuy(::SGAMEDATA * ppUnit, D2UnitStrc * pUnit
             exit(-1);
           }
 
-          ITEMMODE_AddStatsList(pItem, pUnit, 0);
+          ITEMMODE_AddStatsList(ppUnit, pItem, pUnit, 0);
           pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
           D2Common::Units::SetupUpdateFlag(pItem, 1);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
@@ -6007,7 +6006,7 @@ BOOL __fastcall ITEMMODE_TryPutItemInInventory(::SGAMEDATA * pGameStrc, D2UnitSt
             D2Common::ITEMS::Items::SetBodyLoc(pItem, (eD2BodyLoc)eBodyLoc);
             D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pItem);
             D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
-            ITEMMODE_AddStatsList(pItem, pUnit, 0);
+            ITEMMODE_AddStatsList(pGameStrc, pItem, pUnit, 0);
             if (pItem) {
               pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
             }
@@ -6136,7 +6135,7 @@ int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * p
                       if (nEquipMode == BODYLOC_TORSO) {
                         D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pCorpseItem);
                         pGameForDrop = pGameSaved;
-                        ITEMMODE_AddStatsList(pCorpseItem, pUnit, 0);
+                        ITEMMODE_AddStatsList(pGameSaved, pCorpseItem, pUnit, 0);
                         ITEMMODE_ApplyItemToOwner(pUnit, pCorpseItem);
                         ITEMMODE_ValidateWeaponSkills(pUnit);
                       }
@@ -6200,7 +6199,7 @@ int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * p
                     pCorpseItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
                     nAltBodyLocIdx = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pCorpseItem, pUnit);
                     if (nAltBodyLocIdx) {
-                      ITEMMODE_AddStatsList(pCorpseItem, pUnit, 0);
+                      ITEMMODE_AddStatsList(pGameSaved, pCorpseItem, pUnit, 0);
                     }
 
                     D2Common::Units::SetupUpdateFlag(pCorpseItem, 2);
@@ -6488,7 +6487,7 @@ void __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       ITEMMODE_ApplyItemToOwner(pUnit, pItem);
       bActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pUnit);
       if (bActiveCharm) {
-        ITEMMODE_AddStatsList(pItem, pUnit, 0);
+        ITEMMODE_AddStatsList(pGame, pItem, pUnit, 0);
       }
 
       pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
@@ -6634,7 +6633,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
                 pCubeItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
                 dwCarriedGUID = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pCubeItem, pUnit2);
                 if (dwCarriedGUID) {
-                  ITEMMODE_AddStatsList(pCubeItem, pUnit2, 0);
+                  ITEMMODE_AddStatsList(pGame, pCubeItem, pUnit2, 0);
                 }
                 if (bRefreshInv) {
                   D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerInventory, nullptr);
@@ -6810,7 +6809,7 @@ BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
           if (!bSkipRequirementsCheck) {
             nPutResult = D2Common::ITEMS::Items::ITEM_CheckEquipRequirements(pItem, pUnit, 0, nullptr, nullptr, nullptr);
             if (!nPutResult) {
-              ITEMMODE_AddStatsList(pSwapBodyItem, pUnit, 0);
+              ITEMMODE_AddStatsList(pGame, pSwapBodyItem, pUnit, 0);
               UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x14, nullptr);
               return 0;
             }
@@ -6855,7 +6854,7 @@ BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
 
               D2Common::ITEMS::Items::SetBodyLoc(pItem, eTargetBodyLoc);
               D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pItem);
-              ITEMMODE_AddStatsList(pItem, pUnit, 0);
+              ITEMMODE_AddStatsList(pGame, pItem, pUnit, 0);
               pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
               D2Common::Units::SetupUpdateFlag(pItem, 1);
               D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);

@@ -44,7 +44,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(struct D2UnitSt
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
 BOOL __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget);
 BOOL __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t bHasTarget);
-void __fastcall SKILL_ExecuteItemCastAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam);
+int __fastcall SKILL_ExecuteItemCastAtCoords(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam);
 #endif // D2_MODULE_D2Client
 // 1 internal function (defined in .cpp)
 

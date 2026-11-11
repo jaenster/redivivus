@@ -327,8 +327,9 @@ char * ILT_strrchr(char * _Str, int32_t _Ch) {
     return pResult;
 }
 
-void __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
+LPCRITICAL_SECTION __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0098a6f0);
+    return lpCriticalSection;
 }
 
 void __stdcall LeaveCriticalSection_System() {

@@ -415,7 +415,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).
-void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
+uint32_t * __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
 void __thiscall SFILE_CopyStreamBuffer4(uint32_t * pDest, uint32_t * pSrc);
 int __fastcall Unreferenced_00415190(int param_1);

@@ -327,7 +327,7 @@ DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam);
 bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * pExceptionPtrs, struct _EXCEPTION_POINTERS * nEventHandle, DWORD dwThreadId);
 uint32_t __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage);
 void __stdcall CleanupDebugSymbols();
-void __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
+uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
 void __stdcall ZeroStruct16Bytes(void * pStruct);
 void __stdcall ZeroStruct16BytesDuplicate(void * pStruct);
 void __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);

@@ -75,7 +75,7 @@ void __stdcall SYSTEM_GetCurrentProcessThreadCount();
 bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer);
 bool __stdcall InternalCheckCorp();
 char * ILT_strrchr(char * _Str, int32_t _Ch);
-void __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+LPCRITICAL_SECTION __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void __stdcall LeaveCriticalSection_System();
 void __stdcall SetCurrentThreadId();
 #endif // D2_MODULE_crashy

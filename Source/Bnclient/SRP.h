@@ -86,7 +86,7 @@ void __thiscall SRP_ComputeClientProof(struct D2Srp * pThis, char * szUsername, 
 void __thiscall SRP_ComputeServerProof(struct D2Srp * pSrp, void * pClientPublic, void * pClientProof, void * pSessionKey, uint8_t * pHashOut);
 BOOL __fastcall SRP_IsContextInitialized(struct D2Srp * pSrp);
 // @sourcefile .\SRP.cpp
-void __fastcall SRP_CreateContext(struct D2Srp * * ppSrp);
+struct D2Srp * * __fastcall SRP_CreateContext(struct D2Srp * * ppSrp);
 BOOL __thiscall SRP_ExportPublicValues(struct D2Srp * * ppSrp, uint32_t * pnGeneratorLen, void * pGeneratorOut, uint32_t * pnModulusLen, void * pModulusOut);
 BOOL __thiscall SRP_SetParameters(struct D2Srp * * ppSrp, uint32_t nGeneratorLen, uint8_t * pGeneratorBytes, uint32_t nModulusLen, uint8_t * pModulusBytes);
 // Seeds the SRP context's random state: loads *ppSrp and tail-jumps to SRP_InitializeRandomState(pSrp, dwSeed).

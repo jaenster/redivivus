@@ -416,16 +416,17 @@ static void SMSG_DeleteWindow(HWND hWnd) {
 }
 
 // @blizzard InternalRegister (SMSG.CPP)
-static void __stdcall SMSG_InternalRegister(HWND hWnd, int32_t pCallback, uint32_t dwEventTag, uint32_t dwContext) {
+static int __stdcall SMSG_InternalRegister(HWND hWnd, int32_t pCallback, uint32_t dwEventTag, uint32_t dwContext) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pCallback);
-    D2_CHECKS_END_VOID(Source::SErr::SErrSetLastError(0x57));
+    D2_CHECKS_END(Source::SErr::SErrSetLastError(0x57), 0);
     StormWndRecStrc* nRecord = SMSG_FindWindow(hWnd);
     if (!nRecord) {
       SMSG_AddWindow(hWnd);
     }
 
-    Source::SEVT::SEvtRegisterHandler(dwEventTag, (uint32_t)hWnd, dwContext, 0, (pfnSEvtHandler)pCallback);
+    int nResult = Source::SEVT::SEvtRegisterHandler(dwEventTag, (uint32_t)hWnd, dwContext, 0, (pfnSEvtHandler)pCallback);
+    return nResult;
 }
 
 // @blizzard InternalUnregister (SMSG.CPP)

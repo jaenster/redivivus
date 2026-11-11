@@ -1100,7 +1100,7 @@ void __stdcall Unreferenced_005d2b40(D2UnitStrc * pUnit) {
 }
 
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.
-void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost) {
+int __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost) {
     D2SkillsTxt* pSkillRecord;
     D2StatListExStrc* pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
     int32_t nSkillId = D2Common::Stats::StatsEx::GetSkillId(pBloodManaStatList);
@@ -1115,18 +1115,15 @@ void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost
       }
 
       nCurrentHpAfter = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      if (!(nCurrentHpAfter < pSkillRecord->Param[4] * 0x100)) {
-        return;
+      if (nCurrentHpAfter < pSkillRecord->Param[4] * 0x100) {
+        pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
+        if (pBloodManaStatList) {
+          D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pBloodManaStatList);
+          D2Common::Stats::StatsEx::FreeStatList(&pBloodManaStatList->sStatList);
+        }
       }
 
-      pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
-      if (!pBloodManaStatList) {
-        return;
-      }
-
-      D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pBloodManaStatList);
-      D2Common::Stats::StatsEx::FreeStatList(&pBloodManaStatList->sStatList);
-      return;
+      return 1;
     }
 
     pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
@@ -1136,6 +1133,7 @@ void __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0x100, 0);
+    return 0;
 }
 
 // Server-side skill DoFunc 140: scatters a difficulty-scaled number of minion monsters around the caster. Advances the caster unit's RNG seed; the spawn count is (2 + difficulty + seedLow mod 3). Determines the base spawn position from the caster's (or its current target's) static/dynamic path X/Y, then loops spawning monsters at randomized +-9 tile offsets via SpawnMonster, snapping each to a valid nearby room (DRLGROOM_FindBetterNearbyRoom). Each spawned minion is flagged NOXP|NOTC, given AI think mode 0xF (RestartAiThink), and has its owner stored as the caster. Returns 0 if pUnit is null, else 1.

@@ -3808,15 +3808,15 @@ void __stdcall ApplyRuneAndGemStats(uint32_t nType, D2UnitStrc * pUnit2, D2UnitS
     } while ((int)nPropIdx < nPropCount);
 }
 
-void __stdcall RollRunewordMostlikely(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t dwParam) {
+int __stdcall RollRunewordMostlikely(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t dwParam) {
     D2RuneTableStrc* pRuneTable = Items::CalculateRunewordByItem(pUnit);
     if (!pRuneTable) {
-      return;
+      return 0;
     }
 
     D2StatListExStrc* pStatList = Stats::StatsEx::GetStatListByStateOrFlagsIfNotExists(pUnit, STATE_runeword, 0x40);
     if (pStatList) {
-      return;
+      return 0;
     }
 
     Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_RUNEWORD, 1);
@@ -3824,13 +3824,15 @@ void __stdcall RollRunewordMostlikely(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, u
     D2SetsTxtFStrc* pPropEntry = pRuneTable->sEntry;
     do {
       if (pPropEntry->fcode < 0) {
-        return;
+        return 1;
       }
 
       ITEMMOD_ApplyPropertyToUnitStatsExpansion(6, pUnit, pUnit2, nullptr, nPropIdx, 0, pPropEntry, 0xab, 0x40, nullptr);
       nPropIdx++;
       pPropEntry++;
     } while (nPropIdx < 7);
+
+    return 1;
 }
 
 // Applies set-item partial and full set bonus properties to pUnit when equipping set item pUnit2 (nApplyFlags nonzero). Only acts on UNIT_ITEM of quality 5 (set). Resolves the item's SetItems/Sets txt lines, computes how many set pieces are equipped (ITEMS_GetEquippedSetItemsMask -> count via gnPropertyBaseValueByCode), then iterates the set's partial-bonus property list up to that piece count and, if the full set is worn, its full-set property block, applying each valid property via ITEMMOD_ApplyPropertyToUnitStats(type 4). No return.

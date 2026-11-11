@@ -261,16 +261,17 @@ BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
 }
 
 // @sourcefile .\SRP.cpp
-void __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
+D2Srp * * __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
     D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(0x4c, ".\\SRP.cpp", 0x157, 0);
     if (pAllocated) {
       D2Srp* pConstructed;
       pConstructed = SRP_ConstructContext(pAllocated);
       *ppSrp = pConstructed;
-      return;
+      return ppSrp;
     }
 
     *ppSrp = 0;
+    return ppSrp;
 }
 
 BOOL __thiscall SRP_ExportPublicValues(D2Srp * * ppSrp, uint32_t * pnGeneratorLen, void * pGeneratorOut, uint32_t * pnModulusLen, void * pModulusOut) {

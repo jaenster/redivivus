@@ -5857,10 +5857,13 @@ static BOOL __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16
     return uResult;
 }
 
-static void __stdcall SKILLDESC_DescLine2A_DecimalRange(int32_t nValueMax, uint16_t wSuffixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {
+static int __stdcall SKILLDESC_DescLine2A_DecimalRange(int32_t nValueMax, uint16_t wSuffixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {
     uint16_t wszValueText[32];
-    if (!(wLabelStringId != 0x1506 && (nCalcA || nValueMax))) {
-      return;
+    if (wLabelStringId == 0x1506) {
+      return 0;
+    }
+    if (!(nCalcA || nValueMax)) {
+      return 0;
     }
 
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -5886,6 +5889,7 @@ static void __stdcall SKILLDESC_DescLine2A_DecimalRange(int32_t nValueMax, uint1
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
     pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+    return 1;
 }
 
 static BOOL __stdcall SKILLDESC_DescLine40_DecimalLabel(uint16_t wSuffixStringId, int32_t nCalcA, int32_t bPrefixSign, uint16_t wLabelStringId, uint16_t * wszText, int32_t nSecondValue) {
@@ -5938,10 +5942,13 @@ static BOOL SKILLDESC_DescLine41_AppendStrings(uint16_t wDescTextA, uint16_t * w
     return 0;
 }
 
-static void __stdcall SKILLDESC_DescLine45_DecimalLabel(uint16_t wValuePrefixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {
+static int __stdcall SKILLDESC_DescLine45_DecimalLabel(uint16_t wValuePrefixStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText, int32_t nCalcA) {
     uint16_t wszValueText[32];
-    if (!(wLabelStringId != 0x1506 && nCalcA)) {
-      return;
+    if (wLabelStringId == 0x1506) {
+      return 0;
+    }
+    if (!nCalcA) {
+      return 0;
     }
 
     for (int iFill = 0; iFill < 32; iFill++) {
@@ -5967,6 +5974,7 @@ static void __stdcall SKILLDESC_DescLine45_DecimalLabel(uint16_t wValuePrefixStr
 
     pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pLocalStr);
+    return 1;
 }
 
 static int __stdcall SKILLDESC_DescLine42_CalcByIndex(int32_t nCalcResult, uint16_t wFormatStringId, int pSkillDescShort, uint16_t * wszText) {

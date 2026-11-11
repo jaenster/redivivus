@@ -49,7 +49,7 @@ int32_t __stdcall GetCursorItem_Unref_00468030();
 void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon);
 void __fastcall ITEM_SetItemOnHand(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetCursorItem();
-void __fastcall UI_InitializeCursor(int32_t nCursorType);
+int __fastcall UI_InitializeCursor(int32_t nCursorType);
 void __stdcall UI_FreeCursor();
 void __stdcall UI_AnimateCursorForward();
 void __stdcall UI_AnimateCursorBackward();

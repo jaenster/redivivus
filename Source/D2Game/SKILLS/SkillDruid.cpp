@@ -836,19 +836,19 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
     D2Common::Units::Missile::SetTargetY(pMissile, !pUnit ? -1 : pUnit->nUnitGUID);
 }
 
-void __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {
+int __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bApplied;
     bool bApplied;
     if (nSkillLvl <= 0) {
-      return;
+      return 0;
     }
 
     _bApplied = SKILLDRUID_ApplyTimedAuraBuff(pGame, pUnit, pTargetUnit, nDuration, eSkill, nSkillLvl);
-    if (!_bApplied) {
-      return;
+    if (_bApplied) {
+      SKILLDRUID_CreateAuraMissile(pGame, pUnit, pTargetUnit, nDuration, nSkillLvl, eSkill);
     }
 
-    SKILLDRUID_CreateAuraMissile(pGame, pUnit, pTargetUnit, nDuration, nSkillLvl, eSkill);
+    return 1;
 }
 
 BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {

@@ -241,7 +241,7 @@ D2UnitStrc * __stdcall GetCursorItem() {
     return pCursorItem;
 }
 
-void __fastcall UI_InitializeCursor(int32_t nCursorType) {
+int __fastcall UI_InitializeCursor(int32_t nCursorType) {
     // Static local variables (originally global data)
     static unsigned short gwCursorAnimUnknownField; D2_STATIC_GUARD_BSS(gwCursorAnimUnknownField, "D2Client::Cursor::UI_InitializeCursor::gwCursorAnimUnknownField");
 
@@ -268,6 +268,7 @@ void __fastcall UI_InitializeCursor(int32_t nCursorType) {
     gnCursorAnimStartTick = GetTickCount();
     MouseX = UI::ui::ScreenSizeX / 2;
     MouseY = UI::Inv::ScreenSizeY / 2;
+    return 1;
 }
 
 void __stdcall UI_FreeCursor() {

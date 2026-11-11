@@ -109,11 +109,12 @@ uint32_t gbCompressionDebugOutput = 0; D2_GLOBAL_GUARD(gbCompressionDebugOutput,
 namespace Storm::Source::SFile {
 
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).
-void __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3) {
+uint32_t * __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3) {
     *pdwValues = pVal0;
     pdwValues[1] = pVal1;
     pdwValues[2] = pVal2;
     pdwValues[3] = pVal3;
+    return pdwValues;
 }
 
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.

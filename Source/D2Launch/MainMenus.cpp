@@ -4232,8 +4232,9 @@ void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
     }
 }
 
-void __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
+uint16_t * __thiscall CRYPTO_ByteSwap32Array(uint16_t * pwOut, uint16_t wValue) {
     *pwOut = wValue;
+    return pwOut;
 }
 
 int __fastcall Unreferenced_0042e620(uint16_t * param_1) {

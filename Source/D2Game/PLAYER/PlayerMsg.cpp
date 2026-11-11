@@ -3746,12 +3746,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3D_ActivateObject(::SGAMEDATA * pGame,
 // C->S 0x3E Quest Item Interact (5B). Packet: [op:1][unitGUID:u32]. Validates same act, range 10, calls QUEST_HandleClientQuestMessage.
 eD2ServerIncomingStatus __fastcall SCMD_0x3E_QuestItemPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3E_QuestItemPickup * pPacket, uint32_t nSize) {
     eAct eActItem;
-    uint16_t nPosX;
-    uint16_t nPosY;
     D2RoomStrc* pRoom;
     eD2LevelId eLevelId;
+    uint32_t nPosX;
+    uint32_t nPosY;
     eD2ServerIncomingStatus eVar1;
-    int32_t nCoord;
     eD2UnitType eUnitType;
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3778,25 +3777,25 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3E_QuestItemPickup(::SGAMEDATA * pGame
 
       eUnitType = pQuestItem->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosX = (uint16_t)pQuestItem->pPath.pStaticPath->nPosX;
+        *(uint16_t*)(char*)&nPosX = (uint16_t)pQuestItem->pPath.pStaticPath->nPosX;
       } else if (pQuestItem->pPath.pDynamicPath) {
-        nCoord = D2Common::PATH::DynamicPath::GetXPos(pQuestItem->pPath.pDynamicPath);
-        nPosX = (uint16_t)nCoord;
+        nPosX = D2Common::PATH::DynamicPath::GetXPos(pQuestItem->pPath.pDynamicPath);
+        nPosX = (uint32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)nPosX);
       } else {
-        nPosX = 0;
+        *(uint16_t*)(char*)&nPosX = 0;
       }
 
       eUnitType = pQuestItem->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosY = (uint16_t)pQuestItem->pPath.pStaticPath->nPosY;
+        *(uint16_t*)(char*)&nPosY = (uint16_t)pQuestItem->pPath.pStaticPath->nPosY;
       } else if (pQuestItem->pPath.pDynamicPath) {
-        nCoord = D2Common::PATH::DynamicPath::GetYPos(pQuestItem->pPath.pDynamicPath);
-        nPosY = (uint16_t)nCoord;
+        nPosY = D2Common::PATH::DynamicPath::GetYPos(pQuestItem->pPath.pDynamicPath);
+        nPosY = (uint32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)nPosY);
       } else {
-        nPosY = 0;
+        *(uint16_t*)(char*)&nPosY = 0;
       }
 
-      eVar1 = CheckIfCoordsAreInRange(pUnit, 10, nPosX, nPosY);
+      eVar1 = CheckIfCoordsAreInRange(pUnit, 10, (uint16_t)nPosX, (uint16_t)nPosY);
       if (eVar1 != SERVERSTATUS_OK) {
         return (eD2ServerIncomingStatus)eVar1;
       }

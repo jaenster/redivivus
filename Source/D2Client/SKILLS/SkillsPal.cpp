@@ -694,12 +694,14 @@ BOOL __fastcall SKILL_ExecuteItemCastOnUnit(D2UnitStrc * pUnit, eD2Skills eSkill
     return 0;
 }
 
-void __fastcall SKILL_ExecuteItemCastAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam) {
-    if (!(pUnit && nTargetX && nTargetY)) {
-      return;
+int __fastcall SKILL_ExecuteItemCastAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, int32_t nTargetX, int32_t nTargetY, uint16_t nItemParam) {
+    if (pUnit && nTargetX && nTargetY) {
+      BOOL nResult;
+      nResult = SKILL_ExecuteItemCast(pUnit, eSkill, pSkillLevelData, nullptr, (int16_t)nTargetX, (int16_t)nTargetY, nItemParam);
+      return nResult;
     }
 
-    SKILL_ExecuteItemCast(pUnit, eSkill, pSkillLevelData, nullptr, (int16_t)nTargetX, (int16_t)nTargetY, nItemParam);
+    return 0;
 }
 
 } // namespace D2Client::SKILLS::SkillsPal
