@@ -3072,8 +3072,8 @@ static static_tree_desc gZlibStaticBlDesc = {
 }; D2_STATIC_GUARD(gZlibStaticBlDesc, "Storm::_3rdparty::zlib::trees::_tr_init::gZlibStaticBlDesc");
 
     pDeflateState->l_desc.dyn_tree = pDeflateState->dyn_ltree;
-    pDeflateState->bl_desc.dyn_tree = pDeflateState->bl_tree;
     pDeflateState->d_desc.dyn_tree = pDeflateState->dyn_dtree;
+    pDeflateState->bl_desc.dyn_tree = pDeflateState->bl_tree;
     pDeflateState->l_desc.stat_desc = &gZlibStaticLDesc;
     pDeflateState->d_desc.stat_desc = &gZlibStaticDDesc;
     pDeflateState->bl_desc.stat_desc = &gZlibStaticBlDesc;

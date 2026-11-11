@@ -219,7 +219,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOO
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, 0x50, 0);
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnknown);
-    uint8_t byDifficulty;
+    uint32_t byDifficulty;
     byDifficulty = pGame->nDifficulty;
     if (byDifficulty > 0) {
       if (1 < byDifficulty) {
@@ -694,7 +694,7 @@ void __fastcall FireEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
       return;
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {
@@ -765,7 +765,7 @@ void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUni
       return;
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {
@@ -837,7 +837,7 @@ void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
       return;
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {
@@ -910,7 +910,7 @@ void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique
       return;
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {
@@ -982,7 +982,7 @@ void __fastcall ManaBurn(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
       return;
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {

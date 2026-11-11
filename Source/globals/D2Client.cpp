@@ -517,14 +517,6 @@ namespace D2Launch::MainMenus {
 
 } // namespace D2Launch::MainMenus
 
-namespace D2Multi::OOGUtilities {
-
-} // namespace D2Multi::OOGUtilities
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Client::GAME::Game {
 
 // =============================================================================
@@ -1278,8 +1270,6 @@ char * gaLanguageNames_007273a8[15] = {
 uint32_t gnMonsterSpecialType = 0; D2_GLOBAL_GUARD(gnMonsterSpecialType, "D2Client::UI::npcmenu::gnMonsterSpecialType");
 uint32_t gnNpcMenuMercHireCost1 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost1, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost1");
 uint32_t gnNpcMenuMercHireCost2 = 0; D2_GLOBAL_GUARD(gnNpcMenuMercHireCost2, "D2Client::UI::npcmenu::gnNpcMenuMercHireCost2");
-uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "D2Client::UI::npcmenu::gbNpcMenuInitialized");
-uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "D2Client::UI::npcmenu::gnNpcMenuActiveMode");
 
 } // namespace D2Client::UI::npcmenu
 
@@ -1477,10 +1467,6 @@ namespace D2Glide::Renderer::Glide {
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
-
-namespace D2Sound::Src::D2SoundFast {
-
-} // namespace D2Sound::Src::D2SoundFast
 
 namespace D2Lang::Unicode::UNISYS {
 
@@ -1730,6 +1716,10 @@ namespace D2Launch::Launcher {
 
 } // namespace D2Launch::Launcher
 
+namespace D2Multi::OOGUtilities {
+
+} // namespace D2Multi::OOGUtilities
+
 namespace D2Client::Lng {
 
 // =============================================================================
@@ -1886,6 +1876,10 @@ namespace D2Win::Src::D2WinTextBox {
 namespace D2Sound {
 
 } // namespace D2Sound
+
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
 
 namespace Bnclient::Bnet {
 

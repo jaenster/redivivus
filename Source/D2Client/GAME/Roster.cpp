@@ -433,6 +433,7 @@ void __stdcall ROSTER_SortPartyListsByPartyId() {
 
 // Promotes the party entry matching nPartyId to the front of pRosterPartyList, then within that party's pOwner chain promotes the roster node matching nRosterGUID to the front. Used to prioritize a specific player in the party display order. No-ops if nPartyId is -1 or the entries are not found.
 static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(uint16_t nPartyId, int32_t nRosterGUID) {
+    D2RosterPartyListStrc* pCurrentRoster;
     D2RosterStrc* pCurrent;
     D2RosterStrc* pPrevious;
     D2RosterStrc* pNext;
@@ -442,12 +443,7 @@ static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(uint16_t nPartyId, i
       return;
     }
 
-    while (true) {
-      D2RosterPartyListStrc* pCurrentRoster;
-      pCurrentRoster = pList;
-      if (!pCurrentRoster) {
-        break;
-      }
+    while (pCurrentRoster = pList) {
       if (pCurrentRoster->nPartyId == nPartyId) {
         if (pPrevParty) {
           pPrevParty->pNext = pCurrentRoster->pNext;
@@ -660,11 +656,12 @@ D2RosterStrc * __fastcall GetRosterByGUID(int32_t nRosterGUID) {
 
 uint16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
     int nMemberCount = 0;
-    if (!(pRoster && gpRosterPlayers)) {
+    D2RosterStrc* t2_c0 = gpRosterPlayers;
+    if (!(pRoster && t2_c0)) {
       return 0xffff;
     }
 
-    D2RosterStrc* pCurrent = gpRosterPlayers;
+    D2RosterStrc* pCurrent = t2_c0;
     do {
       if (pCurrent->nPartyId == pRoster->nPartyId) {
         nMemberCount++;

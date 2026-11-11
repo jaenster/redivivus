@@ -6329,7 +6329,7 @@ int __fastcall MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce(::SGAMEDATA * pGame, D
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
     nTargetX = D2Common::Seed::GetSeed_nSeedLow(pSeed);
     D2Common::Units::Missile::SetTargetX(pUnit, nTargetX);
-    D2Common::Units::Missile::SetTargetY(pUnit, nInterval * 0x10000 + (nDirY & 0xffff));
+    D2Common::Units::Missile::SetTargetY(pUnit, nInterval * 0x10000 + (uint32_t)(uint16_t)nDirY);
     nMissileId = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
     return nMissileId;
 }

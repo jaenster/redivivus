@@ -336,7 +336,8 @@ void __fastcall Q34_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 void __fastcall Q34_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q4->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+    D2QuestDataA5Q4Strc* t2_c0 = pQuestData->pQuestSpecificData.pA5Q4;
+    QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q34_CheckNearNihlathak (Betrayal of Harrogath). Per-player proximity check: if the player's room (or an adjacent room) is the stored Nihlathak room AND Prison of Ice is done AND Betrayal not yet complete/reward, sets the player's RewardAwaits + JustCompleted bits — i.e. completes the quest when a player is near the dying/dead Nihlathak. Skipped if CannotComplete or already Completed.

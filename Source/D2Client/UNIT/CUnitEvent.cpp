@@ -78,19 +78,14 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, int nClientEv
 void __fastcall CUNITEVENT_RemoveByTypeAndState(D2UnitStrc * pUnit, int32_t nEventType, int32_t nEventState) {
     int32_t nLine;
     int32_t nNull;
+    D2CUnitEventStrc* pMemoryToFree;
     char* szFile;
     if (!pUnit) {
       return;
     }
 
     D2CUnitEventStrc* pPrevEvent = pUnit->uSideData.pClientSide.pCUnitEventList;
-    while (true) {
-      D2CUnitEventStrc* pMemoryToFree;
-      pMemoryToFree = pPrevEvent;
-      if (!pMemoryToFree) {
-        break;
-      }
-
+    while (pMemoryToFree = pPrevEvent) {
       pPrevEvent = pMemoryToFree->pPrev;
       if (pMemoryToFree->nEventType == nEventType && pMemoryToFree->nEventState == nEventState) {
         if (pMemoryToFree->pNext) {

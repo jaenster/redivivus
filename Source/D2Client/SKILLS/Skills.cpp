@@ -926,12 +926,7 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
         bInRadius = ROOM_IsPointInRadius(sCallbackArg.ppRoomList[nCallbackData], nCenterXSaved, nCenterY, nRadius);
         if (bInRadius) {
           pRoomUnitNext = sCallbackArg.ppRoomList[nCallbackData]->pUnitList;
-          while (true) {
-            pUnit2 = pRoomUnitNext;
-            if (!pUnit2) {
-              break;
-            }
-
+          while (pUnit2 = pRoomUnitNext) {
             pRoomUnitNext = pUnit2->pRoomNext;
             if (pUnit2 != sCallbackArg.pUnit2) {
               eUnitType = pUnit2->eUnitType;

@@ -381,7 +381,8 @@ void __fastcall Q03_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 
 // Q03_Callback_10 (A1Q3) — player-leaves-game hook (handler slot 10). Removes the leaving player (by nUnitGUID, or -1 if none) from the quest's participant GUID list (sQuestGUID +5). No quest-record writes.
 void __fastcall Q03_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q3->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+    D2QuestDataA1Q3Strc* t2_c0 = pQuestData->pQuestSpecificData.pA1Q3;
+    QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q03_Callback_06 (A1Q3) — handler slot 6; another Malus-count decrement path. If in-progress: decrement nQuestItemCount; when it reaches 0 and nMalusMode==2, call MallusHandler (which advances nStateFlag to 3 and broadcasts RewardAwaits). No direct quest-record writes.

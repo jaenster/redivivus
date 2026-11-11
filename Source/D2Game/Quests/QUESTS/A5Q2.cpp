@@ -394,7 +394,8 @@ void __fastcall Q32_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 void __fastcall Q32_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA5Q2->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+    D2QuestDataA5Q2Strc* t2_c0 = pQuestData->pQuestSpecificData.pA5Q2;
+    QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q32_SetCannotComplete (A5Q2 Rescue on Mount Arreat) -- per-player marker, iterated over players.

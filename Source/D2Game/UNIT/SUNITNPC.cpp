@@ -553,12 +553,7 @@ void __fastcall SUNITNPC_FillNpcStore(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
                 pDVar1 = pGameNpc->sTrade.pTradeList1;
                 nScrollsToGen = Seed::SEED_RollRange(pNpcControl, (uint32_t)pDVar1[nTradeIdx].nMagicMin, (uint32_t)pDVar1[nTradeIdx].nMagicMax + nScrollCountBonus);
                 pItemTxtTmp = pTradeItemTxt;
-                while (true) {
-                  nTradeItemTxt = nScrollsToGen;
-                  if (!nTradeItemTxt) {
-                    break;
-                  }
-
+                while ((D2ItemsTxt*)(nTradeItemTxt = nScrollsToGen)) {
                   pGeneratedItem = SUNITNPC_GenerateNpcItems(pNpcUnit, pGameNpc->sTrade.pTradeList1[nTradeIdx].dwItemCode, pGame2, 1, QUALITY_MAGIC, nStoreItemLevel, nPlayerLevel);
                   if (!pGeneratedItem) {
                     nFailCount++;

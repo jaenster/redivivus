@@ -3772,7 +3772,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
 
       nVelocityPct = (uint32_t)(pDVar1->nAnimSpeed * nBaseFrameTime) / 100;
       nVelocityPct = !nVelocityPct ? 0 : nVelocityPct;
-      if (0x7ffe < (int32_t)nVelocityPct) {
+      if ((int32_t)nVelocityPct >= 0x7fff) {
         nVelocityPct = 0x7fff;
       }
 
@@ -3897,7 +3897,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
 
           nVelocityPct = (uint32_t)(nFrameTime * nBaseFrameTime) / 100;
           nVelocityPct = !nVelocityPct ? 0 : nVelocityPct;
-          if (0x7ffe < (int32_t)nVelocityPct) {
+          if ((int32_t)nVelocityPct >= 0x7fff) {
             nVelocityPct = 0x7fff;
           }
 

@@ -2586,7 +2586,7 @@ void __fastcall CELCMP_ApplyColorKeyToAllPixels(void * pFrameData, pfnTilecmpPix
       uint32_t dwPixelRGB;
       dwPixelRGB = d2_load24((uint8_t*)pPixel);
       pPixel += 3;
-      if ((uint32_t)dwPixelRGB != ((nColorKeyR & 0xff) * 0x100 + (uint8_t)nColorKeyG) * 0x100 + nColorKeyB) {
+      if ((uint32_t)dwPixelRGB != ((uint32_t)(uint8_t)nColorKeyR * 0x100 + (uint8_t)nColorKeyG) * 0x100 + nColorKeyB) {
         (*pfnPixelCallback)((uint32_t)dwPixelRGB);
       }
     }

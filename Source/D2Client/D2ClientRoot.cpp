@@ -1761,12 +1761,7 @@ int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwne
     if (pOwnerUnit) {
       D2CUnitEventStrc* pDVar1;
       pNextCallback = pOwnerUnit->uSideData.pClientSide.pCUnitEventList;
-      while (true) {
-        pDVar1 = pNextCallback;
-        if (!pDVar1) {
-          break;
-        }
-
+      while (pDVar1 = pNextCallback) {
         pNextCallback = pDVar1->pPrev;
         if (pDVar1->nClientEvent == nClientEvent) {
           dwResult = pDVar1->pfnCallback(nClientEvent, pOwnerUnit, pMissile, dwParam4, pDVar1->dwEventData1, pDVar1->dwEventData2);
@@ -3646,7 +3641,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               ppuVar1 = ppInputSaved;
             }
 
-            pImageWritePtr = (void*)((char*)pImageWritePtr + (nModuleBase & 0xffff));
+            pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
             pCopyDst = pImageWritePtr;
             ppSectionEntry = ppSectionDataCursor;
             if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
@@ -3792,7 +3787,7 @@ uint32_t __fastcall WARDEN_DecryptModule(uint32_t * * ppInput, uint32_t nInputSi
               ppuVar1 = ppInputSaved;
             }
 
-            pImageWritePtr = (void*)((char*)pImageWritePtr + (nModuleBase & 0xffff));
+            pImageWritePtr = (void*)((char*)pImageWritePtr + (uint32_t)(uint16_t)nModuleBase);
             pCopyDst = pImageWritePtr;
             ppSectionEntry = ppSectionDataCursor;
             if (pImageWritePtr >= (void*)(nHeaderSize + (char*)ppFVar7)) {
@@ -3931,7 +3926,7 @@ void __thiscall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, uint8_t * pKey, uint3
       bySwapTemp = pRc4State->sbox[nByteIdx];
       pRc4State->sbox[nByteIdx] = pRc4State->sbox[bySwapIndex];
       pRc4State->sbox[bySwapIndex] = bySwapTemp;
-      nKeyIdx = ((nKeyIdx & 0xff) + 1) % nKeyLength;
+      nKeyIdx = ((uint32_t)(uint8_t)nKeyIdx + 1) % nKeyLength;
       nByteIdx = nNextIdx;
     } while (nNextIdx < 0x100);
 }

@@ -880,11 +880,7 @@ void __fastcall SUNITPROXY_ProcessNpcItemQueue(::SGAMEDATA * pGame, D2UnitStrc *
     D2GameNpcStrc* pNpc;
     pNpc = pFoundNpc;
     pQueueIter = pFoundNpc->pProxyQueue;
-    while (true) {
-      pMemoryToFree = pQueueIter;
-      if (!pMemoryToFree) {
-        break;
-      }
+    while (pMemoryToFree = pQueueIter) {
       if (pMemoryToFree->nEntryType == 1) {
         if (!pMemoryToFree->pUnit) {
           nGambleRefillCount = -1;
@@ -1001,11 +997,7 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
     if (pNpc->flags0x0C) {
       pNextProxyEntry = pNpc->pProxyInventories;
       pProxyEntryIter = 0;
-      while (true) {
-        pProxyEntry = pNextProxyEntry;
-        if (!pProxyEntry) {
-          break;
-        }
+      while (pProxyEntry = pNextProxyEntry) {
         if (pProxyEntry->nPlayerGUID == nMemory) {
           if (pProxyEntryIter) {
             pProxyEntryIter->pNext = pProxyEntry->pNext;

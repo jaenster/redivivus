@@ -15,6 +15,7 @@
 
 // Forward declarations
 struct D2BNetClientCallbacksStrc;
+struct D2ControlMsg;
 struct D2ControlStrc;
 struct D2LobbyControlsStrc;
 struct D2WinButton;
@@ -22,22 +23,20 @@ struct D2WinEditBox;
 struct D2WinSmack;
 struct D2WinTextBox;
 struct DC6;
+struct FORMS_AnimFrameStrc;
+struct FORMS_PredefinedFormStrc;
+typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 
 extern unsigned short CreateJoinGameRequestId;
 extern int gnChatTabCompletionIndex;
 // Eleven lobby user-list row buttons. A stray label on element 1 kept it at one pointer, so rows 1..10 were created into, compared against and destroyed through adjacent globals.
 extern ::D2WinButton * gaChatUserListButtonArray[11];
 extern uint32_t gbChatOptionButtonState;
-extern D2ControlStrc * gpCtlLobbyChat[2];
 extern D2LobbyControlsStrc gpLobbyForm0;
 extern D2BNetClientCallbacksStrc * pNetworkUnknown;
 extern uint32_t ghBannerAdProcess;
 extern char gszOogReplyCommandBuffer[256];
-extern uint32_t gbLadderNewsExpanded;
 extern uint32_t gdwGameJoinRequestTick;
-extern uint32_t gbLobbyInitialized;
-extern DC6 * gpDC6BnetBackground;
-extern DC6 * gpDC6WaitingRoomBackground;
 extern DC6 * gpDC6PopUpLargest2;
 extern DC6 * gpDC6MediumButtonBlank2;
 extern DC6 * gpDC6CursorOpenHand;
@@ -50,9 +49,7 @@ extern DC6 * gpDC6ChatLeftButtons3;
 extern DC6 * gpDC6ChatRightTopButtonsAlt;
 extern DC6 * gpDC6ChatRightTopButtons;
 extern DC6 * gpDC6ChatArrows;
-extern ::D2WinTextBox * gpCtlConfirmDialog;
 extern D2ControlStrc * gpCtlLobbyAccountList;
-extern ::D2WinButton * gpCtlLobbyLadderNewsToggle;
 extern ::D2WinTextBox * pGameListCache;
 extern DC6 * DCC_JoinGame;
 extern DC6 * gpDC6BlankBckg2;
@@ -85,7 +82,6 @@ extern D2ControlStrc * gpCtlChannelOkButton;
 extern D2ControlStrc * gpCtlChannelDlgCancelButton;
 extern ::D2WinEditBox * gpCtlChannelNameEditBox;
 extern ::D2WinTextBox * gpCtlChannelList;
-extern D2ControlStrc * ghWndGameNameEditBox;
 extern DC6 * gpDC6CreateGameBckg;
 extern DC6 * gpDC6WideButtonBlank;
 extern DC6 * gpLauncherImageResource2;
@@ -111,6 +107,33 @@ extern int gaFormList32InitialItems[4];
 extern int32_t gaChatTextBoxFontParams[2];
 extern ::D2WinTextBox * gpChatMessagesTextBox;
 extern ::D2WinEditBox * gpChatDlgInputEditBox;
-extern ::D2WinTextBox * BattleNetNews;
 extern ::D2WinTextBox * gpControlJoinGameError;
 extern uint32_t gnOpenBNetMode;
+
+namespace D2Multi::OOGUtilities {
+extern int32_t gaMultiFormFontParamsFont4[2];
+extern int32_t gaMultiFormFontParamsFont2[2];
+extern int32_t gaMultiFormFontParamsFont1[2];
+extern int32_t gaMultiTextBoxScrollbarGeom6[3];
+// Form records read by FORMS_CreateAnyForm (48 bytes each). pTypeArg1/pTypeArg2 (+0x24/+0x28) are constructor arguments whose meaning depends on neD2FormType: code, data or a small integer (the Button initial image index 0/2/4/6, e.g. gaPredefinedForms_b[12..14]); the struct field comments list each case. Typed void* for that reason.
+// Provenance: FORMS_CreateAnyForm 004f93c0 and a census of every record.
+// Index 0x80 (0070e650, FORM_Timer -> CHATDLG_OnTimerRequestLadderData) is the last record: UIMENU_LadderBoard_PrintClassesAndTableHeaders 00440887 calls FORMS_CreateAnyFormFromListEx(0x80).
+extern FORMS_PredefinedFormStrc gaPredefinedForms_b[129];
+} // namespace D2Multi::OOGUtilities
+
+namespace D2Multi::ChatDlg {
+extern int32_t gaMultiFormFontParamsFont3[2];
+extern int32_t gaMultiFormFontParamsFont7[2];
+extern int32_t gaMultiTextBoxScrollbarGeom0[3];
+extern int32_t gaMultiTextBoxScrollbarGeom1[3];
+extern int32_t gaMultiTextBoxScrollbarGeom2[3];
+extern int32_t gaMultiTextBoxScrollbarGeom3[3];
+extern int32_t gaMultiTextBoxScrollbarGeom4[3];
+extern int32_t gaMultiTextBoxScrollbarGeom5[3];
+extern FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5];
+// lpCriticalSection parameter of DeleteCriticalSection
+// lpCriticalSection parameter of InitializeCriticalSection
+// lpCriticalSection parameter of LeaveCriticalSection
+// lpCriticalSection parameter of EnterCriticalSection
+extern _RTL_CRITICAL_SECTION lpCriticalSection_0077ae28;
+} // namespace D2Multi::ChatDlg

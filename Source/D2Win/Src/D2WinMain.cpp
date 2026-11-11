@@ -399,12 +399,7 @@ void __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
       return;
     }
 
-    while (true) {
-      pCurrent = pIter;
-      if (pCurrent == pControl) {
-        break;
-      }
-
+    while ((pCurrent = pIter) != pControl) {
       pIter = pCurrent->pNext;
       pPrev = pCurrent;
       if (!pCurrent->pNext) {

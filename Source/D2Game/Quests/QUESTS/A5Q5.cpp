@@ -850,8 +850,9 @@ void __fastcall Q35_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         return;
       }
       if (pQuestData->nStateFlag == 2) {
+        D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
         pGame = pQuestArgs->pGame;
-        D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
+        D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(t2_c0)->pQuestRecord[pGame->nDifficulty];
         bIsCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
         if (bIsCompleted == 1) {
           return;

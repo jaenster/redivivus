@@ -210,8 +210,8 @@ static uint32_t __stdcall SFILE_Hash(int32_t nHashKind, char * szText) {
     for (; szText && *szText != '\0'; szText++) {
       uint32_t nUpper;
       nUpper = toupper((int)*szText);
-      nHash = nHash + nSeed ^ g_pStormMpqCryptTable[nHashKind * 0x100 + (nUpper & 0xff)];
-      nSeed = nSeed * 0x21 + (nUpper & 0xff) + 3 + nHash;
+      nHash = nHash + nSeed ^ g_pStormMpqCryptTable[nHashKind * 0x100 + (uint32_t)(uint8_t)nUpper];
+      nSeed = nSeed * 0x21 + (uint32_t)(uint8_t)nUpper + 3 + nHash;
     }
 
     return nHash;
@@ -2862,8 +2862,7 @@ void __thiscall TSList_UnlinkNode_00418560(StormLinkedListStrc * pThis, StormLin
 }
 
 int __fastcall Unreferenced_004185b0(StormLinkedListStrc * param_1) {
-    uint32_t uVar1 = param_1->head.pNext;
-    return (uint32_t)!((int)uVar1 <= 0 ? 0 : uVar1);
+    return (uint32_t)!((int)param_1->head.pNext <= 0 ? 0 : param_1->head.pNext);
 }
 
 intptr_t __thiscall TSList_RawNext_004185d0(StormLinkedListStrc * pThis, StormLinkStrc * pLink) {

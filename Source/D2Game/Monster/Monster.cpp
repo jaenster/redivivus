@@ -446,12 +446,7 @@ void __fastcall MONSTER_KillAllInLevel(::SGAMEDATA * pGame, int32_t nAltMonClass
       eD2LevelId eRoomLevelId;
       if (eLevel == LEVEL_None || (eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom) , eRoomLevelId == eLevel)) {
         pNextUnit = pRoom->pUnitList;
-        while (true) {
-          pUnit = pNextUnit;
-          if (!pUnit) {
-            break;
-          }
-
+        while (pUnit = pNextUnit) {
           pNextUnit = pUnit->pRoomNext;
           if (pUnit->eUnitType == UNIT_MONSTER && (pUnit->nClassId == nTargetClassId || pUnit->nClassId == nAltMonClassId2)) {
             BVar1 = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
@@ -559,7 +554,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     MONSTER_InitLevelDifficultyScaling(pGame, &monLevelData, pRoom, pUnit);
-    uint8_t byDifficultyIdx;
+    uint32_t byDifficultyIdx;
     byDifficultyIdx = pGame->nDifficulty;
     if (byDifficultyIdx > 0) {
       if (1 < byDifficultyIdx) {

@@ -125,11 +125,7 @@ void __fastcall SOUNDUTIL_FreeLinkedList(D2SoundListNodeStrc * * ppListHead) {
       pHead = *ppListHead;
       pCurrent = pHead;
       pPrev = 0;
-      while (true) {
-        pMemoryToFree = pCurrent;
-        if (!pMemoryToFree) {
-          break;
-        }
+      while (pMemoryToFree = pCurrent) {
         if (pMemoryToFree->nItemKey == pHead->nItemKey) {
           if (pHead == pMemoryToFree) {
             *ppListHead = pMemoryToFree->pNext;

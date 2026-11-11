@@ -83,18 +83,13 @@ D2SUnitEventStrc * __fastcall SUNITEVENT_Alloc(::SGAMEDATA * pGame, D2UnitStrc *
 // It sets nothing; the loop at 005c0b70 only removes matches.
 // @sourcefile .\UNIT\SUnitEvent.cpp
 void __fastcall SUNITEVENT_RemoveEventsByQueueAndOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nQueueNo, int32_t nOwnerKey) {
+    D2SUnitEventStrc* pMemoryToFree;
     if (!pUnit) {
       return;
     }
 
     D2SUnitEventStrc* pNextEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList;
-    while (true) {
-      D2SUnitEventStrc* pMemoryToFree;
-      pMemoryToFree = pNextEvent;
-      if (!pMemoryToFree) {
-        break;
-      }
-
+    while (pMemoryToFree = pNextEvent) {
       pNextEvent = pMemoryToFree->pNext;
       if (pMemoryToFree->nQueueNo == nQueueNo && pMemoryToFree->nOwnerKey == nOwnerKey) {
         if (pMemoryToFree->nFlags & 1) {
@@ -137,19 +132,14 @@ D2SUnitEventStrc * __fastcall UNITEVENT_FindByCallbackParams(::SGAMEDATA * pGame
 // Iterates pUnit's pSrvUnitEventList and invokes fpItemEventFunc of every entry whose nUnitEvent matches eEventType, passing pGame, eEventType, pUnit, pOtherUnit, pDamage, eSkill and nSkillLevel. Sets the executing flag during the call; after, frees the entry if it was marked for removal or has nQueueNo==0 (one-shot). Returns the last callback's return value, or 0 if pUnit is null.
 // @sourcefile .\UNIT\SUnitEvent.cpp
 int32_t __fastcall UNITEVENT_DispatchEventsByType(::SGAMEDATA * pGame, uint32_t eEventType, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit, D2DamageStrc * pDamage) {
+    D2SUnitEventStrc* pMemoryToFree;
     if (!pUnit) {
       return 0;
     }
 
     BOOL nCallbackResult = 0;
     D2SUnitEventStrc* pNextEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList;
-    while (true) {
-      D2SUnitEventStrc* pMemoryToFree;
-      pMemoryToFree = pNextEvent;
-      if (!pMemoryToFree) {
-        break;
-      }
-
+    while (pMemoryToFree = pNextEvent) {
       pNextEvent = pMemoryToFree->pNext;
       if (pMemoryToFree->nUnitEvent == eEventType) {
         pMemoryToFree->nFlags |= 1;

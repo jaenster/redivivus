@@ -258,14 +258,6 @@ namespace D2Launch::MainMenus {
 
 } // namespace D2Launch::MainMenus
 
-namespace D2Multi::OOGUtilities {
-
-} // namespace D2Multi::OOGUtilities
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Client::GAME::Game {
 
 } // namespace D2Client::GAME::Game
@@ -341,62 +333,6 @@ namespace D2Glide::Renderer::Glide {
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
-
-namespace D2Sound::Src::D2SoundFast {
-
-// =============================================================================
-// Initialized data (arrays, structs, tables)
-// =============================================================================
-
-int gAmbientSoundTable[16] = {
-    (int)(uintptr_t)(char*)"data\\global\\music\\common\\options.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\caves.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\monastery.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\crypt.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\harem.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\tombs.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\spider.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
-    0x0
-}; D2_GLOBAL_GUARD(gAmbientSoundTable, "D2Sound::Src::D2SoundFast::gAmbientSoundTable");
-
-int gaAmbientSoundEntryTable[16] = {
-    (int)(uintptr_t)(char*)"data\\global\\music\\introedit.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\icecaves.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\xtemple.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\desert.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\sewer.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurast.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act4\\diablo.wav",
-    0x0
-}; D2_GLOBAL_GUARD(gaAmbientSoundEntryTable, "D2Sound::Src::D2SoundFast::gaAmbientSoundEntryTable");
-
-// =============================================================================
-// Initialized scalars
-// =============================================================================
-
-int gaAmbientSoundFlags = 0x8; D2_GLOBAL_GUARD(gaAmbientSoundFlags, "D2Sound::Src::D2SoundFast::gaAmbientSoundFlags");
-uint32_t gnAmbientSoundCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundCount, "D2Sound::Src::D2SoundFast::gnAmbientSoundCount");
-D2SoundSmpStrc * gpMusicStreamBuffer = 0; D2_GLOBAL_GUARD(gpMusicStreamBuffer, "D2Sound::Src::D2SoundFast::gpMusicStreamBuffer");
-uint32_t gnAmbientSoundLanguageCode = 0; D2_GLOBAL_GUARD(gnAmbientSoundLanguageCode, "D2Sound::Src::D2SoundFast::gnAmbientSoundLanguageCode");
-uint32_t gbAmbientSoundLangInitialized = 0; D2_GLOBAL_GUARD(gbAmbientSoundLangInitialized, "D2Sound::Src::D2SoundFast::gbAmbientSoundLangInitialized");
-
-} // namespace D2Sound::Src::D2SoundFast
 
 namespace D2Lang::Unicode::UNISYS {
 
@@ -646,6 +582,10 @@ namespace D2Launch::Launcher {
 
 } // namespace D2Launch::Launcher
 
+namespace D2Multi::OOGUtilities {
+
+} // namespace D2Multi::OOGUtilities
+
 namespace D2Client::Lng {
 
 } // namespace D2Client::Lng
@@ -721,6 +661,16 @@ uint32_t gbHasLegacySoundDriverCrlds3d = 0; D2_GLOBAL_GUARD(gbHasLegacySoundDriv
 uint32_t LanguageCode = 0; D2_GLOBAL_GUARD(LanguageCode, "D2Sound::LanguageCode");
 
 } // namespace D2Sound
+
+namespace D2Sound::Src::D2SoundFast {
+
+// =============================================================================
+// Initialized scalars
+// =============================================================================
+
+D2SoundSmpStrc * gpMusicStreamBuffer = 0; D2_GLOBAL_GUARD(gpMusicStreamBuffer, "D2Sound::Src::D2SoundFast::gpMusicStreamBuffer");
+
+} // namespace D2Sound::Src::D2SoundFast
 
 namespace Bnclient::Bnet {
 

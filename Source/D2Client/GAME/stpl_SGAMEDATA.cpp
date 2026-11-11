@@ -236,13 +236,8 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     intptr_t nHeadOffset;
     intptr_t encPrev;
     TSLink<::SGAMEDATA>* pNext;
-    while (true) {
+    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
       TSLink<::SGAMEDATA>* pNode;
-      nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
-      if (!nHeadOffset) {
-        break;
-      }
-
       pNext = *(TSLink<::SGAMEDATA>**)(this->m_linkoffset + nHeadOffset);
       pNode = (TSLink<::SGAMEDATA>*)(this->m_linkoffset + nHeadOffset);
       if (pNext) {
@@ -266,13 +261,8 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
     intptr_t nHeadOffset;
     intptr_t encPrev;
-    while (true) {
+    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
       TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNode;
-      nHeadOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
-      if (!nHeadOffset) {
-        break;
-      }
-
       pNext = *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)(this->m_linkoffset + nHeadOffset);
       pNode = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)(this->m_linkoffset + nHeadOffset);
       if (pNext) {

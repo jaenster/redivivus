@@ -1130,7 +1130,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
       return 0;
     }
 
-    uint8_t byDescFunc;
+    uint32_t byDescFunc;
     byDescFunc = pStatCostLine->descfunc;
     uint32_t nDescriptionValue;
     nDescriptionValue = (uint32_t)(uint8_t)pStatCostLine->descval;

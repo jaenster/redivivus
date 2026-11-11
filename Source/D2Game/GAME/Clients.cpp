@@ -1852,7 +1852,7 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
     uint32_t szGuildTagLen;
     uint8_t bGuildInfo2;
     uint8_t bGuildInfo1;
-    uint8_t byClass;
+    uint32_t byClass;
     char aBodyAppearance[16];
     char aHeadAppearance[16];
     char aBodyAppearance2[16];

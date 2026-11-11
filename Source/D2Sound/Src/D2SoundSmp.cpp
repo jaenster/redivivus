@@ -847,12 +847,7 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
         }
       }
 
-      while (true) {
-        __frame0.pCurrentNode = ppSoundSmp;
-        if (!__frame0.pCurrentNode) {
-          break;
-        }
-
+      while (__frame0.pCurrentNode = ppSoundSmp) {
         pSoundSmp = (D2SoundSmpStrc*)__frame0.pCurrentNode->nItemKey;
         SOUNDSMP_CheckBufferLost(pSoundSmp);
         if (gbWindowIsMinimized != __frame0.nPrevMinimized) {

@@ -1917,7 +1917,7 @@ void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2
       } else {
         pLayerEntry = pCOFLayerData + 0x1c;
         for (nLayerIndex = 0; nLayerIndex < *pCOFLayerData; nLayerIndex++) {
-          if (0xf < (int32_t)nComponentType) {
+          if ((int32_t)nComponentType >= 0x10) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50e);
             exit(-1);
           }
@@ -2559,12 +2559,7 @@ void __fastcall D2COMP_DrawUnitShadow(D2CharSelCompStrc * pCompUnit) {
             return;
           }
 
-          while (true) {
-            byComponent = nLayerCount[nLayerIndex];
-            if (byComponent >= 0x10) {
-              break;
-            }
-
+          while ((byComponent = nLayerCount[nLayerIndex]) < 0x10) {
             memset(&sGfxData, 0, 0x48);
             D2COMP_InitComponentEntry((uint32_t)pCompUnit->nAnimSpeed, nWeaponClass, pCompUnit, byComponent, nullptr, &sGfxData);
             D2gfx::D2GFX::D2GFX_DrawShadow(&sGfxData, nPositionX - 2, nPositionY);
@@ -3562,12 +3557,12 @@ void __stdcall D2COMP_SetAnimationSpeed(D2CharSelCompStrc * pCompUnit, uint8_t b
       exit(-1);
     }
 
-    uint8_t bySpeedCopy = bySpeed;
+    uint32_t bySpeedCopy = bySpeed;
     if (bySpeed <= 0) {
       bySpeedCopy = 0;
     }
 
-    uint8_t byClampedSpeed = pCompUnit->nNumDirections;
+    uint32_t byClampedSpeed = pCompUnit->nNumDirections;
     if (bySpeedCopy < byClampedSpeed) {
       if (bySpeed > 0) {
         pCompUnit->nAnimSpeed = bySpeed;

@@ -34,12 +34,7 @@ static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * 
 static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback) {
-    while (true) {
-      nBufferSize--;
-      if (nBufferSize < 0) {
-        break;
-      }
-
+    while (--nBufferSize >= 0) {
       (*fpInitValueCallback)(pBuffer);
       pBuffer = (void*)((char*)pBuffer + nTypeSize);
     }
@@ -260,7 +255,7 @@ void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Repo
 
 static void CRASH_GetExceptionName(char * szText, DWORD dwExceptionCode) {
     DWORD nMsgLen;
-    if (dwExceptionCode < 0xc0000006) {
+    if (dwExceptionCode <= 0xc0000005) {
       if (dwExceptionCode == 0xc0000005) {
         strncpy_s(szText, 0x100, "ACCESS_VIOLATION", -1);
         return;
@@ -396,7 +391,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
 uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
-    if (pSep) {
+    if ((uintptr_t)pSep > 0) {
       pLastSep = pSep;
     }
 
@@ -426,7 +421,7 @@ uint32_t __stdcall FILETOOLS_ExtractFilename(char * szDest, char * szSrcPath, ui
     pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep;
     pLastSep = 0;
-    if (pSep) {
+    if ((uintptr_t)pSep > 0) {
       pLastSep = pSep;
     }
 

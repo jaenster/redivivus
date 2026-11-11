@@ -545,12 +545,7 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
       do {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pPool->pSync);
         pNextBlock = pPool->pBlocks;
-        while (true) {
-          _Memory = pNextBlock;
-          if (!_Memory) {
-            break;
-          }
-
+        while (_Memory = pNextBlock) {
           pNextBlock = _Memory->pNext;
           if (!_Memory->nBlocks) {
             if (_Memory->pPrev) {

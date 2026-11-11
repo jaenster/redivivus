@@ -2665,7 +2665,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
               nUTF8Len += 5;
               continue;
             }
-            if (uCodepoint < 0x80000000) {
+            if (uCodepoint <= 0x7fffffff) {
               nUTF8Len += 6;
               continue;
             }
@@ -3067,7 +3067,7 @@ void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut) {
             if (uCodepoint < 0x400000) {
               byLeadByte |= 0xf8;
             } else {
-              if (0x7fffffff < uCodepoint) {
+              if (uCodepoint >= 0x80000000) {
                 *pbOut = 0;
                 return;
               }

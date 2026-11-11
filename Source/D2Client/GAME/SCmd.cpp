@@ -1997,10 +1997,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * p
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_manarecovery, (uint32_t)sDecoded.nMPRegen, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < (int32_t)nDeltaX) {
+    if ((int32_t)nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < (int32_t)nDeltaY) {
+    if ((int32_t)nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
@@ -2048,10 +2048,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < (int32_t)nDeltaX) {
+    if ((int32_t)nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < (int32_t)nDeltaY) {
+    if ((int32_t)nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
@@ -2093,10 +2093,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBy
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
     uint32_t nDeltaX = (uint32_t)sDecoded.dX;
     uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if (0x80 < (int32_t)nDeltaX) {
+    if ((int32_t)nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < (int32_t)nDeltaY) {
+    if ((int32_t)nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
@@ -2119,7 +2119,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes) {
 // Client handler for S2C packet 0x93 (8 bytes). Reads player GUID, signed bonus delta, element type filter, and skill page filter. Finds the player unit client-side, then calls SKILLS_CltUpdateSkillList to walk all skills and adjust bonuses matching the element/page criteria. Removes skills whose level drops to 0. Dead code in 1.14d — server never sends this packet.
 void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
     uint32_t nBonusDelta = (uint32_t)(uint8_t)pBytes[5];
-    if (0x80 < (int32_t)nBonusDelta) {
+    if ((int32_t)nBonusDelta > 0x80) {
       nBonusDelta -= 0x100;
     }
 
@@ -2769,12 +2769,13 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY(D2GSPacketSrv0x8D * pPa
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY(D2GSPacketSrv0x8E * pBytes) {
+    int t2_c0 = pBytes->nOwnerGUID;
     if (pBytes->nAssign) {
-      Roster::AllocRosterOther(pBytes->nOwnerGUID, pBytes->nCorpseGUID);
+      Roster::AllocRosterOther(t2_c0, pBytes->nCorpseGUID);
       return;
     }
 
-    Roster::FreeAllRosterPlayer(pBytes->nOwnerGUID, pBytes->nCorpseGUID);
+    Roster::FreeAllRosterPlayer(t2_c0, pBytes->nCorpseGUID);
 }
 
 // Packet 0x9B: hands the unsigned words at +1 and +3 to SetPlayersMercInfo.
@@ -2957,9 +2958,9 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA7(D2GSPacketSrv0xA7 * pBytes) {
       return;
     }
 
-    uint8_t eState = pBytes->nStateId;
-    UNIT::PlrSkills::STATES_SetStateOnUnit(pUnit, (eD2States)eState);
-    UNIT::PlrSkills::STATES_DispatchSetFunc(pUnit, (eD2States)eState);
+    eD2States eState = pBytes->nStateId;
+    UNIT::PlrSkills::STATES_SetStateOnUnit(pUnit, eState);
+    UNIT::PlrSkills::STATES_DispatchSetFunc(pUnit, eState);
 }
 
 // Server→client SCMD 0xA8 handler: applies a state and its associated stat list to a unit. Looks up the target unit by GUID+type (bytes 1–5), sets the state (byte 7) via STATES_SetStateOnUnit, then reads a 9-bit-delimited bitstream (bytes 8+, length=byte 6−8) of stat entries (id, optional param, signed/unsigned value) using ItemStatCost sendBits/sendParamBits metadata, accumulating them via NET_D2GS_CLIENT_HandleAddSTatUnit. Finalises with STATES_DispatchSetFunc.
@@ -3026,9 +3027,9 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX(D2GSPacketSrv0xA9 
       return;
     }
 
-    uint8_t eState = pBytes->nStateId;
-    UNIT::PlrSkills::STATES_DispatchRemFunc(pUnit, (eD2States)eState);
-    UNIT::PlrSkills::PLRSKILLS_RemoveStateFromUnit(pUnit, (eD2States)eState);
+    eD2States eState = pBytes->nStateId;
+    UNIT::PlrSkills::STATES_DispatchRemFunc(pUnit, eState);
+    UNIT::PlrSkills::PLRSKILLS_RemoveStateFromUnit(pUnit, eState);
 }
 
 // Client-side handler for GS→client packet 0xAA (state + stat update). Looks up the target unit by GUID and type from the packet header, then reads a bit-packed stream: a list of state IDs (8-bit, 0xFF sentinel) each followed by an optional stat block (9-bit stat IDs, 0x1FF sentinel). For each state calls STATES_SetStateOnUnit; for each stat reads sendParamBits param and sendBits value from ItemStatCost.txt and applies via NET_D2GS_CLIENT_HandleAddSTatUnit. Ends each state entry with STATES_DispatchSetFunc.

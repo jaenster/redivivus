@@ -213,7 +213,6 @@
         "DRAW_text"
       ],
       "usedTypes": [
-        "D2UiPartyStrc",
         "WCHAR",
         "int32_t"
       ]

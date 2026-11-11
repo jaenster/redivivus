@@ -549,16 +549,7 @@ int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox) {
 
       pCurLineNode = pTextBox->sListState.pLineHead;
       nCount = 0;
-      while (true) {
-        if (!pCurLineNode) {
-          break;
-        }
-
-        pCurLineNode = pCurLineNode->pNext;
-        if (!pCurLineNode) {
-          break;
-        }
-
+      while (pCurLineNode && (pCurLineNode = pCurLineNode->pNext)) {
         nCount++;
       }
 

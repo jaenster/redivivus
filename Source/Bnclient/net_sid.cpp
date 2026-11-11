@@ -2065,17 +2065,17 @@ void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(uint32_t * pToken) {
           innerNibbleIdx = innerLoopCounter >> 3;
           innerBitShift = ((uint8_t)innerLoopCounter & 7) * '\x04';
           innerLoopCounter--;
-          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((pToken[3 - innerNibbleIdx] & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+          accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((pToken[3 - innerNibbleIdx] & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (uint32_t)(uint8_t)accumulator])];
         } while ((int)innerLoopCounter > (int)nibbleIdx);
       }
 
       nibbleIdx--;
       for (innerNibbleIdx = nibbleIdx; (int)innerNibbleIdx >= 0; innerNibbleIdx--) {
         innerBitShift = ((uint8_t)innerNibbleIdx & 7) * '\x04';
-        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((pToken[3 - (innerNibbleIdx >> 3)] & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (accumulator & 0xff)])];
+        accumulator = (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + ((uint8_t)((pToken[3 - (innerNibbleIdx >> 3)] & 0xf << innerBitShift) >> innerBitShift) ^ (uint32_t)gaNetSidSubstitutionBox[sboxTableOffset + (uint32_t)(uint8_t)accumulator])];
       }
 
-      sboxLookupIdx = sboxTableOffset + (accumulator & 0xff);
+      sboxLookupIdx = sboxTableOffset + (uint32_t)(uint8_t)accumulator;
       outWordIdx = 3 - wordIdx;
       sboxTableOffset += -0x10;
       pToken[outWordIdx] = (gaNetSidSubstitutionBox[sboxLookupIdx] & 0xf) << bitShift | ~(0xf << bitShift) & pToken[outWordIdx];

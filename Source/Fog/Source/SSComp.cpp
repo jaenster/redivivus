@@ -50,13 +50,8 @@ void __fastcall COMPRESS_HeapSort(int32_t * pArray, int32_t nCount) {
       pArray = pArrayAfter;
     }
 
-    while (true) {
+    while (--nCount) {
       int32_t nSwapTmp;
-      nCount--;
-      if (!nCount) {
-        break;
-      }
-
       nSwapTmp = *pArray;
       *pArray = pArray[nCount];
       pArray[nCount] = nSwapTmp;

@@ -1300,7 +1300,7 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    uint8_t byDifficulty;
+    uint32_t byDifficulty;
     byDifficulty = pGame->nDifficulty;
     if (byDifficulty > 0) {
       if (1 < byDifficulty) {

@@ -213,7 +213,7 @@ int Unreferenced_0049a2a0() {
     return (uint32_t)((int)uVar1 >= 9);
 }
 
-static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * szPlayerName, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
+static void __fastcall UI_DrawPartyMemberName(char * szPlayerName, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
     int i;
     uint16_t wszName[100];
     char szEllipsisUtf8[5];
@@ -222,7 +222,7 @@ static void __fastcall UI_DrawPartyMemberName(D2UiPartyStrc * szPlayerName, int3
       wszName[i] = L'\0';
     }
 
-    D2Lang::UTF8_ConvertToWideChar(wszName, (char*)szPlayerName, 100);
+    D2Lang::UTF8_ConvertToWideChar(wszName, szPlayerName, 100);
     uint16_t* pTruncate;
     pTruncate = wszName + 99;
     memcpy(szEllipsisUtf8, "...", 4);
@@ -1557,7 +1557,7 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
-      UI_DrawPartyMemberName((D2UiPartyStrc*)pUiParty->szPlayerName, nY, dwColor, (uint32_t)(nPartyId != 0xffff));
+      UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, (uint32_t)(nPartyId != 0xffff));
       UI_DrawPartyMemberClass(nY + 0xc, pUiParty->nCharType, dwColor);
       UI_DrawPartyMemberLevel(pUiParty->nCharLevel, dwColor, nY + 0xc);
       if (bSameParty && pUiParty->eLevelId != LEVEL_None) {

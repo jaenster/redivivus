@@ -487,12 +487,7 @@ int32_t __stdcall UNITFINDS_FindCullRange(D2UnitFindDataStrc * pUnitFindData) {
           if (bBadPtr) {
             /* ghidra fail here to decompile it properly pParam is DrlgRoom here */ pNextUnit = (D2UnitStrc*)(&pUnitFindData->pMemory)[nRoomIdx]->pPools[1].nAllocBlock;
             nRoomIdx = nRoomIdxInner;
-            while (true) {
-              pUnit = pNextUnit;
-              if (!pUnit) {
-                break;
-              }
-
+            while (pUnit = pNextUnit) {
               pNextUnit = pUnit->pRoomNext;
               nRoomIdxInner = nRoomIdx;
               if (pFindData->fpUnitTest) {

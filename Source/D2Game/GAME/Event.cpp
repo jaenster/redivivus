@@ -190,14 +190,9 @@ static D2TimerStrc * EVENT_AllocTimerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
 // nothing; callers that want an immediate run call EVENT_TriggerImmediate afterwards.
 // The 00540e73-00540e8c loop only calls EVENT_RemoveAndRecycleTimer.
 void __fastcall EVENT_RemoveUnitTimersByType(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD nTimerType, int32_t nArg1) {
+    D2TimerStrc* pTimer;
     D2TimerStrc* pNextTimer = UNIT::SUnit::GetTimerList(pUnit);
-    while (true) {
-      D2TimerStrc* pTimer;
-      pTimer = pNextTimer;
-      if (!pTimer) {
-        break;
-      }
-
+    while (pTimer = pNextTimer) {
       pNextTimer = pTimer->pNextTimerOnUnit;
       if (pTimer->nTimerType == nTimerType && (!nArg1 || pTimer->nArg1 == nArg1)) {
         EVENT_RemoveAndRecycleTimer(pTimer, pGame);
@@ -207,14 +202,9 @@ void __fastcall EVENT_RemoveUnitTimersByType(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Removes timers matching both eTimerType and fpTimerFunction from a unit's timer list. Used for custom callback cleanup when a specific timer/callback pair needs cancellation (e.g., map reveal timer removal). Walks pNextTimerOnUnit and calls EVENT_RemoveAndRecycleTimer on matches.
 void __fastcall EVENT_RemoveCustomTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, fpTimerFunctionUnit nfpTimerFunction) {
+    D2TimerStrc* pTimerList;
     D2TimerStrc* pTimerListTemp2 = UNIT::SUnit::GetTimerList(pUnit);
-    while (true) {
-      D2TimerStrc* pTimerList;
-      pTimerList = pTimerListTemp2;
-      if (!pTimerList) {
-        break;
-      }
-
+    while (pTimerList = pTimerListTemp2) {
       pTimerListTemp2 = pTimerList->pNextTimerOnUnit;
       if (pTimerList->nTimerType == eTimerType && nfpTimerFunction == pTimerList->nfpTimerFunction) {
         EVENT_RemoveAndRecycleTimer(pTimerList, pGame);
@@ -533,15 +523,10 @@ void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame) {
 // Checks if a timer of the specified type already exists on a unit. Walks the unit's timer linked list (pNextTimerOnUnit) and returns the earliest scheduled frame number if a matching timer type is found, 0 if not found. Used to prevent duplicate timers on units.
 BOOL __fastcall EVENT_TimerTypeExistsOnUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType) {
     int nTimerFrame;
+    D2TimerStrc* pCurrentTimer;
     D2TimerStrc* pTimerHead = UNIT::SUnit::GetTimerList(pUnit);
     int nBestFrame = 0;
-    while (true) {
-      D2TimerStrc* pCurrentTimer;
-      pCurrentTimer = pTimerHead;
-      if (!pCurrentTimer) {
-        break;
-      }
-
+    while (pCurrentTimer = pTimerHead) {
       pTimerHead = pCurrentTimer->pNextTimerOnUnit;
       if (pCurrentTimer->nTimerType == eTimerType) {
         nTimerFrame = pCurrentTimer->nFrame;

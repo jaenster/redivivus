@@ -1407,7 +1407,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
               MainMenus::MAINMENU_ShowPopupWithCancel(pwszLocaleStr, MainMenus::FORMS_DestroyList);
               return 1;
             }
-            if ((MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_SP || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && MainMenus::D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && 3 < (int32_t)nDifficultyUnlocked) || 4 < (int32_t)nDifficultyUnlocked)) {
+            if ((MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_SP || MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_TCP_IP && MainMenus::D2IniData_launcher->nGAMETYPE == GAMETYPE_LAN_HOST) && ((nDifficultyUnlocked = pSelectedChar->nCharacterFlags >> 8 & 0x1f , !(pSelectedChar->nCharacterFlags & 0x20) && (int32_t)nDifficultyUnlocked >= 4) || (int32_t)nDifficultyUnlocked >= 5)) {
               UIMENU_SelectDifficultySinglePlayerOrTcpip(nDifficultyUnlocked, wCharFlags & 0x20);
               return 1;
             }

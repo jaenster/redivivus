@@ -9,6 +9,7 @@
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2MCPClient/D2MCPClient.h"
 #include "Source/D2Multi/ComCallback.h"
+#include "Source/D2Multi/D2MultiRoot.h"
 #include "Source/D2Multi/OOGUtilities.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"
@@ -76,6 +77,1485 @@ static uint32_t gbLadderExpansionEnabled = 0x1; D2_STATIC_GUARD(gbLadderExpansio
 int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
 static int gnLadderBoardSelectedRank = -0x1; D2_STATIC_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
 static uint32_t gnLadderRequestedCharIndex = -0x1; D2_STATIC_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
+namespace D2Multi::OOGUtilities {
+int32_t gaMultiFormFontParamsFont4[2] = { 0x4, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont4, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont4");
+} // namespace D2Multi::OOGUtilities
+namespace D2Multi::ChatDlg {
+int32_t gaMultiFormFontParamsFont3[2] = { 0x3, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont3, "D2Multi::ChatDlg::gaMultiFormFontParamsFont3");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::OOGUtilities {
+int32_t gaMultiFormFontParamsFont2[2] = { 0x2, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont2, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont2");
+int32_t gaMultiFormFontParamsFont1[2] = { 0x1, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont1, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont1");
+} // namespace D2Multi::OOGUtilities
+namespace D2Multi::ChatDlg {
+int32_t gaMultiFormFontParamsFont7[2] = { 0x7, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont7, "D2Multi::ChatDlg::gaMultiFormFontParamsFont7");
+int32_t gaMultiTextBoxScrollbarGeom0[3] = { 0x190, 0x186, 0x13a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom0, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0");
+int32_t gaMultiTextBoxScrollbarGeom1[3] = { 0x250, 0x189, 0xad }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom1, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1");
+int32_t gaMultiTextBoxScrollbarGeom2[3] = { 0x2f1, 0x18a, 0xc4 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom2, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2");
+int32_t gaMultiTextBoxScrollbarGeom3[3] = { 0x2f1, 0x189, 0xc5 }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom3, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3");
+int32_t gaMultiTextBoxScrollbarGeom4[3] = { 0x2f4, 0x187, 0xee }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom4, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4");
+int32_t gaMultiTextBoxScrollbarGeom5[3] = { 0x2f4, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom5, "D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom5");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::OOGUtilities {
+int32_t gaMultiTextBoxScrollbarGeom6[3] = { 0x2f1, 0x187, 0x10a }; D2_GLOBAL_GUARD(gaMultiTextBoxScrollbarGeom6, "D2Multi::OOGUtilities::gaMultiTextBoxScrollbarGeom6");
+} // namespace D2Multi::OOGUtilities
+namespace D2Multi::ChatDlg {
+FORMS_AnimFrameStrc gaMultiLogoAnimFrames[5] = {
+    {
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    },
+    {
+        /* .ppBaseImage = */ &gpDC6D2LogoBlackBnet,
+        /* .ppOverlayImage = */ &gpDC6D2LogoBnet,
+        /* .nDrawMode = */ 0x3,
+        /* .nFrameDelay = */ 0x1
+    }
+}; D2_GLOBAL_GUARD(gaMultiLogoAnimFrames, "D2Multi::ChatDlg::gaMultiLogoAnimFrames");
+} // namespace D2Multi::ChatDlg
+namespace D2Multi::OOGUtilities {
+FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b, 0x1d6, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14b9,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons1,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_ValidateUsername1,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x6b, 0x1d6, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14ba,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons1,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_ValidateUsername2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xbb, 0x1d6, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14bc,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons1,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_OpenChatCommandsDialogRestoreFocus,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b, 0x1ea, 0x48, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14bb,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons2,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::ComCallback::COMCALLBACK_HandleGameListError1,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x63, 0x1ea, 0x60, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14be,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons3,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::ComCallback::COMCALLBACK_HandleGameListError2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xc3, 0x1ea, 0x48, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14bd,
+        /* .pDC6 = */ &gpDC6ChatLeftButtons2,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_ValidateUsername3,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x215, 0x1d5, 0x78, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c0,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtons,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_DestroyFormsAndOpenCreateGameDialog,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x217, 0x1ea, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c2,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtonsAlt,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_DestroyFormsAndOpenChannelDialog,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x28c, 0x1d5, 0x78, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c1,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtons,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_DestroyFormsAndJoinGame,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x266, 0x1ea, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c3,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtonsAlt,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_DestroyFormsAndShowLadder,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2b5, 0x1ea, 0x50, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c4,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtonsAlt,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_ShowGatewaySelectTitle,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2d5, 0x247, 0x19, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6ChatArrows,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressUserListPrevPage,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2ef, 0x247, 0x19, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6ChatArrows,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressUserListNextPage,
+        /* .pTypeArg1 = */ (void *)0x00000002,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2d5, 0x210, 0x19, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6ChatArrows,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressUserListPrevLine,
+        /* .pTypeArg1 = */ (void *)0x00000004,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2ef, 0x210, 0x19, 0x1e },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6ChatArrows,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressUserListNextLine,
+        /* .pTypeArg1 = */ (void *)0x00000006,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x91, 0x45, 0x1fe, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Smack,
+        /* .aParams = */ { 0x91, 0x45, 0x1fe, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_OpenBrowserWithURL,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b, 0x1e0, 0x78, 0x14 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x2b76,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtons,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_JoinDefaultChannel,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x92, 0x1e0, 0x78, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14bc,
+        /* .pDC6 = */ &gpDC6ChatRightTopButtons,
+        /* .fpOnPressCallback = */ &D2Multi::ComCallback::CHATDLG_OpenChatCommandsDialogRestoreFocus2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x8f, 0x24c, 0xe6, 0x57 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_AccountList,
+        /* .aParams = */ { 0x28, 0x24f, 0x2d0, 0x4b },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1c, 0x19a, 0x162, 0x12a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6ChatScrollbar,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom0,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x4
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1c, 0x1c2, 0x14f, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_SendChatMessageWide,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x16
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1c, 0x8a, 0x162, 0x3c },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x54, 0x34, 0x93, 0x44 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiLogoAnimFrames,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6BlankBckg2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1bf, 0x18e, 0x122, 0x10d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_AnimImage,
+        /* .aParams = */ { 0x2d6, 0x34, 0x93, 0x44 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiLogoAnimFrames,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x18e, 0x1da, 0xc, 0xd },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6GemButton,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::ChatDlg::CHATDLG_ToggleLadderNews,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x4
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b6, 0x12c, 0x146, 0x96 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_List,
+        /* .aParams = */ { 0x1b6, 0xf0, 0x146, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)gaFormList30InitialItems,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b6, 0xc8, 0x146, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_List,
+        /* .aParams = */ { 0x1b6, 0xf0, 0x146, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)gaFormList32InitialItems,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x10c, 0x15e, 0x108, 0xb0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6PopUpOk,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &gpDC6CancelButtonBlankAlt,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::ChatDlg::CHATDLG_InvokeCallbackIfSet,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x15f, 0x151, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &gpDC6CancelButtonBlankAlt,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::ChatDlg::CHATDLG_InvokeCallbackIfSet,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x10c, 0x140, 0x108, 0x78 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x8,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x9e, 0x1cc, 0x1e5, 0x122 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6PopUpLargest2,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0xcd, 0x1b8, 0x80, 0x23 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &gpDC6MediumButtonBlank2,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressChatWarningCancel,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x150, 0x1c6, 0x80, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &gpDC6MediumButtonBlank2,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressChatWarningOk,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x9e, 0xf0, 0x1e5, 0x28 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0xac, 0x1a4, 0x1c9, 0xb4 },
+        /* .nExtraParam = */ 0xa,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &DCC_JoinGame,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1f0, 0x6a, 0xc8, 0x16 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ac, 0x79, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x25a, 0x79, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1af, 0xd4, 0xc8, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1b0, 0x94, 0x9b, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_ProcessGameListEntry,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x25e, 0x94, 0x9b, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_ProcessGameListEntry,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b0, 0x189, 0xa0, 0xad },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameScrollbar,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_HandleGameCreation,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom1,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x5
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x252, 0x1b1, 0xac, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x141f,
+        /* .pDC6 = */ &gpDC6GameButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_ProcessGameListEntry,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1d7, 0xb9, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameClickBox,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressNoAction,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x22a, 0xb9, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameClickBox,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressNoAction,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x26e, 0xb9, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameClickBox,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressNoAction,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2c9, 0xb9, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameClickBox,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressNoAction,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x261, 0x189, 0x8f, 0xc2 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameScrollbar,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom2,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x6
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6CreateJoinBckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1f0, 0x72, 0xc8, 0x16 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0x87, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0xbb, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1b0, 0xa2, 0x9b, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::OOGUTIL_JoinChannelFromInput,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x25e, 0xa2, 0x9e, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b0, 0x18d, 0x141, 0xc8 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameScrollbar,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_HandleChannelListDoubleClick,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom3,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x5
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x29f, 0x1b1, 0x60, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x13ee,
+        /* .pDC6 = */ &gpLauncherImageResource2,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::OOGUTIL_JoinChannelFromInput,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6CreateGameBckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1f0, 0x6f, 0xc8, 0x16 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0x86, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0xbc, 0x12c, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0xf3, 0x12c, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x278, 0x132, 0x12c, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x10
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x278, 0x156, 0x12c, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x10
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2c1, 0x156, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1b0, 0xa2, 0x9e, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1b0, 0xd9, 0x9e, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x1
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x1b0, 0x10c, 0x14d, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x291, 0x134, 0x1b, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_EditBox,
+        /* .aParams = */ { 0x291, 0x156, 0x1b, 0x14 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x252, 0x1b1, 0xac, 0x20 },
+        /* .nExtraParam = */ 0xd,
+        /* .nLabelAsLocaleStringId = */ 0x141e,
+        /* .pDC6 = */ &gpDC6GameButtonBlank,
+        /* .fpOnPressCallback = */ (OnPress)&D2Multi::OOGUtilities::NET_MCP_CLIENT_PrepareGameCreatePacket,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1af, 0x155, 0xf, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameClickBox,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressLevelRestrictionCheckbox,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x287, 0x15a, 0x21, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6GreyLevelBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1ae, 0x17d, 0x10, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6RadioButton,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressDifficultyNormal,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x22b, 0x17d, 0x10, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6RadioButton,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressDifficultyNightmare,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2ba, 0x17d, 0x10, 0x10 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6RadioButton,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressDifficultyHell,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1cb, 0x17c, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x243, 0x17c, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2d3, 0x17c, 0x96, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont1,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x128, 0xf, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberArrows3,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressMaxPlayersUp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x136, 0xf, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberArrows4,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressMaxPlayersDown,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x14c, 0xf, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberArrows1,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressLevelRestrictionUp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x15a, 0xf, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberArrows2,
+        /* .fpOnPressCallback = */ &D2Multi::OOGUtilities::OOGUTIL_OnPressLevelRestrictionDown,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x15a, 0xf, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberGreyArrows,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x287, 0x137, 0x21, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6GreyLevelBox,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2a9, 0x137, 0xf, 0x1a },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NumberGreyArrows,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6LadderChoiceEXP,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1f0, 0x70, 0xc8, 0x16 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont2,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1cf, 0xee, 0x110, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c6,
+        /* .pDC6 = */ &gpDC6WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderClassicHardcore,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1cf, 0xee, 0x110, 0x23 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x678,
+        /* .pDC6 = */ &gpDC6WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_Unused2,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1cf, 0xbc, 0x110, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x14c5,
+        /* .pDC6 = */ &gpDC6WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderClassicSoftcore,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1cf, 0x152, 0x110, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x276b,
+        /* .pDC6 = */ &gpDC6WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderExpansionHardcore,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1cf, 0x120, 0x110, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x276a,
+        /* .pDC6 = */ &gpDC6WideButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderExpansionSoftcore,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b1, 0x1b1, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &gpLauncherImageResource2,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressCloseDialog,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Image,
+        /* .aParams = */ { 0x19f, 0x1bf, 0x175, 0x175 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6HardcoreLadderBckg,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1a5, 0x88, 0x15e, 0x32 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::ChatDlg::gaMultiFormFontParamsFont7,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b2, 0xa2, 0xd9, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1d4, 0xa2, 0xd9, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x254, 0xa2, 0xd9, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x280, 0xa2, 0xd9, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2bf, 0xa2, 0xd9, 0xc },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1b2, 0x187, 0x139, 0xda },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6JoinGameScrollbar,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ (void*)&D2Multi::ChatDlg::gaMultiTextBoxScrollbarGeom4,
+        /* .pTypeArg2 = */ (void*)&D2Multi::OOGUtilities::gaMultiFormFontParamsFont4,
+        /* .nFlagsOrType = */ 0x4
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1b1, 0x1b1, 0x60, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x13ef,
+        /* .pDC6 = */ &gpLauncherImageResource2,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressCloseLadderBoard,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x1ab, 0x95, 0x55, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6OverallTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderOverall,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x201, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6AmazonTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderAmazon,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x226, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6SorceressTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderSorceress,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x24b, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6NecromancerTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderNecromancer,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x270, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6PaladinTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderPaladin,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x295, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6BarbarianTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderBarbarian,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2ba, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6DruidTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderDruid,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2df, 0x95, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6AssassinTab,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderAssassin,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x1ab, 0x9d, 0x55, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x201, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x226, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x24b, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x270, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x295, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2ba, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_TextBox,
+        /* .aParams = */ { 0x2df, 0x9d, 0x24, 0x1d },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ nullptr,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ (void*)gaChatTextBoxFontParams,
+        /* .nFlagsOrType = */ 0x2
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x277, 0x1b1, 0x46, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6YesNoButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderPageUp,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Button,
+        /* .aParams = */ { 0x2bd, 0x1b1, 0x46, 0x20 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ &gpDC6YesNoButtonBlank,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnPressLadderPageDown,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    },
+    {
+        /* .neD2FormType = */ FORM_Timer,
+        /* .aParams = */ { 0x64, 0x0, 0x0, 0x0 },
+        /* .nExtraParam = */ 0x0,
+        /* .nLabelAsLocaleStringId = */ 0x0,
+        /* .pDC6 = */ nullptr,
+        /* .fpOnPressCallback = */ &D2Multi::ChatDlg::CHATDLG_OnTimerRequestLadderData,
+        /* .pTypeArg1 = */ nullptr,
+        /* .pTypeArg2 = */ nullptr,
+        /* .nFlagsOrType = */ 0x0
+    }
+}; D2_GLOBAL_GUARD(gaPredefinedForms_b, "D2Multi::OOGUtilities::gaPredefinedForms_b");
+} // namespace D2Multi::OOGUtilities
 // also labelled: gnChatRoomListScrollStartPos
 static int32_t gnLadderEntryTotal = 0; D2_STATIC_GUARD(gnLadderEntryTotal, "gnLadderEntryTotal");
 // also labelled: gnChatRoomListScrollPos
@@ -83,8 +1563,11 @@ static int32_t gnLadderListRowCount = 0; D2_STATIC_GUARD(gnLadderListRowCount, "
 ::D2WinButton * gaChatUserListButtonArray[11] = {}; D2_GLOBAL_GUARD(gaChatUserListButtonArray, "gaChatUserListButtonArray");
 uint32_t gbChatOptionButtonState = 0; D2_GLOBAL_GUARD(gbChatOptionButtonState, "gbChatOptionButtonState");
 static D2ControlStrc * FORMS_pListEx[32] = {}; D2_STATIC_GUARD(FORMS_pListEx, "FORMS_pListEx");
+namespace D2Multi::ChatDlg {
+_RTL_CRITICAL_SECTION lpCriticalSection_0077ae28 = {}; D2_GLOBAL_GUARD(lpCriticalSection_0077ae28, "D2Multi::ChatDlg::lpCriticalSection_0077ae28");
+} // namespace D2Multi::ChatDlg
 static char gszLadderCharNameFilter[16] = {}; D2_STATIC_GUARD(gszLadderCharNameFilter, "gszLadderCharNameFilter");
-D2ControlStrc * gpCtlLobbyChat[2] = {}; D2_GLOBAL_GUARD(gpCtlLobbyChat, "gpCtlLobbyChat");
+static D2ControlStrc * gpCtlLobbyChat[2] = {}; D2_STATIC_GUARD(gpCtlLobbyChat, "gpCtlLobbyChat");
 D2LobbyControlsStrc gpLobbyForm0 = {}; D2_GLOBAL_GUARD(gpLobbyForm0, "gpLobbyForm0");
 D2BNetClientCallbacksStrc * pNetworkUnknown = 0; D2_GLOBAL_GUARD(pNetworkUnknown, "pNetworkUnknown");
 static int gnLadderScrollPageSize = 0; D2_STATIC_GUARD(gnLadderScrollPageSize, "gnLadderScrollPageSize");
@@ -95,13 +1578,13 @@ char gszOogReplyCommandBuffer[256] = {}; D2_GLOBAL_GUARD(gszOogReplyCommandBuffe
 static char gaChatDlgHistoryBuffer[10][256] = {}; D2_STATIC_GUARD(gaChatDlgHistoryBuffer, "gaChatDlgHistoryBuffer");
 static char gaChatDlgHistoryBuffer_1__0_[10][256] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; D2_STATIC_GUARD(gaChatDlgHistoryBuffer_1__0_, "gaChatDlgHistoryBuffer_1__0_");
 static int FORMS_nListExCount = 0; D2_STATIC_GUARD(FORMS_nListExCount, "FORMS_nListExCount");
-uint32_t gbLadderNewsExpanded = 0; D2_GLOBAL_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
+static uint32_t gbLadderNewsExpanded = 0; D2_STATIC_GUARD(gbLadderNewsExpanded, "gbLadderNewsExpanded");
 uint32_t gdwGameJoinRequestTick = 0; D2_GLOBAL_GUARD(gdwGameJoinRequestTick, "gdwGameJoinRequestTick");
 static uint32_t gnLadderScrollPos = 0; D2_STATIC_GUARD(gnLadderScrollPos, "gnLadderScrollPos");
-uint32_t gbLobbyInitialized = 0; D2_GLOBAL_GUARD(gbLobbyInitialized, "gbLobbyInitialized");
+static uint32_t gbLobbyInitialized = 0; D2_STATIC_GUARD(gbLobbyInitialized, "gbLobbyInitialized");
 static D2CharSelCompStrc * gpChatDlgCharSelCompositeUnit = 0; D2_STATIC_GUARD(gpChatDlgCharSelCompositeUnit, "gpChatDlgCharSelCompositeUnit");
-DC6 * gpDC6BnetBackground = 0; D2_GLOBAL_GUARD(gpDC6BnetBackground, "gpDC6BnetBackground");
-DC6 * gpDC6WaitingRoomBackground = 0; D2_GLOBAL_GUARD(gpDC6WaitingRoomBackground, "gpDC6WaitingRoomBackground");
+static DC6 * gpDC6BnetBackground = 0; D2_STATIC_GUARD(gpDC6BnetBackground, "gpDC6BnetBackground");
+static DC6 * gpDC6WaitingRoomBackground = 0; D2_STATIC_GUARD(gpDC6WaitingRoomBackground, "gpDC6WaitingRoomBackground");
 DC6 * gpDC6PopUpLargest2 = 0; D2_GLOBAL_GUARD(gpDC6PopUpLargest2, "gpDC6PopUpLargest2");
 DC6 * gpDC6MediumButtonBlank2 = 0; D2_GLOBAL_GUARD(gpDC6MediumButtonBlank2, "gpDC6MediumButtonBlank2");
 DC6 * gpDC6CursorOpenHand = 0; D2_GLOBAL_GUARD(gpDC6CursorOpenHand, "gpDC6CursorOpenHand");
@@ -114,10 +1597,10 @@ DC6 * gpDC6ChatLeftButtons3 = 0; D2_GLOBAL_GUARD(gpDC6ChatLeftButtons3, "gpDC6Ch
 DC6 * gpDC6ChatRightTopButtonsAlt = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtonsAlt, "gpDC6ChatRightTopButtonsAlt");
 DC6 * gpDC6ChatRightTopButtons = 0; D2_GLOBAL_GUARD(gpDC6ChatRightTopButtons, "gpDC6ChatRightTopButtons");
 DC6 * gpDC6ChatArrows = 0; D2_GLOBAL_GUARD(gpDC6ChatArrows, "gpDC6ChatArrows");
-::D2WinTextBox * gpCtlConfirmDialog = 0; D2_GLOBAL_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
+static ::D2WinTextBox * gpCtlConfirmDialog = 0; D2_STATIC_GUARD(gpCtlConfirmDialog, "gpCtlConfirmDialog");
 // also labelled: gpCtlLobbyChannelListBtn
 D2ControlStrc * gpCtlLobbyAccountList = 0; D2_GLOBAL_GUARD(gpCtlLobbyAccountList, "gpCtlLobbyAccountList");
-::D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_GLOBAL_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
+static ::D2WinButton * gpCtlLobbyLadderNewsToggle = 0; D2_STATIC_GUARD(gpCtlLobbyLadderNewsToggle, "gpCtlLobbyLadderNewsToggle");
 ::D2WinTextBox * pGameListCache = 0; D2_GLOBAL_GUARD(pGameListCache, "pGameListCache");
 DC6 * DCC_JoinGame = 0; D2_GLOBAL_GUARD(DCC_JoinGame, "DCC_JoinGame");
 DC6 * gpDC6BlankBckg2 = 0; D2_GLOBAL_GUARD(gpDC6BlankBckg2, "gpDC6BlankBckg2");
@@ -170,7 +1653,7 @@ D2ControlStrc * gpCtlChannelDlgCancelButton = 0; D2_GLOBAL_GUARD(gpCtlChannelDlg
 ::D2WinEditBox * gpCtlChannelNameEditBox = 0; D2_GLOBAL_GUARD(gpCtlChannelNameEditBox, "gpCtlChannelNameEditBox");
 ::D2WinTextBox * gpCtlChannelList = 0; D2_GLOBAL_GUARD(gpCtlChannelList, "gpCtlChannelList");
 static ::D2WinTextBox * g_pLadderBoardTextBox = 0; D2_STATIC_GUARD(g_pLadderBoardTextBox, "g_pLadderBoardTextBox");
-D2ControlStrc * ghWndGameNameEditBox = 0; D2_GLOBAL_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
+static D2ControlStrc * ghWndGameNameEditBox = 0; D2_STATIC_GUARD(ghWndGameNameEditBox, "ghWndGameNameEditBox");
 DC6 * gpDC6CreateGameBckg = 0; D2_GLOBAL_GUARD(gpDC6CreateGameBckg, "gpDC6CreateGameBckg");
 static DC6 * gpDC6CreateGameButton = 0; D2_STATIC_GUARD(gpDC6CreateGameButton, "gpDC6CreateGameButton");
 DC6 * gpDC6WideButtonBlank = 0; D2_GLOBAL_GUARD(gpDC6WideButtonBlank, "gpDC6WideButtonBlank");
@@ -195,7 +1678,7 @@ int32_t gaChatTextBoxFontParams[2] = {}; D2_GLOBAL_GUARD(gaChatTextBoxFontParams
 ::D2WinTextBox * gpChatMessagesTextBox = 0; D2_GLOBAL_GUARD(gpChatMessagesTextBox, "gpChatMessagesTextBox");
 // also labelled: gnChatDlgTabCompletionList
 ::D2WinEditBox * gpChatDlgInputEditBox = 0; D2_GLOBAL_GUARD(gpChatDlgInputEditBox, "gpChatDlgInputEditBox");
-::D2WinTextBox * BattleNetNews = 0; D2_GLOBAL_GUARD(BattleNetNews, "BattleNetNews");
+static ::D2WinTextBox * BattleNetNews = 0; D2_STATIC_GUARD(BattleNetNews, "BattleNetNews");
 ::D2WinTextBox * gpControlJoinGameError = 0; D2_GLOBAL_GUARD(gpControlJoinGameError, "gpControlJoinGameError");
 uint32_t gnOpenBNetMode = 0; D2_GLOBAL_GUARD(gnOpenBNetMode, "gnOpenBNetMode");
 static ChatDlgCallback gpfnChatDlgCallback = (ChatDlgCallback)0; D2_STATIC_GUARD(gpfnChatDlgCallback, "gpfnChatDlgCallback");

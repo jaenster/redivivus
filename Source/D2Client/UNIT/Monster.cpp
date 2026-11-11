@@ -876,7 +876,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     bVar2 = GAME::Game::GetDificulity();
     int nDifficulty;
     nDifficulty = (int)bVar2;
-    if (2 < (int32_t)(uint32_t)nDifficulty) {
+    if ((int32_t)(uint32_t)nDifficulty >= 3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f0);
       exit(-1);
     }

@@ -3358,7 +3358,7 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 
     uint32_t nSocketArea = (nUnit >> 0x18) * (uint32_t)bDim;
     uint32_t nMaxAllowed = 6;
-    if ((int32_t)nSocketArea < 7) {
+    if ((int32_t)nSocketArea <= 6) {
       nMaxAllowed = nSocketArea;
     }
     if (!nSocketArea) {
@@ -3385,19 +3385,19 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, uint32_t nMaxSocksRandom
 
       break;
       case QUALITY_RARE:
-        if (1 < (int32_t)nMaxAllowed) {
+        if ((int32_t)nMaxAllowed >= 2) {
           nMaxAllowed = 2;
         }
       break;
       case QUALITY_MAGIC:
-        if (3 < (int32_t)nMaxAllowed) {
+        if ((int32_t)nMaxAllowed >= 4) {
           nMaxAllowed = 4;
         }
       break;
       case QUALITY_CRAFTED:
 
       case QUALITY_TAMPERED:
-        if (2 < (int32_t)nMaxAllowed) {
+        if ((int32_t)nMaxAllowed >= 3) {
           nMaxAllowed = 3;
         }
     }
@@ -3443,7 +3443,7 @@ void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, uint32_t nSockCount) {
 
     uint32_t nSocketArea = (nUnit >> 0x18) * (uint32_t)bDim;
     uint32_t nMaxAllowed = 6;
-    if (!(6 < (int32_t)nSocketArea || (nMaxAllowed = nSocketArea , nSocketArea != 0))) {
+    if (!((int32_t)nSocketArea > 6 || (nMaxAllowed = nSocketArea , nSocketArea != 0))) {
       return;
     }
 

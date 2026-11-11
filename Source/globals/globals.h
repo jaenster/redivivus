@@ -1388,11 +1388,6 @@ namespace D2Multi::OOGUtilities {
 
 } // namespace D2Multi::OOGUtilities
 
-namespace D2Multi::ChatDlg {
-
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Client::GAME::Game {
 
 

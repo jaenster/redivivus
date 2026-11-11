@@ -33,13 +33,6 @@ extern uint8_t gEAXPropertyGuid_Reserved2[16];
 extern IKsPropertySet * gpDirectSoundEAXInterface;
 } // namespace D2Sound::Sound
 namespace D2Sound::Src::D2SoundFast {
-extern int gaAmbientSoundFlags;
-// Ambient sound table for area-based background audio. Array of {char* szFilename, int bPlayed} entries. Count stored in gaAmbientSoundFlags. SOUND_PlayNextAmbientSound iterates through this table, alternates with gaAmbientSoundEntryTable based on gnAmbientSoundLanguageCode flag. Reset by SOUND_ResetAmbientSoundFlags.
-extern int gAmbientSoundTable[16];
-extern int gaAmbientSoundEntryTable[16];
-extern uint32_t gnAmbientSoundCount;
 extern D2SoundSmpStrc * gpMusicStreamBuffer;
-extern uint32_t gnAmbientSoundLanguageCode;
-extern uint32_t gbAmbientSoundLangInitialized;
 } // namespace D2Sound::Src::D2SoundFast
 #endif // D2_MODULE_D2Sound

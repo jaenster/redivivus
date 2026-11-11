@@ -7270,18 +7270,14 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
       } while (nDstIndex < 200);
 
       goto add_line;
-      find_break_point:
-      while (true) {
+      while (--nLineWidth > 1) {
+        find_break_point:
         bConnected = D2Lang::Unicode::UNISYS::UNICODE_CheckLineBreakPosition(pFileBufferSrc, nLineWidth);
         if (bConnected) {
           break;
         }
-
-        nLineWidth--;
-        if (nLineWidth <= 1) {
-          break;
-        }
       }
+
       cut_line:
       nSrcIndex = nLineWidth + nCharOffset;
       wszLineBuffer[nLineWidth] = L'\0';

@@ -5169,7 +5169,7 @@ void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 
       sSeedRoll = D2_SEED_NEXT_VAL(sSeedRoll);
       *pSeed = sSeedRoll;
-      if (0x45 >= (int32_t)(sSeedRoll.nSeedLow % 100)) {
+      if ((int32_t)(sSeedRoll.nSeedLow % 100) < 0x46) {
         MONSTERAI_CommandWalkToUnit(pGame, pUnitSaved, pTarget, 7);
         return;
       }
@@ -6245,7 +6245,7 @@ void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 
       DVar1 = D2_SEED_NEXT_VAL(DVar1);
       *pSeed = DVar1;
-      if (0x31 < (int32_t)(DVar1.nSeedLow % 100) || (_bEngagedInCombat = SetCombatStateAndApproachTarget(pGame, pSelf, pTarget, 6, 1) , !_bEngagedInCombat)) {
+      if ((int32_t)(DVar1.nSeedLow % 100) >= 0x32 || (_bEngagedInCombat = SetCombatStateAndApproachTarget(pGame, pSelf, pTarget, 6, 1) , !_bEngagedInCombat)) {
         PlanNextAiMove(pGame, pSelf, (int)pMonStats->aip[5][pGame->nDifficulty]);
       }
     }
@@ -6740,7 +6740,7 @@ void __fastcall AITHINK_Fn1_Imp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 
     sNewSeed = D2_SEED_NEXT_VAL(sNewSeed);
     *pSeed = sNewSeed;
-    if (0x13 >= (int32_t)(sNewSeed.nSeedLow % 100)) {
+    if ((int32_t)(sNewSeed.nSeedLow % 100) < 0x14) {
       WalkRandomOffset(pGame, pUnit, 8);
       return;
     }
@@ -6954,7 +6954,7 @@ int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * p
       bWalked2 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), D2Common::Units::GetXPosFromDynamicPathUnit(pOwner), bWalked2);
       pOwnerPlayerData.nOwnerPlayerData = 0x0;
       do {
-        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaMirroredDirection[nWalkRadius & 0xff], &nCompositeDimW, &eAnimMode);
+        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaMirroredDirection[(uint8_t)nWalkRadius], &nCompositeDimW, &eAnimMode);
         bWalked0 = nOwnerX + nCompositeDimW * 8;
         nY_00 = pOwnerDynamicPath.nOwnerDynamicPath2 + eAnimMode * 8;
         nY = nY_00;
@@ -7221,7 +7221,7 @@ int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStr
       bWalkStarted1 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), D2Common::Units::GetXPosFromDynamicPathUnit(pOwner), bWalkStarted1);
       pPlayerData.nPlayerData = 0x0;
       do {
-        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaDirection8ToStepIndex[nWalkRadius & 0xff], &nSpawnPosX, &nSpawnPosY);
+        D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(gaDirection8ToStepIndex[(uint8_t)nWalkRadius], &nSpawnPosX, &nSpawnPosY);
         pNPCInteract = nLoopIdx + nSpawnPosX * 8;
         bWalkStarted2 = pSpawnedRoom + nSpawnPosY * 8;
         bWalkStarted0 = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnitSelf), pNPCInteract, bWalkStarted2);
@@ -7647,7 +7647,7 @@ void __fastcall AI_Pet_ThinkCombatAndFollow(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = sNewSeed;
-    bUseNearRadius = 0xe < (int32_t)(sNewSeed.nSeedLow % 100);
+    bUseNearRadius = (int32_t)(sNewSeed.nSeedLow % 100) >= 0xf;
     if (!bUseNearRadius) {
       pInteractData = 8;
     } else {
@@ -7738,7 +7738,7 @@ void __fastcall AITHINK4_PetThinkCastSkillAndFollow(::SGAMEDATA * pGame, D2UnitS
 
     D2SeedStrc seedNew = D2_SEED_NEXT(pUnit->sSeed);
     pUnit->sSeed = seedNew;
-    bool bUseNearRadius = 0xe < (int32_t)(seedNew.nSeedLow % 100);
+    bool bUseNearRadius = (int32_t)(seedNew.nSeedLow % 100) >= 0xf;
     if (!bUseNearRadius) {
       pInteractData = 8;
     } else {
@@ -12702,7 +12702,7 @@ BOOL __fastcall MONSTERAI_HasConflictingStateInGroup(D2UnitStrc * pUnit, eD2Stat
     D2DataTableTxtStrc* pDataTable;
     eD2States eState_00;
     BOOL bFound;
-    short int nStateGroup;
+    int nStateGroup;
     int nTxtStatesSize;
     int nStateTxtOffset = 0;
     if ((int)eState >= 0) {
@@ -14400,7 +14400,7 @@ void __fastcall AITHINK_Fn1_CatapultSpotter(::SGAMEDATA * pGame, D2UnitStrc * pU
       spawnPoint.y = (LONG)((uint64_t)lSeedProduct >> 0x20);
       sNewSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pUnit->sSeed.nSeedHigh);
       *pSeed = sNewSeed;
-      if (2 < (int32_t)(sNewSeed.nSeedLow % 100)) {
+      if ((int32_t)(sNewSeed.nSeedLow % 100) >= 3) {
         goto call_catapult_strike;
       }
     }
@@ -14672,7 +14672,7 @@ void __fastcall AITHINK_Fn1_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         }
       }
     }
-    if (pMonStats->aSkill[3] <= 0 || (pSkill4 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pMonStats->aSkill[3]) , !pSkill4) || (DVar2 = D2_SEED_NEXT(pUnit->sSeed) , pUnit->sSeed = DVar2 , 0x3b < (int32_t)(DVar2.nSeedLow % 100)) || iVar1 >= 0xe) {
+    if (pMonStats->aSkill[3] <= 0 || (pSkill4 = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)pMonStats->aSkill[3]) , !pSkill4) || (DVar2 = D2_SEED_NEXT(pUnit->sSeed) , pUnit->sSeed = DVar2 , (int32_t)(DVar2.nSeedLow % 100) >= 0x3c) || iVar1 >= 0xe) {
       if (pMonStats->aSkill[1] > 0) {
         DVar2 = D2_SEED_NEXT(pUnit->sSeed);
         pUnit->sSeed = DVar2;
@@ -15940,6 +15940,8 @@ void __fastcall AITHINK_Fn1_Wraith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
         AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pDVar2);
         return;
       }
+
+      PlanNextAiMove(pGame, pUnit, (int)nMonStatsPtr->aip[1][nDifficulty]);
     } else {
       DVar1 = D2_SEED_NEXT(pUnit->sSeed);
       pUnit->sSeed = DVar1;
@@ -15948,9 +15950,9 @@ void __fastcall AITHINK_Fn1_Wraith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
         CastSkillWithDistanceOffset(pGame, pUnit, pDVar2, 0xc, 0);
         return;
       }
-    }
 
-    PlanNextAiMove(pGame, pUnit, (int)nMonStatsPtr->aip[1][nDifficulty]);
+      PlanNextAiMove(pGame, pUnit, (int)nMonStatsPtr->aip[1][nDifficulty]);
+    }
 }
 
 // AI think-tick for Corrupt Rogue monsters. Uses difficulty-scaled melee range (20 - difficulty*3). If target is beyond melee range, applies a run-speed modifier (aip13/difficulty) and commands MONSTERAI_CommandRunToUnitMinStep at step 3. In combat and within range, rolls against MonStats A2 threshold: on pass, attacks (CalledOnEndAiFunction1 mode 4); otherwise idles for A1 frames. Out of combat, rolls A3 chance: if pass, rolls A4 chance to decide run-to-unit vs walk-to-unit approach; otherwise idles.
@@ -17583,7 +17585,7 @@ void __fastcall AITHINK_Fn1_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 
       DVar1 = D2_SEED_NEXT_VAL(DVar1);
       pUnit->sSeed = DVar1;
-      if (0x14 < (int32_t)(DVar1.nSeedLow % 100)) {
+      if ((int32_t)(DVar1.nSeedLow % 100) > 0x14) {
         PlanNextAiMove(pGame, pUnit, 0xf);
         return;
       }
@@ -18217,7 +18219,7 @@ void __fastcall AITHINK_Fn1_Vampire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
       if (bEngagedInCombat) {
         sSeedRoll = D2_SEED_NEXT(pUnit->sSeed);
         pUnit->sSeed = sSeedRoll;
-        if (0x1e < (int32_t)(sSeedRoll.nSeedLow % 100) || !bHasVampiricSkill) {
+        if ((int32_t)(sSeedRoll.nSeedLow % 100) > 0x1e || !bHasVampiricSkill) {
           AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
           return;
         }
@@ -18764,7 +18766,7 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (!pAttacker) {
       DVar2 = D2_SEED_NEXT(*pSeed);
       *pSeed = DVar2;
-      if (0x31 >= (int32_t)(DVar2.nSeedLow % 100)) {
+      if ((int32_t)(DVar2.nSeedLow % 100) < 0x32) {
         SetCombatStateAndApproachTarget(pGame, pUnitSelf, pTarget, 3, 0);
         return;
       }
@@ -19749,7 +19751,7 @@ void __fastcall AITHINK_Fn1_Mephisto(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
       if ((int32_t)(sNewSeed.nSeedLow % 100) < 0x41) {
         sNewSeed = D2_SEED_NEXT_VAL(sNewSeed);
         *pSeed = sNewSeed;
-        if (0x40 < (int32_t)(sNewSeed.nSeedLow % 100) && currentDistance <= 5) {
+        if ((int32_t)(sNewSeed.nSeedLow % 100) >= 0x41 && currentDistance <= 5) {
           ApplyCombatAndMonStats(pUnit, 0, 0, '\x04');
           MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTargetUnit, 7);
           pMephistoAi->dwArg2 = 0;

@@ -2736,12 +2736,7 @@ void __fastcall OBJECT_PopulateRoomObjects(::SGAMEDATA * pGame, D2RoomStrc * pRo
         DVar1 = D2_SEED_NEXT(*pRoomSeed);
         *pRoomSeed = DVar1;
         nSeedRoll = 0;
-        while (true) {
-          nObjGrpId = pObjGroupTxt->dwId[nGroupEntry];
-          if (!nObjGrpId) {
-            break;
-          }
-
+        while (nObjGrpId = pObjGroupTxt->dwId[nGroupEntry]) {
           nSeedRoll += (uint32_t)pObjGroupTxt->nProbability[nGroupEntry];
           pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjGrpId);
           if ((int)(DVar1.nSeedLow % 100) < nSeedRoll && pObjectsTxt->Gore <= gbObjectPopulateInitialized) {
@@ -2809,6 +2804,7 @@ void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, D2RoomStrc * pR
     bool bBadCodePtr;
     uint32_t nProbRoll;
     D2ObjectsTxt* pObjectsTxt;
+    uint32_t nObjClassId;
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
     if (eLevelId == LEVEL_None) {
       return;
@@ -2821,17 +2817,11 @@ void __fastcall OBJECT_PopulateFromObjGroup(::SGAMEDATA * pGame, D2RoomStrc * pR
     }
 
     D2SeedStrc sNewSeed = D2_SEED_NEXT(*pCtrlSeed);
-    uint32_t nSeedRoll = sNewSeed.nSeedLow;
     *pCtrlSeed = sNewSeed;
     int nProbAccum = 0;
     int nGroupEntryIdx = 0;
-    while (true) {
-      uint32_t nObjClassId;
-      nObjClassId = pObjGroupTxt->dwId[nGroupEntryIdx];
-      if (!nObjClassId) {
-        break;
-      }
-
+    while (nObjClassId = pObjGroupTxt->dwId[nGroupEntryIdx]) {
+      uint32_t nSeedRoll = sNewSeed.nSeedLow;
       nProbAccum += (uint32_t)pObjGroupTxt->nProbability[nGroupEntryIdx];
       if ((int)(nSeedRoll + (int)(sNewSeed.nSeedLow / 100) * -100) < nProbAccum) {
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjClassId);

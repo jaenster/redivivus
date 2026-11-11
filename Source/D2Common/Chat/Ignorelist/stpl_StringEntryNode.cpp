@@ -533,12 +533,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HA
       nBucketByteOff = 0;
       ppTempHead = tempList.m_terminator.m_prevlink;
       do {
-        while (true) {
-          nBucketNextLink = pThis->tSlotListArray.m_data[nBucketByteOff].m_terminator.m_next;
-          if (0 >= nBucketNextLink) {
-            break;
-          }
-
+        while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nBucketByteOff].m_terminator.m_next)) {
           pBucket = (TSLink<::StringEntryNode>*)(nBucketNextLink + 4);
           pPrevLink = pBucket->m_prevlink;
           if (pPrevLink) {

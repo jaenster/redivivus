@@ -16,30 +16,11 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2ControlMsg;
 struct D2IniConfigStrc;
-struct DC6;
-struct FORMS_PredefinedFormStrc;
-typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
-namespace D2Multi::ChatDlg {
-// lpCriticalSection parameter of DeleteCriticalSection
-// lpCriticalSection parameter of InitializeCriticalSection
-// lpCriticalSection parameter of LeaveCriticalSection
-// lpCriticalSection parameter of EnterCriticalSection
-extern _RTL_CRITICAL_SECTION lpCriticalSection_0077ae28;
-} // namespace D2Multi::ChatDlg
 namespace D2Multi::OOGUtilities {
-extern int32_t gaMultiFormFontParamsFont4[2];
-extern int32_t gaMultiFormFontParamsFont2[2];
-extern int32_t gaMultiFormFontParamsFont1[2];
-extern int32_t gaMultiTextBoxScrollbarGeom6[3];
-// Form records read by FORMS_CreateAnyForm (48 bytes each). pTypeArg1/pTypeArg2 (+0x24/+0x28) are constructor arguments whose meaning depends on neD2FormType: code, data or a small integer (the Button initial image index 0/2/4/6, e.g. gaPredefinedForms_b[12..14]); the struct field comments list each case. Typed void* for that reason.
-// Provenance: FORMS_CreateAnyForm 004f93c0 and a census of every record.
-// Index 0x80 (0070e650, FORM_Timer -> CHATDLG_OnTimerRequestLadderData) is the last record: UIMENU_LadderBoard_PrintClassesAndTableHeaders 00440887 calls FORMS_CreateAnyFormFromListEx(0x80).
-extern FORMS_PredefinedFormStrc gaPredefinedForms_b[129];
 extern char gszOogChatInputBuffer[512];
 extern D2IniConfigStrc * D2IniData_multiplayer;
 extern uint16_t LastGameRequestId;

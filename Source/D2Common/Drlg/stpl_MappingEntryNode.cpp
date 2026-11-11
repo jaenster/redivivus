@@ -214,13 +214,8 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
     intptr_t nNextLink;
     intptr_t nSlotOffset;
     TSLink<::MappingEntryNode>* pHeadEntry;
-    while (true) {
+    while ((nSlotOffset = this->m_terminator.m_next) > 0) {
       TSLink<::MappingEntryNode>* pSlot;
-      nSlotOffset = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
-      if (!nSlotOffset) {
-        break;
-      }
-
       pHeadEntry = *(TSLink<::MappingEntryNode>**)(this->m_linkoffset + nSlotOffset);
       pSlot = (TSLink<::MappingEntryNode>*)(this->m_linkoffset + nSlotOffset);
       if (pHeadEntry) {

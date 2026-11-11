@@ -1150,7 +1150,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
             if (dwCompFlags & 1) {
               nUserIndex = 2;
             } else {
-              nUserIndex = (dwCompFlags & 0xff) >> 2 & 1;
+              nUserIndex = (uint32_t)(uint8_t)dwCompFlags >> 2 & 1;
             }
           }
         }
@@ -1376,7 +1376,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
           if (dwCompFlags & 1) {
             dwCompFlags = 2;
           } else {
-            dwCompFlags = (dwCompFlags & 0xff) >> 2 & 1;
+            dwCompFlags = (uint32_t)(uint8_t)dwCompFlags >> 2 & 1;
           }
         }
       }

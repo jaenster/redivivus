@@ -387,12 +387,7 @@ void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 *
       return;
     }
 
-    while (true) {
-      pMemoryToFree = pCur;
-      if (pMemoryToFree == pOverlay) {
-        break;
-      }
-
+    while ((pMemoryToFree = pCur) != pOverlay) {
       pCur = pMemoryToFree->pNext;
       pPrev = pMemoryToFree;
       if (!pMemoryToFree->pNext) {
@@ -1414,12 +1409,7 @@ static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
     do {
       D2CofTextureCacheEntryStrc* pNextEntry;
       pNextEntry = *ppBucketHead;
-      while (true) {
-        pMemoryToFree = pNextEntry;
-        if (!pMemoryToFree) {
-          break;
-        }
-
+      while (pMemoryToFree = pNextEntry) {
         pNextEntry = pMemoryToFree->pNext;
         if (pMemoryToFree->dwFlags & 1) {
           gbCofCacheLRUEnabled += -0x1c - pMemoryToFree->nFileSize;
@@ -1565,11 +1555,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
               return;
             }
 
-            while (true) {
-              byComponent = pLayerData[nLayerIndex];
-              if (byComponent >= 0x10) {
-                break;
-              }
+            while ((byComponent = pLayerData[nLayerIndex]) < 0x10) {
               if (*(char*)((char*)pComponentTable + 3) != '\0') {
                 nComponentRow = 0;
                 if ((uint8_t)*(char*)((char*)pComponentTable + 3) > '\0') {
@@ -1834,12 +1820,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlock
                   return __frame0.pRetVal;
                 }
 
-                while (true) {
-                  nDirection = __frame0.pLayerData[nLayerIdx];
-                  if (nDirection >= 0x10) {
-                    break;
-                  }
-
+                while ((nDirection = __frame0.pLayerData[nLayerIdx]) < 0x10) {
                   memset(&sSpriteParams, 0, 0x48);
                   pFrameResult = &__frame0.nFrameResult;
                   nErrLineVal = 0;
@@ -2500,7 +2481,7 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
     if (bCenterAdjust) {
       nWeaponClassOrFlag -= (*(int*)((char*)pBounds + 0x14) - *(int*)((char*)pBounds + 0x10)) / 2;
     }
-    if (!(nWeaponClassOrFlag < UI::ui::ScreenSizeX - 1 && -1 < *(int*)((char*)pBounds + 0xc) + nOriginXAdj && -1 < *(int*)((char*)pBounds + 0x14) + nOriginY)) {
+    if (!(nWeaponClassOrFlag < UI::ui::ScreenSizeX - 1 && *(int*)((char*)pBounds + 0xc) + nOriginXAdj >= 0 && *(int*)((char*)pBounds + 0x14) + nOriginY >= 0)) {
       return 0;
     }
 
@@ -2942,7 +2923,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
                           } else {
                             eDrawMode = eDrawModeCalc;
                             if (!bEthereal && bIsSelected) {
-                              nLayerComponentU = (nLightColor & 0xff) * 2;
+                              nLayerComponentU = (uint32_t)(uint8_t)nLightColor * 2;
                               eDrawModeCalc = DRAW_LIGHTERSOLID;
                               if (nLayerComponentU > 0x40) {
                                 if (nLayerComponentU >= 0xff) {
@@ -3298,7 +3279,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
         if ((uint8_t)*pZHalfOffset.pZHalfOffset2 > 0) {
           do {
             byLayerComponent = pCofData[nLayerIdx];
-            if (0xf < byLayerComponent) {
+            if (byLayerComponent >= 0x10) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x960);
               exit(-1);
             }
@@ -3731,7 +3712,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
     pPlayerUnit_lcl = GAME::Select::GetSelectedUnit();
     bIsSelected = (uint32_t)(pPlayerUnit_lcl == pUnit);
     if (bIsSelected) {
-      nDirOrGoldTier = (nGammaCopy & 0xff) * 2;
+      nDirOrGoldTier = (uint32_t)(uint8_t)nGammaCopy * 2;
       if (nDirOrGoldTier > 0x40) {
         if (nDirOrGoldTier >= 0xff) {
           nDirOrGoldTier = 0xff;

@@ -151,7 +151,7 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
       }
 
       nHashIdx = FINDTILE_ComputeHash((char)pTileData->nSubIndex, (char)pTileData->nIndex, (char)pTileData->nOrientation);
-      pHashSlot = pHashTable->pNodes + (nHashIdx & 0xff);
+      pHashSlot = pHashTable->pNodes + (uint32_t)(uint8_t)nHashIdx;
       pHashEntry = *pHashSlot;
       if (pHashEntry) {
         do {

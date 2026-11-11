@@ -1592,7 +1592,7 @@ static BOOL __stdcall PLAYER_CalculateMovementTarget(D2UnitStrc * pPlayerUnit, D
     uint32_t nMinMoveDist = 3;
     if (!(nAbsDist & 4) || !(nAbsDist & 0x40)) {
       if (nAbsDist & 8) {
-        nMinMoveDist = (nAbsDist & 0xff) >> 6 & 1 | 4;
+        nMinMoveDist = (uint32_t)(uint8_t)nAbsDist >> 6 & 1 | 4;
       } else {
         if (nAbsDist & 0x10) {
           nMinMoveDist = 0;
@@ -2222,12 +2222,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
 
     D2InventoryStrc* pInventory = pUnit->pInventory;
     pKillerOrCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    while (true) {
-      pItem = pKillerOrCorpse;
-      if (!pItem) {
-        break;
-      }
-
+    while (pItem = pKillerOrCorpse) {
       pKillerOrCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItem);
       nTmpPos = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pItem);
       if (nTmpPos == 3) {

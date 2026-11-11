@@ -17,7 +17,7 @@
 #                             (--verify: then the full run too, and diff the two)
 #   oracle fix [PATTERN]      run every fixer over the tree (scripts/fix_all.py), then build, audit
 #   oracle crt                re-derive evidence/crtmap.tsv (the linked CRT)
-#   oracle ref                re-carve the original into functions (cached; automatic)
+#   oracle ref                re-carve the original into functions (cached; automatic; zig/)
 #   oracle rich <pe>          decode a PE's Rich header
 #   oracle compid <obj|lib>   the tool stamps inside objects / libraries
 #
@@ -30,9 +30,27 @@
 set -euo pipefail
 . "$(dirname "$0")/scripts/env.sh"
 
+# The carve: zig/ (refimage in Zig, about a second) when zig is installed, else refimage.py
+# (the same rows, 20+ minutes).
+carve() {
+    if command -v zig >/dev/null 2>&1; then
+        local bin="$ORACLE_ROOT/zig/zig-out/bin/refimage"
+        (cd "$ORACLE_ROOT/zig" && zig build --release=fast)
+        local ref="$ORACLE_ROOT/build/ref"
+        mkdir -p "$ref"
+        "$bin" "$REFERENCE_EXE" "$ref/functions.tsv.new"
+        # model.pkl decodes the carve's functions: a different carve makes it stale.
+        cmp -s "$ref/functions.tsv.new" "$ref/functions.tsv" || rm -f "$ref/model.pkl"
+        mv "$ref/functions.tsv.new" "$ref/functions.tsv"
+    else
+        rm -f "$ORACLE_ROOT/build/ref/model.pkl"
+        oracle_python "$SCRIPTS/refimage.py" "$@"
+    fi
+}
+
 ensure_ref() {
     [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"
-    [ -f "$ORACLE_ROOT/build/ref/functions.tsv" ] || oracle_python "$SCRIPTS/refimage.py"
+    [ -f "$ORACLE_ROOT/build/ref/functions.tsv" ] || carve
 }
 
 is_experiment() { [ "$ORACLE_VC" != sp1 ] || [ -n "${ORACLE_CFLAGS:-}" ]; }
@@ -41,7 +59,7 @@ cmd="${1:-help}"; [ $# -gt 0 ] && shift
 case "$cmd" in
     setup)  "$SCRIPTS/fetch_reference.sh"; "$SCRIPTS/setup_toolchain.sh" ;;
     build)  oracle_python "$SCRIPTS/build.py" "$@" ;;
-    ref)    oracle_python "$SCRIPTS/refimage.py" "$@" ;;
+    ref)    [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"; carve "$@" ;;
     crt)    ensure_ref; oracle_python "$SCRIPTS/crtmap.py" "$@" ;;
     map)    ensure_ref
             if is_experiment; then

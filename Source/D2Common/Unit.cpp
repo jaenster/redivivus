@@ -177,12 +177,7 @@ void __stdcall DRLGROOM_RemoveUnitFromUpdateList(D2UnitStrc * pUnit) {
       pNext = *ppUpdateList;
       pPrevious = 0;
       if (*ppUpdateList) {
-        while (true) {
-          pCurrent = pNext;
-          if (pCurrent == pUnit) {
-            break;
-          }
-
+        while ((pCurrent = pNext) != pUnit) {
           pNext = pCurrent->pChangeNextUnit;
           pPrevious = pCurrent;
           if (!pCurrent->pChangeNextUnit) {
@@ -304,11 +299,7 @@ void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
       pCurrent = DUNGEON::Dungeon::DRLGROOM_GetUnitListFromRoom(pRoom);
       pFirst = *pCurrent;
       pPrevious = 0;
-      while (true) {
-        pNext = pFirst;
-        if (!pNext) {
-          break;
-        }
+      while (pNext = pFirst) {
         if (pNext == pUnit) {
           if (pNext) {
             bFound = true;

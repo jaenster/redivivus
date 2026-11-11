@@ -1266,25 +1266,20 @@ static void DRLGPRESET_AddAndSetPresetUnits(D2RoomExStrc * pRoomEx) {
     BOOL _bInside;
     bool bInside;
     D2DrlgCoordsStrc roomCoords;
+    D2PresetUnitStrc* pCurrent;
     roomCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y;
     roomCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x;
     D2DrlgMapStrc* pPresetRoomDataRaw = pRoomEx->pRoomExData.pRoomExDataPreset->pMap;
     roomCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x;
     roomCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y;
-    D2DrlgMapStrc* pMapDataRaw = pPresetRoomDataRaw;
     Transform::CoordsRoomToWorld((int32_t*)&roomCoords, (int32_t*)&roomCoords.WorldPosition.y);
     Transform::CoordsRoomToWorld((int32_t*)&roomCoords.WorldSize.x, (int32_t*)&roomCoords.WorldSize.y);
     int nOffsetX = pRoomEx->sCoords.WorldPosition.x * 5;
     int nOffsetY = pRoomEx->sCoords.WorldPosition.y * 5;
     D2PresetUnitStrc* pNextPresetUnit = pPresetRoomDataRaw->pPresetUnit;
     D2PresetUnitStrc* pPrevPresetUnit = 0;
-    while (true) {
-      D2PresetUnitStrc* pCurrent;
-      pCurrent = pNextPresetUnit;
-      if (!pCurrent) {
-        break;
-      }
-
+    while (pCurrent = pNextPresetUnit) {
+      D2DrlgMapStrc* pMapDataRaw = pPresetRoomDataRaw;
       _bInside = DrlgRoom::AreXYInsideCoordinates(&roomCoords, pCurrent->nPosX, pCurrent->nPosY);
       if (_bInside) {
         pCurrent->nPosX -= nOffsetX;

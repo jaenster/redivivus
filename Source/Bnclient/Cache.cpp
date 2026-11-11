@@ -1027,19 +1027,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
       nHashSlot = nHashCount & nHashKey;
       nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + nHashSlot * 0x10 + 0xc);
       nProbeSlot = nHashSlot;
-      while (true) {
-        if (nStrCopyOffset == -1) {
-          break;
-        }
-        if (nStrCopyOffset == -2) {
-          break;
-        }
-
-        nProbeSlot = nProbeSlot + 1 & nHashCount;
-        if (nProbeSlot == nHashSlot) {
-          break;
-        }
-
+      while (nStrCopyOffset != -1 && nStrCopyOffset != -2 && (nProbeSlot = nProbeSlot + 1 & nHashCount) != nHashSlot) {
         nStrCopyOffset = *(int*)(gpCacheBufferPoolFirst + nProbeSlot * 0x10 + 0xc);
       }
 

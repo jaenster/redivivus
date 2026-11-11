@@ -118,7 +118,7 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
         memcpy(pBuffer, _Src, _Size);
         return _Size;
       }
-      if (0x2063 < (int32_t)nPacketLen) {
+      if ((int32_t)nPacketLen >= 0x2064) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xfb);
         exit(-1);
       }
@@ -230,25 +230,7 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
 
     int nPollResult;
     nPollResult = pQSSocket->bStopRequested;
-    while (true) {
-      if (nPollResult) {
-        break;
-      }
-
-      pSafesock = pQSSocket->pSafesock;
-      if (!pSafesock) {
-        break;
-      }
-      if (!pSafesock->bConnected) {
-        break;
-      }
-      if (pSafesock->bBlocked) {
-        break;
-      }
-      if (pSafesock->nError) {
-        break;
-      }
-
+    while (!nPollResult && (pSafesock = pQSSocket->pSafesock) && pSafesock->bConnected && !pSafesock->bBlocked && !pSafesock->nError) {
       nPollResult = Safesock::Safesock_PollReadReady(pSafesock);
       if (!pQSSocket->pSafesock || pQSSocket->pSafesock->bBlocked) {
         break;

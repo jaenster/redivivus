@@ -487,12 +487,12 @@ void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Block, int
     }
 
     int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nScreenX + nOffsetX < RENDERER_nWindowWidth && -1 < nDC6Width + nScreenX + nOffsetX)) {
+    if (!(nScreenX + nOffsetX < RENDERER_nWindowWidth && nDC6Width + nScreenX + nOffsetX >= 0)) {
       return;
     }
 
     int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (!(-1 < nScreenY + nDC6OffsetY && nScreenY + nDC6OffsetY - nHeight < RENDERER_nWindowHeight)) {
+    if (!(nScreenY + nDC6OffsetY >= 0 && nScreenY + nDC6OffsetY - nHeight < RENDERER_nWindowHeight)) {
       return;
     }
 }
@@ -560,12 +560,12 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nDC6OffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && -1 < nDC6Width + nDC6OffsetX + nPosX)) {
+    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + nDC6OffsetX + nPosX >= 0)) {
       return 0;
     }
 
     int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (!(-1 < nDC6OffsetY + nPosY && nDC6OffsetY + nPosY - nDC6Height < RENDERER_nWindowHeight)) {
+    if (!(nDC6OffsetY + nPosY >= 0 && nDC6OffsetY + nPosY - nDC6Height < RENDERER_nWindowHeight)) {
       return 0;
     }
 
@@ -593,12 +593,12 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DW
     int32_t nSpriteWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetXY = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nOffsetXY + nPosX < RENDERER_nWindowWidth && -1 < nSpriteWidth + nOffsetXY + nPosX)) {
+    if (!(nOffsetXY + nPosX < RENDERER_nWindowWidth && nSpriteWidth + nOffsetXY + nPosX >= 0)) {
       return;
     }
 
     nOffsetXY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (!(-1 < nOffsetXY + nPosY && nOffsetXY + nPosY - nSpriteHeight < RENDERER_nWindowHeight)) {
+    if (!(nOffsetXY + nPosY >= 0 && nOffsetXY + nPosY - nSpriteHeight < RENDERER_nWindowHeight)) {
       return;
     }
 
@@ -628,13 +628,13 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nDC6Height = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nDC6OffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && -1 < nDC6Width + nDC6OffsetX + nPosX)) {
+    if (!(nDC6OffsetX + nPosX < RENDERER_nWindowWidth && nDC6Width + nDC6OffsetX + nPosX >= 0)) {
       return;
     }
 
     int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
     int nViewportHeight = RENDERER_nWindowHeight;
-    if (!(-1 < nDC6OffsetY + nPosY && nDC6OffsetY + nPosY - nDC6Height < RENDERER_nWindowHeight)) {
+    if (!(nDC6OffsetY + nPosY >= 0 && nDC6OffsetY + nPosY - nDC6Height < RENDERER_nWindowHeight)) {
       return;
     }
 
@@ -686,12 +686,12 @@ void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nSpriteOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
     int nDrawX = nPosX - nSpriteHeight + nSpriteOffsetX;
-    if (!(nDrawX < RENDERER_nWindowWidth && -1 < nDC6Width + nSpriteHeight + nDrawX)) {
+    if (!(nDrawX < RENDERER_nWindowWidth && nDC6Width + nSpriteHeight + nDrawX >= 0)) {
       return;
     }
 
     int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (!(-1 < nDC6OffsetY + nPosY && nDC6OffsetY + nPosY - (nSpriteHeight >> 1) < RENDERER_nWindowHeight)) {
+    if (!(nDC6OffsetY + nPosY >= 0 && nDC6OffsetY + nPosY - (nSpriteHeight >> 1) < RENDERER_nWindowHeight)) {
       return;
     }
 

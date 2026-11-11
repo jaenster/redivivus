@@ -55,16 +55,27 @@ extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726600[16];
 extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007266f0[12];
 extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007267a8[11];
 extern D2NPCSpeechStrc D2NPCSpeech[46];
-extern uint16_t gnNpcMenuRepairCostGold;
-extern int16_t gnNpcMenuTradeActionGold;
 extern D2BitBufferStrc * gpNpcMenuDialogOptions;
 extern ::ListBoxWrapper * gpNpcMenuMercListBox;
-extern uint16_t gnNpcMenuScrollMessageHead;
-extern uint32_t gnNpcMenuShopMode;
 extern DC6 * gpNpcMenuShopInventoryDC6;
 
 namespace D2Client::UI::npcmenu {
 extern short nMercNameId;
+// NPC-menu state region: 0x007c0c68 .. 0x007c0dc7 (0x160 bytes).
+// NPCMENU_Initialize @004b23e0 zeroes this whole run with one memset(0x007c0c68, 0, 0x160);
+// the run holds 45 individually named globals and ends exactly on the next symbol
+// (gpNpcMenuShopInventoryDC6 @007c0dc8, which the same function assigns right after).
+// 339 of the 352 bytes are defined data; the 13 remaining are unnamed filler
+// (007c0c6f-72, 007c0d35-38, 007c0d3a-3c, 007c0dac-ad).
+// The memset is legitimate here: this is one contiguous .data region in the original.
+// It must NOT be collapsed into a struct - the members carry their own xrefs
+// (nUnknownUiRelatedMaybe 76, nCurrentInteractedNpcGUID 103, bInteractingWithNpc 53, ...).
+// The defect is in the emitted C++ layout, not in this program: the generator emits
+// memset(&gbNpcMenuInitialized, 0, 0x160) through a 1-byte global whose neighbours the
+// linker may place anywhere. The emitter must either lay this address run out contiguously
+// or expand the memset into per-global stores.
+extern uint8_t gbNpcMenuInitialized;
+extern uint8_t gnNpcMenuActiveMode;
 } // namespace D2Client::UI::npcmenu
 
 namespace D2Client::_Interaction {

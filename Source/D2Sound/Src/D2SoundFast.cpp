@@ -10,6 +10,7 @@
 #include "Source/D2Sound/D2Sound.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Sound/Sound.data.h"
+#include "Source/D2Sound/Src/D2SoundFast.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -28,8 +29,52 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SoundWavCacheEntryStrc) == 0x60, 
 #endif
 
 
+namespace D2Sound::Src::D2SoundFast {
+int gaAmbientSoundFlags = 0x8; D2_GLOBAL_GUARD(gaAmbientSoundFlags, "D2Sound::Src::D2SoundFast::gaAmbientSoundFlags");
+int gAmbientSoundTable[16] = {
+    (int)(uintptr_t)(char*)"data\\global\\music\\common\\options.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\caves.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\monastery.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\crypt.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\harem.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\tombs.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\spider.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
+    0x0
+}; D2_GLOBAL_GUARD(gAmbientSoundTable, "D2Sound::Src::D2SoundFast::gAmbientSoundTable");
+int gaAmbientSoundEntryTable[16] = {
+    (int)(uintptr_t)(char*)"data\\global\\music\\introedit.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\icecaves.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\xtemple.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\desert.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\sewer.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurast.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
+    0x0,
+    (int)(uintptr_t)(char*)"data\\global\\music\\act4\\diablo.wav",
+    0x0
+}; D2_GLOBAL_GUARD(gaAmbientSoundEntryTable, "D2Sound::Src::D2SoundFast::gaAmbientSoundEntryTable");
+uint32_t gnAmbientSoundCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundCount, "D2Sound::Src::D2SoundFast::gnAmbientSoundCount");
+} // namespace D2Sound::Src::D2SoundFast
 static uint32_t gnMusicEnabled = 0; D2_STATIC_GUARD(gnMusicEnabled, "gnMusicEnabled");
 static uint32_t gbSoundFastPathActive = 0; D2_STATIC_GUARD(gbSoundFastPathActive, "gbSoundFastPathActive");
+namespace D2Sound::Src::D2SoundFast {
+uint32_t gnAmbientSoundLanguageCode = 0; D2_GLOBAL_GUARD(gnAmbientSoundLanguageCode, "D2Sound::Src::D2SoundFast::gnAmbientSoundLanguageCode");
+uint32_t gbAmbientSoundLangInitialized = 0; D2_GLOBAL_GUARD(gbAmbientSoundLangInitialized, "D2Sound::Src::D2SoundFast::gbAmbientSoundLangInitialized");
+} // namespace D2Sound::Src::D2SoundFast
 static uint32_t g_nSoundMixerType = 0; D2_STATIC_GUARD(g_nSoundMixerType, "g_nSoundMixerType");
 static uint32_t g_nSoundMasterVolume = 0; D2_STATIC_GUARD(g_nSoundMasterVolume, "g_nSoundMasterVolume");
 static uint32_t g_nSoundMusicVolume = 0; D2_STATIC_GUARD(g_nSoundMusicVolume, "g_nSoundMusicVolume");

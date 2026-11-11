@@ -1297,7 +1297,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
       }
 
       nModuleCount = nBytesNeeded >> 2;
-      if ((int32_t)nModuleCount < 0x101) {
+      if ((int32_t)nModuleCount <= 0x100) {
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "\nEnumerate modules...");
         nModuleIdx = 0;
         if ((int)nModuleCount > 0) {
@@ -1841,12 +1841,7 @@ int __fastcall CleanupSymbolsWithRefcount(int32_t bForceCleanup) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0075cfbc);
     if (gnDbgSymInitRefcount) {
       HANDLE hProcess;
-      while (true) {
-        gnDbgSymInitRefcount--;
-        if (gnDbgSymInitRefcount) {
-          break;
-        }
-
+      while (!--gnDbgSymInitRefcount) {
         hProcess = GetCurrentProcess();
         (*pSymCleanup)(hProcess);
         if (!bForceCleanup) {

@@ -3599,14 +3599,18 @@ static short gnNpcMenuQuestIdTable[256] = {
     0xde,
     0x9f
 }; D2_STATIC_GUARD(gnNpcMenuQuestIdTable, "gnNpcMenuQuestIdTable");
+namespace D2Client::UI::npcmenu {
+uint8_t gbNpcMenuInitialized = 0; D2_GLOBAL_GUARD(gbNpcMenuInitialized, "D2Client::UI::npcmenu::gbNpcMenuInitialized");
+uint8_t gnNpcMenuActiveMode = 0; D2_GLOBAL_GUARD(gnNpcMenuActiveMode, "D2Client::UI::npcmenu::gnNpcMenuActiveMode");
+} // namespace D2Client::UI::npcmenu
 static uint8_t gbNpcMenuRandomDialogSeed = 0; D2_STATIC_GUARD(gbNpcMenuRandomDialogSeed, "gbNpcMenuRandomDialogSeed");
 namespace D2Client::_Interaction {
 // also labelled: nUnknownUiRelatedMaybe
 eD2NpcUiState geNpcUiState = 0; D2_GLOBAL_GUARD(geNpcUiState, "D2Client::_Interaction::geNpcUiState");
 } // namespace D2Client::_Interaction
 static int PLAYER_CurrentGold = 0; D2_STATIC_GUARD(PLAYER_CurrentGold, "PLAYER_CurrentGold");
-uint16_t gnNpcMenuRepairCostGold = 0; D2_GLOBAL_GUARD(gnNpcMenuRepairCostGold, "gnNpcMenuRepairCostGold");
-int16_t gnNpcMenuTradeActionGold = 0; D2_GLOBAL_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
+static uint16_t gnNpcMenuRepairCostGold = 0; D2_STATIC_GUARD(gnNpcMenuRepairCostGold, "gnNpcMenuRepairCostGold");
+static int16_t gnNpcMenuTradeActionGold = 0; D2_STATIC_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
 static uint16_t gnNpcMenuScrollCompleteMode = 0; D2_STATIC_GUARD(gnNpcMenuScrollCompleteMode, "gnNpcMenuScrollCompleteMode");
 // also labelled: g_nNpcTradeMenuState
 static D2NPCSpeechStrc * gpNpcCurrentSpeech = 0; D2_STATIC_GUARD(gpNpcCurrentSpeech, "gpNpcCurrentSpeech");
@@ -3651,8 +3655,8 @@ static uint32_t nTransactionCost = 0; D2_STATIC_GUARD(nTransactionCost, "nTransa
 static D2GSPacketSrv0x2A D2GSPacketSrv0x2A_007c0d87 = {}; D2_STATIC_GUARD(D2GSPacketSrv0x2A_007c0d87, "D2GSPacketSrv0x2A_007c0d87");
 static uint32_t gnNpcMenuActiveContainer = 0; D2_STATIC_GUARD(gnNpcMenuActiveContainer, "gnNpcMenuActiveContainer");
 static short gaNpcMenuHandledMessageIds[9] = {}; D2_STATIC_GUARD(gaNpcMenuHandledMessageIds, "gaNpcMenuHandledMessageIds");
-uint16_t gnNpcMenuScrollMessageHead = 0; D2_GLOBAL_GUARD(gnNpcMenuScrollMessageHead, "gnNpcMenuScrollMessageHead");
-uint32_t gnNpcMenuShopMode = 0; D2_GLOBAL_GUARD(gnNpcMenuShopMode, "gnNpcMenuShopMode");
+static uint16_t gnNpcMenuScrollMessageHead = 0; D2_STATIC_GUARD(gnNpcMenuScrollMessageHead, "gnNpcMenuScrollMessageHead");
+static uint32_t gnNpcMenuShopMode = 0; D2_STATIC_GUARD(gnNpcMenuShopMode, "gnNpcMenuShopMode");
 static uint32_t gnNpcMenuNpcSoundIndex = 0; D2_STATIC_GUARD(gnNpcMenuNpcSoundIndex, "gnNpcMenuNpcSoundIndex");
 static uint32_t gnNpcMenuNpcClassId = 0; D2_STATIC_GUARD(gnNpcMenuNpcClassId, "gnNpcMenuNpcClassId");
 static uint32_t gnNpcMenuDialogX = 0; D2_STATIC_GUARD(gnNpcMenuDialogX, "gnNpcMenuDialogX");
@@ -3884,7 +3888,8 @@ void __fastcall NPCMENU_AddHandledMessageId(short wMsgId) {
       return;
     }
 
-    gaNpcMenuHandledMessageIds[gnNpcMenuScrollMessageHead] = wMsgId;
+    short int* t2_c0 = gaNpcMenuHandledMessageIds;
+    t2_c0[gnNpcMenuScrollMessageHead] = wMsgId;
     gnNpcMenuScrollMessageHead++;
 }
 

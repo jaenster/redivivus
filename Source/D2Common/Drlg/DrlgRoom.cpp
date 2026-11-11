@@ -1409,12 +1409,7 @@ void __fastcall DRLGROOMEX_FreeDrlgRoomEx(D2RoomExStrc * pRoomEx) {
     }
 
     D2DrlgOrthStrc* pOrthIter = pRoomEx->pOrth;
-    while (true) {
-      pOrthCurrent = pOrthIter;
-      if (!pOrthCurrent) {
-        break;
-      }
-
+    while (pOrthCurrent = pOrthIter) {
       pOrthIter = pOrthCurrent->pNext;
       if (pOrthCurrent->nType == 1) {
         pLinkedRoomEx = pOrthCurrent->pLink.pRoomEx;

@@ -138,8 +138,8 @@ static uint32_t __stdcall ZLIB_Adler32Combine(uint32_t nAdler1, uint32_t nLen2Lo
     }
 
     int64_t nLen2Mod = _allrem(nLen2Lo, nLen2Hi, 0xfff1, 0);
-    uint32_t nSum2 = (nAdler1 & 0xffff) * (int)nLen2Mod;
-    uint32_t nSum1 = (nAdler1 & 0xffff) + 0xfff0 + (uint16_t)nAdler2;
+    uint32_t nSum2 = (uint32_t)(uint16_t)nAdler1 * (int)nLen2Mod;
+    uint32_t nSum1 = (uint32_t)(uint16_t)nAdler1 + 0xfff0 + (uint16_t)nAdler2;
     nSum2 = nSum2 + 0xfff1 + ((nAdler1 >> 0x10) + nSum2 / 0xfff1 * -0xfff1 + (nAdler2 >> 0x10) - (int)nLen2Mod);
     uint32_t nSum1Mod = nSum1;
     if (nSum1 >= 0xfff1) {

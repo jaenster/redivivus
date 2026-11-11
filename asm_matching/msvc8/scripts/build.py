@@ -3,7 +3,9 @@
 
     build.py [-j N] [--force] [--with-data] [PATTERN ...]
 
-Mirrors the tree through vc8_translate.py into build/src, then compiles every
+Mirrors the tree into build/src through ghidra-reconstruct's VC8 output mode
+(ts_translate.py: GR's checkout, else the live daemon's when it has the mode) or
+else through vc8_translate.py, then compiles every
 translation unit (or those whose path contains one of the PATTERNs) to
 build/obj/<path>.obj under wine, N at a time. Incremental by content, not by
 time: every compile is stored in a content-addressed cache (objcache.py) under
@@ -49,6 +51,7 @@ state, not code: objdiff.py over 19 objects from nine modules found all 741
 functions identical with and without it. ORACLE_PCH=0 turns it off.
 """
 import argparse
+import atexit
 import fcntl
 import glob
 import concurrent.futures as cf
@@ -65,6 +68,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import coffobj        # noqa: E402
 import objcache       # noqa: E402
+import ts_translate   # noqa: E402
 import vc8_translate  # noqa: E402
 
 from oracle_config import ORACLE, REPO, BUILD, CFLAGS, DEFAULT_CFLAGS, EXPERIMENT, VC, TOOL_CFLAGS  # noqa: E402
@@ -92,6 +96,18 @@ BATCH = 16                  # TUs per cl.exe at most (compile_batch)
 # 448 TUs compiled in 107s at -j6 against 123s at -j8, 143s at -j12 and 165s
 # at -j16 (batch 16, a 16-core M3 Max under load).
 JOBS = min(os.cpu_count() or 4, 6)
+
+
+TS = None                   # the ghidra-reconstruct translator when ts_translate.checkout() names one
+
+
+def translated(rel):
+    """Tree file `rel` translated, the functions vc8_translate.QUARANTINE names
+    for it quarantined."""
+    if TS is not None:
+        return TS.translate(rel, vc8_translate.QUARANTINE.get(rel, ()))
+    with open(os.path.join(REPO, rel), encoding='utf-8', errors='surrogateescape') as f:
+        return vc8_translate.translate(f.read(), rel)
 
 
 class TU:
@@ -279,8 +295,7 @@ def unquarantined_text(t):
     if t.rel in vc8_translate.QUARANTINE:
         saved = vc8_translate.QUARANTINE.pop(t.rel)
         try:
-            orig = open(os.path.join(REPO, t.rel), encoding='utf-8', errors='surrogateescape').read()
-            return vc8_translate.translate(orig, t.rel)
+            return translated(t.rel)
         finally:
             vc8_translate.QUARANTINE[t.rel] = saved
     return open(t.src, encoding='utf-8', errors='surrogateescape').read()
@@ -321,8 +336,7 @@ def set_quarantine(t, rows):
         if new != lines:
             write_quarantine(new)
         vc8_translate.load_quarantine(QUARANTINE_TSV)
-        orig = open(os.path.join(REPO, t.rel), encoding='utf-8', errors='surrogateescape').read()
-        out = vc8_translate.translate(orig, t.rel).encode('utf-8', errors='surrogateescape')
+        out = translated(t.rel).encode('utf-8', errors='surrogateescape')
         if not os.path.exists(t.src) or open(t.src, 'rb').read() != out:
             with open(t.src, 'wb') as f:
                 f.write(out)
@@ -378,16 +392,23 @@ def quarantine(t, errors_log):
             own.append((int(m.group('line')), m.group('code') + ' ' + m.group('msg')))
     if not own:
         return 0
-    text = open(src, encoding='utf-8', errors='surrogateescape').read()
     rows = []
-    for ln, msg in own:
-        b = vc8_translate.function_body_at(text, ln)
-        if b is None:
-            return 0                      # an error outside any function: cannot quarantine
-        head_line = text.count('\n', 0, b[0]) + 1
-        _, done = vc8_translate.quarantine_bodies(text, [ln])
-        name = done[0][1] if done else '?'
-        rows.append((tu, ln, head_line, name, msg))
+    if TS is not None:
+        found = TS.functions(tu, vc8_translate.QUARANTINE.get(tu, ()), [ln for ln, _msg in own])
+        for (ln, msg), f in zip(own, found):
+            if f is None:
+                return 0                  # an error outside any function: cannot quarantine
+            rows.append((tu, ln, f[0], f[1], msg))
+    else:
+        text = open(src, encoding='utf-8', errors='surrogateescape').read()
+        for ln, msg in own:
+            b = vc8_translate.function_body_at(text, ln)
+            if b is None:
+                return 0                  # an error outside any function: cannot quarantine
+            head_line = text.count('\n', 0, b[0]) + 1
+            _, done = vc8_translate.quarantine_bodies(text, [ln])
+            name = done[0][1] if done else '?'
+            rows.append((tu, ln, head_line, name, msg))
     with _qlock:
         known = set()
         if os.path.exists(QUARANTINE_TSV):
@@ -399,8 +420,7 @@ def quarantine(t, errors_log):
             for r in new:
                 f.write('%s\t%d\t%d\t%s\t%s\n' % r)
         vc8_translate.load_quarantine(QUARANTINE_TSV)
-        orig = open(os.path.join(REPO, tu), encoding='utf-8', errors='surrogateescape').read()
-        out = vc8_translate.translate(orig, tu)
+        out = translated(tu)
         with open(src, 'w', encoding='utf-8', errors='surrogateescape') as f:
             f.write(out)
     return len(new)
@@ -420,9 +440,8 @@ def unquarantine(t):
             return
         write_quarantine(keep)
         vc8_translate.load_quarantine(QUARANTINE_TSV)
-        orig = open(os.path.join(REPO, tu), encoding='utf-8', errors='surrogateescape').read()
         with open(t.src, 'w', encoding='utf-8', errors='surrogateescape') as f:
-            f.write(vc8_translate.translate(orig, tu))
+            f.write(translated(tu))
 
 
 def compile_one(t, rsp, base_key, first=None):
@@ -644,8 +663,7 @@ def translate_support(extra_src, names):
     n = 0
     for name in names:
         rel = os.path.join(SUPPORT, name)
-        with open(os.path.join(REPO, rel), encoding='utf-8', errors='surrogateescape') as f:
-            data = vc8_translate.translate(f.read(), rel).encode('utf-8', errors='surrogateescape')
+        data = translated(rel).encode('utf-8', errors='surrogateescape')
         dst = os.path.join(out, name)
         if not os.path.exists(dst) or open(dst, 'rb').read() != data:
             with open(dst, 'wb') as f:
@@ -731,6 +749,7 @@ def write_status(statusdir, tus, status):
 
 
 def main():
+    global TS
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('-j', '--jobs', type=int, default=JOBS, help='cl.exe processes at a time (default %d)' % JOBS)
     ap.add_argument('--batch', type=int, default=int(os.environ.get('ORACLE_BATCH', BATCH)),
@@ -771,20 +790,36 @@ def main():
     mstate = os.path.join(BUILD, 'mirror.state.pkl')
     names = ('THISCALL_FUNCS', 'THISCALL_PTRS', 'STRIP_CTORS', 'CONSTRUCT', 'THISCALL_DIRECT')
     prev = None
-    if objcache.READ and os.path.exists(mstate):
+    gr = ts_translate.checkout()
+    if gr:
+        # ghidra-reconstruct mirrors the tree (it writes only what changed) and
+        # stays up for the single files translated later. vc8_translate.py's
+        # record of build/src no longer describes it.
+        for path in (mstamp, mstate):
+            if os.path.exists(path):
+                os.remove(path)
+        vc8_translate.load_quarantine(QUARANTINE_TSV)
+        TS = ts_translate.Translator(gr, REPO)
+        atexit.register(TS.close)
+        w, k = TS.mirror(SRC, QUARANTINE_TSV)
+        print('translate (ghidra-reconstruct %s): %d written, %d unchanged (%.1fs)'
+              % (gr, w, k, time.time() - t_start))
+    elif objcache.READ and os.path.exists(mstate):
         try:
             with open(mstate, 'rb') as fh:
                 prev = pickle.load(fh)          # (key, state, translator hash, {path: (hash, quarantine)})
         except Exception:
             prev = None
-    if prev is not None and read_key(mstamp) == mkey and prev[0] == mkey and \
+    if gr:
+        pass
+    elif prev is not None and read_key(mstamp) == mkey and prev[0] == mkey and \
             all(os.path.exists(os.path.join(SRC, r, n)) for r, n in files):
         vc8_translate.load_quarantine(QUARANTINE_TSV)
         for name, value in zip(names, prev[1]):
             getattr(vc8_translate, name).clear()
             getattr(vc8_translate, name).update(value)
         hashes = prev[3]
-        print('translate: tree unchanged, %d kept (%.1fs)' % (len(files), time.time() - t_start))
+        print('translate (vc8_translate.py): tree unchanged, %d kept (%.1fs)' % (len(files), time.time() - t_start))
     else:
         # A file's translation is a function of the translator, the per-tree
         # state, its source and its own quarantined lines: a changed
@@ -826,7 +861,7 @@ def main():
                 pickle.dump(obj, fh)
             os.replace(tmp, path)
         write_text(mstamp, mkey)
-        print('translate: %d written, %d unchanged (%.1fs)' % (w, k, time.time() - t_start))
+        print('translate (vc8_translate.py): %d written, %d unchanged (%.1fs)' % (w, k, time.time() - t_start))
     extra_src = extra_obj = None
     if args.extra:
         extra = os.path.abspath(args.extra)

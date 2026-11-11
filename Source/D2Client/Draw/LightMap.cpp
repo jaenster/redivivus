@@ -411,17 +411,17 @@ static void __stdcall LIGHTMAP_AddLightToCell(int nX, int nIntensity, uint8_t nR
       uint32_t nNewRed;
       nFalloff = gnLightmapInterpolationState[nCellY + 1];
       nNewRed = (gaLightMapCells[nCellOffset].nRed * nCellX + (uint32_t)nRed * nIntensity) * nFalloff >> 0x10;
-      if (0xff < (int32_t)nNewRed) {
+      if ((int32_t)nNewRed > 0xff) {
         nNewRed = 0xff;
       }
 
       nNewGreen = (gaLightMapCells[nCellOffset].nGreen * nCellX + (uint32_t)nGreen * nIntensity) * nFalloff >> 0x10;
-      if (0xff < (int32_t)nNewGreen) {
+      if ((int32_t)nNewGreen > 0xff) {
         nNewGreen = 0xff;
       }
 
       nCellX = (gaLightMapCells[nCellOffset].nBlue * nCellX + (uint32_t)nBlue * nIntensity) * nFalloff >> 0x10;
-      if (0xff < (int32_t)nCellX) {
+      if ((int32_t)nCellX > 0xff) {
         nCellX = 0xff;
       }
 

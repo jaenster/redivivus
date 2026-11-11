@@ -715,13 +715,8 @@ BOOL WasteBits(TDcmpStruct * pClientSideData, uint32_t nBitCount) {
 
 void GenDecodeTabs(int nCount, uint8_t * pBitsTable, uint8_t * pBaseTable, char * pOutTable) {
     uint8_t nBitLen;
-    while (true) {
+    while (--nCount >= 0) {
       uint32_t nBaseIndex;
-      nCount--;
-      if (nCount < 0) {
-        break;
-      }
-
       nBitLen = pBitsTable[nCount];
       nBaseIndex = (uint32_t)pBaseTable[nCount];
       do {

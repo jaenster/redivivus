@@ -393,7 +393,7 @@ static void __stdcall SMemCoalesceFreeBlocks(int * pnFreeTotal, D2FogHeapBlockHd
       uint16_t* pFreeBlock;
       pFreeBlock = (uint16_t*)((intptr_t)&pBlock->wBlockSize + nUsedSizeSnap);
       *pFreeBlock = (short int)nFreeSize;
-      nFreeSize = (nFreeSize & 0xffff) >> 5;
+      nFreeSize = (uint32_t)(uint16_t)nFreeSize >> 5;
       *(uint8_t*)(pFreeBlock + 1) = 0;
       *(uint8_t*)((char*)pFreeBlock + 3) = 2;
       if (nFreeSize >= 8) {
@@ -720,7 +720,7 @@ uint32_t __stdcall SMemDestroy() {
         if (*(int*)((char*)pHeap + 0x14)) {
           ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
         } else {
-          if (*(int*)((char*)pHeap + 0x10) && 0x7fffffff < *(uint32_t*)((char*)pHeap + 4)) {
+          if (*(int*)((char*)pHeap + 0x10) && *(uint32_t*)((char*)pHeap + 4) >= 0x80000000) {
             SErr::SErrReportResourceLeak("HSHEAP");
           }
 
@@ -761,7 +761,7 @@ int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint
 
     SMemZero(pnInfo + 1, *pnInfo - 4);
     LPCRITICAL_SECTION lpCriticalSection;
-    lpCriticalSection = DebugMemoryCriticalSection + (nHeapId & 0xff);
+    lpCriticalSection = DebugMemoryCriticalSection + (uint32_t)(uint8_t)nHeapId;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
     D2FogHeapBlockHdrStrc* pPrevScan;
     pPrevScan = 0;
@@ -799,11 +799,7 @@ int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint
       }
       if (pCurHeap->nHash == nHeapId) {
         pScanBlock = (D2FogHeapBlockHdrStrc*)pCurHeap->pDataStart;
-        while (true) {
-          pFoundBlock = pScanBlock;
-          if ((void*)pFoundBlock == pCurHeap->pWriteCursor) {
-            break;
-          }
+        while ((pFoundBlock = pScanBlock) != pCurHeap->pWriteCursor) {
           if (pPrevScan == pStopBlock) {
             bFound = true;
             break;
@@ -1214,16 +1210,7 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
     void* pFreeBinHead = pHeap->aFreeBins[nBinIndex];
     void** ppBinSlot = pHeap->aFreeBins + nBinIndex;
     uint32_t nBestFit = 0x7fffffff;
-    while (true) {
-      if (pFreeBinHead) {
-        break;
-      }
-
-      nBinIndex++;
-      if (nBinIndex >= 9) {
-        break;
-      }
-
+    while (!pFreeBinHead && ++nBinIndex < 9) {
       ppBinSlot++;
       pFreeBinHead = *ppBinSlot;
     }

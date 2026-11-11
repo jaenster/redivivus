@@ -907,7 +907,7 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection) {
 
 // Validates whether a command can be bound to mouse buttons (0x103-0x104). Returns false if command handler exists and button is left/right click, true otherwise. Used during key binding setup to prevent invalid mouse button assignments.
 static BOOL CMD_ValidateMouseButtonBinding(int32_t nCmdIndex, uint16_t * pErrorCode, uint32_t nMouseButton) {
-    if ((nMouseButton & 0xffff) - 0x103 <= 1 && gaCmdBindings[nCmdIndex].pfnAltHandler) {
+    if ((uint32_t)(uint16_t)nMouseButton - 0x103 <= 1 && gaCmdBindings[nCmdIndex].pfnAltHandler) {
       if (pErrorCode) {
         *pErrorCode = 0xf8a;
       }
@@ -1187,8 +1187,8 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
 
 BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     uint32_t nKeyCode = (uint32_t)wKeyCode;
-    if ((int32_t)nKeyCode < 0x105) {
-      if (0xff < (int32_t)nKeyCode) {
+    if ((int32_t)nKeyCode <= 0x104) {
+      if ((int32_t)nKeyCode >= 0x100) {
         return 1;
       }
 

@@ -220,7 +220,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
       }
 
       uAlphaR = (uint32_t)*pSrcBytes * 0xaa / 100;
-      if (0xff < (int32_t)uAlphaR) {
+      if ((int32_t)uAlphaR > 0xff) {
         uAlphaR = 0xff;
       }
 
@@ -243,7 +243,7 @@ BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct) {
     char szDatPath[260];
     char szPl2Path[260];
     uint32_t nActIndex = nAct + 1;
-    if (!nActIndex || 5 < (int32_t)nActIndex) {
+    if (!nActIndex || (int32_t)nActIndex > 5) {
       nActIndex = 1;
     }
 

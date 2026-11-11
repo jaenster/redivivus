@@ -806,6 +806,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
     uint8_t nGuildUnknown;
     uint32_t dwLadderPad;
     int nClassId;
+    D2ClientStrc* pClientLoop;
     FILETIME* ppFileTime;
     if (!pClient) {
       return;
@@ -822,13 +823,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
     }
 
     D2ClientStrc* pClientNext = pGame->pClient;
-    while (true) {
-      D2ClientStrc* pClientLoop;
-      pClientLoop = pClientNext;
-      if (!pClientLoop) {
-        break;
-      }
-
+    while (pClientLoop = pClientNext) {
       pClientNext = pClientLoop->pNext;
       pPlayer = Clients::CLIENTS_GetControlUnit(pClientLoop, 0);
       if (pPlayer) {
@@ -867,13 +862,8 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
     D2ClientStrc* pClient;
     FILETIME* ppFileTime;
     D2ClientStrc* pClientNext = pGame->pClient;
-    while (true) {
+    while (pClient = pClientNext) {
       D2UnitStrc* pPlayerUnit_lcl;
-      pClient = pClientNext;
-      if (!pClient) {
-        break;
-      }
-
       pClientNext = pClient->pNext;
       pPlayerUnit_lcl = Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pPlayerUnit_lcl) {
@@ -1179,12 +1169,7 @@ void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame) {
     do {
       if (*ppActLoop) {
         pRoomNext = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(*ppActLoop);
-        while (true) {
-          pRoom = pRoomNext;
-          if (!pRoom) {
-            break;
-          }
-
+        while (pRoom = pRoomNext) {
           pRoomNext = pRoom->pDrlgRoomNext;
           nIdleTicks = D2Common::DUNGEON::Dungeon::DRLGROOM_GetIdleTicks(pRoom);
           if (nIdleTicks > 10) {
@@ -1236,13 +1221,8 @@ void __stdcall CheckClientTimeouts(::SGAMEDATA * pGame, int * pbAnyDisconnected)
     *pbAnyDisconnected = 0;
     DWORD dwCurrentTick = GetTickCount();
     D2ClientStrc* pClientNext = pGame->pClient;
-    while (true) {
+    while (pClient = pClientNext) {
       uint32_t dwFileFlags;
-      pClient = pClientNext;
-      if (!pClient) {
-        break;
-      }
-
       pClientNext = pClient->pNext;
       dwFileFlags = Clients::CLIENT_TestFileFlags(pClient, 4);
       dwClientTimeout = pClient->dwTimeOut;
@@ -1294,12 +1274,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
     }
 
     pClientNext = pGame->pClient;
-    while (true) {
-      pClient = pClientNext;
-      if (!pClient) {
-        break;
-      }
-
+    while (pClient = pClientNext) {
       iVar1 = pClient->ConnectionState;
       pClientNext = pClient->pNext;
       switch (iVar1) {
@@ -1951,13 +1926,8 @@ void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
     }
 
     D2ClientStrc* pNextClient = pGame->pClient;
-    while (true) {
+    while (pClient = pNextClient) {
       D2UnitStrc* pUnit;
-      pClient = pNextClient;
-      if (!pClient) {
-        break;
-      }
-
       pNextClient = pClient->pNext;
       pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
       if (pUnit) {
@@ -2436,7 +2406,7 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
     int nBucketIdx;
     int32_t nExported = 0;
     EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[nServerId & 0xffff];
+    ::SGAMEDATA* pGame = gaQServerGameByToken[(uint16_t)nServerId];
     ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;
@@ -2488,7 +2458,7 @@ void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, D2Game_Line0x13af 
     D2UnitStrc* pUnit;
     D2Game_Line0x13af* nListCursor;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    ::SGAMEDATA* pGame = gaQServerGameByToken[(uintptr_t)ppUnitArray & 0xffff];
+    ::SGAMEDATA* pGame = gaQServerGameByToken[(uint16_t)(uint32_t)ppUnitArray];
     ::SGAMEDATA* nToken = 0;
     if (pGame && pGame != (::SGAMEDATA*)-1) {
       nToken = pGame;

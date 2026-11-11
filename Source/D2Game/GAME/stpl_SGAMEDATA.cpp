@@ -220,12 +220,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       nOldBucketIdx = 0;
       pPendingHead2 = pendingList.m_terminator.m_prevlink;
       do {
-        while (true) {
-          nBucketNextLink = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next;
-          if (0 >= nBucketNextLink) {
-            break;
-          }
-
+        while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next)) {
           pBackLink = (TSLink<::SGAMEDATA>*)(nBucketNextLink + 4);
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {

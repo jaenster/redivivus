@@ -279,16 +279,12 @@ char * __thiscall SkipToEOL(D2BNetGatewayAccessStr * pGatewayAccess, char * szTe
 
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 char * __thiscall SkipEOL(D2BNetGatewayAccessStr * pGatewayAccess, char * szText1, char * szText2) {
+    char cCur;
     /* 0x1183c0  20  ?SkipEOL@BNGatewayAccess@@AAEPADPAD0@Z */ if (szText1 >= szText2) {
       return szText1;
     }
 
-    while (true) {
-      char cCur;
-      cCur = *szText1;
-      if (cCur == '\0') {
-        break;
-      }
+    while ((cCur = *szText1) != '\0') {
       if (cCur != '\r' && cCur != '\n') {
         return szText1;
       }

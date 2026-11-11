@@ -328,9 +328,8 @@ void __fastcall Unreferenced_004212c0(uint8_t * pA, uint8_t * pB) {
 // @oracle-method NOUN CORRECTION ONLY. Reads a limb at an offset. Tail unchanged and unverified.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 uint32_t __thiscall SBIG_BigBuffer_GetWord(BigBuffer * pThis, int32_t nOffset) {
-    uint32_t uIndex = pThis->nStartWord + nOffset;
-    if (uIndex < pThis->nCount) {
-      return pThis->pData[uIndex];
+    if (pThis->nStartWord + nOffset < pThis->nCount) {
+      return pThis->pData[pThis->nStartWord + nOffset];
     }
 
     return 0;
@@ -2160,7 +2159,7 @@ static void __stdcall BigBuffer_Sub_Ui(BigBuffer * pSrc, BigBuffer * pResult, ui
         nResultWord = nAccumLo + nSrcCount;
         nAccumLo = nCarryHi + (uint32_t)((uint32_t)((uint32_t)nAccumLo + (uint32_t)nSrcCount) < (uint32_t)nAccumLo);
         nCarryHi = 0;
-        if (false || 0x7fffffff < nAccumLo) {
+        if (false || nAccumLo >= 0x80000000) {
           nCarryHi = -1;
         }
 
@@ -2268,7 +2267,7 @@ static void __stdcall BigBuffer_Sub(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
       dwResultWord = nBorrowLo + (dwLhsWord - dwRhsWord);
       nBorrowLo = nBorrowHi - (uint32_t)(dwLhsWord < dwRhsWord) + (uint32_t)((uint32_t)((uint32_t)nBorrowLo + (uint32_t)(dwLhsWord - dwRhsWord)) < (uint32_t)nBorrowLo);
       nBorrowHi = 0;
-      if (false || 0x7fffffff < nBorrowLo) {
+      if (false || nBorrowLo >= 0x80000000) {
         nBorrowHi = -1;
       }
 
@@ -3370,8 +3369,8 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_MulMod(BigBuffer * pnB, BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * pnModulus, BigStack * pStack) {
     uint32_t nStackBase = pStack->nUsed;
-    pStack->nUsed = nStackBase + 1;
     BigBuffer* pnTmp = pStack->aBuffers + nStackBase;
+    pStack->nUsed = nStackBase + 1;
     BigBuffer_Mul(pnTmp, pnA, pnB, pStack);
     BigBuffer_Div(pnTmp, pnResult, pnModulus, pStack, pnTmp);
     pStack->nUsed--;
@@ -3381,15 +3380,10 @@ static void __stdcall BigBuffer_MulMod(BigBuffer * pnB, BigBuffer * pnResult, Bi
 // @oracle Mac PPC 1.10b Storm mangled symbol .Pow__FR9BigBufferRC9BigBufferUiR8BigStack @1009d240 -- 4 args; square-and-multiply over a scalar unsigned exponent with NO modulus, and like .Pow its only bignum callee is Mul. Was SBIG_MontgomeryPowerMod - it is neither Montgomery nor modular.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Pow(BigBuffer * pnResult, BigBuffer * pnBase, uint32_t nExponent, BigStack * pStack) {
+    uint32_t dwTmp2;
     uint32_t dwTmp3 = nExponent - 1 & nExponent;
     uint32_t dwBitMask = nExponent;
-    while (true) {
-      uint32_t dwTmp2;
-      dwTmp2 = dwTmp3;
-      if (!dwTmp2) {
-        break;
-      }
-
+    while (dwTmp2 = dwTmp3) {
       dwBitMask = dwTmp2;
       dwTmp3 = dwTmp2 - 1 & dwTmp2;
     }

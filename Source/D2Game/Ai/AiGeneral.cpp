@@ -169,15 +169,7 @@ void __fastcall FreeAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // @sourcefile .\Ai\AiGeneral.cpp
 static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
     D2MonsterAiCmdStrc* pCmd = pAiGeneral->pCmdLast;
-    while (true) {
-      if (!pCmd) {
-        break;
-      }
-
-      pCmd = pAiGeneral->pCmdCurrent;
-      if (!pCmd) {
-        break;
-      }
+    while (pCmd && (pCmd = pAiGeneral->pCmdCurrent)) {
       if (pCmd != pCmd->pNext) {
         if (pAiGeneral->pCmdLast == pCmd) {
           pAiGeneral->pCmdLast = pCmd->pNext;

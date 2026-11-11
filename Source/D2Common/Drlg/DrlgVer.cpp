@@ -256,15 +256,10 @@ void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexSt
 }
 
 int __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * param_1) {
+    D2DrlgVertexStrc* pDVar2;
     D2DrlgVertexStrc* pDVar1 = *param_1;
     D2DrlgVertexStrc* pDVar3 = 0;
-    while (true) {
-      D2DrlgVertexStrc* pDVar2;
-      pDVar2 = pDVar1;
-      if (!pDVar2) {
-        break;
-      }
-
+    while (pDVar2 = pDVar1) {
       pDVar1 = pDVar2->pNext;
       pDVar2->pNext = pDVar3;
       pDVar3 = pDVar2;

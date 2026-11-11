@@ -1034,7 +1034,7 @@ void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates
     D2UnitStrc* pSocketedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
     D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pUnit, (char*)&nItemWidth, (char*)&nItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
     uint32_t nSocketCount = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
-    int nSocketLayout = nItemHeight - 0xd + ((uint32_t)nItemWidth + (nSocketCount & 0xff) * 2) * 4;
+    int nSocketLayout = nItemHeight - 0xd + ((uint32_t)nItemWidth + (uint32_t)(uint8_t)nSocketCount * 2) * 4;
     uint32_t nSocketIndex = 0;
     int32_t nSocketCountSigned = D2Common::ITEMS::Items::ITEM_GetSocketsCount(pUnit);
     if ((uint8_t)(char)nSocketCountSigned <= '\0') {

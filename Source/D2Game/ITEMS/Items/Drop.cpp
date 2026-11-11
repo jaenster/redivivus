@@ -779,18 +779,18 @@ static void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUn
     nDifficulty = (int)pGame->nDifficulty;
     if (nDifficulty) {
       if (nDifficulty != 1) {
-        if (nDifficulty == 2 && 5 < (int32_t)nMaxSockCount) {
+        if (nDifficulty == 2 && (int32_t)nMaxSockCount >= 6) {
           nMaxSockCount = 6;
           goto roll_sockets;
         }
       } else {
-        if (3 < (int32_t)nMaxSockCount) {
+        if ((int32_t)nMaxSockCount >= 4) {
           nMaxSockCount = 4;
           goto roll_sockets;
         }
       }
     } else {
-      if (2 < (int32_t)nMaxSockCount) {
+      if ((int32_t)nMaxSockCount >= 3) {
         nMaxSockCount = 3;
         goto roll_sockets;
       }
@@ -825,12 +825,12 @@ static void __stdcall ITEM_RollSocketCount(::SGAMEDATA * pGame, D2UnitStrc * pUn
       D2Common::ITEMS::Items::ITEM_RollSocketCount(pUnit, nModSeed % nMaxSockCount + 1);
       return;
     }
-    if (3 < (int32_t)nMaxSockCount) {
+    if ((int32_t)nMaxSockCount > 3) {
       nMaxSockCount = 3;
     }
 
     uint32_t bIsHelm = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Helm);
-    if (bIsHelm && 2 < (int32_t)nMaxSockCount) {
+    if (bIsHelm && (int32_t)nMaxSockCount > 2) {
       nMaxSockCount = 2;
     }
 
@@ -2434,12 +2434,7 @@ void __fastcall FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct) {
     for (pRoomIter = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(pGame->pAct[nAct]); pRoomIter; pRoomIter = pRoomIter->pDrlgRoomNext) {
       D2UnitStrc* pUnitNext;
       pUnitNext = pRoomIter->pUnitList;
-      while (true) {
-        pUnit = pUnitNext;
-        if (!pUnit) {
-          break;
-        }
-
+      while (pUnit = pUnitNext) {
         pUnitNext = pUnit->pRoomNext;
         if (pUnit->eUnitType == UNIT_ITEM) {
           nExpireFrame = pUnit->pUnitData.pUnitDataItem->nActionStamp;

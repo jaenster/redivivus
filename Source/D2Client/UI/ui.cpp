@@ -3720,12 +3720,7 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = pDC6_Frame;
     int nBottomEdge = nPositionX;
-    while (true) {
-      nBottomEdge += 0xc;
-      if (nBottomEdge >= nLimit) {
-        break;
-      }
-
+    while ((nBottomEdge += 0xc) < nLimit) {
       nFrameCounter++;
       sGfxData.nFrameNumber = nFrameCounter % 6 + 2;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBottomEdge, nRectTop + 0xc, -1, DRAW_SOLID, nullptr);
@@ -4303,7 +4298,7 @@ void __stdcall UI_UpdateCursorAnimationTimer() {
 void __stdcall UI_SendMouseMoveMessage() {
     int nMouseY = Cursor::GetMouseY();
     uint32_t lParam = Cursor::GetMouseX();
-    lParam = lParam & 0xffff | nMouseY << 0x10;
+    lParam = (uint32_t)(uint16_t)lParam | nMouseY << 0x10;
     uint32_t wParam = 0;
     UINT Msg = 0x200;
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
@@ -8757,7 +8752,7 @@ int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
     byDifficultyRaw = GAME::Game::GetDificulity();
     uint32_t nDifficulty;
     nDifficulty = (uint32_t)byDifficultyRaw;
-    if (2 < (int32_t)nDifficulty) {
+    if ((int32_t)nDifficulty >= 3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18e);
       exit(-1);
     }
@@ -8833,7 +8828,7 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     bVar1 = GAME::Game::GetDificulity();
     uint32_t nDifficultyIndex;
     nDifficultyIndex = (uint32_t)bVar1;
-    if (2 < (int32_t)nDifficultyIndex) {
+    if ((int32_t)nDifficultyIndex >= 3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d6);
       exit(-1);
     }

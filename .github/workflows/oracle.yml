@@ -4,9 +4,9 @@ name: oracle
 # MATCH/diff and classify.py's tags. Game.exe is never committed: it is fetched from
 # files.typeguru.nl and checked against the SHA-256 in evidence/toolchain.md. The two
 # expensive inputs are cached: the VC8 toolchain (~3 GB download, once) and the carve of
-# Game.exe into functions (refimage.py, ~20 min in pure Python, depends only on Game.exe
-# and the carving scripts). Only names, tags and counts are uploaded, nothing holding the
-# original's bytes.
+# Game.exe into functions is the Zig refimage (asm_matching/msvc8/zig, about a second), so
+# it is not cached. Only names, tags and counts are uploaded, nothing holding the original's
+# bytes.
 
 on:
   push:
@@ -36,6 +36,19 @@ jobs:
           sudo dpkg --add-architecture i386
           sudo apt-get update -qq
           sudo apt-get install -y -qq wine wine32:i386 wine64 p7zip-full cabextract msitools faketime curl >/dev/null
+          # Ubuntu's wine package keeps wineserver out of PATH (as wineserver64/wineserver32
+          # under /usr/lib/wine); setup_toolchain.sh and build.py call it by name.
+          if ! command -v wineserver >/dev/null; then
+            ws=$(ls /usr/lib/wine/wineserver64 /usr/lib/wine/wineserver /usr/lib/wine/wineserver32 2>/dev/null | head -1)
+            [ -n "$ws" ] || { echo "no wineserver in /usr/lib/wine" >&2; exit 1; }
+            mkdir -p "$HOME/.local/bin" && ln -sf "$ws" "$HOME/.local/bin/wineserver"
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Zig (the carve)
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.17.0
 
       - name: Fetch Game.exe 1.14d (not committed; checked by hash)
         run: |
@@ -48,12 +61,6 @@ jobs:
         with:
           path: ${{ env.VC8_TOOLCHAIN }}
           key: vc8-toolchain-${{ hashFiles('asm_matching/msvc8/scripts/setup_toolchain.sh') }}
-
-      - name: Restore the carve of Game.exe
-        uses: actions/cache@v4
-        with:
-          path: asm_matching/msvc8/build/ref
-          key: refimage-${{ env.GAME_EXE_SHA256 }}-${{ hashFiles('asm_matching/msvc8/scripts/refimage.py', 'asm_matching/msvc8/scripts/funcdecode.py') }}
 
       - name: Setup (skips what the caches hold)
         run: asm_matching/msvc8/oracle setup

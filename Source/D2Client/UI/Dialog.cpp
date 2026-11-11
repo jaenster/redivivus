@@ -407,15 +407,17 @@ static void __stdcall DIALOG_HandleEscapeKeyEvent(int32_t bInvokeDialogFunc, D2U
     if (!bInvokeDialogFunc) {
       return;
     }
-    if (!gpDialogActual) {
+
+    D2DialogStrc* t2_c0 = gpDialogActual;
+    if (!t2_c0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c2);
       exit(-1);
     }
-    if (!((uint32_t)gpDialogActual->nDrawFrameCount >= 5 && gpDialogActual->fpDialogFunc1)) {
+    if (!((uint32_t)t2_c0->nDrawFrameCount >= 5 && t2_c0->fpDialogFunc1)) {
       return;
     }
 
-    gpDialogActual->fpDialogFunc1();
+    t2_c0->fpDialogFunc1();
     ui::UI_UpdateCursorAnimationTimer();
 }
 

@@ -110,12 +110,7 @@ int __fastcall SafeCreateDirectoryTree(char * szPath) {
 
     char* pNextSep = Storm::Source::SSTR::SStrChr(szPath + 1, '\\');
     if (pNextSep) {
-      while (true) {
-        nSegmentLen = (intptr_t)pNextSep - (intptr_t)szPath;
-        if (nSegmentLen >= 0x104) {
-          break;
-        }
-
+      while ((nSegmentLen = (intptr_t)pNextSep - (intptr_t)szPath) < 0x104) {
         memcpy(szPartialPath, szPath, nSegmentLen);
         /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateDirectoryA */ /* LPCSTR lpPathName for CreateDirectoryA */ szPartialPath[nSegmentLen] = '\0';
         bCreated = CreateDirectoryA(szPartialPath, (LPSECURITY_ATTRIBUTES)0x0);

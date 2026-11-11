@@ -444,7 +444,7 @@ uint8_t g_aLightingTable[65536] = {}; D2_GLOBAL_GUARD(g_aLightingTable, "g_aLigh
 static int gnPerspectiveScaleY = 0; D2_STATIC_GUARD(gnPerspectiveScaleY, "gnPerspectiveScaleY");
 static int gnPerspectiveScaleZ = 0; D2_STATIC_GUARD(gnPerspectiveScaleZ, "gnPerspectiveScaleZ");
 uint32_t g_aPerspectiveZDivisionTable[8192] = {}; D2_GLOBAL_GUARD(g_aPerspectiveZDivisionTable, "g_aPerspectiveZDivisionTable");
-static uint32_t g_aSmackerSurfaceArray = 0; D2_STATIC_GUARD(g_aSmackerSurfaceArray, "g_aSmackerSurfaceArray");
+static int g_aSmackerSurfaceArray = 0; D2_STATIC_GUARD(g_aSmackerSurfaceArray, "g_aSmackerSurfaceArray");
 static D2D3DVertexStrc gaD3DSmackerVertices[4] = {}; D2_STATIC_GUARD(gaD3DSmackerVertices, "gaD3DSmackerVertices");
 static uint8_t * pSmackerDecodeBuffer = 0; D2_STATIC_GUARD(pSmackerDecodeBuffer, "pSmackerDecodeBuffer");
 static IDirectDrawSurface7 * gpD3DSmackerSystemSurface0[2] = {}; D2_STATIC_GUARD(gpD3DSmackerSystemSurface0, "gpD3DSmackerSystemSurface0");
@@ -3386,10 +3386,10 @@ static void __stdcall RENDERER_D3D_DrawShadowQuad(D2D3DSpriteInfoStrc * pTexture
     nCenterX = pTextureInfo->nOffsetX + pTextureInfo->nOffsetY;
     nTopYOffset = pTextureInfo->nOffsetY - nHalfHeight;
     if (bPerspectiveEnabled && g_aSmackerSurfaceArray != 0x100) {
-      nCenterX = (int)(g_aSmackerSurfaceArray * nCenterX + (g_aSmackerSurfaceArray * nCenterX >> 0x1f & 0xffU)) >> 8;
-      nTopYOffset = (int)(g_aSmackerSurfaceArray * nTopYOffset + (g_aSmackerSurfaceArray * nTopYOffset >> 0x1f & 0xffU)) >> 8;
-      nQuadWidth = (int)(g_aSmackerSurfaceArray * nQuadWidth + (g_aSmackerSurfaceArray * nQuadWidth >> 0x1f & 0xffU)) >> 8;
-      nHalfHeight = (int)(g_aSmackerSurfaceArray * nHalfHeight + (g_aSmackerSurfaceArray * nHalfHeight >> 0x1f & 0xffU)) >> 8;
+      nCenterX = g_aSmackerSurfaceArray * nCenterX / 256;
+      nTopYOffset = g_aSmackerSurfaceArray * nTopYOffset / 256;
+      nQuadWidth = g_aSmackerSurfaceArray * nQuadWidth / 256;
+      nHalfHeight = g_aSmackerSurfaceArray * nHalfHeight / 256;
     }
 
     fQuadTopY = (float)(nTopYOffset + nPosY);
@@ -3454,10 +3454,10 @@ static void __stdcall RENDERER_DIRECT3D_DrawPalettedQuad(D2D3DSpriteInfoStrc * p
     int nScaledHeight = pTextureInfo->nTexHeight;
     int nScaledWidth = pTextureInfo->nOffsetY - nScaledHeight;
     if (bPerspective && g_aSmackerSurfaceArray != 0x100) {
-      nLockResult = (int)(g_aSmackerSurfaceArray * nLockResult + (g_aSmackerSurfaceArray * nLockResult >> 0x1f & 0xffU)) >> 8;
-      nScaledWidth = (int)(g_aSmackerSurfaceArray * nScaledWidth + (g_aSmackerSurfaceArray * nScaledWidth >> 0x1f & 0xffU)) >> 8;
-      nScaledOffsetX = (int)(g_aSmackerSurfaceArray * nScaledOffsetX + (g_aSmackerSurfaceArray * nScaledOffsetX >> 0x1f & 0xffU)) >> 8;
-      nScaledHeight = (int)(g_aSmackerSurfaceArray * nScaledHeight + (g_aSmackerSurfaceArray * nScaledHeight >> 0x1f & 0xffU)) >> 8;
+      nLockResult = g_aSmackerSurfaceArray * nLockResult / 256;
+      nScaledWidth = g_aSmackerSurfaceArray * nScaledWidth / 256;
+      nScaledOffsetX = g_aSmackerSurfaceArray * nScaledOffsetX / 256;
+      nScaledHeight = g_aSmackerSurfaceArray * nScaledHeight / 256;
     }
 
     float fQuadLeftX = (float)(nLockResult + nPosX);
@@ -3657,7 +3657,7 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
 BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
     D2D3DSpriteInfoStrc aSpriteInfo;
     BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && -1 < aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX && -1 < aSpriteInfo.nOffsetY + nPosY && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
       return 0;
     }
 
@@ -3679,7 +3679,7 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
 void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
     D2D3DSpriteInfoStrc aSpriteInfo;
     BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && -1 < aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX && -1 < aSpriteInfo.nOffsetY + nPosY && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + aSpriteInfo.nOffsetX + nPosX >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
       return;
     }
 

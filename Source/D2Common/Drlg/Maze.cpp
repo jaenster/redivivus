@@ -733,7 +733,7 @@ static void SetupBaalChamber(D2DrlgLevelStrc * pLevel) {
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pSourceRoom->sSeed);
     uint32_t nDirection = sNewSeed.nSeedLow & 3;
     pSourceRoom->sSeed = sNewSeed;
-    if (6 < (int32_t)(nDirection * 2)) {
+    if ((int32_t)(nDirection * 2) >= 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ab);
       exit(-1);
     }

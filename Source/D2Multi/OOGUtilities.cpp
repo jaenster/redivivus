@@ -1172,7 +1172,7 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
         }
 
         nFmtLevel = (uint32_t)byLevelMax + (uint32_t)pGameInfo->nLevelMin;
-        if (0x62 < (int32_t)nFmtLevel) {
+        if ((int32_t)nFmtLevel >= 0x63) {
           nFmtLevel = 99;
         }
 

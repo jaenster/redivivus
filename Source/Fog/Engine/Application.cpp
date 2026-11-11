@@ -249,7 +249,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
 
     char* pDst = strrchr(aModuleInfo.szPath, 0x2f);
     char* pBasename = 0;
-    if (pDst) {
+    if ((uintptr_t)pDst > 0) {
       pBasename = pDst;
     }
 
@@ -653,7 +653,7 @@ bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput) {
     if (bGotModule) {
       pSep = strrchr(szModulePath, 0x2f);
       pBasename = 0;
-      if (pSep) {
+      if ((uintptr_t)pSep > 0) {
         pBasename = pSep;
       }
 
@@ -681,7 +681,7 @@ bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput) {
     Debug::GetSourceLineForAddress(nAddress, szModulePath, pLineField);
     pSep = strrchr(szModulePath, 0x2f);
     pBasename = 0;
-    if (pSep) {
+    if ((uintptr_t)pSep > 0) {
       pBasename = pSep;
     }
 

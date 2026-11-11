@@ -234,7 +234,7 @@ void __stdcall MISSILETBLS_ValidateAndClampField(int32_t eFieldType, uint32_t nM
 void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     D2DataTableTxtStrc* sgptDataTable_lcl;
     D2BinFieldInputStrc* pFieldDesc;
-    uint8_t byCollideType;
+    uint32_t byCollideType;
     D2MissilesTxt* pMissileTxt;
     D2BinFieldInputStrc missiles[147] = {
       {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtMissilesLink},

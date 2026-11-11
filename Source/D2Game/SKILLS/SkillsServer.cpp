@@ -672,12 +672,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         bInTown = SKILLS_IsRoomInRange(ppRoomList[nCallbackArg], nX, nRadius, nY);
         if (bInTown) {
           pNextUnit = ppRoomList[nCallbackArg]->pUnitList;
-          while (true) {
-            pTarget = pNextUnit;
-            if (!pTarget) {
-              break;
-            }
-
+          while (pTarget = pNextUnit) {
             pNextUnit = pTarget->pRoomNext;
             if (pTarget != pOwnerUnit) {
               eUnitType = pTarget->eUnitType;
@@ -1372,7 +1367,7 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
     int32_t bDidRemoveState;
     int nStateTxtStride;
     int nStateCount;
-    short int sStateGroup;
+    int sStateGroup;
     if ((int)eState >= 0) {
       uint8_t* pStateTxt;
       nStateCount = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;

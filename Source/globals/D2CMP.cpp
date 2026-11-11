@@ -475,14 +475,6 @@ namespace D2Launch::MainMenus {
 
 } // namespace D2Launch::MainMenus
 
-namespace D2Multi::OOGUtilities {
-
-} // namespace D2Multi::OOGUtilities
-
-namespace D2Multi::ChatDlg {
-
-} // namespace D2Multi::ChatDlg
-
 namespace D2Client::GAME::Game {
 
 } // namespace D2Client::GAME::Game
@@ -558,10 +550,6 @@ namespace D2Glide::Renderer::Glide {
 namespace D2DDraw::Renderer::DirectDraw {
 
 } // namespace D2DDraw::Renderer::DirectDraw
-
-namespace D2Sound::Src::D2SoundFast {
-
-} // namespace D2Sound::Src::D2SoundFast
 
 namespace D2Lang::Unicode::UNISYS {
 
@@ -948,6 +936,10 @@ namespace D2Launch::Launcher {
 
 } // namespace D2Launch::Launcher
 
+namespace D2Multi::OOGUtilities {
+
+} // namespace D2Multi::OOGUtilities
+
 namespace D2Client::Lng {
 
 } // namespace D2Client::Lng
@@ -1015,6 +1007,10 @@ namespace D2Win::Src::D2WinTextBox {
 namespace D2Sound {
 
 } // namespace D2Sound
+
+namespace D2Sound::Src::D2SoundFast {
+
+} // namespace D2Sound::Src::D2SoundFast
 
 namespace Bnclient::Bnet {
 

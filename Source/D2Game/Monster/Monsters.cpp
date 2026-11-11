@@ -1198,7 +1198,7 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
       }
     }
 
-    uint8_t byGameDifficulty;
+    uint32_t byGameDifficulty;
     byGameDifficulty = pGame->nDifficulty;
     if (byGameDifficulty > 0) {
       if (1 < byGameDifficulty) {

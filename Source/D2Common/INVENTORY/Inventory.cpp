@@ -122,7 +122,7 @@ static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nRow, uint32_t nCol, int
     D2UnitStrc** pRowCells = pGridInfo->pGridCells + (uint32_t)pGridInfo->bWidth * nRow;
     int nColIdx = nStartCol;
     do {
-      for (; nColIdx < (int)((nCol & 0xff) + nStartCol); nColIdx++) {
+      for (; nColIdx < (int)((uint32_t)(uint8_t)nCol + nStartCol); nColIdx++) {
         if (pRowCells[nColIdx]) {
           return 0;
         }
@@ -750,7 +750,7 @@ D2UnitStrc * __stdcall INVENTORY_GetLastItem(D2InventoryStrc * pInventory) {
 }
 
 uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
-    if ((int)((nGridCol & 0xff) + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
+    if ((int)((uint32_t)(uint8_t)nGridCol + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
       uint32_t bFits;
       bFits = INVENTORY_IsGridRectEmpty(nY, nGridCol, nX, byItemHeight, pGridInfo);
       return bFits;
@@ -1132,7 +1132,7 @@ BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2Uni
         return 0;
       }
 
-      pResult = INVENTORY_PlaceItemInGrid(nPage, (int32_t)pUnit, (nPageByte & 0xff) + 2, nPageParam, pUnitSaved, pInventory);
+      pResult = INVENTORY_PlaceItemInGrid(nPage, (int32_t)pUnit, (uint32_t)(uint8_t)nPageByte + 2, nPageParam, pUnitSaved, pInventory);
       return pResult;
     }
 
@@ -1177,7 +1177,7 @@ BOOL __stdcall INVENTORY_CheckGridCollisions(D2InventoryStrc * pInventory, D2Uni
     }
 
     DATATBLS::TokTbls::GetGridDimensions(eInvPage, 0, &sGridDims);
-    D2InventoryGridInfoStrc* pReinitGridInfo = ReinitializeInventoryGrid(pInventory_00, (D2InventorySizesStrc*)&sGridDims, (nPageByteSaved & 0xff) + 2);
+    D2InventoryGridInfoStrc* pReinitGridInfo = ReinitializeInventoryGrid(pInventory_00, (D2InventorySizesStrc*)&sGridDims, (uint32_t)(uint8_t)nPageByteSaved + 2);
     if (pReinitGridInfo) {
       int nGridXEnd;
       nGridXEnd = (nPage >> 0x18) + nGridYCur;
@@ -1253,7 +1253,7 @@ BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2Unit
     }
 
     DATATBLS::TokTbls::GetGridDimensions(eInvPage, 0, &DStack_20);
-    D2InventoryGridInfoStrc* pDVar2_col = ReinitializeInventoryGrid(pInventorySaved, (D2InventorySizesStrc*)&DStack_20, (bIsBox & 0xff) + 2);
+    D2InventoryGridInfoStrc* pDVar2_col = ReinitializeInventoryGrid(pInventorySaved, (D2InventorySizesStrc*)&DStack_20, (uint32_t)(uint8_t)bIsBox + 2);
     if (!pDVar2_col) {
       return 0;
     }

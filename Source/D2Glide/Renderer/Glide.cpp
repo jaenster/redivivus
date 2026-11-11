@@ -2270,7 +2270,7 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     GlideTexInfoStrc texSizeBuf;
     int32_t nPosXSaved = nPosX;
     int nSpriteResult = RENDERER_GLIDE_GetSpriteMetadata(pData, &texSizeBuf);
-    if (!(nSpriteResult && texSizeBuf.nLeft + nPosX <= RENDERER_nWindowWidth && -1 < texSizeBuf.nWidth + texSizeBuf.nLeft + nPosX && -1 < texSizeBuf.nTop + nPosY && texSizeBuf.nTop + nPosY - texSizeBuf.nHeight < RENDERER_nWindowHeight)) {
+    if (!(nSpriteResult && texSizeBuf.nLeft + nPosX <= RENDERER_nWindowWidth && texSizeBuf.nWidth + texSizeBuf.nLeft + nPosX >= 0 && texSizeBuf.nTop + nPosY >= 0 && texSizeBuf.nTop + nPosY - texSizeBuf.nHeight < RENDERER_nWindowHeight)) {
       return;
     }
 

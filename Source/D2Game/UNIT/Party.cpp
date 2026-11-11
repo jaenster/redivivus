@@ -593,11 +593,7 @@ void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUni
         }
 
         pSubSub = pPartySub->pSub;
-        while (true) {
-          pMemoryToFree = pSubSub;
-          if (!pMemoryToFree) {
-            break;
-          }
+        while (pMemoryToFree = pSubSub) {
           if (pMemoryToFree->nUnitGUID == nUnitGUID) {
             if (pPrevSubSub) {
               pPrevSubSub->pNext = pMemoryToFree->pNext;
@@ -675,7 +671,7 @@ DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, D2UnitStrc *
       }
       if (pUnit) {
         nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        if (-1 < nGold + nShare && (pUnit->eUnitType != UNIT_PLAYER || (nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit) , nGold + nShare <= (int)nGoldLimit))) {
+        if (nGold + nShare >= 0 && (pUnit->eUnitType != UNIT_PLAYER || (nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit) , nGold + nShare <= (int)nGoldLimit))) {
           D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_gold, nShare, 0);
           return nAlivePartyMembers;
         }

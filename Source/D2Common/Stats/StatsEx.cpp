@@ -1844,12 +1844,7 @@ void __fastcall FreeAnyStatList(D2StatListExStrc * pPlayerStatsEx) {
     if (pPlayerStatsEx->sStatList.nFlags & 0x80000000U) {
       int* pChangedStatIdsToFree;
       pChildNext = pPlayerStatsEx->pActiveHead;
-      while (true) {
-        pChildStatsEx = pChildNext;
-        if (!pChildStatsEx) {
-          break;
-        }
-
+      while (pChildStatsEx = pChildNext) {
         pChildNext = pChildStatsEx->sStatList.pPrevLink;
         pChildStatsEx->sStatList.pParent = 0;
         pChildStatsEx->sStatList.pUnitAttached = 0;
@@ -2210,19 +2205,14 @@ void __stdcall STATLIST_AddUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, i
 
 void __stdcall STATLIST_MarkUnitStatsChanged(D2UnitStrc * pUnit) {
     eD2States eState;
+    D2StatListExStrc* pActiveStatList;
     D2StatListExStrc* pStatsExRoot = pUnit->pStatsEx;
     if (!(pStatsExRoot && pStatsExRoot->sStatList.nFlags & 2)) {
       return;
     }
 
     D2StatListExStrc* pActiveNext = pStatsExRoot->pActiveHead;
-    while (true) {
-      D2StatListExStrc* pActiveStatList;
-      pActiveStatList = pActiveNext;
-      if (!pActiveStatList) {
-        break;
-      }
-
+    while (pActiveStatList = pActiveNext) {
       pActiveNext = pActiveStatList->sStatList.pPrevLink;
       if (pActiveStatList->sStatList.nFlags & 4) {
         eState = pActiveStatList->sStatList.eState;
@@ -2349,12 +2339,7 @@ void __stdcall RemoveStatListAfterTimeout(D2UnitStrc * pUnit, int32_t nFrameNumb
         return;
       }
     } else {
-      while (true) {
-        pCurStatList = pPlayerStatsEx;
-        if (!pCurStatList) {
-          break;
-        }
-
+      while (pCurStatList = pPlayerStatsEx) {
         nFlags = pCurStatList->sStatList.nFlags;
         pPlayerStatsEx = pCurStatList->sStatList.pPrevLink;
         if (nFlags & 2) {
@@ -2386,6 +2371,7 @@ void __stdcall CopyStatListEx(D2StatListExStrc * pStatListExDest, D2StatListExSt
 void __stdcall STATLIST_RecalcAfterRemove(D2UnitStrc * pUnit) {
     uint32_t _bIsStateActive;
     bool bIsStateActive;
+    D2StatListExStrc* pPlayerStatsEx;
     if (!pUnit) {
       return;
     }
@@ -2396,13 +2382,7 @@ void __stdcall STATLIST_RecalcAfterRemove(D2UnitStrc * pUnit) {
     }
 
     D2StatListExStrc* pActiveNext = pStatsExRoot->pActiveHead;
-    while (true) {
-      D2StatListExStrc* pPlayerStatsEx;
-      pPlayerStatsEx = pActiveNext;
-      if (!pPlayerStatsEx) {
-        break;
-      }
-
+    while (pPlayerStatsEx = pActiveNext) {
       pActiveNext = pPlayerStatsEx->sStatList.pPrevLink;
       if (pPlayerStatsEx->sStatList.eOwnerType != UNIT_ITEM && !(pPlayerStatsEx->sStatList.nFlags & 0x181U)) {
         _bIsStateActive = DATATBLS::ItemStats::STATES_IsStateActive(pUnit, pPlayerStatsEx->sStatList.eState);

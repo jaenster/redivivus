@@ -81,7 +81,6 @@ LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lPara
 
 // Windows message pump + optional per-tick callback. If no messages, call callback each tick; exit when callback returns nonzero or WM_QUIT.
 int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
-    HWND hWnd;
     uint32_t nCallbackResult;
     tagMSG msg;
     HACCEL hAccTable;
@@ -101,8 +100,7 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
         if (getMessageResult && GAME::Game::gbLanguageDllLoaded) {
           lpMsg = &msg;
           hAccTable = GAME::Game::gbLanguageDllLoaded;
-          /* LPMSG lpMsg for TranslateAcceleratorA */ /* HACCEL hAccTable for TranslateAcceleratorA */ hWnd = D2gfx::D2GFX::GetHwnd();
-          /* HWND hWnd for TranslateAcceleratorA */ TranslateAcceleratorA(hWnd, hAccTable, lpMsg);
+          /* HWND hWnd for TranslateAcceleratorA */ TranslateAcceleratorA(D2gfx::D2GFX::GetHwnd(), hAccTable, lpMsg);
         }
 
         /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msg);

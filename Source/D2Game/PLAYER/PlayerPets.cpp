@@ -851,14 +851,9 @@ static void __stdcall PETS_RemoveDistantPets(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t nPetPosY;
     eD2UnitType eUnitType;
     eD2UnitType eCurUnitType;
+    uint8_t* pCurPetNode;
     uint8_t* pPetNode = *ppPetListHead;
-    while (true) {
-      uint8_t* pCurPetNode;
-      pCurPetNode = pPetNode;
-      if (!pCurPetNode) {
-        break;
-      }
-
+    while (pCurPetNode = pPetNode) {
       pPetNode = *(uint8_t**)(pCurPetNode + 0x14);
       if (!(*pCurPetNode & 1)) {
         pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *(uint32_t*)(pCurPetNode + 4));
@@ -969,12 +964,7 @@ static void __stdcall PETS_RemoveDeadPets(D2UnitStrc * pUnit, D2UnitDataPlayerPe
         pPetListEntry = &pUnitDataPlayerPets->pPetList[nPetTypeIdx];
         if (pPetListEntry && nPetTypeIdx != 7) {
           pNextNode = pPetListEntry->pPets;
-          while (true) {
-            pPetNode = pNextNode;
-            if (!pPetNode) {
-              break;
-            }
-
+          while (pPetNode = pNextNode) {
             pNextNode = pPetNode->pNext;
             pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetNode->nPetGUID);
             if (!pPetUnit || (bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pPetUnit) , bIsDead != 0)) {
@@ -1053,7 +1043,7 @@ static void __stdcall PLAYERPETS_RemoveConflictingPetsByGroup(ePetType nPetType,
       return;
     }
 
-    short int wGroup = pPetTypeTxt->group;
+    int wGroup = pPetTypeTxt->group;
     if (0 >= wGroup) {
       return;
     }

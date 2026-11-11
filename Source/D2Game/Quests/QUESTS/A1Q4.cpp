@@ -1458,7 +1458,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), pppRoomList, (int*)pNumRooms);
       pRoomListEnd = 0;
       pMissileRoom = __frame0.pExistingPortal;
-      if (__frame0.pExistingPortal) {
+      if ((uintptr_t)__frame0.pExistingPortal > 0) {
         do {
           pMissileUnit = __frame0.ppRoomList[(intptr_t)pRoomListEnd]->pUnitList;
           do {
@@ -1823,7 +1823,8 @@ void __fastcall Q04_InitializeCainGibbetObject(D2QuestDataStrc * pQuestData, D2O
 // (by GUID, or -1) from quest list1. Bookkeeping only.
 void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA1Q4->sQuestGUID1, !pUnit ? -1 : pUnit->nUnitGUID);
+    D2QuestDataA1Q4Strc* t2_c0 = pQuestData->pQuestSpecificData.pA1Q4;
+    QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID1, !pUnit ? -1 : pUnit->nUnitGUID);
 }
 
 // A1Q4 — Objects_InitFn54: init callback for the Cain-cage object. Records its GUID

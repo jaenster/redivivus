@@ -938,12 +938,7 @@ static int DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
     } else {
       D2ClientStrc** ppDVar1;
       nOuter = pRoom->nClientsCount;
-      while (true) {
-        nOuter--;
-        if (nOuter <= 0) {
-          break;
-        }
-
+      while (--nOuter > 0) {
         bSwapped = false;
         j = 0;
         if (nOuter <= 0) {
@@ -1792,15 +1787,15 @@ static void DRLGROOMEX_RecalcPriority(D2RoomExStrc * pRoomEx) {
       return;
     }
 
-    uint32_t nIndex = 0;
+    uint8_t nIndex = 0;
     do {
-      nPriority = (uint8_t)nIndex;
+      nPriority = nIndex;
       if (pRoomEx->awRoomsInList[nIndex]) {
         break;
       }
 
       nPriority++;
-      nIndex = (uint32_t)nPriority;
+      nIndex = nPriority;
     } while (nPriority < 4);
 
     D2RoomExStrc* pRoomExResult = DRLGROOMEX_MoveToActivationList(pRoomEx, nPriority);

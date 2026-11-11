@@ -138,8 +138,8 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
       return 0;
     }
 
-    uint32_t uVar1 = Fog::Src::D2QSSocket::ReadBytesFromSocket(MCPD2QSSocket, szPacketBuf, 0x400);
-    if ((short int)uVar1) {
+    short int uVar1 = Fog::Src::D2QSSocket::ReadBytesFromSocket(MCPD2QSSocket, szPacketBuf, 0x400);
+    if (uVar1) {
       /* At self point nSize is removed from packet structure */ HandleIncomingPacket(szPacketBuf, (uint16_t)uVar1);
     }
 

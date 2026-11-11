@@ -46,7 +46,7 @@ static BOOL __thiscall SBMP_DecodeTGAPalette(D2TgaHeaderStrc * pHeader, int nPal
         pDstEntry[-2] = pPaletteData[2];
         pDstEntry[-1] = pPaletteData[1];
         *pDstEntry = *pPaletteData;
-        if ((int32_t)nLastEntry >= 4) {
+        if ((int32_t)nLastEntry > 3) {
           byAlpha = pPaletteData[3];
         } else {
           byAlpha = 0;

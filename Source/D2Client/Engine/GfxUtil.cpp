@@ -314,14 +314,14 @@ uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDr
     if (!(nScreenX <= UI::ui::ScreenSizeX)) {
       return 0;
     }
-    if (-1 >= nWidth + nScreenX) {
+    if (nWidth + nScreenX < 0) {
       return 0;
     }
     if (!(nOffsetY + nScreenY - nHeight <= UI::Inv::ScreenSizeY)) {
       return 0;
     }
 
-    return (uint32_t)(-1 < nOffsetY + nScreenY + nHeight);
+    return (uint32_t)(nOffsetY + nScreenY + nHeight >= 0);
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp

@@ -322,7 +322,7 @@ int32_t __fastcall MISSILE_CltHitFn13_Homing(D2UnitStrc * pUnit, D2UnitStrc * pT
           return (uint32_t)(bIsInTown != 0);
         }
 
-        return (nTargetFlags & 0xff) >> 2 & 1;
+        return (uint32_t)(uint8_t)nTargetFlags >> 2 & 1;
       }
     }
 
@@ -1728,7 +1728,7 @@ void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUni
 
     int nOffsetX = 0;
     nLevel = 0;
-    if (1 < (int32_t)nModulo) {
+    if ((int32_t)nModulo > 1) {
       uint32_t nRandOffset;
       nRandOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit2->sSeed, nModulo);
       nOffsetX = nRandOffset - nModulo / 2;
@@ -5784,10 +5784,10 @@ void __fastcall MISSILE_CltDoFn02_GroundSplat(D2UnitStrc * pUnit) {
 
     int32_t nTargetCoord = D2Common::Units::GetTargetX(pUnit);
     int32_t nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
-    if (-1 < nTargetCoord - nWorldOffset && nTargetCoord - nWorldOffset <= UI::SpellSel::WindowSizeX) {
+    if (nTargetCoord - nWorldOffset >= 0 && nTargetCoord - nWorldOffset <= UI::SpellSel::WindowSizeX) {
       nTargetCoord = D2Common::Units::GetTargetY(pUnit);
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
-      if (-1 < nTargetCoord - nWorldOffset && nTargetCoord - nWorldOffset <= UI::ui::WindowSizeY + 0x40) {
+      if (nTargetCoord - nWorldOffset >= 0 && nTargetCoord - nWorldOffset <= UI::ui::WindowSizeY + 0x40) {
         D2Common::Units::Missile::SetCurrentFrame(pUnit, 0x80);
         MISSILE_CltDoFn01_BasicMissile(pUnit);
         return;
@@ -8154,7 +8154,7 @@ void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
     uint32_t nTargetX = D2Common::Seed::GetSeed_nSeedLow(pSeed);
     D2Common::Units::Missile::SetTargetX(pUnit, nTargetX);
-    D2Common::Units::Missile::SetTargetY(pUnit, nNewDestYFinal * 0x10000 + (nNewDestY & 0xffff));
+    D2Common::Units::Missile::SetTargetY(pUnit, nNewDestYFinal * 0x10000 + (uint32_t)(uint16_t)nNewDestY);
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 

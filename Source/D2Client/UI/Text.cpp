@@ -2744,12 +2744,7 @@ void __fastcall TEXT_InsertScreenMessage(ScreenMessage_t * ppwszText) {
       pNextNext = AllMessagesMaybe.pHead->pNext;
       pPrev = 0;
       pCurrent = AllMessagesMaybe.pHead;
-      while (true) {
-        pNext = pNextNext;
-        if (!pNext) {
-          break;
-        }
-
+      while (pNext = pNextNext) {
         pPrev = pCurrent;
         pCurrent = pNext;
         pNextNext = pNext->pNext;
@@ -2867,11 +2862,7 @@ void __stdcall TEXT_DrawChatMessages() {
 
     ScreenMessage_t* pPrevMessage = 0;
     uint32_t pWrapNext = GetTickCount();
-    while (true) {
-      pMessage = pListHead;
-      if (!pMessage) {
-        break;
-      }
+    while (pMessage = pListHead) {
       if (pMessage->dwMessageExpiration < pWrapNext) {
         ScreenMessagesMaybe.nCount--;
         pListHead = pMessage->pNext;

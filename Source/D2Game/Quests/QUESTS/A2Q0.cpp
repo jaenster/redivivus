@@ -111,7 +111,8 @@ bool __fastcall Q08_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0a (player leave/cleanup). Removes the player's GUID (or -1) from the A2Q0 quest-GUID player list (counterpart to Callback_11's add-to-list).
 void __fastcall Q08_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    QUESTGUID_RemovePlayerFromList(&pQuestData->pQuestSpecificData.pA2Q0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+    D2QuestDataA2Q0Strc* t2_c0 = pQuestData->pQuestSpecificData.pA2Q0;
+    QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0d (re-sync on join/refresh). If SpokeToJerhyn is already Completed for this difficulty, re-broadcast JustCompleted so the Warriv->Act3 travel option is (re)opened for the player.

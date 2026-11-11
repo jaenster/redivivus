@@ -3345,11 +3345,7 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     pUnit = 0;
     D2UnitStrc* pIterSkill;
     pIterSkill = (D2UnitStrc*)pSkillsList->pFirstSkill;
-    while (true) {
-      pPrevSkill = pIterSkill;
-      if (!pPrevSkill) {
-        break;
-      }
+    while (pPrevSkill = pIterSkill) {
       if (pPrevSkill->nSeqFrameCount == nOwnerGUID && (D2SkillsTxt*)pPrevSkill->eUnitType == pSkillTxt) {
         pPrevSkill->nInitSeed = nLevel;
         pPrevSkill->nSeqAnimSpeed = 1;

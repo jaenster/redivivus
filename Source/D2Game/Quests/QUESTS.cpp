@@ -2346,11 +2346,7 @@ void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::
 
     D2QuestTimerStrc* pTimerIter = pQuestControl->pTimer;
     D2QuestTimerStrc* pPrevTimer = 0;
-    while (true) {
-      pMemoryToFree = pTimerIter;
-      if (!pMemoryToFree) {
-        break;
-      }
+    while (pMemoryToFree = pTimerIter) {
       if (pMemoryToFree->pfUpdate == pQuestUpdate && pMemoryToFree->pQuest == pQuestData) {
         if (!pPrevTimer) {
           pQuestControl->pTimer = pMemoryToFree->pNext;

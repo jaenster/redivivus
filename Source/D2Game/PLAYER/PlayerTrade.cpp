@@ -858,7 +858,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
               nOutItemLevel = (int)pSourceItem / 100 * nItemLevelClamped;
             }
           } else {
-            if ((int32_t)nItemLevelClamped >= 0x10001) {
+            if ((int32_t)nItemLevelClamped > 0x10000) {
               if ((int32_t)(nItemLevelClamped & -16) < 0x640) {
                 nMulDivResult = (int64_t)(int)pSourceItem * (int64_t)(int)nItemLevelClamped / 100;
                 nOutItemLevel = (uint32_t)nMulDivResult;
@@ -884,7 +884,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
               nAffixIdx = (int)nItemLevelClamped / 100 * nILvlPercent;
             }
           } else {
-            if ((int32_t)nILvlPercent >= 0x10001) {
+            if ((int32_t)nILvlPercent > 0x10000) {
               if ((int32_t)(nILvlPercent & -16) < 0x640) {
                 nMulDivResult = (int64_t)(int)nItemLevelClamped * (int64_t)(int)nILvlPercent / 100;
                 nAffixIdx = (int)nMulDivResult;
@@ -1184,7 +1184,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 4:
 
           case 9:
-            if ((int32_t)pSourceItem < 4) {
+            if ((int32_t)pSourceItem <= 3) {
               break;
             }
           pSourceItem = 3;
@@ -1198,7 +1198,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           case 7:
 
           case 8:
-            if (1 < (int32_t)pSourceItem) {
+            if ((int32_t)pSourceItem > 1) {
               pSourceItem = 1;
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDVar2, ITEMFLAG_SOCKETED, 1);
               D2Common::ITEMS::Items::ITEM_RollSocketCount(pDVar2, pSourceItem);

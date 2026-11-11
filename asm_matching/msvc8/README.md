@@ -116,6 +116,20 @@ edited for it. Instead `oracle build`:
    `FILE_PATCHES` holds the few edits tied to one file, all in
    `Source/D2Headers/d2_platform.h`'s toolchain glue; each anchor must match exactly once, so a
    regenerated header fails loudly rather than compiling unpatched.
+
+   The same rewrites are made by ghidra-reconstruct's VC8 output mode
+   (`packages/reconstruct/src/vc8`), from the C++ token stream instead of
+   regular expressions, with `__thiscall` functions keyed on their qualified
+   name, so a same-named function in another class no longer loses its
+   convention. `scripts/ts_translate.py` picks the translator: `GR=<checkout>`
+   names one (an error if it has no VC8 mode); without `GR`, the live daemon's
+   checkout `~/code/ts/gr-daemon` when it has `src/vc8/cli.ts` and a built
+   cpp-parser; otherwise `vc8_translate.py`. The build log's `translate (...)`
+   line names the one used. It is the default because it matches more: on
+   source/modified 9c8f96084 8113 non-CRT MATCH against 8103, 10 gained and 0
+   lost (six constructors, four `Draw` wrappers). `vc8_translate.py` stays the
+   fall-back, and build.py keeps the quarantine in its module under either
+   translator.
 2. **Forces in** `vc8_compat.h` (nullptr, constexpr, static_assert and the like
    as macros) ahead of `d2_platform.h`, and puts `shim_include/` first on the
    include path (`<cstdint>` for a compiler without one; a hook that runs
@@ -161,7 +175,7 @@ records the tier on every row of `evidence/funcmap.tsv`:
 | `name` | its generated name ends in the address Ghidra knew it by (`FOO_00512340`) |
 | `export` | the original exports it under this mangled name |
 | `exact` | its code is identical to one original function's (references masked, strings, imports and switch offsets compared) and unique on both sides; within a bracket gap also shorter code, unique in the gap - in a gap with another file's mapped code inside, which is not one object's, only while the gap is narrow (`FOREIGN_GAP`), else the code must also be unique overall |
-| `located` | the same, but for source locations: where ours pushes its own line and loads a file name of the oracle's tree (`__LINE__`, `__FILE__`: upstream's allocator macros), the original pushes and loads its own; jumps compared by the instruction they reach. Pairs what `fix_allocargs.py` needs to read the original's values off |
+| `located` | the same, but for source locations: where ours pushes its own line and loads a file name of the oracle's tree (`__LINE__`, `__FILE__`: upstream's allocator macros), the original pushes and loads its own; jumps compared by the instruction they reach. |
 | `votes` | under the map of a first pass, the aligned call sites of all paired functions agree where our callee sits in the original; pinned, and the map derived again around the pins |
 | `string` | string literals that occur in at most a few original functions, nearly all held by one |
 | `import` | the same sequence of imported-API calls, unique on both sides |
@@ -564,8 +578,6 @@ names the evidence its rule rests on.
 | `fix_assert.py` | `if (ok) { return x; } halt(); exit(-1);` | the assertion first: `if (!ok) { halt(); exit(-1); } return x;` |
 | `fix_ifelse.py` | `if (!c) { B } else { A }`, where a jump shows it - or, kept only where its function gets more similar, any `if (!x)` or `if (x == 0)` of one operand | the branches in the order VC8 lays out: `if (c) { A } else { B }` |
 | `fix_switch.py` | an if-chain on one variable, `if (v == A) {…} else if (v == B) {…}`, or consecutive `if (v == A) {… return;}` blocks | the `switch (v)` the original lowers to subtractions; `--single` also a one-case chain where the original subtracts the case value (`sub; je`) |
-| `fix_guardstack.py` | `Fog::Debug::GuardStack();` where the original checks its stack cookie | nothing: under `/GS` VC8 emits the check itself |
-| `fix_uninline.py` | the body of a helper marked inline in the Ghidra database, e.g. `seed.nSeedLow = v; seed.nSeedHigh = 0x29a;` | the call: `InitSeed_Param_666(&seed, v)` |
 | `fix_return.py` | `void` where the original returns one constant on every path (EAX at each `ret`, by constant propagation over its control flow: `classify.eax_at_returns`), or one argument (`arg_at_returns`) | `int` returning that constant; `bool` where only AL holds it; the parameter, as its type |
 | `fix_gsbuffer.py` | `uint8_t aPacket[9]` in a function the original gives no stack cookie (`/GS` protects byte arrays); with `--members` a byte array inside a local's struct type, such as D2DamageStrc's padding `uint8_t nReserved66[2]` | a struct of scalar fields, `struct { uint8_t e0, …, e8; }`, addressed through a byte pointer |
 | `fix_order.py` | independent stores in an order of its own, `p[2] = x; p[1] = y; p[0] = 0x0c;` | the order VC8 schedules the original's from: fields in member order (`--by offset`), or the original's store order (`--by store`) |
@@ -577,17 +589,15 @@ names the evidence its rule rests on.
 | `fix_nestcall.py` | a call's result in a temporary, `pGame = GetGamePointer(pUnit); HasQuestItem(pGame, pUnit, code);` (with `--runs`, several temporaries feeding one call) | the call nested in the argument list, which VC8 evaluates after the arguments to its right: `HasQuestItem(GetGamePointer(pUnit), pUnit, code)` |
 | `fix_inplace.py` | a read-modify-write through a temporary pointer, `p = &pUnit->nCount; *p = *p + 1;` | the update of the field itself, `pUnit->nCount++` (`+= v`, `|= v`, ...) |
 | `fix_boolarith.py` | arithmetic on a comparison, `(uint32_t)(c != 0) * 2 + 1` | the choice VC8 compiled without a branch, `(uint32_t)((c != 0) ? 3 : 1)` |
-| `fix_allocargs.py` | Fog allocator calls as upstream's macros, `D2_FREE(p)`, `D2_NEW(T)`, `D2_REALLOC_POOL(m, p, n)`, which pass the reconstruction's own `__FILE__` and `__LINE__` | the call with the file and line the original passes, read off the original's code: `FreeClientMemory(p, ".\\Src\\Exceptions.cpp", 0x1f7, 0)` |
 | `fix_permute.py` | a run of independent assignments in the order Ghidra listed the original's stores, which is VC8's schedule, not the source order | the order that compiles to the original's: searched, every order of each run tried, one trial per function per round |
 | `fix_caseorder.py` | a switch's cases in order of their values | the order Blizzard wrote them in, read off the original's jump table: VC8 lays case bodies out in source order, so the same case values reach the same bodies at other addresses |
 | `fix_forloop.py` | a rotated loop, `if (0 < n) { int i = 0; do { B; i++; } while (i < n); }` | the for loop it was, `for (int i = 0; i < n; i++) { B }`: VC8 then initialises the counter before the test, as the original does |
 | `fix_fastcall.py` | `__cdecl`/`__stdcall` on a function whose original takes its first arguments in ECX (and EDX) and pops what `__fastcall` leaves on the stack | `__fastcall`, judged on the function and every caller; `--thiscall`: a function taking `this` in ECX that no original code calls directly becomes `__fastcall(this, int32_t nEdxUnused, ...)` |
 | `fix_paramtype.py` | a `uint8_t` or `uint16_t` parameter of a `__fastcall` function, where the original's callers load the whole of ECX or EDX (`mov edx, 5` against our `mov dl, 5`) | `int32_t`, judged on the function and every caller |
-| `fix_globalwidth.py` | a global or static typed `bool`, `uint8_t`, `uint16_t`, ..., by the accesses Ghidra saw: `mov byte ptr [g], 1` | the dword the original reads and writes, `mov dword ptr [g], 1`: `BOOL`, `int32_t` or `uint32_t` in every declaration, judged on the whole tree |
 | `fix_restore.py` | after a regeneration, the generator's body again for a function that matched before it | the body it matched with, from the old tree's commit (`fix_restore.py REV OLD_AUDIT`), kept only where the function then matches again |
 
 `oracle fix` runs them all (`scripts/fix_all.py`): conventions first
-(`fix_refile`, `fix_static`, then `--demote`, then `fix_fastcall`, `fix_paramtype`, `fix_globalwidth`), the local rewrites after, the whole cycle
+(`fix_refile`, `fix_paramtype`; static linkage and register conventions are the generator's since 2026-11-11), the local rewrites after, the whole cycle
 again while a round still keeps edits - their rules interact (a static
 function changes its callers; a comparison written back lets an if/else line
 up). It is also what a regenerated tree is put through, and what
@@ -647,7 +657,7 @@ map (`bracket`, `align`) and `tulayout.py` order our functions by source line
 | `scripts/diffgrams.py`, `classify.py`, `tulayout.py` | what differs, over all pairs |
 | `scripts/commit.py` | commit the branch's way (CLAUDE.md, "Commits"): tooling amended into the first commit, source changes as a new commit |
 | `scripts/objects.py` | `evidence/objects.tsv`: functions the tree files apart from the callers they share a register convention with, and declared conventions the original contradicts - for upstream |
-| `scripts/fixlib.py`, `fix_static.py`, `fix_refile.py`, `fix_compare.py`, `fix_assert.py`, `fix_ifelse.py`, `fix_switch.py`, `fix_guardstack.py`, `fix_idioms.py`, `fix_bitmask.py`, `fix_shiftbit.py`, `fix_localtype.py`, `fix_uninline.py`, `fix_return.py`, `fix_gsbuffer.py`, `fix_stringops.py`, `fix_nestcall.py`, `fix_inplace.py`, `fix_boolarith.py`, `fix_allocargs.py`, `fix_order.py`, `fix_permute.py`, `fix_caseorder.py`, `fix_forloop.py`, `fix_fastcall.py`, `fix_paramtype.py`, `fix_globalwidth.py`, `fix_restore.py`, `fix_all.py`, `tidy_blanks.py` | systematic fixes, kept only where confirmed; `oracle fix` runs them all |
+| `scripts/fixlib.py`, `fix_static.py`, `fix_refile.py`, `fix_compare.py`, `fix_assert.py`, `fix_ifelse.py`, `fix_switch.py`, `fix_idioms.py`, `fix_bitmask.py`, `fix_shiftbit.py`, `fix_localtype.py`, `fix_return.py`, `fix_gsbuffer.py`, `fix_stringops.py`, `fix_nestcall.py`, `fix_inplace.py`, `fix_boolarith.py`, `fix_order.py`, `fix_permute.py`, `fix_caseorder.py`, `fix_forloop.py`, `fix_fastcall.py`, `fix_paramtype.py`, `fix_restore.py`, `fix_all.py`, `tidy_blanks.py` | systematic fixes, kept only where confirmed; `oracle fix` runs them all |
 | `scripts/oracle_config.py` | which build directory a configuration uses |
 | `scripts/objdiff.py` | do two builds contain the same code |
 | `scripts/abcompare.py` | baseline vs experiment, module by module |

@@ -862,12 +862,7 @@ static void __stdcall Q27_ActivateAllSealsKillChaos(D2QuestDataA4Q2Strc * pQuest
       eRoomLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       if (eRoomLevel == LEVEL_ChaosSanctuary) {
         pNextUnit = pRoom->pUnitList;
-        while (true) {
-          pUnit = pNextUnit;
-          if (!pUnit) {
-            break;
-          }
-
+        while (pUnit = pNextUnit) {
           pNextUnit = pUnit->pRoomNext;
           if (pUnit->eUnitType == UNIT_MONSTER && pUnit->nClassId != 0xf3) {
             bMonDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);

@@ -266,12 +266,7 @@ static void UNITS_NotifyClientsUnitRemoved(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    while (true) {
-      pCurUnit = pListHead;
-      if (pCurUnit == pUnit) {
-        break;
-      }
-
+    while ((pCurUnit = pListHead) != pUnit) {
       pListHead = pCurUnit->pListNext;
       pPrevUnit = pCurUnit;
       if (!pCurUnit->pListNext) {
@@ -1218,7 +1213,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
     if (!pUnit) {
       return;
     }
-    if (2 < (int32_t)nValue_00) {
+    if ((int32_t)nValue_00 >= 3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbb2);
       exit(-1);
     }

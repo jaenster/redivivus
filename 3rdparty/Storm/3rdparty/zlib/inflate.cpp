@@ -3065,7 +3065,7 @@ int32_t __fastcall inflate(z_stream * pInflateStream, int32_t nFlush) {
               if (pState->head) {
                 pState->head->done = -1;
               }
-              if (!(pState->wrap & 1) || ((nHold & 0xff) * 0x100 + (nHold >> 8)) % 0x1f) {
+              if (!(pState->wrap & 1) || ((uint32_t)(uint8_t)nHold * 0x100 + (nHold >> 8)) % 0x1f) {
                 pInflateStream->msg = "incorrect header check";
               } else {
                 if (((uint8_t)nHold & 0xf) == 8) {
