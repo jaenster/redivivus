@@ -2700,7 +2700,7 @@ D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType 
     return pUnit;
 }
 
-void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nY) {
+static void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nY) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW | UNITFLAG_TARGETABLE;
     }
@@ -2820,5 +2820,7 @@ uint32_t __stdcall IsPlayerDead() {
 
     return (uint32_t)(CUnit::pPlayerUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead);
 }
+
+static void * keep_00463bc0 = (0 ? (PLAYER_PlaceUnitInRoom(*(int32_t *)0, *(D2RoomStrc * *)0, *(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::Player

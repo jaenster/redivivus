@@ -1506,7 +1506,7 @@ void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
 }
 
 // Gets secondary floor grid flags at the given Y coordinate. Checks if the misc grid's sub-grid flag is set before reading from the embedded coords grid at 0xF4.
-int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX) {
+static int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX) {
     if (*(int*)(pLevelCtx[0x14] + 0x18)) {
       int nFlags;
       nFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)(pLevelCtx + 0x3d), nGridX, nGridY);
@@ -2070,7 +2070,7 @@ BOOL __fastcall DRLGMAZE_IsPresetSingleFile(D2DrlgLevelStrc * pDrlgMap) {
 // pOutCoords = output rect {x, y, w, h} (its size is read, its position written).
 // Adjusts position by +/-16 or +/-8 based on sub-variant.
 // UNREFERENCED - likely dead code or cut from final build.
-void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoords(D2DrlgCoordsStrc * pOutCoords, D2DrlgCoordsStrc * pLevelCoords, int32_t nVariant, int32_t nDirection) {
+static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoords(D2DrlgCoordsStrc * pOutCoords, D2DrlgCoordsStrc * pLevelCoords, int32_t nVariant, int32_t nDirection) {
     int nAdjustedPos;
     bool bOffsetVariant;
     switch (nDirection) {
@@ -2132,7 +2132,7 @@ void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoords(D2DrlgCoordsStrc * pOutCoords, 
 // pLevelCoords = source rect, nVariant = sub-variant (0-3),
 // nDirection = direction (0-3), pOutCoords = output rect.
 // UNREFERENCED - likely dead code or cut from final build.
-void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(D2DrlgCoordsStrc * pOutCoords, D2DrlgCoordsStrc * pLevelCoords, int32_t nVariant, int32_t nDirection) {
+static void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(D2DrlgCoordsStrc * pOutCoords, D2DrlgCoordsStrc * pLevelCoords, int32_t nVariant, int32_t nDirection) {
     int nAdjustedPos;
     bool bOffsetVariant;
     switch (nDirection) {
@@ -2195,7 +2195,7 @@ void __stdcall DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(D2DrlgCoordsStrc * pOutC
 // nCornerType = corner direction, pLevelCoords = reference rect.
 // Adjusts by +/- (w/2 + 8) or (h/2 + 8) for centering on corners.
 // UNREFERENCED - likely dead code or cut from final build.
-void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLevelCoords, D2DrlgCoordsStrc * pOutCoords, int32_t nVariant, int32_t nCornerType) {
+static void __stdcall DRLGOUTPLACE_CalcCornerBorderCoords(D2DrlgCoordsStrc * pLevelCoords, D2DrlgCoordsStrc * pOutCoords, int32_t nVariant, int32_t nCornerType) {
     int nAdjustedPos;
     switch (nCornerType) {
       case 0:
@@ -3405,7 +3405,7 @@ uint32_t __fastcall DRLGOUTROOM_HasOutdoorBorderFlag(D2RoomExStrc * pRoomEx) {
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*
-int32_t __stdcall DRLGOUTROOM_SetupRoomCoordsFromTable(int * pOutCoords, int32_t nDirection, int * pSrcCoords, int32_t nTableRow) {
+static int32_t __stdcall DRLGOUTROOM_SetupRoomCoordsFromTable(int * pOutCoords, int32_t nDirection, int * pSrcCoords, int32_t nTableRow) {
     switch (nDirection) {
       case 0:
         {
@@ -3653,7 +3653,7 @@ void __fastcall DRLGOUTROOM_FindRightExitPosition(D2DrlgLevelStrc * pLevel, int 
 }
 
 // Shifts 3x3 neighbor buffer up one row and reads new values.
-void __stdcall DRLGOUTROOM_SlideGridNeighborBuffer(D2DrlgGridStrc * pGrid, int32_t nRow, int32_t nCol, int * pNeighborBuffer) {
+static void __stdcall DRLGOUTROOM_SlideGridNeighborBuffer(D2DrlgGridStrc * pGrid, int32_t nRow, int32_t nCol, int * pNeighborBuffer) {
     int nGridFlags = pNeighborBuffer[1];
     pNeighborBuffer[1] = pNeighborBuffer[2];
     *pNeighborBuffer = nGridFlags;
@@ -4182,7 +4182,7 @@ void __fastcall DRLGOUTROOM_LinkOutdoorRoomExits(D2DrlgLevelStrc * pLevel) {
 }
 
 // Estimates path distance between two grid positions (nX1,nY1) and (nX2,nY2 on stack). Uses a weighted Manhattan heuristic: min(dx,dy) + 2*max(dx,dy), which approximates diagonal+cardinal movement cost. Used by outdoor room pathfinding to rank exit connections.
-int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2) {
+static int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY2) {
     int nDist;
     int nDx = nX1 - nX2;
     if (nDx < 0) {
@@ -4204,7 +4204,7 @@ int __stdcall DRLGOUTROOM_EstimatePathDistance(int nX1, int nY1, int nX2, int nY
 }
 
 // NOTE: Register params: pint (EAX): int *
-int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3) {
+static int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, int dwParam3) {
     int32_t nCost;
     if (!(pint[3] == dwParam2 || (nCost = 3 , pint[4] == dwParam3))) {
       return nCost;
@@ -4215,7 +4215,7 @@ int32_t __stdcall DRLGOUTROOM_GetDirectionChangeCost(int * pint, int dwParam2, i
 }
 
 // Direction delta lookup from table based on (dir2-dir1)&3.
-uint8_t * __stdcall DRLGOUTROOM_GetDirectionDeltaLookup(char nDirection, char nParentDirection) {
+static uint8_t * __stdcall DRLGOUTROOM_GetDirectionDeltaLookup(char nDirection, char nParentDirection) {
     return gaOutRoomPathDirectionDelta + ((uint8_t)(nParentDirection - nDirection) & 3) * 4;
 }
 
@@ -4471,12 +4471,7 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
       sPathPool.nNodeCount = 1;
       piVar4 = aInitNode;
       pNodeIter = sPathPool.pHead;
-      for (nStartGridX = 10; nStartGridX; nStartGridX--) {
-        pNodeIter->nFCost = *piVar4;
-        piVar4++;
-        pNodeIter = (D2DrlgOutRoomPathNodeStrc*)&pNodeIter->nHCost;
-      }
-
+      memcpy(pNodeIter, piVar4, 40);
       pFoundNode = DRLGOUTROOM_PathSearchStep(&sPathPool, nTargetGridYRaw, pLevel, aTargetPos);
       nTargetGridYRaw += 5;
       if (sPathPool.nNodeCount >= 900) {
@@ -4507,5 +4502,15 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
 
     return 0;
 }
+
+static void * keep_0066f350 = (0 ? (DRLGOUTDOOR_GetSecondaryFloorGridFlags(*(int * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00675de0 = (0 ? (DRLGOUTPLACE_CalcEdgeBorderCoords(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00675eb0 = (0 ? (DRLGOUTPLACE_CalcEdgeBorderCoordsFlipped(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00675f80 = (0 ? (DRLGOUTPLACE_CalcCornerBorderCoords(*(D2DrlgCoordsStrc * *)0, *(D2DrlgCoordsStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0067d7e0 = (0 ? (DRLGOUTROOM_SetupRoomCoordsFromTable(*(int * *)0, *(int32_t *)0, *(int * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00680950 = (0 ? (DRLGOUTROOM_SlideGridNeighborBuffer(*(D2DrlgGridStrc * *)0, *(int32_t *)0, *(int32_t *)0, *(int * *)0), (void *)0) : (void *)0);
+static void * keep_006814e0 = (0 ? (DRLGOUTROOM_EstimatePathDistance(*(int *)0, *(int *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
+static void * keep_00681510 = (0 ? (DRLGOUTROOM_GetDirectionChangeCost(*(int * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
+static void * keep_00681540 = (0 ? (DRLGOUTROOM_GetDirectionDeltaLookup(*(char *)0, *(char *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg

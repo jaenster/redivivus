@@ -200,6 +200,14 @@ void __stdcall CLIENT_QuestEvent_PlaceHoradricStaff() {
     Engine::Gfx::GFX_PrecacheMonsterAllModes(0xd3, 1);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 void __stdcall CLIENT_QuestEvent_RestoreTaintedSun() {
     int nY;
     int nX;
@@ -237,7 +245,7 @@ void __stdcall CLIENT_QuestEvent_RestoreTaintedSun() {
       return;
     }
 
-    D2Common::Units::Missile::SetTargetY(pPlayer, pObject->nUnitGUID);
+    D2Common::Units::Missile::SetTargetY(pPlayer, GetGUIDInline(pObject));
 }
 
 void __stdcall CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary() {
@@ -288,7 +296,7 @@ void __stdcall CLIENT_QuestEvent_HoradricForge() {
       return;
     }
 
-    D2Common::Units::Missile::SetTargetX(pPlayer, pUnit->nUnitGUID);
+    D2Common::Units::Missile::SetTargetX(pPlayer, GetGUIDInline(pUnit));
     D2Common::Units::Missile::SetTargetY(pPlayer, 0);
 }
 
@@ -777,7 +785,7 @@ void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
 }
 
 void __fastcall CLIENT_StoreUnitGuidForQuestTracking(D2UnitStrc * pUnit) {
-    gnQuestMonsterUnitId = !pUnit ? -1 : pUnit->nUnitGUID;
+    gnQuestMonsterUnitId = !pUnit ? -1 : GetGUIDInline(pUnit);
 }
 
 void __stdcall CLIENT_BossDeath_Baal() {

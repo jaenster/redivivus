@@ -97,7 +97,7 @@ static int __stdcall ReplaceRoomWithNewRoom(int nDirection, D2RoomExStrc * pNewR
 }
 
 // Directly sets a room's preset ID and variant in pRoomExData. Writes nPresetId and nVariant (stack arg) to the room data, and sets or clears the 'has preset' flag based on bHasPreset (stack arg). Returns the room pointer. No callers found (dead code).
-void __stdcall DRLGMAZE_SetRoomPresetDirect(D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset) {
+static void __stdcall DRLGMAZE_SetRoomPresetDirect(D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset) {
     D2DrlgPresetRoomStrc* pDVar1 = pRoomEx->pRoomExData.pRoomExDataPreset;
     pDVar1->nLevelPrest = nPresetId;
     pDVar1->nPickedFile = nVariant;
@@ -280,7 +280,7 @@ static D2RoomExStrc * __stdcall DRLGMAZE_PickRoomPreset(D2RoomExStrc * pRoomEx, 
 }
 
 // Searches the room's preset list for a matching preset ID, then replaces it with the new values from the stack args. Returns the matching node or 0.
-D2RoomExStrc * __stdcall DRLGMAZE_FindAndReplacePreset(D2DrlgLevelStrc * pCtx, int nPresetId, int nNewPresetId, int nNewArg1, int nEnableFlag) {
+static D2RoomExStrc * __stdcall DRLGMAZE_FindAndReplacePreset(D2DrlgLevelStrc * pCtx, int nPresetId, int nNewPresetId, int nNewArg1, int nEnableFlag) {
     D2DrlgPresetRoomStrc* pDVar1;
     D2RoomExStrc* pOrth = pCtx->pRoomExFirst;
     while (true) {
@@ -408,7 +408,7 @@ static D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomExAndPickPreset(eDrlgDirection
 // Returns the new RoomEx, or NULL if allocation failed.
 // No call, jump or stored address reaches 00670e70 in 1.14d (byte scan for
 // the absolute and rel32 forms); only its sibling 00670de0 is called.
-D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomAndPickPreset(eDrlgDirection eDirection, D2RoomExStrc * pSourceRoom, int bPickPresets) {
+static D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomAndPickPreset(eDrlgDirection eDirection, D2RoomExStrc * pSourceRoom, int bPickPresets) {
     D2RoomExStrc* pNewRoom = AllocateRoomEx(pSourceRoom, eDirection, bPickPresets);
     if (pNewRoom) {
       if (bPickPresets) {
@@ -3539,5 +3539,9 @@ void __fastcall DRLGMAZE_ResetMazeRecord(D2DrlgLevelStrc * pLevel, BOOL bKeepRec
 
     pLevel->pDrlgLevelData.pTxtLvlMaze = 0;
 }
+
+static void * keep_00670970 = (0 ? (DRLGMAZE_SetRoomPresetDirect(*(D2RoomExStrc * *)0, *(int *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00670c10 = (0 ? (DRLGMAZE_FindAndReplacePreset(*(D2DrlgLevelStrc * *)0, *(int *)0, *(int *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
+static void * keep_00670e70 = (0 ? (DRLGMAZE_AllocRoomAndPickPreset(*(eDrlgDirection *)0, *(D2RoomExStrc * *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::Maze

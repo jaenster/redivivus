@@ -37,7 +37,6 @@ BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUn
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 void __fastcall PATH_CheckPathPointsInRoom(struct D2DynamicPathStrc * pPath);
-void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnOutX, int32_t * pnOutY, int32_t nStepIndex);
 // PATH_FindAlternateAroundObstacle - Attempts to find an alternate path around an obstacle using directional triplets (left/right alternatives). Checks primary, secondary, and tertiary directions until a collision-free direction is found. Returns 1 if an alternate path was found.
 BOOL PATH_FindAlternateAroundObstacle(struct D2PathTypeArg * pPathState);
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).

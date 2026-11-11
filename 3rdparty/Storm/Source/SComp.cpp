@@ -1468,9 +1468,10 @@ void __fastcall LINKEDLIST_UnlinkAll(StormLinkedListStrc * pList) {
     }
 }
 
-void __fastcall LINKEDLIST_LinkBefore(void * pNode) {
+void * __fastcall LINKEDLIST_LinkBefore(void * pNode) {
     *(uint32_t*)pNode = 0;
     *(uint32_t*)((char*)pNode + 4) = 0;
+    return pNode;
 }
 
 void __fastcall LINKEDLIST_NodeDestructor(void * pNode) {
@@ -4222,7 +4223,7 @@ void __fastcall COMPRESS_FlushEncoderState(StormLinkedListStrc * pEncoder) {
 
 // Initialise a Huffman encoder/decoder context: zero all linked-list sentinels, set epoch to 1, clear node-count and quick-table epoch
 D2CompressEncoderStrc * __fastcall HUFFMAN_InitContext(D2CompressEncoderStrc * pEncoder) {
-    _eh_vector_constructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, LINKEDLIST_LinkBefore, LINKEDLIST_NodeDestructor);
+    _eh_vector_constructor_iterator_(pEncoder->aNodePool, 0x18, 0x203, (void (__fastcall *)(void*))LINKEDLIST_LinkBefore, LINKEDLIST_NodeDestructor);
     pEncoder->ppFreeListTailLink = 0;
     D2CompressHuffNodeStrc** ppDVar1 = &pEncoder->pFreeListSentinel;
     *ppDVar1 = (D2CompressHuffNodeStrc*)ppDVar1;

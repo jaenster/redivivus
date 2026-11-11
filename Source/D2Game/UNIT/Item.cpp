@@ -322,7 +322,7 @@ BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
-void __stdcall Unreferenced_00597aa0(D2UnitStrc * pItem) {
+static void __stdcall Unreferenced_00597aa0(D2UnitStrc * pItem) {
     uint32_t uVar1;
     uVar1 = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_TAKE_ITEM);
     if (!uVar1) {
@@ -461,7 +461,7 @@ static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2Unit
 
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nIsNew) {
-    uint16_t wPosX;
+    int32_t wPosX;
     D2UnitStrc* pPlayer;
     uint32_t bIsInNpcState2;
     D2UnitStrc* pOwner;
@@ -470,24 +470,24 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     int32_t nPosRaw;
     eD2UnitType eType;
     if (pUnit) {
-      uint16_t wPosY;
+      int32_t wPosY;
       if (pUnit->eUnitFlagsEx & UNITFLAGEX_TELEPORTED) {
         eType = pUnit->eUnitType;
         if (eType == UNIT_OBJECT || (int)eType > 3 && (int)eType <= 5) {
-          wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+          wPosY = pUnit->pPath.pStaticPath->nPosY;
         } else if (pUnit->pPath.pDynamicPath) {
           nPosRaw = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-          wPosY = (uint16_t)nPosRaw;
+          wPosY = nPosRaw;
         } else {
           wPosY = 0;
         }
 
         eType = pUnit->eUnitType;
         if (eType == UNIT_OBJECT || (int)eType > 3 && (int)eType <= 5) {
-          wPosX = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
+          wPosX = pUnit->pPath.pStaticPath->nPosX;
         } else if (pUnit->pPath.pDynamicPath) {
           nPosRaw = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-          wPosX = (uint16_t)nPosRaw;
+          wPosX = nPosRaw;
         } else {
           wPosX = 0;
         }
@@ -551,5 +551,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
     MONSTER_SendNpcEnchantsToClient(pClient, pUnit);
 }
+
+static void * keep_00597aa0 = (0 ? (Unreferenced_00597aa0(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT

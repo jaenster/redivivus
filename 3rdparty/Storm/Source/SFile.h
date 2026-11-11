@@ -608,9 +608,6 @@ struct D2StormAudioStreamRec * __thiscall SFILE_DeleteAudioStream(struct D2Storm
 // Stream-list delete-node: destroys and frees pNode, returns the next node (NULL at the list end).
 // Provenance: next = [node+4] (<=0 -> NULL), CALL 004199a0, SMemFree(node), RET 4.
 struct D2StormAudioStreamRec * __thiscall SFILE_AudioStreamListDeleteNode(struct StormLinkedListStrc * pList, struct D2StormAudioStreamRec * pNode);
-// Drops one reference (nRefCount +0x4c) on pAudioStream (ESI); at zero runs SFILE_DestroyAudioStream and SMemFree.
-// No call, jump or stored pointer reaches it in 1.14d (rel32 and pointer-byte scans of the image are empty); body ends at the RET 0x419bf0 before INT3 padding.
-void __stdcall SFILE_ReleaseAudioStream(struct D2StormAudioStreamRec * pAudioStream);
 // CD-thread pass that issues refill requests for playing audio streams from their buffer position.
 // Name from the PowerPC 1.13c Storm traceback table (static CheckAudioStreams @1001fdd0).
 void __stdcall SFILE_CheckAudioStreams();

@@ -271,7 +271,7 @@ static uint8_t __stdcall Q11_BeginTaintedSun(D2QuestDataStrc * pQuestData) {
 
 // A2Q3 - Q11_EndTaintedSun: ends the darkening. Clears the darkened flag, calls DRLGENV_TaintedSunEnd()
 // (restores daylight in Act 2) and iterates players sending Q11_SendSunRestoredPacket. No quest-record writes.
-void __stdcall Q11_EndTaintedSun(D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGame) {
+static void __stdcall Q11_EndTaintedSun(D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGame) {
     if (!pGame->pAct[1]) {
       return;
     }
@@ -885,5 +885,7 @@ void __fastcall Q11_InitData(D2QuestDataStrc * pQuestData) {
     pQuestSpecificData->nViperAmuletUpdateFlag = 0;
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sPlayerGUID);
 }
+
+static void * keep_0059a3c0 = (0 ? (Q11_EndTaintedSun(*(D2QuestDataStrc * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS::A2Q3

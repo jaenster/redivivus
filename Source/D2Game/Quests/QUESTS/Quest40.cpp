@@ -171,6 +171,14 @@ void __fastcall Q40_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q40_ActiveFilter;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Object init callback for Quest 40 (Prison of Ice, A5Q3). Records the initialized object's GUID and coords into the A5Q3 quest-specific data. If the trigger count reaches 2, fires Q33_SequenceFilter; if the Tristram portal has not yet been initialized, spawns a monster near the object's coords and transfers its DRLG map AI file. Also fires a timed event if the BetrayalOfHaggorath quest completion flag is set.
 void __fastcall Objects_InitFn66_DrehyaStartInTown(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedUnit;
@@ -199,7 +207,7 @@ void __fastcall Objects_InitFn66_DrehyaStartInTown(D2ObjectInitFnArg * pInitArg)
             if (!pQuestSpecificA1Q4->bFrozenAnyaSpawned) {
               pSpawnedUnit = QUEST_SpawnMonsterNearCoords(pInitArg->pGame, pInitArg->nX, pInitArg->nY, pInitArg->pRoom, 1, 0x200);
               if (pSpawnedUnit) {
-                pQuestSpecificA1Q4->nFrozenAnyaGUID = pSpawnedUnit->nUnitGUID;
+                pQuestSpecificA1Q4->nFrozenAnyaGUID = GetGUIDInline(pSpawnedUnit);
                 pQuestSpecificA1Q4->bFrozenAnyaSpawned = 1;
                 ppDrlgMapAi = Ai::AiGeneral::GetMonsterMapAi(pSpawnedUnit);
                 pDrlgFile = (D2DrlgFileStrc*)pQuestSpecificA1Q4->pDrlgMap;

@@ -50,7 +50,7 @@ static int gnActCount = 0x5; D2_STATIC_GUARD(gnActCount, "gnActCount");
 
 namespace D2Game::UNIT::SUnitMsg {
 
-void __stdcall PLAYER_SetStartingLevelForAct(uint8_t nAct, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __stdcall PLAYER_SetStartingLevelForAct(uint8_t nAct, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t uVar1 = (uint32_t)nAct;
     if (nAct >= 5) {
       uVar1 = 4;
@@ -1272,5 +1272,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
         ITEMS::ItemMode::SendDropItemPacket(pUnit, pClientSaved);
     }
 }
+
+static void * keep_005706a0 = (0 ? (PLAYER_SetStartingLevelForAct(*(uint8_t *)0, *(::SGAMEDATA * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT::SUnitMsg

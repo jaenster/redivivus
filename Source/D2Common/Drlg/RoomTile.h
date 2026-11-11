@@ -43,8 +43,6 @@ namespace D2Common::Drlg::RoomTile {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-// Converts world tile coordinates to screen position and room-relative offsets. Output: [0]=screenX, [1]=screenY+40, [2]=relativeX (world-roomOrigin), [3]=relativeY. Calls CoordsMiniMapToScreen for isometric transform.
-void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, struct D2RoomExStrc * pRoomEx, int nWorldX, int nWorldY);
 // Allocates the next wall tile slot in pRoomEx's tile grid, links it into the *ppTileHead list, converts minimap coords to screen coords, sets colour/type/flags, then recursively creates a shadow tile (type 4) when nTileType==3 and propagates nGridFlags bits into that shadow tile's flags.
 struct D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(struct D2RoomExStrc * pRoomEx, struct D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, struct D2TileLibraryEntryStrc * pTileLibEntry, int nTileType);
 // Initializes D2DrlgTileDataStrc: sets library entry, RGB to 0xFF, maps grid flags to tile flags.

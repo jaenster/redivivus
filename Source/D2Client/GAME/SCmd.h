@@ -719,7 +719,6 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes);
 // Server→client handler for stat-set/add opcodes 0x19–0x1F targeting the local player. Opcodes 0x19–0x1B add gold or experience (delta from bytes 1–4, varying width); 0x1C sets experience outright; 0x1D–0x1F set an arbitrary stat (id=byte 1, value bytes 2+, byte/word/dword). Calls STATLIST_SetUnitStat then SCMD_HandleStatChangeEffect to apply side-effects (level-up UI, sound, etc.).
 void __fastcall NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x20(struct D2GSPacketSrv0x20 * pBytes);
-void __stdcall SCMD_DecodeRelativeCoordinates(uint16_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY, uint16_t nByteX);
 void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBytes);

@@ -204,7 +204,7 @@ void __fastcall LINKEDLIST_NodeDestructor_Unref_0041ed30(struct StormLinkStrc * 
 struct StormLinkedListStrc * __fastcall Unreferenced_0041ed70(struct StormLinkedListStrc * param_1);
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef);
 void __fastcall LINKEDLIST_UnlinkAll(struct StormLinkedListStrc * pList);
-void __fastcall LINKEDLIST_LinkBefore(void * pNode);
+void * __fastcall LINKEDLIST_LinkBefore(void * pNode);
 void __fastcall LINKEDLIST_NodeDestructor(void * pNode);
 struct D2CompressHuffNodeStrc * __thiscall HUFFMAN_AllocateNode(struct D2HuffmanContextStrc * pThis, int32_t nInsertMode);
 void __thiscall COMPRESS_InitEncoderContext(struct D2CompressEncoderStrc * pEncoder, int * * pTableSel);

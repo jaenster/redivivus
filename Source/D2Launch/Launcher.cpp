@@ -766,7 +766,7 @@ void __stdcall UIMENU_MainMenuWithoutMenuButWithDiabloLogo() {
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0043c530..0043c539; unreferenced in 1.14d.
-__time32_t __stdcall LAUNCHER_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall LAUNCHER_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -1083,5 +1083,7 @@ BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     return bWriteSuccess;
 }
+
+static void * keep_0043c530 = (0 ? (LAUNCHER_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Launch::Launcher

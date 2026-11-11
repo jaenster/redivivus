@@ -60,7 +60,6 @@ void __stdcall SPELLSEL_Initialize();
 void __stdcall SPELLSEL_Cleanup();
 struct DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId);
 void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand);
-uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nRectX, int32_t nRectY);
 int32_t __fastcall SPELLSEL_GetSkillPalette(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpanded, int32_t nSkillDescId, int32_t nStatId, int32_t nIconX, int32_t nIconY);
 void __fastcall SPELLSEL_DrawKeyBindingText(int32_t nCmdIndex, int32_t nX, int32_t nY, int32_t dwColor);

@@ -157,7 +157,7 @@ static void __stdcall DRLGROOMTILE_SetWallTileFlags(D2DrlgTileDataStrc * pTileDa
 }
 
 // Converts world tile coordinates to screen position and room-relative offsets. Output: [0]=screenX, [1]=screenY+40, [2]=relativeX (world-roomOrigin), [3]=relativeY. Calls CoordsMiniMapToScreen for isometric transform.
-void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, D2RoomExStrc * pRoomEx, int nWorldX, int nWorldY) {
+static void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, D2RoomExStrc * pRoomEx, int nWorldX, int nWorldY) {
     pOutCoords[2] = nWorldX - pRoomEx->sCoords.WorldPosition.x;
     int nScreenX = nWorldY - pRoomEx->sCoords.WorldPosition.y;
     nWorldY++;
@@ -1235,5 +1235,7 @@ void __fastcall DRLGROOMTILE_FreeRoomTilesAll(D2RoomExStrc * pRoomEx) {
     D2_FREE_POOL_AT(pMemory, pTileGrid, ".\\DRLG\\RoomTile.cpp", 0x5bd);
     pRoomEx->pRoomTiles = 0;
 }
+
+static void * keep_0066dc10 = (0 ? (DRLGROOMTILE_WorldToTileScreenPos(*(int * *)0, *(D2RoomExStrc * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::RoomTile

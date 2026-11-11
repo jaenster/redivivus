@@ -172,7 +172,7 @@ static uint32_t CODEC_ReadBits(D2CodecBitStateStrc * pBitState, int nNumBits) {
     return nResult;
 }
 
-uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode) {
+static uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode) {
     uint32_t nNumBits = g_aCodecBitMaskLookupTable[nBitWidthCode];
     uint32_t nBitsRead = CODEC_ReadBits(pBitState, nNumBits);
     if (nNumBits && bSigned && g_aCodecBitMaskLookupTable[nNumBits + 0xf] & nBitsRead) {
@@ -349,7 +349,7 @@ static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t 
     pOutBounds->nWidth = nMaxX - nMinXLeft;
 }
 
-void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, uint8_t * nInverseMapBase, uint8_t * nPaletteTableBase) {
+static void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, uint8_t * nInverseMapBase, uint8_t * nPaletteTableBase) {
     int i = 0;
     int nMappedCount = 0;
     do {
@@ -1376,5 +1376,8 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&CelCmp::lpCriticalSection_008f03cc);
     return pOutBuffer;
 }
+
+static void * keep_0060b280 = (0 ? (CODEC_ReadBitsWithTransparency(*(uint32_t *)0, *(D2CodecBitStateStrc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0060b5f0 = (0 ? (CODEC_BuildInversePalette(*(uint32_t *)0, *(int32_t *)0, *(uint8_t * *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2CMP::SRC::Codec

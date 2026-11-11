@@ -128,28 +128,11 @@ BOOL __stdcall CheckSpeachVersusInteractedUnit();
 int __stdcall NPCMENU_EmptyDialogDrawHandler();
 int __stdcall NPCMENU_OpenTradeWithNpc();
 void __stdcall NPCMENU_HireMerc();
-BOOL NPCMENU_IsItemIdentified(struct D2UnitStrc * pUnit);
 int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_004b2010();
 // Cain's "Identify Items" (4020 NPCIdentify1) option callback: slot 1 of the Cain rows 16, 17, 18, 19 and 38 (cain2, cain5, cain3, cain4, cain6); installed by NPCMENU_InitializeMenuOptions and NPCMENU_EnableCainIdentifyOption.
 // Halts if the transaction-wait dialog (gpNpcHireMercDialog) is already open. Otherwise opens it with 3353 "Waiting for confirmation of transaction...", sets a 60 s deadline, NPC UI state 10, gnNpcMenuTransactionType = 4, and sends C->S 0x34 (NPC GUID) = identify all items. Returns 1.
 int __stdcall NPCMENU_CainIdentifyOptionCallback();
 void __stdcall NPCMENU_CloseAllDialogs();
-// Shrinks NPC menu row nRowIndex (EAX) to 2 options: nOptionsCount = 2 and option slot 2 cleared (string id 0, callback NULL).
-// No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (rows 11, 13, 15, 21, 43). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
-// Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot2(int nRowIndex);
-// Shrinks NPC menu row nRowIndex (EAX) to 3 options: nOptionsCount = 3 and option slot 3 cleared (string id 0, callback NULL).
-// No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (rows 3 and 39). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
-// Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot3(int nRowIndex);
-// Shrinks NPC menu row nRowIndex (EAX) to 4 options: nOptionsCount = 4 and option slot 4 cleared (string id 0, callback NULL).
-// No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (row 41). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
-// Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot4(int nRowIndex);
-// Adds Cain's "Identify Items" (4020 NPCIdentify1) option to NPC menu row nRowIndex (EAX): slot 1 = NPCMENU_CainIdentifyOptionCallback, nOptionsCount = 3.
-// No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined for the Cain rows 16, 17, 18, 19 and 38.
-// Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_EnableCainIdentifyOption(int nRowIndex);
 void __stdcall NPCMENU_InitializeMenuOptions();
 void __fastcall SubmitItem(DWORD dwItemId);
 void __fastcall NPCMENU_ValidateNpcForShop(struct D2UnitStrc * pUnit);

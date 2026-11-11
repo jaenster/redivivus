@@ -15,7 +15,7 @@ namespace Bnclient::SRP {
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00527db0..00527db9; unreferenced in 1.14d.
-__time32_t __stdcall SRP_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall SRP_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -545,5 +545,7 @@ void __stdcall SRP_GlobalInit() {
 void SRP_AtexitCleanup() {
     SRP_DestroyContext(&g_pSrpContext);
 }
+
+static void * keep_00527db0 = (0 ? (SRP_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace Bnclient::SRP

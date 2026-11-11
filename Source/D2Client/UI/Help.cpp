@@ -46,7 +46,7 @@ int32_t __stdcall GetSeenHelpMenuValue() {
     return bSeenHelpMenu;
 }
 
-void __stdcall SetSeenHelpMenu(BOOL bSeenHelpMenu) {
+static void __stdcall SetSeenHelpMenu(BOOL bSeenHelpMenu) {
     Help::bSeenHelpMenu = bSeenHelpMenu;
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Help Menu", 1, bSeenHelpMenu);
 }
@@ -301,7 +301,7 @@ void __stdcall HELP_HideMiniPanel() {
     gbMiniPanel = 0;
 }
 
-BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY) {
+static BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nX && nMouseX <= nX + nSizeX && nMouseY >= nY - nSizeY && nMouseY <= nY) {
@@ -957,5 +957,8 @@ void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType,
 void __stdcall HELP_MiniPanelKeyNoOp_Unref_004e4040(D2UIMouseMsgStrc * pMsg) {
 
 }
+
+static void * keep_00494300 = (0 ? (SetSeenHelpMenu(*(BOOL *)0), (void *)0) : (void *)0);
+static void * keep_00494ff0 = (0 ? (MouseIsInRange(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::Help

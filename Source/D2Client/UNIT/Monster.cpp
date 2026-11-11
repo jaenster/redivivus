@@ -3011,6 +3011,14 @@ uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2UnitStrc * pUnit, D2ClientM
     return nResult;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Client-side per-frame update tick for a monster/NPC unit (param is the unit; aliased as D2DynamicPathStrc). Skips if frozen-and-inactive; reads the unit's animation-mode entry, advances path/trail-effect stepping for walk modes, resolves the client-side target unit from the server path, periodically recalculates pathing, and faces the player when nearby. Computes name-color and the per-anim-mode completion flag, casts queued skill missiles, dispatches unique-mod get-hit handlers, interpolates path direction, fires the skill-anim-end handler, may spawn missile 0x1de on a DOUPDATE object, runs damage-state skill effects, and updates SFX/footstep sounds.
 void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     bool bHasDmgState;
@@ -3026,7 +3034,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     if (!pDynamicPath) {
       return;
     }
-    if (pDynamicPath->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pDynamicPath) != UNIT_MONSTER) {
       return;
     }
 

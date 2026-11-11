@@ -913,6 +913,14 @@ void __fastcall NET_D2GS_SERVER_Send_0x23_SetSkill(D2ClientStrc * pClient, uint8
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 0xd);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Sends opcode 0x94 skills-list packet to pClient for pUnit. Walks the unit's skill list twice: first to count skills, then to serialise each entry as 3 bytes (skill ID + level) into a game-pool-allocated buffer. Halts if pUnit/skills null or skill count >= 256.
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
@@ -954,7 +962,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x94_SETALLSKILLS(D2ClientStrc * pClient, D
       }
 
       pPktBuf[1] = (uint8_t)nSkillCountIter;
-      *(int*)(pPktBuf + 2) = pUnit->nUnitGUID;
+      *(int*)(pPktBuf + 2) = GetGUIDInline(pUnit);
       pSkill = D2Common::Skills::GetFirstSkill(pSkillsList);
       while (pSkill) {
         nSkillCountIter = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 0);

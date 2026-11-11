@@ -1142,7 +1142,7 @@ void __fastcall RENDERER_DDRAW_SetHorizontalBounds(int32_t bWidescreen) {
 }
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, int32_t bIsometric, DC6Block * pDC6Block) {
+static uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, int32_t bIsometric, DC6Block * pDC6Block) {
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     if (bIsometric) {
@@ -2483,5 +2483,7 @@ void __fastcall SetDefaultPerspectiveFactor_Unref_00514040() {
 void __fastcall SetDefaultPerspectiveFactor_Unref_00514050() {
 
 }
+
+static void * keep_00511e10 = (0 ? (RENDERER_DDRAW_IsDC6OffScreen(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(DC6Block * *)0), (void *)0) : (void *)0);
 
 } // namespace D2DDraw::Renderer::DirectDraw

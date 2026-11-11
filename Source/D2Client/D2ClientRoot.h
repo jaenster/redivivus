@@ -81,9 +81,6 @@ void __stdcall CMD_AutomapTogglePartyNames();
 void __stdcall CMD_AutomapToggleLeft();
 void __stdcall CMD_ToggleSkillTree();
 void __stdcall CMD_ToggleSkillSelect();
-// Skill hotkey slot nSlot (ESI): ignored while exiting or dead, and slots above 8 need the expansion. With the skill-select UI open it calls SPELLSEL_HandleSkillSelection, otherwise SPELLSEL_ActivateSkillSlot. The range assert (View.cpp line 252) tests nSlot < 0 && nSlot > 15 and can never fire.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall CMD_SelectSkillHotkeySlot(int nSlot);
 void __stdcall CMD_ActivateSkillSlot_F1();
 void __stdcall CMD_ActivateSkillSlot_F2();
 void __stdcall CMD_ActivateSkillSlot_F3();
@@ -187,9 +184,6 @@ void __stdcall dSceneTransitionDraw();
 void __stdcall DRAW_WORLD_ClearWarpFadeTimer();
 int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, struct D2UnitStrc * pOwnerUnit, struct D2UnitStrc * pMissile, uint32_t dwParam4);
 uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam);
-// TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY);
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId);
 pfnWardenCreateInterface __thiscall WARDEN_DecryptBuffer(struct D2WardenModuleStrc * ppModule, int32_t nOrdinal);
 // Decrypt Warden anti-cheat module data using RSA/crypto operations

@@ -1020,9 +1020,8 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
 }
 
 void __fastcall SUNITNPC_ValidateGambleItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint16_t wPosY;
+    uint32_t wPosY;
     int32_t nPosX;
-    int32_t nPosY;
     D2UnitStrc* pMerc = PLAYER::PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 0);
     if (!pMerc) {
       return;
@@ -1030,10 +1029,9 @@ void __fastcall SUNITNPC_ValidateGambleItem(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      wPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
-      nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPosY;
+      wPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
     } else {
       wPosY = 0;
     }
@@ -1042,15 +1040,15 @@ void __fastcall SUNITNPC_ValidateGambleItem(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
       if (pUnit->pPath.pDynamicPath) {
         nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, (uint16_t)nPosX, wPosY);
+        PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, (uint16_t)nPosX, (uint16_t)wPosY);
         return;
       }
 
-      PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, 0, wPosY);
+      PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, 0, (uint16_t)wPosY);
       return;
     }
 
-    PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, (uint16_t)pUnit->pPath.pStaticPath->nPosX, wPosY);
+    PLAYER::PlayerPets::PETS_ManagePetsByType(pGame, pUnit, (uint16_t)pUnit->pPath.pStaticPath->nPosX, (uint16_t)wPosY);
 }
 
 void __fastcall SUNITNPC_ProcessGambleResult(D2UnitStrc * pUnit) {
@@ -2491,12 +2489,14 @@ void __fastcall SUNITNPC_HandleResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 void __fastcall SUNITNPC_CloseNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc) {
     SUnit::ClearInteractInfo(pUnit);
+    D2MonsterAiStrc* pAi;
     if (pNpc && pNpc->eUnitType == UNIT_MONSTER && pNpc->pUnitData.pUnitDataMonster) {
-      D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pNpc->pUnitData.pUnitDataMonster->pMonsterAi);
-      return;
+      pAi = pNpc->pUnitData.pUnitDataMonster->pMonsterAi;
+    } else {
+      pAi = nullptr;
     }
 
-    D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, nullptr);
+    D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pAi);
 }
 
 // Server-side mercenary hiring from a town NPC (e.g. Greiz/Asheara). Looks up the NPC's per-game hire-list state by class id; bails if the player already owns a hireable pet. For each available, not-yet-hired list slot in the hireling name range, marks the slot taken, sends a 0x50 quest-special packet to the player's client to confirm, spawns the merc monster (trying placement modes 4/6/0xC), and calls MERC_HireAndReplaceMerc to attach it as the player's hireling. Resets the NPC hire list if it becomes empty. Halts (error 0xFA2) if no hireling.txt entry exists.

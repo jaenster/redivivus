@@ -156,7 +156,7 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
 }
 
 // @sourcefile .\GAME\Roster.cpp
-void FreeRosterLinkList(D2RosterStrc * pRoster) {
+static void FreeRosterLinkList(D2RosterStrc * pRoster) {
     D2RosterLinkListStrc* pRosterLinkList = pRoster->pRosterLinkList;
     while (pRosterLinkList) {
       D2RosterLinkListStrc* pNext;
@@ -328,7 +328,7 @@ D2RosterStrc * Unreferenced_00479740() {
 }
 
 // @sourcefile .\GAME\Roster.cpp
-void AllocRosterPartyList(uint16_t nPartyId) {
+static void AllocRosterPartyList(uint16_t nPartyId) {
     D2RosterPartyListStrc* pNewParty;
     D2RosterPartyListStrc* pPartyIter = pRosterPartyList;
     while (true) {
@@ -1536,5 +1536,8 @@ void __fastcall PlayerLeft(int32_t nPlayerUid) {
     ROSTER_RebuildPlayerParty();
     UI::Party::ResetPartyUi();
 }
+
+static void * keep_00479470 = (0 ? (FreeRosterLinkList(*(D2RosterStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00479770 = (0 ? (AllocRosterPartyList(*(uint16_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::GAME::Roster

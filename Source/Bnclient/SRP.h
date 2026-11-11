@@ -63,9 +63,6 @@ namespace Bnclient::SRP {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00527db0..00527db9; unreferenced in 1.14d.
-__time32_t __stdcall SRP_GetTime32(__time32_t * pTime);
 // In-place constructor for the SRP context: zeroes bInitialized (+0) and nBytesAvailable (+0x48). It is MOV EAX,ECX / two stores / RET, i.e. the C++ ABI contract of returning `this` in EAX, and its sole caller SRP_CreateContext @005281c0 stores that return into *ppSrp. Typed void, the decompiler dropped EAX and emitted `*ppSrp = <uninitialised local>` - which put a stack address into the global g_pSrpContext and made the Battle.net teardown free garbage on the way into the main menu.
 struct D2Srp * __fastcall SRP_ConstructContext(struct D2Srp * pSrp);
 // Seeds the SRP random pool. Fills a 12-byte frame run sSeedEntropy {_time32(), dwSeed, rand()} (D2SrpSeedEntropyStrc),

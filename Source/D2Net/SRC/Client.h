@@ -1364,8 +1364,6 @@ uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t U
 void __fastcall NET_CLIENT_SetConnectionTimeout(int32_t nTimeoutMs);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadParam);
-// Creates server connection thread. Spawns thread via CreateThread with CLIENT_ServerConnectionThread_lpStartAddress entry point, stores handle in SERVER_THREAD.
-HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam);
 // @sourcefile .\SRC\Client.cpp
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues();
 void Unreferenced_0052aaa0();

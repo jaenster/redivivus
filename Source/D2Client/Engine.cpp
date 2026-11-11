@@ -93,7 +93,7 @@ void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost
     gaScreenResolutionModeArray = bConnectionLost;
 }
 
-BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
+static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nRectLeftX && nMouseX <= nRectLeftX + nRectWidth && nMouseY >= nRectBottomY - nRectHeight && nMouseY <= nRectBottomY) {
@@ -452,7 +452,7 @@ uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode) {
 }
 
 // Alternate draw mode game loop with different event handler table and loop function
-uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal) {
+static uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal) {
     GAME::Game::GAMEDATA_SetDrawFunction(nDrawMode);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit2, 4);
     _Message::MessageGameLoop((::fpGameLoopFunction)LOADER_PopupGameLoopCallback);
@@ -510,6 +510,14 @@ int __fastcall Unreferenced_00460810(D2UnitStrc * param_1) {
     return 0;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     BOOL eState;
     uint32_t nCount;
@@ -528,7 +536,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &pAdjacentRooms, (int*)&nRoomCount);
     for (nCount = 0; nCount < nRoomCount; nCount++) {
       for (pUnit = pAdjacentRooms[nCount]->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
-        if (pUnit->eUnitType == UNIT_MONSTER) {
+        if (GetTypeInline(pUnit) == UNIT_MONSTER) {
           eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_dopplezon);
           if (eState) {
             Gfx::GFX_LoadUnitModeCof(pUnit, 0);
@@ -599,5 +607,8 @@ void __fastcall CLIENT_SetUnitLightColor(D2UnitStrc * pUnit, int32_t dwRGB) {
 void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost) {
     Cursor::gnCursorInitialized = bConnectionLost;
 }
+
+static void * keep_0045fb80 = (0 ? (UI_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_004606de = (0 ? (ENGINE_RunDrawModeGameLoopAlt(*(int32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Engine

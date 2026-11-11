@@ -111,7 +111,7 @@ D2SoundChannelStrc * __fastcall Unreferenced_004b9440(int param_1) {
 
 // pSoundInst in ESI: when +0x30 is 1, calls SOUND_StopAndDetach on the channel at +0x2c; then halts (SoundInst.cpp line 147, !ptInst->hChannel) if the channel is still set.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall SOUNDINST_StopChannel(D2SoundChannelStrc * pSoundInst) {
+static void __stdcall SOUNDINST_StopChannel(D2SoundChannelStrc * pSoundInst) {
     if (pSoundInst->nPlayMode == 1) {
       GAME::Sound::SOUND_StopAndDetach(pSoundInst->pClientChannel);
     }
@@ -1794,5 +1794,7 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
 
     int32_t_007c8c7c = eLevelIdCurrent;
 }
+
+static void * keep_004b94a0 = (0 ? (SOUNDINST_StopChannel(*(D2SoundChannelStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Sound

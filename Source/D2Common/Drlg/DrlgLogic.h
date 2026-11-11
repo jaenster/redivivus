@@ -48,8 +48,6 @@ void __fastcall DRLGLOGIC_GetGridFlagsAtWorldPos(struct D2RoomExStrc * pRoomEx, 
 // @sourcefile .\DRLG\DrlgLogic.cpp
 struct D2DrlgCoordListStrc * __thiscall AllocEmptyDrlgCoordList_Unused(struct D2PoolManagerStrc * pMemory, struct D2RoomExStrc * pRoomEx);
 // @sourcefile .\DRLG\DrlgLogic.cpp
-void AllocEmptyRoomCoordList_Unused(struct D2PoolManagerStrc * pMemory, struct D2DrlgCoordListStrc * pDrlgCoordList, int32_t nSize);
-// @sourcefile .\DRLG\DrlgLogic.cpp
 void __fastcall FreeDrlgCoordList(struct D2RoomExStrc * pRoomEx);
 // Replaces all references to pOrientationGrid with pFloorGrid in pRoomEx's coordinate list, then recursively propagates the replacement to all neighbouring RoomEx entries that share the same level ID. Used during DRLG map-generation to commit a floor-grid assignment across a connected tile group.
 void __fastcall InitializeDrlgCoordList(struct D2RoomExStrc * pRoomEx, int nMatchIndex, int nNewIndex, int bNode);
@@ -63,12 +61,6 @@ void __stdcall DRLGLOGIC_FillTileGridFlags(struct D2RoomExStrc * pRoomEx);
 void __stdcall DRLGLOGIC_BuildCoordRegions(struct D2RoomExStrc * pRoomEx, struct D2DrlgCoordListStrc * pCoordList);
 // @sourcefile .\DRLG\DrlgLogic.cpp
 void __fastcall AllocDrlgCoordList(struct D2RoomExStrc * pRoomEx);
-// pRoomEx in ESI, nY in ECX, nX in EDX: returns pCoord for a single-entry coord list (eFlags bit 0), otherwise the sCoordIndexGrid cell at the room-relative position. Halts (DrlgLogic.cpp line 668, ptLogicalRoomInfo) when the list is missing.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-struct D2RoomCoordListStrc * __stdcall DRLGLOGIC_GetRoomCoordListAt(struct D2RoomExStrc * pRoomEx, int nY, int nX);
-// pRoomEx in EDI, nX in ECX, nY in EAX: returns nIndex of the coord entry at that position (as in DRLGLOGIC_GetRoomCoordListAt), or -1. Halts (DrlgLogic.cpp line 668, ptLogicalRoomInfo) when the list is missing.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall DRLGLOGIC_GetRoomCoordIndexAt(struct D2RoomExStrc * pRoomEx, int nX, int nY);
 int32_t __fastcall DRLG_ROOMEX_GetGridIndex(struct D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY);
 // Converts subtile coords to world coords and looks up coord list entry.
 struct D2RoomCoordListStrc * __fastcall DRLGLOGIC_GetCoordListFromSubtilePos(struct D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY);

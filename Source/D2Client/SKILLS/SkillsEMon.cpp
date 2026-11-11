@@ -718,6 +718,14 @@ BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtParam(D2UnitStrc * pUnit, eD2Skil
     return 1;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 BOOL __fastcall Skills_CltStFunc_CheckReviveCorpseSetParams(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -736,7 +744,7 @@ BOOL __fastcall Skills_CltStFunc_CheckReviveCorpseSetParams(D2UnitStrc * pUnit, 
       D2Common::Skills::SKILL_SetParam1(pSkill, nPos);
       nPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00);
       D2Common::Skills::SKILL_SetParam2(pSkill, nPos);
-      D2Common::Skills::SKILL_SetParam3(pSkill, pUnit_00->nClassId);
+      D2Common::Skills::SKILL_SetParam3(pSkill, GetClassIdInline(pUnit_00));
       return 1;
     }
 

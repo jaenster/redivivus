@@ -9616,7 +9616,7 @@ BOOL __stdcall MAINMENU_OnSubmitResetPassword(int32_t bSubmit) {
 
 // Returns __time32(pTime) with pTime passed in EAX.
 // Provenance: asm 004379c0..004379c9; unreferenced in 1.14d.
-__time32_t __stdcall MAINMENU_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall MAINMENU_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -9635,7 +9635,7 @@ uint32_t __fastcall MAINMENU_GetFlagBits8To12(uint32_t dwFlags) {
 
 // Returns MAINMENU_GetRealmName(nIndex) when nIndex < MAINMENU_GetRealmCount(), else NULL (tail-jumps to 00430b50).
 // Provenance: asm 00437a00..00437a12; unreferenced in 1.14d.
-char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex) {
+static char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex) {
     int nRealmCount = MAINMENU_GetRealmCount();
     if (nIndex < nRealmCount) {
       char* szRealmName;
@@ -9664,5 +9664,8 @@ int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     return 1;
 }
+
+static void * keep_004379c0 = (0 ? (MAINMENU_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
+static void * keep_00437a00 = (0 ? (MAINMENU_GetRealmNameIfValid(*(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Launch::MainMenus

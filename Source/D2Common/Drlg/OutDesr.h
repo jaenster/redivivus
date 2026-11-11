@@ -25,8 +25,6 @@ namespace D2Common::Drlg::OutDesr {
 // Places the Lut Gholein exit preset in Act 2 desert levels. Searches the outdoor room linked list for the town connection (level 0x28), then spawns the appropriate exit preset (0x16A or 0x16B) based on the connection direction.
 void __fastcall DRLGOUTPLACE_PlaceAct2CanyonExitPresets(struct D2DrlgLevelStrc * pLevel);
 void __fastcall AddExits(struct D2DrlgLevelStrc * pLevel);
-// Places Act 2 desert scenery variant presets (0x18C and 0x18D) using the PlacePresetVariants system. Simple wrapper that configures the preset ID array and delegates.
-void DRLGOUTPLACE_PlaceAct2DesertVariants(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor-level generator dispatcher for Act 2 wilderness levels. Applies common outdoor setup (SetOutGridLinkFlags, PlaceAct1245OutdoorBorders) then switches on pLevel->eD2LevelId to run the per-level placement for Rocky Waste (0x29), Dry Hills (0x2a), Far Oasis (0x2b), Lost City (0x2c), Canyon of the Magi (0x2e), etc.: placing cliffs/ruins/tomb-entries/preset variants, secondary borders, exits, waypoints, Act1/2 shrines, and level-specific fills. Level 0x86 spawns an extra outdoor preset. Out-of-range/intermediate ids fall through to a no-op return.
 void __fastcall InitAct2OutdoorLevel(struct D2DrlgLevelStrc * pLevel);
 #endif // D2_MODULE_D2Common

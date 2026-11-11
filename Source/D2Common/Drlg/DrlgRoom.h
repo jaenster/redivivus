@@ -109,8 +109,6 @@ int * __fastcall DRLGACTMISC_GetWarpsIdIfExists(struct D2DrlgStrc * pDrlg, eD2Le
 struct D2LvlWarpTxt * __fastcall DRLGLEVEL_GetWarpsIdIfExistsAndSetup(struct D2DrlgLevelStrc * pLevel, uint8_t nIdIndex, uint8_t nDirection);
 // Returns the D2LvlWarpTxt record of the warp node whose Id matches the warp unit's class id, or NULL if the node is disabled.
 struct D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(struct D2RoomExStrc * pRoomEx, struct D2UnitStrc * pUnit);
-// Finds the Nth occurrence of a level ID in the vis array. Used to resolve which vis slot corresponds to a specific warp when multiple warps connect to the same level.
-int DRLGWARP_FindNthVisEntryForLevel(struct D2DrlgStrc * pDrlg, eD2LevelId eLevelIdVis, eD2LevelId eLevelId, int nOccurrenceIndex);
 // Ensure both levels are allocated+initialized. For each matching visibility-slot pair between eLevel and eLevelTarget, find a room in each level with the corresponding warp flag bit (slot+4), init both rooms, and locate UNIT_WARP preset units. Repeats up to 8 pairs; returns if no matching vis slots.
 void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(struct D2DrlgStrc * pDrlg, uint8_t nActNo, eD2LevelId eLevel, eD2LevelId eLevelTarget);
 // Main entry point for finding a spawn location in a level.

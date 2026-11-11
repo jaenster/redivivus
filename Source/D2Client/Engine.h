@@ -35,7 +35,6 @@ BOOL fpRequiredUserAction();
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae50(BOOL bConnectionLost);
 void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost);
-BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight);
 void __stdcall DrawPopupOk(int32_t bDiscPrompt);
 void __stdcall LOADER_CheckForInsertedDiscs();
 void __stdcall DrawOkCancel(int32_t nFrameNumber);
@@ -60,8 +59,6 @@ void __stdcall LOADER_FreePopupImages();
 void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost);
 // Sets draw function mode, registers event handlers, runs game loop with custom fpGameLoopFunction, then cleans up
 uint32_t __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode);
-// Alternate draw mode game loop with different event handler table and loop function
-uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal);
 void __fastcall CLIENT_SetUnitFlag(struct D2UnitStrc * pUnit, uint16_t wFlag, BOOL bSet);
 void __fastcall Unreferenced_00460760(struct D2UnitStrc * param_1, int param_2);
 int __fastcall Unreferenced_004607d0(struct D2UnitStrc * param_1);

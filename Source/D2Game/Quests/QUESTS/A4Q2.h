@@ -69,9 +69,6 @@ BOOL __fastcall Q27_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, struct D2
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd is JustCompleted, send 0x5D quest-state update (quest 0x17, state 2) to that client and queue the completion sound/event. nParam is the SGAMEDATA (nDifficulty at +0x6d).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// [A4Q3 Terror's End — expansion] Warp player into the Pandemonium Fortress (LEVEL_ThePandemoniumFortress) and send 0x5D quest-state packet (quest 0x17, state 1). Standalone variant of the JustCompleted branch in Q27_PlayerEnterGame.
-// @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
-void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // [A4Q3 Terror's End] Player-enters-game handler. Cancels interaction, stores pPlayerUnit into the A4Q2 quest-specific struct. If QUEST_TerrorsEnd is JustCompleted -> warp to Pandemonium Fortress + send 0x5D state packet (Diablo already dead this game). Otherwise send 0x50 quest-special packet (quest 0x17). Stack-cookie guarded (DEFAULT_SECURITY_COOKIE).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);

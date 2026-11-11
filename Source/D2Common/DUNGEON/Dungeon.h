@@ -204,12 +204,6 @@ void __stdcall GetTombStoneTileCoords(struct D2RoomStrc * pRoom, struct D2CoordS
 // Converts a bitmask of portal flags (nFlags) into an allocated array of level IDs. Fetches the master portal-level list from LvlTbls; iterates each bit in nFlags, collecting matching level IDs into a stack buffer (max 32). Allocates a server-memory copy of matched IDs into *ppLevels and sets *pnLevels. Outputs null/0 if no bits matched. Halts if the master list exceeds 32 entries.
 // @sourcefile .\DUNGEON\Dungeon.cpp
 void __stdcall GetPortalLevelArrayFromPortalFlags(struct D2PoolManagerStrc * pMemory, int32_t nFlags, int * * ppLevels, int * pnLevels);
-// Sets RoomEx activation priority to 0 (highest). Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 0).
-void DRLGROOMEX_SetPriority0(struct D2RoomExStrc * pRoomEx);
-// Sets RoomEx activation priority to 1. Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 1).
-void __stdcall DRLGROOMEX_SetPriority1(struct D2RoomExStrc * pRoom);
-// Sets RoomEx activation priority to 3 (lowest). Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 3).
-struct D2RoomExStrc * __stdcall DRLGROOMEX_SetPriority3(struct D2RoomExStrc * pRoomExStrc);
 // Alternate entry point to set RoomEx activation priority to 0 (highest). Uses fastcall convention. Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 0).
 void __fastcall DUNGEON_ActivationHandler0_SetRoomExPriority0(struct D2RoomExStrc * pRoomEx);
 // Activates a RoomEx if it has no D2RoomStrc allocated and is not flagged 0x100000. Calls DRLGROOMEX_InitRoomExData to fully initialize room data, then resets the activation cooldown timer based on client/server mode.
@@ -241,19 +235,12 @@ struct D2RoomStrc * __fastcall DRLGROOMEX_GetCurrentSubA0(struct D2DrlgStrc * pD
 struct D2RoomStrc * __fastcall DRLGROOMEX_GetSubA0ForRoom(struct D2DrlgStrc * pDrlg, struct D2RoomExStrc * pRoomEx);
 // Reads cached DrlgActMisc state from the static data table (sgtDataTable). Outputs field_0x8 and field_0x468 values for both client-side (A) and server-side (B) actmisc instances.
 void __fastcall DRLGROOM_GetActMiscCacheInfo(int32_t * pnCacheA, int32_t * pnCacheB, int32_t * pnCacheC, int32_t * pnCacheD);
-// eLevel in ESI: returns 0 when LEVEL_CheckIfLevelIsTown(eLevel), else eLevel != LEVEL_ArreatSummit (0x78).
-// Provenance: asm 0061ba10..0061ba26 (RET), aligned entry after padding; unreferenced in 1.14d.
-BOOL __stdcall LEVEL_IsNotTownAndNotArreatSummit(eD2LevelId eLevel);
 BOOL __fastcall DRLGROOMEX_TestCanUntile(struct D2RoomExStrc * pRoomEx);
 void __fastcall ToggleHasPortalFlag(struct D2RoomExStrc * pRoomEx, BOOL bReset);
 char __fastcall Get0x44FromRoomEx(struct D2RoomExStrc * pRoomEx);
-// Demotes a RoomEx to priority 2, then activates it if its init ref count is non-zero. Used to transition a RoomEx from a higher priority to the activation-ready state.
-void DRLGROOMEX_DemoteAndActivate(struct D2RoomExStrc * pRoomExStrc);
 // Conditionally demotes a RoomEx to priority 2 if tile data (flag 0x1000000) and presets (type 2 + flag 0x2000000) are already initialized, and current priority is above 2. Then activates if init ref count is non-zero.
 void __fastcall DRLGROOMEX_DemoteIfReady(struct D2RoomExStrc * pRoomEx);
 void __fastcall thunk_DRLGROOMEX_ActivateRoomEx(struct D2RoomExStrc * pRoomEx);
-// Sets special RGB color values (0xF5, 0xF0, 0xFF) for the Arreat Summit level environment. Only applies when the level ID matches LEVEL_ArreatSummit.
-void __stdcall DRLGROOM_SetArreatSummitColors(struct D2DrlgEnvironmentStrc * pAmbientColorBytes, eD2LevelId nLevelId);
 #endif // D2_MODULE_D2Common
 // 7 internal functions (defined in .cpp)
 

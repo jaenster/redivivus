@@ -9,7 +9,7 @@
 
 namespace D2Client::_net_sid {
 
-void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context) {
+static void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context) {
     *pSha1Context = 0x67452301;
     pSha1Context[1] = 0xefcdab89;
     pSha1Context[2] = 0x98badcfe;
@@ -21,7 +21,7 @@ void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context) {
 
 // SHA-0 update: adds to the bit count with signed carry, copies each 64-byte block to ctx+0x1c and calls SHA0_Transform.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnContext) {
+static void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnContext) {
     int nWordCopyIdx;
     uint32_t* pCtxBlock;
     uint32_t nBlocksRemaining;
@@ -52,5 +52,8 @@ void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnCon
       nBlocksRemaining--;
     } while (nBlocksRemaining);
 }
+
+static void * keep_00523ac0 = (0 ? (NET_SID_CLIENT_SHA1Init(*(uint32_t * *)0), (void *)0) : (void *)0);
+static void * keep_00524140 = (0 ? (SHA0_Update(*(uint32_t * *)0, *(uint32_t *)0, *(uint32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::_net_sid

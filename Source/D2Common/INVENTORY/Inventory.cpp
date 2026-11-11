@@ -285,6 +285,14 @@ BOOL __fastcall INVENTORY_RemoveItemFromInventory(D2UnitStrc * pItem) {
     return 1;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // @sourcefile .\INVENTORY\Inventory.cpp
 D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     if (!pMemory && pUnit) {
@@ -302,7 +310,7 @@ D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMe
     pInventoryStrc->pOwner = pUnit;
     if (pUnit) {
       pUnit->pInventory = pInventoryStrc;
-      pInventoryStrc->nOwnerGUID = pUnit->nUnitGUID;
+      pInventoryStrc->nOwnerGUID = GetGUIDInline(pUnit);
     }
 
     return pInventoryStrc;
@@ -453,7 +461,7 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(D2Inventory
 }
 
 // Links pItem onto the tail of pInventoryStrc's item linked list (pFirstItem/pLastItem chain). Validates that pItem is a unit of type UNIT_ITEM (eUnitType==4) with valid pUnitData and pStatsEx. Sets pUnitDataItem->pInventory to the previous last item and pStatsEx to the inventory pointer.
-void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventoryStrc) {
+static void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventoryStrc) {
     D2UnitDataItemStrc* pLastItemData;
     D2UnitDataItemStrc* pItemUnitData;
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
@@ -749,7 +757,7 @@ D2UnitStrc * __stdcall INVENTORY_GetLastItem(D2InventoryStrc * pInventory) {
     return pInventory->pLastItem;
 }
 
-uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
+static uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     if ((int)((uint32_t)(uint8_t)nGridCol + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
       uint32_t bFits;
       bFits = INVENTORY_IsGridRectEmpty(nY, nGridCol, nX, byItemHeight, pGridInfo);
@@ -1880,6 +1888,14 @@ void __stdcall INVENTORY_OnBeltChanged_NoOp(D2InventoryStrc * pInventory, uint32
 
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     BOOL _bSamePotion;
     bool bSamePotion;
@@ -1894,7 +1910,7 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStr
       return 0;
     }
 
-    D2ItemsTxt* pItemsTxtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
+    D2ItemsTxt* pItemsTxtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pItem));
     if (!(pItemsTxtLine && pItemsTxtLine->dwCode != 0x20637369 && pItemsTxtLine->dwCode != 0x20637374)) {
       return 0;
     }
@@ -4440,7 +4456,7 @@ static void __stdcall INVENTORY_SetEquippedItemAppearance(D2UnitStrc * pUnit, ch
     }
 }
 
-uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2) {
+static uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2) {
     if (nParam1) {
       return !nParam2 ? 0x1 : 0x5;
     }
@@ -4691,7 +4707,7 @@ D2UnitStrc * __stdcall GetCarriedItem(D2UnitStrc * pUnit) {
       return nullptr;
     }
 
-    return pUnit->eUnitType != UNIT_ITEM ? nullptr : pUnit;
+    return GetTypeInline(pUnit) != UNIT_ITEM ? nullptr : pUnit;
 }
 
 int32_t __stdcall ITEM_GetGUID(D2UnitStrc * pUnit) {
@@ -5059,5 +5075,9 @@ void __stdcall NullSub_Unref_006460c0(D2InventoryStrc * pInventory) {
 void __stdcall NullSub_Unref_006460e0(D2InventoryStrc * pInventory) {
 
 }
+
+static void * keep_0063af20 = (0 ? (INVENTORY_AppendItemToList(*(D2UnitStrc * *)0, *(D2InventoryStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0063b300 = (0 ? (INVENTORY_CheckItemFitsInGrid(*(uint32_t *)0, *(uint32_t *)0, *(int32_t *)0, *(int32_t *)0, *(uint8_t *)0, *(D2InventoryGridInfoStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0063db90 = (0 ? (INVENTORY_CalculateSwapActionCode(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::INVENTORY::Inventory

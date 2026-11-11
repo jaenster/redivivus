@@ -126,10 +126,6 @@ void __stdcall FreeTokenTables();
 // Builds the D2BinFieldInputStrc schema describing inventory.txt (the equipment/inventory grid layout panel) and compiles it via DataTbls::CompileTxt into the pTxtInventory table. Fields map per body-location screen rectangles (invLeft/Right/Top/Bottom, gridX/Y, gridBox W/H, and per-slot rArm/torso/lArm/head/neck/rHand/lHand/belt/feet/gloves left/right/top/bottom/width/height). Asserts the produced record count is exactly 0x20 (else fatal Fog error). Called once during table init; allocates from the passed D2PoolManagerStrc.
 void __fastcall TXT_AllocTxt_inventory(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeInventoryTable();
-// nIndex in EAX: returns &pTxtInventory[nIndex], or NULL when nIndex > nTxtInventorySize (the bound is inclusive in the binary). Halts (InvTbls.cpp line 127, sgptInventoryInitStats) when the table is not loaded.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-struct D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex);
-int32_t __stdcall TOKTBLS_GetTokenIndex(int32_t nParam1, int32_t nParam2);
 #endif // D2_MODULE_D2Common
 
 } // namespace D2Common::DATATBLS::TokTbls

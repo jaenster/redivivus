@@ -2904,7 +2904,7 @@ static inline int __stdcall UNITSND_GetUnitSfxFlag(D2UnitStrc * pUnit) {
     return (uint32_t)pUnit->uSideData.pClientSide.bUnitSfx;
 }
 
-void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, D2UnitStrc * pUnit) {
+static void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc9a);
       exit(-1);
@@ -2915,7 +2915,7 @@ void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, D2UnitStrc * pUnit) 
 
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-uint32_t __stdcall UNITSND_GetSfxMode(D2UnitStrc * pUnit) {
+static uint32_t __stdcall UNITSND_GetSfxMode(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca5);
       exit(-1);
@@ -2924,7 +2924,7 @@ uint32_t __stdcall UNITSND_GetSfxMode(D2UnitStrc * pUnit) {
     return pUnit->uSideData.pClientSide.nSfxMode;
 }
 
-void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, D2UnitStrc * pUnit) {
+static void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcb0);
       exit(-1);
@@ -2971,7 +2971,7 @@ static void __stdcall SetSfxAsyncTicks(uint32_t dwSfxAsyncTicks, D2UnitStrc * pU
 
 // Returns pUnit's client-side dwSfxStepTicks (+0x84, the field SetSfxStepTicks writes); halts (UnitSnd.cpp line 3303) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-uint32_t __stdcall UNITSND_GetSfxStepTicks(D2UnitStrc * pUnit) {
+static uint32_t __stdcall UNITSND_GetSfxStepTicks(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce7);
       exit(-1);
@@ -3002,7 +3002,7 @@ static inline BOOL __stdcall UNITSND_HasActiveSound(D2UnitStrc * pUnit) {
 
 // Sets pUnit's client-side bHasActiveSound (+0x24 of the client side data, unit +0x88); halts (UnitSnd.cpp line 3336) on a NULL unit.
 // Provenance: asm 004caca0..004cacd0 (pUnit in EAX, value at [EBP+8], RET 4); unreferenced in 1.14d.
-void __stdcall SetHasActiveSound(D2UnitStrc * pUnit, BOOL bHasActiveSound) {
+static void __stdcall SetHasActiveSound(D2UnitStrc * pUnit, BOOL bHasActiveSound) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd08);
       exit(-1);
@@ -3316,7 +3316,7 @@ void __fastcall PlayUnitFootstepSound(D2UnitStrc * pUnit) {
     SetSfxStepTicks(nRecordingIdx, pUnit);
 }
 
-int Unreferenced_004cb170(D2UnitStrc * pUnit) {
+static int Unreferenced_004cb170(D2UnitStrc * pUnit) {
     D2MonSoundsTxt* pDVar1 = TxtGetSoundIdLineFromUnit(pUnit);
     if (!pDVar1) {
       return 0;
@@ -3325,7 +3325,7 @@ int Unreferenced_004cb170(D2UnitStrc * pUnit) {
     return pDVar1->Neutral;
 }
 
-int Unreferenced_004cb180(D2UnitStrc * pUnit) {
+static int Unreferenced_004cb180(D2UnitStrc * pUnit) {
     D2MonSoundsTxt* pDVar1 = TxtGetSoundIdLineFromUnit(pUnit);
     if (!pDVar1) {
       return 0;
@@ -4588,5 +4588,13 @@ void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAni
       }
     }
 }
+
+static void * keep_004caaa0 = (0 ? (UNITSND_Unused_Placeholder_3(*(uint8_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004caad0 = (0 ? (UNITSND_GetSfxMode(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004cab00 = (0 ? (UNITSND_Unused_Placeholder_4(*(uint32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004cac00 = (0 ? (UNITSND_GetSfxStepTicks(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004caca0 = (0 ? (SetHasActiveSound(*(D2UnitStrc * *)0, *(BOOL *)0), (void *)0) : (void *)0);
+static void * keep_004cb170 = (0 ? (Unreferenced_004cb170(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004cb180 = (0 ? (Unreferenced_004cb180(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::UnitSnd

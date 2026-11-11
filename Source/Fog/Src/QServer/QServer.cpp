@@ -947,7 +947,7 @@ void __stdcall SetHackMode(D2QServerStrc * pQServer, BOOL bUseQServerHack) {
     pQServer->bUseQServerHack = bUseQServerHack;
 }
 
-void Listen98Nt(D2QServerStrc * pQServer, int pPort) {
+static void Listen98Nt(D2QServerStrc * pQServer, int pPort) {
     WSADATA wsaData;
     int nResult = WSAStartup(0x101, &wsaData);
     if (!nResult) {
@@ -1883,5 +1883,7 @@ void __fastcall RecvForClient(D2QServerStrc * pQServer, D2QServerClientConnectio
       }
     } while (true);
 }
+
+static void * keep_006bf520 = (0 ? (Listen98Nt(*(D2QServerStrc * *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::Src

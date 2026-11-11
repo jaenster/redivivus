@@ -184,7 +184,6 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage);
 void __stdcall INV_ResetInventoryState();
 void __stdcall INV_SetRefreshFlag();
 void __stdcall INV_SetMercInventoryMode();
-void __stdcall INV_HandleShopAction(DWORD nAction, struct D2UnitStrc * pTarget, struct D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode);
 int __stdcall INV_EnterShopMode();
 void __stdcall INV_ReturnToShopFromRepair();
 void __stdcall INV_SetRepairMode();

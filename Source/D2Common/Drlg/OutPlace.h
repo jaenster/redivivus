@@ -54,11 +54,6 @@ void __fastcall SetBlankBorderGridCells(struct D2DrlgLevelStrc * pLevel);
 void __fastcall SetOutGridLinkFlags(struct D2DrlgLevelStrc * pLevel);
 // DRLG outdoor wilderness border/road generator: walks the level's polygon outline (linked list of D2DrlgVertexStrc edges) and stamps edge presets, corner presets and grid border flags into the outdoor preset grid. For each edge it picks a road/border preset type from the level type (case 2 dirt, 0x10, 0x1b, 0x1f siege-grid-division) and direction lookup tables (gaRoadPresetDirectionLookup / gaOutPlaceRoadPresetLookup / gRoadPresetIdLookupTable), then spawns presets along the edge via SpawnOutdoorLevelPresetEx and flags cells via AlterGridFlag. Has act-specific corner handling for acts I/II/IV/V (and special-cases level 0x11) plus joint/corner presets at each vertex. Finishes with SetBlankBorderGridCells. Used during outdoor level layout for acts 1,2,4,5.
 void __fastcall PlaceAct1245OutdoorBorders(struct D2DrlgLevelStrc * pLevel);
-// Allocates a DrlgOrth connection between a level data entry's RoomEx and an adjacent level.
-// Computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth
-// on the RoomEx at offset +0x264 of the level data struct.
-// Used as a callback during level chain parsing to establish orthogonal room linkage.
-void DRLGLEVEL_AllocOrthForAdjacentLevel(struct D2DrlgStrc * pDrlg, struct D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel);
 struct D2DrlgLevelStrc * __stdcall DRLGLEVEL_FixDrlgLevelForLowerKurast(struct D2DrlgLevelStrc * pLevel);
 // Act-specific level allocation. Parses per-act level data tables, allocates level ranges for the act, initializes Act III special handling, and sets Act V warp connections. Act IV sets a flag in Outer Steppes level data before allocating the rest.
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(struct D2DrlgStrc * pDrlg, eAct nActNo);

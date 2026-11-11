@@ -86,7 +86,7 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
 }
 
 // Checks if the grid cell at (nX, nY) is flagged, and if so spawns a preset at that location.
-BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, D2DrlgLevelStrc * pLevel, D2DrlgLevelDataWildernessLevel * pWildData, int nPresetId) {
+static BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, D2DrlgLevelStrc * pLevel, D2DrlgLevelDataWildernessLevel * pWildData, int nPresetId) {
     uint32_t nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY);
     if (nGridFlags & 0x400) {
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nPresetId, pLevel->eD2LevelId == 0x6e ? 0x1U : 0xffffffff, 0);
@@ -628,5 +628,7 @@ void __fastcall InitAct5OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets(pLevel);
     DRLGOUTROOM_PlaceAct5SceneryPresets(pLevel);
 }
+
+static void * keep_0067db00 = (0 ? (DRLGOUTROOM_SpawnPresetIfGridFlagged(*(int *)0, *(int *)0, *(D2DrlgLevelStrc * *)0, *(D2DrlgLevelDataWildernessLevel * *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::OutSiege

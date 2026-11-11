@@ -8391,10 +8391,6 @@ void __stdcall CheckAll(struct D2DrlgWallLayerGridsStrc * pWallLayerGrids, struc
 // DRLG level-placement iterator: for the current node in pLevelUnknown, seeds or advances a directional-rotation state (8 compass directions, mod-8 wraparound) then computes the node's world-space position relative to its predecessor entry. Returns 0 when all 8 directions have been exhausted for this node (backtrack signal), 1 on a valid placement.
 BOOL __fastcall fpLevelDataEntry(struct D2DrlgLevelPlacementStrc * pLevelUnknown);
 } // namespace D2Common::Drlg
-namespace D2Common::Drlg::OutWild {
-// Returns a preset variant index from a grid cell's flags and preset type. For type 0, checks bit 0x100 to choose variant 0 or 3. For type 7 with flags matching 0x30000, returns variant 3. Otherwise indexes into the variant lookup table at data_006f2680, choosing between two columns based on the bAlternate stack arg.
-int __stdcall DRLGOUTROOM_GetPresetVariantFromGridCell(uint32_t nGridFlags, int nPresetType, int bReturnPresetId);
-} // namespace D2Common::Drlg::OutWild
 namespace D2Common::Drlg::Preset {
 // @sourcefile .\DRLG\Preset.cpp
 // Deep-copies a preset unit's D2MapAIStrc path (8-byte header + nSize*12-byte D2PathPosStrc).

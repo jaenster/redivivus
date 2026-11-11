@@ -35,8 +35,6 @@ namespace D2Common::Drlg::OutSiege {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-// Checks if the grid cell at (nX, nY) is flagged, and if so spawns a preset at that location.
-BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(int nY, int nX, struct D2DrlgLevelStrc * pLevel, struct D2DrlgLevelDataWildernessLevel * pWildData, int nPresetId);
 // Scans grid edges for 0x400 flag and spawns border connector presets (0x38B-0x38E).
 void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(struct D2DrlgLevelStrc * pLevel);
 // Returns the base preset ID for Act 5 outer wall tiles. Returns 5 for the Bloody Foothills (level 0x75) or 4 for other Act 5 levels. Called by PlaceAct1245OutdoorBorders. Trivial getter.

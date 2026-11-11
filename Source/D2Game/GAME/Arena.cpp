@@ -111,7 +111,7 @@ static inline int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
 }
 
 // Adjusts an arena participant's score by the modifier indexed by nParam (0-6) from the arena's ArenaTxt record. Cases 0/1/3/4/6 add the flat column value; cases 2/5 add a percentage of the opposing unit's current score. Sets the score-dirty flag and links the unit to the update list. Halts with an internal error if pUnit2 is null, not a player, the game has no arena control, or nParam is out of range.
-void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nScoreType, DWORD dwParam) {
+static void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nScoreType, DWORD dwParam) {
     D2ArenaTxt* pArenaTxt;
     D2UnitDataPlayerArenaStrc* pArenaData;
     eD2ArenaFlags* peArenaFlags;
@@ -578,5 +578,7 @@ uint32_t __fastcall ARENA_GetTemplate(::SGAMEDATA * pGame) {
 BOOL __fastcall ARENA_IsFlag0x200Set(::SGAMEDATA * pGame) {
     return ARENA_TestFlag(pGame, 0x200);
 }
+
+static void * keep_0053f630 = (0 ? (ARENA_ApplyScoreModifier(*(::SGAMEDATA * *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0, *(int32_t *)0, *(DWORD *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::GAME::Arena

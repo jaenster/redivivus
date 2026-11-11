@@ -87,6 +87,14 @@ uint32_t __fastcall Q17_GetHratliCoords(::SGAMEDATA * pGame, int32_t * pnCoords)
     return 0;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
 void __fastcall Objects_InitFn50_HratliEnd(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pMonster;
@@ -117,7 +125,7 @@ void __fastcall Objects_InitFn50_HratliEnd(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    pA1Q3Data->nHratliGUID = pMonster->nUnitGUID;
+    pA1Q3Data->nHratliGUID = GetGUIDInline(pMonster);
     pA1Q3Data->bHratliMapAiSet = true;
     pMonster->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
     if (!(pA1Q3Data->pDrlgMap && pA1Q3Data->pDrlgMap->pPosition && !pA1Q3Data->bDrlgMapTaken)) {

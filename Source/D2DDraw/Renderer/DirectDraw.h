@@ -489,8 +489,6 @@ BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHel
 BYTE * __fastcall RENDERER_DIRECTDRAW_GetPalettePointer(int32_t nPaletteMode, uint32_t * pnOutHeight);
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
 void __fastcall RENDERER_DDRAW_SetHorizontalBounds(int32_t bWidescreen);
-// DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, int32_t bIsometric, struct DC6Block * pDC6Block);
 BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, BYTE * pPalette);
 void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
 void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, int32_t nDrawMode);

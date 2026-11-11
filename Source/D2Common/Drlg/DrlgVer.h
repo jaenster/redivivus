@@ -28,8 +28,6 @@ namespace D2Common::Drlg::DrlgVer {
 // Allocates 0x14-byte vertex node.
 // @sourcefile .\DRLG\DrlgVer.cpp
 struct D2DrlgVertexStrc * __fastcall DRLGVER_AllocVertex(struct D2PoolManagerStrc * pMemory, uint8_t nDirection);
-// Sets flags on a DRLG vertex. Always sets bit 0 (initialized flag). If nFlag is non-zero, also sets bit 1 (direction flag). From DrlgVer.cpp.
-void __stdcall DRLGVER_SetVertexFlags(struct D2DrlgVertexStrc * pVertex, int nFlag);
 // DRLG room outline generation: walks a linked list of room-edge descriptors (pDrlgRoomData) and splits a 4-vertex rectangular boundary (pFirstVertex's linked ring) by inserting new vertices where each edge's coordinate range intersects the room. nDirection (case 0-3) selects which side/axis (Y top, X right, Y bottom, X left) and the sign of comparison; uses pDrlgCoord or an override coord on the descriptor. New vertices are allocated from the server memory pool (AllocServerMemory, 0x14 bytes), tagged with nDirection and dwFlags (bit0 always, bit1 if descriptor field at +8 is set), and spliced into the vertex list. Returns 0 / end-of-list pointer; halts via ErrorManager on an invalid direction case.
 // @sourcefile .\DRLG\DrlgVer.cpp
 struct D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(struct D2PoolManagerStrc * pMemory, struct D2DrlgVertexStrc * pFirstVertex, struct D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, struct D2DrlgOrthStrc * pDrlgRoomData);

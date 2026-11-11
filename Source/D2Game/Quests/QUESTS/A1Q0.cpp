@@ -29,9 +29,17 @@ void __fastcall Q00_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_SpokeToWarriv, QUESTSTATE_Completed);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Q00_Callback_00 (QUEST_SpokeToWarriv, state-handler slot 0x00). NPC-interact handler for Warriv (target class 0x9b). If the "spoke to Warriv" flag is NOT yet set, queues Warriv's first-greeting gossip line (Paladin gets a unique line, msg id 1; everyone else id 0). Reads but does not write quest state.
 void __fastcall Q00_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    /* 0x9b is Wariv1 class ID */ if (!(pQuestArgs->pTarget && pQuestArgs->pTarget->nClassId == 0x9b)) {
+    /* 0x9b is Wariv1 class ID */ if (!(GetClassIdInline(pQuestArgs->pTarget) == 0x9b)) {
       return;
     }
 

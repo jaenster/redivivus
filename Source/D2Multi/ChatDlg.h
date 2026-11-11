@@ -181,8 +181,6 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
 void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230();
 void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240();
-// @sourcefile .\Src\ChatDlg.cpp
-void CHATDLG_FreeChatMsgNode(void * * pChatNode);
 struct D2ChatDlgUnknown_0x10 * Unreferenced_0043e370();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();
@@ -255,7 +253,6 @@ void __stdcall CHATDLG_RefreshGameNameDisplay();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_FreePlayerNameList();
 int __stdcall CHATDLG_CancelGameCreate();
-void __stdcall SafeDefaultChannel(char * pszChannel);
 void __stdcall CHATDLG_DestroyAllForms();
 uint32_t __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback pfnCallback);
 int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char * szText);

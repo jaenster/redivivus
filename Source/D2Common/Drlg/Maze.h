@@ -26,23 +26,8 @@ namespace D2Common::Drlg::Maze {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-// Directly sets a room's preset ID and variant in pRoomExData. Writes nPresetId and nVariant (stack arg) to the room data, and sets or clears the 'has preset' flag based on bHasPreset (stack arg). Returns the room pointer. No callers found (dead code).
-void __stdcall DRLGMAZE_SetRoomPresetDirect(struct D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset);
-// Searches the room's preset list for a matching preset ID, then replaces it with the new values from the stack args. Returns the matching node or 0.
-struct D2RoomExStrc * __stdcall DRLGMAZE_FindAndReplacePreset(struct D2DrlgLevelStrc * pCtx, int nPresetId, int nNewPresetId, int nNewArg1, int nEnableFlag);
 // Iterates every room in pRoomEx's level and, for eligible non-preset neighbor pairs that are adjacent but not already linked, rolls the neighbor's seed against LvlMazeTxt.Merge to decide whether to merge them. On a hit, allocates orthogonal link nodes between the two rooms and calls DRLGMAZE_PickRoomPreset on the neighbor.
 void __stdcall DRLGMAZE_PickRoomPresets(struct D2RoomExStrc * pRoomEx);
-// DRLGMAZE_AllocRoomAndPickPreset - Maze.cpp
-// Allocates a new RoomEx adjacent to the given room in the specified
-// direction by calling AllocateRoomEx. If allocation succeeds:
-//   - If bPickPresets (EDI, pushed at 00670e7a as AllocateRoomEx's
-//     bPickPresets, tested at 00670e86) is non-zero, also picks a preset
-//     for the source room pSourceRoom
-//   - Always picks a preset for the newly allocated room
-// Returns the new RoomEx, or NULL if allocation failed.
-// No call, jump or stored address reaches 00670e70 in 1.14d (byte scan for
-// the absolute and rel32 forms); only its sibling 00670de0 is called.
-struct D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomAndPickPreset(eDrlgDirection eDirection, struct D2RoomExStrc * pSourceRoom, int bPickPresets);
 struct D2RoomExStrc * __fastcall GetRandomRoomExFromLevel(struct D2DrlgLevelStrc * pLevel);
 // Core maze expansion loop: repeatedly picks a random non-preset room, advances its seed to choose a random direction, allocates and attempts to place a new adjacent room, links and registers it on success. Scales the target room count by difficulty and doubles or triples it for the Act 2 tombs. Runs until pLevel->nRoomExCount reaches the scaled target. The loop keeps pLevel in ECX across the GetRandomRoomExFromLevel call and its tail re-reads [ECX+8] without reloading, which is why that callee is typed __fastcall_ecxsafe.
 void __stdcall ActualLevelGeneration(struct D2DrlgLevelStrc * pLevel);

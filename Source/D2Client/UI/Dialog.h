@@ -134,7 +134,6 @@ void __stdcall INPUT_DialogEnterKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogKeyHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall DIALOG_InitializeSystem();
 void __stdcall DIALOG_CleanupSystem();
-void Unreferenced_004b7bc0(struct D2DialogStrc * pDialog);
 void __fastcall AllocDialogSub(struct D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3);
 void __stdcall DIALOG_RegisterHandler();
 struct D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, fpDialogFunc fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam);

@@ -1071,7 +1071,7 @@ void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
 // Body continues at 0052d0b4, the JZ target of 0052d095 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_NullSub0'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_NullSub0':
 // NOTE: Callee-saved register params inferred (medium confidence): pGameStrc (EDI): SGAMEDATA*
-void __stdcall QSERVER_CleanupUnitChain(D2UnitStrc * * pUnitHead, ::SGAMEDATA * pGame) {
+static void __stdcall QSERVER_CleanupUnitChain(D2UnitStrc * * pUnitHead, ::SGAMEDATA * pGame) {
     D2UnitStrc* pUnit = pUnitHead[0x1d];
     while (pUnit) {
       D2UnitStrc* pDVar1;
@@ -1082,7 +1082,7 @@ void __stdcall QSERVER_CleanupUnitChain(D2UnitStrc * * pUnitHead, ::SGAMEDATA * 
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pRoomStrc (ESI): D2RoomStrc*, pGameStrc (EDI): SGAMEDATA*
-void __stdcall SERVER_PopulateRoom(D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc) {
+static void __stdcall SERVER_PopulateRoom(D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc) {
     UNIT::SUnit::SUNIT_SpawnPresetUnitsForRoom(pGameStrc, pRoomStrc);
     UNIT::SUnitInactive::SUNITINACTIVE_RoomInit(pGameStrc, pRoomStrc);
     Objects::OBJECT_PopulateRoomObjects(pGameStrc, pRoomStrc);
@@ -2452,7 +2452,7 @@ int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, D2QServer
 }
 
 // Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
+static void __stdcall Unused_GetUnitList(D2UnitStrc * * ppUnitArray, D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId) {
     D2UnitStrc* pUnit;
     D2Game_Line0x13af* nListCursor;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
@@ -3683,5 +3683,9 @@ void * __fastcall QSERVER_GetTaskQueuePointer_Unref_00666eb0(int32_t pQServer) {
 void StaticInit_Frames_TimeBetweenFrames() {
     Frames_TimeBetweenFrames = (int)(1000 / Frames_PerSecond);
 }
+
+static void * keep_0052d090 = (0 ? (QSERVER_CleanupUnitChain(*(D2UnitStrc * * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
+static void * keep_0052d0c0 = (0 ? (SERVER_PopulateRoom(*(D2RoomStrc * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
+static void * keep_0052f160 = (0 ? (Unused_GetUnitList(*(D2UnitStrc * * *)0, *(D2Game_Line0x13af * *)0, *(int32_t *)0, *(int * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::GAME::Server

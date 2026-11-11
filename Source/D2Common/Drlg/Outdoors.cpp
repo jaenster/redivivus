@@ -106,7 +106,7 @@ int gnOutdoorsGridWidthByLevel[53] = {
 namespace D2Common::Drlg::Outdoors {
 
 // Gets primary wall grid flags at the given Y coordinate. Checks sGridMisc.nHeight before reading from the embedded wall grid at 0xA4.
-int __stdcall DRLGOUTDOOR_GetPrimaryWallGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX) {
+static int __stdcall DRLGOUTDOOR_GetPrimaryWallGridFlags(int * pLevelCtx, int32_t nGridY, int32_t nGridX) {
     if (*(int*)(pLevelCtx[0x14] + 0x14)) {
       int nFlags;
       nFlags = DrlgGrid::GetGridFlags((D2DrlgGridStrc*)(pLevelCtx + 0x29), nGridX, nGridY);
@@ -1589,5 +1589,7 @@ void __fastcall InitAct4OutdoorLevel(D2DrlgLevelStrc * pLevel) {
       DRLGOUTDOOR_SpawnAct4OutdoorPresets(pLevel);
     }
 }
+
+static void * keep_0066f380 = (0 ? (DRLGOUTDOOR_GetPrimaryWallGridFlags(*(int * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::Outdoors

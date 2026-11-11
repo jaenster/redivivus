@@ -49,8 +49,6 @@ void __fastcall AllocPlayerArena(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit)
 // @sourcefile .\GAME\Arena.cpp
 void __fastcall FreePlayerArena(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 eD2LevelId __fastcall GetTownLevelFromArenaCtrl(::SGAMEDATA * pGame);
-// Adjusts an arena participant's score by the modifier indexed by nParam (0-6) from the arena's ArenaTxt record. Cases 0/1/3/4/6 add the flat column value; cases 2/5 add a percentage of the opposing unit's current score. Sets the score-dirty flag and links the unit to the update list. Halts with an internal error if pUnit2 is null, not a player, the game has no arena control, or nParam is out of range.
-void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nScoreType, DWORD dwParam);
 // Server-side PvP/PK Arena scoring handler invoked when a unit dies. No-op unless the game has an active D2ArenaControlStrc. Reads each combatant's D2UnitDataPlayerArenaStrc and adjusts nScore from the ArenaTxt record for the relevant outcome: suicide (self-kill), player-kill / player-death (with flat dwPlayerKill/dwPlayerDeath plus a percentage of the opponent's score), and monster-kill / monster-death. On each adjustment sets bScoreDirty, OR's ARENAFLAG_ScoresDirty into the control flags, and calls ROOM_LinkUnitToUpdateList to schedule a score sync. Missing arena data on an expected player triggers ERROR_UnrecoverableInternalError_Halt with the source line.
 void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);
 // Clears bScoreDirty flag on player's D2UnitDataPlayerArenaStrc. Halts if unit is null, not player type, or has no arena data.

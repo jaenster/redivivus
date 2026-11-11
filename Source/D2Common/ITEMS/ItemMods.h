@@ -76,9 +76,6 @@ int __stdcall RollRunewordMostlikely(struct D2UnitStrc * pUnit, struct D2UnitStr
 void __stdcall ITEMMOD_ApplyRunewordProperties(struct D2UnitStrc * pUnit, struct D2SetsTxtFStrc * pProperty, int32_t bExpansion);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-// Returns pTxtLine + 0xc + nMod * 0x10 (nMod in EAX, the line in ECX); halts (ItemMods.cpp line 129, nMod < MAX_UNIQUE_ITEM_PROPERTIES && nMod >= 0) when nMod >= 12.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nMod);
 void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel);
 void __stdcall ITEMMODS_GetQualityAllFields(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
 int32_t __stdcall ITEMMODS_GetQualityField1(int32_t nParam1, int32_t nParam2);
@@ -104,8 +101,6 @@ int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, struct D2Un
 // - Many other single-stat bonuses
 // The actual stat ID is determined by the dispatch table parameter.
 int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStat(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
-// Wrapper for simple stat application via PropertyFunc_SimpleStat.
-void __stdcall PropertyFunc_SimpleStatThunk1(int32_t bClearStat, int32_t param_1, int32_t nType, struct D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, struct D2UnitStrc * pUnit2, uint32_t dwStatListFlags);
 // Property function for Socket Count (adds sockets to an item).
 // Property→Stat Conversion:
 // - Property code: ? (socket property)
@@ -161,8 +156,6 @@ int32_t __fastcall ITEMMOD_ApplyIndestructible(int32_t nType, struct D2UnitStrc 
 // the base damage/defense to its maximum value before applying the percentage
 // modifier, ensuring % bonuses scale from the item's best possible base.
 int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStatAndMaximize(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
-// Alternative wrapper for simple stat application via PropertyFunc_SimpleStat.
-void __stdcall PropertyFunc_SimpleStatThunk2(int32_t nFastCallECX, int32_t pPropData, int32_t nType, struct D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, struct D2UnitStrc * pUnit2, uint32_t dwStatListFlags);
 // Property function for All Resistances (+resist to fire/light/cold/poison).
 // Property→Stat Conversion:
 // - Property code: ? (need to verify dispatch table index)

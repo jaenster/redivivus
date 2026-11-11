@@ -2583,7 +2583,7 @@ int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCal
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 0051dc70..0051dc79; unreferenced in 1.14d.
-__time32_t __stdcall BNSEND_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall BNSEND_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -2596,7 +2596,7 @@ void __fastcall BNSEND_HashCDKeyData(void * pOutHash, void * pTokenData, uint32_
     Storm::Source::SSignature::Sha1_Finalize(&aSHA1Ctx, (uint8_t*)pOutHash);
 }
 
-void __stdcall BNNEWS_TransformCDKeyCharacter(uint8_t bKeyChar, uint32_t * pValue, uint8_t * pOutChar) {
+static void __stdcall BNNEWS_TransformCDKeyCharacter(uint8_t bKeyChar, uint32_t * pValue, uint8_t * pOutChar) {
     int nUpperChar = toupper((int)(char)*pOutChar);
     uint8_t bUpperChar = (uint8_t)nUpperChar;
     *pOutChar = bUpperChar;
@@ -3225,5 +3225,8 @@ void StaticFini_gpBNetNewsCache() {
 
     Storm::Source::SMem::SMemFree(g_nNewsMaxCacheSize.pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
+
+static void * keep_0051dc70 = (0 ? (BNSEND_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
+static void * keep_0051dcd0 = (0 ? (BNNEWS_TransformCDKeyCharacter(*(uint8_t *)0, *(uint32_t * *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
 
 } // namespace Bnclient::BnSend

@@ -2536,14 +2536,14 @@ void __stdcall GFX_SetSpriteCacheMaxSize(size_t nSize) {
     SpriteCache::SPRITECACHE_SetMaxSize(nSize);
 }
 
-void __stdcall BITSTREAM_InitWriter(uint32_t * pBitStream, int32_t nByteSize, D2CodecBitStateStrc * pBitState) {
+static void __stdcall BITSTREAM_InitWriter(uint32_t * pBitStream, int32_t nByteSize, D2CodecBitStateStrc * pBitState) {
     pBitState->nReserved00 = (uint32_t)(uintptr_t)pBitStream;
     pBitState->pCurWord = pBitStream;
     pBitState->nReserved08 = nByteSize * 8;
     pBitState->nBitOffset = 0;
 }
 
-void __fastcall BITSTREAM_CopyState(D2CodecBitStateStrc * dest, D2CodecBitStateStrc * src) {
+static void __fastcall BITSTREAM_CopyState(D2CodecBitStateStrc * dest, D2CodecBitStateStrc * src) {
     dest->nReserved08 = src->nReserved08;
     dest->nBitOffset = src->nBitOffset;
 }
@@ -2610,5 +2610,8 @@ void StaticFini_gCelCmpCacheHandler() {
     DeleteCriticalSection(&gCelCmpCacheHandler.tSync.m_critsect);
     gCelCmpCacheHandler.TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Destructor();
 }
+
+static void * keep_0060b140 = (0 ? (BITSTREAM_InitWriter(*(uint32_t * *)0, *(int32_t *)0, *(D2CodecBitStateStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0060b16a = (0 ? (BITSTREAM_CopyState(*(D2CodecBitStateStrc * *)0, *(D2CodecBitStateStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2CMP::SRC::CelCmp

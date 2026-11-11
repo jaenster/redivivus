@@ -54,7 +54,7 @@ D2TileCmpTileNodeStrc * __stdcall TILECMP_AllocTileNode() {
 }
 
 // @sourcefile .\SRC\Tilecmp.cpp
-void TILECMP_FreeTileNode(D2TileCmpTileNodeStrc * pTileNode) {
+static void TILECMP_FreeTileNode(D2TileCmpTileNodeStrc * pTileNode) {
     if (!pTileNode) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31);
       exit(-1);
@@ -573,7 +573,7 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
 
 // @sourcefile .\SRC\Tilecmp.cpp
 // @note ESI nErrLine is not a real input (ESI is only saved, then overwritten at 00609df0). It stays because the halt tail at 00609d71 is reached at several stack depths (0x224/0x22d/0x239/0x247); without it the decompiler reads the 0x239 line as unaff_ESI.
-uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc * pTileSetList, D2TileLibraryHeaderStrc * * ppOutBuffer, DWORD nErrLine) {
+static uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc * pTileSetList, D2TileLibraryHeaderStrc * * ppOutBuffer, DWORD nErrLine) {
     D2TileLibraryEntryStrc* pSerialTileSetArray;
     size_t nTileSetArrayBytes;
     D2TileCmpTileSetStrc* pCurTileSetChain;
@@ -1240,5 +1240,8 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1
       return;
     }
 }
+
+static void * keep_00609500 = (0 ? (TILECMP_FreeTileNode(*(D2TileCmpTileNodeStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00609d60 = (0 ? (TILECMP_ExportCacheToBuffer(*(D2TileCmpTileSetListStrc * *)0, *(D2TileLibraryHeaderStrc * * *)0, *(DWORD *)0), (void *)0) : (void *)0);
 
 } // namespace D2CMP::SRC::Tilecmp

@@ -361,7 +361,7 @@ static BOOL AI_BAAL_HasPowerfulSkill(D2UnitStrc * pUnit) {
 }
 
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
-int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, D2UnitStrc * pUnit) {
+static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, D2UnitStrc * pUnit) {
     uint32_t nSeedLow;
     D2SeedStrc sNewSeed;
     uint32_t nRandResult = 0;
@@ -1298,5 +1298,7 @@ void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     kill_self:
     UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, nullptr, 1);
 }
+
+static void * keep_005fc130 = (0 ? (AI_BAAL_SelectWeightedAction(*(int * *)0, *(int32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Monster::AI::Baal

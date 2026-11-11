@@ -819,6 +819,14 @@ BOOL __fastcall OBJOP_UseStairway(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Object operate-fn for waygate interaction. If the waygate is in Death mode (inactive/just activated), marks it updated and schedules its opening animation. If in Walk mode (active), searches the waygate's room and adjacent rooms for the first UNIT_WARP and calls TakeStairs on the attacking player to warp them. Returns 1 on success.
 BOOL __fastcall OBJOP_UseWaygate(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
@@ -853,7 +861,7 @@ BOOL __fastcall OBJOP_UseWaygate(D2ObjectOperateFnArg * pOperation) {
       case Opened:
         {
           for (pWarpUnit = pRoom->pUnitList; pWarpUnit; pWarpUnit = pWarpUnit->pRoomNext) {
-            if (pWarpUnit->eUnitType == UNIT_WARP) {
+            if (GetTypeInline(pWarpUnit) == UNIT_WARP) {
               use_found_warp:
               UNIT::SUnit::TakeStairs(pOperation->sArg.pGame, pOperation->pAttacker, pWarpUnit);
               return 1;
@@ -866,7 +874,7 @@ BOOL __fastcall OBJOP_UseWaygate(D2ObjectOperateFnArg * pOperation) {
             do {
               if (pAdjRooms[uAdjRoomIdx] != pRoom) {
                 for (pWarpUnit = pAdjRooms[uAdjRoomIdx]->pUnitList; pWarpUnit; pWarpUnit = pWarpUnit->pRoomNext) {
-                  if (pWarpUnit->eUnitType == UNIT_WARP) {
+                  if (GetTypeInline(pWarpUnit) == UNIT_WARP) {
                     goto use_found_warp;
                   }
                 }

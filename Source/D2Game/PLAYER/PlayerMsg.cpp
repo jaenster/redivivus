@@ -607,30 +607,27 @@ void __fastcall UpgradeLifeAndHitClass(D2UnitStrc * pUnit, D2ClientStrc * pClien
 }
 
 void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClient, uint8_t bWarpFade) {
-    uint16_t wPosY;
-    uint16_t wPosX;
-    int32_t nPos;
+    uint32_t wPosY;
+    uint32_t wPosX;
     eD2UnitType eUnitType = pUnitStrc->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = (uint16_t)pUnitStrc->pPath.pStaticPath->nPosY;
+      wPosY = pUnitStrc->pPath.pStaticPath->nPosY;
     } else if (pUnitStrc->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pUnitStrc->pPath.pDynamicPath);
-      wPosY = (uint16_t)nPos;
+      wPosY = D2Common::PATH::DynamicPath::GetYPos(pUnitStrc->pPath.pDynamicPath);
     } else {
       wPosY = 0;
     }
 
     eUnitType = pUnitStrc->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = (uint16_t)pUnitStrc->pPath.pStaticPath->nPosX;
+      wPosX = pUnitStrc->pPath.pStaticPath->nPosX;
     } else if (pUnitStrc->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnitStrc->pPath.pDynamicPath);
-      wPosX = (uint16_t)nPos;
+      wPosX = D2Common::PATH::DynamicPath::GetXPos(pUnitStrc->pPath.pDynamicPath);
     } else {
       wPosX = 0;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnitStrc->eUnitType, pUnitStrc->nUnitGUID, wPosX, wPosY, bWarpFade);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnitStrc->eUnitType, pUnitStrc->nUnitGUID, (uint16_t)wPosX, (uint16_t)wPosY, bWarpFade);
 }
 
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
@@ -1338,9 +1335,9 @@ static eD2ServerIncomingStatus __stdcall CheckIfCoordsAreInRange(D2UnitStrc * pU
 
 // Checks whether pUnit is within nRange tiles (Chebyshev) of a target unit identified by (eUnitType, nUid). Also validates same-act placement and, for item targets, that the player is not already holding the item. Returns a non-zero status if in range, 0 (via CheckIfCoordsAreInRange) otherwise. Used to gate walk-to-entity and interact packet processing.
 static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGame, eD2UnitType eUnitType, D2UnitStrc * pUnit, uint32_t nUid, int32_t nRange) {
-    uint16_t wTargetX;
-    eD2ServerIncomingStatus eVar1;
-    int32_t nCoordPos;
+    uint32_t wTargetX;
+    int32_t iVar1;
+    eD2ServerIncomingStatus eVar2;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, nUid);
     if (!pTargetUnit) {
       return SERVERSTATUS_BAD_TARGET;
@@ -1365,10 +1362,9 @@ static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGa
 
     eD2UnitType eTargetType = pTargetUnit->eUnitType;
     if (eTargetType == UNIT_OBJECT || (int)eTargetType > 3 && (int)eTargetType <= 5) {
-      wTargetX = (uint16_t)pTargetUnit->pPath.pStaticPath->nPosX;
+      wTargetX = pTargetUnit->pPath.pStaticPath->nPosX;
     } else if (pTargetUnit->pPath.pDynamicPath) {
-      nCoordPos = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
-      wTargetX = (uint16_t)nCoordPos;
+      wTargetX = D2Common::PATH::DynamicPath::GetXPos(pTargetUnit->pPath.pDynamicPath);
     } else {
       wTargetX = 0;
     }
@@ -1376,17 +1372,17 @@ static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGa
     eTargetType = pTargetUnit->eUnitType;
     if (eTargetType != UNIT_OBJECT && ((int)eTargetType <= 3 || (int)eTargetType > 5)) {
       if (pTargetUnit->pPath.pDynamicPath) {
-        nCoordPos = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
-        eVar1 = CheckIfCoordsAreInRange(pUnit, nRange, wTargetX, (uint16_t)nCoordPos);
-        return eVar1;
+        iVar1 = D2Common::PATH::DynamicPath::GetYPos(pTargetUnit->pPath.pDynamicPath);
+        eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, (uint16_t)iVar1);
+        return eVar2;
       }
 
-      eVar1 = CheckIfCoordsAreInRange(pUnit, nRange, wTargetX, 0);
-      return eVar1;
+      eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, 0);
+      return eVar2;
     }
 
-    eVar1 = CheckIfCoordsAreInRange(pUnit, nRange, wTargetX, (uint16_t)pTargetUnit->pPath.pStaticPath->nPosY);
-    return eVar1;
+    eVar2 = CheckIfCoordsAreInRange(pUnit, nRange, (uint16_t)wTargetX, (uint16_t)pTargetUnit->pPath.pStaticPath->nPosY);
+    return eVar2;
 }
 
 eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, D2UnitStrc * pUnit, uint32_t dwItemGUID) {
@@ -1461,7 +1457,7 @@ static eD2ServerIncomingStatus __stdcall ItemIsOfPlayerAndNotOnCursor(uint32_t n
     return (uint32_t)(pCursorItem_lcl != pItem);
 }
 
-uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t nBodyLoc) {
+static uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t nBodyLoc) {
     if (nBodyLoc != 4 && nBodyLoc != 5) {
       return 3;
     }
@@ -1540,7 +1536,7 @@ static uint32_t __stdcall IsAccessableCheck(DWORD nItemGid, ::SGAMEDATA * pGame,
     return nResult;
 }
 
-int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit, DWORD nUnitId) {
+static int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, D2UnitStrc * * ppUnit, D2UnitStrc * pUnit, DWORD nUnitId) {
     eD2ServerIncomingStatus eVar1;
     D2UnitStrc* pAllyUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitId);
     *ppUnit = pAllyUnit;
@@ -5102,5 +5098,8 @@ void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc 
     uint32_t nGoldLost = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_goldlost, 0);
     SendAttributeUpdate(pUnit, 0xaf, nGoldLost, pUnit);
 }
+
+static void * keep_005492c0 = (0 ? (PLRMSG_CheckWeaponSlotEmpty(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00549410 = (0 ? (MONSTER_FindNearbyAllyUnit(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * * *)0, *(D2UnitStrc * *)0, *(DWORD *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::PLAYER::PlayerMsg

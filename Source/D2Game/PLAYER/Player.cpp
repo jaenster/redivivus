@@ -123,6 +123,14 @@ void __fastcall STRUCT_FillPlayerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     UNIT::SUnit::SetAlignment(pUnit, '\x02', 1);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 static void PLAYER_FreeAllCorpseUnits(D2UnitStrc * pPlayer, ::SGAMEDATA * pGame) {
     D2CorpseStrc* pRoomCorpse;
     D2UnitStrc* pUnit;
@@ -134,7 +142,7 @@ static void PLAYER_FreeAllCorpseUnits(D2UnitStrc * pPlayer, ::SGAMEDATA * pGame)
       if (pUnit) {
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         if (pRoom) {
-          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, pUnit->eUnitType, pUnit->nUnitGUID);
+          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, pUnit->eUnitType, GetGUIDInline(pUnit));
         }
 
         UNIT::SUnit::FreeServerUnit(pGame, pUnit);
@@ -235,7 +243,7 @@ static BOOL __stdcall PLAYER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
     }
 }
 
-uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bAutoPlace, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL bBeltPlaced;
     int32_t dwGUID;
     int32_t* pnBeltSlot;
@@ -655,7 +663,7 @@ void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pPairedPortal = UNIT::SUnit::UNITS_FindPortalOwnerUnit(pGame, pPortal);
       pRoom = D2Common::Units::UNITS_GetRoom(pPortal);
       if (pRoom) {
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, UNIT_OBJECT, pPortal->nUnitGUID);
+        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, UNIT_OBJECT, GetGUIDInline(pPortal));
       }
 
       UNIT::SUnit::FreeServerUnit(pGame, pPortal);
@@ -667,7 +675,7 @@ void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       Quests::QUESTS::A5Q5::QUEST_OnPlayerLeaveArreatSummit(pGame, pPairedPortal);
       pRoom = D2Common::Units::UNITS_GetRoom(pPairedPortal);
       if (pRoom) {
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, UNIT_OBJECT, pPairedPortal->nUnitGUID);
+        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, UNIT_OBJECT, GetGUIDInline(pPairedPortal));
       }
 
       UNIT::SUnit::FreeServerUnit(pGame, pPairedPortal);
@@ -1236,5 +1244,7 @@ void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t bRes
 
     D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pSwitch, 0);
 }
+
+static void * keep_00534c10 = (0 ? (PLAYER_PlaceItemInBelt(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::PLAYER::Player

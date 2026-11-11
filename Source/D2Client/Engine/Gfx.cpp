@@ -942,7 +942,7 @@ static void GFX_LoadObjectModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
     }
 }
 
-uint32_t GFX_LoadGenericModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
+static uint32_t GFX_LoadGenericModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
     uint8_t* nOutCofData;
     uint8_t* bLoaded = GFX_LoadCompositCof(&nOutCofData, nComponent, pUnit);
     if (!bLoaded) {
@@ -3771,5 +3771,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
 int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0() {
     return gnWeatherCurrentTransitionState;
 }
+
+static void * keep_0046ea50 = (0 ? (GFX_LoadGenericModeCof(*(D2UnitStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Engine::Gfx

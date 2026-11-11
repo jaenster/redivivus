@@ -1320,7 +1320,7 @@ void __fastcall SKILLS_ApplySkillToHitAndDamage(D2UnitStrc * pUnit, D2UnitStrc *
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit2, UNITSTAT_damagepercent, nWeaponBonus, 0);
 }
 
-void __stdcall SKILLS_GetWeaponBySkillType(int32_t nSkillType, D2InventoryStrc * pInventory) {
+static void __stdcall SKILLS_GetWeaponBySkillType(int32_t nSkillType, D2InventoryStrc * pInventory) {
     if (nSkillType == 5) {
       D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
       return;
@@ -1349,10 +1349,18 @@ void __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
     GAME::SCmd::NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x6af), nullptr, 0xff, _bTransmorgified, nStatIdPacket, sUnkPacketArg);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
     D2SkillsTxt* pSkillsTxt;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr)) {
-      return (uint32_t)((int)pSkillsTxt->charclass == pUnit->nClassId);
+      return (uint32_t)((int)pSkillsTxt->charclass == GetClassIdInline(pUnit));
     }
 
     return 0;
@@ -2706,6 +2714,22 @@ void __fastcall SKILLS_SetupAnimTimerPercent(D2UnitStrc * pUnit, int32_t nPercen
     UNIT::SUnit::UNITS_SetupAnimTimerEventsFromPercent(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nPercent);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillStrc* pSkill;
     D2MonsterKillStrc sKillData;
@@ -2727,7 +2751,7 @@ BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       switch (pUnit->eUnitType) {
         case UNIT_PLAYER:
           {
-            PLAYER::PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, 7, pTarget->eUnitType, pTarget->nUnitGUID, 1);
+            PLAYER::PlayerModes::PLRMODES_StartModeID(pGame, pUnit, pSkill, 7, GetTypeInline(pTarget), GetGUIDInline(pTarget), 1);
             break;
           }
         case UNIT_MONSTER:
@@ -3431,7 +3455,7 @@ static void __stdcall SetTimeoutEffect(::SGAMEDATA * pGame, int32_t timeoutFrame
 
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_skilldelay);
     if (!pStatsEx) {
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nFrame, pUnit->eUnitType, pUnit->nUnitGUID);
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nFrame, GetTypeInline(pUnit), GetGUIDInline(pUnit));
       if (!pStatsEx) {
         return;
       }
@@ -4415,7 +4439,7 @@ void __thiscall SKILL_ApplyStunState(::SGAMEDATA * pThis, D2UnitStrc * pUnit, eD
     if (!pStatListEx) {
       uint32_t dwStunExpireFrame;
       dwStunExpireFrame = pThis->dwGameFrame + 100;
-      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pThis->pMemoryPool, 2, dwStunExpireFrame, pUnit->eUnitType, pUnit->nUnitGUID);
+      pStatListEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pThis->pMemoryPool, 2, dwStunExpireFrame, GetTypeInline(pUnit), GetGUIDInline(pUnit));
       pThis = pGameSaved;
       if (pStatListEx) {
         GAME::Event::SetEvent(pGameSaved, pUnit, 0xc, dwStunExpireFrame, 0, 0);
@@ -4484,5 +4508,7 @@ D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2Uni
 void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance) {
     D2UpdateState((D2UnitStrc*)wszText, pfnMenuInstance, 1);
 }
+
+static void * keep_0056c670 = (0 ? (SKILLS_GetWeaponBySkillType(*(int32_t *)0, *(D2InventoryStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::SKILLS::SkillsServer

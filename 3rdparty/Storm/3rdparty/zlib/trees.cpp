@@ -2987,7 +2987,7 @@ static void bi_flush(deflate_state * pDeflateState) {
     pDeflateState->bi_buf = (uint16_t)byBitBufHi;
 }
 
-void bi_windup(deflate_state * pDeflateState) {
+static void bi_windup(deflate_state * pDeflateState) {
     if (pDeflateState->bi_valid > 8) {
       uint8_t byBitBufHi;
       pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)pDeflateState->bi_buf;
@@ -3387,5 +3387,7 @@ void __fastcall _tr_flush_block(deflate_state * pDeflateState, char * pbBuf, uin
       pDeflateState->bi_valid = 0;
     }
 }
+
+static void * keep_0042cbc0 = (0 ? (bi_windup(*(deflate_state * *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::_3rdparty::zlib::trees

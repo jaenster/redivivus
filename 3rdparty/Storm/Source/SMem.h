@@ -129,7 +129,6 @@ void __stdcall SMemZero(void * pMemory, size_t nSize);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 void * __fastcall Unreferenced_004116e0(struct D2FogHeapBlockHdrStrc * param_1);
 uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId);
-uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash);
 // @blizzard ComputePageSize (SMEM.CPP)
 void __stdcall SMEM_ComputePageSize();
 // @blizzard FreeHeap (SMEM.CPP)

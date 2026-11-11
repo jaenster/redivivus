@@ -32,9 +32,6 @@ void __fastcall GetSeed(struct D2SeedStrc * pSeed, uint32_t * nSeedLow, uint32_t
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 uint32_t __fastcall GetSeed_nSeedLow_Unref_0060dcf0(struct D2SeedStrc * pSeed);
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00650dd0..00650dd9; unreferenced in 1.14d.
-__time32_t __stdcall SEED_GetTime32(__time32_t * pTime);
 #endif // D2_MODULE_D2Common
 
 } // namespace D2Common::Seed

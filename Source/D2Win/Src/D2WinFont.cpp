@@ -369,7 +369,7 @@ uint32_t __stdcall D2WINFONT_GetCurrentFontHeight() {
 }
 
 // Thin wrapper around D2GFX_DrawSolidRectEx. Adjusts Y coordinates and forwards to renderer.
-void __stdcall D2WINFONT_DrawSolidRectFromBottomLeft(int32_t nX, DRAWMODE eDrawMode, int32_t nWidth, int32_t nY, int32_t nHeight, uint32_t dwColor) {
+static void __stdcall D2WINFONT_DrawSolidRectFromBottomLeft(int32_t nX, DRAWMODE eDrawMode, int32_t nWidth, int32_t nY, int32_t nHeight, uint32_t dwColor) {
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX, nWidth - nHeight, nY + nX, nWidth, dwColor, eDrawMode);
 }
 
@@ -1470,6 +1470,8 @@ void StaticInit_gnFontTableCharWidthCache() {
     gnFontTableCharWidthCache[0] = 0;
     gnFontTableCharWidthCache[1] = 0;
 }
+
+static void * keep_00501a60 = (0 ? (D2WINFONT_DrawSolidRectFromBottomLeft(*(int32_t *)0, *(DRAWMODE *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Win::Src::D2WinFont
 

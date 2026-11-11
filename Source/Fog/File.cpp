@@ -298,7 +298,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
     }
 }
 
-uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
+static uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pSep = strrchr(szSrcPath, 0x2f);
     char* pLastSep = 0;
     if ((uintptr_t)pSep > 0) {
@@ -630,5 +630,7 @@ static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
     return bGotContext;
 }
+
+static void * keep_00403fa0 = (0 ? (FILETOOLS_ExtractDirectory(*(char * *)0, *(uint32_t *)0, *(char * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::File

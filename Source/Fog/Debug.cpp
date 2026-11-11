@@ -951,7 +951,7 @@ uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct) {
     return pStruct;
 }
 
-void __stdcall ZeroStruct16Bytes(void * pStruct) {
+static void __stdcall ZeroStruct16Bytes(void * pStruct) {
     *(uint32_t*)pStruct = 0;
     *(uint16_t*)((char*)pStruct + 4) = 0;
     *(uint16_t*)((char*)pStruct + 6) = 0;
@@ -959,7 +959,7 @@ void __stdcall ZeroStruct16Bytes(void * pStruct) {
     *(uint32_t*)((char*)pStruct + 0xc) = 0;
 }
 
-void __stdcall ZeroStruct16BytesDuplicate(void * pStruct) {
+static void __stdcall ZeroStruct16BytesDuplicate(void * pStruct) {
     *(uint32_t*)pStruct = 0;
     *(uint16_t*)((char*)pStruct + 4) = 0;
     *(uint16_t*)((char*)pStruct + 6) = 0;

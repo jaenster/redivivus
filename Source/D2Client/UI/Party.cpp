@@ -117,7 +117,7 @@ void __stdcall FreeAllUiParty() {
     pUiParty = 0;
 }
 
-void __stdcall UI_InitializePartyButtonStruct(uint32_t nX, uint32_t nY, uint32_t nDC6OrCallback, uint32_t nFrame, uint32_t nButtonType, uint32_t nData1, uint32_t nData2, uint32_t * pButton) {
+static void __stdcall UI_InitializePartyButtonStruct(uint32_t nX, uint32_t nY, uint32_t nDC6OrCallback, uint32_t nFrame, uint32_t nButtonType, uint32_t nData1, uint32_t nData2, uint32_t * pButton) {
     *pButton = nX;
     pButton[1] = nY;
     pButton[2] = nDC6OrCallback;
@@ -1594,5 +1594,7 @@ void __stdcall DRAW_UI_PartyWindow() {
     nMouseX = Inv::gnPanelOffsetX + 0x125;
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x102f), nMouseX, nMouseY, nTooltipFlag, nTooltipFlag2);
 }
+
+static void * keep_0049a060 = (0 ? (UI_InitializePartyButtonStruct(*(uint32_t *)0, *(uint32_t *)0, *(uint32_t *)0, *(uint32_t *)0, *(uint32_t *)0, *(uint32_t *)0, *(uint32_t *)0, *(uint32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::Party

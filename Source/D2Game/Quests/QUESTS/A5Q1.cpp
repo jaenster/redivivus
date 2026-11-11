@@ -115,7 +115,7 @@ void __fastcall Q31_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A5Q1: overlapping/mid-instruction entry of the state handler at 0x586d80 (Larzuk class 0x1ff): broadcasts state 1 if bLarzukTalked, state 4 if bRewardAccepted, then clears the flags. Same logic as Q31_Callback_02.
-void Q31_HandleLarzukRewardState(D2QuestDataStrc * pQuestData, int32_t nParam, D2UnitStrc * pUnit, bool bFlag) {
+static void Q31_HandleLarzukRewardState(D2QuestDataStrc * pQuestData, int32_t nParam, D2UnitStrc * pUnit, bool bFlag) {
     if (!(!bFlag && *(short int*)(nParam + 4) == 0x1ff)) {
       return;
     }
@@ -686,5 +686,7 @@ void __thiscall Q31_OnPresetObjectLoad(void * pThis, D2MapAIStrc * pMapAI) {
     D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&ppSrcMapAI->pPresetDrlgFile, pMonsterMapAi);
     ppSrcMapAI->bDrlgMapTaken = 1;
 }
+
+static void * keep_00586d88 = (0 ? (Q31_HandleLarzukRewardState(*(D2QuestDataStrc * *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(bool *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS::A5Q1

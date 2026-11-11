@@ -48,7 +48,6 @@ namespace D2Game::Monster::MonsterMode {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(struct D2UnitStrc * pUnit);
-void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, struct D2MonsterPathParamStrc * pMonData);
 void __fastcall ResetEngagedCombatAndStats(struct D2UnitStrc * pUnit);
 void __fastcall MONSTERMODE_GetStoredPosition(struct D2MonsterPathParamStrc * pMonData, int32_t * pOutStoredX, int32_t * pOutStoredY, uint8_t * pOutStoredFlags);
 int __fastcall Unreferenced_005a6250(int param_1);

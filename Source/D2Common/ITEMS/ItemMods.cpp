@@ -75,7 +75,7 @@ static D2MagixAffixModStrc * TXT_magixaffixes_GetModEntry(D2MagicAffixTxt * pMag
 
 // Returns pTxtLine + 0xc + nMod * 0x10 (nMod in EAX, the line in ECX); halts (ItemMods.cpp line 129, nMod < MAX_UNIQUE_ITEM_PROPERTIES && nMod >= 0) when nMod >= 12.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nMod) {
+static void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nMod) {
     if (nMod < 0xc) {
       return (void*)(nMod * 0x10 + 0xc + (char*)pTxtLine);
     }
@@ -609,7 +609,7 @@ int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStat(int32_t nType, D2UnitStrc *
 }
 
 // Wrapper for simple stat application via PropertyFunc_SimpleStat.
-void __stdcall PropertyFunc_SimpleStatThunk1(int32_t bClearStat, int32_t param_1, int32_t nType, D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, D2UnitStrc * pUnit2, uint32_t dwStatListFlags) {
+static void __stdcall PropertyFunc_SimpleStatThunk1(int32_t bClearStat, int32_t param_1, int32_t nType, D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, D2UnitStrc * pUnit2, uint32_t dwStatListFlags) {
     PropertyFunc_SimpleStat(nType, pUnit, param_1, bClearStat, 0, nState, pUnit2, eUnitStat, dwStatListFlags);
 }
 
@@ -692,7 +692,7 @@ int32_t __fastcall ITEMMODS_PropFunc_ApplyRolledStatAndMaximize(int32_t nType, D
 }
 
 // Alternative wrapper for simple stat application via PropertyFunc_SimpleStat.
-void __stdcall PropertyFunc_SimpleStatThunk2(int32_t nFastCallECX, int32_t pPropData, int32_t nType, D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, D2UnitStrc * pUnit2, uint32_t dwStatListFlags) {
+static void __stdcall PropertyFunc_SimpleStatThunk2(int32_t nFastCallECX, int32_t pPropData, int32_t nType, D2UnitStrc * pUnit, int32_t nState, eD2UnitStat eUnitStat, D2UnitStrc * pUnit2, uint32_t dwStatListFlags) {
     PropertyFunc_SimpleStat(nType, pUnit, pPropData, nFastCallECX, 1, nState, pUnit2, eUnitStat, dwStatListFlags);
 }
 
@@ -3976,5 +3976,9 @@ void __stdcall ITEMMOD_ApplyRunewordProperties(D2UnitStrc * pUnit, D2SetsTxtFStr
 
     ITEMMOD_ApplyEtherealBonus(pUnit);
 }
+
+static void * keep_0065c6a0 = (0 ? (TXT_UniqueItems_GetModEntry(*(void * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_0065d1f0 = (0 ? (PropertyFunc_SimpleStatThunk1(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(int32_t *)0, *(eD2UnitStat *)0, *(D2UnitStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_0065d2e0 = (0 ? (PropertyFunc_SimpleStatThunk2(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(int32_t *)0, *(eD2UnitStat *)0, *(D2UnitStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::ITEMS::ItemMods

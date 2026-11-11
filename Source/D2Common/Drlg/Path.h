@@ -244,8 +244,6 @@ void __fastcall DRLGPATH_ScaleVelocityVector(int32_t nVelocityScale, POINT * pPo
 uint32_t __fastcall DRLGPATH_ValidateFullPath(struct D2PathTypeArg * pPathTypeArgs);
 // Computes a simple distance heuristic between two packed coordinates: min(dx,dy) + max(dx,dy)*2. This is equivalent to a simple diagonal distance estimation.
 int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_t nPackedPosB);
-// Returns a pointer into the direction delta lookup table based on the difference between two direction indices. Each entry in the table provides directional offsets for path exploration. Trivial helper function.
-uint8_t * __stdcall DRLGPATH_GetDirectionDeltaTable(int32_t nDirFrom, int32_t nDirTo);
 // Checks if a packed coordinate (X|Y) is within the bounding rectangle of the path search area. Returns 1 if inside bounds, 0 otherwise.
 uint32_t __thiscall DRLGPATH_IsPositionInBounds(struct D2DrlgAStarContextStrc * pThis, uint32_t nPackedPos);
 // Top-level A* pathfinding function for PathTypeFunc_00. Initializes the search grid, computes initial heuristic, then iteratively expands the search with increasing cost limits. Extracts and returns the found path length (0 if no path found).

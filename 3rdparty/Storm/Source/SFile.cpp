@@ -4010,7 +4010,7 @@ D2StormAudioStreamRec * __thiscall SFILE_AudioStreamListDeleteNode(StormLinkedLi
 
 // Drops one reference (nRefCount +0x4c) on pAudioStream (ESI); at zero runs SFILE_DestroyAudioStream and SMemFree.
 // No call, jump or stored pointer reaches it in 1.14d (rel32 and pointer-byte scans of the image are empty); body ends at the RET 0x419bf0 before INT3 padding.
-void __stdcall SFILE_ReleaseAudioStream(D2StormAudioStreamRec * pAudioStream) {
+static void __stdcall SFILE_ReleaseAudioStream(D2StormAudioStreamRec * pAudioStream) {
     if (!pAudioStream) {
       return;
     }
@@ -6033,5 +6033,7 @@ void StaticFini_gSFileStreamRecordList() {
     gSFileStreamRecordList.head.pPrevLink = 0;
     gSFileStreamRecordList.head.pNext = 0;
 }
+
+static void * keep_00419bd0 = (0 ? (SFILE_ReleaseAudioStream(*(D2StormAudioStreamRec * *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::Source::SFile

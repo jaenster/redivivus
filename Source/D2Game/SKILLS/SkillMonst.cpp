@@ -1670,9 +1670,8 @@ BOOL __fastcall Skills_SrvDoFunc_102_FireRandomMultiMissile(::SGAMEDATA * pGame,
 
 // Monster skill server start-func 54: records the target unit for a delayed missile-fire skill. Stores target GUID and type into skill Param1/Param2 via SKILL_SetParam, clears the dynamic path target, then writes the target's world position into the caster's path SP1 for later use by the do-func.
 BOOL __fastcall SKILLMONST_SrvStFn54_DiabRun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int16_t nY;
-    int16_t nX;
-    int32_t nPos;
+    int32_t nY;
+    int32_t nX;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return 0;
@@ -1689,25 +1688,23 @@ BOOL __fastcall SKILLMONST_SrvStFn54_DiabRun(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::PATH::DynamicPath::SetTarget(pUnit->pPath.pDynamicPath, nullptr);
     eD2UnitType eUnitType = pTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = (int16_t)pTarget->pPath.pStaticPath->nPosY;
+      nY = pTarget->pPath.pStaticPath->nPosY;
     } else if (pTarget->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-      nY = (int16_t)nPos;
+      nY = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
     } else {
       nY = 0;
     }
 
     eUnitType = pTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = (int16_t)pTarget->pPath.pStaticPath->nPosX;
+      nX = pTarget->pPath.pStaticPath->nPosX;
     } else if (pTarget->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
-      nX = (int16_t)nPos;
+      nX = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
     } else {
       nX = 0;
     }
 
-    D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, nX, nY);
+    D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nX, (int16_t)nY);
     return 1;
 }
 

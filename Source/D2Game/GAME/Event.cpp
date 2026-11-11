@@ -44,7 +44,7 @@ int aTimerIndexUnitTypeLookupTable[6] = { 0x0, 0x1, 0x3, 0x2, 0x4, -0x1 }; D2_GL
 
 namespace D2Game::GAME::Event {
 
-D2TimerStrc * * __stdcall EVENT_GetDispatchBucketForFrame(eD2UnitType eUnitType, uint32_t nUnitGUID, ::SGAMEDATA * pGame) {
+static D2TimerStrc * * __stdcall EVENT_GetDispatchBucketForFrame(eD2UnitType eUnitType, uint32_t nUnitGUID, ::SGAMEDATA * pGame) {
     if (nUnitGUID == -1) {
       return nullptr;
     }
@@ -655,5 +655,7 @@ void __fastcall SetEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int eTimerType
 void __fastcall SetEventMapReveal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nFrame, fpTimerFunctionUnit fpFunction, int32_t nArg1, int32_t nArg2) {
     SetEventInternal(eTimerType, pGame, nFrame, pUnit, fpFunction, nArg1, nArg2);
 }
+
+static void * keep_00540b70 = (0 ? (EVENT_GetDispatchBucketForFrame(*(eD2UnitType *)0, *(uint32_t *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::GAME::Event

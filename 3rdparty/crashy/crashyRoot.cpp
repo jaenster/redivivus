@@ -16,7 +16,7 @@ void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime) {
     /* MCP write-path test — safe to delete */ _localtime64_s((tm*)pLocalTime, (__time64_t*)pTime);
 }
 
-bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {
+static bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc) {
     char* pSrcCur = gszCrashLogTempDir;
     int nRemainingCapacity = 0x3ff;
     char* pSrcScan = pSrc;
@@ -163,7 +163,7 @@ char __stdcall SYSTEM_CaptureThreadContext(LPCVOID * pnStackTop, DWORD dwThreadI
     return '\0';
 }
 
-bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer) {
+static bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer) {
     if (dwCurrentThreadId == wThreadId) {
       strncpy_s(pBuffer, 0x80, "Main Thread", -1);
     } else {
@@ -339,5 +339,8 @@ void __stdcall LeaveCriticalSection_System() {
 void __stdcall SetCurrentThreadId() {
     dwCurrentThreadId = GetCurrentThreadId();
 }
+
+static void * keep_00401020 = (0 ? (FILETOOLS_GetTempPath_UTF8(*(char * *)0), (void *)0) : (void *)0);
+static void * keep_00401640 = (0 ? (SYSTEM_GetThreadName(*(int32_t *)0, *(char * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::_3rdparty::crashy

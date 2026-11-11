@@ -693,7 +693,7 @@ uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(D2UnitStrc * pUnit, int32_t b
     return nRandRoll;
 }
 
-void __stdcall DAMAGE_ApplyDemonBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2DamageStrc * pDamage) {
+static void __stdcall DAMAGE_ApplyDemonBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2DamageStrc * pDamage) {
     uint32_t bIsDemon = D2Common::Monsters::MONSTERS::IsDemon(pUnit2);
     if (!bIsDemon) {
       return;
@@ -3781,5 +3781,7 @@ uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * p
 
     return wHitFlags;
 }
+
+static void * keep_0057b630 = (0 ? (DAMAGE_ApplyDemonBonus(*(D2UnitStrc * *)0, *(D2UnitStrc * *)0, *(D2DamageStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT::SUnitDmg

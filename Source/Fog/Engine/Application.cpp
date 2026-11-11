@@ -94,7 +94,7 @@ bool __stdcall DEBUG_IsValidDebugDirectorySize(uint32_t nDirSize) {
     return nDirSize >= 0x1c ? true : false;
 }
 
-uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
+static uint32_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uint32_t * pDebugData, D2FogDebugModuleEntryStrc * pModuleInfoOut) {
     uint32_t nParseResult;
     uint32_t extraout_var;
     if (nDataSize < 4) {
@@ -426,7 +426,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
 
 // Enumerates loaded modules into pModuleList: tries DEBUG_EnumerateModulesViaPsapi, then ...ViaToolhelp32, then tail-jumps to ...ViaPEB; returns the first success in AL.
 // Provenance: asm 00404f20..00404f3f; unreferenced in 1.14d (EnumerateAndDumpAllFunctions inlines the same chain at 00402f1f).
-bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
+static bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
     bool bVar1 = DEBUG_EnumerateModulesViaPsapi(pModuleList);
     if (bVar1) {
       return bVar1;
@@ -441,7 +441,7 @@ bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
     return bVar1;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader) {
+static void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader) {
     if (*(uint32_t*)(pOptHeader + 0x6c) <= 6) {
       return;
     }
@@ -451,7 +451,7 @@ void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA,
     *pnSize = nSize;
 }
 
-void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
+static void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {
     if (pOptHeader->NumberOfRvaAndSizes <= 6) {
       return;
     }
@@ -734,5 +734,10 @@ uint32_t __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize)
 
     return 0;
 }
+
+static void * keep_004048c0 = (0 ? (DEBUG_ParseDebugInfoFromMemory(*(uint32_t *)0, *(uint32_t * *)0, *(D2FogDebugModuleEntryStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00404f20 = (0 ? (DEBUG_EnumerateModules(*(int * *)0), (void *)0) : (void *)0);
+static void * keep_00404f40 = (0 ? (DEBUG_ExtractDebugDirectory64(*(uint32_t *)0, *(uint32_t * *)0, *(uint32_t * *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
+static void * keep_00404f60 = (0 ? (DEBUG_ExtractDebugDirectory32(*(uint32_t *)0, *(uint32_t * *)0, *(uint32_t * *)0, *(IMAGE_OPTIONAL_HEADER32 * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::Engine::Application

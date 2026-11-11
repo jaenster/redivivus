@@ -409,7 +409,7 @@ static void PlaceFillsInDryHills(D2DrlgLevelStrc * pLevel) {
 }
 
 // Places Act 2 desert scenery variant presets (0x18C and 0x18D) using the PlacePresetVariants system. Simple wrapper that configures the preset ID array and delegates.
-void DRLGOUTPLACE_PlaceAct2DesertVariants(D2DrlgLevelStrc * pLevel) {
+static void DRLGOUTPLACE_PlaceAct2DesertVariants(D2DrlgLevelStrc * pLevel) {
     D2LvlPrestId nPresetId0[2];
     nPresetId0[0] = LVLPREST_ACT_2_DESERT_OASIS_2;
     nPresetId0[1] = 0x18d;
@@ -708,5 +708,7 @@ void __fastcall InitAct2OutdoorLevel(D2DrlgLevelStrc * pLevel) {
         return;
     }
 }
+
+static void * keep_0067f7a0 = (0 ? (DRLGOUTPLACE_PlaceAct2DesertVariants(*(D2DrlgLevelStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::OutDesr

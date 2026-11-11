@@ -120,7 +120,6 @@ void __fastcall dFloorDraw(struct D2GameViewStrc * pGameView);
 // @wasnamed DRAW_UpdateLightFromEnvironment
 // Per-frame refresh of the global wall/tile light colour and intensity from the current act, overridden by the player's room when the room carries its own colour.
 void __stdcall dInitWallDraw();
-int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnIntensityMode);
 // Draws all wall tiles in DRLG with alpha blending. Iterates wall tile linked list, applies alpha fading effects, checks viewport clipping, calls D2GFX_DrawTransWallTile for blended tiles.
 void __stdcall WALL2_DrawWallTilesWithAlpha(struct D2Wall2CellStrc * pWall2Cell, uint32_t eRenderPass, struct D2GameViewStrc * pCameraView);
 // Per-frame world renderer for one game view: walks the Wall2 cell grid (nWall2GridDim^2 cells). For each cell it draws the wall-tile list, advancing each tile's fade animation (nCurrentAlpha interpolated between nAlphaStart/nAlphaEnd until nFadeEndTime, with the 3D-engine path), gathering per-tile light samples (DRAW_CoordIsInCoord into a D2GfxLightStrc[8]), computing screen coords (perspective vs ortho via the view center), and blitting via D2GFX_DrawWallTile or D2GFX_DrawTransWallTile depending on alpha. It then walks the cell's unit list and renders each unit through DRAW_WORLD_Unit with its sampled light color. Pure client draw; mutates only per-tile draw/state flags and alpha.

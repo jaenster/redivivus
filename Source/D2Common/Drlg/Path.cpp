@@ -2159,7 +2159,7 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_
 }
 
 // Returns a pointer into the direction delta lookup table based on the difference between two direction indices. Each entry in the table provides directional offsets for path exploration. Trivial helper function.
-uint8_t * __stdcall DRLGPATH_GetDirectionDeltaTable(int32_t nDirFrom, int32_t nDirTo) {
+static uint8_t * __stdcall DRLGPATH_GetDirectionDeltaTable(int32_t nDirFrom, int32_t nDirTo) {
     return (uint8_t*)(gnDrlgLevelSeed + (nDirTo - nDirFrom & 7U) * 8);
 }
 
@@ -3759,5 +3759,7 @@ int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     nErrorLine = DRLGPATH_SimplifyCollinearWaypoints(pDynamicPath->PathPoints, aBresenhamPoints, nStartPacked, nPointCount_00);
     return nErrorLine;
 }
+
+static void * keep_0067a5d0 = (0 ? (DRLGPATH_GetDirectionDeltaTable(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::Path

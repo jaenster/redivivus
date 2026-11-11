@@ -363,13 +363,6 @@ void __fastcall KillConnection(int32_t nClientId);
 //   0xFB: Disconnect + decrement connected count
 //   0xFC: IP address query response
 void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, int32_t iSize);
-// NOTE: Register params: pUnitHead (EAX): D2UnitStrc * *, pGame (EDI): SGAMEDATA *
-// Body continues at 0052d0b4, the JZ target of 0052d095 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_NullSub0'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
-// Retired notes from '_NullSub0':
-// NOTE: Callee-saved register params inferred (medium confidence): pGameStrc (EDI): SGAMEDATA*
-void __stdcall QSERVER_CleanupUnitChain(struct D2UnitStrc * * pUnitHead, ::SGAMEDATA * pGame);
-// NOTE: Callee-saved register params inferred (medium confidence): pRoomStrc (ESI): D2RoomStrc*, pGameStrc (EDI): SGAMEDATA*
-void __stdcall SERVER_PopulateRoom(struct D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc);
 void __fastcall SetSomeRoomFlags(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom);
 // Frees idle rooms across all 5 acts to conserve memory. For each act, iterates active rooms and checks idle tick count via DRLGROOM_GetIdleTicks. Rooms idle for 10+ frames and passing TestRoomCanUntile (no players nearby) are candidates for cleanup. Moves all units in room to inactive lists via SERVER_GAME_UNIT_method, then removes room from act via RemoveRoomFromAct. Called every 12 frames from GAME_ServerGameLoop. Critical for dynamic memory management in large games.
 void __stdcall CleanupIdleRooms(::SGAMEDATA * pGame);
@@ -429,8 +422,6 @@ BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, struct D2QServerGameS
 int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMaxCount);
 // Exports up to nMaxCount unit type+mode records into pOutBuffer from the game currently assigned to nServerId. Looks up the game token via DATA_LastGameServer[nServerId] under the global hash lock, locks the game, then iterates all 128 player-unit buckets calling GetTypeAndMode for each unit (output stride 0x34 bytes). Returns the number of units exported. Used by external server-management queries.
 int32_t __stdcall QSERVER_ExportUnitListByServerId(uint32_t nServerId, struct D2QServerUnitRecordStrc * pOutBuffer, int32_t nMaxCount);
-// Dead/unused server-side helper that resolves a game token from a global server table, locks the game, selects one of the five unit-type hash-bucket arrays (player/monster/object/missile/item) by nUnitId, iterates all 128 buckets tracking statistics via GAME_TrackGameStatistics, then invokes a per-unit-type callback from PFN_UnitTypeToName_ARRAY. Not reachable in shipping 1.14d; retained for reference.
-void __stdcall Unused_GetUnitList(struct D2UnitStrc * * ppUnitArray, struct D2Game_Line0x13af * pStatRoot, int32_t nUnitId, int * pGameStats, int32_t nGameId);
 // Searches the game on nServerId for nCount specific units identified by (pClassIds[i], pOutBuffer[i]) pairs and exports their type+mode into pUnitTypes (stride 0xd). Uses FindUnitFromTable for each entry; non-player hits additionally call a PFN_UnitTypeToName_ARRAY dispatch. Returns the count of units found. Counterpart to QSERVER_ExportUnitListByServerId for targeted rather than bulk export.
 int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, struct D2QServerUnitRecordStrc * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer);
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.

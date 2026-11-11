@@ -573,6 +573,14 @@ BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame) {
     return 0;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.
 void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     POINT ptPlayerPos;
@@ -602,7 +610,7 @@ void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2Un
 
     pBlockerUnit->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
     pA2Q4Specific->bPortalJerhynSpawned = '\x01';
-    pA2Q4Specific->nJerhynObjectGUID = pBlockerUnit->nUnitGUID;
+    pA2Q4Specific->nJerhynObjectGUID = GetGUIDInline(pBlockerUnit);
 }
 
 // A2Q4 - Objects_InitFn30. Object init fn: syncs a quest object's visual/update flag to the portal substate (sSub.nPortalGUID), records its GUID, and removes its collision once the portal substate == 2 (portal active). No quest-record writes.

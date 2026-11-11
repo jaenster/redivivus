@@ -49,7 +49,7 @@ static uint32_t __stdcall SBIG_Accumulator_AddWithCarry(ULONGLONG ullAddend, uin
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @caution THE TAIL IS ACTIVELY MISLEADING and pass 6 deliberately did NOT rename it, because what it should be called is not established. There is no multiply-and-add here: the __allmul(lo, hi, 0, 1) call is a multiply by 2^32, i.e. a 32-bit word shift. No oracle counterpart exists. Read the body before trusting or reusing this name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnAccumulator, uint32_t nAddend) {
+static void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnAccumulator, uint32_t nAddend) {
     int64_t u64Product = _allmul(*pnAccumulator, pnAccumulator[1], 0, 1);
     *(uint64_t*)pnAccumulator = u64Product + (uint64_t)nAddend;
 }
@@ -57,7 +57,7 @@ void __stdcall SBIG_Accumulator_MulAndAdd(uint32_t * pnAccumulator, uint32_t nAd
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
 // @caution THE TAIL IS ACTIVELY MISLEADING and pass 6 deliberately did NOT rename it. It computes no offset; it assembles a 64-bit value from a high and a low word, MAKE64(hi, lo). No oracle counterpart exists. Read the body before trusting this name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
-int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, uint32_t nAddend) {
+static int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, uint32_t nAddend) {
     int64_t u64Product = _allmul(nMultiplicand, 0, 0, 1);
     return u64Product + (uint64_t)nAddend;
 }
@@ -1074,7 +1074,7 @@ BigData * __fastcall SBIG_Constructor(BigData * pBigData) {
     pBigData->sPrimary.nGrowStep = 0;
     pBigData->sPrimary.nStartWord = 0;
     int nEhState = 0;
-    _eh_vector_constructor_iterator_(&pBigData->sStack, 0x14, 0x10, SSystem::TSFixedArray_Ui_Constructor, TSFixedArray_Ui_Destructor);
+    _eh_vector_constructor_iterator_(&pBigData->sStack, 0x14, 0x10, (void (__fastcall *)(void*))SSystem::TSFixedArray_Ui_Constructor, TSFixedArray_Ui_Destructor);
     pBigData->sStack.nUsed = 0;
     pBigData->sOutBuffer.nCapacity = 0;
     pBigData->sOutBuffer.nLen = 0;

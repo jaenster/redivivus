@@ -1353,7 +1353,7 @@ static uint32_t crc32_little(uint8_t * pbBuf, uint32_t nLen, uint32_t nCrc) {
     return ~nCrcAcc;
 }
 
-int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbData) {
+static int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbData) {
     // Static local variables (originally global data)
     static uint32_t gdwCrc32TableBase[256] = {
     0x0,
@@ -2316,5 +2316,7 @@ uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLengt
     uint32_t dwCrc = crc32_little(pBuffer, nLength, dwCrcSeed);
     return dwCrc;
 }
+
+static void * keep_0042d700 = (0 ? (crc32_big(*(uint32_t *)0, *(uint32_t *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::_3rdparty::zlib::crc32

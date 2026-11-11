@@ -393,18 +393,12 @@ BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2(struct D2Contr
 BOOL __stdcall thunk_UIMENU_YouWereDisconnectedFromBattleNet3(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_HandleEmailChange(int32_t bSubmit);
 BOOL __stdcall MAINMENU_OnSubmitResetPassword(int32_t bSubmit);
-// Returns __time32(pTime) with pTime passed in EAX.
-// Provenance: asm 004379c0..004379c9; unreferenced in 1.14d.
-__time32_t __stdcall MAINMENU_GetTime32(__time32_t * pTime);
 // Returns dwFlags & 0x20.
 // Provenance: asm 004379d0..004379d5; unreferenced in 1.14d.
 uint32_t __fastcall MAINMENU_TestFlag0x20(uint32_t dwFlags);
 // Returns (dwFlags >> 8) & 0x1f.
 // Provenance: asm 004379e0..004379e8; unreferenced in 1.14d.
 uint32_t __fastcall MAINMENU_GetFlagBits8To12(uint32_t dwFlags);
-// Returns MAINMENU_GetRealmName(nIndex) when nIndex < MAINMENU_GetRealmCount(), else NULL (tail-jumps to 00430b50).
-// Provenance: asm 00437a00..00437a12; unreferenced in 1.14d.
-char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex);
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex);
 #endif // D2_MODULE_D2Launch
 // 7 internal functions (defined in .cpp)

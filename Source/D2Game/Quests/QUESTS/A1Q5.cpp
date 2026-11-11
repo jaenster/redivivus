@@ -88,7 +88,7 @@ static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, D2
 }
 
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
-uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc * pListBase, int32_t nListSelector, int32_t nPlayerGUID) {
+static uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc * pListBase, int32_t nListSelector, int32_t nPlayerGUID) {
     int32_t* pListEntry;
     int i = 0;
     if (nListSelector) {
@@ -586,7 +586,7 @@ BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStr
 // state to QUESTSTATE_JustCompleted via QUEST_SetQuestRecordState. Finally inspects quest-data: if a
 // sub-counter (+0x64) is nonzero it schedules the Q05_Callback_10 continuation (death-effect /
 // loot sequence still pending); otherwise it clears a busy flag (+0xa) marking the handler finished.
-int __fastcall Q05_OnTowerComplete(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
+static int __fastcall Q05_OnTowerComplete(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_MarkCompleteForPlayersInTower);
     /* QUEST_SetQuestRecordState(ForgottenTower, JustCompleted=0xd) — game-wide
                          quest record */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
@@ -1077,5 +1077,8 @@ void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x423);
     exit(-1);
 }
+
+static void * keep_005947e0 = (0 ? (QUEST_IsPlayerGUIDInTrackingList(*(D2QuestDataA1Q5Strc * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00594fd3 = (0 ? (Q05_OnTowerComplete(*(::SGAMEDATA * *)0, *(D2QuestDataStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS::A1Q5

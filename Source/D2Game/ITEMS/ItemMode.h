@@ -82,7 +82,6 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, struct D2UnitStrc * 
 BOOL __fastcall ITEMMODE_FindBestBodyLocForItem(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t * pnBodyLoc, uint32_t bAutoEquip);
 void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam);
-void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 int32_t __fastcall ITEMMODE_CheckItemRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 struct D2ClientStrc * __fastcall Unreferenced_0055db80(struct D2UnitStrc * param_1);
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
@@ -232,7 +231,6 @@ BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, struct D2Un
 // Explicit GuardStack(0)/GuardStack(1) tails on the two normal-completion paths; all error paths tail into a noreturn halt.
 BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam);
-BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2);
 #endif // D2_MODULE_D2Game
 // 28 internal functions (defined in .cpp)

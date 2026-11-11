@@ -38,25 +38,12 @@ int32_t __fastcall UNITSND_GetMissileSound(struct D2UnitStrc * pUnit, int32_t nS
 int __fastcall UNITSND_GetMissileLoopSound(struct D2UnitStrc * pUnit);
 void __fastcall IterateUnitSfxData(struct D2UnitStrc * pUnit, int32_t bForceStop);
 void __fastcall UNITSND_UpdatePositionalAudio(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, struct D2UnitStrc * pUnit);
-// Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-uint32_t __stdcall UNITSND_GetSfxMode(struct D2UnitStrc * pUnit);
-void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, struct D2UnitStrc * pUnit);
-// Returns pUnit's client-side dwSfxStepTicks (+0x84, the field SetSfxStepTicks writes); halts (UnitSnd.cpp line 3303) on NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-uint32_t __stdcall UNITSND_GetSfxStepTicks(struct D2UnitStrc * pUnit);
-// Sets pUnit's client-side bHasActiveSound (+0x24 of the client side data, unit +0x88); halts (UnitSnd.cpp line 3336) on a NULL unit.
-// Provenance: asm 004caca0..004cacd0 (pUnit in EAX, value at [EBP+8], RET 4); unreferenced in 1.14d.
-void __stdcall SetHasActiveSound(struct D2UnitStrc * pUnit, BOOL bHasActiveSound);
 // Returns the ground material index (1–6) at the unit's current tile position, used to select footstep/ground sounds. Queries the sound environment table for a fallback material, resolves the unit's map coordinates from its path (static or dynamic), then samples tile data from the unit's room and adjacent rooms. Returns 0 if the room is unavailable, the fallback if no tile data is found in any room.
 int32_t __fastcall UNITSND_GetGroundMaterial(struct D2UnitStrc * pUnit);
 // Returns the sound ID for pUnit's footstep given ground material and whether running. For players, indexes gaUnitSoundTableByClassId[classId][10]; for monsters, reads D2MonSoundsTxt.Footstep. Adds a material offset (+0/+4/+8/+0xc/+0x10/+0x14 for materials 1-6) and +0x18 if bIsRunning. Returns 0 for unsupported unit types or missing data.
 int32_t __fastcall UNITSND_GetFootstepSound(struct D2UnitStrc * pUnit, int32_t bIsRunning);
 // Plays a unit's footstep sound for the current animation frame. For monsters, gates on walk/run-like animation modes and MonStats class range. Computes the step interval from frame count, anim speed and footstep count (FsCnt, FootstepLayer/FsPrb/FsOff from MonSounds.txt for monsters), debounces against the last step tick (dwSfxStepTicks), and picks the loudest of three candidate frame offsets. Selects walk vs run footstep via UNITSND_GetFootstepSound, plays it with distance-scaled channel priority (quieter when not the local player), optionally plays the layered footstep sound by probability, and stamps dwSfxStepTicks. Client/sound side effect only.
 void __fastcall PlayUnitFootstepSound(struct D2UnitStrc * pUnit);
-int Unreferenced_004cb170(struct D2UnitStrc * pUnit);
-int Unreferenced_004cb180(struct D2UnitStrc * pUnit);
 void __fastcall UNITSND_StopAllSkillSounds(struct D2UnitStrc * pUnit);
 // Iterates the unit's active SFX channel list and stops or gracefully fades any channel whose base sound matches the unit's neutral (idle ambient) sound. bForceStop=1 kills the channel immediately; bForceStop=0 fades it. Halts with a fatal error if pUnit is null.
 void __stdcall UNITSND_UpdateNeutralSound(struct D2UnitStrc * pUnit, int32_t bForceStop);

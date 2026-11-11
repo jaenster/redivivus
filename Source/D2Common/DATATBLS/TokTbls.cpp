@@ -383,7 +383,7 @@ void __stdcall FreeInventoryTable() {
 
 // nIndex in EAX: returns &pTxtInventory[nIndex], or NULL when nIndex > nTxtInventorySize (the bound is inclusive in the binary). Halts (InvTbls.cpp line 127, sgptInventoryInitStats) when the table is not loaded.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex) {
+static D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex) {
     if (!pTxtInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
       exit(-1);
@@ -481,8 +481,11 @@ void __stdcall GetBodyDimensions(int32_t neInventoryPage, int32_t nScreenMode, D
     }
 }
 
-int32_t __stdcall TOKTBLS_GetTokenIndex(int32_t nParam1, int32_t nParam2) {
+static int32_t __stdcall TOKTBLS_GetTokenIndex(int32_t nParam1, int32_t nParam2) {
     return nParam1 * 0x10 + nParam2;
 }
+
+static void * keep_0065c140 = (0 ? (TXT_Inventory_GetLine(*(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_0065c300 = (0 ? (TOKTBLS_GetTokenIndex(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::DATATBLS::TokTbls

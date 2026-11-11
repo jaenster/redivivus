@@ -2206,7 +2206,7 @@ static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStr
     return _bAttackable;
 }
 
-uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint32_t _bCanAttack;
     bool bCanAttack;
     if (!(pUnit2 && (int)pUnit2->eUnitType >= 0 && (int)pUnit2->eUnitType <= 1)) {
@@ -2659,9 +2659,17 @@ uint32_t __fastcall ForEach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonsterAi
     }
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // ForEach callback: for each living monster pOther within pCountBuf[3] distance of pUnit, increments a bucket in pCountBuf based on classId. Buckets 0-7 track specific Pandemonium-era minion classes (0x2C0, 0x2C1, 0x2C5, 0x2C7, 0x2C8, 0x2DB/DC/DD, plus a generic overflow bucket). Used to tally nearby minion composition for AI decisions.
 uint32_t __fastcall AI_CountNearbyMinionsByClass(uint32_t nUnused, D2UnitStrc * pUnit, D2UnitStrc * pOther, int * pCountBuf) {
-    if (!(pOther && pOther->eUnitType == UNIT_MONSTER)) {
+    if (!(GetTypeInline(pOther) == UNIT_MONSTER)) {
       return 0;
     }
 
@@ -2774,6 +2782,14 @@ BOOL __fastcall MONSTERAI_HasSkillInSlots(D2UnitStrc * pUnit, int32_t nSkillId) 
     return 0;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 void __fastcall MONSTERAI_SetTargetUnit(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnitType) {
     D2AiGeneralStrc* pAiData;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -2785,7 +2801,7 @@ void __fastcall MONSTERAI_SetTargetUnit(D2UnitStrc * pUnit, D2UnitStrc * pTarget
       pAiData = 0;
     }
     if (pTargetUnitType) {
-      pAiData->nOwnerGUID = pTargetUnitType->nUnitGUID;
+      pAiData->nOwnerGUID = GetGUIDInline(pTargetUnitType);
       pAiData->eOwnerType = pTargetUnitType->eUnitType;
       return;
     }
@@ -12541,7 +12557,7 @@ uint32_t __fastcall MONSTERAI_IsValidResurrectionTarget(D2UnitStrc * pUnit, D2Un
     if (pUnit == pUnit2) {
       return 0;
     }
-    if (pUnit2->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit2) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -22469,5 +22485,7 @@ BOOL __fastcall MONSTERAI_CastItemEffectSkill(D2UnitStrc * pUnit, eD2Skills eSki
     UNIT::SUnitMsg::UnitQueuePacket0x9A(pUnit, (uint16_t)eSkill, (uint8_t)nSubSkill, (uint16_t)nEffectiveX, (uint16_t)nEffectiveY, (uint8_t)nParam2);
     return 1;
 }
+
+static void * keep_005dca20 = (0 ? (MONSTERAI_IsValidTarget(*(::SGAMEDATA * *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Monster::AI

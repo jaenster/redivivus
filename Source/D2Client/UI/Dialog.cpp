@@ -764,7 +764,7 @@ void __stdcall DIALOG_CleanupSystem() {
     gpDialogActual = 0;
 }
 
-void Unreferenced_004b7bc0(D2DialogStrc * pDialog) {
+static void Unreferenced_004b7bc0(D2DialogStrc * pDialog) {
     memset(pDialog, 0, 0xb10);
     pDialog->nBackgroundWidth = 0;
     pDialog->nBackgroundHeight = 0;
@@ -1313,5 +1313,7 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
 void __stdcall DIALOG_InitializeSystem_Unref_004b9200() {
     bReceivedQuestAvailabilityPacket = 0;
 }
+
+static void * keep_004b7bc0 = (0 ? (Unreferenced_004b7bc0(*(D2DialogStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::Dialog

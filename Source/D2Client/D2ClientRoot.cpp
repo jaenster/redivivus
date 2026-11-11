@@ -311,6 +311,14 @@ int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2Un
     return bConsumable;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
 int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     if (!pTargetUnit) {
@@ -326,7 +334,7 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
     if (!bCanBeConverted) {
       return 0;
     }
-    if (pTargetUnit->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pTargetUnit) != UNIT_MONSTER) {
       return 0;
     }
 
@@ -463,7 +471,7 @@ void __stdcall CMD_ToggleSkillSelect() {
 
 // Skill hotkey slot nSlot (ESI): ignored while exiting or dead, and slots above 8 need the expansion. With the skill-select UI open it calls SPELLSEL_HandleSkillSelection, otherwise SPELLSEL_ActivateSkillSlot. The range assert (View.cpp line 252) tests nSlot < 0 && nSlot > 15 and can never fire.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
+static void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
       return;
@@ -1397,7 +1405,7 @@ uint8_t __stdcall INV_GetItemDescDirtyFlag() {
 }
 
 void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+    if (!(GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
     }
 
@@ -1822,7 +1830,7 @@ uint32_t __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
 
 // TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
+static BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
     if (!pRect) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x76);
       exit(-1);
@@ -3964,12 +3972,20 @@ void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2S
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return 0;
     }
 
-    return (uint32_t)(pUnit->nClassId == 0x1d4);
+    return (uint32_t)(GetClassIdInline(pUnit) == 0x1d4);
 }
 
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {

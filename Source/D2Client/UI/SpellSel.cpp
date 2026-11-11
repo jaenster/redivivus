@@ -270,7 +270,7 @@ void __fastcall SPELLSEL_SetMouseHandFlag(uint32_t bLeftHand) {
     gbSpellSelMouseHandFlag = bLeftHand;
 }
 
-uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nRectX, int32_t nRectY) {
+static uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nRectX, int32_t nRectY) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nRectX && nMouseX <= nRectX + nWidth && nMouseY >= nRectY - nHeight && nMouseY <= nRectY) {
@@ -2352,5 +2352,7 @@ void __stdcall DRAW_UI_SkillWindow() {
     SKILLTREE_RenderSkillTree();
     SPELLSEL_DrawTabHighlight(nSkillTreeActiveTab);
 }
+
+static void * keep_004a8cf0 = (0 ? (SPELLSEL_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::SpellSel

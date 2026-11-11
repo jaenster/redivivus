@@ -237,6 +237,14 @@ BOOL __fastcall Skills_CltDoFunc_Nec_TargetedMissileAtParam(D2UnitStrc * pUnit, 
     return 0;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Client StFunc for Necromancer corpse-targeting skills. Verifies current skill and confirmed target exist; if caster is the local player, requires target to be a selectable corpse. Writes target X, Y, and classId into skill params 1/2/3 for server use. Returns TRUE if all checks pass.
 BOOL __fastcall Skills_CltStFunc_CheckSelectableCorpseSetParams(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetPos;
@@ -278,7 +286,7 @@ BOOL __fastcall Skills_CltStFunc_CheckSelectableCorpseSetParams(D2UnitStrc * pUn
     }
 
     D2Common::Skills::SKILL_SetParam2(pSkill, nTargetPos);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pTarget->nClassId);
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetClassIdInline(pTarget));
     return 1;
 }
 

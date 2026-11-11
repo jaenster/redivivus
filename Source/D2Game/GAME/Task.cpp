@@ -141,7 +141,7 @@ uint32_t __stdcall TASK_GetTimestamp() {
 
 // nSlotToken in EAX: enters aTaskQueueCriticalSections[nSlotToken & 0x1f] and returns gaTaskQueueHeadArray[nSlotToken & 0x1f]; when that slot is NULL it leaves the section again, so a non-NULL result is returned with the section held (release with TASK_LeaveQueueCriticalSection).
 // Provenance: asm 00564390..005643be (RET); unreferenced in 1.14d, aligned entry after INT3 padding.
-D2TaskQueueSlotStrc * __stdcall TASK_EnterQueueCriticalSection(uint32_t nSlotToken) {
+static D2TaskQueueSlotStrc * __stdcall TASK_EnterQueueCriticalSection(uint32_t nSlotToken) {
     EnterCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
     D2TaskQueueSlotStrc* pDVar1 = gaTaskQueueHeadArray[nSlotToken & 0x1f];
     if (!pDVar1) {
@@ -154,7 +154,7 @@ D2TaskQueueSlotStrc * __stdcall TASK_EnterQueueCriticalSection(uint32_t nSlotTok
 // pSlot in EAX: when non-NULL, calls LeaveCriticalSection(&aTaskQueueCriticalSections[pSlot->nSlotIndex]);
 // halts (line 151) when the index is >= 32. Counterpart of TASK_EnterQueueCriticalSection (00564390).
 // Unreferenced in 1.14d (entry: aligned start after padding); lines from docs/data/win-assert-oracle.tsv.
-void __stdcall TASK_LeaveQueueCriticalSection(D2TaskQueueSlotStrc * pSlot) {
+static void __stdcall TASK_LeaveQueueCriticalSection(D2TaskQueueSlotStrc * pSlot) {
     if (!pSlot) {
       return;
     }
@@ -585,8 +585,9 @@ void StaticInit_CriticalSection_0088caa8() {
     atexit(StaticFini_CriticalSection_0088caa8);
 }
 
+// Constructs the 32 task-queue critical sections in aTaskQueueCriticalSections through the compiler's array iterator, InitCriticalSection per element; THREADING_DeleteCriticalSection_Thunk is the matching destructor.
 void StaticInit_aTaskQueueCriticalSections() {
-    _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
+    _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, (void (__fastcall *)(void*))Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
     atexit(StaticFini_aTaskQueueCriticalSections);
 }
 
@@ -597,6 +598,9 @@ void StaticFini_CriticalSection_0088caa8() {
 void StaticFini_aTaskQueueCriticalSections() {
     _eh_vector_destructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, Fog::THREADING_DeleteCriticalSection_Thunk);
 }
+
+static void * keep_00564390 = (0 ? (TASK_EnterQueueCriticalSection(*(uint32_t *)0), (void *)0) : (void *)0);
+static void * keep_005643c0 = (0 ? (TASK_LeaveQueueCriticalSection(*(D2TaskQueueSlotStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::GAME::Task
 

@@ -79,7 +79,7 @@ D2DrlgCoordListStrc * __thiscall AllocEmptyDrlgCoordList_Unused(D2PoolManagerStr
 }
 
 // @sourcefile .\DRLG\DrlgLogic.cpp
-void AllocEmptyRoomCoordList_Unused(D2PoolManagerStrc * pMemory, D2DrlgCoordListStrc * pDrlgCoordList, int32_t nSize) {
+static void AllocEmptyRoomCoordList_Unused(D2PoolManagerStrc * pMemory, D2DrlgCoordListStrc * pDrlgCoordList, int32_t nSize) {
     pDrlgCoordList->nListSize = nSize;
     D2RoomCoordListStrc* _Dst = (D2RoomCoordListStrc*)D2_ALLOC_POOL_AT(pMemory, nSize * 0x30, ".\\DRLG\\DrlgLogic.cpp", 0xe9);
     pDrlgCoordList->pCoord = _Dst;
@@ -398,7 +398,7 @@ void __fastcall AllocDrlgCoordList(D2RoomExStrc * pRoomEx) {
 
 // pRoomEx in ESI, nY in ECX, nX in EDX: returns pCoord for a single-entry coord list (eFlags bit 0), otherwise the sCoordIndexGrid cell at the room-relative position. Halts (DrlgLogic.cpp line 668, ptLogicalRoomInfo) when the list is missing.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-D2RoomCoordListStrc * __stdcall DRLGLOGIC_GetRoomCoordListAt(D2RoomExStrc * pRoomEx, int nY, int nX) {
+static D2RoomCoordListStrc * __stdcall DRLGLOGIC_GetRoomCoordListAt(D2RoomExStrc * pRoomEx, int nY, int nX) {
     D2DrlgCoordListStrc* pDVar1 = pRoomEx->pDrlgCoordList;
     if (!pDVar1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x29c);
@@ -414,7 +414,7 @@ D2RoomCoordListStrc * __stdcall DRLGLOGIC_GetRoomCoordListAt(D2RoomExStrc * pRoo
 
 // pRoomEx in EDI, nX in ECX, nY in EAX: returns nIndex of the coord entry at that position (as in DRLGLOGIC_GetRoomCoordListAt), or -1. Halts (DrlgLogic.cpp line 668, ptLogicalRoomInfo) when the list is missing.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-int __stdcall DRLGLOGIC_GetRoomCoordIndexAt(D2RoomExStrc * pRoomEx, int nX, int nY) {
+static int __stdcall DRLGLOGIC_GetRoomCoordIndexAt(D2RoomExStrc * pRoomEx, int nX, int nY) {
     D2RoomCoordListStrc* pDVar2;
     D2DrlgCoordListStrc* pDVar1 = pRoomEx->pDrlgCoordList;
     if (!pDVar1) {
@@ -610,5 +610,9 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     DRLGLOGIC_FillTileGridFlags(pRoomEx);
     DRLGLOGIC_LinkBorderCoordLists(pRoomEx);
 }
+
+static void * keep_0066c6a0 = (0 ? (AllocEmptyRoomCoordList_Unused(*(D2PoolManagerStrc * *)0, *(D2DrlgCoordListStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0066cda0 = (0 ? (DRLGLOGIC_GetRoomCoordListAt(*(D2RoomExStrc * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
+static void * keep_0066cde0 = (0 ? (DRLGLOGIC_GetRoomCoordIndexAt(*(D2RoomExStrc * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::DrlgLogic

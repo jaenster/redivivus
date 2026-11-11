@@ -917,7 +917,7 @@ void __stdcall FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0() {
 
 }
 
-void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2) {
+static void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2) {
     char cVar1;
     if (*szText1 == '\0') {
       cVar1 = ' ';
@@ -950,6 +950,8 @@ void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2) {
 
     szText2[3] = cVar1;
 }
+
+static void * keep_006bcd50 = (0 ? (CUBE_PadItemCodeString_Unref_006bcd50(*(char * *)0, *(char * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Txt::Cube
 

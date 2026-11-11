@@ -1484,7 +1484,7 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, D2UnitS
     A3Q5::Q22_OnCouncilMemberKilled(pQuestData, pUnit);
 }
 
-void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, D2UnitStrc * pUnit, int32_t nNpcIdCount) {
+static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, D2UnitStrc * pUnit, int32_t nNpcIdCount) {
     int i;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     for (i = 0; i < nNpcIdCount; i++) {
@@ -2208,7 +2208,7 @@ void __fastcall AttachToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc
     PLAYER::PlayerMsg::PrepareClientMessage(pGame, "Error attaching to unit", '\x04');
 }
 
-void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, D2QuestDataStrc * pQuestData) {
+static void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, D2QuestDataStrc * pQuestData) {
     memset(pQuestData, 0, 0xf8);
     pQuestData->nQuestNoInternal = nQuestNoInternal;
     pQuestData->pGame = pGame;
@@ -2331,7 +2331,7 @@ void __fastcall AllocQuestControl(::SGAMEDATA * pGame) {
 
 // Searches the quest-control timer list for the entry matching both pQuestUpdate (callback) and pQuestData (quest), unlinks it from the singly-linked list, and frees its memory. Asserts the timer list is not currently being executed (bExecuting). Logs a debug message if no matching timer is found.
 // @sourcefile .\QUESTS\QUESTS.CPP
-void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::SGAMEDATA * pGame) {
+static void RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::SGAMEDATA * pGame) {
     D2QuestTimerStrc* pMemoryToFree;
     D2QuestControlStrc* pQuestControl = pGame->pQuestControl;
     if (!pQuestControl) {
@@ -2990,7 +2990,7 @@ BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
-void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, D2QuestDataA1Q5Strc * nParam2) {
+static void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, D2QuestDataA1Q5Strc * nParam2) {
     if (nParam1) {
       if (nParam2->nPlayersForRewardCount < 0xc) {
         nParam2->aPlayersForRewardGUIDs[nParam2->nPlayersForRewardCount] = nPlayerGUID;
@@ -3466,6 +3466,11 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperati
 
     return 0;
 }
+
+static void * keep_00544f60 = (0 ? (QUEST_MarkNPCsAsIntroduced(*(::SGAMEDATA * *)0, *(int32_t * *)0, *(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00545d40 = (0 ? (QUEST_InitializeQuestDataStruct(*(::SGAMEDATA * *)0, *(uint32_t *)0, *(bool *)0, *(D2QuestDataStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00545fa5 = (0 ? (RemoveQuestTimer(*(D2QuestDataStrc * *)0, *(QUESTUPDATE *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
+static void * keep_00594700 = (0 ? (QUEST_AddPlayerGUIDToTrackingList(*(uint32_t *)0, *(int32_t *)0, *(D2QuestDataA1Q5Strc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS
 

@@ -145,7 +145,6 @@ bool __thiscall GetRC4Data(::WardenClient * pThis, void * pDest, uint32_t * pnSi
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __thiscall WARDEN_RC4Decrypt(struct D2RC4StateStrc * pState, uint8_t * pData, uint32_t nLen);
-uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, int32_t pBuffer, int * pnSigOffset);
 int __fastcall Unreferenced_0047fbc0(int param_1);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __fastcall WARDEN_CbAllocModuleStruct(uint32_t nSize);

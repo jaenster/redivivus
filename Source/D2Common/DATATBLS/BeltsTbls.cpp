@@ -102,7 +102,7 @@ void __stdcall FreeBeltsTxt() {
 
 // nIndex in EAX: returns &pTxtBelts[nIndex]; halts (BeltTbls.cpp line 121, sgptBeltInitStats) when the table is not loaded and (line 122) when the result is NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-D2BeltsTxt * __stdcall TXT_Belts_GetLine(int nIndex) {
+static D2BeltsTxt * __stdcall TXT_Belts_GetLine(int nIndex) {
     if (!pTxtBelts) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
       exit(-1);
@@ -162,5 +162,7 @@ void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_
       return;
     }
 }
+
+static void * keep_00660c70 = (0 ? (TXT_Belts_GetLine(*(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::DATATBLS::BeltsTbls

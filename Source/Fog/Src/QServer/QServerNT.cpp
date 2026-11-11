@@ -318,7 +318,7 @@ static int __stdcall BeginAsyncWriteForClient(D2QServerStrc * pQServer, D2QServe
     return 1;
 }
 
-int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc * pClient) {
+static int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc * pClient) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pClient->clientLock);
     D2QServerClientPacketStrc* pMemoryToFree = pClient->pSendQueueHead;
     if (pMemoryToFree) {
@@ -757,5 +757,7 @@ SOCKET __fastcall CreateSocketLocal(D2QServerStrc * pQServer, int nPort) {
     SOCKET SVar1 = QServerNT::StartListening(pQServer, nPort);
     return SVar1;
 }
+
+static void * keep_006c2810 = (0 ? (PopAndFreeCompletedSendPacket(*(D2QServerClientConnectionStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::Src::QServer::QServerNT

@@ -245,10 +245,7 @@ void __stdcall NullSub_Unref_00611640(struct D2InventoryStrc * pInventory);
 int __fastcall Unreferenced_0063aad0(struct D2UnitStrc * param_1);
 // Removes an item unit from its owning D2InventoryStrc. Validates inventory signature (0x1020304), removes the item from its grid slot, clears the cursor-item pointer or unlinks it from the item list, zeroes the item's inventory/grid references, clears the owner's stat bonuses via STATLIST_RemoveFromOwnerAndRecalc, and clears dwPrimaryWeaponGUID if it matched. Returns 1 on success, 0 on any validation failure.
 BOOL __fastcall INVENTORY_RemoveItemFromInventory(struct D2UnitStrc * pItem);
-// Links pItem onto the tail of pInventoryStrc's item linked list (pFirstItem/pLastItem chain). Validates that pItem is a unit of type UNIT_ITEM (eUnitType==4) with valid pUnitData and pStatsEx. Sets pUnitDataItem->pInventory to the previous last item and pStatsEx to the inventory pointer.
-void INVENTORY_AppendItemToList(struct D2UnitStrc * pItem, struct D2InventoryStrc * pInventoryStrc);
 struct D2UnitStrc * __stdcall INVENTORY_GetLastItem(struct D2InventoryStrc * pInventory);
-uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint32_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, struct D2InventoryGridInfoStrc * pGridInfo);
 int __stdcall Unreferenced_0063bcb0(int param_1, int param_2, int param_3, int param_4);
 // Returns 1 if pInventory has a non-broken, non-disabled item matching weapon class ConfirmWClass equipped in either the primary right-arm slot (grid cell 5) or primary left-arm slot (grid cell 4). Checks both slots independently via ITEM_CheckIfItemIsNotBrokenAndNotDisabled and HasWeaponClass. Returns 0 if no match or inventory is invalid.
 uint32_t __stdcall INVENTORY_HasEquippedWeaponClass(struct D2InventoryStrc * pInventory, int32_t ConfirmWClass);
@@ -268,7 +265,6 @@ void __fastcall INVENTORY_SetOrClearCursorItem(struct D2InventoryStrc * pInvento
 void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pInventory);
 // One-time initializer (guarded by gbItemTypeTableInitialized) that builds gaItemTypeBaseIdTable and gwItemTypeEquivByIndex — a compact lookup table mapping item base-type IDs to their item-type equivalence index. Iterates all Items.txt rows, filters out non-equippable types (no weapons/armor/shields/helms/circlets), deduplicates by base-type ID, and assigns slots by weapon/armor category match. Also seeds gaItemTypeStringBuffer literals ("lit", "med", "hvy") and gnItemTypeAltGfxSentinel=0xFF.
 void __stdcall INVENTORY_InitializeItemTypeTable();
-uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2);
 struct D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
 void __stdcall NullSub_Unref_00643610(struct D2InventoryStrc * pInventory);
 void __stdcall NullSub_Unref_006460c0(struct D2InventoryStrc * pInventory);

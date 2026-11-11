@@ -24,13 +24,10 @@ namespace D2Common {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-// Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.
-void __stdcall DRLGROOMEX_SetFlagsFromNearCount(struct D2RoomExStrc * pRoomEx);
 int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey);
 int __fastcall ITEMTBLS_CalcExpr_GetConstTwo(int nFunctionIndex);
 // Callback used by missile calc VM evaluator; maps calc opcode/context to GetSpecialParamValue.
 int32_t __fastcall MISSILE_CalcVMCallback_GetSpecialParam(uint32_t nCalcOp, struct D2MissileCalcContextStrc * pCalcCtx);
-int __stdcall ITEMMOD_RollRandomInRange(int nRangeStart, int nRangeEnd, struct D2UnitStrc * pUnit);
 // DRLGPRESET_GetObjectTableActCount
 // Returns the count of valid entries in the object preset table for a given act.
 // Iterates the global object ID table (gpsPresetObjectTable) in strides of 6, returning

@@ -36,7 +36,7 @@ namespace D2Game::PLAYER::PlayerSave2 {
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00568d60..00568d69; unreferenced in 1.14d.
-__time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -1952,5 +1952,7 @@ int32_t __fastcall PLAYERSAVE_LoadModernFormat(::SGAMEDATA * pGame, D2ClientStrc
     GAME::Clients::SERVER_LinkServerPlayerUnitToClient(pClientSaved, nullptr);
     return gdwPlayerSaveVersion[nLoadError];
 }
+
+static void * keep_00568d60 = (0 ? (PLRSAVE_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::PLAYER::PlayerSave2

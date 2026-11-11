@@ -1089,7 +1089,7 @@ BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
-void __stdcall Unreferenced_005d2b40(D2UnitStrc * pUnit) {
+static void __stdcall Unreferenced_005d2b40(D2UnitStrc * pUnit) {
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
     if (!pStatListEx) {
       return;
@@ -1338,5 +1338,7 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
     D2Common::Units::UnitFinds::FreeUnitFindData(&sUnitFindData);
     return nullptr;
 }
+
+static void * keep_005d2b40 = (0 ? (Unreferenced_005d2b40(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::SKILLS::SkillEMonst

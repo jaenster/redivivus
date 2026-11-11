@@ -1249,7 +1249,7 @@ BOOL __fastcall NET_SID_CLIENT_IncomingPacketHandler(uint8_t nPacketId, char * p
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00521b40..00521b49; unreferenced in 1.14d.
-__time32_t __stdcall NET_SID_GetTime32_00521b40(__time32_t * pTime) {
+static __time32_t __stdcall NET_SID_GetTime32_00521b40(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -2119,7 +2119,7 @@ void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t 
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00522bb0..00522bb9; unreferenced in 1.14d.
-__time32_t __stdcall NET_SID_GetTime32_00522bb0(__time32_t * pTime) {
+static __time32_t __stdcall NET_SID_GetTime32_00522bb0(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -3160,5 +3160,8 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
 void __stdcall NET_SID_CLIENT_ClearIDEAContexts() {
     memset(g_IDEAKeySchedules, 0, 0x138);
 }
+
+static void * keep_00521b40 = (0 ? (NET_SID_GetTime32_00521b40(*(__time32_t * *)0), (void *)0) : (void *)0);
+static void * keep_00522bb0 = (0 ? (NET_SID_GetTime32_00522bb0(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace Bnclient::_net_sid

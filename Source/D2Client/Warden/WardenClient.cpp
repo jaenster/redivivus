@@ -89,7 +89,7 @@ void __thiscall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, uint8_t * pData, uint
     } while (nNextByteIndex < nLen);
 }
 
-uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, int32_t pBuffer, int * pnSigOffset) {
+static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, int32_t pBuffer, int * pnSigOffset) {
     int nSigOffset = nTotalLen - nDataLen - 4;
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
@@ -1019,5 +1019,7 @@ void __fastcall WARDEN_FreeModuleLibraries(LPVOID * ppWardenModule) {
     *ppWardenModule = (LPVOID)0x0;
     ppWardenModule[1] = (LPVOID)0x0;
 }
+
+static void * keep_0047f950 = (0 ? (WARDEN_CheckSignatureMagic(*(int32_t *)0, *(uint32_t *)0, *(int32_t *)0, *(int * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Warden

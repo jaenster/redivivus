@@ -128,7 +128,6 @@ void __stdcall FIELDTBLS_Unused_HaltLine101();
 int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a490();
 int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a4a0();
 void __stdcall FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0();
-void CUBE_PadItemCodeString_Unref_006bcd50(char * szText1, char * szText2);
 #endif // D2_MODULE_D2Common
 // 4 internal functions (defined in .cpp)
 

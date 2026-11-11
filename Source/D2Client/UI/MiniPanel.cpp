@@ -55,7 +55,7 @@ void __stdcall UpdateGlobalAlwaysRun() {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Always Run", 0, nValue);
 }
 
-void MINIPANEL_DrawBackground(int32_t nPanelSection) {
+static void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     int nXOffset;
     D2GfxDataStrc sGfxData;
     if (!nPanelSection) {
@@ -878,5 +878,7 @@ void __stdcall DRAW_UI_MiniPanel() {
     gnMiniPanelMouseOverButton = 0;
     return;
 }
+
+static void * keep_0047e770 = (0 ? (MINIPANEL_DrawBackground(*(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::MiniPanel

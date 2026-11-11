@@ -32,7 +32,6 @@ void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, struc
 BOOL __fastcall HandleMessage(int32_t nMessageType, struct D2UnitStrc * pUnit, struct D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode);
 // Client-side: when a player/monster unit enters a hit/death anim mode (player modes 0/4/0x13, monster modes 0/3/0xd), spawns the appropriate elemental-hit overlay graphic on the unit based on the high nibble of dwLastHitClass (provided the low nibble is also set). Maps element class 0x20->fire_hit, 0x30->ice_explode, 0x40->lightning, 0x10->doubledamage1, 0x70->bash, 0x80->hit_thorns, 0x90->sanctuaryknockback via GFX_AddOverlayToUnit. Visual only; no-op for other unit types or non-hit modes.
 void __fastcall UNITMODE_ShowElementalHitOverlay(struct D2UnitStrc * pUnit, int32_t nAnimMode);
-BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, struct D2UnitStrc * pUnit);
 void __fastcall UNITMODE_SetAnimMode(struct D2UnitStrc * pUnit, eD2PlayerAnimMode nAnimMode);
 void __fastcall UNITMODE_SetAnimModeSilent(struct D2UnitStrc * pUnit, int32_t nAnimMode);
 // Sends a walk/move message to a unit toward (nTargetX, nTargetY). Computes whether the unit has actually moved (delta > 1 in either axis). For monsters, skips if the class has no-move flag. For the local player unit sends msg ID 1; for remote players optionally calls PATH_MoveUnitToPoint (if bUsePathMove) or msg 0x17; monsters get msg with nTargetUnitId=1. If no movement occurred, clears path flag 0x20 instead.

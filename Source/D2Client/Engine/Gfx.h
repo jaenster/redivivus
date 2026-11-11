@@ -7300,7 +7300,6 @@ void __stdcall DRAW_UNIT_States(struct D2UnitStrc * pUnit, int32_t nBlendMode, i
 void __stdcall DRAW_UNIT_States_HaltTail(int nLine);
 uint8_t * __fastcall GFX_GetGfxInfoCofData(struct D2UnitStrc * pUnit, int32_t pAnimMode);
 struct D2GfxInfoUnkStrc * __fastcall GFX_FindGfxInfoByModeAndWeapon(struct D2UnitStrc * pUnit, int32_t nWeaponParam, int nAnimMode);
-uint32_t GFX_LoadGenericModeCof(struct D2UnitStrc * pUnit, uint32_t nComponent);
 // @sourcefile .\ENGINE\Gfx.cpp
 struct D2GfxInfoStrc * __stdcall AllocGfxInfo();
 // @sourcefile .\ENGINE\Gfx.cpp

@@ -1775,9 +1775,17 @@ void __stdcall StoreOwnerInfo(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t
     StoreOwnerTypeAndGUID(pUnit, eUnitType, nOwnerId);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 void __stdcall StoreOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     if (pOwner) {
-      StoreOwnerTypeAndGUID(pUnit, pOwner->eUnitType, pOwner->nUnitGUID);
+      StoreOwnerTypeAndGUID(pUnit, pOwner->eUnitType, GetGUIDInline(pOwner));
       return;
     }
 
@@ -1888,12 +1896,20 @@ int32_t __stdcall GetCurrentLifePercentage(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 BOOL __stdcall IsSoftMonster(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
-    BOOL bResult = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit->nClassId, TXTMonStats2Field0x04DWORD_ns::soft);
+    BOOL bResult = DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(GetClassIdInline(pUnit), TXTMonStats2Field0x04DWORD_ns::soft);
     return (uint32_t)(bResult != 0);
 }
 

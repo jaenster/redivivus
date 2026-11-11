@@ -2902,7 +2902,7 @@ uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nVa
     return -2;
 }
 
-void __fastcall fixedtables(inflate_state * state) {
+static void __fastcall fixedtables(inflate_state * state) {
     state->lencode = (inflate_code*)gaZlibInflateTableMid;
     state->lenbits = 9;
     state->distcode = (inflate_code*)gaZlibInflateTableStart;
@@ -4416,5 +4416,7 @@ int32_t __fastcall inflateMark(z_stream * pStream) {
 
     return -0x10000;
 }
+
+static void * keep_00429aa0 = (0 ? (fixedtables(*(inflate_state * *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::_3rdparty::zlib::inflate

@@ -444,7 +444,6 @@ uint16_t __stdcall GetClientPeerPortByToken(struct D2QServerStrc * pQServer, uin
 void __stdcall ProbePeerNameByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
 void __stdcall QSHackListSize(struct D2QServerStrc * pQServer, uint32_t szFile, uint32_t nLine);
 void __fastcall Unreferenced_006bf170(struct D2QServerStrc * param_1);
-void Listen98Nt(struct D2QServerStrc * pQServer, int pPort);
 int __stdcall CountAllQueuedPackets(struct D2QServerStrc * pQServer);
 // Checks whether a value matches any configured game-token filter entry.
 int __thiscall MatchesGameTokenFilter(struct D2QServerStrc * pQServer, uint32_t nValue);

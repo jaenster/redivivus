@@ -56,7 +56,7 @@ BOOL __stdcall GetLoggerState_Stub();
 // Element ctor/dtor for the eh-vector iterator over aTaskQueueCriticalSections.
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
-void __fastcall InitCriticalSection(void * pElement);
+void * __fastcall InitCriticalSection(void * pElement);
 void LOGFILE_WriteStringToFile(char * Format, ...);
 void LOGMANAGER_TraceToModuleLog(char * szModule, char * szFormatString, ...);
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
@@ -124,9 +124,6 @@ void __stdcall StartLogWriterThread();
 void LogWithCategory(char * szText1, char * szText2, ...);
 void LogSimple(char * szText, ...);
 void LogWithCategoryVarArgs(char * szText1, char * szText2, ...);
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00410790..00410799; unreferenced in 1.14d.
-__time32_t __stdcall LOGMGR_GetTime32(__time32_t * pTime);
 // Deletes the high-res timer critical section at 0x0075e880. Takes no arguments: the body pushes that address as a hard-coded constant and ends in a bare RET (a __stdcall with one dword arg would RET 4); the only caller, EXIT_AtExit at 0x00407f43, pushes nothing.
 void LOGMGR_DeleteHighResTimerLock();
 // Atomic 64-bit store of *pllValue into *pllTarget: LOCK CMPXCHG8B retried until it succeeds, so the old value is never kept (ECX=target, EDX=value).

@@ -530,6 +530,14 @@ void __fastcall Q04_SendQuestStatePacket(D2UnitStrc * pUnit) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &abyPacketBuf);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // A1Q4 — Q04_DespawnRogueGuards (per-monster iterate callback).
 // For each Rogue guard monster (classId 0x92) escorting/blocking near Tristram:
 // if it still has an AI sub, clear it (graceful); otherwise force a Death
@@ -541,7 +549,7 @@ BOOL __fastcall Q04_DespawnRogueGuards(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (!pUnit || pUnit->nClassId != 0x92) {
       return 0;
     }
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+    if (GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       pMonsterAi = pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     } else {
       pMonsterAi = 0;

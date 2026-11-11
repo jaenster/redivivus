@@ -1160,7 +1160,7 @@ int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry) {
 
 // The 4-byte search key sits in the slot the prologue's PUSH ECX reserves; only its high word (wChar) is
 // set and read - UNICODE_CompareKamapEntry compares the word at +2.
-uint32_t UNICODE_BinarySearchKamap(uint16_t wChar) {
+static uint32_t UNICODE_BinarySearchKamap(uint16_t wChar) {
     uint16_t aSearchKey[2];
     if (wChar < 0x20) {
       return (uint32_t)wChar;
@@ -1353,5 +1353,7 @@ int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile)
 
     return pszCount;
 }
+
+static void * keep_00527b00 = (0 ? (UNICODE_BinarySearchKamap(*(uint16_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Lang::Unicode::UNISYS

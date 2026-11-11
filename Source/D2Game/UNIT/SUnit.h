@@ -62,7 +62,6 @@ void __fastcall SetSeed(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 void __fastcall SetItemSeeds(struct D2UnitStrc * pUnit, struct D2SeedStrc * pSeed);
 // Increments and returns pGame->anUnitGuidCounters[eUnitType] (+0x90), skipping -1. The incremented value IS the new unit's GUID and is returned in EAX; typing it void made every caller read the GUID out of an unassigned local.
 uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitType eUnitType);
-struct D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID);
 // Finds a unit by type and GUID in the game's unit hash tables. Walks the unit linked list (pNext at offset 0xE4) matching dwUnitId.
 struct D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnitType, uint32_t nUnitGUID);
 // Returns the owner unit (parent) of the given unit. Checks eUnitFlagsEx bit 10 (has owner flag), then looks up eOwnerType/nOwnerGUID via FindUnitFromTable.

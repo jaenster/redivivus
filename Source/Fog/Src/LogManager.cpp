@@ -771,8 +771,9 @@ int __fastcall Unreferenced_0040eb40(int param_1) {
 // Element ctor/dtor for the eh-vector iterator over aTaskQueueCriticalSections.
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
-void __fastcall InitCriticalSection(void * pElement) {
+void * __fastcall InitCriticalSection(void * pElement) {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection((LPCRITICAL_SECTION)pElement);
+    return pElement;
 }
 
 void __fastcall InitLogFilePathPointers(uint8_t * * pPathPtrArray, uint32_t nCount) {
@@ -1932,7 +1933,7 @@ void LogWithCategoryVarArgs(char * szText1, char * szText2, ...) {
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00410790..00410799; unreferenced in 1.14d.
-__time32_t __stdcall LOGMGR_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall LOGMGR_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -2160,5 +2161,7 @@ void StaticFini_gLogFileCS() {
 void StaticFini_gLogMessageQueueHead() {
     TeardownListFull(&gLogMessageQueueHead);
 }
+
+static void * keep_00410790 = (0 ? (LOGMGR_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace Fog::Src::LogManager

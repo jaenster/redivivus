@@ -2458,7 +2458,7 @@ static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(int32_t nColor, int32_t nL
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
-void CHATDLG_FreeChatMsgNode(void * * pChatNode) {
+static void CHATDLG_FreeChatMsgNode(void * * pChatNode) {
     if (!pChatNode) {
       return;
     }
@@ -3364,7 +3364,7 @@ static void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSou
     *szDest = '\0';
 }
 
-void __stdcall SafeDefaultChannel(char * pszChannel) {
+static void __stdcall SafeDefaultChannel(char * pszChannel) {
     Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, pszChannel);
 }
 
@@ -4707,5 +4707,8 @@ void StaticInit_gbChatLobbyInitialize() {
 
     gbChatLobbyInitialize = Storm::Source::SSTR::SStrHash("Game Time", 0, 0);
 }
+
+static void * keep_0043e2e0 = (0 ? (CHATDLG_FreeChatMsgNode(*(void * * *)0), (void *)0) : (void *)0);
+static void * keep_0043f8a0 = (0 ? (SafeDefaultChannel(*(char * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Multi::ChatDlg

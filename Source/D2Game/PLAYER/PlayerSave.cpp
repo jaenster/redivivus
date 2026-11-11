@@ -693,7 +693,7 @@ int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, D2UnitStrc *
     return 4;
 }
 
-D2SaveFileHeaderStrc * __stdcall PLRSAVE_MakeSaveFileReturnBuffer(int32_t nPlayerId, int32_t nExperiencePoints, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFileHeaderStrc * pSaveFileHeader, int32_t nParam) {
+static D2SaveFileHeaderStrc * __stdcall PLRSAVE_MakeSaveFileReturnBuffer(int32_t nPlayerId, int32_t nExperiencePoints, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SaveFileHeaderStrc * pSaveFileHeader, int32_t nParam) {
     D2SaveFileHeaderStrc* pSaveFileResult = 0;
     PlayerSave2::MakeSaveFile(pGame, pUnit, (uint8_t*)pSaveFileHeader, (int*)&pSaveFileResult, nExperiencePoints, nPlayerId, nParam);
     return pSaveFileResult;
@@ -2547,5 +2547,7 @@ BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc 
 void __stdcall WapperSaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * szText) {
     SaveGameAllGameTypes(pGame, pUnit, szText, 0);
 }
+
+static void * keep_00531d30 = (0 ? (PLRSAVE_MakeSaveFileReturnBuffer(*(int32_t *)0, *(int32_t *)0, *(::SGAMEDATA * *)0, *(D2UnitStrc * *)0, *(D2SaveFileHeaderStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::PLAYER::PlayerSave

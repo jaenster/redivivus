@@ -354,6 +354,14 @@ void __fastcall PLRMODES_SetMoveTargetPosition(::SGAMEDATA * pGame, D2UnitStrc *
     PLRMODES_StartPathAndChangeMode(pGame, nLevel, pUnit);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Drains stamina for one run-tick. Returns 1 immediately if player is in town (no drain). Computes base drain from CharStats.RunDrain*2, multiplies by armor speed factor (torso item Speed/10+1), then adjusts by UNITSTAT_item_staminadrainpct. Subtracts the result from stamina; if stamina reaches 0, clamps it to 0 and returns 0 (caller should switch to walk). Returns 1 while stamina remains.
 static BOOL PLRMODES_DrainStamina(D2UnitStrc * pUnit) {
     int nDrainAdjusted;
@@ -381,7 +389,7 @@ static BOOL PLRMODES_DrainStamina(D2UnitStrc * pUnit) {
     D2UnitStrc* pArmorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, 3);
     if (pArmorItem) {
       D2ItemsTxt* pArmorTxt;
-      pArmorTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pArmorItem->nClassId);
+      pArmorTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pArmorItem));
       if (pArmorTxt) {
         nStaminaDrain *= pArmorTxt->dwSpeed / 10 + 1;
       }

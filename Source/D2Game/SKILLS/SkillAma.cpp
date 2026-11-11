@@ -230,6 +230,22 @@ BOOL __fastcall SKILLAMA_SrvStFn08_Strafe(::SGAMEDATA * pGame, D2UnitStrc * pUni
     return 1;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Amazon melee area-hit strike-step. Computes melee range, tries the explicit target first; if none, sweeps an area for victims via SKILLS_FindNextUnitInAreaByGUID. Stores hit-count in skill param1 and the primary target's type/GUID in param2/param3 for subsequent do-func processing. Returns 1 if skill struct is valid.
 BOOL __fastcall SKILLAMA_SrvStFn09_Fend(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -261,8 +277,8 @@ BOOL __fastcall SKILLAMA_SrvStFn09_Fend(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     }
 
     D2Common::Skills::SKILL_SetParam1(pSkill, nHitCount);
-    D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pTarget));
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pTarget));
     return 1;
 }
 

@@ -169,7 +169,6 @@ uint32_t __fastcall deflatePending(z_stream * pStream, uint32_t * pPending, uint
 uint32_t __fastcall deflatePrime(z_stream * pStream, int32_t nBits, uint32_t uValue);
 uint32_t __fastcall deflateTune(z_stream * pStream, uint32_t nGoodMatch, uint32_t nMaxLazyMatch, int32_t nNiceMatch, uint32_t nMaxChainLen);
 int32_t __fastcall deflateBound(z_stream * pStream, uint32_t nSourceLen);
-void putShortMSB(deflate_state * pDeflateState, uint32_t wValue);
 uint32_t __fastcall deflateEnd(z_stream * pStream);
 uint32_t __fastcall deflateCopy(z_stream * pDestStream, z_stream * pSrcStream);
 int32_t __fastcall deflate_stored(deflate_state * pDeflateState, int32_t nFlush);

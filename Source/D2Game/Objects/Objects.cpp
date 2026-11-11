@@ -1970,7 +1970,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
 
     D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECT_IsPositionNearSpawnPoint2);
     if (pSpawnedUnit) {
-      if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
+      if (pObjectsTxt->Selectable[GetAnimModeInline(pSpawnedUnit)]) {
         pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
       } else {
         pSpawnedUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;

@@ -25,7 +25,6 @@ namespace D2Client::UI::Help {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 int32_t __stdcall GetSeenHelpMenuValue();
-void __stdcall SetSeenHelpMenu(BOOL bSeenHelpMenu);
 void __stdcall LoadBorder();
 void __stdcall DrawBorderClassic();
 void __stdcall DrawBorderXpac();
@@ -44,7 +43,6 @@ void __stdcall FreeHelpBorder();
 void __stdcall INPUT_HelpCloseButtonDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall HELP_MiniPanelKeyNoOp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall HELP_HideMiniPanel();
-BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY);
 void __stdcall HELP_DrawHelpButtonTooltip();
 void __stdcall HELP_DrawHelpButton();
 void __stdcall INPUT_HelpScrollButtonDown(struct D2UIMouseMsgStrc * pMsg);

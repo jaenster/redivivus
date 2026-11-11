@@ -64,9 +64,6 @@ bool __fastcall Q11_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nT
 // already participated, otherwise pick a msg from gdwQ10QuestStateMessages[stateFlag] when the intro is done,
 // quest not Completed and stateFlag<=3. AddGossipMessageOnMonster shows the chosen line. Read-only on record.
 void __fastcall Q11_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
-// A2Q3 - Q11_EndTaintedSun: ends the darkening. Clears the darkened flag, calls DRLGENV_TaintedSunEnd()
-// (restores daylight in Act 2) and iterates players sending Q11_SendSunRestoredPacket. No quest-record writes.
-void __stdcall Q11_EndTaintedSun(struct D2QuestDataStrc * pQuestData, ::SGAMEDATA * pGame);
 // A2Q3 - Q11_OnViperAmuletInit: object-init hook for the Viper Amulet / altar object. Records the object's
 // GUID, and if the intro is done and stateFlag<2 kicks off Q11_BeginTaintedSun (darkening); sets pending vs
 // darkened flags by its result and advances stateFlag to 3. If no prior stateFlag, broadcasts display state 2

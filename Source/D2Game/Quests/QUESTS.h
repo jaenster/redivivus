@@ -253,7 +253,6 @@ void __fastcall Objects_InitFn23_LamEsenTome(struct D2ObjectInitFnArg * pInitArg
 void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit);
-void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, struct D2UnitStrc * pUnit, int32_t nNpcIdCount);
 // Builds and sends packet 0x91 (NpcGossip) to the player's client for a given act, listing which intro NPCs the player has already spoken with. Selects the act-specific NPC list (Acts I/II/III/V), calls INTRONPC_FillInPacketWithIntroNpcIds to populate the packet, and sends it only if at least one NPC entry needs to be communicated.
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
@@ -301,13 +300,9 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, struct
 struct D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique);
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MapAIStrc * pMapAI);
 void __fastcall AttachToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, BOOL bExpectedResult);
-void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint32_t nQuestNoInternal, bool bIsNotIntroduction, struct D2QuestDataStrc * pQuestData);
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall AllocQuestControl(::SGAMEDATA * pGame);
-// Searches the quest-control timer list for the entry matching both pQuestUpdate (callback) and pQuestData (quest), unlinks it from the singly-linked list, and frees its memory. Asserts the timer list is not currently being executed (bExecuting). Logs a debug message if no matching timer is found.
-// @sourcefile .\QUESTS\QUESTS.CPP
-void RemoveQuestTimer(struct D2QuestDataStrc * pQuestData, QUESTUPDATE pQuestUpdate, ::SGAMEDATA * pGame);
 // Resends a player's full quest state to their client (called on (re)entering a game / quest log refresh). Sends the raw quest-record bitfield via the 0x28 PlayerQuestInfo packet, then walks the game's quest-data linked list computing each quest's display state into a 0x29-byte per-quest array using each quest's fpStatusFilter callback (or QUEST_GetQuestLogDisplayState fallback). Builds and conditionally sends a 0x50 QuestSpecial packet carrying Act1 Den-of-Evil monsters-left, Act5 RescueOnMountArreat barbarians-left, and (once the Summoner is dead and Act2 reached) Tal Rasha's tomb symbol level id. Finally sends the assembled 0x52 PlayerQuestLog packet. Halts via ErrorManager on a malformed quest list / bad filter pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
@@ -324,8 +319,6 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, struct D2UnitStr
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nLevelId, struct D2UnitStrc * nEventCode);
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnitFallback);
-// Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
-void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, int32_t nParam1, struct D2QuestDataA1Q5Strc * nParam2);
 // A2Q4 - Callback_03 (quest state 3 handler). Index 0x4a: advance stateFlag to 4 (if <4) and broadcast state 4 via QUEST_SetStateAndBroadcast, then persist via UpdateQuestRecord. Index 0x32: directly set record Step0x08+Step0x07. For the Jerhyn (0x28) path: tear down/respawn Jerhyn's monster AI, optionally ReplaceJerhyn at his location, remove player from the participation list, and if not Completed(0)/RewardAwaits(1) and stateFlag==3 advance to 4 + persist.
 void __fastcall Q12_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // A2Q4 - InitData. Quest registration/init. Allocates the A2Q4 quest-specific data block (0x48), zeroes state functions, wires the gossip table and the state-handler callbacks (0->Callback_00, 2->Callback_02, 3->Callback_03, 0xa->Callback_10, 0xb->Callback_11, 0xd->Callback_13), sets nQuestIdReal=TheArcaneSanctuary, fpActiveFilter=Q12_ActiveFilter, fpSequenceFilter=Q12_SequenceFilter, nSequenceQuestId=TheSummoner, and clears the Summoner/sun sub-flags.

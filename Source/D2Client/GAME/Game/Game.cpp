@@ -1310,7 +1310,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     return 1;
 }
 
-BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t width, int32_t height, int32_t bottomY, int32_t leftX) {
+static BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t width, int32_t height, int32_t bottomY, int32_t leftX) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= leftX && nMouseX <= leftX + width && nMouseY >= bottomY - height && nMouseY <= bottomY) {

@@ -26,7 +26,7 @@ static int32_t __stdcall SKILLITEMS_SetDispatchTableEntry(D2MagicAffixCandidateS
     return nCount;
 }
 
-int32_t __stdcall SKILLITEMS_GetDispatchTableRange(int32_t pDispatchTable, int32_t nCount, int32_t nIndex) {
+static int32_t __stdcall SKILLITEMS_GetDispatchTableRange(int32_t pDispatchTable, int32_t nCount, int32_t nIndex) {
     if (nIndex >= nCount) {
       return 0;
     }
@@ -1923,5 +1923,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityVersioned(D2UnitStrc * pUnit, D2ItemGen
     BVar1 = ITEMMOD_ApplyCrudeQuality(pUnit);
     return BVar1;
 }
+
+static void * keep_005c0d20 = (0 ? (SKILLITEMS_GetDispatchTableRange(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::SKILLS::Items

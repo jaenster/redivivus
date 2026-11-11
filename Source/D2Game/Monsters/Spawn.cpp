@@ -394,7 +394,7 @@ static void __stdcall MONSTER_SetMinionsForBoss(D2RoomCoordListStrc * pRoomCoord
     } while (nMinionCount);
 }
 
-uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame, D2RoomCoordListStrc * pCoordList, uint32_t nClassId) {
+static uint32_t __stdcall MONSTER_SpawnUniquePackInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame, D2RoomCoordListStrc * pCoordList, uint32_t nClassId) {
     D2UnitStrc* pUnit = SpawnUniquePack(pGame, pRoom, pCoordList, nClassId, 1, 0, 0, 1);
     if (!pUnit) {
       return 0;
@@ -1050,5 +1050,7 @@ void __fastcall MONSTER_TrySpawnWanderingMonster(::SGAMEDATA * pGame, D2RoomStrc
 
     MONSTER_InitWanderingForLevel(pGame, eLevel, pRoom, pLevelsTxt);
 }
+
+static void * keep_0054e260 = (0 ? (MONSTER_SpawnUniquePackInRoom(*(D2RoomStrc * *)0, *(::SGAMEDATA * *)0, *(D2RoomCoordListStrc * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Monsters::Spawn

@@ -944,8 +944,8 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUni
         D2Common::Skills::SKILL_SetParam1(pSkill, nTeleportX);
         D2Common::Skills::SKILL_SetParam2(pSkill, nTeleportY);
         if (pPlayerUnit_lcl) {
-          D2Common::Skills::SKILL_SetParam3(pSkill, pPlayerUnit_lcl->eUnitType);
-          D2Common::Skills::SKILL_SetParam4(pSkill, pPlayerUnit_lcl->nUnitGUID);
+          D2Common::Skills::SKILL_SetParam3(pSkill, GetTypeInline(pPlayerUnit_lcl));
+          D2Common::Skills::SKILL_SetParam4(pSkill, GetGUIDInline(pPlayerUnit_lcl));
         } else {
           D2Common::Skills::SKILL_SetParam3(pSkill, 6);
         }

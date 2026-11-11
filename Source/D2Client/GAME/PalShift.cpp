@@ -325,13 +325,21 @@ D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2Un
     return (D2GamePalShiftRandTransformStrc**)(pPalShiftEntryPtr->aPalShifts + nPalShiftIndex * 0x100);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, uint16_t nSeedInput) {
     if (!pUnitSeedBase) {
       return 9;
     }
 
     D2SeedStrc* pSeed = &pUnitSeedBase->sSeed;
-    D2Common::Seed::InitSeed_Param_666(pSeed, (uint32_t)nSeedInput + pUnitSeedBase->nClassId);
+    D2Common::Seed::InitSeed_Param_666(pSeed, (uint32_t)nSeedInput + GetClassIdInline(pUnitSeedBase));
     uint32_t qwRandState = D2_SeedRoll(pSeed);
     return qwRandState % 0x1e + 9;
 }

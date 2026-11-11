@@ -24,7 +24,7 @@ namespace D2Game::Quests::QUESTS::A4Q4 {
 // missing or its per-game flag field_0x14==0 (Diablo not yet slain / portal-to-Harrogath not opened) ->
 // show the post-forge "go kill Diablo / move to Act 5" gossip line (idx 1). Reads only; no state writes.
 void __fastcall Q30_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!(pQuestArgs->pTarget && pQuestArgs->pTarget->nClassId == 0x198)) {
+    if (!(GetClassIdInline(pQuestArgs->pTarget) == 0x198)) {
       return;
     }
 

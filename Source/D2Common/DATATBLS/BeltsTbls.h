@@ -28,9 +28,6 @@ void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_
 // Builds the D2BinFieldInputStrc schema for belts.txt and compiles it via DataTbls::CompileTxt into the pTxtBelts table. Schema: numboxes plus 16 belt box screen rectangles (boxN left/right/top/bottom) defining the in-belt potion slot layout per belt type. Record stride 0x108. Asserts the produced record count divided by 2 equals 7 (NUM_BELT_STATS across the resolution variants), else fatal Fog error. Called once during data-table init; allocates from the passed D2PoolManagerStrc.
 void __fastcall LoadBeltsTxt(struct D2PoolManagerStrc * pMemory);
 void __stdcall FreeBeltsTxt();
-// nIndex in EAX: returns &pTxtBelts[nIndex]; halts (BeltTbls.cpp line 121, sgptBeltInitStats) when the table is not loaded and (line 122) when the result is NULL.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-struct D2BeltsTxt * __stdcall TXT_Belts_GetLine(int nIndex);
 #endif // D2_MODULE_D2Common
 
 } // namespace D2Common::DATATBLS::BeltsTbls

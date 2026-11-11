@@ -53,7 +53,7 @@ static uint32_t gnMonsterStateFlagMask2 = 0x2; D2_STATIC_GUARD(gnMonsterStateFla
 namespace D2Game::UNIT::SUnitInactive {
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
-void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InventoryToBeUpdatedStrc * pUnit) {
+static void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InventoryToBeUpdatedStrc * pUnit) {
     if ((D2AiGeneralStrc*)pUnit[4].pNext) {
       D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, (D2AiGeneralStrc*)pUnit[4].pNext);
     }
@@ -321,7 +321,7 @@ static D2InactiveUnitListStrc * __stdcall SUNITINACTIVE_AllocOrFindInactiveList(
     return pResultList;
 }
 
-void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t bCreate, D2RoomStrc * pRoom) {
+static void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t bCreate, D2RoomStrc * pRoom) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -1487,8 +1487,8 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
     eUnitType = pUnit->eUnitType;
     int nClassId;
     nClassId = pUnit->nClassId;
-    bool bShouldSave;
-    bShouldSave = false;
+    BOOL bShouldSave;
+    bShouldSave = 0;
     if (eUnitType == UNIT_MONSTER) {
       UNITS_ProcessDeadOrInactiveMonster(pGame, pUnit);
       return;
@@ -1499,7 +1499,7 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
     int32_t bSaveMonsters;
     bSaveMonsters = D2Common::Drlg::TXT_LevelDefs_GetSaveMonsters(eLevel);
     if (bSaveMonsters || pUnit->eUnitFlags & UNITFLAG_ISRESURRECT) {
-      bShouldSave = true;
+      bShouldSave = 1;
     }
     if (!false) {
       uint8_t bVar1;
@@ -1510,10 +1510,10 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
           }
         pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
         if (!pObjectTxt->Restore || (bVar1 = SUnit::GetSparklyChestFlag(pUnit) , (bVar1 & 2) != 0)) {
-          bShouldSave = false;
+          bShouldSave = 0;
         }
         if (pObjectTxt->RestoreVirgins && pUnit->eAnimMode.ePlayerMode != Death) {
-          bShouldSave = false;
+          bShouldSave = 0;
         }
 
         GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
@@ -1549,5 +1549,8 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
       SUnit::FreeServerUnit(pGame, pUnit);
     }
 }
+
+static void * keep_00541890 = (0 ? (SUNITINACTIVE_FreeInactiveMonster(*(::SGAMEDATA * *)0, *(D2InventoryToBeUpdatedStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00541de0 = (0 ? (SUNITINACTIVE_AllocInactiveListForRoom(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2RoomStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT::SUnitInactive

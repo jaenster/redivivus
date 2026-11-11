@@ -443,7 +443,6 @@ int __fastcall Unreferenced_005dc840(struct D2UnitStrc * param_1);
 uint32_t __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiNearbyAllyScanStrc * pScan);
 struct D2UnitStrc * __fastcall AI_ForEachFn04_FindDyingMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, uint32_t * test);
 uint32_t __fastcall MONSTERAI_GetThreatLevel(struct D2UnitStrc * pUnit);
-uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // ForEach callback used during AI target scanning. For each candidate pOther unit: if it is a valid attackable player/monster (alive, TARGETABLE flag set, can-attack check passes), records it in ppResults as a preferred (threat>=2 → ppResults[0]/[1]) or secondary (ppResults[5]/[6]) target when within distance ppResults[3]/[6] respectively, skipping if already blocked by LOS (TestCollisionWithUnit). If the unit fails those checks but is an aligned monster with nAiFlags bit 3 set, checks grid index against ppResults[4] and clears ppResults[2] on match (pack-leader slot invalidation). Always returns 0.
 uint32_t __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2AiThreatScanStrc * pScan);
 uint32_t __fastcall AI_ForEachFn06_NearestTargetByThreat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther, struct D2MonsterAiParameterStruct * ppResults);

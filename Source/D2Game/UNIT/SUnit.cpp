@@ -134,7 +134,7 @@ uint32_t __fastcall UNITS_IncrementUnitGUIDCounter(::SGAMEDATA * pGame, eD2UnitT
     return nNextGUID_lcl;
 }
 
-D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
+static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
     if (eUnitType <= UNIT_ITEM) {
       return (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
     }
@@ -2499,5 +2499,7 @@ void __fastcall Clear_Unref_005de320(D2UnitStrc * pUnit, eD2TimerTypeDWORD nUpda
 void StaticInit_gnSeedCounter() {
     gnSeedCounter = GetTickCount();
 }
+
+static void * keep_00552f30 = (0 ? (UNITS_GetHashTableSlot(*(eD2UnitType *)0, *(::SGAMEDATA * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT::SUnit

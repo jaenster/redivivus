@@ -39,9 +39,6 @@ namespace D2Game::PLAYER::PlayerSave2 {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00568d60..00568d69; unreferenced in 1.14d.
-__time32_t __stdcall PLRSAVE_GetTime32(__time32_t * pTime);
 int Unreferenced_00568d70();
 int32_t __fastcall FindEndOfString(char * szString, int32_t nMaxSize);
 int __stdcall PLAYERSAVE2_LoadOldSavegame_ReturnZero();

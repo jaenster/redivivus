@@ -116,7 +116,6 @@ void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Repo
 // walks as ExceptionRecord -> ExceptionCode.
 LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionPointers);
 void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void * pContext, uint32_t nUnused);
-uint32_t __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath);
 // Recursively creates a directory path (CreateDirectoryW, then split at the last separator and
 // retry).
 // @evidence lpPathName was LPCWSTR and is written through: the body stores L'\0' over the last

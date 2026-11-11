@@ -20,7 +20,7 @@ uint32_t __fastcall GetSeed_nSeedLow_Unref_0060dcf0(D2SeedStrc * pSeed) {
 
 // Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
 // Provenance: asm 00650dd0..00650dd9; unreferenced in 1.14d.
-__time32_t __stdcall SEED_GetTime32(__time32_t * pTime) {
+static __time32_t __stdcall SEED_GetTime32(__time32_t * pTime) {
     __time32_t _Var1 = _time32(pTime);
     return _Var1;
 }
@@ -54,5 +54,7 @@ void __fastcall GetSeed(D2SeedStrc * pSeed, uint32_t * nSeedLow, uint32_t * nSee
     *nSeedLow = pSeed->nSeedLow;
     *nSeedHigh = pSeed->nSeedHigh;
 }
+
+static void * keep_00650dd0 = (0 ? (SEED_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Seed

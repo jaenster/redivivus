@@ -434,7 +434,7 @@ BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitSt
 
 // [A4Q3 Terror's End — expansion] Warp player into the Pandemonium Fortress (LEVEL_ThePandemoniumFortress) and send 0x5D quest-state packet (quest 0x17, state 1). Standalone variant of the JustCompleted branch in Q27_PlayerEnterGame.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
-void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Level::InitLevel(pGame, pUnit, LEVEL_ThePandemoniumFortress, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x1b8);
     D2GSPacketSrv0x5D aQuestStatePacket;
@@ -1180,5 +1180,7 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
     Q23_UnlockHarrogathWaypoint(pOperation->sArg.pGame, pOperation->pAttacker);
     return 0;
 }
+
+static void * keep_005b4a30 = (0 ? (Q27_InitPandemoniumAndSendState(*(::SGAMEDATA * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Quests::QUESTS::A4Q2

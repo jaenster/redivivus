@@ -4125,7 +4125,7 @@ void __stdcall NPCMENU_HireMerc() {
     Dialog::AddStringData(Dialog::gpNpcTransactionWaitDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd19), 0xf, 0, 0, 1, 0, 0);
 }
 
-BOOL NPCMENU_IsItemIdentified(D2UnitStrc * pUnit) {
+static BOOL NPCMENU_IsItemIdentified(D2UnitStrc * pUnit) {
     BOOL BVar1 = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 0x999, ".\\UI\\npcmenu.cpp");
     return BVar1;
 }
@@ -4246,7 +4246,7 @@ void __stdcall NPCMENU_CloseAllDialogs() {
 // Shrinks NPC menu row nRowIndex (EAX) to 2 options: nOptionsCount = 2 and option slot 2 cleared (string id 0, callback NULL).
 // No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (rows 11, 13, 15, 21, 43). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
 // Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot2(int nRowIndex) {
+static void __stdcall NPCMENU_RemoveRowOptionSlot2(int nRowIndex) {
     NPC::D2NpcMenuOptions[nRowIndex].nOptionsCount = 2;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionStringId[2] = 0;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionCallback[2] = 0;
@@ -4255,7 +4255,7 @@ void __stdcall NPCMENU_RemoveRowOptionSlot2(int nRowIndex) {
 // Shrinks NPC menu row nRowIndex (EAX) to 3 options: nOptionsCount = 3 and option slot 3 cleared (string id 0, callback NULL).
 // No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (rows 3 and 39). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
 // Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot3(int nRowIndex) {
+static void __stdcall NPCMENU_RemoveRowOptionSlot3(int nRowIndex) {
     NPC::D2NpcMenuOptions[nRowIndex].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionStringId[3] = 0;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionCallback[3] = 0;
@@ -4264,7 +4264,7 @@ void __stdcall NPCMENU_RemoveRowOptionSlot3(int nRowIndex) {
 // Shrinks NPC menu row nRowIndex (EAX) to 4 options: nOptionsCount = 4 and option slot 4 cleared (string id 0, callback NULL).
 // No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined (row 41). One of a run of three such helpers (004b21c0 count 2, 004b21e0 count 3, 004b2200 count 4).
 // Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_RemoveRowOptionSlot4(int nRowIndex) {
+static void __stdcall NPCMENU_RemoveRowOptionSlot4(int nRowIndex) {
     NPC::D2NpcMenuOptions[nRowIndex].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionStringId[4] = 0;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionCallback[4] = 0;
@@ -4273,7 +4273,7 @@ void __stdcall NPCMENU_RemoveRowOptionSlot4(int nRowIndex) {
 // Adds Cain's "Identify Items" (4020 NPCIdentify1) option to NPC menu row nRowIndex (EAX): slot 1 = NPCMENU_CainIdentifyOptionCallback, nOptionsCount = 3.
 // No code or data refers to it; NPCMENU_InitializeMenuOptions has the same stores inlined for the Cain rows 16, 17, 18, 19 and 38.
 // Register argument in EAX, returns nothing.
-void __stdcall NPCMENU_EnableCainIdentifyOption(int nRowIndex) {
+static void __stdcall NPCMENU_EnableCainIdentifyOption(int nRowIndex) {
     NPC::D2NpcMenuOptions[nRowIndex].nOptionStringId[1] = 0xfb4;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionCallback[1] = NPCMENU_CainIdentifyOptionCallback;
     NPC::D2NpcMenuOptions[nRowIndex].nOptionsCount = 3;
@@ -7854,5 +7854,11 @@ void StaticInit_gNpcMenuConfirmDialogStrings() {
       gNpcMenuConfirmDialogStrings[iFill] = L'\0';
     }
 }
+
+static void * keep_004b1f60 = (0 ? (NPCMENU_IsItemIdentified(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004b21c0 = (0 ? (NPCMENU_RemoveRowOptionSlot2(*(int *)0), (void *)0) : (void *)0);
+static void * keep_004b21e0 = (0 ? (NPCMENU_RemoveRowOptionSlot3(*(int *)0), (void *)0) : (void *)0);
+static void * keep_004b2200 = (0 ? (NPCMENU_RemoveRowOptionSlot4(*(int *)0), (void *)0) : (void *)0);
+static void * keep_004b2220 = (0 ? (NPCMENU_EnableCainIdentifyOption(*(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::npcmenu

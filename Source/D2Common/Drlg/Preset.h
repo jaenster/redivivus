@@ -403,7 +403,6 @@ void __fastcall ParsePresetsOfDrlgFile(struct D2DrlgFileStrc * pFile, struct D2P
 // Thread-safe DS1/preset file cache: under a global critical section, searches the linked cache list by filename. If found, atomically increments the refcount and returns the existing D2DrlgFileStrc. If not found, allocates a new cache node and D2DrlgFileStrc, copies the filename, links the node at the list head, calls ParsePresetsOfDrlgFile to load the DS1 data, then returns the new entry.
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall AllocDrlgFile(struct D2DrlgFileStrc * * ppDrlgFile, struct D2PoolManagerStrc * pMemory, char * szFile);
-void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, struct D2PoolManagerStrc * pMemory, int32_t nPosY, struct D2DrlgMapStrc * pDrlgMap);
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGROOMEX_FreeRoomExDataPresetArea(struct D2RoomExStrc * pRoomEx);
 void __fastcall DRLGPRESET_FreePresetRoomGridsFromRoomEx(struct D2RoomExStrc * pRoomEx);

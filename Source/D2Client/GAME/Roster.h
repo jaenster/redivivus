@@ -64,8 +64,6 @@ namespace D2Client::GAME::Roster {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2RosterStrc * __stdcall GetPlayerRoster();
-// @sourcefile .\GAME\Roster.cpp
-void FreeRosterLinkList(struct D2RosterStrc * pRoster);
 // Frees and NULLs every node in both gpRosterPlayers and gpRosterOther linked lists, releasing each roster's pPlayerList (via FreePlayerList) and pRosterLinkList chain (via FreeClientMemory) before freeing the D2RosterStrc itself. Leaves both globals as NULL.
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall ClearBothRosterLists();
@@ -75,8 +73,6 @@ char * __fastcall GetRosterName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * __stdcall ROSTER_SortByName(struct D2RosterStrc * pRoster);
 struct D2RosterStrc * Unreferenced_004796b0();
 struct D2RosterStrc * Unreferenced_00479740();
-// @sourcefile .\GAME\Roster.cpp
-void AllocRosterPartyList(uint16_t nPartyId);
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall FreeRosterPartyList();
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.

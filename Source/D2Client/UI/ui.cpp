@@ -4007,7 +4007,7 @@ void __stdcall Unreferenced_004535d0() {
     UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)UI_DrawPlayerNameOverhead);
 }
 
-void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
+static void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory) {
     uint16_t wKey;
     if (nButtonIndex == -1) {
       return;
@@ -6395,7 +6395,7 @@ int __stdcall TRADE_GetTradeStatus_Unref_00486d80() {
     return 1;
 }
 
-void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort) {
+static void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort) {
     short int* pnCurrent;
     int i = 0;
     memset(pnDest, 0, nMaxChars * 2);
@@ -7034,7 +7034,7 @@ static int UI_IsMouseBelowScrollThumb(int32_t nMouseX, int32_t nMouseY) {
 
 // Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
 // Was code outside any function; no direct reference reaches it in 1.14d.
-BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
+static BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
     int32_t nTabIndex = UI_GetControlConfigTabIndex(nMouseX, nMouseY);
     return (uint32_t)(nTabIndex != 3);
 }
@@ -7057,7 +7057,7 @@ static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMou
 
 // Returns TRUE when gnUICtrlConfigActiveButton is not 3 (none) and the tab under (nMouseX@ESI, nMouseY@EDX) is that button (004a4a87, 004a4a91); the same test UI_ConfigHandleMouseClick makes inline at 004a5ead.
 // Was code outside any function; no direct reference reaches it in 1.14d.
-BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY) {
+static BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY) {
     int nActiveButton = gnUICtrlConfigActiveButton;
     if (gnUICtrlConfigActiveButton != 3) {
       int32_t nTabIndex;
@@ -10250,11 +10250,11 @@ void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab) {
     UI_ShowHoradricCubeTransmuteDialog();
 }
 
-void thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(D2UnitStrc * pUnit) {
+static void thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(D2UnitStrc * pUnit) {
     UNIT::ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
 
-void thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(D2UnitStrc * pUnit) {
+static void thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(D2UnitStrc * pUnit) {
     UNIT::ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
 
@@ -10308,5 +10308,12 @@ void StaticInit_WindowSizeY() {
 void StaticInit_gnUICtrlConfigScrollPosition() {
     gnUICtrlConfigScrollPosition = (WindowSizeY - 0x1a4) / 2 + 0x2f;
 }
+
+static void * keep_004535f0 = (0 ? (UI_SetButtonKeyBinding(*(D2UIKeyBindingSetStrc * *)0, *(uint16_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_0049d310 = (0 ? (UI_ReadLineFromShortArray(*(short * *)0, *(int32_t *)0, *(short * * *)0), (void *)0) : (void *)0);
+static void * keep_004a4a00 = (0 ? (UI_IsMouseOverControlConfigTab(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_004a4a80 = (0 ? (UI_IsMouseOverActiveControlConfigButton(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_004c16c0 = (0 ? (thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_004c1be0 = (0 ? (thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::ui

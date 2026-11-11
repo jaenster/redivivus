@@ -95,7 +95,7 @@ void __fastcall PATH_CheckPathPointsInRoom(D2DynamicPathStrc * pPath) {
     pPath->nFlags |= 1;
 }
 
-void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnOutX, int32_t * pnOutY, int32_t nStepIndex) {
+static void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnOutX, int32_t * pnOutY, int32_t nStepIndex) {
     *pnOutY = gaPathDirectionStepDeltas[nDirIndex + nStepIndex * 9];
     *pnOutX = gaPathDirectionStepDeltas[nStepIndex + nDirIndex * 9];
 }
@@ -1814,5 +1814,7 @@ BOOL __stdcall IsAllyOf(D2UnitStrc * pUnit, D2UnitStrc * pRosterUnit) {
 
     return 1;
 }
+
+static void * keep_00648020 = (0 ? (PATH_GetTargetCoordinates(*(int32_t *)0, *(int32_t * *)0, *(int32_t * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::PATH::Path

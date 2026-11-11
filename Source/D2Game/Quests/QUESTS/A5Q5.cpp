@@ -232,6 +232,14 @@ static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, D2QuestDataStr
     D2Common::Units::SetupUpdateFlag(pStatue, 0);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // A5Q5 (Rite of Passage) timer that summons the three Ancients one per call. Maps statue classId to super-unique and slot: 0x1da→Madawc (superunique 0x2d, slot 1), 0x1db→Talic (0x2b, slot 0), 0x1dc→Korlic (0x2c, slot 2). If a player is already on the summit, resets the arena. On spawn failure reschedules the event 10 frames later. Tracks spawned GUIDs and increments alive/spawned counters; sets bFightActive on first spawn.
 void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int nClassId;
@@ -291,7 +299,7 @@ void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc *
     }
 
     pQuestSpecificData->abAncientSpawned[pQuestSpecificData->nSpawnedAncientCount] = 1;
-    pQuestSpecificData->anAncientMonsterGUID[pQuestSpecificData->nSpawnedAncientCount] = pSpawnedAncient->nUnitGUID;
+    pQuestSpecificData->anAncientMonsterGUID[pQuestSpecificData->nSpawnedAncientCount] = GetGUIDInline(pSpawnedAncient);
     pQuestSpecificData->nSpawnedAncientCount++;
     pQuestSpecificData->nAncientsAlive++;
     pQuestSpecificData->bAncientsSpawned = 1;

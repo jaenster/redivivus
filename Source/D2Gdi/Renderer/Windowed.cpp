@@ -477,7 +477,7 @@ void __fastcall RENDERER_WINDOWED_UpdateScaleFactor(int nParam) {
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Block, int nScreenX, int nScreenY, int bShadow) {
+static void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Block, int nScreenX, int nScreenY, int bShadow) {
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     if (bShadow) {
@@ -1539,5 +1539,7 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
       }
     }
 }
+
+static void * keep_006c8310 = (0 ? (RENDERER_WINDOWED_ValidateDC6Visibility(*(DC6Block * *)0, *(int *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Gdi::Renderer::Windowed

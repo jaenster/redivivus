@@ -104,7 +104,7 @@ static D2MissileSrvDoFuncData MISSILECLTCOLLIDEFUNCS[9] = {
 
 namespace D2Client::UNIT::Missile {
 
-bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRoom, int32_t nMaxDistSq, int32_t nSourceX, int32_t nSourceY, int32_t nDeltaY) {
+static bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRoom, int32_t nMaxDistSq, int32_t nSourceX, int32_t nSourceY, int32_t nDeltaY) {
     POINT ptSource;
     POINT ptTarget;
     if (!pRoom) {
@@ -4512,6 +4512,14 @@ int32_t __fastcall MISSILE_CltHitFn37_RadamentHandOfGod(D2UnitStrc * pUnit, D2Un
     return 1;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Client missile hit callback for missile index 0x38 (Tainted Sun Ball chain). When pTarget is null (terrain hit): looks up the orbiting sun-ball missile by GUID stored in TargetX, builds a D2SkillArgStrc from the triggering missile's position/level/frame, spawns a new MISSILE_Taintedsunball, and stores the sun-ball GUID in the new missile's TargetX for tracking.
 int32_t __fastcall MISSILE_CltHitFn38_TaintedSunFlash(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
@@ -4577,7 +4585,7 @@ int32_t __fastcall MISSILE_CltHitFn38_TaintedSunFlash(D2UnitStrc * pUnit, D2Unit
       sSkillArg.nUnitY = nUnitYValue;
       pNewMissile = Missile::MakeMissile(&sSkillArg);
       if (pNewMissile) {
-        D2Common::Units::Missile::SetTargetX(pNewMissile, pSunBallMissile->nUnitGUID);
+        D2Common::Units::Missile::SetTargetX(pNewMissile, GetGUIDInline(pSunBallMissile));
       }
     }
 
@@ -9533,23 +9541,21 @@ void __fastcall MISSILE_CltDoFn60_Hurricane(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eUnitType;
       pDynamicPath = pUnit->pPath.pDynamicPath;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&nCurX = (short int)pDynamicPath->ScreenPos.y;
+        nCurX = pDynamicPath->ScreenPos.y;
       } else if (pDynamicPath) {
         nPosX = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-        nPosX = (int32_t)((uint32_t)nPosX & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosX);
-        *(uint16_t*)(char*)&nCurX = (short int)nPosX;
+        nCurX = nPosX;
       } else {
-        *(uint16_t*)(char*)&nCurX = 0;
+        nCurX = 0;
       }
 
       eUnitType = pUnit->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        *(uint16_t*)(char*)&nPosY = (short int)pUnit->pPath.pStaticPath->nPosY;
+        nPosY = pUnit->pPath.pStaticPath->nPosY;
       } else if (pUnit->pPath.pDynamicPath) {
         nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        nPosY = (int32_t)((uint32_t)nPosY & 0xffff0000u | (uint32_t)(uint16_t)(short int)nPosY);
       } else {
-        *(uint16_t*)(char*)&nPosY = 0;
+        nPosY = 0;
       }
 
       nTargetX = D2Common::Units::Missile::GetTargetX(pUnit);
@@ -9560,5 +9566,7 @@ void __fastcall MISSILE_CltDoFn60_Hurricane(D2UnitStrc * pUnit) {
 
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
+
+static void * keep_004cc800 = (0 ? (MISSILE_CheckLineOfSight(*(int32_t *)0, *(D2RoomStrc * *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::Missile

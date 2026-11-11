@@ -2393,7 +2393,7 @@ D2UnitStrc * __fastcall CreateMissileOrMonster(int32_t nMonstatId, int32_t nX, i
     return pCreatedUnit;
 }
 
-void ROOM_SpawnPresetUnitAtCoords(D2RoomStrc * pRoom, int * pPresetUnit) {
+static void ROOM_SpawnPresetUnitAtCoords(D2RoomStrc * pRoom, int * pPresetUnit) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     CreateMissileOrMonster(pPresetUnit[1], pPresetUnit[2] + sRoomCoords.dwXStart, pPresetUnit[6] + sRoomCoords.dwYStart, pPresetUnit[5], *pPresetUnit);
@@ -2699,5 +2699,7 @@ void __fastcall CleanupInventory(D2UnitStrc * pUnit, int32_t bCheckInventory) {
       }
     } while (true);
 }
+
+static void * keep_004667f0 = (0 ? (ROOM_SpawnPresetUnitAtCoords(*(D2RoomStrc * *)0, *(int * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::CUnit

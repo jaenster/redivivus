@@ -773,7 +773,7 @@ void __fastcall MISSILES_SpawnRadialPattern(::SGAMEDATA * pGame, D2UnitStrc * pU
     } while (nTableOffset < 0x3c);
 }
 
-bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc * pRoom, int32_t nMaxDistSquared, int32_t nFromX, int32_t nFromY, int32_t nOffsetY) {
+static bool __stdcall MISSILESMODE_CheckCollisionAtOffset(int32_t nDistance, D2RoomStrc * pRoom, int32_t nMaxDistSquared, int32_t nFromX, int32_t nFromY, int32_t nOffsetY) {
     POINT ptFrom;
     POINT ptTo;
     if (!pRoom) {
@@ -2826,6 +2826,14 @@ BOOL __fastcall Missiles_SrvHitFunc_SetRoomPortalFlag(::SGAMEDATA * pGame, D2Uni
     return 0;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 BOOL __fastcall Missiles_SrvHitFunc_ActivateObjectOnWallHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (pTarget) {
       return 0;
@@ -2844,7 +2852,7 @@ BOOL __fastcall Missiles_SrvHitFunc_ActivateObjectOnWallHit(::SGAMEDATA * pGame,
     if (pUnit_00->eAnimMode.ePlayerMode == Death) {
       D2ObjectsTxt* pObjTxt;
       D2Common::Units::SetupUpdateFlag(pUnit_00, 1);
-      pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pUnit_00->nClassId);
+      pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(GetClassIdInline(pUnit_00));
       if (pObjTxt) {
         GAME::Event::SetEvent(pGame, pUnit_00, 1, (pObjTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
       }
@@ -3997,7 +4005,7 @@ BOOL __fastcall MISSMODE_RedemptionHitWithMana(::SGAMEDATA * pGame, D2UnitStrc *
     return BVar1;
 }
 
-void __fastcall MISSMODE_PortalArrival(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __fastcall MISSMODE_PortalArrival(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::Units::Missile::SetTargetX(pUnit, 1);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     uint32_t bEveOfDestruction = Quests::QUESTS::CheckIntroductionFlagByInternalQuestId(pGame, QUESTINT_EveOfDestruction);
@@ -6546,5 +6554,8 @@ BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646260(::SGAMEDATA * pGame, D2U
 BOOL __fastcall Missiles_SrvHitFunc_NoOp_Unref_00646270(::SGAMEDATA * pGame, D2UnitStrc * pMissile, D2UnitStrc * pTarget) {
     return 1;
 }
+
+static void * keep_005a94c0 = (0 ? (MISSILESMODE_CheckCollisionAtOffset(*(int32_t *)0, *(D2RoomStrc * *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_005ad930 = (0 ? (MISSMODE_PortalArrival(*(::SGAMEDATA * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::MISSILES::MissilesMode

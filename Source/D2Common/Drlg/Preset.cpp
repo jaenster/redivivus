@@ -1042,7 +1042,7 @@ void __fastcall DRLGPRESET_FreeSpawnPointList(D2PoolManagerStrc * pMemory, D2AiG
     D2_FREE_POOL_AT(pMemory, pAiGeneral, ".\\DRLG\\Preset.cpp", 0x598);
 }
 
-void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, D2DrlgMapStrc * pDrlgMap) {
+static void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, D2DrlgMapStrc * pDrlgMap) {
     D2PresetUnitStrc* pPresetUnit = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_OBJECT, nClassId, 0, nPosX, nPosY);
     pPresetUnit->nFlags |= 1;
     pPresetUnit->pPresetUnitNext = pDrlgMap->pPresetUnit;
@@ -2670,5 +2670,7 @@ void StaticInit_CriticalSection_0096d610() {
 void StaticFini_CriticalSection_0096d610() {
     DeleteCriticalSection(&lpCriticalSection_0096d610);
 }
+
+static void * keep_00666170 = (0 ? (CreatePresetObject_Unused(*(int32_t *)0, *(int32_t *)0, *(D2PoolManagerStrc * *)0, *(int32_t *)0, *(D2DrlgMapStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::Preset

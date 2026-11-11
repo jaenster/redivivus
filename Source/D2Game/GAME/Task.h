@@ -80,13 +80,6 @@ void __fastcall LINKLIST_AppendToList(struct D2LinkNodeStrc * * ppList, struct D
 void __fastcall TASK_UnlinkTaskFromList(struct D2LinkNodeStrc * pLink);
 // Returns the current millisecond tick used to timestamp tasks. Wraps GetTickCount; the return is 32 bits in EAX only - EDX is never written before RET, and the sole caller stores four bytes.
 uint32_t __stdcall TASK_GetTimestamp();
-// nSlotToken in EAX: enters aTaskQueueCriticalSections[nSlotToken & 0x1f] and returns gaTaskQueueHeadArray[nSlotToken & 0x1f]; when that slot is NULL it leaves the section again, so a non-NULL result is returned with the section held (release with TASK_LeaveQueueCriticalSection).
-// Provenance: asm 00564390..005643be (RET); unreferenced in 1.14d, aligned entry after INT3 padding.
-struct D2TaskQueueSlotStrc * __stdcall TASK_EnterQueueCriticalSection(uint32_t nSlotToken);
-// pSlot in EAX: when non-NULL, calls LeaveCriticalSection(&aTaskQueueCriticalSections[pSlot->nSlotIndex]);
-// halts (line 151) when the index is >= 32. Counterpart of TASK_EnterQueueCriticalSection (00564390).
-// Unreferenced in 1.14d (entry: aligned start after padding); lines from docs/data/win-assert-oracle.tsv.
-void __stdcall TASK_LeaveQueueCriticalSection(struct D2TaskQueueSlotStrc * pSlot);
 // Moves queued tasks from the existing slots into pSlot, then appends pSlot to the slot ring. avg = gnTaskQueueTailIndex / gnTaskQueueSlotCounter. For each slot on the gsTaskQueueListHead ring (walked along sSlotLink+4), under aTaskQueueCriticalSections[nSlotIndex] it steps along sTaskList a count derived from the slot's nTaskCount, avg and the remainder gnTaskQueueTailIndex % gnTaskQueueSlotCounter, and cuts the list there; outside the lock the cut-off nodes are merged into pSlot->sTaskList by timestamp. Finally links pSlot->sSlotLink into the ring at gsTaskQueueListHead+4; halts at line 0x78 if that link is NULL. Called by TASK_AllocateTaskQueue (005649e2).
 // Provenance: asm 00564460..005645da.
 void __stdcall TASK_MoveTasksToSlotAndLinkSlot(struct D2TaskQueueSlotStrc * pSlot);
@@ -111,6 +104,7 @@ BOOL __stdcall TASK_ReturnTrue();
 // Registers: pItem (ECX) is passed by the callers but not read.
 void __fastcall TASK_Nop(struct D2UnitStrc * pItem);
 void StaticInit_CriticalSection_0088caa8();
+// Constructs the 32 task-queue critical sections in aTaskQueueCriticalSections through the compiler's array iterator, InitCriticalSection per element; THREADING_DeleteCriticalSection_Thunk is the matching destructor.
 void StaticInit_aTaskQueueCriticalSections();
 void StaticFini_CriticalSection_0088caa8();
 void StaticFini_aTaskQueueCriticalSections();

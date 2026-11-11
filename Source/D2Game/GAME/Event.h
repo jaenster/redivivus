@@ -2682,7 +2682,6 @@ namespace D2Game::GAME::Event {
 void __fastcall SetEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int eTimerType, int nDelay, int32_t nArg1, int32_t nArg2);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct D2TimerStrc * * __stdcall EVENT_GetDispatchBucketForFrame(eD2UnitType eUnitType, uint32_t nUnitGUID, ::SGAMEDATA * pGame);
 // Walks pUnit's timer list (UNIT::SUnit::GetTimerList, then pNextTimerOnUnit) and
 // removes and recycles (EVENT_RemoveAndRecycleTimer) every timer whose nTimerType equals
 // nTimerType and, when nArg1 != 0, whose nArg1 (D2TimerStrc+0x14) equals nArg1. It fires

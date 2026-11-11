@@ -2484,7 +2484,7 @@ uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatO
     return *(uint16_t*)(pSkillDescTxt->dmelem + nStatOffset * 2 - 0x18);
 }
 
-int16_t GetSkillLongDescription(eD2Skills eSkill) {
+static int16_t GetSkillLongDescription(eD2Skills eSkill) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0x1506;
@@ -2793,7 +2793,7 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
 }
 
-uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText) {
+static uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText) {
     if (nMinVal == nMaxVal) {
       char szBuf[32];
       if (!bPrefixSign || nMinVal < 0) {
@@ -4080,7 +4080,7 @@ static void __stdcall SKILLDESC_CalcDualWieldDamage(D2UnitStrc * pUnit2, int32_t
     (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
 }
 
-void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2) {
+static void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2) {
     SKILLDESC_CalcDualWieldDamage(pUnit, pdwParam1, pdwParam2, nullptr, pdwParam3, param_1, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)pUnit2);
 }
 
@@ -7646,20 +7646,17 @@ void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills e
       return;
     }
 
-    uint16_t* pWszLocale = wszTooltipBuf;
     D2UnitStrc* pUnitLocal = pUnit;
     eD2Skills eSkillLocal = eSkill;
-    for (nLineResult = 0x200; nLineResult; nLineResult--) {
-      pWszLocale[0] = L'\0';
-      pWszLocale[1] = L'\0';
-      pWszLocale += 2;
+    for (nLineResult = 0; nLineResult < 0x400; nLineResult++) {
+      wszTooltipBuf[nLineResult] = L'\0';
     }
 
     for (int iFill = 0; iFill < 32; iFill++) {
       wszLevelBuf[iFill] = L'\0';
     }
 
-    pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x109c);
+    uint16_t* pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x109c);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltipBuf, pWszLocale);
     int bAnyDescLine = 0;
     do {
@@ -7711,5 +7708,9 @@ void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills e
     D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszTooltipBuf, &nTooltipWidth, &nTooltipHeight);
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltipBuf, nScreenX, nTooltipHeight + 3 + nScreenY, nParam1, 0);
 }
+
+static void * keep_004e6de0 = (0 ? (GetSkillLongDescription(*(eD2Skills *)0), (void *)0) : (void *)0);
+static void * keep_004e75b0 = (0 ? (SKILLDESC_FormatDamageRangeWithCalc(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(uint16_t * *)0), (void *)0) : (void *)0);
+static void * keep_004e94e0 = (0 ? (SKILLDESC_CalcDualWieldDmg(*(D2SkillStrc * *)0, *(int32_t * *)0, *(D2UnitStrc * *)0, *(int32_t * *)0, *(int32_t * *)0, *(int32_t * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::SkillDesc

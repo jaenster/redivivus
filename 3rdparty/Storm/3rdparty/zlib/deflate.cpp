@@ -267,7 +267,7 @@ int32_t __fastcall deflateBound(z_stream * pStream, uint32_t nSourceLen) {
     return nStoredBound + 6;
 }
 
-void putShortMSB(deflate_state * pDeflateState, uint32_t wValue) {
+static void putShortMSB(deflate_state * pDeflateState, uint32_t wValue) {
     pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)(wValue >> 8);
     pDeflateState->pending++;
     pDeflateState->pending_buf[pDeflateState->pending] = (uint8_t)wValue;
@@ -2047,5 +2047,7 @@ int __fastcall deflateInit_(z_stream * pStream, uint32_t nLevel, char * szVersio
     int32_t nRet = deflateInit2_(pStream, nLevel, 8, 0xf, 8, 0, szVersion, nStreamSize);
     return nRet;
 }
+
+static void * keep_00427420 = (0 ? (putShortMSB(*(deflate_state * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::_3rdparty::zlib::deflate

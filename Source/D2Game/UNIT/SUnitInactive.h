@@ -143,9 +143,6 @@ namespace D2Game::UNIT::SUnitInactive {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-// @sourcefile .\UNIT\SUnitInactive.cpp
-void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, struct D2InventoryToBeUpdatedStrc * pUnit);
-void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t bCreate, struct D2RoomStrc * pRoom);
 // Returns 1 if a monster of class nParam is dead at the given subtile coordinates. First searches live units in the best nearby room for mode-0/death state; then searches the inactive monster record list (flag bit 2 = dead) for the coordinate bucket. Returns 0 if not found. Halts on null pGame/pRoom or zero coordinates.
 BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId);
 // @sourcefile .\UNIT\SUnitInactive.cpp

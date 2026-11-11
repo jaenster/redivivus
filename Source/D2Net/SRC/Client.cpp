@@ -99,7 +99,7 @@ static sockaddr * name_00882b38; D2_STATIC_GUARD_BSS(name_00882b38, "D2Net::SRC:
 }
 
 // Creates server connection thread. Spawns thread via CreateThread with CLIENT_ServerConnectionThread_lpStartAddress entry point, stores handle in SERVER_THREAD.
-HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam) {
+static HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam) {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, pThreadParam, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);
     return SERVER_THREAD;
 }
@@ -514,5 +514,7 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x203);
     exit(-1);
 }
+
+static void * keep_0052a730 = (0 ? (NET_CLIENT_CreateServerConnectionThread(*(void * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Net::SRC::Client

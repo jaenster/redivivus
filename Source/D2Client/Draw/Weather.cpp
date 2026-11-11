@@ -932,7 +932,7 @@ void __stdcall WEATHER_DrawParticles() {
     }
 }
 
-void Unreferenced_00473720(BOOL * pbCanRain, BOOL * pbCanMud) {
+static void Unreferenced_00473720(BOOL * pbCanRain, BOOL * pbCanMud) {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
     *pbCanRain = 0;
     *pbCanMud = 0;
@@ -952,16 +952,17 @@ uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
+    uint32_t dwFlags = 0;
     if (pUnit) {
       uint8_t bCanHaveMud;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
       D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveRain(eLevel);
       bCanHaveMud = D2Common::DATATBLS::LvlTbls::LEVEL_CanHaveMud(eLevel);
-      return (uint32_t)(bCanHaveMud != '\0');
+      dwFlags = (uint32_t)(bCanHaveMud != '\0');
     }
 
-    return 0;
+    return dwFlags;
 }
 
 static void WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
@@ -1408,13 +1409,15 @@ void __stdcall WeatherEffects() {
 }
 
 uint32_t __fastcall WEATHER_ApproximateDistance(uint32_t nDeltaX, uint32_t nDeltaY) {
-    int nAbsX = (nDeltaX ^ (int)nDeltaX >> 0x1f) - ((int)nDeltaX >> 0x1f);
-    int nAbsY = (nDeltaY ^ (int)nDeltaY >> 0x1f) - ((int)nDeltaY >> 0x1f);
+    int nAbsX = (uint32_t)abs((int)nDeltaX);
+    int nAbsY = (uint32_t)abs((int)nDeltaY);
     if (nAbsX >= nAbsY) {
       return (uint32_t)(nAbsX * 0x3d7 + nAbsY * 0x197) >> 10;
     }
 
     return (uint32_t)(nAbsY * 0x3d7 + nAbsX * 0x197) >> 10;
 }
+
+static void * keep_00473720 = (0 ? (Unreferenced_00473720(*(BOOL * *)0, *(BOOL * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Draw::Weather

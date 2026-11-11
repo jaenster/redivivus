@@ -116,7 +116,6 @@ namespace Fog::Src::QServer::QServerNT {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 void __fastcall AwaitAndClose(struct D2QServerStrc * pQserver);
-int __stdcall PopAndFreeCompletedSendPacket(struct D2QServerClientConnectionStrc * pClient);
 // Accept thread entry point for QServer network listener. Polls listening socket with select(), accepts incoming client connections via AcceptConnection(), and periodically sweeps expired hacklist entries to enforce IP-based rate limiting. Telemetry tracks performance of each accept operation substage (hacklist check, connection limit, IP rate, IOCP attachment, initial recv).
 DWORD __stdcall AcceptThreadMain(struct D2QServerWorkerThreadContextStrc * lpThreadParam);
 BOOL __fastcall SendToClientLocal(struct D2QServerStrc * pQServer, struct D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize);

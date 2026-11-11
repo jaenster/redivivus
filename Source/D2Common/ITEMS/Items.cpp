@@ -358,8 +358,16 @@ int32_t __stdcall ITEM_GetItemData_nItemLevel(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 void __stdcall ITEM_SetItemData_nItemLevel(D2UnitStrc * pUnit, int32_t nLevel) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
+    if (!(GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
     }
     if (nLevel < 1) {
@@ -845,6 +853,14 @@ BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2U
     return 0;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 BOOL __stdcall INVENTORY_CheckIfItemCanBeAutoBelted(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     BOOL BVar1;
@@ -855,7 +871,7 @@ BOOL __stdcall INVENTORY_CheckIfItemCanBeAutoBelted(D2InventoryStrc * pInventory
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a7);
       exit(-1);
     } else {
-      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit->nClassId);
+      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit));
       if (!pItemsTxt) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a9);
         exit(-1);
@@ -1537,12 +1553,12 @@ uint32_t __stdcall ITEMS_IsA(D2UnitStrc * pUnit, eD2ItemTypes eItemType) {
     }
     if ((int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize) {
       eD2ItemTypes eItemType1;
-      eItemType1 = TXT_Items_GetType(pUnit->nClassId);
+      eItemType1 = TXT_Items_GetType(GetClassIdInline(pUnit));
       if (Fog::BitBuffer::gadwBitMasks[eItemType & ITEMTYPE_Hammer] & *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType >> 5)) * 4)) {
         return 1;
       }
 
-      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit->nClassId);
+      pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit));
       if (pItemsTxt) {
         eType2 = pItemsTxt->wType2;
         if (eType2 > 0 && (int)eType2 < sgptDataTable->nTxtItemTypesSize) {

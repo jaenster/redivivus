@@ -1587,7 +1587,7 @@ void __stdcall SKILL_SetQuantity(D2SkillStrc * pSkill, int32_t nQuantity) {
     pSkill->nQuantity = nQuantity;
 }
 
-uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nPlayerClass, int32_t nMonMode) {
+static uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nPlayerClass, int32_t nMonMode) {
     if (nPlayerClass == 6 && nMonMode == 4) {
       return 0xc;
     }
@@ -1786,7 +1786,7 @@ int32_t __stdcall SKILLS_GetSkillWeaponClass(D2UnitStrc * pUnit, D2SkillStrc * p
     return 1;
 }
 
-uint32_t __stdcall SKILLS_CheckMonsterCorpseSelectable(int32_t bCheckDead, D2UnitStrc * pUnit) {
+static uint32_t __stdcall SKILLS_CheckMonsterCorpseSelectable(int32_t bCheckDead, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
@@ -3985,5 +3985,8 @@ void __stdcall STRUCT_FillSkillsList(D2UnitStrc * pUnit) {
 
     SelectSkillRight(pUnit, 0, -1);
 }
+
+static void * keep_00645160 = (0 ? (SKILLS_GetAnimModeIndex(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_006454c0 = (0 ? (SKILLS_CheckMonsterCorpseSelectable(*(int32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Skills

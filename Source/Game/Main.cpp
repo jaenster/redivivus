@@ -1515,7 +1515,7 @@ void __stdcall CreateRegedit() {
     }
 }
 
-uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPROC * ppfnProc, LPCSTR szText) {
+static uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPROC * ppfnProc, LPCSTR szText) {
     FARPROC pfnProc = GetProcAddress(hModule, szText);
     if (!pfnProc) {
       return 0;
@@ -1633,7 +1633,7 @@ void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl) {
     }
 }
 
-BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService) {
+static BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService) {
     *phService = (SC_HANDLE)0x0;
     *phSCManager = (SC_HANDLE)0x0;
     DWORD DVar1 = GetVersion();
@@ -1748,6 +1748,9 @@ int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lp
 
     return 0;
 }
+
+static void * keep_00406190 = (0 ? (ERRORMANAGER_TryGetProcAddress(*(HMODULE *)0, *(FARPROC * *)0, *(LPCSTR *)0), (void *)0) : (void *)0);
+static void * keep_00406470 = (0 ? (Unreferenced_00406470(*(SC_HANDLE * *)0, *(SC_HANDLE * *)0), (void *)0) : (void *)0);
 
 } // namespace Game::Main
 

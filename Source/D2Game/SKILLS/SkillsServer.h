@@ -176,7 +176,6 @@ int32_t __fastcall RemoveQuanityOnUse(::SGAMEDATA * pGame, struct D2UnitStrc * p
 // @sourcefile .\SKILLS\Skills.cpp
 BOOL __fastcall SKILLS_CheckThrowableAmmo(struct D2UnitStrc * pUnit);
 void __fastcall SKILLS_ApplySkillToHitAndDamage(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2UnitStrc * pWeapon);
-void __stdcall SKILLS_GetWeaponBySkillType(int32_t nSkillType, struct D2InventoryStrc * pInventory);
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall Transmorgify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 uint32_t __fastcall IsSkillBoundToClass(struct D2UnitStrc * pUnit, int32_t nSkillId);

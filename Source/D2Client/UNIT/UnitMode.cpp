@@ -297,7 +297,7 @@ void __fastcall UNITMODE_ShowElementalHitOverlay(D2UnitStrc * pUnit, int32_t nAn
     Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_sanctuaryknockback, 2, 0, 0, 0, 0, 0);
 }
 
-BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc * pUnit) {
+static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc * pUnit) {
     _Utils::UTILS_OnUnitModeChange_NoOp();
     if (pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
@@ -816,5 +816,7 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
     execute_action:
     UNITMODE_ExecuteSkillAction(nActionType, pUnit, eTargetType, nUnitGUID, 0);
 }
+
+static void * keep_00480e30 = (0 ? (UNITMODE_SetModeAndLoadCof(*(int32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::UnitMode

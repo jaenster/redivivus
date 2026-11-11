@@ -104,8 +104,6 @@ void __stdcall Draw_UnitNameUnderCursor();
 struct D2FontGlyphStrc * __fastcall FONT_GetCharWidthCallback(uint16_t wCharCode);
 struct D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode);
 int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t nSize);
-// Thin wrapper around D2GFX_DrawSolidRectEx. Adjusts Y coordinates and forwards to renderer.
-void __stdcall D2WINFONT_DrawSolidRectFromBottomLeft(int32_t nX, DRAWMODE eDrawMode, int32_t nWidth, int32_t nY, int32_t nHeight, uint32_t dwColor);
 // Right-to-left text renderer (for RTL languages). Draws glyphs from right edge backwards with horizontal bounds checking. Processes color codes, newlines. Returns pointer to last glyph data.
 void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nLeftBound, uint32_t nRightBound);
 // Draws text with optional background box. If bDrawBackground is non-zero, calculates text width and adds 8px padding. Forwards to DrawWideStringWithDrawMode.

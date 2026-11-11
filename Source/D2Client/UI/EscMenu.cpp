@@ -58953,7 +58953,7 @@ static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
     return nFoundIndex;
 }
 
-void Unreferenced_0047d5b0(int32_t nMouseY) {
+static void Unreferenced_0047d5b0(int32_t nMouseY) {
     int32_t iVar1 = ESCMENU_GetItemIndexFromMouseY(nMouseY);
     if (iVar1 == -1) {
       return;
@@ -59821,5 +59821,7 @@ void __fastcall ESCMENU_SwitchToOptionsMenu(D2EscMenuItemStrc * pItem, D2UIMouse
     gpEscMenuCurrentTable = gaEscMenuOptionsTable;
     gnEscMenuSelectedIndex = gaEscMenuHeaderOptions.nItemCount - 1;
 }
+
+static void * keep_0047d5b0 = (0 ? (Unreferenced_0047d5b0(*(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::EscMenu

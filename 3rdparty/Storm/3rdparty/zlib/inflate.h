@@ -93,7 +93,6 @@ int __fastcall inflateReset2(z_stream * pStream, uint32_t nWindowBits);
 int32_t __fastcall inflateInit2_(z_stream * pStream, uint32_t nWindowBits, char * szVersion, int32_t nStreamSize);
 int __fastcall inflateInit_(z_stream * pStream, char * szVersion, int32_t nStreamSize);
 uint32_t __fastcall inflatePrime(z_stream * pStream, int32_t nBits, uint32_t nValue);
-void __fastcall fixedtables(inflate_state * state);
 int __fastcall inflateEnd(z_stream * pStream);
 uint32_t __fastcall inflateGetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t * pnDictLength);
 uint32_t __fastcall inflateSetDictionary(z_stream * pStream, uint8_t * pDictionary, uint32_t nDictLength);

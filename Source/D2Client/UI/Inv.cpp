@@ -3746,7 +3746,7 @@ void __stdcall INV_SetMercInventoryMode() {
     g_nCurrentInventoryPage = 0x13;
 }
 
-void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode) {
+static void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode) {
     if (!pTarget) {
       return;
     }
@@ -11517,6 +11517,8 @@ void StaticInit_gpInvRecipeScrollImage() {
       gpInvRecipeScrollImage[nDwordsRemaining] = 0;
     }
 }
+
+static void * keep_00487ba0 = (0 ? (INV_HandleShopAction(*(DWORD *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0, *(DWORD *)0, *(DWORD *)0, *(DWORD *)0, *(DWORD *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::Inv
 

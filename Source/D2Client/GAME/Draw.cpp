@@ -990,7 +990,7 @@ void __stdcall dInitWallDraw() {
     gLightBlue = roomColor.nBlue;
 }
 
-int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnIntensityMode) {
+static int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnIntensityMode) {
     *pnTableMode = gnIntensityTableModes[*pnIntensityMode];
     if (bPerspective) {
       return aIntensityTable_Mode1 + *pnIntensityMode * 0xc;
@@ -1384,5 +1384,7 @@ void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
       pWall2Entry++;
     }
 }
+
+static void * keep_004dedb0 = (0 ? (DRAW_GetIntensityTableForMode(*(int * *)0, *(int32_t *)0, *(int * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::GAME::Draw

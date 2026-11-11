@@ -1945,7 +1945,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x20(D2GSPacketSrv0x20 * pBytes) {
     SCMD_HandleStatChangeEffect(pUnit, (eD2UnitStat)eStatAttribute, nValue);
 }
 
-void __stdcall SCMD_DecodeRelativeCoordinates(uint16_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY, uint16_t nByteX) {
+static void __stdcall SCMD_DecodeRelativeCoordinates(uint16_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY, uint16_t nByteX) {
     uint16_t nDeltaX = (uint8_t)nByteX;
     uint16_t nDeltaY = (uint8_t)nByteY;
     if (0x80 < nDeltaX) {
@@ -3578,16 +3578,18 @@ void __fastcall SCMD_ProcessIncomingPacketBuffer(D2UnitStrc * pUnit) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1531);
         exit(-1);
       }
-      if (NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize != -1 && (uint32_t)nVariableSize[0] != NET_D2GS_CLIENT_INCOMING[bVar1].nExpectedSize) {
+
+      D2NET_CLIENT_D2GS_ServerToClient* t2_r0 = &NET_D2GS_CLIENT_INCOMING[bVar1];
+      if (t2_r0->nExpectedSize != -1 && (uint32_t)nVariableSize[0] != t2_r0->nExpectedSize) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1534);
         exit(-1);
       }
-      if (!NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit) {
+      if (!t2_r0->fpIncomingHandlerUnit) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1536);
         exit(-1);
       }
 
-      NET_D2GS_CLIENT_INCOMING[bVar1].fpIncomingHandlerUnit(pUnit, (char*)pBytes);
+      t2_r0->fpIncomingHandlerUnit(pUnit, (char*)pBytes);
     }
 
     if (pServerCmd->nUsedBuffersCount) {
@@ -3596,5 +3598,7 @@ void __fastcall SCMD_ProcessIncomingPacketBuffer(D2UnitStrc * pUnit) {
 
     pServerCmd->nUsedBuffersCount = 0;
 }
+
+static void * keep_0045d8c0 = (0 ? (SCMD_DecodeRelativeCoordinates(*(uint16_t *)0, *(int16_t *)0, *(int16_t *)0, *(short * *)0, *(short * *)0, *(uint16_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::GAME::SCmd

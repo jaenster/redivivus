@@ -58,7 +58,7 @@ void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, uint32_t * pDropListAr
     (*pnDropCount)++;
 }
 
-int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries) {
+static int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries) {
     if (nEntryIdx > nMaxEntries) {
       return 0;
     }
@@ -1516,7 +1516,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
     return 1;
 }
 
-void ITEM_RollVariantGraphic(D2UnitStrc * pUnit) {
+static void ITEM_RollVariantGraphic(D2UnitStrc * pUnit) {
     uint8_t bVarInvGfxMax = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
     if (!bVarInvGfxMax) {
       return;
@@ -1774,7 +1774,7 @@ void __fastcall ITEM_RemoveFromOwnerInventory(::SGAMEDATA * pGame, D2UnitStrc * 
     INVENTORY_RemoveItemFromOwner(pUnit->pInventory, pItem);
 }
 
-void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * pArgs) {
+static void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * pArgs) {
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)ITEM_RemoveFromOwnerInventory, pArgs);
 }
 
@@ -4022,5 +4022,9 @@ void __fastcall ITEM_GiveGoldOrDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
 
     UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, nGoldAmount);
 }
+
+static void * keep_00555d00 = (0 ? (ITEMDROP_GetDropListEntry(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_00557a70 = (0 ? (ITEM_RollVariantGraphic(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00557fc0 = (0 ? (thunk_IterateAllUnits(*(::SGAMEDATA * *)0, *(uint32_t * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::ITEMS::Items::Drop

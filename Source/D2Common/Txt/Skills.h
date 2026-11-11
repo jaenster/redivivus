@@ -1420,12 +1420,10 @@ int32_t __stdcall TXT_Skills_GetReqLevel(eD2Skills eSkill);
 int32_t __stdcall SKILL_GetRequiredLevel(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 int32_t __fastcall GetSkillLevelById(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 int32_t __fastcall SKILLS_GetValueByLevelBreakpoints(int32_t nLevel, int * pLevelArray);
-uint32_t __stdcall SKILLS_GetAnimModeIndex(int32_t nPlayerClass, int32_t nMonMode);
 // Validates that a monster supports a given animation mode, falling back to a supported substitute if not. Checks the monster's MonStats2 byModeFlags bitfield; if the requested mode is unsupported, maps it to a nearby fallback (e.g. modes 5/7→4, 6→3, 9-11→8, 15→2, default→1). Used before playing a skill animation on a monster to avoid unsupported mode crashes.
 int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonId);
 // Initialises or advances a skill sequence entry for a unit. Searches the unit's sequence list for the entry matching nSeqId that has not yet been committed (pSeqEntry[0xd] == -1). Derives a position seed from the unit's dynamic path sub-positions (or player-specific fields). If the seed matches the stored seed, advances the sequence frame by 7; otherwise resets both seed and frame to the new value. Writes the resulting frame and constant 0x29A into the unit param array. Halts fatally if no matching sequence entry is found.
 void __stdcall SKILLS_InitSkillSequence(struct D2UnitStrc * pUnit, int32_t bIsPlayerUnit, int32_t nSeqId);
-uint32_t __stdcall SKILLS_CheckMonsterCorpseSelectable(int32_t bCheckDead, struct D2UnitStrc * pUnit);
 int32_t __stdcall SKILLS_CalculateDamageReduction(int32_t nParam);
 int32_t __fastcall SKILLS_CalculateSynergyValue_Recursive(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);
 int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);

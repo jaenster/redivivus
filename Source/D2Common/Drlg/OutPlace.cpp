@@ -1273,7 +1273,7 @@ static void __stdcall DRLGACT_SetWarpConnectionsBetweenTwoAreas(D2DrlgStrc * pDr
 // Computes the direction between the two levels' coordinate rects, then calls AllocDrlgOrth
 // on the RoomEx at offset +0x264 of the level data struct.
 // Used as a callback during level chain parsing to establish orthogonal room linkage.
-void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgStrc * pDrlg, D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel) {
+static void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgStrc * pDrlg, D2DrlgLevelStrc * pLevelData, eD2LevelId eLevel) {
     D2DrlgLevelDataWildernessLevel* pLevelDataBase = pLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2DrlgLevelStrc* pLevel = GetLevelAndAlloc(pDrlg, eLevel);
     eDrlgDirection eDirection = GetDirectionFromCoordinates(&pLevelData->sCoordinatesAndSize, &pLevel->sCoordinatesAndSize);
@@ -2518,5 +2518,7 @@ void __fastcall InitAct3OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     BuildKurast(pLevel);
     BuildTravincal(pLevel);
 }
+
+static void * keep_00677647 = (0 ? (DRLGLEVEL_AllocOrthForAdjacentLevel(*(D2DrlgStrc * *)0, *(D2DrlgLevelStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::OutPlace

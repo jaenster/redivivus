@@ -21,7 +21,6 @@ uint32_t __fastcall crc32(uint32_t dwCrcSeed, uint8_t * pBuffer, uint32_t nLengt
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 uint32_t * get_crc_table();
-int32_t __stdcall crc32_big(uint32_t nLength, uint32_t dwInitialCrc, uint8_t * pbData);
 uint32_t __fastcall gf2_matrix_times(uint32_t dwVec, uint32_t * pdwMat);
 uint32_t __stdcall crc32_combine_(uint32_t dwCrc, uint32_t dwFinalXor, int64_t nLength);
 void __fastcall crc32_combine(uint32_t dwCrc, uint32_t dwFinalXor, int32_t nExp);

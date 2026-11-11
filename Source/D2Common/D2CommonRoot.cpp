@@ -16,7 +16,7 @@
 namespace D2Common {
 
 // Sets eRoomExFlags from a lookup table indexed by nDrlgRoomsExNearCount. Appears to set initialization flags based on the number of neighboring RoomEx entries.
-void __stdcall DRLGROOMEX_SetFlagsFromNearCount(D2RoomExStrc * pRoomEx) {
+static void __stdcall DRLGROOMEX_SetFlagsFromNearCount(D2RoomExStrc * pRoomEx) {
     pRoomEx->eRoomExFlags = Environment::gnTimeRates[pRoomEx->nDrlgRoomsExNearCount];
 }
 
@@ -54,7 +54,7 @@ int32_t __fastcall MISSILE_CalcVMCallback_GetSpecialParam(uint32_t nCalcOp, D2Mi
     return nSpecialParamValue;
 }
 
-int __stdcall ITEMMOD_RollRandomInRange(int nRangeStart, int nRangeEnd, D2UnitStrc * pUnit) {
+static int __stdcall ITEMMOD_RollRandomInRange(int nRangeStart, int nRangeEnd, D2UnitStrc * pUnit) {
     if (nRangeStart == nRangeEnd) {
       return nRangeEnd;
     }
@@ -124,5 +124,8 @@ int32_t __stdcall DRLGPRESET_GetObjectTableActCount(uint8_t nActNo) {
 int32_t __stdcall DRLGPRESET_GetObjectIdFromActTable(uint8_t nActNo, int32_t nIndex) {
     return gpsPresetObjectTable[(uint32_t)nActNo * 0x96 + nIndex];
 }
+
+static void * keep_0061bb50 = (0 ? (DRLGROOMEX_SetFlagsFromNearCount(*(D2RoomExStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0065c620 = (0 ? (ITEMMOD_RollRandomInRange(*(int *)0, *(int *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common

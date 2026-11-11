@@ -1628,6 +1628,14 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Fills a 10-element flag array (pdwParam[0..9]) describing the weapon/item type of pUnit for use by item-mode evaluation. Flags: [0]=Bow, [1]=Crossbow, [2]=BowQuiver, [3]=CrossbowQuiver, [4]=AnyShield, [5]=Weapon, [6]=TwoHanded, [7]=Assassin-HTH or Druid special, [8]=Throwable, [9]=Ring. pnParam supplies the player unit for class checks; halts with error if either pointer is NULL.
 static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags, D2UnitStrc * pUnit) {
     uint32_t bIsOfType;
@@ -1642,10 +1650,10 @@ static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags
     }
 
     memset(pnTypeFlags, 0, 10 * sizeof(pnTypeFlags[0]));
-    if (pOwner->eUnitType == UNIT_PLAYER && pOwner->nClassId == 4) {
+    if (GetTypeInline(pOwner) == UNIT_PLAYER && pOwner->nClassId == 4) {
       pnTypeFlags[7] = 1;
     }
-    if (pOwner->eUnitType == UNIT_PLAYER && pOwner->nClassId == 6) {
+    if (GetTypeInline(pOwner) == UNIT_PLAYER && pOwner->nClassId == 6) {
       bIsOfType = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_HandtoHand);
       if (bIsOfType) {
         pnTypeFlags[7] = 1;
@@ -1860,7 +1868,7 @@ void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam) {
 
 }
 
-void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pUnit2->pInventory, pUnit);
     int32_t nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (nSeqMode != 1) {
@@ -4506,7 +4514,7 @@ BOOL __fastcall EquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc nI
       *pbBadParams = 0;
       return 0;
     }
-    if (pEquippedItem->eUnitType != UNIT_ITEM) {
+    if (GetTypeInline(pEquippedItem) != UNIT_ITEM) {
       return 0;
     }
 
@@ -6965,7 +6973,7 @@ void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, D2UnitS
 
 }
 
-BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
+static BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     int32_t iVar1 = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);
     switch (iVar1) {
       case 2:
@@ -6983,5 +6991,8 @@ BOOL ITEMMODE_IsSkillUsableCheck_Unref_00580260(D2UnitStrc * pUnit, D2SkillStrc 
 BOOL __stdcall RemoveStackItem_Unref_005e5270(uint32_t dwParam1, uint32_t dwParam2) {
     return 0;
 }
+
+static void * keep_0055d940 = (0 ? (ITEMMODE_GetItemGoldValue(*(::SGAMEDATA * *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00580260 = (0 ? (ITEMMODE_IsSkillUsableCheck_Unref_00580260(*(D2UnitStrc * *)0, *(D2SkillStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::ITEMS::ItemMode

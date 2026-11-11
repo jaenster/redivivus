@@ -31,8 +31,6 @@ namespace D2Game::Quests::QUESTS::A1Q5 {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-// Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
-uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(struct D2QuestDataA1Q5Strc * pListBase, int32_t nListSelector, int32_t nPlayerGUID);
 BOOL __fastcall Q05_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q5 "Forgotten Tower" — on-join sync callback. Reads the joining player's persisted quest record; if the tower is not yet Completed or RewardAwaits, inspects the shared quest nStateFlag/nStateFlagPrev and re-applies the matching SetQuestState (Step0x02–0x06) to the player's bit buffer so late-joiners see the correct journal progress. No loot or reward granted here.
 BOOL __fastcall Q05_SyncQuestStepToPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
@@ -57,13 +55,6 @@ BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, struct D2Uni
 BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(struct D2ObjectOperateFnArg * pOperation);
 // A1Q5 (Forgotten Tower) per-player completion iterator callback (invoked from Q05_OnTowerComplete for each player). Skips players already Completed. If the player is in LEVEL_TowerCellarLevel5: sets JustCompleted+Completed, clears RewardAwaits, fires attach-sound event 0x25, and appends the player GUID into the quest's bounded reward-GUID array (capacity 0xc). Players outside the tower level receive QUESTSTATE_CannotCompleteQuestInGame instead.
 BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-// 1.14d: 0x594fd3 | A1Q5 "The Forgotten Tower" — top-level completion handler (Countess slain).
-// Iterates all player units calling Q05_MarkCompleteForPlayersInTower to stamp each player's quest
-// record (Completed/JustCompleted, or CannotComplete if absent). Then sets the GAME-WIDE quest record
-// state to QUESTSTATE_JustCompleted via QUEST_SetQuestRecordState. Finally inspects quest-data: if a
-// sub-counter (+0x64) is nonzero it schedules the Q05_Callback_10 continuation (death-effect /
-// loot sequence still pending); otherwise it clears a busy flag (+0xa) marking the handler finished.
-int __fastcall Q05_OnTowerComplete(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // A1Q5 "Tools of the Trade" (Horadric Malus) quest-state handler slot[3]. On dialog index 0x14: advances state 0->2 (sets flag); on index 0x19: advances toward state 3. Broadcasts the new quest state to all players via QUEST_SetStateAndBroadcast and re-syncs each player with Q05_SyncQuestStepToPlayer. In the non-intro path (pTextControl==1) at state 2 it finalizes once the player's quest record shows Completed, and at state 5 removes the player from the tracking list and deactivates the quest when no objects remain.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
 void __fastcall Q05_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);

@@ -88,7 +88,6 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
 void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int nWorldY);
 void __stdcall WEATHER_UpdateParticles(struct D2SeedStrc * pSeed);
 void __stdcall WEATHER_DrawParticles();
-void Unreferenced_00473720(BOOL * pbCanRain, BOOL * pbCanMud);
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags();
 void __stdcall DRAW_Overlay_Weather();
 void __fastcall WEATHER_DrawBubbles(struct D2DataArrayStrc * pBubbleArray, struct DC6 * * pDC6Table);

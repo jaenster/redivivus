@@ -222,7 +222,7 @@ void __fastcall AppearenceItems2(uint32_t pClient, D2UnitStrc * pUnit, uint32_t 
     exit(-1);
 }
 
-void Unreferenced_00537ab0(D2RoomStrc * pRoom1, D2RoomStrc * pRoom2) {
+static void Unreferenced_00537ab0(D2RoomStrc * pRoom1, D2RoomStrc * pRoom2) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_SwapRoomDataForRoomEx(pRoom1, pRoom2);
     D2Common::DUNGEON::Dungeon::DRLGROOM_SwapActiveRoomExBetweenLevels(pRoom1, pRoom2);
 }
@@ -239,7 +239,7 @@ void __fastcall FreeClientList(::SGAMEDATA * pGame) {
 }
 
 // Updates the player's portal-visited bitmask: gets the level ID of the player's current room, maps it to the corresponding portal flag, and OR's it into the player's persistent portal flags. No-op if room or player unit is null.
-void __stdcall CLIENT_UpdatePortalFlags(D2ClientStrc * gameContext) {
+static void __stdcall CLIENT_UpdatePortalFlags(D2ClientStrc * gameContext) {
     if (!(gameContext->pRoom && gameContext->pPlayer)) {
       return;
     }
@@ -2268,7 +2268,7 @@ void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClien
 
 // pRoom in EAX, pClient in EDI: UNITS_SendUnitUpdateToClient for every unit in pRoom->pUnitList (pRoomNext chain); halts (line 98) on a NULL room.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-void __stdcall CLIENT_SendRoomUnitUpdates(D2RoomStrc * pRoom, D2ClientStrc * pClient) {
+static void __stdcall CLIENT_SendRoomUnitUpdates(D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     D2UnitStrc* pUnit;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
@@ -2371,5 +2371,9 @@ void __fastcall CLIENT_BroadcastMovementToAdjacentRooms(::SGAMEDATA * pGame, D2R
 void __stdcall ReturnVoid_Unref_0053c740(uint32_t dwParam) {
 
 }
+
+static void * keep_00537ab0 = (0 ? (Unreferenced_00537ab0(*(D2RoomStrc * *)0, *(D2RoomStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00537b00 = (0 ? (CLIENT_UpdatePortalFlags(*(D2ClientStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0053a6a0 = (0 ? (CLIENT_SendRoomUnitUpdates(*(D2RoomStrc * *)0, *(D2ClientStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::GAME::Clients

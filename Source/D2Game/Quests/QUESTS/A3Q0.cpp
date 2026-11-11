@@ -46,9 +46,17 @@ void __fastcall Q17_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
                          broadcast just-completed (triggers quest-log/UI update) */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_SpokeToHratli, QUESTSTATE_JustCompleted);
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // A3Q0 handler [0x00] — on-interact gossip. If target is Hratli (0xfd) and this player has NOT yet completed SpokeToHratli, queue a gossip line on him: variant 1 for Amazon (nClassId==1), variant 0 otherwise. Pure flavor; no state change.
 void __fastcall Q17_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    if (!(pQuestArgs->pTarget && pQuestArgs->pTarget->nClassId == 0xfd)) {
+    if (!(GetClassIdInline(pQuestArgs->pTarget) == 0xfd)) {
       return;
     }
 
@@ -59,7 +67,7 @@ void __fastcall Q17_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     if (bQuestCompleted) {
       return;
     }
-    if (pQuestArgs->pPlayer && pQuestArgs->pPlayer->nClassId == 1) {
+    if (GetClassIdInline(pQuestArgs->pPlayer) == 1) {
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xfd, 1);
       return;
     }

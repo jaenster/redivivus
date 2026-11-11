@@ -1634,17 +1634,17 @@ static D2RoomExStrc * DRLGROOMEX_MoveToActivationList(D2RoomExStrc * pRoomEx, ui
 }
 
 // Sets RoomEx activation priority to 0 (highest). Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 0).
-void DRLGROOMEX_SetPriority0(D2RoomExStrc * pRoomEx) {
+static void DRLGROOMEX_SetPriority0(D2RoomExStrc * pRoomEx) {
     DRLGROOMEX_MoveToActivationList(pRoomEx, 0);
 }
 
 // Sets RoomEx activation priority to 1. Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 1).
-void __stdcall DRLGROOMEX_SetPriority1(D2RoomExStrc * pRoom) {
+static void __stdcall DRLGROOMEX_SetPriority1(D2RoomExStrc * pRoom) {
     DRLGROOMEX_MoveToActivationList(pRoom, 1);
 }
 
 // Sets RoomEx activation priority to 3 (lowest). Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 3).
-D2RoomExStrc * __stdcall DRLGROOMEX_SetPriority3(D2RoomExStrc * pRoomExStrc) {
+static D2RoomExStrc * __stdcall DRLGROOMEX_SetPriority3(D2RoomExStrc * pRoomExStrc) {
     D2RoomExStrc* pResult = DRLGROOMEX_MoveToActivationList(pRoomExStrc, 3);
     return pResult;
 }
@@ -2030,7 +2030,7 @@ void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(D2DrlgStrc * pDrlg) {
 
 // eLevel in ESI: returns 0 when LEVEL_CheckIfLevelIsTown(eLevel), else eLevel != LEVEL_ArreatSummit (0x78).
 // Provenance: asm 0061ba10..0061ba26 (RET), aligned entry after padding; unreferenced in 1.14d.
-BOOL __stdcall LEVEL_IsNotTownAndNotArreatSummit(eD2LevelId eLevel) {
+static BOOL __stdcall LEVEL_IsNotTownAndNotArreatSummit(eD2LevelId eLevel) {
     BOOL BVar1 = Drlg::LEVEL_CheckIfLevelIsTown(eLevel);
     if (BVar1) {
       return 0;
@@ -2084,7 +2084,7 @@ char __fastcall Get0x44FromRoomEx(D2RoomExStrc * pRoomEx) {
 }
 
 // Demotes a RoomEx to priority 2, then activates it if its init ref count is non-zero. Used to transition a RoomEx from a higher priority to the activation-ready state.
-void DRLGROOMEX_DemoteAndActivate(D2RoomExStrc * pRoomExStrc) {
+static void DRLGROOMEX_DemoteAndActivate(D2RoomExStrc * pRoomExStrc) {
     D2RoomExStrc* pRoomEx = DRLGROOMEX_MoveToActivationList(pRoomExStrc, 2);
     if (!pRoomEx->awRoomsInList[1]) {
       return;
@@ -2113,7 +2113,7 @@ void __fastcall thunk_DRLGROOMEX_ActivateRoomEx(D2RoomExStrc * pRoomEx) {
 }
 
 // Sets special RGB color values (0xF5, 0xF0, 0xFF) for the Arreat Summit level environment. Only applies when the level ID matches LEVEL_ArreatSummit.
-void __stdcall DRLGROOM_SetArreatSummitColors(D2DrlgEnvironmentStrc * pAmbientColorBytes, eD2LevelId nLevelId) {
+static void __stdcall DRLGROOM_SetArreatSummitColors(D2DrlgEnvironmentStrc * pAmbientColorBytes, eD2LevelId nLevelId) {
     if (nLevelId != LEVEL_ArreatSummit) {
       return;
     }
@@ -2122,5 +2122,12 @@ void __stdcall DRLGROOM_SetArreatSummitColors(D2DrlgEnvironmentStrc * pAmbientCo
     pAmbientColorBytes->nGlobalLightGreen = 0xf0;
     pAmbientColorBytes->nGlobalLightBlue = 0xff;
 }
+
+static void * keep_0061b290 = (0 ? (DRLGROOMEX_SetPriority0(*(D2RoomExStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0061b2a0 = (0 ? (DRLGROOMEX_SetPriority1(*(D2RoomExStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0061b2b0 = (0 ? (DRLGROOMEX_SetPriority3(*(D2RoomExStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0061ba10 = (0 ? (LEVEL_IsNotTownAndNotArreatSummit(*(eD2LevelId *)0), (void *)0) : (void *)0);
+static void * keep_0061baf0 = (0 ? (DRLGROOMEX_DemoteAndActivate(*(D2RoomExStrc * *)0), (void *)0) : (void *)0);
+static void * keep_0061bb60 = (0 ? (DRLGROOM_SetArreatSummitColors(*(D2DrlgEnvironmentStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::DUNGEON::Dungeon

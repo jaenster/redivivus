@@ -62,9 +62,6 @@ void __stdcall UNICODE_FreeKamapTables();
 // @sourcefile .\Unicode\UNISYS.CPP
 BOOL __fastcall UNICODE_LoadKamapFile(struct D2PoolManagerStrc * pMemory, char * szFilename);
 int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry);
-// The 4-byte search key sits in the slot the prologue's PUSH ECX reserves; only its high word (wChar) is
-// set and read - UNICODE_CompareKamapEntry compares the word at +2.
-uint32_t UNICODE_BinarySearchKamap(uint16_t wChar);
 uint16_t * __fastcall UNICODE_ConvertMultiByteToWide(uint16_t * wszText, uint8_t * szSource, int32_t nSize);
 uint8_t * __fastcall UNICODE_ConvertWideToMultiByte(uint8_t * szDest, uint16_t * wszSource, int32_t nSize);
 int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxChars);

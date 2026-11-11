@@ -225,7 +225,6 @@ void __stdcall BetaScreen_NextPage(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall BetaScreen_NextPageIfVisible(struct D2UIMouseMsgStrc * pMsg);
 // Draw beta screens; caches result in `gBetaScreenEntries[]` and uses `gD2QServer` congrats image/palette handles when the slideshow is active.
 uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused);
-BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t width, int32_t height, int32_t bottomY, int32_t leftX);
 // Set gCongratzOkClicked when congratz screen is clicked.
 void __stdcall Congratz_SetOkClicked(struct D2UIMouseMsgStrc * pMsg);
 int32_t __fastcall GAMEDATA_GetCenteredTextX(uint16_t nStringId, int32_t nCenterX);

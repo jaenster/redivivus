@@ -119,16 +119,13 @@ uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(struct D2UnitStrc * pUnit,
 uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
 void __fastcall SKILLDESC_BuildMagicAffixDesc(struct D2UnitStrc * pUnit, uint16_t * wszText, int32_t nMaxBufferSize);
 uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatOffset);
-int16_t GetSkillLongDescription(eD2Skills eSkill);
 int32_t __stdcall SKILLDESC_GetAuraBonusDamage();
 int __stdcall SKILLDESC_AccumulateAuraBonusDmg(struct D2UnitStrc * pUnit, int * pnMinDmgAcc, int * pnMaxDmgAcc, uint32_t * pdwElemColorOut);
-uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText);
 void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign);
 int __stdcall SKILLDESC_CalcElemDamageRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, struct D2SkillStrc * pSkill);
 void __fastcall SKILLDESC_CalcAttackRateForWeapon(struct D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, int32_t * param_1, uint32_t dwParam1, int32_t nSkillLevel, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_CalcEquippedAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcCompareAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
-void __stdcall SKILLDESC_CalcDualWieldDmg(struct D2SkillStrc * pSkill, int32_t * param_1, struct D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2);
 void __fastcall SKILLDESC_CalcDualWieldWithAR(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldWithARState(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);
 void __fastcall SKILLDESC_CalcDualWieldSimple(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);

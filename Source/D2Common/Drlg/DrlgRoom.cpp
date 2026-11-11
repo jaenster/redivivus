@@ -389,7 +389,7 @@ D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(D2RoomExStrc * pRoom
 }
 
 // Finds the Nth occurrence of a level ID in the vis array. Used to resolve which vis slot corresponds to a specific warp when multiple warps connect to the same level.
-int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevelIdVis, eD2LevelId eLevelId, int nOccurrenceIndex) {
+static int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevelIdVis, eD2LevelId eLevelId, int nOccurrenceIndex) {
     uint8_t nNextSlot;
     int* pVisArray = DRLGWARP_GetVisArrayFromLevelId(pDrlg, eLevelIdVis);
     int nMatchCount = 0;
@@ -1535,5 +1535,7 @@ void __fastcall DRLGROOMEX_InitNearRoomsAndVisTiles(D2PoolManagerStrc * pMemory,
 
     DRLGROOM_FlagRoomExBorderingTown(pRoomEx);
 }
+
+static void * keep_0066afb0 = (0 ? (DRLGWARP_FindNthVisEntryForLevel(*(D2DrlgStrc * *)0, *(eD2LevelId *)0, *(eD2LevelId *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::DrlgRoom

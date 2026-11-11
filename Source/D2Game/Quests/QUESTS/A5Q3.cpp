@@ -137,6 +137,14 @@ void __fastcall Q33_SendQuestStatePacket(D2UnitStrc * pUnit) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &aPacketBuf);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Q33_OnFrozenAnyaKilled (PrisonOfIce): iterator callback over the frozen-Anya monster placeholder (classId 0x20f).
 // If it still has an AI sub, clears it (Q33_SendQuestStatePacket cb). Otherwise forces Dead skill + lifecycle transition
 // (kills it) and marks pA5Q3->field_0xE3=1. Used when reward is granted to despawn the captive Anya monster.
@@ -146,7 +154,7 @@ BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (!pUnit || pUnit->nClassId != 0x20f) {
       return 0;
     }
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+    if (GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       pMonsterAi = pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     } else {
       pMonsterAi = 0;
@@ -1309,6 +1317,14 @@ void __fastcall Q33_InitData(D2QuestDataStrc * pQuestData) {
     pQuestSpecificData->nAnyaStateExtra = 0;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // SpawnFrozenAnya (PrisonOfIce): creates the frozen-Anya OBJECT (classId 0x22e) at the unit's coords once, marking it
 // resurrect/init and storing its GUID. On failure retries via a +0x19-frame timer event. This is the ice-block Anya.
 void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -1326,7 +1342,7 @@ void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (pFrozenAnya) {
       pFrozenAnya->eUnitFlags |= UNITFLAG_ISRESURRECT | UNITFLAG_ISINIT;
       pQuestSpecificData->bFrozenAnyaSpawning = '\x01';
-      pQuestSpecificData->nFrozenAnyaObjectGUID = pFrozenAnya->nUnitGUID;
+      pQuestSpecificData->nFrozenAnyaObjectGUID = GetGUIDInline(pFrozenAnya);
       return;
     }
 
@@ -1385,7 +1401,7 @@ void __fastcall Objects_InitFn68_NihlathakStartInTown(D2ObjectInitFnArg * pInitA
       return;
     }
 
-    pvTmp->nAnyaCorpseGUID = pSpawnedMonster->nUnitGUID;
+    pvTmp->nAnyaCorpseGUID = GetGUIDInline(pSpawnedMonster);
     pvTmp->bAnyaMonsterAlive = 1;
     D2MapAIStrc** ppDrlgMapAi = Ai::AiGeneral::GetMonsterMapAi(pSpawnedMonster);
     if (!(pvTmp->pAnyaRescuedDrlgMap && pvTmp->pAnyaRescuedDrlgMap->pPosition && !pvTmp->bAnyaRescuedMapTaken)) {

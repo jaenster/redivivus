@@ -59,9 +59,6 @@ int __fastcall ShowOogErrorDialog(struct D2OogErrorDataStrc * pErrorData);
 uint32_t __stdcall CLIENT_ConnectToBattleNet();
 int __fastcall EnterEmailMessagePumper(struct D2IniConfigStrc * pIniConfig, int32_t bCreateAccount, int32_t nResponseCode);
 void __stdcall UIMENU_MainMenuWithoutMenuButWithDiabloLogo();
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 0043c530..0043c539; unreferenced in 1.14d.
-__time32_t __stdcall LAUNCHER_GetTime32(__time32_t * pTime);
 void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE nCharacterClass, uint8_t * pAppearanceBuffer, uint16_t wStatusFlags);
 void __fastcall LAUNCHER_MarkCharacterHardcore(int32_t bHardcore);
 // Writes character save data to a .d2s file in the save directory. Retrieves the save path, constructs the full file path with character name, calculates checksum for the save file header, and writes the entire save structure (0x14f bytes) to disk. Returns 1 on success, 0 if file creation fails.

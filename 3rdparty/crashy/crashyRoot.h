@@ -53,7 +53,6 @@ bool __fastcall ErrorReportingLaunch(char * szText, struct D2BlizzardErrorArgume
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_crashy)
 void __fastcall CRT_LocalTime_Thunk(uint8_t * pLocalTime, uint32_t * pTime);
-bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc);
 // @wasnamed SYSTEM_GetParentProcessId - it does not return a parent PID.
 // @evidence The Toolhelp record at EBP-0x230 is PROCESSENTRY32W (dwSize 0x22c = 556, memset of
 // 0x228 from +4). The loop stops at the entry whose +8 (th32ProcessID) equals GetCurrentProcessId,
@@ -62,7 +61,6 @@ bool __stdcall FILETOOLS_GetTempPath_UTF8(char * pSrc);
 // The offset was only readable once the local was widened to the real struct; before that it was
 // six loose dwords with invented names. No callers, so the rename is local.
 void __stdcall SYSTEM_GetCurrentProcessThreadCount();
-bool __stdcall SYSTEM_GetThreadName(int32_t wThreadId, char * pBuffer);
 bool __stdcall InternalCheckCorp();
 char * ILT_strrchr(char * _Str, int32_t _Ch);
 LPCRITICAL_SECTION __stdcall SYSTEM_EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);

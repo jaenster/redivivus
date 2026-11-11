@@ -888,7 +888,7 @@ BOOL __stdcall GetLoggerState_Stub();
 // Element ctor/dtor for the eh-vector iterator over aTaskQueueCriticalSections.
 // The element is a CRITICAL_SECTION, but the iterator's callback slots are void (*)(void*),
 // so the parameter is void* - the specific type cannot be carried through the generic helper.
-void __fastcall InitCriticalSection(void * pElement);
+void * __fastcall InitCriticalSection(void * pElement);
 void LOGFILE_WriteStringToFile(char * Format, ...);
 void LOGMANAGER_TraceToModuleLog(char * szModule, char * szFormatString, ...);
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.

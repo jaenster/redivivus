@@ -294,7 +294,7 @@ void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX, nTargetY, nDir);
 }
 
-int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
+static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
     int32_t nTier = 3;
     if (nValue < nMax / 3) {
       nTier = 2;
@@ -445,7 +445,7 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
     }
 }
 
-int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nMaxValue, int32_t nValue) {
+static int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t nMaxValue, int32_t nValue) {
     int32_t nTier = 3;
     if (nValue < nMaxValue / 3) {
       nTier = 2;
@@ -1383,5 +1383,8 @@ void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070(D2UnitStrc * pUni
 void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20(D2UnitStrc * pUnit) {
     Engine::Gfx::GFX_DrawUnitShadow(pUnit);
 }
+
+static void * keep_004d8a30 = (0 ? (STATES_CalcDamageSeverityTier(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_004d8d60 = (0 ? (PLRSKILLS_CalcDamageSeverityTier_Unreferenced(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UNIT::PlrSkills

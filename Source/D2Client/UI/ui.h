@@ -149,7 +149,6 @@ void __stdcall DRAW_UI_DeathMessage();
 void __fastcall UI_DrawPlayerNameOverhead(struct D2UnitStrc * pUnit);
 void __stdcall UI_DrawPlayerStateOverlays();
 void __stdcall Unreferenced_004535d0();
-void __stdcall UI_SetButtonKeyBinding(struct D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCommandId, int32_t nButtonIndex, int32_t nCmdCategory);
 BOOL __fastcall GetUIFlag(eD2UIvars eUI);
 int Unreferenced_00453900();
 BOOL __fastcall UI_GetFlag(eD2UIvars eUI);
@@ -211,18 +210,11 @@ void __stdcall nullSub_CharonGameDraw();
 void __stdcall UI_ToggleHelpScreen();
 void __stdcall UI_ToggleBeltRows();
 int __stdcall TRADE_GetTradeStatus_Unref_00486d80();
-void __stdcall UI_ReadLineFromShortArray(short * pnDest, int32_t nMaxChars, short * * ppnShort);
 void __stdcall UI_InitializeStatDescriptionPointers();
 int64_t __stdcall UI_GetControlConfigRowCount();
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX);
-// Returns TRUE when (nMouseX, nMouseY) is over one of the control-config tabs: UI_GetControlConfigTabIndex(nMouseX@ESI, nMouseY@EDX) != 3 (SETNZ at 004a4a0a).
-// Was code outside any function; no direct reference reaches it in 1.14d.
-BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY);
-// Returns TRUE when gnUICtrlConfigActiveButton is not 3 (none) and the tab under (nMouseX@ESI, nMouseY@EDX) is that button (004a4a87, 004a4a91); the same test UI_ConfigHandleMouseClick makes inline at 004a5ead.
-// Was code outside any function; no direct reference reaches it in 1.14d.
-BOOL UI_IsMouseOverActiveControlConfigButton(int32_t nMouseX, int32_t nMouseY);
 // Control config mouse handler. Tracks g_nControlConfigMouseButtonState array for each UI region (scroll up/down, list drag, buttons). Dispatches scroll/selection based on mouse state. Main mouse logic for config UI.
 void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouseYStack);
 void __fastcall UIAction_ResetKeyBindingsToDefaults();
@@ -300,8 +292,6 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive();
 void __stdcall INPUT_GambleRepairClick(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket);
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab);
-void thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(struct D2UnitStrc * pUnit);
-void thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(struct D2UnitStrc * pUnit);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 void StaticInit_6caa10();
 void StaticInit_gU16ImmunityStringBuffer1();

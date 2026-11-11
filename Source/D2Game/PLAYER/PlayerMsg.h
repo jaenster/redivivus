@@ -810,9 +810,7 @@ int32_t __stdcall PLAYERMSG_GetMessagePriority(uint32_t nParam);
 eD2ServerIncomingStatus __thiscall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, struct D2UnitStrc * pUnit, uint32_t dwItemGUID);
 eD2ServerIncomingStatus __thiscall IsPlayerTheOwner(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
 eD2ServerIncomingStatus __thiscall ItemBelongsToUnit(::SGAMEDATA * pThis, struct D2UnitStrc * pOwner, uint32_t nItemGid);
-uint8_t __stdcall PLRMSG_CheckWeaponSlotEmpty(struct D2UnitStrc * pUnit, int32_t nBodyLoc);
 eD2ServerIncomingStatus __thiscall ItemBelongsToInventoryOf(::SGAMEDATA * pThis, struct D2UnitStrc * pPlayer, uint32_t nItemGid);
-int32_t __stdcall MONSTER_FindNearbyAllyUnit(::SGAMEDATA * pGame, int32_t bCheckRange, struct D2UnitStrc * * ppUnit, struct D2UnitStrc * pUnit, DWORD nUnitId);
 // C->S Packet 0x01 - Walk to XY (5 bytes)
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=2).

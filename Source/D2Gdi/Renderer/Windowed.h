@@ -204,8 +204,6 @@ HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240();
 BYTE * __fastcall RENDERER_WINDOWED_GetPalettePointer(int nDrawMode, uint32_t * pdwStateOut);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __fastcall RENDERER_WINDOWED_UpdateScaleFactor(int nParam);
-// Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(struct DC6Block * pDC6Block, int nScreenX, int nScreenY, int bShadow);
 BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette);
 void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift);
 void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode);

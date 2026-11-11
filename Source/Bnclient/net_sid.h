@@ -312,9 +312,6 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_RequiredWork(char * pBytes, size_t nSize
 // Packet format: 0xFF | PacketId(1) | Size(2, LE) | Data(...)
 // Validates nPacketId < 0x5E, calls handler from function pointer table.
 BOOL __fastcall NET_SID_CLIENT_IncomingPacketHandler(uint8_t nPacketId, char * pBytes, size_t nSize);
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00521b40..00521b49; unreferenced in 1.14d.
-__time32_t __stdcall NET_SID_GetTime32_00521b40(__time32_t * pTime);
 // Initializes the SRP context by calling SRP_SetParameters with the Battle.net N (safe prime) and g (generator) values, then seeds the RNG with GetTickCount() for ephemeral key generation. Must be called before any SRP logon/create/change flow.
 void __stdcall NET_SID_CLIENT_InitializeSRP();
 // Frees the SRP context allocated by NET_SID_CLIENT_InitializeSRP, releasing the safe prime/generator parameters and any ephemeral key material.
@@ -377,9 +374,6 @@ void __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t
 void __fastcall NET_SID_CLIENT_ExpandCdKeyToBase5(char * pCdKeyString, uint8_t * pOutBase5);
 void __stdcall NET_SID_CLIENT_SubstitutionBoxShuffle(uint32_t * pToken);
 void __fastcall NET_SID_CLIENT_TransformCdKeyToken(char * nCdKeyValue, uint32_t * pOutPublic, uint32_t * pOutProduct, uint16_t * pOutHash);
-// Returns _time32(pTime) with pTime passed in EAX (CRT inline time() copy).
-// Provenance: asm 00522bb0..00522bb9; unreferenced in 1.14d.
-__time32_t __stdcall NET_SID_GetTime32_00522bb0(__time32_t * pTime);
 void __fastcall NET_SID_CLIENT_GenerateRandomString(char * szOutBuf, int32_t nLength);
 void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed);
 int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSize, char * szCDKey);

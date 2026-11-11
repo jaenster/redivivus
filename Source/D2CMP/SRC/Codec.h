@@ -102,8 +102,6 @@ namespace D2CMP::SRC::Codec {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, struct D2CodecBitStateStrc * pBitState, int32_t bSigned, int32_t nBitWidthCode);
-void __stdcall CODEC_BuildInversePalette(uint32_t nPaletteBase, int32_t nPaletteMaskBase, uint8_t * nInverseMapBase, uint8_t * nPaletteTableBase);
 void __fastcall CODEC_BuildInversePaletteFromBitmask(uint8_t * pInversePalette, uint32_t * pUsedColourBits, uint8_t * pPaletteData);
 // Decompress frame pixel data from bit streams. Processes frame iterator list, decodes pixels via two bit buffers (one for pixel delta, one for colors). Fills output buffer row-by-row. Returns bits read into pBitsRead and buffer advance into pBitOffsets.
 void __stdcall CODEC_DecompressFrameData(struct D2CodecFrameBoundsStrc * nCodecState, struct D2CodecPixelBufferEntryStrc * pBitState1, struct D2CodecBitStateStrc * nBits1, struct D2CodecBitStateStrc * pBitState2, struct D2CodecBitStateStrc * nBits2, struct D2CodecBitStateStrc * pBitState3, struct D2CodecBitStateStrc * pBitOffsets, uint8_t * * ppOutBuffer, int * pBitsRead);

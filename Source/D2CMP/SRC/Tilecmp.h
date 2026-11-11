@@ -93,8 +93,6 @@ namespace D2CMP::SRC::Tilecmp {
 // Allocates and zero-initializes a tile node via Fog::Memory::AllocClientMemory; the pointer stays in EAX through the init writes and RET, matching the caller's extraout variable pNewTileNode.
 struct D2TileCmpTileNodeStrc * __stdcall TILECMP_AllocTileNode();
 // @sourcefile .\SRC\Tilecmp.cpp
-void TILECMP_FreeTileNode(struct D2TileCmpTileNodeStrc * pTileNode);
-// @sourcefile .\SRC\Tilecmp.cpp
 struct D2TileCmpTileSetStrc * __stdcall TILECMP_AllocTileSet();
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_AllocTileLink(uint32_t dwTileRef, uint32_t dwLinkData);
@@ -104,9 +102,6 @@ void __stdcall TILECMP_AddTileToSet(struct D2TileCmpTileSetListStrc * pTileSetLi
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_CacheTileData(struct D2TileCmpTileSetStrc * pTileMeasures, uint32_t * pTilePixels, int32_t nPitch, int32_t nOffsetX, int32_t nOffsetY);
 void __stdcall TILECMP_InitTileSetFromDT1(struct D2TileCmpTileSetStrc * pTileSet, void * nDT1Data);
-// @sourcefile .\SRC\Tilecmp.cpp
-// @note ESI nErrLine is not a real input (ESI is only saved, then overwritten at 00609df0). It stays because the halt tail at 00609d71 is reached at several stack depths (0x224/0x22d/0x239/0x247); without it the decompiler reads the 0x239 line as unaff_ESI.
-uint32_t __stdcall TILECMP_ExportCacheToBuffer(struct D2TileCmpTileSetListStrc * pTileSetList, struct D2TileLibraryHeaderStrc * * ppOutBuffer, DWORD nErrLine);
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_FreeTileCache(struct D2TileLibraryHeaderStrc * pTileLibrary, int32_t nUnused);
 // @sourcefile .\SRC\Tilecmp.cpp

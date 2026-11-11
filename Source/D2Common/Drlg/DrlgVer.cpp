@@ -37,7 +37,7 @@ D2DrlgVertexStrc * __fastcall DRLGVER_AllocVertex(D2PoolManagerStrc * pMemory, u
 }
 
 // Sets flags on a DRLG vertex. Always sets bit 0 (initialized flag). If nFlag is non-zero, also sets bit 1 (direction flag). From DrlgVer.cpp.
-void __stdcall DRLGVER_SetVertexFlags(D2DrlgVertexStrc * pVertex, int nFlag) {
+static void __stdcall DRLGVER_SetVertexFlags(D2DrlgVertexStrc * pVertex, int nFlag) {
     pVertex->dwFlags |= 1;
     if (!nFlag) {
       return;
@@ -287,5 +287,7 @@ void __fastcall GetCoordDiff(D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int *
 
     *pDiffY = 1;
 }
+
+static void * keep_0067ce00 = (0 ? (DRLGVER_SetVertexFlags(*(D2DrlgVertexStrc * *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::DrlgVer

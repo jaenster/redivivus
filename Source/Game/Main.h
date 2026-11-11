@@ -50,11 +50,9 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, struct D2IniConfigStrc * pD2
 BOOL __stdcall ReturnTrue();
 void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText);
 void __stdcall CreateRegedit();
-uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPROC * ppfnProc, LPCSTR szText);
 void __stdcall LIB_LoadAdvapi32();
 // lpHandlerProc parameter of RegisterServiceCtrlHandlerA
 void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl);
-BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService);
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.
 void __fastcall PreInitApplication(int32_t argc, char * * argv);
 // ServiceMain for the DIABLO2SRV service. Registers the control handler, reports

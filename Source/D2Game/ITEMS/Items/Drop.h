@@ -108,7 +108,6 @@ namespace D2Game::ITEMS::Items::Drop {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 int Unreferenced_00555cc0();
 void __fastcall ITEMDROP_AddToDropList(int * pnDropCount, uint32_t * pDropListArr, uint32_t dwItemTxtEntry, uint32_t dwWeightOffset);
-int32_t __stdcall ITEMDROP_GetDropListEntry(int32_t pDropListBase, int32_t nEntryIdx, int32_t nMaxEntries);
 void __fastcall ITEM_InitializeDroppedItem(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t dwUnitGUID, struct D2RoomStrc * dwUnused);
 // Find collision-free coords near drop point. Offset (+2,+3), check if better room exists, then scan for free space using SPAWN_ITEM_COLLISION + COLLISION_ITEMS flags. Returns room or NULL if no space found.
 struct D2RoomStrc * __fastcall FindBestSpotToSpawnItem(struct D2RoomStrc * pRoom, POINT * pPoint, POINT * pNewPosition, uint32_t nCollisionMask, uint8_t nMaxSearchRadius);
@@ -125,7 +124,6 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 uint32_t __stdcall ITEM_RollItemQuality(struct D2UnitStrc * pUnit, struct D2ItemGenContextStrc * pItemGenContext);
 // Apply quality tier to item and generate affixes based on quality type (magic/rare/set/unique/superior)
 int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, struct D2UnitStrc * * ppItem, struct D2ItemGenContextStrc * pItemGenContext);
-void ITEM_RollVariantGraphic(struct D2UnitStrc * pUnit);
 // Initializes the base (pre-affix) stats of a freshly created item unit based on its item type. Gold items get a seeded random gold amount (clamped to inventory limit if owned by a player). Quivers/stackables roll a quantity between min and max stack (seeded), forced to 1 if magic-or-better; weapons/armor roll durability and max-durability (seeded, capped at 255), armor also sets block% and rolls base AC, weapons set attack/velocity rate and base damage. Rolls varinvgfx variant. If bApplyQuality and a generation context is supplied, calls ITEM_ApplyQualityAndAffixes and, for quest items, attaches a stat list storing the quest item difficulty and marks it identified. pGame/pItem=target item, pItemGenCtx=generation parameters (preset quantity etc.). Returns a BOOL in EAX.
 // Returns a BOOL: the epilogue loads EAX explicitly and two of the three callers branch on it, so every server-side item creation decided whether to keep or immediately free the item from whatever was in EAX. Parameter 2 is a D2UnitStrc** - the body dereferences it immediately and every call site passes the address of a local unit pointer; typed one level short it only worked because eUnitType sits at offset 0 and is 4 bytes wide.
 int __fastcall ITEM_InitItemBaseStats(::SGAMEDATA * pGame, struct D2UnitStrc * * ppItem, struct D2ItemGenContextStrc * pItemGenCtx, int32_t bApplyQuality);
@@ -134,7 +132,6 @@ void __fastcall ITEM_FreeItemInventoryAndTimers(::SGAMEDATA * pGame, struct D2Un
 // Matches fpSUnitIterateCallback (ECX=pGame, EDX=pUnit, Stack[0x4]=pArgs); pGame is unused by the
 // body, which is why the register is never read. Confirmed by RET 0x4 and the CALL EBX at 00553914.
 void __fastcall ITEM_RemoveFromOwnerInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
-void thunk_IterateAllUnits(::SGAMEDATA * pGame, uint32_t * pArgs);
 void __fastcall ITEM_DeleteItemAndFreeUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall AlreadyHoldingItem(struct D2UnitStrc * punit, struct D2UnitStrc * pItem, struct D2InventoryStrc * pInventory);
 // Searches a player's inventory (cursor slot + all inventory pages, excluding corpse) for an item matching szItemCode. For quest items also validates that the item's questitemdifficulty stat is >= the current game difficulty, preventing quest items from a lower difficulty from counting. Returns the matching D2UnitStrc* or NULL.

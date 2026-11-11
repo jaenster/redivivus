@@ -101,7 +101,7 @@ static D2FogHeapDescStrc * __stdcall SMEM_LockHeapByBlockPtr(uint32_t * pnOutBuc
     return nHeapDescOffset;
 }
 
-uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash) {
+static uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t nFlags, uint32_t nHash) {
     uint32_t uBucketIndex = (uint8_t)nHash;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + uBucketIndex);
     *pnOutBucket = uBucketIndex;
@@ -1661,5 +1661,7 @@ void __stdcall SMemMove(void * pDest, void * pSrc, size_t nSize) {
 void __stdcall SMemZero(void * pMemory, size_t nSize) {
     memset(pMemory, 0, nSize);
 }
+
+static void * keep_00411740 = (0 ? (SMemFindHeapByHash(*(uint32_t * *)0, *(int32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 } // namespace Storm::Source::SMem

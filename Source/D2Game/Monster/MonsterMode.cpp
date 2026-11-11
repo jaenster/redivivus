@@ -54,7 +54,7 @@ D2MonsterPathParamStrc * __fastcall GetAiParamFromUnit(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
-void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, D2MonsterPathParamStrc * pMonData) {
+static void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char * szText, D2MonsterPathParamStrc * pMonData) {
     if (pMonData->nPathTypeOverride) {
       *pX = pMonData->nPathTypeOverride;
     }
@@ -770,6 +770,14 @@ BOOL __fastcall thunk_ExecuteTimerTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUni
     return 1;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bInRange;
     bool bInRange;
@@ -779,7 +787,7 @@ static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2UnitStrc* pTarget;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     for (pTarget = pRoom->pUnitList; pTarget; pTarget = pTarget->pRoomNext) {
-      if (pTarget->eUnitType == UNIT_PLAYER && pTarget->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
+      if (GetTypeInline(pTarget) == UNIT_PLAYER && pTarget->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
         nDamage = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
         if (nDamage <= 2) {
           _bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pTarget, pUnit, 0x3c01);
@@ -1674,5 +1682,7 @@ void __stdcall SetCurrentSkill(D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode,
 
     pMonsterKill->nAnimatedMode2 = 'd';
 }
+
+static void * keep_005a61b0 = (0 ? (MONSTERMODE_ConsumeStoredPosition(*(int * *)0, *(int * *)0, *(char * *)0, *(D2MonsterPathParamStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::Monster::MonsterMode
