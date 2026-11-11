@@ -50,7 +50,7 @@ fn copy2(src: []const u8, dst: []const u8) !void {
     const sz = try util.z(src);
     var st: c.struct_stat = undefined;
     if (c.stat(sz.ptr, &st) != 0) return error.Stat;
-    var times = [2]c.struct_timespec{ st.st_atimespec, st.st_mtimespec };
+    var times = [2]c.struct_timespec{ proc.statAtime(&st), proc.statMtime(&st) };
     const dz = try util.z(dst);
     _ = c.utimensat(c.AT_FDCWD, dz.ptr, &times, 0);
 }

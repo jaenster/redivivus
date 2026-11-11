@@ -30,7 +30,7 @@ pub fn flockPath(path: []const u8) !c_int {
     const fd = c.open(pz.ptr, c.O_WRONLY | c.O_CREAT | c.O_TRUNC | c.O_CLOEXEC, @as(c_uint, 0o666));
     if (fd < 0) return error.Open;
     while (c.flock(fd, c.LOCK_EX) != 0) {
-        if (c.__error().* != c.EINTR) return error.Lock;
+        if (errno() != c.EINTR) return error.Lock;
     }
     return fd;
 }
@@ -83,11 +83,36 @@ pub fn fileSize(path: []const u8) u64 {
 
 pub const Stat = struct { ino: u64, size: i64, mtime_ns: i128 };
 
+/// A stat's modification and access times: Darwin names the fields st_mtimespec and
+/// st_atimespec, glibc and musl st_mtim and st_atim.
+pub fn statMtime(st: *const c.struct_stat) c.struct_timespec {
+    return if (@hasField(c.struct_stat, "st_mtimespec")) st.st_mtimespec else st.st_mtim;
+}
+pub fn statAtime(st: *const c.struct_stat) c.struct_timespec {
+    return if (@hasField(c.struct_stat, "st_atimespec")) st.st_atimespec else st.st_atim;
+}
+
+/// Only the descriptors a spawn's file actions set reach the child, so another thread's
+/// pipes never leak into it: Darwin has a spawn flag for that; elsewhere the pipes are
+/// opened close-on-exec, and the dup2 onto 0, 1 and 2 clears the flag on the child's copy.
+const spawn_flags = if (@hasDecl(c, "POSIX_SPAWN_CLOEXEC_DEFAULT")) c.POSIX_SPAWN_CLOEXEC_DEFAULT else 0;
+extern "c" fn pipe2(fds: *[2]c_int, flags: c_int) c_int;
+fn pipeCloexec(fds: *[2]c_int) c_int {
+    if (@hasDecl(c, "POSIX_SPAWN_CLOEXEC_DEFAULT")) return c.pipe(fds);
+    return pipe2(fds, c.O_CLOEXEC);
+}
+
+/// The calling thread's errno, which Darwin reaches through __error and glibc through
+/// __errno_location.
+fn errno() c_int {
+    return std.c._errno().*;
+}
+
 pub fn stat(path: []const u8) ?Stat {
     const pz = util.z(path) catch return null;
     var st: c.struct_stat = undefined;
     if (c.stat(pz.ptr, &st) != 0) return null;
-    return .{ .ino = @intCast(st.st_ino), .size = @intCast(st.st_size), .mtime_ns = @as(i128, st.st_mtimespec.tv_sec) * 1_000_000_000 + st.st_mtimespec.tv_nsec };
+    return .{ .ino = @intCast(st.st_ino), .size = @intCast(st.st_size), .mtime_ns = @as(i128, statMtime(&st).tv_sec) * 1_000_000_000 + statMtime(&st).tv_nsec };
 }
 
 /// Write via a temporary file and rename (build.py's write_text, objcache.install).
@@ -100,7 +125,9 @@ pub fn writeAtomic(path: []const u8, data: []const u8) !void {
 /// Distinguishes the threads of this process in temporary names; Python's names carry
 /// only the pid, its threads never write the same file at once (the GIL and the locks).
 fn threadTag() u64 {
-    return @intFromPtr(c.pthread_self());
+    // pthread_t is a pointer on Darwin and an unsigned long on glibc.
+    const t = c.pthread_self();
+    return if (@typeInfo(@TypeOf(t)) == .pointer or @typeInfo(@TypeOf(t)) == .optional) @intFromPtr(t) else @intCast(t);
 }
 
 /// shutil.copyfile into a temporary beside `dst`, then os.replace (objcache.install).
@@ -377,13 +404,13 @@ pub fn run(argv: []const []const u8, opts: RunOptions) !Output {
     _ = c.posix_spawnattr_init(&attr);
     defer _ = c.posix_spawnattr_destroy(&attr);
     // Only the descriptors set here reach the child: another thread's pipes never leak into it.
-    _ = c.posix_spawnattr_setflags(&attr, c.POSIX_SPAWN_CLOEXEC_DEFAULT);
+    _ = c.posix_spawnattr_setflags(&attr, spawn_flags);
     const stdin_z = try util.z(opts.stdin_path orelse "/dev/null");
     _ = c.posix_spawn_file_actions_addopen(&fa, 0, stdin_z.ptr, c.O_RDONLY, 0);
     var po: [2]c_int = .{ -1, -1 };
     var pe: [2]c_int = .{ -1, -1 };
     if (opts.capture) {
-        if (c.pipe(&po) != 0 or c.pipe(&pe) != 0) return error.Pipe;
+        if (pipeCloexec(&po) != 0 or pipeCloexec(&pe) != 0) return error.Pipe;
         _ = c.posix_spawn_file_actions_adddup2(&fa, po[1], 1);
         _ = c.posix_spawn_file_actions_adddup2(&fa, if (opts.merge_stderr) po[1] else pe[1], 2);
     } else {
@@ -425,14 +452,14 @@ pub fn run(argv: []const []const u8, opts: RunOptions) !Output {
             }
             const n = c.poll(&fds, 2, wait_ms);
             if (n < 0) {
-                if (c.__error().* == c.EINTR) continue;
+                if (errno() == c.EINTR) continue;
                 return error.Poll;
             }
             for (&fds, 0..) |*f, k| {
                 if (f.fd < 0 or f.revents == 0) continue;
                 const got = c.read(f.fd, &buf, buf.len);
                 if (got <= 0) {
-                    if (got < 0 and c.__error().* == c.EINTR) continue;
+                    if (got < 0 and errno() == c.EINTR) continue;
                     _ = c.close(f.fd);
                     f.fd = -1;
                     open -= 1;
@@ -448,7 +475,7 @@ pub fn run(argv: []const []const u8, opts: RunOptions) !Output {
     }
     var status: c_int = 0;
     while (c.waitpid(pid, &status, 0) < 0) {
-        if (c.__error().* != c.EINTR) break;
+        if (errno() != c.EINTR) break;
     }
     const st: u32 = @bitCast(status);
     const code: i32 = if (st & 0x7f == 0) @intCast((st >> 8) & 0xff) else -@as(i32, @intCast(st & 0x7f));
@@ -473,10 +500,10 @@ pub const Pipe = struct {
         defer _ = c.posix_spawn_file_actions_destroy(&fa);
         _ = c.posix_spawnattr_init(&attr);
         defer _ = c.posix_spawnattr_destroy(&attr);
-        _ = c.posix_spawnattr_setflags(&attr, c.POSIX_SPAWN_CLOEXEC_DEFAULT);
+        _ = c.posix_spawnattr_setflags(&attr, spawn_flags);
         var pi: [2]c_int = undefined;
         var po: [2]c_int = undefined;
-        if (c.pipe(&pi) != 0 or c.pipe(&po) != 0) return error.Pipe;
+        if (pipeCloexec(&pi) != 0 or pipeCloexec(&po) != 0) return error.Pipe;
         _ = c.posix_spawn_file_actions_adddup2(&fa, pi[0], 0);
         _ = c.posix_spawn_file_actions_adddup2(&fa, po[1], 1);
         _ = c.posix_spawn_file_actions_adddup2(&fa, 2, 2);
@@ -498,7 +525,7 @@ pub const Pipe = struct {
         while (rest.len > 0) {
             const n = c.write(p.in, rest.ptr, rest.len);
             if (n < 0) {
-                if (c.__error().* == c.EINTR) continue;
+                if (errno() == c.EINTR) continue;
                 return error.Write;
             }
             rest = rest[@intCast(n)..];
@@ -522,7 +549,7 @@ pub const Pipe = struct {
             var buf: [65536]u8 = undefined;
             const n = c.read(p.out, &buf, buf.len);
             if (n < 0) {
-                if (c.__error().* == c.EINTR) continue;
+                if (errno() == c.EINTR) continue;
                 return error.Read;
             }
             if (n == 0) {
@@ -542,7 +569,7 @@ pub const Pipe = struct {
     pub fn wait(p: *Pipe) i32 {
         var status: c_int = 0;
         while (c.waitpid(p.pid, &status, 0) < 0) {
-            if (c.__error().* != c.EINTR) return -1;
+            if (errno() != c.EINTR) return -1;
         }
         const st: u32 = @bitCast(status);
         return if (st & 0x7f == 0) @intCast((st >> 8) & 0xff) else -@as(i32, @intCast(st & 0x7f));

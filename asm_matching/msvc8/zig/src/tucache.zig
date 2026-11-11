@@ -235,7 +235,7 @@ fn statPath(p: []const u8, follow: bool) ?Stat {
     var st: c.struct_stat = undefined;
     const rc = if (follow) c.stat(pz.ptr, &st) else c.lstat(pz.ptr, &st);
     if (rc != 0) return null;
-    const ts = st.st_mtimespec;
+    const ts = if (@hasField(c.struct_stat, "st_mtimespec")) st.st_mtimespec else st.st_mtim;
     return .{
         .size = @intCast(st.st_size),
         .mtime_s = @intCast(ts.tv_sec),
