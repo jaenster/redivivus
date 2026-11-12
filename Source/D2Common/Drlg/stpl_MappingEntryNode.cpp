@@ -156,7 +156,6 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkNode(::Mappi
 
 template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
     TSLink<::MappingEntryNode>** pPrevLink2;
-    intptr_t nNextLink;
     char* pObject = this->m_key.szString;
     if (pObject) {
       Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
@@ -166,15 +165,9 @@ template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
     TSLink<::MappingEntryNode>* pTVar1 = &this->m_linktofull;
     if (nHeadEntry) {
       TSLink<::MappingEntryNode>** pPrevLink;
-      nNextLink = this->m_linktofull.m_next;
-      if (nNextLink < 0) {
-        pPrevLink = (TSLink<::MappingEntryNode>**)~nNextLink;
-      } else {
-        pPrevLink = (TSLink<::MappingEntryNode>**)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
-      }
-
+      pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
       *pPrevLink = nHeadEntry;
-      pTVar1->m_prevlink->m_next = this->m_linktofull.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
       this->m_linktofull.m_next = 0;
     }
@@ -185,15 +178,9 @@ template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
       return;
     }
 
-    intptr_t nNextLink2 = this->m_linktoslot.m_next;
-    if (nNextLink2 < 0) {
-      pPrevLink2 = (TSLink<::MappingEntryNode>**)~nNextLink2;
-    } else {
-      pPrevLink2 = (TSLink<::MappingEntryNode>**)((char*)pTVar1 + (nNextLink2 - nHeadEntry->m_next));
-    }
-
+    pPrevLink2 = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
     *pPrevLink2 = nHeadEntry;
-    pTVar1->m_prevlink->m_next = this->m_linktoslot.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }
@@ -211,7 +198,6 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Nex
 
 template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
     TSLink<::MappingEntryNode>** pPrevLink;
-    intptr_t nNextLink;
     intptr_t nSlotOffset;
     TSLink<::MappingEntryNode>* pHeadEntry;
     while ((nSlotOffset = this->m_terminator.m_next) > 0) {
@@ -219,13 +205,7 @@ template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
       pHeadEntry = *(TSLink<::MappingEntryNode>**)(this->m_linkoffset + nSlotOffset);
       pSlot = (TSLink<::MappingEntryNode>*)(this->m_linkoffset + nSlotOffset);
       if (pHeadEntry) {
-        nNextLink = pSlot->m_next;
-        if (nNextLink < 0) {
-          pPrevLink = (TSLink<::MappingEntryNode>**)~nNextLink;
-        } else {
-          pPrevLink = (TSLink<::MappingEntryNode>**)((char*)pSlot + (nNextLink - pHeadEntry->m_next));
-        }
-
+        pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pSlot, -1);
         *pPrevLink = pHeadEntry;
         pSlot->m_prevlink->m_next = pSlot->m_next;
         pSlot->m_prevlink = 0;

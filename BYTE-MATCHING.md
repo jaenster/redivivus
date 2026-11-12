@@ -91,8 +91,8 @@ the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summ
   bytes repeat a named function. They stay in the denominator; the README's second row leaves
   the identical ones out of the identical count only.
 
-Over the whole binary, runtime included, at this commit: 8,966 of 15,741
-functions (57.0%), 821,605 of 2,751,750 bytes (29.86%).
+Over the whole binary, runtime included, at this commit: 9,029 of 15,741
+functions (57.4%), 830,403 of 2,751,750 bytes (30.18%).
 
 ## What it does not say
 
@@ -108,5 +108,8 @@ functions (57.0%), 821,605 of 2,751,750 bytes (29.86%).
 
 The oracle is in [`asm_matching/msvc8/`](asm_matching/msvc8/README.md). It needs the
 original `Game.exe` and the compiler. It runs under wine on macOS and Linux, and in CI the
-tree is compiled with the same compiler on every change. Its README covers setup, how
+tree is compiled with the same compiler on every change. What the compiler sees is the tree
+rewritten for C++03 by the generator's VC8 translation. That is committed as generated
+source in `asm_matching/msvc8/translated/`, refreshed with every export, and
+`oracle build` compiles it when no translator is installed. Its README covers setup, how
 functions are paired and judged, the per-directory flags, and how to read `oracle diff`.

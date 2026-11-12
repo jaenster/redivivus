@@ -570,27 +570,34 @@ void __thiscall TSBaseArray_Ui_Copy(TSGrowableArray_Ui * pArray, uint32_t nCount
     pArray->nLen = nCount;
 }
 
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+
 // @was SBIG_ArrayByteEnsureAdditional (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Compute n = arg + m_count; when m_alloc is below n, and only when the flag is set, call CalcChunkSize then round n up to that chunk, then call ReallocData with n - the oracle's .Reserve__34TSGrowableArray<3RGN,10TSCD<3RGN>>FUi,i at 10040af0, including the bool second parameter that selects chunk rounding. Byte instantiation, SMem tag 0x708880.
 // @struct The container header is +0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk. BigBuffer extends it with +0x10 m_offset, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSGrowableArray_Uc_Reserve(uint32_t * pArray, int32_t nAdditional, int32_t bAlignToGranularity) {
-    uint32_t nNewSize = nAdditional + pArray[1];
-    if (nNewSize <= *pArray) {
+void __thiscall TSGrowableArray_Uc_Reserve(uint32_t * pArray, uint32_t nAdditional, int32_t bAlignToGranularity) {
+    nAdditional = nAdditional + pArray[1];
+    if (nAdditional <= *pArray) {
       return;
     }
     if (bAlignToGranularity) {
       uint32_t nGranularity;
       nGranularity = pArray[3];
       if (!nGranularity) {
-        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewSize);
+        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nAdditional);
       }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
-      }
+
+      nAdditional = D2_RoundUp(nAdditional, nGranularity);
     }
 
-    TSFixedArray_Uc_ReallocData((TSGrowableArray_Uc*)pArray, nNewSize);
+    TSFixedArray_Uc_ReallocData((TSGrowableArray_Uc*)pArray, nAdditional);
 }
 
 // @module-history Pass 5 established the module (contiguous SBig.cpp COMDAT run 00420eb0-00421d80, moved out of D2Client::WindowHandle with a mechanical WND_ -> SBIG_ prefix swap, tail unverified). Pass 6 bound 35 of the 45 tails to oracle template methods; this one is among the 10 it did not.
@@ -882,46 +889,44 @@ void __thiscall TSBaseArray_UcAlt_Copy(TSGrowableArray_Uc * pArray, uint32_t nCo
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Same structure as TSGrowableArray_Uc_Reserve 00421630, dword elements.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSGrowableArray_Ui_Reserve(uint32_t * pArray, int32_t nAdditional, int32_t bAlignToGranularity) {
-    uint32_t nNewSize = nAdditional + pArray[1];
-    if (nNewSize <= *pArray) {
+void __thiscall TSGrowableArray_Ui_Reserve(uint32_t * pArray, uint32_t nAdditional, int32_t bAlignToGranularity) {
+    nAdditional = nAdditional + pArray[1];
+    if (nAdditional <= *pArray) {
       return;
     }
     if (bAlignToGranularity) {
       uint32_t nGranularity;
       nGranularity = pArray[3];
       if (!nGranularity) {
-        nGranularity = TSGrowableArray_Ui_CalcChunkSize((BigBuffer*)pArray, nNewSize);
+        nGranularity = TSGrowableArray_Ui_CalcChunkSize((BigBuffer*)pArray, nAdditional);
       }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
-      }
+
+      nAdditional = D2_RoundUp(nAdditional, nGranularity);
     }
 
-    TSFixedArray_Ui_ReallocData((BigBuffer*)pArray, nNewSize);
+    TSFixedArray_Ui_ReallocData((BigBuffer*)pArray, nAdditional);
 }
 
 // @was SBIG_ArrayByteAltEnsureAdditional (pass 6, 2026.08.28)
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. Same structure as 00421630; second byte instantiation, SMem tag 0x70888c.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-void __thiscall TSGrowableArray_UcAlt_Reserve(TSGrowableArray_Uc * pArray, int32_t nAdditional, int32_t bAlignToGranularity) {
-    uint32_t nNewSize = nAdditional + pArray->nLen;
-    if (nNewSize <= pArray->nCapacity) {
+void __thiscall TSGrowableArray_UcAlt_Reserve(TSGrowableArray_Uc * pArray, uint32_t nAdditional, int32_t bAlignToGranularity) {
+    nAdditional = nAdditional + pArray->nLen;
+    if (nAdditional <= pArray->nCapacity) {
       return;
     }
     if (bAlignToGranularity) {
       uint32_t nGranularity;
       nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
-        nGranularity = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pArray, nNewSize);
+        nGranularity = TSGrowableArray_UcAlt_CalcChunkSize((BigBuffer*)pArray, nAdditional);
       }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
-      }
+
+      nAdditional = D2_RoundUp(nAdditional, nGranularity);
     }
 
-    TSFixedArray_UcAlt_ReallocData(pArray, nNewSize);
+    TSFixedArray_UcAlt_ReallocData(pArray, nAdditional);
 }
 
 // @was SBIG_ArrayDwordCopyAssignWithGranularity (pass 6, 2026.08.28)

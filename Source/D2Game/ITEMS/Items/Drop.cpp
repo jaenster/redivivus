@@ -1175,7 +1175,7 @@ static void __stdcall ITEM_FallbackToNormalQuality(D2UnitStrc * * ppUnit, ::SGAM
 }
 
 // Re-generates the item as QUALITY_SUPERIOR: clears its magic affixes, re-seeds mod and item seed from *pnParam (seed high 0x29A), rerolls the quality fields, sets the quality on the item and gen context, writes the new seed low back to *pnParam, and returns the result of ITEMMOD_RollSuperiorQualityMods.
-static BOOL ITEM_FallbackToSuperiorQuality(int * pnSeed, D2ItemGenContextStrc * pItemGenContext, D2UnitStrc * * ppUnit) {
+static BOOL ITEM_FallbackToSuperiorQuality(D2ItemGenContextStrc * pItemGenContext, D2UnitStrc * * ppUnit, int * pnSeed) {
     ITEM_ClearAllMagicAffixes(ppUnit);
     D2Common::ITEMS::Items::SetModSeed(*ppUnit, *pnSeed);
     D2SeedStrc* pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppUnit);
@@ -1335,7 +1335,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       if (!nCrudeResult) {
         nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
         if (!nCrudeResult) {
-          nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+          nCrudeResult = ITEM_FallbackToSuperiorQuality(pItemGenContext, ppItem, (int*)&nSeedLowBackup);
           if (!nCrudeResult) {
             ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
           }
@@ -1348,7 +1348,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
       nSeedLowBackup = D2Common::Seed::GetSeed_nSeedLow(pSeed);
       nCrudeResult = ITEM_RollMagicPrefixSuffix(pItemGenContext, ppItem);
       if (!nCrudeResult) {
-        nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+        nCrudeResult = ITEM_FallbackToSuperiorQuality(pItemGenContext, ppItem, (int*)&nSeedLowBackup);
         if (!nCrudeResult) {
           ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
         }
@@ -1386,7 +1386,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
         if (!nCrudeResult) {
           nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
           if (!nCrudeResult) {
-            nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+            nCrudeResult = ITEM_FallbackToSuperiorQuality(pItemGenContext, ppItem, (int*)&nSeedLowBackup);
             if (!nCrudeResult) {
               ITEM_FallbackToNormalQuality(ppItem, pGame, pItemGenContext, nSeedLowBackup);
             }
@@ -1451,7 +1451,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
 
         nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
         if (!nCrudeResult) {
-          nCrudeResult = ITEM_FallbackToSuperiorQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+          nCrudeResult = ITEM_FallbackToSuperiorQuality(pItemGenContext, ppItem, (int*)&nSeedLowBackup);
           if (!nCrudeResult) {
             goto fallback_to_normal;
           }

@@ -604,15 +604,15 @@ void __fastcall FreeWall2(D2GameViewStrc * pGameView) {
 
 // Checks whether iso cell (nX,nY) falls inside the game view's current wall draw grid. nX arrives in EAX: the first instruction is SUB EAX,[EDX+0xea68].
 static BOOL WALL2_IsInDrawGrid(int nX, int nY, D2Wall2DrawListStrc * pDrawList) {
-    int iVar1 = nX - pDrawList->nWall2GridOriginX;
+    nX = nX - pDrawList->nWall2GridOriginX;
     int nRelY = nY - pDrawList->nWall2GridOriginY;
-    if (iVar1 < 0) {
+    if (nX < 0) {
       return 0;
     }
     if (nRelY < 0) {
       return 0;
     }
-    if (!(iVar1 < pDrawList->nWall2GridDim)) {
+    if (!(nX < pDrawList->nWall2GridDim)) {
       return 0;
     }
 

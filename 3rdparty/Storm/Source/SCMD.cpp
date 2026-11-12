@@ -275,17 +275,10 @@ StormLinkStrc * __fastcall Unreferenced_006c4470(StormLinkStrc * param_1) {
 }
 
 ::SCMD * __thiscall SCMD_FreeNode(::SCMD * pThis, uint8_t bFreeMemory) {
-    intptr_t nNextOffset;
     StormLinkStrc* pListHead = *(StormLinkStrc**)pThis;
     if (pListHead) {
       StormLinkStrc* pPrevLink;
-      nNextOffset = *(uint32_t*)(pThis + 4);
-      if (nNextOffset < 0) {
-        pPrevLink = (StormLinkStrc*)~nNextOffset;
-      } else {
-        pPrevLink = (StormLinkStrc*)(pThis + (nNextOffset - pListHead->pNext));
-      }
-
+      pPrevLink = (StormLinkStrc*)D2_StormNextLink(pThis, -1);
       pPrevLink->pPrevLink = pListHead;
       *(uint32_t*)(*(int*)pThis + 4) = *(uint32_t*)(pThis + 4);
       *(uint32_t*)pThis = 0;

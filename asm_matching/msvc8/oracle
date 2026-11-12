@@ -3,6 +3,8 @@
 #
 #   oracle setup              fetch Game.exe 1.14d, build the VC8 toolchain (once)
 #   oracle build [-j N] [TU]  translate + compile, incremental (TU = path substring)
+#   oracle translate <out>    write the tree's VC8 translation to <out> (what the export ships
+#                             as translated/)
 #   oracle map                derive evidence/funcmap.tsv (our function -> address)
 #   oracle libmap             derive evidence/libmap.tsv (the linked runtime's functions -> address)
 #   oracle audit [--data]     byte-compare every mapped function: evidence/audit.tsv
@@ -53,9 +55,7 @@ set -euo pipefail
 . "$(dirname "$0")/scripts/env.sh"
 
 # zig/ (oracle-zig, have_zig and oracle_zig in scripts/env.sh) is the oracle in Zig: every
-# stage and tool. It needs zig 0.17 on PATH. The Python left is build.py, for a machine with
-# no ghidra-reconstruct checkout to translate with (it then translates with vc8_translate.py),
-# with the modules it imports. The source fixes are ghidra-reconstruct's: its generator
+# stage and tool. It needs zig 0.17 on PATH and stops without it. The source fixes are ghidra-reconstruct's: its generator
 # passes, and the vc8form permuter (recon/runs/vc8form-permute.sh) for per-function forms.
 need_zig() {
     echo "oracle: '$1' needs zig 0.17 on PATH (asm_matching/msvc8/zig builds oracle-zig)" >&2
@@ -85,16 +85,12 @@ carve() {
     mv "$ref/functions.tsv.new" "$ref/functions.tsv"
 }
 
-# The compile: oracle-zig build when a ghidra-reconstruct checkout can translate (GR, else
-# ~/code/ts/gr-daemon), else build.py (which then translates with vc8_translate.py). The same
-# build/src, objects, quarantine.tsv and cache entries.
+# The compile: oracle-zig build. It translates with a ghidra-reconstruct checkout (GR, else
+# ~/code/ts/gr-daemon), else compiles the translated tree an export ships (translated/,
+# or ORACLE_TRANSLATED); with neither it stops and says so.
 build() {
     have_zig || need_zig build
-    if oracle_zig build --probe; then
-        oracle_zig build --root "$ORACLE_ROOT" "$@"
-    else
-        oracle_python "$SCRIPTS/build.py" "$@"
-    fi
+    oracle_zig build --root "$ORACLE_ROOT" "$@"
 }
 
 ensure_ref() {
@@ -108,6 +104,8 @@ cmd="${1:-help}"; [ $# -gt 0 ] && shift
 case "$cmd" in
     setup)  "$SCRIPTS/fetch_reference.sh"; "$SCRIPTS/setup_toolchain.sh" ;;
     build)  build "$@" ;;
+    translate) [ $# -eq 1 ] || { echo "usage: oracle translate <out>" >&2; exit 2; }
+            zigtool_noroot translate --repo "$REPO_ROOT" "$1" ;;
     ref)    [ -f "$REFERENCE_EXE" ] || "$SCRIPTS/fetch_reference.sh"; carve "$@" ;;
     crt)    ensure_ref
             zigtool crt "$@" ;;

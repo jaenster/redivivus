@@ -29,7 +29,7 @@ a pointer tagged in its low or sign bit, an address sent over the wire.
 
 ## What it runs
 
-`count` translates the checkout for VC8 the way the oracle does (`scripts/vc8_translate.py`),
+`count` translates the checkout for VC8 the way the oracle does (`oracle-zig translate`),
 then compiles each translation unit (`oracle-zig x64 compile`, which needs zig 0.17) with
 
 ```

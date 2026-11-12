@@ -311,7 +311,7 @@ void __thiscall BNNEWS_ReallocateNewsTable(struct D2BnNewsTableStrc * pNewsTable
 void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray);
 uint32_t * __fastcall Unreferenced_0051d690(uint32_t * param_1);
 void __fastcall BNNEWS_ClearNewsTable(struct D2BnNewsTableStrc * pNewsTable);
-void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int dwAdditionalCount, int bGrow);
+void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, uint32_t dwAdditionalCount, int bGrow);
 uint32_t * __fastcall Unreferenced_0051d720(uint32_t * param_1);
 BOOL __stdcall BNNEWS_Shutdown();
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable);

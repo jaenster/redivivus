@@ -1017,8 +1017,8 @@ void __fastcall SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId 
 
 static void MISSILES_UpdatePathToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nCoord;
-    int32_t wOwnerPosY;
     int32_t wOwnerPosX;
+    int32_t wOwnerPosY;
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
     if (!(pOwnerUnit && pDynPath)) {

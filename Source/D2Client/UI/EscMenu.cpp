@@ -58995,7 +58995,7 @@ static void __stdcall ESCMENU_ClickMenuItem(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
-static void ESCMENU_HandleSliderDrag(int32_t nMouseY, int32_t nMouseX) {
+static void ESCMENU_HandleSliderDrag(int32_t nMouseX, int32_t nMouseY) {
     int32_t nHoveredIndex;
     BOOL nSliderLeftX;
     int nScreenCenterX;
@@ -59063,14 +59063,15 @@ static void ESCMENU_HandleSliderDrag(int32_t nMouseY, int32_t nMouseX) {
 }
 
 void __stdcall INPUT_EscMenuMouseDown(D2UIMouseMsgStrc * pMsg) {
+    uint32_t nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    uint16_t uVar1 = pMsg->uLParam.sMousePos.nMouseX;
     int32_t nHitIndex = ESCMENU_GetItemIndexFromMouseY(nMouseY);
     if (nHitIndex != -1) {
       gnEscMenuSelectedIndex = nHitIndex;
     }
 
-    ESCMENU_HandleSliderDrag(nMouseY, nMouseX);
+    ESCMENU_HandleSliderDrag((uint32_t)uVar1, nMouseY);
     gbEscMenuSliderDragging = 1;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -59660,7 +59661,7 @@ void __stdcall DRAW_EscMenu() {
         gnEscMenuLastMouseY = nMouseY;
         gnEscMenuLastMouseX = nMouseX;
         if (gbEscMenuSliderDragging) {
-          ESCMENU_HandleSliderDrag(nMouseY, nMouseX);
+          ESCMENU_HandleSliderDrag(nMouseX, nMouseY);
         } else {
           nErrorLine = ESCMENU_GetItemIndexFromMouseY(nMouseY);
           if (nErrorLine != -1) {

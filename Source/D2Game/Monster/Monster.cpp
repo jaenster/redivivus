@@ -768,12 +768,12 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
     UNIT::SUnit::InitAnimFrame(pUnit);
 }
 
-void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags) {
+BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return;
+      return 0;
     }
     if (!((int)nMonStatId >= 0 && (int)nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
-      return;
+      return 0;
     }
 
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -782,6 +782,7 @@ void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * 
     pUnit->nClassId = nMonStatId;
     STRUCT_FillDataMonster(pGame, pRoom, pUnit, dwUnitGUID);
     D2Common::Units::SetupUpdateFlag(pUnit, nUpdateFlags);
+    return 1;
 }
 
 } // namespace D2Game::Monster

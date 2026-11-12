@@ -998,7 +998,7 @@ void __stdcall CMD_RebuildDerivedBindings() {
 }
 
 // Opens (or creates) the per-character .key save file used for realm character locking. If a realm name is set, first tries the realm subdirectory path (&lt;savepath&gt;\&lt;realm&gt;\&lt;char&gt;.key); on failure falls back to the base save path (&lt;savepath&gt;\&lt;char&gt;.key). Calls Storm CreateFileA with caller-supplied dwDesiredAccess and dwCreationDisposition. Returns the file HANDLE, or INVALID_HANDLE_VALUE if both paths fail.
-static HANDLE GetKeyFileHandle(DWORD dwCreationDisposition, DWORD dwDesiredAccess) {
+static HANDLE GetKeyFileHandle(DWORD dwDesiredAccess, DWORD dwCreationDisposition) {
     HANDLE hFile;
     char szPath[260];
     char szRealmDir[260];
@@ -1031,7 +1031,7 @@ void __stdcall CMD_WriteKeyFile() {
     char szBuffer[1142];
     char szInstallPath[260];
     D2KeyFileHeaderStrc sKeyFileHeader;
-    HANDLE hFile = GetKeyFileHandle(2, 0x40000000);
+    HANDLE hFile = GetKeyFileHandle(0x40000000, 2);
     if (hFile == (HANDLE)-1) {
       return;
     }
@@ -2050,7 +2050,7 @@ void __stdcall CMD_LoadUserKeyBindings() {
     DWORD dwBytesRead;
     bool bFound;
     HANDLE hFile;
-    hFile = GetKeyFileHandle(3, 0x80000000);
+    hFile = GetKeyFileHandle(0x80000000, 3);
     if (hFile != (HANDLE)-1) {
       int nCmdIndex;
       wFileMagic.wVersion = 0;

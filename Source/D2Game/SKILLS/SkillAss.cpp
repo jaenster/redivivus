@@ -906,7 +906,7 @@ void __fastcall SKILLASS_BuildSpiralMissilePath(D2UnitStrc * pUnit, intptr_t nSe
     // Static local variables (originally global data)
     static int gnSkillAssTableOffsetBySkill[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(gnSkillAssTableOffsetBySkill, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSkillAssTableOffsetBySkill");
     static int gnSkillAssTableIndexBySkill[8] = { 0x2, 0x2, 0x0, -0x2, -0x2, -0x2, 0x0, 0x2 }; D2_STATIC_GUARD(gnSkillAssTableIndexBySkill, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSkillAssTableIndexBySkill");
-    static uint32_t gnSpiralMissileBaseOffset = 0xf; D2_STATIC_GUARD(gnSpiralMissileBaseOffset, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSpiralMissileBaseOffset");
+    static int gnSpiralMissileBaseOffset = 0xf; D2_STATIC_GUARD(gnSpiralMissileBaseOffset, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSpiralMissileBaseOffset");
     static unsigned int gnSpiralMissileBaseOffset_b = 0x2; D2_STATIC_GUARD(gnSpiralMissileBaseOffset_b, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSpiralMissileBaseOffset_b");
 
     int32_t nSpiralTurnDir;

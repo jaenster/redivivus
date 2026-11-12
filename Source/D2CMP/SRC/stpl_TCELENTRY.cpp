@@ -134,15 +134,9 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Destructor() {
       return;
     }
 
-    intptr_t uLinkOffset = this->m_terminator.m_next;
-    if (uLinkOffset < 0) {
-      pBackLink = (TSLink<::TCELENTRY>**)~uLinkOffset;
-    } else {
-      pBackLink = (TSLink<::TCELENTRY>**)((char*)pTVar1 + (uLinkOffset - nNext->m_next));
-    }
-
+    pBackLink = (TSLink<::TCELENTRY>**)D2_StormNextLink(pTVar1, -1);
     *pBackLink = nNext;
-    pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }

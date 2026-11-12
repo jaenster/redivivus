@@ -1109,12 +1109,12 @@ int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) 
       nCount += 5;
     }
 
-    int32_t nRemainingTotal = nCount + (pSpecificData->nTotalPrisonersToFree - pSpecificData->nPrisonersFreed - pSpecificData->nPrisonersKilledByMonsters);
-    if (nRemainingTotal < 0) {
-      nRemainingTotal = 0;
+    nCount = nCount + (pSpecificData->nTotalPrisonersToFree - pSpecificData->nPrisonersFreed - pSpecificData->nPrisonersKilledByMonsters);
+    if (nCount < 0) {
+      nCount = 0;
     }
 
-    return nRemainingTotal;
+    return nCount;
 }
 
 // Q32_PrisonerTimerCallback (A5Q2 Rescue on Mount Arreat) -- per-frame timer (Event type 7) driving a freed barbarian.

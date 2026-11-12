@@ -791,7 +791,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
       return 0;
     }
-    if (bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nTargetX, &nTargetY) , !bHasTargetPos) {
+    if ((bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nTargetX, &nTargetY) , !bHasTargetPos)) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
       return 0;
     }
@@ -1522,8 +1522,8 @@ static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
     int32_t nTargetUnitCoord = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
     int nX = nPosX * 3 + nTargetUnitCoord * -2;
     nTargetUnitCoord = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
-    int nOvershootY = nPosY * 3 + nTargetUnitCoord * -2;
-    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nOvershootY);
+    nPosY = nPosY * 3 + nTargetUnitCoord * -2;
+    D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nPosY);
     if (pRoom) {
       BOOL bIsInTown;
       bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
@@ -1532,7 +1532,7 @@ static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
       }
     }
 
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nX, (int16_t)nOvershootY);
+    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nX, (int16_t)nPosY);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 8);
     D2Common::PATH::DynamicPath::SetDistance(pDynamicPath, 5);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);

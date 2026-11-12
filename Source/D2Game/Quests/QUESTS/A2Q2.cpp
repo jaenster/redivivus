@@ -113,7 +113,7 @@ static BOOL __stdcall Q10_CheckHoradricStaffState(D2UnitStrc * pUnit, ::SGAMEDAT
 // Q10_NotifyHoradricStaffActive. If Q10_CheckHoradricStaffState says the quest is
 // live, send quest-log update (msg 9 = The Horadric Staff) to the player. Pure
 // notification wrapper; no state changes.
-static int __stdcall Q10_NotifyHoradricStaffActive(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+static int __stdcall Q10_NotifyHoradricStaffActive(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsQuestLive = Q10_CheckHoradricStaffState(pUnit, pGame);
     if (bIsQuestLive) {
       QUEST_SendQuestUpdateToPlayer(pGame, pUnit, 9);
@@ -129,7 +129,7 @@ static int __stdcall Q10_NotifyHoradricStaffActive(D2UnitStrc * pUnit, ::SGAMEDA
 // For each held item it reads the matching QuestRecord step bit (Step0x03/04/05/06/10)
 // and emits the not-yet-told message (low index) or the already-told message
 // (high index). Returns nonzero if a relevant item is held. Read-only on quest state.
-static uint8_t __stdcall Q10_CheckQuestItemsForDialog(D2UnitStrc * pUnit, D2QuestDataStrc * pQuestData, uint8_t * pOutput) {
+static uint8_t __stdcall Q10_CheckQuestItemsForDialog(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, uint8_t * pOutput) {
     BOOL bQuestStepSet;
     *pOutput = 0xff;
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -208,7 +208,7 @@ bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
       return true;
     }
 
-    uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pUnit, pQuestData, (uint8_t*)((intptr_t)&pBitBuffer + 3));
+    uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pQuestData, pUnit, (uint8_t*)((intptr_t)&pBitBuffer + 3));
     if (uVar1 != '\0') {
       return true;
     }
@@ -359,7 +359,7 @@ void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       nGossipMsgIndex = 4;
     } else {
       bool bHasQuestItem;
-      bHasQuestItem = (bool)Q10_CheckQuestItemsForDialog(pQuestArgs->pPlayer, pQuestData, &byItemDialogMsg);
+      bHasQuestItem = (bool)Q10_CheckQuestItemsForDialog(pQuestData, pQuestArgs->pPlayer, &byItemDialogMsg);
       if (!bHasQuestItem || byItemDialogMsg == 0xff) {
         if (!pQuestArgs->pPlayer) {
           nPlayerGUID = -1;
@@ -448,12 +448,12 @@ void __fastcall Q10_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
         }
         if (!bStep0x03Set) {
           pQuestData->nStateFlagPrev = 6;
-          Q10_NotifyHoradricStaffActive(pQuestArgs->pPlayer, pQuestData->pGame);
+          Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
           return;
         }
 
         pQuestData->nStateFlagPrev = 2;
-        Q10_NotifyHoradricStaffActive(pQuestArgs->pPlayer, pQuestData->pGame);
+        Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
         return;
       }
       if (!bStep0x03Set) {

@@ -161,13 +161,13 @@ static BOOL __stdcall SERR_UndecorateObjectName(char * szMangled, int32_t nMaxLe
       return 0;
     }
 
-    char* pSeparator = strpbrk(szMangled + 4, "?@");
+    char* pSeparator = strpbrk(szMangled + 4, "\?@");
     if (!pSeparator) {
       return 0;
     }
 
     SSTR::SStrCopy(szText, szMangled + 4, nMaxLen);
-    pSeparator = strpbrk(szText, "?@");
+    pSeparator = strpbrk(szText, "\?@");
     if (pSeparator) {
       *pSeparator = '\0';
       while (true) {

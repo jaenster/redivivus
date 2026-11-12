@@ -182,7 +182,7 @@ static uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, 
     return nBitsRead;
 }
 
-static BOOL CODEC_AdvanceFrameIterator(int * pIterState, D2CodecFrameBoundsStrc * pFrameBounds) {
+static BOOL CODEC_AdvanceFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds, int * pIterState) {
     int iVar1;
     int nFrameWidth;
     uint32_t uVar2;
@@ -289,10 +289,10 @@ static void CODEC_InitializeFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds)
 
     memset(iterState, 0, 0x3c);
     iterState[0] = -1;
-    nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
+    nStride = CODEC_AdvanceFrameIterator(pFrameBounds, iterState);
     while (nStride) {
       pFrameBounds->nIterSteps++;
-      nStride = CODEC_AdvanceFrameIterator(iterState, pFrameBounds);
+      nStride = CODEC_AdvanceFrameIterator(pFrameBounds, iterState);
     }
 }
 
@@ -564,7 +564,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
       pOutPixel = pOutPixelCursor;
       memset(__frame0.aIterState, 0, 0x3c);
       __frame0.aIterState[0] = -1;
-      nIterResult = CODEC_AdvanceFrameIterator(__frame0.aIterState, nCodecState);
+      nIterResult = CODEC_AdvanceFrameIterator(nCodecState, __frame0.aIterState);
       while (nIterResult) {
         pFrameIterEntry = pBitState1 + __frame0.nFrameIterOffset;
         nPrevPixelOffset = pFrameIterEntry->pPrevPixels;
@@ -732,7 +732,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
           pOutPixel = pNextOutPixel;
         }
 
-        nIterResult = CODEC_AdvanceFrameIterator(__frame0.aIterState, nCodecState);
+        nIterResult = CODEC_AdvanceFrameIterator(nCodecState, __frame0.aIterState);
         pOutPixelCursor = pOutPixel;
         nBitShift = nInitBitPos;
       }
@@ -1317,7 +1317,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         if (sFrameBounds.nFrameCount) {
           memset(aFrameIterState, 0, 0x3c);
           aFrameIterState[0] = -1;
-          BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, &sFrameBounds);
+          BVar5 = CODEC_AdvanceFrameIterator(&sFrameBounds, (int*)aFrameIterState);
           if (BVar5) {
             local_314 = 0;
             memset(gaCodecFrameDecodeBuffer, 0, 0x1b774);
@@ -1337,7 +1337,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
               gaCodecFrameDecodeBuffer[uVar3].nPitch = aUsedColourBits[5];
               gaCodecFrameDecodeBuffer[uVar3].nWidth = aUsedColourBits[6];
               gaCodecFrameDecodeBuffer[uVar3].nHeight = aUsedColourBits[7];
-              BVar5 = CODEC_AdvanceFrameIterator((int*)aFrameIterState, &sFrameBounds);
+              BVar5 = CODEC_AdvanceFrameIterator(&sFrameBounds, (int*)aFrameIterState);
               uVar3 = aFrameIterState[0];
               if (aFrameIterState[0] != local_314) {
                 puVar8->nFlip = gCodecFrameWorkBuffer[local_314].nXOffset;

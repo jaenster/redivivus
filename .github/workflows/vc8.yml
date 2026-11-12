@@ -16,8 +16,8 @@ name: vc8
 # trusting the label. RTM and SP1 both stamp 50727 in the Rich header, so that
 # check is the only thing standing between this and quietly using the wrong one.
 #
-# The tree is written for a C++17 compiler, so it is mirrored through the
-# oracle's own vc8_translate.py first, exactly as the oracle does. That is not
+# The tree is written for a C++17 compiler, so what is compiled is its VC8
+# translation, the one the oracle compiles (asm_matching/msvc8/translated/). That is not
 # optional: Source/D2Headers/d2_platform.h alone declares every Smacker and Bink import as
 # `extern "C" __stdcall void* f(...)`, which GCC accepts and VC8 rejects with
 # C2062, so without the translator nothing compiles at all.
@@ -64,17 +64,28 @@ jobs:
             exit 1
           }
 
-      # The same rewrite the oracle applies: calling conventions moved after
+      # The same rewrite the oracle compiles: calling conventions moved after
       # the return type, packed structs to pragma pack, `= default` removed,
-      # nested namespaces expanded. Python is the oracle's own, not something
-      # this job introduces.
-      - name: Translate the tree into a form VC8 accepts
+      # nested namespaces expanded. It is committed as generated source
+      # (asm_matching/msvc8/translated/, refreshed by every export), so this job
+      # runs no translator. sources.tsv records the SHA-256 of each source it was
+      # translated from; a source changed since (a pull request that edits the
+      # tree) still compiles its shipped translation, and is named here.
+      - name: The shipped VC8 translation of the tree
         shell: bash
         run: |
-          python asm_matching/msvc8/scripts/vc8_translate.py . build/src
-          test -f build/src/Source/D2Headers/d2_platform.h || { echo "::error::translator produced no tree"; exit 1; }
+          export T=asm_matching/msvc8/translated
+          test -f $T/sources.tsv -a -f $T/Source/D2Headers/d2_platform.h || { echo "::error::no shipped translation in $T"; exit 1; }
+          # The checkout may have CRLF line ends here: a source matches with or without them.
+          perl -MDigest::SHA=sha256_hex -ne '
+            next if $. == 1; chomp; s/\r$//; my ($h, $f) = split /\t/, $_, 2;
+            my $d = do { local $/; open my $fh, "<:raw", $f or do { print "::warning file=${f}::no longer in the tree, $ENV{T} still has its translation\n"; $n++; next }; <$fh> };
+            (my $lf = $d) =~ s/\r\n/\n/g;
+            next if sha256_hex($d) eq $h or sha256_hex($lf) eq $h;
+            print "::warning file=${f}::changed since $ENV{T} was generated; its shipped translation is compiled\n"; $n++;
+            END { print "shipped translation: ", ($. - 1), " files, ", ($n // 0), " out of date\n" }' $T/sources.tsv
           echo "translated d2_platform.h, the Smacker import:"
-          grep -m1 -n ' SmackOpen(' build/src/Source/D2Headers/d2_platform.h
+          grep -m1 -n ' SmackOpen(' $T/Source/D2Headers/d2_platform.h
 
       # Objects cached per unit, the way ccache's direct mode does it. Each unit
       # keeps a manifest of the files it actually included (from /showIncludes),
@@ -102,22 +113,22 @@ jobs:
           $root = "$PWD"
 
           # The include set the oracle builds: every directory holding a header,
-          # plus its shim directory. See write_rsp() in asm_matching/msvc8/scripts/build.py.
-          $src = "$root\build\src"
+          # plus its shim directory. See writeRsp() in asm_matching/msvc8/zig/src/compile.zig.
+          $src = "$root\$oracle\translated"
           $hdrDirs = Get-ChildItem -Path $src -Recurse -Filter *.h -File |
-                     Where-Object { $_.FullName -notmatch '\\(3rdparty\\(libbacktrace|implibs)|asm_matching)\\' } |
+                     Where-Object { ('\' + [IO.Path]::GetRelativePath($src, $_.FullName)) -notmatch '\\(3rdparty\\(libbacktrace|implibs)|asm_matching)\\' } |
                      ForEach-Object { $_.DirectoryName } | Sort-Object -Unique
           $incs = @("$root\$oracle\shim_include", $src) + $hdrDirs
           $forced = @("$root\$oracle\vc8_compat.h", "$src\Source\D2Headers\d2_platform.h")
           $rsp  = $incs | ForEach-Object { "/I`"$_`"" }
           $rsp += $forced | ForEach-Object { "/FI`"$_`"" }
-          # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/scripts/oracle_config.py
+          # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/zig/src/compile.zig
           $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS"
           Set-Content -Path cl.rsp -Value ($rsp -join "`n") -Encoding ascii
           Write-Host "include directories: $($incs.Count)"
 
           $all = Get-ChildItem -Path $src -Recurse -Filter *.cpp -File |
-                 Where-Object { $_.FullName -notmatch '\\(3rdparty\\(libbacktrace|implibs)|asm_matching|tools)\\' } |
+                 Where-Object { ('\' + [IO.Path]::GetRelativePath($src, $_.FullName)) -notmatch '\\(3rdparty\\(libbacktrace|implibs)|asm_matching|tools)\\' } |
                  Sort-Object FullName
           $n = [int]$env:SAMPLE
           $tus = if ($n -gt 0) { $all | Select-Object -First $n } else { $all }
@@ -234,7 +245,7 @@ jobs:
           | rate | $pct% |
           | wall time | $wall on $([Environment]::ProcessorCount) cores |
 
-          Compiled from the tree as ``vc8_translate.py`` rewrites it, the same input
+          Compiled from ``asm_matching/msvc8/translated/``, the tree's VC8 translation and the same input
           the oracle uses. This job judges nothing byte for byte.
           "@ | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
 

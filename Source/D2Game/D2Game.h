@@ -2468,7 +2468,7 @@ struct __attribute__((packed)) D2TaskQueueSlotStrc {
 struct __attribute__((packed)) D2TimerStrc {
     /* 0x00 */ eD2TimerType nTimerType; // the type of the timer, this varies between unit types
     /* 0x01 */ uint8_t field_0x1;
-    /* 0x02 */ short nFlags;
+    /* 0x02 */ uint16_t nFlags;
     /* 0x04 */ int nFrame;
     /* 0x08 */ struct D2UnitStrc * pUnit; // the unit the timer is assigned to
     /* 0x0C */ int nUnitGUID; // the global unique identifier of the unit the list is assigned to

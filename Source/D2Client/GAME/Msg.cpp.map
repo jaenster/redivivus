@@ -328,6 +328,7 @@
       ],
       "usedTypes": [
         "D2GSPacketClt_CMD_SHORT",
+        "uint16_t",
         "uint8_t"
       ]
     },

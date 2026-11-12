@@ -1142,7 +1142,7 @@ void __fastcall UMOD_DispatchInitFunction(D2UnitStrc * pUnit, int32_t nUModId, B
 }
 
 // Applies all active MonUMod enchantment init functions to a monster unit. First, if nParam2 is nonzero, spawns minions via MONSTER_SpawnMinionsForBoss. Then iterates the global gnEnchantmentEffectOffset table, calling each non-null aUmodInitTable entry and dispatching to minions via UMOD_DispatchInitFunction. Finally, iterates the unit's own MonUModList (up to 9 slots) repeating the same init + dispatch for each assigned enchantment ID.
-static void __stdcall UMOD_ApplyEnchantmentsToMonster(int32_t nMinionCountMin, D2RoomCoordListStrc * pCoordList, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t bSpawnMinions, int32_t nMinionCountMax) {
+static void __stdcall UMOD_ApplyEnchantmentsToMonster(::SGAMEDATA * pGame, D2RoomCoordListStrc * pCoordList, D2UnitStrc * pUnit, int32_t bSpawnMinions, int32_t nMinionCountMin, int32_t nMinionCountMax) {
     // Static local variables (originally global data)
     static int gnEnchantmentEffectOffset_Lightning[4] = { 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gnEnchantmentEffectOffset_Lightning, "D2Game::Monsters::UMOD_ApplyEnchantmentsToMonster::gnEnchantmentEffectOffset_Lightning");
 
@@ -2707,7 +2707,7 @@ D2UnitStrc * __fastcall SpawnUniquePack(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     }
 
     MONSTER_RollAndAssignUMods(pUnit, pGame, bMostOfTimesTrue);
-    UMOD_ApplyEnchantmentsToMonster(3, pCoordList, pGame, pUnit, 1, 6);
+    UMOD_ApplyEnchantmentsToMonster(pGame, pCoordList, pUnit, 1, 3, 6);
     return pUnit;
 }
 
@@ -2751,7 +2751,7 @@ D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     char byUMod8 = mods[7];
     pMonsterData->MonUModList[8] = mods[8];
     char byUMod9 = mods[8];
-    UMOD_ApplyEnchantmentsToMonster(0, nullptr, pGame, pUnit, 0, 0);
+    UMOD_ApplyEnchantmentsToMonster(pGame, nullptr, pUnit, 0, 0, 0);
     if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       pUnit->pUnitData.pUnitDataMonster->nNameSeed = nSeed;
     }
@@ -2949,7 +2949,7 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     pUModList[nUModCount] = uMod;
     D2Common::Units::UNITS_GetRoom(pUnit);
-    UMOD_ApplyEnchantmentsToMonster(0, nullptr, pGame, pUnit, 1, 0);
+    UMOD_ApplyEnchantmentsToMonster(pGame, nullptr, pUnit, 1, 0, 0);
 }
 
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -2968,7 +2968,7 @@ void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     SetUniqueMonsterType(pGame, pUnit);
     MONSTER_RollAndAssignUMods(pUnit, pGame, 1);
     D2Common::Units::UNITS_GetRoom(pUnit);
-    UMOD_ApplyEnchantmentsToMonster(0, nullptr, pGame, pUnit, 0, 0);
+    UMOD_ApplyEnchantmentsToMonster(pGame, nullptr, pUnit, 0, 0, 0);
     pUnit->eUnitFlags |= UNITFLAG_SUMMONER;
     Monster::SetUnsetSummonerFlags(pUnit, 1, 1);
 }
@@ -3070,7 +3070,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
       nUModIdx += (uint32_t)pGame->nDifficulty;
     }
 
-    UMOD_ApplyEnchantmentsToMonster(nGroupMin, nullptr, pGame, pUnit, 1, nUModIdx);
+    UMOD_ApplyEnchantmentsToMonster(pGame, nullptr, pUnit, 1, nGroupMin, nUModIdx);
     if (bHasAuraEnchant) {
       Umod::AuraEnchanted(pUnit, 0x1e, 1);
     }

@@ -146,15 +146,9 @@ template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Destructor() {
       return;
     }
 
-    intptr_t nNextOffset = this->m_terminator.m_next;
-    if (nNextOffset < 0) {
-      piPrevLink = (StormLinkStrc**)~nNextOffset;
-    } else {
-      piPrevLink = (StormLinkStrc**)((char*)pTVar1 + (nNextOffset - pListHead->m_next));
-    }
-
+    piPrevLink = (StormLinkStrc**)D2_StormNextLink(pTVar1, -1);
     *piPrevLink = (StormLinkStrc*)pListHead;
-    pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }

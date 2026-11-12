@@ -71,7 +71,7 @@ void __fastcall DRLGGRID_ApplyFlagToBorderCells(struct D2DrlgGridStrc * pDrlgGri
 void __fastcall DRLGGRID_SetEdgeGridFlags(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, int nFlag, int eOperation, BOOL bIncludeEndpoints);
 // Bresenham line with perpendicular width, bounds-checked.
 void __fastcall DRLGGRID_SetLineFlagsWithWidth(struct D2DrlgGridStrc * pDrlgGrid, struct D2DrlgVertexStrc * pEdge, struct D2DrlgCoordsStrc * pDrlgCoords, int nFlag, int eOperation, int nLineWidth);
-void * __fastcall Unreferenced_0067cb60(struct D2DrlgGridStrc * param_1, struct D2DrlgGridStrc * param_2);
+void * __fastcall Unreferenced_0067cb60(struct D2DrlgGridStrc * pDstGrid, struct D2DrlgGridStrc * pSrcGrid);
 // @sourcefile .\DRLG\DrlgGrid.cpp
 void __fastcall DRLGGRID_InitGridCells(struct D2PoolManagerStrc * pMemory, struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight);
 void __fastcall FillGrid(struct D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight, int * pCellPos, int * pCellRowOffsets);

@@ -7,6 +7,10 @@ name: oracle
 # audit and classify are oracle-zig (asm_matching/msvc8/zig, seconds each), so nothing of
 # theirs is cached. Only names, tags and counts are uploaded, nothing holding the original's
 # bytes.
+#
+# No Python and no translator: the VC8 translation of the tree is committed as generated
+# source (asm_matching/msvc8/translated/, refreshed by every export), and `oracle build`
+# (oracle-zig) compiles it after checking its sources.tsv against this checkout.
 
 on:
   push:
@@ -38,7 +42,7 @@ jobs:
           sudo apt-get install -y -qq wine wine32:i386 wine64 p7zip-full cabextract msitools faketime curl >/dev/null
           # Ubuntu's wine package keeps wineserver out of PATH (24.04: wineserver64/32 under
           # /usr/lib/wine; 26.04: wineserver under /usr/lib/<triplet>/wine); setup_toolchain.sh
-          # and build.py call it by name.
+          # and oracle-zig build call it by name.
           if ! command -v wineserver >/dev/null; then
             ws=$(ls /usr/lib/x86_64-linux-gnu/wine/wineserver /usr/lib/wine/wineserver64 /usr/lib/wine/wineserver \
                     /usr/lib/i386-linux-gnu/wine/wineserver /usr/lib/wine/wineserver32 2>/dev/null | head -1)
@@ -72,7 +76,11 @@ jobs:
         run: asm_matching/msvc8/oracle setup
 
       - name: Build, map and audit every function
-        run: asm_matching/msvc8/oracle all
+        run: |
+          set -o pipefail
+          asm_matching/msvc8/oracle all 2>&1 | tee oracle-all.log
+          # The compile read the shipped translation, nothing translated it here.
+          grep -q "^translate (shipped " oracle-all.log || { echo "::error::oracle build did not compile asm_matching/msvc8/translated"; exit 1; }
 
       - name: Classify every function that differs
         run: asm_matching/msvc8/oracle classify --out "$PWD/classes.tsv" | tee classify-summary.txt

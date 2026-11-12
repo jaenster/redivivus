@@ -13,7 +13,7 @@ oracle), carried over to a C++17 tree and a 2016 binary:
 |-|-|-|
 | identify the compiler | Rich header, then an A/B for the service pack | Rich header, then the linked CRT read function by function ([evidence/toolchain.md](evidence/toolchain.md)) |
 | run it | VC6 under wine/box64 | VC8 SP1 under wine/box64, built from Microsoft's own packages |
-| make the source compile | `msvc6_compat.h`, shim headers | `vc8_compat.h`, shim headers, and `vc8_translate.py` for what a macro cannot express |
+| make the source compile | `msvc6_compat.h`, shim headers | `vc8_compat.h`, shim headers, and ghidra-reconstruct's VC8 translation for what a macro cannot express |
 | know which function is which | `// gladiator.dll:` docblocks | derived from evidence: `evidence/funcmap.tsv` |
 | compare | masked objdump text | relocation-exact masking, and every reference checked for *what* it refers to |
 | the measurement | `evidence/dll_audit.tsv` | `evidence/audit.tsv` |
@@ -52,7 +52,7 @@ asm_matching/msvc8/oracle quick --verify   # then the full run too, and diff the
 ```
 
 Each step is incremental without being approximate. A compile is stored in a
-content-addressed cache (`scripts/objcache.py`, `ORACLE_CACHE`, default
+content-addressed cache (`zig/src/objcache.zig`, `ORACLE_CACHE`, default
 `~/.cache/d2-msvc8-oracle`) under the hash of the compiler, the command line,
 the translated source and every header it included, so a TU compiles only
 when one of those changed - whichever build or checkout compiled it before
@@ -68,11 +68,10 @@ under the same callee addresses) is kept per pair (`ours.PairMemo`).
 
 Needs: wine (here wine 9.17 run by box64 on aarch64; any x86 wine works),
 `7z`, `cabextract`, `msitools`, `curl`, and `zig` (0.17; `zig/`, built on
-first use). Every step runs oracle-zig, and stops when zig is missing. One
-thing is still Python, and needs `python3` with `venv` (a private venv with
-capstone, `.venv/`, is created on first use): `oracle build` on a machine with
-no ghidra-reconstruct checkout to translate with (then `scripts/build.py` with
-`vc8_translate.py`).
+first use). Every step runs oracle-zig, and stops when zig is missing. Nothing
+is Python. `oracle build` translates the tree with a ghidra-reconstruct
+checkout; a checkout without one (the public repository, its CI) compiles the
+translation the export ships in `translated/` instead.
 
 * **The reference.** `scripts/fetch_reference.sh` downloads Blizzard's
   `LODPatch_114d.exe` (6 MB) and extracts `Game.exe` with a self-contained
@@ -108,33 +107,33 @@ no ghidra-reconstruct checkout to translate with (then `scripts/build.py` with
 The tree is C++17 for mingw; VC8 is a C++03 compiler. Nothing in the tree is
 edited for it. Instead `oracle build`:
 
-1. **Mirrors** the tree into `build/src` through `scripts/vc8_translate.py`.
-   Its rewrites are line-preserving (so `__LINE__` and every diagnostic map
-   back 1:1) and each has an exact C++03 meaning: nested namespace
-   definitions, GCC's packed attribute as `#pragma pack`, defaulted
-   constructors, list-initialised declarations, calling conventions placed
-   after the return type. The generator gives small by-value structs
-   converting constructors (C++11 conveniences): where such a struct is a
-   union member they are dropped (C++03 forbids them, and the original's C
-   structs had none), where it is only list-initialised its braced
-   initialisers become constructor calls. The docstring is the full list.
-   `FILE_PATCHES` holds the few edits tied to one file, all in
-   `Source/D2Headers/d2_platform.h`'s toolchain glue; each anchor must match exactly once, so a
-   regenerated header fails loudly rather than compiling unpatched.
+1. **Mirrors** the tree into `build/src` through ghidra-reconstruct's VC8
+   output mode (`packages/reconstruct/src/vc8`). Its rewrites are
+   line-preserving (so `__LINE__` and every diagnostic map back 1:1) and each
+   has an exact C++03 meaning: nested namespace definitions, GCC's packed
+   attribute as `#pragma pack`, defaulted constructors, list-initialised
+   declarations, calling conventions placed after the return type, with
+   `__thiscall` functions keyed on their qualified name. The generator gives
+   small by-value structs converting constructors (C++11 conveniences): where
+   such a struct is a union member they are dropped (C++03 forbids them, and
+   the original's C structs had none), where it is only list-initialised its
+   braced initialisers become constructor calls. `FILE_PATCHES` there holds
+   the few edits tied to one file, all in `Source/D2Headers/d2_platform.h`'s
+   toolchain glue; each anchor must match exactly once, so a regenerated
+   header fails loudly rather than compiling unpatched.
 
-   The same rewrites are made by ghidra-reconstruct's VC8 output mode
-   (`packages/reconstruct/src/vc8`), from the C++ token stream instead of
-   regular expressions, with `__thiscall` functions keyed on their qualified
-   name, so a same-named function in another class no longer loses its
-   convention. `scripts/ts_translate.py` picks the translator: `GR=<checkout>`
-   names one (an error if it has no VC8 mode); without `GR`, the live daemon's
+   `zig/src/ts_translate.zig` picks where the translation comes from:
+   `ORACLE_TRANSLATED=<dir>` names a shipped tree; else `GR=<checkout>` names a
+   translator (an error if it has no VC8 mode); else the live daemon's
    checkout `~/code/ts/gr-daemon` when it has `src/vc8/cli.ts` and a built
-   cpp-parser; otherwise `vc8_translate.py`. The build log's `translate (...)`
-   line names the one used. It is the default because it matches more: on
-   source/modified 9c8f96084 8113 non-CRT MATCH against 8103, 10 gained and 0
-   lost (six constructors, four `Draw` wrappers). `vc8_translate.py` stays the
-   fall-back, and build.py keeps the quarantine in its module under either
-   translator.
+   cpp-parser; else `translated/` beside the oracle, the tree the export
+   ships to the public repository (`oracle translate <out>` writes one, with
+   `sources.tsv`: the SHA-256 of each source it was translated from). A
+   shipped tree is checked against the checkout first, and a source changed
+   since it was translated stops the build with the list. The build log's
+   `translate (...)` line names the one used. A shipped tree cannot blank a
+   function, so there a TU VC8 cannot compile fails rather than being
+   quarantined; the translator quarantines as below.
 2. **Forces in** `vc8_compat.h` (nullptr, constexpr, static_assert and the like
    as macros) ahead of `d2_platform.h`, and puts `shim_include/` first on the
    include path (`<cstdint>` for a compiler without one; a hook that runs
@@ -166,7 +165,7 @@ edited for it. Instead `oracle build`:
 `3rdparty/implibs/` and the tooling directories are not reconstruction and are
 not compiled; only the headers of `Redivivus/` are translated, since the tree
 includes them. `Source/globals/*.cpp` hold data only, no function, and are
-skipped unless `build.py --with-data` asks for them.
+skipped unless `oracle build --with-data` asks for them.
 
 ## Which original function is which
 
@@ -217,7 +216,7 @@ Link order is `recon/runs/build-vc8.sh`'s, which is the CMake build's: the
 module libraries of `Source/modules.cmake` in the executable's (1.14d) link
 order, each library's TUs in the original's order (`D2_MODULE_<m>_UNITS`,
 below) and its data unit last, what no module owns last of all
-(`ours.link_order`, `scripts/modules.py`). Against the plain path order it
+(`ours.linkKept`, `zig/src/modules.zig`). Against the plain path order it
 moves 7 pairings to another TU's copy and no MATCH (v2013); the original's TU
 order moves 22 more and no MATCH (v2015). The copies are not interchangeable,
 since a directory can compile with other flags (`/GS-`, `/O1`), so it is that
@@ -464,7 +463,7 @@ by the 1.14d address of its first function inside the module's runs
 (`moduleRuns`), and write the list to `Source/modules.cmake` as
 `D2_MODULE_<m>_UNITS`, each unit with that address and the number of runs its
 functions form. The CMake module libraries list their sources in it (GNU ld
-links an archive's members whole, in member order), and `scripts/modules.py`
+links an archive's members whole, in member order), and `zig/src/modules.zig`
 reads it for build-vc8.sh's libraries and for `ours.link_order`, so the link
 and the COMDAT pairing agree. On v2015 that took order from 5076 to 10827 and
 same-offset from 34 to 67 at the same MATCH. What limits it now: 245 of 438
@@ -476,7 +475,7 @@ is where a library member lands that only a later pass of the linker pulls in.
 
 ## Flags
 
-The default (`scripts/oracle_config.py`):
+The default (`DEFAULT_CFLAGS` in `zig/src/compile.zig`; `audit.zig`'s `Config` reads the same settings):
 
 ```
 /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS
@@ -505,7 +504,7 @@ An experiment builds in `build/experiment-<compiler>-<hash>/`, is audited with
 the baseline's function map (same pairs, other code) and writes its audit
 there. **Evidence from an experiment is never committed.** `ORACLE_VC=rtm`
 selects the RTM compiler the same way. The rule lives in
-`scripts/oracle_config.py`, so it holds however a script is run: an
+oracle-zig (`compile.configure`, `audit.Config`), so it holds however a stage is run: an
 experiment aimed at the baseline directory, or writing into `evidence/`, is
 refused.
 
@@ -600,10 +599,9 @@ map (`bracket`, `align`) and `oracle tulayout` order our functions by source lin
 |-|-|
 | `oracle` | the entry point; `oracle help` |
 | `zig/` (`oracle-zig`) | the oracle in Zig: every stage and tool - setup helpers, carve, build, map, libmap, crt, audit, data, classify, permodule, check, snippet, diff, the analyses, svg, rich/compid, commit (`zig/README.md`) |
-| `scripts/env.sh` | shared settings, drive mapping, `have_zig`/`oracle_zig`, the venv |
+| `scripts/env.sh` | shared settings, drive mapping, `have_zig`/`oracle_zig` |
 | `scripts/fetch_reference.sh` | Game.exe 1.14d from Blizzard's patch |
 | `scripts/setup_toolchain.sh`, `setup_psdk.sh`, `smoke_test.sh` | the toolchain from Microsoft's packages |
 | `scripts/vc8.sh` | run one VC8 tool under wine with the oracle's INCLUDE/LIB |
-| `scripts/vc8_translate.py`, `vc8_compat.h`, `shim_include/` | the source the compiler sees (`vc8_translate.py`: where no ghidra-reconstruct checkout translates, and the public CI) |
-| `scripts/build.py`, `ts_translate.py`, `objcache.py`, `oracle_config.py` | the compile with no ghidra-reconstruct checkout (`oracle build` picks it then) |
-| `scripts/modules.py`, `ours.py`, `objfuncs.py`, `coffobj.py`, `funcdecode.py` | what `build.py` imports: link order, and decoding each object it compiles (capstone, hence the venv) |
+| `vc8_compat.h`, `shim_include/` | the source the compiler sees, with the VC8 translation |
+| `translated/` (public repository only) | the tree's VC8 translation as the export wrote it, with `sources.tsv`: what `oracle build` compiles where no ghidra-reconstruct checkout translates (the public CI) |

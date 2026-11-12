@@ -5925,7 +5925,7 @@ BOOL __fastcall ITEMMODE_ProcessItemBuy(::SGAMEDATA * ppUnit, D2UnitStrc * pUnit
 
 // Replenishment tick handler: increments eUnitStat on pUnit by 1 if it is below nParam, then sends a 0x3E stat-update to the item owner's client. If the item was broken and the new value is positive, restores it via ITEMMODE_ProcessItemFlags. Schedules the next replenishment event based on eStat replenish rate. Returns 1 if incremented, 0 if already at max.
 // @sourcefile .\ITEMS\ItemMode.cpp
-static BOOL __stdcall ITEMMODE_HandleItemGamble(::SGAMEDATA * pGame, int32_t nStatMax, D2UnitStrc * pUnit, eD2UnitStat eUnitStat, eD2UnitStat eStat) {
+static BOOL __stdcall ITEMMODE_HandleItemGamble(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2UnitStat eStat, eD2UnitStat eUnitStat, int32_t nStatMax) {
     D2UnitStrc* pOwner;
     D2ClientStrc* pClient;
     BOOL bIsBroken;
@@ -5976,7 +5976,7 @@ void __fastcall ITEMMODE_ValidateTradeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
       bHasDurability = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
       if (bHasDurability) {
         nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pUnit);
-        bIsBroken = ITEMMODE_HandleItemGamble(pGame, nMaxDurability, pUnit, UNITSTAT_durability, UNITSTAT_item_replenish_durability);
+        bIsBroken = ITEMMODE_HandleItemGamble(pGame, pUnit, UNITSTAT_item_replenish_durability, UNITSTAT_durability, nMaxDurability);
         if (bIsBroken) {
           return;
         }
@@ -5989,7 +5989,7 @@ void __fastcall ITEMMODE_ValidateTradeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     int nStatMax = D2Common::ITEMS::Items::ITEM_GetMaxStack(pUnit);
-    ITEMMODE_HandleItemGamble(pGame, nStatMax, pUnit, UNITSTAT_quantity, UNITSTAT_item_replenish_quantity);
+    ITEMMODE_HandleItemGamble(pGame, pUnit, UNITSTAT_item_replenish_quantity, UNITSTAT_quantity, nStatMax);
 }
 
 void __fastcall ITEMEVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType) {

@@ -2440,7 +2440,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
     0xa,
     0x2
 }; D2_STATIC_GUARD(gaArmorDurabilityWeights, "D2Game::UNIT::SUnitDmg::DAMAGE_ReduceEquipmentDurability::gaArmorDurabilityWeights");
-    static uint32_t gnArmorBodyLocCount = 0x7; D2_STATIC_GUARD(gnArmorBodyLocCount, "D2Game::UNIT::SUnitDmg::DAMAGE_ReduceEquipmentDurability::gnArmorBodyLocCount");
+    static int gnArmorBodyLocCount = 0x7; D2_STATIC_GUARD(gnArmorBodyLocCount, "D2Game::UNIT::SUnitDmg::DAMAGE_ReduceEquipmentDurability::gnArmorBodyLocCount");
 
     D2UnitStrc* pArmorUnit = pUnit;
     D2UnitStrc* pUnitResult;
@@ -2465,7 +2465,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
     uint32_t uTotalWeight = 0;
     int i = 0;
     memset(aEquipSlots, 0, 7 * sizeof(aEquipSlots[0]));
-    if ((int)gnArmorBodyLocCount <= 0) {
+    if (gnArmorBodyLocCount <= 0) {
       return;
     }
 
@@ -2480,7 +2480,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
       }
 
       i++;
-    } while (i < (int)gnArmorBodyLocCount);
+    } while (i < gnArmorBodyLocCount);
 
     if ((int)uTotalWeight <= 0) {
       return;
@@ -2498,7 +2498,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
         uTotalWeight -= gaArmorDurabilityWeights[uRandSlot * 2 + 1];
       }
 
-      uRandSlot = (int)(uRandSlot + 1) % (int)gnArmorBodyLocCount;
+      uRandSlot = (int)(uRandSlot + 1) % gnArmorBodyLocCount;
     } while ((int)uTotalWeight >= 0);
 }
 

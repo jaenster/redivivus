@@ -1,7 +1,4 @@
 # Build products: objects, the translated tree, the decoded reference model.
 /build/
-# The capstone venv scripts/env.sh creates on first use.
-/.venv/
-__pycache__/
 # runs/build-vc8.sh: the Visual C++ 2005 build of the whole exe.
 /build-exe/

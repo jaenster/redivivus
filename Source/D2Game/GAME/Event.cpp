@@ -283,7 +283,7 @@ static void __stdcall EVENT_DispatchPlayerTimers(D2TimerQueueStrc * pTimerQueue,
         }
 
         pTimer->nFlags &= 0xfffe;
-        if (pTimer->nFlags & 8U) {
+        if (pTimer->nFlags & 8) {
           EVENT_RemoveAndRecycleTimer(pTimer, pGame);
         }
 
@@ -327,7 +327,7 @@ static void __stdcall EVENT_DispatchMonsterTimers(D2TimerQueueStrc * pTimerQueue
         }
 
         pTimer->nFlags &= 0xfffe;
-        if (pTimer->nFlags & 8U) {
+        if (pTimer->nFlags & 8) {
           EVENT_RemoveAndRecycleTimer(pTimer, pGame);
         }
 
@@ -371,7 +371,7 @@ static void __stdcall EVENT_DispatchObjectTimers(D2TimerQueueStrc * pTimerQueue,
         }
 
         pTimer->nFlags &= 0xfffe;
-        if (pTimer->nFlags & 8U) {
+        if (pTimer->nFlags & 8) {
           EVENT_RemoveAndRecycleTimer(pTimer, pGame);
         }
 
@@ -415,7 +415,7 @@ static void __stdcall EVENT_DispatchMissileTimers(D2TimerQueueStrc * pTimerQueue
         }
 
         /* Sets nFlags 1st byte to 0 */ pTimer->nFlags &= 0xfffe;
-        if (pTimer->nFlags & 8U) {
+        if (pTimer->nFlags & 8) {
           EVENT_RemoveAndRecycleTimer(pTimer, pGame);
         }
 
@@ -459,7 +459,7 @@ static void __stdcall EVENT_DispatchItemTimers(D2TimerQueueStrc * pTimerQueue, :
         }
 
         pTimer->nFlags &= 0xfffe;
-        if (pTimer->nFlags & 8U) {
+        if (pTimer->nFlags & 8) {
           EVENT_RemoveAndRecycleTimer(pTimer, pGame);
         }
 

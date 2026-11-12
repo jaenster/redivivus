@@ -170,20 +170,13 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
 
 template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
     TSLink<::SGAMEDATA>** pPrevLink2;
-    intptr_t nPrevOffset;
     TSLink<::SGAMEDATA>* pTVar1 = &this->m_linktofull;
     TSLink<::SGAMEDATA>* pNextNode = pTVar1->m_prevlink;
     if (pNextNode) {
       TSLink<::SGAMEDATA>** pPrevLink;
-      nPrevOffset = this->m_linktofull.m_next;
-      if (nPrevOffset < 0) {
-        pPrevLink = (TSLink<::SGAMEDATA>**)~nPrevOffset;
-      } else {
-        pPrevLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nPrevOffset - pNextNode->m_next));
-      }
-
+      pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
       *pPrevLink = pNextNode;
-      pTVar1->m_prevlink->m_next = this->m_linktofull.m_next;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
       pTVar1->m_prevlink = 0;
       this->m_linktofull.m_next = 0;
     }
@@ -194,15 +187,9 @@ template<> void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
       return;
     }
 
-    intptr_t nPrevOffset2 = this->m_linktoslot.m_next;
-    if (nPrevOffset2 < 0) {
-      pPrevLink2 = (TSLink<::SGAMEDATA>**)~nPrevOffset2;
-    } else {
-      pPrevLink2 = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nPrevOffset2 - pNextNode->m_next));
-    }
-
+    pPrevLink2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pTVar1, -1);
     *pPrevLink2 = pNextNode;
-    pTVar1->m_prevlink->m_next = this->m_linktoslot.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }
@@ -234,20 +221,13 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
 template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
     TSLink<::SGAMEDATA>** pPrevLink;
     intptr_t nHeadOffset;
-    intptr_t encPrev;
     TSLink<::SGAMEDATA>* pNext;
     while ((nHeadOffset = this->m_terminator.m_next) > 0) {
       TSLink<::SGAMEDATA>* pNode;
       pNext = *(TSLink<::SGAMEDATA>**)(this->m_linkoffset + nHeadOffset);
       pNode = (TSLink<::SGAMEDATA>*)(this->m_linkoffset + nHeadOffset);
       if (pNext) {
-        encPrev = pNode->m_next;
-        if (encPrev < 0) {
-          pPrevLink = (TSLink<::SGAMEDATA>**)~encPrev;
-        } else {
-          pPrevLink = (TSLink<::SGAMEDATA>**)((char*)pNode + (encPrev - pNext->m_next));
-        }
-
+        pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         pNode->m_prevlink->m_next = pNode->m_next;
         pNode->m_prevlink = 0;
@@ -260,19 +240,12 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
     intptr_t nHeadOffset;
-    intptr_t encPrev;
     while ((nHeadOffset = this->m_terminator.m_next) > 0) {
       TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNode;
       pNext = *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)(this->m_linkoffset + nHeadOffset);
       pNode = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)(this->m_linkoffset + nHeadOffset);
       if (pNext) {
-        encPrev = pNode->m_next;
-        if (encPrev < 0) {
-          pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)~encPrev;
-        } else {
-          pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)((char*)pNode + (encPrev - pNext->m_next));
-        }
-
+        pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pNode, -1);
         *pPrevLink = pNext;
         pNode->m_prevlink->m_next = pNode->m_next;
         pNode->m_prevlink = 0;
@@ -366,15 +339,9 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
       return;
     }
 
-    intptr_t encPrev = this->m_terminator.m_next;
-    if (encPrev < 0) {
-      pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)~encPrev;
-    } else {
-      pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)((char*)pTVar1 + (encPrev - pNext->m_next));
-    }
-
+    pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pTVar1, -1);
     *pPrevLink = pNext;
-    pTVar1->m_prevlink->m_next = this->m_terminator.m_next;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }
@@ -450,23 +417,30 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<SGAMEDATA>::Rea
     Storm::Source::SMem::SMemFree(pOldBuffer, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+
 template<> void TSGrowableArray<SGAMEDATA>::Reserve(uint32_t nCount, int32_t bRound) {
-    uint32_t nNeeded = nCount + this->m_count;
-    if (nNeeded <= this->m_alloc) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
       return;
     }
     if (bRound) {
       uint32_t nGranularity;
       nGranularity = this->m_chunk;
       if (!nGranularity) {
-        nGranularity = this->CalcChunkSize(nNeeded);
+        nGranularity = this->CalcChunkSize(nCount);
       }
-      if (nNeeded % nGranularity) {
-        nNeeded = nGranularity - nNeeded % nGranularity + nNeeded;
-      }
+
+      nCount = D2_RoundUp(nCount, nGranularity);
     }
 
-    this->ReallocData(nNeeded);
+    this->ReallocData(nCount);
 }
 
 template<> __attribute__((noinline)) inline ::SGAMEDATA * TSGrowableArray<SGAMEDATA>::New() {

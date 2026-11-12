@@ -1374,7 +1374,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
                         if (!BVar1) {
                           BVar1 = CHAT_HandleResignCommand("/help", pszInput);
                           if (!BVar1) {
-                            BVar1 = CHAT_HandleResignCommand("/?", pszInput);
+                            BVar1 = CHAT_HandleResignCommand("/\?", pszInput);
                             if (!BVar1) {
                               pBNetCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
                               if (pBNetCallbacks) {

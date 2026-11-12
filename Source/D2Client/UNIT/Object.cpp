@@ -262,7 +262,7 @@ void __stdcall TEXT_CleanupMessageLog_Unref_004b1d50() {
     UI::Dialog::gpNpcInteractionDialog = 0;
 }
 
-static void __stdcall OBJECT_SetLightRGB(uint8_t byRed, uint8_t byGreen, uint8_t byBlue, uint16_t nRadius, D2UnitStrc * pUnit) {
+static void __stdcall OBJECT_SetLightRGB(D2UnitStrc * pUnit, uint16_t nRadius, uint8_t byRed, uint8_t byGreen, uint8_t byBlue) {
     D2LightMapStrc* pLightMap = pUnit->uSideData.pClientSide.pLight;
     if (!nRadius) {
       if (pLightMap) {
@@ -301,7 +301,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
           SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint32_t)pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]);
         }
 
-        OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pUnit);
+        OBJECT_SetLightRGB(pUnit, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue);
         return 1;
       }
 
@@ -318,7 +318,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
     }
 
     D2Common::Units::InitAnimMode(pUnit);
-    OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pUnit);
+    OBJECT_SetLightRGB(pUnit, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue);
     if (pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]) {
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
       return 1;
@@ -405,7 +405,7 @@ void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t 
       return;
     }
 
-    OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pUnit);
+    OBJECT_SetLightRGB(pUnit, (uint16_t)(uint8_t)pTxtLine->Lit[pUnit->eAnimMode.ePlayerMode], pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue);
 }
 
 // Adds a hardcoded visual overlay to specific object class IDs if the txt Overlay flag is set. Class 0x95 (Horadric Cube) in Neutral mode and 0x98 get OVERLAY_horadric_light; classes 0x162-0x164, 0x18D, 0x195-0x197, and 0x1C7 in Death mode get OVERLAY_multigleam. No-ops for all other classes or modes.
@@ -415,36 +415,36 @@ void __fastcall OBJECT_AddVisualOverlay(D2UnitStrc * pUnit) {
     }
 
     uint32_t nObjectClassId = pUnit->nClassId;
-    if (nObjectClassId <= 0x18d) {
-      if (nObjectClassId != 0x18d) {
-        switch (nObjectClassId) {
-          case 0x98:
-            Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_horadric_light, 3, 0, 0, 0, 0, 0);
-          return;
-          case 0x162:
+    switch (nObjectClassId) {
+      case 0x98:
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_horadric_light, 3, 0, 0, 0, 0, 0);
+      return;
+      case 0x162:
 
-          case 0x163:
+      case 0x163:
 
-          case 0x164:
-            break;
-          case 0x95:
-            if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
-              return;
-            }
-          Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_horadric_light, 3, 0, 0, 0, 0, 0);
+      case 0x164:
+
+      case 0x18d:
+
+      case 0x195:
+
+      case 0x196:
+
+      case 0x197:
+
+      case 0x1c7:
+        break;
+      case 0x95:
+        if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
           return;
-          default:
-            return;
         }
-      }
-    } else {
-      if (nObjectClassId < 0x195) {
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_horadric_light, 3, 0, 0, 0, 0, 0);
+      return;
+      default:
         return;
-      }
-      if (nObjectClassId > 0x197 && nObjectClassId != 0x1c7) {
-        return;
-      }
     }
+
     if (pUnit->eAnimMode.ePlayerMode != Death) {
       return;
     }
@@ -573,7 +573,7 @@ static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
         }
 
         SetMonsterFlags(pUnit, UNITFLAG_TARGETABLE, (uint32_t)pTxtLine->Selectable[pUnit->eAnimMode.ePlayerMode]);
-        OBJECT_SetLightRGB(pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue, (uint16_t)(uint8_t)pTxtLine->Lit[2], pUnit);
+        OBJECT_SetLightRGB(pUnit, (uint16_t)(uint8_t)pTxtLine->Lit[2], pTxtLine->Red, pTxtLine->Green, pTxtLine->Blue);
         if (pTxtLine->HasCollision[pUnit->eAnimMode.ePlayerMode]) {
           return;
         }
@@ -702,7 +702,7 @@ static void OBJECT_UpdateModeAndProperties(D2UnitStrc * pUnit, D2ServerMessageHa
         pUnit->eUnitFlags |= UNITFLAG_PREDRAW;
       }
 
-      OBJECT_SetLightRGB(pDVar1->Red, pDVar1->Green, pDVar1->Blue, (uint16_t)(uint8_t)pDVar1->Lit[pMessage->nItemId], pUnit);
+      OBJECT_SetLightRGB(pUnit, (uint16_t)(uint8_t)pDVar1->Lit[pMessage->nItemId], pDVar1->Red, pDVar1->Green, pDVar1->Blue);
     }
 
     UnitSnd::UpdateUnitSfxOnModeChange(pUnit);

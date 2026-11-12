@@ -476,7 +476,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn61_SelfResurrect(::SGAMEDATA * pGame, D2UnitS
     return 1;
 }
 
-static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLvl, ::SGAMEDATA * pGame, int32_t nCount, D2UnitStrc * pUnit) {
+static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId eMissileId, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCount, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static int gnSkillOffset_Sorceress_Fireball[4] = { 0x0, 0x0, 0x1, -0x1 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Fireball, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Fireball");
     static int gnSkillOffset_Sorceress_Meteor[4] = { 0x1, -0x1, 0x0, 0x0 }; D2_STATIC_GUARD(gnSkillOffset_Sorceress_Meteor, "D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount::gnSkillOffset_Sorceress_Meteor");
@@ -529,7 +529,7 @@ BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    SKILLSOR_GetMeteorSubMissileCount(nSrvMissileId, eSkill, nSkillLvl, pGame, nCalcCount, pUnit);
+    SKILLSOR_GetMeteorSubMissileCount(nSrvMissileId, pGame, pUnit, nCalcCount, eSkill, nSkillLvl);
     return 1;
 }
 

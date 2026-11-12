@@ -2130,21 +2130,25 @@ uint32_t __fastcall MONSTERAI_GetThreatLevel(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
     }
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      if (pUnit->eUnitType != UNIT_MONSTER) {
-        return 0;
-      }
 
-      int pAiGeneral = pUnit->nClassId;
-      D2MonStatsTxt* pMonStatsTxt = pAiGeneral >= 0 && pAiGeneral < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + pAiGeneral : nullptr;
-      if (!pMonStatsTxt) {
-        return 0;
-      }
+    switch (pUnit->eUnitType) {
+      case UNIT_MONSTER:
+        {
+          int pAiGeneral = pUnit->nClassId;
+          D2MonStatsTxt* pMonStatsTxt = pAiGeneral >= 0 && pAiGeneral < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + pAiGeneral : nullptr;
+          if (!pMonStatsTxt) {
+            return 0;
+          }
 
-      return (uint32_t)pMonStatsTxt->threat;
+          return (uint32_t)pMonStatsTxt->threat;
+        }
+      case UNIT_PLAYER:
+        {
+          return 0xe;
+        }
     }
 
-    return 0xe;
+    return 0;
 }
 
 // Validates that a monster (pUnit) may legally target pTarget. Checks: both are monsters/players, neither is dead, target's room is not a town room, target has UNITFLAG_CANBEATTACKED, and if target is invisible: player invis targets succeed only on melee range or a 50% seed roll; monster invis targets are blocked unless in melee range. Falls through to UNITS_CheckIfCanAttackTarget.
@@ -2193,7 +2197,7 @@ static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStr
           }
         case UNIT_MONSTER:
           {
-            if (bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0) , bCheckResult != 0) {
+            if ((bCheckResult = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0) , bCheckResult != 0)) {
               return 0;
             }
 
@@ -4704,7 +4708,7 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
 }
 
 // Schedules a convert event (event type 7, UNITMOD 0x15) for all neutral monsters within radius 0x583 of pUnit. Filters by nUnitType; if bUndeadOnly is set, skips non-undead monsters. Skips class 0x14d. For each eligible monster picks a random game-frame delay in [nMinDelay, nMaxDelay) from pUnit's seed via RANDOM_RandomNumberSelector, then calls SetEvent. Asserts nMinDelay &lt; nMaxDelay != 0; halts on assertion failure. Used by Decrepify/Conversion-style AI effects.
-static void __stdcall MONSTERAI_ConvertMonstersInRadius(int32_t nUnitType, int32_t nMinDelay, int32_t nMaxDelay, int32_t bUndeadOnly, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+static void __stdcall MONSTERAI_ConvertMonstersInRadius(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nUnitType, int32_t nMinDelay, int32_t nMaxDelay, int32_t bUndeadOnly) {
     uint32_t nRandDelay;
     int32_t nTargetPosY;
     bool bIsNeutral;
@@ -4774,7 +4778,7 @@ static void __stdcall MONSTERAI_ConvertMonstersInRadius(int32_t nUnitType, int32
 }
 
 void __fastcall MONSTERAI_ThinkRangedSpecial(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    MONSTERAI_ConvertMonstersInRadius(0x23, 0x19, 0x7d, 1, pUnit, pGame);
+    MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x23, 0x19, 0x7d, 1);
 }
 
 void __fastcall AI_Mephisto_SpawnDeathMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -4790,7 +4794,7 @@ void __fastcall AI_Mephisto_SpawnDeathMissile(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 void __fastcall MONSTERAI_ThinkRangedShort(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    MONSTERAI_ConvertMonstersInRadius(0x23, 1, 0x33, 0, pUnit, pGame);
+    MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x23, 1, 0x33, 0);
 }
 
 void __fastcall AI_Diablo_SpawnRingAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
@@ -4808,7 +4812,7 @@ void __fastcall AI_Diablo_SpawnRingAttack(::SGAMEDATA * pGame, D2UnitStrc * pUni
       nMissileRange = 100;
     }
 
-    MONSTERAI_ConvertMonstersInRadius(0x23, 0x28, nMissileRange, 0, pUnit, pGame);
+    MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x23, 0x28, nMissileRange, 0);
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosY = pUnit->pPath.pStaticPath->nPosY;
@@ -4887,11 +4891,11 @@ void __fastcall AI_Boss_LaunchOrbAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 void __fastcall MONSTERAI_ThinkMeleeSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    MONSTERAI_ConvertMonstersInRadius(0x69, 1, 2, 0, pUnit, pGame);
+    MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x69, 1, 2, 0);
 }
 
 void __fastcall MONSTERAI_ThinkRangedNormal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    MONSTERAI_ConvertMonstersInRadius(0x23, 0x19, 0x7d, 0, pUnit, pGame);
+    MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x23, 0x19, 0x7d, 0);
 }
 
 void __stdcall MONSTERAI_Noop() {
@@ -11747,11 +11751,11 @@ BOOL __fastcall AI_Summon_CheckSkillCooldownTimer(::SGAMEDATA * pGame, D2UnitStr
       MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
       return 1;
     }
-    if (pRoom = D2Common::Units::UNITS_GetRoom(pOwner) , !pRoom) {
+    if ((pRoom = D2Common::Units::UNITS_GetRoom(pOwner) , !pRoom)) {
       MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
       return 1;
     }
-    if (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0) {
+    if ((bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
       MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
       return 1;
     }
@@ -13603,7 +13607,7 @@ void __fastcall AITHINK_Fn1_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
       PlanNextAiMove(pGame, pUnit, 10);
       return;
     }
-    if (pMonStats = pAiParam->pMonStats , !pMonStats) {
+    if ((pMonStats = pAiParam->pMonStats , !pMonStats)) {
       PlanNextAiMove(pGame, pUnit, 10);
       return;
     }

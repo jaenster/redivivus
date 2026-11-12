@@ -1606,7 +1606,7 @@ static bool QUESTLOG_HitTestCloseButton(int32_t nPanelY, int32_t nPanelX) {
     return false;
 }
 
-static int32_t QUESTLOG_HitTestQuestIcon(int32_t nX, int32_t nY) {
+static int32_t QUESTLOG_HitTestQuestIcon(int32_t nY, int32_t nX) {
     if ((uint32_t)gQuestLog.nQuestLogQuestCount > 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x738);
       exit(-1);
@@ -2586,7 +2586,7 @@ void __stdcall DRAW_UI_Quest() {
               nActIndex = 0x18;
               pQuestInfo = npcmenu::GetQuestInfo();
               D2Common::QuestRecord::SetQuestState(pQuestInfo, *(eD2Quests*)(pQuestEntry + 10), QUESTSTATE_BoxGrayed);
-              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (short int)*(uint32_t*)(pQuestEntry + 10));
+              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('X', (uint16_t)*(uint32_t*)(pQuestEntry + 10));
             }
 
             sGfxData.pDC6 = gQuestLog.pQuestLogActImages[pQuestEntry[-1]];
@@ -2794,7 +2794,7 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
           QUESTLOG_ResetState();
         }
       } else {
-        uVar2 = QUESTLOG_HitTestQuestIcon(nPanelRelY, nPanelRelX);
+        uVar2 = QUESTLOG_HitTestQuestIcon(nPanelRelX, nPanelRelY);
         if (uVar2 == -1 || (int)uVar2 >= gQuestLog.nQuestLogQuestCount) {
           bVar1 = QUESTLOG_HitTestOpenButton(nPanelRelY, nPanelRelX);
           if (bVar1) {
@@ -3009,7 +3009,7 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
       uint32_t bHitIcon;
       if (gQuestLog.bQuestLogButtonDown == '\0') {
         if (gQuestLog.nQuestLogSelectedIcon != -1) {
-          bHitIcon = QUESTLOG_HitTestQuestIcon(nPanelRelY, nPanelRelX);
+          bHitIcon = QUESTLOG_HitTestQuestIcon(nPanelRelX, nPanelRelY);
           if (bHitIcon == gQuestLog.nQuestLogSelectedIcon) {
             gQuestLog.aQuestLogSelectedQuestByAct[gQuestLog.nQuestLogActiveAct_b] = bHitIcon;
             gQuestLog.nQuestLogActiveAct = bHitIcon;

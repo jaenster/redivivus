@@ -2,9 +2,10 @@
 
 The oracle in Zig: one executable, a subcommand per stage or tool. Each replaced its Python
 script once its output equalled the script's byte for byte, and the script was then deleted;
-`oracle` and the setup scripts need zig and stop without it. What is still Python: `build.py`
-with `vc8_translate.py` and the modules it imports, for a machine with no ghidra-reconstruct
-checkout. The Python fixers are retired: their rules are ghidra-reconstruct's.
+`oracle` and the setup scripts need zig and stop without it. Nothing is Python any more: the
+last scripts (`build.py`, `vc8_translate.py` and what they imported) went once the public
+repository shipped its VC8 translation (`translated/`), so no checkout needs them. The
+Python fixers are retired: their rules are ghidra-reconstruct's.
 
 ```sh
 zig build --release=fast                   # zig-out/bin/oracle-zig (capstone 5.0.7 from source)
@@ -22,6 +23,7 @@ oracle-zig permodule --root <asm_matching/msvc8> --map M [--audit A] [--data D] 
 zig build test                             # the unit tests (datamatch's literal cases among them)
 oracle-zig build --root <asm_matching/msvc8> [-j N] [--batch N] [--force] [--with-data]
                  [--extra DIR --support "A.cpp B.cpp"] [PATTERN ...]
+oracle-zig translate --repo <tree> <out>        # the VC8 translation with sources.tsv (the export's translated/)
 oracle-zig tucache lookup|store|prune [...]   # recon/runs/link.sh and measure.sh
 oracle-zig trial --root <asm_matching/msvc8> --state | --out DIR [-j N] [--batch N] [--expect KEY] < trials
 oracle-zig judge --root <asm_matching/msvc8> < requests
@@ -56,8 +58,7 @@ oracle-zig x64 json <out-dir> <x64.json> <sha> <ghidra> <banner>   # x64/count's
 oracle-zig x64 layout <x64.tsv> <keyed-dir> <dest> <prefix>       # x64/setup.sh's layout
 ```
 
-`quick` runs `oracle build` for its build step (oracle-zig's or build.py, whichever that
-picks) and itself for map, libmap and audit. `mpq-extract` inflates zlib sectors and
+`quick` runs `oracle build` for its build step and itself for map, libmap and audit. `mpq-extract` inflates zlib sectors and
 explodes PKWARE ones like the script; a bzip2 sector, which no member of the 1.14d patch
 has, it refuses (the script decoded it). `model.pkl` is no longer written by anything but
 the Python modules the fixers import (`audit.load_context`); every tool here decodes the
@@ -69,20 +70,24 @@ executable among them, hash to the key `<build>/<stage>.zig-stage` recorded, and
 are the ones that run wrote); the Python's pair memos and library pickle have no counterpart,
 since a cold run takes a few seconds. `ORACLE_NOCACHE=1` runs them afresh.
 
-`audit` reads its settings as `scripts/oracle_config.py` does (`ORACLE_VC`, `ORACLE_CFLAGS`,
+`audit` reads its settings as `compile.zig` does (`ORACLE_VC`, `ORACLE_CFLAGS`,
 `ORACLE_BUILD`, and `VC8_WINEPREFIX`/`VC8_TOOLCHAIN` for the runtime libraries), and writes
 `audit.tsv`, `audit.tsv.summary` and `datamap.tsv` beside it. It caches nothing: decoding
 the original and every object takes about as long as reading the Python's pickles did.
 
-`build` is `build.py`: the translation stays ghidra-reconstruct's TypeScript CLI (`GR`, else
-`~/code/ts/gr-daemon`), driven over the same pipe; with no such checkout `oracle build` runs
-build.py, whose vc8_translate.py needs none (`oracle-zig build --probe` decides). build/src,
-the objects, their `.d`/`.log`/`.flags`/`.key`, `quarantine.tsv`, `compile_status.tsv` and the
-cache entries (`ORACLE_CACHE`, manifests and `meta.json` in `json.dumps` form) are the
-Python's, so the two read each other's cache. What it leaves out is build.py's decoder pool
-(`--decode-jobs`, accepted and ignored): it only warmed the Python readers' pickles.
+`build` was `build.py`. The translation stays ghidra-reconstruct's TypeScript CLI (`GR`,
+else `~/code/ts/gr-daemon`), driven over a pipe; with no such checkout it copies the
+translated tree an export ships (`translated/`, or `ORACLE_TRANSLATED`) after checking its
+`sources.tsv` against the checkout, and with neither it stops (`oracle-zig build --probe`
+exits 0 when there is one). `translate` writes such a tree: the translator's mirror and the
+SHA-256 of each source. A shipped tree blanks nothing, so a TU VC8 cannot compile fails
+there instead of being quarantined, and a cached compile that was quarantined is not
+restored from it. build/src, the objects, their `.d`/`.log`/`.flags`/`.key`,
+`quarantine.tsv`, `compile_status.tsv` and the cache entries (`ORACLE_CACHE`, manifests and
+`meta.json` in `json.dumps` form) are laid out as the Python's were, so a cache it wrote
+still serves. `--decode-jobs` (the Python's decoder pool) is accepted and ignored.
 cl.exe stamps each object with the time and the precompiled header with a fresh signature,
-so two clean builds differ in those bytes whichever driver ran them.
+so two clean builds differ in those bytes.
 
 `tucache` is `recon/runs/tucache.py` (the per-TU gcc cache of link.sh and measure.sh), same
 keys, manifests and objects; `tucache probe` exits 0 so a script can tell it is there.
@@ -125,7 +130,7 @@ camelCase, so a port reads side by side with its original.
 |`permodule.zig`|`permodule.py`|`permodule.tsv`/`.md`: the figures and the layout agreement per module|
 |`compile.zig`|`build.py`, `oracle_config.py`|mirror, response file, precompiled header, batches, quarantine rounds, prune, status|
 |`objcache.zig`|`objcache.py`|the compile cache; `json.dumps`-compatible writer|
-|`ts_translate.zig`|`ts_translate.py`|the ghidra-reconstruct translator process|
+|`ts_translate.zig`|`ts_translate.py`|the ghidra-reconstruct translator process, or the shipped translated tree and its `sources.tsv`|
 |`proc.zig`| |child processes (posix_spawn, both pipes, timeout), mutex, flock, os.walk/os.path, Python str rules over latin1|
 |`tucache.zig`|`recon/runs/tucache.py`|the per-TU gcc result cache|
 |`permute.zig`|(permute.py's Compiler and Oracle)|`trial` and `judge`: the form permuter's compiles and judging|

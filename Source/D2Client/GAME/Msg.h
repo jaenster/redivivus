@@ -184,7 +184,7 @@ void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotal
 // @sourcefile .\GAME\Msg.cpp
 void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate);
 void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode);
-void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, short nArg1);
+void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, uint16_t nArg1);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT(uint8_t nPacketId, int16_t nTargetX, int16_t nTargetY);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(uint8_t nPacketId, int16_t nButtonId, int16_t nGoldHi, int16_t nGoldLow);
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT(uint8_t nPacketId, int16_t nArg1, int16_t nArg2, int16_t nArg3, int16_t nArg4);

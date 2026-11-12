@@ -1494,7 +1494,7 @@ static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * 
 }
 
 // Marks all NPCs in the destination act as already-introduced (spoken-with) for pUnit when an act transition occurs. Switches on eActNo (ACT_I through ACT_V; ACT_IV is a no-op) and iterates the corresponding NPCINTRO_ListActN table, calling INTRONPC_SetSpokenWithNPC_Intro2 for each entry. Ensures the player does not see first-meeting NPC intros upon entering the new act.
-static void QUEST_GrantActTransitionReward(eAct eActNo, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void QUEST_GrantActTransitionReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct eActNo) {
     D2UnitDataPlayerStrc* pPlayerData;
     int* pNpcListIter;
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs;
@@ -2811,7 +2811,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 2);
             }
 
-            QUEST_GrantActTransitionReward(ACT_I, pGame, pUnit);
+            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_I);
           }
 
           bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
@@ -2866,7 +2866,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_JustCompleted);
-            QUEST_GrantActTransitionReward(ACT_II, pGame, pUnit);
+            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb0f);
             if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
@@ -2884,7 +2884,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
           if (!bQuestState && pGame->bExpansion) {
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_Completed);
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_JustCompleted);
-            QUEST_GrantActTransitionReward(ACT_II, pGame, pUnit);
+            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb1f);
             if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
@@ -2946,7 +2946,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
 
         D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct4, QUESTSTATE_Completed);
         D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct4, QUESTSTATE_JustCompleted);
-        QUEST_GrantActTransitionReward(ACT_III, pGame, pUnit);
+        QUEST_GrantActTransitionReward(pGame, pUnit, ACT_III);
         pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
         pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
         GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);

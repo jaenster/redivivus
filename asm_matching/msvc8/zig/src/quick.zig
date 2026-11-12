@@ -3,7 +3,7 @@
 //!   oracle-zig quick [--root R] [-j N] [--verify] [--exe-map FILE]
 //!
 //! Runs build, map, libmap and audit, each incrementally: build compiles only TUs no stored
-//! compile matches (`oracle build`, which picks oracle-zig or build.py), map and libmap
+//! compile matches (`oracle build`), map and libmap
 //! skip the derivation when nothing they read changed (stage.zig), and the audit judges
 //! every row again. The global parts - the funcmap, the libmap, the datamap the audit
 //! writes - are always derived from all functions, so the result is the full run's.

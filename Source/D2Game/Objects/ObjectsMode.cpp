@@ -1004,7 +1004,7 @@ static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_
     return 1;
 }
 
-static void OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode eMonsterAnimMode, int32_t nMonsterId, D2ObjectModeArg * pObjectModeArg) {
+static void OBJMODE_SpawnMonsterFromObject(D2ObjectModeArg * pObjectModeArg, int32_t nMonsterId, eD2MonsterAnimMode eMonsterAnimMode) {
     eD2LevelId eLevel;
     if (!(nMonsterId >= 0 && nMonsterId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
@@ -1047,7 +1047,7 @@ void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     for (; nSpawnCount; nSpawnCount--) {
-      OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nMonClassId, &sOperation.sArg);
+      OBJMODE_SpawnMonsterFromObject(&sOperation.sArg, nMonClassId, eD2MonsterAnimMode_ns::Skill1);
     }
 }
 
@@ -4175,7 +4175,7 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
         sNewSeed = D2_SeedRoll(pSeed);
         if (sNewSeed % 10000 & -8192) {
           nObjectHandleResult = ObjectsRgn::OBJECT_HandleObjectMode(&pOperation->sArg);
-          OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nObjectHandleResult, &pOperation->sArg);
+          OBJMODE_SpawnMonsterFromObject(&pOperation->sArg, nObjectHandleResult, eD2MonsterAnimMode_ns::Skill1);
         }
         if (!pTxtObjects->HasCollision[1]) {
           D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
@@ -4375,7 +4375,7 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
       newSeed = D2_SeedRoll(pSeedPtr);
       if (newSeed % 10000 & -8192) {
         nObjectMode = ObjectsRgn::OBJECT_HandleObjectMode(&pOperation->sArg);
-        OBJMODE_SpawnMonsterFromObject(eD2MonsterAnimMode_ns::Skill1, nObjectMode, &pOperation->sArg);
+        OBJMODE_SpawnMonsterFromObject(&pOperation->sArg, nObjectMode, eD2MonsterAnimMode_ns::Skill1);
       }
 
       pSeedPtr = pOperation->pSeed;

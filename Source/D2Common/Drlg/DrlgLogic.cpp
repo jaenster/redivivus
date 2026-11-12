@@ -477,7 +477,7 @@ D2RoomCoordListStrc * __fastcall GetCoordList(D2RoomExStrc * pRoomEx) {
 }
 
 // Links the DRLG coordinate-list grids of two adjacent rooms at border point (nX,nY). Looks up each room's coord-list grid index at the border point, validates that both grids exist, are different, belong to the same level, and share the same node flag, then calls InitializeDrlgCoordList to merge them. Halts fatally if pSrcRoom has no coord list.
-static void __stdcall DRLGLOGIC_LinkCoordListEntry(int32_t nY, int32_t nX, D2RoomExStrc * pNeighborRoom, D2RoomExStrc * pSrcRoom) {
+static void __stdcall DRLGLOGIC_LinkCoordListEntry(D2RoomExStrc * pNeighborRoom, D2RoomExStrc * pSrcRoom, int32_t nX, int32_t nY) {
     D2RoomCoordListStrc* nNeighborCoordIndex;
     int nDestIndex;
     int nSrcIndex;
@@ -544,8 +544,8 @@ static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
           nCoordValue = pRoomEx->sCoords.WorldPosition.x;
           if (nCoordValue <= pRoomEx->sCoords.WorldSize.x + nCoordValue) {
             do {
-              DRLGLOGIC_LinkCoordListEntry(pRoomEx->sCoords.WorldPosition.y, nCoordValue, pRoomEx, pSrcRoom);
-              DRLGLOGIC_LinkCoordListEntry(pRoomEx->sCoords.WorldPosition.y + pRoomEx->sCoords.WorldSize.y, nCoordValue, pRoomEx, pSrcRoom);
+              DRLGLOGIC_LinkCoordListEntry(pRoomEx, pSrcRoom, nCoordValue, pRoomEx->sCoords.WorldPosition.y);
+              DRLGLOGIC_LinkCoordListEntry(pRoomEx, pSrcRoom, nCoordValue, pRoomEx->sCoords.WorldPosition.y + pRoomEx->sCoords.WorldSize.y);
               nCoordValue++;
             } while (nCoordValue <= pRoomEx->sCoords.WorldSize.x + pRoomEx->sCoords.WorldPosition.x);
           }
@@ -553,8 +553,8 @@ static void DRLGLOGIC_LinkBorderCoordLists(D2RoomExStrc * pRoomEx) {
           nCoordValue = pRoomEx->sCoords.WorldPosition.y;
           if (nCoordValue <= pRoomEx->sCoords.WorldSize.y + nCoordValue) {
             do {
-              DRLGLOGIC_LinkCoordListEntry(nCoordValue, pRoomEx->sCoords.WorldPosition.x, pRoomEx, pSrcRoom);
-              DRLGLOGIC_LinkCoordListEntry(nCoordValue, pRoomEx->sCoords.WorldSize.x + pRoomEx->sCoords.WorldPosition.x, pRoomEx, pSrcRoom);
+              DRLGLOGIC_LinkCoordListEntry(pRoomEx, pSrcRoom, pRoomEx->sCoords.WorldPosition.x, nCoordValue);
+              DRLGLOGIC_LinkCoordListEntry(pRoomEx, pSrcRoom, pRoomEx->sCoords.WorldSize.x + pRoomEx->sCoords.WorldPosition.x, nCoordValue);
               nCoordValue++;
             } while (nCoordValue <= pRoomEx->sCoords.WorldPosition.y + pRoomEx->sCoords.WorldSize.y);
           }

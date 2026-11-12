@@ -153,7 +153,7 @@ static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServe
     }
 }
 
-static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, size_t nSize, char * pBytes) {
+static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, char * pBytes, size_t nSize) {
     D2QServerClientPacketStrc* pNewPacket = (D2QServerClientPacketStrc*)D2_ALLOC_AT(nSize + 8, ".\\Src\\QServer\\QServerNT.cpp", 0x440);
     memcpy(pNewPacket + 1, pBytes, nSize);
     pNewPacket->nPacketSize = nSize;
@@ -455,7 +455,7 @@ BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConne
     uint32_t nHighResTime = LogManager::LOGMGR_GetHighResolutionTime();
     pQServerClient->dwLastSendTick = nHighResTime;
     if (pQServerClient->pSendQueueHead) {
-      NET_QServerClientPacket_CreateStructAndCopyBytesThere(pQServerClient, nSize, pBytes);
+      NET_QServerClientPacket_CreateStructAndCopyBytesThere(pQServerClient, pBytes, nSize);
     } else {
       uint32_t nBytesSent;
       if (pQServerClient->socket == -1) {
@@ -479,7 +479,7 @@ BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConne
         nBytesSent = 0;
       }
       if (nBytesSent < (uint32_t)nSize) {
-        NET_QServerClientPacket_CreateStructAndCopyBytesThere(pQServerClient, nSize - nBytesSent, pBytes + nBytesSent);
+        NET_QServerClientPacket_CreateStructAndCopyBytesThere(pQServerClient, pBytes + nBytesSent, nSize - nBytesSent);
         BeginAsyncWriteForClient(pQServer, pQServerClient);
       }
     }

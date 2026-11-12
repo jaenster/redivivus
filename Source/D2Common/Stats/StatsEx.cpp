@@ -1906,12 +1906,12 @@ void __stdcall FreeStatList(D2StatListStrc * pStatList) {
     FreeAnyStatList((D2StatListExStrc*)pStatList);
 }
 
-void __fastcall Unreferenced_00626cf0(D2StatListExStrc * param_1) {
-    if (!(param_1 && param_1->sStatList.nFlags & 0x80000000U)) {
+void __fastcall Unreferenced_00626cf0(D2StatListExStrc * pStatListEx) {
+    if (!(pStatListEx && pStatListEx->sStatList.nFlags & 0x80000000U)) {
       return;
     }
 
-    FreeAnyStatList(param_1);
+    FreeAnyStatList(pStatListEx);
 }
 
 void __stdcall STATLIST_FreeStatListMemory(D2UnitStrc * pUnit) {

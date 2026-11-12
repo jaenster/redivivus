@@ -4456,9 +4456,9 @@ static void __stdcall INVENTORY_SetEquippedItemAppearance(D2UnitStrc * pUnit, ch
     }
 }
 
-static uint8_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2) {
+static int32_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int32_t nParam2) {
     if (nParam1) {
-      return !nParam2 ? 0x1 : 0x5;
+      return nParam2 != 0 ? 0x5U : 0x1U;
     }
 
     return nParam2 ? 3 : 0;

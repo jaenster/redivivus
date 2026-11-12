@@ -153,7 +153,7 @@ void __fastcall STATLIST_PropagateStatChange(struct D2StatListExStrc * pStatsEx,
 void __stdcall STATLIST_DetachAndRecalc(struct D2StatListExStrc * pStatListEx);
 // Detaches pStatsEx from its parent (STATLIST_DetachAndRecalc), then frees all associated memory: base stat array, full-stat array, changed-stat ID array, state flags, and recursively frees non-root child stat lists. Finally frees the D2StatListExStrc itself.
 void __fastcall FreeAnyStatList(struct D2StatListExStrc * pPlayerStatsEx);
-void __fastcall Unreferenced_00626cf0(struct D2StatListExStrc * param_1);
+void __fastcall Unreferenced_00626cf0(struct D2StatListExStrc * pStatListEx);
 void __stdcall STATLIST_FreeStatListMemory(struct D2UnitStrc * pUnit);
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
 void __stdcall STATLIST_SetStatValueInBaseArray(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer, struct D2UnitStrc * pUnit);

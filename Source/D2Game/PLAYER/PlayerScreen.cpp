@@ -282,7 +282,13 @@ void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pU
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint16_t uVar1 = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTarget);
-    if (!uVar1) {
+    if (uVar1) {
+      UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, pTarget);
+      UNIT::PlayerList::Send0x8bRelationshipStatus(pTarget, pUnit);
+      return;
+    }
+
+    {
       uint32_t nInviterGUID;
       UNIT::PlayerList::SetPlayerRelationship(pUnit, pTarget, 4);
       UNIT::PlayerList::SetPlayerRelationship(pTarget, pUnit, 2);
@@ -294,7 +300,6 @@ void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x132), nInviterGUID, '\x05');
     }
-
     UNIT::PlayerList::Send0x8bRelationshipStatus(pUnit, pTarget);
     UNIT::PlayerList::Send0x8bRelationshipStatus(pTarget, pUnit);
 }

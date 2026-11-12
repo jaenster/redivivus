@@ -554,7 +554,7 @@ void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode) {
     NET_D2GS_CLIENT_Send(aPacketFrame + 3, 1);
 }
 
-void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, short nArg1) {
+void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, uint16_t nArg1) {
     D2GSPacketClt_CMD_SHORT packet = d2_bits_as<D2GSPacketClt_CMD_SHORT>((uint32_t)((uint32_t)((uint32_t)(uint16_t)nArg1 << 8 | (uint32_t)(uint8_t)nPacketId) & 0xffffffu));
     NET_D2GS_CLIENT_Send(&packet.nId, 3);
 }

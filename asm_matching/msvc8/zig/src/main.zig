@@ -16,8 +16,9 @@
 //!                                                 tag why each function differs (classify.py)
 //!   oracle-zig permodule --root <dir> --map M [--audit A] [--data D] [--out O]
 //!                                                 the figures per module (permodule.py)
-//!   oracle-zig build --root <dir> [build.py's options]
-//!                                                 translate + compile the tree under VC8 (build.py)
+//!   oracle-zig build --root <dir> [-j N] [--force] [--with-data] [PATTERN ...]
+//!                                                 translate + compile the tree under VC8
+//!   oracle-zig translate --repo <tree> <out>      the tree's VC8 translation, as an export ships it
 //!   oracle-zig tucache lookup|store|prune [...]   the per-TU gcc result cache (recon/runs/tucache.py)
 //!   oracle-zig trial --root <dir> --state | --out DIR [-j N] [--batch N] [--expect KEY] < trials
 //!                                                 compile form-permuter trials beside the build
@@ -68,6 +69,7 @@ const USAGE =
     \\       oracle-zig permodule --root <asm_matching/msvc8> --map M [--audit A] [--data D] [--out O]
     \\       oracle-zig build --root <asm_matching/msvc8> [-j N] [--batch N] [--force] [--with-data]
     \\                        [--extra DIR --support "A.cpp B.cpp"] [PATTERN ...]
+    \\       oracle-zig translate --repo <tree> <out>
     \\       oracle-zig tucache lookup|store|prune [tucache.py's options]
     \\       oracle-zig trial --root <asm_matching/msvc8> --state
     \\       oracle-zig trial --root <asm_matching/msvc8> --out DIR [-j N] [--batch N] [--expect KEY] < trials
@@ -113,6 +115,7 @@ pub fn main(init: std.process.Init.Minimal) !void {
     if (std.mem.eql(u8, cmd, "classify")) return classify.main(rest);
     if (std.mem.eql(u8, cmd, "permodule")) return permodule.main(rest);
     if (std.mem.eql(u8, cmd, "build")) return compile.main(rest);
+    if (std.mem.eql(u8, cmd, "translate")) return compile.translateMain(rest);
     if (std.mem.eql(u8, cmd, "tucache")) return tucache.main(rest);
     if (std.mem.eql(u8, cmd, "trial") or std.mem.eql(u8, cmd, "judge")) return permute.main(cmd, rest);
     if (std.mem.eql(u8, cmd, "diff")) return asmdiff.main(rest);

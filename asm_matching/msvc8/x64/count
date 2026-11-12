@@ -50,7 +50,8 @@ esac
 
 rm -rf "$W/src" "$W/out"
 mkdir -p "$W"
-python3 "$SCRIPTS/vc8_translate.py" "$REPO_ROOT" "$W/src" >/dev/null
+# The same translation the oracle compiles: the translator, else the shipped translated/.
+oracle_zig translate --repo "$REPO_ROOT" "$W/src" >/dev/null
 
 # The x64 compiler has no inline assembly (C4235). The compat header's two __asm
 # helpers get x64 bodies in a copy; the oracle's own header stays as it is.

@@ -7539,7 +7539,7 @@ static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStr
     UNIT::UnitSnd::UNITSND_StopAllSkillSounds(pUnit);
     gnNpcMenuNpcClassId = Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 0, 1, 0);
     if (nGreetingMode == 2) {
-      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('M', (short int)nNpcClassId);
+      GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('M', (uint16_t)nNpcClassId);
       gnNpcMenuNpcSoundIndex = 1;
       return;
     }

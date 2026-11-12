@@ -10144,7 +10144,7 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive() {
     return ::D2Client::UI::ui::NPCSHOP_IsRepairTabActive();
 }
 
-static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseY, int32_t nMouseX) {
+static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseX, int32_t nMouseY) {
     int nTabIdx;
     BOOL bHandled = 0;
     for (nTabIdx = 0; nTabIdx < UseItem::nCashDisplayItemCount; nTabIdx++) {
@@ -10183,7 +10183,7 @@ void __stdcall INPUT_GambleRepairClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
     if (gnPlayerCashDisplay == 2) {
-      bTabHandled = NPCSHOP_GetActiveTabIndex(nMouseY, nMouseX);
+      bTabHandled = NPCSHOP_GetActiveTabIndex(nMouseX, nMouseY);
       if (!bTabHandled) {
         bTabHandled = Inv::INV_HandleInventoryLeftDown(pMsg);
         if (bTabHandled) {
@@ -10194,7 +10194,7 @@ void __stdcall INPUT_GambleRepairClick(D2UIMouseMsgStrc * pMsg) {
     } else {
       bTabHandled = Inv::INV_HandleInventoryLeftClick(pMsg);
       if (!bTabHandled) {
-        NPCSHOP_GetActiveTabIndex(nMouseY, nMouseX);
+        NPCSHOP_GetActiveTabIndex(nMouseX, nMouseY);
       }
     }
 }

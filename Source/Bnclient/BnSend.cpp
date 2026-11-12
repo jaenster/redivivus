@@ -2249,23 +2249,30 @@ void __fastcall BNNEWS_ClearNewsTable(D2BnNewsTableStrc * pNewsTable) {
     pNewsTable->pEntries = 0;
 }
 
-void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int dwAdditionalCount, int bGrow) {
-    uint32_t nNewCount = dwAdditionalCount + pNewsTable[1];
-    if (nNewCount <= *pNewsTable) {
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+
+void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, uint32_t dwAdditionalCount, int bGrow) {
+    dwAdditionalCount = dwAdditionalCount + pNewsTable[1];
+    if (dwAdditionalCount <= *pNewsTable) {
       return;
     }
     if (bGrow) {
       uint32_t nGrowStep;
       nGrowStep = pNewsTable[3];
       if (!nGrowStep) {
-        nGrowStep = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+        nGrowStep = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
       }
-      if (nNewCount % nGrowStep) {
-        nNewCount = nGrowStep - nNewCount % nGrowStep + nNewCount;
-      }
+
+      dwAdditionalCount = D2_RoundUp(dwAdditionalCount, nGrowStep);
     }
 
-    BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+    BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
 }
 
 uint32_t * __fastcall Unreferenced_0051d720(uint32_t * param_1) {

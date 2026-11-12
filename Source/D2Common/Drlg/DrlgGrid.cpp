@@ -529,8 +529,8 @@ void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2Drl
     }
 }
 
-void * __fastcall Unreferenced_0067cb60(D2DrlgGridStrc * param_1, D2DrlgGridStrc * param_2) {
-    void* pvVar1 = memcpy(param_1->pCellsFlags, param_2->pCellsFlags, param_2->nHeight * param_2->nWidth * 4);
+void * __fastcall Unreferenced_0067cb60(D2DrlgGridStrc * pDstGrid, D2DrlgGridStrc * pSrcGrid) {
+    void* pvVar1 = memcpy(pDstGrid->pCellsFlags, pSrcGrid->pCellsFlags, pSrcGrid->nHeight * pSrcGrid->nWidth * 4);
     return pvVar1;
 }
 

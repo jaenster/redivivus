@@ -1668,6 +1668,22 @@ BOOL __fastcall Skills_SrvDoFunc_102_FireRandomMultiMissile(::SGAMEDATA * pGame,
     return 1;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Monster skill server start-func 54: records the target unit for a delayed missile-fire skill. Stores target GUID and type into skill Param1/Param2 via SKILL_SetParam, clears the dynamic path target, then writes the target's world position into the caster's path SP1 for later use by the do-func.
 BOOL __fastcall SKILLMONST_SrvStFn54_DiabRun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nY;
@@ -1683,8 +1699,8 @@ BOOL __fastcall SKILLMONST_SrvStFn54_DiabRun(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-    D2Common::Skills::SKILL_SetParam1(pSkill, pTarget->nUnitGUID);
-    D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->eUnitType);
+    D2Common::Skills::SKILL_SetParam1(pSkill, GetGUIDInline(pTarget));
+    D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pTarget));
     D2Common::PATH::DynamicPath::SetTarget(pUnit->pPath.pDynamicPath, nullptr);
     eD2UnitType eUnitType = pTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {

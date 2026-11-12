@@ -1,19 +1,18 @@
-//! build.py: compile the reconstruction with Visual C++ 2005, one object per TU.
+//! oracle-zig build (once build.py): compile the reconstruction with Visual C++ 2005, one object per TU.
 //!
 //!   oracle-zig build --root <asm_matching/msvc8> [-j N] [--batch N] [--force] [--with-data]
 //!                    [--extra DIR [--support "A.cpp B.cpp"]] [PATTERN ...]
 //!
-//! The tree is mirrored into build/src by ghidra-reconstruct's VC8 translator
-//! (ts_translate.zig), then every translation unit (or those whose path contains a PATTERN)
+//! The tree is mirrored into build/src by ghidra-reconstruct's VC8 translator, or copied from
+//! the translated tree an export ships (ts_translate.zig), then every translation unit (or those whose path contains a PATTERN)
 //! is compiled to build/obj/<path>.obj under wine, N cl.exe at a time, each cl.exe taking a
 //! batch of TUs of one object directory. Incremental by content: every compile is stored in
 //! the shared cache (objcache.zig) under the hash of what produced it, and a TU is compiled
 //! only when no stored compile matches; an object already in place for the same inputs (its
 //! <path>.key) is left untouched. A function VC8 cannot compile is quarantined round by round
-//! (build/quarantine.tsv) and its body blanked in the translation. Outputs, keys and cache
-//! entries are build.py's, file for file; build.py stays the fall-back when there is no
-//! ghidra-reconstruct checkout to translate with. build.py's decoder pool (--decode-jobs) is
-//! not here: it only warms the Python readers' pickle cache.
+//! (build/quarantine.tsv) and its body blanked in the translation; a shipped translation
+//! blanks nothing, so there such a TU fails. Outputs, keys and cache entries are build.py's
+//! (the Python driver this replaced), file for file; `--decode-jobs` is accepted and ignored.
 const std = @import("std");
 const c = @import("c");
 const util = @import("util.zig");
@@ -40,7 +39,7 @@ const SKIP_DIRS = [_][]const u8{ ".git", ".github", ".idea", "asm_matching", "bu
 const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs" };
 const HEADERS_ONLY_BUT = "Redivivus/ghidra_version.cpp";
 
-// ---- configuration (oracle_config.py, build.py's module globals)
+// ---- configuration (the defaults audit.zig's Config reads too)
 
 var ORACLE: []const u8 = undefined;
 pub var REPO: []const u8 = undefined;
@@ -300,6 +299,7 @@ fn quarantineRows(rel: []const u8) ![]const []const u8 {
 
 /// Make the TU's rows in quarantine.tsv exactly `rows`, and its translation follow them.
 fn setQuarantine(t: *TU, rows: []const []const u8) !void {
+    if (TS.shipped != null) return; // nothing is blanked; restore() takes no quarantined entry
     qlock.lock();
     defer qlock.unlock();
     const lines = try quarantineLines();
@@ -328,6 +328,7 @@ fn setQuarantine(t: *TU, rows: []const []const u8) !void {
 
 /// Forget the TU's quarantined functions and re-translate it without them.
 fn unquarantine(t: *TU) !void {
+    if (TS.shipped != null) return;
     qlock.lock();
     defer qlock.unlock();
     if (!util.exists(QUARANTINE_TSV)) return;
@@ -367,6 +368,7 @@ fn errorAt(s: []const u8) ?ErrorAt {
 /// Record the functions holding the TU's own compile errors and re-translate it with their
 /// bodies blanked. Returns the number of functions newly quarantined (0: none can be).
 fn quarantine(t: *TU, log: []const []const u8) !usize {
+    if (TS.shipped != null) return 0; // a shipped translation cannot blank a function
     const Own = struct { line: u32, msg: []const u8 };
     var own: std.ArrayList(Own) = .empty;
     const src_l = try proc.lower(t.src);
@@ -516,6 +518,7 @@ fn restore(t: *TU, key: []const u8) !bool {
     const info = try objcache.meta(d);
     var rows: std.ArrayList([]const u8) = .empty;
     if (info.object.get("quarantine")) |q| for (q.array.items) |r| try rows.append(gpa, r.string);
+    if (TS.shipped != null and rows.items.len > 0) return false;
     try setQuarantine(t, rows.items);
     util.makeDirs(util.dirname(t.base));
     try objcache.install(try util.join(d, "obj"), try t.path(".obj"));
@@ -531,7 +534,7 @@ fn store(t: *TU, base: []const u8) !void {
     const deps = try storeDeps(try depsOf(try t.path(".d")));
     const key = try depsKey(base, deps);
     qlock.lock();
-    const qrows = quarantineRows(t.rel);
+    const qrows: []const []const u8 = if (TS.shipped != null) &.{} else try quarantineRows(t.rel);
     qlock.unlock();
     var info: std.ArrayList(u8) = .empty;
     try info.appendSlice(gpa, "{\"tu\": ");
@@ -539,7 +542,7 @@ fn store(t: *TU, base: []const u8) !void {
     try info.appendSlice(gpa, ", \"deps\": ");
     try objcache.stringList(&info, try depRels(deps));
     try info.appendSlice(gpa, ", \"quarantine\": ");
-    try objcache.stringList(&info, try qrows);
+    try objcache.stringList(&info, qrows);
     try info.append(gpa, '}');
     try objcache.put("obj", key, &.{ .{ .name = "obj", .path = try t.path(".obj") }, .{ .name = "log", .path = try t.path(".log") } }, info.items);
     try objcache.record(base, deps, key);
@@ -1160,9 +1163,10 @@ pub fn main(args: []const []const u8) !void {
         }.get;
         if (val(args, &i, a, "--root", null)) |v| root = v else if (val(args, &i, a, "--jobs", "-j")) |v| jobs = try std.fmt.parseInt(usize, v, 10) else if (val(args, &i, a, "--batch", null)) |v| batch = try std.fmt.parseInt(usize, v, 10) else if (val(args, &i, a, "--decode-jobs", null)) |_| {} else if (val(args, &i, a, "--extra", null)) |v| extra = v else if (val(args, &i, a, "--support", null)) |v| support_arg = v else if (std.mem.eql(u8, a, "--force")) force = true else if (std.mem.eql(u8, a, "--with-data")) with_data = true else if (std.mem.eql(u8, a, "--probe")) probe = true else if (std.mem.eql(u8, a, "-h") or std.mem.eql(u8, a, "--help")) usage() else if (std.mem.startsWith(u8, a, "-")) usage() else try patterns.append(gpa, a);
     }
-    // --probe: exit 0 when a ghidra-reconstruct checkout can translate (else build.py must).
-    if (probe) std.process.exit(if (try ts_translate.checkout()) |_| 0 else 1);
     try configure(root orelse usage());
+    // --probe: exit 0 when the tree has a translation to compile (a translator or a shipped tree).
+    const from = try ts_translate.origin(ORACLE);
+    if (probe) std.process.exit(if (from) |_| 0 else 1);
     if (support_arg.len > 0 and extra == null) {
         std.debug.print("--support needs --extra\n", .{});
         std.process.exit(2);
@@ -1172,8 +1176,8 @@ pub fn main(args: []const []const u8) !void {
     if (force) objcache.read_enabled = false;
     qlock.init();
     out_lock.init();
-    const gr = (try ts_translate.checkout()) orelse {
-        std.debug.print("oracle-zig build: no ghidra-reconstruct checkout (GR, ~/code/ts/gr-daemon); build.py translates without one\n", .{});
+    const src_of = from orelse {
+        std.debug.print("oracle-zig build: {s}", .{ts_translate.NO_ORIGIN});
         std.process.exit(3);
     };
 
@@ -1189,12 +1193,25 @@ pub fn main(args: []const []const u8) !void {
         const p = try util.join(BUILD, f);
         if (util.exists(p)) proc.remove(p);
     }
-    try loadQuarantine();
-    TS = .{ .gr = gr, .repo = REPO };
+    switch (src_of) {
+        .gr => |gr| {
+            try loadQuarantine();
+            TS = .{ .gr = gr, .repo = REPO };
+        },
+        .shipped => |d| {
+            var rels: std.ArrayList([]const u8) = .empty;
+            for (try sources(REPO)) |s| try rels.append(gpa, try proc.normpath(try util.join(s.rel, s.name)));
+            try ts_translate.checkShipped(d, REPO, rels.items);
+            TS = .{ .shipped = d, .repo = REPO };
+        },
+    }
     TS.init();
     defer TS.close();
     const wk = try TS.mirror(SRC, QUARANTINE_TSV);
-    say("translate (ghidra-reconstruct {s}): {d} written, {d} unchanged ({s}s)\n", .{ gr, wk[0], wk[1], try fixedN(proc.now() - t_start) });
+    switch (src_of) {
+        .gr => |gr| say("translate (ghidra-reconstruct {s}): {d} written, {d} unchanged ({s}s)\n", .{ gr, wk[0], wk[1], try fixedN(proc.now() - t_start) }),
+        .shipped => |d| say("translate (shipped {s}): {d} written, {d} unchanged ({s}s)\n", .{ d, wk[0], wk[1], try fixedN(proc.now() - t_start) }),
+    }
 
     var extra_src: ?[]const u8 = null;
     var extra_obj: ?[]const u8 = null;
@@ -1335,6 +1352,67 @@ pub fn main(args: []const []const u8) !void {
     say("compiled {d}/{d} TUs OK ({d} failed this run) in {d}s\n", .{ nok, tus.items.len, pool.failed, @as(u64, @intFromFloat(@round(proc.now() - t0))) });
     TS.close();
     std.process.exit(if (nok == tus.items.len) 0 else 1);
+}
+
+/// oracle-zig translate --repo <tree> <out>: the tree's VC8 translation, with sources.tsv, in
+/// `out` (emptied first when it holds an earlier translation, refused when it holds anything
+/// else). The translator writes it when there is one, else the tree's shipped translation is
+/// copied, after checking that it still translates the tree. The export ships what this
+/// writes as asm_matching/msvc8/translated/; x64/count compiles it.
+pub fn translateMain(args: []const []const u8) !void {
+    const U = "usage: oracle-zig translate --repo <tree> <out>\n";
+    var repo_arg: ?[]const u8 = null;
+    var out_arg: ?[]const u8 = null;
+    var i: usize = 0;
+    while (i < args.len) : (i += 1) {
+        if (std.mem.eql(u8, args[i], "--repo") and i + 1 < args.len) {
+            i += 1;
+            repo_arg = args[i];
+        } else if (!std.mem.startsWith(u8, args[i], "-") and out_arg == null) out_arg = args[i] else {
+            std.debug.print(U, .{});
+            std.process.exit(2);
+        }
+    }
+    if (repo_arg == null or out_arg == null) {
+        std.debug.print(U, .{});
+        std.process.exit(2);
+    }
+    var buf: [4096]u8 = undefined;
+    const cwd = std.mem.sliceTo(c.getcwd(&buf, buf.len) orelse return error.Cwd, 0);
+    const repo = try proc.realpath(try proc.joinNorm(cwd, repo_arg.?));
+    const out = try proc.joinNorm(cwd, out_arg.?);
+    objcache.initLocks();
+    if (proc.isDir(out)) {
+        const names = try proc.listDir(out);
+        if (names.len > 0) {
+            if (!util.exists(try util.join(out, ts_translate.MANIFEST))) {
+                std.debug.print("{s} is not empty and holds no translation; refusing to replace it\n", .{out});
+                std.process.exit(2);
+            }
+            const r = try proc.run(&.{ "rm", "-rf", out }, .{});
+            if (r.status != 0) return error.Remove;
+        }
+    }
+    util.makeDirs(out);
+    var rels: std.ArrayList([]const u8) = .empty;
+    for (try sources(repo)) |s| try rels.append(gpa, try proc.normpath(try util.join(s.rel, s.name)));
+    const from = try ts_translate.origin(try util.join(repo, "asm_matching/msvc8")) orelse {
+        std.debug.print("oracle-zig translate: {s}", .{ts_translate.NO_ORIGIN});
+        std.process.exit(3);
+    };
+    switch (from) {
+        .gr => |gr| {
+            const line = try ts_translate.translateTree(gr, repo, out);
+            // What build compiles is sources(): the translation must hold exactly those.
+            try ts_translate.checkShipped(out, repo, rels.items);
+            say("{s} (ghidra-reconstruct {s})\n", .{ line, gr });
+        },
+        .shipped => |d| {
+            try ts_translate.checkShipped(d, repo, rels.items);
+            try ts_translate.copyTree(d, out);
+            say("copied the shipped translation {s}: {d} files\n", .{ d, rels.items.len });
+        },
+    }
 }
 
 fn fixedN(v: f64) ![]const u8 {

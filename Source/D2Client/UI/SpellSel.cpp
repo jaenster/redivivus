@@ -1603,7 +1603,7 @@ void __stdcall SKILLTREE_DrawBackground() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTabHighlightX + nScreenX, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 
-static BOOL __stdcall SKILLTREE_IsMouseOnSkillNode(int32_t nHitWidth, int32_t nHitHeight, int32_t nNodeScreenY, int32_t nNodeScreenX) {
+static BOOL __stdcall SKILLTREE_IsMouseOnSkillNode(int32_t nNodeScreenX, int32_t nNodeScreenY, int32_t nHitWidth, int32_t nHitHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nNodeScreenX && nMouseX <= nNodeScreenX + nHitWidth && nMouseY >= nNodeScreenY - nHitHeight && nMouseY <= nNodeScreenY) {
@@ -1665,7 +1665,7 @@ void __stdcall SKILLTREE_RenderSkillTree() {
         return;
       }
 
-      nScreenY = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131);
+      nScreenY = SKILLTREE_IsMouseOnSkillNode(ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, 0x22, 0x22);
       if (!nScreenY) {
         return;
       }
@@ -1797,7 +1797,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
       nTmpResult = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
     }
 
-    nSkillListIdx = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, nPrevActiveTab, nTmpResult);
+    nSkillListIdx = SKILLTREE_IsMouseOnSkillNode(nTmpResult, nPrevActiveTab, 0x22, 0x22);
     if (nSkillListIdx) {
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
       gbSpellSelSkillTreeBackground = 1;
@@ -1940,7 +1940,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
                       if (iSkillResult <= nNewSkills) {
                         iSkillResult = SPELLSEL_IsWaitingForSkill();
                         if (!iSkillResult) {
-                          GAME::Msg::NET_D2GS_CLIENT_Send_SHORT(';', (short int)eSkill);
+                          GAME::Msg::NET_D2GS_CLIENT_Send_SHORT(';', (uint16_t)eSkill);
                           BooleanWaitingForSkillingMaybe = 0;
                         }
                       }
@@ -1987,7 +1987,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
       nNewSkills = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
     }
 
-    nSkillIdx = SKILLTREE_IsMouseOnSkillNode(0x22, 0x22, skillIdOfClass, nNewSkills);
+    nSkillIdx = SKILLTREE_IsMouseOnSkillNode(nNewSkills, skillIdOfClass, 0x22, 0x22);
     if (nSkillIdx) {
       ui::SetUIFlag(UI_SKILLTREE, UI_TOGGLE, 0);
     }

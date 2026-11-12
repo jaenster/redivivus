@@ -2252,7 +2252,7 @@ int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSi
       if (nDataSize <= 8) {
         return 0;
       }
-      if (nAlignedLen = nDataSize - 8 , (nAlignedLen & 0x3f) != 0) {
+      if ((nAlignedLen = nDataSize - 8 , (nAlignedLen & 0x3f) != 0)) {
         return 0;
       }
 

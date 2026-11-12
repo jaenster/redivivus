@@ -1093,7 +1093,7 @@ char * __fastcall GetPickedLevelPrestFilePathFromRoomEx(D2RoomExStrc * pRoomEx) 
     return "None";
 }
 
-static void ReorderNearRoomList(int nRoomCount, D2RoomExStrc * * ppRoomList) {
+static void ReorderNearRoomList(D2RoomExStrc * * ppRoomList, int nRoomCount) {
     int nIndex;
     int nPassRemaining;
     D2RoomExStrc* pRoomCurrent;
@@ -1146,7 +1146,7 @@ static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc 
     }
 
     nGapX = pRoomEx->nDrlgRoomsExNearCount;
-    ReorderNearRoomList(nGapX, apNearRoomExList);
+    ReorderNearRoomList(apNearRoomExList, nGapX);
     D2RoomExStrc** ppNearRooms = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemory, nGapX * 4, ".\\DRLG\\DrlgRoom.cpp", 0x2cb);
     pRoomEx->ppDrlgRoomsExNear = ppNearRooms;
     for (nGapX = 0; nGapX < pRoomEx->nDrlgRoomsExNearCount; nGapX++) {
@@ -1219,7 +1219,7 @@ static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDr
     }
 
     ppNewNearRooms[pDrlgRoomEx->nDrlgRoomsExNearCount - 1] = pRoom;
-    ReorderNearRoomList(pDrlgRoomEx->nDrlgRoomsExNearCount, pDrlgRoomEx->ppDrlgRoomsExNear);
+    ReorderNearRoomList(pDrlgRoomEx->ppDrlgRoomsExNear, pDrlgRoomEx->nDrlgRoomsExNearCount);
 }
 
 // Allocates a tile-grid link for pSrcRoomEx that points to pLinkedRoomEx. Stores warp id for visSlot via DRLGLEVEL_GetWarpsIdIfExistsAndSetup, then prepends the new tile grid entry.
@@ -1322,8 +1322,8 @@ void __fastcall GetRGB_IntensityFromRoomEx(D2RoomExStrc * pRoomEx, char * nInten
     *nBlue = pLevelDefs->ColorInfo.Blue;
 }
 
-int __fastcall Unreferenced_0066c020(D2RoomExStrc * param_1) {
-    D2LevelDefsTxt* pDVar1 = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(param_1->pLevel->eD2LevelId);
+int __fastcall Unreferenced_0066c020(D2RoomExStrc * pRoomEx) {
+    D2LevelDefsTxt* pDVar1 = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(pRoomEx->pLevel->eD2LevelId);
     return pDVar1->DrlgType;
 }
 
@@ -1350,8 +1350,8 @@ int * __fastcall DRLGWARP_GetVisArrayFromLevelId(D2DrlgStrc * pDrlg, eD2LevelId 
     exit(-1);
 }
 
-void __fastcall Unreferenced_0066c090(D2DrlgLevelStrc * param_1) {
-    DRLGWARP_GetVisArrayFromLevelId(param_1->pDrlg, param_1->eD2LevelId);
+void __fastcall Unreferenced_0066c090(D2DrlgLevelStrc * pLevel) {
+    DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
 }
 
 D2DrlgStrc * __fastcall GetDrlgFromRoomEx(D2RoomExStrc * pRoomEx) {

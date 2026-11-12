@@ -92,7 +92,7 @@ void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, struct D2UnitStr
 void __fastcall MONSTER_KillAllInLevel(::SGAMEDATA * pGame, int32_t nAltMonClassId, int32_t nAltMonClassId2, eD2LevelId eLevel);
 // Completes monster unit initialization after allocation. Sets ISVALIDTARGET|TARGETABLE flags and GUID; clears the timer list; allocates and links AiGeneral, AiParam (MonsterNameStrc), and MonsterAI structs into D2UnitDataMonsterStrc; caches the MonStatsTxt pointer; calls InitializeSpawnCount and MONSTER_InitStats to populate combat stats; attaches the correct AI function; records the room's level ID; and either initializes the animation frame (live monster) or calls FreeCombatAndChangeAnimMode for Death/Kick modes. Also attaches quest hooks via AttachToUnit.
 void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit, int32_t dwUnitGUID);
-void __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags);
+BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags);
 #endif // D2_MODULE_D2Game
 // 1 internal function (defined in .cpp)
 

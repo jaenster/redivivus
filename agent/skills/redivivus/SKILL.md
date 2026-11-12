@@ -20,17 +20,32 @@ so that is where a contribution lands.
 
 ## Proposing
 
-The server has no proposal tools yet. Until the review flow arrives, a correction goes as an issue on
-https://github.com/jaenster/redivivus/issues, using the **Correction: name, type or prototype**
-template. One issue is one claim, and it carries:
+A correction is a proposal, sent with the server's `propose` tool. The full guide, with every op and
+evidence kind, is https://redivivus.app/agent-setup/proposals.md; the house rules it applies are
+https://redivivus.app/agent-setup/rules.md. Read both before the first proposal. In short:
 
-- **the target by address**: for locals, the function address plus the storage (stack offset or
-  register); for types, the type path.
-- **the value you saw**, so a reviewer can tell whether it changed in the meantime.
-- **evidence a reviewer can re-check**: an xref, a call site, the Mac counterpart, an assert string, a
-  string reference. "It looks like" or "the name suggests" is not evidence.
+- **One proposal is one claim**: 1-250 ops, applied all-or-nothing. Each op names its target by
+  address (for locals the function address plus the storage, for struct fields the type path and
+  offset) and carries `expect`, the value you read just before, so a change made in the meantime is
+  caught.
+- **The ops**: `rename_function`, `rename_global`, `rename_local` (parameters too), `retype_local`,
+  `set_prototype`, `set_global_type`, `struct_field`, and on Windows two that record what a VC8
+  compile proved: `vc8form` (a source-form tag) and `linkage` (file-static, or the file a function is
+  defined in). Both of those need an `oracle` evidence item for their function.
+- **Evidence a reviewer can re-check**: at least one item that is not `free_text` - an xref, a call
+  site, a Mac pair, an assert or string reference, a field access, or the VC8 audit status before and
+  after (`oracle`). "It looks like" or "the name suggests" is not evidence.
+- **Checked at once**: `propose` verifies every op and evidence item live against the databases and
+  stores nothing if one fails, listing every problem. `dryRun: true` runs the checks only.
+  `my_proposals`, `proposal_status` and `withdraw` follow it from there.
+- **A vc8form tag is tied to its function's decompile** (its `dh`). A `set_prototype`, or a renamed or
+  retyped parameter, changes that decompile (a prototype change its callers' too), and the generator
+  then ignores the tag. When your change touches a tagged function, measure the tag again on the
+  changed decompile and put it in the same proposal as a `vc8form` op with `replace`.
 
-Accepted corrections land in Ghidra and so in the next regeneration of the source.
+Accepted proposals are applied to Ghidra and so land in the next regeneration of the source. A new
+generator form, a filing rule, anything the generator has to learn, is an issue on
+https://github.com/jaenster/redivivus/issues with the measurements, not a proposal.
 
 ## Structural suspicions - file, never propose
 

@@ -639,7 +639,7 @@ D2AutomapCellStrc * __stdcall AUTOMAP_AllocCell() {
 // and inserts the cell into the AVL tree. Wall tiles (type >= 15)
 // get a Y offset of +24 pixels.
 // Source: .\\UI\\automap.cpp
-static void __stdcall AUTOMAP_RevealTile(D2RoomExStrc * pRoomEx, D2AutomapCellStrc * * pAutomapCell, D2DrlgTileDataStrc * pTileData) {
+static void __stdcall AUTOMAP_RevealTile(D2DrlgTileDataStrc * pTileData, D2RoomExStrc * pRoomEx, D2AutomapCellStrc * * pAutomapCell) {
     int32_t nLevelType;
     int32_t nOrientation;
     int32_t nIndex;
@@ -1397,7 +1397,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
       pnTileFlags = &pTiles->nFlags;
       do {
         if (!(*pnTileFlags & 8U) && (*pnTileFlags & 0x20000U || bAutoMapRevealAll || bForceReveal)) {
-          AUTOMAP_RevealTile(pRoomEx, &pAutomapLayer->pFloors, (D2DrlgTileDataStrc*)(pnTileFlags - 5));
+          AUTOMAP_RevealTile((D2DrlgTileDataStrc*)(pnTileFlags - 5), pRoomEx, &pAutomapLayer->pFloors);
         }
 
         i++;
@@ -1411,7 +1411,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
       pnTileFlags = &pTiles->nFlags;
       do {
         if (!(*pnTileFlags & 8U) && (*pnTileFlags & 0x20000U || bAutoMapRevealAll || bForceReveal)) {
-          AUTOMAP_RevealTile(pRoomEx, &pAutomapLayer->pWalls, (D2DrlgTileDataStrc*)(pnTileFlags - 5));
+          AUTOMAP_RevealTile((D2DrlgTileDataStrc*)(pnTileFlags - 5), pRoomEx, &pAutomapLayer->pWalls);
         }
 
         i++;

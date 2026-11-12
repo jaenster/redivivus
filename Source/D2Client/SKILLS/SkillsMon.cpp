@@ -1605,8 +1605,9 @@ BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills e
       bInRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
       if (bInRange) {
         nTargetGUID = D2Common::Skills::SKILL_GetParam1(pSkill);
-        if (nTargetGUID - 1 > 0) {
-          D2Common::Skills::SKILL_SetParam1(pSkill, nTargetGUID - 1);
+        nTargetGUID -= 1;
+        if (nTargetGUID > 0) {
+          D2Common::Skills::SKILL_SetParam1(pSkill, nTargetGUID);
           D2Common::Units::SetSequenceFrame(pUnit, pSkillsTxtBase->Param[0]);
           pUnit->nFrameCount = (pUnit->nFrameCount & 0xffffff00U) + 0x100;
           return 1;

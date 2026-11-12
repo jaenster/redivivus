@@ -603,17 +603,11 @@ void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
     DataTbls::UnloadBin(pTxtRareSuffixTmp);
     DataTbls::UnloadBin(pTxtRarePrefixTmp);
     uint16_t* pStringOut = 0;
-    if (gsRareAffixTable.nSize <= 0) {
-      return;
-    }
-
-    int nIdx = 0;
-    do {
+    for (int nIdx = 0; nIdx < gsRareAffixTable.nSize; nIdx++) {
       uint32_t nStringId;
       nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsRareAffixTable.pTable[nIdx].name[0], &pStringOut);
       gsRareAffixTable.pTable[nIdx].wNameStrId = (short int)nStringId;
-      nIdx++;
-    } while (nIdx < gsRareAffixTable.nSize);
+    }
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp

@@ -559,7 +559,7 @@ uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQues
 
 // [A4Q3 Terror's End] Mark QUEST_TerrorsEnd done for one player's record: set JustCompleted + Completed, clear step states. Classic (non-expansion): also set steps 0x06/0x07 and bump client status to 4 (act complete / go-to-credits). Increments a counter in the A4Q2 quest struct.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
-static void __stdcall Q27_SetTerrorsEndCompleted(D2BitBufferStrc * pBitBuffer, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void __stdcall Q27_SetTerrorsEndCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer) {
     /* SetQuestState(TerrorsEnd, JustCompleted=0xd) — Diablo just died self game
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
     /* SetQuestState(TerrorsEnd, Completed=0) — quest done permanently */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
@@ -603,7 +603,7 @@ void __fastcall Q27_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    Q27_SetTerrorsEndCompleted(pBitBuffer, pGame, pUnit);
+    Q27_SetTerrorsEndCompleted(pGame, pUnit, pBitBuffer);
 }
 
 // [A4Q3 Terror's End] If this player has QUEST_TerrorsEnd JustCompleted, propagate completion to every party member (ExecuteFunctionForEveryPartyMember -> Q27_PartyMember_SetCompleted).
@@ -829,7 +829,7 @@ BOOL __fastcall Q27_PlayerCheckNearDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return 0;
     }
 
-    Q27_SetTerrorsEndCompleted(pBitBuffer, pGame, pUnit);
+    Q27_SetTerrorsEndCompleted(pGame, pUnit, pBitBuffer);
     return 0;
 }
 

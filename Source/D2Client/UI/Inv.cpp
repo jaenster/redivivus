@@ -2845,7 +2845,7 @@ static D2UnitStrc * GetSetItem(int32_t nId, D2InventoryStrc * pInventory) {
     return pCarriedItem;
 }
 
-static BOOL __stdcall INV_IsMouseInRect(int32_t nWidth, int32_t nHeight, int32_t nBottomY, int32_t nLeftX) {
+static BOOL __stdcall INV_IsMouseInRect(int32_t nLeftX, int32_t nBottomY, int32_t nWidth, int32_t nHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nLeftX && nMouseX <= nLeftX + nWidth && nMouseY >= nBottomY - nHeight && nMouseY <= nBottomY) {
@@ -4066,7 +4066,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
       nCoinFrame = (uint32_t)(gnInvStashGold != 0);
       bIsExpansionGfx = GAME::Game::CLIENT_CheckExpansion();
       if (bIsExpansionGfx) {
-        bIsExpansionGfx = INV_IsMouseInRect(0x14, 0x12, gnPanelOffsetY - 0x1b6 + ScreenSizeY, gnPanelOffsetX + 0x49);
+        bIsExpansionGfx = INV_IsMouseInRect(gnPanelOffsetX + 0x49, gnPanelOffsetY - 0x1b6 + ScreenSizeY, 0x14, 0x12);
         if (bIsExpansionGfx) {
           nTooltipY = gnPanelOffsetY - 0x1ca + ScreenSizeY;
           show_gold_button_tooltip:
@@ -4076,7 +4076,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
           D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x101c), nTooltipXPos, nTooltipY, iTmp, nColorFlag);
         }
       } else {
-        bIsExpansionGfx = INV_IsMouseInRect(0x14, 0x12, gnPanelOffsetY - 0xf2 + ScreenSizeY, gnPanelOffsetX + 0x49);
+        bIsExpansionGfx = INV_IsMouseInRect(gnPanelOffsetX + 0x49, gnPanelOffsetY - 0xf2 + ScreenSizeY, 0x14, 0x12);
         if (bIsExpansionGfx) {
           nTooltipY = gnPanelOffsetY - 0x106 + ScreenSizeY;
           goto show_gold_button_tooltip;
@@ -6703,7 +6703,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
                 pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pMercUnit->pInventory, nBodySlotIdx);
                 if (pEquippedItem) {
                   UNIT::ITEM_RemoveClientSide(pEquippedItem);
-                  GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('a', (short int)nBodySlotIdx);
+                  GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('a', (uint16_t)nBodySlotIdx);
                   gpInvItemUnderCursor = 0;
                   gbInvBodySlotUnderCursorExists = 0;
                   pItemToDescribe = 0;
@@ -10260,7 +10260,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
           if (bInteractiveMode) {
             bResult = INV_CheckActionThrottle();
             if (bResult) {
-              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('\x1c', (short int)bodyLocation);
+              GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('\x1c', (uint16_t)bodyLocation);
               DrawShopRelated = 1;
               return 1;
             }
