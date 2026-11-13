@@ -270,64 +270,62 @@ static int __fastcall SBMP_DecodeTgaFile(D2MPQFileStrc * hFile, uint32_t * pWidt
     uint8_t abPalette[1024];
     uint8_t* pPixelsOut = (uint8_t*)palette;
     int nResult = SFile::SFileReadFile(hFile, &sTgaHeader, 0x12, &nBytesRead, (LPOVERLAPPED)0x0);
-    if (nResult && nBytesRead == 0x12) {
-      BOOL BVar1;
-      BVar1 = SBMP_ValidateTGAHeader((TGAHeaderStrc*)&sTgaHeader);
-      if (BVar1) {
-        nWidth = (uint32_t)sTgaHeader.wWidth;
-        nHeight = (uint32_t)sTgaHeader.wHeight;
-        nBpp = (uint32_t)sTgaHeader.byPixelDepth;
-        if (sTgaHeader.byColorMapType != '\0') {
-          nPaletteDataSize = ((int)(sTgaHeader.byColorMapEntrySize + 7) >> 3) * (uint32_t)sTgaHeader.wColorMapLength;
-        } else {
-          nPaletteDataSize = 0;
-        }
-        if (sTgaHeader.byImageType >= 9) {
-          nResult = 1;
-        } else {
-          nResult = ((int)(nBpp + 7) >> 3) * nHeight * nWidth;
-        }
+    BOOL BVar1;
+    BVar1 = nResult && nBytesRead == 0x12 ? SBMP_ValidateTGAHeader((TGAHeaderStrc*)&sTgaHeader) : 0;
+    if (!BVar1) {
+      return 0;
+    }
 
-        nIdFieldLen = (uint32_t)sTgaHeader.byIdLength;
-        dwFileSize = SFile::SFileGetFileSize(hFile, (LPDWORD)0x0);
-        if (nIdFieldLen + nResult + 0x12 + nPaletteDataSize <= dwFileSize) {
-          if (pWidth) {
-            *pWidth = nWidth;
-          }
-          if (pHeight) {
-            *pHeight = nHeight;
-          }
-          if (pBpp) {
-            *pBpp = nBpp;
-          }
+    nWidth = (uint32_t)sTgaHeader.wWidth;
+    nHeight = (uint32_t)sTgaHeader.wHeight;
+    nBpp = (uint32_t)sTgaHeader.byPixelDepth;
+    if (sTgaHeader.byColorMapType != '\0') {
+      nPaletteDataSize = ((int)(sTgaHeader.byColorMapEntrySize + 7) >> 3) * (uint32_t)sTgaHeader.wColorMapLength;
+    } else {
+      nPaletteDataSize = 0;
+    }
+    if (sTgaHeader.byImageType >= 9) {
+      nResult = 1;
+    } else {
+      nResult = ((int)(nBpp + 7) >> 3) * nHeight * nWidth;
+    }
 
-          SFile::SFileSetFilePointer(hFile, nIdFieldLen, nullptr, 1);
-          if (pixels && sTgaHeader.byColorMapType != '\0') {
-            SFile::SFileReadFile(hFile, abPalette, nPaletteDataSize, nullptr, (LPOVERLAPPED)0x0);
-            BVar1 = SBMP_DecodeTGAPalette(&sTgaHeader, 0, nPaletteDataSize, (uint32_t*)pixels, abPalette);
-            if (!BVar1) {
-              return 0;
-            }
-          }
-          if (pPixelsOut) {
-            dwFileSize = SFile::SFileGetFileSize(hFile, (LPDWORD)0x0);
-            nPaletteDataSize = dwFileSize + (-0x12 - (uint32_t)sTgaHeader.byIdLength - nPaletteDataSize);
-            pSrcData = (uint8_t*)SMem::SMemAlloc(nPaletteDataSize, ".\\SOURCE\\SBMP.CPP", 0x116, 0);
-            SFile::SFileReadFile(hFile, pSrcData, nPaletteDataSize, nullptr, (LPOVERLAPPED)0x0);
-            BVar1 = SBMP_DecodeTGAPixels(pSrcData, &sTgaHeader.byIdLength, nPaletteDataSize, pPixelsOut, nMaxPixelBytes);
-            if (!BVar1) {
-              SMem::SMemFree(pSrcData, ".\\SOURCE\\SBMP.CPP", 0x11d, 0);
-              return 0;
-            }
-
-            SMem::SMemFree(pSrcData, ".\\SOURCE\\SBMP.CPP", 0x120, 0);
-          }
-
-          return 1;
-        }
-
-        return 0;
+    nIdFieldLen = (uint32_t)sTgaHeader.byIdLength;
+    dwFileSize = SFile::SFileGetFileSize(hFile, (LPDWORD)0x0);
+    if (nIdFieldLen + nResult + 0x12 + nPaletteDataSize <= dwFileSize) {
+      if (pWidth) {
+        *pWidth = nWidth;
       }
+      if (pHeight) {
+        *pHeight = nHeight;
+      }
+      if (pBpp) {
+        *pBpp = nBpp;
+      }
+
+      SFile::SFileSetFilePointer(hFile, nIdFieldLen, nullptr, 1);
+      if (pixels && sTgaHeader.byColorMapType != '\0') {
+        SFile::SFileReadFile(hFile, abPalette, nPaletteDataSize, nullptr, (LPOVERLAPPED)0x0);
+        BVar1 = SBMP_DecodeTGAPalette(&sTgaHeader, 0, nPaletteDataSize, (uint32_t*)pixels, abPalette);
+        if (!BVar1) {
+          return 0;
+        }
+      }
+      if (pPixelsOut) {
+        dwFileSize = SFile::SFileGetFileSize(hFile, (LPDWORD)0x0);
+        nPaletteDataSize = dwFileSize + (-0x12 - (uint32_t)sTgaHeader.byIdLength - nPaletteDataSize);
+        pSrcData = (uint8_t*)SMem::SMemAlloc(nPaletteDataSize, ".\\SOURCE\\SBMP.CPP", 0x116, 0);
+        SFile::SFileReadFile(hFile, pSrcData, nPaletteDataSize, nullptr, (LPOVERLAPPED)0x0);
+        BVar1 = SBMP_DecodeTGAPixels(pSrcData, &sTgaHeader.byIdLength, nPaletteDataSize, pPixelsOut, nMaxPixelBytes);
+        if (!BVar1) {
+          SMem::SMemFree(pSrcData, ".\\SOURCE\\SBMP.CPP", 0x11d, 0);
+          return 0;
+        }
+
+        SMem::SMemFree(pSrcData, ".\\SOURCE\\SBMP.CPP", 0x120, 0);
+      }
+
+      return 1;
     }
 
     return 0;

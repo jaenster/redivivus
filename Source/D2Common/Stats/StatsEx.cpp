@@ -1504,10 +1504,11 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
             wBaseStat = *pOpRelation;
             pBaseStatInfo = &pStatList->sStatList.sBaseStats;
             nSearchResult = STATLIST_BinarySearchStatById((uint32_t)wBaseStat << 0x10, pBaseStatInfo);
-            if (nSearchResult < 0 || !(pBaseStatInfo->pStatInfo + nSearchResult)) {
+            D2StatStrc* pStatInfoRecord = nSearchResult >= 0 ? pBaseStatInfo->pStatInfo + nSearchResult : nullptr;
+            if (!pStatInfoRecord) {
               nApplyResult3 = 0;
             } else {
-              nApplyResult3 = pBaseStatInfo->pStatInfo[nSearchResult].nStatValue;
+              nApplyResult3 = pStatInfoRecord->nStatValue;
             }
 
             nRelatedStatVal = STATLIST_CalcCombinedStatValue(pStatList, (uint32_t)wBaseStat << 0x10);

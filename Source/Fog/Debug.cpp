@@ -518,7 +518,8 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
       }
     }
     if (pSymGetLineFromAddr64) {
-      IMAGEHLP_LINE64 sLineInfo = {0};
+      IMAGEHLP_LINE64 sLineInfo;
+      memset(&sLineInfo, 0, sizeof(sLineInfo));
       *(uint32_t*)(char*)&sLineInfo.Address = 0;
       *(uint32_t*)((char*)&sLineInfo.Address + 4) = 0;
       sLineInfo.SizeOfStruct = 0x18;

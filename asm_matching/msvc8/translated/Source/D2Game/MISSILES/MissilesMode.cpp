@@ -5428,8 +5428,8 @@ int __fastcall MISSMODE_SrvDoFn18_TowerChestSpawner(::SGAMEDATA * pGame, D2UnitS
           pTargetObj = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nRandDelta);
           if (pTargetObj) {
             sOperateArg.pSeed = &pTargetObj->sSeed;
-            sOperateArg.nObjectClassId = pTargetObj->nClassId;
             sOperateArg.sArg.pVictim = pTargetObj;
+            sOperateArg.nObjectClassId = pTargetObj->nClassId;
             Objects::ObjectsMode::SERVER_MissleKilled(&sOperateArg);
           }
 

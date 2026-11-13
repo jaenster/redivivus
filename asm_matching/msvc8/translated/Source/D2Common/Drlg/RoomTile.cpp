@@ -993,12 +993,12 @@ void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2
     eD2GridCellFlags nFlags;
     eD2GridCellFlags nCellFlags;
     int nColIdx;
+    D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     int nXOffset = pRoomEx->sCoords.WorldPosition.x;
     int nXMax = (uint32_t)!nY + pRoomEx->sCoords.WorldSize.x;
     int nYOffset = pRoomEx->sCoords.WorldPosition.y;
     int maxTile = (uint32_t)!nSizeMaybe + pRoomEx->sCoords.WorldSize.y;
     for (nY = 0; nY < maxTile; nY++) {
-      D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
       for (nColIdx = 0; nColIdx < nXMax; nColIdx++) {
         nFlags = DrlgGrid::GetGridFlags(pGrid, nColIdx, nY);
         if (pOtherGrid) {

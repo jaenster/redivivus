@@ -1338,11 +1338,11 @@ uint8_t __fastcall PLRMODES_GetHpPercent128(D2UnitStrc * pUnit) {
       return 0x80;
     }
 
-    int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    int nMaxHpShifted = nMaxHp >> 8;
-    if (nMaxHpShifted > 0 && nHp >> 8 < nMaxHpShifted) {
-      return (uint8_t)((nHp >> 8 << 7) / nMaxHpShifted);
+    int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
+    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    int nMaxHpShifted = nMaxHp;
+    if (nMaxHpShifted > 0 && nHp < nMaxHpShifted) {
+      return (uint8_t)((nHp << 7) / nMaxHpShifted);
     }
 
     return 0x80;

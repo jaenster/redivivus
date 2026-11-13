@@ -127,8 +127,8 @@ static int __stdcall DRLGOUTDOOR_ValidateSubTilePlacement(D2UnkOutdoorStrc * pOu
     uint32_t wallFlag;
     int dy;
     int dx;
+    int nGridStride = pSubLvl->GridSize;
     for (dy = 0; dy < pSubRect->nHeight; dy++) {
-      int nGridStride = pSubLvl->GridSize;
       for (dx = 0; dx < pSubRect->nWidth; dx++) {
         if (pSubLvl->pDrlgFile->nFloorLayers) {
           floorFlag = DrlgGrid::GetGridFlags(&pSubLvl->pFloorGrid, pSubRect->nPosX + dx, pSubRect->nPosY + dy);
@@ -320,8 +320,8 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D
     int nWallLayerIter;
     int dy;
     int dx;
+    int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
     for (dy = 0; dy < pnGroupEntry[3]; dy++) {
-      int nWallLayerCount = pDrlgUnkn->nWallLayerCount;
       for (dx = 0; dx < pnGroupEntry[2]; dx++) {
         uFlags = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + dx, pnGroupEntry[1] + dy);
         if (uFlags & 2 || pLvlSubTxt->pWallGrid[0].nWidth && (uFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + dx, pnGroupEntry[1] + dy) , (uFlags & 1) != 0)) {
@@ -447,8 +447,8 @@ void __fastcall SetBlankGridCell(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t n
 // via DRLGOUTROOM_PlaceAct5SecondaryBorder -> AddSecondaryBorder.
 BOOL __fastcall DRLGOUTDOOR_IsGridCellPresetFree(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataUnion t2_c2 = pLevel->pDrlgLevelData;
-    uint32_t uFlags = DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
-    return ~(uFlags >> 10) & 1;
+    uint32_t uFlags = (uint32_t)DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY) >> 10;
+    return ~uFlags & 1;
 }
 
 // Tests grid flags against 0x1b81, returns 1 if cell is available.
@@ -1140,19 +1140,19 @@ D2DrlgVertexStrc * __fastcall Unreferenced_00675290(D2DrlgLevelStrc * param_1, i
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {
     D2UnkOutdoorStrc sBorderParams;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    memset(&sBorderParams, 0, 0x38);
+    memset(&sBorderParams, 0, sizeof(sBorderParams));
     sBorderParams.pCoordsGrid = (D2DrlgGridStrc*)&pLevelData->pGridCoordsCellFlags;
+    sBorderParams.pLevel = pLevel;
     sBorderParams.pPrimaryFloorGrid = &pLevelData->sGridPreset;
     sBorderParams.pWallGrid = &pLevelData->sGridOutdoor;
     sBorderParams.nLevelPrestId = nLevelPrestId;
     sBorderParams.nPrevBorderPresetId = -1;
+    sBorderParams.nLvlSubId = nLvlSubId;
     sBorderParams.pfnIsPresetFree = DRLGOUTDOOR_IsGridCellPresetFree;
     sBorderParams.pfnTestPreset = TestOutdoorLevelPreset;
     sBorderParams.pfnAlterAdjacentCells = AlterAdjacentPresetGridCells;
     sBorderParams.pfnSetBlankCell = SetBlankGridCell;
     sBorderParams.pfnSpawnPreset = SpawnOutdoorLevelPresetEx;
-    sBorderParams.pLevel = pLevel;
-    sBorderParams.nLvlSubId = nLvlSubId;
     TileSub::AddSecondaryBorder(&sBorderParams);
 }
 

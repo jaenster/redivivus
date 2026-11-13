@@ -63,7 +63,7 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
       nPosY = 0;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     D2UnitFindArgStrc* pUnitFindArg = &sUnitFindArg;
     UNITFINDTEST fpUnitTest = 0;
     sUnitFindArg.nFlags = 0x3002;
@@ -195,14 +195,14 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkills
 
     spawn_selected_missile:
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nMissileTxtNo = eMissileSelected;
-    sSkillArg.nUnitY = -nDirOffsetX;
-    sSkillArg.nFlags = 3;
-    sSkillArg.nSkillLevel = nSkillLevel;
-    sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nMissileSpawnX;
-    sSkillArg.nY = nUnitY + nDirOffsetY;
+    sSkillArg.nMissileTxtNo = eMissileSelected;
     sSkillArg.nUnitX = nDirOffsetY;
+    sSkillArg.nFlags = 3;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.nY = nUnitY + nDirOffsetY;
+    sSkillArg.nSkillLevel = nSkillLevel;
+    sSkillArg.nUnitY = -nDirOffsetX;
     D2UnitStrc* pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
     if (!pMissile) {
       return;

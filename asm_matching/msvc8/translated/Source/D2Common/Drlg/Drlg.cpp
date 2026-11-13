@@ -1912,8 +1912,8 @@ void __fastcall SubTypeWpShrine(D2DrlgWallLayerGridsStrc * pWallLayerGrids) {
     }
 
     D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pWallLayerGrids->nSubTypeLookupId);
+    D2PoolManagerStrc* pMemory = pWallLayerGrids->pRoomEx->pLevel->pDrlg->pDS1MemPool;
     for (dwSubTypeBitMask = pWallLayerGrids->nSubTypeCount; dwSubTypeBitMask; dwSubTypeBitMask >>= 1) {
-      D2PoolManagerStrc* pMemory = pWallLayerGrids->pRoomEx->pLevel->pDrlg->pDS1MemPool;
       if (dwSubTypeBitMask & 1) {
         TileSub::InitializeDrlgFile(pMemory, pLvlSubTxtRecord);
         if (pLvlSubTxtRecord->CheckAll) {
@@ -2794,12 +2794,11 @@ int __fastcall DRLGPLACE_ACT1_ValidatePlacementList2WithGap(D2DrlgLevelPlacement
 int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
+    int nPrevId = ACT2_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
-    int t2_c0 = ACT2_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     if (nIndexMax > 0) {
       D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
       do {
-        int nPrevId = t2_c0;
         if (i != nPrevId) {
           _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
           if (!_bNoOverlap) {
@@ -2818,12 +2817,11 @@ int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStr
 int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
+    int nPrevId = ACT2_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
-    int t2_c0 = ACT2_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     if (nIndexMax > 0) {
       D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
       do {
-        int nPrevId = t2_c0;
         if (i != nPrevId) {
           _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
           if (!_bNoOverlap) {
@@ -2842,12 +2840,11 @@ int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
 int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
+    int nPrevId = ACT5_D2DrlgLevelData3.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
-    int t2_c0 = ACT5_D2DrlgLevelData3.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     if (nIndexMax > 0) {
       D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
       do {
-        int nPrevId = t2_c0;
         if (i != nPrevId) {
           _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
           if (!_bNoOverlap) {
@@ -2866,12 +2863,11 @@ int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStr
 int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
+    int nPrevId = ACT4_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
-    int t2_c0 = ACT4_D2DrlgLevelData1.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     if (nIndexMax > 0) {
       D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
       do {
-        int nPrevId = t2_c0;
         if (i != nPrevId) {
           _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
           if (!_bNoOverlap) {
@@ -2890,12 +2886,11 @@ int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStr
 int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
+    int nPrevId = ACT4_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     int i = 0;
-    int t2_c0 = ACT4_D2DrlgLevelData2.aEntry[nIndexMax].nNodeLevelEntryIdPrev;
     if (nIndexMax > 0) {
       D2DrlgCoordsStrc* pCoords = pLevelUnknown->aCoordsAndSize;
       do {
-        int nPrevId = t2_c0;
         if (i != nPrevId) {
           _bNoOverlap = DrlgRoom::DRLGROOM_CoordsWithinDistance(pLevelUnknown->aCoordsAndSize + nIndexMax, pCoords, 0);
           if (!_bNoOverlap) {
@@ -3508,8 +3503,8 @@ static void __stdcall DRLGOUTROOM_FindWarpExitInColumn(D2DrlgLevelStrc * pLevel,
     for (nY = 1; nY < pWildData->nGridCoordsWidth - 1; nY++) {
       uint32_t nPresetGridFlags;
       nPresetGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
-      nGridFlags2 = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY);
-      if (nPresetGridFlags == 0x1c && (nGridFlags2 >> 0x10 & 0xf) == 1) {
+      nGridFlags2 = (uint32_t)DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY) >> 0x10;
+      if (nPresetGridFlags == 0x1c && (nGridFlags2 & 0xf) == 1) {
         *pFoundX = nX;
         *pFoundY = nY;
         return;
@@ -3580,14 +3575,13 @@ static void DRLGGRID_SetOutRoomEdgeFlags(D2DrlgLevelStrc * pDrlgLevelData, D2Roo
     D2DrlgCoordsStrc sCoords;
     int nIndex;
     D2DrlgVertexStrc* pVertex;
+    D2DrlgOutdoorRoomStrc* pRoomExDataVoid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     D2DrlgLevelDataWildernessLevel* nDrlgLevelBase = pDrlgLevelData->pDrlgLevelData.pDrlgLevelOutdoorsData;
     sCoords.WorldPosition.x = pRoomEx->sCoords.WorldPosition.x - 1;
     sCoords.WorldPosition.y = pRoomEx->sCoords.WorldPosition.y - 1;
-    struct D2DrlgOutdoorRoomStrc* t2_c8 = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     sCoords.WorldSize.x = pRoomEx->sCoords.WorldSize.x + 3;
     sCoords.WorldSize.y = pRoomEx->sCoords.WorldSize.y + 3;
     for (nIndex = 0; nIndex < nDrlgLevelBase->nExitCount; nIndex++) {
-      D2DrlgOutdoorRoomStrc* pRoomExDataVoid = t2_c8;
       for (pVertex = nDrlgLevelBase->pAdjacentVertices[nIndex]; pVertex; pVertex = pVertex->pNext) {
         if (pVertex->pNext) {
           DrlgGrid::DRLGGRID_SetLineFlagsWithWidth(&pRoomExDataVoid->pCellGrid, pVertex, &sCoords, 1, 0, 2);

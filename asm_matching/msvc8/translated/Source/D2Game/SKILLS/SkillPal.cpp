@@ -1157,11 +1157,11 @@ void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState
 
     int nValue = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pConvSaveStats, UNITSTAT_conversion_level, 0);
     int nValue_00 = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pConvSaveStats, UNITSTAT_conversion_maxhp, 0);
-    int32_t nTxtMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    int32_t nTxtMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
     int nRestoredHp = 1;
-    if (nTxtMaxHp >> 8) {
-      nRestoredHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue_00, nCurHp >> 8, nTxtMaxHp >> 8);
+    if (nTxtMaxHp) {
+      nRestoredHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue_00, nCurHp, nTxtMaxHp);
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nValue, 0);

@@ -3242,7 +3242,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
     }
     if (__frame0.nScalingMode != 5) {
       if (__frame0.nScalingMode > 6 && __frame0.nScalingMode <= 8) {
-        memset(&sMonStats, 0, 0x38);
+        memset(&sMonStats, 0, sizeof(sMonStats));
         nClassId = pUnit->nClassId;
         pScaledStats = &sMonStats;
         nElDifficultyIdx = 0x20;
@@ -3252,7 +3252,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
         nToHit = sMonStats.nTH;
         sMonStats.nTH = __frame0.nPetBonusToHit;
       } else {
-        memset(&sMonStats, 0, 0x38);
+        memset(&sMonStats, 0, sizeof(sMonStats));
         nClassId = pUnit->nClassId;
         pScaledStats = &sMonStats;
         nElDifficultyIdx = 8;
@@ -3262,7 +3262,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
         nToHit = __frame0.nPetBonusToHit;
       }
     } else {
-      memset(&sMonStats, 0, 0x38);
+      memset(&sMonStats, 0, sizeof(sMonStats));
       nClassId = pUnit->nClassId;
       pScaledStats = &sMonStats;
       nElDifficultyIdx = 0x10;
@@ -3304,7 +3304,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       pUnitEl = __frame0.pUnitSaved;
       __frame0.pElModeCur = pElMode;
       if (*pElMode > 0 && __frame0.nScalingMode == (uint32_t)*pElMode && *__frame0.pElChance > 0 && (*__frame0.pElChance >= 100 || (nElDifficultyIdx = D2Common::Seed::UNIT_GetModuloFromSeed(&__frame0.pUnitSaved->sSeed, 100) , (int)nElDifficultyIdx < (int)(uint32_t)*__frame0.pElChance))) {
-        memset(&sMonStats, 0, 0x38);
+        memset(&sMonStats, 0, sizeof(sMonStats));
         pScaledStats = &sMonStats;
         pElMode += __frame0.nElModeFieldOffset;
         nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnitEl, UNITSTAT_level, 0);
@@ -3478,11 +3478,11 @@ uint8_t __fastcall MONSTER_GetHpPercent128(D2UnitStrc * pUnit) {
       return 0x80;
     }
 
-    int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    int nMaxHpShifted = nMaxHp >> 8;
-    if (nMaxHpShifted > 0 && nHp >> 8 < nMaxHpShifted) {
-      return (uint8_t)((nHp >> 8 << 7) / nMaxHpShifted);
+    int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
+    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    int nMaxHpShifted = nMaxHp;
+    if (nMaxHpShifted > 0 && nHp < nMaxHpShifted) {
+      return (uint8_t)((nHp << 7) / nMaxHpShifted);
     }
 
     return 0x80;

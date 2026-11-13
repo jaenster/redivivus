@@ -1130,7 +1130,7 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
 D2UnitFindDataStrc * __fastcall SKILLS_FindUnitsInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nRange, int32_t nX, int32_t nY) {
     D2UnitFindArgStrc sUnitFindArg;
     D2UnitFindDataStrc* pUnitFindData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitFindDataStrc, ".\\SKILLS\\Skills.cpp", 1099);
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nFlags = 1411;
     sUnitFindArg.pAttacker = pUnit;
     sUnitFindArg.nX = nX;
@@ -2450,7 +2450,7 @@ void __fastcall SKILLS_ForEachUnitInRangeCallback(::SGAMEDATA * pGame, int32_t n
       return;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     D2UnitStrc* pTargetX = pUnit;
     sUnitFindArg.pAttacker = pUnit_00;
     sUnitFindArg.nX = (int)pUnit;
@@ -2504,7 +2504,7 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
         nDistance = D2Common::Skills::TXT_Skills_GetSkillRange(pBaalWaveParam->eSkillId, pBaalWaveParam->nSkillLevel);
       }
 
-      memset(&sSkillParam, 0, 0x38);
+      memset(&sSkillParam, 0, sizeof(sSkillParam));
       sSkillParam.nFlags = pBaalWaveParam->nUnitFindFlags;
       sSkillParam.pAttacker = pBaalWaveParam->pAttacker;
       nX_00 = pBaalWaveParam->nX;
@@ -2643,10 +2643,10 @@ void __fastcall SKILLS_ApplyAllPassiveStates(D2UnitStrc * pUnit) {
 
 static void __stdcall SKILLS_CalcSkillMinMaxToHit(int * pnMinMaxToHit, eD2Skills eSkill, D2UnitStrc * pUnit) {
     int32_t nTotalLevel = D2Common::Skills::SKILLS_GetTotalSkillLevel(pUnit, eSkill);
-    int32_t nDamage = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkill, nTotalLevel, 1);
-    *pnMinMaxToHit = nDamage >> 8;
-    int32_t nMaxDamage = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkill, nTotalLevel, 1);
-    pnMinMaxToHit[1] = nMaxDamage >> 8;
+    int32_t nDamage = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkill, nTotalLevel, 1) >> 8;
+    *pnMinMaxToHit = nDamage;
+    int32_t nMaxDamage = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, eSkill, nTotalLevel, 1) >> 8;
+    pnMinMaxToHit[1] = nMaxDamage;
     uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nTotalLevel);
     pnMinMaxToHit[2] = nToHit;
 }
@@ -2811,7 +2811,7 @@ D2UnitStrc * __fastcall SKILLS_FindNearbyCorpse(D2UnitStrc * pUnit, D2UnitStrc *
       pCaster = pUnit;
       nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit2);
       nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit2);
-      memset(&sUnitFindArg, 0, 0x38);
+      memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
       sUnitFindArg.nFlags = 0x1002;
       sUnitFindArg.nX = nX;
       sUnitFindArg.nY = nY;
@@ -3267,13 +3267,14 @@ D2StatListExStrc * __fastcall SetStateWithExpiryTime(D2StateExArgStrc * pStateEx
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pAttacker (EDX): D2UnitStrc *
 void __fastcall SKILLS_SetStateWithCurse(D2UnitStrc * pUnitStrc, D2UnitStrc * pAttacker, eD2Skills eSkill, int32_t nSkillLvl, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
     D2SkillsTxt* pSkillsTxt;
-    D2StateExArgStrc sStateExArg;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
     } else {
       pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
 
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     sStateExArg.nDurationInFrames = pSkillsTxt->Param[1] * nSkillLvl;
     sStateExArg.nSkillLvl = nSkillLvl;
     sStateExArg.nSkillCalc = (nSkillLvl - 1) * pSkillsTxt->Param[2] + pSkillsTxt->Param[0];

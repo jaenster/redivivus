@@ -4985,8 +4985,8 @@ static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwCol
 
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(nFontId);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszBuf, wszText);
-    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszBuf);
-    D2Win::Src::D2WinFont::DRAW_text(wszBuf, (anBounds[2] + anBounds[0] >> 1) - (nTextWidth >> 1), nY, dwColor, 1);
+    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszBuf) >> 1;
+    D2Win::Src::D2WinFont::DRAW_text(wszBuf, (anBounds[2] + anBounds[0] >> 1) - nTextWidth, nY, dwColor, 1);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 

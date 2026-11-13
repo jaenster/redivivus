@@ -750,7 +750,8 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!sStateArg.pTarget) {
       return 0;
@@ -1317,7 +1318,7 @@ D2UnitStrc * __fastcall SKILLEMONST_FindNearbyCorpse(::SGAMEDATA * pGame, D2Unit
       nPosY = 0;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nDistance = nSearchRadius;
     sUnitFindArg.nFlags = 0x1002;
     sUnitFindArg.pAttacker = pUnit;

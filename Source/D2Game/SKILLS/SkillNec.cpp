@@ -414,7 +414,8 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
       }
     }
 
-    D2StateExArgStrc sStateExArg = {0};
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     if ((int)pNecroSkillArg->eStat[0] >= 0) {
       sStateExArg.nSkillCalc = SKILLNEC_ClampResistPenalty(pUnit, pNecroSkillArg->eStat[0], pNecroSkillArg->aSkillCalc[0]);
       if (!sStateExArg.nSkillCalc) {
@@ -699,7 +700,8 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
       SkillsServer::SKILLS_FreeMonsterMinions(pCorpse);
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       nAuraLen = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-      D2StateExArgStrc sStateExArg = {0};
+      D2StateExArgStrc sStateExArg;
+      memset(&sStateExArg, 0, sizeof(sStateExArg));
       sStateExArg.nDurationInFrames = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nAuraLen);
       sCorpseEventArg.eSkill = eSkill;
       sCorpseEventArg.nSkillLvl = nSkillLvl;
@@ -764,13 +766,14 @@ void __fastcall SKILLNEC_OnConvertExpire(D2UnitStrc * pUnit, eD2States eState, D
 // Server-side event callback that applies the Necromancer Attract/Convert curse to pUnit. Validates the revive target, clamps the resist penalty stat, builds a D2StateExArgStrc with skill/level/duration from the event context array (ppGame), calls SetStateWithExpiryTime with SKILLNEC_OnConvertExpire, adds up to 5 clamped resist-penalty stats, updates animation speed if flagged, sets the unit's alignment to friendly (1), adds it to the player's target node table, switches its AI to mode 3, and schedules an expiry event. Returns 1 on success.
 int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCtxStrc * pCtx) {
     int32_t nClampedStatCalc;
-    D2StateExArgStrc sStateExArg;
     uint32_t bReviveValid = SKILLNEC_ValidateReviveTarget(pCtx->pGame, pCtx->pCaster, pUnit);
     if (!bReviveValid) {
       return 0;
     }
 
     eD2UnitStat eStatId = pCtx->anStatIds[0];
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     sStateExArg.nSkillCalc = SKILLNEC_ClampResistPenalty(pUnit, eStatId, pCtx->anStatValues[0]);
     if (!sStateExArg.nSkillCalc) {
       eStatId = ~UNITSTAT_strength;
@@ -989,10 +992,11 @@ static void __stdcall SKILLNEC_RollSkeletonMastery(D2UnitStrc * pUnit, int * pSu
 
     int32_t bHasExtraVariant = 0;
     if (nSkillLvl > 2) {
-      if (eSkillMastery < 0 || eSkillMastery >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillMastery)) {
+      D2SkillsTxt* pSkillsTxt = eSkillMastery >= 0 && eSkillMastery < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillMastery : nullptr;
+      if (!pSkillsTxt) {
         nExtraVariantChance = 0;
       } else {
-        nExtraVariantChance = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillMastery].Param[0];
+        nExtraVariantChance = pSkillsTxt->Param[0];
       }
 
       sSeedNew = D2_SeedRoll(&pUnit->sSeed);
@@ -1466,7 +1470,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
         nPhysDmgMinVal = 1;
       }
 
-      memset(&sMonStats, 0, 0x38);
+      memset(&sMonStats, 0, sizeof(sMonStats));
       nCorpseHpRaw = pCorpseTarget->nClassId;
       pOutStats = &sMonStats;
       D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nCorpseHpRaw, nPhysDmgMinVal, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pCorpseTarget, UNITSTAT_level, 0), 1, pOutStats);

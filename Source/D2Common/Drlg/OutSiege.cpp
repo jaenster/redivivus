@@ -53,9 +53,9 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
     int nY;
     int nX;
     int32_t nLvlPrestId;
+    D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int* pTableEntry = &gaAct5SpecialPresetTable_0[0].nLvlPrestHorz;
     do {
-      D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
       if (pLevel->eD2LevelId == ((D2Act5SpecialPresetStrc*)(pTableEntry - 4))->eLevelId) {
         if (pLevel->sCoordinatesAndSize.WorldSize.x > pLevel->sCoordinatesAndSize.WorldSize.y) {
           nLvlPrestId = *pTableEntry;
@@ -377,8 +377,9 @@ static void DRLGOUTROOM_PlaceAct5SecondaryBorder(D2DrlgLevelStrc * pLevel) {
     }
 
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    memset(&sUnkOutdoorStrc, 0, 0x38);
+    memset(&sUnkOutdoorStrc, 0, sizeof(sUnkOutdoorStrc));
     sUnkOutdoorStrc.pCoordsGrid = (D2DrlgGridStrc*)&pWildData->pGridCoordsCellFlags;
+    sUnkOutdoorStrc.pLevel = pLevel;
     sUnkOutdoorStrc.pPrimaryFloorGrid = &pWildData->sGridPreset;
     sUnkOutdoorStrc.pWallGrid = &pWildData->sGridOutdoor;
     sUnkOutdoorStrc.pfnValidateBorderCell = DRLGOUTDOOR_ValidateSecondaryBorderCell;
@@ -388,7 +389,6 @@ static void DRLGOUTROOM_PlaceAct5SecondaryBorder(D2DrlgLevelStrc * pLevel) {
     sUnkOutdoorStrc.pfnGetBorderPreset = DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub;
     sUnkOutdoorStrc.nPrevBorderPresetId = -1;
     sUnkOutdoorStrc.nLvlSubId = 0xc;
-    sUnkOutdoorStrc.pLevel = pLevel;
     TileSub::AddSecondaryBorder(&sUnkOutdoorStrc);
 }
 
@@ -398,13 +398,13 @@ void __stdcall DRLGOUTROOM_PlaceAct5SceneryPresets(D2DrlgLevelStrc * pLevel) {
     int nCount;
     int32_t nPresetId;
     int32_t nErrCode;
+    int nWidth;
+    nWidth = pLevel->sCoordinatesAndSize.WorldSize.x;
     int nHeight;
     nHeight = pLevel->sCoordinatesAndSize.WorldSize.y;
     int* pTableEntry;
     pTableEntry = gaAct5SceneryPresetTable_0[0] + 1;
     do {
-      int nWidth;
-      nWidth = pLevel->sCoordinatesAndSize.WorldSize.x;
       if (pLevel->eD2LevelId == (*(int (*)[7])(pTableEntry - 1))[0]) {
         if (nWidth < nHeight) {
           nPresetId = *pTableEntry;

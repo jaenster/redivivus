@@ -1805,13 +1805,14 @@ void __fastcall UpdatePops(D2RoomExStrc * pRoomEx, int32_t nX, int32_t nY, BOOL 
     uint32_t nDeadline = dwTickCount + 500;
     int nMatchedPop = 0;
     if (pRoomEx->nPresetType == 2) {
-      D2DrlgCoordsStrc coordsPopBounds;
       pPresetRoomData = pRoomEx->pRoomExData.pRoomExDataPreset->pMap;
       nNearIdx = 0;
       if (pPresetRoomData->nPops > 0) {
         do {
           pDVar1 = pPresetRoomData;
           pPopEntry = (D2DrlgCoordsStrc*)&pPresetRoomData->pPosLocation[nNearIdx].nPosX;
+          D2DrlgCoordsStrc coordsPopBounds;
+          memset(&coordsPopBounds, 0, sizeof(coordsPopBounds));
           coordsPopBounds.WorldPosition.x = pPopEntry->WorldPosition.x * 5;
           coordsPopBounds.WorldPosition.y = pPopEntry->WorldPosition.y * 5;
           coordsPopBounds.WorldSize.x = pPopEntry->WorldSize.x * 5 + pPresetRoomData->pTxtLevelPrest->PopPad;

@@ -755,8 +755,8 @@ void __fastcall MONUNIQUE_ApplyModifierGriswold(D2UnitStrc * pUnit, int32_t nUMo
       return;
     }
 
-    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel >> 1);
+    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) >> 1;
+    MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel);
 }
 
 void __fastcall MONUNIQUE_ApplyModifierTheSmith(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
@@ -764,8 +764,8 @@ void __fastcall MONUNIQUE_ApplyModifierTheSmith(D2UnitStrc * pUnit, int32_t nUMo
       return;
     }
 
-    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel >> 1);
+    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) >> 1;
+    MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel);
 }
 
 void __fastcall MONUNIQUE_SpawnBugLightning(D2UnitStrc * pUnit, int32_t nUMod, int32_t nParam2) {

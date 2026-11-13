@@ -461,7 +461,7 @@ static D2UnitStrc * __stdcall SKILL_FindTargetInRange(D2SkillStrc * pSkill, D2Un
       nfpUnitTest = (UNITFINDTEST)ITEM_IsQuestItem;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nFlags = nFindFlags;
     sUnitFindArg.pAttacker = UNIT::Player::GetPlayerUnit_Net();
     int nY = *pY;

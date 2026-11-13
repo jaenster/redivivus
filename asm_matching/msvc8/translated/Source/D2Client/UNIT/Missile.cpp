@@ -7984,10 +7984,10 @@ void __fastcall MISSILE_CltDoFn42_IzualControl(D2UnitStrc * pUnit) {
         nRandSpread = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 10);
         nOwnerPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pOwner);
         memset(&sSkillArg, 0, 0x5c);
+        sSkillArg.nUnitX = nRandSpread - 5 + nOwnerPosX;
         sSkillArg.nFlags = 0x20;
         sSkillArg.pOwner = pOwner;
         sSkillArg.pMissile = pUnit;
-        sSkillArg.nUnitX = nRandSpread - 5 + nOwnerPosX;
         nRandOffset = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 10);
         nOwnerPosX = D2Common::Units::GetYPosFromDynamicPathUnit(pOwner);
         sSkillArg.nUnitY = nOwnerPosX + (nRandOffset - 5);

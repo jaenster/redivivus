@@ -1652,7 +1652,8 @@ static uint32_t __stdcall SPRITECACHE_LoadFromArchive(D2GfxDataStrc * pGfxData, 
       }
       if (pCelEntry->dwCacheFlags & 2) {
         nLine = 0x3da;
-        D2SpriteDecodeRequestStrc tDecodeRequest = {0};
+        D2SpriteDecodeRequestStrc tDecodeRequest;
+        memset(&tDecodeRequest, 0, sizeof(tDecodeRequest));
         tDecodeRequest.pCelHeader = (uint8_t*)pCelEntry;
         tDecodeRequest.nStartFrame = nFrameGroupIndex * nFrameStep;
         pCacheEntry->tDecode.nFlags |= 4;

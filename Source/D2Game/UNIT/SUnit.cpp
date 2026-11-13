@@ -785,11 +785,11 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
       return;
     }
 
+    D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
     int nFrameIdx = nFrameOffset - 1;
     nFrameOffset *= 0x100;
     nAnimSpeedAccum = nFrameOffset + nAnimSpeed;
     while (nAnimSpeedAccum < nTotalFrameCount) {
-      D2AnimDataRecordStrc* pAnimData = pUnit->pAnimData;
       nNextEventFrame++;
       nFrameOffset += nAnimSpeed;
       nAnimSpeedAccum += nAnimSpeed;

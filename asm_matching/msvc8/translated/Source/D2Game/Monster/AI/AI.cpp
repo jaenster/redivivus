@@ -1862,8 +1862,8 @@ int32_t __fastcall AI_GetWeightedDistanceToPoint(D2UnitStrc * pUnit, int32_t nTa
       nDiffY = -nDiffY;
     }
 
-    nSizeX = D2Common::Units::GetUnitSizeX(pUnit);
-    nHalfSizeOffset = (nSizeX >> 1) + 1;
+    nSizeX = (uint32_t)D2Common::Units::GetUnitSizeX(pUnit) >> 1;
+    nHalfSizeOffset = nSizeX + 1;
     nDiffX -= nHalfSizeOffset;
     nDiffY -= nHalfSizeOffset;
     if (nDiffX < 0) {
@@ -4626,9 +4626,9 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
     nVictimHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_level, 0);
     uint32_t nTrapDamageRoll = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nVictimHp >> 2);
     char nLevelByte = (char)nVictimHp;
-    int nToHitChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_dexterity, 0);
+    int nToHitChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_dexterity, 0) >> 1;
     int nVictimDex = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_armorclass, 0);
-    nVictimHp = ((uint32_t)(uint8_t)((char)nTrapDamageRoll + nLevelByte) + (nToHitChance >> 1) * -5 - nVictimHp) * 2 - nVictimDex + 0x7d;
+    nVictimHp = ((uint32_t)(uint8_t)((char)nTrapDamageRoll + nLevelByte) + nToHitChance * -5 - nVictimHp) * 2 - nVictimDex + 0x7d;
     if (nVictimHp < 0x41) {
       nVictimHp = 0x41;
     }
@@ -4713,7 +4713,7 @@ static void __stdcall MONSTERAI_ConvertMonstersInRadius(::SGAMEDATA * pGame, D2U
         exit(-1);
       }
 
-      memset(&sUnitFindArg, 0, 0x38);
+      memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
       sUnitFindArg.nX = nPosX;
       sUnitFindArg.nDistance = nUnitType;
       sUnitFindArg.nFlags = 0x583;
@@ -10290,7 +10290,7 @@ int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2Uni
     int nLightMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_lightmaxdam, 0);
     int nMagicMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_magicmaxdam, 0);
     int nColdMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_coldmaxdam, 0);
-    int nPoisonMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0);
+    int nPoisonMaxDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0) >> 8;
     BOOL isCold = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold);
     nCurrentLifePct = D2Common::Units::GetCurrentLifePercentage(pTarget);
     int nRightSkillLevel = 0;
@@ -10345,7 +10345,7 @@ int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2Uni
       }
     }
 
-    int nRet = (int)((nCurrentLifePct < 0x14 ? 0x64 : 0) * 3 + (nPlayerColdRes + (nPlayerDr + nPlayerMagicRes * 2) * 4 + nPlayerLightRes + nPlayerFireRes) / 0xf + (int)(pTarget->unk0x19 + nArenaRiskBonus - 0x19) * 5 + (nSkillRankLeftAndRight / 4 + (isCold ? 100 : 0) * 2 + ((nPoisonMaxDmg >> 8) + nColdMaxDmg + nMagicMaxDmg + nLightMaxDmg + nTotalSkillThreat + nMaxDmg) / 2) * 2) / 0x16;
+    int nRet = (int)((nCurrentLifePct < 0x14 ? 0x64 : 0) * 3 + (nPlayerColdRes + (nPlayerDr + nPlayerMagicRes * 2) * 4 + nPlayerLightRes + nPlayerFireRes) / 0xf + (int)(pTarget->unk0x19 + nArenaRiskBonus - 0x19) * 5 + (nSkillRankLeftAndRight / 4 + (isCold ? 100 : 0) * 2 + (nPoisonMaxDmg + nColdMaxDmg + nMagicMaxDmg + nLightMaxDmg + nTotalSkillThreat + nMaxDmg) / 2) * 2) / 0x16;
     if (nRet) {
       return nRet;
     }
@@ -11067,7 +11067,7 @@ void __fastcall AITHINK_Fn1_Diablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
       nTargetPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nSkillIdx = pHomeCmdCopy->nCmdArg[1];
       nMonStat = pMonAi->nCmdArg[2];
-      nDistToHomePt = MONSTERAI_GetDistanceToCoords(pUnit, nSkillIdx, nMonStat);
+      nDistToHomePt = MONSTERAI_GetDistanceToCoords(pUnit, nSkillIdx, nMonStat) >> 1;
       nMonAi = 0x0;
       nAiParam = 0x0;
       if ((int)nTargetRisk < nSkillIdx) {
@@ -11084,7 +11084,7 @@ void __fastcall AITHINK_Fn1_Diablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
       }
 
       ApplyCombatAndMonStats(pUnit, 0, 0x32, 'd');
-      nDecision = MONSTERAI_CommandWalkToCoords(pGame, pUnit, (nDistToHomePt >> 1) * nMonAi + nSkillIdx, (int32_t)(nMonStat + 0x10 + (nDistToHomePt >> 1) * nAiParam - 0x10));
+      nDecision = MONSTERAI_CommandWalkToCoords(pGame, pUnit, nDistToHomePt * nMonAi + nSkillIdx, (int32_t)(nMonStat + 0x10 + nDistToHomePt * nAiParam - 0x10));
       if (nDecision) {
         pAiGeneral->dwArg0 = 0;
         return;
@@ -15400,65 +15400,65 @@ void __fastcall AITHINK_Fn1_Bighead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nAiParam = *pDistanceField;
-    if (!bEngagedInCombat) {
-      BOOL bIsAttacking;
-      bIsAttacking = MONSTERAI_IsMonsterAttacking(pUnit);
-      if (bIsAttacking) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
-        return;
-      }
-    }
+    BOOL bIsAttacking;
+    bIsAttacking = !bEngagedInCombat ? MONSTERAI_IsMonsterAttacking(pUnit) : 0;
+    if (!bIsAttacking) {
+      int32_t nDistanceToTarget = thunk_GetCurrentLifePercentage(pUnit);
+      if (nDistanceToTarget >= pMonStats->aip[0][pGame->nDifficulty]) {
+        if (bEngagedInCombat) {
+          AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+          return;
+        }
+        if (nAiParam < 0xf) {
+          pNewTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&pAiParam, bInBurrowRange);
+          if (pNewTarget) {
+            nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
+            if ((int)nRoll < (int)pMonStats->aip[2][pGame->nDifficulty]) {
+              AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+              return;
+            }
+          }
+        }
 
-    int32_t nDistanceToTarget = thunk_GetCurrentLifePercentage(pUnit);
-    if (nDistanceToTarget >= pMonStats->aip[0][pGame->nDifficulty]) {
-      if (bEngagedInCombat) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+        MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
         return;
       }
-      if (nAiParam < 0xf) {
+      if (nAiParam < 3) {
+        ApplyCombatAndMonStats(pUnit, 0, 0x32, '\0');
+        nDistanceToTarget = WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x05', 1);
+        if (!nDistanceToTarget) {
+          AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+          return;
+        }
+      } else {
+        if (nAiParam > 0xf) {
+          MONSTERAI_CommandWalkToUnitMinStep(pGame, pUnit, pTarget, 6);
+          return;
+        }
+
         pNewTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&pAiParam, bInBurrowRange);
         if (pNewTarget) {
           nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-          if ((int)nRoll < (int)pMonStats->aip[2][pGame->nDifficulty]) {
+          if ((int)nRoll < (int)pMonStats->aip[3][pGame->nDifficulty]) {
             AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
             return;
           }
         }
-      }
 
-      MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
-      return;
-    }
-    if (nAiParam < 3) {
-      ApplyCombatAndMonStats(pUnit, 0, 0x32, '\0');
-      nDistanceToTarget = WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x05', 1);
-      if (!nDistanceToTarget) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
-        return;
-      }
-    } else {
-      if (nAiParam > 0xf) {
-        MONSTERAI_CommandWalkToUnitMinStep(pGame, pUnit, pTarget, 6);
-        return;
-      }
-
-      pNewTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&pAiParam, bInBurrowRange);
-      if (pNewTarget) {
         nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-        if ((int)nRoll < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-          AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+        if ((int)nRoll >= (int)pMonStats->aip[1][pGame->nDifficulty]) {
+          PlanNextAiMove(pGame, pUnit, 10);
           return;
         }
+
+        SetCombatStateAndApproachTarget(pGame, pUnit, pTarget, 3, 0);
       }
 
-      nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRoll >= (int)pMonStats->aip[1][pGame->nDifficulty]) {
-        PlanNextAiMove(pGame, pUnit, 10);
-        return;
-      }
-
-      SetCombatStateAndApproachTarget(pGame, pUnit, pTarget, 3, 0);
+      return;
     }
+
+    AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+    return;
 }
 
 // Blood Hawk AI tick (AI function 1). When not engaged, rolls against difficulty-scaled MonStats fields to decide: charge the target (sets dwArg0=1 and walks toward it), wander randomly, or stand still. When engaged (dwArg0==1 previously set), rolls again to decide whether to break off the charge via CalledOnEndAiFunction1 or continue walking toward the target. Uses the unit's seed RNG and pGame->nDifficulty to scale probabilities.
@@ -19466,10 +19466,10 @@ uint32_t __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, D2UnitStrc * 
               pScan->nNearestDistance = nDistance;
             }
 
-            nHitpoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-            if (nHitpoints >> 8 < pScan->nWeakestLife) {
+            nHitpoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) >> 8;
+            if (nHitpoints < pScan->nWeakestLife) {
               pScan->pWeakestUnit = pTarget;
-              pScan->nWeakestLife = nHitpoints >> 8;
+              pScan->nWeakestLife = nHitpoints;
             }
             if (nDistance < pScan->nNearestWhenPlayerDistance && pUnit && pUnit->eUnitType == UNIT_PLAYER) {
               pScan->pNearestWhenPlayer = pTarget;

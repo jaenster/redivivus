@@ -1889,10 +1889,10 @@ int32_t __stdcall GetBeltType(D2UnitStrc * pUnit) {
 }
 
 int32_t __stdcall GetCurrentLifePercentage(D2UnitStrc * pUnit) {
-    int nCurHp = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = Stats::StatsEx::GetTxtMaxHp(pUnit);
-    if (nMaxHp >> 8) {
-      return (nCurHp >> 8) * 100 / (nMaxHp >> 8);
+    int nCurHp = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
+    int32_t nMaxHp = Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    if (nMaxHp) {
+      return nCurHp * 100 / nMaxHp;
     }
 
     return 0;

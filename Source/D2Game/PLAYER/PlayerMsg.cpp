@@ -899,15 +899,15 @@ static uint8_t GetHPRegen(D2UnitStrc * pUnit) {
     int nHpRegen;
     int nGameFrame;
     int nHP = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
     D2StatListExStrc* pHpPotStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_healthpot);
-    if (pHpPotStatList && nMaxHp >> 8) {
+    if (pHpPotStatList && nMaxHp) {
       uint8_t byPct;
       pGame = UNIT::SUnit::GetGamePointer(pUnit);
       pStatListFullPtr = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pHpPotStatList);
       nGameFrame = pGame->dwGameFrame;
       nHpRegen = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pHpPotStatList, UNITSTAT_hpregen, 0);
-      byPct = (uint8_t)((nHpRegen * (pStatListFullPtr - nGameFrame) + nHP >> 8) * 100 / (nMaxHp >> 8));
+      byPct = (uint8_t)((nHpRegen * (pStatListFullPtr - nGameFrame) + nHP >> 8) * 100 / nMaxHp);
       if (byPct > 100) {
         return 100;
       }
@@ -983,8 +983,8 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
     int nHpDiff;
     nHpDiff = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     int32_t nMaxHp;
-    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
-    if (nMaxHp >> 8 <= 0) {
+    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    if (nMaxHp <= 0) {
       return 0;
     }
 
@@ -994,7 +994,7 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
       nMana = -nMana;
     }
     if (!bForceUpdate) {
-      if (nMana * 100 / (nMaxHp >> 8) < 10) {
+      if (nMana * 100 / nMaxHp < 10) {
         return 0;
       }
       if (!(nHpDiff >> 8) && pBasics->health) {

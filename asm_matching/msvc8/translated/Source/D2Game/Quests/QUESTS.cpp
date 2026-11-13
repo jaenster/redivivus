@@ -1489,8 +1489,8 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, D2UnitS
 static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, D2UnitStrc * pUnit, int32_t nNpcIdCount) {
     int i;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = pPlayerData->pInteractedNPCs[pGame->nDifficulty];
     for (i = 0; i < nNpcIdCount; i++) {
-      D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = pPlayerData->pInteractedNPCs[pGame->nDifficulty];
       PLAYER::PlayerIntro::INTRONPC_SetSpokenWithNPC_Intro2(pInteractedNPCs, pNpcIdArray[i]);
     }
 }

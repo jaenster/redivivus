@@ -5295,10 +5295,11 @@ void __fastcall SKILLDESC_DrawSkillDmgTrap(D2UnitStrc * pUnit, D2SkillStrc * pSk
     int32_t nElemType = 0;
     SKILLDESC_CalcWeaponDamageRange(pUnit, &nMinDmgAccum, (int*)&nSkillsTxt2, &nElemType, 0, pSkill, 0, nullptr, 0, 0);
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UI\\SkillDesc.cpp", 0xd40);
-    if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId)) {
+    D2SkillsTxt* pSkillsTxt2 = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
+    if (!pSkillsTxt2) {
       nTrapDmgBonus = 0;
     } else {
-      nTrapDmgBonus = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].Param[4];
+      nTrapDmgBonus = pSkillsTxt2->Param[4];
     }
 
     nMinDmgAccum += nTrapDmgBonus * nMinDmgAccum / 100;
@@ -5604,14 +5605,14 @@ static void __stdcall SKILLDESC_DescLineA_AppendDamageType(D2UnitStrc * pUnit, u
 }
 
 static void __stdcall SKILLDESC_DescLine32_MissileDamage(D2UnitStrc * pUnit, int32_t nLevel, int32_t nMissileId, uint16_t * wszText, uint16_t wDmgTypeLocaleId) {
-    int32_t nMinElemDmg = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, nMissileId, nLevel);
-    int32_t nMaxElemDmg = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, nMissileId, nLevel);
-    if (!(nMinElemDmg >> 8) && !(nMaxElemDmg >> 8)) {
+    int32_t nMinElemDmg = D2Common::Units::Missile::GetMinElemDamage(nullptr, pUnit, nMissileId, nLevel) >> 8;
+    int32_t nMaxElemDmg = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pUnit, nMissileId, nLevel) >> 8;
+    if (!nMinElemDmg && !nMaxElemDmg) {
       return;
     }
 
     uint8_t byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nMissileId);
-    DamgeTypeToText((uint32_t)byElemType, wDmgTypeLocaleId, nMinElemDmg >> 8, nMaxElemDmg >> 8, wszText);
+    DamgeTypeToText((uint32_t)byElemType, wDmgTypeLocaleId, nMinElemDmg, nMaxElemDmg, wszText);
 }
 
 static void __stdcall SKILLDESC_DescLine9_ElemDamage(D2UnitStrc * pUnit, uint16_t * wszText, int32_t eSkill, int32_t nFlatBonus, int32_t nSkillLevel, uint32_t nPercentBonus) {
@@ -7034,8 +7035,8 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       return 1;
       case 0x31:
         nSigned = D2Common::Skills::SKILL_CalcMinDamage(pUnitLocal, eSkill, nSkillLevel, 1);
-      nDescResult = D2Common::Skills::SKILL_CalcMaxDamage(pUnitLocal, eSkill, nSkillLevel, 1);
-      SKILLDESC_FormatDamageMinMax(nSigned >> 8, nDescResult >> 8, pwszOutput, 1, wDescTextA, 1);
+      nDescResult = D2Common::Skills::SKILL_CalcMaxDamage(pUnitLocal, eSkill, nSkillLevel, 1) >> 8;
+      SKILLDESC_FormatDamageMinMax(nSigned >> 8, nDescResult, pwszOutput, 1, wDescTextA, 1);
       return 1;
       case 0x32:
         SKILLDESC_DescLine32_MissileDamage(pUnitLocal, nSkillLevel, (int)pSkillDescLocal->descmissile[0], pwszOutputLocal, wDescTextA);

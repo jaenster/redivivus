@@ -485,8 +485,8 @@ static int __stdcall SFILE_CheckArchiveHandle(D2ArchiveStrc * pArchive, D2Archiv
 }
 
 static uint32_t SFILE_FileExistsOnDisk(LPCSTR szText) {
-    DWORD dwFileAttributes = GetFileAttributesA(szText);
-    return ~(dwFileAttributes >> 4) & 1;
+    DWORD dwFileAttributes = (DWORD)GetFileAttributesA(szText) >> 4;
+    return ~dwFileAttributes & 1;
 }
 
 // @blizzard CheckFileHandle (SFILE.CPP)

@@ -420,7 +420,7 @@ int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * 
       return 2;
     }
 
-    memset(&pSaveNpc, 0, 0x34);
+    memset(&pSaveNpc, 0, sizeof(pSaveNpc));
     pSaveNpc.szMagic = 0x7701;
     pSaveNpc.nSize = 0x34;
     uint8_t (*pDest)[8] = pSaveNpc.pActNpcBitInfo;

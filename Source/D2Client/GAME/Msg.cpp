@@ -167,8 +167,8 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     gdwLastPingSentTick = dwTick;
     packet.nId = 0x6d;
     packet.nTickCount = GetTickCount();
-    uint32_t nGameDataDelay = Game::GAME_GetAveragePing();
-    packet.nDelay = nGameDataDelay >> 1;
+    uint32_t nGameDataDelay = Game::GAME_GetAveragePing() >> 1;
+    packet.nDelay = nGameDataDelay;
     packet.nWardenOrZero = nWardenChecksum * -0x49bf21bf;
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(0xd, 0, (char*)&packet);
     gnD2GSBytesSentTotal += 0xd;
@@ -622,6 +622,7 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t 
 
 void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID, int32_t bToggle) {
     D2GSPacketClt0x5D sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
     sPacket.bToggle = bToggle != 0;
     sPacket.nId = 0x5d;
     sPacket.nActionType = (uint8_t)nActionType;
@@ -633,6 +634,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID,
 
 void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID) {
     D2GSPacketClt0x5E sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
     sPacket.nId = 0x5e;
     sPacket.nActionType = (uint8_t)nActionType;
     sPacket.nPlayerGUID = nPlayerGUID;

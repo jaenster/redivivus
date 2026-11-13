@@ -795,8 +795,8 @@ static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pU
           _bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pTarget, pUnit, 0x3c01);
           if (!_bInRange) {
             memset(&sDamage, 0, 0x70);
-            nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-            sDamage.dwPhysDamage = nTargetHp >> 5;
+            nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) >> 5;
+            sDamage.dwPhysDamage = nTargetHp;
             sDamage.wResultFlags = 1;
             _bInRange = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_uninterruptable);
             if (!_bInRange) {
@@ -944,7 +944,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
             return 1;
           }
 
-          memset(&sMonStats, 0, 0x38);
+          memset(&sMonStats, 0, sizeof(sMonStats));
           nVictimClassIdForStats = pVictim->nClassId;
           pScaledStatsOut = &sMonStats.nMinHP;
           D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nVictimClassIdForStats, pGame->eGameType, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_level, 0), 1, (D2MonStatsInitStrc*)pScaledStatsOut);

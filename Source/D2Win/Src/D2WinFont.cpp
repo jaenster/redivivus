@@ -1313,8 +1313,8 @@ int32_t __fastcall SetAndReturnLastFont(int32_t nFontId) {
     D2FontCacheEntryStrc* pNewCacheEntry;
     int32_t pReturnFont = gnLastUsedFontId;
     int32_t pSavedFont = gnLastUsedFontId;
-    DWORD dwTickCount = GetTickCount();
-    uint32_t nLRUTick = dwTickCount >> 10;
+    DWORD dwTickCount = (DWORD)GetTickCount() >> 10;
+    uint32_t nLRUTick = dwTickCount;
     if (pReturnFont == nFontId) {
       gaFontCache[nFontId].dwLRUTimestamp = nLRUTick;
       return pReturnFont;

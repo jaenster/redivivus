@@ -206,17 +206,17 @@ int32_t __stdcall GetDistanceBetweenUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit
       }
     } else {
       uint32_t nSizeX1;
-      nSizeX1 = Units::GetUnitSizeX(pUnit1Saved);
-      nSizeX2 = Units::GetUnitSizeX(pUnit2);
-      eUnitType2 = (nSizeX2 >> 1) + (nSizeX1 >> 1);
+      nSizeX1 = (uint32_t)Units::GetUnitSizeX(pUnit1Saved) >> 1;
+      nSizeX1 += (uint32_t)((uint32_t)Units::GetUnitSizeX(pUnit2) >> 1);
+      eUnitType2 = nSizeX1;
       if (eUnitType2 < 0) {
         eUnitType2 = -eUnitType2;
       }
 
       eUnitType2 = nUnit - eUnitType2;
-      nSizeAdj2 = Units::GetUnitSizeX(pUnit1Saved);
-      nSizeX2Tmp = Units::GetUnitSizeX(pUnit2);
-      nSizeAdjY = (nSizeX2Tmp >> 1) + (nSizeAdj2 >> 1);
+      nSizeAdj2 = (uint32_t)Units::GetUnitSizeX(pUnit1Saved) >> 1;
+      nSizeAdj2 += (uint32_t)((uint32_t)Units::GetUnitSizeX(pUnit2) >> 1);
+      nSizeAdjY = nSizeAdj2;
       if (nSizeAdjY < 0) {
         nSizeAdjY = -nSizeAdjY;
       }

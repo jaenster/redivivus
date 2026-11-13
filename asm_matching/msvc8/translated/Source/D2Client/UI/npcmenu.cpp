@@ -5670,36 +5670,35 @@ int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
 }
 
 static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSpeechIndex) {
-    if (_Interaction::bInteractingWithNpc) {
-      D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pNpcUnit) {
-        gnNpcMenuActiveMode = 1;
-        Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
-        Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
-        Dialog::gpNpcGossipDialog = 0;
-        gpNpcCurrentSpeech->field5_0x11 = true;
-        if (gbNpcMenuRandomDialogSeed == '\0') {
-          NPCMENU_RandomizeAllNpcDialogs();
-          if (bUseGossip != '\0') {
-            nSpeechIndex = gpNpcCurrentSpeech->nGossip;
-          }
-        }
-        if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-        } else {
-          pNpcUnit = 0;
-        }
-
-        Text::TEXT_ShowNpcDialog(pNpcUnit, gpNpcCurrentSpeech->pBank[nSpeechIndex % gpNpcCurrentSpeech->nCount].wStringId, 0);
-        return;
-      }
+    D2UnitStrc* pNpcUnit;
+    pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
+    if (!pNpcUnit) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return;
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+    gnNpcMenuActiveMode = 1;
+    Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
+    Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
+    Dialog::gpNpcGossipDialog = 0;
+    gpNpcCurrentSpeech->field5_0x11 = true;
+    if (gbNpcMenuRandomDialogSeed == '\0') {
+      NPCMENU_RandomizeAllNpcDialogs();
+      if (bUseGossip != '\0') {
+        nSpeechIndex = gpNpcCurrentSpeech->nGossip;
+      }
+    }
+    if (_Interaction::bInteractingWithNpc) {
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    } else {
+      pNpcUnit = 0;
+    }
+
+    Text::TEXT_ShowNpcDialog(pNpcUnit, gpNpcCurrentSpeech->pBank[nSpeechIndex % gpNpcCurrentSpeech->nCount].wStringId, 0);
+    return;
 }
 
 // A two-liner:
@@ -5960,37 +5959,36 @@ int __stdcall NPCMENU_TradeDrawCallback() {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
       Dialog::gpNpcMainMenuDialog = 0;
     }
-    if (_Interaction::bInteractingWithNpc) {
-      D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pNpcUnit) {
-        if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-        } else {
-          pNpcUnit = 0;
-        }
 
-        Text::TEXT_ShowNpcDialog(pNpcUnit, gnNpcMenuRepairCostGold, 0);
-        if (gnNpcMenuScrollMessageHead < 9) {
-          gaNpcMenuHandledMessageIds[gnNpcMenuScrollMessageHead] = gnNpcMenuRepairCostGold;
-          gnNpcMenuScrollMessageHead++;
-        }
-        if (gnNpcMenuTradeActionGold == -1) {
-          _Interaction::geNpcUiState = NPCUI_NONE;
-        } else {
-          gnNpcMenuActiveMode = 1;
-          Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)NPCMENU_OnScrollComplete, nullptr);
-        }
-
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, _Interaction::nCurrentInteractedNpcGUID, (uint32_t)gnNpcMenuRepairCostGold);
-        return 1;
+    D2UnitStrc* pNpcUnit;
+    pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
+    if (!pNpcUnit) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+    } else {
+      if (_Interaction::bInteractingWithNpc) {
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      } else {
+        pNpcUnit = 0;
       }
+
+      Text::TEXT_ShowNpcDialog(pNpcUnit, gnNpcMenuRepairCostGold, 0);
+      if (gnNpcMenuScrollMessageHead < 9) {
+        gaNpcMenuHandledMessageIds[gnNpcMenuScrollMessageHead] = gnNpcMenuRepairCostGold;
+        gnNpcMenuScrollMessageHead++;
+      }
+      if (gnNpcMenuTradeActionGold == -1) {
+        _Interaction::geNpcUiState = NPCUI_NONE;
+      } else {
+        gnNpcMenuActiveMode = 1;
+        Text::TEXT_SetScrollCompleteCallback((pfnTextScrollComplete)NPCMENU_OnScrollComplete, nullptr);
+      }
+
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x31, _Interaction::nCurrentInteractedNpcGUID, (uint32_t)gnNpcMenuRepairCostGold);
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
     return 1;
 }
 
@@ -7642,54 +7640,48 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
 // Otherwise closes the interaction and returns 0. Sends no packet.
 int __stdcall NPCMENU_TalkOptionCallback() {
     int nNpcSpeechIdx;
-    if (_Interaction::bInteractingWithNpc) {
-      D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pNpcUnit) {
-        if (Dialog::gpNpcInteractionDialog) {
-          Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
-          Dialog::gpNpcInteractionDialog = 0;
-        }
-
-        _Interaction::geNpcUiState = NPCUI_MENU;
-        nNpcSpeechIdx = CheckSpeachVersusInteractedUnit();
-        gpNpcCurrentSpeech = D2NPCSpeech + nNpcSpeechIdx;
-        NPCMENU_ShowTalkDialog(0xd35, nNpcSpeechIdx);
-        return 1;
-      }
+    D2UnitStrc* pNpcUnit;
+    pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
+    if (!pNpcUnit) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return 0;
+    }
+    if (Dialog::gpNpcInteractionDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
+      Dialog::gpNpcInteractionDialog = 0;
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-    return 0;
+    _Interaction::geNpcUiState = NPCUI_MENU;
+    nNpcSpeechIdx = CheckSpeachVersusInteractedUnit();
+    gpNpcCurrentSpeech = D2NPCSpeech + nNpcSpeechIdx;
+    NPCMENU_ShowTalkDialog(0xd35, nNpcSpeechIdx);
+    return 1;
 }
 
 // Akara's "Reset Stat/Skill Points" option callback (stored by NPCMENU_EnableAkaraRespecOption, row 0 slot 2). If the interacted NPC still exists: frees the NPC dialog, CheckSpeachVersusInteractedUnit, then opens the respec confirmation dialog (NPCMENU_ShowNpcActionConfirmDialog(11168), an OK/Cancel dialog builder) and returns 1.
 // Otherwise closes the NPC interaction, clears UI_NPCMENU and returns 0.
 int __stdcall NPCMENU_AkaraRespecOptionCallback() {
-    if (_Interaction::bInteractingWithNpc) {
-      D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pNpcUnit) {
-        if (Dialog::gpNpcInteractionDialog) {
-          Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
-          Dialog::gpNpcInteractionDialog = 0;
-        }
-
-        _Interaction::geNpcUiState = NPCUI_MENU;
-        CheckSpeachVersusInteractedUnit();
-        NPCMENU_ShowNpcActionConfirmDialog(0x2ba0);
-        return 1;
-      }
+    D2UnitStrc* pNpcUnit;
+    pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
+    if (!pNpcUnit) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return 0;
+    }
+    if (Dialog::gpNpcInteractionDialog) {
+      Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
+      Dialog::gpNpcInteractionDialog = 0;
     }
 
-    _Interaction::geNpcUiState = NPCUI_NONE;
-    Inv::INV_ResetHoverAndContextState();
-    NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-    ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-    return 0;
+    _Interaction::geNpcUiState = NPCUI_MENU;
+    CheckSpeachVersusInteractedUnit();
+    NPCMENU_ShowNpcActionConfirmDialog(0x2ba0);
+    return 1;
 }
 
 // Akara (monstats 148) menu row 0: adds option string 11168 (respec) with callback NPCMENU_AkaraRespecOptionCallback.

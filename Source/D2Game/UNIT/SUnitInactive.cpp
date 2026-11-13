@@ -1455,7 +1455,8 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     }
 
     nMonStatsExIdx = pUnit->nClassId;
-    if (nMonStatsExIdx < 0 || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (nMonStatsExIdx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsExIdx].MonStatsEx , nMonStatsExIdx < 0) || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExIdx) || (cMonStatsExField = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStatsExIdx].byRestore , !cMonStatsExField)) {
+    D2MonStats2Txt* pMonStatsExTxt;
+    if (nMonStatsExIdx < 0 || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(nMonStatsExIdx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsExIdx].MonStatsEx , pMonStatsExTxt = nMonStatsExIdx >= 0 && nMonStatsExIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExIdx : nullptr) || (cMonStatsExField = pMonStatsExTxt->byRestore , !cMonStatsExField)) {
       bShouldSave = false;
     } else if (cMonStatsExField == 2) {
       bShouldSave = true;

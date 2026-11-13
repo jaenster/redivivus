@@ -344,9 +344,10 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
           while ((int)nSetBitIdx >= 0) {
             aStateFlagDwords[((int)nSetBitIdx >> 5) + nDwordIdxSaved] &= Fog::BitBuffer::gadwInvBitMasks[nSetBitIdx & 0x1f];
             eState = nSetBitIdx + nStateBaseIdx;
-            if ((int)eState < 0 || (int)eState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState)) {
+            D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+            if (!pStatesTxt) {
               nFlagDwordVal = *pFlagDword;
-            } else if (*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtStates[eState] + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+            } else if (*((uint8_t*)pStatesTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
               nFlagDwordVal = *pFlagDword;
             } else {
               nBitPos = Fog::BitBuffer::GetNextPositon(&bitBuf);
@@ -492,10 +493,11 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
           while ((int)nSetBitIdx >= 0) {
             aStateFlagDwords[((int)nSetBitIdx >> 5) + nDwordIdx] &= Fog::BitBuffer::gadwInvBitMasks[nSetBitIdx & 0x1f];
             eStateId = nSetBitIdx + nStateBaseIdx;
-            if ((int)eStateId < 0 || (int)eStateId >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eStateId)) {
+            D2StatesTxt* pStatesTxt = (int)eStateId >= 0 && (int)eStateId < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eStateId : nullptr;
+            if (!pStatesTxt) {
               nFlagDwordVal = *pCurFlagDword;
             } else {
-              if (*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtStates[eStateId] + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+              if (*((uint8_t*)pStatesTxt + 0x10) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
                 nFlagDwordVal = *pCurFlagDword;
               } else {
                 eCurState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eStateId);

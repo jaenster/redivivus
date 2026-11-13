@@ -548,8 +548,8 @@ void __fastcall SKILL_CreateLeapArcParticle(D2UnitStrc * pUnit, D2SkillStrc * pS
 
     int32_t nParam1 = D2Common::Skills::SKILL_GetParam1(pSkill);
     int32_t nDestY = D2Common::Skills::SKILL_GetParam2(pSkill);
-    int32_t nVelocity = D2Common::PATH::DynamicPath::GetVelocity(pDynamicPath);
-    if (!(nVelocity >> 8)) {
+    int32_t nVelocity = D2Common::PATH::DynamicPath::GetVelocity(pDynamicPath) >> 8;
+    if (!nVelocity) {
       return;
     }
 
@@ -558,7 +558,7 @@ void __fastcall SKILL_CreateLeapArcParticle(D2UnitStrc * pUnit, D2SkillStrc * pS
       nParam1 = 1;
     }
 
-    int32_t nLeapFrames = (nParam1 << 0x10) / (nVelocity >> 8 << 0xc);
+    int32_t nLeapFrames = (nParam1 << 0x10) / (nVelocity << 0xc);
     if (nLeapFrames > 1) {
       nLeapFrames--;
     }

@@ -458,21 +458,33 @@ BOOL __fastcall Skills_CltDoFunc_EMon_ScreenShake(D2UnitStrc * pUnit, eD2Skills 
     int nRampUpFrames;
     int nHoldFrames;
     int nRampDownFrames;
-    int32_t nDuration = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill) ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].Param[0];
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    int32_t nDuration;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
+      nDuration = 0;
+    } else {
+      nDuration = pSkillsTxt->Param[0];
+    }
+
+    D2SkillsTxt* pSkillsTxt2 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt2) {
       nRampUpFrames = 0;
     } else {
-      nRampUpFrames = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].Param[1];
+      nRampUpFrames = pSkillsTxt2->Param[1];
     }
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+
+    D2SkillsTxt* pSkillsTxt3 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt3) {
       nHoldFrames = 0;
     } else {
-      nHoldFrames = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].Param[2];
+      nHoldFrames = pSkillsTxt3->Param[2];
     }
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+
+    D2SkillsTxt* pSkillsTxt4 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt4) {
       nRampDownFrames = 0;
     } else {
-      nRampDownFrames = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].Param[3];
+      nRampDownFrames = pSkillsTxt4->Param[3];
     }
 
     GAME::View::SetShake(nDuration, nRampUpFrames * 1000 / 0x19, nHoldFrames * 1000 / 0x19, nRampDownFrames * 1000 / 0x19);

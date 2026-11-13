@@ -1613,8 +1613,8 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
       pEditBox->bPendingPush = 0;
     }
     if (pEditBox->bPendingPush) {
-      pEditBoxPush.uMsg = 0x201;
       pEditBoxPush.pControl = &pEditBox->sControl;
+      pEditBoxPush.uMsg = 0x201;
       D2WinEditBox::Push(&pEditBoxPush);
     }
 

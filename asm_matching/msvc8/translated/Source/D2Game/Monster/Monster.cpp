@@ -604,7 +604,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       nRoom = 0x1;
     }
 
-    memset(&sMonStats, 0, 0x38);
+    memset(&sMonStats, 0, sizeof(sMonStats));
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(pUnit->nClassId, nRoom, (uint32_t)pMonRegionField, nMonLevel, 7, &sMonStats);
     nTmpVal = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, sMonStats.nMaxHP - sMonStats.nMinHP + 1);
     int32_t nScaledStat = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nTmpVal + sMonStats.nMinHP, monLevelData.nPlayerMultiplyer, 100);

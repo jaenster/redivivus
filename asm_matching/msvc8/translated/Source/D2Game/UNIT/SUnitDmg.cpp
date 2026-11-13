@@ -391,10 +391,11 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
 
     D2StatListExStrc* pColdStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_cold);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER || (nMonClassId = pUnit2->nClassId , nMonClassId < 0) || nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId)) {
+    D2MonStatsTxt* pMonStatsTxt;
+    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER || !(nMonClassId = pUnit2->nClassId , pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr)) {
       nColdEffectPct = -0x32;
     } else {
-      nColdEffectPct = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].aColdEffect[pGame->nDifficulty];
+      nColdEffectPct = (int)pMonStatsTxt->aColdEffect[pGame->nDifficulty];
       if (!nColdEffectPct) {
         return;
       }
@@ -3072,7 +3073,7 @@ void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, D2UnitStrc *
       nUnitFlags = 0x583;
     }
 
-    memset(&sUnitFindArg, 0, 0x38);
+    memset(&sUnitFindArg, 0, sizeof(sUnitFindArg));
     sUnitFindArg.nFlags = nUnitFlags;
     sUnitFindArg.nDistance = nRadius;
     sUnitFindArg.nY = nCenterY;

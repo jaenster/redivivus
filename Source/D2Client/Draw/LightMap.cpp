@@ -1069,10 +1069,10 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
           pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
         }
         if (pUnit) {
-          nPrecisionX = D2Common::Units::GetPrecisionX(pUnit);
-          nPrecisionY = D2Common::Units::GetPrecisionY(pUnit);
-          pLightMap->nGridX = (nPrecisionX >> 0xd) + 4;
-          pLightMap->nGridY = (nPrecisionY >> 0xd) + 4;
+          nPrecisionX = D2Common::Units::GetPrecisionX(pUnit) >> 0xd;
+          nPrecisionY = D2Common::Units::GetPrecisionY(pUnit) >> 0xd;
+          pLightMap->nGridX = nPrecisionX + 4;
+          pLightMap->nGridY = nPrecisionY + 4;
         }
       }
     }

@@ -90,7 +90,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     int nLightMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_lightmaxdam, 0);
     int nMagicMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_magicmaxdam, 0);
     int nColdMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_coldmaxdam, 0);
-    int nPoisonMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0);
+    int nPoisonMaxDam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_poisonmaxdam, 0) >> 8;
     BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_cold);
     nLifePercent = D2Common::Units::GetCurrentLifePercentage(pTarget);
     int nLeftSkillLevel = 0;
@@ -141,7 +141,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
       }
     }
 
-    nPhysRes = (int)((nLifePercent < 0x14 ? 0x64 : 0) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + ((nPoisonMaxDam >> 8) + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
+    nPhysRes = (int)((nLifePercent < 0x14 ? 0x64 : 0) * 3 + (nColdRes + nLightRes + (nPhysRes + nMagicRes * 2) * 4 + nFireRes) / 0xf + (nAnchorBonus + nMeleeScore) * 5 + (nSkillThreatScore / 4 + (eUnitState ? 100 : 0) * 2 + (nPoisonMaxDam + nColdMaxDam + nMagicMaxDam + nLightMaxDam + nFireMaxDam + nTotalMaxDam) / 2) * 2) / 0x16;
     if (nPhysRes) {
       return nPhysRes;
     }

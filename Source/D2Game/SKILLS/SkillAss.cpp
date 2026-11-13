@@ -1785,9 +1785,9 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
     sSkillArg.pOwner = pOwner;
     sSkillArg.nMissileTxtNo = pMissileTxtId;
     sSkillArg.nFlags = 0x420;
+    sSkillArg.pMissile = pUnit;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
-    sSkillArg.pMissile = pUnit;
     if (nMissileCount <= 1 || nSpread < 2) {
       sSkillArg.nUnitY = nTargetY;
       sSkillArg.nUnitX = nTargetX;
@@ -2145,7 +2145,6 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
 
 // Server-side skill event handler. Builds a D2StateExArgStrc from the event context and applies a timed state via SetStateWithExpiryTime, wiring SKILLNEC_OnCurseExpire as the expiry callback. Copies up to 5 stats into the new stat list, and for monster targets (re)attaches the correct AI. Returns 1 on success, 0 if the unit is dead or state allocation fails.
 uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
-    D2StateExArgStrc sStateArgs;
     int nStatCount;
     eD2Skills* pStatId = (eD2Skills*)pContext->pCallbackArg;
     D2SkillCallbackContextStrc* pContextSaved = pContext;
@@ -2154,6 +2153,8 @@ uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextS
       return 0;
     }
 
+    D2StateExArgStrc sStateArgs;
+    memset(&sStateArgs, 0, sizeof(sStateArgs));
     sStateArgs.pUnit = pContext->pUnit;
     sStateArgs.eSkill = *pStatId;
     sStateArgs.nSkillLvl = pStatId[1];
@@ -2530,10 +2531,12 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
     if (nSkillLvl <= 1) {
       return;
     }
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+
+    D2SkillsTxt* pSkillsTxt2 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt2) {
       nHpBonusPerLevelPct = 0;
     } else {
-      nHpBonusPerLevelPct = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].Param[0];
+      nHpBonusPerLevelPct = pSkillsTxt2->Param[0];
     }
 
     int32_t nValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
