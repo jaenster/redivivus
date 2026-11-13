@@ -22,7 +22,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bd0ecbed"
     },
     {
       "name": "Q26_PlayerUpdateFallenAngelState",
@@ -44,7 +45,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1c0957be"
     },
     {
       "name": "Q26_SequenceFilter",
@@ -65,7 +67,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "27eaae15"
     },
     {
       "name": "Q26_PlayerNotifyCompleted",
@@ -86,7 +89,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "268fff17"
     },
     {
       "name": "Q26_Callback11_ScrollMessage",
@@ -125,7 +129,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "83797a18"
     },
     {
       "name": "Q26_Callback00_NpcActivate",
@@ -151,7 +156,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cbcfaceb"
     },
     {
       "name": "Q26_PartyMember_SetCannotComplete",
@@ -173,7 +179,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2a959a77"
     },
     {
       "name": "Q26_PartyMember_PlayCompleteSound",
@@ -194,7 +201,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b30a7459"
     },
     {
       "name": "Q26_PartyMember_SetCompleted",
@@ -221,7 +229,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "b60fd5d0"
     },
     {
       "name": "Q26_PropagateCompletionToParty",
@@ -243,7 +252,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7701499a"
     },
     {
       "name": "Q26_Callback10_PlayerLeavesGame",
@@ -262,7 +272,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "67bda617"
     },
     {
       "name": "Q26_QuestUpdate_SpawnIzual",
@@ -286,7 +297,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "430a3d8f"
     },
     {
       "name": "Q26_PlayerCheckNearIzual",
@@ -319,7 +331,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "379f3332"
     },
     {
       "name": "Q26_Callback08_MonsterKilled",
@@ -349,7 +362,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "42bb9db5"
     },
     {
       "name": "Q26_Callback03_ChangedLevel",
@@ -375,7 +389,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ae72a0c4"
     },
     {
       "name": "Q26_Callback02_NpcDeactivate",
@@ -395,7 +410,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA4Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "2b8374c2"
     },
     {
       "name": "Q26_Callback13_PlayerStartedGame",
@@ -417,7 +433,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "10cb457e"
     },
     {
       "name": "Q26_InitData",
@@ -437,7 +454,8 @@
       "usedTypes": [
         "D2QuestDataA4Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "eab61f84"
     }
   ]
 }

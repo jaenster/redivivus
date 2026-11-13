@@ -28,7 +28,8 @@
       "usedTypes": [
         "fpProfCoreRegisterSlotCb",
         "uint32_t"
-      ]
+      ],
+      "dh": "a80ae29f"
     },
     {
       "name": "Unreferenced_00611650",
@@ -42,7 +43,8 @@
       "namespace": "D2Common::Logging::ProfCore",
       "calledFunctions": [
         "Unreferenced_00611650"
-      ]
+      ],
+      "dh": "5c4c9e2f"
     },
     {
       "name": "PROFCORE_AccumulateTime",
@@ -60,7 +62,8 @@
       "usedTypes": [
         "LARGE_INTEGER",
         "uint32_t"
-      ]
+      ],
+      "dh": "fbc1186e"
     },
     {
       "name": "D2ProfileDump",
@@ -78,7 +81,8 @@
       ],
       "usedTypes": [
         "LARGE_INTEGER"
-      ]
+      ],
+      "dh": "fc2a7c61"
     },
     {
       "name": "CloseProfCore_Unref_00654ef0",
@@ -93,7 +97,8 @@
       "calledFunctions": [
         "CloseProfCore_Unref_00654ef0",
         "FreeParsedTC"
-      ]
+      ],
+      "dh": "f46d6214"
     }
   ]
 }

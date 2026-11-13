@@ -19,7 +19,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2b414aed"
     },
     {
       "name": "SAVE_CalculateChecksum",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7b374e0d"
     },
     {
       "name": "SAVEFILE_ReadEncodedInt14Bit",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "73260793"
     },
     {
       "name": "SAVEFILE_WriteEncodedInt14Bit",
@@ -72,7 +75,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9c4315f8"
     },
     {
       "name": "SAVEFILE_ReadEncodedInt32Bit",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "00a989bf"
     },
     {
       "name": "FOG_ParseStringValue",
@@ -106,7 +111,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d49bef52"
     }
   ]
 }

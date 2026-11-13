@@ -20,7 +20,8 @@
         "D2QuestDataA1Q5Strc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0026bb5"
     },
     {
       "name": "QUEST_IsPlayerGUIDInTrackingList",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "D2QuestDataA1Q5Strc",
         "int32_t"
-      ]
+      ],
+      "dh": "ecf1a6e5"
     },
     {
       "name": "Q05_NotifyQuestStateToPlayer",
@@ -61,7 +63,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7a9932ed"
     },
     {
       "name": "Q05_SyncQuestStepToPlayer",
@@ -83,7 +86,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2bf47d1e"
     },
     {
       "name": "Q05_Callback11_ScrollMessage",
@@ -114,7 +118,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "dc64da7f"
     },
     {
       "name": "Q05_Callback10_PlayerLeavesGame",
@@ -137,7 +142,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70c114c3"
     },
     {
       "name": "Q05_Callback00_NpcActivate",
@@ -164,7 +170,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d88dcc67"
     },
     {
       "name": "Q05_SetRewardForPlayersInTower",
@@ -196,7 +203,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "51079899"
     },
     {
       "name": "OBJOP_A1Q5_ReadTowerTome",
@@ -222,7 +230,8 @@
         "D2ObjectsTxt",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "79aaf061"
     },
     {
       "name": "Q05_MarkCompleteForPlayersInTower",
@@ -256,7 +265,8 @@
         "eD2LevelId",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "69583156"
     },
     {
       "name": "Q05_OnTowerComplete",
@@ -276,7 +286,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cd2fbf1e"
     },
     {
       "name": "Q05_Callback03_ChangedLevel",
@@ -303,7 +314,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6c6b0f25"
     },
     {
       "name": "Q05_CheckAndUpdateOnAreaEntry",
@@ -332,7 +344,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d277f26a"
     },
     {
       "name": "Q05_SequenceFilter",
@@ -354,7 +367,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6535918d"
     },
     {
       "name": "Q05_ActiveFilter",
@@ -375,7 +389,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dc72d7a"
     },
     {
       "name": "Q05_SetCannotCompleteInGame",
@@ -398,7 +413,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d9972ae3"
     },
     {
       "name": "Q05_SetPartyMemberRewardStates",
@@ -424,7 +440,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "facc9624"
     },
     {
       "name": "Q05_PropagateRewardToParty",
@@ -447,7 +464,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8278bd9d"
     },
     {
       "name": "Q05_SetCompletionForTrackedPlayers",
@@ -475,7 +493,8 @@
         "SGAMEDATA",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "3f44f7e7"
     },
     {
       "name": "Q05_TimerNotifyCompletion",
@@ -496,7 +515,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "31085b5f"
     },
     {
       "name": "Q05_SpawnCountessDeathEffect",
@@ -531,7 +551,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4f8aad3"
     },
     {
       "name": "Q05_TriggerCountessDeathEffect",
@@ -551,7 +572,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "929b81fb"
     },
     {
       "name": "Q05_Callback08_MonsterKilled",
@@ -580,7 +602,8 @@
         "D2QuestDataA1Q5Strc",
         "D2QuestDataStrc",
         "eD2Quests"
-      ]
+      ],
+      "dh": "89d46551"
     },
     {
       "name": "Q05_Callback13_PlayerStartedGame",
@@ -603,7 +626,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "92d7cc62"
     },
     {
       "name": "Q05_InitData",
@@ -625,7 +649,8 @@
         "D2QuestDataA1Q5Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a3d0eb30"
     },
     {
       "name": "Objects_InitFn04_TowerTome",
@@ -649,7 +674,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5dab963b"
     }
   ]
 }

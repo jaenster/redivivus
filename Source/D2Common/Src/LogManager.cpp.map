@@ -17,7 +17,8 @@
         "LOGGING_EnableLogFile",
         "LOGGING_OpenLogFile",
         "fclose"
-      ]
+      ],
+      "dh": "246259a9"
     }
   ]
 }

@@ -30,7 +30,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "05286051"
     },
     {
       "name": "Skills_CltDoFunc_EMon_FallingMissileWithZ",
@@ -75,7 +76,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2eed2bb"
     },
     {
       "name": "Skills_CltDoFunc_EMon_MissileAtOwnerWithZ",
@@ -105,7 +107,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "990dea2a"
     },
     {
       "name": "Skills_CltStFunc_CastBaalTauntMissile",
@@ -130,7 +133,8 @@
         "eMissilesId",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "2a1e92eb"
     },
     {
       "name": "Skills_CltStFunc_CastMissileWithPositionOffset",
@@ -161,7 +165,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bd3712d"
     },
     {
       "name": "Skills_CltStFunc_SpawnCltMissileAtSelf",
@@ -184,7 +189,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "cf38bdd4"
     },
     {
       "name": "Skills_CltDoFunc_EMon_CastAttackMissileB",
@@ -207,7 +213,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "8e0fe06b"
     },
     {
       "name": "Skills_CltDoFunc_EMon_OffsetParticleMissile",
@@ -232,7 +239,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "46e8ae65"
     },
     {
       "name": "SKILLSEMON_CltSetReviveGfx",
@@ -257,7 +265,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "922619db"
     },
     {
       "name": "SKILLSEMON_CltCreateMissileAtUnit",
@@ -287,7 +296,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6ab3de9d"
     },
     {
       "name": "Skills_CltStFunc_SetSrvDoFlagAndReviveGfx",
@@ -311,7 +321,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "73ce3869"
     },
     {
       "name": "Skills_CltDoFunc_EMon_ScreenShake",
@@ -331,7 +342,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "94289cd0"
     },
     {
       "name": "Skills_CltDoFunc_EMon_DelayedLineMissileChain",
@@ -368,7 +380,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4eb23c98"
     },
     {
       "name": "Skills_CltStFunc_SetTimedDurationAndInfernoState",
@@ -395,7 +408,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "fed0ac0b"
     },
     {
       "name": "Skills_CltDoFunc_EMon_InfernoWithZ",
@@ -426,7 +440,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a247915"
     },
     {
       "name": "Skills_CltStFunc_SetParamsFromTargetPositionEMon",
@@ -453,7 +468,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "4a9245b1"
     },
     {
       "name": "Skills_CltDoFunc_EMon_MissileAtParam",
@@ -480,7 +496,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "b4060b3a"
     },
     {
       "name": "Skills_CltStFunc_CheckReviveCorpseSetParams",
@@ -509,7 +526,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "747ae7b0"
     },
     {
       "name": "Skills_CltDoFunc_EMon_MissileAtParamSP1",
@@ -536,7 +554,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "d9fc4667"
     },
     {
       "name": "Skills_CltDoFunc_EMon_HomingToOwner",
@@ -557,7 +576,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "dff30088"
     },
     {
       "name": "Skills_CltDoFunc_EMon_VineAttack",
@@ -601,7 +621,8 @@
         "fpMissileSrvDoFuncData",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "053cf15f"
     },
     {
       "name": "Skills_CltDoFunc_EMon_BloodAndMissileB",
@@ -626,7 +647,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "6c6acb6a"
     },
     {
       "name": "Skills_CltDoFunc_EMon_WallMissileRow",
@@ -662,7 +684,8 @@
         "eD2States",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "db214faa"
     },
     {
       "name": "Skills_CltDoFunc_EMon_PerpendicularMissile2",
@@ -689,7 +712,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "ffa46b64"
     }
   ]
 }

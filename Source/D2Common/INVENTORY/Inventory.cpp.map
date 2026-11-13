@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "1c744d5f"
     },
     {
       "name": "NullSub_Unref_00611640",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "7dd457a9"
     },
     {
       "name": "INVENTORY_GetItemInventoryNode",
@@ -53,7 +55,8 @@
       "usedTypes": [
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c1807db2"
     },
     {
       "name": "INVENTORY_UnlinkItemFromList",
@@ -72,7 +75,8 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "6ede7056"
     },
     {
       "name": "INVENTORY_IsGridRectEmpty",
@@ -93,7 +97,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d41bc646"
     },
     {
       "name": "INVENTORY_FillGridRect",
@@ -114,7 +119,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "df7b8078"
     },
     {
       "name": "INVENTORY_RemoveItemFromGrid",
@@ -139,7 +145,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d6e0897f"
     },
     {
       "name": "Unreferenced_0063aad0",
@@ -156,7 +163,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "260dd0bb"
     },
     {
       "name": "INVENTORY_RemoveItemFromInventory",
@@ -181,7 +189,8 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc",
         "eD2InventoryGrid"
-      ]
+      ],
+      "dh": "847b3785"
     },
     {
       "name": "STRUCT_CreatePlayerInventory",
@@ -202,7 +211,8 @@
         "D2InventoryStrc",
         "D2PoolManagerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ec4fe2fc"
     },
     {
       "name": "STRUCT_FreeInventory",
@@ -225,7 +235,8 @@
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "265589ea"
     },
     {
       "name": "INVENTORY_CheckDoItemBelongToInventory",
@@ -244,7 +255,8 @@
         "D2InventoryStrc",
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "83081cb0"
     },
     {
       "name": "ItemBelongsToInventoryOfPlayer",
@@ -264,7 +276,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4cf07dd7"
     },
     {
       "name": "ReinitializeInventoryGrid",
@@ -289,7 +302,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "15af4d74"
     },
     {
       "name": "INVENTORY_AppendItemToList",
@@ -308,7 +322,8 @@
         "D2InventoryStrc",
         "D2UnitDataItemStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2643b5b3"
     },
     {
       "name": "INVENTORY_InsertItemInPageList",
@@ -328,7 +343,8 @@
         "D2InventoryStrc",
         "D2UnitDataItemStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "696e2412"
     },
     {
       "name": "INVENTORY_PlaceItemInGrid",
@@ -371,7 +387,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "70077721"
     },
     {
       "name": "PutItemInInventory",
@@ -395,7 +412,8 @@
         "D2InventoryStrc",
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1cd08d71"
     },
     {
       "name": "INVENTORY_GetFirstItem",
@@ -413,7 +431,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "17cb4801"
     },
     {
       "name": "INVENTORY_GetLastItem",
@@ -431,7 +450,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5370b393"
     },
     {
       "name": "INVENTORY_CheckItemFitsInGrid",
@@ -452,7 +472,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "54fc5053"
     },
     {
       "name": "INVENTORY_CalcGridPlacementScore",
@@ -473,7 +494,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "42a664e7"
     },
     {
       "name": "INVENTORY_FindBestPlacementWithScore",
@@ -496,7 +518,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "037e232e"
     },
     {
       "name": "INVENTORY_FindFirstEmptySlot",
@@ -517,7 +540,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "41b7b8fb"
     },
     {
       "name": "INVENTORY_FindPlacementSlot",
@@ -540,7 +564,8 @@
         "int *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ef677887"
     },
     {
       "name": "INVENTORY_FindBestGridPosition",
@@ -561,7 +586,8 @@
         "D2InventoryGridInfoStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6febbf34"
     },
     {
       "name": "INVENTORY_FindBestGridPositionNonPlayer",
@@ -582,7 +608,8 @@
         "D2UnitStrc *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "27b14707"
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner",
@@ -605,7 +632,8 @@
         "int *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "93aa7d31"
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner2",
@@ -628,7 +656,8 @@
         "int *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6fa20cf6"
     },
     {
       "name": "INVENTORY_FindGridPositionByOwner3",
@@ -651,7 +680,8 @@
         "int *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ede7ff5a"
     },
     {
       "name": "INVENTORY_FindItemGridPosition",
@@ -680,7 +710,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "50aee4aa"
     },
     {
       "name": "INVENTORY_AutoPlaceItemInGrid",
@@ -702,7 +733,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68760f66"
     },
     {
       "name": "INVENTORY_CheckGridCollisions",
@@ -728,7 +760,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "286aabe5"
     },
     {
       "name": "INVENTORY_CheckGridOccupancy",
@@ -755,7 +788,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9acd17e"
     },
     {
       "name": "Unreferenced_0063bcb0",
@@ -769,7 +803,8 @@
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
         "Unreferenced_0063bcb0"
-      ]
+      ],
+      "dh": "d6e5416b"
     },
     {
       "name": "INVENTORY_PlaceItemAtCoords",
@@ -790,7 +825,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1255791c"
     },
     {
       "name": "UnusedDebug",
@@ -810,7 +846,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aec0d719"
     },
     {
       "name": "NullSub",
@@ -827,7 +864,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "ada99deb"
     },
     {
       "name": "GetUnitAndXAndY",
@@ -853,7 +891,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fe4501a1"
     },
     {
       "name": "INVENTORY_GetItemAtBodyLoc",
@@ -873,7 +912,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b256dcd1"
     },
     {
       "name": "INVENTORY_GetItemByGridOffset",
@@ -895,7 +935,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "031897a1"
     },
     {
       "name": "NullSub_2Arg",
@@ -912,7 +953,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "2115b096"
     },
     {
       "name": "INVENTORY_HasEquippedWeaponClass",
@@ -935,7 +977,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3c9ad244"
     },
     {
       "name": "GetEquipedWeapon",
@@ -957,7 +1000,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "79108c22"
     },
     {
       "name": "GetPrimaryWeapon",
@@ -979,7 +1023,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ce4dbac"
     },
     {
       "name": "INVENTORY_FindWornItemByType",
@@ -1005,7 +1050,8 @@
         "int16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "589ccba8"
     },
     {
       "name": "INVENTORY_IsItemLocationValid",
@@ -1025,7 +1071,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed759708"
     },
     {
       "name": "INVENTORY_GetItemXPosition",
@@ -1045,7 +1092,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1de0b0ba"
     },
     {
       "name": "CopyInventoryOfPlayerOrFree",
@@ -1065,7 +1113,8 @@
         "D2InventoryStrc",
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3d86e5e8"
     },
     {
       "name": "INVENTORY_GetHandItem",
@@ -1083,7 +1132,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "adee7e88"
     },
     {
       "name": "INVENTORY_FindSocketableItemInStash",
@@ -1111,7 +1161,8 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e9dedf44"
     },
     {
       "name": "INVENTORY_FindSocketableItemInMain",
@@ -1136,7 +1187,8 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0054976d"
     },
     {
       "name": "INVENTORY_FindMatchingScrollBook",
@@ -1166,7 +1218,8 @@
         "D2UnitStrc",
         "eD2ItemTypes",
         "int32_t"
-      ]
+      ],
+      "dh": "8d94af92"
     },
     {
       "name": "INVENTORY_PlaceItemInBeltSlot",
@@ -1185,7 +1238,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "17cc1456"
     },
     {
       "name": "INVENTORY_CanPlaceItemInBelt",
@@ -1207,7 +1261,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4d9b4ac"
     },
     {
       "name": "INVENTORY_OnBeltChanged_NoOp",
@@ -1224,7 +1279,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "c478e85b"
     },
     {
       "name": "INVENTORY_CanAutoBeltItem",
@@ -1248,7 +1304,8 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8ccae788"
     },
     {
       "name": "INVENTORY_FindBeltSlotForPotion",
@@ -1281,7 +1338,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4bb14355"
     },
     {
       "name": "INVENTORY_PlacePotionInBelt",
@@ -1302,7 +1360,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d53303b7"
     },
     {
       "name": "INVENTORY_GetItemInBeltSlot",
@@ -1323,7 +1382,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cffc078e"
     },
     {
       "name": "INVENTORY_CheckBeltSlotAndGetItem",
@@ -1350,7 +1410,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "e774a731"
     },
     {
       "name": "INVENTORY_GetEquippedShield",
@@ -1373,7 +1434,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "21b4e0f1"
     },
     {
       "name": "INVENTORY_GetEquippedWeaponInfo",
@@ -1399,7 +1461,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a272abb9"
     },
     {
       "name": "INVENTORY_CheckHasArmorEquipped",
@@ -1420,7 +1483,8 @@
         "D2InventoryGridInfoStrc",
         "D2InventoryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9fb85dc"
     },
     {
       "name": "INVENTORY_CanMoveEquippedToPage",
@@ -1443,7 +1507,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "013426ba"
     },
     {
       "name": "INVENTORY_RemoveAllItems",
@@ -1462,7 +1527,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "75d782c1"
     },
     {
       "name": "GetUpdates",
@@ -1480,7 +1546,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc"
-      ]
+      ],
+      "dh": "024170f8"
     },
     {
       "name": "FreeUpdatesFromInventory",
@@ -1499,7 +1566,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc"
-      ]
+      ],
+      "dh": "631c91f5"
     },
     {
       "name": "SERVER_IsInToBeUpdatedList",
@@ -1518,7 +1586,8 @@
         "D2InventoryStrc",
         "D2InventoryToBeUpdatedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ec51ce93"
     },
     {
       "name": "UpsertToUpdateList",
@@ -1543,7 +1612,8 @@
         "D2InventoryToBeUpdatedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9a4e7079"
     },
     {
       "name": "GetNextUpdate",
@@ -1560,7 +1630,8 @@
       ],
       "usedTypes": [
         "D2InventoryToBeUpdatedStrc"
-      ]
+      ],
+      "dh": "b5a2a490"
     },
     {
       "name": "GetUpdatesUUid",
@@ -1578,7 +1649,8 @@
       "usedTypes": [
         "D2InventoryToBeUpdatedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1c9a68e6"
     },
     {
       "name": "ITEM_ItemsInItem",
@@ -1596,7 +1668,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8468accf"
     },
     {
       "name": "INVENTORY_FindItemByType",
@@ -1625,7 +1698,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c7ab3b4"
     },
     {
       "name": "INVENTORY_FindItemOfTypeInMain",
@@ -1651,7 +1725,8 @@
         "eD2ItemTypes",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e5f5add"
     },
     {
       "name": "INVENTORY_FindItemByCodeInMain",
@@ -1676,7 +1751,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff1d06e7"
     },
     {
       "name": "INVENTORY_FindItemByCodeInStash",
@@ -1701,7 +1777,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "c6f15d73"
     },
     {
       "name": "INVENTORY_CountSetItemsInMain",
@@ -1727,7 +1804,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cab1997d"
     },
     {
       "name": "INVENTORY_SetOrClearCursorItem",
@@ -1745,7 +1823,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5974a74b"
     },
     {
       "name": "INVENTORY_UpdatePrimaryWeapon",
@@ -1769,7 +1848,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a848fa96"
     },
     {
       "name": "INVENTORY_SwapPrimaryWeaponOnRemoval",
@@ -1793,7 +1873,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "82f9e92d"
     },
     {
       "name": "INVENTORY_GetWeaponHandedness",
@@ -1815,7 +1896,8 @@
         "D2InventoryGridInfoStrc",
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3fcf2dbe"
     },
     {
       "name": "INVENTORY_SetOwnerGUID",
@@ -1833,7 +1915,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "325f55de"
     },
     {
       "name": "INVENTORY_GetCursorItemGUID",
@@ -1851,7 +1934,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0ef0aad7"
     },
     {
       "name": "INVENTORY_AddCorpse",
@@ -1873,7 +1957,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1f08d4c0"
     },
     {
       "name": "INVENTORY_RemoveCorpse",
@@ -1893,7 +1978,8 @@
         "D2CorpseStrc",
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7678c6ce"
     },
     {
       "name": "INVENTORY_GetCorpse",
@@ -1911,7 +1997,8 @@
       "usedTypes": [
         "D2CorpseStrc",
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "c6630b2a"
     },
     {
       "name": "INVENTORY_FreeNotifications",
@@ -1930,7 +2017,8 @@
       "usedTypes": [
         "D2CorpseStrc",
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "1b1c4a1f"
     },
     {
       "name": "INVENTORY_GetCorpseCount",
@@ -1948,7 +2036,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "69992b6b"
     },
     {
       "name": "INVENTORY_GetNextCorpse",
@@ -1965,7 +2054,8 @@
       ],
       "usedTypes": [
         "D2CorpseStrc"
-      ]
+      ],
+      "dh": "cac36fd7"
     },
     {
       "name": "ROOMCORPSE_GetGUID",
@@ -1983,7 +2073,8 @@
       "usedTypes": [
         "D2CorpseStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9b0278a0"
     },
     {
       "name": "CORPSE_GetMercClassId",
@@ -2001,7 +2092,8 @@
       "usedTypes": [
         "D2CorpseStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c72cb84d"
     },
     {
       "name": "CORPSE_GetData",
@@ -2019,7 +2111,8 @@
       "usedTypes": [
         "D2CorpseStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "0d221e0e"
     },
     {
       "name": "ITEM_GetBodyComponents",
@@ -2043,7 +2136,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "52532060"
     },
     {
       "name": "INVENTORY_InitializeItemTypeTable",
@@ -2064,7 +2158,8 @@
       "usedTypes": [
         "D2ItemsTableStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "32880d1a"
     },
     {
       "name": "INVENTORY_GetAlternateGfxIndex",
@@ -2083,7 +2178,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "81bd7926"
     },
     {
       "name": "INVENTORY_UpdateCompositeWeaponGfx",
@@ -2115,7 +2211,8 @@
         "eD2BodyLoc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "260b4507"
     },
     {
       "name": "INVENTORY_SetEquippedItemAppearance",
@@ -2146,7 +2243,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "601eef3e"
     },
     {
       "name": "INVENTORY_CalculateSwapActionCode",
@@ -2163,7 +2261,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "80a30106"
     },
     {
       "name": "INVENTORY_CanDualWieldItems",
@@ -2189,7 +2288,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ae7c6ec"
     },
     {
       "name": "INVENTORY_GetEquipSwapAction",
@@ -2214,7 +2314,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "121638c8"
     },
     {
       "name": "INVENTORY_GetEquipActionForBodySlot",
@@ -2240,7 +2341,8 @@
         "eD2BodyLocDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d8c208cd"
     },
     {
       "name": "INVENTORY_GetNextItem",
@@ -2258,7 +2360,8 @@
       "usedTypes": [
         "D2UnitDataItemStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "59cecede"
     },
     {
       "name": "GetCarriedItem",
@@ -2275,7 +2378,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3969c86a"
     },
     {
       "name": "ITEM_GetGUID",
@@ -2293,7 +2397,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2ffd0dbd"
     },
     {
       "name": "ITEM_GetItemData_eD2InventoryGridType",
@@ -2312,7 +2417,8 @@
         "D2UnitDataItemStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fc8b5ff7"
     },
     {
       "name": "INVENTORY_IsItemOwnedBy",
@@ -2331,7 +2437,8 @@
         "D2InventoryStrc",
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4b64e5c8"
     },
     {
       "name": "FreeRecursiveInventorysWithChilds",
@@ -2350,7 +2457,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a35aad36"
     },
     {
       "name": "CopyInventory",
@@ -2375,7 +2483,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "bfccddb6"
     },
     {
       "name": "INVENTORY_ReserveGridCells",
@@ -2402,7 +2511,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "026bfe8d"
     },
     {
       "name": "INVENTORY_CanTransferMercItems",
@@ -2425,7 +2535,8 @@
         "D2UnitStrc",
         "eInventoryPage",
         "int32_t"
-      ]
+      ],
+      "dh": "c520dc37"
     },
     {
       "name": "CreateCopyOfInventoryForTrading",
@@ -2449,7 +2560,8 @@
         "D2InventoryStrc",
         "D2PoolManagerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d4cd56e9"
     },
     {
       "name": "GetCurrentItemOnBodyLocation",
@@ -2471,7 +2583,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0bc3b11"
     },
     {
       "name": "SaveCharAppearance",
@@ -2510,7 +2623,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b2ade1f7"
     },
     {
       "name": "NullSub_Unref_00643610",
@@ -2527,7 +2641,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "c1d40d8d"
     },
     {
       "name": "NullSub_Unref_006460c0",
@@ -2544,7 +2659,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "07f35cc8"
     },
     {
       "name": "NullSub_Unref_006460e0",
@@ -2561,7 +2677,8 @@
       ],
       "usedTypes": [
         "D2InventoryStrc"
-      ]
+      ],
+      "dh": "6507a61d"
     }
   ]
 }

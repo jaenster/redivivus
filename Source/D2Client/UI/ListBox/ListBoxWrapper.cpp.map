@@ -19,7 +19,8 @@
       "usedTypes": [
         "ListBoxWrapper",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "b319adb5"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "ListBoxWrapper",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9547170"
     },
     {
       "name": "OnDownArrow",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "06e3e70b"
     },
     {
       "name": "OnUpArrow",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "da22c0e3"
     },
     {
       "name": "OnRightArrow",
@@ -93,7 +97,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "7c75bb21"
     },
     {
       "name": "OnLeftArrow",
@@ -111,7 +116,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "60312501"
     },
     {
       "name": "OnMouseDown",
@@ -129,7 +135,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "38e5780f"
     },
     {
       "name": "OnMouseUp",
@@ -147,7 +154,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "783edb9f"
     },
     {
       "name": "OnMouseMove",
@@ -165,7 +173,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "bb01b007"
     },
     {
       "name": "OnChar",
@@ -183,7 +192,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "d1fee248"
     },
     {
       "name": "GetValue",
@@ -200,7 +210,8 @@
       ],
       "usedTypes": [
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "2612dd2c"
     },
     {
       "name": "Draw",
@@ -217,7 +228,8 @@
       ],
       "usedTypes": [
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "198859ab"
     },
     {
       "name": "AddItem",
@@ -236,7 +248,8 @@
         "ListBoxWrapper",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "c10eff96"
     },
     {
       "name": "GetItemUserData",
@@ -254,7 +267,8 @@
       "usedTypes": [
         "ListBoxWrapper",
         "uint32_t"
-      ]
+      ],
+      "dh": "aaf1bd41"
     },
     {
       "name": "GetItemCount",
@@ -271,7 +285,8 @@
       ],
       "usedTypes": [
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "b11e953e"
     },
     {
       "name": "Clear",
@@ -288,7 +303,8 @@
       ],
       "usedTypes": [
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "c660713a"
     },
     {
       "name": "OnMouseWheel",
@@ -306,7 +322,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "ListBoxWrapper"
-      ]
+      ],
+      "dh": "df5bbbf0"
     },
     {
       "name": "Constructor",
@@ -327,7 +344,8 @@
         "ListBoxWrapper",
         "fpListBoxItemActivated",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "580e8291"
     }
   ]
 }

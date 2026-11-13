@@ -25,7 +25,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9afc7e8"
     },
     {
       "name": "IMAGE_LoadWeatherDC6ToPointer",
@@ -49,7 +50,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "277f8d79"
     },
     {
       "name": "DC6_FreeAndDelete",
@@ -68,7 +70,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "caeee968"
     }
   ]
 }

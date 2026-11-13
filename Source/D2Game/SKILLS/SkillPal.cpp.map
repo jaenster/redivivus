@@ -35,7 +35,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7034d566"
     },
     {
       "name": "Skills_SrvDoFunc_064_Sacrifice",
@@ -67,7 +68,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "801e97ae"
     },
     {
       "name": "Skills_SrvDoFunc_150_Smite",
@@ -107,7 +109,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5ce44aee"
     },
     {
       "name": "SKILLPAL_OnAuraExpire",
@@ -130,7 +133,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "0d33a2e0"
     },
     {
       "name": "SKILLPAL_ReducePoisonAndCurseDuration",
@@ -159,7 +163,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f4fe531"
     },
     {
       "name": "SKILLPAL_ApplyAuraStateToTarget",
@@ -200,7 +205,8 @@
         "SGAMEDATA",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "00d3947a"
     },
     {
       "name": "Skills_SrvDoFunc_065_Prayer",
@@ -231,7 +237,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "a23d9bf7"
     },
     {
       "name": "SKILLPAL_HandleFistOfHeavensLightningBolt",
@@ -256,7 +263,8 @@
         "D2SkillCallbackContextStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "02a1ad03"
     },
     {
       "name": "Skills_SrvDoFunc_066_Conviction",
@@ -296,7 +304,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "e8309031"
     },
     {
       "name": "SKILPAL_SrvStFn31_Charge",
@@ -346,7 +355,8 @@
         "eD2MonsterAnimMode",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "34fa235f"
     },
     {
       "name": "SKILLPAL_GetAttackFrameIndex",
@@ -367,7 +377,8 @@
         "D2MonSeqTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c4dc493"
     },
     {
       "name": "Skills_SrvDoFunc_067_Charge",
@@ -422,7 +433,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1835f9e3"
     },
     {
       "name": "SKILLPAL_RollRandomDamage",
@@ -446,7 +458,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "d498a949"
     },
     {
       "name": "SKILPAL_SrvStFn35_Vengeance",
@@ -484,7 +497,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "662fe3fe"
     },
     {
       "name": "Skills_SrvDoFunc_073_BlessedHammer",
@@ -518,7 +532,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2958d0f8"
     },
     {
       "name": "SKILPAL_SrvStFn36_HolyShield",
@@ -539,7 +554,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "39fe8e3e"
     },
     {
       "name": "SKILLPAL_OnConversionExpire",
@@ -574,7 +590,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e35e122f"
     },
     {
       "name": "SKILLPAL_CanConvertTarget",
@@ -600,7 +617,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9215626c"
     },
     {
       "name": "Skills_SrvDoFunc_079_Conversion",
@@ -649,7 +667,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "58588ce2"
     },
     {
       "name": "Skills_SrvDoFunc_080_FistOfTheHeavens",
@@ -681,7 +700,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "a35b2319"
     },
     {
       "name": "SKILLPAL_OnFreezeExpire",
@@ -704,7 +724,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "599be9ed"
     },
     {
       "name": "SKILL_HitTargetApplyDamageAndShatter",
@@ -733,7 +754,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f42c7199"
     },
     {
       "name": "Skills_SrvDoFunc_081_HolyFreeze",
@@ -773,7 +795,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "1d7c8a2f"
     },
     {
       "name": "SKILLSOR_GetBlizzardSubMissileCount",
@@ -803,7 +826,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6be7b503"
     },
     {
       "name": "SKILLSOR_IsValidBlizzardTargetType",
@@ -833,7 +857,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e1e26571"
     },
     {
       "name": "Skills_SrvDoFunc_082_Redemption",
@@ -870,7 +895,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3afedbfc"
     }
   ]
 }

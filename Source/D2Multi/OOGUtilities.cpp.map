@@ -22,7 +22,8 @@
         "LPDWORD",
         "LSTATUS",
         "uint32_t"
-      ]
+      ],
+      "dh": "71a7ae49"
     },
     {
       "name": "OOG_DisableControlCallback",
@@ -40,7 +41,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "3b6d0f43"
     },
     {
       "name": "EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "b4fe30d1"
     },
     {
       "name": "OOG_WaitMCPThreadDonePump",
@@ -74,7 +77,8 @@
         "OOG_WaitMCPThreadDonePump",
         "GetMCPThread",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "64304652"
     },
     {
       "name": "OOG_PollMCPCharLogonPump",
@@ -96,7 +100,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b2867699"
     },
     {
       "name": "OOGUTIL_OpenBrowserWithURL",
@@ -124,7 +129,8 @@
         "_PROCESS_INFORMATION",
         "_STARTUPINFOA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3fb5ef6c"
     },
     {
       "name": "OOGUTIL_OpenChannelDialog",
@@ -156,7 +162,8 @@
       "usedTypes": [
         "WCHAR",
         "uint8_t"
-      ]
+      ],
+      "dh": "02b39eb3"
     },
     {
       "name": "OOGUTIL_JoinChannelAndDestroyForms",
@@ -172,7 +179,8 @@
         "OOGUTIL_JoinChannelAndDestroyForms",
         "CHATDLG_DestroyAllForms",
         "D2WINBUTTON_SetPressed"
-      ]
+      ],
+      "dh": "3327698f"
     },
     {
       "name": "OOGUTIL_JoinChannelFromInput",
@@ -194,7 +202,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "WCHAR"
-      ]
+      ],
+      "dh": "de1318f9"
     },
     {
       "name": "OOGUTIL_JoinDefaultChannel",
@@ -219,7 +228,8 @@
         "D2ControlMsg",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a59eb24c"
     },
     {
       "name": "OOGUTIL_HandleChannelListDoubleClick",
@@ -247,7 +257,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1ee13c0"
     },
     {
       "name": "AbleToJoinGameOrBanned",
@@ -272,7 +283,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "519139d8"
     },
     {
       "name": "Unreferenced_004414c0",
@@ -288,7 +300,8 @@
         "Unreferenced_004414c0",
         "HasPeerName",
         "AbleToJoinGameOrBanned"
-      ]
+      ],
+      "dh": "2c242466"
     },
     {
       "name": "JoinOrCreateGame",
@@ -337,7 +350,8 @@
         "tagRECT",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f3d5301"
     },
     {
       "name": "OOGMENU_RestoreMCPConnection",
@@ -364,7 +378,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3dec97bb"
     },
     {
       "name": "fAPPMODE_multiplayer_ReturnAppMode_Caller",
@@ -386,7 +401,8 @@
       "usedTypes": [
         "D2IniConfigStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1315bcc3"
     },
     {
       "name": "CHAT_SendOutOfGameMessage",
@@ -412,7 +428,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "118657d2"
     },
     {
       "name": "OOGUTIL_OnPressChatWarningOk",
@@ -431,7 +448,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "22e169d0"
     },
     {
       "name": "OOGUTIL_SendChatMessageWide",
@@ -457,7 +475,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "d76e5e93"
     },
     {
       "name": "Unreferenced_00442a70",
@@ -474,7 +493,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e090a483"
     },
     {
       "name": "OOGUTIL_GetStringEnd",
@@ -494,7 +514,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d3384b76"
     },
     {
       "name": "OOGUTIL_CheckCharacterLevel",
@@ -512,7 +533,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5312f3a3"
     },
     {
       "name": "OOGMENU_AddGameToCache",
@@ -530,7 +552,8 @@
       "usedTypes": [
         "D2McpGameInfoStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "923a8c3f"
     },
     {
       "name": "OOGMENU_RefreshGameListDisplay",
@@ -563,7 +586,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bd23af23"
     },
     {
       "name": "OOGUTIL_SetPendingJoinGame",
@@ -581,7 +605,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "d0cdcb1e"
     },
     {
       "name": "OOGMENU_RequestGameInfo",
@@ -596,7 +621,8 @@
       "calledFunctions": [
         "OOGMENU_RequestGameInfo",
         "NET_MCP_CLIENT_Send_0x06_GameInfo"
-      ]
+      ],
+      "dh": "5963d1d7"
     },
     {
       "name": "OOGUTIL_ShowGameListEntryDetails",
@@ -618,7 +644,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c97a91e1"
     },
     {
       "name": "OOGMENU_DisplayGameDetails",
@@ -643,7 +670,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f2ba7e5"
     },
     {
       "name": "UIMENU_DestroyLobbyAndJoinGameForms",
@@ -659,7 +687,8 @@
         "UIMENU_DestroyLobbyAndJoinGameForms",
         "FORMS_DestroyAnyForm",
         "D2WINMAIN_SetFormFourth"
-      ]
+      ],
+      "dh": "182ba3af"
     },
     {
       "name": "OOGUTIL_LoadMaxPlayersSetting",
@@ -680,7 +709,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cb131868"
     },
     {
       "name": "OOGUTIL_UpdateGameListFilter",
@@ -697,7 +727,8 @@
         "FORMS_DestroyAnyForm",
         "D2WINMAIN_SetFormFourth",
         "LAUNCHER_RestoreFocusToControl"
-      ]
+      ],
+      "dh": "3c08aba0"
     },
     {
       "name": "OOGUTIL_ParseMaxPlayersEditBox",
@@ -716,7 +747,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "bc2d646c"
     },
     {
       "name": "OOGUTIL_Unused4",
@@ -735,7 +767,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "ac8d7171"
     },
     {
       "name": "OOGUTIL_OnPressMaxPlayersUp",
@@ -757,7 +790,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "WCHAR"
-      ]
+      ],
+      "dh": "89aab5a7"
     },
     {
       "name": "OOGUTIL_OnPressMaxPlayersDown",
@@ -779,7 +813,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "WCHAR"
-      ]
+      ],
+      "dh": "cbc22198"
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionUp",
@@ -801,7 +836,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "WCHAR"
-      ]
+      ],
+      "dh": "4a6ab9ca"
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionDown",
@@ -823,7 +859,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "WCHAR"
-      ]
+      ],
+      "dh": "e91a1544"
     },
     {
       "name": "OOGUTIL_SendPasswordPacket",
@@ -837,7 +874,8 @@
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
         "OOGUTIL_SendPasswordPacket"
-      ]
+      ],
+      "dh": "26b50993"
     },
     {
       "name": "OOGUTIL_IsFirstCharPrintableAscii",
@@ -851,7 +889,8 @@
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
         "OOGUTIL_IsFirstCharPrintableAscii"
-      ]
+      ],
+      "dh": "a7ed68db"
     },
     {
       "name": "OOGUTIL_FilterPrintableAsciiChar",
@@ -865,7 +904,8 @@
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
         "OOGUTIL_FilterPrintableAsciiChar"
-      ]
+      ],
+      "dh": "ddff253d"
     },
     {
       "name": "OOGUTIL_RefreshGameList",
@@ -890,7 +930,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "8271c2ba"
     },
     {
       "name": "OOGUTIL_SetJoinGameError",
@@ -910,7 +951,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "c17e2daa"
     },
     {
       "name": "OOGUTIL_Unused11",
@@ -928,7 +970,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5774b0c2"
     },
     {
       "name": "UIMENU_TitleClickCallback",
@@ -942,7 +985,8 @@
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
         "UIMENU_TitleClickCallback"
-      ]
+      ],
+      "dh": "3af643e6"
     },
     {
       "name": "OOG_PollMCPJoinD2GSPump",
@@ -964,7 +1008,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d4cf1408"
     },
     {
       "name": "OOGUTIL_OnPressWaitInLineCancel",
@@ -984,7 +1029,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "292d550a"
     },
     {
       "name": "OOGUTIL_HandleGameListEntry",
@@ -1007,7 +1053,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c09588e"
     },
     {
       "name": "OOGUTIL_ProcessGameListEntry",
@@ -1040,7 +1087,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fbc23378"
     },
     {
       "name": "OOGUTIL_OnPressNoAction",
@@ -1057,7 +1105,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "12c2c818"
     },
     {
       "name": "OOGUTIL_OnPressDifficultyNormal",
@@ -1075,7 +1124,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "8828bdc1"
     },
     {
       "name": "OOGUTIL_OnPressDifficultyNightmare",
@@ -1093,7 +1143,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "b9ad1bab"
     },
     {
       "name": "OOGUTIL_OnPressDifficultyHell",
@@ -1111,7 +1162,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "f502f2a3"
     },
     {
       "name": "OOGUTIL_SetProfileUser",
@@ -1126,7 +1178,8 @@
       "calledFunctions": [
         "OOGUTIL_OnPressProfileLadder",
         "OOGUTIL_SetProfileUser"
-      ]
+      ],
+      "dh": "11f48e0f"
     },
     {
       "name": "UIMENU_PlayerProfileLabels",
@@ -1146,7 +1199,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "0b2ec8cc"
     },
     {
       "name": "OOGUTIL_CloseProfileDialog",
@@ -1166,7 +1220,8 @@
       ],
       "usedTypes": [
         "D2WinTextBox *"
-      ]
+      ],
+      "dh": "ec3269be"
     },
     {
       "name": "OOGUTIL_OnPressProfileLadder",
@@ -1189,7 +1244,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "11142629"
     },
     {
       "name": "OOGUTIL_GetProfileCharacterName",
@@ -1204,7 +1260,8 @@
       "calledFunctions": [
         "OOGUTIL_GetProfileCharacterName",
         "SStrCopy"
-      ]
+      ],
+      "dh": "e8a4e376"
     },
     {
       "name": "OOGUTIL_OnPressProfileClose",
@@ -1222,7 +1279,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "6352722e"
     },
     {
       "name": "OOGUTIL_OnPressProfileOK",
@@ -1245,7 +1303,8 @@
         "D2ControlMsg",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab3cd70f"
     },
     {
       "name": "UIMENU_DialogWindowChatCommands",
@@ -1271,7 +1330,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "ee8a467f"
     },
     {
       "name": "OOGUTIL_DestroyChatCommandsDialog",
@@ -1288,7 +1348,8 @@
         "OOGUTIL_DestroyChatCommandsDialog",
         "FORMS_DestroyAnyForm",
         "D2WINMAIN_SetFormFourth"
-      ]
+      ],
+      "dh": "7177299d"
     },
     {
       "name": "OOGUTIL_RequestGameListFromServer",
@@ -1314,7 +1375,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3a2a0cd9"
     },
     {
       "name": "OOGMENU_RequestGameList",
@@ -1333,7 +1395,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "d3628f6a"
     },
     {
       "name": "OOGUTIL_SendGamePassword",
@@ -1349,7 +1412,8 @@
         "OOGUTIL_SendGamePassword",
         "D2WINTEXTBOX_SetSelectedLine",
         "OOGUTIL_SendPasswordPacket"
-      ]
+      ],
+      "dh": "34f001a4"
     },
     {
       "name": "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
@@ -1364,7 +1428,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_OOGUTIL_SetJoinGameError",
         "OOGUTIL_SetJoinGameError"
-      ]
+      ],
+      "dh": "3e514bba"
     },
     {
       "name": "OOGUTIL_HandleGameCreation",
@@ -1395,7 +1460,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04a11dd7"
     },
     {
       "name": "OOGUTIL_UpdateLevelRestrictionControls",
@@ -1420,7 +1486,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "eb5a4c3c"
     },
     {
       "name": "OOGUTIL_LoadLevelRestrictionSetting",
@@ -1440,7 +1507,8 @@
         "OOGUTIL_UpdateLevelRestrictionControls",
         "SStrPrintf",
         "D2WINEDITBOX_SetTextFromAnsi"
-      ]
+      ],
+      "dh": "6cfb4ad1"
     },
     {
       "name": "UIMENU_WaitInLine",
@@ -1470,7 +1538,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0bdc357"
     },
     {
       "name": "OOGUTIL_OnTimerRefreshWaitInLine",
@@ -1489,7 +1558,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "f419ad2c"
     },
     {
       "name": "OOGUTIL_OnPressLevelRestrictionCheckbox",
@@ -1515,7 +1585,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0fa042fe"
     },
     {
       "name": "EDITBOX_Cb_OOGUTIL_RefreshGameList",
@@ -1530,7 +1601,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_OOGUTIL_RefreshGameList",
         "OOGUTIL_RefreshGameList"
-      ]
+      ],
+      "dh": "e71d24b6"
     },
     {
       "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
@@ -1545,7 +1617,8 @@
       "calledFunctions": [
         "OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers",
         "OOGUTIL_RefreshGameList"
-      ]
+      ],
+      "dh": "b6f04b29"
     },
     {
       "name": "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
@@ -1560,7 +1633,8 @@
       "calledFunctions": [
         "OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction",
         "OOGUTIL_RefreshGameList"
-      ]
+      ],
+      "dh": "7ea1b11c"
     },
     {
       "name": "NET_MCP_CLIENT_PrepareGameCreatePacket",
@@ -1600,7 +1674,8 @@
         "eD2PlayerStatus",
         "int32_t",
         "mcp0x03data"
-      ]
+      ],
+      "dh": "f6775466"
     },
     {
       "name": "OOGUTIL_CreateEditProfileDialog",
@@ -1631,7 +1706,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "cb6eeab7"
     },
     {
       "name": "OOGUTIL_CreateViewProfileDialog",
@@ -1662,7 +1738,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "73003460"
     },
     {
       "name": "UIMENU_JoinGame",
@@ -1697,7 +1774,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b50265d8"
     },
     {
       "name": "OOGUTIL_OpenCreateGameDialog",
@@ -1744,7 +1822,8 @@
         "eD2PlayerStatus",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bfc80190"
     },
     {
       "name": "OOGUTIL_StrChr",
@@ -1762,7 +1841,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b162ba96"
     },
     {
       "name": "OOGUTIL_GetAccountName",
@@ -1777,7 +1857,8 @@
       "calledFunctions": [
         "SStrChr",
         "OOGUTIL_GetAccountName"
-      ]
+      ],
+      "dh": "a7f44f9b"
     },
     {
       "name": "OOGUTIL_CopyChannelName",
@@ -1794,7 +1875,8 @@
         "SStrChr",
         "memcpy",
         "SStrCopy"
-      ]
+      ],
+      "dh": "3d72ef68"
     },
     {
       "name": "OOGUTIL_ValidateUsername1",
@@ -1817,7 +1899,8 @@
         "D2ControlMsg",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "450deb0c"
     },
     {
       "name": "OOGUTIL_ValidateUsername2",
@@ -1840,7 +1923,8 @@
         "D2ControlMsg",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "48110495"
     },
     {
       "name": "OOGUTIL_ValidateUsername3",
@@ -1865,7 +1949,8 @@
         "D2ControlMsg",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "d8a1be87"
     },
     {
       "name": "OOGUTIL_ValidateUsername4",
@@ -1888,7 +1973,8 @@
       "usedTypes": [
         "WCHAR",
         "uint8_t"
-      ]
+      ],
+      "dh": "026a5b2f"
     },
     {
       "name": "OOGUTIL_AppendChatText",
@@ -1913,7 +1999,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "86b10ede"
     },
     {
       "name": "OOGUTIL_ValidateStringFilter",
@@ -1932,7 +2019,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "53035efe"
     }
   ]
 }

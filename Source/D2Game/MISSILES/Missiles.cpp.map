@@ -22,7 +22,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "19bfa75e"
     },
     {
       "name": "STRUCT_FillDataMissile",
@@ -44,7 +45,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d45b086a"
     },
     {
       "name": "ClearMissileUnitData",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cf48c7dd"
     },
     {
       "name": "MISSILES_EvalDamageAndSetStats",
@@ -87,7 +90,8 @@
         "D2MissileDamageDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "08a15d86"
     },
     {
       "name": "CalculatePierce",
@@ -113,7 +117,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bcf4ac18"
     },
     {
       "name": "CreatingMissile",
@@ -172,7 +177,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "39d033e6"
     },
     {
       "name": "MISSILES_SendMissilePacket",
@@ -203,7 +209,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "1bd56a62"
     }
   ]
 }

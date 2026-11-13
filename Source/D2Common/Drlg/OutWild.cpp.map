@@ -21,7 +21,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b39a17f0"
     },
     {
       "name": "DRLGOUTROOM_GetPresetVariantFromGridCell",
@@ -38,7 +39,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "95979f8a"
     },
     {
       "name": "DRLGOUTROOM_PlaceRiverCrossingPreset",
@@ -60,7 +62,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8a4c4df"
     },
     {
       "name": "DRLGOUTROOM_SpawnVerticalBorderPresets",
@@ -83,7 +86,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ece7c7a"
     },
     {
       "name": "DRLGOUTROOM_MarkBorderJunctions",
@@ -102,7 +106,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "c2020c11"
     },
     {
       "name": "DRLGOUTROOM_SpawnCornerFillPreset",
@@ -122,7 +127,8 @@
       "usedTypes": [
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "6c3ed7d1"
     },
     {
       "name": "Unreferenced_006801f0",
@@ -139,7 +145,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "cad25f5f"
     },
     {
       "name": "DRLGOUTROOM_FillBorderCornersAndPresets",
@@ -166,7 +173,8 @@
         "D2DrlgLevelStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "005402f8"
     },
     {
       "name": "SpawnTownTransitionsAndCaves",
@@ -193,7 +201,8 @@
       "usedTypes": [
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "72cdd21e"
     },
     {
       "name": "DRLGOUTROOM_SpawnRandomOutdoorDecorations",
@@ -213,7 +222,8 @@
         "D2DrlgLevelStrc",
         "D2SeedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "91157535"
     },
     {
       "name": "DRLGOUTROOM_SpawnAct1LevelPresets",
@@ -235,7 +245,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "22fbcdf0"
     },
     {
       "name": "InitAct1OutdoorLevel",
@@ -262,7 +273,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "3078eb32"
     }
   ]
 }

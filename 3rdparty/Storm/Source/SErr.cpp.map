@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "pfnBlizzardError"
-      ]
+      ],
+      "dh": "af99d974"
     },
     {
       "name": "SERR_AddStormFacility",
@@ -39,7 +40,8 @@
         "D2SErrMessageSourceStrc",
         "D2SErrMessageSourceStrc *",
         "uint16_t"
-      ]
+      ],
+      "dh": "d8bfd66b"
     },
     {
       "name": "SERR_AddStormMessages",
@@ -54,7 +56,8 @@
       "calledFunctions": [
         "SERR_AddStormMessages",
         "SERR_AddStormFacility"
-      ]
+      ],
+      "dh": "78dc1e2d"
     },
     {
       "name": "SERR_GetString",
@@ -72,7 +75,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bd8976f6"
     },
     {
       "name": "SERR_InternalEnterCriticalSection",
@@ -86,7 +90,8 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "SERR_InternalEnterCriticalSection"
-      ]
+      ],
+      "dh": "b46cdbaa"
     },
     {
       "name": "SERR_InternalLeaveCriticalSection",
@@ -100,7 +105,8 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "SERR_InternalLeaveCriticalSection"
-      ]
+      ],
+      "dh": "d1eddcfa"
     },
     {
       "name": "SERR_UndecorateObjectName",
@@ -122,7 +128,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1f6ac41"
     },
     {
       "name": "SErrPrepareAppFatal",
@@ -141,7 +148,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a7f857f8"
     },
     {
       "name": "SErrRegisterMessageSource",
@@ -161,7 +169,8 @@
       "usedTypes": [
         "D2SErrMessageSourceStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "e9eb5269"
     },
     {
       "name": "SErrSetLastError",
@@ -175,7 +184,8 @@
       "namespace": "Storm::Source::SErr",
       "calledFunctions": [
         "SErrSetLastError"
-      ]
+      ],
+      "dh": "f23d876f"
     },
     {
       "name": "SSYSTEM_ListOffsetToPointer",
@@ -194,7 +204,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98334035"
     },
     {
       "name": "Unreferenced_0041c410",
@@ -211,7 +222,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "1ffd9b4b"
     },
     {
       "name": "SErrGetErrorStr",
@@ -233,7 +245,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94a293d7"
     },
     {
       "name": "SSYSTEM_ListGetPointer",
@@ -250,7 +263,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f1d11485"
     },
     {
       "name": "SSYSTEM_ListUnlinkAndInsert",
@@ -271,7 +285,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d33c949"
     },
     {
       "name": "SSYSTEM_ListGetNext",
@@ -290,7 +305,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ae5cb1a"
     },
     {
       "name": "SSYSTEM_ListUnlink",
@@ -310,7 +326,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fee31410"
     },
     {
       "name": "Unreferenced_0041c6e0",
@@ -327,7 +344,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "bbf9a515"
     },
     {
       "name": "SSYSTEM_ListGetData",
@@ -346,7 +364,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "f05579d2"
     },
     {
       "name": "UnlinkAll",
@@ -366,7 +385,8 @@
         "TSLink<HANDLER> *",
         "TSList<HANDLER, TSGetLink<HANDLER>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "a08bfc53"
     },
     {
       "name": "TSList_HANDLER_Destructor",
@@ -387,7 +407,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d34568a8"
     },
     {
       "name": "Unreferenced_0041c7f0",
@@ -404,7 +425,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "4fc00be9"
     },
     {
       "name": "SSYSTEM_ListAllocNode",
@@ -425,7 +447,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8fc4810"
     },
     {
       "name": "SSYSTEM_ListFreeNode",
@@ -446,7 +469,8 @@
         "StormLinkStrc *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b6eb9bf6"
     },
     {
       "name": "SErrRegisterHandler",
@@ -470,7 +494,8 @@
         "int32_t",
         "pfnSErrDisplayCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "4cb49bac"
     },
     {
       "name": "TSList_HANDLER_Clear",
@@ -491,7 +516,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfd48850"
     },
     {
       "name": "SSYSTEM_ListRemoveAndFree",
@@ -513,7 +539,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a83703db"
     },
     {
       "name": "SErrDisplayError",
@@ -548,7 +575,8 @@
         "_WIN32_FIND_DATAA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0c3ba90"
     },
     {
       "name": "SErrDisplayErrorFmt",
@@ -569,7 +597,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46e95db2"
     },
     {
       "name": "SErrReportNamedResourceLeak",
@@ -587,7 +616,8 @@
         "SStrPrintf",
         "SErrDisplayError",
         "__security_check_cookie"
-      ]
+      ],
+      "dh": "f1a942fb"
     },
     {
       "name": "SErrUnregisterHandler",
@@ -608,7 +638,8 @@
       "usedTypes": [
         "HANDLER",
         "pfnSErrDisplayCallback"
-      ]
+      ],
+      "dh": "61de90bb"
     },
     {
       "name": "SErrDisplayAppFatal",
@@ -630,7 +661,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "97e49e60"
     },
     {
       "name": "SErrReportResourceLeak",
@@ -645,7 +677,8 @@
       "calledFunctions": [
         "SErrReportResourceLeak",
         "SErrReportNamedResourceLeak"
-      ]
+      ],
+      "dh": "1eaefab2"
     },
     {
       "name": "StaticInit_gStormErrorCallbackList",
@@ -660,7 +693,8 @@
       "calledFunctions": [
         "StaticInit_gStormErrorCallbackList",
         "atexit"
-      ]
+      ],
+      "dh": "8ba0cd97"
     },
     {
       "name": "StaticFini_gStormErrorCallbackList",
@@ -675,7 +709,8 @@
       "calledFunctions": [
         "StaticFini_gStormErrorCallbackList",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "9ef2b988"
     }
   ]
 }

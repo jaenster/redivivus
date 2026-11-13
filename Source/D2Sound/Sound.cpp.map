@@ -16,7 +16,8 @@
       "calledFunctions": [
         "Release",
         "SOUND_ReleaseEAXInterfaces"
-      ]
+      ],
+      "dh": "da837f1b"
     },
     {
       "name": "SOUND_ApplyEAXEnvironment",
@@ -35,7 +36,8 @@
       "usedTypes": [
         "D2FloatIntUnion",
         "D2SoundEaxEnvironStrc"
-      ]
+      ],
+      "dh": "1d650014"
     },
     {
       "name": "SOUND_ShutdownDirectSound",
@@ -53,7 +55,8 @@
         "SOUND_FreeMusicBuffer",
         "SOUND_StopSoundThread",
         "SOUND_ReleaseEAXInterfaces"
-      ]
+      ],
+      "dh": "fd3b392e"
     },
     {
       "name": "SOUND_InitDirectSound",
@@ -90,7 +93,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a33c23b5"
     },
     {
       "name": "SOUND_Initialize",
@@ -110,7 +114,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5a59a2fa"
     },
     {
       "name": "SOUND_InitMusicBuffer",
@@ -130,7 +135,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "937d8de3"
     },
     {
       "name": "SOUND_FreeMusicBuffer",
@@ -146,7 +152,8 @@
         "SOUND_FreeMusicBuffer",
         "SOUNDSMP_Destroy",
         "SFileDdaDestroy"
-      ]
+      ],
+      "dh": "2d82e495"
     },
     {
       "name": "SOUND_StopSoundThread",
@@ -161,7 +168,8 @@
       "calledFunctions": [
         "SOUND_StopSoundThread",
         "SetEvent"
-      ]
+      ],
+      "dh": "1ce9ac02"
     }
   ]
 }

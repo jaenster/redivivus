@@ -1119,7 +1119,7 @@ void __fastcall SendInitUpdateAttributes(D2UnitStrc * pUnit, D2ClientStrc * pCli
     }
 }
 
-static void __stdcall StartModeID(eD2Skills eSkillId, ::SGAMEDATA * pGame, eD2UnitType eUnitType, D2UnitStrc * pUnit, DWORD nUid) {
+static void __stdcall StartModeID(eD2Skills eSkillId, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2UnitType eUnitType, DWORD nUid) {
     PlayerModes::PLRMODES_StartModeID(pGame, pUnit, nullptr, 3, eUnitType, nUid, 0);
     D2Common::Drlg::PLAYER_SetSkillHitFlagAndStoreTarget(pUnit, eSkillId, eUnitType, nUid);
 }
@@ -1181,7 +1181,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         if (nDist <= 0x32) {
           bInRange = D2Common::Units::IsObjectInInteractRange(pUnit, pTargetUnit);
           if (!bInRange || (bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnit, pTargetUnit, 0x804) , bInRange != 0)) {
-            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, UNIT_OBJECT, pUnit, uuid);
+            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, pUnit, UNIT_OBJECT, uuid);
           } else {
             D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnit->pPath.pDynamicPath);
             pGameTmp = Objects::ObjectsMode::Interact(pGame, pUnit, 2, uuid);
@@ -1201,7 +1201,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
           if (nDist > 4) {
-            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, UNIT_WARP, pUnit, uuid);
+            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, pUnit, UNIT_WARP, uuid);
             return SERVERSTATUS_OK;
           }
 
@@ -1226,7 +1226,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
               return SERVERSTATUS_BAD_PARAMS;
             }
           } else {
-            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, UNIT_ITEM, pUnit, uuid);
+            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, pUnit, UNIT_ITEM, uuid);
           }
 
           return SERVERSTATUS_OK;
@@ -1251,7 +1251,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
               return SERVERSTATUS_OK;
             }
 
-            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, UNIT_MONSTER, pUnit, uuid);
+            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, pUnit, UNIT_MONSTER, uuid);
             return SERVERSTATUS_OK;
           }
 
@@ -1272,7 +1272,7 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         nDistPlayer = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDistPlayer <= 0x32) {
           if (nDistPlayer > 8) {
-            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, UNIT_PLAYER, pUnit, uuid);
+            StartModeID(~SKILL_Attack - (bSetting != 0), pGame, pUnit, UNIT_PLAYER, uuid);
             return SERVERSTATUS_OK;
           }
           if (pTargetUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
@@ -1989,7 +1989,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStr
         case 4:
           {
             eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0x7dd);
-            StartModeID(eSkillId, pGame, eUnitType, pUnit, nTargetGUID);
+            StartModeID(eSkillId, pGame, pUnit, eUnitType, nTargetGUID);
             return;
           }
         case 1:
@@ -1998,7 +1998,7 @@ static void __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStr
             bDualWieldOrMeleeCheck = D2Common::Units::IsInMeleeRange(pUnit, pTargetUnit, bDualWieldOrMeleeCheck);
             if (!bDualWieldOrMeleeCheck) {
               eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0x7dd);
-              StartModeID(eSkillId, pGame, eUnitType, pUnit, nTargetGUID);
+              StartModeID(eSkillId, pGame, pUnit, eUnitType, nTargetGUID);
               return;
             }
 

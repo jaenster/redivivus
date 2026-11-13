@@ -22,7 +22,8 @@
         "D2UnitStrc",
         "D2WaypointStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9746da62"
     },
     {
       "name": "UpgradeLifeAndHitClass",
@@ -47,7 +48,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6215ac44"
     },
     {
       "name": "SendReassignPlayer",
@@ -71,7 +73,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d60d904c"
     },
     {
       "name": "SendUnitCast0x4d",
@@ -107,7 +110,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "aecd17b7"
     },
     {
       "name": "SendPlayerMoveOrObject",
@@ -143,7 +147,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fc4a1875"
     },
     {
       "name": "SendPlayerMove",
@@ -173,7 +178,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "121e034a"
     },
     {
       "name": "SendPlayerStop",
@@ -201,7 +207,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "650e7265"
     },
     {
       "name": "PLRMSG_SendPlayerStopToOtherClient",
@@ -228,7 +235,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "c095aadf"
     },
     {
       "name": "DispatchPlayerModeNetMsg",
@@ -254,7 +262,8 @@
         "int32_t",
         "pfnPlayerModeNetMsg",
         "uint32_t"
-      ]
+      ],
+      "dh": "f48a81cc"
     },
     {
       "name": "SendAttributeUpdate",
@@ -281,7 +290,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99b1aac8"
     },
     {
       "name": "GetHPRegen",
@@ -308,7 +318,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bbdc8859"
     },
     {
       "name": "GetMPRegen",
@@ -334,7 +345,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "367effc7"
     },
     {
       "name": "NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate",
@@ -373,7 +385,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "89bd2a62"
     },
     {
       "name": "SendInitUpdateAttributes",
@@ -396,7 +409,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "uint32_t"
-      ]
+      ],
+      "dh": "02e8522b"
     },
     {
       "name": "StartModeID",
@@ -418,7 +432,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "da4f00e2"
     },
     {
       "name": "IsOtherAct",
@@ -442,7 +457,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "a7fb7ea4"
     },
     {
       "name": "PLAYER_AreInDifferentActs",
@@ -466,7 +482,8 @@
         "eAct",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "e26c8685"
     },
     {
       "name": "SERVER_InteractOrPick",
@@ -516,7 +533,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1f95220d"
     },
     {
       "name": "PLAYERMSG_GetMessageType",
@@ -534,7 +552,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e60c5946"
     },
     {
       "name": "PLAYERMSG_GetMessagePriority",
@@ -552,7 +571,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9893273f"
     },
     {
       "name": "CheckIfCoordsAreInRange",
@@ -575,7 +595,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "27034330"
     },
     {
       "name": "CloseEnoughToInteract",
@@ -608,7 +629,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e18d3a6e"
     },
     {
       "name": "SERVER_IsItemOnCursor",
@@ -634,7 +656,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2fd37803"
     },
     {
       "name": "IsPlayerTheOwner",
@@ -660,7 +683,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2194b3f7"
     },
     {
       "name": "ItemBelongsToUnit",
@@ -686,7 +710,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e62f9b2"
     },
     {
       "name": "ItemIsOfPlayerAndNotOnCursor",
@@ -713,7 +738,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c348b45"
     },
     {
       "name": "PLRMSG_CheckWeaponSlotEmpty",
@@ -732,7 +758,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1f376036"
     },
     {
       "name": "ItemBelongsToInventoryOf",
@@ -758,7 +785,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37a658ff"
     },
     {
       "name": "IsAccessableCheck",
@@ -788,7 +816,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b3261d1"
     },
     {
       "name": "MONSTER_FindNearbyAllyUnit",
@@ -813,7 +842,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "94cba471"
     },
     {
       "name": "CheckIfCanBeSkilled",
@@ -835,7 +865,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2d0956b6"
     },
     {
       "name": "OrficeStaffCheck",
@@ -858,7 +889,8 @@
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d00bd9d"
     },
     {
       "name": "PlayerCanInteractWithWaypoint",
@@ -900,7 +932,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c04f497"
     },
     {
       "name": "CheckIfInrangeAndReassign",
@@ -931,7 +964,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f7376d29"
     },
     {
       "name": "SCMD_0x01_WalkToLocation",
@@ -955,7 +989,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0b4f485"
     },
     {
       "name": "AnyPacketClickOnMap",
@@ -978,7 +1013,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "833cee10"
     },
     {
       "name": "SCMD_0x02_WalkToEntity",
@@ -1002,7 +1038,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8cdbf9d"
     },
     {
       "name": "SCMD_0x03_RunToLocation",
@@ -1026,7 +1063,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b037441f"
     },
     {
       "name": "SCMD_0x04_RunToEntity",
@@ -1050,7 +1088,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e81ff34"
     },
     {
       "name": "GetDualSwingSkill",
@@ -1084,7 +1123,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "44052710"
     },
     {
       "name": "PLAYER_SendInventoryFullMessage",
@@ -1107,7 +1147,8 @@
         "D2Packet0x5aEventStructure",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c94eb5c"
     },
     {
       "name": "CastSkillOnLocation",
@@ -1137,7 +1178,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t"
-      ]
+      ],
+      "dh": "906f1293"
     },
     {
       "name": "PLAYER_ProcessSkillOnEntity",
@@ -1175,7 +1217,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2116d45d"
     },
     {
       "name": "SCMD_0x05_LeftSkillOnLocation",
@@ -1204,7 +1247,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "656970ca"
     },
     {
       "name": "SCMD_0x06_LeftSkillOnEntity",
@@ -1233,7 +1277,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46a29a1d"
     },
     {
       "name": "SCMD_0x07_LeftSkillOnEntityEx",
@@ -1262,7 +1307,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1cca5520"
     },
     {
       "name": "SCMD_0x08_LeftSkillOnLocationEx",
@@ -1288,7 +1334,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40d7cf29"
     },
     {
       "name": "PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity",
@@ -1314,7 +1361,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "49e0582a"
     },
     {
       "name": "SCMD_0x0A_LeftSkillOnEntityEx3",
@@ -1340,7 +1388,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "1cb38ee8"
     },
     {
       "name": "SCMD_0x0B_Keepalive",
@@ -1361,7 +1410,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "4681828d"
     },
     {
       "name": "SCMD_0x0C_RightSkillOnLocation",
@@ -1390,7 +1440,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7cc60351"
     },
     {
       "name": "SCMD_0x0D_RightSkillOnEntity",
@@ -1418,7 +1469,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2aa3e9ba"
     },
     {
       "name": "SCMD_0x0E_RightSkillOnEntityEx",
@@ -1446,7 +1498,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "36ba2a43"
     },
     {
       "name": "SCMD_0x0F_RightSkillOnLocationEx",
@@ -1472,7 +1525,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28146664"
     },
     {
       "name": "PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity",
@@ -1498,7 +1552,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "c457132f"
     },
     {
       "name": "SCMD_0x11_RightSkillOnEntityEx3",
@@ -1524,7 +1579,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2310f0c"
     },
     {
       "name": "SCMD_0x12_CancelChanneledSkill",
@@ -1546,7 +1602,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "d281d93b"
     },
     {
       "name": "SCMD_0x14_OverheadMessage",
@@ -1578,7 +1635,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "34cca1a7"
     },
     {
       "name": "CHAT_IsInteractingWithOtherPlayer",
@@ -1600,7 +1658,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "c08a9de6"
     },
     {
       "name": "CHAT_BroadcastToClient",
@@ -1628,7 +1687,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "31b18765"
     },
     {
       "name": "CHAT_DeliverWhisper",
@@ -1658,7 +1718,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f6ab043"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0x26_Chat",
@@ -1712,7 +1773,8 @@
         "fpForEachClientFn",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "950c0eec"
     },
     {
       "name": "PrepareClientMessage",
@@ -1733,7 +1795,8 @@
         "D2GSPacketSrv0x",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "f1959b4e"
     },
     {
       "name": "CHAT_BroadcastMessageToAllClients",
@@ -1754,7 +1817,8 @@
         "D2GSPacketSrv0x",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "361a138c"
     },
     {
       "name": "BroadcastEventMessage",
@@ -1773,7 +1837,8 @@
       "usedTypes": [
         "D2Packet0x5aEventStructure",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "25a42c01"
     },
     {
       "name": "SCMD_0x13_InteractWithEntity",
@@ -1796,7 +1861,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc67d4f8"
     },
     {
       "name": "SCMD_0x16_InteractWithEntityEx",
@@ -1819,7 +1885,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd8d958d"
     },
     {
       "name": "SCMD_0x17_DropItem",
@@ -1845,7 +1912,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "81c70884"
     },
     {
       "name": "SCMD_0x18_ItemToInventory",
@@ -1876,7 +1944,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "08efff81"
     },
     {
       "name": "SCMD_0x19_PickUpToCursor",
@@ -1905,7 +1974,8 @@
         "eD2ServerIncomingStatus",
         "eInventoryPage",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b5a3822"
     },
     {
       "name": "SCMD_0x1A_EquipItem",
@@ -1929,7 +1999,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "a07e7f26"
     },
     {
       "name": "SCMD_0x1B_EquipToSwapSlot",
@@ -1952,7 +2023,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "74255c9e"
     },
     {
       "name": "SCMD_0x1C_UnequipToInventory",
@@ -1978,7 +2050,8 @@
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7518e11d"
     },
     {
       "name": "SCMD_0x1D_SwapBodyItem",
@@ -2005,7 +2078,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea7f6597"
     },
     {
       "name": "SCMD_0x1E_EquipToWeaponSwap",
@@ -2030,7 +2104,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "951aad96"
     },
     {
       "name": "SCMD_0x1F_UseItem",
@@ -2058,7 +2133,8 @@
         "eD2ServerIncomingStatus",
         "eInventoryPage",
         "uint32_t"
-      ]
+      ],
+      "dh": "7127d330"
     },
     {
       "name": "SCMD_0x20_UseItemAtLocation",
@@ -2084,7 +2160,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a1e018f"
     },
     {
       "name": "SCMD_0x27_UseItemOnItem",
@@ -2107,7 +2184,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "30e1d457"
     },
     {
       "name": "SCMD_0x21_MergeStackables",
@@ -2130,7 +2208,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "4409d2dd"
     },
     {
       "name": "PLRMSG_Cmd0x22_RemoveStackItem",
@@ -2153,7 +2232,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "27ce6df3"
     },
     {
       "name": "SCMD_0x23_ItemToBelt",
@@ -2176,7 +2256,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e580ab7"
     },
     {
       "name": "SCMD_0x24_ItemFromBelt",
@@ -2201,7 +2282,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "a42986fe"
     },
     {
       "name": "SCMD_0x25_SwapBeltItem",
@@ -2225,7 +2307,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "805e8c2a"
     },
     {
       "name": "SCMD_0x26_UseItemAtPlayerCoords",
@@ -2253,7 +2336,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "db7ee2ef"
     },
     {
       "name": "SCMD_0x28_SocketItem",
@@ -2280,7 +2364,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c7d5df9"
     },
     {
       "name": "SCMD_0x29_ScrollIntoBook",
@@ -2304,7 +2389,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0e0f277"
     },
     {
       "name": "SCMD_0x2A_ItemToCube",
@@ -2328,7 +2414,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "3fe06ff2"
     },
     {
       "name": "PLRMSG_Cmd0x2C_ReturnBadParams",
@@ -2349,7 +2436,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "d1beafca"
     },
     {
       "name": "PLRMSG_Cmd0x2D_ReturnBadParams",
@@ -2370,7 +2458,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "fdf041a5"
     },
     {
       "name": "LoadAreaOrSpawnPortal",
@@ -2401,7 +2490,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b8d32f77"
     },
     {
       "name": "PLRMSG_Cmd0x2E_ReturnOk",
@@ -2422,7 +2512,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba0bcba7"
     },
     {
       "name": "SCMD_0x2F_NpcInteract",
@@ -2452,7 +2543,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "435600b0"
     },
     {
       "name": "SCMD_0x30_NpcCancelDialog",
@@ -2477,7 +2569,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e44295ee"
     },
     {
       "name": "SCMD_0x31_NpcGossip",
@@ -2499,7 +2592,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "2c201a9c"
     },
     {
       "name": "SCMD_0x32_NpcBuyConfirm",
@@ -2521,7 +2615,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e1fde63"
     },
     {
       "name": "SCMD_0x33_NpcSell",
@@ -2543,7 +2638,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "a831ac59"
     },
     {
       "name": "SCMD_0x35_NpcGamble",
@@ -2565,7 +2661,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "d1b1cd17"
     },
     {
       "name": "SCMD_0x34_CainIdentify",
@@ -2587,7 +2684,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "01e00721"
     },
     {
       "name": "SCMD_0x36_HireMerc",
@@ -2609,7 +2707,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "1bf201d4"
     },
     {
       "name": "SCMD_0x62_NpcSellExpansion",
@@ -2631,7 +2730,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "75f28010"
     },
     {
       "name": "SCMD_0x37_GambleConfirm",
@@ -2656,7 +2756,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "b7ade1ba"
     },
     {
       "name": "SCMD_0x38_NpcMenuSelect",
@@ -2680,7 +2781,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f4a38cf"
     },
     {
       "name": "PLRMSG_Cmd0x39_ReturnBadParams",
@@ -2700,7 +2802,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "11f527b3"
     },
     {
       "name": "SCMD_0x3A_AllocStatPoint",
@@ -2723,7 +2826,8 @@
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5aaeaec7"
     },
     {
       "name": "SCMD_0x3B_AllocSkillPoint",
@@ -2758,7 +2862,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6eb61755"
     },
     {
       "name": "SCMD_0x3C_SelectSkill",
@@ -2786,7 +2891,8 @@
         "eD2ServerIncomingStatus",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a5dc34f"
     },
     {
       "name": "SCMD_0x3D_ActivateObject",
@@ -2809,7 +2915,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e229663"
     },
     {
       "name": "SCMD_0x3E_QuestItemPickup",
@@ -2844,7 +2951,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "b280f34e"
     },
     {
       "name": "SCMD_0x3F_PlayEmote",
@@ -2866,7 +2974,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "cdb93bc4"
     },
     {
       "name": "SCMD_0x40_RefreshQuestData",
@@ -2888,7 +2997,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "a344bcd6"
     },
     {
       "name": "SCMD_0x41_Resurrect",
@@ -2936,7 +3046,8 @@
         "eD2ServerIncomingStatus",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffde1fca"
     },
     {
       "name": "SCMD_0x5D_CubeRecipeCheck",
@@ -2959,7 +3070,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b041e23"
     },
     {
       "name": "SCMD_0x5E_CubeApply",
@@ -2982,7 +3094,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "c919ad2d"
     },
     {
       "name": "SCMD_0x42_StaffInOrifice1",
@@ -3002,7 +3115,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef94a502"
     },
     {
       "name": "SCMD_0x43_StaffInOrifice2",
@@ -3022,7 +3136,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe31a3f2"
     },
     {
       "name": "SCMD_0x44_StaffInOrifice",
@@ -3048,7 +3163,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d43256da"
     },
     {
       "name": "SCMD_0x45_Unused",
@@ -3068,7 +3184,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "049c7d03"
     },
     {
       "name": "CanInteractWithMerc",
@@ -3095,7 +3212,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b2242d0"
     },
     {
       "name": "SCMD_0x46_NpcInteractMerc",
@@ -3119,7 +3237,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "02a08e86"
     },
     {
       "name": "SCMD_0x47_CommandMercenary",
@@ -3143,7 +3262,8 @@
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "06b26d99"
     },
     {
       "name": "SCMD_0x48_CutsceneOver",
@@ -3167,7 +3287,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "2fd8497b"
     },
     {
       "name": "SCMD_0x49_TakeWaypoint",
@@ -3198,7 +3319,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb7faa65"
     },
     {
       "name": "SCMD_0x4D_ResetNpcIntroFlag",
@@ -3220,7 +3342,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b221b6a"
     },
     {
       "name": "SCMD_0x4B_ForceUnitUpdate",
@@ -3245,7 +3368,8 @@
         "eD2ServerIncomingStatus",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "b62bd6e9"
     },
     {
       "name": "SCMD_0x4C_TransmogrifyItem2",
@@ -3268,7 +3392,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "907666b8"
     },
     {
       "name": "SCMD_0x4F_GoToTownFolk",
@@ -3290,7 +3415,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "57c75a1c"
     },
     {
       "name": "SCMD_0x50_DropGold",
@@ -3315,7 +3441,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7caeb37e"
     },
     {
       "name": "SCMD_0x51_SetHotkey",
@@ -3341,7 +3468,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "761121f0"
     },
     {
       "name": "SCMD_0x52_Unused",
@@ -3362,7 +3490,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f00ed35"
     },
     {
       "name": "SCMD_0x53_GamepadInput",
@@ -3385,7 +3514,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee5c4067"
     },
     {
       "name": "SCMD_0x54_StopRunning",
@@ -3407,7 +3537,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "dce43ca5"
     },
     {
       "name": "SCMD_0x58_MarkQuestDone",
@@ -3432,7 +3563,8 @@
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "689bd542"
     },
     {
       "name": "SCMD_0x59_CommandNPC",
@@ -3462,7 +3594,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c23645e"
     },
     {
       "name": "ValidateSyncWarpPath",
@@ -3502,7 +3635,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "51212d24"
     },
     {
       "name": "PLRMODES_StatExpireCallback_ClearState",
@@ -3522,7 +3656,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "5d7a2892"
     },
     {
       "name": "RelocateAndApplySyncWarp",
@@ -3554,7 +3689,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "879ac8a2"
     },
     {
       "name": "SCMD_0x5F_SyncPosition",
@@ -3591,7 +3727,8 @@
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "80fdd2d8"
     },
     {
       "name": "SCMD_0x60_WeaponSwap",
@@ -3616,7 +3753,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "dabb2716"
     },
     {
       "name": "MERC_SwapEquippedItem",
@@ -3664,7 +3802,8 @@
         "SGAMEDATA",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2707ccf2"
     },
     {
       "name": "EquipOrUnequipMercItem",
@@ -3699,7 +3838,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t"
-      ]
+      ],
+      "dh": "3ec3c460"
     },
     {
       "name": "MERC_CanEquipItem",
@@ -3729,7 +3869,8 @@
         "SGAMEDATA",
         "eD2ItemTypes",
         "uint32_t"
-      ]
+      ],
+      "dh": "e433cffd"
     },
     {
       "name": "SCMD_0x61_MercEquipItem",
@@ -3763,7 +3904,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "708da302"
     },
     {
       "name": "SCMD_0x63_ItemToBeltAuto",
@@ -3815,7 +3957,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5829fac5"
     },
     {
       "name": "PLRMSG_Cmd0x66_WardenResponse_ReturnOk",
@@ -3836,7 +3979,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "f24b7963"
     },
     {
       "name": "NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck",
@@ -3863,7 +4007,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8bb0bd5f"
     },
     {
       "name": "PLAYERMSG_BroadcastPlayerSlain",
@@ -3899,7 +4044,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bbb9f2c"
     },
     {
       "name": "SendPlayerStopAndAtributeUpdate",
@@ -3924,7 +4070,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d7166ed"
     }
   ]
 }

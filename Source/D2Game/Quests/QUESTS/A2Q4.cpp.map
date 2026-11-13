@@ -23,7 +23,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "c5f8afae"
     },
     {
       "name": "Q12_Callback10_PlayerLeavesGame",
@@ -57,7 +58,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "64026cd3"
     },
     {
       "name": "Q12_UpdateQuestRecord",
@@ -82,7 +84,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "52a45f2e"
     },
     {
       "name": "Q12_Callback02_NpcDeactivate",
@@ -103,7 +106,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA2Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "785aa1cb"
     },
     {
       "name": "Q12_CheckJournalState",
@@ -122,7 +126,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6116b278"
     },
     {
       "name": "Q12_OnJournalActivate",
@@ -144,7 +149,8 @@
       "usedTypes": [
         "D2QuestDataA2Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "009fc336"
     },
     {
       "name": "Q12_Callback11_ScrollMessage",
@@ -180,7 +186,8 @@
         "D2QuestDataStrc",
         "POINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "88364a5e"
     },
     {
       "name": "Q12_Callback00_NpcActivate",
@@ -208,7 +215,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e941ec9f"
     },
     {
       "name": "Q12_SetCannotComplete",
@@ -229,7 +237,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "808ad47d"
     },
     {
       "name": "Q12_CheckArcaneAndReward",
@@ -257,7 +266,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "ea34cb9d"
     },
     {
       "name": "Q12_SequenceFilterInlined",
@@ -278,7 +288,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "8680e4fc"
     },
     {
       "name": "Q12_SequenceFilter",
@@ -297,7 +308,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "cf24a267"
     },
     {
       "name": "Q12_Callback13_PlayerStartedGame",
@@ -323,7 +335,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "13b03393"
     },
     {
       "name": "Q12_OnHoradricStaffAssembled",
@@ -344,7 +357,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7911fc7a"
     },
     {
       "name": "A2Q4_OnMonsterDeathClass201_NoOp",
@@ -358,7 +372,8 @@
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
         "A2Q4_OnMonsterDeathClass201_NoOp"
-      ]
+      ],
+      "dh": "da4cb2d3"
     },
     {
       "name": "A2Q4_OnMonsterDeathClass331_NoOp",
@@ -372,7 +387,8 @@
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
         "A2Q4_OnMonsterDeathClass331_NoOp"
-      ]
+      ],
+      "dh": "1b2398d0"
     },
     {
       "name": "Q12_CheckJerhynGateOpen",
@@ -390,7 +406,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "957b3fa0"
     },
     {
       "name": "BlockHaremRoomForPlayerAccess",
@@ -417,7 +434,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b6fb9635"
     },
     {
       "name": "Objects_InitFn30_HaremBlocker",
@@ -438,7 +456,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
-      ]
+      ],
+      "dh": "37c67feb"
     },
     {
       "name": "Q14_CheckDurielProximity",
@@ -464,7 +483,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "17cdab50"
     },
     {
       "name": "Q12_IsSanctuaryComplete",
@@ -482,7 +502,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "54e3d42c"
     },
     {
       "name": "Q12_GetSummonerCoords",
@@ -501,7 +522,8 @@
       "usedTypes": [
         "D2CoordStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c613b086"
     },
     {
       "name": "Q12_CheckJustCompleted",
@@ -521,7 +543,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cab2e91c"
     },
     {
       "name": "OBJOP_A2Q4_ReadHorazonsJournal",
@@ -549,7 +572,8 @@
         "D2ObjectsTxt",
         "D2QuestDataA2Q4Strc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "121ba271"
     },
     {
       "name": "Objects_InitFn29_ArcaneSanctuaryPortal",
@@ -576,7 +600,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "b398e8eb"
     },
     {
       "name": "Q12_SetObjectOperateState",
@@ -595,7 +620,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "99f98f64"
     }
   ]
 }

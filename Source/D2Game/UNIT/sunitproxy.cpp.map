@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2MonsterAiStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f57b29c8"
     },
     {
       "name": "GetGameNpcbyClassId",
@@ -42,7 +43,8 @@
         "D2GameNpcStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "49a44806"
     },
     {
       "name": "GetGameNpcByUnit",
@@ -62,7 +64,8 @@
         "D2GameNpcStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "643a805e"
     },
     {
       "name": "SUNITPROXY_AddItemToNpcProxy",
@@ -86,7 +89,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3817b044"
     },
     {
       "name": "SUNITPROXY_InitNpcTradeItems",
@@ -111,7 +115,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "51bab197"
     },
     {
       "name": "SUNITPROXY_AllocNpcControl",
@@ -147,7 +152,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7ba13e79"
     },
     {
       "name": "SUNITPROXY_FreeInventoryItems",
@@ -175,7 +181,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a84c3f47"
     },
     {
       "name": "SUNITPROXY_FreeNpcProxyData",
@@ -199,7 +206,8 @@
         "D2NpcProxyInventoryStrc",
         "D2SUnitProxyStrc_Line0x85",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9600311e"
     },
     {
       "name": "FreeNpcControl",
@@ -221,7 +229,8 @@
         "D2NpcPlayerInteractionStrc",
         "D2NpcTradeItemStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fcf6a3de"
     },
     {
       "name": "SUNITPROXY_AddTradeQueueEntry",
@@ -244,7 +253,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2628b43"
     },
     {
       "name": "SUNITPROXY_QueueTradeAction",
@@ -267,7 +277,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9dbc351"
     },
     {
       "name": "SUNITPROXY_CountPlayerInLevel",
@@ -290,7 +301,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "2a9c54f3"
     },
     {
       "name": "SUNITPROXY_RefreshGambleForAllNpcs",
@@ -312,7 +324,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e0486593"
     },
     {
       "name": "SUNITPROXY_ProcessNpcItemQueue",
@@ -346,7 +359,8 @@
         "SGAMEDATA",
         "eInventoryPage",
         "int32_t"
-      ]
+      ],
+      "dh": "82fd91c1"
     },
     {
       "name": "SUNITPROXY_GetNpcInventory",
@@ -367,7 +381,8 @@
         "D2InventoryStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "161030b1"
     },
     {
       "name": "SUNITPROXY_GetNpcControl",
@@ -385,7 +400,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "20066e5b"
     },
     {
       "name": "SUNITPROXY_RemovePlayerFromNpc",
@@ -413,7 +429,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "4018bee2"
     },
     {
       "name": "SUNITPROXY_GetPlayerProxyInventory",
@@ -436,7 +453,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a0b25ef1"
     },
     {
       "name": "SUNITPROXY_AddPlayerInteraction",
@@ -457,7 +475,8 @@
         "D2NpcPlayerInteractionStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1576b58e"
     },
     {
       "name": "SUNITPROXY_ResetNpcProxy",
@@ -479,7 +498,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8a345364"
     },
     {
       "name": "SUNITPROXY_BuildNpcItemTables",
@@ -501,7 +521,8 @@
         "D2ItemsTableStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d3071459"
     },
     {
       "name": "SUNITPROXY_InitAllNpcItemTables",
@@ -520,7 +541,8 @@
       "usedTypes": [
         "eD2MonsterClassId",
         "int32_t"
-      ]
+      ],
+      "dh": "35e1f07a"
     },
     {
       "name": "SUNITPROXY_FreeAllNpcItemTables",
@@ -539,7 +561,8 @@
       "usedTypes": [
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "49e94b38"
     },
     {
       "name": "SUNITPROXY_RemovePlayerProxyInventory",
@@ -564,7 +587,8 @@
         "D2NpcProxyInventoryStrc *",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e08867a6"
     },
     {
       "name": "SUNITPROXY_UpdateNpcProxiesForAct",
@@ -595,7 +619,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6a45fee4"
     },
     {
       "name": "IterateNpcIntroUnits",
@@ -619,7 +644,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d820c157"
     },
     {
       "name": "SERVER_InitClassicTowns",
@@ -643,7 +669,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d739b2eb"
     },
     {
       "name": "SUNITPROXY_SendProxyItemsToClient",
@@ -665,7 +692,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7168e94b"
     }
   ]
 }

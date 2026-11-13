@@ -18,7 +18,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "f76b6034"
     },
     {
       "name": "UI_GetCursorFrameOffset",
@@ -38,7 +39,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0705fe7d"
     },
     {
       "name": "UI_GetCursorMaxFrames",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8789f975"
     },
     {
       "name": "UI_HandleCursorMouseDown",
@@ -76,7 +79,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "357f9315"
     },
     {
       "name": "UI_HandleCursorMouseMove",
@@ -94,7 +98,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "b557adc5"
     },
     {
       "name": "UI_HandleCursorMouseUp",
@@ -112,7 +117,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8a2a3dc7"
     },
     {
       "name": "CURSOR_SetCursorItem",
@@ -130,7 +136,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3212ab97"
     },
     {
       "name": "GetCursorItem_Unref_00468030",
@@ -147,7 +154,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "453394bc"
     },
     {
       "name": "UI_SetCursorToSpecialIcon",
@@ -164,7 +172,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d1cce6b1"
     },
     {
       "name": "ITEM_SetItemOnHand",
@@ -181,7 +190,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fd1f3cfc"
     },
     {
       "name": "GetCursorItem",
@@ -198,7 +208,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1389bd69"
     },
     {
       "name": "UI_InitializeCursor",
@@ -222,7 +233,8 @@
         "DC6 *",
         "char *",
         "int32_t"
-      ]
+      ],
+      "dh": "ba8c4a2d"
     },
     {
       "name": "UI_FreeCursor",
@@ -243,7 +255,8 @@
       "usedTypes": [
         "DC6 *",
         "int32_t"
-      ]
+      ],
+      "dh": "076607a6"
     },
     {
       "name": "UI_AnimateCursorForward",
@@ -268,7 +281,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d343f177"
     },
     {
       "name": "UI_AnimateCursorBackward",
@@ -287,7 +301,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1f495df8"
     },
     {
       "name": "UI_UpdateCursorAnimation",
@@ -307,7 +322,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "5b90e334"
     },
     {
       "name": "MOUSE_DrawCursorSprite",
@@ -328,7 +344,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "27199ad6"
     },
     {
       "name": "UI_DrawCursorIcon",
@@ -347,7 +364,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "6de4f8a8"
     },
     {
       "name": "DrawCursor",
@@ -376,7 +394,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "524c17a3"
     },
     {
       "name": "UI_DrawCursorWithItem",
@@ -407,7 +426,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "827bd670"
     },
     {
       "name": "GetMouseX",
@@ -421,7 +441,8 @@
       "namespace": "D2Client::Cursor",
       "calledFunctions": [
         "GetMouseX"
-      ]
+      ],
+      "dh": "74e137b8"
     },
     {
       "name": "GetMouseY",
@@ -435,7 +456,8 @@
       "namespace": "D2Client::Cursor",
       "calledFunctions": [
         "GetMouseY"
-      ]
+      ],
+      "dh": "3b26dcb4"
     },
     {
       "name": "UI_SetMousePosition",
@@ -452,7 +474,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b6cdadbb"
     },
     {
       "name": "SetMouseXY",
@@ -476,7 +499,8 @@
         "int32_t",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6b2f830"
     },
     {
       "name": "GetItemType",
@@ -490,7 +514,8 @@
       "namespace": "D2Client::Cursor",
       "calledFunctions": [
         "GetItemType"
-      ]
+      ],
+      "dh": "2b8e7ba1"
     },
     {
       "name": "UI_HandleMousePositionUpdate",
@@ -514,7 +539,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a023ed96"
     }
   ]
 }

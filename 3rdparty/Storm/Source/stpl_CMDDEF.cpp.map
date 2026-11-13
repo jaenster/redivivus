@@ -20,7 +20,8 @@
         "TSLink<CMDDEF>",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "73384d9b"
     },
     {
       "name": "Link",
@@ -39,7 +40,8 @@
         "CMDDEF",
         "TSLink<CMDDEF>",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
-      ]
+      ],
+      "dh": "c4d460e6"
     },
     {
       "name": "LinkNode",
@@ -59,7 +61,8 @@
         "CMDDEF *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "adab1c24"
     },
     {
       "name": "Next",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "CMDDEF",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
-      ]
+      ],
+      "dh": "3a093af1"
     },
     {
       "name": "UnlinkNode",
@@ -96,7 +100,8 @@
         "CMDDEF",
         "CMDDEF *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
-      ]
+      ],
+      "dh": "655e5901"
     },
     {
       "name": "RawNext",
@@ -114,7 +119,8 @@
       "usedTypes": [
         "CMDDEF",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
-      ]
+      ],
+      "dh": "be2f0e18"
     },
     {
       "name": "UnlinkAll",
@@ -134,7 +140,8 @@
         "TSLink<CMDDEF> *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c52b076"
     },
     {
       "name": "Destructor",
@@ -155,7 +162,8 @@
         "TSLink<CMDDEF>",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b1cc335"
     },
     {
       "name": "NewNode",
@@ -176,7 +184,8 @@
         "CMDDEF",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "df7d730a"
     },
     {
       "name": "Clear",
@@ -195,7 +204,8 @@
       "usedTypes": [
         "TSList<CMDDEF, TSGetLink<CMDDEF>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "a272f564"
     },
     {
       "name": "DeleteNode",
@@ -216,7 +226,8 @@
         "StormLinkStrc",
         "StormLinkStrc *",
         "TSList<CMDDEF, TSGetLink<CMDDEF>>"
-      ]
+      ],
+      "dh": "2a7423e7"
     }
   ]
 }

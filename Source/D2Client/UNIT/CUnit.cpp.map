@@ -24,7 +24,8 @@
         "D2UnitStrc *",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "dd12dc94"
     },
     {
       "name": "UNITS_FindClientSideUnit",
@@ -44,7 +45,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "32759b73"
     },
     {
       "name": "UNITS_FindServerSideUnit",
@@ -64,7 +66,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "6b72c900"
     },
     {
       "name": "MISSILE_GetOwnerUnit",
@@ -88,7 +91,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8fe7e163"
     },
     {
       "name": "InsertIntoHashTable",
@@ -112,7 +116,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14eb83d5"
     },
     {
       "name": "CLIENT_SendIdlePlayerMessage",
@@ -133,7 +138,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2PlayerAnimMode"
-      ]
+      ],
+      "dh": "48575082"
     },
     {
       "name": "CUNIT_IterateHashTableWithCallback",
@@ -152,7 +158,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "fnUnitIterCallback"
-      ]
+      ],
+      "dh": "8f43a539"
     },
     {
       "name": "CLIENT_ClearChangedStatFlags_Thunk",
@@ -170,7 +177,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3049239a"
     },
     {
       "name": "GetGfxInfo",
@@ -188,7 +196,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7806b91c"
     },
     {
       "name": "SetGfxSequenceData",
@@ -210,7 +219,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4abc1240"
     },
     {
       "name": "GetGfxSequenceData",
@@ -232,7 +242,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "51643cd6"
     },
     {
       "name": "SetPalShiftIndex",
@@ -254,7 +265,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "55e10a4c"
     },
     {
       "name": "GetPalShiftIndex",
@@ -276,7 +288,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4cd20cc6"
     },
     {
       "name": "WARP_IsPointInClickArea",
@@ -305,7 +318,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a7d6f942"
     },
     {
       "name": "CUNIT_IsClickInSpriteBounds",
@@ -329,7 +343,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "df2de8b6"
     },
     {
       "name": "CUNIT_CalculateSpriteBounds",
@@ -368,7 +383,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a4a9f49d"
     },
     {
       "name": "SKILL_ExecuteSelectProc",
@@ -388,7 +404,8 @@
         "eD2Skills",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cf6c96d4"
     },
     {
       "name": "SKILL_CheckActiveSkillSelectProc",
@@ -413,7 +430,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "71b1ba4b"
     },
     {
       "name": "IsSelected",
@@ -434,7 +452,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6c231c8"
     },
     {
       "name": "CUNIT_IsPlayerOrMonster",
@@ -454,7 +473,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "98facb65"
     },
     {
       "name": "SetTargetByTypeAndGUID",
@@ -475,7 +495,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d1c4cfc8"
     },
     {
       "name": "FacePlayer",
@@ -502,7 +523,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "669cac35"
     },
     {
       "name": "CLIENT_TurnPlayerToFaceUnit",
@@ -528,7 +550,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2a42d1ef"
     },
     {
       "name": "SKILL_IsSequenceInputReady",
@@ -551,7 +574,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fadda0cb"
     },
     {
       "name": "PlayerCanBeInterrupted",
@@ -572,7 +596,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b603dd7d"
     },
     {
       "name": "GetCurrentRoom",
@@ -590,7 +615,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "114bc762"
     },
     {
       "name": "UpdateObjectAutoLightOnPeriodChange",
@@ -614,7 +640,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "dcfd838c"
     },
     {
       "name": "GetServerCmd",
@@ -636,7 +663,8 @@
         "D2ServerCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6a286be1"
     },
     {
       "name": "SetServerCmd",
@@ -658,7 +686,8 @@
         "D2ServerCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2bc24f3a"
     },
     {
       "name": "IsAttackable",
@@ -677,7 +706,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "b230f97a"
     },
     {
       "name": "SetDeadFlag",
@@ -694,7 +724,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3db2655c"
     },
     {
       "name": "IsActive",
@@ -712,7 +743,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2PlayerAnimMode"
-      ]
+      ],
+      "dh": "bf451b99"
     },
     {
       "name": "IsAlive",
@@ -734,7 +766,8 @@
         "D2UnitStrc",
         "eD2ObjectAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "3d06be53"
     },
     {
       "name": "GetConfirmedTargetUnit",
@@ -757,7 +790,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "295a48b5"
     },
     {
       "name": "FreeLightMap",
@@ -774,7 +808,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6bad9d01"
     },
     {
       "name": "CUNIT_IterateServerUnitsWithCallback",
@@ -796,7 +831,8 @@
       "usedTypes": [
         "fnUnitIterCallback",
         "int32_t"
-      ]
+      ],
+      "dh": "172e8b9b"
     },
     {
       "name": "CUNIT_IterateMissilesWithCallback",
@@ -818,7 +854,8 @@
       "usedTypes": [
         "fnUnitIterCallback",
         "int32_t"
-      ]
+      ],
+      "dh": "4f0edff1"
     },
     {
       "name": "CUNIT_IterateItemsWithCallback",
@@ -840,7 +877,8 @@
       "usedTypes": [
         "fnUnitIterCallback",
         "int32_t"
-      ]
+      ],
+      "dh": "e245fedb"
     },
     {
       "name": "CUNIT_IterateUntilWarp",
@@ -857,7 +895,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6b409ccf"
     },
     {
       "name": "ROOM_GetWarpDestinationName",
@@ -880,7 +919,8 @@
         "D2UnitStrc",
         "WCHAR",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "8e995a40"
     },
     {
       "name": "GetName",
@@ -920,7 +960,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04658ab2"
     },
     {
       "name": "DecrementGfxTimer",
@@ -943,7 +984,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dff9bbc"
     },
     {
       "name": "CUNIT_SetUnitFlag3",
@@ -964,7 +1006,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f2b999f2"
     },
     {
       "name": "CUNIT_GetStartLight",
@@ -985,7 +1028,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6294debf"
     },
     {
       "name": "SetLightRadius",
@@ -1006,7 +1050,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e47edb25"
     },
     {
       "name": "CUNIT_IsItemInUnitInventory",
@@ -1031,7 +1076,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a635cab3"
     },
     {
       "name": "CUNIT_IsItemInAnyInventory",
@@ -1051,7 +1097,8 @@
         "D2UnitStrc",
         "D2UnitStrc *[128]",
         "uint32_t"
-      ]
+      ],
+      "dh": "acb7ca8e"
     },
     {
       "name": "UnitDoOverlay",
@@ -1074,7 +1121,8 @@
         "eOverlayId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "43989590"
     },
     {
       "name": "SKILL_IsTargetOwnedPet",
@@ -1100,7 +1148,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "20caa693"
     },
     {
       "name": "SKILL_IsTargetAlliedUnit",
@@ -1125,7 +1174,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "322707dc"
     },
     {
       "name": "CLIENT_SyncPathFromServer",
@@ -1165,7 +1215,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc825605"
     },
     {
       "name": "GetPlayerUnitPartyId",
@@ -1184,7 +1235,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "8eefaa0e"
     },
     {
       "name": "FindRoom",
@@ -1210,7 +1262,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "763b0e93"
     },
     {
       "name": "CLIENT_TeleportUnitToPosition",
@@ -1259,7 +1312,8 @@
         "eD2LevelId",
         "eD2PlayerAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "7f50411f"
     },
     {
       "name": "CLIENT_PlaySkillVisualEffect",
@@ -1284,7 +1338,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5ebdd879"
     },
     {
       "name": "FreeAny",
@@ -1320,7 +1375,8 @@
       "usedTypes": [
         "D2LightMapStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "27a00aad"
     },
     {
       "name": "FreeAllUnits",
@@ -1339,7 +1395,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "460d3eb4"
     },
     {
       "name": "CLIENT_UpdateUnitGfxState",
@@ -1359,7 +1416,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "c508fc87"
     },
     {
       "name": "FaceTarget",
@@ -1386,7 +1444,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "641278dd"
     },
     {
       "name": "CanInteractWith",
@@ -1417,7 +1476,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "968fd64e"
     },
     {
       "name": "RemoveObject",
@@ -1439,7 +1499,8 @@
         "D2UnitStrc *",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2a2bf6b6"
     },
     {
       "name": "RemoveObjectFromServerObjectTable",
@@ -1458,7 +1519,8 @@
       "usedTypes": [
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "133f11b8"
     },
     {
       "name": "UNITS_RemoveFromClientHashTable",
@@ -1477,7 +1539,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "641c22a9"
     },
     {
       "name": "FinalizeCreation",
@@ -1503,7 +1566,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e032e389"
     },
     {
       "name": "InitCommonData",
@@ -1550,7 +1614,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7450f642"
     },
     {
       "name": "UNIT_CreateWarp",
@@ -1571,7 +1636,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "23d9fc53"
     },
     {
       "name": "UNIT_CreatePlayer",
@@ -1606,7 +1672,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "13d3c4c6"
     },
     {
       "name": "CreateObject",
@@ -1629,7 +1696,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "ae734099"
     },
     {
       "name": "UNIT_CreateMonster",
@@ -1696,7 +1764,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "244984a6"
     },
     {
       "name": "CreateMissileOrMonster",
@@ -1719,7 +1788,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2659dcef"
     },
     {
       "name": "ROOM_SpawnPresetUnitAtCoords",
@@ -1739,7 +1809,8 @@
       "usedTypes": [
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "e7a2cb87"
     },
     {
       "name": "CreateUnitsForMissiles",
@@ -1761,7 +1832,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2PresetUnitStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "7d569ad3"
     },
     {
       "name": "HitTestScreen",
@@ -1810,7 +1882,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9d7a4814"
     },
     {
       "name": "CleanupInventory",
@@ -1840,7 +1913,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1e9698f"
     }
   ]
 }

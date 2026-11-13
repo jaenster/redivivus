@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b7955892"
     },
     {
       "name": "MONSTER_FindUnitInPartySlot",
@@ -38,7 +39,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int *"
-      ]
+      ],
+      "dh": "cec00703"
     },
     {
       "name": "MONSTER_SetClearPartyFlags",
@@ -60,7 +62,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "75c9f254"
     },
     {
       "name": "MONSTER_EquipFromClassTable",
@@ -84,7 +87,8 @@
         "D2MonEquipEntryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0cc7cad4"
     },
     {
       "name": "MONSTER_OnCreateAttachQuests",
@@ -111,7 +115,8 @@
         "D2UnitStrc",
         "D2UnknownCreateMonsterStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f1a0dd1f"
     },
     {
       "name": "MONSTER_ApplySpecialUmods",
@@ -132,7 +137,8 @@
         "D2UnknownCreateMonsterStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c7b5b823"
     },
     {
       "name": "SpawnMonsterAtUnit",
@@ -159,7 +165,8 @@
         "eD2UnitType",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "5c04dd4f"
     },
     {
       "name": "SpawnMonsterBase",
@@ -186,7 +193,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "35433832"
     },
     {
       "name": "SpawnMinions_BySlot",
@@ -210,7 +218,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "e90e66c2"
     },
     {
       "name": "SpawnMinions_ByPattern",
@@ -241,7 +250,8 @@
         "eD2UnitType",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "62e188e9"
     },
     {
       "name": "FindDiagonalNonCollisionCoords",
@@ -270,7 +280,8 @@
         "POINT",
         "eCollisionFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "921ec672"
     },
     {
       "name": "MONSTER_SpawnMinionGroup",
@@ -301,7 +312,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "d36676db"
     },
     {
       "name": "CreateMonster",
@@ -347,7 +359,8 @@
         "int64_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99e76698"
     },
     {
       "name": "SpawnMonsterAtRoomPos",
@@ -372,7 +385,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aaa6118e"
     },
     {
       "name": "SpawnMonsterAtCoordList",
@@ -400,7 +414,8 @@
         "eD2UnitType",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "dd2cc9fd"
     },
     {
       "name": "SpawnMonsterInRoomCoordList",
@@ -426,7 +441,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea6fd2ba"
     },
     {
       "name": "SpawnMonsterAtRoomPosSimple",
@@ -450,7 +466,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "22e0780c"
     },
     {
       "name": "SpawnMonsterAtRoomPosGuid",
@@ -474,7 +491,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "d8e2d463"
     },
     {
       "name": "SpawnMonsterSetOwnOwner",
@@ -499,7 +517,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "76b43ffa"
     },
     {
       "name": "SpawnMinions_AtXY",
@@ -526,7 +545,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "35a833f4"
     },
     {
       "name": "SpawnMonsterAtUnitOffset",
@@ -558,7 +578,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "65176d49"
     },
     {
       "name": "MONSTER_SpawnPredefinedAtUnit",
@@ -583,7 +604,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "90ace2a2"
     },
     {
       "name": "SpawnRandomMonster",
@@ -616,7 +638,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "397b51ad"
     }
   ]
 }

@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "682595eb"
     },
     {
       "name": "SID_GetState",
@@ -35,7 +36,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "SID_GetState"
-      ]
+      ],
+      "dh": "b94531d0"
     },
     {
       "name": "NET_SID_CLIENT_SetChannelName",
@@ -50,7 +52,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_SetChannelName",
         "SStrCopy"
-      ]
+      ],
+      "dh": "095cfe99"
     },
     {
       "name": "NET_SID_CLIENT_GetChannelNamePtr",
@@ -64,7 +67,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_GetChannelNamePtr"
-      ]
+      ],
+      "dh": "f6220d0b"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ChatEvent",
@@ -79,7 +83,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_ChatEvent",
         "BNMESSQUEUE_EnqueueBytes"
-      ]
+      ],
+      "dh": "0bc1c1f8"
     },
     {
       "name": "Unreferenced_00520680",
@@ -96,7 +101,8 @@
       ],
       "usedTypes": [
         "D2XSHA1Strc"
-      ]
+      ],
+      "dh": "80d085bf"
     },
     {
       "name": "XSHA1_Transform",
@@ -115,7 +121,8 @@
         "D2XSHA1ContextStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0473aacb"
     },
     {
       "name": "XSHA1",
@@ -137,7 +144,8 @@
         "D2XSHA1ContextStrc",
         "D2XSHA1Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "92795071"
     },
     {
       "name": "SID_SetReadyFlag",
@@ -151,7 +159,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "SID_SetReadyFlag"
-      ]
+      ],
+      "dh": "ff7e7ecd"
     },
     {
       "name": "SID_GetReadyFlag",
@@ -165,7 +174,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "SID_GetReadyFlag"
-      ]
+      ],
+      "dh": "4b3a2a33"
     },
     {
       "name": "SID_GetReadyFlag_Unref_00520af0",
@@ -179,7 +189,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "SID_GetReadyFlag_Unref_00520af0"
-      ]
+      ],
+      "dh": "483b3fab"
     },
     {
       "name": "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00",
@@ -193,7 +204,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00"
-      ]
+      ],
+      "dh": "b32a07cf"
     },
     {
       "name": "NET_SID_CLIENT_GetResponseCount2",
@@ -210,7 +222,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ddc25512"
     },
     {
       "name": "NET_SID_CLIENT_GetResponseCount1",
@@ -227,7 +240,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a1db55c8"
     },
     {
       "name": "SID_InitializeProtocolState",
@@ -245,7 +259,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0f8c6ed9"
     },
     {
       "name": "NET_SID_CLIENT_WaitForPacketId",
@@ -264,7 +279,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "f5c5ddfc"
     },
     {
       "name": "NET_SID_CLIENT_GetRequiredAnswer",
@@ -281,7 +297,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "0ba6f734"
     },
     {
       "name": "NET_SID_CLIENT_ResetRequireResponse",
@@ -298,7 +315,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "c71d639d"
     },
     {
       "name": "SID_GetPacketResponseFlag",
@@ -316,7 +334,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "983ebd0b"
     },
     {
       "name": "Unreferenced_00520c30",
@@ -333,7 +352,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "f27381a0"
     },
     {
       "name": "NET_SID_CLIENT_IncomingReturn",
@@ -347,7 +367,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_IncomingReturn"
-      ]
+      ],
+      "dh": "1d4f81b2"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_CreateAccount",
@@ -361,7 +382,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_CreateAccount"
-      ]
+      ],
+      "dh": "c3da86ac"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_CreateAccount2",
@@ -375,7 +397,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_CreateAccount2"
-      ]
+      ],
+      "dh": "0fe141ca"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ChangePassword",
@@ -390,7 +413,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_ChangePassword",
         "BNMESSQUEUE_SetStateIfZero"
-      ]
+      ],
+      "dh": "aed5637f"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ClientId",
@@ -410,7 +434,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "869faa7b"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_LogonChallenge",
@@ -425,7 +450,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_LogonChallenge",
         "BNSEND_SetServerToken"
-      ]
+      ],
+      "dh": "2ea71594"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_StartAdvEx3",
@@ -439,7 +465,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_StartAdvEx3"
-      ]
+      ],
+      "dh": "6c927c14"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_LogonChallengeEx",
@@ -456,7 +483,8 @@
         "BNSEND_SetServerToken",
         "BNET_LogIndent",
         "BnetLog_WriteLine"
-      ]
+      ],
+      "dh": "d69fec9f"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_LogonResponse",
@@ -470,7 +498,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_LogonResponse"
-      ]
+      ],
+      "dh": "76dabcfa"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_LogonResponse2",
@@ -486,7 +515,8 @@
         "NET_SID_CLIENT_Incoming_LogonResponse2",
         "BNMESSQUEUE_SetStateIfZero",
         "BNMESSQUEUE_SetStateWithString"
-      ]
+      ],
+      "dh": "e0e88f7e"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ReportVersion",
@@ -510,7 +540,8 @@
       "usedTypes": [
         "FILETIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c0607e4"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_StartVersioning",
@@ -526,7 +557,8 @@
         "NET_SID_CLIENT_Incoming_StartVersioning",
         "BNSEND_SendString",
         "BNDOWNLOAD_InitiateFileDownload"
-      ]
+      ],
+      "dh": "42a2376b"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_Ping",
@@ -541,7 +573,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_Ping",
         "NET_SID_CLIENT_Send"
-      ]
+      ],
+      "dh": "71ac0d38"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_CDKey3",
@@ -558,7 +591,8 @@
         "SID_SetStateFlag1",
         "SStrCopy",
         "SID_SetStateFlag2"
-      ]
+      ],
+      "dh": "5c8e78b5"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ServerList",
@@ -573,7 +607,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_ServerList",
         "SRegSaveString"
-      ]
+      ],
+      "dh": "904a9324"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_GetChannelList",
@@ -588,7 +623,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_GetChannelList",
         "BNSEND_StoreChannelListData"
-      ]
+      ],
+      "dh": "ad759d56"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_GetAdvListEx",
@@ -603,7 +639,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_GetAdvListEx",
         "BNSEND_StoreGameListData"
-      ]
+      ],
+      "dh": "5977b01d"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_Announcement",
@@ -617,7 +654,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_Announcement"
-      ]
+      ],
+      "dh": "b4445cce"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_EnterChat",
@@ -633,7 +671,8 @@
         "NET_SID_CLIENT_Incoming_EnterChat",
         "BNMESSQUEUE_EnqueueString",
         "NET_SID_CLIENT_SetChannelName"
-      ]
+      ],
+      "dh": "756bfbaf"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_GetFileTime",
@@ -651,7 +690,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f9ba809b"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_CheckAd",
@@ -669,7 +709,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a6a58ea7"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_QueryRealms2",
@@ -684,7 +725,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_QueryRealms2",
         "BNSEND_StoreRealmQueryData"
-      ]
+      ],
+      "dh": "317ae22b"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_QueryAdURL",
@@ -699,7 +741,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_QueryAdURL",
         "BNSEND_StoreCDKeyHashData"
-      ]
+      ],
+      "dh": "45833bc3"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_LogonRealmEx",
@@ -714,7 +757,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_LogonRealmEx",
         "BNSEND_StoreUserProfileData"
-      ]
+      ],
+      "dh": "28307ee8"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_ReadUserData",
@@ -729,7 +773,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_ReadUserData",
         "BNSEND_StoreReadUserData"
-      ]
+      ],
+      "dh": "de448c42"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_NewsInfo",
@@ -763,7 +808,8 @@
         "FILETIME",
         "SID_S2C_AuthInfo",
         "uint32_t"
-      ]
+      ],
+      "dh": "9565901c"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthCheck",
@@ -792,7 +838,8 @@
         "FILETIME",
         "SID_S2C_AuthCheck",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf637e18"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountCreate",
@@ -807,7 +854,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_AuthAccountCreate",
         "DEBUG_Trace"
-      ]
+      ],
+      "dh": "855c95c6"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountLogon",
@@ -825,7 +873,8 @@
         "NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade"
-      ]
+      ],
+      "dh": "4d683372"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountLogonProof",
@@ -845,7 +894,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7159d3ac"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountChange",
@@ -863,7 +913,8 @@
         "NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade"
-      ]
+      ],
+      "dh": "c39b0fb4"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountChangeProof",
@@ -884,7 +935,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "da404b2d"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountUpgrade",
@@ -901,7 +953,8 @@
         "DEBUG_Trace",
         "BNMESSQUEUE_SetStateIfZero",
         "NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof"
-      ]
+      ],
+      "dh": "1c781c6d"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof",
@@ -920,7 +973,8 @@
         "NET_SID_CLIENT_Resend_0x53_AuthAccountLogon",
         "NET_SID_ClearSrpPassword",
         "BNMESSQUEUE_SetStateIfZero"
-      ]
+      ],
+      "dh": "e0070caf"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_SetEmail",
@@ -935,7 +989,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_SetEmail",
         "BNSEND_SetGlobalFlag"
-      ]
+      ],
+      "dh": "863f2132"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_OptionalWork",
@@ -950,7 +1005,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_OptionalWork",
         "NET_SID_CLIENT_Send_0x33_GetFileTime"
-      ]
+      ],
+      "dh": "61306b36"
     },
     {
       "name": "NET_SID_CLIENT_Incoming_RequiredWork",
@@ -965,7 +1021,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_Incoming_RequiredWork",
         "NET_SID_CLIENT_Send_0x33_GetFileTime"
-      ]
+      ],
+      "dh": "f92e31bb"
     },
     {
       "name": "NET_SID_CLIENT_IncomingPacketHandler",
@@ -982,7 +1039,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "5e4fe0aa"
     },
     {
       "name": "NET_SID_GetTime32_00521b40",
@@ -1000,7 +1058,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "e834c5a4"
     },
     {
       "name": "NET_SID_CLIENT_InitializeSRP",
@@ -1017,7 +1076,8 @@
         "NET_SID_CLIENT_InitializeSRP",
         "SRP_SetParameters",
         "SRP_SeedRandom"
-      ]
+      ],
+      "dh": "622fa941"
     },
     {
       "name": "NET_SID_CLIENT_FreeSRP",
@@ -1032,7 +1092,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_FreeSRP",
         "SRP_FreeParameters"
-      ]
+      ],
+      "dh": "b635efd4"
     },
     {
       "name": "Unreferenced_00521ba0",
@@ -1046,7 +1107,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "Unreferenced_00521ba0"
-      ]
+      ],
+      "dh": "99127402"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x50_AuthInfo",
@@ -1078,7 +1140,8 @@
         "int64_t",
         "sockaddr_in",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd795cc7"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x51_AuthCheck",
@@ -1114,7 +1177,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "57656453"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x53_AuthAccountLogon",
@@ -1139,7 +1203,8 @@
       "usedTypes": [
         "SID_C2S_AuthAccountLogon",
         "uint32_t"
-      ]
+      ],
+      "dh": "b581b3f9"
     },
     {
       "name": "NET_SID_CLIENT_Resend_0x53_AuthAccountLogon",
@@ -1162,7 +1227,8 @@
         "SID_C2S_AuthAccountLogon",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93703ae1"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof",
@@ -1185,7 +1251,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "35e7e6c1"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x52_AuthAccountCreate",
@@ -1208,7 +1275,8 @@
       "usedTypes": [
         "SID_C2S_AuthAccountCreate",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ef94116"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x55_AuthAccountChange",
@@ -1234,7 +1302,8 @@
       "usedTypes": [
         "SID_C2S_AuthAccountLogon",
         "uint32_t"
-      ]
+      ],
+      "dh": "815a1f79"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof",
@@ -1257,7 +1326,8 @@
       "usedTypes": [
         "SID_C2S_AuthAccountChangeProof",
         "int32_t"
-      ]
+      ],
+      "dh": "0219e9f9"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade",
@@ -1276,7 +1346,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "44f0c1b2"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof",
@@ -1302,7 +1373,8 @@
       "usedTypes": [
         "D2XSHA1Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a8478484"
     },
     {
       "name": "NET_SID_CLIENT_VerifyServerProof",
@@ -1320,7 +1392,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2370f2af"
     },
     {
       "name": "NET_SID_CLIENT_GetSIDFlag2",
@@ -1334,7 +1407,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_GetSIDFlag2"
-      ]
+      ],
+      "dh": "cddfefeb"
     },
     {
       "name": "NET_SID_ClearSrpPassword",
@@ -1349,7 +1423,8 @@
       "calledFunctions": [
         "NET_SID_ClearSrpPassword",
         "SMemZero"
-      ]
+      ],
+      "dh": "3133aebf"
     },
     {
       "name": "NET_SID_CLIENT_ExtractCDKeyNibble",
@@ -1367,7 +1442,8 @@
       "usedTypes": [
         "int8_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0000274e"
     },
     {
       "name": "NET_SID_CLIENT_SetCDKeyNibble",
@@ -1386,7 +1462,8 @@
         "int8_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "78e26985"
     },
     {
       "name": "Unreferenced_00522570",
@@ -1403,7 +1480,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7dc01f79"
     },
     {
       "name": "NET_SID_CLIENT_SetCDKeyBit",
@@ -1421,7 +1499,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c39bab12"
     },
     {
       "name": "NET_SID_CLIENT_BigNumMultiplyAccumulate",
@@ -1442,7 +1521,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "66078654"
     },
     {
       "name": "NET_SID_CLIENT_ExpandCdKeyToBase5",
@@ -1460,7 +1540,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3cf3459e"
     },
     {
       "name": "NET_SID_CLIENT_PermuteBitsLFSR",
@@ -1478,7 +1559,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "70fad0ce"
     },
     {
       "name": "NET_SID_CLIENT_SubstitutionBoxShuffle",
@@ -1496,7 +1578,8 @@
       "usedTypes": [
         "int8_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "470d8873"
     },
     {
       "name": "NET_SID_CLIENT_TransformCdKeyToken",
@@ -1519,7 +1602,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "056df5c2"
     },
     {
       "name": "NET_SID_GetTime32_00522bb0",
@@ -1537,7 +1621,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "3624b09f"
     },
     {
       "name": "NET_SID_CLIENT_GenerateRandomString",
@@ -1557,7 +1642,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a126e02c"
     },
     {
       "name": "NET_SID_CLIENT_EncodeCDKeyHash",
@@ -1587,7 +1673,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "65bfe06b"
     },
     {
       "name": "NET_SID_CLIENT_DecodeCDKeyHash",
@@ -1616,7 +1703,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b005fe8a"
     },
     {
       "name": "NET_SID_CLIENT_CalculateAlignedBufferSize",
@@ -1637,7 +1725,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d87f8f72"
     },
     {
       "name": "NET_SID_CLIENT_EncodeBuffer",
@@ -1669,7 +1758,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4c30e7e0"
     },
     {
       "name": "NET_SID_CLIENT_DecodeAndValidateBuffer",
@@ -1690,7 +1780,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5512c3a5"
     },
     {
       "name": "NET_SID_CLIENT_LoadAndDecodeCDKeyFile",
@@ -1711,7 +1802,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4a93d46f"
     },
     {
       "name": "DecodeAndLoadKeys",
@@ -1740,7 +1832,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c3d99eb5"
     },
     {
       "name": "FreeKeys",
@@ -1755,7 +1848,8 @@
       "calledFunctions": [
         "FreeKeys",
         "SFileUnloadFile"
-      ]
+      ],
+      "dh": "460d5a93"
     },
     {
       "name": "NET_SID_CLIENT_GetProductId",
@@ -1772,7 +1866,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "42b02e83"
     },
     {
       "name": "NET_SID_CLIENT_GetCdKeyOwner",
@@ -1786,7 +1881,8 @@
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_GetCdKeyOwner"
-      ]
+      ],
+      "dh": "818207ec"
     },
     {
       "name": "NET_SID_CLIENT_GetCdKeyByType",
@@ -1803,7 +1899,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e592c7a1"
     },
     {
       "name": "SHA0_Transform",
@@ -1820,7 +1917,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e6933403"
     },
     {
       "name": "NET_SID_CLIENT_ClearSHAContexts",
@@ -1835,7 +1933,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_ClearSHAContexts",
         "memset"
-      ]
+      ],
+      "dh": "63e60d1b"
     },
     {
       "name": "NET_SID_CLIENT_GetSHAState",
@@ -1852,7 +1951,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6dd686e5"
     },
     {
       "name": "NET_SID_CLIENT_SHA1Compress",
@@ -1871,7 +1971,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c501d025"
     },
     {
       "name": "NET_SID_CLIENT_InitSHAContext",
@@ -1889,7 +1990,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9023ec38"
     },
     {
       "name": "NET_SID_CLIENT_IDEAMultInverse",
@@ -1907,7 +2009,8 @@
       "usedTypes": [
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "3903fda9"
     },
     {
       "name": "NET_SID_CLIENT_IDEAExpandKey",
@@ -1924,7 +2027,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "31991021"
     },
     {
       "name": "NET_SID_CLIENT_IDEAInvertKey",
@@ -1944,7 +2048,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bb44b1d"
     },
     {
       "name": "NET_SID_CLIENT_IDEACrypt",
@@ -1962,7 +2067,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "adecdb9d"
     },
     {
       "name": "NET_SID_CLIENT_ClearIDEAContexts",
@@ -1977,7 +2083,8 @@
       "calledFunctions": [
         "NET_SID_CLIENT_ClearIDEAContexts",
         "memset"
-      ]
+      ],
+      "dh": "c04312dc"
     }
   ]
 }

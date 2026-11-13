@@ -22,7 +22,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a0ebf187"
     },
     {
       "name": "D2WINTEXTBOX_ClearAllLines",
@@ -45,7 +46,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "697807ea"
     },
     {
       "name": "D2WINTEXTBOX_SetLinePadding",
@@ -66,7 +68,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "3ede4388"
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextW",
@@ -93,7 +96,8 @@
         "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "89c50173"
     },
     {
       "name": "D2WINTEXTBOX_ClearLineRow",
@@ -116,7 +120,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "028b8e05"
     },
     {
       "name": "D2WINTEXTBOX_GetLineCount",
@@ -137,7 +142,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "e769f568"
     },
     {
       "name": "D2WINTEXTBOX_GetScrollPosition",
@@ -158,7 +164,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "3d39261f"
     },
     {
       "name": "D2WINTEXTBOX_GetSelectedLine",
@@ -179,7 +186,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "4b0ae98c"
     },
     {
       "name": "D2WINTEXTBOX_SetSelectedLine",
@@ -200,7 +208,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "e7c3eff2"
     },
     {
       "name": "D2WINTEXTBOX_ScrollToLine",
@@ -223,7 +232,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ed627650"
     },
     {
       "name": "D2WINTEXTBOX_GetVisibleLineCount",
@@ -248,7 +258,8 @@
         "D2WinTextBox",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "456ba5dc"
     },
     {
       "name": "D2WINTEXTBOX_GetSelectedLineText",
@@ -271,7 +282,8 @@
         "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "8203f4a9"
     },
     {
       "name": "D2WINTEXTBOX_GetLineCellValue",
@@ -294,7 +306,8 @@
         "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "fa86119e"
     },
     {
       "name": "D2WINTEXTBOX_SetColumnCount",
@@ -315,7 +328,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "f5d660f7"
     },
     {
       "name": "D2WINTEXTBOX_SetColumnWidth",
@@ -336,7 +350,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "4c870ec9"
     },
     {
       "name": "D2WINTEXTBOX_SetColumnAlignment",
@@ -357,7 +372,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "7174d482"
     },
     {
       "name": "D2WINTEXTBOX_GetLastLineIndex",
@@ -379,7 +395,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bda72ac9"
     },
     {
       "name": "D2WINTEXTBOX_SetActive",
@@ -400,7 +417,8 @@
       ],
       "usedTypes": [
         "D2WinTextBox"
-      ]
+      ],
+      "dh": "4e30f335"
     },
     {
       "name": "D2WINTEXTBOX_Unused_HaltLine814",
@@ -417,7 +435,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "d097d7fa"
     },
     {
       "name": "D2WINTEXTBOX_SetLineColor",
@@ -439,7 +458,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e5849acd"
     },
     {
       "name": "D2WINTEXTBOX_GetVisibleLinesFromScroll",
@@ -461,7 +481,8 @@
         "D2WinTextBox",
         "D2WinTextBoxLineStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "570b25e2"
     },
     {
       "name": "D2WINTEXTBOX_TruncateStringToFitWidth",
@@ -481,7 +502,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9929bf70"
     },
     {
       "name": "Draw",
@@ -520,7 +542,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "82b7e184"
     },
     {
       "name": "Push",
@@ -546,7 +569,8 @@
         "D2WinTextBox",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a83cfb49"
     },
     {
       "name": "Key",
@@ -573,7 +597,8 @@
         "D2WinTextBox",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a05c29ac"
     },
     {
       "name": "D2WINTEXTBOX_GetScrollbarMaxValue",
@@ -594,7 +619,8 @@
       ],
       "usedTypes": [
         "D2WinTextBox"
-      ]
+      ],
+      "dh": "e4edfae6"
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarMaxRange",
@@ -617,7 +643,8 @@
         "D2WinTextBox",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a184f9a3"
     },
     {
       "name": "D2WINTEXTBOX_RefreshScrollbar",
@@ -639,7 +666,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "ff548c06"
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarPosition",
@@ -661,7 +689,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "886b080c"
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarCallbackA",
@@ -683,7 +712,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "e6193e4c"
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarCallbackB",
@@ -707,7 +737,8 @@
         "D2WinTextBox",
         "fpD2WinScrollbarOnChange",
         "int32_t"
-      ]
+      ],
+      "dh": "62630944"
     },
     {
       "name": "D2WINTEXTBOX_SetScrollbarStyle",
@@ -729,7 +760,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "36ee6a24"
     },
     {
       "name": "D2WINTEXTBOX_GetScrollbarStyle",
@@ -750,7 +782,8 @@
       ],
       "usedTypes": [
         "D2WinTextBox"
-      ]
+      ],
+      "dh": "0fa63393"
     },
     {
       "name": "D2WinTextBox",
@@ -780,7 +813,8 @@
         "OnPress",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3fcf6871"
     },
     {
       "name": "FORMS_DestroyD2WinTextBox",
@@ -804,7 +838,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "5a7b4b5c"
     },
     {
       "name": "SetText",
@@ -843,7 +878,8 @@
         "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b58da113"
     },
     {
       "name": "D2WINTEXTBOX_AddLines",
@@ -871,7 +907,8 @@
         "D2WinTextBoxLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "12660b15"
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextA",
@@ -892,7 +929,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9e04f5a2"
     },
     {
       "name": "D2WINTEXTBOX_SetLineCellTextWDirect",
@@ -912,7 +950,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "6de339cc"
     },
     {
       "name": "D2WINTEXTBOX_WordWrapAndSetText",
@@ -943,7 +982,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "8020eb42"
     },
     {
       "name": "D2WINTEXTBOX_SetTextFromAnsiSimple",
@@ -967,7 +1007,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "d11c6520"
     },
     {
       "name": "D2WINTEXTBOX_SetTextFromAnsi",
@@ -991,7 +1032,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "725fb9fd"
     }
   ]
 }

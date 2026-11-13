@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "c85e0b56"
     },
     {
       "name": "CheckFlags",
@@ -40,7 +41,8 @@
         "D2UnitStrc",
         "eD2UnitFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "3257f964"
     },
     {
       "name": "GetGUID",
@@ -59,7 +61,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b2cf559b"
     },
     {
       "name": "GetClassId",
@@ -78,7 +81,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c97671dc"
     },
     {
       "name": "GetAnimMode",
@@ -97,7 +101,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2PlayerAnimMode"
-      ]
+      ],
+      "dh": "99ebacce"
     },
     {
       "name": "GetXPosFromDynamicPathUnit",
@@ -118,7 +123,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "76937be7"
     },
     {
       "name": "GetYPosFromDynamicPathUnit",
@@ -139,7 +145,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "601925ac"
     },
     {
       "name": "CheckFlagWithMask",
@@ -158,7 +165,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "140ad8a3"
     },
     {
       "name": "GetMemPool",
@@ -177,7 +185,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6660a5cd"
     },
     {
       "name": "Return_Unref_005fe100",
@@ -195,7 +204,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "050daaae"
     },
     {
       "name": "GetDirection",
@@ -217,7 +227,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3b5adbe5"
     },
     {
       "name": "GetFirstSkill",
@@ -239,7 +250,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fc5ae444"
     },
     {
       "name": "GetLeftSkill",
@@ -261,7 +273,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d29d3ed9"
     },
     {
       "name": "GetRightSkill",
@@ -283,7 +296,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "326a9113"
     },
     {
       "name": "SetCurrentSkill",
@@ -305,7 +319,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a35246ec"
     },
     {
       "name": "GetCurrentSkill",
@@ -327,7 +342,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "42088a45"
     },
     {
       "name": "AllocUnit",
@@ -349,7 +365,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "d1290dbb"
     },
     {
       "name": "Free",
@@ -369,7 +386,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "98bfddbb"
     },
     {
       "name": "UNITS_SetWarpStaticPathCoords",
@@ -391,7 +409,8 @@
         "D2StaticPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aeeeeebf"
     },
     {
       "name": "GetPrecisionX",
@@ -413,7 +432,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "38ecef93"
     },
     {
       "name": "GetPrecisionY",
@@ -435,7 +455,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c714e89d"
     },
     {
       "name": "SetXForStaticUnit",
@@ -457,7 +478,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "6947bc1c"
     },
     {
       "name": "SetYForStaticUnit",
@@ -479,7 +501,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "cac8f702"
     },
     {
       "name": "GetUnitSizeX",
@@ -501,7 +524,8 @@
         "D2MonStats2Txt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "237b04b3"
     },
     {
       "name": "GetUnitSizeY",
@@ -526,7 +550,8 @@
         "D2MonStats2Txt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3660c849"
     },
     {
       "name": "GetTargetX",
@@ -548,7 +573,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "1c710494"
     },
     {
       "name": "GetTargetY",
@@ -570,7 +596,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "cfed5cae"
     },
     {
       "name": "GetAbsoluteXDistance",
@@ -590,7 +617,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a6b42ed9"
     },
     {
       "name": "GetAbsoluteYDistance",
@@ -610,7 +638,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b3b73a2c"
     },
     {
       "name": "SetTargetX",
@@ -631,7 +660,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b765416"
     },
     {
       "name": "SetTargetY",
@@ -652,7 +682,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cc04ca0f"
     },
     {
       "name": "GetCoords",
@@ -677,7 +708,8 @@
         "POINT",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "542410de"
     },
     {
       "name": "GetTargetCoords",
@@ -702,7 +734,8 @@
         "POINT",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b3ba67bb"
     },
     {
       "name": "SetTargetXYForWarp",
@@ -724,7 +757,8 @@
         "D2StaticPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c08a98c"
     },
     {
       "name": "GetCollisionType",
@@ -747,7 +781,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8ec73227"
     },
     {
       "name": "BlockCollisionPath",
@@ -774,7 +809,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c4ae17a"
     },
     {
       "name": "InitializeStaticPath",
@@ -798,7 +834,8 @@
         "D2StaticPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2267b723"
     },
     {
       "name": "ResetRoom",
@@ -821,7 +858,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "998da40b"
     },
     {
       "name": "UNITS_GetRoom",
@@ -845,7 +883,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "1d64ee18"
     },
     {
       "name": "SetTargetUnitForDynamicUnit",
@@ -868,7 +907,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "aa2ca320"
     },
     {
       "name": "GetTargetTypeFromDynamicUnit",
@@ -891,7 +931,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c311cd1e"
     },
     {
       "name": "GetTargetGUIDFromDynamicUnit",
@@ -915,7 +956,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fdd7c79"
     },
     {
       "name": "SetTargetUnitForPlayerOrMonster",
@@ -938,7 +980,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5afdf3f"
     },
     {
       "name": "SetAnimSpeedForMonster",
@@ -958,7 +1001,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "951be670"
     },
     {
       "name": "GetRunAndWalkVelocityForPlayer",
@@ -977,7 +1021,8 @@
         "D2CharStatsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d1bbe29c"
     },
     {
       "name": "AddWalkVelocityStatIfExistToPlayer",
@@ -1002,7 +1047,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a15e8001"
     },
     {
       "name": "SetAnimData",
@@ -1025,7 +1071,8 @@
         "D2AnimDataRecordStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "49b6f752"
     },
     {
       "name": "NeedsRoomUpdate",
@@ -1048,7 +1095,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "25f5a5a3"
     },
     {
       "name": "ChangeAnimMode",
@@ -1071,7 +1119,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2c5318d1"
     },
     {
       "name": "RefreshInventory",
@@ -1089,7 +1138,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "951eb5e2"
     },
     {
       "name": "GetInventoryPage",
@@ -1114,7 +1164,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8ed7dff4"
     },
     {
       "name": "GetLightMap",
@@ -1136,7 +1187,8 @@
         "D2LightMapStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "18ecf151"
     },
     {
       "name": "GetAnimOrSeqMode",
@@ -1154,7 +1206,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "40a5de42"
     },
     {
       "name": "SetAnimOrSeqMode",
@@ -1175,7 +1228,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "125e71e8"
     },
     {
       "name": "UpdateSequenceMode",
@@ -1196,7 +1250,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b89ea6ba"
     },
     {
       "name": "InitializeSequence",
@@ -1220,7 +1275,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e82b250"
     },
     {
       "name": "SetSequenceFrame",
@@ -1241,7 +1297,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8dee14be"
     },
     {
       "name": "UpdateFrame",
@@ -1258,7 +1315,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4a4d1376"
     },
     {
       "name": "SetFrameNonRate",
@@ -1276,7 +1334,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fa4480ea"
     },
     {
       "name": "UNITS_GetBaseWalkVelocity",
@@ -1294,7 +1353,8 @@
       "usedTypes": [
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8d27e1c4"
     },
     {
       "name": "UNITS_GetAnimFrameTime",
@@ -1313,7 +1373,8 @@
         "D2MonStatsTxt",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d84b881f"
     },
     {
       "name": "UNITS_GetAnimTableEntry",
@@ -1330,7 +1391,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f766700f"
     },
     {
       "name": "CanPlayAnimMode",
@@ -1356,7 +1418,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "864bde1c"
     },
     {
       "name": "UNITS_CheckAnimateAtFrameEnd",
@@ -1385,7 +1448,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5043eb26"
     },
     {
       "name": "UNITS_GetAnimFrameSkip",
@@ -1403,7 +1467,8 @@
       "usedTypes": [
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "27898147"
     },
     {
       "name": "HasSequenceTransition",
@@ -1428,7 +1493,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "9585b94d"
     },
     {
       "name": "GetDiminishedStat",
@@ -1447,7 +1513,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9584aaf8"
     },
     {
       "name": "SetAnimationSpeed",
@@ -1466,7 +1533,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "50f22b23"
     },
     {
       "name": "IsAtEndOfFrameCycle",
@@ -1488,7 +1556,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e450fff"
     },
     {
       "name": "GetShiftedFrameMetrics",
@@ -1510,7 +1579,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d8b83d62"
     },
     {
       "name": "GetFrameMetrics",
@@ -1527,7 +1597,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ae43a8de"
     },
     {
       "name": "SetAnimActionFrame",
@@ -1546,7 +1617,8 @@
         "D2AnimDataRecordStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7bb56c08"
     },
     {
       "name": "GetEventFrameInfo",
@@ -1571,7 +1643,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54853e24"
     },
     {
       "name": "HasCollision",
@@ -1588,7 +1661,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6288ad2d"
     },
     {
       "name": "GetSkillFromSkillId",
@@ -1613,7 +1687,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "25340b72"
     },
     {
       "name": "IsDoor",
@@ -1634,7 +1709,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f929bbd1"
     },
     {
       "name": "CheckIfObjectOrientationIs1",
@@ -1655,7 +1731,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "54632fa7"
     },
     {
       "name": "IsShrine",
@@ -1672,7 +1749,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f5f10acc"
     },
     {
       "name": "GetObjectTxtRecordFromObject",
@@ -1694,7 +1772,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8606ebea"
     },
     {
       "name": "GetShrineTxtRecordFromObject",
@@ -1716,7 +1795,8 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8e1d8a5c"
     },
     {
       "name": "SetShrineTxtRecordInObjectData",
@@ -1738,7 +1818,8 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a9f98495"
     },
     {
       "name": "UpdateDirectionAndSpeed",
@@ -1757,7 +1838,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "049a3d09"
     },
     {
       "name": "StoreOwnerTypeAndGUID",
@@ -1782,7 +1864,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b49333ba"
     },
     {
       "name": "StoreOwnerInfo",
@@ -1802,7 +1885,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fd21e8a9"
     },
     {
       "name": "StoreOwner",
@@ -1825,7 +1909,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "82a42352"
     },
     {
       "name": "StoreLastAttacker",
@@ -1847,7 +1932,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "47b7302f"
     },
     {
       "name": "GetDirectionToCoords",
@@ -1870,7 +1956,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d53fa859"
     },
     {
       "name": "SetOverlay",
@@ -1898,7 +1985,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04aa34f4"
     },
     {
       "name": "GetBeltType",
@@ -1921,7 +2009,8 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "19c60e65"
     },
     {
       "name": "GetCurrentLifePercentage",
@@ -1941,7 +2030,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "079e669f"
     },
     {
       "name": "IsSoftMonster",
@@ -1959,7 +2049,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f6439621"
     },
     {
       "name": "AllocPlayerData",
@@ -1991,7 +2082,8 @@
         "D2UnitStrc",
         "D2WaypointStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "91b6ea05"
     },
     {
       "name": "FreePlayerData",
@@ -2017,7 +2109,8 @@
         "D2PoolManagerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6b55a774"
     },
     {
       "name": "SetNameInPlayerData",
@@ -2039,7 +2132,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bd0303f9"
     },
     {
       "name": "GetPlayerName",
@@ -2060,7 +2154,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "69bc5894"
     },
     {
       "name": "GetPlayerData",
@@ -2082,7 +2177,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "224aa6c3"
     },
     {
       "name": "SetPlayerPortalFlags",
@@ -2103,7 +2199,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6712e82f"
     },
     {
       "name": "GetPlayerPortalFlags",
@@ -2124,7 +2221,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "539ded1f"
     },
     {
       "name": "GetNameOffsetFromObject",
@@ -2146,7 +2244,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0303131d"
     },
     {
       "name": "GetObjectPortalFlags",
@@ -2168,7 +2267,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e36ccbd4"
     },
     {
       "name": "SetObjectPortalFlags",
@@ -2190,7 +2290,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9c671a16"
     },
     {
       "name": "CheckObjectPortalFlag",
@@ -2212,7 +2313,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "832a36cb"
     },
     {
       "name": "GetOverlayHeight",
@@ -2233,7 +2335,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "6b2515df"
     },
     {
       "name": "GetDefense",
@@ -2263,7 +2366,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "bb57413c"
     },
     {
       "name": "GetAttackRate",
@@ -2285,7 +2389,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "03e6e732"
     },
     {
       "name": "HasShield",
@@ -2308,7 +2413,8 @@
         "eD2MonsterClassId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d199d393"
     },
     {
       "name": "GetBlockRate",
@@ -2331,7 +2437,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "781a9cf7"
     },
     {
       "name": "GetEquippedWeapon",
@@ -2350,7 +2457,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c9dc845e"
     },
     {
       "name": "GetMeleeRange",
@@ -2377,7 +2485,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7f9871bc"
     },
     {
       "name": "TestCollision",
@@ -2396,7 +2505,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "2f7f2fa5"
     },
     {
       "name": "TestCollisionByCoordinates",
@@ -2421,7 +2531,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a003e42a"
     },
     {
       "name": "TestCollisionWithUnit",
@@ -2448,7 +2559,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f88a7c9c"
     },
     {
       "name": "TestCollisionBetweenInteractingUnits",
@@ -2476,7 +2588,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "fc25db5f"
     },
     {
       "name": "IsInMeleeRange",
@@ -2498,7 +2611,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "97750183"
     },
     {
       "name": "IsInMovingMode",
@@ -2524,7 +2638,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac8fd993"
     },
     {
       "name": "IsInMovingModeEx",
@@ -2542,7 +2657,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "83f81ef4"
     },
     {
       "name": "CalcRecoveryPriority",
@@ -2563,7 +2679,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3fd2d4e"
     },
     {
       "name": "GetInventoryGoldLimit",
@@ -2583,7 +2700,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c44147a"
     },
     {
       "name": "Return",
@@ -2601,7 +2719,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b99c60e0"
     },
     {
       "name": "InitRightSkill",
@@ -2628,7 +2747,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "fb3c0edb"
     },
     {
       "name": "InitLeftSkill",
@@ -2655,7 +2775,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "912b4df5"
     },
     {
       "name": "InitSwitchRightSkill",
@@ -2682,7 +2803,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5d6f622b"
     },
     {
       "name": "InitSwitchLeftSkill",
@@ -2709,7 +2831,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "7ea6af39"
     },
     {
       "name": "GetRightSkillData",
@@ -2732,7 +2855,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "eb034d2b"
     },
     {
       "name": "GetLeftSkillData",
@@ -2755,7 +2879,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4c072954"
     },
     {
       "name": "GetSwitchRightSkillDataResetRightSkill",
@@ -2778,7 +2903,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "d120c052"
     },
     {
       "name": "GetSwitchLeftSkillDataResetLeftSkill",
@@ -2801,7 +2927,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "7229b3b5"
     },
     {
       "name": "GetShiftLeftSkillData",
@@ -2824,7 +2951,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2e11142b"
     },
     {
       "name": "GetShiftRightSkillData",
@@ -2847,7 +2975,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "26d19d30"
     },
     {
       "name": "SetShiftLeftSkillData",
@@ -2870,7 +2999,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "9d8f2c71"
     },
     {
       "name": "SetShiftRightSkillData",
@@ -2893,7 +3023,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "81d4225d"
     },
     {
       "name": "SetWeaponGUID",
@@ -2915,7 +3046,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f986427d"
     },
     {
       "name": "GetWeaponGUID",
@@ -2936,7 +3068,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e5b9c102"
     },
     {
       "name": "GetStashGoldLimit",
@@ -2954,7 +3087,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c0ff5eb"
     },
     {
       "name": "CanSwitchAI",
@@ -2974,7 +3108,8 @@
         "D2MonStatsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c45d86ea"
     },
     {
       "name": "SetTimerArg",
@@ -2996,7 +3131,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c1c7d8b4"
     },
     {
       "name": "GetTimerArg",
@@ -3018,7 +3154,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "57487c24"
     },
     {
       "name": "AllocStaticPath",
@@ -3037,7 +3174,8 @@
       "usedTypes": [
         "D2StaticPathStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b90b130d"
     },
     {
       "name": "FreeStaticPath",
@@ -3055,7 +3193,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a313af58"
     },
     {
       "name": "CanDualWield",
@@ -3074,7 +3213,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "9fbcac99"
     },
     {
       "name": "IsCorpseUseable",
@@ -3094,7 +3234,8 @@
       "usedTypes": [
         "D2MonStats2Txt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "886effb2"
     },
     {
       "name": "IsObjectInInteractRange",
@@ -3119,7 +3260,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "155ad3da"
     },
     {
       "name": "RemoveCollision_Vector",
@@ -3146,7 +3288,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa94a463"
     },
     {
       "name": "PATH_GetCurrentDirection",
@@ -3176,7 +3319,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9e3cb9ba"
     },
     {
       "name": "GetWeaponBySkill",
@@ -3207,7 +3351,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "290afce3"
     },
     {
       "name": "GetWeaponAnimClass",
@@ -3232,7 +3377,8 @@
         "eD2UnitType",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6ab2604"
     },
     {
       "name": "GetHitClassForPlayerOrMonster",
@@ -3255,7 +3401,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3adabb3d"
     },
     {
       "name": "GetWeaponClass",
@@ -3276,7 +3423,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a15c413d"
     },
     {
       "name": "UpdateDualWieldStats",
@@ -3300,7 +3448,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2fd6dcd0"
     },
     {
       "name": "GetItemComponent",
@@ -3327,7 +3476,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint8_t"
-      ]
+      ],
+      "dh": "614b0c44"
     },
     {
       "name": "AdvanceAnimFrame",
@@ -3348,7 +3498,8 @@
         "D2AnimDataRecordStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bab2a65"
     },
     {
       "name": "UpdateAnimSpeed",
@@ -3389,7 +3540,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05568831"
     },
     {
       "name": "InitAnimMode",
@@ -3426,7 +3578,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "ba7e6757"
     },
     {
       "name": "SetupUpdateFlag",
@@ -3447,7 +3600,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d99ae983"
     }
   ]
 }

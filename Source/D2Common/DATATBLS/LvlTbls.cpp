@@ -497,7 +497,7 @@ D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
 }
 
 // Converts all forward slashes '/' in a level path string to backslashes '\\' in-place, then prepends the data directory prefix via wsprintfA. Used to normalize DS1/DT1 file paths loaded from level text tables to Windows path format.
-static void __fastcall LVLTBLS_FixPathSlashes(char * szText, char * szPathPrefix) {
+static void __fastcall LVLTBLS_FixPathSlashes(char * szPathPrefix, char * szText) {
     int i;
     char szFormatBuf[60];
     char* pcScan = szText;
@@ -569,7 +569,7 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
       nFileIdx = 0x20;
       pFileEntry = pCurrentRow;
       do {
-        LVLTBLS_FixPathSlashes((char*)pFileEntry, "DATA\\GLOBAL\\TILES");
+        LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", (char*)pFileEntry);
         pFileEntry = (D2LvlTypesTxt*)(pFileEntry->File + 1);
         nFileIdx--;
       } while (nFileIdx);
@@ -680,7 +680,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
         nFileIdx = 0;
         szFile = pFirstFile;
         do {
-          LVLTBLS_FixPathSlashes(*szFile, "DATA\\GLOBAL\\TILES");
+          LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", *szFile);
           if (bLoadDrlgFiles) {
             pFileScan = szFile;
             do {
@@ -934,7 +934,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
 
     char* szCurrentFile = pLvlSubTxt->File;
     do {
-      LVLTBLS_FixPathSlashes(szCurrentFile, "DATA\\GLOBAL\\TILES");
+      LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", szCurrentFile);
       if ((bIsExpansion || !*(int*)(szCurrentFile + 0x154)) && (nParam || bGametypeIsOBNetHost)) {
         Drlg::Preset::AllocDrlgFile(gpaDrlgLvlSubPresetFiles + i, nullptr, szCurrentFile);
         if (!gpaDrlgLvlSubPresetFiles[i]->nSubstGroups) {

@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr",
         "int32_t"
-      ]
+      ],
+      "dh": "379c3312"
     },
     {
       "name": "CurGateway",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2BNetGatewayAccessStr",
         "int32_t"
-      ]
+      ],
+      "dh": "e9d67d55"
     },
     {
       "name": "operator=",
@@ -51,7 +53,8 @@
       "namespace": "D2Client::BNGatewayAccess",
       "usedTypes": [
         "D2BNetGatewayAccessStr"
-      ]
+      ],
+      "dh": "08a97868"
     }
   ]
 }

@@ -24,7 +24,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d19c2027"
     },
     {
       "name": "CLIENT_LoadLNG",
@@ -46,7 +47,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2302430d"
     }
   ]
 }

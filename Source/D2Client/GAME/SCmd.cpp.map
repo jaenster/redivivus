@@ -15,7 +15,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv_IgnoreShared_Unref_0045b090"
-      ]
+      ],
+      "dh": "3b055233"
     },
     {
       "name": "SCMD_Rcv_IgnoreShared_Unref_0045b0a0",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv_IgnoreShared_Unref_0045b0a0"
-      ]
+      ],
+      "dh": "5b2e5799"
     },
     {
       "name": "SCMD_SetOrClearBitFlag",
@@ -48,7 +50,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "baa1169c"
     },
     {
       "name": "GetTxtMonStatsSize",
@@ -65,7 +68,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4f1090d5"
     },
     {
       "name": "SCMD_ClearPlayerTradeFields",
@@ -82,7 +86,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a3dc5e50"
     },
     {
       "name": "Unreferenced_0045c4e0",
@@ -96,7 +101,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "Unreferenced_0045c4e0"
-      ]
+      ],
+      "dh": "78e46ca5"
     },
     {
       "name": "SaveCharacter",
@@ -122,7 +128,8 @@
       "usedTypes": [
         "FILE",
         "int32_t"
-      ]
+      ],
+      "dh": "46e5165d"
     },
     {
       "name": "DownloadSave",
@@ -142,7 +149,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "fdce73d8"
     },
     {
       "name": "NET_D2GS_CLIENT_PacketHandle_from0xAF",
@@ -161,7 +169,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "2619bcde"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x01_NEWGAME",
@@ -184,7 +193,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x01",
         "eD2ArenaFlags"
-      ]
+      ],
+      "dh": "abd529fb"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x03_NEWACT",
@@ -202,7 +212,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x03"
-      ]
+      ],
+      "dh": "624a54c3"
     },
     {
       "name": "SCMD_Rcv_IgnoreShared",
@@ -216,7 +227,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv_IgnoreShared"
-      ]
+      ],
+      "dh": "59e62216"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x02_LoadSuccess",
@@ -248,7 +260,8 @@
       ],
       "usedTypes": [
         "eAct"
-      ]
+      ],
+      "dh": "b6f48387"
     },
     {
       "name": "CLIENT_GetUnitAct",
@@ -272,7 +285,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eAct"
-      ]
+      ],
+      "dh": "58a5a964"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x04_STARTACT",
@@ -301,7 +315,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "ca0375e1"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x05_UnloadComplete",
@@ -318,7 +333,8 @@
         "thunk_WEATHER_FreeDC6Graphics",
         "InitializeMemoryManagers",
         "GetTickCount"
-      ]
+      ],
+      "dh": "d6c4a30b"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x06_ENDGAME",
@@ -334,7 +350,8 @@
         "NET_D2GS_CLIENT_Incoming0x06_ENDGAME",
         "GAMEDATA_GetExitFlag2",
         "CLIENT_ConnectionRefused"
-      ]
+      ],
+      "dh": "0a978d74"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x07_NEWROOM",
@@ -360,7 +377,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "8b83c8a1"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM",
@@ -386,7 +404,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "625da031"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp",
@@ -406,7 +425,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x09",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a0a2b742"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT",
@@ -424,7 +444,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x51"
-      ]
+      ],
+      "dh": "6ed7b0d9"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x52",
@@ -456,7 +477,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70be5b2f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL",
@@ -476,7 +498,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "72abfdb9"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE",
@@ -496,7 +519,8 @@
         "D2GSPacketSrv0x0C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ab1fcfc4"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY",
@@ -518,7 +542,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0f696082"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID",
@@ -538,7 +563,8 @@
         "D2GSPacketSrv0x0E",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "18cff1b6"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS",
@@ -559,7 +585,8 @@
         "D2GSPacketSrv0x0F",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "02842637"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS",
@@ -580,7 +607,8 @@
         "D2GSPacketSrv0x10",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "661d6b72"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH",
@@ -600,7 +628,8 @@
         "D2GSPacketSrv0x67",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9a97ff2a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH",
@@ -621,7 +650,8 @@
         "D2GSPacketSrv0x68",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f2b6ad8c"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH",
@@ -641,7 +671,8 @@
         "D2GSPacketSrv0x69",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d61b7734"
     },
     {
       "name": "NET_D2GS_CLIENT_RecvNpcStateToEntity",
@@ -660,7 +691,8 @@
       "usedTypes": [
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "25a7933a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION",
@@ -681,7 +713,8 @@
         "D2GSPacketSrv0x6B",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ad95280e"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION",
@@ -702,7 +735,8 @@
         "D2GSPacketSrv0x6C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fb514e36"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL",
@@ -726,7 +760,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "24c8dcb4"
     },
     {
       "name": "SCMD_Rcv0x6E_UnitIgnore",
@@ -743,7 +778,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2805989b"
     },
     {
       "name": "SCMD_Rcv0x6F_UnitIgnore",
@@ -760,7 +796,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3984932c"
     },
     {
       "name": "SCMD_Rcv0x70_UnitIgnore",
@@ -777,7 +814,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "441c272a"
     },
     {
       "name": "SCMD_Rcv0x71_UnitIgnore",
@@ -794,7 +832,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "08413e8f"
     },
     {
       "name": "SCMD_Rcv0x72_UnitIgnore",
@@ -811,7 +850,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d4a7c512"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay",
@@ -832,7 +872,8 @@
         "D2GSPacketSrv0x11",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "3636cbe1"
     },
     {
       "name": "SCMD_Rcv0x12_Ignore",
@@ -846,7 +887,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv0x12_Ignore"
-      ]
+      ],
+      "dh": "e9ec258c"
     },
     {
       "name": "SCMD_Rcv0x13_Ignore",
@@ -860,7 +902,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv0x13_Ignore"
-      ]
+      ],
+      "dh": "f92e0e6b"
     },
     {
       "name": "SCMD_Rcv0x14_Ignore",
@@ -874,7 +917,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv0x14_Ignore"
-      ]
+      ],
+      "dh": "ef6b1fd1"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x15_WarpXY",
@@ -913,7 +957,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68a5b4fa"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x17_UNITPATH",
@@ -938,7 +983,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "47fad892"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x16_UPDATE",
@@ -963,7 +1009,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3c9761b2"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x28_INTERACTION_ENABLE",
@@ -981,7 +1028,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x28"
-      ]
+      ],
+      "dh": "b3f79c09"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP",
@@ -999,7 +1047,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x62"
-      ]
+      ],
+      "dh": "d05cccbf"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD",
@@ -1017,7 +1066,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x29"
-      ]
+      ],
+      "dh": "15c94c58"
     },
     {
       "name": "ITEM_CltRecalcEquippedFromUnit",
@@ -1036,7 +1086,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2ab68964"
     },
     {
       "name": "SCMD_RecalcInventoryItemStats",
@@ -1065,7 +1116,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3ec2a13"
     },
     {
       "name": "SCMD_HandleStatChangeEffect",
@@ -1090,7 +1142,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "412e5c43"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x9Eto0xA2",
@@ -1114,7 +1167,8 @@
         "eD2UnitStat",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4bfc6963"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL",
@@ -1136,7 +1190,8 @@
         "D2GSPacketSrv0xA3",
         "D2UnitStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "1fb5312b"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL",
@@ -1161,7 +1216,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint16_t"
-      ]
+      ],
+      "dh": "6fe37db7"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER",
@@ -1176,7 +1232,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER",
         "GFX_PrecacheMonsterAllModes"
-      ]
+      ],
+      "dh": "6e6b3760"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA",
@@ -1203,7 +1260,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98122d3a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x20",
@@ -1225,7 +1283,8 @@
         "D2GSPacketSrv0x20",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "8d63fea1"
     },
     {
       "name": "SCMD_DecodeRelativeCoordinates",
@@ -1243,7 +1302,8 @@
       "usedTypes": [
         "int16_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "50ea53f3"
     },
     {
       "name": "DecodeIncoming0x18",
@@ -1264,7 +1324,8 @@
         "D2BitBufferStrc",
         "D2GSPacket0x18Decoded",
         "uint32_t"
-      ]
+      ],
+      "dh": "2ee4618f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG",
@@ -1289,7 +1350,8 @@
         "D2GSPacket0x18Decoded",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3aea3eb"
     },
     {
       "name": "DecodeIncoming0x95",
@@ -1310,7 +1372,8 @@
         "D2BitBufferStrc",
         "D2GSPacket0x95Decoded",
         "uint32_t"
-      ]
+      ],
+      "dh": "af292bff"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM",
@@ -1335,7 +1398,8 @@
         "D2GSPacket0x95Decoded",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "33bb5111"
     },
     {
       "name": "DecodeIncoming0x96",
@@ -1356,7 +1420,8 @@
         "D2BitBufferStrc",
         "D2GSPacket0x96Decoded",
         "uint32_t"
-      ]
+      ],
+      "dh": "d08ea0a1"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition",
@@ -1379,7 +1444,8 @@
         "D2GSPacket0x96Decoded",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8dddf2c7"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL",
@@ -1400,7 +1466,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "77434651"
     },
     {
       "name": "NET_D2GS_CLIENT_RecvSkillTabBonusDelta",
@@ -1421,7 +1488,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2b17e7ac"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS",
@@ -1443,7 +1511,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d8fec003"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS",
@@ -1470,7 +1539,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5c23f070"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x23_SETSKILL",
@@ -1493,7 +1563,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ae1688a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER",
@@ -1511,7 +1582,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u16_u"
-      ]
+      ],
+      "dh": "04b2959c"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID",
@@ -1530,7 +1602,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7a2f7f21"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY",
@@ -1549,7 +1622,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "49538420"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID",
@@ -1569,7 +1643,8 @@
         "D2GSPacketSrv0x4C",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7b0393ff"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY",
@@ -1589,7 +1664,8 @@
         "D2GSPacketSrv0x4D",
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ed1bcaac"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x26_CHATSTART",
@@ -1610,7 +1686,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x26",
         "MessageStrc"
-      ]
+      ],
+      "dh": "51186fc4"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x76",
@@ -1629,7 +1706,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x76"
-      ]
+      ],
+      "dh": "ff130f2f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5A",
@@ -1647,7 +1725,8 @@
       ],
       "usedTypes": [
         "D2Packet0x5aEventStructure"
-      ]
+      ],
+      "dh": "1cbe2e94"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x27_PRESETTALK",
@@ -1666,7 +1745,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x27"
-      ]
+      ],
+      "dh": "1174f6b4"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS",
@@ -1684,7 +1764,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x2A"
-      ]
+      ],
+      "dh": "dc8b2f70"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND",
@@ -1702,7 +1783,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x2C"
-      ]
+      ],
+      "dh": "c11c3a9b"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT",
@@ -1725,7 +1807,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da9e0a6b"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x3F",
@@ -1743,7 +1826,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x3F"
-      ]
+      ],
+      "dh": "d76488fe"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x40",
@@ -1762,7 +1846,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x40"
-      ]
+      ],
+      "dh": "fbd02fa5"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x42",
@@ -1780,7 +1865,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u"
-      ]
+      ],
+      "dh": "1fb1b3df"
     },
     {
       "name": "SCMD_Rcv0x45_Ignore",
@@ -1794,7 +1880,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv0x45_Ignore"
-      ]
+      ],
+      "dh": "5fb93808"
     },
     {
       "name": "NET_D2GS_CLIENT_RecvRecalcEquippedItems",
@@ -1812,7 +1899,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x"
-      ]
+      ],
+      "dh": "86e34db3"
     },
     {
       "name": "NET_D2GS_CLIENT_RecvRecalcEquippedItems2",
@@ -1830,7 +1918,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x"
-      ]
+      ],
+      "dh": "d79f6b90"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x53",
@@ -1857,7 +1946,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fa55ef0"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x50",
@@ -1876,7 +1966,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x50"
-      ]
+      ],
+      "dh": "73e0e2f1"
     },
     {
       "name": "SCMD_Rcv0x54_Ignore",
@@ -1912,7 +2003,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x4E"
-      ]
+      ],
+      "dh": "ea06de89"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT",
@@ -1937,7 +2029,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a65ae91a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x58",
@@ -1955,7 +2048,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u16_u"
-      ]
+      ],
+      "dh": "bd24f87e"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT",
@@ -1970,7 +2064,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT",
         "UNIT_CreatePlayer"
-      ]
+      ],
+      "dh": "d03bbf56"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5B",
@@ -1988,7 +2083,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x5B"
-      ]
+      ],
+      "dh": "98cee71f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5C",
@@ -2006,7 +2102,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x5C"
-      ]
+      ],
+      "dh": "968fb48f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5D",
@@ -2025,7 +2122,8 @@
       "usedTypes": [
         "D2GSPacketClt0x5D",
         "D2GSPacketSrv0x5D"
-      ]
+      ],
+      "dh": "d6fc156d"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5E",
@@ -2054,7 +2152,8 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x91",
         "uint8_t"
-      ]
+      ],
+      "dh": "0e4a7ad8"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY",
@@ -2073,7 +2172,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7792faee"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS",
@@ -2097,7 +2197,8 @@
         "D2GSPacketSrv0x5F",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "30670087"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST",
@@ -2121,7 +2222,8 @@
         "D2SCmdPayload_u32_u16_u",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e95802ef"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x61",
@@ -2137,7 +2239,8 @@
         "NET_D2GS_CLIENT_Incoming0x61",
         "thunk_ExitGamePlayCutScene",
         "SetupMiniPanel"
-      ]
+      ],
+      "dh": "7dbe53e3"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x63",
@@ -2155,7 +2258,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_5u32_u"
-      ]
+      ],
+      "dh": "60840fbf"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE",
@@ -2173,7 +2277,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x65"
-      ]
+      ],
+      "dh": "f7962f6a"
     },
     {
       "name": "SCMD_Rcv0x66_Ignore",
@@ -2187,7 +2292,8 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "SCMD_Rcv0x66_Ignore"
-      ]
+      ],
+      "dh": "90d9de4e"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x73_CreateMissile",
@@ -2216,7 +2322,8 @@
         "eMissilesId",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ef7942c"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x74",
@@ -2235,7 +2342,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x74"
-      ]
+      ],
+      "dh": "8c599953"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER",
@@ -2250,7 +2358,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER",
         "ROSTER_UpdatePlayerPartyInfo"
-      ]
+      ],
+      "dh": "5f73a094"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x77",
@@ -2280,7 +2389,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_5u32_u"
-      ]
+      ],
+      "dh": "be6e8aeb"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD",
@@ -2298,7 +2408,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x79"
-      ]
+      ],
+      "dh": "ca39031b"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET",
@@ -2317,7 +2428,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x7A"
-      ]
+      ],
+      "dh": "ac7b70e6"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x81",
@@ -2336,7 +2448,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x81",
         "D2RosterMercArg"
-      ]
+      ],
+      "dh": "3c08594f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS",
@@ -2355,7 +2468,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x7B",
         "uint32_t"
-      ]
+      ],
+      "dh": "386da748"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED",
@@ -2373,7 +2487,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u"
-      ]
+      ],
+      "dh": "485ca013"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7D",
@@ -2391,7 +2506,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x7D"
-      ]
+      ],
+      "dh": "3fd722f3"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7E",
@@ -2418,7 +2534,8 @@
         "eAct",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb7833b6"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x7F",
@@ -2437,7 +2554,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x7F"
-      ]
+      ],
+      "dh": "74ac6443"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE",
@@ -2455,7 +2573,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x90"
-      ]
+      ],
+      "dh": "bba65eb8"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL",
@@ -2477,7 +2596,8 @@
         "D2GSPacketSrv0x82",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5aa7690"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x89",
@@ -2504,7 +2624,8 @@
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u"
-      ]
+      ],
+      "dh": "fba6cfa7"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON",
@@ -2522,7 +2643,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x8B"
-      ]
+      ],
+      "dh": "6ea07078"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS",
@@ -2540,7 +2662,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x8C"
-      ]
+      ],
+      "dh": "cc96d300"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY",
@@ -2558,7 +2681,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x8D"
-      ]
+      ],
+      "dh": "bcee279c"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY",
@@ -2577,7 +2701,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x8E"
-      ]
+      ],
+      "dh": "840cd294"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING",
@@ -2595,7 +2720,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x9B"
-      ]
+      ],
+      "dh": "29f74a70"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x9",
@@ -2616,7 +2742,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a7e3ea2a"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8F",
@@ -2658,7 +2785,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "718b267c"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x9D",
@@ -2690,7 +2818,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "13b1a532"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA6",
@@ -2705,7 +2834,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0xA6",
         "ITEMTBLS_CopyRunewordRecord"
-      ]
+      ],
+      "dh": "60e4d1c9"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA7",
@@ -2727,7 +2857,8 @@
         "D2GSPacketSrv0xA7",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "8681fd07"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX",
@@ -2760,7 +2891,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3fbba2ae"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX",
@@ -2782,7 +2914,8 @@
         "D2GSPacketSrv0xA9",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "d7857e45"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX",
@@ -2815,7 +2948,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4af735cc"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xAB",
@@ -2837,7 +2971,8 @@
       "usedTypes": [
         "D2GSPacketSrv0xAB",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cfcfdd5e"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xAC",
@@ -2883,7 +3018,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "edbb0cf7"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA",
@@ -2901,7 +3037,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0xAE"
-      ]
+      ],
+      "dh": "f3a293b0"
     },
     {
       "name": "STRUCT_CreateAndPreprareServerCmd",
@@ -2926,7 +3063,8 @@
         "D2ServerCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "73eafadb"
     },
     {
       "name": "NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure",
@@ -2951,7 +3089,8 @@
         "D2ServerCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b3d1bd03"
     },
     {
       "name": "NET_D2GS_CLIENT_PacketHandle_to0xAF",
@@ -2983,7 +3122,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4ce3e14d"
     },
     {
       "name": "FreeServerCmd",
@@ -3004,7 +3144,8 @@
       "usedTypes": [
         "D2ServerCmdStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "26812e18"
     },
     {
       "name": "SCMD_ProcessIncomingPacketBuffer",
@@ -3031,7 +3172,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "32ec21e2"
     }
   ]
 }

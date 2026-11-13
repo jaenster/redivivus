@@ -24,7 +24,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "013aab9a"
     },
     {
       "name": "fpMissileSrvDoFuncData_MonsterOnly",
@@ -44,7 +45,8 @@
         "D2MissileSrvCollideCtxStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "beb3c0ff"
     },
     {
       "name": "fpMissileSrvDoFuncData_PlayerOrAllyMonster",
@@ -66,7 +68,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d2db5e2f"
     },
     {
       "name": "fpMissileSrvDoFuncData_PlayerOrMonster",
@@ -86,7 +89,8 @@
         "D2MissileSrvCollideCtxStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "40648e60"
     },
     {
       "name": "fpMissileSrvDoFuncData_MissileFlagCheck",
@@ -105,7 +109,8 @@
         "D2MissileSrvCollideCtxStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5e137807"
     }
   ]
 }

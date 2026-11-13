@@ -25,7 +25,8 @@
         "DC6Block",
         "TCELENTRY",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3f69e54"
     }
   ]
 }

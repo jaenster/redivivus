@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2WinScrollbar"
-      ]
+      ],
+      "dh": "b7cf0c9e"
     },
     {
       "name": "D2WINSCROLLBAR_GetMaxValue",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "9f49fbfb"
     },
     {
       "name": "D2WINSCROLLBAR_SetMaxValue",
@@ -62,7 +64,8 @@
         "D2WinScrollbar",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "de33d103"
     },
     {
       "name": "D2WINSCROLLBAR_SetPosition",
@@ -83,7 +86,8 @@
       "usedTypes": [
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "e5d83180"
     },
     {
       "name": "D2WINSCROLLBAR_GetPosition",
@@ -104,7 +108,8 @@
       "usedTypes": [
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "5606c6d4"
     },
     {
       "name": "D2WINSCROLLBAR_SetLinkedTextBox",
@@ -126,7 +131,8 @@
         "D2WinScrollbar",
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "42161fdf"
     },
     {
       "name": "D2WINSCROLLBAR_SetChangeCallback",
@@ -148,7 +154,8 @@
         "D2WinScrollbar",
         "fpD2WinScrollbarOnChange",
         "int32_t"
-      ]
+      ],
+      "dh": "bdbbd25e"
     },
     {
       "name": "D2WINSCROLLBAR_HandleMouseWheel",
@@ -171,7 +178,8 @@
         "D2UIMouseMsgStrc",
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "d35d2238"
     },
     {
       "name": "D2WINSCROLLBAR_SetStyle",
@@ -192,7 +200,8 @@
       "usedTypes": [
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "f7c47a20"
     },
     {
       "name": "D2WINSCROLLBAR_GetStyle",
@@ -213,7 +222,8 @@
       "usedTypes": [
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "9471edc0"
     },
     {
       "name": "Push",
@@ -237,7 +247,8 @@
         "D2WinScrollbar",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2fb7bffd"
     },
     {
       "name": "Mouse",
@@ -258,7 +269,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "e39f8255"
     },
     {
       "name": "Draw",
@@ -287,7 +299,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2b68d05c"
     },
     {
       "name": "D2WinScrollbar",
@@ -310,7 +323,8 @@
         "DC6",
         "OnPress",
         "int32_t"
-      ]
+      ],
+      "dh": "ebd72882"
     }
   ]
 }

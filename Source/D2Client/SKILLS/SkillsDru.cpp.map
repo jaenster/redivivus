@@ -25,7 +25,8 @@
         "eD2States",
         "eOverlayId",
         "int32_t"
-      ]
+      ],
+      "dh": "e16f83a9"
     },
     {
       "name": "SKILLSDRU_CltCreateShapeShiftMissile",
@@ -55,7 +56,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "cd07290c"
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
@@ -79,7 +81,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "4b6c4aa1"
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
@@ -103,7 +106,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "5bc504d2"
     },
     {
       "name": "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
@@ -127,7 +131,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "1773d3da"
     }
   ]
 }

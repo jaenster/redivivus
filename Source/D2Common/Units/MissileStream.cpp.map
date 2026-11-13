@@ -23,7 +23,8 @@
         "D2MissileStreamStrc",
         "D2PoolManagerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b190069a"
     },
     {
       "name": "FreeMissileStream",
@@ -44,7 +45,8 @@
         "D2MissileStreamStrc",
         "D2PoolManagerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2d14b545"
     },
     {
       "name": "Return1",
@@ -62,7 +64,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "24d27b85"
     },
     {
       "name": "ExecuteHit",
@@ -96,7 +99,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d520a2fe"
     },
     {
       "name": "Update",
@@ -132,7 +136,8 @@
         "fpUnknownMissileStream",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4973fac8"
     }
   ]
 }

@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2StatesTxt",
         "eD2States"
-      ]
+      ],
+      "dh": "b26a7f7a"
     },
     {
       "name": "D2ApplyPercent",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "int32_t",
         "int64_t"
-      ]
+      ],
+      "dh": "aaef79ae"
     },
     {
       "name": "INV_GetCharStatsTxtLine",
@@ -59,7 +61,8 @@
       "usedTypes": [
         "D2CharStatsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "49af3ec9"
     },
     {
       "name": "GetSkillParam4",
@@ -78,7 +81,8 @@
       "usedTypes": [
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "405f41bd"
     },
     {
       "name": "DATATBLS_NormalizeCodeTo4Chars",
@@ -92,7 +96,8 @@
       "namespace": "D2Common::DATATBLS::DataTbls",
       "calledFunctions": [
         "DATATBLS_NormalizeCodeTo4Chars"
-      ]
+      ],
+      "dh": "f56b8b3c"
     },
     {
       "name": "DATATBLS_LookupStringId",
@@ -112,7 +117,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d85d7366"
     },
     {
       "name": "DATATBLS_GetCompCodeByIndex",
@@ -130,7 +136,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c978cf44"
     },
     {
       "name": "TXT_Experience_GetLineLevel",
@@ -147,7 +154,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4aeffe7d"
     },
     {
       "name": "TXT_Experience_GetMaxLevel",
@@ -164,7 +172,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bb9d2ad4"
     },
     {
       "name": "DATATBLS_GetLevelFromExperience",
@@ -182,7 +191,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17d06c92"
     },
     {
       "name": "DATATBLS_AppendDataToBuffer",
@@ -202,7 +212,8 @@
       "usedTypes": [
         "int32_t",
         "void *"
-      ]
+      ],
+      "dh": "27ef9340"
     },
     {
       "name": "DATATBLS_CalcExpr_ParseTokenType",
@@ -220,7 +231,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3f59cffc"
     },
     {
       "name": "DATATBLS_CalcExpr_GetArgCount",
@@ -234,7 +246,8 @@
       "namespace": "D2Common::DATATBLS::DataTbls",
       "calledFunctions": [
         "DATATBLS_CalcExpr_GetArgCount"
-      ]
+      ],
+      "dh": "b5a030b2"
     },
     {
       "name": "DATATBLS_LookupCalcCode",
@@ -255,7 +268,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6977ad24"
     },
     {
       "name": "DATATBLS_CompileSkillCode",
@@ -277,7 +291,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "60f47c9b"
     },
     {
       "name": "DATATBLS_CompileSkillDescCode",
@@ -299,7 +314,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3760dc7f"
     },
     {
       "name": "TXT_AnimTbls_Get_Unref_00611d10",
@@ -316,7 +332,8 @@
       ],
       "usedTypes": [
         "D2AnimDataStrc"
-      ]
+      ],
+      "dh": "78bcc648"
     },
     {
       "name": "TXT_AnimTbls_Get",
@@ -333,7 +350,8 @@
       ],
       "usedTypes": [
         "D2AnimDataStrc"
-      ]
+      ],
+      "dh": "da0bf329"
     },
     {
       "name": "GetDifficultyLevels",
@@ -351,7 +369,8 @@
       "usedTypes": [
         "D2DifficultyLevelsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e559aac5"
     },
     {
       "name": "DATATBLS_BuildStatesDataBitMask",
@@ -370,7 +389,8 @@
         "D2StatesDataTbls",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "975b99ed"
     },
     {
       "name": "DATATBLS_BuildStatesDataList",
@@ -393,7 +413,8 @@
         "D2StatesTxt",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "983d90fc"
     },
     {
       "name": "TXT_States_AllocItemTypesStateDataTable",
@@ -415,7 +436,8 @@
         "D2AllStatesDataTbl *",
         "D2StatesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c0bf7bfe"
     },
     {
       "name": "GetPlayerClassIdToName",
@@ -434,7 +456,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7adbb93a"
     },
     {
       "name": "GetMonsterClassIdToName",
@@ -456,7 +479,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "83bc242f"
     },
     {
       "name": "GetObjectClassIdToName",
@@ -477,7 +501,8 @@
       "usedTypes": [
         "D2ObjectsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "0931c926"
     },
     {
       "name": "GetItemClassIdToName",
@@ -500,7 +525,8 @@
         "D2ItemsTxt",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "73d71b3c"
     },
     {
       "name": "GetMissileClassIdToName",
@@ -518,7 +544,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bf7ef313"
     },
     {
       "name": "GetUnitClassIdToName",
@@ -541,7 +568,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6459873a"
     },
     {
       "name": "GetNameByClassIdAndType",
@@ -565,7 +593,8 @@
       "usedTypes": [
         "eD2UnitType",
         "int16_t"
-      ]
+      ],
+      "dh": "13d3a569"
     },
     {
       "name": "StoreDataTables",
@@ -588,7 +617,8 @@
         "D2InventoryToBeUpdatedStrc",
         "FILE",
         "uint32_t"
-      ]
+      ],
+      "dh": "95b9af14"
     },
     {
       "name": "ARCHIVE_LoadDataTables",
@@ -610,7 +640,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "80b44aeb"
     },
     {
       "name": "CompileTxt",
@@ -647,7 +678,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a54a53c7"
     },
     {
       "name": "sgtDataTableSetupIfUseTxt",
@@ -664,7 +696,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2b619c41"
     },
     {
       "name": "UnloadBin",
@@ -679,7 +712,8 @@
       "calledFunctions": [
         "UnloadBin",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "e8932617"
     },
     {
       "name": "TXT_CharStats_DefineWideStringClass",
@@ -707,7 +741,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a20a93e4"
     },
     {
       "name": "TXT_AllocTxt_VariousSmallTables",
@@ -727,7 +762,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "acdc5524"
     },
     {
       "name": "DATATBLS_FreeMiscTxtTables",
@@ -762,7 +798,8 @@
         "D2SkillsHeaderTxt",
         "D2StorePageTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "ddc85e64"
     },
     {
       "name": "TXT_AllocTxt_charstats",
@@ -782,7 +819,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "3e3d50f4"
     },
     {
       "name": "TXT_AllocTxt_experience",
@@ -801,7 +839,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "89b1b316"
     },
     {
       "name": "TXT_Experience_GetExpRatio",
@@ -818,7 +857,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6fafbb8d"
     },
     {
       "name": "TXT_SaveTableToBinFile",
@@ -845,7 +885,8 @@
         "D2PoolManagerStrc",
         "FILE",
         "uint32_t"
-      ]
+      ],
+      "dh": "b5b484c2"
     },
     {
       "name": "TXT_AllocTxt_skill_skilldesc",
@@ -878,7 +919,8 @@
         "D2SkillsTxt",
         "D2TxtLinkStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "463b2e1b"
     },
     {
       "name": "DATATBLS_FreeSkillsTxtTables",
@@ -899,7 +941,8 @@
         "D2SkillDescTxt",
         "D2SkillsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "d83873c0"
     },
     {
       "name": "TXT_AllocTxt_difficultylevels",
@@ -922,7 +965,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e41023be"
     },
     {
       "name": "TXT_AllocTxt_states",
@@ -953,7 +997,8 @@
         "D2StatesDataTbls",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6bd8a80d"
     },
     {
       "name": "DATATBLS_FreeStatesTxtTables",
@@ -974,7 +1019,8 @@
       "usedTypes": [
         "D2StatesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c13bb641"
     },
     {
       "name": "TXT_AllocTxt_pettype",
@@ -998,7 +1044,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d9a0ec96"
     },
     {
       "name": "DATATBLS_FreePetTypeTxtTables",
@@ -1018,7 +1065,8 @@
       "usedTypes": [
         "D2PetTypeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "8c069133"
     },
     {
       "name": "FreeTables",
@@ -1084,7 +1132,8 @@
         "D2ExperienceTxt",
         "D2PetTypeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "d291c813"
     },
     {
       "name": "TXT_InitTxtFiles",
@@ -1156,7 +1205,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a8953eff"
     },
     {
       "name": "TXT_AnimTbls_Get_Unref_00624710",
@@ -1173,7 +1223,8 @@
       ],
       "usedTypes": [
         "D2AnimDataStrc"
-      ]
+      ],
+      "dh": "8cc6b2c9"
     }
   ]
 }

@@ -20,7 +20,8 @@
         "D2RC4StateStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94240921"
     },
     {
       "name": "WARDEN_CheckSignatureMagic",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "91d2c508"
     },
     {
       "name": "WARDEN_ComputeModuleHash",
@@ -64,7 +66,8 @@
         "D2Sha1ContextStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cd9f90f2"
     },
     {
       "name": "WARDEN_VerifyModuleSignature",
@@ -98,7 +101,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bfd856ba"
     },
     {
       "name": "Unreferenced_0047fbc0",
@@ -112,7 +116,8 @@
       "namespace": "D2Client::Warden::WardenClient",
       "calledFunctions": [
         "Unreferenced_0047fbc0"
-      ]
+      ],
+      "dh": "611bc381"
     },
     {
       "name": "WARDEN_CbAllocModuleStruct",
@@ -130,7 +135,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d2766bb0"
     },
     {
       "name": "WARDEN_CbFreeModuleStruct",
@@ -145,7 +151,8 @@
       "calledFunctions": [
         "WARDEN_CbFreeModuleStruct",
         "SMemFree"
-      ]
+      ],
+      "dh": "ea854ab9"
     },
     {
       "name": "WARDEN_DestroyModuleObject",
@@ -164,7 +171,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "048e9419"
     },
     {
       "name": "WARDEN_DecryptAndLoadModule",
@@ -196,7 +204,8 @@
         "pfnWardenCreateInterface",
         "uint32_t",
         "uint32_t *"
-      ]
+      ],
+      "dh": "6d37708a"
     },
     {
       "name": "WARDEN_ResolveAndLoadModule",
@@ -218,7 +227,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f66a3d6"
     },
     {
       "name": "WARDEN_DownloadModule",
@@ -236,7 +246,8 @@
       "usedTypes": [
         "_FILETIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "0da07f6e"
     },
     {
       "name": "SendPacket",
@@ -255,7 +266,8 @@
       "usedTypes": [
         "WardenClient",
         "uint32_t"
-      ]
+      ],
+      "dh": "1765ada0"
     },
     {
       "name": "CheckModule",
@@ -274,7 +286,8 @@
       "usedTypes": [
         "WardenClient",
         "uint8_t"
-      ]
+      ],
+      "dh": "507fbad8"
     },
     {
       "name": "LoadModule",
@@ -296,7 +309,8 @@
         "_FILETIME",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "16ba232e"
     },
     {
       "name": "AllocateMemory",
@@ -315,7 +329,8 @@
       "usedTypes": [
         "WardenClient",
         "uint32_t"
-      ]
+      ],
+      "dh": "82648d12"
     },
     {
       "name": "FreeMemory",
@@ -333,7 +348,8 @@
       ],
       "usedTypes": [
         "WardenClient"
-      ]
+      ],
+      "dh": "f3d9e129"
     },
     {
       "name": "SetRC4Data",
@@ -354,7 +370,8 @@
       "usedTypes": [
         "WardenClient",
         "uint32_t"
-      ]
+      ],
+      "dh": "b33a7256"
     },
     {
       "name": "GetRC4Data",
@@ -374,7 +391,8 @@
       "usedTypes": [
         "WardenClient",
         "uint32_t"
-      ]
+      ],
+      "dh": "1243b69d"
     },
     {
       "name": "Constructor",
@@ -391,7 +409,8 @@
       ],
       "usedTypes": [
         "WardenClient"
-      ]
+      ],
+      "dh": "add180fb"
     },
     {
       "name": "WARDEN_UnloadActiveModule",
@@ -410,7 +429,8 @@
       ],
       "usedTypes": [
         "D2WardenModuleStrc"
-      ]
+      ],
+      "dh": "dcd16a8e"
     },
     {
       "name": "WARDEN_ActivatePendingModule",
@@ -430,7 +450,8 @@
       "usedTypes": [
         "D2WardenModuleObjectStrc",
         "D2WardenModuleStrc"
-      ]
+      ],
+      "dh": "ab3014e8"
     },
     {
       "name": "WARDEN_HandleServerPacket",
@@ -448,7 +469,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "bba2ed75"
     },
     {
       "name": "WARDEN_Tick",
@@ -466,7 +488,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "95d0e7d7"
     },
     {
       "name": "WARDEN_Cleanup",
@@ -486,7 +509,8 @@
       ],
       "usedTypes": [
         "D2WardenModuleStrc"
-      ]
+      ],
+      "dh": "9fdbb09a"
     },
     {
       "name": "WARDEN_Initialize",
@@ -504,7 +528,8 @@
         "NET_GetLobbyChatQueue",
         "WARDEN_ResolveAndLoadModule",
         "WARDEN_ActivatePendingModule"
-      ]
+      ],
+      "dh": "82b90197"
     },
     {
       "name": "WARDEN_SetGlobalFlag",
@@ -518,7 +543,8 @@
       "namespace": "D2Client::Warden::WardenClient",
       "calledFunctions": [
         "WARDEN_SetGlobalFlag"
-      ]
+      ],
+      "dh": "2edf18d6"
     },
     {
       "name": "WARDEN_FreeModuleLibraries",
@@ -532,7 +558,8 @@
       "namespace": "D2Client::Warden::WardenClient",
       "calledFunctions": [
         "WARDEN_FreeModuleLibraries"
-      ]
+      ],
+      "dh": "da0ad0cb"
     }
   ]
 }

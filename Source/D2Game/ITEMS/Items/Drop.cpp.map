@@ -16,7 +16,8 @@
       "calledFunctions": [
         "Unreferenced_00555cc0",
         "TXT_Items_GetSize"
-      ]
+      ],
+      "dh": "ecbfa3f1"
     },
     {
       "name": "ITEMDROP_AddToDropList",
@@ -33,7 +34,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1c98409b"
     },
     {
       "name": "ITEMDROP_GetDropListEntry",
@@ -50,7 +52,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4289207b"
     },
     {
       "name": "ITEM_InitializeDroppedItem",
@@ -77,7 +80,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6856a1e"
     },
     {
       "name": "FindBestSpotToSpawnItem",
@@ -99,7 +103,8 @@
         "POINT",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4c2d3be0"
     },
     {
       "name": "ITEMDROP_IsItemClassEligible",
@@ -123,7 +128,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7055df9"
     },
     {
       "name": "ITEMDROP_RollExceptionalItemClass",
@@ -148,7 +154,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1a2402c"
     },
     {
       "name": "ITEMDROP_RollNormalItemClass",
@@ -172,7 +179,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "38b298d9"
     },
     {
       "name": "ITEMDROP_RollEliteItemClass",
@@ -198,7 +206,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1d5aae1"
     },
     {
       "name": "ITEMDROP_RollItemClassByLevel",
@@ -226,7 +235,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34913681"
     },
     {
       "name": "ITEM_RollBaseArmorClass",
@@ -252,7 +262,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f7bd174"
     },
     {
       "name": "ITEM_SetBaseDamageStats",
@@ -277,7 +288,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e86c29e1"
     },
     {
       "name": "ITEM_CheckUniqueBitmask",
@@ -295,7 +307,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3290f602"
     },
     {
       "name": "ITEM_IsUniqueAlreadyDropped",
@@ -316,7 +329,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "1148401d"
     },
     {
       "name": "ITEM_MarkUniqueAsDropped",
@@ -339,7 +353,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "40b7eea6"
     },
     {
       "name": "ITEM_RollMagicPrefixSuffix",
@@ -363,7 +378,8 @@
         "D2ItemGenContextStrc",
         "D2UnitStrc *",
         "int16_t"
-      ]
+      ],
+      "dh": "a0fb69cc"
     },
     {
       "name": "ITEM_RollUniqueItem",
@@ -405,7 +421,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7d5b1248"
     },
     {
       "name": "ITEM_RollForcedMagicAffix",
@@ -433,7 +450,8 @@
         "D2UnitStrc",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "836c4053"
     },
     {
       "name": "ITEM_RollSocketCount",
@@ -468,7 +486,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "eac0928a"
     },
     {
       "name": "ITEM_ApplyEthereal",
@@ -499,7 +518,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd6e0255"
     },
     {
       "name": "ITEM_ApplySpecialTypeProperties",
@@ -529,7 +549,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98f93ff9"
     },
     {
       "name": "ITEM_ApplySpecialTypePropertiesExp",
@@ -556,7 +577,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5c7c8ef"
     },
     {
       "name": "ITEM_ApplyNormalTypeProperties",
@@ -579,7 +601,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "ac82b234"
     },
     {
       "name": "ITEM_RollItemQuality",
@@ -615,7 +638,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "afb275ce"
     },
     {
       "name": "ITEM_ClearAllMagicAffixes",
@@ -637,7 +661,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "0b2170a0"
     },
     {
       "name": "ITEM_FallbackToNormalQuality",
@@ -669,7 +694,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "911b6cdb"
     },
     {
       "name": "ITEM_FallbackToSuperiorQuality",
@@ -697,7 +723,8 @@
         "D2SeedStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "233c8897"
     },
     {
       "name": "ITEM_FallbackToMagicQuality",
@@ -725,7 +752,8 @@
         "D2SeedStrc",
         "D2UnitStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "d227e442"
     },
     {
       "name": "ITEM_FallbackToRareQuality",
@@ -753,7 +781,8 @@
         "D2SeedStrc",
         "D2UnitStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "0795c2e7"
     },
     {
       "name": "ITEM_ApplyQualityAndAffixes",
@@ -820,7 +849,8 @@
         "eD2ItemQuality",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6152ef8"
     },
     {
       "name": "ITEM_RollVariantGraphic",
@@ -842,7 +872,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "20cfe21c"
     },
     {
       "name": "ITEM_InitItemBaseStats",
@@ -897,7 +928,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2e8f2299"
     },
     {
       "name": "ITEM_FreeItemInventoryAndTimers",
@@ -919,7 +951,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fc7b3fcb"
     },
     {
       "name": "INVENTORY_RemoveItemFromOwner",
@@ -943,7 +976,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "65fdc6e8"
     },
     {
       "name": "ITEM_RemoveFromOwnerInventory",
@@ -962,7 +996,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c8938df4"
     },
     {
       "name": "thunk_IterateAllUnits",
@@ -981,7 +1016,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0f8d6c8b"
     },
     {
       "name": "ITEM_DeleteItemAndFreeUnit",
@@ -1001,7 +1037,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "98f39959"
     },
     {
       "name": "AlreadyHoldingItem",
@@ -1027,7 +1064,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fe1d1194"
     },
     {
       "name": "HasQuestItem",
@@ -1057,7 +1095,8 @@
         "SGAMEDATA",
         "eInventoryPage",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffe8fa12"
     },
     {
       "name": "GetLevel",
@@ -1084,7 +1123,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "19730384"
     },
     {
       "name": "ITEMS_FillItemGenerationData",
@@ -1130,7 +1170,8 @@
         "uD2UnitMode",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "433ef589"
     },
     {
       "name": "UNIT_GetMaxAvailableHPCharCode",
@@ -1160,7 +1201,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "72f2094e"
     },
     {
       "name": "UNIT_GetMaxAvailableMPCharCode",
@@ -1190,7 +1232,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "91ab8c07"
     },
     {
       "name": "RefreshDurability",
@@ -1211,7 +1254,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ecff7fa4"
     },
     {
       "name": "RefreshQuantity",
@@ -1232,7 +1276,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "46a4d0ac"
     },
     {
       "name": "ITEM_GetTotalMagicFind",
@@ -1252,7 +1297,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "75f58982"
     },
     {
       "name": "ITEMDROP_AdjustDrop",
@@ -1269,7 +1315,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5c5b84d2"
     },
     {
       "name": "GAME_GetItemQuality",
@@ -1303,7 +1350,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93fe9900"
     },
     {
       "name": "ITEM_ApplyGoldBonus",
@@ -1327,7 +1375,8 @@
         "D2UnitStrc",
         "eD2ItemTypes",
         "int32_t"
-      ]
+      ],
+      "dh": "0a45fce3"
     },
     {
       "name": "ITEM_CalculateDespawnTimer",
@@ -1352,7 +1401,8 @@
         "SGAMEDATA",
         "eD2ItemTypes",
         "int32_t"
-      ]
+      ],
+      "dh": "807e2ba7"
     },
     {
       "name": "DropItem",
@@ -1379,7 +1429,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f0efea47"
     },
     {
       "name": "FreeUnusedItems",
@@ -1406,7 +1457,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b3ef53e6"
     },
     {
       "name": "ITEM_RemoveRuneword",
@@ -1432,7 +1484,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ItemFlag"
-      ]
+      ],
+      "dh": "499f1dd5"
     },
     {
       "name": "ITEM_CreateFromSaveData",
@@ -1463,7 +1516,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "570edfb7"
     },
     {
       "name": "ITEM_CreateItemInstance",
@@ -1526,7 +1580,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4ea0e495"
     },
     {
       "name": "DROP_SpawnRandomItemInRoom",
@@ -1559,7 +1614,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a632455f"
     },
     {
       "name": "DROP_SpawnGoldInRoom",
@@ -1592,7 +1648,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "7c669ea4"
     },
     {
       "name": "DROP_SpawnExceptionalItem",
@@ -1623,7 +1680,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "ac7f7c4d"
     },
     {
       "name": "DROP_SpawnNormalItem",
@@ -1657,7 +1715,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7fc9ce8"
     },
     {
       "name": "DROP_SpawnEliteItem",
@@ -1690,7 +1749,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "565e5602"
     },
     {
       "name": "ITEM_RewardItemToDrop",
@@ -1735,7 +1795,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3020aa03"
     },
     {
       "name": "ITEM_CreateFromTemplate",
@@ -1768,7 +1829,8 @@
         "eD2ItemQuality",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "302f172e"
     },
     {
       "name": "ITEMS_ReduceDurability",
@@ -1805,7 +1867,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93f66e88"
     },
     {
       "name": "DROP_SpawnGoldPiles",
@@ -1838,7 +1901,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2ac11c6"
     },
     {
       "name": "ITEM_DropEarOnPvpDeath",
@@ -1868,7 +1932,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a806b6a"
     },
     {
       "name": "ITEM_CloneFromSerializedData",
@@ -1908,7 +1973,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f1deabf"
     },
     {
       "name": "ITEMGEN_CreateItemFromClassIdAndQuality",
@@ -1944,7 +2010,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0b55b26"
     },
     {
       "name": "SERVER_ITEM_RollItemToDrop",
@@ -1994,7 +2061,8 @@
         "uint16_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "88b77b7b"
     },
     {
       "name": "SERVER_ITEM_RollItemAndGetTreasureClass",
@@ -2022,7 +2090,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "ea9fad1d"
     },
     {
       "name": "DROP_SpawnGoldOnGround",
@@ -2042,7 +2111,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "99cfc082"
     },
     {
       "name": "ITEM_GiveGoldOrDrop",
@@ -2066,7 +2136,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff6172c2"
     }
   ]
 }

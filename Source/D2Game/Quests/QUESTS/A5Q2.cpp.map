@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "16f0779e"
     },
     {
       "name": "Q32_Callback02_NpcDeactivate",
@@ -44,7 +45,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA5Q2Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "a542de7e"
     },
     {
       "name": "Q32_UpdateQuestStep",
@@ -68,7 +70,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fe7d0fc1"
     },
     {
       "name": "Q32_Callback11_ScrollMessage",
@@ -111,7 +114,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a086936d"
     },
     {
       "name": "Q32_Callback00_NpcActivate",
@@ -138,7 +142,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "467b5f18"
     },
     {
       "name": "Q32_SetCompleteForPartyMember",
@@ -169,7 +174,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "282086d7"
     },
     {
       "name": "Q32_Callback10_PlayerLeavesGame",
@@ -189,7 +195,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b90cffa3"
     },
     {
       "name": "Q32_SetCannotComplete",
@@ -212,7 +219,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "72abf0f0"
     },
     {
       "name": "Q32_FindBarricadeGroup",
@@ -231,7 +239,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9bb0ea53"
     },
     {
       "name": "Q32_Callback08_MonsterKilled",
@@ -262,7 +271,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "392e56af"
     },
     {
       "name": "Q32_Callback03_ChangedLevel",
@@ -289,7 +299,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "47edef5c"
     },
     {
       "name": "Q32_ActiveFilter",
@@ -310,7 +321,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c2d6b36"
     },
     {
       "name": "Q32_SequenceFilter",
@@ -332,7 +344,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e4a55fec"
     },
     {
       "name": "Q32_Callback14_PlayerJoinedGame",
@@ -354,7 +367,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "462d1aff"
     },
     {
       "name": "Q32_Callback13_PlayerStartedGame",
@@ -378,7 +392,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bf979ed4"
     },
     {
       "name": "Q32_InitData",
@@ -400,7 +415,8 @@
         "D2QuestDataA5Q2Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f7a2d074"
     },
     {
       "name": "Q32_SpawnBarricadePrisoners",
@@ -422,7 +438,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a6751871"
     },
     {
       "name": "Objects_InitFn62_CagedWussie",
@@ -446,7 +463,8 @@
         "D2QuestDataA5Q2Strc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4d6cfa62"
     },
     {
       "name": "Q32_PropagateCompleteToParty",
@@ -469,7 +487,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b47230e5"
     },
     {
       "name": "Q32_PlayCompletionSound",
@@ -491,7 +510,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2a43b3dc"
     },
     {
       "name": "Q32_CheckWussieBarricade",
@@ -513,7 +533,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "59e8193c"
     },
     {
       "name": "Q32_IncrementWussieKillCount",
@@ -536,7 +557,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8778019f"
     },
     {
       "name": "Q32_OnBarricadeDestroyed",
@@ -582,7 +604,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3413b61c"
     },
     {
       "name": "Q32_GetRemainingPrisonersCount",
@@ -601,7 +624,8 @@
         "D2QuestDataA5Q2Strc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "126508cd"
     },
     {
       "name": "Q32_PrisonerTimerCallback",
@@ -624,7 +648,8 @@
         "D2UnitStrc",
         "eD2MonsterAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "a50ce096"
     },
     {
       "name": "Q32_FindBarricadePortal",
@@ -649,7 +674,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0ac4054d"
     },
     {
       "name": "Q32_OnWussieAllPrisonersFreed",
@@ -670,7 +696,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a0a5c322"
     }
   ]
 }

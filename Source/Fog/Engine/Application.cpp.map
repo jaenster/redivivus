@@ -15,7 +15,8 @@
       "namespace": "Fog::Engine::Application",
       "calledFunctions": [
         "Unreferenced_004046d0"
-      ]
+      ],
+      "dh": "2b0249ad"
     },
     {
       "name": "DEBUG_GetPEImageType",
@@ -32,7 +33,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "31f4d202"
     },
     {
       "name": "DEBUG_ParsePEDebugDirectory",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "40ea72dd"
     },
     {
       "name": "DEBUG_IsValidDebugDirectorySize",
@@ -66,7 +69,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "fa654950"
     },
     {
       "name": "DEBUG_ParseDebugInfoFromMemory",
@@ -86,7 +90,8 @@
       "usedTypes": [
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "99f97924"
     },
     {
       "name": "DEBUG_ParseDebugDataDirectory",
@@ -108,7 +113,8 @@
         "D2FogDebugModuleEntryStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2711e7f9"
     },
     {
       "name": "DEBUG_ParseModuleHeaders",
@@ -130,7 +136,8 @@
         "D2FogDebugModuleEntryStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d7a58d35"
     },
     {
       "name": "DEBUG_AddModuleToList",
@@ -152,7 +159,8 @@
         "D2DebugModuleInfo",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "96ef6c3d"
     },
     {
       "name": "DEBUG_EnumerateModulesViaPsapi",
@@ -175,7 +183,8 @@
         "pfnGetModuleBaseNameW",
         "pfnGetModuleInformation",
         "uint32_t"
-      ]
+      ],
+      "dh": "42d74364"
     },
     {
       "name": "DEBUG_EnumerateModulesViaToolhelp32",
@@ -194,7 +203,8 @@
       ],
       "usedTypes": [
         "MODULEENTRY32W"
-      ]
+      ],
+      "dh": "12231ce6"
     },
     {
       "name": "DEBUG_EnumerateModulesViaPEB",
@@ -212,7 +222,8 @@
       ],
       "usedTypes": [
         "EH4_EXCEPTION_REGISTRATION"
-      ]
+      ],
+      "dh": "d25c2857"
     },
     {
       "name": "DEBUG_EnumerateModules",
@@ -229,7 +240,8 @@
         "DEBUG_EnumerateModulesViaPsapi",
         "DEBUG_EnumerateModulesViaToolhelp32",
         "DEBUG_EnumerateModulesViaPEB"
-      ]
+      ],
+      "dh": "8a7aa04e"
     },
     {
       "name": "DEBUG_ExtractDebugDirectory64",
@@ -247,7 +259,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e99bc65a"
     },
     {
       "name": "DEBUG_ExtractDebugDirectory32",
@@ -265,7 +278,8 @@
       "usedTypes": [
         "IMAGE_OPTIONAL_HEADER32",
         "uint32_t"
-      ]
+      ],
+      "dh": "c93f1949"
     },
     {
       "name": "DEBUG_ParseNB01DebugInfo",
@@ -285,7 +299,8 @@
         "CV_INFO_PDB20",
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e14a7d02"
     },
     {
       "name": "DEBUG_ParseRSDSDebugInfo",
@@ -305,7 +320,8 @@
         "CV_INFO_PDB70",
         "D2FogDebugModuleEntryStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "5d5585ef"
     },
     {
       "name": "DEBUG_UnwindStackFrames",
@@ -327,7 +343,8 @@
         "D2CrashFrameStrc",
         "EH4_EXCEPTION_REGISTRATION",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac2432e9"
     },
     {
       "name": "DEBUG_FormatAddressInfo",
@@ -350,7 +367,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "84f1360b"
     },
     {
       "name": "Unreferenced_004067c0",
@@ -365,7 +383,8 @@
       "calledFunctions": [
         "Unreferenced_004067c0",
         "SFileSetBasePath"
-      ]
+      ],
+      "dh": "2cee9e21"
     },
     {
       "name": "PATH_GetKnownFolderPath",
@@ -384,7 +403,8 @@
         "int32_t",
         "pfnSHGetKnownFolderPath",
         "uint32_t"
-      ]
+      ],
+      "dh": "6edfd181"
     }
   ]
 }

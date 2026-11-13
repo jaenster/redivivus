@@ -24,7 +24,8 @@
         "D2MagixAffixModStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "91d9332a"
     },
     {
       "name": "TXT_UniqueItems_GetModEntry",
@@ -44,7 +45,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "be05ad0d"
     },
     {
       "name": "ITEMMOD_GetMaxLevelAtIndex",
@@ -67,7 +69,8 @@
         "D2MagixAffixModStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d25c350e"
     },
     {
       "name": "ITEMMOD_GetPropertyFromAffix",
@@ -93,7 +96,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33aca616"
     },
     {
       "name": "ITEMMODS_GetQualityMinMax",
@@ -110,7 +114,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "401fcfb0"
     },
     {
       "name": "ITEMMODS_GetQualityAllFields",
@@ -127,7 +132,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "231664ae"
     },
     {
       "name": "ITEMMOD_FindChargedSkill",
@@ -154,7 +160,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "612c77c1"
     },
     {
       "name": "ITEMMOD_SetChargedSkillCharges",
@@ -181,7 +188,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70a27cb6"
     },
     {
       "name": "ITEMMODS_CalculateRepairCost",
@@ -199,7 +207,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0794ccc4"
     },
     {
       "name": "ITEMMODS_GetQualityField1",
@@ -216,7 +225,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a0c10639"
     },
     {
       "name": "ITEMMODS_GetQualityFields2_3_4",
@@ -233,7 +243,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0be18167"
     },
     {
       "name": "ITEMMODS_GetQualityField2",
@@ -250,7 +261,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f754bd3d"
     },
     {
       "name": "ITEMMODS_GetQualityFields1_2_3",
@@ -271,7 +283,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "96ebcbf7"
     },
     {
       "name": "ITEMMODS_GetQualityField3",
@@ -288,7 +301,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6d03ee90"
     },
     {
       "name": "ITEMMOD_GetOrCreateStatList",
@@ -315,7 +329,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a829c05d"
     },
     {
       "name": "ITEMMOD_MaximizeStatForEnhanced",
@@ -342,7 +357,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cadfa85d"
     },
     {
       "name": "ITEMMOD_ScaleValueForStatType",
@@ -359,7 +375,8 @@
       ],
       "usedTypes": [
         "eD2UnitStat"
-      ]
+      ],
+      "dh": "fbc31174"
     },
     {
       "name": "ITEMMOD_ApplyRandomStatValue",
@@ -394,7 +411,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce4725c2"
     },
     {
       "name": "PropertyFunc_SimpleStat",
@@ -423,7 +441,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0a0c95b"
     },
     {
       "name": "PropertyFunc_SimpleStatWithContext",
@@ -453,7 +472,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5a0bb77"
     },
     {
       "name": "ITEMMODS_PropFunc_ApplyRolledStat",
@@ -475,7 +495,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "88405cfb"
     },
     {
       "name": "PropertyFunc_SimpleStatThunk1",
@@ -496,7 +517,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd8e7f93"
     },
     {
       "name": "ITEMMOD_ApplySocketCount",
@@ -522,7 +544,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0cdd800b"
     },
     {
       "name": "ITEMMOD_ApplyIndestructible",
@@ -544,7 +567,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78ddfbd8"
     },
     {
       "name": "ITEMMODS_PropFunc_ApplyRolledStatAndMaximize",
@@ -566,7 +590,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dda2ceef"
     },
     {
       "name": "PropertyFunc_SimpleStatThunk2",
@@ -587,7 +612,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7d302ac"
     },
     {
       "name": "PropertyFunc_AllResistances",
@@ -618,7 +644,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e4635294"
     },
     {
       "name": "PropertyFunc_AllMaxResistances",
@@ -649,7 +676,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d8acb1ae"
     },
     {
       "name": "PropertyFunc_MinDamage",
@@ -683,7 +711,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "936be055"
     },
     {
       "name": "PropertyFunc_MaxDamage",
@@ -717,7 +746,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e687f8a"
     },
     {
       "name": "PropertyFunc_EnhancedDamage",
@@ -753,7 +783,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a0d69b9b"
     },
     {
       "name": "PropertyFunc_AllSkills",
@@ -775,7 +806,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8941925c"
     },
     {
       "name": "PropertyFunc_Charges",
@@ -805,7 +837,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "58422bc2"
     },
     {
       "name": "PropertyFunc_PackedStat",
@@ -832,7 +865,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "72f5ddab"
     },
     {
       "name": "PropertyFunc_MinMaxDamagePair",
@@ -866,7 +900,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b965e075"
     },
     {
       "name": "ITEMMOD_ApplyTripleStat",
@@ -895,7 +930,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "060a191a"
     },
     {
       "name": "PropertyFunc_SingleSkillBonus",
@@ -925,7 +961,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b4e9b549"
     },
     {
       "name": "PropertyFunc_ElemSkillBonus",
@@ -955,7 +992,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3cab1b1e"
     },
     {
       "name": "PropertyFunc_ClassSkillsBonus",
@@ -985,7 +1023,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1c55bb6"
     },
     {
       "name": "PropertyFunc_ReturnTrue",
@@ -1006,7 +1045,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "957794d7"
     },
     {
       "name": "PropertyFunc_SimpleStatWithRoll",
@@ -1033,7 +1073,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "20a52f8b"
     },
     {
       "name": "ITEMMOD_ApplyEtherealBonus",
@@ -1060,7 +1101,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "51290204"
     },
     {
       "name": "ITEMMOD_CanApplyAutomod",
@@ -1087,7 +1129,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7a8acf93"
     },
     {
       "name": "ITEMMOD_CanApplyAffix",
@@ -1111,7 +1154,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "abfd8b6c"
     },
     {
       "name": "ITEMMOD_MatchesRepairType",
@@ -1133,7 +1177,8 @@
         "D2UnitStrc",
         "eD2ItemTypes",
         "uint32_t"
-      ]
+      ],
+      "dh": "18adc73f"
     },
     {
       "name": "ITEMMOD_RollGemRuneType",
@@ -1155,7 +1200,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "678b7c46"
     },
     {
       "name": "Unreferenced_0065e9b0",
@@ -1174,7 +1220,8 @@
       "usedTypes": [
         "D2ItemsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e3054d06"
     },
     {
       "name": "ITEMMOD_RollRandomValue",
@@ -1196,7 +1243,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3cd260ac"
     },
     {
       "name": "ITEMMOD_AddStatToItem",
@@ -1224,7 +1272,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f9e2699"
     },
     {
       "name": "ITEMPROP_AddStat_EnhancedIfItem",
@@ -1247,7 +1296,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9c044ba1"
     },
     {
       "name": "ITEMPROP_AddStat_EnhancedAlways",
@@ -1270,7 +1320,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b098452"
     },
     {
       "name": "ITEMPROP_AddStat_PreserveRolledValue_EnhancedIfItem",
@@ -1293,7 +1344,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "665f7461"
     },
     {
       "name": "ITEMPROP_AddStat_PreserveRolledValue",
@@ -1316,7 +1368,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "412f90a2"
     },
     {
       "name": "ITEMPROP_AddMinDamage",
@@ -1343,7 +1396,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "26717cfa"
     },
     {
       "name": "ITEMPROP_AddMaxDamage",
@@ -1370,7 +1424,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "acc6bb7c"
     },
     {
       "name": "ITEMPROP_AddEnhancedDamage",
@@ -1403,7 +1458,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "05f23e53"
     },
     {
       "name": "ITEMPROP_AddStat_Simple",
@@ -1425,7 +1481,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b81a6be"
     },
     {
       "name": "ITEMPROP_AddSkillBonus",
@@ -1447,7 +1504,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "01f0d596"
     },
     {
       "name": "ITEMPROP_AddStat_WithLayerFromParam4",
@@ -1469,7 +1527,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "de7aee13"
     },
     {
       "name": "ITEMPROP_AddClassSkillBonus",
@@ -1491,7 +1550,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "81d258f3"
     },
     {
       "name": "ITEMPROP_AddSkillOnEvent",
@@ -1516,7 +1576,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8182336"
     },
     {
       "name": "ITEMPROP_SetSockets",
@@ -1542,7 +1603,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "076a2ca0"
     },
     {
       "name": "ITEMPROP_AddSkillCharges",
@@ -1574,7 +1636,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "96afd0d7"
     },
     {
       "name": "ITEMPROP_AddTimedStat",
@@ -1597,7 +1660,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ec7cc97f"
     },
     {
       "name": "ITEMPROP_SetFixedMinDamage",
@@ -1619,7 +1683,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1080c4b6"
     },
     {
       "name": "ITEMPROP_SetFixedMaxDamage",
@@ -1641,7 +1706,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37f14a52"
     },
     {
       "name": "ITEMPROP_AddStat_FixedOrRolledMaxDamageAware",
@@ -1664,7 +1730,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc35f8d6"
     },
     {
       "name": "ITEMPROP_SetIndestructible",
@@ -1687,7 +1754,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05369ebb"
     },
     {
       "name": "ITEMPROP_AddStat_WithLayerFromParam7",
@@ -1709,7 +1777,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8033b72b"
     },
     {
       "name": "ITEMPROP_AddStat_LayerFromRoll_ValueFromParam7",
@@ -1731,7 +1800,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "13f851bb"
     },
     {
       "name": "ITEMPROP_AddStat_LayerFromParam4Lo",
@@ -1753,7 +1823,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6bcaf9cb"
     },
     {
       "name": "ITEMPROP_AddStat_RandLevelAsLayer",
@@ -1775,7 +1846,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba015eb7"
     },
     {
       "name": "ITEMPROP_AddStat_WithMaxDurabilityReset",
@@ -1800,7 +1872,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e12c895"
     },
     {
       "name": "ITEMPROP_ApplyEthereal",
@@ -1823,7 +1896,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d864719"
     },
     {
       "name": "ITEMMOD_ApplyPropertyToUnitStatsExpansion",
@@ -1844,7 +1918,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bdc1f11d"
     },
     {
       "name": "ITEMMOD_ApplyPropertyToUnitStats",
@@ -1870,7 +1945,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e488481c"
     },
     {
       "name": "ApplyRuneAndGemStats",
@@ -1899,7 +1975,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8846e887"
     },
     {
       "name": "RollRunewordMostlikely",
@@ -1925,7 +2002,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d64b00d5"
     },
     {
       "name": "ITEMMOD_ApplySetBonuses",
@@ -1953,7 +2031,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b4b6d62b"
     },
     {
       "name": "ITEMMOD_ApplyRunewordProperties",
@@ -1975,7 +2054,8 @@
         "D2SetsTxtFStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c330702"
     }
   ]
 }

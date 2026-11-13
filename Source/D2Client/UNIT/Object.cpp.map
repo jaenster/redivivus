@@ -16,7 +16,8 @@
       "calledFunctions": [
         "TEXT_CleanupMessageLog_Unref_004b1d50",
         "FreeDialogStrc"
-      ]
+      ],
+      "dh": "296b6ab4"
     },
     {
       "name": "OBJECT_SetLightRGB",
@@ -39,7 +40,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b4cc9717"
     },
     {
       "name": "OBJECT_CheckAutoLight",
@@ -66,7 +68,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5e169fdd"
     },
     {
       "name": "AllocObjectData",
@@ -104,7 +107,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1fc00327"
     },
     {
       "name": "OBJECT_AddVisualOverlay",
@@ -123,7 +127,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "eacc6dc6"
     },
     {
       "name": "FreeObjectData",
@@ -145,7 +150,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "956f49bb"
     },
     {
       "name": "OBJECT_ToggleDoorState",
@@ -170,7 +176,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d6a384e6"
     },
     {
       "name": "OBJECT_AnimateDoorTransition",
@@ -192,7 +199,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2PlayerAnimMode"
-      ]
+      ],
+      "dh": "09370cd0"
     },
     {
       "name": "OBJECT_UpdateAnimation",
@@ -221,7 +229,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d9e29e6"
     },
     {
       "name": "OBJECT_HandlePortalOpen",
@@ -253,7 +262,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94ca8ede"
     },
     {
       "name": "OBJECT_UpdateModeAndProperties",
@@ -279,7 +289,8 @@
       "usedTypes": [
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5fcb67b3"
     },
     {
       "name": "OBJECT_ShrineGloaming_ReversePlayerName",
@@ -301,7 +312,8 @@
         "D2ShrinesTxt",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "13c3b955"
     },
     {
       "name": "OBJECT_SpawnFireballGrid",
@@ -326,7 +338,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "b1434c0c"
     },
     {
       "name": "OBJECT_SpawnExplosivePotionGrid",
@@ -351,7 +364,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "d785b6eb"
     },
     {
       "name": "OBJECT_SpawnChokingGasGrid",
@@ -376,7 +390,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "63b2e8a3"
     },
     {
       "name": "OBJECT_UpdateShrineOverlay",
@@ -401,7 +416,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04a5a672"
     },
     {
       "name": "OBJECT_PlayShrineSound",
@@ -425,7 +441,8 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "394a0730"
     },
     {
       "name": "OBJECT_DispatchShrineServerActivate",
@@ -452,7 +469,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c8fa60f3"
     },
     {
       "name": "OBJECT_DispatchShrineClientFunc",
@@ -475,7 +493,8 @@
         "D2ShrinesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e781a5e8"
     },
     {
       "name": "SetShrineTextInfo",
@@ -496,7 +515,8 @@
       "usedTypes": [
         "D2ShrinesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fa904c7c"
     },
     {
       "name": "ObjectMessage",
@@ -522,7 +542,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cd7f91c8"
     },
     {
       "name": "OBJECT_ClientFn_PeriodicOperate",
@@ -540,7 +561,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fb38ffb7"
     },
     {
       "name": "OBJECT_ClientFn_PeriodicOperateWithSound",
@@ -559,7 +581,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8e0dfae1"
     },
     {
       "name": "OBJECT_ClientFn_TimedSpecial1_7to12s",
@@ -582,7 +605,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7584b8e9"
     },
     {
       "name": "OBJECT_ClientFn_TimedSpecial1Or2_23to33s",
@@ -605,7 +629,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2PlayerAnimMode"
-      ]
+      ],
+      "dh": "3a687187"
     },
     {
       "name": "OBJECT_ClientFn_TimedSpecial1_20to30s",
@@ -628,7 +653,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "594b6049"
     },
     {
       "name": "OBJECT_ClientFn_OperateCycle_10s",
@@ -650,7 +676,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "45ea4e66"
     },
     {
       "name": "OBJECT_ClientFn_Nop_0B",
@@ -667,7 +694,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "37dc14cb"
     },
     {
       "name": "OBJECT_ClientFn_OperateCycle_3s",
@@ -689,7 +717,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1b1f5417"
     },
     {
       "name": "OBJECT_ClientFn_Nop_01",
@@ -706,7 +735,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b04e2d5d"
     },
     {
       "name": "OBJECT_ClientFn_RemoveWhenPlayerFar",
@@ -728,7 +758,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ec38f54d"
     },
     {
       "name": "OBJECT_ClientFn_PlayActBossCinematic",
@@ -746,7 +777,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "33eaf79c"
     },
     {
       "name": "OBJECT_ClientFn_RiteOfPassageAncients",
@@ -775,7 +807,8 @@
         "eD2QuestState",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "cfd3e3f3"
     },
     {
       "name": "OBJECT_ClientFn_PlayLevelUpCinematic",
@@ -793,7 +826,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f55987a5"
     },
     {
       "name": "OBJECT_ClientFn_AutoLightPulse",
@@ -812,7 +846,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6952eeb9"
     },
     {
       "name": "OBJECT_ClientFn_NeutralModeOverlay",
@@ -832,7 +867,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a444b15a"
     },
     {
       "name": "OBJECT_ClientFn_ZooKeeper",
@@ -851,7 +887,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cd00ba8c"
     },
     {
       "name": "OBJECT_ClientFn_OperateToOpened",
@@ -870,7 +907,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "585a4b4d"
     },
     {
       "name": "OBJECT_ClientFn_Zoo",
@@ -894,7 +932,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint8_t"
-      ]
+      ],
+      "dh": "8f7d0158"
     },
     {
       "name": "OBJECT_ExecuteClientFunction",
@@ -918,7 +957,8 @@
         "D2UnitStrc",
         "eD2ObjectClientFn",
         "int32_t"
-      ]
+      ],
+      "dh": "316ed569"
     },
     {
       "name": "WAYPOINT_HandleActivation",
@@ -943,7 +983,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b7b013b2"
     },
     {
       "name": "OBJECT_GetOwnerName",
@@ -960,7 +1001,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "977cc8b8"
     },
     {
       "name": "SetObjectDataOwnerName",
@@ -978,7 +1020,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "acf14db5"
     },
     {
       "name": "OBJECT_UpdateAndExecuteClient",
@@ -998,7 +1041,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "20f593be"
     },
     {
       "name": "TEXT_InitializeMessageLog",
@@ -1014,7 +1058,8 @@
         "TEXT_InitializeMessageLog",
         "sprintf",
         "IMAGE_LoadDC6Ex"
-      ]
+      ],
+      "dh": "e3b8ba77"
     },
     {
       "name": "TEXT_CleanupMessageLog",
@@ -1029,7 +1074,8 @@
       "calledFunctions": [
         "TEXT_CleanupMessageLog",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "e25c55b1"
     }
   ]
 }

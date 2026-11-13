@@ -22,7 +22,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e7fe0c5"
     },
     {
       "name": "SUBTILE_CompressToRLE",
@@ -42,7 +43,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "81390fa7"
     },
     {
       "name": "SUBTILE_AllocAndCompress",
@@ -66,7 +68,8 @@
         "D2GroundSubTileStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b40cdf18"
     },
     {
       "name": "SUBTILE_ConvertToIndexed",
@@ -92,7 +95,8 @@
         "pfnRGBToPaletteIndex",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2aa22978"
     },
     {
       "name": "SUBTILE_ConvertRGBToIndexed",
@@ -117,7 +121,8 @@
         "pfnRGBToPaletteIndex",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3d40a7cc"
     },
     {
       "name": "Unreferenced_0060d7c0",
@@ -134,7 +139,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "672f0536"
     },
     {
       "name": "SUBTILE_CheckIfIsometricEmpty",
@@ -151,7 +157,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "72f03827"
     },
     {
       "name": "SUBTILE_CompressIsometricShape",
@@ -180,7 +187,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d32a3fb2"
     },
     {
       "name": "SUBTILE_ExtractIsometricPixels",
@@ -205,7 +213,8 @@
         "D2GroundSubTileStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7eb9e38a"
     },
     {
       "name": "SUBTILE_CompressWithColorKey",
@@ -229,7 +238,8 @@
         "D2GroundSubTileStrc",
         "pfnRGBToPaletteIndex",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff914834"
     },
     {
       "name": "SUBTILE_RecompressExisting",
@@ -251,7 +261,8 @@
       "usedTypes": [
         "D2GroundSubTileStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "ef64daca"
     },
     {
       "name": "CELCMP_CompressAllFramesWithColorKey",
@@ -275,7 +286,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33b1b023"
     }
   ]
 }

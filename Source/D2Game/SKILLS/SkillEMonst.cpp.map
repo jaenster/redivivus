@@ -27,7 +27,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ecfa855"
     },
     {
       "name": "Skills_SrvDoFunc_125_CatapultFireBomb",
@@ -58,7 +59,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3803cf0c"
     },
     {
       "name": "SKILLEMONST_SrvStFn59_ImpInferno",
@@ -86,7 +88,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "3656f4a5"
     },
     {
       "name": "Skills_SrvDoFunc_126_ImpInferno",
@@ -130,7 +133,8 @@
         "eMissilesId",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "4d58587b"
     },
     {
       "name": "SKILLEMONST_SrvStFn60_SuckBlood",
@@ -159,7 +163,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4e6f0c35"
     },
     {
       "name": "Skills_SrvDoFunc_127_SuckBlood",
@@ -190,7 +195,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0f1337ec"
     },
     {
       "name": "Skills_SrvDoFunc_128_MonsterCreateMinion",
@@ -216,7 +222,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1c29beb1"
     },
     {
       "name": "SKILLEMONST_AttachToHost",
@@ -242,7 +249,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ac356edb"
     },
     {
       "name": "SKILLEMONST_DetachFromHost",
@@ -270,7 +278,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8b991a3d"
     },
     {
       "name": "Skills_SrvDoFunc_129_AttachOrDetachFromHost",
@@ -303,7 +312,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aeec559c"
     },
     {
       "name": "SKILLEMONST_SrvStFn61_SelfResurrect",
@@ -325,7 +335,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "47897c3a"
     },
     {
       "name": "SKILLSOR_GetMeteorSubMissileCount",
@@ -350,7 +361,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "511251e0"
     },
     {
       "name": "Skills_SrvDoFunc_130_SpawnSubMissiles",
@@ -373,7 +385,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1a2d6149"
     },
     {
       "name": "SKILLEMONST_ApplyAuraBuff",
@@ -398,7 +411,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ef9fc0d7"
     },
     {
       "name": "SKILLEMONST_TransformMonsterClass",
@@ -434,7 +448,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "87a1ed4d"
     },
     {
       "name": "Skills_SrvDoFunc_131_ConditionalTransformOrBuff",
@@ -465,7 +480,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e075b44"
     },
     {
       "name": "Skills_SrvDoFunc_132_FireClassUpgradedMissile",
@@ -487,7 +503,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ab8b90f4"
     },
     {
       "name": "SKILLSOR_GetFrozenOrbBoltCount",
@@ -509,7 +526,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f7d2d822"
     },
     {
       "name": "SKILLEMONST_OnDeathSpawnExpire",
@@ -539,7 +557,8 @@
         "eD2States",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "564392fe"
     },
     {
       "name": "Skills_SrvDoFunc_133_SetDeathSpawnState",
@@ -563,7 +582,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3ddbf639"
     },
     {
       "name": "Skills_SrvDoFunc_134_AreaExplosionAttack",
@@ -590,7 +610,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "931cbc27"
     },
     {
       "name": "SKILLEMONST_SrvStFn62_MinionSpawner",
@@ -617,7 +638,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "bf28086f"
     },
     {
       "name": "Skills_SrvDoFunc_135_SpawnMinionFromParams",
@@ -652,7 +674,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0d63f1e"
     },
     {
       "name": "Skills_SrvDoFunc_136_FireSpeedScaledMissile",
@@ -683,7 +706,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d68e0585"
     },
     {
       "name": "Skills_SrvDoFunc_137_CorpseConsumptionAura",
@@ -710,7 +734,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9c1699ea"
     },
     {
       "name": "Skills_SrvDoFunc_138_FirePerpendicularMissileLine",
@@ -745,7 +770,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "62c288cc"
     },
     {
       "name": "Skills_SrvDoFunc_139_FireOrthogonalMissile",
@@ -773,7 +799,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5be247f"
     },
     {
       "name": "SKILLEMONST_SrvStFn63_CorpseCycler",
@@ -803,7 +830,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "6dcb6e9c"
     },
     {
       "name": "Skills_SrvDoFunc_147_ReturnToOwner",
@@ -825,7 +853,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e236927e"
     },
     {
       "name": "Unreferenced_005d2b40",
@@ -845,7 +874,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5193bd9e"
     },
     {
       "name": "SKILLEMONST_ProcessBloodMana",
@@ -872,7 +902,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "57dc2a4f"
     },
     {
       "name": "Skills_SrvDoFunc_140_BaalTentacle",
@@ -907,7 +938,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "74b076bb"
     },
     {
       "name": "fpBaalWaveFunction",
@@ -929,7 +961,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6273f075"
     },
     {
       "name": "Skills_SrvDoFunc_141_BaalCorpseExplosionWave",
@@ -955,7 +988,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8c0759b3"
     },
     {
       "name": "SKILLEMONST_FindNearbyCorpse",
@@ -987,7 +1021,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "f3c0accf"
     }
   ]
 }

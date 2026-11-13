@@ -24,7 +24,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3e46f76a"
     },
     {
       "name": "SKILLAMA_SrvStFn05_Jab",
@@ -45,7 +46,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8569407a"
     },
     {
       "name": "SKILLAMA_SrvStFn06_PowerStrike",
@@ -73,7 +75,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "67a39eb9"
     },
     {
       "name": "UseQuanityAndDurability",
@@ -105,7 +108,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6cdcd9ee"
     },
     {
       "name": "SKILLAMA_SrvStFn07_Impale",
@@ -140,7 +144,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d4e735e6"
     },
     {
       "name": "SKILLAMA_SrvStFn08_Strafe",
@@ -174,7 +179,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e632f766"
     },
     {
       "name": "SKILLAMA_SrvStFn09_Fend",
@@ -205,7 +211,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "feb26675"
     },
     {
       "name": "SKILLAMA_SrvStFn37_MultiStrike",
@@ -236,7 +243,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "19de1988"
     },
     {
       "name": "SKILLAMA_SrvStFn10_LightningStrike",
@@ -269,7 +277,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "88e35983"
     },
     {
       "name": "SKILL_GetPhoenixBoltCount",
@@ -291,7 +300,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bae5ff3"
     },
     {
       "name": "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
@@ -315,7 +325,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "18b754ed"
     },
     {
       "name": "Skills_SrvDoFunc_007_Jab",
@@ -346,7 +357,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "52a4737d"
     },
     {
       "name": "Skills_SrvDoFunc_008_MultipleShot",
@@ -380,7 +392,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0e70d6f"
     },
     {
       "name": "SKILLS_AmazonDamagePercentCallback",
@@ -400,7 +413,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "e0be1101"
     },
     {
       "name": "Skills_SrvDoFunc_010_GuidedArrowLaunch",
@@ -434,7 +448,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff4de3fd"
     },
     {
       "name": "Skills_SrvDoFunc_011_ChargedStrike",
@@ -466,7 +481,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "5f56084e"
     },
     {
       "name": "Skills_SrvDoFunc_012_StrafeContinue",
@@ -511,7 +527,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1832b55"
     },
     {
       "name": "Skills_SrvDoFunc_013_MultiHitAttack",
@@ -556,7 +573,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "31f6a9a9"
     },
     {
       "name": "Skills_SrvDoFunc_014_LightningStrike",
@@ -593,7 +611,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21972547"
     },
     {
       "name": "Skills_SrvDoFunc_015_SummonDecoy",
@@ -630,7 +649,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b803fa3b"
     },
     {
       "name": "Skills_SrvDoFunc_016_SummonValkyrie",
@@ -663,7 +683,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "74f7ac61"
     }
   ]
 }

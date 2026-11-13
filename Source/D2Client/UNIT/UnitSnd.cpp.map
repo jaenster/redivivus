@@ -22,7 +22,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "821c965e"
     },
     {
       "name": "GetSndUnitType",
@@ -43,7 +44,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "11a826da"
     },
     {
       "name": "GetSndUnitMode",
@@ -64,7 +66,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d5282606"
     },
     {
       "name": "UNITSND_GetBaseSoundId",
@@ -85,7 +88,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f2144cd"
     },
     {
       "name": "TxtGetSoundIdLineFromUnit",
@@ -115,7 +119,8 @@
         "D2SuperUniquesTxt",
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "b48c6d4c"
     },
     {
       "name": "UNITSND_GetSkillCastSound",
@@ -137,7 +142,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f68b455d"
     },
     {
       "name": "UNITSND_GetSkillStartSound",
@@ -159,7 +165,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "59f62873"
     },
     {
       "name": "UNITSND_ResolveSoundFromFlags",
@@ -185,7 +192,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ad85f58"
     },
     {
       "name": "UNITSND_GetHitSound",
@@ -207,7 +215,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc105df9"
     },
     {
       "name": "UNITSND_GetSfxDataListHead",
@@ -228,7 +237,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "void *"
-      ]
+      ],
+      "dh": "7969992a"
     },
     {
       "name": "AllocUnitSfxData",
@@ -250,7 +260,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e373a7f8"
     },
     {
       "name": "FreeSfxData",
@@ -272,7 +283,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "99c92bb3"
     },
     {
       "name": "UNITSND_GetMissileSound",
@@ -298,7 +310,8 @@
         "D2SoundListNodeStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "556b6d7b"
     },
     {
       "name": "UNITSND_GetMissileLoopSound",
@@ -319,7 +332,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ee17472c"
     },
     {
       "name": "IterateUnitSfxData",
@@ -341,7 +355,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0586fa7e"
     },
     {
       "name": "UNITSND_UpdatePositionalAudio",
@@ -366,7 +381,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "062de31a"
     },
     {
       "name": "UNITSND_GetUnitSfxFlag",
@@ -386,7 +402,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "570fbf24"
     },
     {
       "name": "UNITSND_Unused_Placeholder_3",
@@ -408,7 +425,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d63cfc78"
     },
     {
       "name": "UNITSND_GetSfxMode",
@@ -429,7 +447,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "641f85b1"
     },
     {
       "name": "UNITSND_Unused_Placeholder_4",
@@ -451,7 +470,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b77bc0e"
     },
     {
       "name": "GetSfxTicks",
@@ -473,7 +493,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb504a59"
     },
     {
       "name": "SetSfxTicks",
@@ -495,7 +516,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d9ac798"
     },
     {
       "name": "GetSfxAsyncTicks",
@@ -517,7 +539,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9b33fb1"
     },
     {
       "name": "SetSfxAsyncTicks",
@@ -539,7 +562,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6b16d60"
     },
     {
       "name": "UNITSND_GetSfxStepTicks",
@@ -560,7 +584,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bff3dee0"
     },
     {
       "name": "SetSfxStepTicks",
@@ -582,7 +607,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a35dd48"
     },
     {
       "name": "UNITSND_HasActiveSound",
@@ -602,7 +628,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "50f9e46d"
     },
     {
       "name": "SetHasActiveSound",
@@ -623,7 +650,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8964f317"
     },
     {
       "name": "UNITSND_GetTileDataAtPosition",
@@ -646,7 +674,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff135ed7"
     },
     {
       "name": "UNITSND_GetGroundMaterialType",
@@ -665,7 +694,8 @@
         "D2DrlgTileDataStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8bffcb32"
     },
     {
       "name": "UNITSND_GetGroundMaterial",
@@ -697,7 +727,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "77d59678"
     },
     {
       "name": "UNITSND_GetFootstepSound",
@@ -724,7 +755,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a76f8a68"
     },
     {
       "name": "PlayUnitFootstepSound",
@@ -757,7 +789,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "19823721"
     },
     {
       "name": "Unreferenced_004cb170",
@@ -775,7 +808,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b732c4ec"
     },
     {
       "name": "Unreferenced_004cb180",
@@ -793,7 +827,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "129fce64"
     },
     {
       "name": "UNITSND_StopAllSkillSounds",
@@ -821,7 +856,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "0ef94195"
     },
     {
       "name": "UNITSND_UpdateNeutralSound",
@@ -850,7 +886,8 @@
         "D2SoundListNodeStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a4a39d2a"
     },
     {
       "name": "UNITSND_StopAllCombatSounds",
@@ -878,7 +915,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "66ad64b9"
     },
     {
       "name": "UNITSND_GetModeChangeSound",
@@ -901,7 +939,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "int32_t"
-      ]
+      ],
+      "dh": "5586ca09"
     },
     {
       "name": "UNITSND_GetSpecialSoundByMode",
@@ -924,7 +963,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "int32_t"
-      ]
+      ],
+      "dh": "f5c8e21f"
     },
     {
       "name": "UpdateUnitSfxOnModeChange",
@@ -971,7 +1011,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e671320e"
     },
     {
       "name": "UNITSND_PlayAttackSound",
@@ -1007,7 +1048,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f8c8769"
     },
     {
       "name": "UNITSND_PlayGetHitSound",
@@ -1029,7 +1071,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5211fa5"
     },
     {
       "name": "UNITSND_PlayMonsterSkillSound",
@@ -1059,7 +1102,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "74b7d61c"
     },
     {
       "name": "UNITSND_PlayFleeSound",
@@ -1085,7 +1129,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c02805f1"
     },
     {
       "name": "UNITSND_PlayPlayerSound",
@@ -1117,7 +1162,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0c395a8"
     },
     {
       "name": "UNITSND_PlaySoundForMercenary",
@@ -1159,7 +1205,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9e6f7b80"
     },
     {
       "name": "MuteOrUnmuteUnitSounds",
@@ -1186,7 +1233,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "int32_t"
-      ]
+      ],
+      "dh": "a89f18f8"
     },
     {
       "name": "SOUND_UpdateAmbientMusic",
@@ -1219,7 +1267,8 @@
         "uint16_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "a1ad4258"
     },
     {
       "name": "PlayUnitInitSound",
@@ -1251,7 +1300,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b387a91d"
     },
     {
       "name": "UNITSND_PlayModeChangeSound",
@@ -1286,7 +1336,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "55af7e8c"
     },
     {
       "name": "UNITSND_DispatchModeChangeSound",
@@ -1316,7 +1367,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c6269916"
     }
   ]
 }

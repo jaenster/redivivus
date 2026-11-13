@@ -25,7 +25,8 @@
         "D2QuestDataStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "bb13ea01"
     },
     {
       "name": "Q06_NotifyQuestStateToPlayer",
@@ -47,7 +48,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "eb5b91f3"
     },
     {
       "name": "Q06_Callback02_NpcDeactivate",
@@ -67,7 +69,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA1Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "85f8de01"
     },
     {
       "name": "Q06_SyncQuestStepToPlayer",
@@ -89,7 +92,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "53f7ae1b"
     },
     {
       "name": "Q06_Callback11_ScrollMessage",
@@ -122,7 +126,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "39f7c72a"
     },
     {
       "name": "Q06_Callback00_NpcActivate",
@@ -151,7 +156,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f2fe7c3"
     },
     {
       "name": "Q06_Callback03_ChangedLevel",
@@ -178,7 +184,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fda4d6ec"
     },
     {
       "name": "Q06_PlayCompletionSound",
@@ -200,7 +207,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fd46924e"
     },
     {
       "name": "Q6_DenOfEvil_OnComplete_ClearGUIDs",
@@ -220,7 +228,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "7a4b2a63"
     },
     {
       "name": "Q06_SetQuestCompletedAndReward",
@@ -242,7 +251,8 @@
         "D2BitBufferStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "939982d1"
     },
     {
       "name": "Q06_OnPlayerEnterCatacombsL4",
@@ -271,7 +281,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "0499ddba"
     },
     {
       "name": "Q06_RegisterActIPlayerForCompletion",
@@ -300,7 +311,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "0497c0cf"
     },
     {
       "name": "Q06_SetCannotCompleteInGame",
@@ -323,7 +335,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "35fdcb35"
     },
     {
       "name": "Q06_PropagateRewardToParty",
@@ -346,7 +359,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "16cb4a1a"
     },
     {
       "name": "Q06_SpawnReturnPortal",
@@ -370,7 +384,8 @@
         "POINT",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "fcbb1d73"
     },
     {
       "name": "Q06_TimerSpawnPortalAndNotify",
@@ -393,7 +408,8 @@
         "SGAMEDATA",
         "fpExecuteOnUnitFunction",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf92f45e"
     },
     {
       "name": "Q06_QuestUpdate",
@@ -413,7 +429,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "c95b463e"
     },
     {
       "name": "Q06_Callback08_MonsterKilled",
@@ -445,7 +462,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4aa3c252"
     },
     {
       "name": "Q06_ActiveFilter",
@@ -467,7 +485,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4ebfda9e"
     },
     {
       "name": "Q06_GetQuestSpecificFlag",
@@ -485,7 +504,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc7f4c2c"
     },
     {
       "name": "Q06_SequenceFilter",
@@ -503,7 +523,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "81a400da"
     },
     {
       "name": "Q06_Callback13_PlayerStartedGame",
@@ -525,7 +546,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3127d6fd"
     },
     {
       "name": "Q06_InitData",
@@ -547,7 +569,8 @@
         "D2QuestDataA1Q6Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ba1f1223"
     }
   ]
 }

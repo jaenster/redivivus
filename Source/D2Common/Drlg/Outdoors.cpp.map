@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9d17217a"
     },
     {
       "name": "DRLGOUTDOOR_ValidateSubTilePlacement",
@@ -41,7 +42,8 @@
         "D2UnkOutdoorStrc",
         "fpDrlgOutdoorValidateBorderCell",
         "uint32_t"
-      ]
+      ],
+      "dh": "eefc0843"
     },
     {
       "name": "DRLGOUTDOOR_ApplySubTileToGrid",
@@ -62,7 +64,8 @@
         "D2LvlSubTxt",
         "D2UnkOutdoorStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "351f664c"
     },
     {
       "name": "DRLGOUTDOOR_PlaceRandomBorderSubTiles",
@@ -85,7 +88,8 @@
         "D2UnkOutdoorStrc",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "027188d4"
     },
     {
       "name": "DRLGOUTDOOR_CheckSubTileOverlap",
@@ -107,7 +111,8 @@
         "D2LvlSubTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f687a78a"
     },
     {
       "name": "DRLGOUTDOOR_GetAdjacentLevelVisMask",
@@ -126,7 +131,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "570ae36f"
     },
     {
       "name": "GetOutLinkVisFlag",
@@ -150,7 +156,8 @@
         "D2DrlgVertexStrc",
         "eDrlgDirection",
         "int32_t"
-      ]
+      ],
+      "dh": "e979e3a4"
     },
     {
       "name": "DRLGOUTDOOR_GetPresetCoordFromGrid",
@@ -171,7 +178,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f66c4aa7"
     },
     {
       "name": "AlterAdjacentPresetGridCells",
@@ -191,7 +199,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "995fd14e"
     },
     {
       "name": "SetBlankGridCell",
@@ -211,7 +220,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "754c86f0"
     },
     {
       "name": "DRLGOUTDOOR_IsGridCellPresetFree",
@@ -231,7 +241,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6410e7d"
     },
     {
       "name": "DRLGOUTDOOR_IsGridCellEmpty",
@@ -251,7 +262,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2336417b"
     },
     {
       "name": "TestOutdoorLevelPreset",
@@ -275,7 +287,8 @@
         "D2LvlPrestTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "62830be5"
     },
     {
       "name": "DRLGOUTDOOR_AllocPresetFileTracker",
@@ -300,7 +313,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8687d933"
     },
     {
       "name": "SpawnOutdoorLevelPresetEx",
@@ -324,7 +338,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "21829591"
     },
     {
       "name": "SpawnPresetFarAway",
@@ -347,7 +362,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7578d82"
     },
     {
       "name": "SpawnOutdoorLevelPreset",
@@ -370,7 +386,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7e2c193"
     },
     {
       "name": "SpawnRandomOutdoorDS1",
@@ -397,7 +414,8 @@
         "int64_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a22436a2"
     },
     {
       "name": "SpawnAct12Waypoint",
@@ -421,7 +439,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6574891"
     },
     {
       "name": "SpawnAct12Shrines",
@@ -445,7 +464,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6a2725d"
     },
     {
       "name": "DRLGOUTDOOR_SimplifyOutdoorPoints",
@@ -465,7 +485,8 @@
         "D2DrlgVertexStrc",
         "D2DrlgVertexStrc *",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "229cb2cf"
     },
     {
       "name": "DRLGOUTDOOR_CreateOutdoorRoomExGrid",
@@ -492,7 +513,8 @@
         "D2DrlgMapStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "96f61b8c"
     },
     {
       "name": "Unreferenced_00675290",
@@ -510,7 +532,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "cef599d0"
     },
     {
       "name": "AddAct124SecondaryBorder",
@@ -532,7 +555,8 @@
         "D2DrlgLevelStrc",
         "D2UnkOutdoorStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "34d50123"
     },
     {
       "name": "DRLGLEVEL_InitializeWithWildernessLevel",
@@ -552,7 +576,8 @@
       "usedTypes": [
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "d46d0b64"
     },
     {
       "name": "DRLGOUTDOOR_GenerateLevel",
@@ -583,7 +608,8 @@
         "D2PoolManagerStrc",
         "eAct",
         "int32_t"
-      ]
+      ],
+      "dh": "390b98bf"
     },
     {
       "name": "DRLGOUTDOOR_FreeOutdoorLevelData",
@@ -607,7 +633,8 @@
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc *",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "4bc6aaa6"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct4SpecialPresets",
@@ -625,7 +652,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "01f645e4"
     },
     {
       "name": "DRLGOUTDOOR_SpawnAct4OutdoorPresets",
@@ -643,7 +671,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "b03c18de"
     },
     {
       "name": "BuildChaosSanctuary",
@@ -662,7 +691,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "20aebe86"
     },
     {
       "name": "InitAct4OutdoorLevel",
@@ -685,7 +715,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "f2dbf73a"
     }
   ]
 }

@@ -23,7 +23,8 @@
       "usedTypes": [
         "D2TileCmpTileNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "942caeae"
     },
     {
       "name": "TILECMP_FreeTileNode",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "D2TileCmpTileNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2e56ebdc"
     },
     {
       "name": "TILECMP_AllocTileSet",
@@ -68,7 +70,8 @@
       "usedTypes": [
         "D2TileCmpTileSetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "91fed5bb"
     },
     {
       "name": "TILECMP_FreeTileSet",
@@ -91,7 +94,8 @@
         "D2TileCmpTileNodeStrc",
         "D2TileCmpTileSetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b5d5ff0"
     },
     {
       "name": "TILECMP_AllocTileLink",
@@ -113,7 +117,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce4ba881"
     },
     {
       "name": "TILECMP_FreeTileSetChain",
@@ -137,7 +142,8 @@
         "D2TileCmpTileSetListStrc",
         "D2TileCmpTileSetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c6a4c7c"
     },
     {
       "name": "TILECMP_AddTileToSet",
@@ -161,7 +167,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b6cebe4"
     },
     {
       "name": "TILECMP_ValidateTilePixels",
@@ -181,7 +188,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "84e3cb89"
     },
     {
       "name": "TILECMP_CacheTileData",
@@ -209,7 +217,8 @@
         "D2TileCmpTileSetStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "00adf5c6"
     },
     {
       "name": "TILECMP_CheckTilePatternRLE",
@@ -226,7 +235,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2b6f6037"
     },
     {
       "name": "TILECMP_ExtractIsometricSubTile",
@@ -254,7 +264,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "60808c6d"
     },
     {
       "name": "TILECMP_Generate25SubTiles",
@@ -279,7 +290,8 @@
         "D2TileCmpTileSetStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "86dcbec9"
     },
     {
       "name": "TILECMP_InitTileSetFromDT1",
@@ -301,7 +313,8 @@
       "usedTypes": [
         "D2TileCmpTileSetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9b475f30"
     },
     {
       "name": "TILECMP_SerializeTileSet",
@@ -327,7 +340,8 @@
         "D2TileCmpTileSetStrc",
         "D2TileLibraryEntryStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "1a281549"
     },
     {
       "name": "TILECMP_ExportCacheToBuffer",
@@ -354,7 +368,8 @@
         "D2TileLibraryEntryStrc",
         "D2TileLibraryHeaderStrc",
         "D2TileLibraryHeaderStrc *"
-      ]
+      ],
+      "dh": "58b0fc42"
     },
     {
       "name": "TILECMP_FreeTileCache",
@@ -378,7 +393,8 @@
         "D2GroundSubTileStrc",
         "D2TileLibraryHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9db2e125"
     },
     {
       "name": "TILECMP_CalculateCacheSize",
@@ -400,7 +416,8 @@
         "D2TileLibraryHeaderStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b512147f"
     },
     {
       "name": "TILECMP_CopyTileNodes",
@@ -420,7 +437,8 @@
         "D2TileLibraryEntryStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c66c3291"
     },
     {
       "name": "TILECMP_DeserializeAndFixup",
@@ -448,7 +466,8 @@
         "int32_t",
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "5d9b3a48"
     },
     {
       "name": "TILECMP_FixupPointersInPlace",
@@ -471,7 +490,8 @@
         "D2TileLibraryHeaderStrc *",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "019484f1"
     },
     {
       "name": "TILECMP_FixupMinimalPointers",
@@ -493,7 +513,8 @@
       "usedTypes": [
         "D2TileLibraryHeaderStrc",
         "D2TileLibraryHeaderStrc *"
-      ]
+      ],
+      "dh": "bfed38e8"
     },
     {
       "name": "TILECMP_FixupMinimalPointers_HaltTail",
@@ -510,7 +531,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "78962acb"
     },
     {
       "name": "TILECMP_RegisterTilesForLookup",
@@ -534,7 +556,8 @@
         "D2TileLibraryHashStrc",
         "D2TileLibraryHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "808a38c4"
     },
     {
       "name": "TILECMP_RelocateSubTilePixelData",
@@ -556,7 +579,8 @@
         "D2GroundSubTileStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1583fd48"
     },
     {
       "name": "TILECMP_ApplyFunctionToPixels",
@@ -575,7 +599,8 @@
         "int32_t",
         "pfnTilecmpPixelCallback",
         "uint8_t"
-      ]
+      ],
+      "dh": "4e115a0d"
     },
     {
       "name": "TILECMP_ProcessAllTilePixels",
@@ -598,7 +623,8 @@
         "D2TileLibraryEntryStrc",
         "D2TileLibraryHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "738f85ee"
     },
     {
       "name": "TILECMP_CompressSubTile",
@@ -626,7 +652,8 @@
         "pfnRGBToPaletteIndex",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "191a2bde"
     },
     {
       "name": "TILECMP_DeepCopyWithRecompression",
@@ -652,7 +679,8 @@
         "D2TileLibraryHeaderStrc",
         "D2TileLibraryHeaderStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "e71ae5d4"
     },
     {
       "name": "TILECMP_ShallowCopyZeroPointers",
@@ -677,7 +705,8 @@
         "D2TileLibraryHeaderStrc",
         "int32_t",
         "void *"
-      ]
+      ],
+      "dh": "c53c334d"
     }
   ]
 }

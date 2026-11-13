@@ -19,7 +19,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "5693c947"
     },
     {
       "name": "RoundToMultiple",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "214c5201"
     },
     {
       "name": "Assign",
@@ -55,7 +57,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "f880986f"
     },
     {
       "name": "SetLinkOffset",
@@ -74,7 +77,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
         "int32_t"
-      ]
+      ],
+      "dh": "ab6465a1"
     },
     {
       "name": "Link",
@@ -93,7 +97,8 @@
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>"
-      ]
+      ],
+      "dh": "fe755edd"
     },
     {
       "name": "Next",
@@ -112,7 +117,8 @@
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>",
         "intptr_t"
-      ]
+      ],
+      "dh": "0369d6ed"
     },
     {
       "name": "LinkNode",
@@ -134,7 +140,8 @@
         "TSLink<MappingEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea02bee4"
     },
     {
       "name": "RawNext",
@@ -152,7 +159,8 @@
       "usedTypes": [
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>"
-      ]
+      ],
+      "dh": "35130dc9"
     },
     {
       "name": "UnlinkNode",
@@ -173,7 +181,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0448a11"
     },
     {
       "name": "Destructor",
@@ -194,7 +203,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "78a7dac8"
     },
     {
       "name": "Next",
@@ -213,7 +223,8 @@
         "MappingEntryNode",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "intptr_t"
-      ]
+      ],
+      "dh": "a57935a9"
     },
     {
       "name": "UnlinkAll",
@@ -233,7 +244,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "de026f39"
     },
     {
       "name": "CopyConstructor",
@@ -252,7 +264,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "13eef8e4"
     }
   ]
 }

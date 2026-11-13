@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "581e8f29"
     },
     {
       "name": "Unreferenced_0053b140",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "6371643b"
     },
     {
       "name": "Unreferenced_0053b180",
@@ -56,7 +58,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3cced4d7"
     },
     {
       "name": "thunk_NET_D2GS_SERVER_SendPacketToClient",
@@ -74,7 +77,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0f803b95"
     },
     {
       "name": "SERVERCMD_SendBufferToClient",
@@ -96,7 +100,8 @@
         "D2GSPacketSrv0xB",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b1e49913"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated",
@@ -115,7 +120,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f091a810"
     },
     {
       "name": "SERVERCMD_SendSingleBytePacket",
@@ -134,7 +140,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "53255d81"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB4_ConnectionRefused",
@@ -153,7 +160,8 @@
       "usedTypes": [
         "D2GSPacketSrv0xB",
         "int32_t"
-      ]
+      ],
+      "dh": "75dad760"
     }
   ]
 }

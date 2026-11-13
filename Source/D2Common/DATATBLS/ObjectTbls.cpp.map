@@ -24,7 +24,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "WCHAR"
-      ]
+      ],
+      "dh": "91525c57"
     },
     {
       "name": "TXT_Objects_GetLine",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "D2ObjectsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e0b488d6"
     },
     {
       "name": "TXT_FreeTxt_Objects",
@@ -60,7 +62,8 @@
       "calledFunctions": [
         "TXT_FreeTxt_Objects",
         "UnloadBin"
-      ]
+      ],
+      "dh": "6341ec46"
     },
     {
       "name": "OBJECTTBLS_FreeObjGroupTxt",
@@ -75,7 +78,8 @@
       "calledFunctions": [
         "OBJECTTBLS_FreeObjGroupTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "76d4abc7"
     },
     {
       "name": "TXT_AllocTxt_objgroup",
@@ -94,7 +98,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "beaae141"
     },
     {
       "name": "DATATBLS_GetObjGroupTxtRecord",
@@ -112,7 +117,8 @@
       "usedTypes": [
         "D2ObjGroupTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "f0aa8b64"
     },
     {
       "name": "TXT_AllocTxt_shrines",
@@ -131,7 +137,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "4ac5b2b3"
     },
     {
       "name": "TXT_Shrines_GetLine",
@@ -152,7 +159,8 @@
       "usedTypes": [
         "D2ShrinesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "aa3fd962"
     },
     {
       "name": "GetShrinesSize",
@@ -169,7 +177,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "76ac1b0e"
     },
     {
       "name": "TXT_Shrines_Free",
@@ -184,7 +193,8 @@
       "calledFunctions": [
         "TXT_Shrines_Free",
         "UnloadBin"
-      ]
+      ],
+      "dh": "b7b1cdd1"
     }
   ]
 }

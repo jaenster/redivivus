@@ -222,7 +222,7 @@ void __fastcall AppearenceItems2(uint32_t pClient, D2UnitStrc * pUnit, uint32_t 
     exit(-1);
 }
 
-static void Unreferenced_00537ab0(D2RoomStrc * pRoom1, D2RoomStrc * pRoom2) {
+static void Unreferenced_00537ab0(D2RoomStrc * pRoom2, D2RoomStrc * pRoom1) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_SwapRoomDataForRoomEx(pRoom1, pRoom2);
     D2Common::DUNGEON::Dungeon::DRLGROOM_SwapActiveRoomExBetweenLevels(pRoom1, pRoom2);
 }

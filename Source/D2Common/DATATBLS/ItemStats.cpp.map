@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2ItemStatCostTxt",
         "eD2UnitStat"
-      ]
+      ],
+      "dh": "08714278"
     },
     {
       "name": "SetState",
@@ -41,7 +42,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "06887d98"
     },
     {
       "name": "UNIT_GetUnitState",
@@ -61,7 +63,8 @@
         "D2UnitStrc",
         "eD2States",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "16c56f5a"
     },
     {
       "name": "D2StatesTogglegfx",
@@ -82,7 +85,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0da87f85"
     },
     {
       "name": "GetStateGfxFlag",
@@ -102,7 +106,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "531a2f34"
     },
     {
       "name": "STATES_ClearGfxFlags",
@@ -121,7 +126,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "53403f03"
     },
     {
       "name": "STATES_HasAnyGfxFlag",
@@ -140,7 +146,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "468a6031"
     },
     {
       "name": "STATES_AssertGetGfxFlags",
@@ -162,7 +169,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "354c008f"
     },
     {
       "name": "STATES_FilterStatesByContext",
@@ -184,7 +192,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0ecc2b1"
     },
     {
       "name": "thunk_UNIT_GetStateList_StateFlags",
@@ -202,7 +211,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "62cf10da"
     },
     {
       "name": "STATES_HasMatchingStateFlag",
@@ -222,7 +232,8 @@
         "D2StatesDataTbls",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c03288f5"
     },
     {
       "name": "STATES_MoveToGfxFlags",
@@ -243,7 +254,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b13af80f"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray1",
@@ -261,7 +273,8 @@
       "usedTypes": [
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "e918ebfb"
     },
     {
       "name": "STATES_HasHideState",
@@ -279,7 +292,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9a509f4f"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray4",
@@ -297,7 +311,8 @@
       "usedTypes": [
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "94ca7b03"
     },
     {
       "name": "STATES_HasTransformState",
@@ -315,7 +330,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "72e757c2"
     },
     {
       "name": "STATES_MoveTransformToGfx",
@@ -333,7 +349,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c1338c9e"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray2",
@@ -351,7 +368,8 @@
       "usedTypes": [
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "92c7c75e"
     },
     {
       "name": "STATES_HasLightState",
@@ -369,7 +387,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1b8e7e7a"
     },
     {
       "name": "STATES_HasDamageState",
@@ -387,7 +406,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c02128b5"
     },
     {
       "name": "STATES_HasBlueState",
@@ -405,7 +425,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e5888193"
     },
     {
       "name": "STATES_HasAttackSpeedState",
@@ -423,7 +444,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "caf85be1"
     },
     {
       "name": "STATES_HasAuraState",
@@ -441,7 +463,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5a414fb7"
     },
     {
       "name": "STATES_HasResistState",
@@ -459,7 +482,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "818dfc37"
     },
     {
       "name": "STATES_HasArmorState",
@@ -477,7 +501,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "47f7ee64"
     },
     {
       "name": "UNITS_IsShapeshifted",
@@ -494,7 +519,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1eb4dbfb"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray11",
@@ -512,7 +538,8 @@
       "usedTypes": [
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "f53098a5"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray12",
@@ -529,7 +556,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "62cb31f5"
     },
     {
       "name": "STATES_IsStateActive",
@@ -547,7 +575,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f2d81bd"
     },
     {
       "name": "STATES_HasPoisonState",
@@ -565,7 +594,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e33c3cac"
     },
     {
       "name": "STATES_HasColdState",
@@ -583,7 +613,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5370921f"
     },
     {
       "name": "STATES_HasFireState",
@@ -601,7 +632,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3c757abb"
     },
     {
       "name": "STATES_HasLifeState",
@@ -619,7 +651,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b6ef3b34"
     },
     {
       "name": "STATES_HasManaState",
@@ -637,7 +670,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c0b36462"
     },
     {
       "name": "STATES_HasStaminaState",
@@ -655,7 +689,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9417478d"
     },
     {
       "name": "STATES_HasDefenseState",
@@ -673,7 +708,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0b9af3c5"
     },
     {
       "name": "STATES_HasExpState",
@@ -691,7 +727,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "650533c8"
     },
     {
       "name": "STATES_HasGoldState",
@@ -709,7 +746,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "40719ecc"
     },
     {
       "name": "STATES_HasMagicFindState",
@@ -727,7 +765,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "68914dc0"
     },
     {
       "name": "STATES_HasSkillState",
@@ -745,7 +784,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cff02ddb"
     },
     {
       "name": "STATES_HasAbsorbState",
@@ -763,7 +803,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "42b06156"
     },
     {
       "name": "STATES_HasCurseState",
@@ -781,7 +822,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "311a1e98"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray30",
@@ -798,7 +840,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "18be8b05"
     },
     {
       "name": "STATES_HasMaxState",
@@ -816,7 +859,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "26b97701"
     },
     {
       "name": "ITEMSTATS_CheckStateFlagArray31",
@@ -833,7 +877,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5f88c676"
     },
     {
       "name": "STATES_HasProgressiveState",
@@ -851,7 +896,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e4474e13"
     },
     {
       "name": "STATES_HasPassiveState",
@@ -869,7 +915,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "dfd4430c"
     },
     {
       "name": "STATES_HasDisguiseState",
@@ -887,7 +934,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2a3d7ea6"
     },
     {
       "name": "ITEMSTATS_CheckUnitHasStateFlagIndex",
@@ -906,7 +954,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cfb47236"
     }
   ]
 }

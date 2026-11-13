@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "30f13041"
     },
     {
       "name": "MISC_GetValueFromD2Ini",
@@ -41,7 +42,8 @@
         "D2IniConfigStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "644b3b74"
     },
     {
       "name": "INI_FindConfigValueIndex",
@@ -60,7 +62,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cdbcccaf"
     },
     {
       "name": "INI_IsDelimiterChar",
@@ -74,7 +77,8 @@
       "namespace": "Game::Main",
       "calledFunctions": [
         "INI_IsDelimiterChar"
-      ]
+      ],
+      "dh": "d24c02d2"
     },
     {
       "name": "INI_StripDelimiters",
@@ -92,7 +96,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "461273f5"
     },
     {
       "name": "INI_ParseCommandLineArg",
@@ -117,7 +122,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "00051c58"
     },
     {
       "name": "CloseDiablo",
@@ -132,7 +138,8 @@
       "calledFunctions": [
         "CloseDiablo",
         "exit"
-      ]
+      ],
+      "dh": "8181f14d"
     },
     {
       "name": "MISC_ParseCommandLineAndPutIntoD2IniData",
@@ -153,7 +160,8 @@
         "D2IniConfigStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fd69b318"
     },
     {
       "name": "MISC_InitD2IniAndIgnorelist",
@@ -174,7 +182,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "d328e2b3"
     },
     {
       "name": "ApplicationRunCurrentMode",
@@ -195,7 +204,8 @@
       "usedTypes": [
         "D2IniConfigStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d637fcaa"
     },
     {
       "name": "SystemSurvey_WriteProductLanugageToLocaleFile",
@@ -227,7 +237,8 @@
       "usedTypes": [
         "FILE",
         "uint32_t"
-      ]
+      ],
+      "dh": "53c825db"
     },
     {
       "name": "ApplicationMain",
@@ -278,7 +289,8 @@
         "eD2RendererMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "375c0e59"
     },
     {
       "name": "ReturnTrue",
@@ -292,7 +304,8 @@
       "namespace": "Game::Main",
       "calledFunctions": [
         "ReturnTrue"
-      ]
+      ],
+      "dh": "0d27003a"
     },
     {
       "name": "D2INIT_CheckCommandLineOrLoadItFromRegistry",
@@ -316,7 +329,8 @@
       "usedTypes": [
         "char *",
         "int32_t"
-      ]
+      ],
+      "dh": "36e9acf0"
     },
     {
       "name": "CreateRegedit",
@@ -337,7 +351,8 @@
       "usedTypes": [
         "HKEY",
         "LSTATUS"
-      ]
+      ],
+      "dh": "9766caff"
     },
     {
       "name": "ERRORMANAGER_TryGetProcAddress",
@@ -354,7 +369,8 @@
       ],
       "usedTypes": [
         "FARPROC"
-      ]
+      ],
+      "dh": "b13f1639"
     },
     {
       "name": "LIB_LoadAdvapi32",
@@ -378,7 +394,8 @@
         "pfnInitializeAcl",
         "pfnSetSecurityInfo",
         "uint32_t"
-      ]
+      ],
+      "dh": "37b2b0b4"
     },
     {
       "name": "CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument",
@@ -400,7 +417,8 @@
       ],
       "usedTypes": [
         "eD2ApplicationMode"
-      ]
+      ],
+      "dh": "a06a98b0"
     },
     {
       "name": "ERRORMANAGER_ServiceControlHandler",
@@ -417,7 +435,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "84f5e938"
     },
     {
       "name": "Unreferenced_00406470",
@@ -434,7 +453,8 @@
       ],
       "usedTypes": [
         "SC_HANDLE"
-      ]
+      ],
+      "dh": "daa19a9c"
     },
     {
       "name": "PreInitApplication",
@@ -465,7 +485,8 @@
         "eD2ApplicationMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ab43a8d"
     },
     {
       "name": "main",
@@ -480,7 +501,8 @@
       "calledFunctions": [
         "PreInitApplication",
         "main"
-      ]
+      ],
+      "dh": "945acd54"
     },
     {
       "name": "StartDiablo2ServerAsService",
@@ -498,7 +520,8 @@
       "usedTypes": [
         "SC_HANDLE",
         "SERVICE_TABLE_ENTRYA"
-      ]
+      ],
+      "dh": "b31dab48"
     },
     {
       "name": "WinMain",
@@ -518,7 +541,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9095742d"
     }
   ]
 }

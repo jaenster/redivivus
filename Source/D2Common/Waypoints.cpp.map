@@ -21,7 +21,8 @@
         "D2LevelsTxt",
         "eD2LevelId",
         "uint16_t"
-      ]
+      ],
+      "dh": "b8a2d3a8"
     },
     {
       "name": "FindWaypointIdByLevelId",
@@ -42,7 +43,8 @@
         "eD2LevelId",
         "int16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e6b41589"
     },
     {
       "name": "CheckWaypoint",
@@ -65,7 +67,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5d332ca9"
     },
     {
       "name": "EnableWaypoint",
@@ -87,7 +90,8 @@
         "D2WaypointStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "17475d3a"
     },
     {
       "name": "Alloc",
@@ -106,7 +110,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2WaypointStrc"
-      ]
+      ],
+      "dh": "6b5ec44e"
     },
     {
       "name": "WAYPOINT_UpgradeSignature",
@@ -127,7 +132,8 @@
       "usedTypes": [
         "D2WaypointStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "e2f05c7b"
     },
     {
       "name": "Free",
@@ -151,7 +157,8 @@
         "D2WaypointStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5d72e3a6"
     },
     {
       "name": "CopyWaypointBits",
@@ -174,7 +181,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b94c5ade"
     },
     {
       "name": "CopyWaypoint",
@@ -196,7 +204,8 @@
         "D2WaypointStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2b1954aa"
     }
   ]
 }

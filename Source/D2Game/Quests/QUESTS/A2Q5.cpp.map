@@ -22,7 +22,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b9a228d4"
     },
     {
       "name": "Q13_Callback00_NpcActivate",
@@ -47,7 +48,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fb4143a3"
     },
     {
       "name": "Q13_NotifySummonerComplete",
@@ -68,7 +70,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a08497df"
     },
     {
       "name": "Q13_UpdateQuestRecord",
@@ -92,7 +95,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1bb20555"
     },
     {
       "name": "Q13_Callback11_ScrollMessage",
@@ -122,7 +126,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "7a021b3b"
     },
     {
       "name": "Q13_CheckSummonerKillAndReward",
@@ -152,7 +157,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f96f0f62"
     },
     {
       "name": "Q13_Callback10_PlayerLeavesGame",
@@ -191,7 +197,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "f93b0d4f"
     },
     {
       "name": "Q13_OnEndCallbackAndNotify",
@@ -214,7 +221,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "8b4d6b3e"
     },
     {
       "name": "Q13_SetSummonerRewardOnPartyMember",
@@ -242,7 +250,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "99e24741"
     },
     {
       "name": "Q13_PropagateRewardToParty",
@@ -264,7 +273,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "afd90bb5"
     },
     {
       "name": "Q13_SetCannotComplete",
@@ -286,7 +296,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1cc16346"
     },
     {
       "name": "Q13_Callback08_MonsterKilled",
@@ -313,7 +324,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "78f14892"
     },
     {
       "name": "Q13_Callback03_ChangedLevel",
@@ -332,7 +344,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "e80b97cc"
     },
     {
       "name": "Q13_Callback13_PlayerStartedGame",
@@ -354,7 +367,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f58e6ff6"
     },
     {
       "name": "Q13_InitData",
@@ -374,7 +388,8 @@
       "usedTypes": [
         "D2QuestDataA2Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "dff86941"
     }
   ]
 }

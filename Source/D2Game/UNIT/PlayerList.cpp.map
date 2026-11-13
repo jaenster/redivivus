@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2UnitDataPlayerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "96f3ef71"
     },
     {
       "name": "PLAYERLIST_AddPlayerEntry",
@@ -48,7 +49,8 @@
         "eD2States",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "0290ea8e"
     },
     {
       "name": "PLAYERLIST_RemoveFromList",
@@ -71,7 +73,8 @@
         "D2UnitPlayerListStrc *",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fef116bf"
     },
     {
       "name": "SendRelationshipStatus",
@@ -95,7 +98,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "758fb224"
     },
     {
       "name": "PLAYERLIST_GetFlagsMasked",
@@ -116,7 +120,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fbc18a27"
     },
     {
       "name": "PLAYERLIST_GetFlags",
@@ -138,7 +143,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97b8996f"
     },
     {
       "name": "SetPlayerRelationship",
@@ -159,7 +165,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c82ebbdf"
     },
     {
       "name": "PLAYERLIST_IsPartied",
@@ -180,7 +187,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "f941eed3"
     },
     {
       "name": "Send0x8bRelationshipStatus",
@@ -203,7 +211,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitPlayerListStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8dab348c"
     },
     {
       "name": "PARTY_SendRelationshipForPlayer",
@@ -225,7 +234,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7bfddf12"
     },
     {
       "name": "PLAYERLIST_AddBothWays",
@@ -254,7 +264,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a31370d5"
     },
     {
       "name": "PARTY_BroadcastPlayerToAllUnits",
@@ -277,7 +288,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "867af42d"
     },
     {
       "name": "PARTY_RefreshPlayerListRelationships",
@@ -302,7 +314,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int16_t"
-      ]
+      ],
+      "dh": "170878ab"
     },
     {
       "name": "GetHostileDelay",
@@ -322,7 +335,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitPlayerListStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "999bdb2d"
     },
     {
       "name": "PLAYERLIST_SetHostileDelay",
@@ -344,7 +358,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c523f64"
     },
     {
       "name": "PLAYERLIST_RemoveFromListCallback",
@@ -363,7 +378,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "049371f7"
     },
     {
       "name": "PLAYERDATA_FreePlayerList",
@@ -386,7 +402,8 @@
         "D2UnitPlayerListStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "40a01865"
     }
   ]
 }

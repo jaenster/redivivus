@@ -21,7 +21,8 @@
         "D2SUnitEventStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b52dfaf0"
     },
     {
       "name": "SUNITEVENT_Alloc",
@@ -45,7 +46,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4f87e5dd"
     },
     {
       "name": "SUNITEVENT_RemoveEventsByQueueAndOwner",
@@ -66,7 +68,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b9700073"
     },
     {
       "name": "UNITEVENT_FindByCallbackParams",
@@ -87,7 +90,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c81e3889"
     },
     {
       "name": "UNITEVENT_DispatchEventsByType",
@@ -110,7 +114,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d3dbe54"
     }
   ]
 }

@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5c85513e"
     },
     {
       "name": "MoveY16Minus",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "eaa6ba20"
     },
     {
       "name": "MoveX16Plus",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "3550d41d"
     },
     {
       "name": "MoveX16Minus",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "86496946"
     },
     {
       "name": "AUTOMAP_OnKeyDownEnd_NoOp",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "abd23d5e"
     },
     {
       "name": "AUTOMAP_SetupPosition",
@@ -105,7 +110,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b47a1c3c"
     },
     {
       "name": "AUTOMAP_CenterOnPlayer",
@@ -123,7 +129,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "806b4c60"
     },
     {
       "name": "AUTOMAP_GetFade",
@@ -140,7 +147,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "25761c7d"
     },
     {
       "name": "AUTOMAP_SetFade",
@@ -158,7 +166,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9f860635"
     },
     {
       "name": "AUTOMAP_GetCenters",
@@ -175,7 +184,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "45dc19e5"
     },
     {
       "name": "AUTOMAP_SetCenters",
@@ -193,7 +203,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d871618f"
     },
     {
       "name": "AUTOMAP_GetLeft",
@@ -210,7 +221,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2d21daa1"
     },
     {
       "name": "AUTOMAP_SetLeft",
@@ -228,7 +240,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cc875a72"
     },
     {
       "name": "AUTOMAP_GetParty",
@@ -242,7 +255,8 @@
       "namespace": "D2Client::UI::Automap",
       "calledFunctions": [
         "AUTOMAP_GetParty"
-      ]
+      ],
+      "dh": "3b9b7aac"
     },
     {
       "name": "AUTOMAP_SetParty",
@@ -260,7 +274,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2aaa952a"
     },
     {
       "name": "AUTOMAP_GetPartyNames",
@@ -277,7 +292,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f2212b78"
     },
     {
       "name": "AUTOMAP_SetPartyNames",
@@ -295,7 +311,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "56749a45"
     },
     {
       "name": "AUTOMAP_RotateCellRight",
@@ -317,7 +334,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "b204969d"
     },
     {
       "name": "AUTOMAP_RotateCellLeft",
@@ -339,7 +357,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "dbb065c3"
     },
     {
       "name": "AUTOMAP_RebalanceTreeRight",
@@ -362,7 +381,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "3db965ac"
     },
     {
       "name": "AUTOMAP_RebalanceTreeLeft",
@@ -385,7 +405,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "1f4434fb"
     },
     {
       "name": "Unreferenced_00457ac0",
@@ -402,7 +423,8 @@
       ],
       "usedTypes": [
         "D2AutomapCellStrc"
-      ]
+      ],
+      "dh": "c6989a80"
     },
     {
       "name": "AUTOMAP_InsertCellIntoTree",
@@ -423,7 +445,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "76525279"
     },
     {
       "name": "AUTOMAP_AllocCell",
@@ -445,7 +468,8 @@
         "D2AutomapStrc",
         "D2AutomapStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "27243c08"
     },
     {
       "name": "AUTOMAP_RevealTile",
@@ -477,7 +501,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0d1a92cc"
     },
     {
       "name": "AUTOMAP_AddCellByCoords",
@@ -498,7 +523,8 @@
         "D2AutomapCellStrc",
         "D2AutomapCellStrc *",
         "int16_t"
-      ]
+      ],
+      "dh": "7360eded"
     },
     {
       "name": "AUTOMAP_AddCellForUnit",
@@ -526,7 +552,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "abe875bd"
     },
     {
       "name": "AUTOMAP_GetMapFileHandle",
@@ -556,7 +583,8 @@
       "usedTypes": [
         "AutomapSeedHeader",
         "uint32_t"
-      ]
+      ],
+      "dh": "9021aa76"
     },
     {
       "name": "AUTOMAP_SaveLayerToFile",
@@ -579,7 +607,8 @@
       ],
       "usedTypes": [
         "D2AutomapFileEntryStrc"
-      ]
+      ],
+      "dh": "d7e8ff99"
     },
     {
       "name": "AUTOMAP_CalcCellTreeSize",
@@ -597,7 +626,8 @@
       "usedTypes": [
         "D2AutomapCellStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7c78646"
     },
     {
       "name": "AUTOMAP_SerializeCellTree",
@@ -614,7 +644,8 @@
       ],
       "usedTypes": [
         "D2AutomapCellStrc"
-      ]
+      ],
+      "dh": "e5ab8028"
     },
     {
       "name": "AUTOMAP_SaveCurrentLayer",
@@ -637,7 +668,8 @@
       "usedTypes": [
         "D2AutomapFileEntryStrc",
         "D2AutomapLayerStrc"
-      ]
+      ],
+      "dh": "a30a7dc2"
     },
     {
       "name": "AUTOMAP_FreeCurrentLayerCells",
@@ -656,7 +688,8 @@
       "usedTypes": [
         "D2AutomapLayerStrc",
         "D2AutomapStrc"
-      ]
+      ],
+      "dh": "9d5c2d93"
     },
     {
       "name": "AUTOMAP_InvalidateLayerEntry",
@@ -676,7 +709,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "872fad33"
     },
     {
       "name": "AUTOMAP_LoadLayerFromFile",
@@ -710,7 +744,8 @@
         "D2AutomapFileEntryStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "77a6693f"
     },
     {
       "name": "AUTOMAP_SwitchLayer",
@@ -730,7 +765,8 @@
       ],
       "usedTypes": [
         "D2AutomapLayerStrc"
-      ]
+      ],
+      "dh": "95ce2ebd"
     },
     {
       "name": "AUTOMAP_AllocLayer",
@@ -749,7 +785,8 @@
       "usedTypes": [
         "D2AutomapLayerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b614334b"
     },
     {
       "name": "AUTOMAP_AddLayer",
@@ -771,7 +808,8 @@
       "usedTypes": [
         "D2AutomapLayerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a0da2161"
     },
     {
       "name": "AUTOMAP_RevealUnitsInRoom",
@@ -797,7 +835,8 @@
         "D2UnitStrc",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "f2778869"
     },
     {
       "name": "AUTOMAP_RevealRoom",
@@ -824,7 +863,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e7f5f6bb"
     },
     {
       "name": "AUTOMAP_Update",
@@ -860,7 +900,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ab274af"
     },
     {
       "name": "AUTOMAP_SetRefreshDelay",
@@ -874,7 +915,8 @@
       "namespace": "D2Client::UI::Automap",
       "calledFunctions": [
         "AUTOMAP_SetRefreshDelay"
-      ]
+      ],
+      "dh": "6951a4fc"
     },
     {
       "name": "AUTOMAP_RevealRoomCallback",
@@ -897,7 +939,8 @@
         "D2AutomapLayerStrc",
         "D2LevelDefsTxt",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "9fdc0306"
     },
     {
       "name": "AUTOMAP_RevealTownCallback",
@@ -927,7 +970,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14703346"
     },
     {
       "name": "AUTOMAP_DrawCellTree",
@@ -956,7 +1000,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1e027fc0"
     },
     {
       "name": "AUTOMAP_DrawMap",
@@ -978,7 +1023,8 @@
       "usedTypes": [
         "D2AutomapDrawCtxStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "42f58f04"
     },
     {
       "name": "AUTOMAP_GetUnitColor",
@@ -1014,7 +1060,8 @@
         "uD2UnitMode",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f2d66a15"
     },
     {
       "name": "AUTOMAP_DrawGamePassword",
@@ -1042,7 +1089,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "80210da5"
     },
     {
       "name": "AUTOMAP_DrawExpansionTag",
@@ -1064,7 +1112,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a47d757f"
     },
     {
       "name": "AUTOMAP_DrawLevelName",
@@ -1089,7 +1138,8 @@
         "WCHAR",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "71d288fb"
     },
     {
       "name": "AUTOMAP_DrawVersion",
@@ -1111,7 +1161,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "45d9c29d"
     },
     {
       "name": "AUTOMAP_DrawServerIP",
@@ -1133,7 +1184,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "bc34aef3"
     },
     {
       "name": "AUTOMAP_DrawDifficulty",
@@ -1162,7 +1214,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fdb146ce"
     },
     {
       "name": "Unreferenced_0045a280",
@@ -1177,7 +1230,8 @@
       "calledFunctions": [
         "Unreferenced_0045a280",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "86e841d8"
     },
     {
       "name": "AUTOMAP_LoadDC6Sprites",
@@ -1200,7 +1254,8 @@
       ],
       "usedTypes": [
         "DC6 *"
-      ]
+      ],
+      "dh": "c5669670"
     },
     {
       "name": "AUTOMAP_Init",
@@ -1220,7 +1275,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4670d17"
     },
     {
       "name": "AUTOMAP_Free",
@@ -1242,7 +1298,8 @@
       "usedTypes": [
         "D2AutomapLayerStrc",
         "DC6 *"
-      ]
+      ],
+      "dh": "6d902c61"
     },
     {
       "name": "AUTOMAP_InitPaletteColors",
@@ -1257,7 +1314,8 @@
       "calledFunctions": [
         "AUTOMAP_InitPaletteColors",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "90687968"
     },
     {
       "name": "AUTOMAP_GetMiniMapType",
@@ -1271,7 +1329,8 @@
       "namespace": "D2Client::UI::Automap",
       "calledFunctions": [
         "AUTOMAP_GetMiniMapType"
-      ]
+      ],
+      "dh": "9c367993"
     },
     {
       "name": "AUTOMAP_SetMiniMapType",
@@ -1290,7 +1349,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "906ec3e1"
     },
     {
       "name": "AUTOMAP_DrawTextCentered",
@@ -1315,7 +1375,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "92f6e9ae"
     },
     {
       "name": "AUTOMAP_DrawXMarker",
@@ -1334,7 +1395,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1fa44aa"
     },
     {
       "name": "AUTOMAP_DrawUnitMarker",
@@ -1378,7 +1440,8 @@
         "uD2UnitMode",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "644ac315"
     },
     {
       "name": "AUTOMAP_DrawPartyMember",
@@ -1410,7 +1473,8 @@
         "eAct",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "3659fe64"
     },
     {
       "name": "AUTOMAP_DrawPlayersAndParty",
@@ -1442,7 +1506,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "c5d7e3ad"
     },
     {
       "name": "AUTOMAP_Draw",
@@ -1476,7 +1541,8 @@
         "D2UnitStrc",
         "eD2GSGameType",
         "int32_t"
-      ]
+      ],
+      "dh": "66e4d455"
     },
     {
       "name": "AUTOMAP_GetParty_ForEscMenuItem",

@@ -23,7 +23,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c938c34e"
     },
     {
       "name": "Skills_CltDoFunc_Bar_BloodParticlesOnTarget",
@@ -44,7 +45,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "7b841f32"
     },
     {
       "name": "Skills_CltStFunc_AllocStatListByCltCalc",
@@ -65,7 +67,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "d8d1895c"
     },
     {
       "name": "Skills_CltDoFunc_Bar_DoubleSwing_Sound",
@@ -94,7 +97,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "66765c7d"
     },
     {
       "name": "Skills_CltDoFunc_Bar_ThrowItem",
@@ -123,7 +127,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "652bab45"
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsSelectableCorpse",
@@ -144,7 +149,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4a279709"
     },
     {
       "name": "Skills_CltDoFunc_Bar_SoftMonster_BloodParticles",
@@ -166,7 +172,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "f6ce19d4"
     },
     {
       "name": "Skills_CltDoFunc_Bar_GrimWard",
@@ -201,7 +208,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "bc67f08a"
     },
     {
       "name": "SKILL_ValidateTeleportDestination",
@@ -239,7 +247,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "897d6bed"
     },
     {
       "name": "SKILL_CanUseAtLocation",
@@ -263,7 +272,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2018bcaa"
     },
     {
       "name": "Skills_CltStFunc_SetupLeapTeleportDest",
@@ -310,7 +320,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f007073"
     },
     {
       "name": "SKILL_SetupLeapPath",
@@ -344,7 +355,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "58897c1a"
     },
     {
       "name": "SKILL_CreateLeapArcParticle",
@@ -372,7 +384,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bac87293"
     },
     {
       "name": "CLIENT_UpdateSkillMissilePosition",
@@ -413,7 +426,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fc96c4a4"
     },
     {
       "name": "PATH_ResetCollisionOnLanding",
@@ -443,7 +457,8 @@
         "eD2CollisionShapeType",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "0daad93b"
     },
     {
       "name": "CLIENT_PlaySkillSound",
@@ -477,7 +492,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "42fc9714"
     },
     {
       "name": "SKILL_HandleTeleportLanding",
@@ -511,7 +527,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5bc841fc"
     },
     {
       "name": "Skills_CltDoFunc_Bar_Leap_ArcParticle",
@@ -541,7 +558,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b5c4505a"
     },
     {
       "name": "Skills_CltStFunc_FindTeleportPositionForTarget",
@@ -583,7 +601,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8b0f3c8"
     },
     {
       "name": "Skills_CltDoFunc_Bar_LeapAttack_ArcParticle",
@@ -624,7 +643,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "67049ba5"
     },
     {
       "name": "SKILL_DrawUnitAtRotatedAngle",
@@ -657,7 +677,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2e8320b6"
     },
     {
       "name": "Skills_CltStFunc_CalcWhirlwindDestViaPathfind",
@@ -706,7 +727,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7245e3f"
     },
     {
       "name": "Skills_CltDoFunc_Bar_Whirlwind_EndCollision",
@@ -743,7 +765,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3332010"
     },
     {
       "name": "SKILL_StopAndClearSound",
@@ -769,7 +792,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f1daa6b"
     }
   ]
 }

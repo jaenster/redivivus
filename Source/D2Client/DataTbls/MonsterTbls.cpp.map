@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2MonStats2Txt"
-      ]
+      ],
+      "dh": "00e4355e"
     },
     {
       "name": "Unreferenced_00452020",
@@ -32,7 +33,8 @@
       "namespace": "D2Client::DataTbls::MonsterTbls",
       "calledFunctions": [
         "Unreferenced_00452020"
-      ]
+      ],
+      "dh": "d66c047b"
     },
     {
       "name": "Unreferenced_00452030",
@@ -46,7 +48,8 @@
       "namespace": "D2Client::DataTbls::MonsterTbls",
       "calledFunctions": [
         "Unreferenced_00452030"
-      ]
+      ],
+      "dh": "fdab5813"
     }
   ]
 }

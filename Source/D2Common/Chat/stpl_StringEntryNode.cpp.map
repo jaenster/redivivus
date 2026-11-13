@@ -20,7 +20,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ad3c79b"
     },
     {
       "name": "NextLink",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "TSLink<StringEntryNode>",
         "intptr_t"
-      ]
+      ],
+      "dh": "3a132fcf"
     },
     {
       "name": "ComputeSlot",
@@ -56,7 +58,8 @@
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ec6f9ba"
     }
   ]
 }

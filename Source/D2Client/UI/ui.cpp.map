@@ -15,7 +15,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0040f590"
-      ]
+      ],
+      "dh": "2b551727"
     },
     {
       "name": "MoveArgumentToEAX_Unref_004168a0",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004168a0"
-      ]
+      ],
+      "dh": "b535054d"
     },
     {
       "name": "MoveArgumentToEAX_Unref_004169e0",
@@ -43,7 +45,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004169e0"
-      ]
+      ],
+      "dh": "412bec17"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a40",
@@ -57,7 +60,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a40"
-      ]
+      ],
+      "dh": "62e274a3"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a50",
@@ -71,7 +75,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a50"
-      ]
+      ],
+      "dh": "c4b1b8e6"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a60",
@@ -85,7 +90,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a60"
-      ]
+      ],
+      "dh": "236aede2"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a70",
@@ -99,7 +105,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a70"
-      ]
+      ],
+      "dh": "09e0d3b8"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00416a80",
@@ -113,7 +120,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00416a80"
-      ]
+      ],
+      "dh": "aa95334c"
     },
     {
       "name": "MoveArgumentToEAX_Unref_0041c420",
@@ -127,7 +135,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0041c420"
-      ]
+      ],
+      "dh": "d1ae2702"
     },
     {
       "name": "MoveArgumentToEAX_Unref_0041e9c0",
@@ -141,7 +150,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0041e9c0"
-      ]
+      ],
+      "dh": "879adead"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420420",
@@ -155,7 +165,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420420"
-      ]
+      ],
+      "dh": "c2814529"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420480",
@@ -169,7 +180,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420480"
-      ]
+      ],
+      "dh": "d1bed94e"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420e40",
@@ -183,7 +195,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420e40"
-      ]
+      ],
+      "dh": "68a21d35"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00420e50",
@@ -197,7 +210,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00420e50"
-      ]
+      ],
+      "dh": "cd7b439c"
     },
     {
       "name": "MoveArgumentToEAX_Unref_00421100",
@@ -211,7 +225,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_00421100"
-      ]
+      ],
+      "dh": "719af550"
     },
     {
       "name": "MoveArgumentToEAX_Unref_004269b0",
@@ -225,7 +240,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_004269b0"
-      ]
+      ],
+      "dh": "5d782ce6"
     },
     {
       "name": "UI_GoldInputCallback_ReturnZero_Unref_00437d10",
@@ -239,7 +255,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_GoldInputCallback_ReturnZero_Unref_00437d10"
-      ]
+      ],
+      "dh": "8db8909c"
     },
     {
       "name": "INPUT_ClearChatMessages",
@@ -258,7 +275,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "80a15605"
     },
     {
       "name": "ARCHIVE_LoadOverlayImageUsedInGame",
@@ -278,7 +296,8 @@
       "usedTypes": [
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f39d13a"
     },
     {
       "name": "InitializeGlobalsWithColors",
@@ -300,7 +319,8 @@
         "PANEL_InitGoldColor",
         "PANEL_InitBeltColors",
         "thunk_D2GFX_GetColorFromPalette_B"
-      ]
+      ],
+      "dh": "3c618b20"
     },
     {
       "name": "MoveArgumentToEAX",
@@ -314,7 +334,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX"
-      ]
+      ],
+      "dh": "9ca22b6e"
     },
     {
       "name": "UI_TranslateWideCharacterLookup",
@@ -333,7 +354,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "211b0b08"
     },
     {
       "name": "AppendAsWideChar",
@@ -354,7 +376,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "ce31204e"
     },
     {
       "name": "UI_AppendColorCodeToString",
@@ -379,7 +402,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3dcf1aca"
     },
     {
       "name": "UI_RemoveColorCodesFromString",
@@ -404,7 +428,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b91c0ec9"
     },
     {
       "name": "UI_WrapStringWithColorCodes",
@@ -430,7 +455,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3569053d"
     },
     {
       "name": "UI_StoreGlobalTooltipText",
@@ -449,7 +475,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "dfbc3c21"
     },
     {
       "name": "UI_SetTooltipAttributesWithCustomField",
@@ -468,7 +495,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "770aac66"
     },
     {
       "name": "UI_StoreGlobalUIText",
@@ -486,7 +514,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "86f92d54"
     },
     {
       "name": "UI_StoreGlobalUIText_Unref_00452550",
@@ -504,7 +533,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "f540899f"
     },
     {
       "name": "UI_GetUniqueMonsterName",
@@ -528,7 +558,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "af36021b"
     },
     {
       "name": "UI_GetMonsterHpBarValue",
@@ -553,7 +584,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b982abec"
     },
     {
       "name": "UI_BuildUberBossImmunityString",
@@ -577,7 +609,8 @@
         "D2UnitStrc",
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "a261bb36"
     },
     {
       "name": "UI_FormatItemNameWithQuality",
@@ -619,7 +652,8 @@
         "int32_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "9dae77c2"
     },
     {
       "name": "UI_FormatPlayerNameAndStatus",
@@ -647,7 +681,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc6696ed"
     },
     {
       "name": "UI_ShowMonsterNameBar",
@@ -671,7 +706,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "21922407"
     },
     {
       "name": "UI_GetRosterPlayerInfoForDisplay",
@@ -697,7 +733,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "25bb9fdc"
     },
     {
       "name": "UI_DrawMercenaryHealthBar",
@@ -732,7 +769,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fb9a689"
     },
     {
       "name": "DRAW_Direct_RectFrame",
@@ -752,7 +790,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "RECT"
-      ]
+      ],
+      "dh": "49f60bff"
     },
     {
       "name": "UI_DrawStoredTooltip",
@@ -775,7 +814,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7ce448f"
     },
     {
       "name": "DRAW_UI_DeathMessage",
@@ -811,7 +851,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "087042a3"
     },
     {
       "name": "UI_DrawPlayerNameOverhead",
@@ -839,7 +880,8 @@
         "WCHAR",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "8b8e5eab"
     },
     {
       "name": "UI_DrawPlayerStateOverlays",
@@ -869,7 +911,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "d9e2cf18"
     },
     {
       "name": "Unreferenced_004535d0",
@@ -885,7 +928,8 @@
         "Unreferenced_004535d0",
         "CLIENT_GetD2GSGameType",
         "CUNIT_IterateServerUnitsWithCallback"
-      ]
+      ],
+      "dh": "2acbaf58"
     },
     {
       "name": "UI_SetButtonKeyBinding",
@@ -907,7 +951,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c4203a4"
     },
     {
       "name": "UI_SetMultipleButtonKeyBindings",
@@ -929,7 +974,8 @@
         "D2UIKeyBindingSetStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "532b41ca"
     },
     {
       "name": "GetUIFlag",
@@ -950,7 +996,8 @@
       "usedTypes": [
         "eD2UIvars",
         "int32_t"
-      ]
+      ],
+      "dh": "a810b3bf"
     },
     {
       "name": "Unreferenced_00453900",
@@ -965,7 +1012,8 @@
       "calledFunctions": [
         "Unreferenced_00453900",
         "GetDialogCounter"
-      ]
+      ],
+      "dh": "8e947a0d"
     },
     {
       "name": "UI_HandleKeyInputAndDismiss",
@@ -1002,7 +1050,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c100e286"
     },
     {
       "name": "UI_GetFlag",
@@ -1019,7 +1068,8 @@
       ],
       "usedTypes": [
         "eD2UIvars"
-      ]
+      ],
+      "dh": "b7c813e4"
     },
     {
       "name": "UI_GetCursorIconIndex",
@@ -1036,7 +1086,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "9e235d0e"
     },
     {
       "name": "UI_GetCursorIconDC6",
@@ -1053,7 +1104,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "37d03b4a"
     },
     {
       "name": "UI_ClearCursorAnimationState",
@@ -1067,7 +1119,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_ClearCursorAnimationState"
-      ]
+      ],
+      "dh": "6332574e"
     },
     {
       "name": "UI_SetCursorAnimationFlag",
@@ -1081,7 +1134,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_SetCursorAnimationFlag"
-      ]
+      ],
+      "dh": "f4ead113"
     },
     {
       "name": "UI_UpdateCursorAnimationTimer",
@@ -1096,7 +1150,8 @@
       "calledFunctions": [
         "UI_UpdateCursorAnimationTimer",
         "GetTickCount"
-      ]
+      ],
+      "dh": "fc67fa69"
     },
     {
       "name": "UI_SendMouseMoveMessage",
@@ -1116,7 +1171,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d821288d"
     },
     {
       "name": "UI_DrawArenaKillCount",
@@ -1143,7 +1199,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b3583744"
     },
     {
       "name": "UI_DrawPartyRoster",
@@ -1175,7 +1232,8 @@
         "int32_t",
         "uint16_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "c72e6631"
     },
     {
       "name": "UI_LoadAllPanelAssets",
@@ -1201,7 +1259,8 @@
         "UI_InitializeHirelingIconsUI",
         "AUTOMAP_CenterOnPlayer",
         "SetGlobalAlwaysRun"
-      ]
+      ],
+      "dh": "ddb28e19"
     },
     {
       "name": "UI_FreeAllPanelAssets",
@@ -1227,7 +1286,8 @@
         "DC6_FreeAndDelete",
         "UpdateGlobalAlwaysRun",
         "ITEM_SetItemOnHand"
-      ]
+      ],
+      "dh": "e66e234c"
     },
     {
       "name": "CLIENT_GetLevelNameByLevelId",
@@ -1250,7 +1310,8 @@
         "WCHAR",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "47feef3a"
     },
     {
       "name": "UI_DropCursorItemOnGround",
@@ -1269,7 +1330,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c2342b4a"
     },
     {
       "name": "UI_CloseCurrentDialog",
@@ -1287,7 +1349,8 @@
         "FreeDialogStrc",
         "INV_StashOpened",
         "UI_ClearGoldStashMode"
-      ]
+      ],
+      "dh": "ebf090a1"
     },
     {
       "name": "UI_DialogCloseCallback",
@@ -1302,7 +1365,8 @@
       "calledFunctions": [
         "UI_DialogCloseCallback",
         "UI_CloseCurrentDialog"
-      ]
+      ],
+      "dh": "1210761a"
     },
     {
       "name": "UI_GoldInputCallback_ReturnZero",
@@ -1316,7 +1380,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_GoldInputCallback_ReturnZero"
-      ]
+      ],
+      "dh": "0fe6e601"
     },
     {
       "name": "UI_GoldDialogScrollCallback",
@@ -1335,7 +1400,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "49ba931b"
     },
     {
       "name": "UI_GoldDialogConfirmCallback",
@@ -1359,7 +1425,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "e5ae07ca"
     },
     {
       "name": "UI_ButtonCallback_CloseDialog",
@@ -1374,7 +1441,8 @@
       "calledFunctions": [
         "UI_ButtonCallback_CloseDialog",
         "UI_CloseCurrentDialog"
-      ]
+      ],
+      "dh": "9c05a011"
     },
     {
       "name": "UI_ShowGoldTransactionDialog",
@@ -1420,7 +1488,8 @@
         "int32_t",
         "pfnEHHandlerRoutine",
         "uint16_t"
-      ]
+      ],
+      "dh": "67f4ef3a"
     },
     {
       "name": "Unreferenced_00454570",
@@ -1434,7 +1503,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "Unreferenced_00454570"
-      ]
+      ],
+      "dh": "ec819b0f"
     },
     {
       "name": "UI_DrawDialogBackground",
@@ -1449,7 +1519,8 @@
       "calledFunctions": [
         "UI_DrawDialogBackground",
         "DIALOG_DrawBackground"
-      ]
+      ],
+      "dh": "79f1bcd0"
     },
     {
       "name": "UI_RegisterAutoMapEventHandlers",
@@ -1469,7 +1540,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fdbfc45f"
     },
     {
       "name": "GetBuySellBtnDC6",
@@ -1487,7 +1559,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "487b7a2b"
     },
     {
       "name": "UI_LoadFileToMemory",
@@ -1507,7 +1580,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "65e1ed58"
     },
     {
       "name": "PALETTE_LoadLoadingScreenPalette",
@@ -1523,7 +1597,8 @@
         "PALETTE_LoadLoadingScreenPalette",
         "sprintf",
         "LoadPalette"
-      ]
+      ],
+      "dh": "fccb30b3"
     },
     {
       "name": "SetActNo",
@@ -1540,7 +1615,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "eb3bcbfd"
     },
     {
       "name": "DRAW_GetLastPanelId_Unref_004547a0",
@@ -1557,7 +1633,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "da0266fe"
     },
     {
       "name": "CleanupAfterLoadingAct",
@@ -1585,7 +1662,8 @@
         "thunk_D2GFX_GetColorFromPalette_B",
         "MISC_PrepareWeatherOverlay",
         "GAMEDATA_ExtendTimeout"
-      ]
+      ],
+      "dh": "aef32dce"
     },
     {
       "name": "DRAW_GetLastPanelId",
@@ -1602,7 +1680,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "68c89710"
     },
     {
       "name": "DRAW_CheckTickRateLimiter",
@@ -1617,7 +1696,8 @@
       "calledFunctions": [
         "DRAW_CheckTickRateLimiter",
         "GetTickCount"
-      ]
+      ],
+      "dh": "cfc74b4d"
     },
     {
       "name": "DRAW_GetVisibleViewportBounds",
@@ -1634,7 +1714,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9dc17e55"
     },
     {
       "name": "DRAW_GetBottomPanelY",
@@ -1651,7 +1732,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "60a8b8c3"
     },
     {
       "name": "DRAW_RegisterDrawHandlers",
@@ -1670,7 +1752,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "87ff7344"
     },
     {
       "name": "DRAW_RefreshNpcDialog",
@@ -1686,7 +1769,8 @@
         "DRAW_RefreshNpcDialog",
         "TEXT_CloseMessageUI",
         "NPCMENU_RefreshMenuDialog"
-      ]
+      ],
+      "dh": "f894eaaa"
     },
     {
       "name": "DRAW_IsDialogActive",
@@ -1703,7 +1787,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "fc5e11dc"
     },
     {
       "name": "Unreferenced_004549d0",
@@ -1720,7 +1805,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8bbe4000"
     },
     {
       "name": "DRAW_CenteredText",
@@ -1744,7 +1830,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ada7cc0a"
     },
     {
       "name": "DRAW_MonsterUnderCursorImmunites",
@@ -1766,7 +1853,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "712b5fee"
     },
     {
       "name": "DRAW_MonsterHealthBar",
@@ -1816,7 +1904,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3abb95da"
     },
     {
       "name": "DRAW_UnitUnderMouse",
@@ -1888,7 +1977,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e601e967"
     },
     {
       "name": "DRAW_UnitUModsUnderCursor",
@@ -1913,7 +2003,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0cb1e7ba"
     },
     {
       "name": "DRAW_Overlay_EnteringAreaX",
@@ -1947,7 +2038,8 @@
         "eAct",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "472f19cc"
     },
     {
       "name": "SetUiFlagInit",
@@ -1983,7 +2075,8 @@
       "usedTypes": [
         "eD2UIvars",
         "int32_t"
-      ]
+      ],
+      "dh": "bb342f1b"
     },
     {
       "name": "UI_UnregisterHandlersForPanel",
@@ -2027,7 +2120,8 @@
         "D2UIFlagInitStrc",
         "eD2UIvars",
         "int32_t"
-      ]
+      ],
+      "dh": "331ae33b"
     },
     {
       "name": "SetUIFlag",
@@ -2065,7 +2159,8 @@
         "eD2UIvarsSetType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "be79e000"
     },
     {
       "name": "UI_CloseActivePanels",
@@ -2098,7 +2193,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "35b51844"
     },
     {
       "name": "MoveArgumentToEAX_Unref_0045ba90",
@@ -2112,7 +2208,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "MoveArgumentToEAX_Unref_0045ba90"
-      ]
+      ],
+      "dh": "0755d1b6"
     },
     {
       "name": "DRAW_IsDialogActive_Unref_0045fdd0",
@@ -2129,7 +2226,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7b959f75"
     },
     {
       "name": "UI_ShowPopupDialog",
@@ -2155,7 +2253,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e97902bd"
     },
     {
       "name": "nullSub_CharonGameDraw_Unref_00463d70",
@@ -2169,7 +2268,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "nullSub_CharonGameDraw_Unref_00463d70"
-      ]
+      ],
+      "dh": "e1dc1c9a"
     },
     {
       "name": "nullSub_CharonGameDraw",
@@ -2183,7 +2283,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "nullSub_CharonGameDraw"
-      ]
+      ],
+      "dh": "e5618773"
     },
     {
       "name": "UI_ToggleHelpScreen",
@@ -2206,7 +2307,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dbb71b60"
     },
     {
       "name": "UI_ToggleBeltRows",
@@ -2228,7 +2330,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d59697a5"
     },
     {
       "name": "TRADE_GetTradeStatus_Unref_00486d80",
@@ -2242,7 +2345,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "TRADE_GetTradeStatus_Unref_00486d80"
-      ]
+      ],
+      "dh": "544c6006"
     },
     {
       "name": "UI_ReadLineFromShortArray",
@@ -2261,7 +2365,8 @@
       "usedTypes": [
         "int32_t",
         "short *"
-      ]
+      ],
+      "dh": "b459e996"
     },
     {
       "name": "UI_InitializeStatDescriptionPointers",
@@ -2276,7 +2381,8 @@
       "calledFunctions": [
         "UI_InitializeStatDescriptionPointers",
         "CLIENT_CheckExpansion"
-      ]
+      ],
+      "dh": "fcd9e25a"
     },
     {
       "name": "UI_GetControlConfigRowCount",
@@ -2294,7 +2400,8 @@
       "usedTypes": [
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46a7d7f2"
     },
     {
       "name": "UI_ScrollConfigListVertical",
@@ -2313,7 +2420,8 @@
       "usedTypes": [
         "int32_t",
         "int64_t"
-      ]
+      ],
+      "dh": "63de9e58"
     },
     {
       "name": "UI_ScrollConfigListHorizontal",
@@ -2332,7 +2440,8 @@
       "usedTypes": [
         "int32_t",
         "int64_t"
-      ]
+      ],
+      "dh": "1dedd848"
     },
     {
       "name": "UI_GetControlConfigRowAtY",
@@ -2349,7 +2458,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0370cad4"
     },
     {
       "name": "UI_IsMouseInRightColumn",
@@ -2367,7 +2477,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d18673ad"
     },
     {
       "name": "UI_GetControlConfigTabIndex",
@@ -2385,7 +2496,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5eb5856"
     },
     {
       "name": "UI_IsMouseInControlConfigArea",
@@ -2402,7 +2514,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7ee66892"
     },
     {
       "name": "UI_IsMouseOnUpArrow",
@@ -2419,7 +2532,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6eddd1ee"
     },
     {
       "name": "UI_IsMouseOnDownArrow",
@@ -2436,7 +2550,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4f7c9b2c"
     },
     {
       "name": "UI_IsMouseOnScrollBar",
@@ -2453,7 +2568,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c7437973"
     },
     {
       "name": "UI_IsMouseOnScrollThumb",
@@ -2470,7 +2586,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "220df8da"
     },
     {
       "name": "UI_IsMouseBelowScrollThumb",
@@ -2487,7 +2604,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c5cfd768"
     },
     {
       "name": "UI_IsMouseOverControlConfigTab",
@@ -2505,7 +2623,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a66ad10d"
     },
     {
       "name": "UI_IsControlConfigCellClickable",
@@ -2525,7 +2644,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c04dacfb"
     },
     {
       "name": "UI_IsMouseOverActiveControlConfigButton",
@@ -2543,7 +2663,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "054f43e9"
     },
     {
       "name": "UI_UpdateConfigControlsState",
@@ -2575,7 +2696,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfa7ec04"
     },
     {
       "name": "UI_GetConfigControlTextColor",
@@ -2594,7 +2716,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9df3aa51"
     },
     {
       "name": "UIAction_ResetKeyBindingsToDefaults",
@@ -2609,7 +2732,8 @@
       "calledFunctions": [
         "UIAction_ResetKeyBindingsToDefaults",
         "CMD_ResetKeyBindingsToDefaults"
-      ]
+      ],
+      "dh": "7c2300e6"
     },
     {
       "name": "CONTROLCONFIG_SaveAndCancel",
@@ -2626,7 +2750,8 @@
         "CMD_SaveKeyBindings",
         "SetUIFlag",
         "ESCMENU_RestoreUIState"
-      ]
+      ],
+      "dh": "8eab89d0"
     },
     {
       "name": "CONTROLCONFIG_RevertAndClose",
@@ -2643,7 +2768,8 @@
         "CMD_RevertKeyBindings",
         "SetUIFlag",
         "ESCMENU_ShowMenu"
-      ]
+      ],
+      "dh": "3b8a39f8"
     },
     {
       "name": "CONTROLCONFIG_CalculateColumnBounds",
@@ -2665,7 +2791,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f73204f6"
     },
     {
       "name": "CONTROLCONFIG_Initialize",
@@ -2683,7 +2810,8 @@
         "sprintf",
         "IMAGE_LoadDC6Ex",
         "CONTROLCONFIG_CalculateColumnBounds"
-      ]
+      ],
+      "dh": "77264182"
     },
     {
       "name": "CONTROLCONFIG_Cleanup",
@@ -2698,7 +2826,8 @@
       "calledFunctions": [
         "CONTROLCONFIG_Cleanup",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "0108e6db"
     },
     {
       "name": "CONTROLCONFIG_OnToggleUI",
@@ -2723,7 +2852,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0726d6c5"
     },
     {
       "name": "DRAW_ConfigControlsMenu",
@@ -2760,7 +2890,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f0f55bd"
     },
     {
       "name": "InitConfigUiFlags",
@@ -2780,7 +2911,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "29c4759b"
     },
     {
       "name": "INPUT_SkillTreeScroll",
@@ -2801,7 +2933,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "cbd440f9"
     },
     {
       "name": "INPUT_SkillTreeNavigateUp",
@@ -2823,7 +2956,8 @@
       "usedTypes": [
         "D2ConfigControlDescStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "593dfb55"
     },
     {
       "name": "INPUT_SkillTreeNavigateDown",
@@ -2845,7 +2979,8 @@
       "usedTypes": [
         "D2ConfigControlDescStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "b9dc68d6"
     },
     {
       "name": "INPUT_ConfigToggleLeft",
@@ -2865,7 +3000,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f49c9652"
     },
     {
       "name": "INPUT_ConfigToggleRight",
@@ -2885,7 +3021,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "d97dfc71"
     },
     {
       "name": "INPUT_ConfigAcceptBinding",
@@ -2906,7 +3043,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "cd85f9d7"
     },
     {
       "name": "INPUT_ConfigCancel",
@@ -2929,7 +3067,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "808f6a14"
     },
     {
       "name": "UI_ConfigKeyBindModeEnable",
@@ -2949,7 +3088,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "43572a0b"
     },
     {
       "name": "UI_ConfigKeyBindModeDisable",
@@ -2969,7 +3109,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b3ef5686"
     },
     {
       "name": "UI_ConfigKeyBindModeCancelAndRevert",
@@ -2992,7 +3133,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e4ff8385"
     },
     {
       "name": "UI_ConfigHandleMouseClick",
@@ -3014,7 +3156,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97fd78e8"
     },
     {
       "name": "INPUT_ConfigMouseDown",
@@ -3036,7 +3179,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b12d97d0"
     },
     {
       "name": "INPUT_ConfigConfirmEntry",
@@ -3057,7 +3201,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "fa40be4f"
     },
     {
       "name": "INPUT_ConfigScreenOpen",
@@ -3082,7 +3227,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cc198b18"
     },
     {
       "name": "INPUT_ConfigKeyBind",
@@ -3105,7 +3251,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5fc2f7cb"
     },
     {
       "name": "INPUT_ConfigKeyBindAlternate",
@@ -3128,7 +3275,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "923b60bb"
     },
     {
       "name": "UI_ConfigSetKeyBinding",
@@ -3151,7 +3299,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "ff27c652"
     },
     {
       "name": "INPUT_ConfigMouseClick",
@@ -3171,7 +3320,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4fd75f2e"
     },
     {
       "name": "INPUT_ConfigMouseButtonHandler",
@@ -3192,7 +3342,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "224beb82"
     },
     {
       "name": "INPUT_ConfigMouseWheelScroll",
@@ -3214,7 +3365,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4291f33e"
     },
     {
       "name": "UI_LoadLevelUpPanelImages",
@@ -3229,7 +3381,8 @@
       "calledFunctions": [
         "UI_LoadLevelUpPanelImages",
         "ARCHIVE_LoadOverlayImageUsedInGame"
-      ]
+      ],
+      "dh": "64c704e2"
     },
     {
       "name": "UI_FreeLevelUpPanelImages",
@@ -3244,7 +3397,8 @@
       "calledFunctions": [
         "UI_FreeLevelUpPanelImages",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "d1a3be8f"
     },
     {
       "name": "UI_UpdateNewStatSkillIcons",
@@ -3267,7 +3421,8 @@
         "D2UnitStrc",
         "eD2UIvarsSetType",
         "int32_t"
-      ]
+      ],
+      "dh": "2a63d39c"
     },
     {
       "name": "UI_IsMouseOnStatButton",
@@ -3284,7 +3439,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e98eef97"
     },
     {
       "name": "UI_GetNewStatPointsCount",
@@ -3300,7 +3456,8 @@
         "UI_GetNewStatPointsCount",
         "GetMouseX",
         "GetMouseY"
-      ]
+      ],
+      "dh": "ab1e93aa"
     },
     {
       "name": "UI_IsMouseOnSkillButton",
@@ -3317,7 +3474,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4cee8db0"
     },
     {
       "name": "UI_GetNewSkillPointsCount",
@@ -3333,7 +3491,8 @@
         "UI_GetNewSkillPointsCount",
         "GetMouseX",
         "GetMouseY"
-      ]
+      ],
+      "dh": "eb44c7e6"
     },
     {
       "name": "INPUT_StatScreenButtonDown",
@@ -3361,7 +3520,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "408cf798"
     },
     {
       "name": "INPUT_SkillTreeButtonDown",
@@ -3389,7 +3549,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7dfa3359"
     },
     {
       "name": "INPUT_StatScreenButtonUp",
@@ -3415,7 +3576,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8374a520"
     },
     {
       "name": "INPUT_SkillTreeButtonUp",
@@ -3442,7 +3604,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b7737e4a"
     },
     {
       "name": "UI_CanAllocateStatPoint",
@@ -3460,7 +3623,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "558b08ae"
     },
     {
       "name": "UI_DrawLevelUpButtonLeft",
@@ -3486,7 +3650,8 @@
         "D2GfxDataStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a07cdf94"
     },
     {
       "name": "DRAW_UI_NewStatPoints_II",
@@ -3523,7 +3688,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "09216daf"
     },
     {
       "name": "UI_GetNewSkillPointsForClass",
@@ -3541,7 +3707,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "71eacde4"
     },
     {
       "name": "UI_DrawLevelUpButtonRight",
@@ -3567,7 +3734,8 @@
         "D2GfxDataStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a0434117"
     },
     {
       "name": "Draw_UI_NewStatPoints",
@@ -3604,7 +3772,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49870427"
     },
     {
       "name": "UI_DrawTextCentered",
@@ -3624,7 +3793,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "946acc3e"
     },
     {
       "name": "UI_GetStatDescriptionStringId",
@@ -3649,7 +3819,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8cd8dd65"
     },
     {
       "name": "DRAW_UI_StatWindow_III",
@@ -3682,7 +3853,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "6e77ea4e"
     },
     {
       "name": "CHAR_AddClassToHitFactor",
@@ -3700,7 +3872,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "57cb442e"
     },
     {
       "name": "UI_GetStatValueForDisplay",
@@ -3734,7 +3907,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2dab3452"
     },
     {
       "name": "UI_BuildStatWindowDescriptions",
@@ -3768,7 +3942,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "857b51c6"
     },
     {
       "name": "UI_AppendColorCodeToString",
@@ -3788,7 +3963,8 @@
         "WCHAR",
         "WCHAR *",
         "int32_t"
-      ]
+      ],
+      "dh": "aa7ea387"
     },
     {
       "name": "INPUT_HighResLeftPanelClick",
@@ -3810,7 +3986,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "ecf144f3"
     },
     {
       "name": "INPUT_StatScreenMouseDown",
@@ -3836,7 +4013,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "114a2e59"
     },
     {
       "name": "INPUT_StatScreenMouseUp",
@@ -3865,7 +4043,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c97e5a2b"
     },
     {
       "name": "UI_ClearGoldStashMode",
@@ -3879,7 +4058,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_ClearGoldStashMode"
-      ]
+      ],
+      "dh": "23712610"
     },
     {
       "name": "UI_SetGoldStashMode",
@@ -3893,7 +4073,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_SetGoldStashMode"
-      ]
+      ],
+      "dh": "e1afe105"
     },
     {
       "name": "UI_PrecomputeStatDescriptionWidths",
@@ -3914,7 +4095,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1abe5cbe"
     },
     {
       "name": "CHAR_FreePanelAssets_NoOp",
@@ -3928,7 +4110,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "CHAR_FreePanelAssets_NoOp"
-      ]
+      ],
+      "dh": "937e2d4a"
     },
     {
       "name": "DRAW_UI_StatWindow_II",
@@ -3955,7 +4138,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "fc085ae7"
     },
     {
       "name": "DRAW_UI_StatWindow_I",
@@ -4028,7 +4212,8 @@
         "uint32_t",
         "uint8_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "a3ab64f6"
     },
     {
       "name": "CHAR_FreePanelAssets_NoOp_Unref_004b3330",
@@ -4042,7 +4227,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "CHAR_FreePanelAssets_NoOp_Unref_004b3330"
-      ]
+      ],
+      "dh": "8bf2e2b1"
     },
     {
       "name": "UI_ResetTradeGlobals",
@@ -4056,7 +4242,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_ResetTradeGlobals"
-      ]
+      ],
+      "dh": "5ca8522a"
     },
     {
       "name": "DRAW_UI_TradePrompt",
@@ -4094,7 +4281,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc83e070"
     },
     {
       "name": "UI_InitTradeState",
@@ -4108,7 +4296,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "UI_InitTradeState"
-      ]
+      ],
+      "dh": "0b1453e5"
     },
     {
       "name": "UI_CloseTradeWindow",
@@ -4133,7 +4322,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a801cd93"
     },
     {
       "name": "Unreferenced_004b8a00",
@@ -4147,7 +4337,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "Unreferenced_004b8a00"
-      ]
+      ],
+      "dh": "6d8b8ddd"
     },
     {
       "name": "TRADE_GetTradeStatus",
@@ -4161,7 +4352,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "TRADE_GetTradeStatus"
-      ]
+      ],
+      "dh": "b2988807"
     },
     {
       "name": "CHAR_FreePanelAssets_NoOp_Unref_004bf9c0",
@@ -4175,7 +4367,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "CHAR_FreePanelAssets_NoOp_Unref_004bf9c0"
-      ]
+      ],
+      "dh": "ab7456ec"
     },
     {
       "name": "CHAR_FreePanelAssets_NoOp_Unref_004c0080",
@@ -4189,7 +4382,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "CHAR_FreePanelAssets_NoOp_Unref_004c0080"
-      ]
+      ],
+      "dh": "04b4dcdc"
     },
     {
       "name": "UI_FreeHoradricCubeAssets",
@@ -4205,7 +4399,8 @@
         "UI_FreeHoradricCubeAssets",
         "UI_CloseHoradricCubeWindow",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "07ca4214"
     },
     {
       "name": "PACKET_SendUnitInteraction0x44",
@@ -4230,7 +4425,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5cddf188"
     },
     {
       "name": "DRAW_UI_CASH",
@@ -4263,7 +4459,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "73c7de46"
     },
     {
       "name": "NPCSHOP_IsRepairTabActive",
@@ -4287,7 +4484,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "11a0c2c0"
     },
     {
       "name": "UI_ShowHoradricCubeTransmuteDialog",
@@ -4318,7 +4516,8 @@
         "D2UnitStrc",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "f327c9a6"
     },
     {
       "name": "thunk_NPCSHOP_IsRepairTabActive",
@@ -4348,7 +4547,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ea52945"
     },
     {
       "name": "INPUT_GambleRepairClick",
@@ -4371,7 +4571,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e0698b3"
     },
     {
       "name": "UI_HandleHoradricCubePacket",
@@ -4401,7 +4602,8 @@
         "eD2Sounds",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6d54039a"
     },
     {
       "name": "UI_OpenHoradricCubeWithNpcInteraction",
@@ -4416,7 +4618,8 @@
       "calledFunctions": [
         "UI_OpenHoradricCubeWithNpcInteraction",
         "UI_ShowHoradricCubeTransmuteDialog"
-      ]
+      ],
+      "dh": "82c6dc05"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca05c",
@@ -4436,7 +4639,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "c6ae1936"
     },
     {
       "name": "StaticInit_6caa10",
@@ -4453,7 +4657,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "cfb71c19"
     },
     {
       "name": "StaticInit_gU16ImmunityStringBuffer1",
@@ -4470,7 +4675,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "93200966"
     },
     {
       "name": "StaticInit_gU16ImmunityStringBuffer2",
@@ -4487,7 +4693,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "e3ed9d30"
     },
     {
       "name": "StaticInit_gnMonsterHealthBarValue",
@@ -4504,7 +4711,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "f33e0b0e"
     },
     {
       "name": "StaticInit_WindowSizeX",
@@ -4518,7 +4726,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "StaticInit_WindowSizeX"
-      ]
+      ],
+      "dh": "e330e9fa"
     },
     {
       "name": "StaticInit_WindowSizeY",
@@ -4532,7 +4741,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "StaticInit_WindowSizeY"
-      ]
+      ],
+      "dh": "514bc3f4"
     },
     {
       "name": "StaticInit_gnUICtrlConfigScrollPosition",
@@ -4546,7 +4756,8 @@
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
         "StaticInit_gnUICtrlConfigScrollPosition"
-      ]
+      ],
+      "dh": "bf08645d"
     }
   ]
 }

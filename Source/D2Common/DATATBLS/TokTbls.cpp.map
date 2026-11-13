@@ -29,7 +29,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee94b2a6"
     },
     {
       "name": "TXT_AllocTxt_monmode",
@@ -49,7 +50,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "36d0d575"
     },
     {
       "name": "TXT_AllocTxt_objtype_objmode",
@@ -78,7 +80,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9e7b276"
     },
     {
       "name": "TXT_AllocTxt_composit",
@@ -97,7 +100,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "c86c0eb2"
     },
     {
       "name": "TXT_AllocTxt_armtype",
@@ -116,7 +120,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "8224e786"
     },
     {
       "name": "FreeTokenTables",
@@ -132,7 +137,8 @@
         "FreeTokenTables",
         "FreeServerMemory",
         "UnloadBin"
-      ]
+      ],
+      "dh": "6817a2d5"
     },
     {
       "name": "TxtGetPlrTypeModeLine",
@@ -154,7 +160,8 @@
         "D2PlrTypeModeTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "07e085b5"
     },
     {
       "name": "TxtGetMonModeLine",
@@ -176,7 +183,8 @@
         "D2MonModeTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e72566cf"
     },
     {
       "name": "TxtGetObjTypeModeLine",
@@ -198,7 +206,8 @@
         "D2ObjTypeTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "773c63c0"
     },
     {
       "name": "TxtCompositGetLine",
@@ -219,7 +228,8 @@
       "usedTypes": [
         "D2CompositTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "6f3db977"
     },
     {
       "name": "TxtGetArmTypeLine",
@@ -240,7 +250,8 @@
       "usedTypes": [
         "D2ArmTypeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "6fc63230"
     },
     {
       "name": "TXT_AllocTxt_inventory",
@@ -263,7 +274,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6c06c4e2"
     },
     {
       "name": "FreeInventoryTable",
@@ -278,7 +290,8 @@
       "calledFunctions": [
         "FreeInventoryTable",
         "UnloadBin"
-      ]
+      ],
+      "dh": "12a3ab5e"
     },
     {
       "name": "TXT_Inventory_GetLine",
@@ -299,7 +312,8 @@
       "usedTypes": [
         "D2InventoryTxt",
         "uint32_t"
-      ]
+      ],
+      "dh": "64382fb6"
     },
     {
       "name": "GetInvDimensions",
@@ -322,7 +336,8 @@
         "D2InventoryTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a2a9891"
     },
     {
       "name": "GetGridDimensions",
@@ -346,7 +361,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "baded09d"
     },
     {
       "name": "GetBodyDimensions",
@@ -371,7 +387,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "18c595d4"
     },
     {
       "name": "TOKTBLS_GetTokenIndex",
@@ -388,7 +405,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "29b59c2c"
     }
   ]
 }

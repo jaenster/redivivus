@@ -28,7 +28,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b60a2f53"
     },
     {
       "name": "ROOM_LinkUnitToUpdateList",
@@ -54,7 +55,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "09e3bd33"
     },
     {
       "name": "SortUnitListByTargetY",
@@ -76,7 +78,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "d012bb43"
     },
     {
       "name": "ROOM_ClearUnitUpdateList",
@@ -96,7 +99,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "90267eaf"
     },
     {
       "name": "DRLGROOM_RemoveUnitFromUpdateList",
@@ -121,7 +125,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "74808607"
     },
     {
       "name": "DRLGROOM_IsUnitInRoom",
@@ -145,7 +150,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "a10c0041"
     },
     {
       "name": "DRLGROOM_AddUnitToRoomList",
@@ -174,7 +180,8 @@
         "D2UnitStrc *",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a2de4b1b"
     },
     {
       "name": "DRLGROOM_AddUnitToRoom",
@@ -193,7 +200,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5fcf49d0"
     },
     {
       "name": "RemoveUnitFromRoom",
@@ -222,7 +230,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "1ae48c8c"
     },
     {
       "name": "DRLGROOM_ClearUnitRoomLink",
@@ -247,7 +256,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "37f94b97"
     }
   ]
 }

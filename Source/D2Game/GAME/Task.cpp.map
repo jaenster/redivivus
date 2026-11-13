@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2LinkNodeStrc"
-      ]
+      ],
+      "dh": "f984c5ef"
     },
     {
       "name": "TASK_LinkTaskToList",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "D2LinkNodeStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f8ec301"
     },
     {
       "name": "LINKLIST_AppendToList",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D2LinkNodeStrc",
         "D2LinkNodeStrc *"
-      ]
+      ],
+      "dh": "3150f6b0"
     },
     {
       "name": "TASK_UnlinkTaskFromList",
@@ -85,7 +88,8 @@
       "usedTypes": [
         "D2LinkNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eb1282b4"
     },
     {
       "name": "TASK_GetTimestamp",
@@ -107,7 +111,8 @@
         "LARGE_INTEGER",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9eea579e"
     },
     {
       "name": "TASK_EnterQueueCriticalSection",
@@ -125,7 +130,8 @@
       "usedTypes": [
         "D2TaskQueueSlotStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "45fef095"
     },
     {
       "name": "TASK_LeaveQueueCriticalSection",
@@ -146,7 +152,8 @@
       ],
       "usedTypes": [
         "D2TaskQueueSlotStrc"
-      ]
+      ],
+      "dh": "08b12732"
     },
     {
       "name": "TASK_InsertTaskAtTimestamp",
@@ -169,7 +176,8 @@
         "D2TaskNodeStrc",
         "D2TaskQueueSlotStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6006c653"
     },
     {
       "name": "TASK_MoveTasksToSlotAndLinkSlot",
@@ -194,7 +202,8 @@
         "D2TaskQueueSlotStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f28e43c4"
     },
     {
       "name": "TASK_GameTickCallback",
@@ -235,7 +244,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f752917"
     },
     {
       "name": "thunk_QueryPerformanceFrequency_B",
@@ -249,7 +259,8 @@
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
         "thunk_QueryPerformanceFrequency_B"
-      ]
+      ],
+      "dh": "9f743b62"
     },
     {
       "name": "TASK_FreeAllSlots",
@@ -273,7 +284,8 @@
         "D2LinkNodeStrc",
         "D2TaskQueueSlotStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d60aab0"
     },
     {
       "name": "TASK_Nop_Unref_00564940",
@@ -290,7 +302,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "799ef606"
     },
     {
       "name": "TASK_AllocateTaskQueue",
@@ -310,7 +323,8 @@
       "usedTypes": [
         "D2TaskQueueSlotStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc6c6ddb"
     },
     {
       "name": "TASK_EnqueueGameTask",
@@ -335,7 +349,8 @@
         "D2TaskQueueSlotStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d4bb859d"
     },
     {
       "name": "TASK_DequeueReadyTask",
@@ -361,7 +376,8 @@
         "PD2TaskNodeLink",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "89c1d777"
     },
     {
       "name": "TASK_Dispatch",
@@ -383,7 +399,8 @@
       "usedTypes": [
         "D2TaskNodeStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ef8bcd0"
     },
     {
       "name": "TASK_ReturnTrue",
@@ -397,7 +414,8 @@
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
         "TASK_ReturnTrue"
-      ]
+      ],
+      "dh": "3fcd12a0"
     },
     {
       "name": "TASK_Nop",
@@ -414,7 +432,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8a03763d"
     },
     {
       "name": "StaticInit_CriticalSection_0088caa8",
@@ -429,7 +448,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_0088caa8",
         "atexit"
-      ]
+      ],
+      "dh": "c3b2c898"
     },
     {
       "name": "StaticInit_aTaskQueueCriticalSections",
@@ -444,7 +464,8 @@
       "calledFunctions": [
         "StaticInit_aTaskQueueCriticalSections",
         "atexit"
-      ]
+      ],
+      "dh": "0f466690"
     },
     {
       "name": "StaticFini_CriticalSection_0088caa8",
@@ -458,7 +479,8 @@
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
         "StaticFini_CriticalSection_0088caa8"
-      ]
+      ],
+      "dh": "d60e7447"
     },
     {
       "name": "StaticFini_aTaskQueueCriticalSections",
@@ -472,7 +494,8 @@
       "namespace": "D2Game::GAME::Task",
       "calledFunctions": [
         "StaticFini_aTaskQueueCriticalSections"
-      ]
+      ],
+      "dh": "de93b413"
     }
   ]
 }

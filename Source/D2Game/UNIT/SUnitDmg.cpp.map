@@ -19,7 +19,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "85882b11"
     },
     {
       "name": "DAMAGE_RollPhysicalDamageRange",
@@ -40,7 +41,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "457952b5"
     },
     {
       "name": "DAMAGE_RollElementalDamageWithBonus",
@@ -62,7 +64,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a8fb69ed"
     },
     {
       "name": "DAMAGE_ApplyHealingToUnit",
@@ -85,7 +88,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9d7dec83"
     },
     {
       "name": "DAMAGE_ApplyManaToUnit",
@@ -106,7 +110,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3fd3143c"
     },
     {
       "name": "DAMAGE_DrainManaFromUnit",
@@ -126,7 +131,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac1f6110"
     },
     {
       "name": "DAMAGE_DrainStaminaFromUnit",
@@ -146,7 +152,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d504f4ee"
     },
     {
       "name": "DAMAGE_ApplyStun",
@@ -182,7 +189,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7de0d886"
     },
     {
       "name": "DAMAGE_ApplyPoison",
@@ -215,7 +223,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "60ffe3dc"
     },
     {
       "name": "DAMAGE_OnColdExpire",
@@ -239,7 +248,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a637402"
     },
     {
       "name": "DAMAGE_ApplyBurning",
@@ -272,7 +282,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d4704f1e"
     },
     {
       "name": "DAMAGE_GetMonsterDelayByDifficulty",
@@ -291,7 +302,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8bbf5c45"
     },
     {
       "name": "DAMAGE_ApplyCold",
@@ -327,7 +339,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b87fed12"
     },
     {
       "name": "SUNITDMG_StatExpireCallback_ResumeAI",
@@ -357,7 +370,8 @@
         "eD2States",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1e89ecd1"
     },
     {
       "name": "DAMAGE_ApplyFreeze",
@@ -403,7 +417,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "31e95c0c"
     },
     {
       "name": "DAMAGE_CalculatePhysicalDamage",
@@ -433,7 +448,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f148ab8d"
     },
     {
       "name": "DAMAGE_ApplyDemonBonus",
@@ -455,7 +471,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2af74858"
     },
     {
       "name": "DAMAGE_ApplyUndeadBonusDamage",
@@ -479,7 +496,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "26ac5a6c"
     },
     {
       "name": "DAMAGE_ApplyMonsterTypeBonusDamage",
@@ -502,7 +520,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "08db6687"
     },
     {
       "name": "DAMAGE_CalculateOffensiveDamage",
@@ -547,7 +566,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94c3a04d"
     },
     {
       "name": "DAMAGE_CalculateResistance",
@@ -569,7 +589,8 @@
         "D2DamageContext",
         "D2ResistTableEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "88b6f03b"
     },
     {
       "name": "DAMAGE_AbsorbDamageByPercent",
@@ -590,7 +611,8 @@
         "D2DamageContext",
         "D2ResistTableEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "65215ff3"
     },
     {
       "name": "DAMAGE_ApplyElementalDamageWithResist",
@@ -614,7 +636,8 @@
         "D2DamageContext",
         "D2ResistTableEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "9911e174"
     },
     {
       "name": "DAMAGE_CalculateExperienceMultiplier",
@@ -638,7 +661,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9cefbff4"
     },
     {
       "name": "DAMAGE_ProcessFreezeAndPoisonImmunity",
@@ -658,7 +682,8 @@
       "usedTypes": [
         "D2DamageContext",
         "int32_t"
-      ]
+      ],
+      "dh": "94a4fb21"
     },
     {
       "name": "DAMAGE_ApplyDefensiveReduction",
@@ -690,7 +715,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4652e8c"
     },
     {
       "name": "DAMAGE_GetMonsterDrainEffectiveness",
@@ -710,7 +736,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "df76fce6"
     },
     {
       "name": "DAMAGE_ApplyLifeAndManaLeech",
@@ -747,7 +774,8 @@
         "int32_t",
         "uD2UnitMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb8ac72e"
     },
     {
       "name": "DAMAGE_ApplyDamageToUnit",
@@ -795,7 +823,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f976c83"
     },
     {
       "name": "FreeCombat",
@@ -815,7 +844,8 @@
         "D2CombatEntryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "62d88206"
     },
     {
       "name": "DAMAGE_RemoveDamageListEntry",
@@ -835,7 +865,8 @@
         "D2CombatEntryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fcb3663c"
     },
     {
       "name": "DAMAGE_AddDamageListEntry",
@@ -856,7 +887,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3f3e58f6"
     },
     {
       "name": "DAMAGE_CheckKnockbackThreshold",
@@ -881,7 +913,8 @@
         "eD2ElementalDamageTypeDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "de492b4b"
     },
     {
       "name": "DAMAGE_RemoveObjectAtSameCoords",
@@ -905,7 +938,8 @@
         "D2UnitStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "d36e0355"
     },
     {
       "name": "SERVER_KillMonster",
@@ -941,7 +975,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "814a8f20"
     },
     {
       "name": "DAMAGE_GetElementalDamageTypeFlags",
@@ -959,7 +994,8 @@
       "usedTypes": [
         "D2DamageStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f45feb8"
     },
     {
       "name": "SERVER_GetHitCalculation",
@@ -1017,7 +1053,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0628ad52"
     },
     {
       "name": "DAMAGE_ReduceEquipmentDurability",
@@ -1042,7 +1079,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "126d72b3"
     },
     {
       "name": "DAMAGE_ProcessCombatQueueEntry",
@@ -1076,7 +1114,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "89aa85fb"
     },
     {
       "name": "DAMAGE_FindCombatEntry",
@@ -1099,7 +1138,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "87e3b4be"
     },
     {
       "name": "DAMAGE_RollMinMaxDamageRange",
@@ -1118,7 +1158,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "db714db1"
     },
     {
       "name": "DAMAGE_CheckPreventHealAndSetState",
@@ -1139,7 +1180,8 @@
         "D2StateExArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c42d497"
     },
     {
       "name": "DAMAGE_ApplyIgnoreAndFractionalAC",
@@ -1165,7 +1207,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8103512e"
     },
     {
       "name": "DAMAGE_RollAttackHit",
@@ -1202,7 +1245,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a0981b6"
     },
     {
       "name": "DAMAGE_CalculateAndApplyDamage",
@@ -1228,7 +1272,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f009852"
     },
     {
       "name": "DAMAGE_GetSkillDamageBonus",
@@ -1253,7 +1298,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bb76f2a"
     },
     {
       "name": "DAMAGE_CheckDefenseEvasion",
@@ -1279,7 +1325,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd2440da"
     },
     {
       "name": "DAMAGE_CheckBlockAndEvasion",
@@ -1304,7 +1351,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5387ab01"
     },
     {
       "name": "DAMAGE_ApplyAreaOfEffectDamage",
@@ -1342,7 +1390,8 @@
         "int32_t",
         "pfnAoEDamageFilter",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd74ee12"
     },
     {
       "name": "DAMAGE_AddSkillBonusDamage",
@@ -1364,7 +1413,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "f5221f15"
     },
     {
       "name": "SKILL_CalculateDamageForEvent",
@@ -1390,7 +1440,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7deb1905"
     },
     {
       "name": "EXPERIENCE_ApplyLevelDiffPenaulty",
@@ -1408,7 +1459,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3278aaca"
     },
     {
       "name": "DAMAGE_SafeShiftMultiply",
@@ -1426,7 +1478,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c92f4517"
     },
     {
       "name": "XP_ApplyLevelExpRatio",
@@ -1445,7 +1498,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b2682dc8"
     },
     {
       "name": "CALC_Experience",
@@ -1471,7 +1525,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "74973252"
     },
     {
       "name": "SERVER_CalculateExperienceForUnit",
@@ -1498,7 +1553,8 @@
         "eD2PlayerClassID",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "693bc68a"
     },
     {
       "name": "SERVER_PlayerUpdateExperience",
@@ -1526,7 +1582,8 @@
         "eD2PlayerClassID",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f05396f"
     },
     {
       "name": "ExperienceLoopOverPlayers",
@@ -1555,7 +1612,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "09d6b49a"
     },
     {
       "name": "SERVER_PartyShareExperience",
@@ -1581,7 +1639,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "9e203baf"
     },
     {
       "name": "SERVER_GetOwnerFromMonsterUnit",
@@ -1608,7 +1667,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "aaa7d218"
     },
     {
       "name": "SERVER_SEND_MercExperience",
@@ -1645,7 +1705,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "825082db"
     },
     {
       "name": "SERVER_KillExperience",
@@ -1673,7 +1734,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a7edd0f9"
     },
     {
       "name": "DAMAGE_AwardKillExperience",
@@ -1696,7 +1758,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "193a9b8d"
     },
     {
       "name": "DAMAGE_SetUnitToLevel",
@@ -1727,7 +1790,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c862787a"
     },
     {
       "name": "DAMAGE_CalculateHitCheck",
@@ -1754,7 +1818,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "6b68a517"
     }
   ]
 }

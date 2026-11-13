@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "83a1d8f5"
     },
     {
       "name": "Q34_StatusFilter",
@@ -44,7 +45,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0b002cde"
     },
     {
       "name": "Q34_SpawnNihlathakPortal",
@@ -68,7 +70,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "1e59844b"
     },
     {
       "name": "Q34_Callback02_NpcDeactivate",
@@ -89,7 +92,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA5Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "a7c583c6"
     },
     {
       "name": "Q34_UpdateQuestStep",
@@ -113,7 +117,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2cdb6987"
     },
     {
       "name": "Q34_SequenceFilter",
@@ -135,7 +140,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "c913f846"
     },
     {
       "name": "Q34_Callback11_ScrollMessage",
@@ -165,7 +171,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "22e55e55"
     },
     {
       "name": "Q34_Callback00_NpcActivate",
@@ -191,7 +198,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54719c57"
     },
     {
       "name": "Q34_Callback10_PlayerLeavesGame",
@@ -210,7 +218,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "b0149456"
     },
     {
       "name": "Q34_CheckNearNihlathak",
@@ -240,7 +249,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "49a5be84"
     },
     {
       "name": "Q34_SetCompleteForPartyMember",
@@ -266,7 +276,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "467dd6e6"
     },
     {
       "name": "Q34_PropagateCompleteToParty",
@@ -288,7 +299,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c4216096"
     },
     {
       "name": "Q34_SetCannotComplete",
@@ -311,7 +323,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8c483abc"
     },
     {
       "name": "Q34_PlayCompletionSound",
@@ -333,7 +346,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "91fee79f"
     },
     {
       "name": "Q34_OnNihlathakSpeak",
@@ -354,7 +368,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "3a7be748"
     },
     {
       "name": "Q34_Callback08_MonsterKilled",
@@ -380,7 +395,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "cdc6a4a9"
     },
     {
       "name": "Q34_ActiveFilter",
@@ -401,7 +417,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cb03e34a"
     },
     {
       "name": "Q34_SetAnyaTimerEvent",
@@ -422,7 +439,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "802d0088"
     },
     {
       "name": "Q34_SpawnNihlathakPortalTimer",
@@ -445,7 +463,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "adb74c65"
     },
     {
       "name": "Q34_Callback13_PlayerStartedGame",
@@ -473,7 +492,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d07d547c"
     },
     {
       "name": "Q34_Callback03_ChangedLevel",
@@ -495,7 +515,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA5Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "b0bf2c5e"
     },
     {
       "name": "Q34_InitData",
@@ -516,7 +537,8 @@
       "usedTypes": [
         "D2QuestDataA5Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "72afd83b"
     },
     {
       "name": "Q34_ClaimReward",
@@ -540,7 +562,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "357a7bdd"
     },
     {
       "name": "Q34_OnNihlathakAI",
@@ -560,7 +583,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "71d926da"
     },
     {
       "name": "Q34_NpcSpawnPortalInAct5",
@@ -593,7 +617,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "175fcb77"
     }
   ]
 }

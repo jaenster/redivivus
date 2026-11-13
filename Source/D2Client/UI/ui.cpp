@@ -7034,7 +7034,7 @@ static BOOL UI_IsMouseOverControlConfigTab(int32_t nMouseX, int32_t nMouseY) {
     return (uint32_t)(nTabIndex != 3);
 }
 
-static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosY, int32_t nMousePosX) {
+static uint32_t UI_IsControlConfigCellClickable(int32_t nMousePosX, int32_t nMousePosY) {
     int bInArea = UI_IsMouseInControlConfigArea(nMousePosX, nMousePosY);
     if (bInArea) {
       int32_t nRowIndex;
@@ -7795,7 +7795,7 @@ static void UI_ConfigHandleMouseClick(int32_t nMouseX, int32_t nMouseY) {
     int32_t nTabIndex;
     if (gaControlConfigRegionMouseState[0]) {
       uint32_t bCellClickable;
-      bCellClickable = UI_IsControlConfigCellClickable(nMouseY, nMouseX);
+      bCellClickable = UI_IsControlConfigCellClickable(nMouseX, nMouseY);
       if (bCellClickable && gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex != 0x39) {
         UI_ConfigKeyBindModeEnable();
         Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);

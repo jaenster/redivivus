@@ -22,7 +22,8 @@
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8f55b035"
     },
     {
       "name": "Q22_OnCouncilMemberKilled",
@@ -41,7 +42,8 @@
         "D2QuestDataA3Q5Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d49cad90"
     },
     {
       "name": "Q22_IsGoldenBirdQuestActive",
@@ -60,7 +62,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1d99a12d"
     },
     {
       "name": "Q22_ClearGoldenBirdQuestFlag",
@@ -79,7 +82,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "89359c9f"
     },
     {
       "name": "Q22_ActiveFilter",
@@ -100,7 +104,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "81455d21"
     },
     {
       "name": "Q22_PlayerUpdateBlackenedTempleState",
@@ -124,7 +129,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9c37a7f4"
     },
     {
       "name": "Q22_PlayerCheckNearTravincal",
@@ -164,7 +170,8 @@
         "eD2QuestState",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c3bafae"
     },
     {
       "name": "Q22_PlayerNotifyCompleted",
@@ -186,7 +193,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "df018bb6"
     },
     {
       "name": "Q22_Callback00_NpcActivate",
@@ -213,7 +221,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21195b91"
     },
     {
       "name": "Q22_Callback02_NpcDeactivate",
@@ -234,7 +243,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA3Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "6bdd1b86"
     },
     {
       "name": "Q22_Callback03_ChangedLevel",
@@ -260,7 +270,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fe00eb1c"
     },
     {
       "name": "Q22_Callback11_ScrollMessage",
@@ -298,7 +309,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc262734"
     },
     {
       "name": "Q22_Callback10_PlayerLeavesGame",
@@ -332,7 +344,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "d85d54af"
     },
     {
       "name": "Q22_Callback13_PlayerStartedGame",
@@ -356,7 +369,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "28e77b7b"
     },
     {
       "name": "Q22_TrackCouncilKill",
@@ -383,7 +397,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dc0d242c"
     },
     {
       "name": "Q22_PartyMember_SetCompleted",
@@ -409,7 +424,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "04882aaa"
     },
     {
       "name": "Q22_PropagateCompletionToParty",
@@ -431,7 +447,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b4f5d0c5"
     },
     {
       "name": "Q22_PartyMember_SetCannotComplete",
@@ -453,7 +470,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "056e5a6b"
     },
     {
       "name": "Q22_PartyMember_PlayCompleteSound",
@@ -474,7 +492,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "013930f6"
     },
     {
       "name": "Q22_PlayerCheckKhalimsWillItems",
@@ -503,7 +522,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "fea5c3fc"
     },
     {
       "name": "Q22_PlayerCompleteKhalimsWill",
@@ -531,7 +551,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "d8acaf25"
     },
     {
       "name": "OBJOP_A3Q5_SmashCompellingOrb",
@@ -579,7 +600,8 @@
         "eD2Quests",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "b303d84c"
     },
     {
       "name": "Objects_InitFn53_MephistoDoor",
@@ -599,7 +621,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "065d9280"
     },
     {
       "name": "Objects_InitFn60_CompellingOrb",
@@ -622,7 +645,8 @@
         "D2QuestDataA2Q2Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7c420965"
     },
     {
       "name": "Q22_Callback08_MonsterKilled",
@@ -651,7 +675,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "32c1410a"
     },
     {
       "name": "Q22_StatusFilter",
@@ -671,7 +696,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d09ed0b"
     },
     {
       "name": "Q22_InitData",
@@ -692,7 +718,8 @@
         "D2QuestDataA3Q5Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "23f1ffb7"
     }
   ]
 }

@@ -24,7 +24,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8936d09d"
     },
     {
       "name": "Draw_UI_LoadGame",
@@ -62,7 +63,8 @@
         "D2GfxDataStrc",
         "eD2GSGameType",
         "int32_t"
-      ]
+      ],
+      "dh": "9c4118fe"
     },
     {
       "name": "UI_ToggleMiniPanel",
@@ -99,7 +101,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f3b0ee3"
     },
     {
       "name": "InitializeUI",
@@ -155,7 +158,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fdce435f"
     },
     {
       "name": "FreeDraw",
@@ -207,7 +211,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "196ee8f1"
     },
     {
       "name": "DRAW_UI",
@@ -303,7 +308,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f009a5d6"
     },
     {
       "name": "CLIENT_AdjustMemoryBudget",
@@ -332,7 +338,8 @@
         "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93081db7"
     },
     {
       "name": "GFX_ShutdownSpriteCacheAndCofSystem",
@@ -352,7 +359,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f42f832d"
     },
     {
       "name": "DRAW_NoOp",
@@ -366,7 +374,8 @@
       "namespace": "D2Client::UI::Draw",
       "calledFunctions": [
         "DRAW_NoOp"
-      ]
+      ],
+      "dh": "14d9764f"
     },
     {
       "name": "DRAW_PfHandlerCallback_CloseActivePanels",
@@ -384,7 +393,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "6941f2b9"
     }
   ]
 }

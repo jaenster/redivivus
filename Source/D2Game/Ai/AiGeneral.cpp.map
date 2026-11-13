@@ -21,7 +21,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3952de91"
     },
     {
       "name": "SetAiArgument",
@@ -40,7 +41,8 @@
         "D2AiGeneralStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "da9c81bc"
     },
     {
       "name": "GetAiArgument",
@@ -59,7 +61,8 @@
         "D2AiGeneralStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dfff13b6"
     },
     {
       "name": "CreateAiCmdStrc",
@@ -80,7 +83,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2cfe98e3"
     },
     {
       "name": "FreeAi",
@@ -101,7 +105,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7d01709f"
     },
     {
       "name": "FreeAiCmds",
@@ -121,7 +126,8 @@
         "D2AiGeneralStrc",
         "D2MonsterAiCmdStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7f17fd89"
     },
     {
       "name": "ResetAiGeneralStrc",
@@ -142,7 +148,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b5ed58a0"
     },
     {
       "name": "GetAiCmd",
@@ -161,7 +168,8 @@
         "D2AiGeneralStrc",
         "D2MonsterAiCmdStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "13be1620"
     },
     {
       "name": "AI_SetCurrentAiCommand",
@@ -181,7 +189,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a65c2655"
     },
     {
       "name": "FindMonsterAiCmd",
@@ -201,7 +210,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2c6880e4"
     },
     {
       "name": "CreateAiCmdAndFill",
@@ -223,7 +233,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "72f7b7ff"
     },
     {
       "name": "AI_CreateCmdIfNotExists",
@@ -246,7 +257,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "69262e60"
     },
     {
       "name": "GetMonsterMapAi",
@@ -264,7 +276,8 @@
       "usedTypes": [
         "D2MapAIStrc *",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "481af176"
     },
     {
       "name": "AssignMinionOwner",
@@ -286,7 +299,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "5a9589c4"
     },
     {
       "name": "GetMonsterNameAndAi",
@@ -305,7 +319,8 @@
         "D2AiGeneralStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "993abc3f"
     },
     {
       "name": "GetOwnerUnit",
@@ -324,7 +339,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e1cc9199"
     },
     {
       "name": "AddMinionToList",
@@ -345,7 +361,8 @@
         "D2MonsterDataMinionList",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cf511119"
     },
     {
       "name": "FreeAiOfMinions",
@@ -368,7 +385,8 @@
         "D2MonsterDataMinionList *",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f5cdb475"
     },
     {
       "name": "FreeAiOfMinionsLessSafe",
@@ -390,7 +408,8 @@
         "D2MonsterDataMinionList",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d90965f2"
     },
     {
       "name": "ClearMinionList",
@@ -409,7 +428,8 @@
       "usedTypes": [
         "D2MonsterDataMinionList",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2e51a9db"
     },
     {
       "name": "CallForEachMinion",
@@ -435,7 +455,8 @@
         "SGAMEDATA",
         "int32_t",
         "pfnMinionForEachCallback"
-      ]
+      ],
+      "dh": "77a9198a"
     },
     {
       "name": "GetAndRemoveMinionList",
@@ -457,7 +478,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "73971c55"
     },
     {
       "name": "ReplaceMinionList",
@@ -481,7 +503,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "de82b84f"
     },
     {
       "name": "AddMinionToAi",
@@ -504,7 +527,8 @@
         "D2MonsterDataMinionList",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2c1541ab"
     },
     {
       "name": "RemoveMinionsFromAiIfFlag1Set2Not",
@@ -528,7 +552,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ff02b48"
     },
     {
       "name": "MONSTER_GetUnitData_AiGeneral_Offset0x3C",
@@ -546,7 +571,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a5da5c2c"
     },
     {
       "name": "CreateMinion",
@@ -570,7 +596,8 @@
         "D2MonsterDataMinionList",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "288991f7"
     },
     {
       "name": "FreeMonsterAi",
@@ -592,7 +619,8 @@
         "D2AiGeneralStrc",
         "D2MonsterDataMinionList",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ce496094"
     }
   ]
 }

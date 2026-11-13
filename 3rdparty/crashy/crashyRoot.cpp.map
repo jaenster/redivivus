@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7fb36cd0"
     },
     {
       "name": "FILETOOLS_GetTempPath_UTF8",
@@ -33,7 +34,8 @@
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
         "FILETOOLS_GetTempPath_UTF8"
-      ]
+      ],
+      "dh": "1b89d9ef"
     },
     {
       "name": "isDebuggerPresent",
@@ -50,7 +52,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3551b64a"
     },
     {
       "name": "SYSTEM_Win32TerminateProcess",
@@ -67,7 +70,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ee9d5cc0"
     },
     {
       "name": "SYSTEM_GetCurrentProcessThreadCount",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "PROCESSENTRY32W"
-      ]
+      ],
+      "dh": "fc654e64"
     },
     {
       "name": "SYSTEM_GetStackRegion",
@@ -104,7 +109,8 @@
       "usedTypes": [
         "_MEMORY_BASIC_INFORMATION",
         "uint8_t"
-      ]
+      ],
+      "dh": "dd4670a6"
     },
     {
       "name": "SYSTEM_CaptureThreadContext",
@@ -124,7 +130,8 @@
       "usedTypes": [
         "CONTEXT",
         "uint32_t"
-      ]
+      ],
+      "dh": "58a47ee0"
     },
     {
       "name": "SYSTEM_GetThreadName",
@@ -142,7 +149,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2d996b15"
     },
     {
       "name": "ILT_GetCurrentThreadId",
@@ -178,7 +186,8 @@
         "WSADATA",
         "hostent",
         "uint32_t"
-      ]
+      ],
+      "dh": "88f17501"
     },
     {
       "name": "SYSTEM_SetGlobalString",
@@ -192,7 +201,8 @@
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
         "SYSTEM_SetGlobalString"
-      ]
+      ],
+      "dh": "60c616c2"
     },
     {
       "name": "ErrorReportingLaunch",
@@ -216,7 +226,8 @@
         "D2BlizzardErrorArgument",
         "char *",
         "uint32_t"
-      ]
+      ],
+      "dh": "532a0ea6"
     },
     {
       "name": "ILT_strrchr",
@@ -234,7 +245,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b91cfdfb"
     },
     {
       "name": "SYSTEM_EnterCriticalSection",
@@ -251,7 +263,8 @@
       ],
       "usedTypes": [
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "0a8db65c"
     },
     {
       "name": "LeaveCriticalSection_System",
@@ -265,7 +278,8 @@
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
         "LeaveCriticalSection_System"
-      ]
+      ],
+      "dh": "edccac54"
     },
     {
       "name": "SetCurrentThreadId",
@@ -279,7 +293,8 @@
       "namespace": "Fog::_3rdparty::crashy",
       "calledFunctions": [
         "SetCurrentThreadId"
-      ]
+      ],
+      "dh": "5aac6b3a"
     }
   ]
 }

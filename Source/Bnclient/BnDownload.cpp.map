@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "FILETIME"
-      ]
+      ],
+      "dh": "ff51775a"
     },
     {
       "name": "NET_CopyDllFromArchive",
@@ -51,7 +52,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "91ea0efd"
     },
     {
       "name": "BNDOWNLOAD_SetCancelFlag",
@@ -65,7 +67,8 @@
       "namespace": "Bnclient::BnDownload",
       "calledFunctions": [
         "BNDOWNLOAD_SetCancelFlag"
-      ]
+      ],
+      "dh": "def98fce"
     },
     {
       "name": "BNDOWNLOAD_HasActiveDownloads",
@@ -82,7 +85,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "914ee73d"
     },
     {
       "name": "NET_RecvExact",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "SOCKET",
         "uint32_t"
-      ]
+      ],
+      "dh": "af1fdd1e"
     },
     {
       "name": "BNDOWNLOAD_GetCachedFileSize",
@@ -121,7 +126,8 @@
         "FILETIME",
         "_FILETIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "90120d3e"
     },
     {
       "name": "BNDOWNLOAD_PerformCheckRevision",
@@ -150,7 +156,8 @@
         "pfnCheckRevision",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5dbe8c92"
     },
     {
       "name": "BNDOWNLOAD_ExtractFileFromArchive",
@@ -177,7 +184,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "94ca02d4"
     },
     {
       "name": "BNDOWNLOAD_LaunchVerifiedExecutables",
@@ -196,7 +204,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f5582a45"
     },
     {
       "name": "BNDOWNLOAD_UpdateProgressPercent",
@@ -214,7 +223,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "833991b0"
     },
     {
       "name": "BNDOWNLOAD_ResetState",
@@ -231,7 +241,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "39a53e89"
     },
     {
       "name": "BNDOWNLOAD_GetProgress",
@@ -245,7 +256,8 @@
       "namespace": "Bnclient::BnDownload",
       "calledFunctions": [
         "BNDOWNLOAD_GetProgress"
-      ]
+      ],
+      "dh": "120e1bb0"
     },
     {
       "name": "BNDOWNLOAD_SetPatchFilename",
@@ -260,7 +272,8 @@
       "calledFunctions": [
         "BNDOWNLOAD_SetPatchFilename",
         "SStrCopy"
-      ]
+      ],
+      "dh": "6e996f7f"
     },
     {
       "name": "BNDOWNLOAD_HasPatchFilename",
@@ -277,7 +290,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3eaf8509"
     },
     {
       "name": "BnetDownloadFile",
@@ -304,7 +318,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "bd246185"
     },
     {
       "name": "BNDOWNLOAD_RecvFileFromSocket",
@@ -329,7 +344,8 @@
         "SOCKET",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4a0cb1b"
     },
     {
       "name": "BNDOWNLOAD_ProcessPrepatchList",
@@ -374,7 +390,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f79339e4"
     },
     {
       "name": "BNDOWNLOAD_ApplyPrepatch",
@@ -389,7 +406,8 @@
       "calledFunctions": [
         "BNDOWNLOAD_ApplyPrepatch",
         "BNDOWNLOAD_ProcessPrepatchList"
-      ]
+      ],
+      "dh": "f1664c72"
     },
     {
       "name": "BnetDownloadFile_II",
@@ -430,7 +448,8 @@
         "u_short",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ec991c7c"
     },
     {
       "name": "BNDOWNLOAD_InitiateFileDownload",
@@ -457,7 +476,8 @@
         "FILETIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40f91d64"
     },
     {
       "name": "NET_BNFTP_CLIENT_ProcessFile",
@@ -506,7 +526,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c04b38c0"
     },
     {
       "name": "BNDOWNLOAD_InitiatePatchDownload",
@@ -537,7 +558,8 @@
         "FILETIME",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "1ed96690"
     },
     {
       "name": "StaticInit_CriticalSection_00881f64",
@@ -552,7 +574,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_00881f64",
         "atexit"
-      ]
+      ],
+      "dh": "33c6baaf"
     },
     {
       "name": "StaticFini_CriticalSection_00881f64",
@@ -566,7 +589,8 @@
       "namespace": "Bnclient::BnDownload",
       "calledFunctions": [
         "StaticFini_CriticalSection_00881f64"
-      ]
+      ],
+      "dh": "c2f51fb9"
     }
   ]
 }

@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ecfb948"
     }
   ]
 }

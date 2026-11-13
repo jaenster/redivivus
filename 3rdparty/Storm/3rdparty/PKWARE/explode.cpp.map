@@ -26,7 +26,8 @@
         "pfnPkwareWrite",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8e3cb742"
     },
     {
       "name": "Expand",
@@ -48,7 +49,8 @@
         "TDcmpStruct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a3d592b1"
     },
     {
       "name": "DecodeLit",
@@ -68,7 +70,8 @@
         "TDcmpStruct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "656f8bf7"
     },
     {
       "name": "DecodeDist",
@@ -87,7 +90,8 @@
       "usedTypes": [
         "TDcmpStruct",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe66e59c"
     },
     {
       "name": "WasteBits",
@@ -106,7 +110,8 @@
         "TDcmpStruct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8d3fedf8"
     },
     {
       "name": "GenDecodeTabs",
@@ -124,7 +129,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "37181eec"
     },
     {
       "name": "GenAscTabs",
@@ -144,7 +150,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c7f0b52"
     },
     {
       "name": "lmemcpy",
@@ -161,7 +168,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ccab08b7"
     }
   ]
 }

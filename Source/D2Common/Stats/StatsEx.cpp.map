@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2StatInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "84231582"
     },
     {
       "name": "STATLIST_BinarySearchInsertPos",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2StatInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a822162a"
     },
     {
       "name": "STATLIST_BinarySearchStatInfoArray",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "D2StatInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7a087189"
     },
     {
       "name": "STATLIST_InsertStatIntoArray",
@@ -78,7 +81,8 @@
         "D2StatInfoStrc",
         "D2StatStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ce07bb98"
     },
     {
       "name": "STATLIST_RemoveStatFromArray",
@@ -99,7 +103,8 @@
         "D2PoolManagerStrc",
         "D2StatInfoStrc",
         "D2StatStrc"
-      ]
+      ],
+      "dh": "ec9ca049"
     },
     {
       "name": "STATLIST_BinarySearchChangedInsertPos",
@@ -117,7 +122,8 @@
       "usedTypes": [
         "D2ChangedStatArrayStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8d80bbe6"
     },
     {
       "name": "STATLIST_TrackChangedStat",
@@ -141,7 +147,8 @@
         "D2StatListExStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "735ffd4f"
     },
     {
       "name": "STATLIST_LookupBaseStatWithMinAccr",
@@ -162,7 +169,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6b48bf10"
     },
     {
       "name": "STATLIST_GetEffectiveStatsArray",
@@ -180,7 +188,8 @@
       "usedTypes": [
         "D2StatInfoStrc",
         "D2StatListExStrc"
-      ]
+      ],
+      "dh": "682dd475"
     },
     {
       "name": "TXT_ItemStatCost_GetMinimumStatValueShifted",
@@ -203,7 +212,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ff17a9b"
     },
     {
       "name": "STATLIST_CalcFullStatFromChildren",
@@ -224,7 +234,8 @@
         "D2StatInfoStrc",
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b064e712"
     },
     {
       "name": "STATLIST_PropagateStatDelta",
@@ -249,7 +260,8 @@
         "D2StatStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa4a85cb"
     },
     {
       "name": "STATLIST_SetFullStatValue",
@@ -274,7 +286,8 @@
         "D2StatStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c660be2"
     },
     {
       "name": "AllocStatList",
@@ -296,7 +309,8 @@
         "D2StatListStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "08bc516c"
     },
     {
       "name": "GetOwnerType",
@@ -314,7 +328,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "bbc17602"
     },
     {
       "name": "STATLIST_GetStatCountFromStatList",
@@ -332,7 +347,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b76f5281"
     },
     {
       "name": "STATLIST_GetUnitTotalStats",
@@ -350,7 +366,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b545cd5"
     },
     {
       "name": "GetOwnerGUID",
@@ -368,7 +385,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "756bd883"
     },
     {
       "name": "SetState",
@@ -386,7 +404,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "ad8b46dc"
     },
     {
       "name": "GetState",
@@ -404,7 +423,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "37220a62"
     },
     {
       "name": "SetTimeout_WithFlag",
@@ -422,7 +442,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "77618247"
     },
     {
       "name": "STATLIST_GetFullListFromStatList",
@@ -439,7 +460,8 @@
       ],
       "usedTypes": [
         "D2StatListExStrc"
-      ]
+      ],
+      "dh": "054b3cbf"
     },
     {
       "name": "STATLIST_GetStatFromBaseArray",
@@ -460,7 +482,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "754e72c1"
     },
     {
       "name": "SERVER_GetUnitStat",
@@ -481,7 +504,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cc169337"
     },
     {
       "name": "STATLIST_GetMinimalStatValueShifted",
@@ -502,7 +526,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cc1fabde"
     },
     {
       "name": "STATSEX_GetCurrentStat",
@@ -522,7 +547,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "uint16_t"
-      ]
+      ],
+      "dh": "cf0be6c4"
     },
     {
       "name": "thunk_STATLIST_GetStatFromBaseArray",
@@ -543,7 +569,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2230f65"
     },
     {
       "name": "thunk_STATLIST_GetMinimalStatValueShifted",
@@ -564,7 +591,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "760e7821"
     },
     {
       "name": "ITEM_GetMinimalStatValueShifted",
@@ -585,7 +613,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "917c955c"
     },
     {
       "name": "STATLIST_GetStatBonusFromList",
@@ -607,7 +636,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "01358744"
     },
     {
       "name": "STATLIST_GetStatBonusFromLists",
@@ -630,7 +660,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4324985b"
     },
     {
       "name": "STATLIST_CalcStatWithPercentBonus",
@@ -652,7 +683,8 @@
         "D2StatListExStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "29ddd0c8"
     },
     {
       "name": "UNITS_CalcUnitStatWithPercentBonus",
@@ -672,7 +704,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "69740aa9"
     },
     {
       "name": "STATLIST_GetStatValueByIndex",
@@ -690,7 +723,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa7a1e9c"
     },
     {
       "name": "GetStatListByState",
@@ -709,7 +743,8 @@
         "D2StatListExStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8bf0fed"
     },
     {
       "name": "GetStatsByState",
@@ -729,7 +764,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "b53be47c"
     },
     {
       "name": "GetStatListByFlags",
@@ -747,7 +783,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b28af61"
     },
     {
       "name": "STATLIST_FindStatListWithFlags",
@@ -765,7 +802,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "da234395"
     },
     {
       "name": "GetStatsByFlags",
@@ -785,7 +823,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d12f4dc"
     },
     {
       "name": "GetStatListByStateOrFlagsIfNotExists",
@@ -807,7 +846,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3e84eec"
     },
     {
       "name": "GetStatList",
@@ -827,7 +867,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "158f43eb"
     },
     {
       "name": "SEVER_ITEM_GetOwner",
@@ -846,7 +887,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "486a8d3b"
     },
     {
       "name": "STATLIST_DispatchUnchangedStatToCallback",
@@ -869,7 +911,8 @@
         "eD2UnitStat",
         "int32_t",
         "pfnStatChangedCb"
-      ]
+      ],
+      "dh": "ca0b0ecf"
     },
     {
       "name": "STATLIST_IterateChangedStats",
@@ -890,7 +933,8 @@
         "int32_t",
         "pfnStatChangedCb",
         "uint32_t"
-      ]
+      ],
+      "dh": "f31b490b"
     },
     {
       "name": "STATLIST_ClearChangedStatFlags",
@@ -909,7 +953,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0d608d14"
     },
     {
       "name": "STATSEX_GetAlignment",
@@ -930,7 +975,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2d94035a"
     },
     {
       "name": "STATLIST_ClearOverlayFlags",
@@ -947,7 +993,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2c1e041c"
     },
     {
       "name": "STATLIST_HasChangedStats",
@@ -965,7 +1012,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f590d89d"
     },
     {
       "name": "STATLIST_GetStatByState",
@@ -985,7 +1033,8 @@
         "D2StatListExStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "30325040"
     },
     {
       "name": "STATLIST_SetUnitState",
@@ -1009,7 +1058,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b33604c0"
     },
     {
       "name": "GetStateBitFlag",
@@ -1028,7 +1078,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "5142cc9a"
     },
     {
       "name": "GetStateFlags",
@@ -1046,7 +1097,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a8a90cf6"
     },
     {
       "name": "STATLIST_GetUnitGfxFlags",
@@ -1064,7 +1116,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f6965db7"
     },
     {
       "name": "STATLIST_CopyStatsToBuffer",
@@ -1085,7 +1138,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "769b8773"
     },
     {
       "name": "CopyStatsToBuffer",
@@ -1105,7 +1159,8 @@
         "D2StatStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "6760f042"
     },
     {
       "name": "STATLIST_SetExpireFunction",
@@ -1123,7 +1178,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "PFN_StatExpireCallback"
-      ]
+      ],
+      "dh": "4343463e"
     },
     {
       "name": "STATLIST_GetBaseStatValue",
@@ -1144,7 +1200,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb3421b3"
     },
     {
       "name": "GetTxtMaxHp",
@@ -1163,7 +1220,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dd1ddc9f"
     },
     {
       "name": "GetTxtMaxMana",
@@ -1182,7 +1240,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c0b7b36a"
     },
     {
       "name": "GetTxtMaxStamina",
@@ -1201,7 +1260,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fe4de35e"
     },
     {
       "name": "GetTxtMaxDurability",
@@ -1223,7 +1283,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5e542946"
     },
     {
       "name": "GetTxtMaxDamage",
@@ -1242,7 +1303,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "30bb55ed"
     },
     {
       "name": "GetTxtMinDamage",
@@ -1261,7 +1323,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cd360749"
     },
     {
       "name": "GetTxtThrowMaxDamage",
@@ -1280,7 +1343,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "39132fc1"
     },
     {
       "name": "GetTxtThrowMinDamage",
@@ -1299,7 +1363,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1b15ce64"
     },
     {
       "name": "GetTxtArmorClass",
@@ -1318,7 +1383,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3b6aca87"
     },
     {
       "name": "STATLIST_GetStatForDamageCalc",
@@ -1338,7 +1404,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "f0a28e87"
     },
     {
       "name": "STATLIST_GetFullListPtr",
@@ -1355,7 +1422,8 @@
       ],
       "usedTypes": [
         "D2StatListExStrc"
-      ]
+      ],
+      "dh": "60388c28"
     },
     {
       "name": "STATSEX_SetStatListTimeout",
@@ -1373,7 +1441,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2cf19f4c"
     },
     {
       "name": "SetSkillId",
@@ -1391,7 +1460,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "a5f89adc"
     },
     {
       "name": "GetSkillId",
@@ -1409,7 +1479,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "856fd3c7"
     },
     {
       "name": "SetSkillLevel",
@@ -1427,7 +1498,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2145778d"
     },
     {
       "name": "GetSkillLevel",
@@ -1444,7 +1516,8 @@
       ],
       "usedTypes": [
         "D2StatListExStrc"
-      ]
+      ],
+      "dh": "31657f48"
     },
     {
       "name": "STATLIST_CopyStatPairsByStatIndex",
@@ -1466,7 +1539,8 @@
         "D2StatStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5e062bd"
     },
     {
       "name": "STATSEX_CopyStatPairsFromStatList",
@@ -1487,7 +1561,8 @@
         "D2StatStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae19c9fa"
     },
     {
       "name": "STATLIST_GetItemStatBonusValues",
@@ -1509,7 +1584,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f7b8f5be"
     },
     {
       "name": "STATLIST_CalcCombinedStatValue",
@@ -1547,7 +1623,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ea7920e0"
     },
     {
       "name": "STATLIST_ApplyComplexStatFormula",
@@ -1574,7 +1651,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1a66879"
     },
     {
       "name": "STATLIST_PropagateStatChange",
@@ -1597,7 +1675,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7163eaa9"
     },
     {
       "name": "STATLIST_DetachAndRecalc",
@@ -1622,7 +1701,8 @@
         "PFN_StatExpireCallback",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c40b4431"
     },
     {
       "name": "FreeAnyStatList",
@@ -1642,7 +1722,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2StatStrc"
-      ]
+      ],
+      "dh": "f5db0105"
     },
     {
       "name": "FreeStatList",
@@ -1660,7 +1741,8 @@
       ],
       "usedTypes": [
         "D2StatListStrc"
-      ]
+      ],
+      "dh": "2439d40a"
     },
     {
       "name": "Unreferenced_00626cf0",
@@ -1678,7 +1760,8 @@
       ],
       "usedTypes": [
         "D2StatListExStrc"
-      ]
+      ],
+      "dh": "fc2ee2b2"
     },
     {
       "name": "STATLIST_FreeStatListMemory",
@@ -1697,7 +1780,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "79317909"
     },
     {
       "name": "AllocStatListEx",
@@ -1721,7 +1805,8 @@
         "SGAMEDATA",
         "fpStatListExChangeCb",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfbb1add"
     },
     {
       "name": "STATLIST_AttachStatListToUnit",
@@ -1750,7 +1835,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33d00ab9"
     },
     {
       "name": "STATLIST_AddStatValue",
@@ -1776,7 +1862,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "34e14d0f"
     },
     {
       "name": "STATLIST_SetStatValue",
@@ -1803,7 +1890,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "65cec1db"
     },
     {
       "name": "D2AddStatToStatsListEx",
@@ -1824,7 +1912,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b7b3666"
     },
     {
       "name": "STATLIST_SetStatValueInBaseArray",
@@ -1852,7 +1941,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "459642a8"
     },
     {
       "name": "STATLIST_SetStatValueInBaseArraySafe",
@@ -1874,7 +1964,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab336047"
     },
     {
       "name": "thunk_STATLIST_SetStatValue",
@@ -1895,7 +1986,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d327fa00"
     },
     {
       "name": "STATLIST_SetUnitStat",
@@ -1917,7 +2009,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "c58c3869"
     },
     {
       "name": "thunk_STATLIST_AddStatValue",
@@ -1938,7 +2031,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b453ca7d"
     },
     {
       "name": "STATLIST_AddUnitStat",
@@ -1959,7 +2053,8 @@
         "eD2UnitStat",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "e8f03507"
     },
     {
       "name": "STATLIST_MarkUnitStatsChanged",
@@ -1980,7 +2075,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "3b7140ef"
     },
     {
       "name": "STATLIST_FreeChildStatLists",
@@ -2002,7 +2098,8 @@
         "D2PoolManagerStrc",
         "D2StatListExStrc",
         "D2StatStrc"
-      ]
+      ],
+      "dh": "cdf65e45"
     },
     {
       "name": "STATLIST_FreeUnitChildStatLists",
@@ -2022,7 +2119,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "eba21054"
     },
     {
       "name": "RemoveStatListAfterTimeout",
@@ -2043,7 +2141,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "00084a49"
     },
     {
       "name": "CopyStatListEx",
@@ -2062,7 +2161,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2StatStrc"
-      ]
+      ],
+      "dh": "c3244b5d"
     },
     {
       "name": "STATLIST_RecalcAfterRemove",
@@ -2082,7 +2182,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4e2014ec"
     },
     {
       "name": "UpdateResourceStats",
@@ -2106,7 +2207,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "41faebc0"
     },
     {
       "name": "ItemUpdateStatsAfterSocketing",
@@ -2131,7 +2233,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "53f06e0f"
     },
     {
       "name": "STATLIST_RemoveAndRecalc",
@@ -2150,7 +2253,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ef16eafd"
     },
     {
       "name": "STATLIST_RemoveFromOwnerAndRecalc",
@@ -2168,7 +2272,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "997417d2"
     },
     {
       "name": "STATLIST_SetStatValueSimple",
@@ -2188,7 +2293,8 @@
         "D2StatListExStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "464175b9"
     },
     {
       "name": "UNITS_CalcCombinedStatValue",
@@ -2209,7 +2315,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "3cb5772e"
     },
     {
       "name": "STATLIST_ActivateItemStats",
@@ -2235,7 +2342,8 @@
         "D2StatStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "834f06df"
     },
     {
       "name": "STATLIST_SetItemStatActive",
@@ -2260,7 +2368,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "int32_t"
-      ]
+      ],
+      "dh": "b07b79d0"
     },
     {
       "name": "STATLIST_ToggleStateDisabled",
@@ -2283,7 +2392,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "16bca0ab"
     },
     {
       "name": "STATLIST_DeactivateItemStats",
@@ -2309,7 +2419,8 @@
         "D2StatStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "68da9f7f"
     },
     {
       "name": "SKILLS_ValidateSkillDescIndex",
@@ -2326,7 +2437,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "09e765f2"
     },
     {
       "name": "Unreferenced_00627b30",
@@ -2340,7 +2452,8 @@
       "namespace": "D2Common::Stats::StatsEx",
       "calledFunctions": [
         "Unreferenced_00627b30"
-      ]
+      ],
+      "dh": "6a153568"
     },
     {
       "name": "nullsub",
@@ -2357,7 +2470,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6588720e"
     },
     {
       "name": "MATH_Min",
@@ -2374,7 +2488,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "171acff5"
     },
     {
       "name": "MATH_Max",
@@ -2391,7 +2506,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "572569ed"
     },
     {
       "name": "MATH_RandomRange",
@@ -2411,7 +2527,8 @@
         "D2ItemCalcContextStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "57163cd8"
     },
     {
       "name": "UNITS_GetStatValueByType",
@@ -2435,7 +2552,8 @@
         "D2UnitStrc *",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "e7eee39d"
     }
   ]
 }

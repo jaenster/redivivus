@@ -18,7 +18,8 @@
         "LRUCACHE_FreeAll",
         "memset",
         "Free"
-      ]
+      ],
+      "dh": "cdb9c910"
     },
     {
       "name": "SPRITECACHE_AllocEntry",
@@ -46,7 +47,8 @@
         "D2LRUCacheNodeStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8bdba34"
     },
     {
       "name": "SPRITECACHE_FreeEntry",
@@ -64,7 +66,8 @@
       ],
       "usedTypes": [
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "82523d51"
     },
     {
       "name": "SPRITECACHE_LoadFromFile",
@@ -85,7 +88,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "00698595"
     },
     {
       "name": "SPRITECACHE_SetMaxSize",
@@ -99,7 +103,8 @@
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize"
-      ]
+      ],
+      "dh": "f409cf0f"
     },
     {
       "name": "SPRITECACHE_GetStats",
@@ -117,7 +122,8 @@
       "usedTypes": [
         "ULONG_PTR",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c38262c"
     },
     {
       "name": "SPRITECACHE_Lock",
@@ -131,7 +137,8 @@
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
         "SPRITECACHE_Lock"
-      ]
+      ],
+      "dh": "d642730d"
     },
     {
       "name": "SPRITECACHE_Unlock",
@@ -146,7 +153,8 @@
       "calledFunctions": [
         "SPRITECACHE_Unlock",
         "LRUCACHE_FreeAll"
-      ]
+      ],
+      "dh": "a1852d2e"
     },
     {
       "name": "SPRITECACHE_TouchEntry",
@@ -164,7 +172,8 @@
       ],
       "usedTypes": [
         "D2TileLibraryHeaderStrc"
-      ]
+      ],
+      "dh": "87b84c77"
     },
     {
       "name": "GFX_InitLRUCache",
@@ -184,7 +193,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6739c73"
     },
     {
       "name": "SPRITECACHE_ReleaseHashEntry",
@@ -206,7 +216,8 @@
       "usedTypes": [
         "D2GfxHashEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "41d40ae0"
     },
     {
       "name": "IMAGE_ReturnImageExtension",
@@ -223,7 +234,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "748c8260"
     },
     {
       "name": "SPRITECACHE_BuildPath",
@@ -243,7 +255,8 @@
         "int32_t",
         "uint32_t",
         "va_list"
-      ]
+      ],
+      "dh": "0754ae9e"
     },
     {
       "name": "SetCompressedDataGlobalAndSaveItToRegistry",
@@ -258,7 +271,8 @@
       "calledFunctions": [
         "SetCompressedDataGlobalAndSaveItToRegistry",
         "SRegLoadValue"
-      ]
+      ],
+      "dh": "cf71d29f"
     },
     {
       "name": "SPRITECACHE_FindOrLoad",
@@ -275,7 +289,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "89f747f6"
     },
     {
       "name": "SPRITECACHE_LoadDC6",
@@ -296,7 +311,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5811de60"
     },
     {
       "name": "SPRITECACHE_LoadDCC",
@@ -333,7 +349,8 @@
         "D2LRUCacheNodeStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "137d8611"
     },
     {
       "name": "SPRITECACHE_FindFrameBlock",
@@ -356,7 +373,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9e037a34"
     },
     {
       "name": "SPRITECACHE_GetFrameBlock",
@@ -378,7 +396,8 @@
         "D2GfxDataStrc",
         "DC6Block",
         "uint8_t"
-      ]
+      ],
+      "dh": "91863b5a"
     },
     {
       "name": "SPRITECACHE_LoadAndCacheDC6",
@@ -409,7 +428,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "55eccc6b"
     },
     {
       "name": "SPRITECACHE_Unlock_Unref_005fee00",
@@ -424,7 +444,8 @@
       "calledFunctions": [
         "SPRITECACHE_Unlock_Unref_005fee00",
         "IGNORELIST_Initialize_Unref_0060ab70"
-      ]
+      ],
+      "dh": "c9fb22ea"
     },
     {
       "name": "SPRITECACHE_GetTotalEntries",
@@ -441,7 +462,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b3277db9"
     },
     {
       "name": "SPRITECACHE_GetCacheSize",
@@ -458,7 +480,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7972b651"
     },
     {
       "name": "SPRITECACHE_Unlock_Unref_005fee50",
@@ -473,7 +496,8 @@
       "calledFunctions": [
         "SPRITECACHE_Unlock_Unref_005fee50",
         "IGNORELIST_Initialize_Unref_0060b130"
-      ]
+      ],
+      "dh": "9397fa98"
     },
     {
       "name": "SPRITECACHE_GetMaxSize",
@@ -487,7 +511,8 @@
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
         "SPRITECACHE_GetMaxSize"
-      ]
+      ],
+      "dh": "62fea275"
     },
     {
       "name": "SPRITECACHE_GetCurrentSize",
@@ -504,7 +529,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e02daece"
     },
     {
       "name": "Unreferenced_005fee80",
@@ -518,7 +544,8 @@
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
         "Unreferenced_005fee80"
-      ]
+      ],
+      "dh": "c3f0f361"
     },
     {
       "name": "GFX_AllocSpriteCache",
@@ -541,7 +568,8 @@
         "D2SpriteCache",
         "fnSpriteCacheEntryRelease",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9e6341e"
     },
     {
       "name": "SPRITECACHE_EvictOldest",
@@ -561,7 +589,8 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "24285708"
     },
     {
       "name": "SPRITECACHE_AddToLRU",
@@ -581,7 +610,8 @@
         "D2SpriteCacheEntryStrc",
         "D2SpriteCacheEntryStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "04b32f80"
     },
     {
       "name": "SPRITECACHE_RemoveFromLRU",
@@ -603,7 +633,8 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d9275f37"
     },
     {
       "name": "SPRITECACHE_CountPendingLoads",
@@ -627,7 +658,8 @@
         "D2SpriteCacheEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bbf1840"
     },
     {
       "name": "SPRITECACHE_IsLoadPending",
@@ -651,7 +683,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3012fbb1"
     },
     {
       "name": "SPRITECACHE_CancelPendingLoads",
@@ -672,7 +705,8 @@
         "D2AsyncData_Line0x128",
         "D2CelCacheBlockStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ce0a857"
     },
     {
       "name": "SPRITECACHE_Query",
@@ -695,7 +729,8 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a9896b7e"
     },
     {
       "name": "SPRITECACHE_EvictEntry",
@@ -717,7 +752,8 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cef0f88a"
     },
     {
       "name": "SPRITECACHE_AllocateMemory",
@@ -741,7 +777,8 @@
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5cb9c65c"
     },
     {
       "name": "SPRITECACHE_FreeMemory",
@@ -766,7 +803,8 @@
         "D2SpriteCacheEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97a91b91"
     },
     {
       "name": "SPRITECACHE_DecodeFrameByIndex",
@@ -788,7 +826,8 @@
         "D2SpriteDecodeRequestStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "689a4f1f"
     },
     {
       "name": "SPRITECACHE_LoadCelFileAndCache",
@@ -821,7 +860,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "213431fa"
     },
     {
       "name": "SPRITECACHE_LoadFromArchive",
@@ -848,7 +888,8 @@
         "D2SpriteDecodeRequestStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd0d09bf"
     },
     {
       "name": "SPRITECACHE_ReleaseMemory",
@@ -868,7 +909,8 @@
       "usedTypes": [
         "D2GfxMemoryStrc",
         "D2SpriteCacheEntryStrc"
-      ]
+      ],
+      "dh": "0ee68b35"
     },
     {
       "name": "SPRITECACHE_AllocEntry2",
@@ -896,7 +938,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "0241e118"
     },
     {
       "name": "GFX_InitCelDataCache",
@@ -928,7 +971,8 @@
         "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a33e03d"
     },
     {
       "name": "SPRITECACHE_Shutdown",
@@ -949,7 +993,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4c0ce220"
     },
     {
       "name": "SPRITECACHE_LoadDCCAndCache",
@@ -982,7 +1027,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1affd803"
     },
     {
       "name": "SPRITECACHE_LoadCelAndCache",
@@ -1014,7 +1060,8 @@
         "D2SpriteCacheEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b7a23f1d"
     },
     {
       "name": "SPRITECACHE_LoadSpriteWithConversion",
@@ -1044,7 +1091,8 @@
         "D2GfxHashEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4012fbf"
     },
     {
       "name": "SPRITECACHE_GetOrLoadSprite",
@@ -1080,7 +1128,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2002d513"
     },
     {
       "name": "SPRITECACHE_PrecacheSpriteSync",
@@ -1112,7 +1161,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b4136e1"
     }
   ]
 }

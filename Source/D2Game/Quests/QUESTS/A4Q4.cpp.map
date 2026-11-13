@@ -25,7 +25,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ff939e66"
     },
     {
       "name": "Q30_StatusFilter",
@@ -44,7 +45,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "44042240"
     },
     {
       "name": "Q30_ActiveFilter",
@@ -68,7 +70,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "2fd23ca4"
     },
     {
       "name": "Q30_InitData",
@@ -86,7 +89,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "54d06ce9"
     }
   ]
 }

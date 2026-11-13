@@ -15,7 +15,8 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "ARCHIVE_WriteFormattedText"
-      ]
+      ],
+      "dh": "0ae738a3"
     },
     {
       "name": "ARCHIVE_ComputeAddress",
@@ -34,7 +35,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ca64c0b"
     },
     {
       "name": "Unreferenced_0045b9d0",
@@ -51,7 +53,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "8e64f467"
     },
     {
       "name": "Unreferenced_0045ba80",
@@ -69,7 +72,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "2374c21a"
     },
     {
       "name": "Unreferenced_0045baa0",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "b3593244"
     },
     {
       "name": "ARCHIVE_GetNodeOrDefault",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0a8c8dce"
     },
     {
       "name": "ARCHIVE_GetNodeValue",
@@ -122,7 +128,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2fcc2f4f"
     },
     {
       "name": "ARCHIVE_UnlinkNode",
@@ -142,7 +149,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bfb40644"
     },
     {
       "name": "ARCHIVE_LinkNode",
@@ -160,7 +168,8 @@
       "usedTypes": [
         "int *",
         "int32_t"
-      ]
+      ],
+      "dh": "f5057a7f"
     },
     {
       "name": "ARCHIVE_GetNodeSize",
@@ -179,7 +188,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "f0184046"
     },
     {
       "name": "Unreferenced_0045bcb0",
@@ -193,7 +203,8 @@
       "namespace": "D2Client::Archive",
       "calledFunctions": [
         "Unreferenced_0045bcb0"
-      ]
+      ],
+      "dh": "8a597ff8"
     },
     {
       "name": "ARCHIVE_ClearList",
@@ -213,7 +224,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "71bd6c8b"
     },
     {
       "name": "ARCHIVE_ClearAndFreeHead",
@@ -234,7 +246,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "71cb3f03"
     },
     {
       "name": "Unreferenced_0045bd80",
@@ -251,7 +264,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ec83de4c"
     },
     {
       "name": "ARCHIVE_AllocNode",
@@ -272,7 +286,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a130a833"
     },
     {
       "name": "ARCHIVE_FreeNode",
@@ -293,7 +308,8 @@
         "StormLinkStrc *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b7bd8bcb"
     },
     {
       "name": "ARCHIVE_RemoveNode",
@@ -314,7 +330,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf81de83"
     },
     {
       "name": "ARCHIVE_WriteMemoryCheckReport",
@@ -345,7 +362,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cb242c32"
     },
     {
       "name": "ReadByteShortOrDword",
@@ -364,7 +382,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9ff053d"
     },
     {
       "name": "ReadByteOrShort",
@@ -383,7 +402,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff6a767c"
     }
   ]
 }

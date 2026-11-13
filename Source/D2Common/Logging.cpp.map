@@ -15,7 +15,8 @@
       "namespace": "D2Common::Logging::Logging",
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize_Unref_00624700"
-      ]
+      ],
+      "dh": "544eec17"
     },
     {
       "name": "MISC_SafeStrncpy",
@@ -33,7 +34,8 @@
       ],
       "usedTypes": [
         "_SYSTEMTIME"
-      ]
+      ],
+      "dh": "36cdc4fa"
     },
     {
       "name": "StoreLogging",
@@ -58,7 +60,8 @@
         "SYSTEMTIME",
         "uint32_t",
         "va_list"
-      ]
+      ],
+      "dh": "2dd82991"
     },
     {
       "name": "LOGGING_FilePrintf",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "FILE",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a50df2c"
     },
     {
       "name": "LOGGING_LogLine",
@@ -95,7 +99,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "de914925"
     },
     {
       "name": "StoreGameLogging",
@@ -117,7 +122,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6b846a15"
     },
     {
       "name": "LOGGING_OpenLogFile",
@@ -133,7 +139,8 @@
         "LOGGING_OpenLogFile",
         "fopen",
         "LOGGING_LogLine"
-      ]
+      ],
+      "dh": "d7721233"
     },
     {
       "name": "CloseLogging",
@@ -148,7 +155,8 @@
       "calledFunctions": [
         "CloseLogging",
         "fclose"
-      ]
+      ],
+      "dh": "76812c71"
     }
   ]
 }

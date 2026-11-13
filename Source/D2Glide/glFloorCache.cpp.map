@@ -26,7 +26,8 @@
         "GlFloorCacheStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a930d565"
     },
     {
       "name": "GLFLOOR_AppendNodeToTail",
@@ -44,7 +45,8 @@
       "usedTypes": [
         "GlFloorCacheNodeStrc",
         "GlFloorCacheStrc"
-      ]
+      ],
+      "dh": "451d51ca"
     },
     {
       "name": "GLFLOOR_RemoveNodeByIndex",
@@ -62,7 +64,8 @@
       "usedTypes": [
         "GlFloorCacheNodeStrc",
         "GlFloorCacheStrc"
-      ]
+      ],
+      "dh": "6c6f42bd"
     },
     {
       "name": "GLFLOOR_AllocateNode",
@@ -84,7 +87,8 @@
         "GlFloorCacheNodeStrc",
         "GlFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4f13cbd7"
     },
     {
       "name": "GLFLOOR_PromoteNodeToMRU",
@@ -107,7 +111,8 @@
       "usedTypes": [
         "GlFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b74e5765"
     },
     {
       "name": "GLFLOOR_EvictLRU",
@@ -129,7 +134,8 @@
         "GlFloorCacheNodeStrc",
         "GlFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3825dafa"
     },
     {
       "name": "GLFLOOR_InvalidateByIndex",
@@ -152,7 +158,8 @@
         "GlFloorCacheNodeStrc",
         "GlFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "62d039a6"
     },
     {
       "name": "GLFLOOR_Destroy",
@@ -172,7 +179,8 @@
       "usedTypes": [
         "GlFloorCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad2ef6fd"
     },
     {
       "name": "GLFLOOR_EnsureCapacity",
@@ -195,7 +203,8 @@
       "usedTypes": [
         "GlFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e502560a"
     }
   ]
 }

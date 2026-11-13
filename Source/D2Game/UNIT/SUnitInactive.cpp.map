@@ -21,7 +21,8 @@
       "usedTypes": [
         "D2InventoryToBeUpdatedStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "145e3e37"
     },
     {
       "name": "SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom",
@@ -49,7 +50,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "196f60d7"
     },
     {
       "name": "SUNITINACTIVE_RestoreInactiveItem",
@@ -82,7 +84,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0bff569a"
     },
     {
       "name": "SUNITINACTIVE_RestoreInactiveItemList",
@@ -103,7 +106,8 @@
         "D2InactiveItemRecordStrc",
         "D2RoomStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "76cfa07e"
     },
     {
       "name": "SUNITINACTIVE_SerializeAndDeactivateItem",
@@ -140,7 +144,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "663905a3"
     },
     {
       "name": "SUNITINACTIVE_RemoveInactiveMonsterByClassId",
@@ -165,7 +170,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "42b8f047"
     },
     {
       "name": "SUNITINACTIVE_FreeInactiveMonsterList",
@@ -187,7 +193,8 @@
         "D2InactiveMonsterRecordStrc",
         "D2InactiveUnitListStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1c2adf6e"
     },
     {
       "name": "SUNITINACTIVE_AllocOrFindInactiveList",
@@ -207,7 +214,8 @@
         "D2InactiveUnitListStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "2ac5824e"
     },
     {
       "name": "SUNITINACTIVE_AllocInactiveListForRoom",
@@ -233,7 +241,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "b8cedec8"
     },
     {
       "name": "SUNITINACTIVE_RestoreMonsterStateFromInactive",
@@ -261,7 +270,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c5804e7"
     },
     {
       "name": "SUNITINACTIVE_SaveMonsterStateToInactive",
@@ -288,7 +298,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7902e73b"
     },
     {
       "name": "SUNITINACTIVE_DeactivateMonster",
@@ -351,7 +362,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "592e3114"
     },
     {
       "name": "SUNITINACTIVE_RoomInitMonsters",
@@ -410,7 +422,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b22c1f8a"
     },
     {
       "name": "SUNITINACTIVE_CheckDeadMonsterAtCoords",
@@ -444,7 +457,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "77ea03ba"
     },
     {
       "name": "SUNITINACTIVE_FreeUnusedItems",
@@ -465,7 +479,8 @@
         "D2InactiveUnitListStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "dd974bb8"
     },
     {
       "name": "SUNITINACTIVE_RoomInit",
@@ -509,7 +524,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "92baef37"
     },
     {
       "name": "SUNITINACTIVE_SaveInactiveUnit",
@@ -541,7 +557,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "bf0800b4"
     },
     {
       "name": "SUNITINACTIVE_FreeAllInactiveLists",
@@ -564,7 +581,8 @@
         "D2InactiveUnitListStrc *",
         "D2InactiveUnitRecordStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b381ff36"
     },
     {
       "name": "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
@@ -587,7 +605,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "69c84c24"
     },
     {
       "name": "UNITS_ProcessDeadOrInactiveMonster",
@@ -627,7 +646,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "21f866bd"
     },
     {
       "name": "SUNITINACTIVE_SaveOrFreeUnit",
@@ -661,7 +681,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "09de8c3b"
     }
   ]
 }

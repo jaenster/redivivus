@@ -26,7 +26,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "1349d057"
     },
     {
       "name": "Q08_Callback00_NpcActivate",
@@ -53,7 +54,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ce024910"
     },
     {
       "name": "Q08_StatusFilter",
@@ -72,7 +74,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d86a29a4"
     },
     {
       "name": "Q08_ActiveFilter",
@@ -93,7 +96,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f7d7f054"
     },
     {
       "name": "Q08_Callback10_PlayerLeavesGame",
@@ -112,7 +116,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "fc8c220e"
     },
     {
       "name": "Q08_Callback13_PlayerStartedGame",
@@ -135,7 +140,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "82976142"
     },
     {
       "name": "Q08_InitData",
@@ -156,7 +162,8 @@
       "usedTypes": [
         "D2QuestDataA2Q0Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "063135c6"
     }
   ]
 }

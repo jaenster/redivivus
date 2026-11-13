@@ -22,7 +22,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d849ed8"
     },
     {
       "name": "MISSILE_RollElementalDamage",
@@ -45,7 +46,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c2100acf"
     },
     {
       "name": "MISSILE_SetDamage",
@@ -76,7 +78,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "781cde32"
     },
     {
       "name": "MISSILES_CalculateElementalDamage",
@@ -103,7 +106,8 @@
         "eD2ElementalDamageType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "053ae670"
     },
     {
       "name": "MISSILES_SetDamageByElementType",
@@ -124,7 +128,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ElementalDamageType"
-      ]
+      ],
+      "dh": "76fdfec1"
     },
     {
       "name": "MISSILESMODE_SetElementalDamageField",
@@ -145,7 +150,8 @@
         "D2UnitStrc",
         "eD2ElementalDamageType",
         "int32_t"
-      ]
+      ],
+      "dh": "465be3d3"
     },
     {
       "name": "MISSILESMODE_GetElementalDamageField",
@@ -166,7 +172,8 @@
         "D2UnitStrc",
         "eD2ElementalDamageType",
         "int32_t"
-      ]
+      ],
+      "dh": "63e03c0b"
     },
     {
       "name": "MISSILES_ClearDamageStruct",
@@ -187,7 +194,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ElementalDamageType"
-      ]
+      ],
+      "dh": "a75c693b"
     },
     {
       "name": "MISSILES_AddElementalDamageBonus",
@@ -209,7 +217,8 @@
         "SGAMEDATA",
         "eD2ElementalDamageType",
         "int32_t"
-      ]
+      ],
+      "dh": "adaebf25"
     },
     {
       "name": "MISSILES_SpawnRadialPattern",
@@ -236,7 +245,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "5ac6ef43"
     },
     {
       "name": "MISSILESMODE_CheckCollisionAtOffset",
@@ -256,7 +266,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "f2a02cb1"
     },
     {
       "name": "MISSILES_SpawnAreaPattern",
@@ -292,7 +303,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "38f2e6c6"
     },
     {
       "name": "MISSILES_SpawnSubMissileAlongPath",
@@ -323,7 +335,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8796dd7"
     },
     {
       "name": "MISSILES_SpawnPeriodicRandom",
@@ -360,7 +373,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d61ccf96"
     },
     {
       "name": "SpawnPortal",
@@ -390,7 +404,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "1682a9f8"
     },
     {
       "name": "MISSILES_UpdatePathToOwner",
@@ -418,7 +433,8 @@
         "eD2UnitType",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "3b32d25e"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaElementalDamageExplosion",
@@ -450,7 +466,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fbd1b283"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaPhysicalDamageExplosion",
@@ -482,7 +499,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "556663e4"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRadialSubMissiles",
@@ -508,7 +526,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "eb720df7"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaSplashDamage",
@@ -540,7 +559,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "6b3888ae"
     },
     {
       "name": "Missiles_SrvHitFunc_WallHitDelegateToAreaDamage",
@@ -559,7 +579,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "435b59a5"
     },
     {
       "name": "Missiles_SrvHitFunc_HealTarget",
@@ -597,7 +618,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae024b4b"
     },
     {
       "name": "Missiles_SrvHitFunc_BlockSelfHitByState",
@@ -617,7 +639,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1406972b"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMonsterAtHit",
@@ -642,7 +665,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f376ddb6"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageWithSpawnPattern",
@@ -679,7 +703,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6a5275c"
     },
     {
       "name": "MISSILE_SetupTargetAndRange",
@@ -713,7 +738,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fdc7c5cb"
     },
     {
       "name": "MISSILES_ApplyAreaHitEffect",
@@ -739,7 +765,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bdc23d5e"
     },
     {
       "name": "Missiles_SrvHitFunc_PierceOrExplodeOnWall",
@@ -768,7 +795,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17b4e5a4"
     },
     {
       "name": "Missiles_SrvHitFunc_ChainPierceWithBounce",
@@ -803,7 +831,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8f636185"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageWithDurationMod",
@@ -837,7 +866,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2aa27722"
     },
     {
       "name": "MISSILES_SpawnRadialPattern18",
@@ -867,7 +897,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "0ec1e557"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageAndRadialBurst",
@@ -901,7 +932,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "650ba894"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnStationarySubMissile",
@@ -928,7 +960,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c8be151c"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyAuraStateToTarget",
@@ -963,7 +996,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "0225b19c"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTerrorToMonster",
@@ -994,7 +1028,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1314e83d"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyWarCryBuff",
@@ -1019,7 +1054,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "fc60fc49"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTimedAuraState",
@@ -1055,7 +1091,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "432cc5c5"
     },
     {
       "name": "MISSMODE_CreateSubMissileAtFrame",
@@ -1081,7 +1118,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "c94c48a1"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtFrameInArea",
@@ -1112,7 +1150,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2638e20a"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered",
@@ -1143,7 +1182,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "edc1f117"
     },
     {
       "name": "MISSMODE_CreateSubMissileInvertFrame",
@@ -1169,7 +1209,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "65c418ca"
     },
     {
       "name": "MISSMODE_CreateDirectionalMissiles",
@@ -1197,7 +1238,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "5e6c2644"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnDirectionalSubMissiles",
@@ -1222,7 +1264,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "329c01e0"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos",
@@ -1251,7 +1294,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fbeea205"
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp",
@@ -1269,7 +1313,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "19902b8b"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyTerrorNearMinion",
@@ -1302,7 +1347,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4be66779"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissilesOnFirstFrame",
@@ -1331,7 +1377,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "12c07448"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSpreadSubMissiles",
@@ -1358,7 +1405,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a393dc47"
     },
     {
       "name": "Missiles_SrvHitFunc_LeechHpToOwner",
@@ -1385,7 +1433,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c269811"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnPortalOnWallHit",
@@ -1407,7 +1456,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5c5d89f3"
     },
     {
       "name": "Missiles_SrvHitFunc_SetRoomPortalFlag",
@@ -1428,7 +1478,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "54578a48"
     },
     {
       "name": "Missiles_SrvHitFunc_ActivateObjectOnWallHit",
@@ -1456,7 +1507,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ce0284c"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtWallHit",
@@ -1487,7 +1539,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a1f587d"
     },
     {
       "name": "Missiles_SrvHitFunc_AlwaysPierce",
@@ -1506,7 +1559,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "dd518c9f"
     },
     {
       "name": "MISSILES_SetPathFromTotalFramesCallback",
@@ -1532,7 +1586,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c38a2b9"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMissileStarPattern",
@@ -1564,7 +1619,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "20ceabce"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRandomMonsterAtHit",
@@ -1589,7 +1645,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d4c7ef3d"
     },
     {
       "name": "Missiles_SrvHitFunc_CastScatterMissiles",
@@ -1618,7 +1675,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "07f77a41"
     },
     {
       "name": "Missiles_SrvHitFunc_HealTargetRandom",
@@ -1650,7 +1708,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8cf42d8a"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnFixedMissileStar",
@@ -1677,7 +1736,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7e43ef07"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageLargeMonstersAndRadialBurst",
@@ -1711,7 +1771,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "fe560aec"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileAtDirectionPoint",
@@ -1742,7 +1803,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b359f27a"
     },
     {
       "name": "Missiles_SrvHitFunc_BlockHitUntilFrame",
@@ -1764,7 +1826,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "669f4632"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnUpToThreeSubMissiles",
@@ -1789,7 +1852,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8f3ebe7d"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnEightDirectionSubMissiles",
@@ -1816,7 +1880,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e957f791"
     },
     {
       "name": "Missiles_SrvHitFunc_ApplyDruidAuraWithMissile",
@@ -1842,7 +1907,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5f287993"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnMonsterFromSkillParam",
@@ -1872,7 +1938,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "59380b72"
     },
     {
       "name": "Missiles_SrvHitFunc_DrainTargetManaPercent",
@@ -1895,7 +1962,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "daad44b7"
     },
     {
       "name": "Missiles_SrvHitFunc_AreaDamageAndSpawnSubMissile",
@@ -1927,7 +1995,8 @@
         "eD2Skills",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7fa0236"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnRandomOffsetSubMissile",
@@ -1958,7 +2027,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa2eed0f"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnDualRadialSubMissiles",
@@ -1983,7 +2053,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5f9ede4d"
     },
     {
       "name": "Missiles_SrvHitFunc_DispatchSrvDoFunc",
@@ -2009,7 +2080,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3d500e3b"
     },
     {
       "name": "Missiles_SrvDmgFunc_PhysToElementalByCalc1",
@@ -2034,7 +2106,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97ce5664"
     },
     {
       "name": "Missiles_SrvDmgFunc_RecalcElementalWithClear",
@@ -2061,7 +2134,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea46dec9"
     },
     {
       "name": "Missiles_SrvDmgFunc_FreezeLengthFromColdLengthPct",
@@ -2085,7 +2159,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1466b52"
     },
     {
       "name": "Missiles_SrvDmgFunc_RollChanceFlagBlessedAim",
@@ -2106,7 +2181,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d3508f25"
     },
     {
       "name": "Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength",
@@ -2125,7 +2201,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "68dea550"
     },
     {
       "name": "Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength",
@@ -2144,7 +2221,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4f8e86ca"
     },
     {
       "name": "Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon",
@@ -2170,7 +2248,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c33bbc05"
     },
     {
       "name": "Missiles_SrvDmgFunc_SetTargetNotControlled",
@@ -2190,7 +2269,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4473b2b2"
     },
     {
       "name": "Missiles_SrvDmgFunc_SetStunLengthFromParam1",
@@ -2215,7 +2295,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3302175f"
     },
     {
       "name": "Missiles_SrvDmgFunc_ApplyProgOverlayToTarget",
@@ -2235,7 +2316,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8b011ea6"
     },
     {
       "name": "Missiles_SrvDmgFunc_SetStunLengthFromSkillParam",
@@ -2257,7 +2339,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "292738e5"
     },
     {
       "name": "Missiles_SrvDmgFunc_SynergyCappedPoisonLength",
@@ -2283,7 +2366,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "218a2a94"
     },
     {
       "name": "Missiles_SrvDmgFunc_ScaleByDamagePctThenElemBonus",
@@ -2305,7 +2389,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d6e4196c"
     },
     {
       "name": "Missiles_SrvDmgFunc_RollMonsterSizeKnockbackChance",
@@ -2329,7 +2414,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf1b8556"
     },
     {
       "name": "MISSMODE_ApplyMissileHitDamage",
@@ -2360,7 +2446,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "56a2bd58"
     },
     {
       "name": "MISSMODE_RedemptionHitNoMana",
@@ -2380,7 +2467,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "702af86b"
     },
     {
       "name": "MISSMODE_RedemptionHitWithMana",
@@ -2400,7 +2488,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "bbc47046"
     },
     {
       "name": "MISSMODE_PortalArrival",
@@ -2424,7 +2513,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f299688"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnTyraelAndOpenPortal",
@@ -2450,7 +2540,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "bffe989e"
     },
     {
       "name": "MISSMODE_ExpireAndFree",
@@ -2471,7 +2562,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "95d87efa"
     },
     {
       "name": "MISSMODE_CheckCollisionMode",
@@ -2489,7 +2581,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "5e83606f"
     },
     {
       "name": "getDamageTarget",
@@ -2509,7 +2602,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c65b203e"
     },
     {
       "name": "MISSILESMODE_StatExpireCallback_ClearState",
@@ -2529,7 +2623,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "f0b20220"
     },
     {
       "name": "MISSMODE_ApplyNextHitState",
@@ -2556,7 +2651,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6e320211"
     },
     {
       "name": "MissileSrvDo",
@@ -2584,7 +2680,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "32d31a91"
     },
     {
       "name": "MISSILEEVENT_DefaultCallback",
@@ -2604,7 +2701,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "de1b407b"
     },
     {
       "name": "MISSMODE_HitWithArmorReduction",
@@ -2628,7 +2726,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "bbc19441"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnSubMissileInvertFrameInArea",
@@ -2666,7 +2765,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "abcda1a6"
     },
     {
       "name": "Hits",
@@ -2708,7 +2808,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f69a710a"
     },
     {
       "name": "MISSMODE_SrvDoFn01_BasicMissile",
@@ -2748,7 +2849,8 @@
         "eD2CollisionUnitSize",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "607f59ac"
     },
     {
       "name": "MISSMODE_SrvDoFn02_PoisonTrail",
@@ -2774,7 +2876,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "293dcae9"
     },
     {
       "name": "MISSMODE_SrvDoFn03_StationaryCloud",
@@ -2802,7 +2905,8 @@
         "eCollisionFlags",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2a8abc12"
     },
     {
       "name": "MISSMODE_SrvDoFn05_FireWall",
@@ -2834,7 +2938,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9509778e"
     },
     {
       "name": "MISSMODE_SrvDoFn06_FireWallMaker",
@@ -2865,7 +2970,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "22b6d43f"
     },
     {
       "name": "MISSMODE_SrvDoFn07_GuidedMissile",
@@ -2900,7 +3006,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "532e0d06"
     },
     {
       "name": "MISSMODE_SrvDoFn08_MonBlizzCenter",
@@ -2923,7 +3030,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c3a6c375"
     },
     {
       "name": "MISSMODE_SrvDoFn09_BatLightningBolt",
@@ -2955,7 +3063,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5980cd4"
     },
     {
       "name": "MISSMODE_SrvDoFn10_BlizzardCenter",
@@ -2983,7 +3092,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "28fd1260"
     },
     {
       "name": "MISSMODE_SrvDoFn11_FingerMageSpider",
@@ -3012,7 +3122,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "134cf5a7"
     },
     {
       "name": "MISSMODE_SrvDoFn12_DiabWallMaker",
@@ -3043,7 +3154,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ccc196f"
     },
     {
       "name": "MISSILESMODE_SrvDoFn13_BoneWallMaker",
@@ -3087,7 +3199,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f919756d"
     },
     {
       "name": "MISSILESMODE_SrvDoFn14_GrimWard",
@@ -3113,7 +3226,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c185038a"
     },
     {
       "name": "MISSMODE_SrvDoFn15_FrozenOrb",
@@ -3144,7 +3258,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4a320a5"
     },
     {
       "name": "MISSMODE_SrvDoFn16_FrozenOrbNova",
@@ -3174,7 +3289,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f931f00b"
     },
     {
       "name": "MISSMODE_SrvDoFn17_CairnStones",
@@ -3199,7 +3315,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "4418a766"
     },
     {
       "name": "MISSMODE_SrvDoFn18_TowerChestSpawner",
@@ -3244,7 +3361,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8f949378"
     },
     {
       "name": "MISSILESMODE_SrvDoFn20_BladeCreeper",
@@ -3268,7 +3386,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "acfc79bd"
     },
     {
       "name": "MISSILESMODE_SrvDoFn21_Distraction",
@@ -3299,7 +3418,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c44eca95"
     },
     {
       "name": "MISSILESMODE_SrvDoFn22_LightningTrailingJavelin",
@@ -3338,7 +3458,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1594bac0"
     },
     {
       "name": "MISSILESMODE_SrvDoFn23_SubMissileTrail",
@@ -3368,7 +3489,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "25f4bccf"
     },
     {
       "name": "MISSILESMODE_SrvDoFn25_EruptionCenter",
@@ -3396,7 +3518,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8c753bb3"
     },
     {
       "name": "MISSILESMODE_SrvDoFn26_Vines",
@@ -3427,7 +3550,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8aacb0b"
     },
     {
       "name": "MISSILESMODE_SrvDoFn27_Tornado",
@@ -3458,7 +3582,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c522a098"
     },
     {
       "name": "MISSILESMODE_SrvDoFn28_Volcano",
@@ -3498,7 +3623,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94302577"
     },
     {
       "name": "MISSILESMODE_SrvDoFn29_RecyclerDelay",
@@ -3532,7 +3658,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "537ac233"
     },
     {
       "name": "MISSILESMODE_SrvDoFn33_VineRecyclerDelay",
@@ -3566,7 +3693,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "44d4365c"
     },
     {
       "name": "MISSILESMODE_SrvDoFn30_RabiesPlague",
@@ -3610,7 +3738,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c512a6a"
     },
     {
       "name": "MISSILESMODE_SrvDoFn31_TwinWaveMaker",
@@ -3650,7 +3779,8 @@
         "eD2CollisionUnitSize",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0452e4c"
     },
     {
       "name": "MISSILESMODE_SrvDoFn32_TigerFury",
@@ -3678,7 +3808,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e8b810d"
     },
     {
       "name": "MISSILESMODE_SrvDoFn34_BaalTauntControl",
@@ -3713,7 +3844,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33125fc9"
     },
     {
       "name": "MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce",
@@ -3746,7 +3878,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "76f70ea4"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnHitSubMissilesAndHit",
@@ -3772,7 +3905,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2b280ac7"
     },
     {
       "name": "Missiles_SrvHitFunc_SpawnHitSubMissiles",
@@ -3798,7 +3932,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e78b0107"
     },
     {
       "name": "MISSILESMODE_SrvDoFn19_RadamentDeath",
@@ -3824,7 +3959,8 @@
         "eD2UnitType",
         "fpBaalWaveFunction",
         "int32_t"
-      ]
+      ],
+      "dh": "0c1505a5"
     },
     {
       "name": "MISSILESMODE_SrvDoFn36_BaalFxControl",
@@ -3853,7 +3989,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e823fc8"
     },
     {
       "name": "MISSILESMODE_SrvDoFn37_Unused",
@@ -3884,7 +4021,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d144a1fd"
     },
     {
       "name": "thunk_MISSILESMODE_SrvDoFn01_BasicMissile",
@@ -3915,7 +4053,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b44cfff6"
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp_Unref_00646260",
@@ -3933,7 +4072,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c26a110e"
     },
     {
       "name": "Missiles_SrvHitFunc_NoOp_Unref_00646270",
@@ -3951,7 +4091,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ac713d75"
     }
   ]
 }

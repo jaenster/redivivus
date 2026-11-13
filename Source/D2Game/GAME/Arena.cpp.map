@@ -23,7 +23,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd1647da"
     },
     {
       "name": "AllocArenaControl",
@@ -45,7 +46,8 @@
         "eD2ArenaFlags",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6d93a154"
     },
     {
       "name": "FreeArenaControl",
@@ -63,7 +65,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2da4dc61"
     },
     {
       "name": "AllocPlayerArena",
@@ -89,7 +92,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "3966adb3"
     },
     {
       "name": "FreePlayerArena",
@@ -114,7 +118,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "161c87f3"
     },
     {
       "name": "GetTownLevelFromArenaCtrl",
@@ -136,7 +141,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "e4ef7c2b"
     },
     {
       "name": "ARENA_GetArenaTxtRecord",
@@ -156,7 +162,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e25e19eb"
     },
     {
       "name": "ARENA_ApplyScoreModifier",
@@ -185,7 +192,8 @@
         "SGAMEDATA",
         "eD2ArenaFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "c599ef73"
     },
     {
       "name": "SERVER_ARENA_KillHandler",
@@ -216,7 +224,8 @@
         "eD2ArenaFlags",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "58881158"
     },
     {
       "name": "ARENA_ClearScoreDirty",
@@ -240,7 +249,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b53004ef"
     },
     {
       "name": "ARENA_ClearUpdateFlag",
@@ -257,7 +267,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "97ca9700"
     },
     {
       "name": "ARENA_IsScoreDirty",
@@ -280,7 +291,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b259b01b"
     },
     {
       "name": "UpdatePlayerKillCount",
@@ -306,7 +318,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0ad306fe"
     },
     {
       "name": "ARENA_BroadcastKillToPlayers",
@@ -333,7 +346,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "929e4bec"
     },
     {
       "name": "ARENA_UpdatePlayerKillState",
@@ -357,7 +371,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bfcc3cca"
     },
     {
       "name": "ARENA_BroadcastScoreOnJoin",
@@ -379,7 +394,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "743ae118"
     },
     {
       "name": "ARENA_GetClientUpdateFlag",
@@ -401,7 +417,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b79cbec4"
     },
     {
       "name": "ARENA_IsArenaLevel",
@@ -423,7 +440,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4cd752b5"
     },
     {
       "name": "ARENA_IsNoCubeRecipes",
@@ -445,7 +463,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "750b1753"
     },
     {
       "name": "ARENA_GetFlags",
@@ -467,7 +486,8 @@
         "SGAMEDATA",
         "eD2ArenaFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "c6bdddd1"
     },
     {
       "name": "ARENA_TestFlags",
@@ -488,7 +508,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "eD2ArenaFlags"
-      ]
+      ],
+      "dh": "9ae2b769"
     },
     {
       "name": "ARENA_SetOrClearFlags",
@@ -511,7 +532,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3e23eca"
     },
     {
       "name": "NullSub",
@@ -525,7 +547,8 @@
       "namespace": "D2Game::GAME::Arena",
       "calledFunctions": [
         "NullSub"
-      ]
+      ],
+      "dh": "1ae97e62"
     },
     {
       "name": "ARENA_IsFlag0x40Set",
@@ -545,7 +568,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "033bc5cf"
     },
     {
       "name": "ARENA_IsFlag0x80Set",
@@ -565,7 +589,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f20e8455"
     },
     {
       "name": "ARENA_IsArenaMode",
@@ -587,7 +612,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d92122b"
     },
     {
       "name": "ARENA_GetTemplate",
@@ -609,7 +635,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2ed6add"
     },
     {
       "name": "ARENA_IsFlag0x200Set",
@@ -629,7 +656,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b93f18ee"
     }
   ]
 }

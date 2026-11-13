@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "757d27be"
     },
     {
       "name": "IsUnitDistanceLowerThan700",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "POINT"
-      ]
+      ],
+      "dh": "2b21d090"
     }
   ]
 }

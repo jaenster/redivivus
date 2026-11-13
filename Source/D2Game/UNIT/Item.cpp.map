@@ -48,7 +48,8 @@
         "SGAMEDATA",
         "eD2ItemAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "1389ebc2"
     },
     {
       "name": "SendUpdatedItemsToClient",
@@ -82,7 +83,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b11a5cf"
     },
     {
       "name": "ITEM_ClearFlagsAndCommands",
@@ -103,7 +105,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3866a6c8"
     },
     {
       "name": "ITEM_HasPendingInventoryUpdates",
@@ -127,7 +130,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa45e991"
     },
     {
       "name": "Unreferenced_00597aa0",
@@ -147,7 +151,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9de0b079"
     },
     {
       "name": "ITEM_ProcessInventoryUpdates",
@@ -183,7 +188,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e009e040"
     },
     {
       "name": "MONSTER_SendNpcEnchantsToClient",
@@ -208,7 +214,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a528b066"
     },
     {
       "name": "MONSTER_SendNpcHealthUpdate",
@@ -232,7 +239,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "046f4289"
     },
     {
       "name": "PacketUpdateForClient",
@@ -275,7 +283,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c698858a"
     }
   ]
 }

@@ -30,7 +30,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "1b54aa25"
     },
     {
       "name": "Skills_CltStFunc_ApplyInfernoState",
@@ -62,7 +63,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c36e1597"
     },
     {
       "name": "SKILLSSOR_SetInfernoFrames",
@@ -81,7 +83,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "68a78987"
     },
     {
       "name": "SKILLSSOR_CltCreateInfernoMissile",
@@ -112,7 +115,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "48168c96"
     },
     {
       "name": "Skills_CltDoFunc_Sor_Inferno",
@@ -132,7 +136,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "860e1d6b"
     },
     {
       "name": "Skills_CltStFunc_CheckTargetInAuraRange",
@@ -163,7 +168,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4adf3e3a"
     },
     {
       "name": "Skills_CltDoFunc_Sor_HomingMissileVelocity",
@@ -188,7 +194,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "a9e60116"
     },
     {
       "name": "Skills_CltDoFunc_Sor_FireWall",
@@ -221,7 +228,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a6bc22a"
     },
     {
       "name": "Skills_CltDoFunc_Sor_MissileWithChargeCount",
@@ -246,7 +254,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "0b05f2c7"
     },
     {
       "name": "Skills_CltDoFunc_Sor_OffsetMissileCount",
@@ -277,7 +286,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "3256afd4"
     },
     {
       "name": "Skills_CltDoFunc_Sor_CollisionCheckedMissile",
@@ -301,7 +311,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d1cd2fb"
     },
     {
       "name": "Skills_CltStFunc_CheckCasterHasRoomNotInTown",
@@ -325,7 +336,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ad09032e"
     },
     {
       "name": "Skills_CltDoFunc_Sor_SimpleMakeMissile",
@@ -347,7 +359,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "50368862"
     },
     {
       "name": "SKILLSSOR_CltCreateBlazeMissile",
@@ -382,7 +395,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf9ecb30"
     },
     {
       "name": "Skills_CltDoFunc_Sor_ThunderStormBolt",
@@ -413,7 +427,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "827ee827"
     },
     {
       "name": "SKILLSSOR_StateCltEventFn01_ChillingArmor",
@@ -446,7 +461,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4b958df"
     },
     {
       "name": "Skills_CltDoFunc_Sor_RandomRadiusMissile",
@@ -478,7 +494,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "29f0fca7"
     }
   ]
 }

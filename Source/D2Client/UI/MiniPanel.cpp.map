@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "89d03796"
     },
     {
       "name": "UpdateGlobalAlwaysRun",
@@ -35,7 +36,8 @@
         "UpdateGlobalAlwaysRun",
         "GetGlobalAlwaysRun",
         "SRegSaveValue"
-      ]
+      ],
+      "dh": "eee4dfce"
     },
     {
       "name": "MINIPANEL_DrawBackground",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "43b68f0e"
     },
     {
       "name": "MINIPANEL_DrawButton",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "550740aa"
     },
     {
       "name": "MINIPANEL_CalculateButtonPositions",
@@ -93,7 +97,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e2485db"
     },
     {
       "name": "MINIPANEL_DrawAllButtons",
@@ -113,7 +118,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2d45f09d"
     },
     {
       "name": "IsLeftScreenOpen",
@@ -128,7 +134,8 @@
       "calledFunctions": [
         "IsLeftScreenOpen",
         "GetUIFlag"
-      ]
+      ],
+      "dh": "3c40ff9c"
     },
     {
       "name": "IsRightScreenOpen",
@@ -148,7 +155,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c2dacf0a"
     },
     {
       "name": "Unreferenced_0047ec20",
@@ -163,7 +171,8 @@
       "calledFunctions": [
         "Unreferenced_0047ec20",
         "GetUIFlag"
-      ]
+      ],
+      "dh": "ba623fbb"
     },
     {
       "name": "MINIPANEL_HandleButtonClick",
@@ -191,7 +200,8 @@
         "eD2GSGameType",
         "eD2UIvars",
         "int32_t"
-      ]
+      ],
+      "dh": "98d1eae7"
     },
     {
       "name": "INPUT_MiniPanelMouseUp",
@@ -225,7 +235,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1bcc34be"
     },
     {
       "name": "INPUT_MiniPanelMouseDown",
@@ -254,7 +265,8 @@
         "eD2GSGameType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0930d37e"
     },
     {
       "name": "MINIPANEL_Init",
@@ -274,7 +286,8 @@
       "usedTypes": [
         "eD2GSGameType",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc0846eb"
     },
     {
       "name": "MINIPANEL_Shutdown",
@@ -290,7 +303,8 @@
         "MINIPANEL_Shutdown",
         "SRegSaveValue",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "2e51ee40"
     },
     {
       "name": "MINIPANEL_IsMouseInArea",
@@ -307,7 +321,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2ac113b3"
     },
     {
       "name": "SetupMiniPanel",
@@ -326,7 +341,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bcfd0232"
     },
     {
       "name": "WAYPOINT_IsMouseInMiniPanel",
@@ -343,7 +359,8 @@
         "GetMouseX",
         "GetMouseY",
         "GetUIFlag"
-      ]
+      ],
+      "dh": "114488b3"
     },
     {
       "name": "MINIPANEL_ShowTooltip",
@@ -371,7 +388,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "f6d72ef4"
     },
     {
       "name": "MINIPANEL_HandleMouseHover",
@@ -391,7 +409,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ea64e8cd"
     },
     {
       "name": "DRAW_UI_MiniPanel",
@@ -417,7 +436,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "0b408b9d"
     }
   ]
 }

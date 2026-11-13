@@ -16,7 +16,8 @@
       "calledFunctions": [
         "GLBLOCKS_AllocBlockBuffers",
         "AllocClientMemory"
-      ]
+      ],
+      "dh": "3b4a9a7b"
     },
     {
       "name": "GLBLOCKS_FreeBlockBuffers",
@@ -31,7 +32,8 @@
       "calledFunctions": [
         "GLBLOCKS_FreeBlockBuffers",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "c8b64e3f"
     },
     {
       "name": "GLBLOCKS_DecodeRLEBlock",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "0b16f7ad"
     },
     {
       "name": "GLBLOCKS_RenderTileSubBlocks",
@@ -73,7 +76,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "acce8d80"
     },
     {
       "name": "GLBLOCKS_LoadFloorTileTexture",
@@ -100,7 +104,8 @@
         "D2TileLibraryEntryStrc",
         "FxU",
         "int32_t"
-      ]
+      ],
+      "dh": "2ac9128d"
     },
     {
       "name": "GLBLOCKS_LoadWallSubtileTexture",
@@ -126,7 +131,8 @@
         "D2GroundSubTileStrc",
         "FxU",
         "int32_t"
-      ]
+      ],
+      "dh": "a4bcefba"
     },
     {
       "name": "GLBLOCKS_ReleaseTileTextures",
@@ -145,7 +151,8 @@
       ],
       "usedTypes": [
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "5a5069e8"
     },
     {
       "name": "GLBLOCKS_RenderBinkVideoFrame",
@@ -167,7 +174,8 @@
         "FxBool",
         "GrLfbInfo_t",
         "int32_t"
-      ]
+      ],
+      "dh": "fdc4e997"
     },
     {
       "name": "GLBLOCKS_PlayBinkVideo",
@@ -192,7 +200,8 @@
         "int32_t",
         "tagMSG",
         "uint32_t"
-      ]
+      ],
+      "dh": "69a8d89d"
     }
   ]
 }

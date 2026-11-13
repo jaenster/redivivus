@@ -23,7 +23,8 @@
         "D2RoomExStrc",
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "8ed2ee70"
     },
     {
       "name": "DRLGWARP_SetAllWarpTilesSelectValue",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2DrlgRoomExRoomTileNodeStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "34381f82"
     },
     {
       "name": "DRLGWARP_UpdateWarpRoomExSelect",
@@ -61,7 +63,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "c7c10097"
     },
     {
       "name": "DRLGWARP_UpdateWarpRoomExDeselect",
@@ -81,7 +84,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "56eaf0fc"
     },
     {
       "name": "DRLGSPAWN_GetRandomPresetSpawnPoint",
@@ -104,7 +108,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "797ac4bb"
     },
     {
       "name": "DRLGSPAWN_FindWaypointRoomAndCoords",
@@ -128,7 +133,8 @@
         "D2PresetUnitStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5943424"
     },
     {
       "name": "DRLGSPAWN_GetRoomAtLevelCenterOffset",
@@ -148,7 +154,8 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a8ccdc9b"
     },
     {
       "name": "DRLGSPAWN_GetRandomRoomFromLevel",
@@ -172,7 +179,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2341cd2"
     },
     {
       "name": "DRLGACTMISC_GetWarpsIdIfExists",
@@ -197,7 +205,8 @@
         "D2LevelDefsTxt",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "d7d351a2"
     },
     {
       "name": "DRLGLEVEL_GetWarpsIdIfExistsAndSetup",
@@ -218,7 +227,8 @@
         "D2DrlgLevelStrc",
         "D2LvlWarpTxt",
         "uint8_t"
-      ]
+      ],
+      "dh": "a1415bf8"
     },
     {
       "name": "DRLGROOM_GetLvlWarpTxtForWarpUnit",
@@ -239,7 +249,8 @@
         "D2RoomExStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c02f057f"
     },
     {
       "name": "DRLGWARP_FindNthVisEntryForLevel",
@@ -260,7 +271,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c663905b"
     },
     {
       "name": "DRLGWARP_InitWarpConnectionsBetweenLevels",
@@ -290,7 +302,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "773e36dc"
     },
     {
       "name": "DRLGWARP_ValidateWarpFlagsAgainstVis",
@@ -316,7 +329,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd882d1a"
     },
     {
       "name": "DRLGSPAWN_FindSpawnLocationInLevel",
@@ -348,7 +362,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "ea46ac25"
     },
     {
       "name": "DRLGROOMEX_AllocRoomEx",
@@ -372,7 +387,8 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "6c67d5c2"
     },
     {
       "name": "FreeDrlgRoomEx",
@@ -392,7 +408,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e1e2b3b7"
     },
     {
       "name": "DRLGROOMEX_FreeDrlgRoomTile",
@@ -412,7 +429,8 @@
         "D2DrlgRoomExRoomTileNodeStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "f40d656e"
     },
     {
       "name": "FreeRoomData",
@@ -431,7 +449,8 @@
       "usedTypes": [
         "D2DrlgOrthStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "6068fcad"
     },
     {
       "name": "DRLGROOMEX_AllocNodesFromRoomExToRoomEx",
@@ -451,7 +470,8 @@
         "D2DrlgOrthStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8eb67a1e"
     },
     {
       "name": "DRLGROOMEX_AllocNodesForBothRoomEx",
@@ -470,7 +490,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fe01168d"
     },
     {
       "name": "DRLGROOMEX_FreeOrthToRoomEx",
@@ -490,7 +511,8 @@
         "D2DrlgOrthStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "a6597b7a"
     },
     {
       "name": "DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx",
@@ -509,7 +531,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "1b3b58b1"
     },
     {
       "name": "DRLGORTH_CompareByDirectionAndCoord",
@@ -527,7 +550,8 @@
       "usedTypes": [
         "D2DrlgOrthStrc",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "f0d6e33c"
     },
     {
       "name": "DRLGORTH_InsertSorted",
@@ -546,7 +570,8 @@
       "usedTypes": [
         "D2DrlgOrthStrc",
         "D2DrlgOrthStrc *"
-      ]
+      ],
+      "dh": "e3ae56ce"
     },
     {
       "name": "AllocDrlgOrth",
@@ -568,7 +593,8 @@
         "D2DrlgOrthStrc",
         "D2DrlgOrthStrc *",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "6336e4eb"
     },
     {
       "name": "DRLGCOORDS_IsWithinDistance",
@@ -586,7 +612,8 @@
       "usedTypes": [
         "D2DrlgCoordsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "575751ed"
     },
     {
       "name": "DRLGROOM_CoordsWithinDistance",
@@ -605,7 +632,8 @@
       "usedTypes": [
         "D2DrlgCoordsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "630fd1c8"
     },
     {
       "name": "DRLGCOORDS_IsAdjacentOrOverlapping",
@@ -623,7 +651,8 @@
       "usedTypes": [
         "D2DrlgCoordsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a9ba3b08"
     },
     {
       "name": "ComputeRectanglesManhattanDistance",
@@ -642,7 +671,8 @@
         "D2DrlgLevelStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "32c0d219"
     },
     {
       "name": "AddRoomExToLevel",
@@ -660,7 +690,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "510fe200"
     },
     {
       "name": "AreXYInsideCoordinates",
@@ -678,7 +709,8 @@
       "usedTypes": [
         "D2DrlgCoordsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f3787f0c"
     },
     {
       "name": "DRLGCOORDS_IsPointInside",
@@ -697,7 +729,8 @@
         "D2DrlgCoordsStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94475e28"
     },
     {
       "name": "DRLGROOMEX_CheckWorldCoordsInRoomBounds",
@@ -716,7 +749,8 @@
         "D2DrlgCoordsStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93212254"
     },
     {
       "name": "CheckLOSDraw",
@@ -734,7 +768,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "23eb04c6"
     },
     {
       "name": "DRLGROOMEX_IsPresetWithOutdoorBorder",
@@ -753,7 +788,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "66625dad"
     },
     {
       "name": "GetWaypointFlags",
@@ -771,7 +807,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1c629076"
     },
     {
       "name": "GetLevelId",
@@ -789,7 +826,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "95888854"
     },
     {
       "name": "DRLGWARP_GetWarpDestinationLevel",
@@ -815,7 +853,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "a22cbef9"
     },
     {
       "name": "GetLevelIdFromPopulatedRoomEx",
@@ -837,7 +876,8 @@
         "D2RoomExStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "1dc7ba6f"
     },
     {
       "name": "HasWaypoint",
@@ -858,7 +898,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d1c218f8"
     },
     {
       "name": "GetPickedLevelPrestFilePathFromRoomEx",
@@ -876,7 +917,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "e651f930"
     },
     {
       "name": "ReorderNearRoomList",
@@ -894,7 +936,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomExStrc *"
-      ]
+      ],
+      "dh": "644cb332"
     },
     {
       "name": "DefineRoomsNear",
@@ -915,7 +958,8 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc",
         "D2RoomExStrc *"
-      ]
+      ],
+      "dh": "f280341d"
     },
     {
       "name": "GetRoomsNearCount",
@@ -933,7 +977,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d3dc619f"
     },
     {
       "name": "GetRealRoomsNearCount",
@@ -953,7 +998,8 @@
         "D2RoomStrc",
         "D2RoomStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "f843d350"
     },
     {
       "name": "DRLGROOM_FlagRoomExBorderingTown",
@@ -971,7 +1017,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "dd7fd0d7"
     },
     {
       "name": "DRLGROOMEX_ResizeArrayAndAddNewNearRoom",
@@ -996,7 +1043,8 @@
         "D2RoomExStrc",
         "D2RoomExStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "91dae479"
     },
     {
       "name": "DRLGROOMEX_AllocRoomTile",
@@ -1018,7 +1066,8 @@
         "D2LvlWarpTxt",
         "D2RoomExStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "c3688b4a"
     },
     {
       "name": "DRLGROOMEX_LinkNearRoomByDirection",
@@ -1040,7 +1089,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "51b0b741"
     },
     {
       "name": "AllocPresetUnit",
@@ -1062,7 +1112,8 @@
         "D2RoomExStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "256d9a1f"
     },
     {
       "name": "GetPresetUnits",
@@ -1081,7 +1132,8 @@
         "D2PresetUnitStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b35f115"
     },
     {
       "name": "SetRoom",
@@ -1099,7 +1151,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "6bbffe51"
     },
     {
       "name": "GetRGB_IntensityFromRoomEx",
@@ -1118,7 +1171,8 @@
       "usedTypes": [
         "D2LevelDefsTxt",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "70c10483"
     },
     {
       "name": "Unreferenced_0066c020",
@@ -1136,7 +1190,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "d25b453f"
     },
     {
       "name": "DRLGWARP_GetVisArrayFromLevelId",
@@ -1161,7 +1216,8 @@
         "D2LevelDefsTxt",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "1db52e25"
     },
     {
       "name": "Unreferenced_0066c090",
@@ -1179,7 +1235,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "8283f493"
     },
     {
       "name": "GetDrlgFromRoomEx",
@@ -1201,7 +1258,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c5766cf"
     },
     {
       "name": "DRLGROOMEX_FreeDrlgRoomEx",
@@ -1231,7 +1289,8 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "16803159"
     },
     {
       "name": "DRLGROOMEX_LinkNearRoomsByVis",
@@ -1261,7 +1320,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a6ac4370"
     },
     {
       "name": "DRLGROOMEX_InitNearRoomsAndVisTiles",
@@ -1284,7 +1344,8 @@
         "D2RoomExStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b3c607f2"
     }
   ]
 }

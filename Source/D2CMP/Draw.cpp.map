@@ -24,7 +24,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9932b210"
     },
     {
       "name": "DRAW_GetHueSector",
@@ -38,7 +39,8 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_GetHueSector"
-      ]
+      ],
+      "dh": "a153b503"
     },
     {
       "name": "DRAW_ConvertPaletteHSLtoRGB",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2HSLColorStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "606b339b"
     },
     {
       "name": "thunk_D2MEM_VirtualFree",
@@ -72,7 +75,8 @@
       "calledFunctions": [
         "thunk_D2MEM_VirtualFree",
         "D2MEM_VirtualFree"
-      ]
+      ],
+      "dh": "d8a91842"
     },
     {
       "name": "D2GFX_GetColorWithAlphaFromPallete",
@@ -92,7 +96,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "af8781a3"
     },
     {
       "name": "DRAW_FindFarthestPaletteColor",
@@ -110,7 +115,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bd7e1b96"
     },
     {
       "name": "Unreferenced_006052f0",
@@ -124,7 +130,8 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "Unreferenced_006052f0"
-      ]
+      ],
+      "dh": "9a6ed1ce"
     },
     {
       "name": "DRAW_SetTransparentColorRGB",
@@ -141,7 +148,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "95ee9c80"
     },
     {
       "name": "DRAW_LoadPaletteFromPCX",
@@ -163,7 +171,8 @@
         "PcxPaletteTrailer",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8cc11ddf"
     },
     {
       "name": "DRAW_InitPalette",
@@ -187,7 +196,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6a535aa4"
     },
     {
       "name": "DRAW_SetTransparentColorEnabled",
@@ -201,7 +211,8 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_SetTransparentColorEnabled"
-      ]
+      ],
+      "dh": "e153809d"
     },
     {
       "name": "DRAW_FindNearestPaletteColor",
@@ -219,7 +230,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e7c30057"
     },
     {
       "name": "DRAW_ConvertRGBAToIndexed",
@@ -237,7 +249,8 @@
       "usedTypes": [
         "pfnRGBToPaletteIndex",
         "uint8_t"
-      ]
+      ],
+      "dh": "da8882f4"
     },
     {
       "name": "DRAW_SetDarkThresholdEnabled",
@@ -251,7 +264,8 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_SetDarkThresholdEnabled"
-      ]
+      ],
+      "dh": "258191b4"
     },
     {
       "name": "DRAW_SetPaletteMask",
@@ -268,7 +282,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "f25b78c4"
     },
     {
       "name": "DRAW_BuildAlphaBlendTables",
@@ -287,7 +302,8 @@
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
-      ]
+      ],
+      "dh": "a837fc32"
     },
     {
       "name": "DRAW_BuildAdditiveBlendTable",
@@ -306,7 +322,8 @@
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
-      ]
+      ],
+      "dh": "f72767ce"
     },
     {
       "name": "PALETTE_BuildAdditiveBlendTable_Callback",
@@ -324,7 +341,8 @@
       ],
       "usedTypes": [
         "LPPALETTEENTRY"
-      ]
+      ],
+      "dh": "80bb9387"
     },
     {
       "name": "DRAW_BuildMultiplicativeBlendTable",
@@ -342,7 +360,8 @@
       ],
       "usedTypes": [
         "LPPALETTEENTRY"
-      ]
+      ],
+      "dh": "37351eec"
     },
     {
       "name": "DRAW_BuildScreenBlendAndDesatTable",
@@ -362,7 +381,8 @@
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bb1b45cc"
     },
     {
       "name": "DRAW_BuildColorTintTable",
@@ -382,7 +402,8 @@
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "55dd58ba"
     },
     {
       "name": "DRAW_BuildDarkenTable",
@@ -401,7 +422,8 @@
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
-      ]
+      ],
+      "dh": "33f800e3"
     },
     {
       "name": "DRAW_BuildBrightenTable",
@@ -421,7 +443,8 @@
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9c76bcd5"
     },
     {
       "name": "DRAW_BuildHSLTransformTables",
@@ -444,7 +467,8 @@
         "LPPALETTEENTRY",
         "tagRGBQUAD",
         "uint32_t"
-      ]
+      ],
+      "dh": "2b618ede"
     },
     {
       "name": "DRAW_BuildBrightenLightnessTable",
@@ -466,7 +490,8 @@
         "LPPALETTEENTRY",
         "tagRGBQUAD",
         "uint32_t"
-      ]
+      ],
+      "dh": "4eed84af"
     },
     {
       "name": "DRAW_BuildAllPaletteTables",
@@ -500,7 +525,8 @@
         "LPPALETTEENTRY",
         "int32_t",
         "tagPALETTEENTRY"
-      ]
+      ],
+      "dh": "23d8d12d"
     },
     {
       "name": "DRAW_BuildPaletteTablesWrapper",
@@ -518,7 +544,8 @@
       ],
       "usedTypes": [
         "tagPALETTEENTRY"
-      ]
+      ],
+      "dh": "28b6c1ce"
     }
   ]
 }

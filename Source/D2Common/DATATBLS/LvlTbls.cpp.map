@@ -28,7 +28,8 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "1f8cb6fd"
     },
     {
       "name": "TXT_Levels_GetLine",
@@ -46,7 +47,8 @@
       "usedTypes": [
         "D2LevelsTxt",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "81827c80"
     },
     {
       "name": "LEVEL_CanHaveRain",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "71c17774"
     },
     {
       "name": "LVLTBLS_GetNoPer",
@@ -82,7 +85,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "21207500"
     },
     {
       "name": "LEVEL_CanHaveMud",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "ee8686da"
     },
     {
       "name": "LVLTBLS_FreeLevelsTxt",
@@ -115,7 +120,8 @@
       "calledFunctions": [
         "LVLTBLS_FreeLevelsTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "55d9cebd"
     },
     {
       "name": "TXT_Levels_GetMonLvlForDifficulty",
@@ -135,7 +141,8 @@
         "eD2Difficulty",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "6b7ed1fb"
     },
     {
       "name": "LVLTBLS_BuildPortalLevelArray",
@@ -159,7 +166,8 @@
         "D2LevelDefsTxt",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "cea3bd78"
     },
     {
       "name": "GetPortalLevelArrayFromPortalFlags",
@@ -176,7 +184,8 @@
       ],
       "usedTypes": [
         "eD2LevelId"
-      ]
+      ],
+      "dh": "041b4d11"
     },
     {
       "name": "TXT_AllocTxt_leveldefs",
@@ -196,7 +205,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "b42c237b"
     },
     {
       "name": "LVLTBLS_FreeLevelDefsTxt",
@@ -212,7 +222,8 @@
         "LVLTBLS_FreeLevelDefsTxt",
         "UnloadBin",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "d93d84e0"
     },
     {
       "name": "TXT_LevelDefs_GetLine",
@@ -230,7 +241,8 @@
       "usedTypes": [
         "D2LevelDefsTxt",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "5042996d"
     },
     {
       "name": "LVLTBLS_FixPathSlashes",
@@ -248,7 +260,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1cd463ab"
     },
     {
       "name": "TXT_AllocTxt_lvltypes",
@@ -269,7 +282,8 @@
         "D2BinFieldInputStrc",
         "D2LvlTypesTxt",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "d7190ce1"
     },
     {
       "name": "thunk_UnloadBin_DataTbls",
@@ -284,7 +298,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_DataTbls",
         "UnloadBin"
-      ]
+      ],
+      "dh": "d7391861"
     },
     {
       "name": "TXT_LvlTypes_GetLine",
@@ -305,7 +320,8 @@
       "usedTypes": [
         "D2LvlTypesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "3e2809da"
     },
     {
       "name": "TXT_LvlTypes_CheckIfTypeIsAssignedToAct",
@@ -325,7 +341,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b31f1b81"
     },
     {
       "name": "LVLTBLS_GetLvlTypeFilename",
@@ -347,7 +364,8 @@
         "D2LvlTypesTxt",
         "char[60]",
         "int32_t"
-      ]
+      ],
+      "dh": "714267fd"
     },
     {
       "name": "TXT_AllocTxt_lvlprest",
@@ -375,7 +393,8 @@
         "char[60]",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "908bea6f"
     },
     {
       "name": "TXT_LvlTbls_Free",
@@ -395,7 +414,8 @@
       ],
       "usedTypes": [
         "D2DrlgFileStrc *"
-      ]
+      ],
+      "dh": "91320cfb"
     },
     {
       "name": "TXT_LvlPrest_GetLine",
@@ -413,7 +433,8 @@
       "usedTypes": [
         "D2LvlPrestTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "8f8bdb0d"
     },
     {
       "name": "TXT_LvlPrest_FindLineByLevelId",
@@ -431,7 +452,8 @@
       "usedTypes": [
         "D2LvlPrestTxt",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "94ae28e7"
     },
     {
       "name": "TXT_AllocTxt_lvlwarp",
@@ -450,7 +472,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "2dd34466"
     },
     {
       "name": "TXT_LvlWarp_Free",
@@ -465,7 +488,8 @@
       "calledFunctions": [
         "TXT_LvlWarp_Free",
         "UnloadBin"
-      ]
+      ],
+      "dh": "1a73bf3b"
     },
     {
       "name": "TXT_LvlWarp_Setup",
@@ -487,7 +511,8 @@
         "D2LvlWarpTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4ec3ed25"
     },
     {
       "name": "TXT_AllocTxt_lvlmaze",
@@ -506,7 +531,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "21cab9ec"
     },
     {
       "name": "TXT_FreeTxt_LvlMaze",
@@ -521,7 +547,8 @@
       "calledFunctions": [
         "TXT_FreeTxt_LvlMaze",
         "UnloadBin"
-      ]
+      ],
+      "dh": "a9ca8a57"
     },
     {
       "name": "TXT_LvlMaze_FindLineByLevelId",
@@ -542,7 +569,8 @@
       "usedTypes": [
         "D2LvlMazeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "92a2f8ea"
     },
     {
       "name": "TXT_AllocTxt_lvlsub",
@@ -572,7 +600,8 @@
         "D2LvlSubTxt",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "887055db"
     },
     {
       "name": "TXT_FreeTxt_LvlSub",
@@ -594,7 +623,8 @@
       ],
       "usedTypes": [
         "D2DrlgFileStrc *"
-      ]
+      ],
+      "dh": "5d2343de"
     },
     {
       "name": "TXT_LvlSub_GetLineFromSubType",
@@ -615,7 +645,8 @@
       "usedTypes": [
         "D2LvlSubTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4bf95abc"
     },
     {
       "name": "TXT_LoadExpansionLvlTbls",
@@ -641,7 +672,8 @@
         "D2ExpansionLvlTblsTxt",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1ffbd500"
     },
     {
       "name": "TXT_FreeExpansionLvlTbls",
@@ -656,7 +688,8 @@
       "calledFunctions": [
         "TXT_FreeExpansionLvlTbls",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "40901d90"
     },
     {
       "name": "LVLTBLS_GetAutomapLevelId",
@@ -678,7 +711,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t[16]"
-      ]
+      ],
+      "dh": "ae0aaec0"
     },
     {
       "name": "LVLTBLS_GetAutomapTileId",
@@ -700,7 +734,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t[8]"
-      ]
+      ],
+      "dh": "655e5dbb"
     },
     {
       "name": "TXT_AllocTxt_automap",
@@ -733,7 +768,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "142fcfe5"
     },
     {
       "name": "GetRandomCellNo",
@@ -756,7 +792,8 @@
         "D2AutoMapLvlTbls",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d7fe6f5"
     },
     {
       "name": "FreeAutoMapLvlTbls",
@@ -771,7 +808,8 @@
       "calledFunctions": [
         "FreeAutoMapLvlTbls",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "6468c9aa"
     }
   ]
 }

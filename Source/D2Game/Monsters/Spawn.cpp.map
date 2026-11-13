@@ -22,7 +22,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomCoordListStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "6a08aeab"
     },
     {
       "name": "CheckWarpSpawnCoords",
@@ -51,7 +52,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "211af5d9"
     },
     {
       "name": "SPAWN_FindRandomPositionForMonster",
@@ -79,7 +81,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68d1cdfc"
     },
     {
       "name": "SPAWN_SpawnMonsterGroupAtRandom",
@@ -107,7 +110,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "879cdd2b"
     },
     {
       "name": "SPAWN_SpawnMonsterWithMinions",
@@ -139,7 +143,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8329416b"
     },
     {
       "name": "MONSTER_SpawnMonsterGroup",
@@ -167,7 +172,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "39ab5314"
     },
     {
       "name": "SPAWN_SpawnMonsterFormation",
@@ -188,7 +194,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "37753f66"
     },
     {
       "name": "MONSTER_SetMinionsForBoss",
@@ -212,7 +219,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "957a0247"
     },
     {
       "name": "MONSTER_SpawnUniquePackInRoom",
@@ -235,7 +243,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "90fd5118"
     },
     {
       "name": "MONSTER_ValidateSpawnForLevel",
@@ -253,7 +262,8 @@
       "usedTypes": [
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "9df80a9d"
     },
     {
       "name": "SPAWN_IsExcludedMonsterClass",
@@ -270,7 +280,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "45d705cd"
     },
     {
       "name": "SPAWN_SpawnMonsterWithCollisionObj",
@@ -301,7 +312,8 @@
         "eD2MonsterAnimMode",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "cc65a73c"
     },
     {
       "name": "SpawnMonster",
@@ -347,7 +359,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eb9e1ecb"
     },
     {
       "name": "MONSTER_CanSpawnInRoom",
@@ -373,7 +386,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "502bd9cb"
     },
     {
       "name": "CheckIfBaseIsFallenOrScarabAndSet",
@@ -390,7 +404,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9c191e8e"
     },
     {
       "name": "MONSTER_SpawnRoomMonsters",
@@ -430,7 +445,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3e223f4"
     },
     {
       "name": "MONSTER_InitWanderingMonsterRegion",
@@ -459,7 +475,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a22093d0"
     },
     {
       "name": "MONSTER_InitWanderingForLevel",
@@ -483,7 +500,8 @@
         "D2SeedStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d79180d0"
     },
     {
       "name": "MONSTER_TrySpawnWanderingMonster",
@@ -507,7 +525,8 @@
         "D2SeedStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "619bea27"
     }
   ]
 }

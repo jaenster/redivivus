@@ -28,7 +28,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d01b6ae3"
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_GameSetup",
@@ -73,7 +74,8 @@
         "D2GSClientMsgEnvelopeStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "69831265"
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_InGame",
@@ -103,7 +105,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "1e4ac06f"
     }
   ]
 }

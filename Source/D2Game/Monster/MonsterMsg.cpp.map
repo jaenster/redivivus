@@ -33,7 +33,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3bb6d236"
     },
     {
       "name": "MONSTER_SendUpdateToClient",
@@ -89,7 +90,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "16454e3c"
     }
   ]
 }

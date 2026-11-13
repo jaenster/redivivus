@@ -23,7 +23,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1d509808"
     },
     {
       "name": "Q03_SyncQuestProgress",
@@ -48,7 +49,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "eb4cd687"
     },
     {
       "name": "Q03_Callback02_NpcDeactivate",
@@ -69,7 +71,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "9de3b284"
     },
     {
       "name": "Q03_Callback11_ScrollMessage",
@@ -109,7 +112,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "629ea69d"
     },
     {
       "name": "Q03_Callback00_NpcActivate",
@@ -137,7 +141,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d8e0f67d"
     },
     {
       "name": "DeactivateToolsOfTrade",
@@ -166,7 +171,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f80b65e6"
     },
     {
       "name": "Q03_Callback03_ChangedLevel",
@@ -191,7 +197,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "623712b7"
     },
     {
       "name": "MallusHandler",
@@ -213,7 +220,8 @@
       "usedTypes": [
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "3b9fd12a"
     },
     {
       "name": "Q03_Callback04_ItemPickedUp",
@@ -238,7 +246,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1fa1cbf1"
     },
     {
       "name": "Q03_Callback14_PlayerJoinedGame",
@@ -257,7 +266,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "b7729fe4"
     },
     {
       "name": "Q03_Callback09_PlayerDroppedWithQuestItem",
@@ -278,7 +288,8 @@
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9fba34c7"
     },
     {
       "name": "Q03_Callback10_PlayerLeavesGame",
@@ -297,7 +308,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "5734d2a9"
     },
     {
       "name": "Q03_Callback06_Unused",
@@ -317,7 +329,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d21e2719"
     },
     {
       "name": "OBJOP_A1Q3_UseMalus",
@@ -349,7 +362,8 @@
         "SGAMEDATA",
         "eD2ObjectAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "5adefa01"
     },
     {
       "name": "Q03_ActiveFilter",
@@ -373,7 +387,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "450ff2d7"
     },
     {
       "name": "Q03_CheckPlayerHasMalus",
@@ -394,7 +409,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c57848c6"
     },
     {
       "name": "Q03_CheckPartyHasMalus",
@@ -417,7 +433,8 @@
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "60fe9230"
     },
     {
       "name": "Q03_StatusFilter",
@@ -441,7 +458,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7ab23125"
     },
     {
       "name": "Q03_SequenceFilter",
@@ -463,7 +481,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "20b6f54b"
     },
     {
       "name": "Q03_Callback13_PlayerStartedGame",
@@ -489,7 +508,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "7f20bfc3"
     },
     {
       "name": "Q03_InitData",
@@ -510,7 +530,8 @@
       "usedTypes": [
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "7f4a9768"
     }
   ]
 }

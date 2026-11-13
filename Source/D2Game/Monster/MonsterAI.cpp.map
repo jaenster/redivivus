@@ -25,7 +25,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1738edf9"
     },
     {
       "name": "MERC_ApplyLevelStats",
@@ -63,7 +64,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93041ecc"
     },
     {
       "name": "AllocMonsterAI",
@@ -82,7 +84,8 @@
       "usedTypes": [
         "D2MonsterAiStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4c56c0e6"
     },
     {
       "name": "FreeMonsterAi",
@@ -102,7 +105,8 @@
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d23ef7b1"
     },
     {
       "name": "NPC_BeginInteraction",
@@ -146,7 +150,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c99a261e"
     },
     {
       "name": "CountMonstersByAi",
@@ -165,7 +170,8 @@
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "289b5cc1"
     },
     {
       "name": "HasAiSub",
@@ -183,7 +189,8 @@
       "usedTypes": [
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc"
-      ]
+      ],
+      "dh": "20a67c53"
     },
     {
       "name": "HasUnitInSubAi",
@@ -202,7 +209,8 @@
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2df80b63"
     },
     {
       "name": "FreeSpecificAiForUnit",
@@ -223,7 +231,8 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "007d73c0"
     },
     {
       "name": "NpcState_MoveState0To1",
@@ -244,7 +253,8 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1cf02285"
     },
     {
       "name": "NpcState_MoveState1To2",
@@ -263,7 +273,8 @@
         "D2MonsterAiStrc",
         "D2MonsterAiSubStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2c5d449e"
     },
     {
       "name": "NpcStateIs2",
@@ -283,7 +294,8 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3030bf2c"
     },
     {
       "name": "FreeAndResetAiSub",
@@ -311,7 +323,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9a64f38"
     },
     {
       "name": "NPC_BeginInteractionFromUnit",
@@ -332,7 +345,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "f23abd9d"
     },
     {
       "name": "UnitHasSwitchAiSet",
@@ -350,7 +364,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c150104c"
     },
     {
       "name": "AI_SetSwitchAiTargetParams",
@@ -371,7 +386,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da15ee45"
     },
     {
       "name": "AI_GetSwitchAiParam1",
@@ -389,7 +405,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ac7cf401"
     },
     {
       "name": "AI_GetSwitchAiParam2",
@@ -407,7 +424,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a2763a2"
     },
     {
       "name": "AI_ClearSwitchAiTargetParams",
@@ -425,7 +443,8 @@
       "usedTypes": [
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "22c70a3d"
     },
     {
       "name": "NpcStateIsntZero",
@@ -445,7 +464,8 @@
         "D2MonsterAiSubStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cac68131"
     },
     {
       "name": "ClearAISub",
@@ -476,7 +496,8 @@
         "fpAiClear",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab171b69"
     },
     {
       "name": "MERC_HireAndReplaceMerc",
@@ -522,7 +543,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bed196b6"
     }
   ]
 }

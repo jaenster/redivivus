@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1d722a60"
     },
     {
       "name": "FINDTILE_AllocHashTable",
@@ -44,7 +45,8 @@
       "usedTypes": [
         "D2TileLibraryHashStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c86a4ad9"
     },
     {
       "name": "FINDTILE_FreeHashTable",
@@ -64,7 +66,8 @@
         "D2TileLibraryHashNodeStrc",
         "D2TileLibraryHashRefStrc",
         "D2TileLibraryHashStrc"
-      ]
+      ],
+      "dh": "02c53118"
     },
     {
       "name": "FINDTILE_AddTileToChain",
@@ -88,7 +91,8 @@
         "D2TileLibraryHashNodeStrc",
         "D2TileLibraryHashRefStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "77101261"
     },
     {
       "name": "FINDTILE_AllocHashEntry",
@@ -113,7 +117,8 @@
         "D2TileLibraryHashNodeStrc *",
         "D2TileLibraryHashRefStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "660d956b"
     },
     {
       "name": "FINDTILE_Register",
@@ -141,7 +146,8 @@
         "D2TileLibraryHashStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d409ce1"
     },
     {
       "name": "FINDTILE_Lookup",
@@ -167,7 +173,8 @@
         "D2TileLibraryHashStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2122d3f"
     }
   ]
 }

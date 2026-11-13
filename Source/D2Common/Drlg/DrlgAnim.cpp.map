@@ -27,7 +27,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a0e1f8f4"
     },
     {
       "name": "AnimateTile",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "D2DrlgAnimTileGridStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "09e5d9ba"
     },
     {
       "name": "AnimateTiles",
@@ -63,7 +65,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "31670146"
     },
     {
       "name": "DRLGANIM_AllocAnimatedTiles",
@@ -103,7 +106,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a1ead50a"
     },
     {
       "name": "DRLGROOMTILE_AllocAnimTiles",
@@ -123,7 +127,8 @@
         "D2DrlgGridStrc",
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "d3dd9abc"
     },
     {
       "name": "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0",
@@ -137,7 +142,8 @@
       "namespace": "D2Common::Drlg::DrlgAnim",
       "calledFunctions": [
         "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0"
-      ]
+      ],
+      "dh": "c99d669d"
     },
     {
       "name": "DRLGANIM_GetOrientationFromIndex",
@@ -151,7 +157,8 @@
       "namespace": "D2Common::Drlg::DrlgAnim",
       "calledFunctions": [
         "DRLGANIM_GetOrientationFromIndex"
-      ]
+      ],
+      "dh": "e293d347"
     }
   ]
 }

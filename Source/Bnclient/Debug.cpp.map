@@ -15,7 +15,8 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_Trace_Unref_00515ec0"
-      ]
+      ],
+      "dh": "504e6e82"
     },
     {
       "name": "DEBUG_Trace_Unref_00515ed0",
@@ -29,7 +30,8 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_Trace_Unref_00515ed0"
-      ]
+      ],
+      "dh": "3845054b"
     },
     {
       "name": "DEBUG_LogFormattedMessage",
@@ -44,7 +46,8 @@
       "calledFunctions": [
         "DEBUG_LogFormattedMessage",
         "SLogWrite"
-      ]
+      ],
+      "dh": "5732fd85"
     },
     {
       "name": "DEBUG_SetLoggingFlag",
@@ -61,7 +64,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "acbfde5d"
     },
     {
       "name": "DEBUG_GetTime32",
@@ -79,7 +83,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "9cbce83d"
     },
     {
       "name": "DEBUG_Trace",
@@ -93,7 +98,8 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_Trace"
-      ]
+      ],
+      "dh": "a863fce5"
     },
     {
       "name": "DEBUG_Trace_Unref_0051d2d0",
@@ -107,7 +113,8 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_Trace_Unref_0051d2d0"
-      ]
+      ],
+      "dh": "62771703"
     },
     {
       "name": "DEBUG_Trace_Unref_0051d2e0",
@@ -121,7 +128,8 @@
       "namespace": "Bnclient::Debug",
       "calledFunctions": [
         "DEBUG_Trace_Unref_0051d2e0"
-      ]
+      ],
+      "dh": "3848a875"
     }
   ]
 }

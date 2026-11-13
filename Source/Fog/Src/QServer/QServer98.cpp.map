@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "de913a32"
     },
     {
       "name": "SendToClientOnline",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "d95d1de4"
     },
     {
       "name": "QSERVER_AllocateConnectionStruct",
@@ -57,7 +59,8 @@
         "D2QServerClientContainerStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2946a869"
     },
     {
       "name": "SocketThreadMain",
@@ -100,7 +103,8 @@
         "sockaddr_in",
         "timeval",
         "uint32_t"
-      ]
+      ],
+      "dh": "1c4d0c5b"
     },
     {
       "name": "CreateSocketOnline",
@@ -124,7 +128,8 @@
         "u_long",
         "u_short",
         "uint32_t"
-      ]
+      ],
+      "dh": "2c8a7fb3"
     }
   ]
 }

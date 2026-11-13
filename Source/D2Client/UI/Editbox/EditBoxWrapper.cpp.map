@@ -19,7 +19,8 @@
       "usedTypes": [
         "EditBoxWrapper",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "55adf6c4"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "EditBoxWrapper",
         "uint32_t"
-      ]
+      ],
+      "dh": "ca4c78e1"
     },
     {
       "name": "OnMouseWheel",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "b976ba5b"
     },
     {
       "name": "OnMouseDown",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "06e3bde4"
     },
     {
       "name": "OnMouseUp",
@@ -93,7 +97,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "996566d6"
     },
     {
       "name": "OnMouseMove",
@@ -111,7 +116,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "ed3f70a2"
     },
     {
       "name": "Draw",
@@ -128,7 +134,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "b3124fe3"
     },
     {
       "name": "OnChar",
@@ -146,7 +153,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "fe711231"
     },
     {
       "name": "OnDownArrow",
@@ -164,7 +172,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "9200d0af"
     },
     {
       "name": "OnUpArrow",
@@ -182,7 +191,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "52277bf3"
     },
     {
       "name": "OnRightArrow",
@@ -200,7 +210,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "5a956bdc"
     },
     {
       "name": "OnLeftArrow",
@@ -218,7 +229,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "b57a1cb7"
     },
     {
       "name": "GetValue",
@@ -235,7 +247,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "f14173c2"
     },
     {
       "name": "GetRepeatDelta",
@@ -252,7 +265,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "515709ea"
     },
     {
       "name": "SetNumber",
@@ -269,7 +283,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "c11b105e"
     },
     {
       "name": "SetText",
@@ -286,7 +301,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "9a31c418"
     },
     {
       "name": "GetText",
@@ -303,7 +319,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "5fa1a08d"
     },
     {
       "name": "SetCharFilter",
@@ -321,7 +338,8 @@
       "usedTypes": [
         "EditBoxWrapper",
         "fpUIWidgetCharFilter"
-      ]
+      ],
+      "dh": "b44cb376"
     },
     {
       "name": "SetWidth",
@@ -338,7 +356,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "763013b3"
     },
     {
       "name": "SetKeyRepeat",
@@ -355,7 +374,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "7769ccde"
     },
     {
       "name": "SetNumericOnly",
@@ -372,7 +392,8 @@
       ],
       "usedTypes": [
         "EditBoxWrapper"
-      ]
+      ],
+      "dh": "799fa3bf"
     },
     {
       "name": "Constructor",
@@ -394,7 +415,8 @@
         "fpEditBoxOnEnter",
         "pfnEHHandlerRoutine",
         "uint16_t"
-      ]
+      ],
+      "dh": "d907d875"
     }
   ]
 }

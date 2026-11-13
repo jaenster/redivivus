@@ -20,7 +20,8 @@
       "usedTypes": [
         "SpinnerImplementation",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "e080673e"
     },
     {
       "name": "Draw",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "5e33d585"
     },
     {
       "name": "IsMouseOnUpButton",
@@ -59,7 +61,8 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "ecd7f759"
     },
     {
       "name": "IsMouseOnDownButton",
@@ -78,7 +81,8 @@
         "D2UIMouseMsgStrc",
         "SpinnerImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4ab1d20"
     },
     {
       "name": "GetValue",
@@ -95,7 +99,8 @@
       ],
       "usedTypes": [
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "25110c00"
     },
     {
       "name": "GetRepeatDelta",
@@ -114,7 +119,8 @@
       "usedTypes": [
         "SpinnerImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b479856"
     },
     {
       "name": "OnMouseWheel",
@@ -133,7 +139,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "959da839"
     },
     {
       "name": "OnMouseDown",
@@ -154,7 +161,8 @@
         "SpinnerImplementation",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0ba0e55"
     },
     {
       "name": "OnMouseUp",
@@ -172,7 +180,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "62abd061"
     },
     {
       "name": "OnChar",
@@ -190,7 +199,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "b7ee494e"
     },
     {
       "name": "OnMouseMove",
@@ -208,7 +218,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "855fe035"
     },
     {
       "name": "OnUpArrow",
@@ -226,7 +237,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "1e6de8ec"
     },
     {
       "name": "OnDownArrow",
@@ -244,7 +256,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "33ff2ea7"
     },
     {
       "name": "OnRightArrow",
@@ -262,7 +275,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "e628cdc5"
     },
     {
       "name": "OnLeftArrow",
@@ -280,7 +294,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerImplementation"
-      ]
+      ],
+      "dh": "f52cd72a"
     },
     {
       "name": "Constructor",
@@ -308,7 +323,8 @@
         "fpSpinnerRepeatAction",
         "int32_t",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "e75fa76c"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -328,7 +344,8 @@
       "usedTypes": [
         "SpinnerImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "967d81d3"
     }
   ]
 }

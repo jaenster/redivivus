@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "8c8010df"
     }
   ]
 }

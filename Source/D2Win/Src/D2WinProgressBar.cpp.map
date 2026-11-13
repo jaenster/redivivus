@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2WinProgressBar"
-      ]
+      ],
+      "dh": "10fa56d8"
     },
     {
       "name": "Draw",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2WinProgressBar",
         "int32_t"
-      ]
+      ],
+      "dh": "fa991b58"
     },
     {
       "name": "D2WinProgressBar",
@@ -63,7 +65,8 @@
       "usedTypes": [
         "D2WinProgressBar",
         "int32_t"
-      ]
+      ],
+      "dh": "38178f94"
     }
   ]
 }

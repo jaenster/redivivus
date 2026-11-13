@@ -20,7 +20,8 @@
         "exit",
         "toupper",
         "tolower"
-      ]
+      ],
+      "dh": "188def0f"
     },
     {
       "name": "SMemStringToUppercase",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3d220616"
     },
     {
       "name": "SMemEscapeString",
@@ -60,7 +62,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "89e33d64"
     },
     {
       "name": "SMemFormat64BitWithSeparators",
@@ -80,7 +83,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c1894d48"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d78dd469"
     },
     {
       "name": "SEED_RollRange",
@@ -41,7 +42,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c230b154"
     },
     {
       "name": "SEED_RollRangeInclusive",
@@ -62,7 +64,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6583944"
     }
   ]
 }

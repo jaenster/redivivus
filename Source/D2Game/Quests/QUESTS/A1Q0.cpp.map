@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "50c16541"
     },
     {
       "name": "Q00_Callback00_NpcActivate",
@@ -47,7 +48,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "424b8a36"
     },
     {
       "name": "Q00_StatusFilter",
@@ -66,7 +68,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "382e9e9a"
     },
     {
       "name": "Q00_ActiveFilter",
@@ -87,7 +90,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1289e18c"
     },
     {
       "name": "Q00_InitData",
@@ -105,7 +109,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "a6db3444"
     }
   ]
 }

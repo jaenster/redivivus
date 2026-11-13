@@ -15,7 +15,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_DetectLegacySoundDrivers"
-      ]
+      ],
+      "dh": "56ff57f1"
     },
     {
       "name": "SOUND_GetLanguageCode",
@@ -29,7 +30,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetLanguageCode"
-      ]
+      ],
+      "dh": "056ac722"
     },
     {
       "name": "SOUND_GetDirectSoundDevice",
@@ -46,7 +48,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "65b408d9"
     },
     {
       "name": "SOUND_GetPrimaryBufferModeFlag",
@@ -60,7 +63,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetPrimaryBufferModeFlag"
-      ]
+      ],
+      "dh": "eca902d3"
     },
     {
       "name": "SOUND_GetSound3DFlag",
@@ -74,7 +78,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetSound3DFlag"
-      ]
+      ],
+      "dh": "3b46ea94"
     },
     {
       "name": "SOUND_GetSoundQualityFlag",
@@ -88,7 +93,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetSoundQualityFlag"
-      ]
+      ],
+      "dh": "757b8fa6"
     },
     {
       "name": "SOUND_GetEAXEnabledFlag",
@@ -102,7 +108,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetEAXEnabledFlag"
-      ]
+      ],
+      "dh": "34cfaa6c"
     },
     {
       "name": "SOUND_GetHardwareAccelerationFlag",
@@ -116,7 +123,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetHardwareAccelerationFlag"
-      ]
+      ],
+      "dh": "702556d2"
     },
     {
       "name": "SOUND_ToggleEAXEnvironmentPreset",
@@ -133,7 +141,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "9bb8d16e"
     },
     {
       "name": "SOUND_GetDirectSoundErrorString",
@@ -147,7 +156,8 @@
       "namespace": "D2Sound",
       "calledFunctions": [
         "SOUND_GetDirectSoundErrorString"
-      ]
+      ],
+      "dh": "d8354cc0"
     }
   ]
 }

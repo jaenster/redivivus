@@ -1208,7 +1208,7 @@ static BOOL __stdcall ITEM_FallbackToMagicQuality(D2ItemGenContextStrc * pItemGe
 }
 
 // Re-generates the item as QUALITY_RARE: clears its magic affixes, re-seeds mod and item seed from *pnParam (seed high 0x29A), rerolls the quality fields, sets the quality on the item and gen context, writes the new seed low back to *pnParam, and returns the result of RollingItem.
-static BOOL ITEM_FallbackToRareQuality(int * pnSeed, D2ItemGenContextStrc * pItemGenContext, D2UnitStrc * * ppUnit) {
+static BOOL ITEM_FallbackToRareQuality(D2ItemGenContextStrc * pItemGenContext, int * pnSeed, D2UnitStrc * * ppUnit) {
     ITEM_ClearAllMagicAffixes(ppUnit);
     D2Common::ITEMS::Items::SetModSeed(*ppUnit, *pnSeed);
     D2SeedStrc* pSeed = D2Common::ITEMS::Items::GetItemSeed(*ppUnit);
@@ -1383,7 +1383,7 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
           }
         }
 
-        nCrudeResult = ITEM_FallbackToRareQuality((int*)&nSeedLowBackup, pItemGenContext, ppItem);
+        nCrudeResult = ITEM_FallbackToRareQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
         if (!nCrudeResult) {
           nCrudeResult = ITEM_FallbackToMagicQuality(pItemGenContext, (int*)&nSeedLowBackup, ppItem);
           if (!nCrudeResult) {

@@ -15,7 +15,8 @@
       "namespace": "D2Win::Src::D2Comp",
       "calledFunctions": [
         "D2COMP_PadStringTo4Chars"
-      ]
+      ],
+      "dh": "2f87ea43"
     },
     {
       "name": "D2COMP_AssertNotNull",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7b8384dd"
     },
     {
       "name": "D2COMP_LoadAndValidateCOFFile",
@@ -60,7 +62,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b89ae976"
     },
     {
       "name": "D2COMP_ValidateCOFLayerData",
@@ -81,7 +84,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e7295ac7"
     },
     {
       "name": "D2COMP_FindOrAllocCOFCacheEntry",
@@ -106,7 +110,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3f8afe8b"
     },
     {
       "name": "D2COMP_ReleaseCOFCacheEntry",
@@ -128,7 +133,8 @@
       "usedTypes": [
         "D2CompCofCacheEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "117efec9"
     },
     {
       "name": "D2COMP_BuildCOFFilePath",
@@ -152,7 +158,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "581301d7"
     },
     {
       "name": "D2COMP_FindCOFEntryByModeAndWeapon",
@@ -175,7 +182,8 @@
         "D2CompCofListNodeStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c3397ad3"
     },
     {
       "name": "D2COMP_GetOrLoadCOF",
@@ -205,7 +213,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dbb3c90a"
     },
     {
       "name": "D2COMP_PopulateComponentFromCOF",
@@ -231,7 +240,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "25eb6887"
     },
     {
       "name": "D2COMP_InitComponentEntry",
@@ -253,7 +263,8 @@
         "DC6",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a77771be"
     },
     {
       "name": "D2COMP_GetPaletteTransformTable",
@@ -271,7 +282,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "27fd1d8f"
     },
     {
       "name": "D2COMP_ValidateComponentType",
@@ -294,7 +306,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e1b048fc"
     },
     {
       "name": "D2COMP_LoadLayerSpritesAndCalcHeight",
@@ -322,7 +335,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f2f60d1"
     },
     {
       "name": "D2COMP_DrawUnitShadow",
@@ -354,7 +368,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8179fc8d"
     },
     {
       "name": "D2COMP_DrawCompositeUnit",
@@ -391,7 +406,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e91c4978"
     },
     {
       "name": "D2COMP_TruncateStringToFitWidth",
@@ -412,7 +428,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "cf777ca5"
     },
     {
       "name": "D2COMP_AddTextLineToLayout",
@@ -436,7 +453,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d94aa9f2"
     },
     {
       "name": "D2COMP_ZeroBuffer512",
@@ -454,7 +472,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "45057869"
     },
     {
       "name": "D2COMP_ValidateAndLoadCOFForUnit",
@@ -477,7 +496,8 @@
         "D2CharSelCompStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1e3499dc"
     },
     {
       "name": "D2COMP_UnlinkCompositeUnit",
@@ -496,7 +516,8 @@
       "usedTypes": [
         "D2CharSelCompStrc",
         "D2CharSelStrc"
-      ]
+      ],
+      "dh": "a81177b9"
     },
     {
       "name": "D2COMP_AllocSmallClientBlock",
@@ -517,7 +538,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0add135a"
     },
     {
       "name": "D2COMP_DestroyCompositeUnit",
@@ -544,7 +566,8 @@
         "D2CompCofListNodeStrc",
         "D2CompCofListNodeStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "b33935db"
     },
     {
       "name": "D2COMP_SetUnitDisplayStrings",
@@ -567,7 +590,8 @@
         "D2CharSelCompStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "2db09446"
     },
     {
       "name": "D2COMP_SetAnimationMode",
@@ -590,7 +614,8 @@
         "D2CompCofListNodeStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "50fe4b77"
     },
     {
       "name": "D2COMP_GetWeaponClassCodeIndex",
@@ -608,7 +633,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad52f7ff"
     },
     {
       "name": "D2COMP_FreeServerMemory",
@@ -623,7 +649,8 @@
       "calledFunctions": [
         "D2COMP_FreeServerMemory",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "a77a810f"
     },
     {
       "name": "D2COMP_LoadExcelTxtFile",
@@ -642,7 +669,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "574026fd"
     },
     {
       "name": "LoadTxt",
@@ -675,7 +703,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d84f9dbe"
     },
     {
       "name": "D2COMP_AllocTxt_Items",
@@ -701,7 +730,8 @@
         "D2BinFieldInputStrc",
         "D2ItemsTxt",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "dc121dc1"
     },
     {
       "name": "D2COMP_LoadItemTypesTxt",
@@ -721,7 +751,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "f8d92507"
     },
     {
       "name": "Unreferenced_005049d0",
@@ -736,7 +767,8 @@
       "calledFunctions": [
         "Unreferenced_005049d0",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "611f295e"
     },
     {
       "name": "D2COMP_IsItemTypeDescendant",
@@ -756,7 +788,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b8580e31"
     },
     {
       "name": "D2COMP_ResolveWeaponClass",
@@ -775,7 +808,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c9671c52"
     },
     {
       "name": "D2COMP_SetSelectionAndAuraImages",
@@ -793,7 +827,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "e0c9af38"
     },
     {
       "name": "D2COMP_ValidateEquippedItemForClass",
@@ -813,7 +848,8 @@
         "D2CompCharacterCompositeItemStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "21c13ced"
     },
     {
       "name": "D2COMP_CreateCompositeUnit",
@@ -841,7 +877,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "712f6b02"
     },
     {
       "name": "D2COMP_FreeAllCompositeUnits",
@@ -857,7 +894,8 @@
         "D2COMP_FreeAllCompositeUnits",
         "D2COMP_DestroyCompositeUnit",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "f74ad2fb"
     },
     {
       "name": "D2COMP_GetCompositeUnitListHead",
@@ -874,7 +912,8 @@
       ],
       "usedTypes": [
         "D2CharSelCompStrc"
-      ]
+      ],
+      "dh": "8a0bdc8c"
     },
     {
       "name": "D2COMP_GetNextCompositeUnit",
@@ -895,7 +934,8 @@
       "usedTypes": [
         "D2CharSelCompStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "06e4f08f"
     },
     {
       "name": "D2COMP_SetAnimationSpeed",
@@ -917,7 +957,8 @@
         "D2CharSelCompStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d3cc12ed"
     },
     {
       "name": "D2COMP_GetNumDirections",
@@ -939,7 +980,8 @@
         "D2CharSelCompStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "51996b7c"
     },
     {
       "name": "D2COMP_GetNumFrames",
@@ -960,7 +1002,8 @@
       "usedTypes": [
         "D2CharSelCompStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "53032aff"
     },
     {
       "name": "D2COMP_SetCurrentFrame",
@@ -982,7 +1025,8 @@
         "D2CharSelCompStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0e5dfa18"
     },
     {
       "name": "D2COMP_SetScreenX",
@@ -1003,7 +1047,8 @@
       "usedTypes": [
         "D2CharSelCompStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "80a8be5f"
     },
     {
       "name": "D2COMP_SetScreenY",
@@ -1024,7 +1069,8 @@
       "usedTypes": [
         "D2CharSelCompStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c4ad9d18"
     },
     {
       "name": "D2COMP_GetFlags",
@@ -1046,7 +1092,8 @@
         "D2CharSelCompStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e9016c6d"
     },
     {
       "name": "D2COMP_SetFlags",
@@ -1068,7 +1115,8 @@
         "D2CharSelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f5ea5943"
     },
     {
       "name": "D2COMP_LoadGuildEmblemIcon",
@@ -1092,7 +1140,8 @@
         "DC6",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "05dd81ca"
     },
     {
       "name": "D2COMP_LoadItemPaletteFile",
@@ -1117,7 +1166,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6918b62e"
     },
     {
       "name": "D2COMP_LoadAllItemPalettes",
@@ -1132,7 +1182,8 @@
       "calledFunctions": [
         "D2COMP_LoadAllItemPalettes",
         "D2COMP_LoadItemPaletteFile"
-      ]
+      ],
+      "dh": "221e47a5"
     },
     {
       "name": "D2COMP_InitEmblemColorTables",
@@ -1150,7 +1201,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "3ceb11e8"
     },
     {
       "name": "D2COMP_GetTitlePrefix",
@@ -1168,7 +1220,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49d977db"
     },
     {
       "name": "D2COMP_DrawUnitNameAndTitle",
@@ -1202,7 +1255,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6698795"
     },
     {
       "name": "DRAW_OOG_ChannelPlayers",
@@ -1239,7 +1293,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t[520]"
-      ]
+      ],
+      "dh": "78cf2756"
     },
     {
       "name": "D2COMP_AllocTxt_EverythingItems",
@@ -1267,7 +1322,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0470fd2a"
     },
     {
       "name": "AllocCharSelectComponent",
@@ -1297,7 +1353,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f63b5b46"
     }
   ]
 }

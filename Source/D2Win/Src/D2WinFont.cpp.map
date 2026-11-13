@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9eaa5345"
     },
     {
       "name": "GetFontTablePath",
@@ -41,7 +42,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "48dc3525"
     },
     {
       "name": "InitFontCache",
@@ -65,7 +67,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "109200be"
     },
     {
       "name": "D2WINFONT_FreeFontCache",
@@ -84,7 +87,8 @@
       ],
       "usedTypes": [
         "void *"
-      ]
+      ],
+      "dh": "45b25cbf"
     },
     {
       "name": "FONT_GetCharWidthCallback",
@@ -102,7 +106,8 @@
       "usedTypes": [
         "D2FontGlyphStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "c4280b9c"
     },
     {
       "name": "D2WINFONT_LookupGlyphEntry",
@@ -120,7 +125,8 @@
       "usedTypes": [
         "D2FontGlyphStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "9a98f94f"
     },
     {
       "name": "D2WINFONT_GetStringPixelWidthN",
@@ -139,7 +145,8 @@
         "D2FontGlyphStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "bc8815cc"
     },
     {
       "name": "D2WINFONT_GetStringPixelWidth",
@@ -158,7 +165,8 @@
         "D2FontGlyphStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "4ce89cab"
     },
     {
       "name": "DRAW_text0",
@@ -178,7 +186,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "0a11e8d2"
     },
     {
       "name": "TEXT_CalculateTextWidth",
@@ -202,7 +211,8 @@
         "D2FontGlyphStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "80f79e69"
     },
     {
       "name": "D2WINFONT_GetFirstLinePixelWidth",
@@ -226,7 +236,8 @@
         "D2FontGlyphStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "78b2b2d2"
     },
     {
       "name": "TEXT_CalculateTextHeight",
@@ -248,7 +259,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "91f0f8a2"
     },
     {
       "name": "D2WINFONT_GetCurrentFontHeight",
@@ -265,7 +277,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a542738b"
     },
     {
       "name": "D2WINFONT_DrawSolidRectFromBottomLeft",
@@ -285,7 +298,8 @@
         "DRAWMODE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7230dafe"
     },
     {
       "name": "D2WINFONT_DrawWideString",
@@ -311,7 +325,8 @@
         "GLOBALPALLETE",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "94a97e6b"
     },
     {
       "name": "D2WINFONT_DrawWideStringWithDrawMode",
@@ -338,7 +353,8 @@
         "GLOBALPALLETE",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "eba54411"
     },
     {
       "name": "D2WINFONT_DrawVerticalCroppedText",
@@ -369,7 +385,8 @@
         "eD2RendererMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0c3b37a"
     },
     {
       "name": "D2WINFONT_DrawWideStringRightToLeft",
@@ -395,7 +412,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0fab9ee"
     },
     {
       "name": "D2WINFONT_DrawWideStringSimple",
@@ -418,7 +436,8 @@
         "D2GfxDataStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a8cfddca"
     },
     {
       "name": "TEXT_TooltipSetAttributes",
@@ -439,7 +458,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "0cca7666"
     },
     {
       "name": "D2WINFONT_SetTooltipAttributesWithCustomField",
@@ -458,7 +478,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "74ca2fa6"
     },
     {
       "name": "DRAW_text",
@@ -478,7 +499,8 @@
       "usedTypes": [
         "int32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "a23251f8"
     },
     {
       "name": "D2WINFONT_DrawTextWithOptionalBackground",
@@ -501,7 +523,8 @@
         "GLOBALPALLETE",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "52ba8032"
     },
     {
       "name": "D2WINFONT_DrawWideStringSimpleThunk",
@@ -520,7 +543,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "2a39f35e"
     },
     {
       "name": "D2WINFONT_DrawTextWithBackgroundRect",
@@ -546,7 +570,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "283353d6"
     },
     {
       "name": "D2WINFONT_DrawTextWithSimpleBackground",
@@ -571,7 +596,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a36bd202"
     },
     {
       "name": "TEXT_CalcTextDimensions",
@@ -591,7 +617,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "f895a6ed"
     },
     {
       "name": "D2WINFONT_IsFontCharacterValid",
@@ -612,7 +639,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "08f92b06"
     },
     {
       "name": "D2WINFONT_DrawTextWithOffsetBackground",
@@ -637,7 +665,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "75516e23"
     },
     {
       "name": "IMAGE_DrawDC6ImageOnScreen",
@@ -666,7 +695,8 @@
         "GLOBALPALLETE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c040e849"
     },
     {
       "name": "D2WINFONT_DrawTextWithProgressBar",
@@ -693,7 +723,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc4c5e19"
     },
     {
       "name": "D2WINFONT_FreeWordWrapList",
@@ -711,7 +742,8 @@
       ],
       "usedTypes": [
         "void *"
-      ]
+      ],
+      "dh": "427836eb"
     },
     {
       "name": "D2WINFONT_AllocWordWrapNode",
@@ -733,7 +765,8 @@
         "D2TextLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "22b9a8a0"
     },
     {
       "name": "D2WINFONT_WordWrapString",
@@ -759,7 +792,8 @@
         "D2TextLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "638173bd"
     },
     {
       "name": "Unreferenced_00502c40",
@@ -773,7 +807,8 @@
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
         "Unreferenced_00502c40"
-      ]
+      ],
+      "dh": "b0cb49ad"
     },
     {
       "name": "D2WINFONT_InitFontSystem",
@@ -796,7 +831,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6ac8f2f8"
     },
     {
       "name": "SetAndReturnLastFont",
@@ -821,7 +857,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b73b1216"
     },
     {
       "name": "Draw_UnitNameUnderCursor",
@@ -847,7 +884,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0c2b61c"
     },
     {
       "name": "StaticInit_DisplayedTooltip",
@@ -861,7 +899,8 @@
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
         "StaticInit_DisplayedTooltip"
-      ]
+      ],
+      "dh": "45b265b1"
     },
     {
       "name": "StaticInit_gwFontHeightDefault",
@@ -875,7 +914,8 @@
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
         "StaticInit_gwFontHeightDefault"
-      ]
+      ],
+      "dh": "760be268"
     },
     {
       "name": "StaticInit_gnFontTableCharWidthCache",
@@ -889,7 +929,8 @@
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
         "StaticInit_gnFontTableCharWidthCache"
-      ]
+      ],
+      "dh": "2f56ad6f"
     }
   ]
 }

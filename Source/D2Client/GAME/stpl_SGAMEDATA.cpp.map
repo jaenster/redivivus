@@ -19,7 +19,8 @@
       "usedTypes": [
         "TSLink<SGAMEDATA>",
         "intptr_t"
-      ]
+      ],
+      "dh": "73396bd1"
     },
     {
       "name": "OperatorIndex",
@@ -38,7 +39,8 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd3327c6"
     },
     {
       "name": "NextLink_Unreferenced",
@@ -57,7 +59,8 @@
         "TSLink<SGAMEDATA>",
         "int32_t",
         "intptr_t"
-      ]
+      ],
+      "dh": "e61905b5"
     },
     {
       "name": "CalcChunkSize",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "882fbc61"
     },
     {
       "name": "RoundToMultiple",
@@ -92,7 +96,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "31a5354a"
     },
     {
       "name": "Assign",
@@ -109,7 +114,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
-      ]
+      ],
+      "dh": "6aed440d"
     },
     {
       "name": "Link",
@@ -128,7 +134,8 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>"
-      ]
+      ],
+      "dh": "0039fabf"
     },
     {
       "name": "Unreferenced_0044ed40",
@@ -145,7 +152,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "dfde4288"
     },
     {
       "name": "Unreferenced_0044ed90",
@@ -162,7 +170,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4f7d2c36"
     },
     {
       "name": "Link_Unreferenced",
@@ -181,7 +190,8 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>"
-      ]
+      ],
+      "dh": "9b3fb89e"
     },
     {
       "name": "UnlinkNode",
@@ -202,7 +212,8 @@
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ae8a8b8"
     },
     {
       "name": "SetLinkOffset",
@@ -220,7 +231,8 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
-      ]
+      ],
+      "dh": "208661cb"
     },
     {
       "name": "SetLinkOffset_Unreferenced",
@@ -238,7 +250,8 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
-      ]
+      ],
+      "dh": "f94be7ac"
     },
     {
       "name": "CopyConstructor",
@@ -255,7 +268,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
-      ]
+      ],
+      "dh": "6fdd869a"
     },
     {
       "name": "Destructor",
@@ -275,7 +289,8 @@
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "70ebca02"
     },
     {
       "name": "UnlinkNode_Unreferenced",
@@ -296,7 +311,8 @@
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd1cda03"
     },
     {
       "name": "UnlinkAll",
@@ -316,7 +332,8 @@
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "1c44a9c5"
     },
     {
       "name": "UnlinkAll",
@@ -336,7 +353,8 @@
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "258bdbb5"
     },
     {
       "name": "ChangeLinkOffset",
@@ -355,7 +373,8 @@
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>",
         "int32_t"
-      ]
+      ],
+      "dh": "2f6c1ca0"
     },
     {
       "name": "InternalClear",
@@ -377,7 +396,8 @@
         "TSLink<SGAMEDATA> *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3baac9f"
     },
     {
       "name": "Destructor_Unreferenced",
@@ -398,7 +418,8 @@
         "TSLink<SGAMEDATA>",
         "TSLink<SGAMEDATA> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "a866192f"
     },
     {
       "name": "Destructor",
@@ -419,7 +440,8 @@
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "4d47f8c4"
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -436,7 +458,8 @@
       ],
       "usedTypes": [
         "TSExplicitList<SGAMEDATA, -572662307>"
-      ]
+      ],
+      "dh": "a93ba620"
     },
     {
       "name": "InternalDelete",
@@ -456,7 +479,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>"
-      ]
+      ],
+      "dh": "17ac6bbc"
     },
     {
       "name": "ReallocData",
@@ -480,7 +504,8 @@
         "SGAMEDATA",
         "TSGrowableArray<SGAMEDATA>",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bdc00b6"
     },
     {
       "name": "Reserve",
@@ -501,7 +526,8 @@
         "TSGrowableArray<SGAMEDATA>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4c52a38e"
     },
     {
       "name": "New",
@@ -522,7 +548,8 @@
         "SGAMEDATA",
         "TSGrowableArray<SGAMEDATA>",
         "uint32_t"
-      ]
+      ],
+      "dh": "f58bbb5d"
     },
     {
       "name": "ReserveNoRound",
@@ -541,7 +568,8 @@
       "usedTypes": [
         "TSGrowableArray<SGAMEDATA>",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1d41a08"
     },
     {
       "name": "Destructor_UnwindThunk_Unref_00450f70",
@@ -559,7 +587,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>"
-      ]
+      ],
+      "dh": "3e7953f3"
     },
     {
       "name": "NewNode",
@@ -580,7 +609,8 @@
         "TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>",
         "TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>",
         "uint32_t"
-      ]
+      ],
+      "dh": "f381de2f"
     },
     {
       "name": "InternalNew",
@@ -603,7 +633,8 @@
         "TSLink<SGAMEDATA>",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad204ffd"
     },
     {
       "name": "Destroy",
@@ -622,7 +653,8 @@
       ],
       "usedTypes": [
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>"
-      ]
+      ],
+      "dh": "98b04363"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -642,7 +674,8 @@
       "usedTypes": [
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "d26d6b2e"
     },
     {
       "name": "Constructor",
@@ -663,7 +696,8 @@
         "TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>",
         "TSLink<SGAMEDATA>",
         "TSLink<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>>"
-      ]
+      ],
+      "dh": "5e96c8ae"
     },
     {
       "name": "Constructor",
@@ -680,7 +714,8 @@
       ],
       "usedTypes": [
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>"
-      ]
+      ],
+      "dh": "662a5197"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -700,7 +735,8 @@
       "usedTypes": [
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "e709509e"
     },
     {
       "name": "Destructor",
@@ -717,7 +753,8 @@
       ],
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>"
-      ]
+      ],
+      "dh": "3b5c68d2"
     },
     {
       "name": "Constructor",
@@ -734,7 +771,8 @@
       ],
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>"
-      ]
+      ],
+      "dh": "06512789"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -754,7 +792,8 @@
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2e86ac6"
     }
   ]
 }

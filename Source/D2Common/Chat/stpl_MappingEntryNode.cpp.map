@@ -20,7 +20,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "33b483c8"
     },
     {
       "name": "NextLink",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "TSLink<MappingEntryNode>",
         "intptr_t"
-      ]
+      ],
+      "dh": "13ca1a54"
     },
     {
       "name": "ComputeSlot",
@@ -56,7 +58,8 @@
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b9a73eb"
     }
   ]
 }

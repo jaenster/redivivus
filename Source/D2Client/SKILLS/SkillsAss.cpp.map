@@ -26,7 +26,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a09cd8c"
     },
     {
       "name": "Skills_CltDoFunc_Ass_Melee_TargetValidate",
@@ -51,7 +52,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "89de6c29"
     },
     {
       "name": "Skills_CltStFunc_SetParam1FromCalc",
@@ -76,7 +78,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "d8d660b2"
     },
     {
       "name": "Skills_CltDoFunc_Ass_Blade_DecrementCharge",
@@ -101,7 +104,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4c5a0e2c"
     },
     {
       "name": "SKILLSASS_GetCltMissileByAuraLevel",
@@ -123,7 +127,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "52e36415"
     },
     {
       "name": "SKILLSASS_GetPrgCalcByAuraLevel",
@@ -148,7 +153,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e786e64f"
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom",
@@ -174,7 +180,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "63886549"
     },
     {
       "name": "Skills_CltStFunc_CheckAuraStateInactive",
@@ -194,7 +201,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "86781086"
     },
     {
       "name": "SKILLSASS_CltSetChargeUpState",
@@ -229,7 +237,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "f016d51a"
     },
     {
       "name": "Skills_CltStFunc_SetChargeUpState",
@@ -249,7 +258,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e5864e86"
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge",
@@ -284,7 +294,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4734b27"
     },
     {
       "name": "Skills_CltStFunc_AllocStatListByParam3",
@@ -304,7 +315,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "453f098f"
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget",
@@ -327,7 +339,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "07645f56"
     },
     {
       "name": "Skills_CltDoFunc_Ass_AuraLevel_StreamMissile",
@@ -354,7 +367,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "24c61348"
     }
   ]
 }

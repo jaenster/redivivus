@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "1ecc418b"
     },
     {
       "name": "_NullSubRet4_Unref_006bc850",
@@ -32,7 +33,8 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "_NullSubRet4_Unref_006bc850"
-      ]
+      ],
+      "dh": "1b73483c"
     },
     {
       "name": "_NullSubTrace",
@@ -46,7 +48,8 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "_NullSubTrace"
-      ]
+      ],
+      "dh": "eb87dbb0"
     },
     {
       "name": "QSERVER_LOG",
@@ -60,7 +63,8 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "QSERVER_LOG"
-      ]
+      ],
+      "dh": "1b69b5b7"
     },
     {
       "name": "_unused_SetupDefaultValues",
@@ -74,7 +78,8 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "_unused_SetupDefaultValues"
-      ]
+      ],
+      "dh": "7e270d0e"
     },
     {
       "name": "StartListening",
@@ -94,7 +99,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "b79b4c01"
     },
     {
       "name": "SwapWorkerSlotValue",
@@ -111,7 +117,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "57844aac"
     },
     {
       "name": "ClearModePacketQueues",
@@ -129,7 +136,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "0da74d57"
     },
     {
       "name": "GetConnectedClients",
@@ -146,7 +154,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "a9a49ab8"
     },
     {
       "name": "IsSingleplayer",
@@ -163,7 +172,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "6adb23cb"
     },
     {
       "name": "SetPerIpConnectionLimit",
@@ -180,7 +190,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "7075a605"
     },
     {
       "name": "WaitForEmptyEvent",
@@ -197,7 +208,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "c04cee93"
     },
     {
       "name": "EnterCriticalSection_QServer",
@@ -215,7 +227,8 @@
       "usedTypes": [
         "FogCritSectLockStrc",
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "cd388921"
     },
     {
       "name": "LeaveCriticalSection_QServer",
@@ -232,7 +245,8 @@
       ],
       "usedTypes": [
         "FogCritSectLockStrc"
-      ]
+      ],
+      "dh": "3b4bad3b"
     },
     {
       "name": "FindClientByClientId",
@@ -251,7 +265,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bdffb38a"
     },
     {
       "name": "FindClientBySocket",
@@ -271,7 +286,8 @@
         "D2QServerStrc",
         "SOCKET",
         "uint32_t"
-      ]
+      ],
+      "dh": "312ffc9c"
     },
     {
       "name": "IncrementClientRefCount",
@@ -289,7 +305,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "49d6505e"
     },
     {
       "name": "NET_QServerClientPacket_FreeAllPackets",
@@ -309,7 +326,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerClientPacketStrc"
-      ]
+      ],
+      "dh": "e31c2d14"
     },
     {
       "name": "LogHackList",
@@ -325,7 +343,8 @@
         "LogHackList",
         "GetTickCount",
         "LOGMANAGER_TraceToModuleLog"
-      ]
+      ],
+      "dh": "5710743d"
     },
     {
       "name": "SweepExpiredHackEntries",
@@ -346,7 +365,8 @@
         "D2QServerHacklistEntryStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "be278871"
     },
     {
       "name": "HACKL_RemoveIpFromHacklist",
@@ -368,7 +388,8 @@
         "D2QServerHacklistEntryStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5920fec3"
     },
     {
       "name": "HACKL_CheckAndResetHacklistEntry",
@@ -386,7 +407,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0baf06aa"
     },
     {
       "name": "IsPerIpLimitReached",
@@ -406,7 +428,8 @@
         "D2QServerStrc",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a0f2e5d"
     },
     {
       "name": "CountQueuedPacketsInMode",
@@ -423,7 +446,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "8dba78c1"
     },
     {
       "name": "DequeueModePacket",
@@ -442,7 +466,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "329fc0fc"
     },
     {
       "name": "WaitForEmptyEventOrPumpIo",
@@ -461,7 +486,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "08f25847"
     },
     {
       "name": "GetTokenHashMapByTokenId",
@@ -481,7 +507,8 @@
         "D2QServerStrc",
         "D2TSExplicitListHeadStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c9bf7cb"
     },
     {
       "name": "GetClientLocalIpByToken",
@@ -502,7 +529,8 @@
         "D2QServerStrc",
         "D2TSExplicitListHeadStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a54bff2"
     },
     {
       "name": "GetClientLocalPortByToken",
@@ -525,7 +553,8 @@
         "u_short",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0dbe17f2"
     },
     {
       "name": "GetClientPeerIpByToken",
@@ -546,7 +575,8 @@
         "D2QServerStrc",
         "LPCRITICAL_SECTION",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8b6bb8f"
     },
     {
       "name": "GetClientPeerPortByToken",
@@ -569,7 +599,8 @@
         "u_short",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70cc2627"
     },
     {
       "name": "GetClientIpStringByClientId",
@@ -588,7 +619,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "054d0f75"
     },
     {
       "name": "GetClientIpByToken",
@@ -608,7 +640,8 @@
         "_union_",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "68f87fe1"
     },
     {
       "name": "ProbePeerNameByToken",
@@ -628,7 +661,8 @@
         "D2QServerStrc",
         "sockaddr",
         "uint32_t"
-      ]
+      ],
+      "dh": "52a29aad"
     },
     {
       "name": "GetClientSocketByToken",
@@ -647,7 +681,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "01c1e837"
     },
     {
       "name": "QSHackUnlistIP",
@@ -668,7 +703,8 @@
         "D2QServerStrc",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "d87efd97"
     },
     {
       "name": "QSHackListSize",
@@ -686,7 +722,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "f9be0e59"
     },
     {
       "name": "SetHacklistLineHook",
@@ -707,7 +744,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "fpD2QServerLineHook"
-      ]
+      ],
+      "dh": "c88e346e"
     },
     {
       "name": "SetReservedHook",
@@ -724,7 +762,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "5c267336"
     },
     {
       "name": "SetClientServerTokenByClientId",
@@ -744,7 +783,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fec10584"
     },
     {
       "name": "GetClientServerTokenByClientId",
@@ -763,7 +803,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b831072"
     },
     {
       "name": "FreeHacklistBuckets",
@@ -783,7 +824,8 @@
         "D2QServerHacklistEntryStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6878d4a"
     },
     {
       "name": "Unreferenced_006bf170",
@@ -802,7 +844,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "14f163b9"
     },
     {
       "name": "IncrementPerIpConnCount",
@@ -823,7 +866,8 @@
         "D2QServerStrc",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab2370b6"
     },
     {
       "name": "NET_QServer_DecrementPerIpConnectionCount",
@@ -843,7 +887,8 @@
         "D2QServerStrc",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "a236bb86"
     },
     {
       "name": "PruneIpRateList",
@@ -863,7 +908,8 @@
       "usedTypes": [
         "D2QServerIpRateEntryStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "6e80747c"
     },
     {
       "name": "FreeIpRateList",
@@ -882,7 +928,8 @@
       "usedTypes": [
         "D2QServerIpRateEntryStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "73bf70bd"
     },
     {
       "name": "SendPacketToClient",
@@ -905,7 +952,8 @@
         "D2QServerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8b9f2637"
     },
     {
       "name": "SetHackMode",
@@ -922,7 +970,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "74a876f6"
     },
     {
       "name": "Listen98Nt",
@@ -944,7 +993,8 @@
         "D2QServerStrc",
         "WSADATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0c60263"
     },
     {
       "name": "CountAllQueuedPackets",
@@ -963,7 +1013,8 @@
         "D2QServerModePacketNodeStrc",
         "D2QServerModePacketNodeStrc *",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "d3fa61f8"
     },
     {
       "name": "_NullSubRet4",
@@ -980,7 +1031,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "57d4e6d1"
     },
     {
       "name": "_NullSubRet8",
@@ -997,7 +1049,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "43f1489b"
     },
     {
       "name": "AddGameTokenFilter",
@@ -1016,7 +1069,8 @@
         "D2QServerStrc",
         "D2QServerTokenFilterEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6fed2b32"
     },
     {
       "name": "MatchesGameTokenFilter",
@@ -1034,7 +1088,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b5455ec6"
     },
     {
       "name": "MatchesGameTokenFilter_Thunk",
@@ -1053,7 +1108,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ced75aef"
     },
     {
       "name": "CopyWorkerTelemetrySnapshot",
@@ -1073,7 +1129,8 @@
         "D2QServerStrc",
         "D2QServerWorkerTelemetryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8856d08b"
     },
     {
       "name": "_NullSub",
@@ -1087,7 +1144,8 @@
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
         "_NullSub"
-      ]
+      ],
+      "dh": "8357f95d"
     },
     {
       "name": "NET_QServer_Init",
@@ -1124,7 +1182,8 @@
         "fpD2QServerSinglePlayerSendHook",
         "fpD2QServerSourceLineHook",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfcd1772"
     },
     {
       "name": "BroadcastToAllClients",
@@ -1144,7 +1203,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6883d91c"
     },
     {
       "name": "AddClient",
@@ -1169,7 +1229,8 @@
         "D2QServerStrc",
         "SOCKET",
         "uint32_t"
-      ]
+      ],
+      "dh": "53baa044"
     },
     {
       "name": "RemoveClient",
@@ -1197,7 +1258,8 @@
         "D2QServerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "314ad718"
     },
     {
       "name": "BanIpAddress",
@@ -1219,7 +1281,8 @@
         "D2QServerHacklistEntryStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f7a2096"
     },
     {
       "name": "CheckIpConnectionRate",
@@ -1242,7 +1305,8 @@
         "D2QServerStrc",
         "_struct_",
         "in_addr"
-      ]
+      ],
+      "dh": "b2affe5c"
     },
     {
       "name": "QSSpamCheck",
@@ -1262,7 +1326,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "d034579f"
     },
     {
       "name": "Shutdown",
@@ -1291,7 +1356,8 @@
         "D2QServerModePacketNodeStrc",
         "D2QServerStrc",
         "SOCKET"
-      ]
+      ],
+      "dh": "91570a8d"
     },
     {
       "name": "RemoveClientAndClearLog",
@@ -1311,7 +1377,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "1c8b1433"
     },
     {
       "name": "SendPacketByClientId",
@@ -1332,7 +1399,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ffae6b2e"
     },
     {
       "name": "CloseRemoteConnection",
@@ -1356,7 +1424,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "a3f638c0"
     },
     {
       "name": "BanClient",
@@ -1379,7 +1448,8 @@
         "D2QServerStrc",
         "_struct_",
         "uint32_t"
-      ]
+      ],
+      "dh": "098b3f01"
     },
     {
       "name": "DisconnectAndBanIp",
@@ -1401,7 +1471,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a2bd91b7"
     },
     {
       "name": "thunk_CloseRemoteConnection",
@@ -1419,7 +1490,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "7030b3a7"
     },
     {
       "name": "QSDisconnectIP",
@@ -1441,7 +1513,8 @@
         "D2QServerStrc",
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a615065"
     },
     {
       "name": "HACKL_DisconnectAndBanClient",
@@ -1462,7 +1535,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "135c8b5c"
     },
     {
       "name": "CheckIfPlayerIsBannedByAddress",
@@ -1486,7 +1560,8 @@
         "in_addr",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5951f29d"
     },
     {
       "name": "RecvForClient",
@@ -1517,7 +1592,8 @@
         "D2QServerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56515d6b"
     }
   ]
 }

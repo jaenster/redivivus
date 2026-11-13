@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ba3c29cf"
     },
     {
       "name": "INIT_SetWndProcBGlobalPointer",
@@ -38,7 +39,8 @@
       ],
       "usedTypes": [
         "WndProcB"
-      ]
+      ],
+      "dh": "49975b97"
     },
     {
       "name": "UI_Init",
@@ -62,7 +64,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "aa47b7fa"
     },
     {
       "name": "D2GFX_CheckVideoMode",
@@ -78,7 +81,8 @@
         "D2GFX_CheckVideoMode",
         "SPRITECACHE_Shutdown",
         "D2GFX_DestroyWindow"
-      ]
+      ],
+      "dh": "cde7de95"
     },
     {
       "name": "BeginCutSceneAtResolutionMode0",
@@ -93,7 +97,8 @@
       "calledFunctions": [
         "BeginCutSceneAtResolutionMode0",
         "D2GFX_BeginCutScene"
-      ]
+      ],
+      "dh": "1ac0ea5d"
     },
     {
       "name": "SetResolutionModeWithEndCutScene",
@@ -113,7 +118,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2b120ce8"
     },
     {
       "name": "D2GFX_SetVideoMode",
@@ -138,7 +144,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3887cb40"
     },
     {
       "name": "thunk_D2GFX_ClearCaches",

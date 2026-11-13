@@ -25,7 +25,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e553b7a7"
     },
     {
       "name": "FindUnitInNeighboredRooms",
@@ -50,7 +51,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "bcd67080"
     },
     {
       "name": "CheckRoomIfNotInRange",
@@ -70,7 +72,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "68d47cb2"
     },
     {
       "name": "CheckRoomIfInRange",
@@ -90,7 +93,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "90ff2df6"
     },
     {
       "name": "GetTestedUnitsFromRoom",
@@ -115,7 +119,8 @@
         "D2UnitStrc *",
         "UNITFINDTEST",
         "int32_t"
-      ]
+      ],
+      "dh": "52dee52e"
     },
     {
       "name": "GetNearestTestedUnit",
@@ -143,7 +148,8 @@
         "D2UnitStrc",
         "fpUnitTest",
         "int32_t"
-      ]
+      ],
+      "dh": "9eee724e"
     },
     {
       "name": "ExpandUnitFinds",
@@ -167,7 +173,8 @@
         "D2UnitFindsStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d0a8b5a8"
     },
     {
       "name": "InitializeUnitFindData",
@@ -195,7 +202,8 @@
         "D2UnitFindsStrc",
         "UNITFINDTEST",
         "int32_t"
-      ]
+      ],
+      "dh": "8f36eea5"
     },
     {
       "name": "FreeUnitFindData",
@@ -213,7 +221,8 @@
       ],
       "usedTypes": [
         "D2UnitFindDataStrc"
-      ]
+      ],
+      "dh": "f5b78670"
     },
     {
       "name": "TestUnit",
@@ -247,7 +256,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1d9fd85"
     },
     {
       "name": "UNITFINDS_FindCullRange",
@@ -277,7 +287,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6293bc18"
     }
   ]
 }

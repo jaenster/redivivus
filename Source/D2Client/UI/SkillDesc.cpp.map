@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2QuestLogStrc"
-      ]
+      ],
+      "dh": "37777740"
     },
     {
       "name": "GetMonTypeLine",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2MonTypeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "eaa4d28c"
     },
     {
       "name": "SKILLDESC_FormatItemStatLine",
@@ -67,7 +69,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4ebace1"
     },
     {
       "name": "DamageToUndeadText",
@@ -91,7 +94,8 @@
         "WCHAR",
         "int32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "7b86b5d4"
     },
     {
       "name": "SKILLDESC_BuildStatListDesc",
@@ -113,7 +117,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2UnitStat"
-      ]
+      ],
+      "dh": "e9dd6c0a"
     },
     {
       "name": "SKILLDESC_CalcStatGroupValue",
@@ -138,7 +143,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68147c1b"
     },
     {
       "name": "SKILLDESC_CalcStatGroupMinMax",
@@ -162,7 +168,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "bc89d1cc"
     },
     {
       "name": "ItemStatCost_DescFunc_DGrpFunc",
@@ -208,7 +215,8 @@
         "uint32_t",
         "uint8_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "5eaf0ec5"
     },
     {
       "name": "SKILLDESC_BuildStatDescription",
@@ -235,7 +243,8 @@
         "WCHAR",
         "eD2UnitStat",
         "wchar_t"
-      ]
+      ],
+      "dh": "dc81d2dd"
     },
     {
       "name": "SKILLDESC_BuildChargeSkillDesc",
@@ -268,7 +277,8 @@
         "uint16_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "67c6cd3d"
     },
     {
       "name": "SKILLDESC_BuildStatBuffDesc",
@@ -321,7 +331,8 @@
         "uint16_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "44e06979"
     },
     {
       "name": "SKILLDESC_AppendStatBuffText",
@@ -345,7 +356,8 @@
         "WCHAR",
         "int32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "19d1964d"
     },
     {
       "name": "SKILLDESC_AppendItemBuffText",
@@ -371,7 +383,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e162ea9"
     },
     {
       "name": "SKILLDESC_AppendSetBonusTextByStateValue",
@@ -397,7 +410,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "56f0f870"
     },
     {
       "name": "SKILLDESC_FormatMagicPrefixDesc",
@@ -426,7 +440,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b87bc6d"
     },
     {
       "name": "SKILLDESC_FormatMagicSuffixDesc",
@@ -454,7 +469,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0acd011b"
     },
     {
       "name": "SKILLDESC_BuildMagicAffixDesc",
@@ -486,7 +502,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "546f1a1e"
     },
     {
       "name": "SKILLDESC_GetStatNameString",
@@ -504,7 +521,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5ded5ce6"
     },
     {
       "name": "GetSkillLongDescription",
@@ -522,7 +540,8 @@
       "usedTypes": [
         "eD2Skills",
         "int16_t"
-      ]
+      ],
+      "dh": "8665560e"
     },
     {
       "name": "GetAltSkillDescription",
@@ -540,7 +559,8 @@
       "usedTypes": [
         "eD2Skills",
         "int16_t"
-      ]
+      ],
+      "dh": "0a3c0385"
     },
     {
       "name": "ApplyPassiveFireMasteryDamage",
@@ -562,7 +582,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ecaec72d"
     },
     {
       "name": "ApplyPassiveLightningMasteryDamage",
@@ -584,7 +605,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "395f75cb"
     },
     {
       "name": "GetDamageTypeLocale",
@@ -602,7 +624,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e901af74"
     },
     {
       "name": "SKILLDESC_ElemTypeToColorIndex",
@@ -620,7 +643,8 @@
       "usedTypes": [
         "eD2ElementalDamageTypeDWORD",
         "uint32_t"
-      ]
+      ],
+      "dh": "784f3052"
     },
     {
       "name": "SKILLDESC_GetAuraBonusDamage",
@@ -647,7 +671,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "713cfd56"
     },
     {
       "name": "SKILLDESC_AccumulateAuraBonusDmg",
@@ -679,7 +704,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "36402b80"
     },
     {
       "name": "SKILLDESC_CalcSkillElemDamage",
@@ -701,7 +727,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a1090d72"
     },
     {
       "name": "SKILLDESC_FormatIntValue",
@@ -720,7 +747,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "eca82022"
     },
     {
       "name": "SKILLDESC_FormatDecimalValue",
@@ -739,7 +767,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3e622d54"
     },
     {
       "name": "SKILLDESC_FormatDamageRange",
@@ -758,7 +787,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "06b23548"
     },
     {
       "name": "SKILLDESC_FormatDamageRangeWithCalc",
@@ -778,7 +808,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a7341f57"
     },
     {
       "name": "SKILLDESC_FormatDecimalRange",
@@ -797,7 +828,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b1ec7449"
     },
     {
       "name": "SKILLDESC_FormatRangeWithStrings",
@@ -819,7 +851,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a293d9ff"
     },
     {
       "name": "SKILLDESC_FormatRangeDivided",
@@ -842,7 +875,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1bcbdbae"
     },
     {
       "name": "SKILLDESC_FormatStringWithCalc",
@@ -864,7 +898,8 @@
         "WCHAR",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4363b62b"
     },
     {
       "name": "SKILLDESC_FormatSignedValue",
@@ -886,7 +921,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b0468abe"
     },
     {
       "name": "SKILLDESC_FormatDecimalWithStrings",
@@ -910,7 +946,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b1c6687"
     },
     {
       "name": "SKILLDESC_FormatDecimalWithLabel",
@@ -933,7 +970,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "d7a30b1d"
     },
     {
       "name": "SKILLDESC_FormatValuePercentage",
@@ -955,7 +993,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cd4f0e3d"
     },
     {
       "name": "SKILLDESC_FormatValueTwoStrings",
@@ -977,7 +1016,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2de5f935"
     },
     {
       "name": "SKILLDESC_FormatTwoValuesSigned",
@@ -999,7 +1039,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "201cd712"
     },
     {
       "name": "SKILLDESC_FormatSignedRangeOrValue",
@@ -1021,7 +1062,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2570b104"
     },
     {
       "name": "SKILLDESC_FormatMinMaxRange",
@@ -1044,7 +1086,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a57500db"
     },
     {
       "name": "SKILLDESC_FormatMinMaxRangeLabelsFirst",
@@ -1067,7 +1110,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "7d235082"
     },
     {
       "name": "SKILLDESC_FormatDamageMinMax",
@@ -1090,7 +1134,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "451ca827"
     },
     {
       "name": "SKILLDESC_FormatThreeValues",
@@ -1112,7 +1157,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2731699f"
     },
     {
       "name": "SKILLDESC_FormatDecimalSigned",
@@ -1134,7 +1180,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "8afcb29b"
     },
     {
       "name": "DistanceToYardsText",
@@ -1156,7 +1203,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e7643bf8"
     },
     {
       "name": "SKILLDESC_FormatSkillCalcValue",
@@ -1177,7 +1225,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "30338e47"
     },
     {
       "name": "SKILLDESC_DescLine1_SkillParams",
@@ -1205,7 +1254,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5b70248e"
     },
     {
       "name": "SKILLDESC_CalcWeaponDamageRange",
@@ -1241,7 +1291,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49c2ad37"
     },
     {
       "name": "SKILLDESC_CalcElemDamageRange",
@@ -1268,7 +1319,8 @@
         "D2UnitStrc",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e7d2796"
     },
     {
       "name": "AdjustDamageByType",
@@ -1288,7 +1340,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d1e22337"
     },
     {
       "name": "SKILLDESC_CalcAttackRateBonus",
@@ -1320,7 +1373,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "29aaf91f"
     },
     {
       "name": "SKILLDESC_CalcAttackRateForWeapon",
@@ -1340,7 +1394,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e73779be"
     },
     {
       "name": "SKILLDESC_CalcEquippedAttackRate",
@@ -1362,7 +1417,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "430cb636"
     },
     {
       "name": "SKILLDESC_CalcCompareAttackRate",
@@ -1393,7 +1449,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7830f858"
     },
     {
       "name": "SKILLDESC_CalcAttackRateWithState",
@@ -1425,7 +1482,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bfa42067"
     },
     {
       "name": "SKILLDESC_GetPrimaryWeapon",
@@ -1453,7 +1511,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "01708855"
     },
     {
       "name": "SKILLDESC_GetSecondaryWeapon",
@@ -1480,7 +1539,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6acbf92"
     },
     {
       "name": "SKILLDESC_CalcDualWieldDamage",
@@ -1510,7 +1570,8 @@
         "int32_t",
         "pfnSkillDescWeaponDmgCalc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1eef615"
     },
     {
       "name": "SKILLDESC_CalcDualWieldDmg",
@@ -1530,7 +1591,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "429eca44"
     },
     {
       "name": "SKILLDESC_CalcDualWieldWithAR",
@@ -1554,7 +1616,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "57de9bf8"
     },
     {
       "name": "SKILLDESC_CalcDualWieldWithARState",
@@ -1575,7 +1638,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c83e909a"
     },
     {
       "name": "SKILLDESC_CalcDualWieldSimple",
@@ -1596,7 +1660,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e3cdafe6"
     },
     {
       "name": "SKILLDESC_DrawDamageWithRange",
@@ -1618,7 +1683,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4a9a671"
     },
     {
       "name": "SKILLDESC_DrawElemDamageWithRange",
@@ -1639,7 +1705,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3f45af25"
     },
     {
       "name": "SKILLDESC_DrawDamageNumbers",
@@ -1661,7 +1728,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "347df5aa"
     },
     {
       "name": "SKILLDESC_DrawTwoLineText",
@@ -1683,7 +1751,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "09d30ccc"
     },
     {
       "name": "SKILLDESC_DrawSingleNumber",
@@ -1704,7 +1773,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9140c304"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgPhysical",
@@ -1733,7 +1803,8 @@
         "int32_t",
         "pfnSkillDescWeaponDmgCalc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1772d790"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElemental",
@@ -1766,7 +1837,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0793c31b"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgWithElem",
@@ -1801,7 +1873,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3b1f1776"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType1",
@@ -1830,7 +1903,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9f46f22"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType2",
@@ -1859,7 +1933,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95b44f13"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgType3",
@@ -1889,7 +1964,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3448606"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgBasic",
@@ -1911,7 +1987,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eaca74ab"
     },
     {
       "name": "SKILLDESC_CalcAuraDamageRange",
@@ -1950,7 +2027,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "59bc2f1e"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgAura",
@@ -1983,7 +2061,8 @@
         "int16_t",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5d387e73"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgAuraElem",
@@ -2007,7 +2086,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "23bff141"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgDualWield",
@@ -2031,7 +2111,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8b520ac2"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgComplex",
@@ -2060,7 +2141,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "089f9bff"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElem2H",
@@ -2089,7 +2171,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "55b94a7a"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgElem2HAlt",
@@ -2119,7 +2202,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e109f120"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgRanged",
@@ -2147,7 +2231,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "606f0fb4"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgSimple",
@@ -2169,7 +2254,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bbe66700"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgPoisonRange",
@@ -2199,7 +2285,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97670ae0"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgBow",
@@ -2225,7 +2312,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cea0c4d2"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgThrow",
@@ -2262,7 +2350,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bceb112d"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgKick",
@@ -2292,7 +2381,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7e284da"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgFist",
@@ -2317,7 +2407,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "89e61097"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgTrap",
@@ -2342,7 +2433,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2049a458"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgConversion",
@@ -2371,7 +2463,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8fa8d30d"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgSummon",
@@ -2411,7 +2504,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4a0e6d83"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgProgressive",
@@ -2444,7 +2538,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c22b3721"
     },
     {
       "name": "SKILLDESC_DrawSkillDmgProgElem",
@@ -2467,7 +2562,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d47ff2ac"
     },
     {
       "name": "SKILLDESC_DescLineD_AppendDuration",
@@ -2493,7 +2589,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efbe6543"
     },
     {
       "name": "DamgeTypeToText",
@@ -2516,7 +2613,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "81500f55"
     },
     {
       "name": "SKILLDESC_DescLineA_AppendDamageType",
@@ -2540,7 +2638,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a648b442"
     },
     {
       "name": "SKILLDESC_DescLine32_MissileDamage",
@@ -2565,7 +2664,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "205b8ea1"
     },
     {
       "name": "SKILLDESC_DescLine9_ElemDamage",
@@ -2592,7 +2692,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ae2dee6"
     },
     {
       "name": "SKILLDESC_DescLine8_AppendToHit",
@@ -2614,7 +2715,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "176797ac"
     },
     {
       "name": "SKILLDESC_FormatMissileDamage",
@@ -2636,7 +2738,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a22c6069"
     },
     {
       "name": "SKILLDESC_DescLine16_MissileDamage",
@@ -2664,7 +2767,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e3bf773d"
     },
     {
       "name": "SKILLDESC_DescLine1B_AppendDamage",
@@ -2686,7 +2790,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "fc4c6950"
     },
     {
       "name": "SKILLDESC_DescLine1A_SkillDamage",
@@ -2710,7 +2815,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e3d4273b"
     },
     {
       "name": "SKILLDESC_DescLine3F_SignedPctRange",
@@ -2732,7 +2838,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a368fcb3"
     },
     {
       "name": "SKILLDESC_DescLine2A_DecimalRange",
@@ -2754,7 +2861,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "dbe675c9"
     },
     {
       "name": "SKILLDESC_DescLine40_DecimalLabel",
@@ -2778,7 +2886,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "77bea974"
     },
     {
       "name": "SKILLDESC_DescLine41_AppendStrings",
@@ -2798,7 +2907,8 @@
       "usedTypes": [
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "97c460d6"
     },
     {
       "name": "SKILLDESC_DescLine45_DecimalLabel",
@@ -2820,7 +2930,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "3b7b9fbf"
     },
     {
       "name": "SKILLDESC_DescLine42_CalcByIndex",
@@ -2842,7 +2953,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e4927ec8"
     },
     {
       "name": "SKILLDESC_DescLine27_SkillElemCalc",
@@ -2874,7 +2986,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "29bf61fa"
     },
     {
       "name": "SKILLDESC_DescLine29_FormatMonster",
@@ -2904,7 +3017,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "859f3f88"
     },
     {
       "name": "SKILLDESC_DescLine2D_SkillPassive",
@@ -2926,7 +3040,8 @@
         "D2SkillsTxt",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b4b24a27"
     },
     {
       "name": "SKILLDESC_DescLine22_SkillSynergies",
@@ -2957,7 +3072,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7262fc0e"
     },
     {
       "name": "SKILLDESC_DescLine35_BonusList",
@@ -2979,7 +3095,8 @@
       "usedTypes": [
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "bbd6d171"
     },
     {
       "name": "SKILLDESC_HasAnyClassSkill",
@@ -3004,7 +3121,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ac205be0"
     },
     {
       "name": "SKILLDESC_DrawSkillInfo",
@@ -3045,7 +3163,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "597b8735"
     },
     {
       "name": "DRAW_UI_STAT_Damage",
@@ -3068,7 +3187,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7eda12c1"
     },
     {
       "name": "SKILLDESC_GetSkillBonusText",
@@ -3094,7 +3214,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2831da48"
     },
     {
       "name": "SKILLDESC_FormatValueWithSign",
@@ -3117,7 +3238,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "1705440f"
     },
     {
       "name": "SKILLDESC_DescLineB_SignedFormat",
@@ -3139,7 +3261,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "62527b5e"
     },
     {
       "name": "SKILLDESC_DescLineE_PerLevelBonus",
@@ -3167,7 +3290,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "8964ebbe"
     },
     {
       "name": "SKILLDESC_DescLine30_DamageMinMax",
@@ -3196,7 +3320,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "064898b3"
     },
     {
       "name": "SKILLDESC_ProcessDescLine",
@@ -3280,7 +3405,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "53f6bb38"
     },
     {
       "name": "SKILLDESC_BuildSkillTooltip",
@@ -3315,7 +3441,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "9186ef82"
     },
     {
       "name": "SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck",
@@ -3349,7 +3476,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "24de74dd"
     },
     {
       "name": "SKILLDESC_BuildSkillShortTooltip",
@@ -3378,7 +3506,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "61a9ae44"
     }
   ]
 }

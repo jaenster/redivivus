@@ -22,7 +22,8 @@
       "usedTypes": [
         "SID_C2S_ClientId",
         "uint32_t"
-      ]
+      ],
+      "dh": "4797dd52"
     },
     {
       "name": "BNSEND_SetServerToken",
@@ -36,7 +37,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNSEND_SetServerToken"
-      ]
+      ],
+      "dh": "a4a8605b"
     },
     {
       "name": "BNSEND_GetServerToken",
@@ -53,7 +55,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e9847f4a"
     },
     {
       "name": "BNSEND_SetClientToken",
@@ -67,7 +70,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNSEND_SetClientToken"
-      ]
+      ],
+      "dh": "68046ec3"
     },
     {
       "name": "BNCLIENT_GetBNetClientToken",
@@ -81,7 +85,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNCLIENT_GetBNetClientToken"
-      ]
+      ],
+      "dh": "147e3a0c"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x29_LogonResponse",
@@ -107,7 +112,8 @@
         "BnDoubleHashInput",
         "SID_C2S_LogonResponse",
         "uint32_t"
-      ]
+      ],
+      "dh": "64d839bf"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
@@ -133,7 +139,8 @@
         "BnDoubleHashInput",
         "SID_C2S_LogonResponse",
         "uint32_t"
-      ]
+      ],
+      "dh": "2cc09975"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
@@ -156,7 +163,8 @@
       "usedTypes": [
         "D2XSHA1Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1982f71f"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x31_ChangePassword",
@@ -181,7 +189,8 @@
         "BnDoubleHashInput",
         "D2XSHA1Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a19610d2"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x07_ReportVersion",
@@ -204,7 +213,8 @@
       "usedTypes": [
         "SID_C2S_ReportVersion",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ace3870"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x06_StartVersioning",
@@ -239,7 +249,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d60e5132"
     },
     {
       "name": "BNSEND_StoreCDKeyHashData",
@@ -256,7 +267,8 @@
         "SMemFree",
         "SMemAlloc",
         "memcpy"
-      ]
+      ],
+      "dh": "1c82ab8c"
     },
     {
       "name": "BNSEND_FreeRealmQueryData",
@@ -271,7 +283,8 @@
       "calledFunctions": [
         "BNSEND_FreeRealmQueryData",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "5b79bf5e"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x41_QueryAdURL",
@@ -292,7 +305,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7540c331"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x40_QueryRealms2",
@@ -312,7 +326,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cea9c55b"
     },
     {
       "name": "BNSEND_FreeChannelListData",
@@ -327,7 +342,8 @@
       "calledFunctions": [
         "BNSEND_FreeChannelListData",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "1aeccebd"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0B_GetChannelList",
@@ -349,7 +365,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "27a09efc"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0C_JoinChannel",
@@ -372,7 +389,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "76739007"
     },
     {
       "name": "BNSEND_EncodePacketEscape",
@@ -390,7 +408,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0901fb96"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat",
@@ -412,7 +431,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ce4342a3"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x10_LeaveChat",
@@ -431,7 +451,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e544873"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x0E_ChatCommand",
@@ -454,7 +475,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "62700c88"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x15_CheckAd",
@@ -474,7 +496,8 @@
       ],
       "usedTypes": [
         "SID_C2S_CheckAd"
-      ]
+      ],
+      "dh": "c433f58c"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x21_DisplayAd",
@@ -495,7 +518,8 @@
       "usedTypes": [
         "SID_C2S_DisplayAd",
         "uint32_t"
-      ]
+      ],
+      "dh": "2da0705c"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x1C_StartAdVex3",
@@ -517,7 +541,8 @@
         "SID_C2S_StartAdvex",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bca5843d"
     },
     {
       "name": "BNCLIENT_SendKeepAlive",
@@ -532,7 +557,8 @@
       "calledFunctions": [
         "BNCLIENT_SendKeepAlive",
         "NET_SID_CLIENT_Send"
-      ]
+      ],
+      "dh": "2614c197"
     },
     {
       "name": "thunk_NET_SID_CLIENT_Send",
@@ -550,7 +576,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "9d3aa98e"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x1F_LeaveGame",
@@ -569,7 +596,8 @@
       ],
       "usedTypes": [
         "IgnoreList"
-      ]
+      ],
+      "dh": "5b24c671"
     },
     {
       "name": "BNCLIENT_GetEnterChatResponseFlags",
@@ -588,7 +616,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f61e697f"
     },
     {
       "name": "BNSEND_FreeGameListData",
@@ -603,7 +632,8 @@
       "calledFunctions": [
         "BNSEND_FreeGameListData",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "b7ff8688"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x09_GetAdvListEx",
@@ -626,7 +656,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8c26c71e"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x22_NotifyJoin",
@@ -647,7 +678,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ef362249"
     },
     {
       "name": "BNSEND_StoreUserProfileData",
@@ -669,7 +701,8 @@
         "u_short",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ac35b12"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x3E_LogonRealmEx",
@@ -692,7 +725,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9ab69275"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x12_LocaleInfo",
@@ -715,7 +749,8 @@
         "SID_C2S_LocaleInfo",
         "_SYSTEMTIME",
         "_TIME_ZONE_INFORMATION"
-      ]
+      ],
+      "dh": "c5302250"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x16_ClickAd",
@@ -735,7 +770,8 @@
         "SID_C2S_ClickAd",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4681e65e"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x27_WriteUserData",
@@ -760,7 +796,8 @@
         "char *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "510d744f"
     },
     {
       "name": "BNSEND_StoreReadUserData",
@@ -780,7 +817,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "d230925b"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x26_ReadUserData",
@@ -805,7 +843,8 @@
         "char *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "85d15411"
     },
     {
       "name": "BNSEND_GetStoredReadUserData",
@@ -828,7 +867,8 @@
         "char *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "90bb0157"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x59_SetEmail",
@@ -853,7 +893,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e163ad96"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5A_ResetPassword",
@@ -878,7 +919,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3375d265"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5B_ChangeEmail",
@@ -903,7 +945,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c19ef704"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x5D_ReportCrash",
@@ -924,7 +967,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5db3429f"
     },
     {
       "name": "BNSEND_StoreRealmQueryData",
@@ -944,7 +988,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "c1d65d69"
     },
     {
       "name": "BNSEND_StoreChannelListData",
@@ -964,7 +1009,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "3933bf3d"
     },
     {
       "name": "BNSEND_StoreGameListData",
@@ -984,7 +1030,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "d721755e"
     },
     {
       "name": "BNCLIENT_InterlockedCompareExchange",
@@ -998,7 +1045,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNCLIENT_InterlockedCompareExchange"
-      ]
+      ],
+      "dh": "70f7855c"
     },
     {
       "name": "Unreferenced_0051bea0",
@@ -1012,7 +1060,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "Unreferenced_0051bea0"
-      ]
+      ],
+      "dh": "844ac2b3"
     },
     {
       "name": "D2CheckExpansionGame",
@@ -1035,7 +1084,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "Unreferenced_0051bed0"
-      ]
+      ],
+      "dh": "5b92844b"
     },
     {
       "name": "GetDnsResults",
@@ -1067,7 +1117,8 @@
         "hostent",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6ad3de1b"
     },
     {
       "name": "GetDnsRecordSync",
@@ -1084,7 +1135,8 @@
       ],
       "usedTypes": [
         "char *"
-      ]
+      ],
+      "dh": "9fb8853e"
     },
     {
       "name": "Unreferenced_0051c170",
@@ -1099,7 +1151,8 @@
       "calledFunctions": [
         "Unreferenced_0051c170",
         "NET_SID_CLIENT_Send_0x33_GetFileTime"
-      ]
+      ],
+      "dh": "21190a56"
     },
     {
       "name": "BnetLoadAndReturn",
@@ -1117,7 +1170,8 @@
       ],
       "usedTypes": [
         "D2BNetGatewayAccessStr"
-      ]
+      ],
+      "dh": "32407d43"
     },
     {
       "name": "GetBnetIp",
@@ -1140,7 +1194,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3bd0db0"
     },
     {
       "name": "BNSEND_GetConnectionState",
@@ -1161,7 +1216,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cda5e862"
     },
     {
       "name": "BNCLIENT_SendLogonRequest",
@@ -1179,7 +1235,8 @@
         "NET_SID_CLIENT_ResetRequireResponse",
         "NET_SID_CLIENT_Send_0x3A_LogonResponse2",
         "NET_SID_CLIENT_Send_0x53_AuthAccountLogon"
-      ]
+      ],
+      "dh": "3c4894dc"
     },
     {
       "name": "BNCLIENT_WaitForLogonResponse",
@@ -1197,7 +1254,8 @@
         "BNCLIENT_GetBNetClientToken",
         "NET_SID_CLIENT_GetRequiredAnswer",
         "BNMESSQUEUE_SetStateIfZero"
-      ]
+      ],
+      "dh": "46d0aaee"
     },
     {
       "name": "BNCLIENT_SendCreateAccountRequest",
@@ -1215,7 +1273,8 @@
         "NET_SID_CLIENT_ResetRequireResponse",
         "NET_SID_CLIENT_Send_0x3D_CreateAccount2",
         "NET_SID_CLIENT_Send_0x52_AuthAccountCreate"
-      ]
+      ],
+      "dh": "4efc589d"
     },
     {
       "name": "BNCLIENT_WaitForCreateAccountResponse",
@@ -1235,7 +1294,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "91f903fc"
     },
     {
       "name": "BNCLIENT_SendChangePasswordRequest",
@@ -1253,7 +1313,8 @@
         "NET_SID_CLIENT_ResetRequireResponse",
         "NET_SID_CLIENT_Send_0x31_ChangePassword",
         "NET_SID_CLIENT_Send_0x55_AuthAccountChange"
-      ]
+      ],
+      "dh": "017468f8"
     },
     {
       "name": "BNCLIENT_WaitForChangePasswordResponse",
@@ -1273,7 +1334,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1c12816e"
     },
     {
       "name": "BNCLIENT_EnterChatAndJoinChannel",
@@ -1298,7 +1360,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "97c84a97"
     },
     {
       "name": "thunk_NET_SID_CLIENT_Send_0x10_LeaveChat",
@@ -1313,7 +1376,8 @@
       "calledFunctions": [
         "thunk_NET_SID_CLIENT_Send_0x10_LeaveChat",
         "NET_SID_CLIENT_Send_0x10_LeaveChat"
-      ]
+      ],
+      "dh": "dd4ce0dd"
     },
     {
       "name": "BNSEND_Disconnect",
@@ -1340,7 +1404,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8a68e6ca"
     },
     {
       "name": "Unreferenced_0051c570",
@@ -1355,7 +1420,8 @@
       "calledFunctions": [
         "Unreferenced_0051c570",
         "WSASocket2_Send"
-      ]
+      ],
+      "dh": "562fbaad"
     },
     {
       "name": "NET_SID_CLIENT_Send",
@@ -1379,7 +1445,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8ab3a50b"
     },
     {
       "name": "Unreferenced_0051c6b0",
@@ -1394,7 +1461,8 @@
       "calledFunctions": [
         "Unreferenced_0051c6b0",
         "BNMESSQUEUE_EnqueueString"
-      ]
+      ],
+      "dh": "5a60d772"
     },
     {
       "name": "BNCLIENT_ParseAndEnqueueChatMessages",
@@ -1415,7 +1483,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c7963771"
     },
     {
       "name": "NET_SID_CLIENT_IncomingPacketHandlerLoop",
@@ -1434,7 +1503,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2e87c70c"
     },
     {
       "name": "BnetReadFunction",
@@ -1460,7 +1530,8 @@
         "D2NetDataStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "853c3b18"
     },
     {
       "name": "BNCLIENT_GetSocketPeerName",
@@ -1480,7 +1551,8 @@
         "D2NetDataStrc",
         "sockaddr",
         "uint32_t"
-      ]
+      ],
+      "dh": "0596a496"
     },
     {
       "name": "BNSEND_GetSocketAddress",
@@ -1500,7 +1572,8 @@
         "D2NetDataStrc",
         "sockaddr",
         "uint32_t"
-      ]
+      ],
+      "dh": "a506e9b1"
     },
     {
       "name": "GET_GameVersion",
@@ -1517,7 +1590,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "645803d7"
     },
     {
       "name": "BNCLIENT_GetProtocolVersionChar",
@@ -1531,7 +1605,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNCLIENT_GetProtocolVersionChar"
-      ]
+      ],
+      "dh": "84981e2d"
     },
     {
       "name": "BNCLIENT_IsSocketConnected",
@@ -1547,7 +1622,8 @@
         "BNCLIENT_IsSocketConnected",
         "SID_GetState",
         "SID_GetReadyFlag"
-      ]
+      ],
+      "dh": "f7faf338"
     },
     {
       "name": "BNSEND_GetBNetThreadInitFlag",
@@ -1561,7 +1637,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNSEND_GetBNetThreadInitFlag"
-      ]
+      ],
+      "dh": "b91e8fc7"
     },
     {
       "name": "BNSEND_SetGlobalFlag",
@@ -1575,7 +1652,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNSEND_SetGlobalFlag"
-      ]
+      ],
+      "dh": "52e3acce"
     },
     {
       "name": "NET_SID_CLIENT_LogonSequence",
@@ -1622,7 +1700,8 @@
         "timeval",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "39342e2f"
     },
     {
       "name": "BattleConnectFastest",
@@ -1645,7 +1724,8 @@
         "GetDnsRecordSync",
         "SID_SetStateFlag1",
         "NET_SID_CLIENT_LogonSequence"
-      ]
+      ],
+      "dh": "0da65468"
     },
     {
       "name": "ConnectingToBattleNet",
@@ -1665,7 +1745,8 @@
         "SID_InitializeProtocolState",
         "NET_SID_CLIENT_InitializeSRP",
         "DEBUG_Trace"
-      ]
+      ],
+      "dh": "55d1a6e1"
     },
     {
       "name": "BNNEWS_SetNewsChannel",
@@ -1685,7 +1766,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a9fbfd7d"
     },
     {
       "name": "BNNEWS_GetNewsEntryByIndex",
@@ -1699,7 +1781,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNNEWS_GetNewsEntryByIndex"
-      ]
+      ],
+      "dh": "1ff49d17"
     },
     {
       "name": "BNNEWS_RoundToPowerOfTwo",
@@ -1717,7 +1800,8 @@
       "usedTypes": [
         "D2BnNewsTableStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a36e270"
     },
     {
       "name": "BNNEWS_RoundUpToMultiple",
@@ -1731,7 +1815,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNNEWS_RoundUpToMultiple"
-      ]
+      ],
+      "dh": "b53e891a"
     },
     {
       "name": "Unreferenced_0051d350",
@@ -1748,7 +1833,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8e472cb6"
     },
     {
       "name": "BNNEWS_SaveToCache",
@@ -1774,7 +1860,8 @@
         "_SYSTEMTIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8590764a"
     },
     {
       "name": "BNNEWS_InvokeCallbacks",
@@ -1788,7 +1875,8 @@
       "namespace": "Bnclient::BnSend",
       "calledFunctions": [
         "BNNEWS_InvokeCallbacks"
-      ]
+      ],
+      "dh": "da70752e"
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_0051d570",
@@ -1803,7 +1891,8 @@
       "calledFunctions": [
         "TSFixedArray_Ui_Destructor_Unref_0051d570",
         "SMemFree"
-      ]
+      ],
+      "dh": "ef0f2622"
     },
     {
       "name": "BNNEWS_DestroyNewsTable",
@@ -1822,7 +1911,8 @@
       "usedTypes": [
         "D2BnNewsTableStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "8fbf10ae"
     },
     {
       "name": "BNNEWS_ReallocateNewsTable",
@@ -1844,7 +1934,8 @@
         "D2BnNewsEntryStrc",
         "D2BnNewsTableStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6d18c57e"
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
@@ -1859,7 +1950,8 @@
       "calledFunctions": [
         "TSFixedArray_Ui_Destructor_Unref_0051d670",
         "SMemFree"
-      ]
+      ],
+      "dh": "0b70a21b"
     },
     {
       "name": "Unreferenced_0051d690",
@@ -1876,7 +1968,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9f3283aa"
     },
     {
       "name": "BNNEWS_ClearNewsTable",
@@ -1894,7 +1987,8 @@
       ],
       "usedTypes": [
         "D2BnNewsTableStrc"
-      ]
+      ],
+      "dh": "fa4077f0"
     },
     {
       "name": "BNNEWS_EnsureCapacityWithGrowth",
@@ -1913,7 +2007,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "60311edf"
     },
     {
       "name": "Unreferenced_0051d720",
@@ -1930,7 +2025,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a85c7cb6"
     },
     {
       "name": "BNNEWS_Shutdown",
@@ -1945,7 +2041,8 @@
       "calledFunctions": [
         "BNNEWS_Shutdown",
         "SMemFree"
-      ]
+      ],
+      "dh": "90a8c939"
     },
     {
       "name": "BNNEWS_AllocateNewsEntry",
@@ -1964,7 +2061,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2244413d"
     },
     {
       "name": "BNNEWS_EnsureCapacity",
@@ -1983,7 +2081,8 @@
       "usedTypes": [
         "D2BnNewsTableStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9240856"
     },
     {
       "name": "BNNEWS_SetNewsEntryCount",
@@ -2003,7 +2102,8 @@
       "usedTypes": [
         "D2BnNewsTableStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f608de4e"
     },
     {
       "name": "NET_SID_CLIENT_Incoming0x46",
@@ -2028,7 +2128,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f7b5ea6f"
     },
     {
       "name": "BNNEWS_LoadCachedNews",
@@ -2051,7 +2152,8 @@
       "usedTypes": [
         "D2BnNewsEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6866f8c4"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x46_NewsInfo",
@@ -2074,7 +2176,8 @@
         "pfnNewsEntryCallback",
         "pfnVoidNoArgCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "46a05df5"
     },
     {
       "name": "BNSEND_GetTime32",
@@ -2092,7 +2195,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "9302d741"
     },
     {
       "name": "BNSEND_HashCDKeyData",
@@ -2114,7 +2218,8 @@
       "usedTypes": [
         "D2Sha1ContextStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed6ba967"
     },
     {
       "name": "BNNEWS_TransformCDKeyCharacter",
@@ -2133,7 +2238,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "79b3cbd5"
     },
     {
       "name": "BNSEND_CalculateCDKeyChecksum",
@@ -2151,7 +2257,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "575bd139"
     },
     {
       "name": "BNSEND_DecodeCDKeyString",
@@ -2175,7 +2282,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "35edad14"
     },
     {
       "name": "BNNEWS_DecodeCDKey26Char",
@@ -2194,7 +2302,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68c75678"
     },
     {
       "name": "BNSEND_PrepareCDKeyHash",
@@ -2220,7 +2329,8 @@
         "D2CDKeyHashStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "57425685"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x42_CDKey3",
@@ -2251,7 +2361,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bdfad3b0"
     },
     {
       "name": "Unreferenced_0051e240",
@@ -2269,7 +2380,8 @@
         "NET_SID_CLIENT_Send_0x42_CDKey3",
         "FreeKeys",
         "SID_SetStateFlag1"
-      ]
+      ],
+      "dh": "f45fdfb9"
     },
     {
       "name": "BNNEWS_DecodeCDKeys",
@@ -2294,7 +2406,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7e4c7e93"
     },
     {
       "name": "BNSEND_HashCDKeyByType",
@@ -2316,7 +2429,8 @@
         "D2CDKeyHashStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c6008856"
     },
     {
       "name": "BNSEND_SendRawBytes",
@@ -2331,7 +2445,8 @@
       "calledFunctions": [
         "BNSEND_SendRawBytes",
         "SMemCopy"
-      ]
+      ],
+      "dh": "821e0639"
     },
     {
       "name": "BNSEND_SendString",
@@ -2346,7 +2461,8 @@
       "calledFunctions": [
         "BNSEND_SendString",
         "SStrCopy"
-      ]
+      ],
+      "dh": "b5d376e9"
     },
     {
       "name": "NET_SID_CLIENT_Send_0x33_GetFileTime",
@@ -2367,7 +2483,8 @@
       "usedTypes": [
         "SID_C2S_GetFileTime",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c959c92"
     },
     {
       "name": "StaticInit_gpBNetNewsCache",
@@ -2382,7 +2499,8 @@
       "calledFunctions": [
         "StaticInit_gpBNetNewsCache",
         "atexit"
-      ]
+      ],
+      "dh": "c9ef10fc"
     },
     {
       "name": "StaticFini_gpBNetNewsCache",
@@ -2397,7 +2515,8 @@
       "calledFunctions": [
         "StaticFini_gpBNetNewsCache",
         "SMemFree"
-      ]
+      ],
+      "dh": "9c3a448c"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "dcb11523"
     },
     {
       "name": "SehHandler_6ca1b8",
@@ -41,7 +42,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "00f9e8ca"
     },
     {
       "name": "SehHandler_6ca1d8",
@@ -61,7 +63,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "257f7ffb"
     },
     {
       "name": "SehHandler_6ca203",
@@ -81,7 +84,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "5289d28a"
     }
   ]
 }

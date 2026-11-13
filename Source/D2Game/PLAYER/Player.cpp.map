@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a24dfd8b"
     },
     {
       "name": "FreePartyData",
@@ -44,7 +45,8 @@
         "D2PartyDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "43ff335e"
     },
     {
       "name": "PLAYERDATA_FreeInteractions",
@@ -67,7 +69,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7073507c"
     },
     {
       "name": "STRUCT_FillPlayerUnit",
@@ -101,7 +104,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b463aadd"
     },
     {
       "name": "PLAYER_FreeAllCorpseUnits",
@@ -129,7 +133,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "93718df3"
     },
     {
       "name": "PLAYER_FreeAllResources",
@@ -159,7 +164,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0d15b88d"
     },
     {
       "name": "FreePlayers",
@@ -180,7 +186,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "73dad420"
     },
     {
       "name": "PLAYER_ClearTargetIfMatch",
@@ -200,7 +207,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6649f3db"
     },
     {
       "name": "PLAYER_MoveToLocationWithTimeout",
@@ -221,7 +229,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "7661c5ff"
     },
     {
       "name": "PLAYER_PlaceItemInInventory",
@@ -249,7 +258,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "393c7b08"
     },
     {
       "name": "PLAYER_EquipItemToBodyLoc",
@@ -275,7 +285,8 @@
         "eD2BodyLoc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "763f947b"
     },
     {
       "name": "PLAYER_PlaceItemInBelt",
@@ -300,7 +311,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c15fc9e3"
     },
     {
       "name": "PLAYER_CreateRewardItemFromTemplate",
@@ -332,7 +344,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8b266ae2"
     },
     {
       "name": "PLAYER_CreateStarterItems",
@@ -373,7 +386,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7cf6c13f"
     },
     {
       "name": "PLAYER_CreateAllStarterItems",
@@ -395,7 +409,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "0ddf2c1a"
     },
     {
       "name": "PLAYER_SendAllItemsToClient",
@@ -425,7 +440,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f52ee4c9"
     },
     {
       "name": "GetPlayerTradeTickOrBusy",
@@ -449,7 +465,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9af531f1"
     },
     {
       "name": "PLAYER_ClearCutsceneFlag",
@@ -472,7 +489,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "88ca4f67"
     },
     {
       "name": "PLAYER_EndInteraction",
@@ -501,7 +519,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "a0bb6f8f"
     },
     {
       "name": "PLAYER_CancelInteraction",
@@ -533,7 +552,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d022b8f2"
     },
     {
       "name": "PLAYER_PlaceCorpse",
@@ -565,7 +585,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "86e4b5f5"
     },
     {
       "name": "PLAYER_SetUniqueId",
@@ -589,7 +610,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dc6bdc7"
     },
     {
       "name": "GetPlayerUniqueId",
@@ -613,7 +635,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a78d497"
     },
     {
       "name": "PLAYER_DestroyPortalPair",
@@ -645,7 +668,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "91156276"
     },
     {
       "name": "GOLD_DropGoldFromInventory",
@@ -674,7 +698,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "19f58ded"
     },
     {
       "name": "CheckItemMovePermission",
@@ -701,7 +726,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "36d0e73f"
     },
     {
       "name": "SetHotkey",
@@ -726,7 +752,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c749379"
     },
     {
       "name": "PLAYER_CountLivingPlayerInLevelCallback",
@@ -749,7 +776,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "cbf0a5a2"
     },
     {
       "name": "PLAYER_CountLivingPlayersInLevel",
@@ -770,7 +798,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "5af4f5bd"
     },
     {
       "name": "CountModeZeroDeath",
@@ -789,7 +818,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4a45b58f"
     },
     {
       "name": "COMMAND_playersX",
@@ -803,7 +833,8 @@
       "namespace": "D2Game::PLAYER::Player",
       "calledFunctions": [
         "COMMAND_playersX"
-      ]
+      ],
+      "dh": "24d1587e"
     },
     {
       "name": "SERVER_GAME_CountPlayers",
@@ -822,7 +853,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "29411457"
     },
     {
       "name": "PLAYER_ApplyGoldPenaltyOnDeath",
@@ -847,7 +879,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "807aa933"
     },
     {
       "name": "EXP_ApplyDeathExpPenalty",
@@ -874,7 +907,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6daffc4"
     },
     {
       "name": "PLAYER_HandleDeathPenalties",
@@ -895,7 +929,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c9a007f4"
     },
     {
       "name": "PLAYER_CheckIsHostileToPlayer",
@@ -916,7 +951,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9e90a68"
     },
     {
       "name": "PLAYER_CountPlayersWithFilter",
@@ -936,7 +972,8 @@
         "D2PlayerHostileCheckArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9b01ed24"
     },
     {
       "name": "PLAYER_CheckPlayerIsHostileToThis",
@@ -957,7 +994,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3dbfb81f"
     },
     {
       "name": "PLAYER_CountPlayersWithFilter2",
@@ -977,7 +1015,8 @@
         "D2PlayerHostileCheckArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "70638ac8"
     },
     {
       "name": "PLAYER_GetActiveWeaponForSkill",
@@ -1007,7 +1046,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b398a95"
     },
     {
       "name": "EQUIPMENT_RecalcDualWieldWeaponStats",
@@ -1031,7 +1071,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8bf4414c"
     },
     {
       "name": "WEAPON_ApplyEquippedWeaponStats",
@@ -1053,7 +1094,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d83fa3a5"
     }
   ]
 }

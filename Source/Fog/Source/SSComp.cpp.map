@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "db60a6dc"
     },
     {
       "name": "COMPRESS_HeapSort",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "70c51e70"
     },
     {
       "name": "COMPRESS_BuildHuffmanTree",
@@ -53,7 +55,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ab2e2d04"
     },
     {
       "name": "COMPRESS_BuildHuffmanDecodeTable",
@@ -74,7 +77,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "65f8b258"
     }
   ]
 }

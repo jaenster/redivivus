@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2SetsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4b36aace"
     },
     {
       "name": "GetSetItemsLine",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "D2SetItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "54fd9f38"
     },
     {
       "name": "INV_GetUniqueItemsTxtLine",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "D2UniqueItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "76e72e9a"
     },
     {
       "name": "ITEMTBLS_ParseItemStatCostOrBase",
@@ -77,7 +80,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1190fe38"
     },
     {
       "name": "ITEMTBLS_CompileItemCodeExpression",
@@ -99,7 +103,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e1ea3107"
     },
     {
       "name": "TXT_AllocTxt_items",
@@ -126,7 +131,8 @@
         "D2BinFieldInputStrc",
         "D2ItemsTxt",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "28f62db6"
     },
     {
       "name": "TXT_FreeTxt_Items",
@@ -142,7 +148,8 @@
         "TXT_FreeTxt_Items",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "c590ee1c"
     },
     {
       "name": "TXT_Items_GetSize",
@@ -159,7 +166,8 @@
       ],
       "usedTypes": [
         "D2ItemsTableStrc"
-      ]
+      ],
+      "dh": "cc15f85d"
     },
     {
       "name": "TXT_Items_GetVersion",
@@ -180,7 +188,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "782d06d3"
     },
     {
       "name": "TXT_Items_GetLine",
@@ -202,7 +211,8 @@
         "D2ItemsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f25c94a0"
     },
     {
       "name": "ConvertItemCodeToClassIdAndGetItemsTxtLine",
@@ -222,7 +232,8 @@
         "D2ItemsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ea603c0"
     },
     {
       "name": "TXT_Items_ConvertItemCodeToItemClassId",
@@ -241,7 +252,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d096f169"
     },
     {
       "name": "ITEMTBLS_ParseSkillMonTypeOrStateId",
@@ -259,7 +271,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "69482ba5"
     },
     {
       "name": "TXT_AllocTxt_MagicAffixes",
@@ -284,7 +297,8 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "a2e90208"
     },
     {
       "name": "ITEMTBLS_FreeMagicAffixes",
@@ -299,7 +313,8 @@
       "calledFunctions": [
         "ITEMTBLS_FreeMagicAffixes",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "93e54d58"
     },
     {
       "name": "TXT_MagicAffixes_GetTableInfo",
@@ -316,7 +331,8 @@
       ],
       "usedTypes": [
         "D2MagicAffixTableStrc"
-      ]
+      ],
+      "dh": "37931622"
     },
     {
       "name": "TXT_magicaffixes_GetLine",
@@ -337,7 +353,8 @@
       "usedTypes": [
         "D2MagicAffixTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "9d9916b8"
     },
     {
       "name": "TXT_AllocTxt_RareAffixes",
@@ -362,7 +379,8 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "1673b1c8"
     },
     {
       "name": "ITEMTBLS_FreeRareAffixes",
@@ -377,7 +395,8 @@
       "calledFunctions": [
         "ITEMTBLS_FreeRareAffixes",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "48cb520a"
     },
     {
       "name": "TXT_RareAffixes_GetTableInfo",
@@ -394,7 +413,8 @@
       ],
       "usedTypes": [
         "D2RareAffixTableStrc"
-      ]
+      ],
+      "dh": "9d73e0f7"
     },
     {
       "name": "TXT_RareAffixes_GetLine",
@@ -415,7 +435,8 @@
       "usedTypes": [
         "D2RareAffixTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "3a868769"
     },
     {
       "name": "TXT_AllocTxt_uniqueitems",
@@ -443,7 +464,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18c0affd"
     },
     {
       "name": "ITEMTBLS_FreeUniqueItems",
@@ -459,7 +481,8 @@
         "ITEMTBLS_FreeUniqueItems",
         "STRUCT_FreeTxtLink",
         "UnloadBin"
-      ]
+      ],
+      "dh": "b5088f65"
     },
     {
       "name": "TXT_AllocTxt_setitems",
@@ -489,7 +512,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c97676cb"
     },
     {
       "name": "ITEMTBLS_FreeSetsAndSetItems",
@@ -505,7 +529,8 @@
         "ITEMTBLS_FreeSetsAndSetItems",
         "STRUCT_FreeTxtLink",
         "UnloadBin"
-      ]
+      ],
+      "dh": "a28cff35"
     },
     {
       "name": "TXT_AllocTxt_qualityitems",
@@ -527,7 +552,8 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "f38b8528"
     },
     {
       "name": "thunk_UnloadBin_Lvl",
@@ -542,7 +568,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_Lvl",
         "UnloadBin"
-      ]
+      ],
+      "dh": "21376913"
     },
     {
       "name": "TXT_QualityItems_GetTableInfo",
@@ -559,7 +586,8 @@
       ],
       "usedTypes": [
         "D2QualityItemsTableStrc"
-      ]
+      ],
+      "dh": "2c33602b"
     },
     {
       "name": "TXT_QualityItems_GetLine",
@@ -580,7 +608,8 @@
       "usedTypes": [
         "D2QualityItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4fb59499"
     },
     {
       "name": "TXT_AllocTxt_gems",
@@ -603,7 +632,8 @@
         "WCHAR",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "98addf93"
     },
     {
       "name": "thunk_UnloadBin_LvlType",
@@ -618,7 +648,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_LvlType",
         "UnloadBin"
-      ]
+      ],
+      "dh": "4158bf9a"
     },
     {
       "name": "TXT_Books_GetTableInfo_Unref_006372b0",
@@ -635,7 +666,8 @@
       ],
       "usedTypes": [
         "D2BooksTableStrc"
-      ]
+      ],
+      "dh": "0053a7de"
     },
     {
       "name": "TXT_Gems_GetLine",
@@ -656,7 +688,8 @@
       "usedTypes": [
         "D2GemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "fc193d89"
     },
     {
       "name": "TXT_AllocTxt_books",
@@ -675,7 +708,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "30ac114d"
     },
     {
       "name": "thunk_UnloadBin_LvlWarp",
@@ -690,7 +724,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_LvlWarp",
         "UnloadBin"
-      ]
+      ],
+      "dh": "7ea062ef"
     },
     {
       "name": "TXT_Books_GetTableInfo",
@@ -707,7 +742,8 @@
       ],
       "usedTypes": [
         "D2BooksTableStrc"
-      ]
+      ],
+      "dh": "ca40d220"
     },
     {
       "name": "TXT_Books_GetLine",
@@ -728,7 +764,8 @@
       "usedTypes": [
         "D2BooksTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "a4b14fb0"
     },
     {
       "name": "TXT_AllocTxt_lowqualityitems",
@@ -750,7 +787,8 @@
         "D2PoolManagerStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "2132afe5"
     },
     {
       "name": "thunk_UnloadBin_LvlPrest",
@@ -765,7 +803,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_LvlPrest",
         "UnloadBin"
-      ]
+      ],
+      "dh": "26f2ed74"
     },
     {
       "name": "TXT_LowQualityItems_GetTableInfo",
@@ -782,7 +821,8 @@
       ],
       "usedTypes": [
         "D2LowQualityItemsTableStrc"
-      ]
+      ],
+      "dh": "5004a360"
     },
     {
       "name": "TXT_LowQualityItems_GetLine",
@@ -803,7 +843,8 @@
       "usedTypes": [
         "D2LowQualityItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c960de05"
     },
     {
       "name": "TXT_AllocTxt_itemratio",
@@ -822,7 +863,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "7a6d9e2d"
     },
     {
       "name": "thunk_UnloadBin_LvlMaze",
@@ -837,7 +879,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_LvlMaze",
         "UnloadBin"
-      ]
+      ],
+      "dh": "eeefdef8"
     },
     {
       "name": "TXT_LowQualityItems_GetTableInfo_Unref_00637900",
@@ -854,7 +897,8 @@
       ],
       "usedTypes": [
         "D2LowQualityItemsTableStrc"
-      ]
+      ],
+      "dh": "10187999"
     },
     {
       "name": "TXT_QualityRatio_GetLine",
@@ -879,7 +923,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "27d3f136"
     },
     {
       "name": "SORT_ItemDescPriority",
@@ -893,7 +938,8 @@
       "namespace": "D2Common::DATATBLS::ItemTbls",
       "calledFunctions": [
         "SORT_ItemDescPriority"
-      ]
+      ],
+      "dh": "db8dbf8a"
     },
     {
       "name": "TXT_AllocTxt_itemstatcost",
@@ -924,7 +970,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5b4c4008"
     },
     {
       "name": "ITEMTBLS_FreeItemStatCost",
@@ -941,7 +988,8 @@
         "UnloadBin",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "2b31b09e"
     },
     {
       "name": "TXT_AllocTxt_properties",
@@ -961,7 +1009,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "e2745eab"
     },
     {
       "name": "ITEMTBLS_FreeProperties",
@@ -977,7 +1026,8 @@
         "ITEMTBLS_FreeProperties",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "977d3f56"
     },
     {
       "name": "TXT_Gamble_SortFunction",
@@ -991,7 +1041,8 @@
       "namespace": "D2Common::DATATBLS::ItemTbls",
       "calledFunctions": [
         "TXT_Gamble_SortFunction"
-      ]
+      ],
+      "dh": "1b70fe25"
     },
     {
       "name": "TXT_AllocTxt_gamble",
@@ -1019,7 +1070,8 @@
         "D2GambleTxt",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1717de6a"
     },
     {
       "name": "FreeGambleTable",
@@ -1034,7 +1086,8 @@
       "calledFunctions": [
         "FreeGambleTable",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "64dafe04"
     },
     {
       "name": "GetGambleTableSize",
@@ -1051,7 +1104,8 @@
       ],
       "usedTypes": [
         "D2GambleTableStrc"
-      ]
+      ],
+      "dh": "a1a35f41"
     },
     {
       "name": "ITEMTBLS_CheckItemTypeRecursive",
@@ -1068,7 +1122,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e248b350"
     },
     {
       "name": "TXT_AllocTxt_itemtypes",
@@ -1093,7 +1148,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7c1cd33"
     },
     {
       "name": "ITEMTBLS_FreeItemTypes",
@@ -1110,7 +1166,8 @@
         "FreeServerMemory",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "1dceab26"
     },
     {
       "name": "ITEMTBLS_CheckIfDataFileExists",
@@ -1132,7 +1189,8 @@
         "D2MPQFileStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f499a200"
     },
     {
       "name": "TXT_AllocTxt_runes",
@@ -1160,7 +1218,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6162106"
     },
     {
       "name": "ITEMTBLS_FreeRunes",
@@ -1176,7 +1235,8 @@
         "ITEMTBLS_FreeRunes",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "1255a8f4"
     },
     {
       "name": "TXT_GetRuneTableSize",
@@ -1193,7 +1253,8 @@
       ],
       "usedTypes": [
         "D2RunesTxtTableStrc"
-      ]
+      ],
+      "dh": "eeaba021"
     },
     {
       "name": "ITEMTBLS_CopyRunewordRecord",
@@ -1213,7 +1274,8 @@
       "usedTypes": [
         "D2RunesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "32ec3b62"
     },
     {
       "name": "ITEMTBLS_GetRunewordTxtRecord",
@@ -1234,7 +1296,8 @@
       "usedTypes": [
         "D2RunesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "ddafa2f7"
     },
     {
       "name": "TXT_GetRuneTableSize_Unref_00654fd0",
@@ -1251,7 +1314,8 @@
       ],
       "usedTypes": [
         "D2RunesTxtTableStrc"
-      ]
+      ],
+      "dh": "f055fa59"
     },
     {
       "name": "TXT_GetRuneTableSize_Unref_0065b450",
@@ -1268,7 +1332,8 @@
       ],
       "usedTypes": [
         "D2RunesTxtTableStrc"
-      ]
+      ],
+      "dh": "2d24204d"
     },
     {
       "name": "TXT_GetRuneTableSize_Unref_0065b460",
@@ -1285,7 +1350,8 @@
       ],
       "usedTypes": [
         "D2RunesTxtTableStrc"
-      ]
+      ],
+      "dh": "1a5bf840"
     },
     {
       "name": "TXT_GetRuneTableSize_Unref_0065b470",
@@ -1302,7 +1368,8 @@
       ],
       "usedTypes": [
         "D2RunesTxtTableStrc"
-      ]
+      ],
+      "dh": "c3d0a6db"
     }
   ]
 }

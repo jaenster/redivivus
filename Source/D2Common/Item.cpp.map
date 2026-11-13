@@ -27,7 +27,8 @@
         "int16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ac2d59ad"
     },
     {
       "name": "ITEM_ManageSetBonusStatList",
@@ -62,7 +63,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "80091d13"
     },
     {
       "name": "ITEM_ProcessSetItemEquip",
@@ -86,7 +88,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c2996483"
     }
   ]
 }

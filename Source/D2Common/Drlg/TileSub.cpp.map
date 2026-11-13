@@ -23,7 +23,8 @@
         "D2LvlSubTxt",
         "D2UnkOutdoorStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "106668ae"
     },
     {
       "name": "InitializeDrlgFile",
@@ -51,7 +52,8 @@
         "D2LvlSubTxt",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b41ab259"
     },
     {
       "name": "AddSecondaryBorder",
@@ -73,7 +75,8 @@
         "D2LvlSubTxt",
         "D2PoolManagerStrc",
         "D2UnkOutdoorStrc"
-      ]
+      ],
+      "dh": "c032aa13"
     }
   ]
 }

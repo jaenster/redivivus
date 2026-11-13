@@ -739,7 +739,7 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
     return nullptr;
 }
 
-static void __stdcall TileLibrary_AddCollision(D2TileLibraryEntryStrc * pTileLibraryEntry, uint32_t nX, uint32_t nY, D2RoomCollisionGridStrc * pCollisionMap) {
+static void __stdcall TileLibrary_AddCollision(uint32_t nY, uint32_t nX, D2TileLibraryEntryStrc * pTileLibraryEntry, D2RoomCollisionGridStrc * pCollisionMap) {
     uint16_t* pCellPtr;
     if (!(pCollisionMap && pCollisionMap->pMapStart)) {
       return;
@@ -769,7 +769,7 @@ static void __stdcall TileLibrary_AddCollision(D2TileLibraryEntryStrc * pTileLib
     } while (nColsRemaining);
 }
 
-static void __stdcall TileLibrary_RemoveCollision(D2TileLibraryEntryStrc * pTileLibraryEntry, uint32_t nX, uint32_t nY, D2RoomCollisionGridStrc * pCollisionMap) {
+static void __stdcall TileLibrary_RemoveCollision(uint32_t nY, uint32_t nX, D2TileLibraryEntryStrc * pTileLibraryEntry, D2RoomCollisionGridStrc * pCollisionMap) {
     uint16_t* pCellPtr;
     if (!(pCollisionMap && pCollisionMap->pMapStart)) {
       return;
@@ -880,7 +880,7 @@ static void __stdcall TileLibrary_SetupCollision(D2DrlgTileDataStrc * pTileData,
         if (bReplace) {
           TileLibrary_SetCollision(*pTileLibraryEntry, nX, nY, pCollisionMap);
         } else {
-          TileLibrary_AddCollision(*pTileLibraryEntry, nX, nY, pCollisionMap);
+          TileLibrary_AddCollision(nY, nX, *pTileLibraryEntry, pCollisionMap);
         }
 
         nTileFlags = (uint32_t)pTileLibraryEntry[-1];
@@ -929,12 +929,12 @@ void __fastcall TileLibrary_UpdateCollision(D2RoomStrc * pRoom, D2DrlgTileDataSt
 
     uint32_t nY = nWorldX - pCollision->sCoords.dwXStart;
     uint32_t nX = nWorldY - pCollision->sCoords.dwYStart;
-    TileLibrary_RemoveCollision(pTileData->pTileLibraryEntry, nX, nY, pCollision);
+    TileLibrary_RemoveCollision(nY, nX, pTileData->pTileLibraryEntry, pCollision);
     if (!pTileLibraryEntry) {
       return;
     }
 
-    TileLibrary_AddCollision(pTileLibraryEntry, nX, nY, pCollision);
+    TileLibrary_AddCollision(nY, nX, pTileLibraryEntry, pCollision);
 }
 
 // Allocates and populates the collision grid (D2RoomCollisionGridStrc) for pRoom from the server memory pool. Copies room coordinates into the grid header, zeroes the map, then calls TileLibrary_SetupCollision for floor, wall, and roof tile layers of each adjacent room. Side effect: sets the collision grid pointer in pRoom via DRLGROOM_SetCollisionGridInRoom.

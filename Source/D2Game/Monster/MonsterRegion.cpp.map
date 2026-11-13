@@ -27,7 +27,8 @@
         "int64_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf5f68ad"
     },
     {
       "name": "AllocMonsterRegion",
@@ -62,7 +63,8 @@
         "D2SeedStrc",
         "eD2Difficulty",
         "int32_t"
-      ]
+      ],
+      "dh": "66b141b0"
     },
     {
       "name": "FreeMonsterRegion",
@@ -81,7 +83,8 @@
       "usedTypes": [
         "D2MonsterRegionStrc *",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "b13a852d"
     },
     {
       "name": "ReturnMonsterRegionEntryForLevel",
@@ -100,7 +103,8 @@
         "D2MonsterRegionStrc",
         "D2MonsterRegionStrc *",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "bd1255ae"
     },
     {
       "name": "InitializeSpawnCount",
@@ -125,7 +129,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint16_t"
-      ]
+      ],
+      "dh": "cd7565f0"
     },
     {
       "name": "AllocMonsterRegionForGame",
@@ -146,7 +151,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "41178dfd"
     },
     {
       "name": "IncreaseMonsterSpawnCount",
@@ -169,7 +175,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "cd9d1e7b"
     },
     {
       "name": "DecreaseMonsterSpawnCount",
@@ -194,7 +201,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d8acfa29"
     },
     {
       "name": "IncreaseMonKillCount",
@@ -219,7 +227,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d106e935"
     },
     {
       "name": "DecreaseMonKillCount",
@@ -244,7 +253,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "07440b16"
     },
     {
       "name": "UpdateMonsterRegion",
@@ -269,7 +279,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e16e1dbd"
     }
   ]
 }

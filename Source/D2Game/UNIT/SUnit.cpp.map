@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "78171a1e"
     },
     {
       "name": "GetNextUnit",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ad99944e"
     },
     {
       "name": "SetSeed",
@@ -68,7 +70,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eb44d3dd"
     },
     {
       "name": "SetItemSeeds",
@@ -92,7 +95,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b80d3e6"
     },
     {
       "name": "UNITS_IncrementUnitGUIDCounter",
@@ -115,7 +119,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c68313e8"
     },
     {
       "name": "UNITS_GetHashTableSlot",
@@ -135,7 +140,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "392649cb"
     },
     {
       "name": "FindUnitFromTable",
@@ -160,7 +166,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6b0fea1"
     },
     {
       "name": "GetOwnerUnit",
@@ -179,7 +186,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e28db69a"
     },
     {
       "name": "GetKillerUnit",
@@ -202,7 +210,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "addecd06"
     },
     {
       "name": "UNITS_InsertUnitIntoHashTable",
@@ -226,7 +235,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "ccda753a"
     },
     {
       "name": "UNITS_NotifyClientsUnitRemoved",
@@ -246,7 +256,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "3696138b"
     },
     {
       "name": "IsRoomOccupied",
@@ -266,7 +277,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ec2e0698"
     },
     {
       "name": "SetClient",
@@ -290,7 +302,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a672bb6a"
     },
     {
       "name": "SUNIT_GetClient",
@@ -311,7 +324,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7bd8a0ca"
     },
     {
       "name": "UNITS_SendUnitUpdateToClient",
@@ -331,7 +345,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "87b5d983"
     },
     {
       "name": "UNITS_ResetUnitForReuse",
@@ -365,7 +380,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d543b1c"
     },
     {
       "name": "SetupUpdateEvent_AttachEventSound",
@@ -388,7 +404,8 @@
         "D2UnitStrc",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "b99dc110"
     },
     {
       "name": "InitAnimFrame",
@@ -414,7 +431,8 @@
         "D2MonSeqTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c17dbef9"
     },
     {
       "name": "GetTarget",
@@ -443,7 +461,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e2d83b4"
     },
     {
       "name": "GetTargetEx",
@@ -463,7 +482,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c4fe81ee"
     },
     {
       "name": "FreeCombatAndChangeAnimMode",
@@ -483,7 +503,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ed322d0c"
     },
     {
       "name": "LinkPortalCoords",
@@ -511,7 +532,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d2191710"
     },
     {
       "name": "UNITS_SetStaticPathRoomCoords",
@@ -532,7 +554,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "75b8e891"
     },
     {
       "name": "UNITS_FindPortalOwnerUnit",
@@ -561,7 +584,8 @@
         "SGAMEDATA",
         "eAct",
         "int32_t"
-      ]
+      ],
+      "dh": "20847298"
     },
     {
       "name": "IteratePlayerOrMonsterUnits",
@@ -586,7 +610,8 @@
         "SGAMEDATA",
         "fpExecuteOnUnitFunction",
         "int32_t"
-      ]
+      ],
+      "dh": "349a19fb"
     },
     {
       "name": "IterateAllUnits",
@@ -611,7 +636,8 @@
         "SGAMEDATA",
         "fpSUnitIterateCallback",
         "int32_t"
-      ]
+      ],
+      "dh": "94789710"
     },
     {
       "name": "SetTimerListIfUnitExists",
@@ -629,7 +655,8 @@
       "usedTypes": [
         "D2TimerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "935fd57e"
     },
     {
       "name": "GetTimerList",
@@ -647,7 +674,8 @@
       "usedTypes": [
         "D2TimerStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bf9f28c0"
     },
     {
       "name": "UNITS_ClearAnimTimerEvents",
@@ -666,7 +694,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2fe315b6"
     },
     {
       "name": "UNITS_SetupAnimTimerEvents",
@@ -689,7 +718,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "12199629"
     },
     {
       "name": "UNITS_SetupAnimTimerEventsFromPercent",
@@ -713,7 +743,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f848f343"
     },
     {
       "name": "UNITS_SetupAnimTimerEventsWithDelay",
@@ -737,7 +768,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4e4c506"
     },
     {
       "name": "UNITS_SetupAnimTimerEventsFromFrame",
@@ -761,7 +793,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0c64487"
     },
     {
       "name": "UNITS_ClearAnimAndTriggerEndAnim",
@@ -781,7 +814,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "5824a970"
     },
     {
       "name": "GetTypeAndMode",
@@ -809,7 +843,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac33a39f"
     },
     {
       "name": "GetGamePointer",
@@ -831,7 +866,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e25468f3"
     },
     {
       "name": "SetNecroPet",
@@ -853,7 +889,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d1af8cc"
     },
     {
       "name": "GetNecroPet",
@@ -874,7 +911,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ed755349"
     },
     {
       "name": "SetSparklyChestFlag",
@@ -896,7 +934,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b62df0a6"
     },
     {
       "name": "GetSparklyChestFlag",
@@ -918,7 +957,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4cef52b1"
     },
     {
       "name": "GetInteractInfo",
@@ -937,7 +977,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "a92db8cc"
     },
     {
       "name": "SetInteractInfo",
@@ -960,7 +1001,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "87a38cc4"
     },
     {
       "name": "ClearInteractInfo",
@@ -977,7 +1019,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "722f7631"
     },
     {
       "name": "CheckForModeZeroDeath",
@@ -994,7 +1037,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "23c25209"
     },
     {
       "name": "UNITS_CheckIfCanAttackTarget",
@@ -1017,7 +1061,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "31e72cf9"
     },
     {
       "name": "UNITS_CheckSkillTargetAlignment",
@@ -1037,7 +1082,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "bab34a79"
     },
     {
       "name": "UNITS_OnAlignmentChanged",
@@ -1063,7 +1109,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fe319ca6"
     },
     {
       "name": "SetAlignment",
@@ -1096,7 +1143,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "02f85576"
     },
     {
       "name": "SetUninterruptableState",
@@ -1127,7 +1175,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ce3fbf4"
     },
     {
       "name": "PLAYER_CancelMapReveal",
@@ -1150,7 +1199,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "7eae009c"
     },
     {
       "name": "UNITS_GetTargetRoom",
@@ -1178,7 +1228,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "2f0877d3"
     },
     {
       "name": "GetPartyId",
@@ -1197,7 +1248,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "49d65643"
     },
     {
       "name": "SetDamageHitClass",
@@ -1215,7 +1267,8 @@
       "usedTypes": [
         "D2DamageStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0e36612f"
     },
     {
       "name": "UNITS_UpdateRoomClientVisibility",
@@ -1247,7 +1300,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "8072fad5"
     },
     {
       "name": "UNITS_PlaceUnitInRoom",
@@ -1291,7 +1345,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "758876da"
     },
     {
       "name": "UNITS_RelocateUnitToRoom",
@@ -1340,7 +1395,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87b452e5"
     },
     {
       "name": "UNITS_ProcessUnitMovement",
@@ -1367,7 +1423,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7854f203"
     },
     {
       "name": "GetInteractedNpc",
@@ -1386,7 +1443,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cddc15df"
     },
     {
       "name": "UNITS_CanUseSkillOnTarget",
@@ -1413,7 +1471,8 @@
         "eD2UnitType",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6d67c09"
     },
     {
       "name": "SKILL_CanUnitTargetAlly",
@@ -1435,7 +1494,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int16_t"
-      ]
+      ],
+      "dh": "24a77fec"
     },
     {
       "name": "SUNIT_RelocateUnit",
@@ -1482,7 +1542,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "309b6c47"
     },
     {
       "name": "TakeStairs",
@@ -1522,7 +1583,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4417840c"
     },
     {
       "name": "CreateUnit",
@@ -1571,7 +1633,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a42f530e"
     },
     {
       "name": "ClearInteractOnFreePlayer",
@@ -1594,7 +1657,8 @@
         "D2MonsterAiStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c82cc3f7"
     },
     {
       "name": "UNITS_UnlinkUnitFromRoom",
@@ -1620,7 +1684,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "22d164aa"
     },
     {
       "name": "FreeServerUnit",
@@ -1660,7 +1725,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "42c0c06a"
     },
     {
       "name": "FreeWarpUnits",
@@ -1683,7 +1749,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "33401516"
     },
     {
       "name": "SpawnUnitByType",
@@ -1714,7 +1781,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0dfa983e"
     },
     {
       "name": "SUNIT_SpawnPresetUnit",
@@ -1741,7 +1809,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f38c4aa3"
     },
     {
       "name": "SUNIT_SpawnPresetUnitsForRoom",
@@ -1766,7 +1835,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "45dd770c"
     },
     {
       "name": "UNITS_FreeInventoryItems",
@@ -1809,7 +1879,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bddbf90b"
     },
     {
       "name": "Clear_Unref_005de320",
@@ -1828,7 +1899,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2TimerTypeDWORD"
-      ]
+      ],
+      "dh": "96ee8e5b"
     },
     {
       "name": "StaticInit_gnSeedCounter",
@@ -1843,7 +1915,8 @@
       "calledFunctions": [
         "StaticInit_gnSeedCounter",
         "GetTickCount"
-      ]
+      ],
+      "dh": "81eddafa"
     }
   ]
 }

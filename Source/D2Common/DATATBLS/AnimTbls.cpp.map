@@ -26,7 +26,8 @@
         "D2AnimDataStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "635856a9"
     },
     {
       "name": "ANIMDATA_FreeAnimDataRecord",
@@ -45,7 +46,8 @@
       ],
       "usedTypes": [
         "D2AnimDataStrc"
-      ]
+      ],
+      "dh": "f802a8c7"
     },
     {
       "name": "ANIMDATA_CompareNames",
@@ -66,7 +68,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7c54a479"
     },
     {
       "name": "ANIMDATA_GetRecordByNameHash",
@@ -92,7 +95,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "05870ec9"
     },
     {
       "name": "ANIMDATA_GetAnimDataForUnit",
@@ -117,7 +121,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e84700d1"
     },
     {
       "name": "ANIMDATA_SetAnimSpeedForUnit",
@@ -140,7 +145,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "925d6684"
     },
     {
       "name": "ANIMDATA_GetFramesSpeedAndTrigger",
@@ -161,7 +167,8 @@
         "D2AnimDataRecordStrc",
         "D2AnimDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cd3e1091"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "Storm::_3rdparty::zlib::zutil",
       "calledFunctions": [
         "zlibVersion"
-      ]
+      ],
+      "dh": "6aacbb91"
     },
     {
       "name": "zlibCompileFlags",
@@ -32,7 +33,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f459aae8"
     },
     {
       "name": "zError",
@@ -46,7 +48,8 @@
       "namespace": "Storm::_3rdparty::zlib::zutil",
       "calledFunctions": [
         "zError"
-      ]
+      ],
+      "dh": "2138efea"
     },
     {
       "name": "zcalloc",
@@ -64,7 +67,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e4a38d89"
     },
     {
       "name": "zcfree",
@@ -79,7 +83,8 @@
       "calledFunctions": [
         "zcfree",
         "free"
-      ]
+      ],
+      "dh": "87e07f60"
     }
   ]
 }

@@ -788,7 +788,7 @@ void __fastcall SCOMP_ZlibCompressWithLevel(uint8_t * pDst, uint32_t * pnDstLen,
 // bzip2, so the whole pair may be misnamed. What would
 // settle it is the SCompDecompress method-table entry that points at 0041e340 and the compression id
 // it sits under.
-static int __stdcall SCOMP_InflateZlibStackArena(uint8_t * pSrc, uint8_t * pDst, uint32_t nSrcLen, uint32_t * pnOutLen) {
+static int __stdcall SCOMP_InflateZlibStackArena(uint32_t * pnOutLen, uint8_t * pDst, uint32_t nSrcLen, uint8_t * pSrc) {
     int32_t nRet;
     z_stream zStream;
     D2ScompArenaStrc sArena;
@@ -822,7 +822,7 @@ static int __stdcall SCOMP_InflateZlibStackArena(uint8_t * pSrc, uint8_t * pDst,
 }
 
 void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8_t * pSrc, uint32_t nSrcLen, uint32_t pUserData) {
-    SCOMP_InflateZlibStackArena(pSrc, pDst, nSrcLen, pnDstLen);
+    SCOMP_InflateZlibStackArena(pnDstLen, pDst, nSrcLen, pSrc);
 }
 
 // @blizzard AdpcmMonoCompress (SCOMP.CPP)

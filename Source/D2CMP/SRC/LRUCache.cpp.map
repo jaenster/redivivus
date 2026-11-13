@@ -25,7 +25,8 @@
         "int32_t",
         "pfnLruFreeEntry",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b660802"
     },
     {
       "name": "LRUCACHE_PopOldest",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc"
-      ]
+      ],
+      "dh": "91514006"
     },
     {
       "name": "LRUCACHE_Unlink",
@@ -66,7 +68,8 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f7e1ec36"
     },
     {
       "name": "LRUCACHE_ForEach",
@@ -89,7 +92,8 @@
         "fpLRUCacheForEachFn",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4a0728d3"
     },
     {
       "name": "LRUCACHE_AllocEntry",
@@ -111,7 +115,8 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f42dc9cf"
     },
     {
       "name": "LRUCACHE_FreeEntry",
@@ -131,7 +136,8 @@
       "usedTypes": [
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc"
-      ]
+      ],
+      "dh": "c7577652"
     },
     {
       "name": "LRUCACHE_MoveToFront",
@@ -154,7 +160,8 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "326a0e5f"
     },
     {
       "name": "LRUCACHE_FreeAll",
@@ -173,7 +180,8 @@
       ],
       "usedTypes": [
         "D2LRUCacheStrc"
-      ]
+      ],
+      "dh": "714a8b93"
     },
     {
       "name": "LRUCACHE_GetOrAlloc",
@@ -198,7 +206,8 @@
         "D2LRUCacheNodeStrc",
         "D2LRUCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "001e4548"
     }
   ]
 }

@@ -24,7 +24,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ff7a8a27"
     },
     {
       "name": "FreeBeltsTxt",
@@ -39,7 +40,8 @@
       "calledFunctions": [
         "FreeBeltsTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "772f095d"
     },
     {
       "name": "TXT_Belts_GetLine",
@@ -59,7 +61,8 @@
       ],
       "usedTypes": [
         "D2BeltsTxt"
-      ]
+      ],
+      "dh": "d12ccaa9"
     },
     {
       "name": "GetBeltsLine",
@@ -81,7 +84,8 @@
         "D2BeltsTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2c598d0a"
     },
     {
       "name": "GetInvRectFromBeltsTxt",
@@ -102,7 +106,8 @@
       "usedTypes": [
         "D2BeltsEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "86be314c"
     }
   ]
 }

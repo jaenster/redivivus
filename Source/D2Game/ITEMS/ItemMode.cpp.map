@@ -22,7 +22,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "63a59a9c"
     },
     {
       "name": "SetSavePacketList",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "de136df2"
     },
     {
       "name": "ITEMMODE_NullSub_Unref_00558990",
@@ -61,7 +63,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "46c8153e"
     },
     {
       "name": "GetMonsterData",
@@ -79,7 +82,8 @@
       "usedTypes": [
         "D2MonStatsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "730e6e5c"
     },
     {
       "name": "STATSLISTEX_FunctionCallback",
@@ -137,7 +141,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e974dda"
     },
     {
       "name": "SendDropItemPacket",
@@ -158,7 +163,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ae356e6a"
     },
     {
       "name": "PacketUpdateForClient",
@@ -177,7 +183,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cf1910ba"
     },
     {
       "name": "SERVER_ITEM_SendStackableUsagePackets",
@@ -206,7 +213,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5ef39f0c"
     },
     {
       "name": "Unreferenced_0055bfe0",
@@ -224,7 +232,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7f57043f"
     },
     {
       "name": "ITEMMODE_GetItemSkillId",
@@ -251,7 +260,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9bc0fa5e"
     },
     {
       "name": "ITEMMODE_UpdateBookSkillQuantity",
@@ -282,7 +292,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b1da1c8d"
     },
     {
       "name": "ITEMMODE_UpdateItemSkill",
@@ -319,7 +330,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c94d8e8c"
     },
     {
       "name": "ITEMMODE_ApplyItemToOwner",
@@ -341,7 +353,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "72a63105"
     },
     {
       "name": "ITEMMODE_AddStatsList",
@@ -376,7 +389,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "2ced2ad1"
     },
     {
       "name": "ITEMMODE_AddStatsList_ForMercSwap",
@@ -396,7 +410,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f85a73f2"
     },
     {
       "name": "ITEMMODE_GetEquippedWeapons",
@@ -419,7 +434,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "390a8abb"
     },
     {
       "name": "ITEMMODE_IsSkillUsableCheck",
@@ -439,7 +455,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "983efad1"
     },
     {
       "name": "ITEMMODE_ResetSkillToDefault",
@@ -465,7 +482,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ec1555a"
     },
     {
       "name": "ITEMMODE_CanUseSkillWithWeapon",
@@ -488,7 +506,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3eaf0b75"
     },
     {
       "name": "ITEMMODE_ValidateWeaponSkills",
@@ -518,7 +537,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "946fd1ad"
     },
     {
       "name": "ITEMMODE_RemoveItemStates",
@@ -540,7 +560,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "16772de1"
     },
     {
       "name": "ITEMMODE_UnequipItemStats",
@@ -573,7 +594,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb0273a3"
     },
     {
       "name": "PickingGold",
@@ -610,7 +632,8 @@
         "eD2UnitType",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "32545ac0"
     },
     {
       "name": "ITEMMODE_GetItemPageForUnit",
@@ -635,7 +658,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "646855ea"
     },
     {
       "name": "ITEMMODE_CheckQuestItemCodePair",
@@ -654,7 +678,8 @@
         "D2ItemsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd28de34"
     },
     {
       "name": "ITEMMODE_CheckDuplicateQuestItem",
@@ -682,7 +707,8 @@
         "D2UnitStrc",
         "eInventoryPage",
         "uint32_t"
-      ]
+      ],
+      "dh": "65924c01"
     },
     {
       "name": "SERVER_CheckIfPickable",
@@ -723,7 +749,8 @@
         "eD2Quests",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a342cf0"
     },
     {
       "name": "SERVER_PickToCursor",
@@ -770,7 +797,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "02178540"
     },
     {
       "name": "ITEMMODE_AutoStackItem",
@@ -818,7 +846,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a8e5c02"
     },
     {
       "name": "ITEMMODE_CheckAutoStack",
@@ -859,7 +888,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e44a004"
     },
     {
       "name": "ITEMMODE_GetItemTypeFlags",
@@ -885,7 +915,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "244a941b"
     },
     {
       "name": "ITEMMODE_CheckItemTypeConflict",
@@ -899,7 +930,8 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "ITEMMODE_CheckItemTypeConflict"
-      ]
+      ],
+      "dh": "3686f838"
     },
     {
       "name": "ITEMMODE_FindBestBodyLocForItem",
@@ -936,7 +968,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "06044617"
     },
     {
       "name": "ITEMMODE_NullSub_Unref_0055d920",
@@ -954,7 +987,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9f7566a8"
     },
     {
       "name": "ITEMMODE_ReturnOne",
@@ -968,7 +1002,8 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "ITEMMODE_ReturnOne"
-      ]
+      ],
+      "dh": "10f1bb84"
     },
     {
       "name": "ITEMMODE_GetItemGoldValue",
@@ -990,7 +1025,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "033610fa"
     },
     {
       "name": "ITEMMODE_CheckCanPickup",
@@ -1017,7 +1053,8 @@
         "eD2BodyLoc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "511538cb"
     },
     {
       "name": "ITEMMODE_ValidateItemForPlayer",
@@ -1042,7 +1079,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "0ec21e3c"
     },
     {
       "name": "ITEMMODE_ValidateItemQuality",
@@ -1066,7 +1104,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c0c15f2"
     },
     {
       "name": "ITEMMODE_CheckItemRequirements",
@@ -1091,7 +1130,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fdf7a047"
     },
     {
       "name": "Unreferenced_0055db80",
@@ -1111,7 +1151,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "218a22aa"
     },
     {
       "name": "ITEMS_RecalcEquippedItemStates",
@@ -1158,7 +1199,8 @@
         "eD2BodyLoc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c0ef8e3"
     },
     {
       "name": "ITEMS_RecalcAndRefreshInventory",
@@ -1178,7 +1220,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6d7663e3"
     },
     {
       "name": "ITEMMODE_DeleteItemFromInventory",
@@ -1214,7 +1257,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "863810ca"
     },
     {
       "name": "ITEMMODE_ConsumeItem",
@@ -1238,7 +1282,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ItemFlag"
-      ]
+      ],
+      "dh": "5bc53eaf"
     },
     {
       "name": "ITEMMODE_GetItemCastSkill",
@@ -1265,7 +1310,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "02f433a5"
     },
     {
       "name": "ITEMMODE_CastItemSkill",
@@ -1297,7 +1343,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e2390f55"
     },
     {
       "name": "SpecialItemsBonuses",
@@ -1359,7 +1406,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc592a94"
     },
     {
       "name": "ITEMMODE_MergeStackableItems",
@@ -1399,7 +1447,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e71b4abf"
     },
     {
       "name": "StackItem",
@@ -1430,7 +1479,8 @@
         "SGAMEDATA",
         "eInventoryPage",
         "int32_t"
-      ]
+      ],
+      "dh": "4cc168b9"
     },
     {
       "name": "ITEMMODE_InitItemCreateContext",
@@ -1457,7 +1507,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "16432e0d"
     },
     {
       "name": "RemoveStackItem",
@@ -1474,7 +1525,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6e84c34f"
     },
     {
       "name": "ITEM_TryPlaceInBelt",
@@ -1514,7 +1566,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e02aea4"
     },
     {
       "name": "SERVER_BeltSwapItem",
@@ -1559,7 +1612,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e21efaf7"
     },
     {
       "name": "ITEMMODE_DeleteItemFromCorpse",
@@ -1587,7 +1641,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b05ed7b6"
     },
     {
       "name": "ITEMMODE_SortBeltColumn",
@@ -1615,7 +1670,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a4cecf0d"
     },
     {
       "name": "ToCursorItem",
@@ -1642,7 +1698,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4ed749f"
     },
     {
       "name": "ITEM_InsertScrollIntoBook",
@@ -1688,7 +1745,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "401b547e"
     },
     {
       "name": "ITEMMODE_NullSub",
@@ -1706,7 +1764,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e4408032"
     },
     {
       "name": "ITEMMODE_RemoveExpiredStatLists",
@@ -1725,7 +1784,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "016fb77c"
     },
     {
       "name": "ITEMMODE_CheckEquipRestrictions",
@@ -1762,7 +1822,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd62f791"
     },
     {
       "name": "ITEMMODE_GetAlternateBodyLoc",
@@ -1779,7 +1840,8 @@
       ],
       "usedTypes": [
         "eD2BodyLocDWORD"
-      ]
+      ],
+      "dh": "294f911c"
     },
     {
       "name": "ITEMMODE_CanEquipOnBodyLoc",
@@ -1801,7 +1863,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "eD2BodyLocDWORD"
-      ]
+      ],
+      "dh": "00b94f12"
     },
     {
       "name": "ITEMMODE_ResolveEquipConflict",
@@ -1830,7 +1893,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40dd87d3"
     },
     {
       "name": "ITEMMODE_ReturnZero3",
@@ -1848,7 +1912,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6614d6eb"
     },
     {
       "name": "ITEMMODE_RecalcAllEquippedStats",
@@ -1876,7 +1941,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c15396f2"
     },
     {
       "name": "ITEMMODE_HasSocketedItems",
@@ -1896,7 +1962,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "edb04d7c"
     },
     {
       "name": "ITEMMODE_GetSocketCount",
@@ -1919,7 +1986,8 @@
         "int16_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cfde1a45"
     },
     {
       "name": "ITEMMODE_ValidateSocketedItems",
@@ -1949,7 +2017,8 @@
         "eD2ItemTypes",
         "eInventoryPage",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff059baa"
     },
     {
       "name": "ITEMMODE_CheckItemEthereal",
@@ -1977,7 +2046,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3dd2033f"
     },
     {
       "name": "ITEMMODE_HandleItemDurability",
@@ -2014,7 +2084,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37f7e614"
     },
     {
       "name": "ITEMMODE_SendItemUpdate",
@@ -2049,7 +2120,8 @@
         "eD2UnitStat",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5d901092"
     },
     {
       "name": "ITEMMODE_ProcessItemFlags",
@@ -2083,7 +2155,8 @@
         "eD2UnitStat",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6cf18794"
     },
     {
       "name": "ITEMMODE_SetItemFlags",
@@ -2112,7 +2185,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe59970a"
     },
     {
       "name": "ITEMMODE_CheckItemLevel",
@@ -2139,7 +2213,8 @@
         "SGAMEDATA",
         "eInventoryPage",
         "int32_t"
-      ]
+      ],
+      "dh": "31e09ebc"
     },
     {
       "name": "ITEMMODE_ApplyQuestReward",
@@ -2165,7 +2240,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "96e1d8ca"
     },
     {
       "name": "ITEMMODE_HandleItemPickup",
@@ -2196,7 +2272,8 @@
         "int64_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "65300b92"
     },
     {
       "name": "ITEMMODE_ProcessItemDropLogic",
@@ -2233,7 +2310,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff480a02"
     },
     {
       "name": "UpdatePlayerItemState",
@@ -2254,7 +2332,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e1273fd2"
     },
     {
       "name": "ITEMMODE_GetItemCursorMode",
@@ -2278,7 +2357,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "21acf3a9"
     },
     {
       "name": "ITEMMODE_IsItemOnCursor",
@@ -2297,7 +2377,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "25b2c451"
     },
     {
       "name": "ITEMMODE_HandleCursorItem",
@@ -2323,7 +2404,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "875324ed"
     },
     {
       "name": "ITEMMODE_ValidateInventorySlot",
@@ -2347,7 +2429,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "dbc86060"
     },
     {
       "name": "ITEMMODE_CheckInventorySpace",
@@ -2376,7 +2459,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "762f505e"
     },
     {
       "name": "ITEMMODE_PlaceItemInInventoryPage",
@@ -2420,7 +2504,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c83d7db"
     },
     {
       "name": "SERVER_ItemToInventory",
@@ -2462,7 +2547,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "418ead2f"
     },
     {
       "name": "SERVER_TakeItemToCursor",
@@ -2512,7 +2598,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e1046b0"
     },
     {
       "name": "SERVER_EquipItemToBodyLoc",
@@ -2557,7 +2644,8 @@
         "SGAMEDATA",
         "eD2BodyLoc",
         "int32_t"
-      ]
+      ],
+      "dh": "8a082d3d"
     },
     {
       "name": "ITEMMODE_RemoveItemFromBelt",
@@ -2625,7 +2713,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0ba69e31"
     },
     {
       "name": "ITEMMODE_TakeItemFromBodyLoc",
@@ -2673,7 +2762,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8e834c5"
     },
     {
       "name": "SERVER_Swap2HandItem",
@@ -2730,7 +2820,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "863a2698"
     },
     {
       "name": "ITEMMODE_EquipItemToBodyLoc",
@@ -2786,7 +2877,8 @@
         "eD2BodyLoc",
         "eD2BodyLocDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "2e4c647e"
     },
     {
       "name": "ITEMMODE_WeaponSwap",
@@ -2854,7 +2946,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ec699bfc"
     },
     {
       "name": "ITEMMODE_ExchangeInventoryItem",
@@ -2910,7 +3003,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "442adfc3"
     },
     {
       "name": "ITEMMODE_ConsumeItemAndRemove",
@@ -2934,7 +3028,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "e869cf97"
     },
     {
       "name": "ITEMMODE_UseItemOnItem",
@@ -2978,7 +3073,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "c91468d9"
     },
     {
       "name": "SERVER_BeltTakeItem",
@@ -3016,7 +3112,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "42a80c59"
     },
     {
       "name": "SERVER_UseItemAtCoords",
@@ -3061,7 +3158,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3b6ff1c6"
     },
     {
       "name": "ITEMMODE_ProcessItemSell",
@@ -3091,7 +3189,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "15fa53e9"
     },
     {
       "name": "PutItemInItem",
@@ -3137,7 +3236,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffdb97ff"
     },
     {
       "name": "ITEMMODE_HandleItemRepair",
@@ -3169,7 +3269,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54c4c55c"
     },
     {
       "name": "ITEMMODE_ProcessItemBuy",
@@ -3221,7 +3322,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e7636b92"
     },
     {
       "name": "ITEMMODE_HandleItemGamble",
@@ -3252,7 +3354,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed714e87"
     },
     {
       "name": "ITEMMODE_ValidateTradeItem",
@@ -3278,7 +3381,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a97d0c0"
     },
     {
       "name": "ITEMEVENT_DefaultCallback",
@@ -3301,7 +3405,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "069a850d"
     },
     {
       "name": "ITEMMODE_TryPutItemInInventory",
@@ -3338,7 +3443,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "bc5d753e"
     },
     {
       "name": "ITEMMODE_EquipCorpseItems",
@@ -3397,7 +3503,8 @@
         "eD2BodyLocDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d2b6c15"
     },
     {
       "name": "ITEMMODE_ProcessCorpsePickup",
@@ -3429,7 +3536,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2bebff93"
     },
     {
       "name": "ITEM_RemoveItemFromCurrentLocation",
@@ -3460,7 +3568,8 @@
         "eD2ItemAnimMode",
         "eInventoryPage",
         "int32_t"
-      ]
+      ],
+      "dh": "14100ef7"
     },
     {
       "name": "SERVER_PickToInventory",
@@ -3520,7 +3629,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b36176e1"
     },
     {
       "name": "ITEMMODE_RemoveItemsFromCube",
@@ -3589,7 +3699,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc8201a8"
     },
     {
       "name": "ITEMMODE_RemoveItemsFromCube_HaltTail",
@@ -3606,7 +3717,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "4a243c5c"
     },
     {
       "name": "SERVER_DropItemFromPlayer",
@@ -3643,7 +3755,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0149c524"
     },
     {
       "name": "ITEMMODE_EquipItemToSwapBodyLoc",
@@ -3701,7 +3814,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b32a2fe"
     },
     {
       "name": "Transmorgify",
@@ -3736,7 +3850,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0cd9f73"
     },
     {
       "name": "ITEMMODE_ReturnZero3_Unref_00570690",
@@ -3754,7 +3869,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "607a8d65"
     },
     {
       "name": "ITEMMODE_IsSkillUsableCheck_Unref_00580260",
@@ -3773,7 +3889,8 @@
       "usedTypes": [
         "D2SkillStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9beca8ce"
     },
     {
       "name": "RemoveStackItem_Unref_005e5270",
@@ -3787,7 +3904,8 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "RemoveStackItem_Unref_005e5270"
-      ]
+      ],
+      "dh": "0cd2f79a"
     }
   ]
 }

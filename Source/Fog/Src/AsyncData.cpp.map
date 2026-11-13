@@ -24,7 +24,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6103b9e8"
     },
     {
       "name": "STRUCT_FreeAsyncData",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "D2AsyncDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "af133958"
     },
     {
       "name": "ASYNCDATA_CancelAndCleanup",
@@ -62,7 +64,8 @@
       ],
       "usedTypes": [
         "D2AsyncData_Line0x128"
-      ]
+      ],
+      "dh": "a3d84442"
     },
     {
       "name": "ASYNCDATA_AllocSlot",
@@ -81,7 +84,8 @@
       "usedTypes": [
         "D2AsyncDataSlotStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc3d0e3a"
     },
     {
       "name": "STRUCT_AllocAsyncData_Line0x128",
@@ -117,7 +121,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b34f288"
     },
     {
       "name": "ASYNCDATA_IsComplete",
@@ -140,7 +145,8 @@
         "D2AsyncData_Line0x128",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fa615e1e"
     },
     {
       "name": "ASYNCDATA_SetPriority",
@@ -163,7 +169,8 @@
       "usedTypes": [
         "D2AsyncData_Line0x128",
         "uint32_t"
-      ]
+      ],
+      "dh": "23cd3a0d"
     },
     {
       "name": "ASYNCDATA_HaltSetPriorityAtLine",
@@ -180,7 +187,8 @@
         "GetInstructionPointer",
         "exit",
         "ASYNCDATA_HaltSetPriorityAtLine"
-      ]
+      ],
+      "dh": "4ff445e7"
     },
     {
       "name": "ASYNCDATA_DeferPriorityUpdates",
@@ -201,7 +209,8 @@
       ],
       "usedTypes": [
         "D2AsyncData_Line0x128"
-      ]
+      ],
+      "dh": "e2847a3c"
     },
     {
       "name": "ASYNCDATA_WaitForCompletion",
@@ -226,7 +235,8 @@
         "D2AsyncData_Line0x128",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ef6de0a"
     },
     {
       "name": "ASYNCDATA_GetResult",
@@ -248,7 +258,8 @@
       "usedTypes": [
         "D2AsyncData_Line0x128",
         "int32_t"
-      ]
+      ],
+      "dh": "2fc5aa14"
     },
     {
       "name": "ASYNCDATA_GetReadSize",
@@ -269,7 +280,8 @@
       "usedTypes": [
         "D2AsyncData_Line0x128",
         "int32_t"
-      ]
+      ],
+      "dh": "695e957a"
     },
     {
       "name": "ASYNCDATA_SetResult",
@@ -291,7 +303,8 @@
       "usedTypes": [
         "D2AsyncData_Line0x128",
         "int32_t"
-      ]
+      ],
+      "dh": "bed205b3"
     },
     {
       "name": "ASYNCDATA_Free",
@@ -318,7 +331,8 @@
         "D2AsyncData_Line0x128 *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5c421bf"
     }
   ]
 }

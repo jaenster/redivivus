@@ -22,7 +22,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f221a63f"
     },
     {
       "name": "DRAW_AltItems",
@@ -74,7 +75,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ce335c8a"
     },
     {
       "name": "StaticInit_gaGroundItemLabels",
@@ -89,7 +91,8 @@
       "calledFunctions": [
         "StaticInit_gaGroundItemLabels",
         "CONTAINER_InitializeBuffer"
-      ]
+      ],
+      "dh": "5401d446"
     },
     {
       "name": "StaticInit_6cade0",
@@ -104,7 +107,8 @@
       "calledFunctions": [
         "StaticInit_6cade0",
         "atexit"
-      ]
+      ],
+      "dh": "5d62de71"
     },
     {
       "name": "StaticFini_Empty_6cb400",
@@ -118,7 +122,8 @@
       "namespace": "D2Client::UI::ShowItems",
       "calledFunctions": [
         "StaticFini_Empty_6cb400"
-      ]
+      ],
+      "dh": "c36c751f"
     }
   ]
 }

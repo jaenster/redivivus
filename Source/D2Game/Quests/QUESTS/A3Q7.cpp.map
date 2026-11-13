@@ -28,7 +28,8 @@
         "D2QuestDataA3Q6Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0667c472"
     },
     {
       "name": "Q23_NotifyGuardianStateToPlayers",
@@ -48,7 +49,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "2e7f2adb"
     },
     {
       "name": "Q24_HandleKhalimsWillCompletion",
@@ -71,7 +73,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f095e30b"
     },
     {
       "name": "Q24_SetupDarkWandererMapAi",
@@ -95,7 +98,8 @@
         "D2MapAIStrc *",
         "D2QuestDataA3Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "c2aa62a4"
     },
     {
       "name": "Q24_StatusFilter",
@@ -114,7 +118,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0540e853"
     },
     {
       "name": "Q24_ActiveFilter",
@@ -134,7 +139,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "40340e11"
     },
     {
       "name": "Q24_GetDarkWandererSpawnCoords",
@@ -157,7 +163,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "135f0c17"
     },
     {
       "name": "Objects_InitFn43_DarkWanderer",
@@ -182,7 +189,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6bac11cd"
     },
     {
       "name": "Q24_Callback13_PlayerStartedGame",
@@ -205,7 +213,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2db902dc"
     },
     {
       "name": "Q24_InitData",
@@ -226,7 +235,8 @@
         "D2QuestDataA3Q7Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "018d531d"
     },
     {
       "name": "Q24_TimerCallback_SpawnPortals",
@@ -257,7 +267,8 @@
         "POINT",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "8cfa97c0"
     },
     {
       "name": "Q24_StartDarkWandererPortalTimer",
@@ -278,7 +289,8 @@
         "D2QuestDataA3Q7Strc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "af177b7c"
     }
   ]
 }

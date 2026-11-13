@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e5542232"
     },
     {
       "name": "PerspectiveScalePosition_Unref_005043d0",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ffa182b5"
     },
     {
       "name": "Initialize",
@@ -62,7 +64,8 @@
         "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f72afc7"
     },
     {
       "name": "ClearCaches",
@@ -76,7 +79,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "ClearCaches"
-      ]
+      ],
+      "dh": "91f07daa"
     },
     {
       "name": "CheckCutScene",
@@ -90,7 +94,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "CheckCutScene"
-      ]
+      ],
+      "dh": "326ac3ca"
     },
     {
       "name": "GetScreenSize",
@@ -107,7 +112,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "56e96d5c"
     },
     {
       "name": "SetPalette",
@@ -127,7 +133,8 @@
         "LPPALETTEENTRY",
         "PALETTEENTRY",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a08c1ad"
     },
     {
       "name": "SetPaletteTable",
@@ -144,7 +151,8 @@
       ],
       "usedTypes": [
         "BYTE *"
-      ]
+      ],
+      "dh": "51ec669d"
     },
     {
       "name": "UpdateScaleFactor",
@@ -161,7 +169,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "55f67e66"
     },
     {
       "name": "SetGamma",
@@ -179,7 +188,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b16a2492"
     },
     {
       "name": "CheckGamma",
@@ -196,7 +206,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e96e8e58"
     },
     {
       "name": "SetGlobalLight",
@@ -210,7 +221,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "SetGlobalLight"
-      ]
+      ],
+      "dh": "25070f88"
     },
     {
       "name": "SetPerspectiveScale",
@@ -227,7 +239,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9d570651"
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -244,7 +257,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "691533ef"
     },
     {
       "name": "PerspectiveScalePosition",
@@ -261,7 +275,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "863d8512"
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -275,7 +290,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor"
-      ]
+      ],
+      "dh": "9a17a18a"
     },
     {
       "name": "GetRenderStatistics",
@@ -289,7 +305,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "GetRenderStatistics"
-      ]
+      ],
+      "dh": "7c3646c8"
     },
     {
       "name": "ActivateWindow",
@@ -303,7 +320,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "ActivateWindow"
-      ]
+      ],
+      "dh": "f33b5aa4"
     },
     {
       "name": "SetOption",
@@ -320,7 +338,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b8a7e8f6"
     },
     {
       "name": "DirectDrawErrorHandler",
@@ -338,7 +357,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c861240a"
     },
     {
       "name": "InternalOpenWindow",
@@ -364,7 +384,8 @@
         "DDSURFACEDESC",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7988e0ac"
     },
     {
       "name": "InternalCutsceneWindow",
@@ -388,7 +409,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "5e8c6642"
     },
     {
       "name": "CreateWindow",
@@ -408,7 +430,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "443f7109"
     },
     {
       "name": "PlayCutScene",
@@ -432,7 +455,8 @@
       "usedTypes": [
         "DDBLTFX",
         "int32_t"
-      ]
+      ],
+      "dh": "cfff15a6"
     },
     {
       "name": "BeginScene",
@@ -456,7 +480,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "2cfe97a3"
     },
     {
       "name": "EndScene1",
@@ -477,7 +502,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d1620d2a"
     },
     {
       "name": "EndScene2",
@@ -496,7 +522,8 @@
       "usedTypes": [
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "6fd1ce8c"
     },
     {
       "name": "GetBackBuffer",
@@ -516,7 +543,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "uint8_t"
-      ]
+      ],
+      "dh": "269d3a34"
     },
     {
       "name": "InternalReleaseWindow",
@@ -532,7 +560,8 @@
         "InternalReleaseWindow",
         "ClearScreen",
         "EndScene2"
-      ]
+      ],
+      "dh": "de1ce9f3"
     },
     {
       "name": "BeginCutScene",
@@ -548,7 +577,8 @@
         "BeginCutScene",
         "InternalReleaseWindow",
         "InternalCutsceneWindow"
-      ]
+      ],
+      "dh": "cbc200b2"
     },
     {
       "name": "RENDERER_DDRAW_DestroyWindow",
@@ -563,7 +593,8 @@
       "calledFunctions": [
         "RENDERER_DDRAW_DestroyWindow",
         "InternalReleaseWindow"
-      ]
+      ],
+      "dh": "83de296f"
     },
     {
       "name": "ResizeWindow",
@@ -579,7 +610,8 @@
         "ResizeWindow",
         "InternalReleaseWindow",
         "InternalOpenWindow"
-      ]
+      ],
+      "dh": "a4eda3fb"
     },
     {
       "name": "Release",
@@ -596,7 +628,8 @@
         "InternalReleaseWindow",
         "FreeClientMemory",
         "D2ddDebugFont_Free"
-      ]
+      ],
+      "dh": "5e7ce4c2"
     },
     {
       "name": "EndCutScene",
@@ -618,7 +651,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "be40b00f"
     },
     {
       "name": "thunk_Release",
@@ -650,7 +684,8 @@
         "D2GfxHelperStrc",
         "D2GfxSettingsStrc",
         "GUID"
-      ]
+      ],
+      "dh": "ff219c73"
     },
     {
       "name": "RENDERER_DIRECTDRAW_GetPalettePointer",
@@ -667,7 +702,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7f55d77c"
     },
     {
       "name": "RENDERER_DDRAW_SetHorizontalBounds",
@@ -684,7 +720,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8ec44981"
     },
     {
       "name": "RENDERER_DDRAW_IsDC6OffScreen",
@@ -706,7 +743,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "a6771a3b"
     },
     {
       "name": "RENDERER_DDRAW_ComputeDC6ClipRect",
@@ -732,7 +770,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3ef837e"
     },
     {
       "name": "DrawImage",
@@ -759,7 +798,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c11bc696"
     },
     {
       "name": "DrawShiftedImage",
@@ -785,7 +825,8 @@
         "D2GfxDataStrc",
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "79924705"
     },
     {
       "name": "DrawVerticalCropImage",
@@ -811,7 +852,8 @@
         "D2GfxDataStrc",
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "a10bfbff"
     },
     {
       "name": "DrawClippedImage",
@@ -834,7 +876,8 @@
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ddf247ad"
     },
     {
       "name": "DrawShadow",
@@ -860,7 +903,8 @@
         "D2GfxDataStrc",
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "63d7483c"
     },
     {
       "name": "DrawImageFast",
@@ -878,7 +922,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1dbd0f0f"
     },
     {
       "name": "DebugFillBackBuffer",
@@ -899,7 +944,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "72dc8481"
     },
     {
       "name": "DrawPerspectiveImage",
@@ -918,7 +964,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "52f2563e"
     },
     {
       "name": "D2ddDebugFont_Alloc",
@@ -942,7 +989,8 @@
         "HFONT",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "eac2fbe6"
     },
     {
       "name": "D2ddDebugFont_Free",
@@ -957,7 +1005,8 @@
       "calledFunctions": [
         "D2ddDebugFont_Free",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "382cf82b"
     },
     {
       "name": "RENDERER_DDRAW_DrawDebugFontChar",
@@ -976,7 +1025,8 @@
         "LPINT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1bab67bb"
     },
     {
       "name": "DrawString",
@@ -996,7 +1046,8 @@
         "LPINT",
         "int32_t",
         "va_list"
-      ]
+      ],
+      "dh": "eb9f472d"
     },
     {
       "name": "DrawLight",
@@ -1013,7 +1064,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "58116bc7"
     },
     {
       "name": "RENDERER_DDRAW_AreBlendedShadowsEnabled",
@@ -1027,7 +1079,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "RENDERER_DDRAW_AreBlendedShadowsEnabled"
-      ]
+      ],
+      "dh": "8f62b9f9"
     },
     {
       "name": "DrawSolidRectEx",
@@ -1051,7 +1104,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c36a00cd"
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1069,7 +1123,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f0a1d9bc"
     },
     {
       "name": "RENDERER_DDRAW_DrawPixel",
@@ -1086,7 +1141,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8799c28f"
     },
     {
       "name": "DrawLine",
@@ -1103,7 +1159,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6d5a16f8"
     },
     {
       "name": "RENDERER_DDRAW_DrawLine",
@@ -1120,7 +1177,8 @@
       ],
       "usedTypes": [
         "POINT"
-      ]
+      ],
+      "dh": "4a129d37"
     },
     {
       "name": "DrawRect",
@@ -1144,7 +1202,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f7b09892"
     },
     {
       "name": "DrawRectEx",
@@ -1167,7 +1226,8 @@
         "POINT",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "7e3ca2a9"
     },
     {
       "name": "DrawSolidRect",
@@ -1189,7 +1249,8 @@
       "usedTypes": [
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "433ba381"
     },
     {
       "name": "DrawSolidSquare",
@@ -1209,7 +1270,8 @@
         "POINT",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "b620fdbb"
     },
     {
       "name": "ClearScreen",
@@ -1228,7 +1290,8 @@
       ],
       "usedTypes": [
         "DDBLTFX"
-      ]
+      ],
+      "dh": "e021f754"
     },
     {
       "name": "DrawShadowTile",
@@ -1248,7 +1311,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0777b4b3"
     },
     {
       "name": "DrawTransWallTile",
@@ -1269,7 +1333,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd8873a4"
     },
     {
       "name": "DrawWallTile",
@@ -1290,7 +1355,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6269537"
     },
     {
       "name": "DrawGroundTile",
@@ -1310,7 +1376,8 @@
         "D2GfxLightExStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c0b9a15"
     },
     {
       "name": "CloseSmacker",
@@ -1328,7 +1395,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "4ff633c8"
     },
     {
       "name": "RENDERER_DDRAW_BlitSmackerFrame",
@@ -1347,7 +1415,8 @@
         "D2SmackerContextStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "99a0a4dc"
     },
     {
       "name": "DecodeSmacker",
@@ -1374,7 +1443,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e85b020a"
     },
     {
       "name": "PlayerSmacker",
@@ -1395,7 +1465,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "b433556f"
     },
     {
       "name": "BINK_RenderVideoFrame",
@@ -1417,7 +1488,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "95bd72df"
     },
     {
       "name": "BINK_PlayVideoFile",
@@ -1443,7 +1515,8 @@
         "int32_t",
         "tagMSG",
         "uint32_t"
-      ]
+      ],
+      "dh": "963ac38c"
     },
     {
       "name": "ActivateWindow_Unref_00513b80",
@@ -1457,7 +1530,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "ActivateWindow_Unref_00513b80"
-      ]
+      ],
+      "dh": "f49ac184"
     },
     {
       "name": "SetDefaultPerspectiveFactor_Unref_00514040",
@@ -1471,7 +1545,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor_Unref_00514040"
-      ]
+      ],
+      "dh": "c3792e19"
     },
     {
       "name": "SetDefaultPerspectiveFactor_Unref_00514050",
@@ -1485,7 +1560,8 @@
       "namespace": "D2DDraw::Renderer::DirectDraw",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor_Unref_00514050"
-      ]
+      ],
+      "dh": "76ff9d9e"
     }
   ]
 }

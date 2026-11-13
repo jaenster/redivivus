@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "286b50af"
     },
     {
       "name": "PLRSKILLS_CheckSkillWhipAndLeap",
@@ -45,7 +46,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "f2bdf8b5"
     },
     {
       "name": "PLRSKILLS_DrawChargeTrailIfPrimary",
@@ -84,7 +86,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "03204fc7"
     },
     {
       "name": "PLRSKILLS_DrawChargeTrailIfSecondary",
@@ -117,7 +120,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f2e6115c"
     },
     {
       "name": "PLRSKILLS_StateSetFn01_ProgressiveCharge",
@@ -138,7 +142,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "bcba7464"
     },
     {
       "name": "PLRSKILLS_StateRemFn01_ProgressiveCharge",
@@ -157,7 +162,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "341bf132"
     },
     {
       "name": "PLRSKILLS_StateSetFn02_CloakOfShadows",
@@ -186,7 +192,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "655287e7"
     },
     {
       "name": "PLRSKILLS_StateSetFn03_Blaze",
@@ -216,7 +223,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "47dd5847"
     },
     {
       "name": "PLRSKILLS_StateSetFn04_SourceUnit",
@@ -239,7 +247,8 @@
         "D2UnitStrc",
         "eD2States",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "ada6bb0d"
     },
     {
       "name": "PLRSKILLS_StateRemFn02_SourceUnit",
@@ -258,7 +267,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "b00124de"
     },
     {
       "name": "PLRSKILLS_StateSetFn05_ChangeClass",
@@ -287,7 +297,8 @@
         "eD2PlayerAnimMode",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "79502b6c"
     },
     {
       "name": "STATES_CalcDamageSeverityTier",
@@ -304,7 +315,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "60d608f5"
     },
     {
       "name": "PLRSKILLS_StateRemFn03_BoneArmor",
@@ -324,7 +336,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "9a5c001a"
     },
     {
       "name": "PLRSKILLS_StateSetFn06_BoneArmor",
@@ -350,7 +363,8 @@
         "D2UnitStrc",
         "eD2States",
         "eOverlayId"
-      ]
+      ],
+      "dh": "68f6aeef"
     },
     {
       "name": "PLRSKILLS_CalcDamageSeverityTier_Unreferenced",
@@ -367,7 +381,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a910da57"
     },
     {
       "name": "PLRSKILLS_StateRemFn05_CycloneArmor",
@@ -387,7 +402,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "1d21f017"
     },
     {
       "name": "PLRSKILLS_StateSetFn08_CycloneArmor",
@@ -413,7 +429,8 @@
         "D2UnitStrc",
         "eD2States",
         "eOverlayId"
-      ]
+      ],
+      "dh": "183376fa"
     },
     {
       "name": "PLRSKILLS_StateSetFn07_Hurricane",
@@ -436,7 +453,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2States"
-      ]
+      ],
+      "dh": "72a7e9ec"
     },
     {
       "name": "PLRSKILLS_StateRemFn04_Hurricane",
@@ -461,7 +479,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "bf70b822"
     },
     {
       "name": "PLRSKILLS_StateSetFn09_ShrineSkill",
@@ -480,7 +499,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "a238bfac"
     },
     {
       "name": "PLRSKILLS_StateRemFn06_ShrineSkill",
@@ -499,7 +519,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "5fe3a66a"
     },
     {
       "name": "PLRSKILLS_StateSetFn10_Redeemed",
@@ -522,7 +543,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2States"
-      ]
+      ],
+      "dh": "99f24481"
     },
     {
       "name": "PLRSKILLS_StateRemFn07_Uninterruptable",
@@ -553,7 +575,8 @@
         "eD2Skills",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "09814ac9"
     },
     {
       "name": "PLRSKILLS_StateSetFn11_VineBeast",
@@ -571,7 +594,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "eeb01321"
     },
     {
       "name": "PLRSKILLS_StateSetFn12_Invis",
@@ -589,7 +613,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "a639b070"
     },
     {
       "name": "PLRSKILLS_StateRemFn08_Invis",
@@ -607,7 +632,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "9aadf918"
     },
     {
       "name": "PLRSKILLS_StateSetFn13_Attached",
@@ -627,7 +653,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "f25d2fe6"
     },
     {
       "name": "PLRSKILLS_StateRemFn09_Attached",
@@ -647,7 +674,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "378d3e4e"
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant",
@@ -683,7 +711,8 @@
         "D2UnitStrc",
         "eD2States",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "e1d67471"
     },
     {
       "name": "PLRSKILLS_StateSetFn15_Revive",
@@ -703,7 +732,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "8ee6195a"
     },
     {
       "name": "PLRSKILLS_StateSetFn16_StackOverlay",
@@ -732,7 +762,8 @@
         "eD2States",
         "eOverlayId",
         "int32_t"
-      ]
+      ],
+      "dh": "c0078ee7"
     },
     {
       "name": "PLRSKILLS_StateRemFn11_StackOverlay",
@@ -751,7 +782,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "4e370a25"
     },
     {
       "name": "PLRSKILLS_StateSetFn17_RestInPeace",
@@ -772,7 +804,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "5d669553"
     },
     {
       "name": "PLRSKILLS_StateSetFn18_CorpseExp",
@@ -794,7 +827,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "3a3e029e"
     },
     {
       "name": "PLRSKILLS_StateSetFn19RemFn12_SkillDelay",
@@ -813,7 +847,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "345fe790"
     },
     {
       "name": "STATES_UpdateColorShiftAndLight",
@@ -838,7 +873,8 @@
         "eD2States",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2f4e067c"
     },
     {
       "name": "STATES_AddStateOverlays",
@@ -866,7 +902,8 @@
         "eOverlayId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8b05ee22"
     },
     {
       "name": "STATES_ResetUnitGfxAndMode",
@@ -888,7 +925,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7590fcc2"
     },
     {
       "name": "STATES_SetStateOnUnit",
@@ -917,7 +955,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "bc0e964c"
     },
     {
       "name": "PLRSKILLS_RemoveStateFromUnit",
@@ -953,7 +992,8 @@
         "eD2States",
         "eOverlayId",
         "uint32_t"
-      ]
+      ],
+      "dh": "427ae171"
     },
     {
       "name": "NET_D2GS_CLIENT_HandleAddSTatUnit",
@@ -983,7 +1023,8 @@
         "eD2States",
         "eD2UnitStat",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5e2d283"
     },
     {
       "name": "STATES_DispatchSetFunc",
@@ -1006,7 +1047,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2States"
-      ]
+      ],
+      "dh": "751bc056"
     },
     {
       "name": "STATES_DispatchRemFunc",
@@ -1027,7 +1069,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "9df983c2"
     },
     {
       "name": "PLRSKILLS_CanUseSkillCheck",
@@ -1051,7 +1094,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "19afd9a5"
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
@@ -1069,7 +1113,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8af2cd0f"
     },
     {
       "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
@@ -1087,7 +1132,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "443076ae"
     }
   ]
 }

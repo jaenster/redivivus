@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "68cb1445"
     },
     {
       "name": "ResetGrid_Unref_00416810",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "b6d65036"
     },
     {
       "name": "ResetGrid_Unref_00416890",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "c2e47ab6"
     },
     {
       "name": "ResetGrid_Unref_004168b0",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e182b6ee"
     },
     {
       "name": "ResetGrid_Unref_00416960",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e42d39cf"
     },
     {
       "name": "ResetGrid_Unref_004169a0",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "b56482d7"
     },
     {
       "name": "ResetGrid_Unref_0041c390",
@@ -120,7 +126,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e445753a"
     },
     {
       "name": "ResetGrid_Unref_004203e0",
@@ -137,7 +144,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "55804a0d"
     },
     {
       "name": "ResetGrid_Unref_0044be20",
@@ -154,7 +162,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e67a7b87"
     },
     {
       "name": "ResetGrid_Unref_0044de50",
@@ -171,7 +180,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "0ebeab69"
     },
     {
       "name": "ResetGrid_Unref_0044dee0",
@@ -188,7 +198,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "f977784b"
     },
     {
       "name": "ResetGrid_Unref_0045ba70",
@@ -205,7 +216,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "f9f5555f"
     },
     {
       "name": "ResetGrid_Unref_00601bb0",
@@ -222,7 +234,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "b1b0c97f"
     },
     {
       "name": "ResetGrid_Unref_00601d20",
@@ -239,7 +252,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "37f3be85"
     },
     {
       "name": "ResetGrid_Unref_00601db0",
@@ -256,7 +270,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "b6c94a97"
     },
     {
       "name": "ResetGrid_Unref_0060e290",
@@ -273,7 +288,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "d5fbe6ed"
     },
     {
       "name": "DRLGGRID_FloodFillGridCoords",
@@ -296,7 +312,8 @@
         "D2DrlgCoordIndexCtxStrc",
         "D2DrlgCoordsStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff01078b"
     },
     {
       "name": "OverwriteFlag",
@@ -313,7 +330,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a3aefb54"
     },
     {
       "name": "OrFlag",
@@ -330,7 +348,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1c450964"
     },
     {
       "name": "AndFlag",
@@ -347,7 +366,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0013d3a5"
     },
     {
       "name": "XorFlag",
@@ -364,7 +384,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2594d812"
     },
     {
       "name": "OverwriteFlagIfZero",
@@ -381,7 +402,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a68bd63f"
     },
     {
       "name": "AndNegatedFlag",
@@ -398,7 +420,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "58a9f38b"
     },
     {
       "name": "DRLGGRID_IsGridValid",
@@ -415,7 +438,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e4bd4ad2"
     },
     {
       "name": "IsPointInsideGridArea",
@@ -433,7 +457,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "24541640"
     },
     {
       "name": "DRLGGRID_GetCellAddress",
@@ -451,7 +476,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "eD2GridCellFlags"
-      ]
+      ],
+      "dh": "36aefc14"
     },
     {
       "name": "AlterGridFlag",
@@ -469,7 +495,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1734537d"
     },
     {
       "name": "DRLGGRID_ApplyFlagOperation",
@@ -487,7 +514,8 @@
       "usedTypes": [
         "D2DrlgCoordStrc",
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "dba0f179"
     },
     {
       "name": "GetOffset",
@@ -507,7 +535,8 @@
         "eD2GridCellFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f9135fe"
     },
     {
       "name": "GetGridFlags",
@@ -524,7 +553,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "8673dd92"
     },
     {
       "name": "AlterAllGridFlags",
@@ -543,7 +573,8 @@
         "D2DrlgGridStrc",
         "eD2GridCellFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "0a844245"
     },
     {
       "name": "FlagOperations",
@@ -562,7 +593,8 @@
         "D2DrlgGridStrc",
         "eD2GridCellFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "e2d8bb9d"
     },
     {
       "name": "DRLGGRID_ApplyFlagToBorderCells",
@@ -580,7 +612,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "eD2GridCellFlags"
-      ]
+      ],
+      "dh": "6c0e69a2"
     },
     {
       "name": "DRLGGRID_SetEdgeGridFlags",
@@ -598,7 +631,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "6d37fba0"
     },
     {
       "name": "DRLGGRID_SetLineFlagsWithWidth",
@@ -618,7 +652,8 @@
         "D2DrlgCoordsStrc",
         "D2DrlgGridStrc",
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "9087ca50"
     },
     {
       "name": "Unreferenced_0067cb60",
@@ -636,7 +671,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "e473cae4"
     },
     {
       "name": "DRLGGRID_InitGridCells",
@@ -657,7 +693,8 @@
         "D2DrlgGridStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f4d22a45"
     },
     {
       "name": "FillGrid",
@@ -676,7 +713,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "afff706a"
     },
     {
       "name": "DRLGGRID_AllocGrid",
@@ -696,7 +734,8 @@
         "D2DrlgGridStrc",
         "D2PoolManagerStrc",
         "eD2GridCellFlags"
-      ]
+      ],
+      "dh": "7ccef0c3"
     },
     {
       "name": "DRLGGRID_InitGridFromTileData",
@@ -717,7 +756,8 @@
         "D2DrlgGridStrc",
         "D2PoolManagerStrc",
         "eD2GridCellFlags"
-      ]
+      ],
+      "dh": "272fa651"
     },
     {
       "name": "FillExternalCellFlags",
@@ -737,7 +777,8 @@
         "D2DrlgGridStrc",
         "D2DrlgMapStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "057c5780"
     },
     {
       "name": "DRLGGRID_FreeGrid",
@@ -756,7 +797,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "8d92d4a7"
     },
     {
       "name": "ResetGrid",
@@ -773,7 +815,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "eb6981bf"
     },
     {
       "name": "ResetGrid_Unref_006c4030",
@@ -790,7 +833,8 @@
       ],
       "usedTypes": [
         "D2DrlgGridStrc"
-      ]
+      ],
+      "dh": "4454b08e"
     }
   ]
 }

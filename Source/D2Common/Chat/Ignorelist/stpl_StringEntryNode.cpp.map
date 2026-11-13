@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "176b53aa"
     },
     {
       "name": "DeleteNode",
@@ -40,7 +41,8 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "TSLink<StringEntryNode>",
         "intptr_t"
-      ]
+      ],
+      "dh": "4b19f4ba"
     },
     {
       "name": "Destructor",
@@ -61,7 +63,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "c1683bbd"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -84,7 +87,8 @@
         "TSLink<StringEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1e3e5e82"
     },
     {
       "name": "DeleteNode",
@@ -106,7 +110,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
         "intptr_t"
-      ]
+      ],
+      "dh": "e8529544"
     },
     {
       "name": "Destructor_UnreferencedCopy",
@@ -127,7 +132,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "194c1582"
     },
     {
       "name": "ReallocData",
@@ -152,7 +158,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ef93416"
     },
     {
       "name": "Ptr",
@@ -175,7 +182,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "164c97d0"
     },
     {
       "name": "Destructor",
@@ -198,7 +206,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "aaa4b963"
     },
     {
       "name": "Reserve",
@@ -219,7 +228,8 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b2fc49d"
     },
     {
       "name": "Ptr",
@@ -243,7 +253,8 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "10e9affb"
     },
     {
       "name": "thunk_Destructor",
@@ -278,7 +289,8 @@
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "c215016d"
     },
     {
       "name": "Destructor",
@@ -302,7 +314,8 @@
         "int32_t",
         "intptr_t",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "a08e5238"
     },
     {
       "name": "NewNode",
@@ -323,7 +336,8 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed5b80a1"
     },
     {
       "name": "InternalNew",
@@ -347,7 +361,8 @@
         "TSLink<StringEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dde9d990"
     },
     {
       "name": "InternalDelete",
@@ -367,7 +382,8 @@
       "usedTypes": [
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "3de8e17f"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -387,7 +403,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "74b86fcb"
     },
     {
       "name": "Clear",
@@ -405,7 +422,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>"
-      ]
+      ],
+      "dh": "ba9e80d7"
     },
     {
       "name": "Destroy",
@@ -424,7 +442,8 @@
       ],
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "ed6f578a"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -444,7 +463,8 @@
       "usedTypes": [
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "cd52df3b"
     },
     {
       "name": "SetCount_Unreferenced",
@@ -463,7 +483,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "fae34ad3"
     },
     {
       "name": "GrowListArray",
@@ -487,7 +508,8 @@
         "TSLink<StringEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34a0770f"
     },
     {
       "name": "Constructor",
@@ -508,7 +530,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4977706"
     },
     {
       "name": "MonitorFullness",
@@ -529,7 +552,8 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f60575c"
     },
     {
       "name": "New",
@@ -555,7 +579,8 @@
         "TSLink<StringEntryNode> *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "942613b8"
     },
     {
       "name": "New",
@@ -579,7 +604,8 @@
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "0aacdcdb"
     }
   ]
 }

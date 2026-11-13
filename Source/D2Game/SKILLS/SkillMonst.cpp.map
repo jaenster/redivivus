@@ -31,7 +31,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "41f89865"
     },
     {
       "name": "Skills_SrvDoFunc_083_MonsterMeleeAttack",
@@ -55,7 +56,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4115da77"
     },
     {
       "name": "SKILLMONST_SrvStFn43_MaggotEgg",
@@ -76,7 +78,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ac794fd2"
     },
     {
       "name": "Skills_SrvDoFunc_084_SpawnMinionsAndSuicide",
@@ -105,7 +108,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "13516156"
     },
     {
       "name": "Skills_SrvDoFunc_085_FireUpgradedMissile",
@@ -128,7 +132,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "0e4d1d2f"
     },
     {
       "name": "SKILLMONST_SrvStFn44_MaggotUp",
@@ -157,7 +162,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87f3d470"
     },
     {
       "name": "SKILLMONST_SrvStFn45_MaggotDown",
@@ -185,7 +191,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "532e4446"
     },
     {
       "name": "Skills_SrvDoFunc_086_SelfHeal",
@@ -212,7 +219,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "afb43e7b"
     },
     {
       "name": "Skills_SrvDoFunc_087_SpawnBehindTarget",
@@ -244,7 +252,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9e1bb8e"
     },
     {
       "name": "SKILLMONST_SrvStFn46_AndrialSpray",
@@ -272,7 +281,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8d87f425"
     },
     {
       "name": "Skills_SrvDoFunc_088_FireMissileFromBodyPart",
@@ -309,7 +319,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a92c0c32"
     },
     {
       "name": "SKILLMONST_SrvStFn47_Jump",
@@ -357,7 +368,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "abe0487c"
     },
     {
       "name": "Skills_SrvDoFunc_089_ChargeLeapAttack",
@@ -414,7 +426,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28cd96dd"
     },
     {
       "name": "SKILLMONST_SrvStFn48_SwarmMove",
@@ -443,7 +456,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "372c41ec"
     },
     {
       "name": "Skills_SrvDoFunc_090_SetAnimFrameFromCalc",
@@ -471,7 +485,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b70b66f"
     },
     {
       "name": "SKILLMONST_SrvStFn49_NestSpawn",
@@ -505,7 +520,8 @@
         "eD2MonsterAnimMode",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c93fc8e9"
     },
     {
       "name": "Skills_SrvDoFunc_091_SpawnMinionAtCoords",
@@ -542,7 +558,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1e7ccabf"
     },
     {
       "name": "SKILLMONST_SrvStFn50_QuickStrike",
@@ -566,7 +583,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b8540123"
     },
     {
       "name": "SKILLMONST_SrvDoFunc092_MeleeHitThenMissile",
@@ -591,7 +609,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "0b110e9e"
     },
     {
       "name": "Skills_SrvDoFunc_093_FireLeadingMissile",
@@ -618,7 +637,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "81afe215"
     },
     {
       "name": "SKILLMONST_SrvStFn51_Submerge",
@@ -638,7 +658,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e3d0ece0"
     },
     {
       "name": "Skills_SrvDoFunc_094_ResetAnimFrame",
@@ -659,7 +680,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "a7ba879e"
     },
     {
       "name": "SKILLMONST_SrvStFn52_Emerge",
@@ -679,7 +701,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "94c2508b"
     },
     {
       "name": "SKILLMONST_SrvStFn53_MonInferno",
@@ -706,7 +729,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ba68e6d5"
     },
     {
       "name": "SKILLASSN_GetTrapHealthBonus",
@@ -731,7 +755,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ba5a8547"
     },
     {
       "name": "SKILLMONST_TriggerModeChange",
@@ -752,7 +777,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "dcb9749c"
     },
     {
       "name": "SKILLASSN_GetShadowHealthBonus",
@@ -772,7 +798,8 @@
         "D2MonStats2Txt",
         "D2SkillsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c832dffa"
     },
     {
       "name": "Skills_SrvDoFunc_095_SpawnTrapMissile",
@@ -810,7 +837,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "62a5a2bd"
     },
     {
       "name": "Skills_SrvDoFunc_152_SpawnTrapMissileVariant",
@@ -848,7 +876,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ea3342c4"
     },
     {
       "name": "Skills_SrvDoFunc_096_HealTarget",
@@ -877,7 +906,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bde366a"
     },
     {
       "name": "SKILLMONST_ResurrectUnit",
@@ -911,7 +941,8 @@
         "eD2CollisionShapeType",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a4790a3c"
     },
     {
       "name": "Skills_SrvDoFunc_097_ResurrectDeadMonster",
@@ -952,7 +983,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a66f7bad"
     },
     {
       "name": "Skills_SrvDoFunc_098_TeleportToStoredPosition",
@@ -981,7 +1013,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2bab2dd2"
     },
     {
       "name": "Skills_SrvDoFunc_099_FireMissileRing8Dir",
@@ -1010,7 +1043,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "64b2476b"
     },
     {
       "name": "Skills_SrvDoFunc_100_FreezingMeleeAttack",
@@ -1040,7 +1074,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "cdd1eaf3"
     },
     {
       "name": "Skills_SrvDoFunc_101_FireDirectionalMissile",
@@ -1073,7 +1108,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d427a97"
     },
     {
       "name": "SKILLMONST_RandomizeMissilePath",
@@ -1103,7 +1139,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a0974a19"
     },
     {
       "name": "Skills_SrvDoFunc_102_FireRandomMultiMissile",
@@ -1131,7 +1168,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "80bde6d7"
     },
     {
       "name": "SKILLMONST_SrvStFn54_DiabRun",
@@ -1162,7 +1200,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "30b264b7"
     },
     {
       "name": "Skills_SrvDoFunc_103_ChargeAndMeleeStrike",
@@ -1209,7 +1248,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3db388e7"
     },
     {
       "name": "Skills_SrvDoFunc_104_SpawnPredefinedAtTarget",
@@ -1240,7 +1280,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fdb01c94"
     },
     {
       "name": "Skills_SrvDoFunc_105_FireParallelMissileVolley",
@@ -1270,7 +1311,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a6d348c"
     },
     {
       "name": "Skills_SrvDoFunc_106_FireMissileRingOnTarget",
@@ -1294,7 +1336,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "9255a231"
     },
     {
       "name": "SKILLMONST_SrvStFn55_Mosquito",
@@ -1327,7 +1370,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ced79bbc"
     },
     {
       "name": "Skills_SrvDoFunc_107_LeechMeleeMultiHit",
@@ -1374,7 +1418,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "44a70d06"
     },
     {
       "name": "Skills_SrvDoFunc_108_DevourMinionForHP",
@@ -1408,7 +1453,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "262d041a"
     },
     {
       "name": "SKILLPAL_GetHolyBoltTargetCount",
@@ -1432,7 +1478,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8f7f25c7"
     },
     {
       "name": "SKILLMONST_SingleTargetSkillAttack",
@@ -1466,7 +1513,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fa550bea"
     },
     {
       "name": "SKILLMONST_SrvStFn64_MonFrenzy",
@@ -1487,7 +1535,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b449d6e4"
     },
     {
       "name": "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
@@ -1517,7 +1566,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a8beb27"
     },
     {
       "name": "Skills_SrvDoFunc_148_FireMissileBodyPart10",
@@ -1545,7 +1595,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "752c0814"
     },
     {
       "name": "Skills_SrvDoFunc_149_FireMissileBodyPart11",
@@ -1573,7 +1624,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46764240"
     },
     {
       "name": "Skills_SrvDoFunc_110_FireArrowModMissile",
@@ -1601,7 +1653,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "054f32c2"
     },
     {
       "name": "Skills_SrvDoFunc_112_RandomCurse",
@@ -1629,7 +1682,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "59c33c6a"
     },
     {
       "name": "SKILLMONST_SpiderLayTrail",
@@ -1667,7 +1721,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b39da4e5"
     },
     {
       "name": "Skills_SrvDoFunc_111_ApplyFetishAura",
@@ -1696,7 +1751,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2e6833b"
     }
   ]
 }

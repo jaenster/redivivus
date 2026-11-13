@@ -15,7 +15,8 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "ReturnFirstArgument_Unref_00518b90"
-      ]
+      ],
+      "dh": "7ba49eaf"
     },
     {
       "name": "GetDistanceBetween",
@@ -36,7 +37,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "98bf2da0"
     },
     {
       "name": "AI_Fn1_None",
@@ -55,7 +57,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "224beac6"
     },
     {
       "name": "AI_Fn1_Idle",
@@ -77,7 +80,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6c95e6bd"
     },
     {
       "name": "AI_FindClosestAllyOfSameType",
@@ -100,7 +104,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "df9a8ee3"
     },
     {
       "name": "ReturnFirstArgument",
@@ -114,7 +119,8 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "ReturnFirstArgument"
-      ]
+      ],
+      "dh": "561520f4"
     },
     {
       "name": "SetDwArgsIfNotNeg0x29a",
@@ -132,7 +138,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8171b688"
     },
     {
       "name": "AI_CanApplyColdState",
@@ -156,7 +163,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e99f0d73"
     },
     {
       "name": "AttachCorrectAiFunctionToMonster",
@@ -187,7 +195,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "611b795d"
     },
     {
       "name": "MonsterNeedsToOpenDoor",
@@ -214,7 +223,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eCollisionFlags"
-      ]
+      ],
+      "dh": "bfb102ca"
     },
     {
       "name": "SUMMON_CheckOwnerAlive",
@@ -243,7 +253,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6379ea6e"
     },
     {
       "name": "CheckStunnedOpenDoorAndParent",
@@ -266,7 +277,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "94b401e1"
     },
     {
       "name": "MonsterIsBossHasCloseByPlayerTarget",
@@ -292,7 +304,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "92423127"
     },
     {
       "name": "CheckIfBossNeedsToTeleport",
@@ -335,7 +348,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28d52716"
     },
     {
       "name": "DistanceAndCollisionChecks",
@@ -369,7 +383,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "fe538fcc"
     },
     {
       "name": "HirelingFarWander",
@@ -395,7 +410,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "36ef3b5c"
     },
     {
       "name": "MONSTERAI_GetAiFunctionFromTable",
@@ -416,7 +432,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "38dc9ca4"
     },
     {
       "name": "AiDecideTarget",
@@ -441,7 +458,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "740c8e40"
     },
     {
       "name": "MONSTERAI_ExecuteAiFunction",
@@ -468,7 +486,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9a3d7bb"
     },
     {
       "name": "AI_Fn1_None_Unref_005b72a0",
@@ -487,7 +506,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "932e7502"
     },
     {
       "name": "AI_Fn1_None_Unref_005b8740",
@@ -506,7 +526,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "699b7d20"
     },
     {
       "name": "GetDistance",
@@ -528,7 +549,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2af38e25"
     },
     {
       "name": "AI_GetWeightedDistanceToPoint",
@@ -551,7 +573,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "126a1533"
     },
     {
       "name": "GetCollisionDistanceFromXY",
@@ -572,7 +595,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8c3aa520"
     },
     {
       "name": "MONSTERAI_GetDistanceToCoords",
@@ -597,7 +621,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9fc2ad61"
     },
     {
       "name": "TestIfMonsterCanHitTarget",
@@ -623,7 +648,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9b85d3bf"
     },
     {
       "name": "Unreferenced_005dc840",
@@ -641,7 +667,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b4dc2918"
     },
     {
       "name": "MONSTERAI_FindNearestAllyCallback",
@@ -665,7 +692,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "977f4181"
     },
     {
       "name": "AI_ForEachFn04_FindDyingMonster",
@@ -686,7 +714,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ca6088bc"
     },
     {
       "name": "MONSTERAI_GetThreatLevel",
@@ -704,7 +733,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "73d217bc"
     },
     {
       "name": "MONSTERAI_CanTargetUnit",
@@ -732,7 +762,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c6bc191c"
     },
     {
       "name": "MONSTERAI_IsValidTarget",
@@ -753,7 +784,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba08f459"
     },
     {
       "name": "AI_ForEachFn05_ScanTargetsByThreat",
@@ -788,7 +820,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28b2402b"
     },
     {
       "name": "AI_ForEachFn06_NearestTargetByThreat",
@@ -813,7 +846,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "896535b9"
     },
     {
       "name": "AI_ForEachFn07_AltHighThreatTarget",
@@ -837,7 +871,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "05de94a5"
     },
     {
       "name": "AI_ForEachFn11_AltHittableTarget",
@@ -863,7 +898,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2968d4a4"
     },
     {
       "name": "AI_ForEachFn08_NearestClosedDoor",
@@ -884,7 +920,8 @@
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d87df411"
     },
     {
       "name": "AI_ForEachFn09_FindOwnMinionCorpse",
@@ -906,7 +943,8 @@
         "D2AiCorpseScanStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "021b0204"
     },
     {
       "name": "AI_ForEachFn12_CountClassInRange",
@@ -928,7 +966,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ecb6a816"
     },
     {
       "name": "ForEachCallOther",
@@ -954,7 +993,8 @@
         "fpMonsterAiForEach",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "fe7415b3"
     },
     {
       "name": "ForEachCallType1",
@@ -979,7 +1019,8 @@
         "fpMonsterAiForEach",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "f78e429f"
     },
     {
       "name": "ForEachCallType2",
@@ -1007,7 +1048,8 @@
         "fpMonsterAiForEach",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "862951a7"
     },
     {
       "name": "ForEachMinion",
@@ -1025,7 +1067,8 @@
       "usedTypes": [
         "D2MinionForEachCtx",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bcf613a4"
     },
     {
       "name": "ForEachCallType3",
@@ -1050,7 +1093,8 @@
         "fpMonsterAiForEach",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "23fad771"
     },
     {
       "name": "ForEach",
@@ -1077,7 +1121,8 @@
         "int32_t",
         "uint32_t",
         "uintptr_t"
-      ]
+      ],
+      "dh": "550f240f"
     },
     {
       "name": "AI_CountNearbyMinionsByClass",
@@ -1098,7 +1143,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6b168a2"
     },
     {
       "name": "GetFlagBit",
@@ -1117,7 +1163,8 @@
         "D2AiGeneralStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d550df63"
     },
     {
       "name": "SetUnsetAiFlag",
@@ -1135,7 +1182,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "ccbc0963"
     },
     {
       "name": "SetUnsetAiFlags0x20",
@@ -1153,7 +1201,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "13cf9981"
     },
     {
       "name": "thunk_GetCurrentLifePercentage",
@@ -1172,7 +1221,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "692004be"
     },
     {
       "name": "CollisionWithWall",
@@ -1191,7 +1241,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "70af6c7f"
     },
     {
       "name": "MONSTERAI_IsMonsterAttacking",
@@ -1209,7 +1260,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cdf387a0"
     },
     {
       "name": "MONSTERAI_HasSkillInSlots",
@@ -1227,7 +1279,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6fff4d4a"
     },
     {
       "name": "MONSTERAI_SetTargetUnit",
@@ -1245,7 +1298,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "888f4463"
     },
     {
       "name": "AI_FindUnitAtPositionByBaseId",
@@ -1272,7 +1326,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7cbb1c2c"
     },
     {
       "name": "MONSTERAI_CanApplyDebuffState",
@@ -1298,7 +1353,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b40b5eb"
     },
     {
       "name": "MONSTERAI_ValidateSwitchTarget",
@@ -1332,7 +1388,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1ef08af"
     },
     {
       "name": "MONSTERAI_FindSwitchAiTarget",
@@ -1371,7 +1428,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1decd1cf"
     },
     {
       "name": "MONSTERAI_FindBestTarget",
@@ -1417,7 +1475,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c4ef7ec5"
     },
     {
       "name": "FindTargetAndDistance",
@@ -1441,7 +1500,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f48f263"
     },
     {
       "name": "MONSTERAI_ApplyTerrorToMonster",
@@ -1475,7 +1535,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "75a152f3"
     },
     {
       "name": "MONSTERAI_FindTargetInRange",
@@ -1496,7 +1557,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "100d5e90"
     },
     {
       "name": "MONSTERAI_FindNearestInteractNpc",
@@ -1518,7 +1580,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7025524"
     },
     {
       "name": "MONSTERAI_FindNearestUnit",
@@ -1540,7 +1603,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b16bac5e"
     },
     {
       "name": "AI_ChangeModeAndTargetUnit",
@@ -1562,7 +1626,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0fcff045"
     },
     {
       "name": "MONSTERAI_CommandSkillAtPosition",
@@ -1584,7 +1649,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "aef47d44"
     },
     {
       "name": "MONSTERAI_CommandSkillSequence",
@@ -1610,7 +1676,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "419a7689"
     },
     {
       "name": "PlanNextAiMove",
@@ -1634,7 +1701,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f96c223f"
     },
     {
       "name": "RestartAiThink",
@@ -1655,7 +1723,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b9f6b386"
     },
     {
       "name": "ScheduleAiThink",
@@ -1678,7 +1747,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "73d370af"
     },
     {
       "name": "ApplyCombatAndMonStats",
@@ -1701,7 +1771,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c119023"
     },
     {
       "name": "WalkRandomOffset",
@@ -1727,7 +1798,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc0a35c5"
     },
     {
       "name": "SendNpcMessageOrHoverText",
@@ -1759,7 +1831,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "df2598f1"
     },
     {
       "name": "MONSTERAI_CommandMoveToPosition",
@@ -1782,7 +1855,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "2c38cbcf"
     },
     {
       "name": "MONSTERAI_CommandSkillInPlace",
@@ -1805,7 +1879,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6fcf5166"
     },
     {
       "name": "MoveAndCastSkill",
@@ -1833,7 +1908,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05240c9a"
     },
     {
       "name": "CastSkillWithDistanceOffset",
@@ -1852,7 +1928,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2e698649"
     },
     {
       "name": "MONSTERAI_WalkPartialTowardTarget",
@@ -1879,7 +1956,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d29c170d"
     },
     {
       "name": "MONSTERAI_GetAliveKillerUnit",
@@ -1900,7 +1978,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "e853f003"
     },
     {
       "name": "MONSTERAI_GetTarget_WithWander",
@@ -1933,7 +2012,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "965d8689"
     },
     {
       "name": "MONSTERAI_GetTarget_Hidden",
@@ -1968,7 +2048,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a15e77f6"
     },
     {
       "name": "SERVER_UNIT_CastSkill",
@@ -1996,7 +2077,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cbca00fd"
     },
     {
       "name": "StartMonsterMove",
@@ -2029,7 +2111,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c1fa7f8b"
     },
     {
       "name": "MONSTERAI_CommandWalkToUnit",
@@ -2050,7 +2133,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "93786296"
     },
     {
       "name": "ResetCombatTargetAndIdle",
@@ -2072,7 +2156,8 @@
         "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c9d12246"
     },
     {
       "name": "MONSTERAI_CommandRunToUnit",
@@ -2093,7 +2178,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0f03ffda"
     },
     {
       "name": "MONSTERAI_CommandRunToUnitDirect",
@@ -2112,7 +2198,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "444f713d"
     },
     {
       "name": "MONSTERAI_CommandFleeFromUnit",
@@ -2135,7 +2222,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "35d1bdef"
     },
     {
       "name": "WalkToCoords",
@@ -2158,7 +2246,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e3e9e662"
     },
     {
       "name": "MONSTERAI_CommandMoveToCoords",
@@ -2185,7 +2274,8 @@
         "eD2MonsterAnimMode",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "3462bdfe"
     },
     {
       "name": "MONSTERAI_CommandWalkToCoords",
@@ -2209,7 +2299,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "44609668"
     },
     {
       "name": "MONSTERAI_CommandMoveToCoordsRetry",
@@ -2237,7 +2328,8 @@
         "eD2MonsterAnimMode",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "db2f90e1"
     },
     {
       "name": "MONSTERAI_CommandWalkToCoordsImmediate",
@@ -2260,7 +2352,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d1eba714"
     },
     {
       "name": "MONSTERAI_CommandWalkToUnitMinStep",
@@ -2281,7 +2374,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4afb00ff"
     },
     {
       "name": "MONSTERAI_CommandRunToUnitMinStep",
@@ -2301,7 +2395,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "7bf923f0"
     },
     {
       "name": "WalkTowardsUnitOffset",
@@ -2326,7 +2421,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f565ca1"
     },
     {
       "name": "MONSTERAI_CommandRunAwayFromUnit",
@@ -2353,7 +2449,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc9e157e"
     },
     {
       "name": "MONSTERAI_CommandWalkAwayFromUnit",
@@ -2381,7 +2478,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4ef42562"
     },
     {
       "name": "MONSTERAI_CommandWalkRandomOffset",
@@ -2411,7 +2509,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "91d9b8ab"
     },
     {
       "name": "WalkRandomOffsetAroundUnit",
@@ -2441,7 +2540,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04c58fec"
     },
     {
       "name": "SetCombatStateAndApproachTarget",
@@ -2464,7 +2564,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f36b613d"
     },
     {
       "name": "MONSTERAI_CastSkillAtRandomOffset",
@@ -2492,7 +2593,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "62e5bc4a"
     },
     {
       "name": "MONSTERAI_CalculateTrapDamage",
@@ -2516,7 +2618,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c5a6530"
     },
     {
       "name": "MONSTERAI_CalculateCounterAttackDamage",
@@ -2554,7 +2657,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc386023"
     },
     {
       "name": "MONSTERAI_ConvertMonstersInRadius",
@@ -2593,7 +2697,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c91103e"
     },
     {
       "name": "MONSTERAI_ThinkRangedSpecial",
@@ -2612,7 +2717,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1f05efdb"
     },
     {
       "name": "AI_Mephisto_SpawnDeathMissile",
@@ -2633,7 +2739,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "08c9a70e"
     },
     {
       "name": "MONSTERAI_ThinkRangedShort",
@@ -2652,7 +2759,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e98e7133"
     },
     {
       "name": "AI_Diablo_SpawnRingAttack",
@@ -2678,7 +2786,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b62d17a1"
     },
     {
       "name": "AI_Boss_LaunchOrbAtObject",
@@ -2715,7 +2824,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "581d01ab"
     },
     {
       "name": "MONSTERAI_ThinkMeleeSkill",
@@ -2734,7 +2844,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f10ba9ca"
     },
     {
       "name": "MONSTERAI_ThinkRangedNormal",
@@ -2753,7 +2864,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "72f49030"
     },
     {
       "name": "MONSTERAI_Noop",
@@ -2767,7 +2879,8 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "MONSTERAI_Noop"
-      ]
+      ],
+      "dh": "320e5150"
     },
     {
       "name": "AI_UberTristram_CheckDeathAndDropLoot",
@@ -2791,7 +2904,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "022cabed"
     },
     {
       "name": "AI_Fn1_InvisoSpawner",
@@ -2821,7 +2935,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "38fb280a"
     },
     {
       "name": "AI_Fn1_MosquitoNest",
@@ -2851,7 +2966,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5baec543"
     },
     {
       "name": "AI_Fn0_BoneWall",
@@ -2870,7 +2986,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9e1f0351"
     },
     {
       "name": "AI_Fn1_BoneWall",
@@ -2891,7 +3008,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0d06ce43"
     },
     {
       "name": "MONSTERAI_FindAlliedMonsterToHeal",
@@ -2917,7 +3035,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "266deaee"
     },
     {
       "name": "AI_Fn1_HighPriest",
@@ -2958,7 +3077,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ca4f4b6"
     },
     {
       "name": "AI_Fn1_DesertTurret",
@@ -2994,7 +3114,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e32878b5"
     },
     {
       "name": "AI_Fn1_Megademon",
@@ -3028,7 +3149,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2879085"
     },
     {
       "name": "AI_Fn1_ArcaneTower",
@@ -3052,7 +3174,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9468fefa"
     },
     {
       "name": "AI_Fn1_PantherJavelin",
@@ -3083,7 +3206,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "55df6564"
     },
     {
       "name": "AI_Fn1_FetishBlowgun",
@@ -3119,7 +3243,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3d829d8"
     },
     {
       "name": "AI_Fn1_ReanimatedHorde",
@@ -3148,7 +3273,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "f35ebc6b"
     },
     {
       "name": "MONSTERAI_FindNeutralMonsterInRange",
@@ -3175,7 +3301,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "23a1f129"
     },
     {
       "name": "MONSTERAI_UpdateClosestTarget",
@@ -3199,7 +3326,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d1ad599e"
     },
     {
       "name": "AI_Fn1_SiegeTower",
@@ -3225,7 +3353,8 @@
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "da2a5079"
     },
     {
       "name": "AI_Fn1_SiegeBeast",
@@ -3263,7 +3392,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8bebb8e"
     },
     {
       "name": "AI_Fn1_Minion",
@@ -3294,7 +3424,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d3b073ed"
     },
     {
       "name": "AI_Fn1_SuicideMinion",
@@ -3318,7 +3449,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff9b0f34"
     },
     {
       "name": "AI_Fn1_Succubus",
@@ -3352,7 +3484,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4b85c8d"
     },
     {
       "name": "AI_Fn1_SuccubusWitch",
@@ -3388,7 +3521,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c211d29a"
     },
     {
       "name": "HirelingRandomMoveCheck",
@@ -3411,7 +3545,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ead825f"
     },
     {
       "name": "AI_Baal_FindMinionToHeal",
@@ -3439,7 +3574,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ccf2a1f"
     },
     {
       "name": "AI_Fn1_Overseer",
@@ -3476,7 +3612,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2ba3410d"
     },
     {
       "name": "MONSTERAI_CountGolemReviveMonsters",
@@ -3498,7 +3635,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99970ce5"
     },
     {
       "name": "AITHINK_Fn1_MinionSpawner",
@@ -3524,7 +3662,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "eaca5d9b"
     },
     {
       "name": "AITHINK_Fn0_SpecialMounting",
@@ -3547,7 +3686,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "9fca2771"
     },
     {
       "name": "AITHINK_Fn1_SpecialMounting",
@@ -3582,7 +3722,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1eec9fe"
     },
     {
       "name": "AITHINK_Fn0_Imp",
@@ -3601,7 +3742,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "56839705"
     },
     {
       "name": "AITHINK_Fn1_Imp",
@@ -3640,7 +3782,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "76739597"
     },
     {
       "name": "AITHINK_Fn1_Catapult",
@@ -3663,7 +3806,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f9aadb89"
     },
     {
       "name": "AITHINK_Fn1_FrozenHorror",
@@ -3693,7 +3837,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "1baa1a29"
     },
     {
       "name": "AITHINK_Fn1_BloodLord",
@@ -3719,7 +3864,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "8636cf12"
     },
     {
       "name": "AITHINK_Fn1_Spirit",
@@ -3740,7 +3886,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e389d406"
     },
     {
       "name": "AITHINK_Fn1_Smith",
@@ -3763,7 +3910,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "16f12308"
     },
     {
       "name": "MONSTERAI_CheckAdjacentUnit",
@@ -3783,7 +3931,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "a048ebd5"
     },
     {
       "name": "HirelingFollowOwnerAction",
@@ -3839,7 +3988,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3309e721"
     },
     {
       "name": "AI_Pet_ExecuteMovementBehavior",
@@ -3900,7 +4050,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ffcfb8b8"
     },
     {
       "name": "AI_Pet_EvaluateMovementPriority",
@@ -3940,7 +4091,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cbfcf0c4"
     },
     {
       "name": "AI_Pet_ThinkCombatAndFollow",
@@ -3981,7 +4133,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "070cd11b"
     },
     {
       "name": "AITHINK4_PetThinkCastSkillAndFollow",
@@ -4020,7 +4173,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "77c7129c"
     },
     {
       "name": "AITHINK_Fn1_NecroPet",
@@ -4042,7 +4196,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e527816b"
     },
     {
       "name": "AI_Hireling_SelectAndCastSkill",
@@ -4080,7 +4235,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "ad8090f9"
     },
     {
       "name": "HirelingCombatThink",
@@ -4117,7 +4273,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "d22abf23"
     },
     {
       "name": "NihlathakMercAi_ClearInfernoState",
@@ -4141,7 +4298,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "aeca5ad1"
     },
     {
       "name": "AITHINK_Fn1_Hireable",
@@ -4196,7 +4354,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0f583e77"
     },
     {
       "name": "AI_Function0_AttachedCasterInit",
@@ -4224,7 +4383,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a30cf79a"
     },
     {
       "name": "AI_Function1_SummonMaster",
@@ -4265,7 +4425,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e76b3a1a"
     },
     {
       "name": "AITHINK_Fn1_Griswold",
@@ -4288,7 +4449,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e16781b"
     },
     {
       "name": "AI_Monster_TryCastRateLimitedSkill",
@@ -4310,7 +4472,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "eeabebbc"
     },
     {
       "name": "AITHINK_Fn1_SpecialCountess",
@@ -4355,7 +4518,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99c8bee5"
     },
     {
       "name": "AI_GetRandomMonsterClassForLevel",
@@ -4381,7 +4545,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2482c875"
     },
     {
       "name": "AITHINK_Fn0_GenericSpawner",
@@ -4401,7 +4566,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "90a2619e"
     },
     {
       "name": "AI_Fn1_GenericSpawner",
@@ -4432,7 +4598,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "02288547"
     },
     {
       "name": "AITHINK_Fn0_BloodRaven",
@@ -4451,7 +4618,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8420677d"
     },
     {
       "name": "AITHINK_Fn1_BloodRaven",
@@ -4500,7 +4668,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da0d0042"
     },
     {
       "name": "AI_Monster_InitializeHomePosition",
@@ -4525,7 +4694,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d7d3d711"
     },
     {
       "name": "AI_Monster_CheckReturnToHome",
@@ -4551,7 +4721,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d8e22a6"
     },
     {
       "name": "_PlayerNpcInteraction",
@@ -4587,7 +4758,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d477fa7"
     },
     {
       "name": "AI_Monster_ExecuteAiCommands",
@@ -4619,7 +4791,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0f69180"
     },
     {
       "name": "AI_Monster_WalkToStoredPosition",
@@ -4645,7 +4818,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5808e3fd"
     },
     {
       "name": "AI_Monster_WalkToStoredPositionSlow",
@@ -4668,7 +4842,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3cf0d590"
     },
     {
       "name": "AITHINK4_MapAiHandler3_WalkToStoredPosition",
@@ -4689,7 +4864,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8f33d2b"
     },
     {
       "name": "AI_Monster_WalkToPositionAndFace",
@@ -4713,7 +4889,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0775a958"
     },
     {
       "name": "AITHINK4_WalkToPositionAndFace_MonStatFlag9",
@@ -4737,7 +4914,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "24e54806"
     },
     {
       "name": "AI_Monster_ExecuteMapAiBehavior",
@@ -4760,7 +4938,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "dcd8da88"
     },
     {
       "name": "AI_Fn1_Npc",
@@ -4804,7 +4983,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68f42057"
     },
     {
       "name": "AI_Monster_TryDefaultIdleIfNoSub",
@@ -4825,7 +5005,8 @@
         "D2MonsterAiStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2d7aaf70"
     },
     {
       "name": "AITHINK_Fn1_NpcStationary",
@@ -4859,7 +5040,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6a88849a"
     },
     {
       "name": "AI_Fn1_Towner",
@@ -4882,7 +5064,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a3c17381"
     },
     {
       "name": "AITHINK_Fn1_JarJar",
@@ -4919,7 +5102,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "006bd837"
     },
     {
       "name": "AI_QuestNpc_InitializeQuestPhase",
@@ -4949,7 +5133,8 @@
         "fpQuestNpcPhaseFn",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "906c422b"
     },
     {
       "name": "AITHINK_Fn1_NpcOutOfTown",
@@ -4987,7 +5172,8 @@
         "fpQuestNpcPhaseFn",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da6f437d"
     },
     {
       "name": "AITHINK_Fn1_GoodNpcRanged",
@@ -5020,7 +5206,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d12f6d39"
     },
     {
       "name": "AITHINK_Fn1_SpecialHireNoOwner",
@@ -5052,7 +5239,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14ba4af8"
     },
     {
       "name": "Unreferenced_005e7d30",
@@ -5071,7 +5259,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e2722fd9"
     },
     {
       "name": "AITHINK_Fn1_TownRogue",
@@ -5093,7 +5282,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "43d94e06"
     },
     {
       "name": "AITHINK_Fn1_SpecialTownRogue",
@@ -5115,7 +5305,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ce4aa425"
     },
     {
       "name": "AITHINK_Fn1_Navi",
@@ -5146,7 +5337,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6621933c"
     },
     {
       "name": "AITHINK_Fn1_Buffy",
@@ -5168,7 +5360,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e7181218"
     },
     {
       "name": "AITHINK_Fn1_MinionReset",
@@ -5197,7 +5390,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2380cffb"
     },
     {
       "name": "AITHINK_Fn1_SpecialDimVision",
@@ -5222,7 +5416,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0dd7a54c"
     },
     {
       "name": "AI_Fn0_SpecialTerror",
@@ -5244,7 +5439,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "b63b24d3"
     },
     {
       "name": "AITHINK_Fn1_SpecialTerror",
@@ -5279,7 +5475,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f6bc67a"
     },
     {
       "name": "AITHINK_Fn1_SpecialTaunt",
@@ -5312,7 +5509,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5b8c8e68"
     },
     {
       "name": "DiabloAi_ResetInfernoAndReattach",
@@ -5340,7 +5538,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b662f9fe"
     },
     {
       "name": "CalculateRiskAncientsAndDiablo",
@@ -5375,7 +5574,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a5e26201"
     },
     {
       "name": "AI_Diablo_DecideAction",
@@ -5426,7 +5626,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "def02005"
     },
     {
       "name": "AI_IsTargetWithinBossRange",
@@ -5451,7 +5652,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1c3bf072"
     },
     {
       "name": "SelectTarget",
@@ -5491,7 +5693,8 @@
         "fpAiTargetPredicate",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f88c8978"
     },
     {
       "name": "AITHINK_Fn1_Diablo",
@@ -5539,7 +5742,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "83a54218"
     },
     {
       "name": "AI_BAAL_ChooseCombatAction",
@@ -5591,7 +5795,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "01af256d"
     },
     {
       "name": "MONSTERAI_SpawnSpecificMinions",
@@ -5610,7 +5815,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9efb0c7d"
     },
     {
       "name": "AITHINK_Fn1_UberDiablo",
@@ -5629,7 +5835,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "feb66da2"
     },
     {
       "name": "AITHINK_Fn1_Vendor",
@@ -5651,7 +5858,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9ddc297c"
     },
     {
       "name": "AITHINK_Fn1_Hydra",
@@ -5674,7 +5882,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f3fc70d3"
     },
     {
       "name": "AITHINK_Fn1_TrappedSoul",
@@ -5698,7 +5907,8 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1a11c989"
     },
     {
       "name": "AITHINK_Fn1_7TIllusion",
@@ -5722,7 +5932,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "82c9e829"
     },
     {
       "name": "AITHINK_Fn1_DarkWanderer",
@@ -5751,7 +5962,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "657a09d6"
     },
     {
       "name": "AITHINK_Fn0_SentryTimerInit",
@@ -5771,7 +5983,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f57fdb9d"
     },
     {
       "name": "AI_Summon_CheckSkillCooldownTimer",
@@ -5803,7 +6016,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "69ce35c3"
     },
     {
       "name": "AITHINK_Fn1_AssassinSentry",
@@ -5838,7 +6052,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79b0a2ae"
     },
     {
       "name": "AITHINK_Fn0_BladeCreeper",
@@ -5858,7 +6073,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e9b226a5"
     },
     {
       "name": "AITHINK_Fn1_BladeCreeper",
@@ -5902,7 +6118,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3adafeed"
     },
     {
       "name": "AITHINK_Fn1_InvisoPet",
@@ -5934,7 +6151,8 @@
         "eD2UnitType",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "44a83e26"
     },
     {
       "name": "AITHINK_Fn1_DeathSentry",
@@ -5968,7 +6186,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d980629"
     },
     {
       "name": "MONSTERAI_CanSummonPetType",
@@ -5991,7 +6210,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18153042"
     },
     {
       "name": "MONSTERAI_ValidateSkillConditions",
@@ -6018,7 +6238,8 @@
         "SGAMEDATA",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "31c62df4"
     },
     {
       "name": "MONSTERAI_ShouldCastSkill",
@@ -6047,7 +6268,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5826db54"
     },
     {
       "name": "MONSTERAI_CalculateSkillAuraRange",
@@ -6068,7 +6290,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6ffcdd5c"
     },
     {
       "name": "AITHINK_Fn0_ShadowWarrior",
@@ -6092,7 +6315,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4828e3d5"
     },
     {
       "name": "AITHINK_Fn1_ShadowWarrior",
@@ -6137,7 +6361,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8b4f2a09"
     },
     {
       "name": "MONSTERAI_CalcEffectiveSkillLevel",
@@ -6160,7 +6385,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b8923bfc"
     },
     {
       "name": "AITHINK_Fn0_ShadowMaster",
@@ -6196,7 +6422,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97beb1a7"
     },
     {
       "name": "AITHINK_Fn0_ShadowMasterNoInit",
@@ -6224,7 +6451,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "227a12f4"
     },
     {
       "name": "MONSTERAI_IsValidResurrectionTarget",
@@ -6248,7 +6476,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6bc66f0b"
     },
     {
       "name": "AI_Baal_FindEnemyAndMinionCallback",
@@ -6276,7 +6505,8 @@
         "eD2MonsterClassId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c486f73e"
     },
     {
       "name": "MONSTERAI_HasConflictingStateInGroup",
@@ -6297,7 +6527,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint8_t"
-      ]
+      ],
+      "dh": "d5129fc7"
     },
     {
       "name": "AI_Monster_CastSkillOnTarget",
@@ -6327,7 +6558,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "84e978b9"
     },
     {
       "name": "AITHINK_Fn1_ShadowMaster",
@@ -6399,7 +6631,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3febd085"
     },
     {
       "name": "AITHINK_Fn0_VineInit",
@@ -6418,7 +6651,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "82de4a46"
     },
     {
       "name": "AITHINK_Fn1_Vines",
@@ -6455,7 +6689,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a8901ce"
     },
     {
       "name": "AITHINK_Fn1_CycleOfLife",
@@ -6499,7 +6734,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1de900f"
     },
     {
       "name": "AITHINK_Fn0_Raven",
@@ -6521,7 +6757,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "af12ed2b"
     },
     {
       "name": "MONSTERAI_CommandWalkToUnitWithCombat",
@@ -6546,7 +6783,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0353bd14"
     },
     {
       "name": "AITHINK_Fn1_Raven",
@@ -6585,7 +6823,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9114bef9"
     },
     {
       "name": "AI_Hireling_ThinkRangedCombat",
@@ -6632,7 +6871,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a6a0295"
     },
     {
       "name": "AI_Hireling_ThinkMeleeCombat",
@@ -6681,7 +6921,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8bc4267e"
     },
     {
       "name": "AITHINK_Fn1_DruidWolf",
@@ -6702,7 +6943,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "becae7ca"
     },
     {
       "name": "AITHINK_Fn1_DruidBear",
@@ -6740,7 +6982,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2a59487"
     },
     {
       "name": "AITHINK_Fn1_Totem",
@@ -6777,7 +7020,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40a6fa92"
     },
     {
       "name": "AI_SetStoredPosition",
@@ -6798,7 +7042,8 @@
       "usedTypes": [
         "D2AiParamStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c26438d"
     },
     {
       "name": "AITHINK_Fn0_NpcBarb",
@@ -6817,7 +7062,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f9981615"
     },
     {
       "name": "AITHINK_Fn1_NpcBarb",
@@ -6851,7 +7097,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "a45b3a45"
     },
     {
       "name": "AI_Monster_FindDeadMonsterNearby",
@@ -6880,7 +7127,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46e10826"
     },
     {
       "name": "AITHINK_Fn1_CatapultSpotter",
@@ -6916,7 +7164,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87d2cc2f"
     },
     {
       "name": "AITHINK_Fn1_DeathMauler",
@@ -6941,7 +7190,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "672adf07"
     },
     {
       "name": "AITHINK_Fn1_Wussie",
@@ -6993,7 +7243,8 @@
         "int64_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "134d521e"
     },
     {
       "name": "AITHINK_Fn0_Nihlathak",
@@ -7012,7 +7263,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "76907e54"
     },
     {
       "name": "AITHINK_Fn1_Nihlathak",
@@ -7060,7 +7312,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac2a3a52"
     },
     {
       "name": "AITHINK_Fn1_AncientStatue",
@@ -7090,7 +7343,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e637f7ac"
     },
     {
       "name": "AI_SelectTarget_SameLevelFilter",
@@ -7114,7 +7368,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "19a994b2"
     },
     {
       "name": "AITHINK_AncientKoric",
@@ -7156,7 +7411,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c3ed60f3"
     },
     {
       "name": "AITHINK_AncientTalic",
@@ -7191,7 +7447,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "a4361a9d"
     },
     {
       "name": "AITHINK_AncientMadawc",
@@ -7226,7 +7483,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffa74b0c"
     },
     {
       "name": "AITHINK_Fn1_Ancient",
@@ -7248,7 +7506,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "000f2df2"
     },
     {
       "name": "Unreferenced_005ef1e0",
@@ -7265,7 +7524,8 @@
       ],
       "usedTypes": [
         "uint8_t *"
-      ]
+      ],
+      "dh": "ce1e1b9f"
     },
     {
       "name": "AI_SetClearFlags",
@@ -7284,7 +7544,8 @@
         "D2AiParamStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "60d64a2c"
     },
     {
       "name": "BaalThroneClearFunc",
@@ -7316,7 +7577,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "b3beb659"
     },
     {
       "name": "AITHINK_Fn0_BaalThrone",
@@ -7335,7 +7597,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9d80bd0f"
     },
     {
       "name": "AI_Fn1_BaalThrone",
@@ -7383,7 +7646,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ac0655e"
     },
     {
       "name": "AITHINK_Fn1_BaalToStairs",
@@ -7421,7 +7685,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "87d26b0b"
     },
     {
       "name": "AITHINK_Fn1_BaalTaunt",
@@ -7451,7 +7716,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f997cf46"
     },
     {
       "name": "AITHINK_Fn1_BaalTentacle",
@@ -7478,7 +7744,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3c85f13"
     },
     {
       "name": "AITHINK_Fn1_BaalMinion",
@@ -7506,7 +7773,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "cee37b4f"
     },
     {
       "name": "MONSTERAI_FindEnergyMonster",
@@ -7526,7 +7794,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a08f532"
     },
     {
       "name": "AITHINK_Fn1_PutridDefiler",
@@ -7554,7 +7823,8 @@
         "D2MonsterAiParameterStruct",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2b3607ac"
     },
     {
       "name": "AITHINK_Fn1_Brute",
@@ -7580,7 +7850,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "58233905"
     },
     {
       "name": "AITHINK_Fn1_Skeleton",
@@ -7604,7 +7875,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a77f7c65"
     },
     {
       "name": "AITHINK_Fn1_Zombie",
@@ -7634,7 +7906,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d304e93d"
     },
     {
       "name": "AITHINK_Fn1_Bighead",
@@ -7667,7 +7940,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "759dbd9f"
     },
     {
       "name": "AITHINK_Fn1_BloodHawk",
@@ -7696,7 +7970,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0f6018c"
     },
     {
       "name": "AITHINK_Fn1_Fallen",
@@ -7745,7 +8020,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6de3af9c"
     },
     {
       "name": "MONSTERAI_FindNearestEvilMonster",
@@ -7768,7 +8044,8 @@
         "D2UnitStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "752d5ca1"
     },
     {
       "name": "AITHINK_Fn1_SandRaider",
@@ -7805,7 +8082,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b4effab3"
     },
     {
       "name": "AITHINK_Fn1_Wraith",
@@ -7829,7 +8107,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "6447f187"
     },
     {
       "name": "AITHINK_Fn1_CorruptRogue",
@@ -7861,7 +8140,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b2493bb"
     },
     {
       "name": "AITHINK_Fn1_Baboon",
@@ -7897,7 +8177,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49953e5b"
     },
     {
       "name": "AITHINK_Fn1_QuillRat",
@@ -7926,7 +8207,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f29d78c4"
     },
     {
       "name": "AITHINK_Fn1_Goatman",
@@ -7950,7 +8232,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ed3065d"
     },
     {
       "name": "MONSTERAI_FindFallenForRevival",
@@ -7977,7 +8260,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3de0e11e"
     },
     {
       "name": "AITHINK_Fn1_FallenShaman",
@@ -8014,7 +8298,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78593c8f"
     },
     {
       "name": "SandMaggotAi_CastDelayedSkill",
@@ -8042,7 +8327,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d7964c6d"
     },
     {
       "name": "AITHINK_Fn1_SandMaggot",
@@ -8072,7 +8358,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da70a97c"
     },
     {
       "name": "AITHINK_Fn1_ClawViper",
@@ -8103,7 +8390,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a73e43e3"
     },
     {
       "name": "AITHINK_Fn1_ClawViperEx",
@@ -8135,7 +8423,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea99c095"
     },
     {
       "name": "AITHINK_Fn1_SandLeaper",
@@ -8164,7 +8453,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "e75d6af0"
     },
     {
       "name": "AITHINK_Fn1_PantherWoman",
@@ -8194,7 +8484,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b72d8da"
     },
     {
       "name": "AITHINK_Fn1_Swarm",
@@ -8218,7 +8509,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1d4045c"
     },
     {
       "name": "AITHINK_Fn1_Scarab",
@@ -8254,7 +8546,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "133feef0"
     },
     {
       "name": "AITHINK_Fn1_Mummy",
@@ -8279,7 +8572,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a7ef3cfb"
     },
     {
       "name": "MONSTERAI_FindMonsterToResurrect",
@@ -8310,7 +8604,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c17e19ee"
     },
     {
       "name": "AITHINK_Fn1_GreaterMummy",
@@ -8346,7 +8641,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bdd8c293"
     },
     {
       "name": "ClearCollisionAndResetPath",
@@ -8374,7 +8670,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "e586b004"
     },
     {
       "name": "AI_Monster_ShrinkCollisionSize",
@@ -8406,7 +8703,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5955f09"
     },
     {
       "name": "MONSTERAI_FindLowHpTarget",
@@ -8430,7 +8728,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d0eb2ea"
     },
     {
       "name": "AITHINK_Fn1_Vulture",
@@ -8480,7 +8779,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d42d87d"
     },
     {
       "name": "AITHINK_Fn1_Mosquito",
@@ -8508,7 +8808,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "22c63be7"
     },
     {
       "name": "MONSTERAI_IsSpecificMonsterAlive",
@@ -8530,7 +8831,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "508b828f"
     },
     {
       "name": "AITHINK_Fn1_WillOWisp",
@@ -8583,7 +8885,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1f8919a2"
     },
     {
       "name": "AITHINK_Fn1_Arach",
@@ -8618,7 +8921,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f207f8df"
     },
     {
       "name": "AITHINK_Fn1_ThornHulk",
@@ -8649,7 +8953,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f9f29f9"
     },
     {
       "name": "AITHINK_Fn1_Vampire",
@@ -8684,7 +8989,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5f872b0"
     },
     {
       "name": "BatDemonAi_HandleThrowCompletion",
@@ -8708,7 +9014,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "eb90e5fc"
     },
     {
       "name": "AITHINK_Fn1_BatDemon",
@@ -8742,7 +9049,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0c0aea8"
     },
     {
       "name": "AITHINK_Fn1_Fetish",
@@ -8778,7 +9086,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef30ab09"
     },
     {
       "name": "AITHINK_Fn1_HellMeteor",
@@ -8806,7 +9115,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "0555f332"
     },
     {
       "name": "AndarielAi_DecideSkillCast",
@@ -8834,7 +9144,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a556015"
     },
     {
       "name": "AITHINK_Fn1_CorruptArcher",
@@ -8868,7 +9179,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "baad90b8"
     },
     {
       "name": "AITHINK_Fn1_CorruptLancer",
@@ -8899,7 +9211,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "05d97c9a"
     },
     {
       "name": "AITHINK_Fn1_SkeletonBow",
@@ -8926,7 +9239,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6116a778"
     },
     {
       "name": "AITHINK_Fn1_MaggotLarva",
@@ -8951,7 +9265,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f5cf0c9a"
     },
     {
       "name": "AITHINK_Fn1_PinHead",
@@ -8977,7 +9292,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "5de60d01"
     },
     {
       "name": "AITHINK_Fn1_MaggotEgg",
@@ -9004,7 +9320,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2c005d78"
     },
     {
       "name": "AITHINK_Fn0_SpawnTimerInit",
@@ -9024,7 +9341,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f996d4f1"
     },
     {
       "name": "AITHINK_Fn1_FoulCrowNest",
@@ -9055,7 +9373,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d1e361d2"
     },
     {
       "name": "AITHINK_Fn1_Duriel",
@@ -9084,7 +9403,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b0244f08"
     },
     {
       "name": "AITHINK_Fn1_Sarcophagus",
@@ -9115,7 +9435,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ac955d42"
     },
     {
       "name": "AITHINK_Fn1_ElementalBeast",
@@ -9145,7 +9466,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "671d225f"
     },
     {
       "name": "AITHINK_Fn1_FlyingScimitar",
@@ -9172,7 +9494,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "527e47fe"
     },
     {
       "name": "Unreferenced_005f6e20",
@@ -9189,7 +9512,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "6cc9d641"
     },
     {
       "name": "AITHINK_Fn1_ZakarumZealot",
@@ -9241,7 +9565,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "008c45e9"
     },
     {
       "name": "MONSTERAI_FindWoundedHydraGolem",
@@ -9268,7 +9593,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95de9bb3"
     },
     {
       "name": "AITHINK_Fn1_ZakarumPriest",
@@ -9306,7 +9632,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79be55af"
     },
     {
       "name": "CollectMephistoTargetInfo",
@@ -9331,7 +9658,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6a1503f"
     },
     {
       "name": "DecideMephistoAlternateTarget",
@@ -9352,7 +9680,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f90cd799"
     },
     {
       "name": "AITHINK_Fn1_Mephisto",
@@ -9392,7 +9721,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e0898a9"
     },
     {
       "name": "AI_UberBoss_SpawnMinion",
@@ -9417,7 +9747,8 @@
         "eD2MonsterAnimMode",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "452adac9"
     },
     {
       "name": "AI_BAAL_FindRandomTargetPlayer",
@@ -9451,7 +9782,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2513f6b5"
     },
     {
       "name": "AITHINK_Fn1_UberMephisto",
@@ -9470,7 +9802,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2b526584"
     },
     {
       "name": "AITHINK_Fn2_FrogDemon",
@@ -9494,7 +9827,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3ec59a89"
     },
     {
       "name": "AITHINK_Fn1_FrogDemon",
@@ -9534,7 +9868,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c94c3da"
     },
     {
       "name": "AI_Fn1_Summoner",
@@ -9568,7 +9903,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "db033716"
     },
     {
       "name": "AI_Fn1_Izual",
@@ -9601,7 +9937,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "02673300"
     },
     {
       "name": "AI_Fn1_UberIzual",
@@ -9635,7 +9972,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40251ac2"
     },
     {
       "name": "AI_Fn1_Tentacle",
@@ -9667,7 +10005,8 @@
         "SGAMEDATA",
         "eD2PlayerAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "63db955d"
     },
     {
       "name": "AI_Fn1_TentacleHead",
@@ -9696,7 +10035,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bc39d15"
     },
     {
       "name": "AI_Fn1_GargoyleTrap",
@@ -9727,7 +10067,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a2d63d24"
     },
     {
       "name": "AI_Fn1_SkeletonMage",
@@ -9756,7 +10097,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "13ecfd6c"
     },
     {
       "name": "FetishShamanAi_ClearInfernoState",
@@ -9780,7 +10122,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "422668e8"
     },
     {
       "name": "AI_Necromancer_FindOwnedSummonCallback",
@@ -9808,7 +10151,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5151b7b"
     },
     {
       "name": "AI_Fn1_FetishShaman",
@@ -9846,7 +10190,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efe7bcb7"
     },
     {
       "name": "AI_Fn1_SandMaggotQueen",
@@ -9880,7 +10225,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a3e257f"
     },
     {
       "name": "AI_Monster_CastDirectionalSkillAtTarget",
@@ -9914,7 +10260,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ac57f2e"
     },
     {
       "name": "AI_Fn1_VileMother",
@@ -9949,7 +10296,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54d005b5"
     },
     {
       "name": "AI_Fn1_VileDog",
@@ -9973,7 +10321,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b8eee02"
     },
     {
       "name": "AI_Fn1_FingerMage",
@@ -10009,7 +10358,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d217ce4"
     },
     {
       "name": "MONSTERAI_FindCorpseForRaising",
@@ -10034,7 +10384,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1da0c96"
     },
     {
       "name": "AI_Fn1_Regurgitator",
@@ -10069,7 +10420,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b347767"
     },
     {
       "name": "AI_Fn1_DoomKnight",
@@ -10093,7 +10445,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "20f9fc02"
     },
     {
       "name": "AI_Fn1_AbyssKnight",
@@ -10126,7 +10479,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "60f4d7dd"
     },
     {
       "name": "MONSTERAI_FindBloodLordTarget",
@@ -10152,7 +10506,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ba9e970"
     },
     {
       "name": "AI_Fn1_OblivionKnight",
@@ -10190,7 +10545,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "34b26dd8"
     },
     {
       "name": "AI_Fn1_QuillMother",
@@ -10218,7 +10574,8 @@
         "SGAMEDATA",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "64297d47"
     },
     {
       "name": "AI_Fn1_EvilHole",
@@ -10252,7 +10609,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "15c88a0a"
     },
     {
       "name": "AI_Fn1_TrapMissile",
@@ -10276,7 +10634,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b7ce932b"
     },
     {
       "name": "AI_GetMonsterRegionBehaviorType",
@@ -10302,7 +10661,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "c27691cd"
     },
     {
       "name": "AI_Fn1_TrapRightArrow",
@@ -10330,7 +10690,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "102f6be3"
     },
     {
       "name": "AI_Fn1_TrapLeftArrow",
@@ -10358,7 +10719,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b4ae6704"
     },
     {
       "name": "AI_Fn1_TrapPoison",
@@ -10382,7 +10744,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e5035240"
     },
     {
       "name": "AI_Fn1_TrapNova",
@@ -10406,7 +10769,8 @@
         "D2MonStatsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "13045573"
     },
     {
       "name": "AI_Fn1_TrapMelee",
@@ -10429,7 +10793,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "977397f2"
     },
     {
       "name": "MONSTERAI_CanSpawnMonsterAt",
@@ -10450,7 +10815,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "cedf774f"
     },
     {
       "name": "AI_Monster_ValidateSkillAtPosition",
@@ -10487,7 +10853,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3329b46b"
     },
     {
       "name": "MONSTERAI_SetSpecialAttackSkill",
@@ -10510,7 +10877,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d752348"
     },
     {
       "name": "MONSTERAI_FindRandomWalkPoint",
@@ -10542,7 +10910,8 @@
         "eD2UnitType",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "0d8511e7"
     },
     {
       "name": "AI_Monster_FindAndTargetCorpse",
@@ -10565,7 +10934,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3f7bfe73"
     },
     {
       "name": "AI_Monster_AcquireKillerAsTarget",
@@ -10587,7 +10957,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "031f574a"
     },
     {
       "name": "AI_Monster_CastItemEffectSkill",
@@ -10622,7 +10993,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d6eb320"
     },
     {
       "name": "SKILL_CastOnTargetUnit",
@@ -10648,7 +11020,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1230a1d2"
     },
     {
       "name": "MONSTERAI_CastItemEffectSkill",
@@ -10674,7 +11047,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6b70384"
     }
   ]
 }

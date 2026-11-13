@@ -20,7 +20,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "41790d8d"
     },
     {
       "name": "Skills_CltStFunc_MonInitAndSpawnCltMissile",
@@ -60,7 +61,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "36bbd1e4"
     },
     {
       "name": "Skills_CltStFunc_ClearTargetableAndCollision",
@@ -86,7 +88,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "593a435b"
     },
     {
       "name": "Skills_CltDoFunc_Mon_AdvanceFrameMetrics",
@@ -106,7 +109,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "42a40777"
     },
     {
       "name": "Skills_CltStFunc_SetParamsFromTargetPosition",
@@ -133,7 +137,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c594188d"
     },
     {
       "name": "Skills_CltDoFunc_Mon_CompositeDirMissile",
@@ -167,7 +172,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "49f29735"
     },
     {
       "name": "Skills_CltStFunc_CalcPathToTargetSetFlag",
@@ -195,7 +201,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "52d8addf"
     },
     {
       "name": "Skills_CltDoFunc_Mon_SetSequenceFromCalc",
@@ -222,7 +229,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "83f56c6f"
     },
     {
       "name": "Skills_CltStFunc_MonSummonSpawnSetCollision",
@@ -250,7 +258,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c37fc512"
     },
     {
       "name": "Skills_CltDoFunc_Mon_RemoveCollisionAtParam",
@@ -279,7 +288,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "798842be"
     },
     {
       "name": "Skills_CltDoFunc_Mon_JumpMissileTowardTarget",
@@ -308,7 +318,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b71f88c1"
     },
     {
       "name": "Skills_CltStFunc_ClearTargetableFlags",
@@ -327,7 +338,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "dc83d816"
     },
     {
       "name": "Skills_CltDoFunc_Mon_AdvanceFrameMetrics2",
@@ -347,7 +359,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "dab1486f"
     },
     {
       "name": "Skills_CltDoFunc_Mon_SpawnMissilesInArea",
@@ -371,7 +384,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "5e05b9ed"
     },
     {
       "name": "SKILLSMON_SetMissileFrameAndSpeed",
@@ -396,7 +410,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8ec0203c"
     },
     {
       "name": "SKILLSMON_CreateMissileWithSeed",
@@ -424,7 +439,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "2acfa680"
     },
     {
       "name": "Skills_CltDoFunc_Mon_RandomDualMissile",
@@ -448,7 +464,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1bdd807a"
     },
     {
       "name": "Skills_CltStFunc_SetTargetableFlags",
@@ -467,7 +484,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "dc0ed5d8"
     },
     {
       "name": "Skills_CltStFunc_CheckTargetClearNodrawFlag",
@@ -487,7 +505,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5334697b"
     },
     {
       "name": "Skills_CltDoFunc_Mon_RingMissileSpray",
@@ -515,7 +534,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "b24439c7"
     },
     {
       "name": "Skills_CltStFunc_SetParam1FromCltCalc",
@@ -539,7 +559,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "6a147d08"
     },
     {
       "name": "SKILLSMON_SetMonsterDeathFrame",
@@ -559,7 +580,8 @@
         "D2MonStats2Txt",
         "D2SkillsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5b14121a"
     },
     {
       "name": "Skills_CltDoFunc_Mon_PeriodicMissile",
@@ -588,7 +610,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "639950c3"
     },
     {
       "name": "Skills_CltDoFunc_Mon_DirectionalBeam",
@@ -621,7 +644,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79bd6a84"
     },
     {
       "name": "SKILLSMON_SetMissilePathRandom",
@@ -651,7 +675,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a090af7d"
     },
     {
       "name": "Skills_CltDoFunc_Mon_RandomScatterMissiles",
@@ -679,7 +704,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "6a572344"
     },
     {
       "name": "Skills_CltStFunc_ClearSkillFlags",
@@ -701,7 +727,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e73d8360"
     },
     {
       "name": "Skills_CltDoFunc_Mon_ChargeAnim",
@@ -737,7 +764,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "58d3430a"
     },
     {
       "name": "Skills_CltDoFunc_Mon_LineMissileSpread",
@@ -765,7 +793,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "be563cd9"
     },
     {
       "name": "Skills_CltDoFunc_Mon_RadialMissileExplosion",
@@ -797,7 +826,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "cd0f49dc"
     },
     {
       "name": "Skills_CltStFunc_SetRandomParamFromCalcRange",
@@ -829,7 +859,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c40f1a47"
     },
     {
       "name": "Skills_CltDoFunc_Mon_MeleeRepeat",
@@ -859,7 +890,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "15b6e855"
     },
     {
       "name": "Skills_CltStFunc_SpawnCltMissileA",
@@ -880,7 +912,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "7ae73547"
     },
     {
       "name": "Skills_CltDoFunc_Mon_ScatterDoubleMissile",
@@ -906,7 +939,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "b072cb9c"
     },
     {
       "name": "Skills_CltDoFunc_Mon_QueenDeath",
@@ -932,7 +966,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ad36a78a"
     },
     {
       "name": "Skills_CltDoFunc_Mon_CurseCenter_StreamRange",
@@ -959,7 +994,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2f0b9c86"
     },
     {
       "name": "Skills_CltStFunc_CastHellMeteorMissiles",
@@ -986,7 +1022,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3a57016d"
     },
     {
       "name": "Skills_CltDoFunc_Mon_ComponentOffset_Missile_A",
@@ -1012,7 +1049,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7b73a74e"
     },
     {
       "name": "Skills_CltDoFunc_Mon_ComponentOffset_Missile_B",
@@ -1038,7 +1076,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "677df765"
     },
     {
       "name": "Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile",
@@ -1064,7 +1103,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "7d47f15c"
     },
     {
       "name": "SKILLSMON_CltCreateSpiderLay",
@@ -1102,7 +1142,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7b16a678"
     },
     {
       "name": "SKILLSMON_SetMissilePathLinear",
@@ -1131,7 +1172,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2deb66ae"
     }
   ]
 }

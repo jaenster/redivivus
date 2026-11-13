@@ -22,7 +22,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b62804a5"
     },
     {
       "name": "TILEPROJECT_FreeSlot",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2TileLibraryHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dcaa3d83"
     },
     {
       "name": "TILEPROJECT_LookupTilesInAllProjects",
@@ -65,7 +67,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "6cca5393"
     },
     {
       "name": "GetOrientation",
@@ -86,7 +89,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8d7ce6f4"
     },
     {
       "name": "GetIndex",
@@ -107,7 +111,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "26046fbc"
     },
     {
       "name": "TILEPROJECT_GetTileCount",
@@ -129,7 +134,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1875a416"
     },
     {
       "name": "TILEPROJECT_GetTileDataPtr",
@@ -150,7 +156,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d4e2559c"
     },
     {
       "name": "TILEPROJECT_GetAnimatedTileDataPtr",
@@ -171,7 +178,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6322b02b"
     },
     {
       "name": "GetSubIndex",
@@ -192,7 +200,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "81dd6307"
     },
     {
       "name": "TILEPROJECT_GetTileOrientationIndex",
@@ -213,7 +222,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9edb074c"
     },
     {
       "name": "TILEPROJECT_GetRoofHeightIndex",
@@ -234,7 +244,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "26d8bf0c"
     },
     {
       "name": "TILE_GetTileFlags",
@@ -255,7 +266,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d8aca622"
     }
   ]
 }

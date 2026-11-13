@@ -61,7 +61,7 @@ static BOOL PLRMODES_HasEndAnimEventAndSeqInput(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Checks if the player unit can interrupt its current animation mode to start the specified new mode. Returns TRUE if the new mode can interrupt.
-static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode) {
+static BOOL PLRMODES_CanInterruptCurrentMode(uint32_t nNewMode, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint8_t PLRMODES_CanInterruptCaseIndex[18] = {
     0x0,
@@ -159,8 +159,8 @@ static BOOL PLRMODES_CanInterruptCurrentMode(D2UnitStrc * pUnit, ::SGAMEDATA * p
 }
 
 // Extern entry for hand-written callers: PLRMODES_CanInterruptCurrentMode itself keeps its unit's linkage.
-BOOL PLRMODES_CanInterruptCurrentMode_Extern(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode) {
-    return ::D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode(pUnit, pGame, nNewMode);
+BOOL PLRMODES_CanInterruptCurrentMode_Extern(uint32_t nNewMode, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    return ::D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode(nNewMode, pGame, pUnit);
 }
 
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
@@ -1557,7 +1557,7 @@ void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       exit(-1);
     }
 
-    _bCanInterrupt = PLRMODES_CanInterruptCurrentMode(pUnit, pGame, nIndex);
+    _bCanInterrupt = PLRMODES_CanInterruptCurrentMode(nIndex, pGame, pUnit);
     if (!_bCanInterrupt) {
       return;
     }
@@ -1598,7 +1598,7 @@ void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
       return;
     }
 
-    _bCanInterrupt = PLRMODES_CanInterruptCurrentMode(pUnit, pGame, nModeIndex);
+    _bCanInterrupt = PLRMODES_CanInterruptCurrentMode(nModeIndex, pGame, pUnit);
     if (!(_bCanInterrupt && (bSkipCancelAttempt || (nCancelResult = PLRMODES_TryCancelModeAndMoveToLocation(pGame, pUnit, nModeIndex, 1, pSkill) , nCancelResult != 0)))) {
       return;
     }

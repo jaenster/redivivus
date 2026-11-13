@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b8ab2945"
     },
     {
       "name": "DRAW_GetTypeOfBorder_Unref_0045ae80",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "014c3c7e"
     },
     {
       "name": "DRAW_GetTypeOfBorder",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "af8dbf2b"
     },
     {
       "name": "TypeOfUiOverlayOverWorld",
@@ -72,7 +75,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "91c33869"
     },
     {
       "name": "GetMouseXOffset",
@@ -86,7 +90,8 @@
       "namespace": "D2Client::UI::Path",
       "calledFunctions": [
         "GetMouseXOffset"
-      ]
+      ],
+      "dh": "8073ac52"
     },
     {
       "name": "GetMouseYOffset",
@@ -100,7 +105,8 @@
       "namespace": "D2Client::UI::Path",
       "calledFunctions": [
         "GetMouseYOffset"
-      ]
+      ],
+      "dh": "241d1bac"
     },
     {
       "name": "DRAW_GetWorldOffsetX",
@@ -117,7 +123,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0a962148"
     },
     {
       "name": "DRAW_GetWorldOffsetY",
@@ -134,7 +141,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5b0afad5"
     },
     {
       "name": "ConvertCoordToPerspectiveView",
@@ -153,7 +161,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a27a9a92"
     },
     {
       "name": "DRAW_DrawRoomUnits",
@@ -180,7 +189,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f2a0d12"
     },
     {
       "name": "DEBUG_DrawRoomBoundsRect",
@@ -199,7 +209,8 @@
       "usedTypes": [
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "0d6d51cb"
     },
     {
       "name": "DEBUG_DrawUnitShadowBounds",
@@ -228,7 +239,8 @@
         "RECT",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7dc3b827"
     },
     {
       "name": "DEBUG_DrawWarpUnitBounds",
@@ -251,7 +263,8 @@
         "D2RoomStrc *",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e4b414a0"
     },
     {
       "name": "DRAW_UpdateMouseWorldOffsets",
@@ -273,7 +286,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c4d4cd89"
     },
     {
       "name": "DRAW_DrawRoomCollisionGrid",
@@ -298,7 +312,8 @@
         "D2RoomStrc",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "4a87d62f"
     },
     {
       "name": "DRAW_DrawRoomWallTiles",
@@ -333,7 +348,8 @@
         "D2RoomStrc",
         "RECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dda5415"
     },
     {
       "name": "DEBUG_DrawLogicalRoomOverlay",
@@ -361,7 +377,8 @@
         "eD2RendererMode",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "15fea86f"
     }
   ]
 }

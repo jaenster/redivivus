@@ -23,7 +23,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "cba1b54c"
     },
     {
       "name": "PLAYER_CheckIfSpokenWithNPC",
@@ -45,7 +46,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "42e3ef19"
     },
     {
       "name": "INTRONPC_SetSpokenWithNPC_Intro2",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D2UnitDataPlayerInteractedNPCStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e8782be5"
     },
     {
       "name": "INTRONPC_CheckIfSpokenWithNPC_Intro2",
@@ -83,7 +86,8 @@
       "usedTypes": [
         "D2UnitDataPlayerInteractedNPCStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c040770"
     },
     {
       "name": "PLAYER_UnsetSpokenWithNPC_Intro2",
@@ -105,7 +109,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "282724e4"
     },
     {
       "name": "CopyBufferToPointer",
@@ -123,7 +128,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "70006e90"
     },
     {
       "name": "CopySizeAndPosToBuffer",
@@ -142,7 +148,8 @@
         "D2BitBufferStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "16a50155"
     },
     {
       "name": "PLAYERINTRO_CopyIntroData8Bytes",
@@ -160,7 +167,8 @@
       "usedTypes": [
         "D2UnitDataPlayerInteractedNPCStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "370641c0"
     },
     {
       "name": "PLAYERINTRO_CopyIntroDataIndirect",
@@ -178,7 +186,8 @@
       "usedTypes": [
         "D2UnitDataPlayerInteractedNPCStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7adfc516"
     },
     {
       "name": "STRUCT_AllocPlayerInteractedNPC",
@@ -200,7 +209,8 @@
         "D2UnitDataPlayerInteractedNPCStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "cb526229"
     },
     {
       "name": "PLAYERDATA_FreeInteractedNPCs",
@@ -219,7 +229,8 @@
       "usedTypes": [
         "D2UnitDataPlayerInteractedNPCStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1d886d75"
     }
   ]
 }

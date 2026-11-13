@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2MonStatsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "bae2a987"
     },
     {
       "name": "TXT_MonStats_GetMonStats2",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "D2MonStats2Txt",
         "int32_t"
-      ]
+      ],
+      "dh": "ad387e2a"
     },
     {
       "name": "TXT_MonStats_GetFlagsByBitOffset",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "TxtMonStatsField0x0c",
         "int32_t"
-      ]
+      ],
+      "dh": "3c824144"
     },
     {
       "name": "TXT_MonStats_GetBaseId",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1b69f1db"
     },
     {
       "name": "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
@@ -96,7 +100,8 @@
       "usedTypes": [
         "TXTMonStats2Field0x04DWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "e1263c77"
     },
     {
       "name": "ValidateClassId",
@@ -114,7 +119,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a1850e96"
     },
     {
       "name": "GetSomeMonsterStatFlag",
@@ -133,7 +139,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05ab76c6"
     },
     {
       "name": "CheckMonStatId",
@@ -151,7 +158,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7f332069"
     },
     {
       "name": "FilterNameString",
@@ -165,7 +173,8 @@
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
         "FilterNameString"
-      ]
+      ],
+      "dh": "a7d5bbe9"
     },
     {
       "name": "MONSTERTBLS_AllocateTransformArrays",
@@ -185,7 +194,8 @@
         "D2AnimDataRecordStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1d81d4f"
     },
     {
       "name": "MONSTERTBLS_FreeTransformArrays",
@@ -202,7 +212,8 @@
       ],
       "usedTypes": [
         "D2MonStatsTxt"
-      ]
+      ],
+      "dh": "73dca031"
     },
     {
       "name": "MONSTERTBLS_GetUpgradeDataByMonStatsId",
@@ -220,7 +231,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "32848054"
     },
     {
       "name": "MONSTERTBLS_ParseMonStatsField",
@@ -241,7 +253,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b5a71b79"
     },
     {
       "name": "TXT_AllocTxt_monstats",
@@ -267,7 +280,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7830e05d"
     },
     {
       "name": "MONSTER_CalculateLevelScaledStats",
@@ -289,7 +303,8 @@
         "D2MonStatsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68afed79"
     },
     {
       "name": "Unreferenced_00653d30",
@@ -305,7 +320,8 @@
         "Unreferenced_00653d30",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "9c2e4d89"
     },
     {
       "name": "MONSTER_SetVelocityByIndex",
@@ -326,7 +342,8 @@
       "usedTypes": [
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "52198b22"
     },
     {
       "name": "DATATBLS_CompileUniqueTitleTxt",
@@ -347,7 +364,8 @@
         "D2PoolManagerStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "459e72c2"
     },
     {
       "name": "TXT_UnloadUniqueMonsterNameTables",
@@ -365,7 +383,8 @@
       ],
       "usedTypes": [
         "D2UniqueNameTablesStrc"
-      ]
+      ],
+      "dh": "2531797e"
     },
     {
       "name": "Unreferenced_00653e50",
@@ -385,7 +404,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "5b321325"
     },
     {
       "name": "MONSTER_GetRandomUniquePrefix_Unref_00653e90",
@@ -405,7 +425,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "WCHAR"
-      ]
+      ],
+      "dh": "db13a7ce"
     },
     {
       "name": "MONSTER_GetRandomUniquePrefix",
@@ -426,7 +447,8 @@
         "D2UnitStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "31033f36"
     },
     {
       "name": "MONSTER_GetRandomUniqueSuffix",
@@ -447,7 +469,8 @@
         "D2UnitStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b5d30d5"
     },
     {
       "name": "MONSTER_GetRandomUniqueAppelation",
@@ -468,7 +491,8 @@
         "D2UnitStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6f3f9b5"
     },
     {
       "name": "TC_ExtendTreasureClassSize",
@@ -489,7 +513,8 @@
       "usedTypes": [
         "D2ParsedTreasureClassStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc49da0d"
     },
     {
       "name": "ResizeParsedTCEntries",
@@ -510,7 +535,8 @@
         "D2ParsedTreasureClassEntriesStrc",
         "D2ParsedTreasureClassStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "41ee2100"
     },
     {
       "name": "AddOneParsedTCEntry",
@@ -529,7 +555,8 @@
       "usedTypes": [
         "D2ParsedTreasureClassEntriesStrc",
         "D2ParsedTreasureClassStrc"
-      ]
+      ],
+      "dh": "f5c0d9ac"
     },
     {
       "name": "AdjustRarities",
@@ -549,7 +576,8 @@
         "D2ParsedTreasureClassStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "829c32aa"
     },
     {
       "name": "TC_GenerateAutoItemTypeTreasureClasses",
@@ -583,7 +611,8 @@
         "D2ParsedTreasureClassStrc",
         "eD2ItemTypes",
         "uint32_t"
-      ]
+      ],
+      "dh": "05ea03e9"
     },
     {
       "name": "TC_ExtractNextIntModifier",
@@ -603,7 +632,8 @@
         "int32_t",
         "uint32_t",
         "uint32_t *"
-      ]
+      ],
+      "dh": "e2b55b63"
     },
     {
       "name": "TC_ParseTreasureClassEntry",
@@ -632,7 +662,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3af91833"
     },
     {
       "name": "TXT_AllocTxt_TreasureClassEx",
@@ -657,7 +688,8 @@
         "D2PoolManagerStrc",
         "D2TreasureClassExSubSubTxt",
         "D2TreasureClassExTxt"
-      ]
+      ],
+      "dh": "b1ca2bd0"
     },
     {
       "name": "FreeParsedTC",
@@ -673,7 +705,8 @@
         "FreeParsedTC",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "a9cb1151"
     },
     {
       "name": "TC_LookupTreasureClassByName",
@@ -692,7 +725,8 @@
       "usedTypes": [
         "D2ParsedTreasureClassStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8bd52694"
     },
     {
       "name": "TC_GetParsedTreasureClassByLevel",
@@ -711,7 +745,8 @@
         "D2ParsedTreasureClassStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "1bf4c47c"
     },
     {
       "name": "RollTreasureClass",
@@ -730,7 +765,8 @@
         "D2ParsedTreasureClassStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8fa3b4b3"
     },
     {
       "name": "MONSTERTBLS_Unused_HaltLine1710",
@@ -747,7 +783,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "4301f741"
     },
     {
       "name": "DATATBLS_CompileBodyLocsTxt",
@@ -766,7 +803,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "6e962507"
     },
     {
       "name": "thunk_UnloadBin_MonStats",
@@ -781,7 +819,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_MonStats",
         "UnloadBin"
-      ]
+      ],
+      "dh": "c024d346"
     },
     {
       "name": "TC_GetTreasureClassArrayEntry",
@@ -802,7 +841,8 @@
       "usedTypes": [
         "D2MonItemPercentTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "90215064"
     },
     {
       "name": "TXT_AllocTxt_monumod",
@@ -822,7 +862,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "e8977e57"
     },
     {
       "name": "Unreferenced_006552a0",
@@ -838,7 +879,8 @@
         "Unreferenced_006552a0",
         "STRUCT_FreeTxtLink",
         "UnloadBin"
-      ]
+      ],
+      "dh": "17027b05"
     },
     {
       "name": "TXT_AllocTxt_superuniques",
@@ -862,7 +904,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "935d5e46"
     },
     {
       "name": "Unreferenced_006556a0",
@@ -878,7 +921,8 @@
         "Unreferenced_006556a0",
         "STRUCT_FreeTxtLink",
         "UnloadBin"
-      ]
+      ],
+      "dh": "d1bd8e20"
     },
     {
       "name": "TXT_SuperUniques_GetLine",
@@ -896,7 +940,8 @@
       "usedTypes": [
         "D2SuperUniquesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "659ddd1e"
     },
     {
       "name": "MONSTERTBLS_GetSuperUniquesTxtCount",
@@ -913,7 +958,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "41a7feec"
     },
     {
       "name": "TXT_AllocTxt_hireling",
@@ -940,7 +986,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f972d48f"
     },
     {
       "name": "MONSTERTBLS_FreeHirelingTxt",
@@ -955,7 +1002,8 @@
       "calledFunctions": [
         "MONSTERTBLS_FreeHirelingTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "3deab9ba"
     },
     {
       "name": "GetHirelingText",
@@ -973,7 +1021,8 @@
       "usedTypes": [
         "D2HirelingTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e3947455"
     },
     {
       "name": "GetHirelingEntryByNameId",
@@ -992,7 +1041,8 @@
         "D2HirelingTxt",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "76770fec"
     },
     {
       "name": "GetHirelingEntryByClassId",
@@ -1010,7 +1060,8 @@
       "usedTypes": [
         "D2HirelingTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "50830e21"
     },
     {
       "name": "GetHirelingEntry",
@@ -1028,7 +1079,8 @@
       "usedTypes": [
         "D2HirelingTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "33880535"
     },
     {
       "name": "GetHirelingDataTable",
@@ -1046,7 +1098,8 @@
       "usedTypes": [
         "D2HirelingTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "b6852bfc"
     },
     {
       "name": "TXT_AllocTxt_npc",
@@ -1065,7 +1118,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "ac49cb63"
     },
     {
       "name": "thunk_UnloadBin_MonStats_Unref_006568f0",
@@ -1080,7 +1134,8 @@
       "calledFunctions": [
         "thunk_UnloadBin_MonStats_Unref_006568f0",
         "UnloadBin"
-      ]
+      ],
+      "dh": "774162c7"
     },
     {
       "name": "TXT_npc_GetLine",
@@ -1098,7 +1153,8 @@
       "usedTypes": [
         "D2NpcTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "2875dd13"
     },
     {
       "name": "TXT_AllocTxt_monsounds",
@@ -1118,7 +1174,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "ae2104b0"
     },
     {
       "name": "TXT_FreeTxt_sounds_Unref_00656f60",
@@ -1134,7 +1191,8 @@
         "TXT_FreeTxt_sounds_Unref_00656f60",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "a9cd40ca"
     },
     {
       "name": "TxtGetMonSoundsLine",
@@ -1152,7 +1210,8 @@
       "usedTypes": [
         "D2MonSoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "ab74dac8"
     },
     {
       "name": "MONSTERTBLS_GetMonSoundsTxtRecord",
@@ -1170,7 +1229,8 @@
       "usedTypes": [
         "D2MonSoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "fc2f8ba9"
     },
     {
       "name": "MONSTERTBLS_ParseMonSeqField",
@@ -1191,7 +1251,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "336eda9d"
     },
     {
       "name": "TXT_AllocTxt_monstats2",
@@ -1211,7 +1272,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "beff2268"
     },
     {
       "name": "Unreferenced_00658440",
@@ -1227,7 +1289,8 @@
         "Unreferenced_00658440",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "a6763d72"
     },
     {
       "name": "MONSTERTBLS_GetMonSeqFrameCount",
@@ -1244,7 +1307,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9135e651"
     },
     {
       "name": "TXT_AllocTxt_montype",
@@ -1268,7 +1332,8 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ca7bc23"
     },
     {
       "name": "MONSTERTBLS_FreeMonPlaceTxt",
@@ -1285,7 +1350,8 @@
         "UnloadBin",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "b60cadf6"
     },
     {
       "name": "TXT_AllocTxt_monprop",
@@ -1305,7 +1371,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "16da88b7"
     },
     {
       "name": "Unreferenced_006594d0",
@@ -1321,7 +1388,8 @@
         "Unreferenced_006594d0",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "f2b18b1e"
     },
     {
       "name": "TXT_AllocTxt_monlvl",
@@ -1340,7 +1408,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "c874ae05"
     },
     {
       "name": "Unreferenced_00659970",
@@ -1355,7 +1424,8 @@
       "calledFunctions": [
         "Unreferenced_00659970",
         "UnloadBin"
-      ]
+      ],
+      "dh": "2af8ae40"
     },
     {
       "name": "DATATBLS_LinkerMonsterPreset",
@@ -1373,7 +1443,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "88c0f811"
     },
     {
       "name": "TXT_AllocTxt_monpreset",
@@ -1393,7 +1464,8 @@
         "D2BinFieldInputStrc",
         "D2MonPresetTxt",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "96230401"
     },
     {
       "name": "MONSTERTBLS_FreeMonPresetTxt",
@@ -1408,7 +1480,8 @@
       "calledFunctions": [
         "MONSTERTBLS_FreeMonPresetTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "993bb2e7"
     },
     {
       "name": "MONSTERTBLS_GetMonPresetRecord",
@@ -1426,7 +1499,8 @@
       "usedTypes": [
         "D2MonPresetTxt",
         "uint32_t"
-      ]
+      ],
+      "dh": "5cd35c5e"
     },
     {
       "name": "MONSTERTBLS_GetPresetActValue",
@@ -1443,7 +1517,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "31d28eab"
     },
     {
       "name": "TXT_AllocTxt_sounds",
@@ -1463,7 +1538,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "9a18cfcf"
     },
     {
       "name": "TXT_FreeTxt_sounds",
@@ -1479,7 +1555,8 @@
         "TXT_FreeTxt_sounds",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "d0db020b"
     },
     {
       "name": "TXT_AllocTxt_monseq",
@@ -1501,7 +1578,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "fef60d67"
     },
     {
       "name": "MONSTERTBLS_FreeMonPropTxt",
@@ -1518,7 +1596,8 @@
         "UnloadBin",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "666ecb0e"
     },
     {
       "name": "GetMonsterSequenceTableByIndex",
@@ -1536,7 +1615,8 @@
       "usedTypes": [
         "D2MonSeqMonsterTbls",
         "int32_t"
-      ]
+      ],
+      "dh": "a903f31d"
     },
     {
       "name": "TXT_AllocTxt_MonEquip",
@@ -1562,7 +1642,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ce41019"
     },
     {
       "name": "Unreferenced_0065a170",
@@ -1577,7 +1658,8 @@
       "calledFunctions": [
         "Unreferenced_0065a170",
         "UnloadBin"
-      ]
+      ],
+      "dh": "0d926c35"
     },
     {
       "name": "MONSTERTBLS_FreeMonUModTxt",
@@ -1598,7 +1680,8 @@
         "MONSTERTBLS_FreeMonPropTxt",
         "FreeParsedTC",
         "TXT_UnloadUniqueMonsterNameTables"
-      ]
+      ],
+      "dh": "d59e6ba6"
     },
     {
       "name": "TXT_AllocParsedTreasureClassDiffActChestABC",
@@ -1622,7 +1705,8 @@
         "char *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d032122c"
     },
     {
       "name": "TXT_AllocItemDropData",
@@ -1647,7 +1731,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7a580c0c"
     },
     {
       "name": "ClearScreen_Unref_0065a3f0",
@@ -1665,7 +1750,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "64568337"
     },
     {
       "name": "TXT_AllocMonsterTables",
@@ -1697,7 +1783,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "21f97186"
     }
   ]
 }

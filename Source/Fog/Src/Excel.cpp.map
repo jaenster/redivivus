@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "D2BinFieldExcelStrc"
-      ]
+      ],
+      "dh": "4020a7b6"
     },
     {
       "name": "TXT_GetLinesCountFromBinFieldExcel",
@@ -37,7 +38,8 @@
       ],
       "usedTypes": [
         "D2BinFieldExcelStrc"
-      ]
+      ],
+      "dh": "5ad8a2b1"
     },
     {
       "name": "FOG_ParseBinField",
@@ -66,7 +68,8 @@
         "eD2BinFieldInputType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d879653"
     },
     {
       "name": "STRUCT_CreateTxtLinkStrc",
@@ -84,7 +87,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkStrc"
-      ]
+      ],
+      "dh": "2c7a1aa2"
     },
     {
       "name": "STRUCT_FreeTxtLinkNode",
@@ -102,7 +106,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkNodeStrc"
-      ]
+      ],
+      "dh": "55e8fb9e"
     },
     {
       "name": "STRUCT_FreeTxtLink",
@@ -122,7 +127,8 @@
       "usedTypes": [
         "D2TxtLinkNodeStrc",
         "D2TxtLinkStrc"
-      ]
+      ],
+      "dh": "ec86818e"
     },
     {
       "name": "GetClassIdFromName",
@@ -141,7 +147,8 @@
         "D2TxtLinkStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18484b73"
     },
     {
       "name": "FOG_GetTxtLinkRecord",
@@ -160,7 +167,8 @@
         "D2TxtLinkStrc",
         "D2TxtLinkSub0x08Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1f86b06d"
     },
     {
       "name": "FOG_AddTxtLinkRecord",
@@ -185,7 +193,8 @@
         "D2TxtLinkStrc",
         "D2TxtLinkSub0x08Strc",
         "uint32_t"
-      ]
+      ],
+      "dh": "be2394fe"
     },
     {
       "name": "FOG_GetRecordField",
@@ -202,7 +211,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkNodeStrc"
-      ]
+      ],
+      "dh": "650d7c06"
     },
     {
       "name": "FOG_ParseIntField",
@@ -220,7 +230,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkStrc"
-      ]
+      ],
+      "dh": "7c13c54e"
     },
     {
       "name": "GetLinkNodeIndex",
@@ -247,7 +258,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3dfa7942"
     },
     {
       "name": "FOG_ValidateBytePtr",
@@ -265,7 +277,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "cc10cf10"
     },
     {
       "name": "FOG_ParseStringField",
@@ -290,7 +303,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkStrc"
-      ]
+      ],
+      "dh": "55771c7d"
     },
     {
       "name": "FOG_ParseTxtLink",
@@ -316,7 +330,8 @@
       ],
       "usedTypes": [
         "D2TxtLinkStrc"
-      ]
+      ],
+      "dh": "e71ed158"
     },
     {
       "name": "STRUCT_CreateBinFieldExcelAndFillData",
@@ -343,7 +358,8 @@
         "D2BinFieldExcelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17e57bdf"
     },
     {
       "name": "TXT_ParseDataAndPutIntoStructure",
@@ -380,7 +396,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "960f4b2f"
     }
   ]
 }

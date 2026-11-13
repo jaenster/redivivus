@@ -22,7 +22,8 @@
         "D2DrlgCoordsStrc",
         "D2DrlgOrthStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "3d0e961d"
     },
     {
       "name": "DRLGMAZE_SetRoomPresetDirect",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8d871a2f"
     },
     {
       "name": "DRLGMAZE_PickRoomPreset",
@@ -65,7 +67,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79bd8840"
     },
     {
       "name": "DRLGMAZE_FindAndReplacePreset",
@@ -83,7 +86,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "0079ad53"
     },
     {
       "name": "DRLGMAZE_PickRoomPresets",
@@ -108,7 +112,8 @@
         "D2RoomExStrc",
         "D2SeedStrc",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "a7f14af7"
     },
     {
       "name": "AllocateRoomEx",
@@ -133,7 +138,8 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "044df42c"
     },
     {
       "name": "DRLGMAZE_AllocRoomExAndPickPreset",
@@ -160,7 +166,8 @@
         "eDrlgDirection",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "737d3e18"
     },
     {
       "name": "DRLGMAZE_AllocRoomAndPickPreset",
@@ -180,7 +187,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "57ff78c2"
     },
     {
       "name": "ReplaceRoomWith",
@@ -206,7 +214,8 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8a7515e4"
     },
     {
       "name": "DRLGMAZE_BuildRoomGrid",
@@ -233,7 +242,8 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d443b642"
     },
     {
       "name": "GetRandomRoomExFromLevel",
@@ -254,7 +264,8 @@
         "D2SeedStrc",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "72187e89"
     },
     {
       "name": "ActualLevelGeneration",
@@ -283,7 +294,8 @@
         "D2RoomExStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ec84607"
     },
     {
       "name": "DRLGMAZE_ExpandRoomsWithPresets",
@@ -313,7 +325,8 @@
         "D2RoomExStrc",
         "D2RoomExStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "0e6aa628"
     },
     {
       "name": "SetupBaalChamber",
@@ -338,7 +351,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aee7fb06"
     },
     {
       "name": "DRLGMAZE_ExpandCatacombsLevel",
@@ -367,7 +381,8 @@
         "D2RoomExStrc",
         "D2SeedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d1ea2ff7"
     },
     {
       "name": "GenerateWolrdstoneAndTombs",
@@ -395,7 +410,8 @@
         "D2RoomExStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d322ef1"
     },
     {
       "name": "RollArcaneTypePath",
@@ -425,7 +441,8 @@
         "D2RoomExStrc *",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c8cc484"
     },
     {
       "name": "DRLGMAZE_CanPlaceRoomInDirection",
@@ -451,7 +468,8 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "11fbefc1"
     },
     {
       "name": "DRLGMAZE_FindTopMostRoom",
@@ -470,7 +488,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "33da9e2d"
     },
     {
       "name": "DRLGMAZE_FindLeftMostRoom",
@@ -489,7 +508,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "fba7c080"
     },
     {
       "name": "DRLGMAZE_FindRightMostRoom",
@@ -508,7 +528,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "3801c7c8"
     },
     {
       "name": "DRLGMAZE_FindBottomMostRoom",
@@ -527,7 +548,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "64fe3fdc"
     },
     {
       "name": "ReplaceRoom",
@@ -549,7 +571,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8100fd4c"
     },
     {
       "name": "Caves",
@@ -570,7 +593,8 @@
         "D2DrlgReplaceRoomStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8635637b"
     },
     {
       "name": "Crypt",
@@ -589,7 +613,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e7d89ee"
     },
     {
       "name": "RollRooms",
@@ -608,7 +633,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "dab8e0ed"
     },
     {
       "name": "DRLGMAZE_ReplaceCatacombsRooms",
@@ -628,7 +654,8 @@
         "D2DrlgLevelStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1baa9003"
     },
     {
       "name": "DRLGMAZE_GenerateSewerLevel",
@@ -660,7 +687,8 @@
         "D2RoomExStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b57afa0"
     },
     {
       "name": "ReplaceAreas",
@@ -686,7 +714,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d8e64337"
     },
     {
       "name": "Lair",
@@ -706,7 +735,8 @@
         "D2DrlgLevelStrc",
         "D2DrlgReplaceRoomStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8a902028"
     },
     {
       "name": "PickSummonerLocation",
@@ -725,7 +755,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ead86f94"
     },
     {
       "name": "DungeonRoll",
@@ -744,7 +775,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1839560"
     },
     {
       "name": "DRLGMAZE_ReplaceSewerRooms",
@@ -764,7 +796,8 @@
         "D2DrlgLevelStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b011173"
     },
     {
       "name": "DRLGMAZE_ReplaceDuranceRooms",
@@ -784,7 +817,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5f6fb31"
     },
     {
       "name": "ReplaceRooms",
@@ -807,7 +841,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2c51c2ee"
     },
     {
       "name": "PutRedNextLevelAreasInPlace",
@@ -826,7 +861,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc8be10f"
     },
     {
       "name": "DRLGMAZE_GenerateBarracksLayout",
@@ -853,7 +889,8 @@
         "D2RoomExStrc",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7792611e"
     },
     {
       "name": "DRLGMAZE_GenerateRiverOfFlames",
@@ -886,7 +923,8 @@
         "D2DrlgPresetRoomStrc",
         "D2LvlMazeTxt",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "41f17171"
     },
     {
       "name": "DRLGMAZE_ReplaceIceCavesRooms",
@@ -905,7 +943,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f424247"
     },
     {
       "name": "ForAllButDenOfEvil",
@@ -922,7 +961,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "964181c2"
     },
     {
       "name": "DRLGMAZE_SelectRandomPresetFile",
@@ -945,7 +985,8 @@
         "D2DrlgMapStrc",
         "eLvlTypes",
         "uint32_t"
-      ]
+      ],
+      "dh": "93605ff4"
     },
     {
       "name": "InitAllRoomsEx",
@@ -970,7 +1011,8 @@
         "D2DrlgMapStrc",
         "D2DrlgOrthStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "b8098e40"
     },
     {
       "name": "DRLGMAZE_InitializeLevel",
@@ -990,7 +1032,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlMazeTxt"
-      ]
+      ],
+      "dh": "17736371"
     },
     {
       "name": "DRLGMAZE_GenerateLevel",
@@ -1044,7 +1087,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6dfe9aa8"
     },
     {
       "name": "DRLGMAZE_ResetMazeRecord",
@@ -1061,7 +1105,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "2aee1dd8"
     }
   ]
 }

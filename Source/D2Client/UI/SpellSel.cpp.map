@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "97c70b54"
     },
     {
       "name": "SPELLSEL_Cleanup",
@@ -38,7 +39,8 @@
       ],
       "usedTypes": [
         "D2ClassIconWithNameStrc"
-      ]
+      ],
+      "dh": "5b7fdd79"
     },
     {
       "name": "ARCHIVE_LoadSpellsClassSkillicon",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "2470464a"
     },
     {
       "name": "SPELLSEL_SetMouseHandFlag",
@@ -75,7 +78,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2a6a064d"
     },
     {
       "name": "SPELLSEL_IsMouseInRect",
@@ -94,7 +98,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bc8f7a70"
     },
     {
       "name": "SPELLSEL_GetSkillPalette",
@@ -114,7 +119,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ffbe1a06"
     },
     {
       "name": "SPELLSEL_DrawSkillTooltip",
@@ -136,7 +142,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bc3b6684"
     },
     {
       "name": "SPELLSEL_DrawKeyBindingText",
@@ -160,7 +167,8 @@
       "usedTypes": [
         "int32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "36998a56"
     },
     {
       "name": "SPELLSEL_DrawKeyBindingsForLeftHand",
@@ -178,7 +186,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b1d02926"
     },
     {
       "name": "SPELLSEL_DrawSkillLevel",
@@ -201,7 +210,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "5145ba0e"
     },
     {
       "name": "SPELLSEL_DrawKeyBindingsForRightHand",
@@ -219,7 +229,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ed75a725"
     },
     {
       "name": "SPELLSEL_DrawSkillIconWithQuantity",
@@ -257,7 +268,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1f324eea"
     },
     {
       "name": "SPELLSEL_DrawSkillIcon",
@@ -288,7 +300,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf10ef6e"
     },
     {
       "name": "SPELLSEL_RegisterSkillSlot",
@@ -309,7 +322,8 @@
         "D2SkillStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "560addbf"
     },
     {
       "name": "SPELLSEL_FindChargedSkill1",
@@ -333,7 +347,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "47880f6b"
     },
     {
       "name": "SPELLSEL_FindChargedSkill2",
@@ -357,7 +372,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a713b39b"
     },
     {
       "name": "SPELLSEL_FindChargedSkill3",
@@ -381,7 +397,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "957944d5"
     },
     {
       "name": "SPELLSEL_FindChargedSkill4",
@@ -405,7 +422,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c232201b"
     },
     {
       "name": "INPUT_SpellSelectClick",
@@ -439,7 +457,8 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3e217040"
     },
     {
       "name": "SPELLSEL_ClearSkillBinding",
@@ -457,7 +476,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d34bd2c4"
     },
     {
       "name": "SPELLSEL_ClearChargedSkillBindings",
@@ -486,7 +506,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dd07177e"
     },
     {
       "name": "SPELLSEL_HandleSkillSelection",
@@ -507,7 +528,8 @@
       "usedTypes": [
         "D2SpellSelGridRegionStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0a6984a8"
     },
     {
       "name": "SPELLSEL_IsSkillSlotValid",
@@ -530,7 +552,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bcb913cb"
     },
     {
       "name": "SPELLSEL_ActivateSkillSlot",
@@ -554,7 +577,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "7bf49715"
     },
     {
       "name": "SPELLSEL_SetSkillSlot",
@@ -571,7 +595,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7b2159a6"
     },
     {
       "name": "SPELLSEL_AssignSkillToSlot",
@@ -589,7 +614,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d16d2ded"
     },
     {
       "name": "SPELLSEL_AutoBindNonChargedSkills",
@@ -617,7 +643,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e191458a"
     },
     {
       "name": "SPELLSEL_DrawSkillRequirementTooltip",
@@ -644,7 +671,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "0d31b0ae"
     },
     {
       "name": "SPELLSEL_DrawSkillGrid",
@@ -680,7 +708,8 @@
         "GLOBALPALLETE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0e89932a"
     },
     {
       "name": "Unreferenced_004aa6b0",
@@ -696,7 +725,8 @@
         "Unreferenced_004aa6b0",
         "GetPlayerUnit_UI",
         "SPELLSEL_DrawSkillGrid"
-      ]
+      ],
+      "dh": "39e4b3e0"
     },
     {
       "name": "Unreferenced_004aa6e0",
@@ -712,7 +742,8 @@
         "Unreferenced_004aa6e0",
         "GetPlayerUnit_UI",
         "SPELLSEL_DrawSkillGrid"
-      ]
+      ],
+      "dh": "31c67d2a"
     },
     {
       "name": "Unreferenced_004aa710",
@@ -728,7 +759,8 @@
         "Unreferenced_004aa710",
         "GetPlayerUnit_UI",
         "SPELLSEL_DrawSkillGrid"
-      ]
+      ],
+      "dh": "50f80f1f"
     },
     {
       "name": "SPELLSEL_CycleRightHandSkills",
@@ -749,7 +781,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d1c7d25"
     },
     {
       "name": "SPELLSEL_RenderAllSkillGrids",
@@ -770,7 +803,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "95329ab1"
     },
     {
       "name": "SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0",
@@ -784,7 +818,8 @@
       "namespace": "D2Client::UI::SpellSel",
       "calledFunctions": [
         "SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0"
-      ]
+      ],
+      "dh": "e6ce1e6e"
     },
     {
       "name": "SPELLSEL_ClearWaitingForSkillFlag",
@@ -798,7 +833,8 @@
       "namespace": "D2Client::UI::SpellSel",
       "calledFunctions": [
         "SPELLSEL_ClearWaitingForSkillFlag"
-      ]
+      ],
+      "dh": "5db052f6"
     },
     {
       "name": "SPELLSEL_IsWaitingForSkill",
@@ -817,7 +853,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3f74e476"
     },
     {
       "name": "ARCHIVE_LoadSpellsClassSkilltree",
@@ -839,7 +876,8 @@
       "usedTypes": [
         "DC6",
         "int32_t"
-      ]
+      ],
+      "dh": "944241c1"
     },
     {
       "name": "SPELLSEL_FreeSkilltreeGraphic",
@@ -854,7 +892,8 @@
       "calledFunctions": [
         "SPELLSEL_FreeSkilltreeGraphic",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "c3b16c94"
     },
     {
       "name": "SPELLSEL_GetSkillTreeRowOffset",
@@ -871,7 +910,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4890f4c6"
     },
     {
       "name": "SPELLSEL_GetSkillTreeColumnOffset",
@@ -888,7 +928,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1c2d3588"
     },
     {
       "name": "SPELLSEL_DrawTabHeader",
@@ -907,7 +948,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b2e5ddd5"
     },
     {
       "name": "SPELLSEL_DrawSkilltreeBackground",
@@ -928,7 +970,8 @@
         "D2GfxDataStrc",
         "DC6",
         "int32_t"
-      ]
+      ],
+      "dh": "cb769cbb"
     },
     {
       "name": "DRAW_UI_SkillsWindow_II",
@@ -949,7 +992,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "eae47fca"
     },
     {
       "name": "thunk_D2GFX_GetColorFromPalette_C",
@@ -964,7 +1008,8 @@
       "calledFunctions": [
         "thunk_D2GFX_GetColorFromPalette_C",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "1b83e90d"
     },
     {
       "name": "SPELLSEL_DrawTabHighlight",
@@ -989,7 +1034,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "310696d4"
     },
     {
       "name": "SKILLTREE_DrawBackground",
@@ -1009,7 +1055,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "a52cedce"
     },
     {
       "name": "SKILLTREE_IsMouseOnSkillNode",
@@ -1028,7 +1075,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d5cc37a0"
     },
     {
       "name": "SKILLTREE_RenderSkillTree",
@@ -1051,7 +1099,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "ca5f4b76"
     },
     {
       "name": "Unreferenced_004ab7b0",
@@ -1066,7 +1115,8 @@
       "calledFunctions": [
         "Unreferenced_004ab7b0",
         "GetTickCount"
-      ]
+      ],
+      "dh": "be52098e"
     },
     {
       "name": "INPUT_SkillTreeLeftClick",
@@ -1105,7 +1155,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34184310"
     },
     {
       "name": "ClickOnScreenSkillWindow",
@@ -1149,7 +1200,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eecf23f9"
     },
     {
       "name": "SKILLTREE_FreeResources",
@@ -1171,7 +1223,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e70026a1"
     },
     {
       "name": "SKILLTREE_DrawSkillNode",
@@ -1214,7 +1267,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b1b6b547"
     },
     {
       "name": "DRAW_UI_SkillSkillsWithAvailableSkills",
@@ -1252,7 +1306,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b523788"
     },
     {
       "name": "SKILLTREE_DrawAllSkillNodes",
@@ -1284,7 +1339,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8aef68f4"
     },
     {
       "name": "DRAW_UI_SkillWindow",
@@ -1312,7 +1368,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f91e647a"
     }
   ]
 }

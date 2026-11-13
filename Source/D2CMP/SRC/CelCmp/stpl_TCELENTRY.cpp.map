@@ -22,7 +22,8 @@
         "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "cae2f5aa"
     },
     {
       "name": "DeleteNode",
@@ -45,7 +46,8 @@
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b5af484"
     }
   ]
 }

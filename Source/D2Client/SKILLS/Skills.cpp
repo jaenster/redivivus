@@ -1136,7 +1136,7 @@ BOOL __fastcall Skills_CltDoFunc_Bow_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSk
 
 // Client-side skill cast initiator for a unit. Validates the skill row, performs the line-of-sight check (mapping SkillsTxt.lineofsight 1-5 to the appropriate collision mask), and SKILL_CanTargetDeadMonster gating. Ensures the skill object exists on the unit (allocates/adds it, clamping to max level and applying a skill-level bonus for overflow) and sets it as the unit's current skill. Cancels casting in town for non-town-allowed skills (HandleMessage 7 + plays the no-cast sound). Sets the unit's anim mode (or attack animation for melee Attack), runs the per-skill client-start function (cltstfunc), plays start/cast/class sounds, adds the cast overlay, and assigns missile light. Returns the skill result code (SKILL_Attack signals abort/no-op). __fastcall (EAX=eSkill, ECX=pUnit).
 // @sourcefile .\SKILLS\Skills.cpp
-static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel) {
+static int32_t __stdcall SKILLS_CastSkillClient(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOwnerGUID, uint32_t nSkillLevel) {
     // Static local variables (originally global data)
     static int SKILLCLTSTFUNCS_SIZE = 0x46; D2_STATIC_GUARD(SKILLCLTSTFUNCS_SIZE, "D2Client::SKILLS::Skills::SKILLS_CastSkillClient::SKILLCLTSTFUNCS_SIZE");
     static D2SkillCltStFunc SKILLCLTSTFUNCS[70] = {
@@ -1441,12 +1441,12 @@ static int32_t __stdcall SKILLS_CastSkillClient(eD2Skills eSkill, D2UnitStrc * p
 }
 
 // Extern entry for hand-written callers: SKILLS_CastSkillClient itself keeps its unit's linkage.
-int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel) {
-    return ::D2Client::SKILLS::Skills::SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, nSkillLevel);
+int32_t __stdcall SKILLS_CastSkillClient_Extern(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOwnerGUID, uint32_t nSkillLevel) {
+    return ::D2Client::SKILLS::Skills::SKILLS_CastSkillClient(pUnit, eSkill, nOwnerGUID, nSkillLevel);
 }
 
 int32_t __fastcall SKILLS_CastSkillClientArgsReversed(D2UnitStrc * pUnit, eD2Skills eSkill, uint32_t nSkillLevel, int32_t nOwnerGUID) {
-    int32_t nResult = SKILLS_CastSkillClient(eSkill, pUnit, nOwnerGUID, nSkillLevel);
+    int32_t nResult = SKILLS_CastSkillClient(pUnit, eSkill, nOwnerGUID, nSkillLevel);
     return nResult;
 }
 
@@ -1844,7 +1844,7 @@ int32_t __fastcall SKILLS_CltStartSkillCast(D2UnitStrc * pUnit, int * pnCastArgs
       int32_t nCastResult;
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pFoundTarget);
       UNIT::CUnit::FaceTarget(pUnit, 0);
-      nCastResult = SKILLS_CastSkillClient(*pnCastArgs, pUnit, pnCastArgs[1], pnCastArgs[4]);
+      nCastResult = SKILLS_CastSkillClient(pUnit, *pnCastArgs, pnCastArgs[1], pnCastArgs[4]);
       return nCastResult;
     }
 
@@ -1876,7 +1876,7 @@ int32_t __fastcall SKILL_ProcessCastFromPacket(D2UnitStrc * pUnit, int * pnCastA
     }
 
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, nullptr);
-    nTargetY = SKILLS_CastSkillClient(*pnCastArgs, pUnit, pnCastArgs[1], pnCastArgs[4]);
+    nTargetY = SKILLS_CastSkillClient(pUnit, *pnCastArgs, pnCastArgs[1], pnCastArgs[4]);
     return nTargetY;
 }
 

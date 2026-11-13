@@ -19,7 +19,8 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "RENDERER_GLIDE_LoadLibrarySymbols_HaltTail"
-      ]
+      ],
+      "dh": "857a6a25"
     },
     {
       "name": "RENDERER_GLIDE_LoadLibrarySymbols_HaltTail",
@@ -36,7 +37,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "07d15a8e"
     },
     {
       "name": "Initialize",
@@ -51,7 +53,8 @@
       "calledFunctions": [
         "Initialize",
         "RENDERER_GLIDE_LoadLibrarySymbols"
-      ]
+      ],
+      "dh": "d7c68735"
     },
     {
       "name": "ClearCaches",
@@ -68,7 +71,8 @@
         "GLFLOOR_Destroy",
         "GLSUBTILE_Destroy",
         "GLTEXCACHE_Destroy"
-      ]
+      ],
+      "dh": "bff96495"
     },
     {
       "name": "CheckCutScene",
@@ -82,7 +86,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "CheckCutScene"
-      ]
+      ],
+      "dh": "7bd595ba"
     },
     {
       "name": "BeginScene",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2f25763a"
     },
     {
       "name": "UpdateScaleFactor",
@@ -120,7 +126,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5104fcf4"
     },
     {
       "name": "SetGamma",
@@ -143,7 +150,8 @@
         "FxU",
         "FxU32",
         "int32_t"
-      ]
+      ],
+      "dh": "9fecc27f"
     },
     {
       "name": "CheckGamma",
@@ -160,7 +168,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e96e8e58"
     },
     {
       "name": "EndScene1",
@@ -180,7 +189,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2dba11b8"
     },
     {
       "name": "EndScene2",
@@ -194,7 +204,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "EndScene2"
-      ]
+      ],
+      "dh": "e32b2758"
     },
     {
       "name": "GetBackBuffer",
@@ -214,7 +225,8 @@
         "GrLfbInfo_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "03719099"
     },
     {
       "name": "GetScreenSize",
@@ -231,7 +243,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6222fe47"
     },
     {
       "name": "SetPalette",
@@ -249,7 +262,8 @@
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
-      ]
+      ],
+      "dh": "28ad8a13"
     },
     {
       "name": "RENDERER_GLIDE_ScalePaletteValue",
@@ -266,7 +280,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "15e6d010"
     },
     {
       "name": "SetPaletteTable",
@@ -283,7 +298,8 @@
       ],
       "usedTypes": [
         "BYTE *"
-      ]
+      ],
+      "dh": "bf714bf4"
     },
     {
       "name": "ActivateWindow",
@@ -297,7 +313,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "ActivateWindow"
-      ]
+      ],
+      "dh": "f33b5aa4"
     },
     {
       "name": "SetOption",
@@ -314,7 +331,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e638bd2c"
     },
     {
       "name": "RENDERER_GLIDE_SetTextureMode",
@@ -331,7 +349,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b27ca819"
     },
     {
       "name": "RENDERER_GLIDE_SetColorCombine",
@@ -348,7 +367,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2f5d33a4"
     },
     {
       "name": "RENDERER_GLIDE_SetAlphaBlendMode",
@@ -365,7 +385,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "37510658"
     },
     {
       "name": "RENDERER_GLIDE_SetTextureFiltering",
@@ -382,7 +403,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9608618a"
     },
     {
       "name": "GetRenderStatistics",
@@ -396,7 +418,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "GetRenderStatistics"
-      ]
+      ],
+      "dh": "2435040e"
     },
     {
       "name": "RENDERER_GLIDE_IsPerspectiveMode",
@@ -410,7 +433,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "RENDERER_GLIDE_IsPerspectiveMode"
-      ]
+      ],
+      "dh": "caa86a58"
     },
     {
       "name": "D2WINPAL_SetGammaRamp_Unref_00509660",
@@ -424,7 +448,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "D2WINPAL_SetGammaRamp_Unref_00509660"
-      ]
+      ],
+      "dh": "a94a99ef"
     },
     {
       "name": "RENDERER_GLIDE_InitTextureMemory",
@@ -451,7 +476,8 @@
         "FxU",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ff636d4"
     },
     {
       "name": "Unreferenced_00509a70",
@@ -465,7 +491,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "Unreferenced_00509a70"
-      ]
+      ],
+      "dh": "c56a2b20"
     },
     {
       "name": "RENDERER_GLIDE_DestroyWindow",
@@ -488,7 +515,8 @@
       ],
       "usedTypes": [
         "FxBool"
-      ]
+      ],
+      "dh": "d3060c2d"
     },
     {
       "name": "PlayCutScene",
@@ -506,7 +534,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8d3f2b92"
     },
     {
       "name": "RENDERER_GLIDE_InitWindow",
@@ -533,7 +562,8 @@
         "GrScreenRefresh_t",
         "GrScreenResolution_t",
         "int32_t"
-      ]
+      ],
+      "dh": "4aad1bf6"
     },
     {
       "name": "Release",
@@ -553,7 +583,8 @@
         "RENDERER_GLIDE_FreePerspectiveLUT",
         "RENDERER_GLIDE_FreeLightingTable",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "3aac703d"
     },
     {
       "name": "CreateWindow",
@@ -571,7 +602,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e712b639"
     },
     {
       "name": "EndCutScene",
@@ -593,7 +625,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "dc415825"
     },
     {
       "name": "ResizeWindow",
@@ -609,7 +642,8 @@
         "ResizeWindow",
         "RENDERER_GLIDE_DestroyWindow",
         "RENDERER_GLIDE_InitWindow"
-      ]
+      ],
+      "dh": "a984f0f7"
     },
     {
       "name": "thunk_Release",
@@ -634,7 +668,8 @@
         "BeginCutScene",
         "ResizeWindow",
         "SetGamma"
-      ]
+      ],
+      "dh": "55f46ba0"
     },
     {
       "name": "InitPerspective",
@@ -666,7 +701,8 @@
         "D2GfxHelperStrc",
         "D2GfxSettingsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "30840a11"
     },
     {
       "name": "RENDERER_GLIDE_FreeSpriteBuffers",
@@ -681,7 +717,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_FreeSpriteBuffers",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "0a9512b4"
     },
     {
       "name": "GLIDE_PixelDataFreeCallback_ClearCacheNodes",
@@ -695,7 +732,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "GLIDE_PixelDataFreeCallback_ClearCacheNodes"
-      ]
+      ],
+      "dh": "7ea1ea29"
     },
     {
       "name": "RENDERER_GLIDE_GetSpriteMetadata",
@@ -722,7 +760,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bc2c1edc"
     },
     {
       "name": "RENDERER_GLIDE_CalculateTextureSize",
@@ -741,7 +780,8 @@
       "usedTypes": [
         "GlideTexInfoStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6fda6ac"
     },
     {
       "name": "RENDERER_GLIDE_UploadTextureToCache",
@@ -770,7 +810,8 @@
         "GrTexInfo",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "80572d06"
     },
     {
       "name": "RENDERER_GLIDE_DrawShadowQuad",
@@ -789,7 +830,8 @@
       "usedTypes": [
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2aedee9a"
     },
     {
       "name": "RENDERER_GLIDE_DrawPalettedQuad",
@@ -813,7 +855,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fb78862a"
     },
     {
       "name": "RENDERER_GLIDE_SetDrawMode",
@@ -831,7 +874,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "71cfcac6"
     },
     {
       "name": "DrawPerspectiveImage",
@@ -859,7 +903,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4d5a38ba"
     },
     {
       "name": "DrawImage",
@@ -883,7 +928,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "766c31f8"
     },
     {
       "name": "DrawShiftedImage",
@@ -907,7 +953,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "803c1615"
     },
     {
       "name": "DrawVerticalCropImage",
@@ -932,7 +979,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f93a2e8a"
     },
     {
       "name": "RENDERER_GLIDE_CalculateClipRect",
@@ -955,7 +1003,8 @@
         "GlideTexInfoStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d448a9a0"
     },
     {
       "name": "DrawClippedImage",
@@ -982,7 +1031,8 @@
         "D2RenderClipOutStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f315a6f4"
     },
     {
       "name": "DrawShadow",
@@ -1009,7 +1059,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eb3f2f7e"
     },
     {
       "name": "DrawImageFast",
@@ -1033,7 +1084,8 @@
         "D2GfxDataStrc",
         "GlideTexInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "de7fbf0b"
     },
     {
       "name": "DebugFillBackBuffer",
@@ -1050,7 +1102,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "35ac9aba"
     },
     {
       "name": "RENDERER_GLIDE_InitSpriteCache",
@@ -1073,7 +1126,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ac9f3923"
     },
     {
       "name": "RENDERER_GLIDE_InitDebugFont",
@@ -1095,7 +1149,8 @@
         "GrChipID_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba934e62"
     },
     {
       "name": "RENDERER_GLIDE_GenerateDebugFont",
@@ -1121,7 +1176,8 @@
         "HFONT",
         "int32_t",
         "tagRECT"
-      ]
+      ],
+      "dh": "91a8843f"
     },
     {
       "name": "RENDERER_GLIDE_FreeDebugFont",
@@ -1136,7 +1192,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_FreeDebugFont",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "12dcdf7c"
     },
     {
       "name": "RENDERER_GLIDE_DrawDebugChar",
@@ -1154,7 +1211,8 @@
       "usedTypes": [
         "LPINT",
         "int32_t"
-      ]
+      ],
+      "dh": "7de072b4"
     },
     {
       "name": "DrawString",
@@ -1178,7 +1236,8 @@
         "LPINT",
         "int32_t",
         "va_list"
-      ]
+      ],
+      "dh": "230f2c29"
     },
     {
       "name": "RENDERER_GLIDE_DrawLightRadialPoints",
@@ -1197,7 +1256,8 @@
         "D2GlideVertexStrc",
         "GrColor_t",
         "int32_t"
-      ]
+      ],
+      "dh": "6bdad0e1"
     },
     {
       "name": "RENDERER_GLIDE_DrawLightGradient",
@@ -1215,7 +1275,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "56e6fe6a"
     },
     {
       "name": "RENDERER_GLIDE_DrawLightMap",
@@ -1234,7 +1295,8 @@
       "usedTypes": [
         "GrColor_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b367b17f"
     },
     {
       "name": "DrawLight",
@@ -1253,7 +1315,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d5717bcc"
     },
     {
       "name": "RENDERER_GLIDE_AreBlendedShadowsEnabled",
@@ -1267,7 +1330,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "RENDERER_GLIDE_AreBlendedShadowsEnabled"
-      ]
+      ],
+      "dh": "dbcde2e1"
     },
     {
       "name": "DrawSolidRectEx",
@@ -1293,7 +1357,8 @@
         "GrColor_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "892095b5"
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1318,7 +1383,8 @@
         "D2GlideVertexStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "203b97fe"
     },
     {
       "name": "DrawLine",
@@ -1340,7 +1406,8 @@
         "D2GlideVertexStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "945a861e"
     },
     {
       "name": "DrawRect",
@@ -1363,7 +1430,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3fe9c0e"
     },
     {
       "name": "DrawRectEx",
@@ -1386,7 +1454,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "849c9bd1"
     },
     {
       "name": "DrawSolidRect",
@@ -1408,7 +1477,8 @@
       "usedTypes": [
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "369aec90"
     },
     {
       "name": "DrawSolidSquare",
@@ -1429,7 +1499,8 @@
         "int32_t",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2b76916"
     },
     {
       "name": "ClearScreen",
@@ -1443,7 +1514,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "ClearScreen"
-      ]
+      ],
+      "dh": "2c3f4984"
     },
     {
       "name": "RENDERER_GLIDE_CalculateScreenBounds",
@@ -1464,7 +1536,8 @@
       "usedTypes": [
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "b846c735"
     },
     {
       "name": "RENDERER_GLIDE_InitPerspectiveTables",
@@ -1481,7 +1554,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e3becf15"
     },
     {
       "name": "RENDERER_GLIDE_DrawShadowTileSimple",
@@ -1503,7 +1577,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5a730b9a"
     },
     {
       "name": "RENDERER_GLIDE_DrawShadowTilePerspective",
@@ -1528,7 +1603,8 @@
         "RECT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "72b5dc94"
     },
     {
       "name": "DrawShadowTile",
@@ -1554,7 +1630,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8507282d"
     },
     {
       "name": "RENDERER_GLIDE_DrawWallTileSimple",
@@ -1575,7 +1652,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3eb4750c"
     },
     {
       "name": "RENDERER_GLIDE_DrawWallTilePerspective",
@@ -1605,7 +1683,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e4ef8699"
     },
     {
       "name": "RENDERER_GLIDE_DrawTransparentWallTile",
@@ -1632,7 +1711,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8338b630"
     },
     {
       "name": "DrawTransWallTile",
@@ -1652,7 +1732,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3493ceb6"
     },
     {
       "name": "DrawWallTile",
@@ -1678,7 +1759,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "13d742ca"
     },
     {
       "name": "RENDERER_GLIDE_InitGroundTileVertices",
@@ -1696,7 +1778,8 @@
       "usedTypes": [
         "D2GlideVertexStrc",
         "void *"
-      ]
+      ],
+      "dh": "5351edce"
     },
     {
       "name": "DrawGroundTile",
@@ -1723,7 +1806,8 @@
         "int32_t",
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "038e524f"
     },
     {
       "name": "RENDERER_GLIDE_AllocLightingTable",
@@ -1738,7 +1822,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_AllocLightingTable",
         "AllocClientMemory"
-      ]
+      ],
+      "dh": "25c77e93"
     },
     {
       "name": "RENDERER_GLIDE_FreeLightingTable",
@@ -1753,7 +1838,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_FreeLightingTable",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "d0d759a2"
     },
     {
       "name": "RENDERER_GLIDE_BuildLightingTable",
@@ -1767,7 +1853,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "RENDERER_GLIDE_BuildLightingTable"
-      ]
+      ],
+      "dh": "5442ca9a"
     },
     {
       "name": "SetGlobalLight",
@@ -1781,7 +1868,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "SetGlobalLight"
-      ]
+      ],
+      "dh": "4f745233"
     },
     {
       "name": "RENDERER_GLIDE_ApplyShadowLighting",
@@ -1799,7 +1887,8 @@
       "usedTypes": [
         "D2GlideVertexStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "fa946143"
     },
     {
       "name": "RENDERER_GLIDE_ApplyColorLighting",
@@ -1817,7 +1906,8 @@
       "usedTypes": [
         "D2GlideVertexStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d55ba618"
     },
     {
       "name": "RENDERER_GLIDE_AllocPerspectiveLUT",
@@ -1832,7 +1922,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_AllocPerspectiveLUT",
         "AllocClientMemory"
-      ]
+      ],
+      "dh": "f649637e"
     },
     {
       "name": "RENDERER_GLIDE_FreePerspectiveLUT",
@@ -1847,7 +1938,8 @@
       "calledFunctions": [
         "RENDERER_GLIDE_FreePerspectiveLUT",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "256e6f8c"
     },
     {
       "name": "RENDERER_GLIDE_BuildPerspectiveLUT",
@@ -1864,7 +1956,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9a576427"
     },
     {
       "name": "RENDERER_GLIDE_IsPerspectiveEnabled",
@@ -1878,7 +1971,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "RENDERER_GLIDE_IsPerspectiveEnabled"
-      ]
+      ],
+      "dh": "1757ef6e"
     },
     {
       "name": "SetPerspectiveScale",
@@ -1895,7 +1989,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "029d0a6f"
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -1912,7 +2007,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fa91c2cc"
     },
     {
       "name": "PerspectiveScalePosition",
@@ -1929,7 +2025,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9a561afc"
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -1943,7 +2040,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor"
-      ]
+      ],
+      "dh": "cfbdcd42"
     },
     {
       "name": "GLSMACK_AllocBuffers",
@@ -1958,7 +2056,8 @@
       "calledFunctions": [
         "GLSMACK_AllocBuffers",
         "AllocClientMemory"
-      ]
+      ],
+      "dh": "4228ae02"
     },
     {
       "name": "GLSMACK_FreeBuffers",
@@ -1973,7 +2072,8 @@
       "calledFunctions": [
         "GLSMACK_FreeBuffers",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "1d45befa"
     },
     {
       "name": "GLSMACK_AllocTextureMemory",
@@ -1991,7 +2091,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba5e27e4"
     },
     {
       "name": "GLSMACK_DestroyNoop",
@@ -2005,7 +2106,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "GLSMACK_DestroyNoop"
-      ]
+      ],
+      "dh": "9aa80ede"
     },
     {
       "name": "CloseSmacker",
@@ -2022,7 +2124,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "705219f6"
     },
     {
       "name": "GLSMACK_ConvertPaletteToRGB565",
@@ -2039,7 +2142,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "2d5e0e01"
     },
     {
       "name": "GLSMACK_UploadTextures",
@@ -2053,7 +2157,8 @@
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
         "GLSMACK_UploadTextures"
-      ]
+      ],
+      "dh": "73cde900"
     },
     {
       "name": "GLSMACK_DrawSmackerQuad",
@@ -2075,7 +2180,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c648d90"
     },
     {
       "name": "DecodeSmacker",
@@ -2105,7 +2211,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "221c6a0b"
     },
     {
       "name": "PlayerSmacker",
@@ -2126,7 +2233,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "eea75d39"
     }
   ]
 }

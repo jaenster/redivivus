@@ -32,7 +32,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4b56598d"
     },
     {
       "name": "Skills_CltDoFunc_Pal_ChargePathMissile",
@@ -60,7 +61,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "3bef2d18"
     },
     {
       "name": "Skills_CltDoFunc_Pal_FistOfHeavens",
@@ -89,7 +91,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "391acbbe"
     },
     {
       "name": "Skills_CltDoFunc_Pal_RandomRadiusMissileField",
@@ -125,7 +128,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3241a4a"
     },
     {
       "name": "SKILL_DrawChargeTrail",
@@ -158,7 +162,8 @@
         "DRAWMODE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "72312591"
     },
     {
       "name": "Skills_CltStFunc_SetupHolyChargeMovement",
@@ -209,7 +214,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3cda3e7"
     },
     {
       "name": "SKILLS_FindClosestTargetExcludingGUID",
@@ -227,7 +233,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c5484940"
     },
     {
       "name": "SKILL_GetSequenceEventFrame",
@@ -248,7 +255,8 @@
         "D2MonSeqTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7a2ac404"
     },
     {
       "name": "Skills_CltDoFunc_Pal_Charge",
@@ -293,7 +301,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "935cf6ae"
     },
     {
       "name": "SKILL_StopAndClearUninterruptable",
@@ -317,7 +326,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b7f0449"
     },
     {
       "name": "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
@@ -339,7 +349,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a67e41db"
     },
     {
       "name": "SKILL_ExecuteItemCast",
@@ -375,7 +386,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2e8bd1a"
     },
     {
       "name": "SKILL_ExecuteItemCastOnUnit",
@@ -396,7 +408,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "83859675"
     },
     {
       "name": "SKILL_ExecuteItemCastAtCoords",
@@ -417,7 +430,8 @@
         "eD2Skills",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "0199568e"
     }
   ]
 }

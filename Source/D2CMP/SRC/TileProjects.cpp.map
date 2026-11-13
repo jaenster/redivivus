@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2TileProjectStrc"
-      ]
+      ],
+      "dh": "73019577"
     },
     {
       "name": "TILEPROJECT_FindByFilename",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "D2TileProjectStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "71d6b9b7"
     },
     {
       "name": "TILEPROJECT_GetProjectId",
@@ -57,7 +59,8 @@
       ],
       "usedTypes": [
         "D2TileProjectStrc"
-      ]
+      ],
+      "dh": "a8c7840b"
     },
     {
       "name": "Alloc",
@@ -91,7 +94,8 @@
         "D2TileLibraryHeaderStrc",
         "D2TileProjectStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cc18d3f5"
     }
   ]
 }

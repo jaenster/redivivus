@@ -16,7 +16,8 @@
       "calledFunctions": [
         "D2WINPOPUP_Destroy",
         "FORMS_DestroyControl"
-      ]
+      ],
+      "dh": "7f9cc503"
     },
     {
       "name": "D2WINPOPUP_IsActiveAndVisible",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "508b1b8f"
     },
     {
       "name": "D2WINPOPUP_AddMessage",
@@ -60,7 +62,8 @@
         "D2WinPopup",
         "D2WinPopupEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "087f6f4d"
     },
     {
       "name": "D2WINPOPUP_HandleClick",
@@ -82,7 +85,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "pfnVoidNoArgCallback"
-      ]
+      ],
+      "dh": "1b372b02"
     },
     {
       "name": "DrawEx",
@@ -103,7 +107,8 @@
       "usedTypes": [
         "D2WinPopup",
         "int32_t"
-      ]
+      ],
+      "dh": "a8bbfb21"
     },
     {
       "name": "Draw",
@@ -131,7 +136,8 @@
         "D2WinPopupEntry",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "9e6e59bf"
     },
     {
       "name": "D2WinPopup",
@@ -152,7 +158,8 @@
       ],
       "usedTypes": [
         "D2WinPopup"
-      ]
+      ],
+      "dh": "b57371ef"
     }
   ]
 }

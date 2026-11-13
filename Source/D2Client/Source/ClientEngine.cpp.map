@@ -25,7 +25,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1db2af75"
     },
     {
       "name": "DenOfEvilSpecific",
@@ -54,7 +55,8 @@
         "eCollisionFlags",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "8c23796f"
     },
     {
       "name": "CLIENT_QuestEvent_DenOfEvilLightReset",
@@ -68,7 +70,8 @@
       "namespace": "D2Client::Source::ClientEngine",
       "calledFunctions": [
         "CLIENT_QuestEvent_DenOfEvilLightReset"
-      ]
+      ],
+      "dh": "593d9e45"
     },
     {
       "name": "ClientLight_ApplyDenOfEvilLighting",
@@ -89,7 +92,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "3808f30c"
     },
     {
       "name": "CLIENT_QuestEvent_PlaceHoradricStaff",
@@ -121,7 +125,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "05d0b62e"
     },
     {
       "name": "CLIENT_QuestEvent_RestoreTaintedSun",
@@ -147,7 +152,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "402c0db7"
     },
     {
       "name": "CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary",
@@ -174,7 +180,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "beb7a601"
     },
     {
       "name": "CLIENT_QuestEvent_HoradricForge",
@@ -203,7 +210,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f635dfa"
     },
     {
       "name": "CLIENT_QuestEvent_StartGameEndCountdown",
@@ -221,7 +229,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "46839382"
     },
     {
       "name": "CLIENT_SpawnOverseerControlMissile",
@@ -244,7 +253,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "39c0b25c"
     },
     {
       "name": "CLIENT_QuestEvent_FreeAnyaFromIce",
@@ -271,7 +281,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "dbad215c"
     },
     {
       "name": "CLIENT_QuestEvent_NihlathakTransformation",
@@ -296,7 +307,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eb4bb039"
     },
     {
       "name": "CLIENT_QuestEvent_WorldstoneShake",
@@ -310,7 +322,8 @@
       "namespace": "D2Client::Source::ClientEngine",
       "calledFunctions": [
         "CLIENT_QuestEvent_WorldstoneShake"
-      ]
+      ],
+      "dh": "03c0cd0e"
     },
     {
       "name": "CLIENT_SpawnAncientDeathMissile",
@@ -338,7 +351,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "27fc8f00"
     },
     {
       "name": "HandleIncoming0x89",
@@ -358,7 +372,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0471fc73"
     },
     {
       "name": "CLIENT_BossDeath_BloodRaven",
@@ -379,7 +394,8 @@
       "usedTypes": [
         "D2SkillArgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9bdb7546"
     },
     {
       "name": "CLIENT_SpawnTowerMistEffect",
@@ -408,7 +424,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7a887af6"
     },
     {
       "name": "CLIENT_SpawnOrbMistEffect",
@@ -437,7 +454,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d999a864"
     },
     {
       "name": "CLIENT_BossDeath_Mephisto",
@@ -459,7 +477,8 @@
       "usedTypes": [
         "D2SkillArgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6788f125"
     },
     {
       "name": "CLIENT_BossDeath_Andariel",
@@ -479,7 +498,8 @@
       "usedTypes": [
         "D2SkillArgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bfc77dca"
     },
     {
       "name": "CLIENT_BossDeath_Radament",
@@ -502,7 +522,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c8e511f6"
     },
     {
       "name": "CLIENT_BossDeath_SandMaggotQueen",
@@ -525,7 +546,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "0b50b6d4"
     },
     {
       "name": "CLIENT_BossDeath_Duriel",
@@ -548,7 +570,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7291dfff"
     },
     {
       "name": "CLIENT_BossDeath_Izual",
@@ -569,7 +592,8 @@
       "usedTypes": [
         "D2SkillArgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c96577f0"
     },
     {
       "name": "CLIENT_StoreUnitGuidForQuestTracking",
@@ -586,7 +610,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e1218de4"
     },
     {
       "name": "CLIENT_BossDeath_Baal",
@@ -612,7 +637,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7e03214e"
     },
     {
       "name": "CLIENT_GetDenOfEvilLightIntensity",
@@ -632,7 +658,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "647b1b0d"
     },
     {
       "name": "ROOM_GetLevelLightColor",
@@ -652,7 +679,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "f5f20e07"
     },
     {
       "name": "DenOfEvilLight",
@@ -676,7 +704,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "97a3f1ca"
     },
     {
       "name": "ClientLight_UpdateLightTimers",
@@ -692,7 +721,8 @@
         "ClientLight_UpdateLightTimers",
         "ClientLight_UpdateRoomLightPulse",
         "ClientLight_ApplyDenOfEvilLighting"
-      ]
+      ],
+      "dh": "0896a175"
     },
     {
       "name": "CLIENT_CheckWorldstoneShake",
@@ -714,7 +744,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "731f71a5"
     },
     {
       "name": "CLIENT_InitializeQuestStateGlobals",
@@ -729,7 +760,8 @@
       "calledFunctions": [
         "CLIENT_InitializeQuestStateGlobals",
         "memset"
-      ]
+      ],
+      "dh": "725b308f"
     },
     {
       "name": "CLIENT_SetQuestGameEndTimer",
@@ -748,7 +780,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95bc95a6"
     },
     {
       "name": "CLIENT_SpawnWorldstoneShakeParticle",
@@ -778,7 +811,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a1d7ea19"
     },
     {
       "name": "DRAW_Overlay_SecondsLeftToGame",
@@ -804,7 +838,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9ca60b9a"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame",
@@ -839,7 +874,8 @@
         "eD2CollisionUnitSize",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce98cb0a"
     },
     {
       "name": "CLIENT_SpawnMonstersAroundUnit",
@@ -867,7 +903,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "e137c4c6"
     },
     {
       "name": "DRLGROOM_SpawnRandomMonsters",
@@ -893,7 +930,8 @@
         "D2SeedStrc",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "61217036"
     },
     {
       "name": "CLIENT_ForEachUnitInAdjacentRooms",
@@ -918,7 +956,8 @@
         "fnRoomUnitScanCallback",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56f1af0b"
     },
     {
       "name": "CLIENT_FindClosestDeadUnitCallback",
@@ -939,7 +978,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "e6f4a550"
     },
     {
       "name": "CLIENT_FindNearbyCorpseCallback",
@@ -964,7 +1004,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "66466a69"
     },
     {
       "name": "CLIENT_RegisterActiveUnitInSlot",
@@ -982,7 +1023,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "3a51ba45"
     },
     {
       "name": "CLIENT_UnregisterActiveUnitFromSlot",
@@ -1000,7 +1042,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "d694bfea"
     },
     {
       "name": "CLIENT_FindClosestTrackedUnit",
@@ -1020,7 +1063,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "4e2ee65f"
     },
     {
       "name": "CLIENT_SendMonsterMoveToUnitMessage",
@@ -1044,7 +1088,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d254c92"
     },
     {
       "name": "MONSTER_TryMoveTowardTarget",
@@ -1077,7 +1122,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "53de4a02"
     },
     {
       "name": "CLIENT_SendMonsterMoveToRandomNearbyPosMessage",
@@ -1106,7 +1152,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "01de70b7"
     },
     {
       "name": "CLIENT_SendMonsterMoveToTargetMessage",
@@ -1130,7 +1177,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "68713314"
     },
     {
       "name": "CLIENT_SendMonsterAttackMessage",
@@ -1152,7 +1200,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "794f155d"
     },
     {
       "name": "CLIENT_SendMonsterWanderMessage",
@@ -1174,7 +1223,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "b6c47e35"
     },
     {
       "name": "CLIENT_SetMonsterAiTimer",
@@ -1193,7 +1243,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e4204570"
     },
     {
       "name": "CLIENT_CheckIfUnitPositionsMatch",
@@ -1214,7 +1265,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac2bb279"
     },
     {
       "name": "MONSTER_FindAndChaseNearestEnemy",
@@ -1240,7 +1292,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "53332426"
     },
     {
       "name": "CLIENT_MonsterAi_IdleWanderBehavior",
@@ -1261,7 +1314,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "18c45e43"
     },
     {
       "name": "CLIENT_MonsterIdleApproach",
@@ -1289,7 +1343,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "ffab7051"
     },
     {
       "name": "CLIENT_MonsterThinkBehavior",
@@ -1315,7 +1370,8 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "142af8ad"
     },
     {
       "name": "CLIENT_MonsterAi_CorpseSeekerBehavior",
@@ -1345,7 +1401,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "15be9f63"
     },
     {
       "name": "CLIENT_MonsterAi_BasicChaseBehavior",
@@ -1372,7 +1429,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d843d1be"
     },
     {
       "name": "CLIENT_MonsterSeekCorpse",
@@ -1406,7 +1464,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17b1e167"
     },
     {
       "name": "CLIENT_SpawnWorldstoneChipDebris",
@@ -1440,7 +1499,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c91ad6f6"
     },
     {
       "name": "MONSTER_ProcessPathCallback",
@@ -1468,7 +1528,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18e05982"
     },
     {
       "name": "CLIENT_ClearActiveUnitSlotArray",
@@ -1482,7 +1543,8 @@
       "namespace": "D2Client::Source::ClientEngine",
       "calledFunctions": [
         "CLIENT_ClearActiveUnitSlotArray"
-      ]
+      ],
+      "dh": "76727c0f"
     },
     {
       "name": "CLIENT_DispatchMonsterAiBehavior",
@@ -1515,7 +1577,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "06b0f3be"
     },
     {
       "name": "Unreferenced_0046d9c0",
@@ -1532,7 +1595,8 @@
       ],
       "usedTypes": [
         "D2OverlayTxt"
-      ]
+      ],
+      "dh": "882a6c94"
     },
     {
       "name": "CLIENT_GetEffectiveUnitType",
@@ -1553,7 +1617,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "aca61ae2"
     },
     {
       "name": "CLIENT_GetEffectiveAnimMode",
@@ -1574,7 +1639,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "99f875ff"
     },
     {
       "name": "CLIENT_GetEffectiveClassId",
@@ -1595,7 +1661,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7b4300b9"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690",
@@ -1610,7 +1677,8 @@
       "calledFunctions": [
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690",
         "RENDERER_TogglePerspective"
-      ]
+      ],
+      "dh": "07e6b2b1"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0",
@@ -1625,7 +1693,8 @@
       "calledFunctions": [
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0",
         "RENDERER_ToggleBlendedShadows"
-      ]
+      ],
+      "dh": "a7431c68"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0",
@@ -1640,7 +1709,8 @@
       "calledFunctions": [
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0",
         "D2GFX_ToggleLowQuality"
-      ]
+      ],
+      "dh": "965edc92"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940",
@@ -1655,7 +1725,8 @@
       "calledFunctions": [
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940",
         "WARDEN_FreeModuleLibraries"
-      ]
+      ],
+      "dh": "483b4774"
     },
     {
       "name": "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0",
@@ -1670,7 +1741,8 @@
       "calledFunctions": [
         "thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0",
         "WARDEN_FreeModuleLibraries"
-      ]
+      ],
+      "dh": "4b76cb8b"
     }
   ]
 }

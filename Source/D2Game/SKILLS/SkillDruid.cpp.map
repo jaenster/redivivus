@@ -30,7 +30,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a8bc733"
     },
     {
       "name": "Skills_SrvDoFunc_115_SummonPoisonCreeper",
@@ -60,7 +61,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "efae1891"
     },
     {
       "name": "SKILLDRUID_GetTransformGfx",
@@ -80,7 +82,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "f3fb0d8a"
     },
     {
       "name": "SKILLDRUID_OnShapeshiftExpire",
@@ -108,7 +111,8 @@
         "eD2Skills",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b849861"
     },
     {
       "name": "D2SetAurastatsFromSkills",
@@ -135,7 +139,8 @@
         "eD2Skills",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "b92b3ba9"
     },
     {
       "name": "D2SetPassiveStatsFromSkills",
@@ -162,7 +167,8 @@
         "eD2Skills",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "7267f2fd"
     },
     {
       "name": "Skills_SrvDoFunc_116_Werewolf",
@@ -199,7 +205,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "9cfc4c53"
     },
     {
       "name": "SKILLDRUID_CastMultiMissile",
@@ -228,7 +235,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "99bc5e1d"
     },
     {
       "name": "Skills_SrvDoFunc_117_Firestorm",
@@ -259,7 +267,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "129ec402"
     },
     {
       "name": "Skills_SrvDoFunc_118_Twister",
@@ -284,7 +293,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "eb99a9a7"
     },
     {
       "name": "Skills_SrvDoFunc_119_SummonDireWolf",
@@ -314,7 +324,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dee8982c"
     },
     {
       "name": "SKILLDRUID_CreateSummon",
@@ -343,7 +354,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bc036941"
     },
     {
       "name": "SKILLDRUID_SrvStFn56_FeralRageMaul",
@@ -374,7 +386,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6519100f"
     },
     {
       "name": "Skills_SrvDoFunc_120_FeralRage",
@@ -415,7 +428,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7a3c84f8"
     },
     {
       "name": "SKILLDRUID_SrvStFn57_Rabies",
@@ -447,7 +461,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd8577a0"
     },
     {
       "name": "SKILLDRUID_ApplyTimedAuraBuff",
@@ -479,7 +494,8 @@
         "eD2UnitType",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "e7f65db4"
     },
     {
       "name": "SKILLDRUID_GetSummonDamageBonus",
@@ -508,7 +524,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4a71e022"
     },
     {
       "name": "SKILLDRUID_CreateAuraMissile",
@@ -536,7 +553,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "3edd24dc"
     },
     {
       "name": "SKILLDRUID_ApplyAuraWithMissile",
@@ -558,7 +576,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3525d518"
     },
     {
       "name": "SKILLDRUID_SrvStFn58_FireClaws",
@@ -587,7 +606,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "abbccf5c"
     },
     {
       "name": "Skills_SrvDoFunc_122_Hunger",
@@ -618,7 +638,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ffd55439"
     },
     {
       "name": "Skills_SrvDoFunc_123_Volcano",
@@ -648,7 +669,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c19c077"
     },
     {
       "name": "Skills_SrvDoFunc_124_Armageddon",
@@ -689,7 +711,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7f60926"
     },
     {
       "name": "Skills_SrvDoFunc_145_Hurricane",
@@ -728,7 +751,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "cf45fd0a"
     },
     {
       "name": "Skills_SrvDoFunc_146_ArmageddonTick",
@@ -779,7 +803,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1b0621f1"
     },
     {
       "name": "SKILLDRUID_GetSummonHealthBonus",
@@ -796,7 +821,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "524abd42"
     },
     {
       "name": "ITEMEVENT_DruidSummonHpAura",
@@ -830,7 +856,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e5c91b5"
     },
     {
       "name": "SKILLDRUID_ApplyAccumulatedStateDamage",
@@ -865,7 +892,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d887a149"
     },
     {
       "name": "Skills_SrvDoFunc_121_Rabies",
@@ -897,7 +925,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5b8db53a"
     }
   ]
 }

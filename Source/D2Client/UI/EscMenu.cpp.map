@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "70fac574"
     },
     {
       "name": "UI_SLIDER_GetPositionFromValue",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a8022505"
     },
     {
       "name": "UI_SLIDER_ApplyMasterVolumeFromSlider",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8ae11678"
     },
     {
       "name": "UI_SLIDER_ApplyMasterVolume",
@@ -78,7 +81,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7d0432e5"
     },
     {
       "name": "UI_SLIDER_ApplyMusicVolumeFromSlider",
@@ -98,7 +102,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0aacaa2b"
     },
     {
       "name": "UI_SLIDER_ApplyMusicVolume",
@@ -119,7 +124,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e42114b9"
     },
     {
       "name": "ESCMENU_Init3DSoundItem",
@@ -138,7 +144,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "08cd6ce4"
     },
     {
       "name": "UI_SLIDER_ApplyPositionalBiasFromSlider",
@@ -158,7 +165,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f461c67e"
     },
     {
       "name": "UI_SLIDER_ApplyPositionalBias",
@@ -179,7 +187,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c39d66f8"
     },
     {
       "name": "ESCMENU_InitEaxSoundItem",
@@ -199,7 +208,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "42d51a7f"
     },
     {
       "name": "UI_SLIDER_ApplyNpcSpeech",
@@ -220,7 +230,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "c832de68"
     },
     {
       "name": "UI_SLIDER_LoadAndApplyNpcSpeech",
@@ -241,7 +252,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "54821210"
     },
     {
       "name": "UI_SLIDER_ApplyLightQuality",
@@ -262,7 +274,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0e51850c"
     },
     {
       "name": "UI_SLIDER_InitLightQuality",
@@ -283,7 +296,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "c1728086"
     },
     {
       "name": "UI_SLIDER_ApplyBlendedShadows",
@@ -303,7 +317,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "45e3977b"
     },
     {
       "name": "UI_SLIDER_InitBlendedShadows",
@@ -323,7 +338,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "fee9ca47"
     },
     {
       "name": "UI_SLIDER_ApplyResolution",
@@ -343,7 +359,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "60d38276"
     },
     {
       "name": "UI_SLIDER_LoadAndApplyResolution",
@@ -363,7 +380,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f1e10872"
     },
     {
       "name": "UI_SLIDER_ApplyPerspective",
@@ -384,7 +402,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "573f965b"
     },
     {
       "name": "UI_SLIDER_LoadAndApplyPerspective",
@@ -407,7 +426,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "163ef801"
     },
     {
       "name": "StoreGamma",
@@ -428,7 +448,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0dcd2aed"
     },
     {
       "name": "UI_SLIDER_InitGamma",
@@ -453,7 +474,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "46359ca8"
     },
     {
       "name": "UI_SLIDER_ApplyContrast",
@@ -475,7 +497,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "6605d1ab"
     },
     {
       "name": "UI_SLIDER_InitContrast",
@@ -502,7 +525,8 @@
         "D2UIMouseMsgStrc",
         "eD2RendererMode",
         "int32_t"
-      ]
+      ],
+      "dh": "90a0d931"
     },
     {
       "name": "UI_SLIDER_ApplyAutomapMode",
@@ -522,7 +546,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "3675e62f"
     },
     {
       "name": "UI_SLIDER_InitAutomapMode",
@@ -544,7 +569,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "05baf86b"
     },
     {
       "name": "UI_SLIDER_ApplyAutomapFade",
@@ -564,7 +590,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5509c89c"
     },
     {
       "name": "UI_SLIDER_InitAutomapFade",
@@ -587,7 +614,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ce153a3"
     },
     {
       "name": "UI_SLIDER_ApplyAutomapCenters",
@@ -606,7 +634,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "d45ed67e"
     },
     {
       "name": "ESCMENU_InitAutomapCenterItem",
@@ -626,7 +655,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "87ec0655"
     },
     {
       "name": "UI_SLIDER_ApplyAutomapParty",
@@ -645,7 +675,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "c5da0e49"
     },
     {
       "name": "ESCMENU_InitAutomapPartyItem",
@@ -664,7 +695,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "dbd43e2d"
     },
     {
       "name": "UI_SLIDER_InitAutomapParty",
@@ -685,7 +717,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2d005036"
     },
     {
       "name": "ESCMENU_GetItemIndexFromMouseY",
@@ -703,7 +736,8 @@
       "usedTypes": [
         "int32_t",
         "pfnEscMenuItemVisible"
-      ]
+      ],
+      "dh": "8495e1c0"
     },
     {
       "name": "Unreferenced_0047d5b0",
@@ -721,7 +755,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "61946e73"
     },
     {
       "name": "ESCMENU_ClickMenuItem",
@@ -740,7 +775,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "56c02a7b"
     },
     {
       "name": "ESCMENU_HandleSliderDrag",
@@ -760,7 +796,8 @@
       "usedTypes": [
         "int32_t",
         "pfnEscMenuItemAction"
-      ]
+      ],
+      "dh": "f0a8b0d8"
     },
     {
       "name": "INPUT_EscMenuMouseDown",
@@ -782,7 +819,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e25fbd3d"
     },
     {
       "name": "INPUT_EscMenuMouseUp",
@@ -804,7 +842,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "493951c8"
     },
     {
       "name": "INPUT_EscMenuNavigateNext",
@@ -824,7 +863,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "pfnEscMenuItemVisible"
-      ]
+      ],
+      "dh": "890c7ace"
     },
     {
       "name": "INPUT_EscMenuNavigatePrev",
@@ -844,7 +884,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "pfnEscMenuItemVisible"
-      ]
+      ],
+      "dh": "70382735"
     },
     {
       "name": "INPUT_EscMenuOptionDecrease",
@@ -865,7 +906,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8905a7c9"
     },
     {
       "name": "INPUT_EscMenuOptionIncrease",
@@ -886,7 +928,8 @@
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "62f2fa61"
     },
     {
       "name": "INPUT_EscMenuExecuteSelection",
@@ -905,7 +948,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "2798b4ce"
     },
     {
       "name": "ESCMENU_LoadLocalizedImages",
@@ -933,7 +977,8 @@
         "D2EscMenuItemStrc",
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ba0d01f"
     },
     {
       "name": "ESCMENU_LoadLocalizedImages_HaltTail",
@@ -950,7 +995,8 @@
         "ESCMENU_LoadLocalizedImages_HaltTail",
         "GetInstructionPointer",
         "exit"
-      ]
+      ],
+      "dh": "c21d85b7"
     },
     {
       "name": "ESCMENU_Initialize",
@@ -981,7 +1027,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb42145c"
     },
     {
       "name": "ESCMENU_FreeLoadedImages",
@@ -1005,7 +1052,8 @@
         "D2EscMenuItemStrc",
         "DC6 *",
         "uint32_t"
-      ]
+      ],
+      "dh": "06ebfd4a"
     },
     {
       "name": "ESCMENU_FreeLoadedImages_HaltTail",
@@ -1022,7 +1070,8 @@
         "ESCMENU_FreeLoadedImages_HaltTail",
         "GetInstructionPointer",
         "exit"
-      ]
+      ],
+      "dh": "ac004e06"
     },
     {
       "name": "ESCMENU_Shutdown",
@@ -1043,7 +1092,8 @@
       "usedTypes": [
         "D2EscMenuHeaderStrc",
         "D2EscMenuItemStrc"
-      ]
+      ],
+      "dh": "af622ffd"
     },
     {
       "name": "ESCMENU_ShowMenu",
@@ -1065,7 +1115,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "12c39d90"
     },
     {
       "name": "ESCMENU_RestoreUIState",
@@ -1086,7 +1137,8 @@
         "eD2UIvars",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfee2f0a"
     },
     {
       "name": "ESCMENU_DrawProgressBar",
@@ -1111,7 +1163,8 @@
         "DC6",
         "DRAWMODE",
         "int32_t"
-      ]
+      ],
+      "dh": "53ab0270"
     },
     {
       "name": "DRAW_EscMenu",
@@ -1147,7 +1200,8 @@
         "int32_t",
         "pfnEscMenuItemVisible",
         "uint8_t"
-      ]
+      ],
+      "dh": "c0e08792"
     },
     {
       "name": "ESCMENU_SwitchToMainMenu",
@@ -1166,7 +1220,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "e4827636"
     },
     {
       "name": "ESCMENU_CloseWindowAndRestoreUI",
@@ -1187,7 +1242,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0ce8c4b8"
     },
     {
       "name": "ESCMENU_BackToGame",
@@ -1206,7 +1262,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "2704f29d"
     },
     {
       "name": "ESCMENU_SwitchToSaveExitMenu",
@@ -1225,7 +1282,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "336f1667"
     },
     {
       "name": "ESCMENU_SwitchToDeleteCharMenu",
@@ -1245,7 +1303,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "d4c7ecad"
     },
     {
       "name": "ESCMENU_SwitchToExpansionSaveExitMenu",
@@ -1265,7 +1324,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5e6b5a6a"
     },
     {
       "name": "ESCMENU_ShowControlConfig",
@@ -1285,7 +1345,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "82cf7e57"
     },
     {
       "name": "ESCMENU_SwitchToMainMenu_alt",
@@ -1304,7 +1365,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "119e8ea3"
     },
     {
       "name": "ESCMENU_SwitchToOptionsMenu",
@@ -1323,7 +1385,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "ec8b1fe1"
     }
   ]
 }

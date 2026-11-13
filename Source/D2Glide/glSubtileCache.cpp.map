@@ -27,7 +27,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e6e66db6"
     },
     {
       "name": "GLSUBTILE_AppendNodeToTail",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc"
-      ]
+      ],
+      "dh": "1d108b57"
     },
     {
       "name": "GLSUBTILE_RemoveNodeFromHead",
@@ -64,7 +66,8 @@
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "7794a6a9"
     },
     {
       "name": "GLSUBTILE_RemoveNodeByIndex",
@@ -88,7 +91,8 @@
         "GlSubtileCacheStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "49582618"
     },
     {
       "name": "GLSUBTILE_AllocateNode",
@@ -110,7 +114,8 @@
         "GlSubtileCacheStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9812d1bc"
     },
     {
       "name": "GLSUBTILE_PromoteNodeToMRU",
@@ -133,7 +138,8 @@
       "usedTypes": [
         "GlSubtileCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa111d86"
     },
     {
       "name": "GLSUBTILE_InvalidateByIndex",
@@ -151,7 +157,8 @@
       ],
       "usedTypes": [
         "GlSubtileCacheStrc"
-      ]
+      ],
+      "dh": "bcde80dd"
     },
     {
       "name": "GLSUBTILE_Destroy",
@@ -171,7 +178,8 @@
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c3d937d4"
     },
     {
       "name": "GLSUBTILE_EnsureCapacity",
@@ -190,7 +198,8 @@
       "usedTypes": [
         "GlSubtileCacheNodeStrc",
         "GlSubtileCacheStrc"
-      ]
+      ],
+      "dh": "80da50c6"
     }
   ]
 }

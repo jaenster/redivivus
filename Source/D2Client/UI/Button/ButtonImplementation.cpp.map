@@ -19,7 +19,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "bb83a55d"
     },
     {
       "name": "Destructor",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "ButtonImplementation"
-      ]
+      ],
+      "dh": "44c8dd3f"
     },
     {
       "name": "IsMouseInBounds",
@@ -55,7 +57,8 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1af4815b"
     },
     {
       "name": "GetValue",
@@ -72,7 +75,8 @@
       ],
       "usedTypes": [
         "ButtonImplementation"
-      ]
+      ],
+      "dh": "20966761"
     },
     {
       "name": "SetAccelerator",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "ButtonImplementation"
-      ]
+      ],
+      "dh": "742fd296"
     },
     {
       "name": "OnMouseDown",
@@ -109,7 +114,8 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa93fc4d"
     },
     {
       "name": "OnMouseUp",
@@ -128,7 +134,8 @@
         "ButtonImplementation",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "402a1087"
     },
     {
       "name": "OnChar",
@@ -146,7 +153,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "b66af4a1"
     },
     {
       "name": "OnMouseMove",
@@ -164,7 +172,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "86ed40c0"
     },
     {
       "name": "OnUpArrow",
@@ -182,7 +191,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "58c1ebe8"
     },
     {
       "name": "OnDownArrow",
@@ -200,7 +210,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0d77ab27"
     },
     {
       "name": "OnRightArrow",
@@ -218,7 +229,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8b8970dd"
     },
     {
       "name": "OnLeftArrow",
@@ -236,7 +248,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f0fce154"
     },
     {
       "name": "OnMouseWheel",
@@ -254,7 +267,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "d64769bc"
     },
     {
       "name": "Constructor",
@@ -282,7 +296,8 @@
         "int32_t",
         "pfnEHHandlerRoutine",
         "uint16_t"
-      ]
+      ],
+      "dh": "8f630337"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -302,7 +317,8 @@
       "usedTypes": [
         "ButtonImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "b15ca7aa"
     },
     {
       "name": "Draw",
@@ -332,7 +348,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8429a119"
     }
   ]
 }

@@ -23,7 +23,8 @@
         "D2PoolManagerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ca278cc3"
     },
     {
       "name": "CUNITEVENT_Alloc",
@@ -43,7 +44,8 @@
         "D2CUnitEventStrc",
         "D2UnitStrc",
         "fnCUnitEventCallback"
-      ]
+      ],
+      "dh": "71057839"
     },
     {
       "name": "CUNITEVENT_RemoveByTypeAndState",
@@ -65,7 +67,8 @@
         "D2PoolManagerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8297c1a1"
     }
   ]
 }

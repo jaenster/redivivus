@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "SOCKET"
-      ]
+      ],
+      "dh": "153ef375"
     },
     {
       "name": "StartUp",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "WSADATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef29b707"
     },
     {
       "name": "WSACleanup",
@@ -73,7 +75,8 @@
         "u_long",
         "u_short",
         "uint32_t"
-      ]
+      ],
+      "dh": "37e829ff"
     },
     {
       "name": "Free",
@@ -94,7 +97,8 @@
         "CRITICAL_SECTION",
         "D2NetDataStrc",
         "SOCKET"
-      ]
+      ],
+      "dh": "bb473a1d"
     },
     {
       "name": "WSASocket2_Read",
@@ -113,7 +117,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ce5b3db8"
     },
     {
       "name": "WSASocket2_Send",
@@ -133,7 +138,8 @@
         "CRITICAL_SECTION",
         "D2NetDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e6eb2498"
     },
     {
       "name": "WSASocket2_SendOrCloseOnTimeout",
@@ -153,7 +159,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ffa6c750"
     },
     {
       "name": "SAFESOCK_EnterCriticalSection",
@@ -170,7 +177,8 @@
       ],
       "usedTypes": [
         "D2NetDataStrc"
-      ]
+      ],
+      "dh": "bf4b760a"
     },
     {
       "name": "LeaveCriticalSection_Safesock",
@@ -187,7 +195,8 @@
       ],
       "usedTypes": [
         "D2NetDataStrc"
-      ]
+      ],
+      "dh": "d7b1bb19"
     },
     {
       "name": "Safesock_PollReadReady",
@@ -211,7 +220,8 @@
         "fd_set",
         "int32_t",
         "timeval"
-      ]
+      ],
+      "dh": "b441e1e8"
     },
     {
       "name": "GetPeerNameDoesReturn",
@@ -230,7 +240,8 @@
         "D2NetDataStrc",
         "int32_t",
         "sockaddr"
-      ]
+      ],
+      "dh": "27ddbace"
     },
     {
       "name": "GetSockNameDoesReturn",
@@ -249,7 +260,8 @@
         "D2NetDataStrc",
         "sockaddr",
         "uint32_t"
-      ]
+      ],
+      "dh": "af799f8b"
     },
     {
       "name": "NET_GetLocalIp",
@@ -273,7 +285,8 @@
         "hostent",
         "sockaddr_in",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c3af1f1"
     },
     {
       "name": "NET_MakeIPV4AddressHumanFriendly",
@@ -290,7 +303,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c582ac83"
     },
     {
       "name": "GetSocketStatusAndWsaResultToArguments",
@@ -307,7 +321,8 @@
       ],
       "usedTypes": [
         "D2NetDataStrc"
-      ]
+      ],
+      "dh": "bc40aea8"
     },
     {
       "name": "inet_nameToIp",
@@ -328,7 +343,8 @@
       ],
       "usedTypes": [
         "hostent"
-      ]
+      ],
+      "dh": "f07d53f2"
     },
     {
       "name": "SAFESOCK_SetSocketNonBlocking",
@@ -346,7 +362,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "u_long"
-      ]
+      ],
+      "dh": "0211436e"
     },
     {
       "name": "SAFESOCK_EnableNonBlocking",
@@ -364,7 +381,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "u_long"
-      ]
+      ],
+      "dh": "217442ce"
     },
     {
       "name": "SAFESOCK_DisableNonBlocking",
@@ -382,7 +400,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "u_long"
-      ]
+      ],
+      "dh": "a2b80a75"
     },
     {
       "name": "SAFESOCK_CreateBlocking",
@@ -401,7 +420,8 @@
       "usedTypes": [
         "D2NetDataStrc",
         "LPTHREAD_START_ROUTINE"
-      ]
+      ],
+      "dh": "a6fb1a2d"
     }
   ]
 }

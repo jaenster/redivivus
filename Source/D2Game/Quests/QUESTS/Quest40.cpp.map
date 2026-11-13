@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1e616ac1"
     },
     {
       "name": "Q40_Callback00_NpcActivate",
@@ -40,7 +41,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "eD2MonsterClassId"
-      ]
+      ],
+      "dh": "722895c5"
     },
     {
       "name": "Q40_StatusFilter",
@@ -59,7 +61,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6916bcee"
     },
     {
       "name": "Q40_ActiveFilter",
@@ -80,7 +83,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "17c6887d"
     },
     {
       "name": "Q40_Callback11_ScrollMessage",
@@ -102,7 +106,8 @@
         "D2QuestDataStrc",
         "eD2MonsterClassId",
         "uint16_t"
-      ]
+      ],
+      "dh": "181084c8"
     },
     {
       "name": "Q40_InitData",
@@ -120,7 +125,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "0a7d47d0"
     },
     {
       "name": "Objects_InitFn66_DrehyaStartInTown",
@@ -150,7 +156,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e9d0513b"
     }
   ]
 }

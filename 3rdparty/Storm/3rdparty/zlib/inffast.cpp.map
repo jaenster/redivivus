@@ -23,7 +23,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "c29ef53c"
     }
   ]
 }

@@ -16,7 +16,8 @@
       "calledFunctions": [
         "DetectCpuVendor",
         "__security_check_cookie"
-      ]
+      ],
+      "dh": "3eb3c17d"
     },
     {
       "name": "DecodeCpuModelName",
@@ -34,7 +35,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2d3f057"
     },
     {
       "name": "GetTimestamp",
@@ -51,7 +53,8 @@
       ],
       "usedTypes": [
         "int64_t"
-      ]
+      ],
+      "dh": "31ede059"
     },
     {
       "name": "BenchmarkCpuSpeed",
@@ -75,7 +78,8 @@
         "PFN_GetCurrentThread",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6730b57a"
     },
     {
       "name": "GetCpuVersionInfo",
@@ -92,7 +96,8 @@
       ],
       "usedTypes": [
         "uint64_t"
-      ]
+      ],
+      "dh": "1e2ccdb3"
     },
     {
       "name": "GetCpuBrandId",
@@ -112,7 +117,8 @@
       "usedTypes": [
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "c19aeedb"
     },
     {
       "name": "DispatchCpuidCall",
@@ -129,7 +135,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6e8bec39"
     },
     {
       "name": "LogCpuInfo",
@@ -153,7 +160,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e8b153bf"
     },
     {
       "name": "GetLoggerState_Stub",
@@ -167,7 +175,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "GetLoggerState_Stub"
-      ]
+      ],
+      "dh": "7aa43a1d"
     },
     {
       "name": "ReturnParam2_Stub",
@@ -181,7 +190,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "ReturnParam2_Stub"
-      ]
+      ],
+      "dh": "4201b340"
     },
     {
       "name": "LOGMANAGER_UnwindDestructor_NoOp",
@@ -195,7 +205,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "LOGMANAGER_UnwindDestructor_NoOp"
-      ]
+      ],
+      "dh": "aebba282"
     },
     {
       "name": "Unreferenced_0040eb40",
@@ -209,7 +220,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "Unreferenced_0040eb40"
-      ]
+      ],
+      "dh": "97761594"
     },
     {
       "name": "InitCriticalSection",
@@ -223,7 +235,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "InitCriticalSection"
-      ]
+      ],
+      "dh": "a6a16dfd"
     },
     {
       "name": "InitLogFilePathPointers",
@@ -242,7 +255,8 @@
         "char[260]",
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "3bb85820"
     },
     {
       "name": "OpenLogFileWithTimestamp",
@@ -267,7 +281,8 @@
         "LPSYSTEMTIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a842201d"
     },
     {
       "name": "WriteLogFileHeader",
@@ -288,7 +303,8 @@
         "FILE",
         "SYSTEMTIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f851ece"
     },
     {
       "name": "WriteRealmStartupHeader",
@@ -308,7 +324,8 @@
       "usedTypes": [
         "FILE",
         "uint32_t"
-      ]
+      ],
+      "dh": "3983c9b2"
     },
     {
       "name": "FindOrOpenLogFileSlot",
@@ -337,7 +354,8 @@
         "_SYSTEMTIME",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e7872eba"
     },
     {
       "name": "FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder",
@@ -360,7 +378,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c9b5f5da"
     },
     {
       "name": "WriteHexDumpLogEntry",
@@ -391,7 +410,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0bda8b80"
     },
     {
       "name": "CloseStaleLogFileHandles",
@@ -408,7 +428,8 @@
         "GetTickCount",
         "fclose",
         "__security_check_cookie"
-      ]
+      ],
+      "dh": "2e981ad6"
     },
     {
       "name": "DeleteOldLogFile",
@@ -431,7 +452,8 @@
         "_FILETIME",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bde9d8a4"
     },
     {
       "name": "CloseLogFileByName",
@@ -450,7 +472,8 @@
       "usedTypes": [
         "char[16]",
         "uint8_t"
-      ]
+      ],
+      "dh": "1f4f532e"
     },
     {
       "name": "ComputeAbsoluteFromRelative",
@@ -469,7 +492,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "446e4352"
     },
     {
       "name": "Unreferenced_0040f520",
@@ -486,7 +510,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "6a86690b"
     },
     {
       "name": "Unreferenced_0040f580",
@@ -504,7 +529,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "19db7302"
     },
     {
       "name": "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",
@@ -524,7 +550,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2ed1235a"
     },
     {
       "name": "GetLogFileSize",
@@ -548,7 +575,8 @@
         "FILE",
         "_SYSTEMTIME",
         "uint8_t"
-      ]
+      ],
+      "dh": "454403a4"
     },
     {
       "name": "ReadLogFileRange",
@@ -575,7 +603,8 @@
         "_SYSTEMTIME",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6d7eb47b"
     },
     {
       "name": "LogToFile",
@@ -603,7 +632,8 @@
         "FILE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1928571"
     },
     {
       "name": "Unreferenced_0040f810",
@@ -620,7 +650,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d4dae873"
     },
     {
       "name": "UnlinkListNode",
@@ -638,7 +669,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd3d5c7b"
     },
     {
       "name": "NormalizeListNodePointer",
@@ -655,7 +687,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bcf16643"
     },
     {
       "name": "ExitOrCrashCleanup",
@@ -679,7 +712,8 @@
         "FILE *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ecbd2066"
     },
     {
       "name": "ExitOrCrashCleanUpJmp",
@@ -714,7 +748,8 @@
         "_SYSTEMTIME",
         "_WIN32_FIND_DATAA",
         "uint32_t"
-      ]
+      ],
+      "dh": "bac50674"
     },
     {
       "name": "UnlinkListNodeDouble",
@@ -731,7 +766,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "850ac47f"
     },
     {
       "name": "InitListHead",
@@ -748,7 +784,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "a5925f73"
     },
     {
       "name": "InsertListNode",
@@ -766,7 +803,8 @@
       "usedTypes": [
         "int *",
         "int32_t"
-      ]
+      ],
+      "dh": "b08bd32f"
     },
     {
       "name": "RemoveListNode",
@@ -785,7 +823,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "74b685e3"
     },
     {
       "name": "ClearListNode",
@@ -799,7 +838,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "ClearListNode"
-      ]
+      ],
+      "dh": "3e5805d2"
     },
     {
       "name": "RemoveAllListNodes",
@@ -817,7 +857,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b5254eda"
     },
     {
       "name": "DestroyListWithHandler",
@@ -835,7 +876,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "bea22a27"
     },
     {
       "name": "TeardownListFull",
@@ -856,7 +898,8 @@
         "StormLinkedListStrc",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "e102d4d0"
     },
     {
       "name": "ZeroListNode",
@@ -870,7 +913,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "ZeroListNode"
-      ]
+      ],
+      "dh": "adc39636"
     },
     {
       "name": "DestroyListNodeAndFree",
@@ -890,7 +934,8 @@
       "usedTypes": [
         "pfnEHHandlerRoutine",
         "uint8_t"
-      ]
+      ],
+      "dh": "c664d2e8"
     },
     {
       "name": "DestroyAllListNodes",
@@ -910,7 +955,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "cf652c5b"
     },
     {
       "name": "AllocateAndInsertMessageNode",
@@ -933,7 +979,8 @@
         "int32_t",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "6d644ec4"
     },
     {
       "name": "StopLogWriterThread",
@@ -948,7 +995,8 @@
       "calledFunctions": [
         "StopLogWriterThread",
         "DestroyAllListNodes"
-      ]
+      ],
+      "dh": "b7886dae"
     },
     {
       "name": "EnqueueLogMessage",
@@ -972,7 +1020,8 @@
         "StormLinkStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17828e62"
     },
     {
       "name": "LOGMANAGER_LogWriterThreadProc",
@@ -998,7 +1047,8 @@
         "D2LogRecordStrc",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bb6a76a"
     },
     {
       "name": "EnqueueFormattedLogMessage",
@@ -1025,7 +1075,8 @@
         "int32_t",
         "uint32_t",
         "va_list"
-      ]
+      ],
+      "dh": "8528ea9c"
     },
     {
       "name": "StartLogWriterThread",
@@ -1042,7 +1093,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "deca685a"
     },
     {
       "name": "LOGFILE_WriteStringToFile",
@@ -1063,7 +1115,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ede8962c"
     },
     {
       "name": "LOGMANAGER_TraceToModuleLog",
@@ -1084,7 +1137,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9d1ef343"
     },
     {
       "name": "LogWithCategory",
@@ -1105,7 +1159,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5876fbd2"
     },
     {
       "name": "LogSimple",
@@ -1126,7 +1181,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "67afe6f5"
     },
     {
       "name": "LogWithCategoryVarArgs",
@@ -1147,7 +1203,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9e987a3d"
     },
     {
       "name": "LOGMGR_GetTime32",
@@ -1165,7 +1222,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "c8915cca"
     },
     {
       "name": "LOGMGR_DeleteHighResTimerLock",
@@ -1179,7 +1237,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "LOGMGR_DeleteHighResTimerLock"
-      ]
+      ],
+      "dh": "c267d746"
     },
     {
       "name": "Atomic64Store",
@@ -1196,7 +1255,8 @@
       ],
       "usedTypes": [
         "int64_t"
-      ]
+      ],
+      "dh": "064cf94d"
     },
     {
       "name": "Atomic64Load",
@@ -1213,7 +1273,8 @@
       ],
       "usedTypes": [
         "int64_t"
-      ]
+      ],
+      "dh": "a2c1c061"
     },
     {
       "name": "GetFreeDiskSpaceForSavePath",
@@ -1234,7 +1295,8 @@
         "ULONGLONG",
         "pfnGetDiskFreeSpaceEx",
         "uint32_t"
-      ]
+      ],
+      "dh": "19808b8c"
     },
     {
       "name": "GetGlobalMemoryStatus",
@@ -1251,7 +1313,8 @@
       ],
       "usedTypes": [
         "LPMEMORYSTATUS"
-      ]
+      ],
+      "dh": "e665ea82"
     },
     {
       "name": "IsWindowsNT",
@@ -1270,7 +1333,8 @@
       ],
       "usedTypes": [
         "_OSVERSIONINFOA"
-      ]
+      ],
+      "dh": "e8d20702"
     },
     {
       "name": "InitHighResTimer",
@@ -1296,7 +1360,8 @@
         "D2HighResTimestampStrc",
         "int32_t",
         "int64_t"
-      ]
+      ],
+      "dh": "f7e3ddd3"
     },
     {
       "name": "LOGMGR_GetHighResolutionTime",
@@ -1318,7 +1383,8 @@
       "usedTypes": [
         "D2HighResTimestampStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f23ae2aa"
     },
     {
       "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740",
@@ -1332,7 +1398,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740"
-      ]
+      ],
+      "dh": "60c4157d"
     },
     {
       "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750",
@@ -1346,7 +1413,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416750"
-      ]
+      ],
+      "dh": "b6f970b6"
     },
     {
       "name": "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760",
@@ -1360,7 +1428,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "LOGMANAGER_UnwindDestructor_NoOp_Unref_00416760"
-      ]
+      ],
+      "dh": "da8b8945"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9d08",
@@ -1381,7 +1450,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "c3ddf12b"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9d3b",
@@ -1402,7 +1472,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "2fff6432"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9d98",
@@ -1423,7 +1494,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "83a00ae3"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9dc8",
@@ -1444,7 +1516,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "c140479b"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e11",
@@ -1465,7 +1538,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "6ee90e1f"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e38",
@@ -1486,7 +1560,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "efdae5be"
     },
     {
       "name": "SehHandler_6c9e6a",
@@ -1506,7 +1581,8 @@
         "EHExceptionRecord",
         "EHRegistrationNode",
         "_CONTEXT"
-      ]
+      ],
+      "dh": "4e8d2ee4"
     },
     {
       "name": "StaticInit_gLogMessageQueueCS",
@@ -1521,7 +1597,8 @@
       "calledFunctions": [
         "StaticInit_gLogMessageQueueCS",
         "atexit"
-      ]
+      ],
+      "dh": "e874f2c1"
     },
     {
       "name": "StaticInit_gLogFileCS",
@@ -1536,7 +1613,8 @@
       "calledFunctions": [
         "StaticInit_gLogFileCS",
         "atexit"
-      ]
+      ],
+      "dh": "2bb52838"
     },
     {
       "name": "LOGMGR_InitMessageQueue",
@@ -1554,7 +1632,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "54f5c634"
     },
     {
       "name": "StaticFini_gLogMessageQueueCS",
@@ -1568,7 +1647,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "StaticFini_gLogMessageQueueCS"
-      ]
+      ],
+      "dh": "370f926e"
     },
     {
       "name": "StaticFini_gLogFileCS",
@@ -1582,7 +1662,8 @@
       "namespace": "Fog::Src::LogManager",
       "calledFunctions": [
         "StaticFini_gLogFileCS"
-      ]
+      ],
+      "dh": "a821afb9"
     },
     {
       "name": "StaticFini_gLogMessageQueueHead",
@@ -1597,7 +1678,8 @@
       "calledFunctions": [
         "StaticFini_gLogMessageQueueHead",
         "TeardownListFull"
-      ]
+      ],
+      "dh": "6554d974"
     }
   ]
 }

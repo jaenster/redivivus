@@ -21,7 +21,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "46379256"
     },
     {
       "name": "CopyConstructor",
@@ -43,7 +44,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8fdc3d84"
     }
   ]
 }

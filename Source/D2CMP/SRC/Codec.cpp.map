@@ -20,7 +20,8 @@
         "D2CodecBitStateStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "076e5f8e"
     },
     {
       "name": "CODEC_ReadBitsWithTransparency",
@@ -40,7 +41,8 @@
         "D2CodecBitStateStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "318ce7e7"
     },
     {
       "name": "CODEC_AdvanceFrameIterator",
@@ -59,7 +61,8 @@
         "D2CodecFrameBoundsStrc",
         "D2CodecFrameComponentStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6772cb43"
     },
     {
       "name": "CODEC_InitializeFrameIterator",
@@ -78,7 +81,8 @@
       ],
       "usedTypes": [
         "D2CodecFrameBoundsStrc"
-      ]
+      ],
+      "dh": "5c8e58c3"
     },
     {
       "name": "CODEC_CalculateFrameBounds",
@@ -98,7 +102,8 @@
         "D2CodecFrameComponentStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a28b9eb5"
     },
     {
       "name": "CODEC_BuildInversePalette",
@@ -117,7 +122,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "61a01884"
     },
     {
       "name": "CODEC_BuildInversePaletteFromBitmask",
@@ -136,7 +142,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "370a11d3"
     },
     {
       "name": "CODEC_DecodeFramePixels",
@@ -161,7 +168,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "84d0808d"
     },
     {
       "name": "CODEC_DecompressFrameData",
@@ -186,7 +194,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "3edb2336"
     },
     {
       "name": "CODEC_EncodeRLE",
@@ -208,7 +217,8 @@
         "DC6Block",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fa966b17"
     },
     {
       "name": "CODEC_LoadPaletteFromFile",
@@ -232,7 +242,8 @@
         "D2DccFileHeaderStrc",
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c69ea417"
     },
     {
       "name": "CODEC_DecompressAllFrames",
@@ -273,7 +284,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "47a26d7d"
     }
   ]
 }

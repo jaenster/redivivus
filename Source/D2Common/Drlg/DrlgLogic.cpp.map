@@ -21,7 +21,8 @@
       "usedTypes": [
         "D2DrlgCoordIndexCtxStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a996af72"
     },
     {
       "name": "DRLGLOGIC_GetGridFlagsAtWorldPos",
@@ -41,7 +42,8 @@
         "D2DrlgCoordListStrc",
         "D2DrlgVertexStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "d9653b6e"
     },
     {
       "name": "AllocEmptyDrlgCoordList_Unused",
@@ -62,7 +64,8 @@
         "D2DrlgCoordListStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "79b79102"
     },
     {
       "name": "AllocEmptyRoomCoordList_Unused",
@@ -84,7 +87,8 @@
         "D2PoolManagerStrc",
         "D2RoomCoordListStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b506a0cd"
     },
     {
       "name": "FreeDrlgCoordList",
@@ -106,7 +110,8 @@
         "D2PoolManagerStrc",
         "D2RoomCoordListStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "a808c24a"
     },
     {
       "name": "InitializeDrlgCoordList",
@@ -125,7 +130,8 @@
         "D2DrlgCoordListStrc",
         "D2RoomCoordListStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "8913e319"
     },
     {
       "name": "DRLGLOGIC_SetGridDoorFlags",
@@ -147,7 +153,8 @@
         "D2DrlgTileGridStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9de2571"
     },
     {
       "name": "Unreferenced_0066c840",
@@ -164,7 +171,8 @@
       ],
       "usedTypes": [
         "D2DrlgTileDataStrc"
-      ]
+      ],
+      "dh": "a191e893"
     },
     {
       "name": "DRLGLOGIC_SetGridWallFlags",
@@ -188,7 +196,8 @@
         "D2DrlgTileLinkStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d58b465e"
     },
     {
       "name": "DRLGLOGIC_FillTileGridFlags",
@@ -210,7 +219,8 @@
         "D2DrlgTileGridStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6d5dd3bd"
     },
     {
       "name": "DRLGLOGIC_BuildCoordRegions",
@@ -236,7 +246,8 @@
         "D2RoomCoordListStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f55f403b"
     },
     {
       "name": "AllocDrlgCoordList",
@@ -259,7 +270,8 @@
         "D2PoolManagerStrc",
         "D2RoomCoordListStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "14fdef09"
     },
     {
       "name": "DRLGLOGIC_GetRoomCoordListAt",
@@ -281,7 +293,8 @@
       "usedTypes": [
         "D2RoomCoordListStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "71acf728"
     },
     {
       "name": "DRLGLOGIC_GetRoomCoordIndexAt",
@@ -302,7 +315,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "86e9bb1b"
     },
     {
       "name": "DRLG_ROOMEX_GetGridIndex",
@@ -326,7 +340,8 @@
         "D2RoomCoordListStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "93724e8c"
     },
     {
       "name": "DRLGLOGIC_GetCoordListFromSubtilePos",
@@ -350,7 +365,8 @@
         "D2RoomCoordListStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3ea3820a"
     },
     {
       "name": "GetCoordList",
@@ -372,7 +388,8 @@
         "D2RoomCoordListStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f7fc3df"
     },
     {
       "name": "DRLGLOGIC_LinkCoordListEntry",
@@ -399,7 +416,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4453e685"
     },
     {
       "name": "DRLGLOGIC_LinkBorderCoordLists",
@@ -418,7 +436,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "fc2f4686"
     },
     {
       "name": "DRLGLOGIC_BuildRoomCoordList",
@@ -451,7 +470,8 @@
         "D2DrlgLevelStrc",
         "D2RoomCoordListStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "8af4fd3a"
     }
   ]
 }

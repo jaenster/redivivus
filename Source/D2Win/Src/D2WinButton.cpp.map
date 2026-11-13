@@ -23,7 +23,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "24a4ccb3"
     },
     {
       "name": "D2WINBUTTON_IsPressed",
@@ -44,7 +45,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "c182c569"
     },
     {
       "name": "D2WINBUTTON_SetPressed",
@@ -65,7 +67,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "7e42cb12"
     },
     {
       "name": "D2WINBUTTON_SetTextWithFont",
@@ -88,7 +91,8 @@
         "D2WinButton",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9b9ba5bc"
     },
     {
       "name": "D2WINBUTTON_SetLocalizedTextWithFont",
@@ -113,7 +117,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "8daae42b"
     },
     {
       "name": "D2WINBUTTON_SetBounds",
@@ -134,7 +139,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "a59827ee"
     },
     {
       "name": "D2WINBUTTON_InvokeClickCallback",
@@ -155,7 +161,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "5d9ba6a2"
     },
     {
       "name": "D2WINBUTTON_SetImageIndex",
@@ -176,7 +183,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "5be59a0e"
     },
     {
       "name": "D2WINBUTTON_HandleMouseWheel",
@@ -199,7 +207,8 @@
         "D2WinButton",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0e6dc52"
     },
     {
       "name": "D2WINBUTTON_SetCustomData",
@@ -220,7 +229,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "47adeba6"
     },
     {
       "name": "D2WINBUTTON_IsPointInside",
@@ -238,7 +248,8 @@
       "usedTypes": [
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "9fedbb3f"
     },
     {
       "name": "D2WINBUTTON_DrawText",
@@ -265,7 +276,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "183e089e"
     },
     {
       "name": "Draw",
@@ -296,7 +308,8 @@
         "DRAWMODE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e65efd90"
     },
     {
       "name": "Push",
@@ -321,7 +334,8 @@
         "OnPress",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "818cc687"
     },
     {
       "name": "Mouse",
@@ -345,7 +359,8 @@
         "OnPress",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33e2cbff"
     },
     {
       "name": "D2WINBUTTON_HandleHotkey",
@@ -367,7 +382,8 @@
         "D2ControlMsg",
         "D2WinButton",
         "int32_t"
-      ]
+      ],
+      "dh": "9317a2f8"
     },
     {
       "name": "D2WinButton",
@@ -395,7 +411,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7883625e"
     }
   ]
 }

@@ -31,7 +31,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e183884"
     },
     {
       "name": "Q07_Callback08_MonsterKilled",
@@ -49,7 +50,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "615ab13e"
     },
     {
       "name": "Q07_StatusFilter",
@@ -68,7 +70,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b8eb180a"
     },
     {
       "name": "Q07_ActiveFilter",
@@ -94,7 +97,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6245e3bb"
     },
     {
       "name": "Q07_InitData",
@@ -112,7 +116,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "7a640d2b"
     }
   ]
 }

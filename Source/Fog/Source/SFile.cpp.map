@@ -23,7 +23,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2917e559"
     },
     {
       "name": "ARCHIVE_OpenD2FileWrap",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2MPQFileStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "98113b31"
     },
     {
       "name": "ERRORMANAGER_FCloseFile",
@@ -60,7 +62,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "27952375"
     },
     {
       "name": "ERRORMANAGER_FReadFile",
@@ -81,7 +84,8 @@
         "D2StormAsyncCompletionStrc",
         "LPOVERLAPPED",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e1d6bf7"
     },
     {
       "name": "ERRORMANAGER_FGetFileSize",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "LPDWORD"
-      ]
+      ],
+      "dh": "da86ead9"
     },
     {
       "name": "SFILE_SetFilePointerThunk",
@@ -120,7 +125,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "92aa9f27"
     },
     {
       "name": "thunk_CreateFileA",
@@ -137,7 +143,8 @@
       ],
       "usedTypes": [
         "LPSECURITY_ATTRIBUTES"
-      ]
+      ],
+      "dh": "143b6b5c"
     },
     {
       "name": "thunk_DeleteFileA",
@@ -151,7 +158,8 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "thunk_DeleteFileA"
-      ]
+      ],
+      "dh": "9207da53"
     },
     {
       "name": "SFILE_Win32CloseHandle",
@@ -165,7 +173,8 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "SFILE_Win32CloseHandle"
-      ]
+      ],
+      "dh": "c7439be0"
     },
     {
       "name": "thunk_ReadFile",
@@ -183,7 +192,8 @@
       "usedTypes": [
         "LPDWORD",
         "LPOVERLAPPED"
-      ]
+      ],
+      "dh": "cd654647"
     },
     {
       "name": "thunk_WriteFile",
@@ -201,7 +211,8 @@
       "usedTypes": [
         "LPDWORD",
         "LPOVERLAPPED"
-      ]
+      ],
+      "dh": "802262e8"
     },
     {
       "name": "SFILE_Win32SetFilePointer",
@@ -218,7 +229,8 @@
       ],
       "usedTypes": [
         "PLONG"
-      ]
+      ],
+      "dh": "eeb92c0c"
     },
     {
       "name": "SafeCreateDirectoryTree",
@@ -238,7 +250,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "70036178"
     },
     {
       "name": "SFILE_EnsurePathEndsWithBackslash",
@@ -256,7 +269,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "de99b0c9"
     },
     {
       "name": "SFILE_GetExecutableDirectory",
@@ -271,7 +285,8 @@
       "calledFunctions": [
         "SFILE_GetExecutableDirectory",
         "SStrChrR"
-      ]
+      ],
+      "dh": "20e55b9a"
     },
     {
       "name": "SFILE_GetInstallPath",
@@ -293,7 +308,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "36af7adb"
     },
     {
       "name": "SFILE_GetBlizzardAppDataPath",
@@ -315,7 +331,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "be31726e"
     },
     {
       "name": "GetUseDirectCommand",
@@ -329,7 +346,8 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "GetUseDirectCommand"
-      ]
+      ],
+      "dh": "f685f9c0"
     },
     {
       "name": "SFILE_GetSaveGamePath",
@@ -354,7 +372,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8a093ac4"
     },
     {
       "name": "SFILE_MoveDirectoryRecursive",
@@ -378,7 +397,8 @@
       "usedTypes": [
         "_WIN32_FIND_DATAA",
         "uint32_t"
-      ]
+      ],
+      "dh": "d616119f"
     },
     {
       "name": "GetAndCreateSavePath",
@@ -404,7 +424,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "86d7faec"
     },
     {
       "name": "Unreferenced_00407260",
@@ -421,7 +442,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e1198ab1"
     },
     {
       "name": "Unreferenced_00407280",
@@ -435,7 +457,8 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00407280"
-      ]
+      ],
+      "dh": "bfec597a"
     },
     {
       "name": "Unreferenced_00407290",
@@ -449,7 +472,8 @@
       "namespace": "Fog::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00407290"
-      ]
+      ],
+      "dh": "cc07008c"
     },
     {
       "name": "SFILE_CalculateBufferOffset",
@@ -466,7 +490,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "72e1a0a2"
     },
     {
       "name": "ERRORMANAGER_SprintfToBuffer",
@@ -481,7 +506,8 @@
       "calledFunctions": [
         "ERRORMANAGER_SprintfToBuffer",
         "vsprintf"
-      ]
+      ],
+      "dh": "6997d80a"
     },
     {
       "name": "ERRORMANAGER_SnprintfTerminated",
@@ -496,7 +522,8 @@
       "calledFunctions": [
         "ERRORMANAGER_SnprintfTerminated",
         "_vsnprintf"
-      ]
+      ],
+      "dh": "13254a47"
     },
     {
       "name": "SFILE_GetGlobalPointer",
@@ -513,7 +540,8 @@
       ],
       "usedTypes": [
         "D2SystemInfoStrc"
-      ]
+      ],
+      "dh": "5ca848a3"
     },
     {
       "name": "SFILE_JulianDayNumber",
@@ -531,7 +559,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "946f5b37"
     },
     {
       "name": "SFILE_GregorianCalendarFromJulian",
@@ -548,7 +577,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d121ebfe"
     },
     {
       "name": "SFILE_DeleteOldLogFiles",
@@ -574,7 +604,8 @@
         "_SYSTEMTIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed4bac10"
     },
     {
       "name": "LOGFILE_StoreGameStartupInfo",
@@ -597,7 +628,8 @@
       "usedTypes": [
         "_SYSTEMTIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "52e3c4de"
     },
     {
       "name": "FILETOOLS_SetLogFilePathWithoutDateAndExtension2",

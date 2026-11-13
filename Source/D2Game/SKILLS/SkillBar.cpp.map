@@ -45,7 +45,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "72a5ddb0"
     },
     {
       "name": "SKILLBAR_SrvStFn33_TargetRevivableCorpse",
@@ -69,7 +70,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4aaf238d"
     },
     {
       "name": "SKILLAMZ_CreateLightningFuryBolts",
@@ -98,7 +100,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "098c5b53"
     },
     {
       "name": "Skills_SrvDoFunc_069_FindPotion",
@@ -129,7 +132,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a1eae4d"
     },
     {
       "name": "SKILLBAR_ApplyWarCryBuff",
@@ -163,7 +167,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "4b99f709"
     },
     {
       "name": "Skills_SrvDoFunc_068_WarCry",
@@ -187,7 +192,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "8bf38785"
     },
     {
       "name": "Skills_SrvDoFunc_070_DoubleSwing",
@@ -214,7 +220,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3284a66"
     },
     {
       "name": "SKILL_CheckCorpseCanBeConsumed",
@@ -236,7 +243,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7034094b"
     },
     {
       "name": "Skills_SrvDoFunc_071_Taunt",
@@ -272,7 +280,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "387d0d71"
     },
     {
       "name": "SKILLBAR_SrvStFn34_FindItem",
@@ -294,7 +303,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1800073c"
     },
     {
       "name": "Skills_SrvDoFunc_072_FindItem",
@@ -324,7 +334,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "61db5749"
     },
     {
       "name": "Skills_SrvDoFunc_074_DoubleThrow",
@@ -356,7 +367,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "62c11b5f"
     },
     {
       "name": "Skills_SrvDoFunc_075_GrimWard",
@@ -395,7 +407,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e11efa8"
     },
     {
       "name": "SKILLBAR_SkillMeleeAttack",
@@ -429,7 +442,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2d231d72"
     },
     {
       "name": "SKILLBAR_ApplyFrenzyStack",
@@ -467,7 +481,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3a62430c"
     },
     {
       "name": "Skills_SrvDoFunc_009_FrenzyMeleeHit",
@@ -497,7 +512,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "44d9e231"
     },
     {
       "name": "SKILLBAR_OnWarCryExpire",
@@ -526,7 +542,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "26709635"
     },
     {
       "name": "SKILLBAR_SrvStFn38_Whirlwind",
@@ -589,7 +606,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ce1c374"
     },
     {
       "name": "SKILLAMZ_GetPlagueJavelinCloudCount",
@@ -610,7 +628,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb9f4059"
     },
     {
       "name": "SKILLAMZ_CreatePlagueJavelinClouds",
@@ -636,7 +655,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "cf52ea38"
     },
     {
       "name": "SKILL_DeactivateAndRestoreCollision",
@@ -674,7 +694,8 @@
         "eD2CollisionShapeType",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2d05d2ce"
     },
     {
       "name": "Skills_SrvDoFunc_076_Whirlwind",
@@ -719,7 +740,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1950fe8e"
     },
     {
       "name": "SKILLBAR_SrvStFn39_Berserk",
@@ -759,7 +781,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "132a9e71"
     },
     {
       "name": "SKILLBAR_FindValidLeapTarget",
@@ -795,7 +818,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d55dfeb"
     },
     {
       "name": "SKILLBAR_InitChargeTarget",
@@ -819,7 +843,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "365f254e"
     },
     {
       "name": "SKILLBAR_CanTargetPosition",
@@ -842,7 +867,8 @@
         "D2SkillsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "413d8faa"
     },
     {
       "name": "SKILLBAR_SrvStFn40_Leap",
@@ -890,7 +916,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b9c029c"
     },
     {
       "name": "SKILL_InitTransportPath",
@@ -924,7 +951,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8129e5ac"
     },
     {
       "name": "SKILLBAR_CalculateChargePath",
@@ -966,7 +994,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c199f95f"
     },
     {
       "name": "SKILLBAR_ArriveAtChargeTarget",
@@ -1012,7 +1041,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ce000c5"
     },
     {
       "name": "Skills_SrvDoFunc_077_Leap",
@@ -1045,7 +1075,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dec33522"
     },
     {
       "name": "SKILLBAR_AcquireNextTarget",
@@ -1076,7 +1107,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9e0a405"
     },
     {
       "name": "SKILLBAR_SrvStFn41_LeapAttack",
@@ -1117,7 +1149,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "af7d3277"
     },
     {
       "name": "SKILLBAR_WhirlwindHitCycle",
@@ -1156,7 +1189,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a44984ae"
     },
     {
       "name": "Skills_SrvDoFunc_078_LeapAttack",
@@ -1188,7 +1222,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5f4ef6dd"
     }
   ]
 }

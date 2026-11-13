@@ -30,7 +30,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f533bbcf"
     },
     {
       "name": "MakeRandomChest",
@@ -62,7 +63,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "307c69c0"
     },
     {
       "name": "MakeRandomSparklyChest",
@@ -89,7 +91,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "57aef954"
     },
     {
       "name": "OBJECT_CreateTombPortal",
@@ -115,7 +118,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c5c4dcd"
     },
     {
       "name": "SERVER_InitUnitObject",
@@ -138,7 +142,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fe73595d"
     },
     {
       "name": "AllocTimer",
@@ -157,7 +162,8 @@
       "usedTypes": [
         "D2TimerArgStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bfdc60d0"
     },
     {
       "name": "FrreeTimer",
@@ -176,7 +182,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "void *"
-      ]
+      ],
+      "dh": "268ea086"
     },
     {
       "name": "OBJECT_InitializeObject",
@@ -212,7 +219,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "200e17a8"
     },
     {
       "name": "OBJECT_SelectRandomShrineType",
@@ -242,7 +250,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3fe5fe52"
     },
     {
       "name": "Objects_InitFn10",
@@ -263,7 +272,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "1dec6079"
     },
     {
       "name": "Objects_InitFn28_GoldPlaceholder",
@@ -289,7 +299,8 @@
         "POINT",
         "eCollisionFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "06e39c0a"
     },
     {
       "name": "Objects_InitFn01_Shrine",
@@ -316,7 +327,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bbd611b0"
     },
     {
       "name": "Objects_InitFn05_Door_Unref_0054fb30",
@@ -333,7 +345,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "7be87153"
     },
     {
       "name": "Objects_InitFn22_Fire",
@@ -353,7 +366,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "281b9879"
     },
     {
       "name": "Objects_InitFn24_FloorTrap",
@@ -371,7 +385,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "e7b6b0b8"
     },
     {
       "name": "Objects_InitFn02_Urn",
@@ -395,7 +410,8 @@
         "D2SeedStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "08c88e55"
     },
     {
       "name": "Objects_InitFn27_GooPile",
@@ -413,7 +429,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "uint8_t"
-      ]
+      ],
+      "dh": "9d4b0c3f"
     },
     {
       "name": "Objects_InitFn03_Chest",
@@ -438,7 +455,8 @@
         "D2SeedStrc",
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "8538d560"
     },
     {
       "name": "Objects_InitFn57_SparklyChest",
@@ -457,7 +475,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "05a6ecd5"
     },
     {
       "name": "Objects_InitFn58_Fissure",
@@ -477,7 +496,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "48d47a34"
     },
     {
       "name": "Objects_InitFn59_VileDogAfterglow",
@@ -497,7 +517,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e7df00d2"
     },
     {
       "name": "Objects_InitFn12_PermanentPortal",
@@ -523,7 +544,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "47764205"
     },
     {
       "name": "Objects_InitFn08_Torch",
@@ -541,7 +563,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "eea638fd"
     },
     {
       "name": "Objects_InitFn14",
@@ -559,7 +582,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "540ea9a7"
     },
     {
       "name": "Objects_InitFn26",
@@ -577,7 +601,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "a226fd90"
     },
     {
       "name": "Objects_InitFn34_HellBrazier",
@@ -597,7 +622,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "1e200a7e"
     },
     {
       "name": "Objects_InitFn05_Door",
@@ -614,7 +640,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "bd9c11d6"
     },
     {
       "name": "Objects_InitFn11_TownPortal",
@@ -642,7 +669,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "dc43d0fb"
     },
     {
       "name": "Objects_InitFn51_TrappedSoul",
@@ -661,7 +689,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b6d37820"
     },
     {
       "name": "ROOM_CheckSpawnCollision",
@@ -681,7 +710,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "a183fac6"
     },
     {
       "name": "ROOM_CheckSpawnCollisionSimple",
@@ -701,7 +731,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "b0a1ae73"
     },
     {
       "name": "OBJECT_PlaceAtRandomPosition",
@@ -732,7 +763,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba380d37"
     },
     {
       "name": "OBJECT_PlaceWithCallback",
@@ -764,7 +796,8 @@
         "int32_t",
         "pfnObjectPlaceTestCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ad649cf"
     },
     {
       "name": "Objects_InitFn46",
@@ -794,7 +827,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "e155a914"
     },
     {
       "name": "OBJECT_PlaceAtBiasedPosition",
@@ -827,7 +861,8 @@
         "int32_t",
         "pfnObjectPlaceTestCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6833680"
     },
     {
       "name": "Objects_PopulateFn1",
@@ -863,7 +898,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7f656772"
     },
     {
       "name": "OBJECT_SpawnBonusChest",
@@ -892,7 +928,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0f49d77e"
     },
     {
       "name": "Objects_PopulateFn7_CorpseOnStick",
@@ -929,7 +966,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "95541e43"
     },
     {
       "name": "Objects_PopulateFn3",
@@ -961,7 +999,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f7ed6de2"
     },
     {
       "name": "Objects_PopulateFn9_TrappedSoul",
@@ -992,7 +1031,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b9be0bf7"
     },
     {
       "name": "Objects_PopulateFn6_Corpse",
@@ -1016,7 +1056,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "72bbf5df"
     },
     {
       "name": "Objects_PopulateFn8",
@@ -1056,7 +1097,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a496cce"
     },
     {
       "name": "Objects_PopulateFn4",
@@ -1092,7 +1134,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94cbf6f9"
     },
     {
       "name": "Objects_PopulateFn5_Crate",
@@ -1129,7 +1172,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "48565862"
     },
     {
       "name": "OBJECT_AlwaysReturnOne",
@@ -1149,7 +1193,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "e8d0d3ba"
     },
     {
       "name": "OBJECT_PopulateGridObjects",
@@ -1179,7 +1224,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f04381c3"
     },
     {
       "name": "OBJECT_PopulateGridItems",
@@ -1203,7 +1249,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2065b610"
     },
     {
       "name": "Roll",
@@ -1233,7 +1280,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4e60d747"
     },
     {
       "name": "RollArmorStand",
@@ -1254,7 +1302,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5f21602e"
     },
     {
       "name": "RollWeaponRack",
@@ -1275,7 +1324,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "29716854"
     },
     {
       "name": "OBJECT_RollAndDispatchPopulateFn",
@@ -1300,7 +1350,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3305659"
     },
     {
       "name": "OBJECT_PopulateRoomSpecialObjects",
@@ -1329,7 +1380,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "6cc1c5ad"
     },
     {
       "name": "OBJECT_PopulateRoomObjects",
@@ -1365,7 +1417,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2245c45a"
     },
     {
       "name": "OBJECT_CallPopulateFn",
@@ -1391,7 +1444,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "19637ca3"
     },
     {
       "name": "OBJECT_PopulateFromObjGroup",
@@ -1422,7 +1476,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ce776ab"
     },
     {
       "name": "OBJECT_FreeObjectData",
@@ -1445,7 +1500,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "14b47f62"
     },
     {
       "name": "FreeObjects",
@@ -1466,7 +1522,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e40a5f74"
     },
     {
       "name": "OBJECT_GetDoubledTxtSize",
@@ -1484,7 +1541,8 @@
       "usedTypes": [
         "D2ObjectsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "3c577a0a"
     },
     {
       "name": "OBJECT_GetDefaultSize",
@@ -1501,7 +1559,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "991a4bf9"
     },
     {
       "name": "OBJECT_RemapClassIdFromParm",
@@ -1521,7 +1580,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "28a20379"
     },
     {
       "name": "OBJECTS_SetUnitIdInTimerArg",
@@ -1541,7 +1601,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c6f9b977"
     },
     {
       "name": "GetUnitGUIDFromUnitTimerArg",
@@ -1561,7 +1622,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "471ba272"
     },
     {
       "name": "Objects_InitFn16_Well",
@@ -1578,7 +1640,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "14a1298b"
     },
     {
       "name": "Objects_PopulateFn2_WaypointShrine",
@@ -1620,7 +1683,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e6a24837"
     },
     {
       "name": "MONSTER_SetSpawnCoordList",
@@ -1639,7 +1703,8 @@
       "usedTypes": [
         "D2RoomCoordListStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "700b7666"
     },
     {
       "name": "StaticInit_gaObjectSpawnOffsetTables",
@@ -1653,7 +1718,8 @@
       "namespace": "D2Game::Objects::Objects",
       "calledFunctions": [
         "StaticInit_gaObjectSpawnOffsetTables"
-      ]
+      ],
+      "dh": "df6964fd"
     }
   ]
 }

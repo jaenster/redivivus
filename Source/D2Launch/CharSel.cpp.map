@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "593c842d"
     },
     {
       "name": "CHARSEL_GetCachedRealmData",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2RealmCharListCacheEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "65b9812d"
     },
     {
       "name": "CHARSEL_CacheRealmData",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D2RealmCharListCacheEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd83bcaf"
     },
     {
       "name": "CHARSEL_FreeCachedRealmData",
@@ -83,7 +86,8 @@
       ],
       "usedTypes": [
         "D2RealmCharListCacheEntryStrc"
-      ]
+      ],
+      "dh": "122e4823"
     },
     {
       "name": "UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide",
@@ -100,7 +104,8 @@
         "FORMS_CreateAnyFormFromList",
         "FORMS_SetGlobalFormImage",
         "SetUnsetFlag0x08"
-      ]
+      ],
+      "dh": "df88b297"
     },
     {
       "name": "CHARSEL_SelectRealmInDropdown",
@@ -121,7 +126,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c2feaa0a"
     },
     {
       "name": "GetPreferedRealm",
@@ -135,7 +141,8 @@
       "namespace": "D2Launch::CharSel",
       "calledFunctions": [
         "GetPreferedRealm"
-      ]
+      ],
+      "dh": "1793748c"
     },
     {
       "name": "CHARSEL_IsBetaRealm",
@@ -157,7 +164,8 @@
         "WCHAR[256]",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a3066c27"
     },
     {
       "name": "Unreferenced_00437f30",
@@ -171,7 +179,8 @@
       "namespace": "D2Launch::CharSel",
       "calledFunctions": [
         "Unreferenced_00437f30"
-      ]
+      ],
+      "dh": "a0eb5ed7"
     },
     {
       "name": "CHARSEL_GetClassNameString",
@@ -190,7 +199,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "dbb4ba38"
     },
     {
       "name": "CHARSEL_ClassHasAlternateDeath",
@@ -204,7 +214,8 @@
       "namespace": "D2Launch::CharSel",
       "calledFunctions": [
         "CHARSEL_ClassHasAlternateDeath"
-      ]
+      ],
+      "dh": "76b0f73b"
     },
     {
       "name": "CHARSEL_DestroySelectedChar",
@@ -220,7 +231,8 @@
         "CHARSEL_DestroySelectedChar",
         "D2COMP_DestroyCompositeUnit",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "9dc6b1d4"
     },
     {
       "name": "CHARSEL_GetDaysUntilExpiry",
@@ -239,7 +251,8 @@
       "usedTypes": [
         "__time32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a37b0db5"
     },
     {
       "name": "DRAW_LocalCharsInSelectionScreen",
@@ -280,7 +293,8 @@
         "uint16_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "06fd169c"
     },
     {
       "name": "DRAW_LocalCharsInSelectionScreen0",
@@ -329,7 +343,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "39ef6f9a"
     },
     {
       "name": "SAVEFILE_ParseSaveData",
@@ -369,7 +384,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b7ea472c"
     },
     {
       "name": "CHARSEL_DestroyAllCharEntries",
@@ -388,7 +404,8 @@
       ],
       "usedTypes": [
         "D2CharSelStrc"
-      ]
+      ],
+      "dh": "c11d67c0"
     },
     {
       "name": "Unreferenced_00438f40",
@@ -402,7 +419,8 @@
       "namespace": "D2Launch::CharSel",
       "calledFunctions": [
         "Unreferenced_00438f40"
-      ]
+      ],
+      "dh": "4a8e0a03"
     },
     {
       "name": "CHARSEL_EnumerateLocalSaves",
@@ -425,7 +443,8 @@
         "_WIN32_FIND_DATAA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2af58d20"
     },
     {
       "name": "CHARSEL_UpdateSelectionExpansion",
@@ -448,7 +467,8 @@
       "usedTypes": [
         "D2CharSelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "28bec30c"
     },
     {
       "name": "CHARSEL_UpdateSelectedCharDisplay",
@@ -503,7 +523,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0ae26983"
     },
     {
       "name": "UIMENU_SelectDifficultySinglePlayerOrTcpip",
@@ -531,7 +552,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7f45f7db"
     },
     {
       "name": "SelectCharHandler",
@@ -564,7 +586,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d25f1ba9"
     },
     {
       "name": "UIMENU_CALLBACK_SetDificultySingleplayerTcpIp",
@@ -585,7 +608,8 @@
       "usedTypes": [
         "D2CharSelStrc",
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "1ce4795b"
     },
     {
       "name": "UIMENU_Callback_NormalButtonSingleplayerTcpIp",
@@ -603,7 +627,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "92c70a29"
     },
     {
       "name": "UIMENU_Callback_NightmareButtonSingleplayerTcpIp",
@@ -621,7 +646,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "5a85dcad"
     },
     {
       "name": "UIMENU_Callback_HellButtonSingleplayerTcpIp",
@@ -639,7 +665,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "4d2e5fe3"
     },
     {
       "name": "MAINMENU_OnPressShowExpansionCreditsPage",
@@ -666,7 +693,8 @@
         "D2ControlStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "5b8deab6"
     },
     {
       "name": "MAINMENU_OnPressDestroyFormListIfExpansion",
@@ -685,7 +713,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "9b75f7fd"
     },
     {
       "name": "UIMENU_AreYouSureWouWantToDeleteThisCharacter",
@@ -712,7 +741,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2745b2b2"
     },
     {
       "name": "CHARSEL_OnPressDestroyFormList",
@@ -730,7 +760,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "65485763"
     },
     {
       "name": "CHARSEL_OnPressConfirmDeleteCharacter",
@@ -748,7 +779,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "4e8bd1f9"
     },
     {
       "name": "CHARSEL_OnPressScrollCharListUp",
@@ -767,7 +799,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "7bad54b4"
     },
     {
       "name": "CHARSEL_OnPressScrollCharListDown",
@@ -786,7 +819,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "c2bb6eb0"
     },
     {
       "name": "MAINMENU_CharSelScrollbarCallback",
@@ -806,7 +840,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "17dcb275"
     },
     {
       "name": "CHARSEL_ScrollCharList",
@@ -825,7 +860,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f12c5e80"
     },
     {
       "name": "CHARSEL_HandleKeyNavExpansion",
@@ -846,7 +882,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "uint32_t"
-      ]
+      ],
+      "dh": "5762f69c"
     },
     {
       "name": "CHARSEL_HandleKeyNavClassic",
@@ -867,7 +904,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "9b6bb661"
     },
     {
       "name": "CHARSEL_SetStatusMessage",
@@ -891,7 +929,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "a1226279"
     },
     {
       "name": "CHARSEL_ShowWaitTimeout",
@@ -913,7 +952,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "671c4d3d"
     },
     {
       "name": "CHARSEL_InitRealmSelection",
@@ -950,7 +990,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "f810e352"
     },
     {
       "name": "CHARSEL_CreateCharEntry",
@@ -980,7 +1021,8 @@
         "eD2PlayerClassID",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3c2efc79"
     },
     {
       "name": "CHARSEL_AddCreateNewEntry",
@@ -1000,7 +1042,8 @@
       "usedTypes": [
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "f35fd8c6"
     },
     {
       "name": "CHARSEL_AddRetrievingEntry",
@@ -1019,7 +1062,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "f51a91da"
     },
     {
       "name": "CHARSEL_ClearCharDetailUI",
@@ -1039,7 +1083,8 @@
         "D2WINMAIN_SetControlVisible",
         "D2WINMAIN_SetControlActive",
         "D2CheckExpansionGame"
-      ]
+      ],
+      "dh": "c48189a2"
     },
     {
       "name": "CHARSEL_ResetCharListUI",
@@ -1056,7 +1101,8 @@
         "D2WINMAIN_SetControlVisible",
         "D2CheckExpansionGame",
         "CHARSEL_UpdateSelectedCharDisplay"
-      ]
+      ],
+      "dh": "1d246ce4"
     },
     {
       "name": "Unreferenced_0043a7e0",
@@ -1072,7 +1118,8 @@
         "Unreferenced_0043a7e0",
         "FORMS_DestroyList",
         "CHARSEL_ResetCharListUI"
-      ]
+      ],
+      "dh": "2cdaa17c"
     },
     {
       "name": "UIMENU_ChangeHavingMultipleRealmsAsia123",
@@ -1104,7 +1151,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "34a2a056"
     },
     {
       "name": "ChangeClosedRealmChoice",
@@ -1125,7 +1173,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "1ff36efc"
     },
     {
       "name": "CHARSEL_OpenRealmChangeDialog",
@@ -1144,7 +1193,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "1f0513c2"
     },
     {
       "name": "CHARSEL_HandleCharListClick",
@@ -1167,7 +1217,8 @@
         "D2ControlMsg",
         "D2WinTextBox",
         "uint32_t"
-      ]
+      ],
+      "dh": "7157ad11"
     },
     {
       "name": "CHARSEL_ParseRealmCharList",
@@ -1194,7 +1245,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "00a7bba9"
     },
     {
       "name": "CHARSEL_OnPressPumpRealmCharListLoad",
@@ -1225,7 +1277,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd218899"
     },
     {
       "name": "CHARSEL_RequestRealmCharList",
@@ -1251,7 +1304,8 @@
         "D2RealmCharListCacheEntryStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "19f2d3e8"
     },
     {
       "name": "CHARSEL_LoadCharList",
@@ -1274,7 +1328,8 @@
         "D2CheckExpansionGame",
         "CHARSEL_AddCreateNewEntry",
         "CHARSEL_EnumerateLocalSaves"
-      ]
+      ],
+      "dh": "472aa5b1"
     },
     {
       "name": "CHARSEL_InitCharSelScreen",
@@ -1307,7 +1362,8 @@
       "usedTypes": [
         "D2WinTextBox",
         "uint32_t"
-      ]
+      ],
+      "dh": "155e8eb8"
     },
     {
       "name": "UIMENU_CharacterSelectAllGameTypes",
@@ -1355,7 +1411,8 @@
         "D2WinTimer",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "1f941bf0"
     },
     {
       "name": "StaticInit_pBetaRealmNames",
@@ -1372,7 +1429,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "64b219b0"
     }
   ]
 }

@@ -32,7 +32,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6d12d99"
     }
   ]
 }

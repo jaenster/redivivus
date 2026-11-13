@@ -20,7 +20,8 @@
         "D2DynamicPathStrc",
         "D2RoomStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1cb8c8f"
     },
     {
       "name": "PATH_GetTargetCoordinates",
@@ -37,7 +38,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "96c24230"
     },
     {
       "name": "PATH_ExtendPathEndpoint",
@@ -57,7 +59,8 @@
         "D2PathTypeArg",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b0914eb"
     },
     {
       "name": "PATH_GetScreenVelocity",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "D2DynamicPathStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b7010d68"
     },
     {
       "name": "DRLGPATH_UpdateUnitRoom",
@@ -101,7 +105,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "6472b080"
     },
     {
       "name": "DRLGPATH_SetPathPosition",
@@ -124,7 +129,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f12d22fd"
     },
     {
       "name": "DRLGPATH_ClearPathPosition",
@@ -142,7 +148,8 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
-      ]
+      ],
+      "dh": "7624d8c9"
     },
     {
       "name": "DRLGPATH_CalcDirectionVector",
@@ -160,7 +167,8 @@
       "usedTypes": [
         "POINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "00de20ce"
     },
     {
       "name": "DRLGPATH_CalcPathDirection",
@@ -179,7 +187,8 @@
       "usedTypes": [
         "POINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "448da48f"
     },
     {
       "name": "DRLGPATH_GetDirectionFromCoords",
@@ -199,7 +208,8 @@
         "POINT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a883336c"
     },
     {
       "name": "PATH_CalculateDistance",
@@ -217,7 +227,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7f892829"
     },
     {
       "name": "DRLGPATH_AdvanceAlongPathPoints",
@@ -239,7 +250,8 @@
         "POINT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae73c033"
     },
     {
       "name": "PATH_CheckCollisionOnStep",
@@ -265,7 +277,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "19ff112c"
     },
     {
       "name": "PATH_ComputeDirectMovementVector",
@@ -282,7 +295,8 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
-      ]
+      ],
+      "dh": "f8875494"
     },
     {
       "name": "PATH_TraceCollisionPath",
@@ -304,7 +318,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "076791cb"
     },
     {
       "name": "PATH_UpdateVelocityWithAcceleration",
@@ -322,7 +337,8 @@
       "usedTypes": [
         "D2DynamicPathStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9aa1e877"
     },
     {
       "name": "PATH_RecalculatePath",
@@ -346,7 +362,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9369ea2b"
     },
     {
       "name": "PATH_CheckIfTargetReached",
@@ -371,7 +388,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eaac6c6e"
     },
     {
       "name": "PATH_CheckPathCollision",
@@ -390,7 +408,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "76f96d4f"
     },
     {
       "name": "PATH_HasReachedTarget",
@@ -410,7 +429,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "63d20338"
     },
     {
       "name": "PATH_SnapPositionToTile",
@@ -428,7 +448,8 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
-      ]
+      ],
+      "dh": "16f86c91"
     },
     {
       "name": "Get8FlagsFromDynamicPath",
@@ -446,7 +467,8 @@
       "usedTypes": [
         "D2DynamicPathStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c407ba1"
     },
     {
       "name": "PATH_SetPathTarget",
@@ -469,7 +491,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b3673b91"
     },
     {
       "name": "PATH_ComputeMovementStep",
@@ -492,7 +515,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "607ea931"
     },
     {
       "name": "PATH_ResetPathState",
@@ -510,7 +534,8 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
-      ]
+      ],
+      "dh": "b9fd4f84"
     },
     {
       "name": "Unreferenced_00650800",
@@ -529,7 +554,8 @@
       "usedTypes": [
         "D2DynamicPathStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f974c1ee"
     },
     {
       "name": "PATH_AdvanceUnitAlongPath",
@@ -555,7 +581,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8fa50684"
     },
     {
       "name": "PATH_MoveUnitToPosition",
@@ -587,7 +614,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "533bcfd9"
     },
     {
       "name": "PATH_MoveObjectToPosition",
@@ -618,7 +646,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7d54756"
     },
     {
       "name": "PATH_GetCollisionMaskAt",
@@ -639,7 +668,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "f9bfd313"
     },
     {
       "name": "PATH_GetCollisionTypeAt",
@@ -660,7 +690,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ec296f7c"
     },
     {
       "name": "PATH_CheckCollisionFlags",
@@ -681,7 +712,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "147de013"
     },
     {
       "name": "PATH_TestLineOfSight",
@@ -708,7 +740,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "3003d869"
     },
     {
       "name": "IsAllyOf",
@@ -727,7 +760,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c835394"
     }
   ]
 }

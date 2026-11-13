@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "59f4c132"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648370",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ac494a05"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648380",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c56ca5c0"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648430",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8aac717c"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648440",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7db41f0f"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00648450",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f0c489d4"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0",
@@ -120,7 +126,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0331db35"
     },
     {
       "name": "FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740",
@@ -137,7 +144,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fcecab4b"
     },
     {
       "name": "CUBE_GetRecipeCount_Unref_00665760",
@@ -154,7 +162,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "00b73292"
     },
     {
       "name": "CUBE_PadItemCodeString",
@@ -168,7 +177,8 @@
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
         "CUBE_PadItemCodeString"
-      ]
+      ],
+      "dh": "9584b55c"
     },
     {
       "name": "CUBE_TokenizeAndParseInt",
@@ -187,7 +197,8 @@
       "usedTypes": [
         "char *",
         "int32_t"
-      ]
+      ],
+      "dh": "1ca278d5"
     },
     {
       "name": "CUBE_ParseInputItem",
@@ -213,7 +224,8 @@
         "D2ItemsTxt",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b06ce7ad"
     },
     {
       "name": "CUBE_ParseOutputItem",
@@ -239,7 +251,8 @@
         "D2CubeOutputStrc",
         "D2ItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "0b264181"
     },
     {
       "name": "CUBE_ParseInputItemField",
@@ -258,7 +271,8 @@
       "usedTypes": [
         "D2CubeMainTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "8fd6699e"
     },
     {
       "name": "CUBE_ParseOutputItemField",
@@ -277,7 +291,8 @@
       "usedTypes": [
         "D2CubeMainTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e538a5db"
     },
     {
       "name": "DATATBLS_LinkerItemStatCost",
@@ -295,7 +310,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "854e8049"
     },
     {
       "name": "CUBE_LoadCubeMainTable",
@@ -321,7 +337,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05f0689e"
     },
     {
       "name": "CUBE_FreeCubeMainTable",
@@ -336,7 +353,8 @@
       "calledFunctions": [
         "CUBE_FreeCubeMainTable",
         "UnloadBin"
-      ]
+      ],
+      "dh": "7439b270"
     },
     {
       "name": "CUBE_GetRecipeByIndex",
@@ -357,7 +375,8 @@
       "usedTypes": [
         "D2CubeMainTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "1ae07951"
     },
     {
       "name": "CUBE_GetRecipeCount",
@@ -374,7 +393,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "50117960"
     },
     {
       "name": "nullsub_Unref_0066a210",
@@ -391,7 +411,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ea8c457e"
     },
     {
       "name": "nullsub",
@@ -408,7 +429,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4d614268"
     },
     {
       "name": "FIELDTBLS_AllocPlayerData_NoOp",
@@ -425,7 +447,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a511cb0b"
     },
     {
       "name": "FIELDTBLS_FreePlayerData_STUB",
@@ -442,7 +465,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4745b547"
     },
     {
       "name": "FIELDTBLS_InitTxtFiles_NoOp",
@@ -459,7 +483,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "aa90de13"
     },
     {
       "name": "FIELDTBLS_FreeTables_NoOp",
@@ -473,7 +498,8 @@
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
         "FIELDTBLS_FreeTables_NoOp"
-      ]
+      ],
+      "dh": "3ad8bcd4"
     },
     {
       "name": "FIELDTBLS_Unused_HaltLine101",
@@ -490,7 +516,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "e8defc9a"
     },
     {
       "name": "CUBE_GetRecipeCount_Unref_0066a490",
@@ -507,7 +534,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e56822ae"
     },
     {
       "name": "CUBE_GetRecipeCount_Unref_0066a4a0",
@@ -524,7 +552,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a7a17397"
     },
     {
       "name": "FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0",
@@ -538,7 +567,8 @@
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
         "FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0"
-      ]
+      ],
+      "dh": "518edfdb"
     },
     {
       "name": "CUBE_PadItemCodeString_Unref_006bcd50",
@@ -552,7 +582,8 @@
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
         "CUBE_PadItemCodeString_Unref_006bcd50"
-      ]
+      ],
+      "dh": "0cbea488"
     }
   ]
 }

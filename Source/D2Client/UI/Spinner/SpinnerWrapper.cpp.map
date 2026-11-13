@@ -19,7 +19,8 @@
       "usedTypes": [
         "SpinnerWrapper",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "5c7315dd"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "SpinnerWrapper",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc2f3320"
     },
     {
       "name": "OnMouseWheel",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "86027539"
     },
     {
       "name": "OnMouseDown",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "4e91e70a"
     },
     {
       "name": "OnMouseUp",
@@ -93,7 +97,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "273721c4"
     },
     {
       "name": "OnMouseMove",
@@ -111,7 +116,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "183052f6"
     },
     {
       "name": "Draw",
@@ -128,7 +134,8 @@
       ],
       "usedTypes": [
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "a083b1d2"
     },
     {
       "name": "OnChar",
@@ -146,7 +153,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "3cea8689"
     },
     {
       "name": "OnDownArrow",
@@ -164,7 +172,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "9ef8b484"
     },
     {
       "name": "OnUpArrow",
@@ -182,7 +191,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "36e8db42"
     },
     {
       "name": "OnRightArrow",
@@ -200,7 +210,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "c434c98a"
     },
     {
       "name": "OnLeftArrow",
@@ -218,7 +229,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "1a7b1884"
     },
     {
       "name": "GetValue",
@@ -235,7 +247,8 @@
       ],
       "usedTypes": [
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "9faed513"
     },
     {
       "name": "GetRepeatDelta",
@@ -252,7 +265,8 @@
       ],
       "usedTypes": [
         "SpinnerWrapper"
-      ]
+      ],
+      "dh": "cd7d3470"
     },
     {
       "name": "Constructor",
@@ -273,7 +287,8 @@
         "SpinnerWrapper",
         "fpSpinnerRepeatAction",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "d18e35fb"
     }
   ]
 }

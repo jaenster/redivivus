@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8fb0a587"
     },
     {
       "name": "Q01_Callback02_NpcDeactivate",
@@ -44,7 +45,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA1Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "22701194"
     },
     {
       "name": "Q01_SyncQuestStepToPlayer",
@@ -69,7 +71,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cf0d1877"
     },
     {
       "name": "RESPEC_GrantRespecReward",
@@ -91,7 +94,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3bfde351"
     },
     {
       "name": "DeactivateRespecQuest",
@@ -122,7 +126,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a7a62a26"
     },
     {
       "name": "Q01_Callback11_ScrollMessage",
@@ -160,7 +165,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cce9bf75"
     },
     {
       "name": "Q01_Callback00_NpcActivate",
@@ -187,7 +193,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0255c6f2"
     },
     {
       "name": "Q01_SetCannotCompleteInGame",
@@ -212,7 +219,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0cc50a17"
     },
     {
       "name": "Q01_PlayCompletionSound",
@@ -234,7 +242,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6fab3f8f"
     },
     {
       "name": "Q01_SetPartyMemberRewardStates",
@@ -263,7 +272,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "53af98f6"
     },
     {
       "name": "Q01_PropagateRewardToParty",
@@ -287,7 +297,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "af1e6f94"
     },
     {
       "name": "GetDenMonstersLeftToKillCount",
@@ -305,7 +316,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a8d3df6"
     },
     {
       "name": "Q01_Callback10_PlayerLeavesGame",
@@ -325,7 +337,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e33c42e0"
     },
     {
       "name": "Q01_TimerNotifyCompletion",
@@ -346,7 +359,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "c0ce744b"
     },
     {
       "name": "Q01_Callback08_MonsterKilled",
@@ -385,7 +399,8 @@
         "eD2LevelId",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "ef8c9cd1"
     },
     {
       "name": "Q01_Callback03_ChangedLevel",
@@ -413,7 +428,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1e36e22f"
     },
     {
       "name": "Q01_ActiveFilter",
@@ -434,7 +450,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "17197c2e"
     },
     {
       "name": "Q01_SequenceFilter",
@@ -456,7 +473,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bb6b7c69"
     },
     {
       "name": "Q01_Callback13_PlayerStartedGame",
@@ -479,7 +497,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f374963e"
     },
     {
       "name": "Q01_InitData",
@@ -501,7 +520,8 @@
         "D2QuestDataA1Q1Strc *",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c64ca923"
     }
   ]
 }

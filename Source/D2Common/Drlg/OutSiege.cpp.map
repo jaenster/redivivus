@@ -22,7 +22,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "11e58a7d"
     },
     {
       "name": "DRLGOUTROOM_SpawnPresetIfGridFlagged",
@@ -43,7 +44,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3756d8d1"
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5BorderPresets",
@@ -64,7 +66,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d737e48"
     },
     {
       "name": "DRLGOUTROOM_GetGridDivisionSize",
@@ -82,7 +85,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "412d3743"
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5RoadPath",
@@ -109,7 +113,8 @@
         "D2DrlgVertexStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54d78ef0"
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5OuterWalls",
@@ -129,7 +134,8 @@
       "usedTypes": [
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "0da070d1"
     },
     {
       "name": "DRLGOUTDOOR_GetSecondaryBorderPresetFromLvlSub",
@@ -151,7 +157,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "06470562"
     },
     {
       "name": "DRLGOUTDOOR_ValidateSecondaryBorderCell",
@@ -172,7 +179,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ed695f3"
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5SecondaryBorder",
@@ -193,7 +201,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "D2UnkOutdoorStrc"
-      ]
+      ],
+      "dh": "9be3dd74"
     },
     {
       "name": "DRLGOUTROOM_PlaceAct5SceneryPresets",
@@ -215,7 +224,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "34261ea6"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5BloodyFoothillsRandomPresets",
@@ -242,7 +252,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e237f0e4"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5SiegePresets",
@@ -267,7 +278,8 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "3d160ab0"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct5WallPresets",
@@ -292,7 +304,8 @@
         "D2DrlgLevelStrc",
         "D2LvlPrestTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "dce9bafe"
     },
     {
       "name": "InitAct5OutdoorLevel",
@@ -319,7 +332,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "49d03bce"
     }
   ]
 }

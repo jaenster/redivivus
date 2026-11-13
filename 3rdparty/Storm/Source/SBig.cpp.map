@@ -21,7 +21,8 @@
         "ULONGLONG",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "12114813"
     },
     {
       "name": "SBIG_Accumulator_MulAndAdd",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "83de9fc3"
     },
     {
       "name": "SBIG_Accumulator_ComputeOffset",
@@ -59,7 +61,8 @@
       "usedTypes": [
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4d51472"
     },
     {
       "name": "BigBuffer_DecodeDataBytes",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "49eb1688"
     },
     {
       "name": "TSBaseArray_Ui_Subscript",
@@ -96,7 +100,8 @@
         "TSGrowableArray_Ui",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7c1fb1d"
     },
     {
       "name": "TSBaseArray_Ui_Top",
@@ -114,7 +119,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "82ce037d"
     },
     {
       "name": "TSBaseArray_Uc_Subscript",
@@ -133,7 +139,8 @@
         "TSGrowableArray_Uc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3af2c13e"
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr",
@@ -151,7 +158,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "e7add616"
     },
     {
       "name": "TSBaseArray_Uc_Constructor",
@@ -168,7 +176,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "e1ae9695"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor",
@@ -185,7 +194,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "86e5ddb5"
     },
     {
       "name": "Unreferenced_00421050",
@@ -202,7 +212,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "fd3a63db"
     },
     {
       "name": "Unreferenced_00421090",
@@ -219,7 +230,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "4d1462a9"
     },
     {
       "name": "TSGrowableArray_Ui_CalcChunkSize",
@@ -237,7 +249,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "91dc43b4"
     },
     {
       "name": "TSGrowableArray_Ui_RoundToChunk",
@@ -254,7 +267,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c4cf8e38"
     },
     {
       "name": "SBIG_DynArray_Resize",
@@ -274,7 +288,8 @@
         "TSGrowableArray_Ui",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "712ddab6"
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr_Unref_00421150",
@@ -292,7 +307,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "b7987f4d"
     },
     {
       "name": "TSGrowableArray_Uc_CalcChunkSize",
@@ -310,7 +326,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "2bb445b2"
     },
     {
       "name": "TSGrowableArray_Uc_RoundToChunk",
@@ -327,7 +344,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "775b4c96"
     },
     {
       "name": "TSFixedArray_Uc_ReallocData",
@@ -349,7 +367,8 @@
         "TSGrowableArray_Uc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "52db83ea"
     },
     {
       "name": "TSGrowableArray_UcAlt_CalcChunkSize",
@@ -367,7 +386,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "67ba3513"
     },
     {
       "name": "TSGrowableArray_UcAlt_RoundToChunk",
@@ -384,7 +404,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "935288ec"
     },
     {
       "name": "Unreferenced_004212a0",
@@ -401,7 +422,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "30f1c0ad"
     },
     {
       "name": "Unreferenced_004212c0",
@@ -418,7 +440,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "4534e037"
     },
     {
       "name": "SBIG_BigBuffer_GetWord",
@@ -437,7 +460,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "303dc2e1"
     },
     {
       "name": "BigBuffer_Compare",
@@ -456,7 +480,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae7ea441"
     },
     {
       "name": "SBIG_BigBuffer_FindHighestBit",
@@ -476,7 +501,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5f7abe69"
     },
     {
       "name": "SBIG_BigBuffer_IsLowestBitClear",
@@ -494,7 +520,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "43a6a14a"
     },
     {
       "name": "SBIG_BigBuffer_FindLowestBit",
@@ -514,7 +541,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14a2b0c1"
     },
     {
       "name": "SBIG_BigBuffer_GetFirstWord",
@@ -532,7 +560,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "475ad120"
     },
     {
       "name": "SBIG_CompareBigBuffers_ForSha1",
@@ -551,7 +580,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "53046906"
     },
     {
       "name": "SBIG_BigBuffer_IsLowestBitClearWrapper",
@@ -570,7 +600,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "d8b405f2"
     },
     {
       "name": "SBIG_ArrayDwordReadAtCursor",
@@ -589,7 +620,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff55f123"
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_00421570",
@@ -607,7 +639,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray_Ui"
-      ]
+      ],
+      "dh": "f4677af2"
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_00421590",
@@ -625,7 +658,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray_Ui"
-      ]
+      ],
+      "dh": "7557f21b"
     },
     {
       "name": "SBIG_BigBuffer_GetDataPtr_Unref_004215b0",
@@ -643,7 +677,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "04775877"
     },
     {
       "name": "TSBaseArray_Ui_Copy",
@@ -662,7 +697,8 @@
       "usedTypes": [
         "TSGrowableArray_Ui",
         "uint32_t"
-      ]
+      ],
+      "dh": "866f4e23"
     },
     {
       "name": "TSGrowableArray_Uc_Reserve",
@@ -682,7 +718,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b519c014"
     },
     {
       "name": "SBIG_ArrayByteSetCapacity",
@@ -702,7 +739,8 @@
         "TSGrowableArray_Uc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21c14635"
     },
     {
       "name": "SBIG_ArrayByteAltSetCapacity",
@@ -722,7 +760,8 @@
         "TSGrowableArray_Uc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b140ce2"
     },
     {
       "name": "TSFixedArray_Ui_ReallocData",
@@ -743,7 +782,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e77459e"
     },
     {
       "name": "TSFixedArray_UcAlt_ReallocData",
@@ -765,7 +805,8 @@
         "TSGrowableArray_Uc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "576a3a6a"
     },
     {
       "name": "TSFixedArray_Ui_Destructor_Unref_004217f0",
@@ -783,7 +824,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray_Ui"
-      ]
+      ],
+      "dh": "34c36343"
     },
     {
       "name": "TSFixedArray_Ui_Destructor",
@@ -798,7 +840,8 @@
       "calledFunctions": [
         "TSFixedArray_Ui_Destructor",
         "SMemFree"
-      ]
+      ],
+      "dh": "f4387462"
     },
     {
       "name": "Unreferenced_00421830",
@@ -812,7 +855,8 @@
       "namespace": "Storm::Source::SBig",
       "calledFunctions": [
         "Unreferenced_00421830"
-      ]
+      ],
+      "dh": "b0ddd7cb"
     },
     {
       "name": "Unreferenced_00421860",
@@ -829,7 +873,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4ff6d0a9"
     },
     {
       "name": "TSFixedArray_Ui_Assign",
@@ -847,7 +892,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "82aac283"
     },
     {
       "name": "Unreferenced_004218a0",
@@ -861,7 +907,8 @@
       "namespace": "Storm::Source::SBig",
       "calledFunctions": [
         "Unreferenced_004218a0"
-      ]
+      ],
+      "dh": "0e4a5543"
     },
     {
       "name": "SBIG_ArrayByteAppendData",
@@ -883,7 +930,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ffe28eb3"
     },
     {
       "name": "TSGrowableArray_Uc_New",
@@ -904,7 +952,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f929d7c"
     },
     {
       "name": "TSGrowableArray_Uc_SetCount",
@@ -923,7 +972,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ba0277e3"
     },
     {
       "name": "SBIG_ArrayByteAppendByte",
@@ -942,7 +992,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8ceb2ee7"
     },
     {
       "name": "TSBaseArray_Uc_Copy",
@@ -962,7 +1013,8 @@
         "TSGrowableArray_Uc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4de27727"
     },
     {
       "name": "TSBaseArray_UcAlt_Copy",
@@ -982,7 +1034,8 @@
         "TSGrowableArray_Uc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf921ced"
     },
     {
       "name": "TSGrowableArray_Ui_Reserve",
@@ -1002,7 +1055,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c0a5ba9"
     },
     {
       "name": "TSGrowableArray_UcAlt_Reserve",
@@ -1023,7 +1077,8 @@
         "TSGrowableArray_Uc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad0bb211"
     },
     {
       "name": "TSGrowableArray_Ui_Assign",
@@ -1042,7 +1097,8 @@
       "usedTypes": [
         "TSGrowableArray_Ui",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c771d17"
     },
     {
       "name": "BigBuffer_EncodeDataBytes",
@@ -1067,7 +1123,8 @@
       "usedTypes": [
         "TSGrowableArray_Uc",
         "uint32_t"
-      ]
+      ],
+      "dh": "20dad709"
     },
     {
       "name": "BigBuffer_ToBinaryAppend",
@@ -1094,7 +1151,8 @@
         "TSGrowableArray_Uc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b1933e05"
     },
     {
       "name": "BigData_Destructor",
@@ -1113,7 +1171,8 @@
       "usedTypes": [
         "BigData",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "1db94b19"
     },
     {
       "name": "SBIG_Constructor",
@@ -1131,7 +1190,8 @@
       "usedTypes": [
         "BigData",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "3d16f6b1"
     },
     {
       "name": "SBIG_EnsureCapacity",
@@ -1153,7 +1213,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bbe56ae"
     },
     {
       "name": "TSGrowableArray_Ui_SetCount",
@@ -1173,7 +1234,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "e9e037c3"
     },
     {
       "name": "SBIG_AppendBytes",
@@ -1195,7 +1257,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7715cedd"
     },
     {
       "name": "SBIG_GrowToIndex",
@@ -1217,7 +1280,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a0dc45c"
     },
     {
       "name": "SBIG_GetPtrAtOffset",
@@ -1237,7 +1301,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1fbd8dbc"
     },
     {
       "name": "SBIG_TrimToOffset",
@@ -1257,7 +1322,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b9c7a12"
     },
     {
       "name": "SBIG_GrowToIndexNoZero",
@@ -1278,7 +1344,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "218ad9b0"
     },
     {
       "name": "SBIG_SetOffset",
@@ -1297,7 +1364,8 @@
       "usedTypes": [
         "BigBuffer",
         "int32_t"
-      ]
+      ],
+      "dh": "ee1a3635"
     },
     {
       "name": "SBIG_TrimLeadingZeros",
@@ -1318,7 +1386,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ca26ae1"
     },
     {
       "name": "SBIG_CopyAssign",
@@ -1337,7 +1406,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fec5065"
     },
     {
       "name": "BigBuffer_Add_Ui",
@@ -1358,7 +1428,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "4c7ec2a8"
     },
     {
       "name": "BigBuffer_Add",
@@ -1379,7 +1450,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "eceb54f7"
     },
     {
       "name": "BigBuffer_And",
@@ -1400,7 +1472,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "725b6a4b"
     },
     {
       "name": "BigBuffer_Compare_Ui",
@@ -1420,7 +1493,8 @@
         "BigBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a5ad490"
     },
     {
       "name": "BigBuffer_Div_Ux",
@@ -1445,7 +1519,8 @@
         "BigBuffer",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34c597b7"
     },
     {
       "name": "BigBuffer_IsOdd",
@@ -1464,7 +1539,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "78dc4a8e"
     },
     {
       "name": "BigBuffer_IsOne",
@@ -1483,7 +1559,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "f9e3ebeb"
     },
     {
       "name": "BigBuffer_IsZero",
@@ -1502,7 +1579,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe0d8066"
     },
     {
       "name": "BigBuffer_Mul_Ux",
@@ -1526,7 +1604,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "acc53731"
     },
     {
       "name": "BigBuffer_Not",
@@ -1547,7 +1626,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bdd3630"
     },
     {
       "name": "BigBuffer_Or",
@@ -1568,7 +1648,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "420b4636"
     },
     {
       "name": "BigBuffer_Set2Exp",
@@ -1589,7 +1670,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef977958"
     },
     {
       "name": "BigBuffer_SetOne",
@@ -1610,7 +1692,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "d97d50b0"
     },
     {
       "name": "BigBuffer_SetZero",
@@ -1631,7 +1714,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bed27e1"
     },
     {
       "name": "BigBuffer_Shl",
@@ -1654,7 +1738,8 @@
         "BigBuffer",
         "int8_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6767589e"
     },
     {
       "name": "BigBuffer_Shr",
@@ -1676,7 +1761,8 @@
         "BigBuffer",
         "int8_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9833f061"
     },
     {
       "name": "BigBuffer_Sub_Ui",
@@ -1697,7 +1783,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f6c1a14"
     },
     {
       "name": "BigBuffer_Sub",
@@ -1718,7 +1805,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3b7cdad"
     },
     {
       "name": "BigBuffer_Xor",
@@ -1739,7 +1827,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f22812f"
     },
     {
       "name": "BigBuffer_FromBinary",
@@ -1762,7 +1851,8 @@
         "BigBuffer",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7b5b11d0"
     },
     {
       "name": "BigBuffer_FromStr",
@@ -1782,7 +1872,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "84a9072f"
     },
     {
       "name": "BigBuffer_FromStream",
@@ -1803,7 +1894,8 @@
         "BigBuffer",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "99a90260"
     },
     {
       "name": "BigBuffer_FromUnsigned",
@@ -1824,7 +1916,8 @@
       "usedTypes": [
         "BigBuffer",
         "uint32_t"
-      ]
+      ],
+      "dh": "03799e88"
     },
     {
       "name": "BigBuffer_ToBinary",
@@ -1843,7 +1936,8 @@
       "usedTypes": [
         "BigBuffer",
         "TSGrowableArray_Uc"
-      ]
+      ],
+      "dh": "b1586918"
     },
     {
       "name": "BigBuffer_ToStr",
@@ -1870,7 +1964,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "febaec02"
     },
     {
       "name": "BigBuffer_ToStream",
@@ -1891,7 +1986,8 @@
       "usedTypes": [
         "BigBuffer",
         "TSGrowableArray_Uc"
-      ]
+      ],
+      "dh": "566fc1ab"
     },
     {
       "name": "SBigAdd",
@@ -1909,7 +2005,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "57fc947d"
     },
     {
       "name": "SBigAnd",
@@ -1927,7 +2024,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "6e39dec3"
     },
     {
       "name": "SBigCopy",
@@ -1946,7 +2044,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "27ba7b4b"
     },
     {
       "name": "SBigDec",
@@ -1964,7 +2063,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "62e89266"
     },
     {
       "name": "SBIG_Destructor",
@@ -1984,7 +2084,8 @@
       "usedTypes": [
         "BigData",
         "uint8_t"
-      ]
+      ],
+      "dh": "05bd180d"
     },
     {
       "name": "SBigFromBinary",
@@ -2003,7 +2104,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "257daaf4"
     },
     {
       "name": "SBigFromStr",
@@ -2021,7 +2123,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "d6e7e8a2"
     },
     {
       "name": "SBigFromStream",
@@ -2041,7 +2144,8 @@
         "BigData",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "745b3072"
     },
     {
       "name": "SBigFromUnsigned",
@@ -2060,7 +2164,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "09ddf4c4"
     },
     {
       "name": "SBigInc",
@@ -2078,7 +2183,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "29e9eb22"
     },
     {
       "name": "SBigIsOdd",
@@ -2096,7 +2202,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "c7605b99"
     },
     {
       "name": "SBigIsOne",
@@ -2114,7 +2221,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "1939b89e"
     },
     {
       "name": "SBigIsZero",
@@ -2132,7 +2240,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "c0e3ff14"
     },
     {
       "name": "SBigNew",
@@ -2153,7 +2262,8 @@
         "BigData",
         "BigData *",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "0a4ff6ad"
     },
     {
       "name": "SBigNot",
@@ -2171,7 +2281,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "21097589"
     },
     {
       "name": "SBigOr",
@@ -2189,7 +2300,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "b1eb07bf"
     },
     {
       "name": "SBigSet2Exp",
@@ -2208,7 +2320,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "3096bdc4"
     },
     {
       "name": "SBigSetOne",
@@ -2226,7 +2339,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "ea378b48"
     },
     {
       "name": "SBigSetZero",
@@ -2245,7 +2359,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "ba329545"
     },
     {
       "name": "SBigShl",
@@ -2264,7 +2379,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "d1094175"
     },
     {
       "name": "SBigShr",
@@ -2283,7 +2399,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a932519"
     },
     {
       "name": "SBigSub",
@@ -2301,7 +2418,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "353d644e"
     },
     {
       "name": "SBigToBinaryArray",
@@ -2323,7 +2441,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "3847b5e5"
     },
     {
       "name": "SBigToBinaryBuffer",
@@ -2343,7 +2462,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "df2a3f66"
     },
     {
       "name": "SBigToBinaryPtr",
@@ -2363,7 +2483,8 @@
         "BigData",
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "15060983"
     },
     {
       "name": "SBigToStrArray",
@@ -2384,7 +2505,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "37eed830"
     },
     {
       "name": "SBigToStrBuffer",
@@ -2404,7 +2526,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "bf834ff7"
     },
     {
       "name": "SBigToStrPtr",
@@ -2423,7 +2546,8 @@
       "usedTypes": [
         "BigData",
         "uint8_t *"
-      ]
+      ],
+      "dh": "26428946"
     },
     {
       "name": "SBigToStreamArray",
@@ -2444,7 +2568,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "7501bf39"
     },
     {
       "name": "SBigToStreamBuffer",
@@ -2464,7 +2589,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0caeed0"
     },
     {
       "name": "SBigToStreamPtr",
@@ -2484,7 +2610,8 @@
         "BigData",
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "521cf27a"
     },
     {
       "name": "SBigXor",
@@ -2502,7 +2629,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "4e6e72e2"
     },
     {
       "name": "SBIG_CopyBigNumToTemp",
@@ -2521,7 +2649,8 @@
       "usedTypes": [
         "BigBuffer",
         "BigStack"
-      ]
+      ],
+      "dh": "fa8c1614"
     },
     {
       "name": "BigBuffer_Div",
@@ -2559,7 +2688,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "b4fbef1a"
     },
     {
       "name": "BigBuffer_Gcd",
@@ -2583,7 +2713,8 @@
         "BigStack",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "576048be"
     },
     {
       "name": "BigBuffer_Mul",
@@ -2609,7 +2740,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a8c4b09f"
     },
     {
       "name": "BigBuffer_MulMod",
@@ -2630,7 +2762,8 @@
         "BigBuffer",
         "BigStack",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5717dcf"
     },
     {
       "name": "BigBuffer_Pow",
@@ -2651,7 +2784,8 @@
         "BigBuffer",
         "BigStack",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad28bcbf"
     },
     {
       "name": "BigBuffer_Rand",
@@ -2682,7 +2816,8 @@
         "BigStack",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f8cca981"
     },
     {
       "name": "BigBuffer_Square",
@@ -2708,7 +2843,8 @@
         "BigStack",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "762f2111"
     },
     {
       "name": "SBigDel",
@@ -2727,7 +2863,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "c9f65c88"
     },
     {
       "name": "SBigDiv",
@@ -2746,7 +2883,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "234b63aa"
     },
     {
       "name": "SBigGcd",
@@ -2764,7 +2902,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "943695ff"
     },
     {
       "name": "SBigMod",
@@ -2783,7 +2922,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9b42925"
     },
     {
       "name": "SBigMul",
@@ -2801,7 +2941,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "c6a2792b"
     },
     {
       "name": "SBigMulMod",
@@ -2819,7 +2960,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "020e6423"
     },
     {
       "name": "SBigPow",
@@ -2838,7 +2980,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "3970d11a"
     },
     {
       "name": "SBigRand",
@@ -2856,7 +2999,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "a4e4eda5"
     },
     {
       "name": "SBigSquare",
@@ -2874,7 +3018,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "ca3de515"
     },
     {
       "name": "BigBuffer_InvMod",
@@ -2901,7 +3046,8 @@
         "BigBuffer",
         "BigStack",
         "uint32_t"
-      ]
+      ],
+      "dh": "8fb3df24"
     },
     {
       "name": "BigBuffer_PowMod",
@@ -2926,7 +3072,8 @@
         "BigBuffer",
         "BigStack",
         "uint32_t"
-      ]
+      ],
+      "dh": "1fe16312"
     },
     {
       "name": "SBigInvMod",
@@ -2944,7 +3091,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "c21dfb1c"
     },
     {
       "name": "SBigPowMod",
@@ -2962,7 +3110,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "1cf774d5"
     },
     {
       "name": "BigBuffer_IsPrime",
@@ -2995,7 +3144,8 @@
         "BigStack",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9cf0cd6a"
     },
     {
       "name": "SBigIsPrime",
@@ -3013,7 +3163,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "30408539"
     },
     {
       "name": "BigBuffer_FindPrime",
@@ -3044,7 +3195,8 @@
         "BigStack",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93206262"
     },
     {
       "name": "SBigFindPrime",
@@ -3063,7 +3215,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "4faedebc"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0044df10",
@@ -3080,7 +3233,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "acd1e957"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00450870",
@@ -3097,7 +3251,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "30eb7324"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0047f930",
@@ -3114,7 +3269,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "df76b801"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0",
@@ -3131,7 +3287,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "e6cf56d5"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00601e00",
@@ -3148,7 +3305,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "e3d0fb51"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_00603f40",
@@ -3165,7 +3323,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "27312d9a"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e200",
@@ -3182,7 +3341,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "e30b442f"
     },
     {
       "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e220",
@@ -3199,7 +3359,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "1c154516"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9f58",
@@ -3220,7 +3381,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "894b54a7"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9f88",
@@ -3241,7 +3403,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "90c42eb7"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9fc1",
@@ -3262,7 +3425,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "dca38cd7"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9ff0",
@@ -3283,7 +3447,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "f1134e59"
     }
   ]
 }

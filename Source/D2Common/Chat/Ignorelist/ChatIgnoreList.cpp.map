@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "ChatIgnoreList"
-      ]
+      ],
+      "dh": "62007599"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "ChatIgnoreList",
         "uint32_t"
-      ]
+      ],
+      "dh": "43981e08"
     },
     {
       "name": "Constructor",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "ChatIgnoreList"
-      ]
+      ],
+      "dh": "c7b1f6bd"
     }
   ]
 }

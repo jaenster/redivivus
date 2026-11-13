@@ -23,7 +23,8 @@
         "D2LvlPrestId",
         "D2LvlPrestTxt",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f070b26"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct2CanyonExitPresets",
@@ -43,7 +44,8 @@
         "D2DrlgLevelDataWildernessLevel",
         "D2DrlgLevelStrc",
         "D2DrlgOrthStrc"
-      ]
+      ],
+      "dh": "d920e67c"
     },
     {
       "name": "PlaceCliffs",
@@ -63,7 +65,8 @@
         "D2DrlgLevelStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "30844a8d"
     },
     {
       "name": "AddAct124SecondaryBorderSubId213",
@@ -81,7 +84,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "6f9784bd"
     },
     {
       "name": "AddExits",
@@ -103,7 +107,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f45f58de"
     },
     {
       "name": "PlaceFillsInRockyWaste",
@@ -122,7 +127,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "610eeebd"
     },
     {
       "name": "PlaceFillsInDryHills",
@@ -141,7 +147,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "24695813"
     },
     {
       "name": "DRLGOUTPLACE_PlaceAct2DesertVariants",
@@ -160,7 +167,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "e0f3bd7d"
     },
     {
       "name": "PlaceFillsInFarOasis",
@@ -179,7 +187,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "5b5990f4"
     },
     {
       "name": "PlaceRuinsInLostCity",
@@ -198,7 +207,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "82a90edd"
     },
     {
       "name": "PlaceFillsInLostCity",
@@ -217,7 +227,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "58def09b"
     },
     {
       "name": "PlaceTombEntriesInCanyon",
@@ -236,7 +247,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c6910f94"
     },
     {
       "name": "PlaceFillsInCanyon",
@@ -255,7 +267,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "82c54659"
     },
     {
       "name": "InitAct2OutdoorLevel",
@@ -290,7 +303,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2LvlPrestId"
-      ]
+      ],
+      "dh": "d9731b1c"
     }
   ]
 }

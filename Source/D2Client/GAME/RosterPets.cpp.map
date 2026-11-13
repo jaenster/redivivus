@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2RosterPetStrc"
-      ]
+      ],
+      "dh": "8739108e"
     },
     {
       "name": "Unreferenced_00478a90",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "D2RosterPetStrc"
-      ]
+      ],
+      "dh": "0d042d4e"
     },
     {
       "name": "ROSTERPETS_RemoveRosterPetsBySkillID",
@@ -56,7 +58,8 @@
         "D2RosterPetStrc",
         "D2RosterPetStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "86dab628"
     },
     {
       "name": "AddRosterPet",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0b52ae57"
     },
     {
       "name": "AddRosterPetMerc",
@@ -108,7 +112,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "057b3625"
     },
     {
       "name": "RemoveRosterPet",
@@ -129,7 +134,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "249613ea"
     },
     {
       "name": "ROSTER_GetPetOwnershipRelation",
@@ -153,7 +159,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "6c699365"
     },
     {
       "name": "GetSeed",
@@ -172,7 +179,8 @@
         "D2RosterPetSeedStrc",
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa00ae6b"
     },
     {
       "name": "ROSTER_AreUnitsHostile",
@@ -193,7 +201,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0496a9b3"
     },
     {
       "name": "CountRostersForUnitFilterBySkill",
@@ -212,7 +221,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e25c52a0"
     },
     {
       "name": "GetRosterPetGUID",
@@ -231,7 +241,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dbe55aac"
     },
     {
       "name": "CheckIfUnitHasRosterPet",
@@ -249,7 +260,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f16a88c7"
     },
     {
       "name": "ROSTER_UpdateHostileColors",
@@ -273,7 +285,8 @@
         "D2RosterPetStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dd7c8ad"
     },
     {
       "name": "UpdateLifeAndArea",
@@ -296,7 +309,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "bfb35558"
     },
     {
       "name": "GetRosterPerHPPercent",
@@ -314,7 +328,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3073faf3"
     },
     {
       "name": "ROSTERPETS_GetPetData",
@@ -332,7 +347,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "27ca719c"
     },
     {
       "name": "GetRosterClass",
@@ -350,7 +366,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4aa13766"
     },
     {
       "name": "GetRosterOwnerGUID",
@@ -367,7 +384,8 @@
       ],
       "usedTypes": [
         "D2RosterPetStrc"
-      ]
+      ],
+      "dh": "a8f275c7"
     },
     {
       "name": "GetSkillId",
@@ -385,7 +403,8 @@
       "usedTypes": [
         "D2RosterPetStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fca49545"
     },
     {
       "name": "ROSTER_IsUnitHostileToPlayer",
@@ -410,7 +429,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cca6e7f5"
     },
     {
       "name": "ROSTER_UpdateMercHostileColors",
@@ -436,7 +456,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e7dfad89"
     }
   ]
 }

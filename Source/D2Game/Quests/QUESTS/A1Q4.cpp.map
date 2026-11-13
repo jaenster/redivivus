@@ -22,7 +22,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "77da363d"
     },
     {
       "name": "Q04_NotifyQuestStateToPlayer",
@@ -44,7 +45,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "209d2ad1"
     },
     {
       "name": "Q04_SyncQuestStepToPlayer",
@@ -69,7 +71,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "7ce668bb"
     },
     {
       "name": "Q04_Callback02_NpcDeactivate",
@@ -90,7 +93,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "e54c6214"
     },
     {
       "name": "Q04_Callback11_ScrollMessage",
@@ -134,7 +138,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "f7a65986"
     },
     {
       "name": "Q04_Callback00_NpcActivate",
@@ -166,7 +171,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4a1e7238"
     },
     {
       "name": "QuestStartDebugNotify",
@@ -184,7 +190,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "a78ff92e"
     },
     {
       "name": "Q04_SendQuestStatePacket",
@@ -204,7 +211,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x5D",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3c9654c1"
     },
     {
       "name": "Q04_DespawnRogueGuards",
@@ -229,7 +237,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c98a11dd"
     },
     {
       "name": "Q04_SpawnDeckardCainNpc",
@@ -258,7 +267,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a182f8c8"
     },
     {
       "name": "Q04_MarkCannotComplete",
@@ -283,7 +293,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c454b4aa"
     },
     {
       "name": "Q04_Callback14_PlayerJoinedGame",
@@ -302,7 +313,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "f021aa0f"
     },
     {
       "name": "Q04_DeactivateCairnStones",
@@ -325,7 +337,8 @@
       "usedTypes": [
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "81fde931"
     },
     {
       "name": "Q04_Callback09_PlayerDroppedWithQuestItem",
@@ -348,7 +361,8 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "003af8c7"
     },
     {
       "name": "Q04_Callback10_PlayerLeavesGame",
@@ -368,7 +382,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "7de57368"
     },
     {
       "name": "Q04_SpawnTristramPortal",
@@ -395,7 +410,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "53d9cb05"
     },
     {
       "name": "Q04_Callback04_ItemPickedUp",
@@ -415,7 +431,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "1ca11d0a"
     },
     {
       "name": "Q04_Callback06_Unused",
@@ -435,7 +452,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "71b0420a"
     },
     {
       "name": "RollStonesOrder",
@@ -459,7 +477,8 @@
         "D2QuestDataA1Q4SubStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a73a925d"
     },
     {
       "name": "Q04_SetRescueTrigger",
@@ -479,7 +498,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "70836e83"
     },
     {
       "name": "Q04_ActiveFilter",
@@ -504,7 +524,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "800bc40a"
     },
     {
       "name": "Q04_AutoCompleteForActIPlayer",
@@ -530,7 +551,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "716e63ac"
     },
     {
       "name": "Q04_CompleteOnEnterTristram",
@@ -557,7 +579,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "7d6809a2"
     },
     {
       "name": "Q04_SetQuestCannotComplete",
@@ -580,7 +603,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "64ba8311"
     },
     {
       "name": "Q04_RegisterTristramVisitor",
@@ -604,7 +628,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "015079cd"
     },
     {
       "name": "Q04_TimerDespawnRogueGuards",
@@ -625,7 +650,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "0fcd9ee7"
     },
     {
       "name": "MakeTownPortalFromScroolTree",
@@ -664,7 +690,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5dc6d5b9"
     },
     {
       "name": "OBJOP_A1Q4_OpenCainGibbet",
@@ -701,7 +728,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "4b18f422"
     },
     {
       "name": "Objects_InitFn06_CairnStone",
@@ -726,7 +754,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d4e0460"
     },
     {
       "name": "Q04_HandleNpcInteraction",
@@ -753,7 +782,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "a6cbde11"
     },
     {
       "name": "OBJOP_A1Q4_ActivateCairnStone",
@@ -806,7 +836,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "2df97a68"
     },
     {
       "name": "OBJOP_A1Q4_ActivateInifussTree",
@@ -840,7 +871,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "58b82f35"
     },
     {
       "name": "Q04_SendStonesOrderToClient",
@@ -869,7 +901,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "7bbd19de"
     },
     {
       "name": "Q04_SequenceFilter",
@@ -892,7 +925,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "817304cc"
     },
     {
       "name": "Q04_SetCainRescuedFlag",
@@ -911,7 +945,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4c39da00"
     },
     {
       "name": "Q04_SetSecretCowLevelDiscovered",
@@ -935,7 +970,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "f931298e"
     },
     {
       "name": "Q04_Callback08_MonsterKilled",
@@ -961,7 +997,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "125345e7"
     },
     {
       "name": "Q04_SetScrollActivatedFlag",
@@ -980,7 +1017,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fe57dd1b"
     },
     {
       "name": "Q04_GetPortalCreatedFlag",
@@ -1002,7 +1040,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "abd0512d"
     },
     {
       "name": "Objects_InitFn09_InifussTree",
@@ -1021,7 +1060,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "1949f413"
     },
     {
       "name": "Objects_InitFn13_InvisibleObject",
@@ -1042,7 +1082,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "610bdbc7"
     },
     {
       "name": "Q04_InitializeCainGibbetObject",
@@ -1062,7 +1103,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "6a1db329"
     },
     {
       "name": "Q04_RemovePlayerFromList",
@@ -1083,7 +1125,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "201ee2df"
     },
     {
       "name": "Objects_InitFn54_CainStartPosition",
@@ -1104,7 +1147,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "8ed56c93"
     },
     {
       "name": "CUBE_SpecialOutput_CowPortal",
@@ -1136,7 +1180,8 @@
         "POINT",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "19abb9a3"
     },
     {
       "name": "CUBE_SpecialOutput_Quest_Unused2",
@@ -1154,7 +1199,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "16a7725f"
     },
     {
       "name": "CUBE_SpecialOutput_Quest_Unused3",
@@ -1172,7 +1218,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cf1e4a14"
     },
     {
       "name": "Objects_InitFn61_CainPortal",
@@ -1191,7 +1238,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "959b325a"
     },
     {
       "name": "Q33_UpdateFrozenAnyaNpcState",
@@ -1219,7 +1267,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "35afa30d"
     },
     {
       "name": "Q04_GetCainPortalCoordinates",
@@ -1240,7 +1289,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6698f534"
     },
     {
       "name": "Q04_SpawnCainCage",
@@ -1265,7 +1315,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8d67d24f"
     },
     {
       "name": "Q04_GetCainPosition",
@@ -1288,7 +1339,8 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8e698c6d"
     },
     {
       "name": "Q04_StoreCairnStonesPosition",
@@ -1310,7 +1362,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ef1da7f9"
     },
     {
       "name": "Q04_InitializeTristramObjects",
@@ -1341,7 +1394,8 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "855662dc"
     },
     {
       "name": "Q04_SetTristramActiveFlag",
@@ -1360,7 +1414,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e48a25f7"
     },
     {
       "name": "Q04_IsTristramActive",
@@ -1380,7 +1435,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "308fec1b"
     },
     {
       "name": "Q04_DropShieldRewards",
@@ -1405,7 +1461,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "472bcbd8"
     },
     {
       "name": "Q04_SetCainUnitGUID",
@@ -1425,7 +1482,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "9e9deab3"
     },
     {
       "name": "Q04_ActivateCairnStonesAndTree",
@@ -1449,7 +1507,8 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7f0fefe7"
     },
     {
       "name": "Q04_ForceStartQuestProgression",
@@ -1472,7 +1531,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "eb400ffd"
     },
     {
       "name": "Q04_Callback03_ChangedLevel",
@@ -1511,7 +1571,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "9a7b3827"
     },
     {
       "name": "Q04_Callback13_PlayerStartedGame",
@@ -1538,7 +1599,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "295a8956"
     },
     {
       "name": "Q04_InitData",
@@ -1560,7 +1622,8 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "16826c99"
     },
     {
       "name": "ForceStartQuest",
@@ -1588,7 +1651,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "791ffa67"
     }
   ]
 }

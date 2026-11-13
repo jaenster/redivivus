@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "d021af23"
     },
     {
       "name": "Unreferenced_00568d70",
@@ -33,7 +34,8 @@
       "namespace": "D2Game::PLAYER::PlayerSave2",
       "calledFunctions": [
         "Unreferenced_00568d70"
-      ]
+      ],
+      "dh": "995cc0e5"
     },
     {
       "name": "FindEndOfString",
@@ -50,7 +52,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "90d014cb"
     },
     {
       "name": "PLAYERSAVE2_LoadOldSavegame_ReturnZero",
@@ -64,7 +67,8 @@
       "namespace": "D2Game::PLAYER::PlayerSave2",
       "calledFunctions": [
         "PLAYERSAVE2_LoadOldSavegame_ReturnZero"
-      ]
+      ],
+      "dh": "0a96c52a"
     },
     {
       "name": "GetItemIndexInList",
@@ -90,7 +94,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "f98cc5c2"
     },
     {
       "name": "SaveMercData",
@@ -118,7 +123,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cc487e59"
     },
     {
       "name": "SaveHeader",
@@ -172,7 +178,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "e987bef9"
     },
     {
       "name": "SaveQuests",
@@ -200,7 +207,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "ad612697"
     },
     {
       "name": "SaveWaypoints",
@@ -229,7 +237,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "01cae5ac"
     },
     {
       "name": "SaveNPC",
@@ -259,7 +268,8 @@
         "uint8_t",
         "uint8_t *",
         "uint8_t[8]"
-      ]
+      ],
+      "dh": "cf214ddf"
     },
     {
       "name": "SaveStats",
@@ -290,7 +300,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "c5c1ee06"
     },
     {
       "name": "SaveSkills",
@@ -321,7 +332,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "a9468b91"
     },
     {
       "name": "SaveItems",
@@ -344,7 +356,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "801c0407"
     },
     {
       "name": "SaveCorpseItems",
@@ -384,7 +397,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "874939dc"
     },
     {
       "name": "SaveMercItems",
@@ -407,7 +421,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "f6404293"
     },
     {
       "name": "SaveGolemItems",
@@ -435,7 +450,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "eb47aab6"
     },
     {
       "name": "MakeSaveFile",
@@ -468,7 +484,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a14bd18b"
     },
     {
       "name": "CalculateGetFlags",
@@ -491,7 +508,8 @@
         "eD2ArenaFlags",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8654c01c"
     },
     {
       "name": "SetHotkey",
@@ -510,7 +528,8 @@
         "D2SaveHotKeyStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad71bf84"
     },
     {
       "name": "PLAYERSAVE_LinkPlayerToUnit",
@@ -537,7 +556,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fe50d006"
     },
     {
       "name": "PLAYERSAVE_CreateNewCharacter",
@@ -575,7 +595,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f9472ce"
     },
     {
       "name": "PLAYERSAVE_ParseHeaderAndCreateUnit",
@@ -620,7 +641,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d5a1677d"
     },
     {
       "name": "PLRSAVE_ReadQuestsFromBuffer",
@@ -643,7 +665,8 @@
         "SGAMEDATA",
         "int *",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ebf39d1"
     },
     {
       "name": "ReadWaypoints",
@@ -668,7 +691,8 @@
         "short *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f18d0d49"
     },
     {
       "name": "LoadPlayerIntro",
@@ -693,7 +717,8 @@
         "SGAMEDATA",
         "short *",
         "uint32_t"
-      ]
+      ],
+      "dh": "22ad9c23"
     },
     {
       "name": "ReadStatsLong",
@@ -722,7 +747,8 @@
         "short *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6573cf32"
     },
     {
       "name": "ReadStats",
@@ -748,7 +774,8 @@
         "short *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "caa8e94d"
     },
     {
       "name": "PLRSAVE_SetSkillIfNonZero",
@@ -768,7 +795,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint8_t"
-      ]
+      ],
+      "dh": "0d4c95bd"
     },
     {
       "name": "LoadHardSkills",
@@ -798,7 +826,8 @@
         "int32_t",
         "short *",
         "uint32_t"
-      ]
+      ],
+      "dh": "32ee8f3f"
     },
     {
       "name": "PLRSAVE_LoadItemsFromBuffer",
@@ -821,7 +850,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "4f67eed2"
     },
     {
       "name": "PLRSAVE_LoadCorpseFromBuffer",
@@ -859,7 +889,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "51fc46c6"
     },
     {
       "name": "LoadMerc",
@@ -896,7 +927,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9ab7bd4"
     },
     {
       "name": "LoadMerc2",
@@ -922,7 +954,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e2646fb"
     },
     {
       "name": "CreateItemIronGolemItem",
@@ -959,7 +992,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "071f49a8"
     },
     {
       "name": "LoadGolem",
@@ -988,7 +1022,8 @@
         "short *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "54016e61"
     },
     {
       "name": "HOTKEY_GetAssignedItemGUID",
@@ -1010,7 +1045,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d4213222"
     },
     {
       "name": "SetStatsAndHotkeys",
@@ -1047,7 +1083,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d5b23b2"
     },
     {
       "name": "PLAYERSAVE_LoadModernFormat",
@@ -1091,7 +1128,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4300a676"
     }
   ]
 }

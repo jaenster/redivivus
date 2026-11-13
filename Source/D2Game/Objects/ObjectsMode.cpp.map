@@ -30,7 +30,8 @@
         "eCollisionFlags",
         "eD2ObjectAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "2c18d98c"
     },
     {
       "name": "OBJMODE_CreateRedPortal",
@@ -57,7 +58,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "603ebdae"
     },
     {
       "name": "OBJMODE_OpenObject",
@@ -78,7 +80,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d0eea152"
     },
     {
       "name": "OBJMODE_DeactivateShrine",
@@ -99,7 +102,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7159df00"
     },
     {
       "name": "OBJMODE_UpdateFillProgress",
@@ -129,7 +133,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f6aa2c04"
     },
     {
       "name": "OBJMODE_UpdateHoverTextExpiry",
@@ -153,7 +158,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "91e3b2ff"
     },
     {
       "name": "OBJMODE_TriggerProximityEffect",
@@ -180,7 +186,8 @@
         "POINT",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "837e783a"
     },
     {
       "name": "OBJMODE_UpdateTrapObject",
@@ -204,7 +211,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab5aa824"
     },
     {
       "name": "OBJMODE_DispatchChestType",
@@ -232,7 +240,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5734080b"
     },
     {
       "name": "OBJMODE_UpdateProximityStateMachine",
@@ -265,7 +274,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b737935e"
     },
     {
       "name": "QUEST_DispatchObjectActivation",
@@ -305,7 +315,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9e665bc3"
     },
     {
       "name": "PacketUpdateForClient",
@@ -329,7 +340,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c3758e67"
     },
     {
       "name": "OBJMODE_WarpPlayerToObject",
@@ -362,7 +374,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "74c7d0b7"
     },
     {
       "name": "OBJOP_UseTeleportPad",
@@ -386,7 +399,8 @@
         "D2RoomStrc *",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8a9a874"
     },
     {
       "name": "OBJOP_ExplodingTrap",
@@ -409,7 +423,8 @@
         "D2ObjectOperateFnArg",
         "D2ObjectsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d45e812c"
     },
     {
       "name": "OBJOP_ToggleDoor",
@@ -444,7 +459,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7be0f654"
     },
     {
       "name": "OBJOP_UseStairway",
@@ -475,7 +491,8 @@
         "POINT",
         "eD2ObjectAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "eaa698ae"
     },
     {
       "name": "OBJOP_UseWaygate",
@@ -508,7 +525,8 @@
         "POINT",
         "eD2ObjectAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f7128be"
     },
     {
       "name": "OBJOP_OpenTimedDoor",
@@ -540,7 +558,8 @@
         "D2UnitStrc",
         "POINT",
         "eD2ObjectAnimMode"
-      ]
+      ],
+      "dh": "cb431cfb"
     },
     {
       "name": "OBJOP_UseStairAlias",
@@ -560,7 +579,8 @@
         "D2ObjectOperateFnArg",
         "D2UnitStrc",
         "eCollisionFlags"
-      ]
+      ],
+      "dh": "a3a82960"
     },
     {
       "name": "OBJOP_OpenBreakableContainer",
@@ -586,7 +606,8 @@
         "SGAMEDATA",
         "eD2ObjectAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "dbb24699"
     },
     {
       "name": "OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction",
@@ -607,7 +628,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "56874c3f"
     },
     {
       "name": "OBJMODE_SpawnMonsterFromObject",
@@ -633,7 +655,8 @@
         "eD2LevelId",
         "eD2MonsterAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "63e6f24c"
     },
     {
       "name": "OBJMODE_SpawnRandomMonsters",
@@ -658,7 +681,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "39304816"
     },
     {
       "name": "OBJMODE_SpawnCompanionChests",
@@ -687,7 +711,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "99651fd7"
     },
     {
       "name": "OBJMODE_SpawnMonsterAtObject",
@@ -717,7 +742,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f66bc2ca"
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterA",
@@ -736,7 +762,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "de9bec46"
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterB",
@@ -755,7 +782,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a2bad677"
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterC",
@@ -774,7 +802,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ee98a23d"
     },
     {
       "name": "OBJMODE_SpawnSiegeMonsterD",
@@ -793,7 +822,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bbc79369"
     },
     {
       "name": "OBJMODE_DispatchOperateCallback",
@@ -822,7 +852,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a8056767"
     },
     {
       "name": "OBJMODE_CheckInventoryHasItemType",
@@ -849,7 +880,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "11a8ee1d"
     },
     {
       "name": "OBJOP_UseObelisk",
@@ -880,7 +912,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a0b2dfce"
     },
     {
       "name": "UNIT_IsAlive",
@@ -900,7 +933,8 @@
         "D2UnitFindArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1122b73f"
     },
     {
       "name": "OBJECT_CanTargetMonster",
@@ -930,7 +964,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "53e580cd"
     },
     {
       "name": "ApplyShrineBonus",
@@ -955,7 +990,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0003e050"
     },
     {
       "name": "Shrines_HealthBoostFunction",
@@ -977,7 +1013,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "8c51953b"
     },
     {
       "name": "Shrines_ManaBoostFunction",
@@ -999,7 +1036,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "fc6a1103"
     },
     {
       "name": "Shrines_RefillFunction",
@@ -1022,7 +1060,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "dcecb6a0"
     },
     {
       "name": "Shrines_HealthExchangeFunction",
@@ -1043,7 +1082,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "uint32_t"
-      ]
+      ],
+      "dh": "376523e2"
     },
     {
       "name": "Shrines_ManaExchangeFunction",
@@ -1064,7 +1104,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e6e4c58"
     },
     {
       "name": "Shrines_ShrineOfEnirhsFunction",
@@ -1086,7 +1127,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "D2UnitDataPlayerStrc"
-      ]
+      ],
+      "dh": "9e7eb29e"
     },
     {
       "name": "Shrines_PortalShrineFunction",
@@ -1116,7 +1158,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "d4fe9509"
     },
     {
       "name": "Shrines_GemShrine_SpawnGem",
@@ -1157,7 +1200,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f4c5273a"
     },
     {
       "name": "Shrines_GemShrineFunction",
@@ -1188,7 +1232,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "84f741f5"
     },
     {
       "name": "Shrines_StormShrineFunction",
@@ -1226,7 +1271,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ee34480"
     },
     {
       "name": "Shrines_WarpingShrineFunction",
@@ -1251,7 +1297,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "9ad29ee1"
     },
     {
       "name": "Shrines_ExplodingShrineFunction",
@@ -1296,7 +1343,8 @@
         "int64_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9d4222a1"
     },
     {
       "name": "Shrines_PoisonShrineFunction",
@@ -1341,7 +1389,8 @@
         "int64_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "992f6479"
     },
     {
       "name": "SKILL_GetAttackRateForWeapon",
@@ -1371,7 +1420,8 @@
         "D2UnitStrc",
         "eD2ItemTypes",
         "int32_t"
-      ]
+      ],
+      "dh": "215d07ef"
     },
     {
       "name": "OBJMODE_GetModifiedStatValueFromShrine",
@@ -1397,7 +1447,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "9263df3c"
     },
     {
       "name": "Shrines_CombatBoostFunction",
@@ -1424,7 +1475,8 @@
         "D2StatListExStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8129792b"
     },
     {
       "name": "SHRINE_OnStaminaExpire",
@@ -1447,7 +1499,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "7fa1ba56"
     },
     {
       "name": "Shrines_StaminaBoostFunction",
@@ -1476,7 +1529,8 @@
         "D2StatListExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd51fa93"
     },
     {
       "name": "Shrines_StatBoostFunction",
@@ -1501,7 +1555,8 @@
         "D2ShrinesTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d0201cf"
     },
     {
       "name": "QUEST_DispatchObjectActivation_Unref_00583bc0",
@@ -1520,7 +1575,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2d6f2adf"
     },
     {
       "name": "SHRINE_OnSkillExpire",
@@ -1541,7 +1597,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "9ed30828"
     },
     {
       "name": "Shrines_SkillBoostFunction",
@@ -1562,7 +1619,8 @@
         "D2ObjectOperateFnArg",
         "D2ShrinesTxt",
         "D2StateExArgStrc"
-      ]
+      ],
+      "dh": "a7e92bf5"
     },
     {
       "name": "OBJOP_ActivateShrine",
@@ -1600,7 +1658,8 @@
         "fpD2ShrineTableHandler",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "59ad149b"
     },
     {
       "name": "OBJOP_SpawnRewardItem",
@@ -1624,7 +1683,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3a8d95b3"
     },
     {
       "name": "OBJOP_TimedDestructible",
@@ -1651,7 +1711,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "59439f26"
     },
     {
       "name": "OBJOP_DestroyDestructible",
@@ -1675,7 +1736,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "c8e91c37"
     },
     {
       "name": "OBJOP_SpawnQuestItemReward",
@@ -1700,7 +1762,8 @@
         "POINT",
         "eD2UnitFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "bb56937f"
     },
     {
       "name": "OBJOP_SpawnExceptionalItemDrop",
@@ -1726,7 +1789,8 @@
         "POINT",
         "eD2UnitFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "1b9b53f8"
     },
     {
       "name": "OBJOP_SpawnNormalItemDrop",
@@ -1751,7 +1815,8 @@
         "D2UnitStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "1fa0fc95"
     },
     {
       "name": "OBJMODE_ApplyCounterAttackToNearbyUnits",
@@ -1779,7 +1844,8 @@
         "POINT",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "5eda1513"
     },
     {
       "name": "OBJOP_DetonateExplosiveBarrel",
@@ -1803,7 +1869,8 @@
         "D2ObjectOperateFnArg",
         "D2ObjectsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a7c79907"
     },
     {
       "name": "OBJOP_ActivateSimple",
@@ -1823,7 +1890,8 @@
         "D2ObjectOperateFnArg",
         "D2UnitStrc",
         "eD2ObjectAnimMode"
-      ]
+      ],
+      "dh": "eac811ba"
     },
     {
       "name": "OBJOP_ActivateNoOp",
@@ -1842,7 +1910,8 @@
       "usedTypes": [
         "D2ObjectOperateFnArg",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ee1308a5"
     },
     {
       "name": "InteractWithObject",
@@ -1876,7 +1945,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9828904a"
     },
     {
       "name": "Interact",
@@ -1900,7 +1970,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "55f4658a"
     },
     {
       "name": "OBJECT_UpdateCollisionOnModeChange",
@@ -1934,7 +2005,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d0d291d"
     },
     {
       "name": "OBJOP_A2Q2_ArcaneGateLevelTransition",
@@ -1962,7 +2034,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "c599ba03"
     },
     {
       "name": "Objects_OperateFn46_PortalToAct4",
@@ -1994,7 +2067,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "29f4148f"
     },
     {
       "name": "OBJMODE_ClearObjectUnitLink",
@@ -2016,7 +2090,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f71d4e4"
     },
     {
       "name": "Objects_OperateFn15_Portal",
@@ -2097,7 +2172,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fd463a39"
     },
     {
       "name": "OBJOP_ActivatePortalObject",
@@ -2133,7 +2209,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d1ba105"
     },
     {
       "name": "OBJOP_ActivateWaypoint",
@@ -2175,7 +2252,8 @@
         "eD2LevelId",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "04bed238"
     },
     {
       "name": "TakeWaypoint",
@@ -2219,7 +2297,8 @@
         "int16_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28c64daa"
     },
     {
       "name": "OBJMODE_ShrineManaRefill",
@@ -2241,7 +2320,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6afc19ee"
     },
     {
       "name": "OBJMODE_ShrineEnergyBoost",
@@ -2262,7 +2342,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "13493722"
     },
     {
       "name": "OBJMODE_ShrineDexterityBoost",
@@ -2283,7 +2364,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "effaa50e"
     },
     {
       "name": "OBJMODE_ShrineVitalityBoost",
@@ -2304,7 +2386,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34f81b61"
     },
     {
       "name": "OBJMODE_ShrineStrengthBoost",
@@ -2325,7 +2408,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "afdf5a6e"
     },
     {
       "name": "OBJMODE_ShrineHealthRefill",
@@ -2347,7 +2431,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "43125eca"
     },
     {
       "name": "OBJMODE_ShrineSkillPointBoost",
@@ -2368,7 +2453,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f2ce5a40"
     },
     {
       "name": "OBJMODE_DispatchOperateFunction",
@@ -2393,7 +2479,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5d1d5099"
     },
     {
       "name": "0x44PacketHandler",
@@ -2431,7 +2518,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33de659c"
     },
     {
       "name": "OBJMODE_HandleObjectDeactivation",
@@ -2452,7 +2540,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c3f356cf"
     },
     {
       "name": "OBJMODE_OnWaypointFinish",
@@ -2473,7 +2562,8 @@
         "D2TimerArgStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "5af36890"
     },
     {
       "name": "OBJMODE_FinalizePortalLink",
@@ -2510,7 +2600,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "uint8_t"
-      ]
+      ],
+      "dh": "c9702d01"
     },
     {
       "name": "OBJMODE_FinalizePortalLink_HaltTail",
@@ -2527,7 +2618,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "f6cdd7ed"
     },
     {
       "name": "OBJECT_HandleUnitRevival",
@@ -2553,7 +2645,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b5990ee2"
     },
     {
       "name": "OBJMODE_ApplyWellHealing",
@@ -2585,7 +2678,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "07d0728a"
     },
     {
       "name": "OBJOP_ActivateHealingWell",
@@ -2612,7 +2706,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ec77af94"
     },
     {
       "name": "SpawnDrop",
@@ -2645,7 +2740,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "37b64073"
     },
     {
       "name": "OBJMODE_DropItemAtPosition",
@@ -2677,7 +2773,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "686d2730"
     },
     {
       "name": "RollChestDrops",
@@ -2715,7 +2812,8 @@
         "eD2ItemTypes",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "05c243ee"
     },
     {
       "name": "KillUnit",
@@ -2746,7 +2844,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "aa568a26"
     },
     {
       "name": "SERVER_MissleKilled",
@@ -2780,7 +2879,8 @@
         "eD2UnitFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f92fdbef"
     },
     {
       "name": "OBJOP_OpenSparklyChest",
@@ -2824,7 +2924,8 @@
         "eD2UnitFlags",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "22844891"
     },
     {
       "name": "OBJOP_OpenChestSpawnMonster",
@@ -2857,7 +2958,8 @@
         "D2UnitStrc *",
         "eD2UnitFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "9d405e5a"
     },
     {
       "name": "OBJOP_OpenBossChestSpawnUniques",
@@ -2898,7 +3000,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c94d5aeb"
     },
     {
       "name": "OBJMODE_RollChestDrops",
@@ -2919,7 +3022,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "6761af5d"
     },
     {
       "name": "OBJOP_OpenChestNoMonster",
@@ -2949,7 +3053,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "26805d77"
     },
     {
       "name": "OBJOP_OpenLockedChest",
@@ -2978,7 +3083,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2UnitFlags"
-      ]
+      ],
+      "dh": "7145a2eb"
     },
     {
       "name": "OBJMODE_RollChestLoot",
@@ -3003,7 +3109,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "88cc3631"
     },
     {
       "name": "OBJOP_OpenTrapChestSkillTrigger",
@@ -3041,7 +3148,8 @@
         "eD2UnitFlags",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "06357427"
     },
     {
       "name": "OBJOP_OpenUnlockedChest",
@@ -3068,7 +3176,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "18cd62a3"
     },
     {
       "name": "OBJECTEVENT_DefaultCallback",
@@ -3091,7 +3200,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "2ecb4b47"
     }
   ]
 }

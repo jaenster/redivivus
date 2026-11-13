@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2MonPropTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "51a494d0"
     },
     {
       "name": "SetAiState",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b8c4a2ce"
     },
     {
       "name": "GetAiState",
@@ -53,7 +55,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "070dba47"
     },
     {
       "name": "SetLevelId",
@@ -71,7 +74,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "27e67c71"
     },
     {
       "name": "GetMonsterArea",
@@ -89,7 +93,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "c325d23a"
     },
     {
       "name": "GetMonsterFlags",
@@ -108,7 +113,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e29e7f05"
     },
     {
       "name": "SetUnsetSummonerFlags",
@@ -127,7 +133,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "50b8d22d"
     },
     {
       "name": "MONSTER_SetVelocityAndTransition",
@@ -154,7 +161,8 @@
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "497799ea"
     },
     {
       "name": "FreeMonsters",
@@ -175,7 +183,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "89f97f3c"
     },
     {
       "name": "MONSTER_FreeAllResources",
@@ -201,7 +210,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c5e5869c"
     },
     {
       "name": "MONSTER_ClearTargetIfMatch",
@@ -222,7 +232,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "df640407"
     },
     {
       "name": "MONSTERAI_TriggerMageThink",
@@ -245,7 +256,8 @@
         "SGAMEDATA",
         "eD2MonsterAnimMode",
         "eD2MonsterClassId"
-      ]
+      ],
+      "dh": "037e9a73"
     },
     {
       "name": "MONSTER_StartAiAndRegenTimers",
@@ -264,7 +276,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a8efd4d2"
     },
     {
       "name": "PlayerMultiplyer",
@@ -281,7 +294,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "47d3c275"
     },
     {
       "name": "PlayerMultiplyer2",
@@ -298,7 +312,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3a447bf7"
     },
     {
       "name": "MONSTER_InitLevelDifficultyScaling",
@@ -325,7 +340,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "b42f3a20"
     },
     {
       "name": "MONSTER_RollComponentAppearance",
@@ -349,7 +365,8 @@
         "uint32_t",
         "uint64_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3da64356"
     },
     {
       "name": "CheckComponents",
@@ -367,7 +384,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "1f8e0001"
     },
     {
       "name": "MONSTER_CreateAndEquipItem",
@@ -402,7 +420,8 @@
         "eD2ItemQuality",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f365ad43"
     },
     {
       "name": "MONSTER_KillAllInLevel",
@@ -432,7 +451,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "7c3d447e"
     },
     {
       "name": "MONSTER_InitStats",
@@ -493,7 +513,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b120804a"
     },
     {
       "name": "STRUCT_FillDataMonster",
@@ -532,7 +553,8 @@
         "eD2LevelId",
         "eD2MonsterAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "2a79e133"
     },
     {
       "name": "MONSTER_TransformMonsterClass",
@@ -556,7 +578,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8a58adf9"
     }
   ]
 }

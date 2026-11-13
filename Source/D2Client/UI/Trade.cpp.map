@@ -18,7 +18,8 @@
         "SOUND_PlaySound",
         "FreeDialogStrc",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
-      ]
+      ],
+      "dh": "f190c0dc"
     },
     {
       "name": "TRADE_GetPlayerGoldAmount",
@@ -36,7 +37,8 @@
         "FreeDialogStrc",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
         "GetTickCount"
-      ]
+      ],
+      "dh": "07224561"
     },
     {
       "name": "DrawAgreeToTrade",
@@ -61,7 +63,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef39f28b"
     },
     {
       "name": "TRADE_GetPartnerGoldAmount",
@@ -79,7 +82,8 @@
         "FreeDialogStrc",
         "GetTickCount",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
-      ]
+      ],
+      "dh": "830eacb6"
     },
     {
       "name": "TRADE_HandleTradeCancel",
@@ -107,7 +111,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e5dbed0"
     },
     {
       "name": "TRADE_CloseTrade",
@@ -123,7 +128,8 @@
         "TRADE_CloseTrade",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
         "GetTickCount"
-      ]
+      ],
+      "dh": "fd8f9591"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST",
@@ -162,7 +168,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "21f4e99c"
     },
     {
       "name": "TRADE_HandleTradeGoldUpdate",
@@ -180,7 +187,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "f0d7720e"
     },
     {
       "name": "TRADE_GetTradeWindowPtr",
@@ -197,7 +205,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "78aa7b19"
     },
     {
       "name": "AcceptTrade",
@@ -212,7 +221,8 @@
       "calledFunctions": [
         "AcceptTrade",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
-      ]
+      ],
+      "dh": "30c3553a"
     },
     {
       "name": "CancelTrade",
@@ -227,7 +237,8 @@
       "calledFunctions": [
         "CancelTrade",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT"
-      ]
+      ],
+      "dh": "73075d63"
     },
     {
       "name": "StaticInit_gwszTradePartnerName",
@@ -241,7 +252,8 @@
       "namespace": "D2Client::UI::Trade",
       "calledFunctions": [
         "StaticInit_gwszTradePartnerName"
-      ]
+      ],
+      "dh": "8e872322"
     }
   ]
 }

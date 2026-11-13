@@ -24,7 +24,8 @@
       "usedTypes": [
         "D2GamePalShiftGreenBloodStrc",
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "59353a79"
     },
     {
       "name": "InitPal",
@@ -48,7 +49,8 @@
         "D2GamePalShiftGreenBloodStrc",
         "D2MPQFileStrc",
         "D2MonsterPalShiftSlotStrc"
-      ]
+      ],
+      "dh": "23c25d75"
     },
     {
       "name": "FreeGamePalShift",
@@ -66,7 +68,8 @@
       ],
       "usedTypes": [
         "D2PalShiftEntryStrc"
-      ]
+      ],
+      "dh": "51f1f471"
     },
     {
       "name": "PALSHIFT_FindPalShiftByToken",
@@ -84,7 +87,8 @@
       "usedTypes": [
         "D2PalShiftEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "73133f77"
     },
     {
       "name": "PALSHIFT_ApplyGreenBloodPalette",
@@ -103,7 +107,8 @@
         "D2GamePalShiftGreenBloodStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "44a4e11f"
     },
     {
       "name": "PALSHIFT_LoadMonsterPalShift",
@@ -132,7 +137,8 @@
         "D2PalShiftEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bd80f6d"
     },
     {
       "name": "PALSHIFT_InitPalShiftTable",
@@ -153,7 +159,8 @@
       ],
       "usedTypes": [
         "D2MonsterPalShiftSlotStrc"
-      ]
+      ],
+      "dh": "c1c9bd14"
     },
     {
       "name": "PALSHIFT_GetMonsterTransform",
@@ -180,7 +187,8 @@
         "D2PalShiftEntryStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e7b24266"
     },
     {
       "name": "PALSHIFT_GenerateShiftDuration",
@@ -201,7 +209,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2ea34ac4"
     },
     {
       "name": "PALSHIFT_GetGreenBloodTable",
@@ -218,7 +227,8 @@
       ],
       "usedTypes": [
         "D2GamePalShiftGreenBloodStrc"
-      ]
+      ],
+      "dh": "20951098"
     }
   ]
 }

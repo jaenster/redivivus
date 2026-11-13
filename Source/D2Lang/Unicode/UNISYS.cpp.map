@@ -16,7 +16,8 @@
       "definedIn": "D2Lang/Unicode/UNISYS.inline.h",
       "calledFunctions": [
         "STRING_ZeroOneWCHAR"
-      ]
+      ],
+      "dh": "951679af"
     },
     {
       "name": "STRING_CompareWideStrings",
@@ -34,7 +35,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "dbf0a86b"
     },
     {
       "name": "UNICODE_CompareWideStringsN",
@@ -52,7 +54,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "33cca0d0"
     },
     {
       "name": "UNICODE_CompareWideStringsNoCase",
@@ -71,7 +74,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b9c13e72"
     },
     {
       "name": "UNICODE_CompareWideStringsNNoCase",
@@ -91,7 +95,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0164d406"
     },
     {
       "name": "UNICODE_FindWideChar",
@@ -108,7 +113,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "edd2d2b8"
     },
     {
       "name": "AppendToBuffer",
@@ -126,7 +132,8 @@
       "usedTypes": [
         "WCHAR",
         "wchar_t"
-      ]
+      ],
+      "dh": "4003384e"
     },
     {
       "name": "UNICODE_AppendWideStringN",
@@ -144,7 +151,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "7923bc83"
     },
     {
       "name": "WSTRING_PutWideCharIntoBuffer",
@@ -162,7 +170,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "72cec467"
     },
     {
       "name": "STRING_CopyWideString",
@@ -179,7 +188,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "e9ef4d36"
     },
     {
       "name": "STRING_GetWideStringLength",
@@ -197,7 +207,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "562fb054"
     },
     {
       "name": "UNICODE_FindSubstringNoCase",
@@ -215,7 +226,8 @@
       "usedTypes": [
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "39d685c8"
     },
     {
       "name": "UNICODE_FindSubstring",
@@ -232,7 +244,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "fb74204c"
     },
     {
       "name": "UNICODE_FormatWideString",
@@ -263,7 +276,8 @@
         "uint16_t",
         "uint16_t *",
         "uint32_t"
-      ]
+      ],
+      "dh": "cffedf28"
     },
     {
       "name": "Unreferenced_00526d00",
@@ -280,7 +294,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "a6fd4406"
     },
     {
       "name": "UNICODE_CheckLineBreakPosition",
@@ -301,7 +316,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2df79bf9"
     },
     {
       "name": "STRING_ConvertCharToWchar",
@@ -321,7 +337,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "57d09866"
     },
     {
       "name": "STRING_CopyCharToWCharWithSetMaxSize",
@@ -339,7 +356,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "1baa1345"
     },
     {
       "name": "UNICODE_WideToMultiByte",
@@ -357,7 +375,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "f9170ab6"
     },
     {
       "name": "UNICODE_CheckTrailingPunctuation",
@@ -377,7 +396,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "876d3c0b"
     },
     {
       "name": "UNICODE_CheckLeadingPunctuation",
@@ -397,7 +417,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a7b744a2"
     },
     {
       "name": "UNICODE_FormatPossessiveName",
@@ -424,7 +445,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ddaa7820"
     },
     {
       "name": "UNICODE_FreeBuffer",
@@ -439,7 +461,8 @@
       "calledFunctions": [
         "UNICODE_FreeBuffer",
         "SMemFree"
-      ]
+      ],
+      "dh": "7234b93e"
     },
     {
       "name": "UNICODE_AllocBuffer",
@@ -457,7 +480,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "80e17575"
     },
     {
       "name": "UNICODE_ReadByteRange",
@@ -474,7 +498,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "78f7a87f"
     },
     {
       "name": "UNICODE_CheckByteInRange",
@@ -491,7 +516,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "a84ef7e5"
     },
     {
       "name": "UNICODE_IsControlChar",
@@ -509,7 +535,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3e6279e8"
     },
     {
       "name": "UNICODE_FreeKamapTables",
@@ -524,7 +551,8 @@
       "calledFunctions": [
         "UNICODE_FreeKamapTables",
         "SMemFree"
-      ]
+      ],
+      "dh": "45510334"
     },
     {
       "name": "UNICODE_LoadKamapFile",
@@ -554,7 +582,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f5e5df5"
     },
     {
       "name": "UNICODE_MapCharacterToCode",
@@ -572,7 +601,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a76895d8"
     },
     {
       "name": "UNICODE_CompareKamapEntry",
@@ -586,7 +616,8 @@
       "namespace": "D2Lang::Unicode::UNISYS",
       "calledFunctions": [
         "UNICODE_CompareKamapEntry"
-      ]
+      ],
+      "dh": "73f83417"
     },
     {
       "name": "UNICODE_BinarySearchKamap",
@@ -605,7 +636,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68d4d9e4"
     },
     {
       "name": "UNICODE_ConvertMultiByteToWide",
@@ -629,7 +661,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d6ab0a3c"
     },
     {
       "name": "UNICODE_ConvertWideToMultiByte",
@@ -650,7 +683,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "23745a69"
     },
     {
       "name": "UNICODE_GetMultiByteLength",
@@ -671,7 +705,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3d68a232"
     },
     {
       "name": "UNICODE_GetWideCharCount",
@@ -689,7 +724,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "61e5d8a9"
     }
   ]
 }

@@ -24,7 +24,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "333bde88"
     },
     {
       "name": "Destructor_Unreferenced",
@@ -45,7 +46,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "dd896e9e"
     },
     {
       "name": "ChangeLinkOffset",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "TSExplicitList<MappingEntryNode, -572662307>",
         "int32_t"
-      ]
+      ],
+      "dh": "e690f8c0"
     },
     {
       "name": "DeleteNode",
@@ -86,7 +89,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
         "intptr_t"
-      ]
+      ],
+      "dh": "376eb03d"
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -105,7 +109,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSLink<MappingEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "eebf4b63"
     },
     {
       "name": "Clear",
@@ -123,7 +128,8 @@
       ],
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "97cac7a5"
     },
     {
       "name": "Destructor",
@@ -144,7 +150,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "3ed19055"
     },
     {
       "name": "Ptr",
@@ -167,7 +174,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95114eb7"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -190,7 +198,8 @@
         "TSLink<MappingEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e12adfe6"
     },
     {
       "name": "Ptr",
@@ -214,7 +223,8 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5cea638"
     },
     {
       "name": "Destructor_UnreferencedCopy",
@@ -235,7 +245,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "683d5fda"
     },
     {
       "name": "ReallocData",
@@ -260,7 +271,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "68271ca1"
     },
     {
       "name": "Destructor",
@@ -283,7 +295,8 @@
         "TSLink<MappingEntryNode>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "25bb0342"
     },
     {
       "name": "Reserve",
@@ -304,7 +317,8 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b22dca2"
     },
     {
       "name": "thunk_Destructor",
@@ -339,7 +353,8 @@
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "TSLink<MappingEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "045e2c3c"
     },
     {
       "name": "Destructor",
@@ -363,7 +378,8 @@
         "int32_t",
         "intptr_t",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "baa8f811"
     },
     {
       "name": "NewNode",
@@ -384,7 +400,8 @@
         "MappingEntryNode",
         "TSExplicitList<MappingEntryNode, -572662307>",
         "uint32_t"
-      ]
+      ],
+      "dh": "027e242b"
     },
     {
       "name": "InternalDelete",
@@ -404,7 +421,8 @@
       "usedTypes": [
         "MappingEntryNode",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "79a0d2b5"
     },
     {
       "name": "InternalNew",
@@ -428,7 +446,8 @@
         "TSLink<MappingEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78e78b31"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -448,7 +467,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a5e1186"
     },
     {
       "name": "Clear",
@@ -466,7 +486,8 @@
       ],
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>"
-      ]
+      ],
+      "dh": "dc83b468"
     },
     {
       "name": "Destroy",
@@ -485,7 +506,8 @@
       ],
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "1ed2bc65"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -505,7 +527,8 @@
       "usedTypes": [
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a8be3ae"
     },
     {
       "name": "SetCount_Unreferenced",
@@ -524,7 +547,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "cd2ea751"
     },
     {
       "name": "GrowListArray",
@@ -548,7 +572,8 @@
         "TSLink<MappingEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "15404a99"
     },
     {
       "name": "Constructor",
@@ -569,7 +594,8 @@
         "TSExplicitList<MappingEntryNode, -572662307>",
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "68eb03fe"
     },
     {
       "name": "MonitorFullness",
@@ -590,7 +616,8 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc4ef2c4"
     },
     {
       "name": "New",
@@ -616,7 +643,8 @@
         "TSLink<MappingEntryNode> *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4fa8e1c8"
     },
     {
       "name": "New",
@@ -639,7 +667,8 @@
         "TSHashTable<MappingEntryNode, HASHKEY_STRI>",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "3855cab6"
     }
   ]
 }

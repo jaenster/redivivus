@@ -15,7 +15,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "AdjustPerspectivePosition_Unref_00646010"
-      ]
+      ],
+      "dh": "34d314ba"
     },
     {
       "name": "AdjustPerspectivePosition_Unref_006460d0",
@@ -29,7 +30,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "AdjustPerspectivePosition_Unref_006460d0"
-      ]
+      ],
+      "dh": "704d6791"
     },
     {
       "name": "AdjustPerspectivePosition_Unref_006bf250",
@@ -43,7 +45,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "AdjustPerspectivePosition_Unref_006bf250"
-      ]
+      ],
+      "dh": "da3f220e"
     },
     {
       "name": "Initialize",
@@ -57,7 +60,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "Initialize"
-      ]
+      ],
+      "dh": "e1dd5d2c"
     },
     {
       "name": "InitPerspective",
@@ -76,7 +80,8 @@
       "usedTypes": [
         "D2GfxHelperStrc",
         "D2GfxSettingsStrc"
-      ]
+      ],
+      "dh": "fb00f796"
     },
     {
       "name": "Release",
@@ -91,7 +96,8 @@
       "calledFunctions": [
         "Release",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "ab38fc4f"
     },
     {
       "name": "ClearCaches",
@@ -105,7 +111,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "ClearCaches"
-      ]
+      ],
+      "dh": "3be2102d"
     },
     {
       "name": "RENDERER_WINDOWED_AllocateDIBSection",
@@ -127,7 +134,8 @@
       "usedTypes": [
         "BITMAPINFO",
         "int32_t"
-      ]
+      ],
+      "dh": "4073dcff"
     },
     {
       "name": "CreateWindow",
@@ -148,7 +156,8 @@
       ],
       "usedTypes": [
         "D2LogPalette256Strc"
-      ]
+      ],
+      "dh": "ae40422a"
     },
     {
       "name": "Unreferenced_006c7c90",
@@ -162,7 +171,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "Unreferenced_006c7c90"
-      ]
+      ],
+      "dh": "6a3a9456"
     },
     {
       "name": "BeginCutScene",
@@ -176,7 +186,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "BeginCutScene"
-      ]
+      ],
+      "dh": "ace78960"
     },
     {
       "name": "PlayCutScene",
@@ -190,7 +201,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "PlayCutScene"
-      ]
+      ],
+      "dh": "f50d3c7a"
     },
     {
       "name": "CheckCutScene",
@@ -204,7 +216,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "CheckCutScene"
-      ]
+      ],
+      "dh": "9c381687"
     },
     {
       "name": "RENDERER_WINDOWED_DestroyWindow",
@@ -219,7 +232,8 @@
       "calledFunctions": [
         "RENDERER_WINDOWED_DestroyWindow",
         "RENDERER_WINDOWED_DestroyDebugFont"
-      ]
+      ],
+      "dh": "f9212d55"
     },
     {
       "name": "EndCutScene",
@@ -236,7 +250,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "943b8e04"
     },
     {
       "name": "BeginScene",
@@ -254,7 +269,8 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "RENDERER_WINDOWED_ClearScreen"
-      ]
+      ],
+      "dh": "6f5e2ec0"
     },
     {
       "name": "EndScene1",
@@ -271,7 +287,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "ddabe323"
     },
     {
       "name": "EndScene2",
@@ -289,7 +306,8 @@
       ],
       "usedTypes": [
         "tagRECT"
-      ]
+      ],
+      "dh": "09986232"
     },
     {
       "name": "GetBackBuffer",
@@ -306,7 +324,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "c19c5ba1"
     },
     {
       "name": "GetScreenSize",
@@ -320,7 +339,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "GetScreenSize"
-      ]
+      ],
+      "dh": "85853687"
     },
     {
       "name": "SetPalette",
@@ -339,7 +359,8 @@
         "LPPALETTEENTRY",
         "RGBQUAD",
         "tagPALETTEENTRY"
-      ]
+      ],
+      "dh": "985aa8fb"
     },
     {
       "name": "SetPaletteTable",
@@ -356,7 +377,8 @@
       ],
       "usedTypes": [
         "BYTE *"
-      ]
+      ],
+      "dh": "4e9620ff"
     },
     {
       "name": "RENDERER_WINDOWED_GetBitmapHandle",
@@ -373,7 +395,8 @@
       ],
       "usedTypes": [
         "HBITMAP"
-      ]
+      ],
+      "dh": "90e6dbbd"
     },
     {
       "name": "UpdateScaleFactor",
@@ -387,7 +410,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "UpdateScaleFactor"
-      ]
+      ],
+      "dh": "ea181260"
     },
     {
       "name": "SetGamma",
@@ -401,7 +425,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetGamma"
-      ]
+      ],
+      "dh": "fd9a003c"
     },
     {
       "name": "CheckGamma",
@@ -415,7 +440,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "CheckGamma"
-      ]
+      ],
+      "dh": "baa3fc23"
     },
     {
       "name": "SetGlobalLight",
@@ -429,7 +455,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetGlobalLight"
-      ]
+      ],
+      "dh": "fa5926e7"
     },
     {
       "name": "SetPerspectiveScale",
@@ -443,7 +470,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetPerspectiveScale"
-      ]
+      ],
+      "dh": "dc98d5a1"
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -457,7 +485,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "AdjustPerspectivePosition"
-      ]
+      ],
+      "dh": "a1110d86"
     },
     {
       "name": "PerspecitveScalePosition",
@@ -471,7 +500,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "PerspecitveScalePosition"
-      ]
+      ],
+      "dh": "30901b11"
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -485,7 +515,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor"
-      ]
+      ],
+      "dh": "483e03ec"
     },
     {
       "name": "ResizeWindow",
@@ -501,7 +532,8 @@
         "ResizeWindow",
         "RENDERER_WINDOWED_AllocateDIBSection",
         "RENDERER_WINDOWED_UpdateScaleFactor"
-      ]
+      ],
+      "dh": "a6ad7d3b"
     },
     {
       "name": "ActivateWindow",
@@ -515,7 +547,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "ActivateWindow"
-      ]
+      ],
+      "dh": "427f8559"
     },
     {
       "name": "SetOption",
@@ -529,7 +562,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetOption"
-      ]
+      ],
+      "dh": "aeca1d31"
     },
     {
       "name": "RENDERER_WINDOWED_FindNearestPaletteIndex",
@@ -546,7 +580,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "04a90a4f"
     },
     {
       "name": "GetRendererStatistics",
@@ -560,7 +595,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "GetRendererStatistics"
-      ]
+      ],
+      "dh": "5610ffa0"
     },
     {
       "name": "RENDERER_WINDOWED_GetPalette",
@@ -581,7 +617,8 @@
       "usedTypes": [
         "HPALETTE",
         "RGBQUAD *"
-      ]
+      ],
+      "dh": "e8bbf24e"
     },
     {
       "name": "RENDERER_WINDOWED_GetFramebufferInfo",
@@ -598,7 +635,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "22036143"
     },
     {
       "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240",
@@ -615,7 +653,8 @@
       ],
       "usedTypes": [
         "HBITMAP"
-      ]
+      ],
+      "dh": "4d58f9b1"
     },
     {
       "name": "RENDERER_WINDOWED_GetPalettePointer",
@@ -629,7 +668,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_GetPalettePointer"
-      ]
+      ],
+      "dh": "b1d833f6"
     },
     {
       "name": "RENDERER_WINDOWED_UpdateScaleFactor",
@@ -643,7 +683,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_UpdateScaleFactor"
-      ]
+      ],
+      "dh": "331a45a6"
     },
     {
       "name": "RENDERER_WINDOWED_ValidateDC6Visibility",
@@ -665,7 +706,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "d7f788a2"
     },
     {
       "name": "RENDERER_WINDOWED_CalculateCropRect",
@@ -691,7 +733,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3db4a078"
     },
     {
       "name": "DrawImage",
@@ -717,7 +760,8 @@
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "45175772"
     },
     {
       "name": "DrawShiftedImage",
@@ -742,7 +786,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e6e81a90"
     },
     {
       "name": "DrawVerticalCropImage",
@@ -767,7 +812,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7213d353"
     },
     {
       "name": "DrawClippedImage",
@@ -791,7 +837,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f37466ae"
     },
     {
       "name": "DrawShadow",
@@ -816,7 +863,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "72a2bd4a"
     },
     {
       "name": "DrawImageFast",
@@ -833,7 +881,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "ec7b4f5d"
     },
     {
       "name": "DebugFillBackBuffer",
@@ -851,7 +900,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "c05c66d5"
     },
     {
       "name": "DrawPerspectiveImage",
@@ -869,7 +919,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "b347dd48"
     },
     {
       "name": "RENDERER_WINDOWED_CreateDebugFont",
@@ -883,7 +934,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_CreateDebugFont"
-      ]
+      ],
+      "dh": "c186ce9e"
     },
     {
       "name": "RENDERER_WINDOWED_DestroyDebugFont",
@@ -897,7 +949,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_DestroyDebugFont"
-      ]
+      ],
+      "dh": "63307b57"
     },
     {
       "name": "DrawString",
@@ -918,7 +971,8 @@
         "HDC",
         "tagRECT",
         "va_list"
-      ]
+      ],
+      "dh": "dd9c8715"
     },
     {
       "name": "DrawLight",
@@ -932,7 +986,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "DrawLight"
-      ]
+      ],
+      "dh": "8e7e0a46"
     },
     {
       "name": "RENDERER_WINDOWED_CheckBlendedShadowsEnabled",
@@ -946,7 +1001,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_CheckBlendedShadowsEnabled"
-      ]
+      ],
+      "dh": "91871f38"
     },
     {
       "name": "DrawSolidRectEx",
@@ -969,7 +1025,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0cc41f85"
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -984,7 +1041,8 @@
       "calledFunctions": [
         "DrawSolidRectAlpha",
         "DrawSolidRectEx"
-      ]
+      ],
+      "dh": "94c3fa38"
     },
     {
       "name": "RENDERER_WINDOWED_DrawPixel",
@@ -998,7 +1056,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "RENDERER_WINDOWED_DrawPixel"
-      ]
+      ],
+      "dh": "96205cba"
     },
     {
       "name": "DrawLine",
@@ -1012,7 +1071,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "DrawLine"
-      ]
+      ],
+      "dh": "da970ca3"
     },
     {
       "name": "RENDERER_WINDOWED_DrawLineBresenham",
@@ -1029,7 +1089,8 @@
       ],
       "usedTypes": [
         "POINT"
-      ]
+      ],
+      "dh": "d872110d"
     },
     {
       "name": "DrawRect",
@@ -1052,7 +1113,8 @@
         "POINT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "00af078a"
     },
     {
       "name": "DrawRectEx",
@@ -1074,7 +1136,8 @@
       "usedTypes": [
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "cc1abefd"
     },
     {
       "name": "DrawSolidRect",
@@ -1097,7 +1160,8 @@
       "usedTypes": [
         "tagRECT",
         "uint8_t"
-      ]
+      ],
+      "dh": "5eeb5a2c"
     },
     {
       "name": "DrawSolidRect_HaltTail",
@@ -1114,7 +1178,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "a0dba76c"
     },
     {
       "name": "DrawSolidSquare",
@@ -1134,7 +1199,8 @@
         "POINT",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ae002b1"
     },
     {
       "name": "RENDERER_WINDOWED_ClearFramebuffer",
@@ -1149,7 +1215,8 @@
       "calledFunctions": [
         "RENDERER_WINDOWED_ClearFramebuffer",
         "memset"
-      ]
+      ],
+      "dh": "52f26113"
     },
     {
       "name": "ClearScreen",
@@ -1164,7 +1231,8 @@
       "calledFunctions": [
         "ClearScreen",
         "RENDERER_WINDOWED_ClearFramebuffer"
-      ]
+      ],
+      "dh": "5d324021"
     },
     {
       "name": "RENDERER_WINDOWED_ClearScreen",
@@ -1179,7 +1247,8 @@
       "calledFunctions": [
         "RENDERER_WINDOWED_ClearScreen",
         "RENDERER_WINDOWED_ClearFramebuffer"
-      ]
+      ],
+      "dh": "8c805df2"
     },
     {
       "name": "DrawShadowTile",
@@ -1199,7 +1268,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2f79b297"
     },
     {
       "name": "DrawTransWallTile",
@@ -1219,7 +1289,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4490330"
     },
     {
       "name": "DrawWallTile",
@@ -1239,7 +1310,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5de3355"
     },
     {
       "name": "SetDefaultPerspectiveFactor_Unref_006c95c0",
@@ -1253,7 +1325,8 @@
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor_Unref_006c95c0"
-      ]
+      ],
+      "dh": "2633034d"
     },
     {
       "name": "DrawGroundTile",
@@ -1272,7 +1345,8 @@
       "usedTypes": [
         "D2GfxLightExStrc",
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "d5b10c05"
     },
     {
       "name": "CloseSmacker",
@@ -1290,7 +1364,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "41be5e16"
     },
     {
       "name": "RENDERER_WINDOWED_BlitSmackerFrame",
@@ -1308,7 +1383,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "158f59c2"
     },
     {
       "name": "DecodeSmacker",
@@ -1335,7 +1411,8 @@
         "Smack",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "76a48ce7"
     },
     {
       "name": "PlayerSmacker",
@@ -1357,7 +1434,8 @@
         "D2SmackerContextStrc",
         "Smack",
         "uint8_t"
-      ]
+      ],
+      "dh": "77f34d37"
     }
   ]
 }

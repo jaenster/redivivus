@@ -15,7 +15,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EmptyDialogDrawHandler_Unref_00486e00"
-      ]
+      ],
+      "dh": "7f46f4d7"
     },
     {
       "name": "GetInteractedUnitClassId_Unref_004b1020",
@@ -32,7 +33,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "199d1154"
     },
     {
       "name": "NPCMENU_ConvertQuestId",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "3219e5a8"
     },
     {
       "name": "GetInteractedUnit",
@@ -67,7 +70,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "547e4519"
     },
     {
       "name": "SetInteractedUnitInfo",
@@ -84,7 +88,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "85cb10cb"
     },
     {
       "name": "GetInteractedUnitClassId",
@@ -101,7 +106,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9d8f2f2d"
     },
     {
       "name": "NPCMENU_SelectRandomDialogOption",
@@ -124,7 +130,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "be55fe99"
     },
     {
       "name": "NPCMENU_RandomizeAllNpcDialogs",
@@ -142,7 +149,8 @@
       ],
       "usedTypes": [
         "D2NPCSpeechStrc"
-      ]
+      ],
+      "dh": "86fb3be3"
     },
     {
       "name": "NPCMENU_FindNextUnhandledMessage",
@@ -163,7 +171,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int16_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "bbf8ccdb"
     },
     {
       "name": "NPCMENU_ScrollCompleteShowNextMessage",
@@ -185,7 +194,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a4e4fe6f"
     },
     {
       "name": "Unreferenced_004b1970",
@@ -199,7 +209,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "Unreferenced_004b1970"
-      ]
+      ],
+      "dh": "a95faa49"
     },
     {
       "name": "NPCMENU_AddHandledMessageId",
@@ -213,7 +224,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_AddHandledMessageId"
-      ]
+      ],
+      "dh": "40f04e83"
     },
     {
       "name": "NPCMENU_CheckQuestDependentCallbacks",
@@ -233,7 +245,8 @@
         "D2BitBufferStrc",
         "D2NpcQuestCallbackEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "38619916"
     },
     {
       "name": "inline_NPC_IsInteractableSideNpc",
@@ -250,7 +263,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "428f8368"
     },
     {
       "name": "NPCMENU_ShowSelectedDialogOption",
@@ -279,7 +293,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "79da6a5c"
     },
     {
       "name": "NPCMENU_ShowGossipDialog",
@@ -300,7 +315,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ce9e94cc"
     },
     {
       "name": "NPCMENU_ShowIntroduceDialog",
@@ -321,7 +337,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "be20f811"
     },
     {
       "name": "NPCMENU_CalculateDialogPosition",
@@ -344,7 +361,8 @@
         "D2UnitStrc",
         "POINT",
         "tagRECT"
-      ]
+      ],
+      "dh": "5c676206"
     },
     {
       "name": "CheckSpeachVersusInteractedUnit",
@@ -361,7 +379,8 @@
       ],
       "usedTypes": [
         "D2NPCSpeechStrc"
-      ]
+      ],
+      "dh": "b2bbe8ec"
     },
     {
       "name": "NPCMENU_EmptyDialogDrawHandler",
@@ -375,7 +394,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EmptyDialogDrawHandler"
-      ]
+      ],
+      "dh": "0743b203"
     },
     {
       "name": "NPCMENU_OpenTradeWithNpc",
@@ -404,7 +424,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3f7ef83"
     },
     {
       "name": "NPCMENU_HireMerc",
@@ -433,7 +454,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eb8ddcb9"
     },
     {
       "name": "NPCMENU_IsItemIdentified",
@@ -451,7 +473,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "61e34e64"
     },
     {
       "name": "NPCMENU_CanItemBeRepaired",
@@ -479,7 +502,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d59c85a1"
     },
     {
       "name": "NPCMENU_EmptyDialogDrawHandler_Unref_004b2010",
@@ -493,7 +517,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EmptyDialogDrawHandler_Unref_004b2010"
-      ]
+      ],
+      "dh": "3e0e3f17"
     },
     {
       "name": "NPCMENU_CainIdentifyOptionCallback",
@@ -525,7 +550,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2b7e3837"
     },
     {
       "name": "NPCMENU_CloseAllDialogs",
@@ -540,7 +566,8 @@
       "calledFunctions": [
         "NPCMENU_CloseAllDialogs",
         "FreeDialogStrc"
-      ]
+      ],
+      "dh": "7f53928a"
     },
     {
       "name": "NPCMENU_RemoveRowOptionSlot2",
@@ -554,7 +581,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot2"
-      ]
+      ],
+      "dh": "519adaed"
     },
     {
       "name": "NPCMENU_RemoveRowOptionSlot3",
@@ -568,7 +596,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot3"
-      ]
+      ],
+      "dh": "662dfe6d"
     },
     {
       "name": "NPCMENU_RemoveRowOptionSlot4",
@@ -582,7 +611,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_RemoveRowOptionSlot4"
-      ]
+      ],
+      "dh": "f8a9e672"
     },
     {
       "name": "NPCMENU_EnableCainIdentifyOption",
@@ -596,7 +626,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableCainIdentifyOption"
-      ]
+      ],
+      "dh": "51d78f63"
     },
     {
       "name": "NPCMENU_InitializeMenuOptions",
@@ -610,7 +641,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_InitializeMenuOptions"
-      ]
+      ],
+      "dh": "738d494e"
     },
     {
       "name": "SubmitItem",
@@ -625,7 +657,8 @@
       "calledFunctions": [
         "SubmitItem",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "a4103aeb"
     },
     {
       "name": "NPCMENU_ValidateNpcForShop",
@@ -643,7 +676,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "39d82add"
     },
     {
       "name": "NPCMENU_Initialize",
@@ -662,7 +696,8 @@
         "CreateBitBuffer",
         "sprintf",
         "IMAGE_LoadDC6Ex"
-      ]
+      ],
+      "dh": "6d47a4a3"
     },
     {
       "name": "NPCMENU_Cleanup",
@@ -679,7 +714,8 @@
         "FreeQuestRecordPool",
         "DC6_FreeAndDelete",
         "FreeDialogStrc"
-      ]
+      ],
+      "dh": "521ce276"
     },
     {
       "name": "NPCMENU_SetTransactionMode",
@@ -702,7 +738,8 @@
         "D2GSPacketSrv0x50",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "63f0d3ca"
     },
     {
       "name": "QuestHandeling",
@@ -717,7 +754,8 @@
       "calledFunctions": [
         "QuestHandeling",
         "ReadQuestRecordFromBuffer"
-      ]
+      ],
+      "dh": "3ea51a87"
     },
     {
       "name": "thunk_SetInventoryNeedsRefresh",
@@ -772,7 +810,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d5e01e44"
     },
     {
       "name": "NPCMENU_CancelShopTransaction",
@@ -790,7 +829,8 @@
         "INV_SelectDefaultNpcButton",
         "INV_HandleShopReturnAction",
         "ClearSelectedUnit"
-      ]
+      ],
+      "dh": "c58b6a45"
     },
     {
       "name": "NPCMENU_HandleTransactionComplete",
@@ -814,7 +854,8 @@
       "usedTypes": [
         "eD2GSGameType",
         "uint32_t"
-      ]
+      ],
+      "dh": "cc9312d5"
     },
     {
       "name": "NPCMENU_OnCursorItemRemoved",
@@ -832,7 +873,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ca49efee"
     },
     {
       "name": "NPCMENU_OnItemRemovedFromContainer",
@@ -850,7 +892,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5a39dc01"
     },
     {
       "name": "NPCMENU_OnItemUnequip",
@@ -868,7 +911,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "18c504b4"
     },
     {
       "name": "NPCMENU_OnItemPutInContainer",
@@ -886,7 +930,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5e3f72d3"
     },
     {
       "name": "NPCMENU_OnItemPutInBelt",
@@ -904,7 +949,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "29604055"
     },
     {
       "name": "NPCMENU_OnItemInShop",
@@ -926,7 +972,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "df7bca54"
     },
     {
       "name": "NPCMENU_CalculateItemTransactionCost",
@@ -968,7 +1015,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c9e6a02f"
     },
     {
       "name": "NPCMENU_IsShopActive",
@@ -985,7 +1033,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "237fd05d"
     },
     {
       "name": "NPCMENU_FindMenuIndexByNpcId",
@@ -1004,7 +1053,8 @@
         "D2NpcMenuOptions",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e560bd89"
     },
     {
       "name": "NPCMENU_ConfirmTransactionCallback",
@@ -1025,7 +1075,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "14059212"
     },
     {
       "name": "NPCMENU_ConfirmTransactionReturn",
@@ -1043,7 +1094,8 @@
         "NPCMENU_BuildMercHireMenu",
         "INV_ReturnToShopFromRepair",
         "ClearSelectedUnit"
-      ]
+      ],
+      "dh": "879c0527"
     },
     {
       "name": "NPCMENU_ShowTransactionConfirmDialog",
@@ -1082,7 +1134,8 @@
         "uint16_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "fa5fedeb"
     },
     {
       "name": "GetInteractedUnitGuid",
@@ -1096,7 +1149,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "GetInteractedUnitGuid"
-      ]
+      ],
+      "dh": "e05d155f"
     },
     {
       "name": "GetQuestInfo",
@@ -1113,7 +1167,8 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc"
-      ]
+      ],
+      "dh": "7ce6ef5d"
     },
     {
       "name": "ResetNPCSpeeches",
@@ -1132,7 +1187,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "d37db8bd"
     },
     {
       "name": "NPCMENU_IsNpcMenuStateActive",
@@ -1150,7 +1206,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e6ba21c7"
     },
     {
       "name": "NPCMENU_IsAnyNpcDialogOpen",
@@ -1164,7 +1221,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_IsAnyNpcDialogOpen"
-      ]
+      ],
+      "dh": "7f75c4c1"
     },
     {
       "name": "NPCMENU_GetCurrentShopMode",
@@ -1178,7 +1236,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_GetCurrentShopMode"
-      ]
+      ],
+      "dh": "8007b046"
     },
     {
       "name": "NPCMENU_MarkNpcSpeechesUpdated",
@@ -1197,7 +1256,8 @@
         "D2GSPacketSrv0x91",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c9e40080"
     },
     {
       "name": "Unreferenced_004b3560",
@@ -1214,7 +1274,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "f809d6a2"
     },
     {
       "name": "NPCMENU_ItemServiceOptionCallback",
@@ -1233,7 +1294,8 @@
         "SetUIFlag",
         "UI_UpdateCursorAnimationTimer",
         "INV_ResetHoverAndContextState"
-      ]
+      ],
+      "dh": "d6eec033"
     },
     {
       "name": "NPCMENU_EnableCharsiImbueOption",
@@ -1247,7 +1309,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableCharsiImbueOption"
-      ]
+      ],
+      "dh": "a63f71a2"
     },
     {
       "name": "NPCMENU_EnableLarzukSocketOption",
@@ -1261,7 +1324,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableLarzukSocketOption"
-      ]
+      ],
+      "dh": "b03a3c81"
     },
     {
       "name": "NPCMENU_EnableAnyaPersonalizeOption",
@@ -1275,7 +1339,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableAnyaPersonalizeOption"
-      ]
+      ],
+      "dh": "0653a77b"
     },
     {
       "name": "NPCMENU_ClearHireListAndStopNpcSound",
@@ -1296,7 +1361,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bbb68bb3"
     },
     {
       "name": "ShopAction",
@@ -1336,7 +1402,8 @@
         "int32_t",
         "pfnItemTransactionCb",
         "uint32_t"
-      ]
+      ],
+      "dh": "8e7a1f21"
     },
     {
       "name": "NPCMENU_OnItemEquip",
@@ -1354,7 +1421,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c1508553"
     },
     {
       "name": "NPCMENU_CloseNpcInteraction",
@@ -1381,7 +1449,8 @@
         "D2AiGeneralStrc *",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6aff1cf0"
     },
     {
       "name": "NPCMENU_CloseScrollAndInteraction",
@@ -1401,7 +1470,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "64de9525"
     },
     {
       "name": "NPCMENU_OpenNpcShop",
@@ -1424,7 +1494,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "07eade8a"
     },
     {
       "name": "NPCMENU_CloseAndResetAll",
@@ -1441,7 +1512,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "0666a437"
     },
     {
       "name": "NPCMENU_HandlePlayerInteractionEnd",
@@ -1468,7 +1540,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4a767c63"
     },
     {
       "name": "NPCMENU_CloseShopUI",
@@ -1485,7 +1558,8 @@
         "SetUIFlag",
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction"
-      ]
+      ],
+      "dh": "48831f20"
     },
     {
       "name": "CloseNPCInteract",
@@ -1507,7 +1581,8 @@
         "INV_ResetShopState",
         "thunk_NPCSHOP_IsRepairTabActive",
         "NPCMENU_CloseAndResetAll"
-      ]
+      ],
+      "dh": "0f385007"
     },
     {
       "name": "NPCMENU_CloseCubeUI",
@@ -1524,7 +1599,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "5f48d3ce"
     },
     {
       "name": "NPCMENU_CloseStashUI",
@@ -1541,7 +1617,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "3a5e5205"
     },
     {
       "name": "NPCMENU_CloseGossipDialog",
@@ -1559,7 +1636,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "4a28db50"
     },
     {
       "name": "NPCMENU_CloseConfirmDialogAndInteraction",
@@ -1577,7 +1655,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "2cd98f68"
     },
     {
       "name": "NPCMENU_SendCainIdentifyItems",
@@ -1603,7 +1682,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bb63046f"
     },
     {
       "name": "NPCMENU_ShowCurrentGossipCallback",
@@ -1618,7 +1698,8 @@
       "calledFunctions": [
         "NPCMENU_SendCainIdentifyItems",
         "NPCMENU_ShowCurrentGossipCallback"
-      ]
+      ],
+      "dh": "d213984b"
     },
     {
       "name": "NPCMENU_CainIdentifyCallback",
@@ -1638,7 +1719,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7dc4bba5"
     },
     {
       "name": "NPCMENU_ConfirmDialogOkCallback",
@@ -1654,7 +1736,8 @@
         "NPCMENU_ConfirmDialogOkCallback",
         "NPCMENU_CloseConfirmDialogAndInteraction",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "0657ddcb"
     },
     {
       "name": "NPCMENU_TradeOptionCallback",
@@ -1679,7 +1762,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cf468e60"
     },
     {
       "name": "DRAW_UI_NPC_INTERACTION",
@@ -1721,7 +1805,8 @@
         "D2UnitStrc",
         "eD2GSGameType",
         "uint32_t"
-      ]
+      ],
+      "dh": "6af9450a"
     },
     {
       "name": "NPCMENU_GambleDrawCallback",
@@ -1739,7 +1824,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "3e50a124"
     },
     {
       "name": "NPCMENU_GambleMouseCallback",
@@ -1757,7 +1843,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "bd0961eb"
     },
     {
       "name": "NPCMENU_RepairDrawCallback",
@@ -1776,7 +1863,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "c102312a"
     },
     {
       "name": "NPCMENU_RepairMouseCallback",
@@ -1795,7 +1883,8 @@
         "INV_ResetHoverAndContextState",
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "aca8e4a3"
     },
     {
       "name": "NPCMENU_TradeDrawCallback",
@@ -1820,7 +1909,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ca5d6f98"
     },
     {
       "name": "NPCMENU_OpenInteractionDialog",
@@ -1873,7 +1963,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e3efb15f"
     },
     {
       "name": "NPCMENU_ShowMainMenuDialog",
@@ -1914,7 +2005,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f61e0e3"
     },
     {
       "name": "NPCMENU_OpenInteraction",
@@ -1954,7 +2046,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2af0ea06"
     },
     {
       "name": "NPCMENU_WarrivGoEastOptionCallback",
@@ -1973,7 +2066,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "876712ee"
     },
     {
       "name": "NPCMENU_MeshifSailEastOptionCallback",
@@ -1992,7 +2086,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "00608d46"
     },
     {
       "name": "NPCMENU_TyraelTravelToHarrogathOptionCallback",
@@ -2011,7 +2106,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "c171ab6a"
     },
     {
       "name": "NPCMENU_MeshifSailWestOptionCallback",
@@ -2030,7 +2126,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "cbd6bf87"
     },
     {
       "name": "NPCMENU_WarrivGoWestOptionCallback",
@@ -2049,7 +2146,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NET_D2GS_CLIENT_Send_INT_INT_INT"
-      ]
+      ],
+      "dh": "425e87a1"
     },
     {
       "name": "NPCMENU_HandleQuestItemPacket",
@@ -2075,7 +2173,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9eac60cc"
     },
     {
       "name": "NPCMENU_HandleTradeAccepted",
@@ -2119,7 +2218,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8370a9b"
     },
     {
       "name": "NPCMENU_HandleTradeRejected",
@@ -2154,7 +2254,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "473fff8c"
     },
     {
       "name": "NPCMENU_MercDrawCallback1",
@@ -2171,7 +2272,8 @@
         "FreeDialogStrc",
         "SOUND_PlaySound",
         "NPCMENU_OpenInteractionDialog"
-      ]
+      ],
+      "dh": "413bb81b"
     },
     {
       "name": "NPCMENU_ConfirmDialogCancelCallback",
@@ -2188,7 +2290,8 @@
         "FreeDialogStrc",
         "SOUND_PlaySound",
         "NPCMENU_OpenInteractionDialog"
-      ]
+      ],
+      "dh": "416e6222"
     },
     {
       "name": "NPCMENU_ShowTalkDialog",
@@ -2229,7 +2332,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a61dce54"
     },
     {
       "name": "NPCMENU_ShowNpcActionConfirmDialog",
@@ -2259,7 +2363,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6cda260"
     },
     {
       "name": "NPCMENU_ReopenTalkDialog",
@@ -2275,7 +2380,8 @@
         "NPCMENU_ReopenTalkDialog",
         "CheckSpeachVersusInteractedUnit",
         "NPCMENU_ShowTalkDialog"
-      ]
+      ],
+      "dh": "5cd57e14"
     },
     {
       "name": "NPCMENU_ShowAkaraRespecConfirm_Unused",
@@ -2291,7 +2397,8 @@
         "CheckSpeachVersusInteractedUnit",
         "NPCMENU_ShowAkaraRespecConfirm_Unused",
         "NPCMENU_ShowNpcActionConfirmDialog"
-      ]
+      ],
+      "dh": "0b2e2296"
     },
     {
       "name": "NPCMENU_MercListDrawCallback",
@@ -2307,7 +2414,8 @@
         "NPCMENU_MercListDrawCallback",
         "FreeDialogStrc",
         "NPCMENU_OpenInteractionDialog"
-      ]
+      ],
+      "dh": "54d35e86"
     },
     {
       "name": "NPCMENU_BuildMercHireMenu",
@@ -2360,7 +2468,8 @@
         "pfnEHHandlerRoutine",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a84d0e7"
     },
     {
       "name": "NPCMENU_HandleTradePacket",
@@ -2385,7 +2494,8 @@
         "D2UnitStrc",
         "eD2UnitStat",
         "uint16_t"
-      ]
+      ],
+      "dh": "5c45a752"
     },
     {
       "name": "NPCMENU_EnableKashyaHireOption",
@@ -2400,7 +2510,8 @@
       "calledFunctions": [
         "NPCMENU_BuildMercHireMenu",
         "NPCMENU_EnableKashyaHireOption"
-      ]
+      ],
+      "dh": "ab10c7bc"
     },
     {
       "name": "NPCMENU_ConfigureMenuOption",
@@ -2420,7 +2531,8 @@
       "usedTypes": [
         "D2NpcMenuOptionFunc *",
         "int32_t"
-      ]
+      ],
+      "dh": "72745daa"
     },
     {
       "name": "NPCMENU_EnableWarrivGoEastOption",
@@ -2434,7 +2546,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableWarrivGoEastOption"
-      ]
+      ],
+      "dh": "2e74cb62"
     },
     {
       "name": "NPCMENU_EnableMeshifSailEastOption",
@@ -2448,7 +2561,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableMeshifSailEastOption"
-      ]
+      ],
+      "dh": "7c2e2b47"
     },
     {
       "name": "NPCMENU_EnableQualKehkHireOption",
@@ -2462,7 +2576,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableQualKehkHireOption"
-      ]
+      ],
+      "dh": "c01ffbbd"
     },
     {
       "name": "NPCMENU_EnableTyraelTravelToHarrogathOption",
@@ -2477,7 +2592,8 @@
       "calledFunctions": [
         "NPCMENU_EnableTyraelTravelToHarrogathOption",
         "CLIENT_CheckExpansion"
-      ]
+      ],
+      "dh": "c52018e7"
     },
     {
       "name": "NPCMENU_HandleMenuSelection",
@@ -2520,7 +2636,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6f2ce2b"
     },
     {
       "name": "SetPlayersMercInfo",
@@ -2539,7 +2656,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "32ef48de"
     },
     {
       "name": "NPCMENU_RefreshMenuDialog",
@@ -2555,7 +2673,8 @@
         "NPCMENU_RefreshMenuDialog",
         "FreeDialogStrc",
         "NPCMENU_OpenInteractionDialog"
-      ]
+      ],
+      "dh": "b2d87e96"
     },
     {
       "name": "NPCMENU_OnScrollComplete",
@@ -2588,7 +2707,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "509c5562"
     },
     {
       "name": "NPCMENU_TalkOptionCallback",
@@ -2612,7 +2732,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "38c04eec"
     },
     {
       "name": "NPCMENU_AkaraRespecOptionCallback",
@@ -2636,7 +2757,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a7baa2e7"
     },
     {
       "name": "NPCMENU_EnableAkaraRespecOption",
@@ -2650,7 +2772,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "NPCMENU_EnableAkaraRespecOption"
-      ]
+      ],
+      "dh": "2bc9b4a3"
     },
     {
       "name": "UI_HandleNpcInteractionPacket",
@@ -2701,7 +2824,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1101b5c6"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca09b",
@@ -2721,7 +2845,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "f4488e11"
     },
     {
       "name": "StaticInit_gNpcMenuConfirmDialogStrings",
@@ -2735,7 +2860,8 @@
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
         "StaticInit_gNpcMenuConfirmDialogStrings"
-      ]
+      ],
+      "dh": "afb2c077"
     }
   ]
 }

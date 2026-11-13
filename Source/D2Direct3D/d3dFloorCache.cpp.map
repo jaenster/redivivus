@@ -26,7 +26,8 @@
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f7de903"
     },
     {
       "name": "D3DFLOOR_SetPalette",
@@ -46,7 +47,8 @@
       "usedTypes": [
         "D3DFloorCacheStrc",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "09a8e361"
     },
     {
       "name": "D3DFLOOR_InsertNodeAtTail",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "4bfdbf4e"
     },
     {
       "name": "D3DFLOOR_RemoveNodeByIndex",
@@ -82,7 +85,8 @@
       "usedTypes": [
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "2d3f8d0c"
     },
     {
       "name": "D3DFLOOR_AllocateNodeFromFreeList",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "3414c611"
     },
     {
       "name": "D3DFLOOR_PromoteNodeToMRU",
@@ -123,7 +128,8 @@
       ],
       "usedTypes": [
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "7f005f8e"
     },
     {
       "name": "D3DFLOOR_EvictLRU",
@@ -142,7 +148,8 @@
       "usedTypes": [
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "4b39e7ca"
     },
     {
       "name": "D3DFLOOR_InvalidateByIndex",
@@ -161,7 +168,8 @@
       ],
       "usedTypes": [
         "D3DFloorCacheStrc"
-      ]
+      ],
+      "dh": "f5094356"
     },
     {
       "name": "D3DFLOOR_Free",
@@ -184,7 +192,8 @@
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc",
         "IUnknown"
-      ]
+      ],
+      "dh": "ad2bd806"
     },
     {
       "name": "D3DFLOOR_EnsureAvailableNode",
@@ -204,7 +213,8 @@
         "D3DFloorCacheNodeStrc",
         "D3DFloorCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a27cca9b"
     },
     {
       "name": "D3D_CreateSystemMemoryTexturesForTiles",
@@ -225,7 +235,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f7e2903c"
     },
     {
       "name": "D3D_FreeSystemMemoryTexturesForTiles",
@@ -239,7 +250,8 @@
       "namespace": "D2Direct3D::d3dFloorCache",
       "calledFunctions": [
         "D3D_FreeSystemMemoryTexturesForTiles"
-      ]
+      ],
+      "dh": "bb33b585"
     },
     {
       "name": "D3D_DecompressRLESubtileToBuffer",
@@ -257,7 +269,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "0b04d1e8"
     },
     {
       "name": "D3D_RenderTileComponentsToPixelBuffer",
@@ -277,7 +290,8 @@
         "D2TileLibraryEntryStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1b754952"
     },
     {
       "name": "D3D_RenderFloorTileToTexture",
@@ -308,7 +322,8 @@
         "DDSURFACEDESC",
         "IDirect3DTexture2",
         "int32_t"
-      ]
+      ],
+      "dh": "7c541948"
     },
     {
       "name": "D3D_RenderSubtileToTexture",
@@ -338,7 +353,8 @@
         "D3DSubtileCacheNodeStrc",
         "DDSURFACEDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "44f8dc65"
     },
     {
       "name": "D3D_InvalidateTileCachesForEntry",
@@ -357,7 +373,8 @@
       ],
       "usedTypes": [
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "44d0a3a5"
     },
     {
       "name": "D3D_RenderBinkVideoFrame",
@@ -379,7 +396,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "8186c82d"
     },
     {
       "name": "D3D_PlayBinkVideo",
@@ -404,7 +422,8 @@
         "fnBinkFrameCallback",
         "tagMSG",
         "uint32_t"
-      ]
+      ],
+      "dh": "6045b347"
     }
   ]
 }

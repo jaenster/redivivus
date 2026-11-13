@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "20c4b212"
     },
     {
       "name": "SHA1_Init",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2BnSha1ContextStrc"
-      ]
+      ],
+      "dh": "3e0b0b7f"
     },
     {
       "name": "SHA1_Update",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "D2BnSha1ContextStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c65c44f6"
     },
     {
       "name": "SHA1_Final",
@@ -76,7 +79,8 @@
         "D2BnSha1ContextStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc1e2446"
     }
   ]
 }

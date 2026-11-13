@@ -23,7 +23,8 @@
       "usedTypes": [
         "_MEMORYSTATUS",
         "uint32_t"
-      ]
+      ],
+      "dh": "85feed83"
     },
     {
       "name": "ComputeSizeClassIndex",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9c36d98d"
     },
     {
       "name": "FindFirstFreeBit",
@@ -59,7 +61,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2268f336"
     },
     {
       "name": "FindFreeSlotInBitmap",
@@ -78,7 +81,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea709b91"
     },
     {
       "name": "InsertBlockIntoSortedArray",
@@ -104,7 +108,8 @@
         "D2PoolBlockStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fa4c6847"
     },
     {
       "name": "RemoveBlockFromSortedArray",
@@ -131,7 +136,8 @@
         "D2PoolBlockStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5ff65724"
     },
     {
       "name": "AllocatePoolBlock",
@@ -160,7 +166,8 @@
         "D2PoolManagerStrc",
         "D2PoolStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "22be70d1"
     },
     {
       "name": "FindOrCreateBlockWithFreeSlots",
@@ -183,7 +190,8 @@
         "D2PoolManagerStrc",
         "D2PoolStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5667f7c0"
     },
     {
       "name": "POOL_AllocOverflowBlock",
@@ -206,7 +214,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a8eb0f36"
     },
     {
       "name": "FreeTrackedAllocation",
@@ -225,7 +234,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1abf68d3"
     },
     {
       "name": "ReallocTrackedAllocation",
@@ -249,7 +259,8 @@
         "CRITICAL_SECTION",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "76e4bc73"
     },
     {
       "name": "FindBlockContainingAddress",
@@ -269,7 +280,8 @@
         "D2PoolBlockEntryStrc",
         "D2PoolBlockStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "e65c7869"
     },
     {
       "name": "PromoteBlockToFreeListHead",
@@ -287,7 +299,8 @@
       "usedTypes": [
         "D2PoolBlockStrc",
         "D2PoolStrc"
-      ]
+      ],
+      "dh": "0d486c94"
     },
     {
       "name": "Free",
@@ -312,7 +325,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "c17f3319"
     },
     {
       "name": "InitializeMemoryManagers",
@@ -333,7 +347,8 @@
         "D2PoolBlockStrc",
         "D2PoolManagerStrc",
         "D2PoolStrc"
-      ]
+      ],
+      "dh": "92723895"
     },
     {
       "name": "FreeMemoryPool",
@@ -355,7 +370,8 @@
         "D2PoolBlockStrc",
         "D2PoolManagerStrc",
         "D2PoolStrc"
-      ]
+      ],
+      "dh": "3a76e051"
     },
     {
       "name": "InitializePoolSystem",
@@ -383,7 +399,8 @@
         "D2PoolManagerStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "410e9abf"
     },
     {
       "name": "SetPoolIdForMemoryManager",
@@ -401,7 +418,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1dc48c14"
     },
     {
       "name": "getDwMemory",
@@ -418,7 +436,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "26edf898"
     },
     {
       "name": "Alloc",
@@ -446,7 +465,8 @@
         "D2PoolStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "57b4d603"
     },
     {
       "name": "ReAlloc",
@@ -474,7 +494,8 @@
         "ReAlloc_Slotm",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37d81499"
     },
     {
       "name": "SErrSetBlizzardErrorFunction_Unref_0040b370",
@@ -491,7 +512,8 @@
       ],
       "usedTypes": [
         "pfnBlizzardError"
-      ]
+      ],
+      "dh": "a3d5b367"
     },
     {
       "name": "AllocClientMemory",
@@ -510,7 +532,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0d1e982d"
     },
     {
       "name": "FreeClientMemory",
@@ -528,7 +551,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "84bb7d3c"
     },
     {
       "name": "ReAllocClientMemory",
@@ -544,7 +568,8 @@
         "ReAllocClientMemory",
         "ReAlloc",
         "FOG_ErrorHandler"
-      ]
+      ],
+      "dh": "847026d1"
     },
     {
       "name": "AllocServerMemory",
@@ -564,7 +589,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ccd885fb"
     },
     {
       "name": "FreeServerMemory",
@@ -583,7 +609,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5a379747"
     },
     {
       "name": "ReAllocServerMemory",
@@ -602,7 +629,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "3fbcaa22"
     }
   ]
 }

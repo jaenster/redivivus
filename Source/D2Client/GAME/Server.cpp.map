@@ -26,7 +26,8 @@
         "D2BNetClientCallbacksStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "adf30eb6"
     }
   ]
 }

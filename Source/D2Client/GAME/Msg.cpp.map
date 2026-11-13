@@ -16,7 +16,8 @@
       "calledFunctions": [
         "NET_SendPacket0x3f_0x1a",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "5395d90a"
     },
     {
       "name": "LOADING_GetProgressRatio_Unref_00477c90",
@@ -30,7 +31,8 @@
       "namespace": "D2Client::GAME::Msg",
       "calledFunctions": [
         "LOADING_GetProgressRatio_Unref_00477c90"
-      ]
+      ],
+      "dh": "fa75e172"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x67",
@@ -54,7 +56,8 @@
         "D2GSPacketClt0x",
         "eD2PlayerClassIDDWORD",
         "uint32_t"
-      ]
+      ],
+      "dh": "948444bb"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x6B",
@@ -72,7 +75,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "08475c73"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x6D_PING",
@@ -95,7 +99,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "51c6ad0e"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x69",
@@ -115,7 +120,8 @@
       "usedTypes": [
         "D2BNetClientCallbacksStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "e74b64e2"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x68",
@@ -144,7 +150,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a3bb78c"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x6A",
@@ -162,7 +169,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "1cf7ef21"
     },
     {
       "name": "MSG_ReadSaveFileToBuffer",
@@ -192,7 +200,8 @@
         "FILE",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0aed3ea6"
     },
     {
       "name": "LOADING_SetProgressRatio",
@@ -209,7 +218,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6a96de0b"
     },
     {
       "name": "LOADING_GetProgressRatio",
@@ -223,7 +233,8 @@
       "namespace": "D2Client::GAME::Msg",
       "calledFunctions": [
         "LOADING_GetProgressRatio"
-      ]
+      ],
+      "dh": "caafd6e9"
     },
     {
       "name": "LOADING_AnimateProgressBar",
@@ -241,7 +252,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "63eb0e9d"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x6C",
@@ -267,7 +279,8 @@
         "D2GSPacketClt0x6C",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e863bad5"
     },
     {
       "name": "NET_D2GS_CLIENT_Send",
@@ -292,7 +305,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2e480a97"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_CMD",
@@ -310,7 +324,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "d5728a2b"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_SHORT",
@@ -330,7 +345,8 @@
         "D2GSPacketClt_CMD_SHORT",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6bd11a4f"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT",
@@ -350,7 +366,8 @@
         "D2GSPacketClt_CMD_SHORT_SHORT",
         "int16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a6a8188e"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT",
@@ -370,7 +387,8 @@
         "D2GSPacketClt_CMD_SHORT_SHORT_SHORT",
         "int16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c2c43c59"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT",
@@ -390,7 +408,8 @@
         "D2GSPacketClt_CMD_SHORT_SHORT_SHORT_SHORT",
         "int16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6975352c"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_INT",
@@ -410,7 +429,8 @@
         "D2GSPacketClt_CMD_INT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d1154a28"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_INT_INT",
@@ -430,7 +450,8 @@
         "D2GSPacketClt_CMD_INT_INT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ee1a4f4f"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_INT_INT_INT",
@@ -450,7 +471,8 @@
         "D2GSPacketClt_CMD_INT_INT_INT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a5034f11"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
@@ -470,7 +492,8 @@
         "D2GSPacketClt_CMD_INT_INT_INT_INT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "534df6dd"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x5D",
@@ -490,7 +513,8 @@
         "D2GSPacketClt0x5D",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce6e1efd"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x5E",
@@ -509,7 +533,8 @@
       "usedTypes": [
         "D2GSPacketClt0x5E",
         "int32_t"
-      ]
+      ],
+      "dh": "bbbfbc7c"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_Chat",
@@ -530,7 +555,8 @@
         "D2ChatPacketBuildStrc",
         "D2ChatPacketSendStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "78120c00"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x66",
@@ -554,7 +580,8 @@
       "usedTypes": [
         "D2GSPacketClt0x",
         "uint32_t"
-      ]
+      ],
+      "dh": "73bc3d0a"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x66_HaltTail",
@@ -571,7 +598,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "1cbb1ed2"
     }
   ]
 }

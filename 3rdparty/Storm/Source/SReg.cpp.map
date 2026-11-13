@@ -21,7 +21,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "627a2b81"
     },
     {
       "name": "SREG_InternalDeleteEntry",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "HKEY",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae90ea05"
     },
     {
       "name": "SREG_InternalLoadEntry",
@@ -66,7 +68,8 @@
         "LPDWORD",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9337db14"
     },
     {
       "name": "SREG_InternalSaveEntry",
@@ -88,7 +91,8 @@
         "HKEY",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e84363e7"
     },
     {
       "name": "SRegDeleteValue",
@@ -107,7 +111,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0bf2b85a"
     },
     {
       "name": "SRegLoadData",
@@ -129,7 +134,8 @@
         "int32_t",
         "uint32_t",
         "uint32_t *"
-      ]
+      ],
+      "dh": "66adae6d"
     },
     {
       "name": "SRegLoadString",
@@ -148,7 +154,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a90b276f"
     },
     {
       "name": "SRegLoadValue",
@@ -171,7 +178,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "752bd707"
     },
     {
       "name": "SRegSaveData",
@@ -193,7 +201,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9294250b"
     },
     {
       "name": "SRegSaveString",
@@ -215,7 +224,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34af0cb7"
     },
     {
       "name": "SRegSaveValue",
@@ -234,7 +244,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e0b4ee31"
     }
   ]
 }

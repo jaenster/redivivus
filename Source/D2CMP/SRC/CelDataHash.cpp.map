@@ -21,7 +21,8 @@
         "D2CelDataHashEntryStrc",
         "D2CelDataHashTableStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "84597f9d"
     },
     {
       "name": "CELDATAHASH_InitHashTable",
@@ -36,7 +37,8 @@
       "calledFunctions": [
         "CELDATAHASH_InitHashTable",
         "memset"
-      ]
+      ],
+      "dh": "19c5730d"
     },
     {
       "name": "GFX_FreeAllCacheEntries",
@@ -61,7 +63,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94e2c907"
     },
     {
       "name": "CELDATAHASH_FindByFilename",
@@ -82,7 +85,8 @@
         "D2CelDataHashTableStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3fbafc28"
     },
     {
       "name": "CELDATAHASH_AllocEntry",
@@ -104,7 +108,8 @@
         "D2CelDataHashTableStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "526b1f96"
     },
     {
       "name": "GFX_RemoveCacheEntry",
@@ -128,7 +133,8 @@
         "D2CelDataHashTableStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d72bff2f"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060b130",
@@ -142,7 +148,8 @@
       "namespace": "D2CMP::SRC::CelDataHash",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060b130"
-      ]
+      ],
+      "dh": "a12fc429"
     }
   ]
 }

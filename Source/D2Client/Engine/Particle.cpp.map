@@ -27,7 +27,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2e545b35"
     },
     {
       "name": "FreeParticle",
@@ -48,7 +49,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "790e02a5"
     },
     {
       "name": "PARTICLE_GetX",
@@ -68,7 +70,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7a711b26"
     },
     {
       "name": "PARTICLE_GetY",
@@ -88,7 +91,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "02761c67"
     },
     {
       "name": "PARTICLE_GetScreenZ",
@@ -108,7 +112,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "591386b2"
     },
     {
       "name": "PARTICLE_GetPosXShifted",
@@ -128,7 +133,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "16d6a1c4"
     },
     {
       "name": "PARTICLE_GetPosYShifted",
@@ -148,7 +154,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "65a0dc8d"
     },
     {
       "name": "PARTICLE_GetPosZShifted",
@@ -168,7 +175,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c9cf860c"
     },
     {
       "name": "PARTICLE_GetPosXRaw",
@@ -188,7 +196,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d1d2014e"
     },
     {
       "name": "PARTICLE_GetPosYRaw",
@@ -208,7 +217,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bfac5fd6"
     },
     {
       "name": "PARTICLE_GetPosZRaw",
@@ -228,7 +238,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "add11ea6"
     },
     {
       "name": "SetPosVectorShifted",
@@ -248,7 +259,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "513bca21"
     },
     {
       "name": "SetOffsetVector",
@@ -268,7 +280,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c3941af"
     },
     {
       "name": "PARTICLE_SetVelocityOffset",
@@ -288,7 +301,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "98cd0a6e"
     },
     {
       "name": "PARTICLE_SetBoundsOffset",
@@ -308,7 +322,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9f37e4e0"
     },
     {
       "name": "PARTICLE_SetBounceParams",
@@ -328,7 +343,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dd9864f9"
     },
     {
       "name": "PARTICLE_GetBounceCount",
@@ -348,7 +364,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9efda08d"
     },
     {
       "name": "PARTICLE_ClearLifetimeFlag",
@@ -367,7 +384,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "212e1e9d"
     },
     {
       "name": "PARTICLE_UpdatePosition",
@@ -399,7 +417,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a6ed0aac"
     },
     {
       "name": "PARTICLE_InitProjectile",
@@ -419,7 +438,8 @@
         "D2ParticleStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "92489f9b"
     },
     {
       "name": "PARTICLE_SetAttachedToOwner",
@@ -438,7 +458,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "886a1326"
     },
     {
       "name": "PARTICLE_SetStopped",
@@ -457,7 +478,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3db20ee7"
     },
     {
       "name": "PARTICLE_IsStopped",
@@ -476,7 +498,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4f159ad0"
     },
     {
       "name": "PARTICLE_SetStoppedWithFade",
@@ -495,7 +518,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e8fb73ae"
     },
     {
       "name": "PARTICLE_IsStoppedOrFading",
@@ -514,7 +538,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3410122b"
     },
     {
       "name": "PARTICLE_SetReverseDirection",
@@ -533,7 +558,8 @@
       "usedTypes": [
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a0ca16db"
     }
   ]
 }

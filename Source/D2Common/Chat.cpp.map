@@ -24,7 +24,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14e8647c"
     },
     {
       "name": "Free",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "D2HoverTextStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "0abadbab"
     },
     {
       "name": "CHAT_GetChatField",
@@ -57,7 +59,8 @@
       "namespace": "D2Common::Chat::Chat",
       "calledFunctions": [
         "CHAT_GetChatField"
-      ]
+      ],
+      "dh": "94f2d8e2"
     },
     {
       "name": "GetExpireFrame",
@@ -75,7 +78,8 @@
       "usedTypes": [
         "D2HoverTextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f9503464"
     },
     {
       "name": "TEXT_CopyHoverMessageString",
@@ -92,7 +96,8 @@
       ],
       "usedTypes": [
         "D2HoverTextStrc"
-      ]
+      ],
+      "dh": "86596af2"
     },
     {
       "name": "HOVERTEXT_GetTextLineList",
@@ -109,7 +114,8 @@
       ],
       "usedTypes": [
         "D2HoverTextStrc"
-      ]
+      ],
+      "dh": "1af93416"
     },
     {
       "name": "HOVERTEXT_SetTextLineList",
@@ -126,7 +132,8 @@
       ],
       "usedTypes": [
         "D2HoverTextStrc"
-      ]
+      ],
+      "dh": "72ff1a1c"
     },
     {
       "name": "GetLanguageCode",
@@ -144,7 +151,8 @@
       "usedTypes": [
         "D2HoverTextStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "34c41362"
     },
     {
       "name": "SetLanguageCode",
@@ -162,7 +170,8 @@
       "usedTypes": [
         "D2HoverTextStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "c2bbab6c"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca2b8",
@@ -183,7 +192,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "1ff368c7"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca2e8",
@@ -204,7 +214,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "e0a5a7d7"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca326",
@@ -225,7 +236,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "96d52a4d"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca366",
@@ -246,7 +258,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "a56ac6b3"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca3b9",
@@ -267,7 +280,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "d19c9707"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca3e8",
@@ -288,7 +302,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "c04efdde"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca418",
@@ -309,7 +324,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "b6c6b756"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca475",
@@ -330,7 +346,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "59d2e92d"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca4b1",
@@ -351,7 +368,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "4a9e006f"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca4e1",
@@ -372,7 +390,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "cbb8df2a"
     }
   ]
 }

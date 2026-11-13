@@ -26,7 +26,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "6dbff3e2"
     },
     {
       "name": "Q10_IsRadamentCompleted",
@@ -46,7 +47,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bf904835"
     },
     {
       "name": "Q10_CheckHoradricStaffState",
@@ -66,7 +68,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2442fd7e"
     },
     {
       "name": "Q10_NotifyHoradricStaffActive",
@@ -86,7 +89,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0f8c0c6a"
     },
     {
       "name": "Q10_CheckQuestItemsForDialog",
@@ -110,7 +114,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "f7b7868b"
     },
     {
       "name": "Q10_ActiveFilter",
@@ -132,7 +137,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e6eb95d7"
     },
     {
       "name": "Q10_OnScrollPickup",
@@ -156,7 +162,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "44ab5a26"
     },
     {
       "name": "Q10_OnStaffOrViperPickup",
@@ -181,7 +188,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ba274bc3"
     },
     {
       "name": "Q10_OnHoradricCubePickup",
@@ -203,7 +211,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a943a08c"
     },
     {
       "name": "Q10_Callback11_ScrollMessage",
@@ -230,7 +239,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "8dd62a9a"
     },
     {
       "name": "Q10_Callback00_NpcActivate",
@@ -258,7 +268,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "21e89e22"
     },
     {
       "name": "Q10_Callback03_ChangedLevel",
@@ -277,7 +288,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "35118fc7"
     },
     {
       "name": "Q10_Callback10_PlayerLeavesGame",
@@ -308,7 +320,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "e50869c3"
     },
     {
       "name": "Q10_Callback04_ItemPickedUp",
@@ -339,7 +352,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "4cc57e05"
     },
     {
       "name": "Q10_Callback05_ItemDropped",
@@ -364,7 +378,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1be8c1fd"
     },
     {
       "name": "Q10_AdjustStaffPieceCount",
@@ -383,7 +398,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cb288f1e"
     },
     {
       "name": "Unreferenced_00599bf0",
@@ -402,7 +418,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "307d015a"
     },
     {
       "name": "OBJOP_A2Q2_OpenHoradricScrollChest",
@@ -429,7 +446,8 @@
         "D2QuestDataA2Q2Strc",
         "D2QuestDataStrc",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "43d3b55e"
     },
     {
       "name": "OBJOP_A2Q2_OpenStaffOfKingsChest",
@@ -458,7 +476,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "603212bd"
     },
     {
       "name": "OBJOP_A2Q2_OpenHoradricCubeChest",
@@ -486,7 +505,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7e78ae8c"
     },
     {
       "name": "Objects_InitFn31",
@@ -503,7 +523,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "22da96d7"
     },
     {
       "name": "Objects_InitFn33",
@@ -520,7 +541,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "e8cda2aa"
     },
     {
       "name": "Objects_InitFn32_HoradricScrollChest",
@@ -537,7 +559,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "85dbb13b"
     },
     {
       "name": "Q10_GetQuestInfo",
@@ -557,7 +580,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c60113a"
     },
     {
       "name": "Q10_OnStaffAssembledViaCube",
@@ -584,7 +608,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6fa67e27"
     },
     {
       "name": "Q10_StatusFilter",
@@ -607,7 +632,8 @@
         "D2QuestDataA2Q2Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e6c5ffda"
     },
     {
       "name": "Q10_Callback13_PlayerStartedGame",
@@ -634,7 +660,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a631a063"
     },
     {
       "name": "Q10_Callback14_PlayerJoinedGame",
@@ -656,7 +683,8 @@
         "D2QuestDataA2Q2Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b9cd52e0"
     },
     {
       "name": "Q10_Callback09_PlayerDroppedWithQuestItem",
@@ -680,7 +708,8 @@
         "D2QuestDataStrc",
         "eD2HostGameType",
         "uint32_t"
-      ]
+      ],
+      "dh": "04ccd4c0"
     },
     {
       "name": "Q10_InitData",
@@ -700,7 +729,8 @@
       "usedTypes": [
         "D2QuestDataA2Q2Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "fc1348d4"
     }
   ]
 }

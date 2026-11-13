@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImage"
-      ]
+      ],
+      "dh": "6a194936"
     },
     {
       "name": "D2WINANIMIMAGE_GetCurrentState",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "D2WinAnimImage",
         "int32_t"
-      ]
+      ],
+      "dh": "f93c936f"
     },
     {
       "name": "D2WINANIMIMAGE_TryAdvanceToPlaying",
@@ -62,7 +64,8 @@
       "usedTypes": [
         "D2WinAnimImage",
         "int32_t"
-      ]
+      ],
+      "dh": "9465696e"
     },
     {
       "name": "DrawAnim",
@@ -93,7 +96,8 @@
         "DC6 *",
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "63c5997c"
     },
     {
       "name": "D2WINANIMIMAGE_UpdateFrame",
@@ -121,7 +125,8 @@
         "DC6 *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a065e0d"
     },
     {
       "name": "Draw",
@@ -157,7 +162,8 @@
         "FORMS_AnimFrameStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "540837a9"
     },
     {
       "name": "Push",
@@ -180,7 +186,8 @@
         "D2ControlMsg",
         "D2WinAnimImage",
         "int32_t"
-      ]
+      ],
+      "dh": "1aab8bdb"
     },
     {
       "name": "D2WINANIMIMAGE_SetAnimate",
@@ -201,7 +208,8 @@
       "usedTypes": [
         "D2WinAnimImage",
         "int32_t"
-      ]
+      ],
+      "dh": "24ced3f1"
     },
     {
       "name": "D2WinAnimImage",
@@ -229,7 +237,8 @@
         "fpD2WinAnimImageNotify",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "84217060"
     }
   ]
 }

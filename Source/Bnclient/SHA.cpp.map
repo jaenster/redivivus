@@ -27,7 +27,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8d9acc62"
     },
     {
       "name": "SHA1_BigIntFromUnsigned",
@@ -47,7 +48,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6d10b19"
     },
     {
       "name": "SHA1_FromBigIntBytes",
@@ -67,7 +69,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "979ea84c"
     },
     {
       "name": "SHA1_ToBigIntBytes",
@@ -88,7 +91,8 @@
         "BigData",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6c4a00e6"
     },
     {
       "name": "SHA1_CompareBigInt",
@@ -107,7 +111,8 @@
       "usedTypes": [
         "BigData",
         "int32_t"
-      ]
+      ],
+      "dh": "eb2f619f"
     },
     {
       "name": "SHA1_BigIntCompareValue",
@@ -130,7 +135,8 @@
         "BigData",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bcec9da7"
     },
     {
       "name": "SHA1_BigIntShl",
@@ -149,7 +155,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d7ad03d"
     },
     {
       "name": "SHA1_BigIntAdd",
@@ -167,7 +174,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "3d1aca0e"
     },
     {
       "name": "SHA1_BigIntAddValue",
@@ -189,7 +197,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "6be75f98"
     },
     {
       "name": "SHA1_BigIntSub",
@@ -207,7 +216,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "ca5148ac"
     },
     {
       "name": "SHA1_BigIntSubValue",
@@ -229,7 +239,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "8dd5e20a"
     },
     {
       "name": "SHA1_BigIntMul",
@@ -247,7 +258,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "f64cfe93"
     },
     {
       "name": "SHA1_BigIntMulValue",
@@ -269,7 +281,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e6da243"
     },
     {
       "name": "SHA1_BigIntDivValue",
@@ -291,7 +304,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "81cbfc15"
     },
     {
       "name": "SHA1_BigIntMod",
@@ -309,7 +323,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "296a2abb"
     },
     {
       "name": "SHA1_BigIntModToInt",
@@ -332,7 +347,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "4fca5dd8"
     },
     {
       "name": "SHA1_BigIntMulMod",
@@ -351,7 +367,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "577f5084"
     },
     {
       "name": "SHA1_BigIntPowMod",
@@ -369,7 +386,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "396069a2"
     },
     {
       "name": "SHA1_BigIntPowModValue",
@@ -391,7 +409,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "e05c5547"
     },
     {
       "name": "SHA1_BigIntFree",
@@ -409,7 +428,8 @@
       ],
       "usedTypes": [
         "BigData"
-      ]
+      ],
+      "dh": "560d295c"
     }
   ]
 }

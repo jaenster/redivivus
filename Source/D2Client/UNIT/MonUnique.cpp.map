@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "17dcdd8d"
     },
     {
       "name": "Unreferenced_004ac760",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "4a248269"
     },
     {
       "name": "SetNameSeed",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "0b403b42"
     },
     {
       "name": "SetBossId",
@@ -73,7 +76,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "5fe221cf"
     },
     {
       "name": "GetBossId",
@@ -91,7 +95,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "47e567df"
     },
     {
       "name": "CheckMonTypeForMonster",
@@ -109,7 +114,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "537cd879"
     },
     {
       "name": "SetUnsetMonsterType",
@@ -128,7 +134,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "f49c7e33"
     },
     {
       "name": "MONSTER_SetUniqueMonsterFlag0x100",
@@ -147,7 +154,8 @@
         "D2UnitDataUnion",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "04ab7650"
     },
     {
       "name": "DefineSuperMonster",
@@ -182,7 +190,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f391a9a7"
     },
     {
       "name": "MONUNIQUE_ApplyModifierBishbosh",
@@ -209,7 +218,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "84a8b31e"
     },
     {
       "name": "MONUNIQUE_ApplyModifierBloodRaven",
@@ -231,7 +241,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0cd2ed6e"
     },
     {
       "name": "SetResistances",
@@ -251,7 +262,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "311a7799"
     },
     {
       "name": "MONUNIQUE_ApplyModifierEffects",
@@ -270,7 +282,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "42281952"
     },
     {
       "name": "MakeFireExposionAttack",
@@ -293,7 +306,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dc5535cd"
     },
     {
       "name": "MakeMonsterCorpseExplodeAttack",
@@ -316,7 +330,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3cd56638"
     },
     {
       "name": "MONUNIQUE_SpawnDeathMissile",
@@ -342,7 +357,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1180a389"
     },
     {
       "name": "MONUNIQUE_DurielDeathAndSpawn",
@@ -368,7 +384,8 @@
         "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "97b75ba8"
     },
     {
       "name": "MONUNIQUE_SpawnDirectionalMissiles",
@@ -393,7 +410,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "6a521979"
     },
     {
       "name": "MONUNIQUE_ApplyModifierGriswold",
@@ -414,7 +432,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1d81f334"
     },
     {
       "name": "MONUNIQUE_ApplyModifierTheSmith",
@@ -434,7 +453,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c8d1b1c"
     },
     {
       "name": "MONUNIQUE_SpawnBugLightning",
@@ -455,7 +475,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "791ac899"
     },
     {
       "name": "MONUNIQUE_ApplyModifierNihlathak",
@@ -491,7 +512,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5157252d"
     },
     {
       "name": "MONUNIQUE_SpawnExplodingArrowDeath",
@@ -515,7 +537,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "975edbeb"
     },
     {
       "name": "MONUNIQUE_SpawnSuicideExplosion",
@@ -545,7 +568,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7bf467a6"
     },
     {
       "name": "MONUNIQUE_PregnantCorpseBurst",
@@ -567,7 +591,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "afafcb28"
     },
     {
       "name": "SetNameSeed_Unref_005a0160",
@@ -585,7 +610,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "dfab5f4e"
     }
   ]
 }

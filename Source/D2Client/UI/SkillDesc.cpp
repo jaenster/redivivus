@@ -3889,7 +3889,7 @@ void __fastcall SKILLDESC_CalcCompareAttackRate(D2UnitStrc * pUnit, D2SkillStrc 
     *pnMinColor = 1;
 }
 
-static void __stdcall SKILLDESC_CalcAttackRateWithState(int * pnAttackRate, int32_t * pnColor, int32_t nSkillLevel, D2SkillStrc * pSkill, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+static void __stdcall SKILLDESC_CalcAttackRateWithState(int * pnAttackRate, int32_t * pnColor, int32_t nSkillLevel, D2SkillStrc * pSkill, D2UnitStrc * pUnit2, D2UnitStrc * pUnit) {
     if (!pSkill) {
       return;
     }
@@ -4104,7 +4104,7 @@ void __fastcall SKILLDESC_CalcDualWieldWithAR(D2UnitStrc * pUnit, D2SkillStrc * 
 void __fastcall SKILLDESC_CalcDualWieldWithARState(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor) {
     *pnMinDamage = 0;
     *pnMinColor = 0;
-    SKILLDESC_CalcAttackRateWithState(pnMinDamage, pnMinColor, nSkillLevel, pSkill, nullptr, pUnit);
+    SKILLDESC_CalcAttackRateWithState(pnMinDamage, pnMinColor, nSkillLevel, pSkill, pUnit, nullptr);
 }
 
 void __fastcall SKILLDESC_CalcDualWieldSimple(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor) {

@@ -25,7 +25,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "948c93b4"
     },
     {
       "name": "CMD_ToggleAlwaysRun",
@@ -41,7 +42,8 @@
         "CMD_ToggleAlwaysRun",
         "GetGlobalAlwaysRun",
         "SetGlobalAlwaysRun"
-      ]
+      ],
+      "dh": "91b5ddf8"
     },
     {
       "name": "CMD_SetClickModifier",
@@ -56,7 +58,8 @@
       "calledFunctions": [
         "CMD_SetClickModifier",
         "GAMEDATA_SetClickModifier"
-      ]
+      ],
+      "dh": "b448ed02"
     },
     {
       "name": "CMD_ShowEscMenu",
@@ -79,7 +82,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b90afe0e"
     },
     {
       "name": "CMD_CyclePrevSkill",
@@ -99,7 +103,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a211af79"
     },
     {
       "name": "CMD_CycleNextSkill",
@@ -119,7 +124,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9257048e"
     },
     {
       "name": "CMD_SwapWeaponSet",
@@ -135,7 +141,8 @@
         "CMD_SwapWeaponSet",
         "GetUIFlag",
         "INV_SwapWeaponSet"
-      ]
+      ],
+      "dh": "4ce14854"
     },
     {
       "name": "CMD_ToggleMercInventory",
@@ -157,7 +164,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "961d0c58"
     },
     {
       "name": "CMDTBL_InvokeMouseLeftButtonHandler",
@@ -177,7 +185,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9317a554"
     },
     {
       "name": "CMD_InvokeCallback_0x1144",
@@ -197,7 +206,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ebbe9c5c"
     },
     {
       "name": "CMD_InvokeCallback_0x1152",
@@ -217,7 +227,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b22d66e2"
     },
     {
       "name": "CMDTBL_InvokeMouseRightButtonHandler",
@@ -237,7 +248,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "052dde8c"
     },
     {
       "name": "CMD_InvokeCallback_0x1148",
@@ -257,7 +269,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "73be676b"
     },
     {
       "name": "CMDTBL_InvokeMouseMiddleButtonHandler",
@@ -277,7 +290,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "982c5a8c"
     },
     {
       "name": "CMD_InvokeCallbackByParam",
@@ -297,7 +311,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a8436af3"
     },
     {
       "name": "CMD_ValidateMouseButtonBinding",
@@ -315,7 +330,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56093a0c"
     },
     {
       "name": "SORT_CompareInts",
@@ -332,7 +348,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "99f092b4"
     },
     {
       "name": "CMD_RebuildDerivedBindings",
@@ -350,7 +367,8 @@
       "usedTypes": [
         "D2KeyBindStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ad4c3d4"
     },
     {
       "name": "GetKeyFileHandle",
@@ -369,7 +387,8 @@
         "SStrPrintf",
         "SafeCreateDirectoryTree",
         "thunk_CreateFileA"
-      ]
+      ],
+      "dh": "b80ebb5e"
     },
     {
       "name": "CMD_WriteKeyFile",
@@ -394,7 +413,8 @@
         "D2KeyBindStrc",
         "D2KeyFileHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1aaf6f6c"
     },
     {
       "name": "CMD_LoadDefaultKeyBindings",
@@ -426,7 +446,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8a371756"
     },
     {
       "name": "CMD_ResetKeyBindingsToDefaults",
@@ -446,7 +467,8 @@
       "usedTypes": [
         "D2KeyBindStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "e223aa81"
     },
     {
       "name": "CMD_GetKeyForCommand",
@@ -465,7 +487,8 @@
         "PD2KeyBindSlot",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "7594d8d4"
     },
     {
       "name": "CMD_IsBindableKey",
@@ -485,7 +508,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aae7e557"
     },
     {
       "name": "CMD_SetKeyBinding",
@@ -507,7 +531,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6a86458"
     },
     {
       "name": "CMD_AcceptKeyBindings",
@@ -525,7 +550,8 @@
       ],
       "usedTypes": [
         "D2KeyBindStrc"
-      ]
+      ],
+      "dh": "a2391176"
     },
     {
       "name": "CMD_SaveKeyBindings",
@@ -541,7 +567,8 @@
         "CMD_SaveKeyBindings",
         "CMD_WriteKeyFile",
         "CMD_RebuildDerivedBindings"
-      ]
+      ],
+      "dh": "95304a5b"
     },
     {
       "name": "CMD_RevertKeyBindings",
@@ -559,7 +586,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8860538b"
     },
     {
       "name": "CMD_UnbindCommand",
@@ -577,7 +605,8 @@
       "usedTypes": [
         "PD2KeyBindSlot",
         "int32_t"
-      ]
+      ],
+      "dh": "14002d48"
     },
     {
       "name": "CMD_IsCommandBound",
@@ -596,7 +625,8 @@
         "PD2KeyBindSlot",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "61b29022"
     },
     {
       "name": "CMD_GetKeyNameForCommand",
@@ -617,7 +647,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5ad48061"
     },
     {
       "name": "CMD_GetKeyDescForCommand",
@@ -639,7 +670,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "715fc25e"
     },
     {
       "name": "WindowsKeyPressedEvent",
@@ -662,7 +694,8 @@
         "D2KeyBindStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e6b0dde1"
     },
     {
       "name": "INPUT_DispatchKeyCommand",
@@ -685,7 +718,8 @@
         "D2KeyBindStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "65fb929e"
     },
     {
       "name": "CMD_ToggleKeyConfigMode",
@@ -705,7 +739,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7584bdd6"
     },
     {
       "name": "CMD_LoadUserKeyBindings",
@@ -731,7 +766,8 @@
         "D2KeyBindStrc",
         "D2KeyFileStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "a06f1724"
     },
     {
       "name": "CMD_InitKeyBindings",
@@ -751,7 +787,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5c8b8a61"
     },
     {
       "name": "CMD_ExitKeyConfigMode",
@@ -770,7 +807,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f69edeec"
     },
     {
       "name": "CMD_InitKeyConfigUI",
@@ -792,7 +830,8 @@
       "usedTypes": [
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "618f942a"
     },
     {
       "name": "StaticInit_6caab0",
@@ -806,7 +845,8 @@
       "namespace": "D2Client::UI::CmdTbl",
       "calledFunctions": [
         "StaticInit_6caab0"
-      ]
+      ],
+      "dh": "d3c11909"
     },
     {
       "name": "StaticInit_gwKeyNameBuffer",
@@ -820,7 +860,8 @@
       "namespace": "D2Client::UI::CmdTbl",
       "calledFunctions": [
         "StaticInit_gwKeyNameBuffer"
-      ]
+      ],
+      "dh": "ab815003"
     }
   ]
 }

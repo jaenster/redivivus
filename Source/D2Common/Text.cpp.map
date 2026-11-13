@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x27_TextStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "efe7c6b0"
     },
     {
       "name": "TEXT_FreeAllMessages",
@@ -39,7 +40,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc"
-      ]
+      ],
+      "dh": "c98c4664"
     },
     {
       "name": "STRUCT_FreeTxtMessageForPacket0x27",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc"
-      ]
+      ],
+      "dh": "f4e0efdc"
     },
     {
       "name": "AddNewGossipText",
@@ -78,7 +81,8 @@
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "35765f44"
     },
     {
       "name": "TEXT_RemoveMessageById",
@@ -98,7 +102,8 @@
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "57b3e5d1"
     },
     {
       "name": "TEXT_CountMessagesOfType2",
@@ -117,7 +122,8 @@
         "D2GSPacketSrv0x27_EntryStrc",
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2b227580"
     },
     {
       "name": "TEXT_GetMessageByIndex",
@@ -137,7 +143,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "46c7dde1"
     },
     {
       "name": "OVERHEAD_GetMessageType0",
@@ -157,7 +164,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e529ea2e"
     },
     {
       "name": "OVERHEAD_GetMessageType1",
@@ -177,7 +185,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "ab7a669c"
     },
     {
       "name": "BuildPacket0x27Messages",
@@ -200,7 +209,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fe1620a5"
     },
     {
       "name": "StoreMessages",
@@ -225,7 +235,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9344bbd9"
     },
     {
       "name": "TEXT_CompareMessagesByCode",
@@ -243,7 +254,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "31152af7"
     },
     {
       "name": "TEXT_SortMessages",
@@ -263,7 +275,8 @@
         "pfnTextMessageCompare",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f518a39"
     },
     {
       "name": "TEXT_SortMessageList",
@@ -289,7 +302,8 @@
         "D2GSPacketSrv0x27_TextStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "9ec0c640"
     }
   ]
 }

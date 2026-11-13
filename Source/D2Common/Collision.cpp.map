@@ -22,7 +22,8 @@
         "D2RoomStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9709a17e"
     },
     {
       "name": "GetDistanceBetweenUnits",
@@ -45,7 +46,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f0fc7e3"
     },
     {
       "name": "GetCollisionDistance",
@@ -67,7 +69,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "37587cd0"
     },
     {
       "name": "GetDistanceToXY",
@@ -88,7 +91,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "4698f3a3"
     },
     {
       "name": "COLLISION_IsUnitInRange",
@@ -110,7 +114,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d15da881"
     },
     {
       "name": "CoordIsInRoom",
@@ -130,7 +135,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e398c4a6"
     },
     {
       "name": "COLLISION_FindNearbyUnitByCallback",
@@ -160,7 +166,8 @@
         "eD2UnitType",
         "int32_t",
         "pfnUnitProximityTest"
-      ]
+      ],
+      "dh": "5244ef34"
     },
     {
       "name": "CallCollisionFunction",
@@ -186,7 +193,8 @@
         "eD2UnitType",
         "fpMissileSrvDoFuncData",
         "int32_t"
-      ]
+      ],
+      "dh": "a8d00fcd"
     },
     {
       "name": "TileLibrary_AddCollision",
@@ -208,7 +216,8 @@
         "eCollisionFlags",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d6301ee"
     },
     {
       "name": "TileLibrary_RemoveCollision",
@@ -230,7 +239,8 @@
         "eCollisionFlags",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5718b33f"
     },
     {
       "name": "TileLibrary_SetCollision",
@@ -252,7 +262,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3dd99da"
     },
     {
       "name": "AddCollisionFlagToCoords",
@@ -272,7 +283,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "40f09e4e"
     },
     {
       "name": "TileLibrary_SetupCollision",
@@ -298,7 +310,8 @@
         "D2TileLibraryEntryStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6e45d6a"
     },
     {
       "name": "TileLibrary_UpdateCollision",
@@ -325,7 +338,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2cf5ea0"
     },
     {
       "name": "AllocRoomCollisionGrid",
@@ -358,7 +372,8 @@
         "D2RoomStrc",
         "D2RoomStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "d1ab081e"
     },
     {
       "name": "FreeRoomCollisionGrid",
@@ -380,7 +395,8 @@
         "D2PoolManagerStrc",
         "D2RoomCollisionGridStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "41dded66"
     },
     {
       "name": "COLLISN_CheckCellMask_RegArgs",
@@ -402,7 +418,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "7bfebe4c"
     },
     {
       "name": "RemoveCollision_Vector1",
@@ -424,7 +441,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "684f4992"
     },
     {
       "name": "AddCollision_Vector1",
@@ -446,7 +464,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "ca276d6a"
     },
     {
       "name": "CheckCollision_BlockPlayerMissile",
@@ -468,7 +487,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "886a083e"
     },
     {
       "name": "AddCollision",
@@ -490,7 +510,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "50975a35"
     },
     {
       "name": "RemoveCollision",
@@ -512,7 +533,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "f1fe6d20"
     },
     {
       "name": "CollisionGrid_CheckCollision_BoundingBox",
@@ -531,7 +553,8 @@
         "D2BoundingBoxStrc",
         "D2RoomCollisionGridStrc",
         "eCollisionFlags"
-      ]
+      ],
+      "dh": "48aded81"
     },
     {
       "name": "CollisionGrid_RemoveCollision_BoundingBox",
@@ -551,7 +574,8 @@
         "D2RoomCollisionGridStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "2dd67b67"
     },
     {
       "name": "CollisionGrid_AddCollision_BoundingBox",
@@ -571,7 +595,8 @@
         "D2RoomCollisionGridStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "c4d32083"
     },
     {
       "name": "BoundnigBox_AdaptBoundingBoxToGrid",
@@ -592,7 +617,8 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d0cb22e5"
     },
     {
       "name": "CheckCollision_BoundingBox",
@@ -618,7 +644,8 @@
         "int16_t",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e16b4f93"
     },
     {
       "name": "CheckCollision_BlockPlayer_BoundingBox",
@@ -643,7 +670,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "32203cf6"
     },
     {
       "name": "RemoveCollision_BoundingBox",
@@ -667,7 +695,8 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "68420bf1"
     },
     {
       "name": "AddCollision_BoundingBox",
@@ -691,7 +720,8 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "354d80a7"
     },
     {
       "name": "BoundingBox",
@@ -710,7 +740,8 @@
         "D2BoundingBoxStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c8f7e0a"
     },
     {
       "name": "CheckCollision_Cross",
@@ -734,7 +765,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4f3ec065"
     },
     {
       "name": "COLLISN_CheckCellMaskOrBlocked",
@@ -756,7 +788,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "07ae1491"
     },
     {
       "name": "CheckCollision_BoundingBox1",
@@ -777,7 +810,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "89ed23ce"
     },
     {
       "name": "CheckCollision_BlockPlayer_Cross",
@@ -800,7 +834,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "f486cba8"
     },
     {
       "name": "CheckCollision_BlockPlayer_BoundingBox1",
@@ -820,7 +855,8 @@
         "D2BoundingBoxStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b455d984"
     },
     {
       "name": "CheckCollision_Vector",
@@ -843,7 +879,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "41941ecf"
     },
     {
       "name": "CheckCollision_BlockAll_Type",
@@ -866,7 +903,8 @@
         "eCollisionFlags",
         "eD2CollisionShapeType",
         "int32_t"
-      ]
+      ],
+      "dh": "24ca80f0"
     },
     {
       "name": "CheckCollision_BlockPlayer_Type",
@@ -890,7 +928,8 @@
         "eD2CollisionShapeType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "519c887c"
     },
     {
       "name": "CheckCollision_BlockAll_Width",
@@ -913,7 +952,8 @@
         "eCollisionFlags",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "0b627310"
     },
     {
       "name": "RemoveCollision_Cross",
@@ -936,7 +976,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "1a77a241"
     },
     {
       "name": "COLLISN_ClearCellMask",
@@ -958,7 +999,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "632ce91d"
     },
     {
       "name": "RemoveCollision_BoundingBox1",
@@ -979,7 +1021,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "0c8ce156"
     },
     {
       "name": "RemoveCollision_Vector",
@@ -1001,7 +1044,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e2a8c48"
     },
     {
       "name": "AddCollision_Cross",
@@ -1023,7 +1067,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "5caee2c4"
     },
     {
       "name": "COLLISN_SetCellMask",
@@ -1045,7 +1090,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "11c49b95"
     },
     {
       "name": "AddCollision_BoundingBox1",
@@ -1065,7 +1111,8 @@
         "D2BoundingBoxStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b59f45fc"
     },
     {
       "name": "AddCollision_Vector",
@@ -1087,7 +1134,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f7e34fb"
     },
     {
       "name": "GetFreeCoordinates",
@@ -1117,7 +1165,8 @@
         "POINT",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "dfd5db9f"
     },
     {
       "name": "TestCollision",
@@ -1140,7 +1189,8 @@
         "POINT",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "d5b65f68"
     },
     {
       "name": "GetFreeCoordinates_WithMaxDistance",
@@ -1160,7 +1210,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "1f5b596a"
     },
     {
       "name": "GetFreeCoordinates_WithNeighboorRooms",
@@ -1180,7 +1231,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "6105225f"
     },
     {
       "name": "GetFreeCoordinates_WithIncrementValue",
@@ -1200,7 +1252,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "24e895b8"
     },
     {
       "name": "GetFreeCoordinates_WithFieldCoords",
@@ -1220,7 +1273,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "d18998b2"
     },
     {
       "name": "COLLISION_FindFreeCoordSpiral",
@@ -1249,7 +1303,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e523dc2"
     },
     {
       "name": "AddCollision_Width",
@@ -1272,7 +1327,8 @@
         "D2RoomStrc",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "d98a97f8"
     },
     {
       "name": "AddCollision_Type",
@@ -1294,7 +1350,8 @@
         "D2RoomStrc",
         "eD2CollisionShapeType",
         "int32_t"
-      ]
+      ],
+      "dh": "6e69dee1"
     },
     {
       "name": "RemoveCollision_Width",
@@ -1316,7 +1373,8 @@
         "D2RoomStrc",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "fc66ad03"
     },
     {
       "name": "RemoveCollision_Type",
@@ -1338,7 +1396,8 @@
         "D2RoomStrc",
         "eD2CollisionShapeType",
         "int32_t"
-      ]
+      ],
+      "dh": "085f52cb"
     },
     {
       "name": "RemoveGetCollision_Width",
@@ -1361,7 +1420,8 @@
         "eCollisionFlags",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "b0cc257d"
     },
     {
       "name": "RemoveGetCollision_Type",
@@ -1383,7 +1443,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "4f3474ee"
     },
     {
       "name": "UpdateGetCollision_Unused",
@@ -1405,7 +1466,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "b6f0e370"
     },
     {
       "name": "UpdateGetCollision_Width",
@@ -1428,7 +1490,8 @@
         "eCollisionFlags",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "011b790e"
     },
     {
       "name": "UpdateCollision_Width",
@@ -1450,7 +1513,8 @@
         "eD2CollisionUnitSize",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "ceabdd23"
     },
     {
       "name": "UpdateGetCollision_Type",
@@ -1472,7 +1536,8 @@
         "D2RoomStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "87cce8dc"
     },
     {
       "name": "UpdateCollision_Type",
@@ -1492,7 +1557,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4fbea2f3"
     }
   ]
 }

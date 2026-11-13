@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e39e3e64"
     },
     {
       "name": "LoadClassIcons",
@@ -41,7 +42,8 @@
         "DC6",
         "DC6 *",
         "char[32]"
-      ]
+      ],
+      "dh": "a71dce38"
     },
     {
       "name": "FreeHireablesList",
@@ -61,7 +63,8 @@
       "usedTypes": [
         "D2HireablesListStrc",
         "DC6 *"
-      ]
+      ],
+      "dh": "e4233033"
     },
     {
       "name": "InitializeHealthBarColors",
@@ -79,7 +82,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e71f1eaa"
     },
     {
       "name": "UnsetHealthBarInitialize",
@@ -93,7 +97,8 @@
       "namespace": "D2Client::UI::Hireables",
       "calledFunctions": [
         "UnsetHealthBarInitialize"
-      ]
+      ],
+      "dh": "f42f6917"
     },
     {
       "name": "DrawHirelingName",
@@ -114,7 +119,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "63efd3f9"
     },
     {
       "name": "GetAndDrawHirelingName",
@@ -137,7 +143,8 @@
         "D2PetTypeTxt",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "03378369"
     },
     {
       "name": "UI_DrawHirelingNameFromString",
@@ -157,7 +164,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "93e65968"
     },
     {
       "name": "UI_DrawSummonCount",
@@ -183,7 +191,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "70647d49"
     },
     {
       "name": "GetRosterIcon",
@@ -210,7 +219,8 @@
         "char[32]",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efb3d0d6"
     },
     {
       "name": "DRAW_Overlay_PetsAndPartyMembers",
@@ -236,7 +246,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5dde26eb"
     },
     {
       "name": "INPUT_HireableInteract",
@@ -260,7 +271,8 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3d60d119"
     },
     {
       "name": "Unreferenced_004934b0",
@@ -279,7 +291,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "63d2d0f0"
     },
     {
       "name": "UI_CheckItemCanEquipToHireling",
@@ -310,7 +323,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99720b97"
     },
     {
       "name": "INPUT_HireableHireClick",
@@ -334,7 +348,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea25d0fc"
     },
     {
       "name": "UI_HandleHirelingTooltipHoverTimer",
@@ -361,7 +376,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98b98a29"
     },
     {
       "name": "UI_ToggleHirelingIconsVisibility",
@@ -380,7 +396,8 @@
       ],
       "usedTypes": [
         "eD2GSGameType"
-      ]
+      ],
+      "dh": "a1ec888d"
     },
     {
       "name": "INPUT_HireableLongPress",
@@ -408,7 +425,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f559a51c"
     },
     {
       "name": "UI_InitializeHirelingIconsUI",
@@ -427,7 +445,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cf3e1b85"
     },
     {
       "name": "DrawHealthBar",
@@ -450,7 +469,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7e4fd036"
     },
     {
       "name": "UI_DrawHirelingNameFromUnit",
@@ -473,7 +493,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "444dc999"
     },
     {
       "name": "UI_DrawPartyMembersHirelingIcons",
@@ -506,7 +527,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "415c6358"
     },
     {
       "name": "HIRELING_DrawPortraitIcon",
@@ -531,7 +553,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0415e504"
     },
     {
       "name": "HIRELING_DrawPetIcon",
@@ -555,7 +578,8 @@
         "D2GfxDataStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "524164b7"
     },
     {
       "name": "HIRELING_DrawSummonIcon",
@@ -583,7 +607,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5d0cea2d"
     },
     {
       "name": "HIRELING_DrawGenericPetIcon",
@@ -607,7 +632,8 @@
         "D2GfxDataStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0554608"
     },
     {
       "name": "UI_DrawHireableIcons",
@@ -645,7 +671,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eadb8774"
     }
   ]
 }

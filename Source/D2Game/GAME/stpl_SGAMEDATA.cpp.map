@@ -19,7 +19,8 @@
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
-      ]
+      ],
+      "dh": "962c5d43"
     },
     {
       "name": "Unlink",
@@ -39,7 +40,8 @@
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "TSLink<SGAMEDATA>",
         "intptr_t"
-      ]
+      ],
+      "dh": "47717e85"
     },
     {
       "name": "RawNext",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>"
-      ]
+      ],
+      "dh": "4af98ec9"
     },
     {
       "name": "Next",
@@ -76,7 +79,8 @@
         "SGAMEDATA",
         "TSExplicitList<SGAMEDATA, -572662307>",
         "intptr_t"
-      ]
+      ],
+      "dh": "ea10299d"
     },
     {
       "name": "Unlock",
@@ -94,7 +98,8 @@
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
-      ]
+      ],
+      "dh": "6fbe9492"
     },
     {
       "name": "Delete",
@@ -113,7 +118,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>"
-      ]
+      ],
+      "dh": "9768c2fe"
     },
     {
       "name": "Delete",
@@ -132,7 +138,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>"
-      ]
+      ],
+      "dh": "975f626e"
     },
     {
       "name": "DeleteUnlock",
@@ -152,7 +159,8 @@
         "SGAMEDATA",
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
-      ]
+      ],
+      "dh": "13f8765d"
     },
     {
       "name": "DeleteNode",
@@ -174,7 +182,8 @@
         "TSExplicitList<SGAMEDATA, -572662307>",
         "TSLink<SGAMEDATA>",
         "intptr_t"
-      ]
+      ],
+      "dh": "0f8fd1ab"
     },
     {
       "name": "Ptr",
@@ -194,7 +203,8 @@
         "SGAMEDATA",
         "TSHashTable<SGAMEDATA, HASHKEY_NONE>",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f7aff61"
     },
     {
       "name": "Ptr",
@@ -213,7 +223,8 @@
         "SGAMEDATA",
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a47ff40"
     },
     {
       "name": "GenerateUniqueHandle",
@@ -233,7 +244,8 @@
         "SGAMEDATA",
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef0485af"
     },
     {
       "name": "Lock",
@@ -254,7 +266,8 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8da118ae"
     },
     {
       "name": "GrowListArray",
@@ -277,7 +290,8 @@
         "TSLink<SGAMEDATA>",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "800d9506"
     },
     {
       "name": "MonitorFullness",
@@ -299,7 +313,8 @@
         "TSLink<SGAMEDATA>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21cc95a1"
     },
     {
       "name": "New",
@@ -322,7 +337,8 @@
         "TSLink<SGAMEDATA>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2fb437f5"
     },
     {
       "name": "New",
@@ -342,7 +358,8 @@
         "SGAMEDATA",
         "TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>",
         "uint32_t"
-      ]
+      ],
+      "dh": "f59edf65"
     },
     {
       "name": "NewLock",
@@ -364,7 +381,8 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "57181cba"
     }
   ]
 }

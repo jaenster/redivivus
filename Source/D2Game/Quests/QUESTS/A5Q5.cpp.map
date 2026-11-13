@@ -27,7 +27,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7478c4d6"
     },
     {
       "name": "Q35_NotifyQuestState",
@@ -50,7 +51,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "60d423d4"
     },
     {
       "name": "Q35_Callback02_NpcDeactivate",
@@ -70,7 +72,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "8581495c"
     },
     {
       "name": "Q35_KillAndRemoveAncient",
@@ -101,7 +104,8 @@
         "SGAMEDATA",
         "eD2States",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "91ad82bb"
     },
     {
       "name": "Q35_PrepareAncientsForBattle",
@@ -127,7 +131,8 @@
         "D2QuestDataStrc",
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "efb2c3e6"
     },
     {
       "name": "Q35_ResetAncientsArena",
@@ -151,7 +156,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9cf58d3a"
     },
     {
       "name": "Q35_SpawnAncientTimer",
@@ -177,7 +183,8 @@
         "D2UnitStrc",
         "POINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "55bd9ead"
     },
     {
       "name": "Q35_UpdateQuestStep",
@@ -204,7 +211,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ec7d68b2"
     },
     {
       "name": "Q35_Callback11_ScrollMessage",
@@ -236,7 +244,8 @@
         "eD2QuestState",
         "eD2Quests",
         "uint16_t"
-      ]
+      ],
+      "dh": "aea93f22"
     },
     {
       "name": "Q35_Callback00_NpcActivate",
@@ -265,7 +274,8 @@
         "eD2QuestState",
         "eD2Quests",
         "uint32_t"
-      ]
+      ],
+      "dh": "809d28b5"
     },
     {
       "name": "RewardExperienceFromAncients",
@@ -292,7 +302,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "22c8e653"
     },
     {
       "name": "Q35_SetCompleteForPartyMember",
@@ -324,7 +335,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "5b299504"
     },
     {
       "name": "Q35_Callback10_PlayerLeavesGame",
@@ -343,7 +355,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "904974cf"
     },
     {
       "name": "Q35_SetCannotComplete",
@@ -367,7 +380,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9e935c64"
     },
     {
       "name": "Q35_OnAncientsDefeated",
@@ -405,7 +419,8 @@
         "eD2LevelId",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "cdf9da3b"
     },
     {
       "name": "Q35_FireAncientDeathMissile",
@@ -432,7 +447,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "443762c2"
     },
     {
       "name": "Q35_Callback08_MonsterKilled",
@@ -477,7 +493,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "404b54e1"
     },
     {
       "name": "Q35_Callback03_ChangedLevel",
@@ -507,7 +524,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fe2c830d"
     },
     {
       "name": "Q35_ActiveFilter",
@@ -528,7 +546,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ae93677e"
     },
     {
       "name": "Q35_SequenceFilter",
@@ -550,7 +569,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "64237d2e"
     },
     {
       "name": "Q35_Callback13_PlayerStartedGame",
@@ -573,7 +593,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d47a643b"
     },
     {
       "name": "Q35_InitData",
@@ -594,7 +615,8 @@
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e5c9088b"
     },
     {
       "name": "Q35_OnPlayerDeath",
@@ -619,7 +641,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "889e0656"
     },
     {
       "name": "QUEST_OnPlayerLeaveArreatSummit",
@@ -644,7 +667,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "ab2159e0"
     },
     {
       "name": "GetQuestDataAncients",
@@ -663,7 +687,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "15fe526b"
     },
     {
       "name": "Q35_GetAncientsState",
@@ -682,7 +707,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1826ee9c"
     },
     {
       "name": "Q35_Noop",
@@ -696,7 +722,8 @@
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
         "Q35_Noop"
-      ]
+      ],
+      "dh": "ae4ac35d"
     },
     {
       "name": "Q35_IsAncientsActive",
@@ -715,7 +742,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b83f1cef"
     },
     {
       "name": "Q35_AreAncientsReadyToFight",
@@ -734,7 +762,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "be87e324"
     },
     {
       "name": "Q35_FindAncientByClassId",
@@ -757,7 +786,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d388b8aa"
     },
     {
       "name": "Q35_CheckQuestNotStarted",
@@ -778,7 +808,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3273ded9"
     },
     {
       "name": "Q35_SetStatueAnimMode",
@@ -798,7 +829,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0a6568be"
     },
     {
       "name": "Objects_InitFn65_AncientStatue2",
@@ -819,7 +851,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "da885a08"
     },
     {
       "name": "Objects_InitFn63_AncientStatue3",
@@ -840,7 +873,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "6eb46abe"
     },
     {
       "name": "Objects_InitFn64_AncientStatue1",
@@ -861,7 +895,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "eba87f5d"
     },
     {
       "name": "OBJOP_A5Q5_AncientsTriggerSound1",
@@ -879,7 +914,8 @@
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg"
-      ]
+      ],
+      "dh": "1fc02cba"
     },
     {
       "name": "OBJOP_A5Q5_AncientsTriggerSound2",
@@ -897,7 +933,8 @@
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg"
-      ]
+      ],
+      "dh": "f991be0f"
     },
     {
       "name": "OBJOP_A5Q5_AncientsTriggerSound3",
@@ -915,7 +952,8 @@
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg"
-      ]
+      ],
+      "dh": "ec013328"
     },
     {
       "name": "Objects_InitFn72_AncientsAltar",
@@ -935,7 +973,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "ad783392"
     },
     {
       "name": "Objects_InitFn73_AncientsDoor",
@@ -955,7 +994,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "50b74b3d"
     },
     {
       "name": "Q35_BootPlayerFromSummit",
@@ -979,7 +1019,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "5203549c"
     },
     {
       "name": "Q35_BootAllPlayersFromSummit",
@@ -998,7 +1039,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fde675d5"
     },
     {
       "name": "OBJOP_A5Q5_AncientsAltarActivate",
@@ -1024,7 +1066,8 @@
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "995d3bd8"
     },
     {
       "name": "OBJOP_A5Q5_WorldstonePortalActivate",
@@ -1060,7 +1103,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ObjectAnimMode"
-      ]
+      ],
+      "dh": "9d00bf3a"
     },
     {
       "name": "ResurrectAncients",
@@ -1083,7 +1127,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "372550e4"
     },
     {
       "name": "Q35_OnPlayerLeavesSummit",
@@ -1110,7 +1155,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d602d732"
     },
     {
       "name": "OBJOP_A5Q5_AncientsQuestStateQuery",
@@ -1132,7 +1178,8 @@
         "D2ObjectOperateFnArg",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "03b33edc"
     },
     {
       "name": "Objects_InitFn76_SummitDoor",
@@ -1153,7 +1200,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "e4277783"
     },
     {
       "name": "OBJOP_A5Q5_WorldstoneStairPortal",
@@ -1178,7 +1226,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "eD2ObjectAnimMode"
-      ]
+      ],
+      "dh": "e5e64ada"
     }
   ]
 }

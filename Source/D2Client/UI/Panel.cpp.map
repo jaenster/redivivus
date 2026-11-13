@@ -54,7 +54,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a35ecbcb"
     },
     {
       "name": "PANEL_SetBottomPanelGlobals1_Unref_004880f0",
@@ -68,7 +69,8 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "PANEL_SetBottomPanelGlobals1_Unref_004880f0"
-      ]
+      ],
+      "dh": "2a3f8512"
     },
     {
       "name": "PANEL_GetBeltSlotHoverFlag_Unref_0048a690",
@@ -85,7 +87,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "81666a91"
     },
     {
       "name": "LoadPanelImages",
@@ -110,7 +113,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3ac802d0"
     },
     {
       "name": "FreePanelImages",
@@ -126,7 +130,8 @@
         "FreePanelImages",
         "DC6_FreeAndDelete",
         "memset"
-      ]
+      ],
+      "dh": "70720303"
     },
     {
       "name": "PANEL_DrawHostileIndicator",
@@ -148,7 +153,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "a91f81a0"
     },
     {
       "name": "SPELLSEL_DrawSkillIcon",
@@ -182,7 +188,8 @@
         "DC6",
         "GLOBALPALLETE",
         "int32_t"
-      ]
+      ],
+      "dh": "49eda633"
     },
     {
       "name": "PANEL_DrawSkillIcons",
@@ -211,7 +218,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "9683f78c"
     },
     {
       "name": "PANEL_GetSmoothedStatValue",
@@ -237,7 +245,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8abe7d3"
     },
     {
       "name": "PANEL_DrawHealthOrb",
@@ -269,7 +278,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "72aea20a"
     },
     {
       "name": "PANEL_DrawManaOrb",
@@ -301,7 +311,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "61c6522a"
     },
     {
       "name": "thunk_D2GFX_GetColorFromPalette_A",
@@ -316,7 +327,8 @@
       "calledFunctions": [
         "thunk_D2GFX_GetColorFromPalette_A",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "be694ade"
     },
     {
       "name": "PANEL_InitGoldColor",
@@ -331,7 +343,8 @@
       "calledFunctions": [
         "PANEL_InitGoldColor",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "e3a3076f"
     },
     {
       "name": "thunk_D2GFX_GetColorFromPalette_B",
@@ -346,7 +359,8 @@
       "calledFunctions": [
         "thunk_D2GFX_GetColorFromPalette_B",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "293aca9c"
     },
     {
       "name": "PANEL_InitBeltColors",
@@ -361,7 +375,8 @@
       "calledFunctions": [
         "PANEL_InitBeltColors",
         "D2GFX_GetColorFromCurrentPallete"
-      ]
+      ],
+      "dh": "f7f01bbc"
     },
     {
       "name": "PANEL_ShowRunButtonTooltip",
@@ -386,7 +401,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "865c9545"
     },
     {
       "name": "PANEL_IsMouseInRunButton",
@@ -403,7 +419,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8834b358"
     },
     {
       "name": "PANEL_DrawRunButton",
@@ -426,7 +443,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "23ed9c43"
     },
     {
       "name": "PANEL_DrawStaminaBar",
@@ -458,7 +476,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a196ed91"
     },
     {
       "name": "PANEL_IsMouseInMenuButton",
@@ -475,7 +494,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "23796985"
     },
     {
       "name": "PANEL_DrawMenuButton",
@@ -497,7 +517,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "ce859f17"
     },
     {
       "name": "PANEL_HighlightBeltSlot",
@@ -517,7 +538,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d767e635"
     },
     {
       "name": "CLIENT_HandleBeltSlotClick",
@@ -542,7 +564,8 @@
         "D2BeltsTxt",
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7b761cd3"
     },
     {
       "name": "PANEL_GetBeltSlotHoverFlag",
@@ -559,7 +582,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "33574b74"
     },
     {
       "name": "PANEL_CheckBeltUseBlocked",
@@ -573,7 +597,8 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "PANEL_CheckBeltUseBlocked"
-      ]
+      ],
+      "dh": "528e2354"
     },
     {
       "name": "PANEL_DrawExperienceBar",
@@ -613,7 +638,8 @@
         "int32_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "e73daab7"
     },
     {
       "name": "PANEL_DrawBeltSlots",
@@ -636,7 +662,8 @@
         "D2GfxDataStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "da4c4aac"
     },
     {
       "name": "Draw_EquipmentNeedToRepairBody_1",
@@ -659,7 +686,8 @@
         "D2GfxDataStrc",
         "eD2BodyLocDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "483adda7"
     },
     {
       "name": "DRAW_EquipmentNeedArrows",
@@ -696,7 +724,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f55b5a26"
     },
     {
       "name": "Draw_EquipmentNeedToRepairBody",
@@ -725,7 +754,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8fc00f0"
     },
     {
       "name": "PANEL_DrawPanelLayout",
@@ -755,7 +785,8 @@
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a2e683b1"
     },
     {
       "name": "Unreferenced_00498310",
@@ -771,7 +802,8 @@
         "Unreferenced_00498310",
         "GetCurrentRoom",
         "DRLGROOM_GetLevelIdFromRoom"
-      ]
+      ],
+      "dh": "b1516509"
     },
     {
       "name": "PANEL_DrawLife",
@@ -795,7 +827,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "9bdf9807"
     },
     {
       "name": "PANEL_DrawCharacterInfo",
@@ -818,7 +851,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "12c4132e"
     },
     {
       "name": "DRAW_UI_BorderLeft",
@@ -838,7 +872,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "11e9f5a8"
     },
     {
       "name": "DRAW_UI_BorderRight",
@@ -858,7 +893,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "95bc3c58"
     },
     {
       "name": "PANEL_GetBeltBoxAtPoint",
@@ -879,7 +915,8 @@
         "D2BeltsEntryStrc",
         "D2BeltsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "bfbff598"
     },
     {
       "name": "ClickBelt",
@@ -911,7 +948,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6232f5f3"
     },
     {
       "name": "CLIENT_HandleBeltMouseDown",
@@ -937,7 +975,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a514dd1"
     },
     {
       "name": "PANEL_CheckEquipmentClickable",
@@ -961,7 +1000,8 @@
         "D2ItemsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "22e2cc36"
     },
     {
       "name": "ClickBeltRight",
@@ -1003,7 +1043,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79bfc0c2"
     },
     {
       "name": "CMD_UseBeltSlot1",
@@ -1025,7 +1066,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d57a69f"
     },
     {
       "name": "CMD_UseBeltSlot2",
@@ -1047,7 +1089,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6725ec82"
     },
     {
       "name": "CMD_UseBeltSlot3",
@@ -1069,7 +1112,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4e17a12a"
     },
     {
       "name": "CMD_UseBeltSlot4",
@@ -1091,7 +1135,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "72646038"
     },
     {
       "name": "PANEL_SetBeltSlotHoverFlag",
@@ -1108,7 +1153,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3d651f80"
     },
     {
       "name": "PANEL_ClearBeltSlotHover",
@@ -1122,7 +1168,8 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "PANEL_ClearBeltSlotHover"
-      ]
+      ],
+      "dh": "a9b1b0b0"
     },
     {
       "name": "PANEL_SetBeltPanelState",
@@ -1139,7 +1186,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "a43907ff"
     },
     {
       "name": "PANEL_CalculateBeltSlotIndex",
@@ -1159,7 +1207,8 @@
         "D2BeltsTxt",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1952ebbc"
     },
     {
       "name": "PANEL_SetBottomPanelGlobals1",
@@ -1173,7 +1222,8 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "PANEL_SetBottomPanelGlobals1"
-      ]
+      ],
+      "dh": "871d8b38"
     },
     {
       "name": "PANEL_SetBottomPanelGlobals2",
@@ -1187,7 +1237,8 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "PANEL_SetBottomPanelGlobals2"
-      ]
+      ],
+      "dh": "20d86301"
     },
     {
       "name": "PANEL_DrawGoldAmount",
@@ -1218,7 +1269,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7393e99c"
     },
     {
       "name": "PANEL_DrawBottomPanel",
@@ -1273,7 +1325,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5b123431"
     },
     {
       "name": "DRAW_UI_BordersAndOrbsAndFillers",
@@ -1311,7 +1364,8 @@
         "eD2LevelId",
         "eD2RendererMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "73a905f7"
     },
     {
       "name": "INPUT_PanelLeftClickDown",
@@ -1338,7 +1392,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3b192f5"
     },
     {
       "name": "INPUT_PanelLeftClickUp",
@@ -1373,7 +1428,8 @@
         "eD2UIvarsSetType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d2add3d2"
     },
     {
       "name": "PANEL_UpdatePanelFromMode",
@@ -1401,7 +1457,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f34cd288"
     },
     {
       "name": "INPUT_PanelRightClick",
@@ -1431,7 +1488,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "db04708d"
     }
   ]
 }

@@ -31,7 +31,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "44dc55ac"
     },
     {
       "name": "SUNITNPC_UpdateNpcInventory",
@@ -64,7 +65,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "90f36fe6"
     },
     {
       "name": "SUNITNPC_RepairAllItemCallback",
@@ -83,7 +85,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0709ad55"
     },
     {
       "name": "SUNITNPC_SetItemForNpc",
@@ -107,7 +110,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "29e6e705"
     },
     {
       "name": "SUNITNPC_GenerateNpcItems",
@@ -154,7 +158,8 @@
         "eInventoryPage",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3145308"
     },
     {
       "name": "SUNITNPC_RefreshNpcItem",
@@ -180,7 +185,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0fcf046f"
     },
     {
       "name": "SUNITNPC_FillNpcInventory",
@@ -207,7 +213,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ddb5c2b1"
     },
     {
       "name": "SendMercForHireList",
@@ -240,7 +247,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "35a55478"
     },
     {
       "name": "SUNITNPC_GetActCappedLevel",
@@ -262,7 +270,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d46d1d81"
     },
     {
       "name": "SUNITNPC_RollStoreItemQuality",
@@ -283,7 +292,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "e2406bb4"
     },
     {
       "name": "SUNITNPC_FillNpcStore",
@@ -323,7 +333,8 @@
         "eD2ItemQuality",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e83efd02"
     },
     {
       "name": "SUNITNPC_RepairAllItems",
@@ -347,7 +358,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ab4513e4"
     },
     {
       "name": "SUNITNPC_RollTradeListItemCode",
@@ -376,7 +388,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4a22435c"
     },
     {
       "name": "CheckIfPlayerCanAffordCost",
@@ -401,7 +414,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "84ec0bc8"
     },
     {
       "name": "SUNITNPC_ApplyScrollSkill",
@@ -430,7 +444,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "48db7e14"
     },
     {
       "name": "SUNITNPC_CheckNpcCanSellItem",
@@ -452,7 +467,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e46fe0a"
     },
     {
       "name": "SUNITNPC_GiveGoldOrDrop",
@@ -472,7 +488,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "717dca4a"
     },
     {
       "name": "SUNITNPC_DeductGoldForPurchase",
@@ -499,7 +516,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "1086d82a"
     },
     {
       "name": "ResetNpcHireListIfEmpty",
@@ -527,7 +545,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9659d897"
     },
     {
       "name": "NPC_ProcessMercHire",
@@ -572,7 +591,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "11109c49"
     },
     {
       "name": "SUNITNPC_ValidateGambleItem",
@@ -597,7 +617,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0f492ac"
     },
     {
       "name": "SUNITNPC_ProcessGambleResult",
@@ -620,7 +641,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7c782585"
     },
     {
       "name": "CreateMerc",
@@ -657,7 +679,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ba6c59fd"
     },
     {
       "name": "SUNITNPC_GetBuyableStackSize",
@@ -678,7 +701,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3a3694b1"
     },
     {
       "name": "SUNITNPC_CloneItemFromSerialized",
@@ -697,7 +721,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "995f0dd9"
     },
     {
       "name": "SUNITNPC_FindExistingStackInInventory",
@@ -724,7 +749,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "87ea8c8a"
     },
     {
       "name": "SUNITNPC_BuyItem",
@@ -787,7 +813,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b5504bc6"
     },
     {
       "name": "SUNITNPC_HandleBuyConfirmation",
@@ -819,7 +846,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f494f49"
     },
     {
       "name": "NPC_ValidateAndProcessMercHire",
@@ -847,7 +875,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "42ce2af2"
     },
     {
       "name": "SUNITNPC_ProcessGamble",
@@ -897,7 +926,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ddec1908"
     },
     {
       "name": "SUNITNPC_HandleIdentify",
@@ -937,7 +967,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "47e4ec88"
     },
     {
       "name": "UnitHasItemInInventory",
@@ -956,7 +987,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "da67a6df"
     },
     {
       "name": "SUNITNPC_CheckCanIdentify",
@@ -979,7 +1011,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "092068d5"
     },
     {
       "name": "SUNITNPC_RepairAndRecharge",
@@ -1004,7 +1037,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "71061dde"
     },
     {
       "name": "GAMBLE_GenerateGambleInventory",
@@ -1049,7 +1083,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cff3b8e5"
     },
     {
       "name": "SUNITNPC_ValidateNpcInteraction",
@@ -1070,7 +1105,8 @@
         "D2NpcProxyInventoryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ae8a5e3a"
     },
     {
       "name": "SUNITNPC_ProcessNpcAction",
@@ -1096,7 +1132,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "319ee35f"
     },
     {
       "name": "SUNITNPC_HandleHireableAction",
@@ -1121,7 +1158,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "80850249"
     },
     {
       "name": "HealByPlayerPetsByNPC",
@@ -1147,7 +1185,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "34a52b22"
     },
     {
       "name": "HealByPlayerByNPC",
@@ -1180,7 +1219,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "b4f85fba"
     },
     {
       "name": "Init",
@@ -1199,7 +1239,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7b4f363c"
     },
     {
       "name": "ExecutePrayUnused",
@@ -1232,7 +1273,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2f8c5743"
     },
     {
       "name": "SUNITNPC_DiscardTradeListRolls",
@@ -1256,7 +1298,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "10fa8f7c"
     },
     {
       "name": "SUNITNPC_HandleResurrect",
@@ -1283,7 +1326,8 @@
         "D2MonsterAiStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "468a83cb"
     },
     {
       "name": "SUNITNPC_CloseNpcInteraction",
@@ -1303,7 +1347,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "914452cd"
     },
     {
       "name": "HireMercFromNpc",
@@ -1339,7 +1384,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "48f97300"
     },
     {
       "name": "SUNITNPC_OpenTradeScreen",
@@ -1367,7 +1413,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "3588b384"
     },
     {
       "name": "SUNITNPC_HandleTradeAction",
@@ -1395,7 +1442,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d8c37251"
     },
     {
       "name": "SUNITNPC_SellItem",
@@ -1476,7 +1524,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5de91eea"
     },
     {
       "name": "SUNITNPC_ProcessSellConfirmation",
@@ -1515,7 +1564,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "6cabff2d"
     },
     {
       "name": "SUNITNPC_HandleSellAction",
@@ -1550,7 +1600,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d30170d"
     },
     {
       "name": "UseMenu",
@@ -1641,7 +1692,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "03f80b44"
     }
   ]
 }

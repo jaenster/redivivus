@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "beab67a5"
     },
     {
       "name": "NET_CLIENT_GetConnectionTimeout",
@@ -37,7 +38,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6d6bbf70"
     },
     {
       "name": "CLIENT_ServerConnectionThread_lpStartAddress",
@@ -56,7 +58,8 @@
       ],
       "usedTypes": [
         "u_short"
-      ]
+      ],
+      "dh": "6faba86f"
     },
     {
       "name": "NET_CLIENT_CreateServerConnectionThread",
@@ -70,7 +73,8 @@
       "namespace": "D2Net::SRC::Client",
       "calledFunctions": [
         "NET_CLIENT_CreateServerConnectionThread"
-      ]
+      ],
+      "dh": "5029a8c2"
     },
     {
       "name": "NET_D2GS_ConnectToServer",
@@ -92,7 +96,8 @@
       ],
       "usedTypes": [
         "eD2GSConnectionType"
-      ]
+      ],
+      "dh": "6796895f"
     },
     {
       "name": "NET_CLIENT_ShutdownConnection",
@@ -111,7 +116,8 @@
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
         "closeSocket",
         "WSAGetLastError"
-      ]
+      ],
+      "dh": "1ffcad62"
     },
     {
       "name": "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
@@ -126,7 +132,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_ExtractPacketSize_to0xAE",
         "NET_D2GS_CLIENT_ExtractPacketSize"
-      ]
+      ],
+      "dh": "3325d8e1"
     },
     {
       "name": "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
@@ -141,7 +148,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
         "NET_D2GS_CLIENT_ExtractPacketSize"
-      ]
+      ],
+      "dh": "67af3ecf"
     },
     {
       "name": "NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues",
@@ -173,7 +181,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9976a5a3"
     },
     {
       "name": "Unreferenced_0052aaa0",
@@ -189,7 +198,8 @@
         "Unreferenced_0052aaa0",
         "WSAGetLastError",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
-      ]
+      ],
+      "dh": "d568cafa"
     },
     {
       "name": "Unreferenced_0052aad0",
@@ -204,7 +214,8 @@
       "calledFunctions": [
         "Unreferenced_0052aad0",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
-      ]
+      ],
+      "dh": "added1ba"
     },
     {
       "name": "ThreadClientToServer",
@@ -231,7 +242,8 @@
         "timeval",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf49af15"
     },
     {
       "name": "NET_CLIENT_SendPacketToServer",
@@ -253,7 +265,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "914efb28"
     },
     {
       "name": "NET_SendPacketToD2GSOnline",
@@ -272,7 +285,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d696f6ed"
     },
     {
       "name": "NET_D2GS_CLIENT_SendPacketAfterChecks",
@@ -296,7 +310,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ec75849c"
     },
     {
       "name": "NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket",
@@ -321,7 +336,8 @@
       "usedTypes": [
         "D2OnePacketClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "b589d375"
     }
   ]
 }

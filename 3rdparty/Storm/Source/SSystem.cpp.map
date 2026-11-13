@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1dfe0313"
     },
     {
       "name": "SSYSTEM_Initialize",
@@ -37,7 +38,8 @@
         "SMemInitialize",
         "SLogInitialize",
         "SSTR_InitConversionTables"
-      ]
+      ],
+      "dh": "c49df5c0"
     },
     {
       "name": "StormGetInstance",
@@ -51,7 +53,8 @@
       "namespace": "Storm::Source::SSystem",
       "calledFunctions": [
         "StormGetInstance"
-      ]
+      ],
+      "dh": "b482faeb"
     },
     {
       "name": "SSYSTEM_GetSystemOption",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "10974e39"
     },
     {
       "name": "SSYSTEM_SetSystemOption",
@@ -88,7 +92,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "25c84877"
     },
     {
       "name": "SSYSTEM_InitializeAndReturn",
@@ -103,7 +108,8 @@
       "calledFunctions": [
         "SSYSTEM_InitializeAndReturn",
         "SSYSTEM_Initialize"
-      ]
+      ],
+      "dh": "6e69d4f3"
     },
     {
       "name": "ILT_strpbrk",
@@ -118,7 +124,8 @@
       "calledFunctions": [
         "ILT_strpbrk",
         "strpbrk"
-      ]
+      ],
+      "dh": "0dee6ea3"
     },
     {
       "name": "__break",
@@ -132,7 +139,8 @@
       "namespace": "Storm::Source::SSystem",
       "calledFunctions": [
         "__break"
-      ]
+      ],
+      "dh": "8b41c07d"
     },
     {
       "name": "SSYSTEM_SetShutdownFlag",
@@ -146,7 +154,8 @@
       "namespace": "Storm::Source::SSystem",
       "calledFunctions": [
         "SSYSTEM_SetShutdownFlag"
-      ]
+      ],
+      "dh": "83f32a26"
     },
     {
       "name": "TSFixedArray_Ui_Constructor",
@@ -160,7 +169,8 @@
       "namespace": "Storm::Source::SSystem",
       "calledFunctions": [
         "TSFixedArray_Ui_Constructor"
-      ]
+      ],
+      "dh": "57c9abc1"
     },
     {
       "name": "StaticInit_6ca890",

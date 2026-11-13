@@ -22,7 +22,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "79239757"
     },
     {
       "name": "BitScanReverse",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0595ff27"
     },
     {
       "name": "Return_Unref_00409c70",
@@ -54,7 +56,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return_Unref_00409c70"
-      ]
+      ],
+      "dh": "10abd1e1"
     },
     {
       "name": "Return_Unref_0040a030",
@@ -68,7 +71,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return_Unref_0040a030"
-      ]
+      ],
+      "dh": "d3272118"
     },
     {
       "name": "FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070",
@@ -85,7 +89,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4980e571"
     },
     {
       "name": "FOG_GetAsyncFileCount_ReturnZero",
@@ -102,7 +107,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "1d370344"
     },
     {
       "name": "Return_Unref_0040ada0",
@@ -116,7 +122,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return_Unref_0040ada0"
-      ]
+      ],
+      "dh": "2e87f2a9"
     },
     {
       "name": "Return_Unref_0040b110",
@@ -130,7 +137,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return_Unref_0040b110"
-      ]
+      ],
+      "dh": "0b7ba199"
     },
     {
       "name": "Return_Unref_0040b120",
@@ -144,7 +152,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return_Unref_0040b120"
-      ]
+      ],
+      "dh": "16d2b6f3"
     },
     {
       "name": "Return",
@@ -158,7 +167,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "Return"
-      ]
+      ],
+      "dh": "b60b6b8c"
     },
     {
       "name": "MATH_sinTable_f32_LookupOffset",
@@ -175,7 +185,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f219aafa"
     },
     {
       "name": "MATH_sinTable_f32_Lookup",
@@ -192,7 +203,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "31e15c90"
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk",
@@ -206,7 +218,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk"
-      ]
+      ],
+      "dh": "8d199925"
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70",
@@ -220,7 +233,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70"
-      ]
+      ],
+      "dh": "a6b48283"
     },
     {
       "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80",
@@ -234,7 +248,8 @@
       "namespace": "Fog",
       "calledFunctions": [
         "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80"
-      ]
+      ],
+      "dh": "c1efa03c"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca548",
@@ -255,7 +270,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "28e696a1"
     }
   ]
 }

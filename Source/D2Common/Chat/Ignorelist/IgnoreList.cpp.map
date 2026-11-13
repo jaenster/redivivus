@@ -20,7 +20,8 @@
       "usedTypes": [
         "IgnoreList",
         "int32_t"
-      ]
+      ],
+      "dh": "cc0edcb2"
     },
     {
       "name": "GetPersistentSetting",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "IgnoreList",
         "int32_t"
-      ]
+      ],
+      "dh": "54b88ef6"
     },
     {
       "name": "SavePersistentSetting",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "IgnoreList",
         "int32_t"
-      ]
+      ],
+      "dh": "0fd42369"
     },
     {
       "name": "AppendLineToFile",
@@ -84,7 +87,8 @@
         "IgnoreList",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5999ccb8"
     },
     {
       "name": "SaveToFile",
@@ -107,7 +111,8 @@
         "IgnoreList",
         "int32_t",
         "intptr_t"
-      ]
+      ],
+      "dh": "a6ecdc83"
     },
     {
       "name": "ClearAccountMappings",
@@ -125,7 +130,8 @@
       ],
       "usedTypes": [
         "IgnoreList"
-      ]
+      ],
+      "dh": "45aba096"
     },
     {
       "name": "GetMappedValue",
@@ -146,7 +152,8 @@
         "IgnoreList",
         "MappingEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "cb49ddaa"
     },
     {
       "name": "RemoveByPattern",
@@ -171,7 +178,8 @@
         "IgnoreList",
         "StringEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "e4e8c475"
     },
     {
       "name": "RemoveByAccountName",
@@ -193,7 +201,8 @@
         "IgnoreList",
         "StringEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "da6c66e0"
     },
     {
       "name": "CheckAccountNameIgnored",
@@ -219,7 +228,8 @@
         "StringEntryNode",
         "int32_t",
         "intptr_t"
-      ]
+      ],
+      "dh": "7517b7db"
     },
     {
       "name": "CheckCharNameIgnored",
@@ -239,7 +249,8 @@
         "IgnoreList",
         "StringEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "424b76b9"
     },
     {
       "name": "CheckIgnored",
@@ -262,7 +273,8 @@
       "usedTypes": [
         "IgnoreList",
         "int32_t"
-      ]
+      ],
+      "dh": "b96157c2"
     },
     {
       "name": "Destructor",
@@ -281,7 +293,8 @@
       "usedTypes": [
         "IgnoreList",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "08eb8756"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -301,7 +314,8 @@
       "usedTypes": [
         "IgnoreList",
         "uint32_t"
-      ]
+      ],
+      "dh": "02af38f5"
     },
     {
       "name": "AddByPattern",
@@ -326,7 +340,8 @@
         "IgnoreList",
         "StringEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "e4fcf892"
     },
     {
       "name": "AddByAccountName",
@@ -351,7 +366,8 @@
         "IgnoreList",
         "StringEntryNode",
         "int32_t"
-      ]
+      ],
+      "dh": "1a0acd70"
     },
     {
       "name": "LoadFromFile",
@@ -378,7 +394,8 @@
         "IgnoreList",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "uint32_t"
-      ]
+      ],
+      "dh": "5779f02f"
     },
     {
       "name": "Constructor",
@@ -406,7 +423,8 @@
         "int32_t",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7176445"
     }
   ]
 }

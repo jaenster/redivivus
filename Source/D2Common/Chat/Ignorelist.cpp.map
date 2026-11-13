@@ -15,7 +15,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_005fe0e0"
-      ]
+      ],
+      "dh": "259e63ba"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_005fe0f0",
@@ -29,7 +30,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_005fe0f0"
-      ]
+      ],
+      "dh": "409a6a93"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_005fe110",
@@ -43,7 +45,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_005fe110"
-      ]
+      ],
+      "dh": "ae9dbfb5"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_005ff390",
@@ -57,7 +60,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_005ff390"
-      ]
+      ],
+      "dh": "38ac06bd"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_00601b50",
@@ -71,7 +75,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_00601b50"
-      ]
+      ],
+      "dh": "74617603"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060ac50",
@@ -85,7 +90,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060ac50"
-      ]
+      ],
+      "dh": "710160fb"
     },
     {
       "name": "IGNORELIST_Shutdown",
@@ -99,7 +105,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Shutdown"
-      ]
+      ],
+      "dh": "1e859ae5"
     },
     {
       "name": "IGNORELIST_ExtractPrefix",
@@ -118,7 +125,8 @@
         "IgnoreList",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e95a37ab"
     },
     {
       "name": "IGNORELIST_ExtractSuffix",
@@ -137,7 +145,8 @@
         "IgnoreList",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "23b65163"
     },
     {
       "name": "IGNORELIST_ParsePattern",
@@ -163,7 +172,8 @@
       "usedTypes": [
         "IgnoreList",
         "int32_t"
-      ]
+      ],
+      "dh": "53d874a7"
     },
     {
       "name": "AddAccountMapping",
@@ -192,7 +202,8 @@
         "MappingEntryNode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ea5e720e"
     },
     {
       "name": "MISC_InitIgnorelist",
@@ -212,7 +223,8 @@
       "usedTypes": [
         "IgnoreList",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "005142ef"
     },
     {
       "name": "MISC_GetIgnorelist",
@@ -232,7 +244,8 @@
       "usedTypes": [
         "IgnoreList",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "f2f5c57d"
     },
     {
       "name": "IGNORELIST_Initialize",
@@ -246,7 +259,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize"
-      ]
+      ],
+      "dh": "a8b31beb"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0063a800",
@@ -260,7 +274,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0063a800"
-      ]
+      ],
+      "dh": "b012a92f"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0063b9c0",
@@ -274,7 +289,8 @@
       "namespace": "D2Common::Chat::Ignorelist",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0063b9c0"
-      ]
+      ],
+      "dh": "a12b40ca"
     }
   ]
 }

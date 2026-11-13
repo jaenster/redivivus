@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "intptr_t"
-      ]
+      ],
+      "dh": "984daf37"
     },
     {
       "name": "SOUND_sD2SoundSmp_Free",
@@ -39,7 +40,8 @@
         "D2SoundListNodeStrc",
         "D2SoundListNodeStrc *",
         "intptr_t"
-      ]
+      ],
+      "dh": "25b839c8"
     },
     {
       "name": "SOUNDUTIL_FindInLinkedList",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "D2SoundListNodeStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "0e16cdb9"
     },
     {
       "name": "Unreferenced_005169f0",
@@ -74,7 +77,8 @@
       ],
       "usedTypes": [
         "D2SoundListNodeStrc"
-      ]
+      ],
+      "dh": "0124febe"
     },
     {
       "name": "SOUNDUTIL_FreeLinkedList",
@@ -93,7 +97,8 @@
       "usedTypes": [
         "D2SoundListNodeStrc",
         "D2SoundListNodeStrc *"
-      ]
+      ],
+      "dh": "176eada9"
     },
     {
       "name": "SOUNDUTIL_AppendToLinkedList",
@@ -113,7 +118,8 @@
         "D2SoundListNodeStrc",
         "D2SoundListNodeStrc *",
         "intptr_t"
-      ]
+      ],
+      "dh": "b851f394"
     },
     {
       "name": "SOUNDUTIL_ReadVersionResource",
@@ -133,7 +139,8 @@
       "usedTypes": [
         "EH3_EXCEPTION_REGISTRATION",
         "uint32_t"
-      ]
+      ],
+      "dh": "da0e3379"
     },
     {
       "name": "SOUNDUTIL_GetVersionResourceSize",
@@ -151,7 +158,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ff647c22"
     },
     {
       "name": "SOUNDUTIL_ReadVersionResourceToBuffer",
@@ -169,7 +177,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "da5ad434"
     },
     {
       "name": "SOUNDUTIL_GetFileVersionInfo",
@@ -190,7 +199,8 @@
       "usedTypes": [
         "VS_FIXEDFILEINFO",
         "uint32_t"
-      ]
+      ],
+      "dh": "58cbe6fd"
     }
   ]
 }

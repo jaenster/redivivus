@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "9a87a23d"
     },
     {
       "name": "RENDERER_D3D_CloseRegistryKey",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "HKEY"
-      ]
+      ],
+      "dh": "f13dc759"
     }
   ]
 }

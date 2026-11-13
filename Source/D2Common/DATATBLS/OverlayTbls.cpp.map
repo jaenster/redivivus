@@ -21,7 +21,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "8d049758"
     },
     {
       "name": "OVERLAYTBLS_FreeOverlayTables",
@@ -37,7 +38,8 @@
         "OVERLAYTBLS_FreeOverlayTables",
         "STRUCT_FreeTxtLink",
         "UnloadBin"
-      ]
+      ],
+      "dh": "89d25e19"
     },
     {
       "name": "OVERLAYTBLS_GetFrames",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "72df4fa7"
     },
     {
       "name": "OVERLAYTBLS_GetPreDraw",
@@ -72,7 +75,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e31551b"
     },
     {
       "name": "OVERLAYTBLS_GetXOffset",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f211a97c"
     },
     {
       "name": "OVERLAYTBLS_GetYOffset",
@@ -106,7 +111,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d2dfbc2e"
     },
     {
       "name": "OVERLAYTBLS_GetTrans",
@@ -124,7 +130,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4074897c"
     },
     {
       "name": "OVERLAYTBLS_GetLightRadiusAndRGB",
@@ -142,7 +149,8 @@
       "usedTypes": [
         "D2OverlayTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e05fb604"
     },
     {
       "name": "OVERLAYTBLS_Get1ofN",
@@ -159,7 +167,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "178a244c"
     },
     {
       "name": "OVERLAYTBLS_GetDir",
@@ -177,7 +186,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b91833ba"
     },
     {
       "name": "GetComponentsData",
@@ -197,7 +207,8 @@
         "D2MonStats2Txt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "113a0a6c"
     },
     {
       "name": "Unreferenced_00664800",
@@ -211,7 +222,8 @@
       "namespace": "D2Common::DATATBLS::OverlayTbls",
       "calledFunctions": [
         "Unreferenced_00664800"
-      ]
+      ],
+      "dh": "cc72fd63"
     },
     {
       "name": "MONSTER_GetComponentOverlay",
@@ -241,7 +253,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3b49930"
     },
     {
       "name": "OVERLAYTBLS_GetMonsterComponentOverlay",
@@ -261,7 +274,8 @@
         "D2MonStats2Txt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "59e8e924"
     }
   ]
 }

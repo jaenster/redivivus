@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4fbe0483"
     },
     {
       "name": "MESSAGE_OnActivate",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5ce5a2bf"
     },
     {
       "name": "WndProcD",
@@ -53,7 +55,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1816a6f"
     },
     {
       "name": "MESSAGE_OnClose",
@@ -67,7 +70,8 @@
       "namespace": "D2Client::_Message",
       "calledFunctions": [
         "MESSAGE_OnClose"
-      ]
+      ],
+      "dh": "fd1fdc24"
     },
     {
       "name": "WndProcB",
@@ -87,7 +91,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d926bef8"
     },
     {
       "name": "MessageGameLoop",
@@ -109,7 +114,8 @@
         "int32_t",
         "tagMSG",
         "uint32_t"
-      ]
+      ],
+      "dh": "1421d93a"
     },
     {
       "name": "MESSAGE_RegisterEventHandler",
@@ -133,7 +139,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "52c462d6"
     },
     {
       "name": "MESSAGE_UnregisterEventHandler",
@@ -157,7 +164,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b9ac3cf6"
     },
     {
       "name": "MESSAGE_RegisterEventHandlerBatch",
@@ -179,7 +187,8 @@
       "usedTypes": [
         "D2UIFlagInitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ddaa09d2"
     },
     {
       "name": "MESSAGE_UnregisterEventHandlerBatch",
@@ -201,7 +210,8 @@
       "usedTypes": [
         "D2UIFlagInitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "88f19d9e"
     },
     {
       "name": "MESSAGE_RegisterWindowMessageHandlers",
@@ -223,7 +233,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fcbc6f7b"
     },
     {
       "name": "MESSAGE_UnregisterWindowMessageHandlers",
@@ -246,7 +257,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4eb9189e"
     },
     {
       "name": "MESSAGE_SnapshotEventHandlers",
@@ -262,7 +274,8 @@
         "MESSAGE_SnapshotEventHandlers",
         "GetHwnd",
         "SMsgPushRegisterState"
-      ]
+      ],
+      "dh": "a55bc0b0"
     },
     {
       "name": "MESSAGE_UndoLastEventRegistrations",
@@ -278,7 +291,8 @@
         "MESSAGE_UndoLastEventRegistrations",
         "GetHwnd",
         "SMsgPopRegisterState"
-      ]
+      ],
+      "dh": "3103c27a"
     }
   ]
 }

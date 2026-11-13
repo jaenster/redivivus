@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "sockaddr_in"
-      ]
+      ],
+      "dh": "2bd40388"
     },
     {
       "name": "NET_D2GS_CLIENT_ExtractPacketSize",
@@ -42,7 +43,8 @@
         "D2OnePacketClientStrc",
         "D2OnePacketClientStrc *",
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "0e9d2e51"
     },
     {
       "name": "NET_D2GS_CLIENT_FreeAllClientD2Packets",
@@ -62,7 +64,8 @@
         "D2OnePacketClientStrc",
         "D2OnePacketClientStrc *",
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "4880c5b6"
     }
   ]
 }

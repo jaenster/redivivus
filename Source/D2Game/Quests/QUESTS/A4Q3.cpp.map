@@ -26,7 +26,8 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "713265e9"
     },
     {
       "name": "Q27_IsClassicGameCompleted",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b4a8ca0c"
     },
     {
       "name": "Objects_InitFn78_LastLastPortal",
@@ -65,7 +67,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "9bf634a9"
     },
     {
       "name": "Q28_PlayerNotifyCompletedForge",
@@ -88,7 +91,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3b05f2d1"
     },
     {
       "name": "Objects_InitFn48_HellForge",
@@ -111,7 +115,8 @@
         "D2QuestDataStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c4ce30c2"
     },
     {
       "name": "Q28_Callback04_ItemPickedUp",
@@ -135,7 +140,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1fed7f55"
     },
     {
       "name": "Q28_PlayerCompleteForgeInAct4",
@@ -168,7 +174,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "2c007802"
     },
     {
       "name": "Q28_PartyMember_SetCannotComplete",
@@ -190,7 +197,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8af77e1b"
     },
     {
       "name": "OBJOP_A4Q3_HellforgeSmash",
@@ -238,7 +246,8 @@
         "eD2ObjectAnimMode",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "272be896"
     },
     {
       "name": "Q28_ActiveFilter",
@@ -259,7 +268,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b66407cb"
     },
     {
       "name": "Q28_SequenceFilter",
@@ -282,7 +292,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c73cd96b"
     },
     {
       "name": "Q28_PlayerUpdateForgeState",
@@ -307,7 +318,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "90f33982"
     },
     {
       "name": "Q28_Callback10_PlayerLeavesGame",
@@ -326,7 +338,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "abfa0b92"
     },
     {
       "name": "Q28_Callback03_ChangedLevel",
@@ -352,7 +365,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7cc66644"
     },
     {
       "name": "Q28_Callback11_ScrollMessage",
@@ -389,7 +403,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "08e8cbb7"
     },
     {
       "name": "Q28_Callback00_NpcActivate",
@@ -417,7 +432,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "bed529b2"
     },
     {
       "name": "Q28_Callback02_NpcDeactivate",
@@ -439,7 +455,8 @@
         "D2QuestDataA4Q3Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4d2c0d35"
     },
     {
       "name": "Q28_DecrementHellforgeWeaponCount",
@@ -460,7 +477,8 @@
         "D2QuestDataA4Q3Strc",
         "D2QuestDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb4a6394"
     },
     {
       "name": "Q28_Callback_14_CheckIfGotHammer",
@@ -481,7 +499,8 @@
         "D2QuestDataA4Q3Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "14a08199"
     },
     {
       "name": "Q28_Callback13_PlayerStartedGame",
@@ -507,7 +526,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e5945704"
     },
     {
       "name": "Q28_Callback08_MonsterKilled",
@@ -528,7 +548,8 @@
         "D2QuestDataA4Q3Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "21541e4f"
     },
     {
       "name": "Q28_InitData",
@@ -549,7 +570,8 @@
         "D2QuestDataA4Q3Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "167da92d"
     },
     {
       "name": "Q28_TimerCallback_DropForgeRunes",
@@ -576,7 +598,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "35478d11"
     },
     {
       "name": "Q28_EmptyCallback",
@@ -590,7 +613,8 @@
       "namespace": "D2Game::Quests::QUESTS::A4Q3",
       "calledFunctions": [
         "Q28_EmptyCallback"
-      ]
+      ],
+      "dh": "50694e48"
     }
   ]
 }

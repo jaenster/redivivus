@@ -19,7 +19,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0a16302"
     },
     {
       "name": "fpDrawVisTile",
@@ -42,7 +43,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "224e679b"
     },
     {
       "name": "DRAW_DrawWallTileWithLighting",
@@ -66,7 +68,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "95de63dd"
     },
     {
       "name": "fpDrawWallTile",
@@ -92,7 +95,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "67fb9d15"
     },
     {
       "name": "fpDrawBlendedVisTile",
@@ -114,7 +118,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "690c0b18"
     },
     {
       "name": "fpDrawRoofTile",
@@ -137,7 +142,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t[32]"
-      ]
+      ],
+      "dh": "f621e624"
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileDispatch1",
@@ -157,7 +163,8 @@
       "usedTypes": [
         "D2GroundSubTileStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "eac6f87e"
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileDispatch2",
@@ -177,7 +184,8 @@
       "usedTypes": [
         "D2GroundSubTileStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "56d327ef"
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileWithLight",
@@ -198,7 +206,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3f8e66c7"
     },
     {
       "name": "D2GFXHELPER_DrawGroundTileWithPerspectiveLight",
@@ -219,7 +228,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7d61a3df"
     },
     {
       "name": "fpDrawGroundTile",
@@ -245,7 +255,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8a070412"
     },
     {
       "name": "D2GFX_SetupRenderFunctions",
@@ -260,7 +271,8 @@
       "calledFunctions": [
         "D2GFX_SetupRenderFunctions",
         "D2GFX_InitializeLineBuffer"
-      ]
+      ],
+      "dh": "2c1a4c3b"
     },
     {
       "name": "fpFillYBufferTable",
@@ -279,7 +291,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "11233409"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "StaticFini_gLogMessageQueueCS_Unref_00665930"
-      ]
+      ],
+      "dh": "5005c2b9"
     },
     {
       "name": "StaticFini_gLogMessageQueueCS_Unref_00665940",
@@ -29,7 +30,8 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "StaticFini_gLogMessageQueueCS_Unref_00665940"
-      ]
+      ],
+      "dh": "9a9db887"
     },
     {
       "name": "ParsePresetsOfDrlgFile",
@@ -66,7 +68,8 @@
         "uint32_t",
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "a1fd2167"
     },
     {
       "name": "AllocDrlgFile",
@@ -90,7 +93,8 @@
         "D2DrlgFileStrc *",
         "D2PoolManagerStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "f5588fa9"
     },
     {
       "name": "DRLGPRESET_CopyMapAI",
@@ -111,7 +115,8 @@
         "D2MapAIStrc",
         "D2PathPosStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "7012d465"
     },
     {
       "name": "DRLGPRESET_TransferMapAI",
@@ -130,7 +135,8 @@
       "usedTypes": [
         "D2MapAIStrc",
         "D2MapAIStrc *"
-      ]
+      ],
+      "dh": "426cab6f"
     },
     {
       "name": "DRLGPRESET_FreeSpawnPointList",
@@ -149,7 +155,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "53484458"
     },
     {
       "name": "CreatePresetObject_Unused",
@@ -170,7 +177,8 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c43c03e"
     },
     {
       "name": "CreateObjectPresets",
@@ -192,7 +200,8 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2bcf9027"
     },
     {
       "name": "CreateObjectPresets2",
@@ -217,7 +226,8 @@
         "D2PresetUnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bdad901"
     },
     {
       "name": "CreateObjectPresetsForMap",
@@ -243,7 +253,8 @@
         "D2DrlgMapStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b9cb93b"
     },
     {
       "name": "CreateMonsterPreset",
@@ -265,7 +276,8 @@
         "D2PoolManagerStrc",
         "D2PresetUnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1b0336f4"
     },
     {
       "name": "DRLGPRESET_FreePresetRoomGrids",
@@ -286,7 +298,8 @@
         "D2DrlgPresetRoomStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "6e5afdd6"
     },
     {
       "name": "DRLGROOMEX_FreeRoomExDataPresetArea",
@@ -306,7 +319,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "c7216d36"
     },
     {
       "name": "DRLGPRESET_FreePresetRoomGridsFromRoomEx",
@@ -324,7 +338,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "5686ffae"
     },
     {
       "name": "DRLGROOMEX_AllocRoomExDataPresetArea",
@@ -344,7 +359,8 @@
       "usedTypes": [
         "D2DrlgPresetRoomStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "7a159998"
     },
     {
       "name": "DRLGROOMEX_AllocRoomExTypePreset",
@@ -367,7 +383,8 @@
         "D2DrlgMapStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bcf80197"
     },
     {
       "name": "DRLGPRESET_AddAndSetPresetUnits",
@@ -389,7 +406,8 @@
         "D2DrlgMapStrc",
         "D2PresetUnitStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "329fa55e"
     },
     {
       "name": "DRLGPRESET_InitGridsFromDS1File",
@@ -415,7 +433,8 @@
         "D2DrlgMapStrc",
         "D2RoomExStrc",
         "void *"
-      ]
+      ],
+      "dh": "bbc70ae6"
     },
     {
       "name": "DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds",
@@ -438,7 +457,8 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "969b5e6f"
     },
     {
       "name": "GetTombStoneTileCoords",
@@ -457,7 +477,8 @@
         "D2CoordStrc *",
         "D2DrlgPresetRoomStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "9a86e4ff"
     },
     {
       "name": "DRLGROOMEX_InitializePresetRoom",
@@ -494,7 +515,8 @@
         "D2PoolManagerStrc",
         "D2RoomExStrc",
         "DRLGROOMEX_InitializePresetRoom_Slotm"
-      ]
+      ],
+      "dh": "124b308e"
     },
     {
       "name": "DRLGPRESET_InitDrlgMapPopLocations",
@@ -512,7 +534,8 @@
       "usedTypes": [
         "D2DrlgMapStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6220e9f4"
     },
     {
       "name": "DRLGPRESET_SetPickedFileInDrlgMap",
@@ -530,7 +553,8 @@
       "usedTypes": [
         "D2DrlgMapStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "77f0de05"
     },
     {
       "name": "DRLGPRESET_AllocDrlgMap",
@@ -557,7 +581,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "89567b0f"
     },
     {
       "name": "GetSizeX",
@@ -576,7 +601,8 @@
       "usedTypes": [
         "D2LvlPrestTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c3880c32"
     },
     {
       "name": "GetSizeY",
@@ -595,7 +621,8 @@
       "usedTypes": [
         "D2LvlPrestTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c71ad325"
     },
     {
       "name": "Unreferenced_00666ff0",
@@ -613,7 +640,8 @@
       "usedTypes": [
         "D2DrlgGridStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "49edd3fe"
     },
     {
       "name": "Unreferenced_00667000",
@@ -630,7 +658,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "2f9f36ea"
     },
     {
       "name": "DRLGPRESET_GetPickedFilePathFromRoomEx",
@@ -648,7 +677,8 @@
       "usedTypes": [
         "D2DrlgMapStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "82ee0bc0"
     },
     {
       "name": "DRLGPRESET_GetDrlgFileSize",
@@ -667,7 +697,8 @@
         "D2DrlgPresetRoomStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1acdd85e"
     },
     {
       "name": "DRLGPRESET_UpdatePopTiles",
@@ -693,7 +724,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "709f9af2"
     },
     {
       "name": "UpdatePops",
@@ -717,7 +749,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "483b22f8"
     },
     {
       "name": "Unreferenced_00667420",
@@ -735,7 +768,8 @@
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "ffbcd783"
     },
     {
       "name": "DRLGLEVEL_InitializeWithPresetArea",
@@ -763,7 +797,8 @@
         "D2LvlPrestTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b79a2f5"
     },
     {
       "name": "DRLGPRESET_FreePresetLevelData",
@@ -781,7 +816,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "6f98b95b"
     },
     {
       "name": "CopyPresetUnit",
@@ -804,7 +840,8 @@
         "D2PresetUnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1511dad0"
     },
     {
       "name": "DRLGPRESETUNIT_FreeDrlgPresetUnit",
@@ -823,7 +860,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2PresetUnitStrc"
-      ]
+      ],
+      "dh": "b9e3caad"
     },
     {
       "name": "DRLGPRESET_AddPresetUnitToDrlgMap",
@@ -848,7 +886,8 @@
         "D2SeedStrc",
         "int32_t",
         "int64_t"
-      ]
+      ],
+      "dh": "c8c294a4"
     },
     {
       "name": "DRLGPRESET_CreateMonsterPresets",
@@ -872,7 +911,8 @@
         "D2DrlgStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "05c24d34"
     },
     {
       "name": "DRLGPRESET_BuildPresetArea",
@@ -917,7 +957,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "e21f410c"
     },
     {
       "name": "BuildArea",
@@ -947,7 +988,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6ad62352"
     },
     {
       "name": "DRLGPRESET_InitializeRoomEx",
@@ -976,7 +1018,8 @@
         "D2RoomExStrc",
         "eD2LevelId",
         "fTownAutoMap"
-      ]
+      ],
+      "dh": "df39758e"
     },
     {
       "name": "DRLGPRESET_FreeDrlgFile",
@@ -997,7 +1040,8 @@
         "D2DrlgFileStrc",
         "D2MapAIStrc",
         "D2PresetUnitStrc"
-      ]
+      ],
+      "dh": "5944716c"
     },
     {
       "name": "DRLGPRESET_ReleaseDrlgFile",
@@ -1017,7 +1061,8 @@
       "usedTypes": [
         "D2DrlgFileCacheNodeStrc",
         "D2DrlgFileStrc *"
-      ]
+      ],
+      "dh": "30c1bf77"
     },
     {
       "name": "DRLGPRESET_FreeDrlgMapList",
@@ -1041,7 +1086,8 @@
         "D2MapAIStrc",
         "D2PoolManagerStrc",
         "D2PresetUnitStrc"
-      ]
+      ],
+      "dh": "094ef6d8"
     },
     {
       "name": "DRLGPRESET_FindPresetTypeIndex",
@@ -1059,7 +1105,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49693f87"
     },
     {
       "name": "StaticInit_CriticalSection_0096d610",
@@ -1074,7 +1121,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_0096d610",
         "atexit"
-      ]
+      ],
+      "dh": "43c3ce29"
     },
     {
       "name": "StaticFini_CriticalSection_0096d610",
@@ -1088,7 +1136,8 @@
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
         "StaticFini_CriticalSection_0096d610"
-      ]
+      ],
+      "dh": "fbb0f1e1"
     }
   ]
 }

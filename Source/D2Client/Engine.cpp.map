@@ -15,7 +15,8 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_0045ae50"
-      ]
+      ],
+      "dh": "8b8a8148"
     },
     {
       "name": "LOADER_SetConnectionLostFlag_Unref_0045ae70",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_0045ae70"
-      ]
+      ],
+      "dh": "4fa6c098"
     },
     {
       "name": "UI_IsMouseInRect",
@@ -48,7 +50,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "870d3b3d"
     },
     {
       "name": "DrawPopupOk",
@@ -68,7 +71,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5a219ff5"
     },
     {
       "name": "LOADER_CheckForInsertedDiscs",
@@ -90,7 +94,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "8a1d442a"
     },
     {
       "name": "DrawOkCancel",
@@ -110,7 +115,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8bf66994"
     },
     {
       "name": "LOADER_DrawInsertDiscMessage",
@@ -131,7 +137,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9b5d33f2"
     },
     {
       "name": "LOADER_DrawInsertDiscScreen",
@@ -158,7 +165,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ae5711bb"
     },
     {
       "name": "INPUT_CharScreenOkDown",
@@ -180,7 +188,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "6a3ef828"
     },
     {
       "name": "INPUT_CharScreenOkUp",
@@ -201,7 +210,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "a948922f"
     },
     {
       "name": "INPUT_CharScreenOkForce",
@@ -220,7 +230,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8a665e5f"
     },
     {
       "name": "INPUT_CharScreenOkCancel",
@@ -237,7 +248,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8aeea94a"
     },
     {
       "name": "LOADER_DrawConnectionLostMessage",
@@ -259,7 +271,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "525184c4"
     },
     {
       "name": "LOADER_DrawOkCancelButtons",
@@ -279,7 +292,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f6698767"
     },
     {
       "name": "DRAW_UI_OkCancel",
@@ -300,7 +314,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "226ece73"
     },
     {
       "name": "Unreferenced_00460170",
@@ -314,7 +329,8 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "Unreferenced_00460170"
-      ]
+      ],
+      "dh": "0e85f9a1"
     },
     {
       "name": "LOADER_DrawConnectionLostScreen",
@@ -341,7 +357,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "08265b67"
     },
     {
       "name": "INPUT_CharScreenDualButtonDown",
@@ -363,7 +380,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "08347eb8"
     },
     {
       "name": "INPUT_CharScreenDualButtonUp",
@@ -384,7 +402,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "71b4be37"
     },
     {
       "name": "INPUT_CharScreenDualButtonForce",
@@ -403,7 +422,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "aa434942"
     },
     {
       "name": "INPUT_CharScreenDualButtonCancel",
@@ -420,7 +440,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "a40ba6a0"
     },
     {
       "name": "LOADER_FreePopupImages",
@@ -436,7 +457,8 @@
         "LOADER_FreePopupImages",
         "DC6_FreeAndDelete",
         "PALETTE_LoadLoadingScreenPalette"
-      ]
+      ],
+      "dh": "30c3b5a7"
     },
     {
       "name": "LOADER_SetConnectionLostFlag",
@@ -450,7 +472,8 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag"
-      ]
+      ],
+      "dh": "b888da03"
     },
     {
       "name": "fpGameLoopFunction",
@@ -481,7 +504,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cdaf1470"
     },
     {
       "name": "fpRequiredUserAction",
@@ -508,7 +532,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "66494b89"
     },
     {
       "name": "ENGINE_RunDrawModeGameLoop",
@@ -531,7 +556,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b45c957d"
     },
     {
       "name": "ENGINE_RunDrawModeGameLoopAlt",
@@ -555,7 +581,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c091746b"
     },
     {
       "name": "CLIENT_SetUnitFlag",
@@ -574,7 +601,8 @@
         "D2AiGeneralStrc *",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "8dad8a77"
     },
     {
       "name": "Unreferenced_00460760",
@@ -591,7 +619,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "715f17a1"
     },
     {
       "name": "Unreferenced_004607d0",
@@ -608,7 +637,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "58296ec9"
     },
     {
       "name": "Unreferenced_004607f0",
@@ -625,7 +655,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "90420684"
     },
     {
       "name": "Unreferenced_00460810",
@@ -642,7 +673,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "73899fba"
     },
     {
       "name": "CLIENT_PreloadMonsterCofsInAdjacentRooms",
@@ -667,7 +699,8 @@
         "D2RoomStrc *",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f116fa9f"
     },
     {
       "name": "CLIENT_UpdateUnitLightRadius",
@@ -692,7 +725,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac938dc5"
     },
     {
       "name": "CLIENT_SetUnitLightColor",
@@ -712,7 +746,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c9fd1ca4"
     },
     {
       "name": "LOADER_SetConnectionLostFlag_Unref_00468000",
@@ -726,7 +761,8 @@
       "namespace": "D2Client::Engine",
       "calledFunctions": [
         "LOADER_SetConnectionLostFlag_Unref_00468000"
-      ]
+      ],
+      "dh": "08b5fa78"
     }
   ]
 }

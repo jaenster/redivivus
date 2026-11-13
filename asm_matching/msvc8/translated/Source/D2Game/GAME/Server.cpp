@@ -1082,7 +1082,7 @@ static void __stdcall QSERVER_CleanupUnitChain(D2UnitStrc * * pUnitHead, ::SGAME
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pRoomStrc (ESI): D2RoomStrc*, pGameStrc (EDI): SGAMEDATA*
-static void __stdcall SERVER_PopulateRoom(D2RoomStrc * pRoomStrc, ::SGAMEDATA * pGameStrc) {
+static void __stdcall SERVER_PopulateRoom(::SGAMEDATA * pGameStrc, D2RoomStrc * pRoomStrc) {
     UNIT::SUnit::SUNIT_SpawnPresetUnitsForRoom(pGameStrc, pRoomStrc);
     UNIT::SUnitInactive::SUNITINACTIVE_RoomInit(pGameStrc, pRoomStrc);
     Objects::OBJECT_PopulateRoomObjects(pGameStrc, pRoomStrc);
@@ -3684,7 +3684,7 @@ void StaticInit_Frames_TimeBetweenFrames() {
 }
 
 static void * keep_0052d090 = (0 ? (QSERVER_CleanupUnitChain(*(D2UnitStrc * * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
-static void * keep_0052d0c0 = (0 ? (SERVER_PopulateRoom(*(D2RoomStrc * *)0, *(::SGAMEDATA * *)0), (void *)0) : (void *)0);
+static void * keep_0052d0c0 = (0 ? (SERVER_PopulateRoom(*(::SGAMEDATA * *)0, *(D2RoomStrc * *)0), (void *)0) : (void *)0);
 static void * keep_0052f160 = (0 ? (Unused_GetUnitList(*(D2UnitStrc * * *)0, *(D2Game_Line0x13af * *)0, *(int32_t *)0, *(int * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Game::GAME::Server

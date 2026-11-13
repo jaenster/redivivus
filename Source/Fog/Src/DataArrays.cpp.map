@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2DataArrayStrc"
-      ]
+      ],
+      "dh": "22ab98ff"
     },
     {
       "name": "FreeWeatherPointer",
@@ -37,7 +38,8 @@
         "FreeWeatherPointer",
         "memset",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "0c44b985"
     },
     {
       "name": "FOG_InitDataArray",
@@ -57,7 +59,8 @@
       ],
       "usedTypes": [
         "D2DataArrayStrc"
-      ]
+      ],
+      "dh": "65455c43"
     },
     {
       "name": "FOG_GetMissileField",
@@ -80,7 +83,8 @@
         "D2DataArrayStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87ffc287"
     },
     {
       "name": "FOG_GetDataArrayEntry",
@@ -101,7 +105,8 @@
       "usedTypes": [
         "D2DataArrayStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f8c9ef9"
     },
     {
       "name": "FOG_GetDataArrayEntryOrHalt",
@@ -122,7 +127,8 @@
       ],
       "usedTypes": [
         "D2DataArrayStrc"
-      ]
+      ],
+      "dh": "c940cd12"
     },
     {
       "name": "FOG_CloseDataArray",
@@ -140,7 +146,8 @@
       ],
       "usedTypes": [
         "D2DataArrayStrc"
-      ]
+      ],
+      "dh": "ddc4c253"
     },
     {
       "name": "FOG_ArrayFreeAtIndex",
@@ -162,7 +169,8 @@
       "usedTypes": [
         "D2DataArrayStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ed1b2173"
     },
     {
       "name": "FOG_FillArrayWithRandomInts",
@@ -184,7 +192,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ae068954"
     }
   ]
 }

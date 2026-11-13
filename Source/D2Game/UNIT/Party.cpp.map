@@ -26,7 +26,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ddeab41a"
     },
     {
       "name": "AllocPartyControl",
@@ -49,7 +50,8 @@
         "D2UnitPartyControl",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "28382181"
     },
     {
       "name": "FreePartyControl",
@@ -74,7 +76,8 @@
         "D2UnitPartyControlSubSub",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8ebb48a0"
     },
     {
       "name": "PARTY_UpdateNextPartyId",
@@ -94,7 +97,8 @@
         "D2UnitPartyControlSub *",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "18b1c396"
     },
     {
       "name": "PARTY_CreateParty",
@@ -121,7 +125,8 @@
         "int16_t",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "93274efb"
     },
     {
       "name": "PARTY_FreePartyMembers",
@@ -149,7 +154,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "20c4166e"
     },
     {
       "name": "PARTY_DisbandParty",
@@ -174,7 +180,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "cca53af6"
     },
     {
       "name": "FindPartyControlSub",
@@ -196,7 +203,8 @@
         "D2UnitPartyControlSub",
         "SGAMEDATA",
         "int16_t"
-      ]
+      ],
+      "dh": "907f377e"
     },
     {
       "name": "CheckUnitGUIDInAllPartyControlSubs",
@@ -218,7 +226,8 @@
         "D2UnitPartyControlSub",
         "D2UnitPartyControlSubSub",
         "int32_t"
-      ]
+      ],
+      "dh": "78c39670"
     },
     {
       "name": "PARTY_AddUnitToParty",
@@ -248,7 +257,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "2316f732"
     },
     {
       "name": "CountPartyControlSubSize",
@@ -272,7 +282,8 @@
         "SGAMEDATA",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "1bc51bcf"
     },
     {
       "name": "CountAliveUnitsLevelSum",
@@ -292,7 +303,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cc7d6107"
     },
     {
       "name": "CountModeZero",
@@ -311,7 +323,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a93d111b"
     },
     {
       "name": "ExecuteFunctionForEveryPartyMember",
@@ -338,7 +351,8 @@
         "fpExecuteOnUnitFunction",
         "int16_t",
         "int32_t"
-      ]
+      ],
+      "dh": "c92298b6"
     },
     {
       "name": "FindUnitWithFilter",
@@ -367,7 +381,8 @@
         "eD2LevelId",
         "pfnPartyMemberFilter",
         "uint16_t"
-      ]
+      ],
+      "dh": "1f22157f"
     },
     {
       "name": "GoldCalculations",
@@ -388,7 +403,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9e0e655"
     },
     {
       "name": "BroadcastAutomapAllyPartyInfo",
@@ -415,7 +431,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "5953d54d"
     },
     {
       "name": "GetPartyIdFromUnit",
@@ -442,7 +459,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "16592328"
     },
     {
       "name": "PARTY_RemoveUnitFromParty",
@@ -475,7 +493,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "575c1638"
     },
     {
       "name": "GetPartiedUnitsLevelSum",
@@ -498,7 +517,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bab7e13"
     },
     {
       "name": "CountDeadPartyMembers",
@@ -518,7 +538,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0b343a5"
     },
     {
       "name": "PARTY_SplitGoldToPartyMembers",
@@ -557,7 +578,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b079022a"
     }
   ]
 }

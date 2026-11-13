@@ -22,7 +22,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "c9a4a416"
     },
     {
       "name": "Skills_CltDoFunc_Nec_CurseCenter_StreamMissile",
@@ -53,7 +54,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "47e5a850"
     },
     {
       "name": "SKILLSNEC_CltSetBoneWallGfx",
@@ -84,7 +86,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70a89b48"
     },
     {
       "name": "Skills_CltStFunc_SpawnCltMissileCTowardTarget",
@@ -106,7 +109,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f913de1f"
     },
     {
       "name": "Skills_CltStFunc_CheckCorpseSetPositionParams",
@@ -134,7 +138,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a7f28a0"
     },
     {
       "name": "Skills_CltDoFunc_Nec_TargetedMissileAtParam",
@@ -164,7 +169,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "1c23c274"
     },
     {
       "name": "Skills_CltStFunc_CheckSelectableCorpseSetParams",
@@ -194,7 +200,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "8e340fdb"
     },
     {
       "name": "SKILLSNEC_CltCreateTeethMissiles",
@@ -227,7 +234,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fed1e779"
     },
     {
       "name": "Skills_CltDoFunc_Nec_CorpseExplosion",
@@ -252,7 +260,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "f95a27d8"
     },
     {
       "name": "SKILLSNEC_CltCreateBoneSpearMissile",
@@ -279,7 +288,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "87c61506"
     },
     {
       "name": "Skills_CltDoFunc_Nec_PoisonExplosion",
@@ -304,7 +314,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2eef316c"
     },
     {
       "name": "Skills_CltStFunc_CheckCasterRoomNotInTownNec",
@@ -329,7 +340,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "03fe74c8"
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsUnclaimedGroundItem",
@@ -355,7 +367,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ada6182"
     },
     {
       "name": "Unreferenced_004f3fb0",
@@ -376,7 +389,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b5abe291"
     },
     {
       "name": "Skills_CltStFunc_SelectReviveMissileByMonsterSize",
@@ -407,7 +421,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b80e6444"
     }
   ]
 }

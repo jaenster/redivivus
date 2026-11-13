@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc *"
-      ]
+      ],
+      "dh": "7e13280a"
     },
     {
       "name": "DeleteCriticalSections",
@@ -32,7 +33,8 @@
       "namespace": "D2Game::GAME::Clients",
       "calledFunctions": [
         "DeleteCriticalSections"
-      ]
+      ],
+      "dh": "822d407e"
     },
     {
       "name": "GetClientByToken",
@@ -50,7 +52,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b2926bf"
     },
     {
       "name": "LeaveCriticalSection_ClientById",
@@ -64,7 +67,8 @@
       "namespace": "D2Game::GAME::Clients",
       "calledFunctions": [
         "LeaveCriticalSection_ClientById"
-      ]
+      ],
+      "dh": "33fdddc5"
     },
     {
       "name": "SERVER_GetClientFromGmeByClientId",
@@ -86,7 +90,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d8863349"
     },
     {
       "name": "CLIENTS_GetControlUnit",
@@ -109,7 +114,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6d6677cb"
     },
     {
       "name": "SERVER_LinkServerPlayerUnitToClient",
@@ -131,7 +137,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2fddf561"
     },
     {
       "name": "CLIENT_SendHandshakePacket0x0B",
@@ -150,7 +157,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bcc23537"
     },
     {
       "name": "SetCientFlag0x01",
@@ -171,7 +179,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "faa0da2d"
     },
     {
       "name": "SetGameDataHook",
@@ -188,7 +197,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6b820d4d"
     },
     {
       "name": "AppearenceItems",
@@ -213,7 +223,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c649ff1"
     },
     {
       "name": "AppearenceItems2",
@@ -237,7 +248,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b03a188"
     },
     {
       "name": "Unreferenced_00537ab0",
@@ -256,7 +268,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "7ee157e6"
     },
     {
       "name": "FreeClientList",
@@ -275,7 +288,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c0fbc8d2"
     },
     {
       "name": "CLIENT_UpdatePortalFlags",
@@ -297,7 +311,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a852dffa"
     },
     {
       "name": "GAME_OnClientRoomChange",
@@ -330,7 +345,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "d18d6b18"
     },
     {
       "name": "CLIENT_AddUnitToProximitySortedList",
@@ -354,7 +370,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "61991e3b"
     },
     {
       "name": "CLIENT_PopulateVisibilityPacketBuffer",
@@ -378,7 +395,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3637f65"
     },
     {
       "name": "GAME_CollectNearbyUnitPositions",
@@ -409,7 +427,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c07663a0"
     },
     {
       "name": "UpdateSingleClient",
@@ -443,7 +462,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "c9da067a"
     },
     {
       "name": "IsClientInGame",
@@ -462,7 +482,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ded67584"
     },
     {
       "name": "CLIENT_SetRoom",
@@ -485,7 +506,8 @@
         "D2ClientStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c4555c4f"
     },
     {
       "name": "CLIENT_GetRoom",
@@ -506,7 +528,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "4233b2c4"
     },
     {
       "name": "AttachUnitType",
@@ -527,7 +550,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9edea678"
     },
     {
       "name": "GetAct",
@@ -549,7 +573,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5d7070c1"
     },
     {
       "name": "CLIENT_SetAct",
@@ -571,7 +596,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1ace1166"
     },
     {
       "name": "ClientSetDwSaveTo1",
@@ -592,7 +618,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7453b2e2"
     },
     {
       "name": "CLIENT_GetUnk0x1AD",
@@ -613,7 +640,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "e363c050"
     },
     {
       "name": "CLIENT_SetUnk0x1AD",
@@ -634,7 +662,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "9be39986"
     },
     {
       "name": "InitUnitForClient",
@@ -664,7 +693,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "69cd8f42"
     },
     {
       "name": "RemoveUnitForClient",
@@ -692,7 +722,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fd4bfb8"
     },
     {
       "name": "GetClientNo",
@@ -713,7 +744,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "19440b44"
     },
     {
       "name": "ReturnFFFFFFFF",
@@ -727,7 +759,8 @@
       "namespace": "D2Game::GAME::Clients",
       "calledFunctions": [
         "ReturnFFFFFFFF"
-      ]
+      ],
+      "dh": "16379f87"
     },
     {
       "name": "ReturnVoid",
@@ -741,7 +774,8 @@
       "namespace": "D2Game::GAME::Clients",
       "calledFunctions": [
         "ReturnVoid"
-      ]
+      ],
+      "dh": "0843eacf"
     },
     {
       "name": "GetPlayerClassId",
@@ -763,7 +797,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "513ffcca"
     },
     {
       "name": "SetClassOfClient",
@@ -780,7 +815,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "61198267"
     },
     {
       "name": "SetFileFlags",
@@ -798,7 +834,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "3059cd71"
     },
     {
       "name": "GetCharacterStatus",
@@ -816,7 +853,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6db8d14"
     },
     {
       "name": "SetFlagIf",
@@ -834,7 +872,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "ebe57ec7"
     },
     {
       "name": "CLIENT_TestFileFlags",
@@ -853,7 +892,8 @@
         "D2ClientStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e03738fb"
     },
     {
       "name": "SetClientStatus",
@@ -872,7 +912,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d4af6e8"
     },
     {
       "name": "CLIENT_SetConnectionState",
@@ -893,7 +934,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0879629a"
     },
     {
       "name": "SetGolem",
@@ -914,7 +956,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f41c8953"
     },
     {
       "name": "CLIENT_GetGolemGUID",
@@ -934,7 +977,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "92f42d3d"
     },
     {
       "name": "SetCreateTime",
@@ -956,7 +1000,8 @@
         "D2ClientStrc",
         "__time32_t",
         "int32_t"
-      ]
+      ],
+      "dh": "5237b1ae"
     },
     {
       "name": "GetCreateTime",
@@ -977,7 +1022,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2242b7ec"
     },
     {
       "name": "CLIENT_GetGame",
@@ -999,7 +1045,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "77e18060"
     },
     {
       "name": "IsUnitNearClient",
@@ -1020,7 +1067,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "15d87b38"
     },
     {
       "name": "GetCharName",
@@ -1041,7 +1089,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "11546ee6"
     },
     {
       "name": "ARENA_SetClientDead",
@@ -1063,7 +1112,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8e45f419"
     },
     {
       "name": "ARENA_IsClientDead",
@@ -1085,7 +1135,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ea37b0e"
     },
     {
       "name": "CLIENT_GetCharTemplate",
@@ -1106,7 +1157,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "e19533de"
     },
     {
       "name": "QSERVER_IsClientAllowedToJoin",
@@ -1124,7 +1176,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a717269f"
     },
     {
       "name": "SendPongByClientId",
@@ -1154,7 +1207,8 @@
         "int64_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "ad1fab53"
     },
     {
       "name": "NET_D2GS_SERVER_GetPlayerNameByClientId",
@@ -1173,7 +1227,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5745d0b7"
     },
     {
       "name": "GetClientId",
@@ -1193,7 +1248,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eb8bc000"
     },
     {
       "name": "SERVER_IsPlayerCharacterInGame",
@@ -1214,7 +1270,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8902f787"
     },
     {
       "name": "CLIENT_AccumulateSaveData",
@@ -1240,7 +1297,8 @@
         "D2SaveFileHeaderStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c05fcdff"
     },
     {
       "name": "GetSaveGame",
@@ -1262,7 +1320,8 @@
         "D2ClientStrc",
         "D2SaveFileHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4704e0b7"
     },
     {
       "name": "GetSaveGameSize",
@@ -1283,7 +1342,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f313ac2b"
     },
     {
       "name": "CopySafeBuffer",
@@ -1308,7 +1368,8 @@
         "D2ClientStrc",
         "D2SaveFileHeaderStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "670e4737"
     },
     {
       "name": "DeleteCurrentSave",
@@ -1330,7 +1391,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "02cfdc21"
     },
     {
       "name": "CLIENTS_ResetSaveTransferState",
@@ -1351,7 +1413,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "33fa48ca"
     },
     {
       "name": "CLIENT_HasSaveData",
@@ -1372,7 +1435,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7627eab9"
     },
     {
       "name": "GAMECLIENT_GetFlags0x20",
@@ -1393,7 +1457,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1fb0346f"
     },
     {
       "name": "CLIENT_GetSaveCompleteFlag",
@@ -1415,7 +1480,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "089a3b85"
     },
     {
       "name": "GetFirstClientOfGame",
@@ -1433,7 +1499,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b3011640"
     },
     {
       "name": "GetNext",
@@ -1450,7 +1517,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "b7784799"
     },
     {
       "name": "SetGotkeyInfo",
@@ -1471,7 +1539,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "93e6cfe8"
     },
     {
       "name": "GetHotKey",
@@ -1490,7 +1559,8 @@
         "D2ClientStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "691b1fe3"
     },
     {
       "name": "GetGuildFlags",
@@ -1508,7 +1578,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "a1b8f29f"
     },
     {
       "name": "SetGuildFlags",
@@ -1525,7 +1596,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "64085eda"
     },
     {
       "name": "GetGuildTag",
@@ -1542,7 +1614,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "70d1de12"
     },
     {
       "name": "SetGuildTag",
@@ -1559,7 +1632,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "10c51b2e"
     },
     {
       "name": "GetGuildName",
@@ -1576,7 +1650,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "627f7363"
     },
     {
       "name": "SetGuildName",
@@ -1593,7 +1668,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "96b6c432"
     },
     {
       "name": "GetGuildInfo",
@@ -1611,7 +1687,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "b678004e"
     },
     {
       "name": "SetGuildInfo",
@@ -1629,7 +1706,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "5812b639"
     },
     {
       "name": "SetExperience",
@@ -1650,7 +1728,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9a688df0"
     },
     {
       "name": "GetExperience",
@@ -1668,7 +1747,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c48b3e3d"
     },
     {
       "name": "HasWeaponSwapped",
@@ -1685,7 +1765,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "061bccb1"
     },
     {
       "name": "SetWeaponSwap",
@@ -1703,7 +1784,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "387db051"
     },
     {
       "name": "SERVER_PutPacketInQueueList",
@@ -1721,7 +1803,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2PacketListStrc"
-      ]
+      ],
+      "dh": "41fb4a94"
     },
     {
       "name": "CLIENT_SetPacketList",
@@ -1739,7 +1822,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2PacketListStrc"
-      ]
+      ],
+      "dh": "8881bd03"
     },
     {
       "name": "CLIENT_ClearDispatchList",
@@ -1757,7 +1841,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2PacketListStrc"
-      ]
+      ],
+      "dh": "b56876d0"
     },
     {
       "name": "CLIENT_GetPacketList",
@@ -1775,7 +1860,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2PacketListStrc"
-      ]
+      ],
+      "dh": "eedf2667"
     },
     {
       "name": "CLIENT_GetDispatchList",
@@ -1793,7 +1879,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2PacketListStrc"
-      ]
+      ],
+      "dh": "8ad22149"
     },
     {
       "name": "GetAccountName",
@@ -1811,7 +1898,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "37fcb438"
     },
     {
       "name": "GetClientContainer",
@@ -1828,7 +1916,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "38fdce02"
     },
     {
       "name": "GetRealm",
@@ -1845,7 +1934,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "c4f30c3c"
     },
     {
       "name": "SetRealm",
@@ -1863,7 +1953,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6d9038be"
     },
     {
       "name": "CLIENT_GetPlayerBasicsData",
@@ -1885,7 +1976,8 @@
         "D2ClientStrc",
         "D2PlayerBasicsData",
         "int32_t"
-      ]
+      ],
+      "dh": "87d076e9"
     },
     {
       "name": "RecordSyncWarpTimestamp",
@@ -1909,7 +2001,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0ead24ef"
     },
     {
       "name": "CheckSyncWarpRateExceeded",
@@ -1933,7 +2026,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "d09c7dfd"
     },
     {
       "name": "CLIENT_GetLangId",
@@ -1953,7 +2047,8 @@
       ],
       "usedTypes": [
         "D2ClientStrc"
-      ]
+      ],
+      "dh": "1bf63b83"
     },
     {
       "name": "CLIENT_PlacePlayerInRoom",
@@ -2014,7 +2109,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cb09763f"
     },
     {
       "name": "CLIENT_LoadCharacterAndSendGameData",
@@ -2060,7 +2156,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "18878980"
     },
     {
       "name": "CreateClient",
@@ -2089,7 +2186,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b6465318"
     },
     {
       "name": "CleanUp",
@@ -2117,7 +2215,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d8d46f06"
     },
     {
       "name": "CleanUpClient",
@@ -2165,7 +2264,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f5374027"
     },
     {
       "name": "CLIENT_GetAttachedUnit",
@@ -2189,7 +2289,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b1909061"
     },
     {
       "name": "UnusedClientJoinGame",
@@ -2224,7 +2325,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d78f1881"
     },
     {
       "name": "UnusedClientJoinGame2",
@@ -2255,7 +2357,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3b8a5665"
     },
     {
       "name": "CLIENT_SendRoomUnitUpdates",
@@ -2277,7 +2380,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "9bd153e5"
     },
     {
       "name": "UnusedUpdateFunctionForUnits",
@@ -2304,7 +2408,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1b33b71"
     },
     {
       "name": "FreePendingDrlgDeletes",
@@ -2326,7 +2431,8 @@
         "D2DrlgActStrc *",
         "D2RoomStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a9045535"
     },
     {
       "name": "MovementUpdateForClient",
@@ -2352,7 +2458,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "1d58c059"
     },
     {
       "name": "CLIENT_BroadcastMovementToAdjacentRooms",
@@ -2379,7 +2486,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "935b1610"
     },
     {
       "name": "ReturnVoid_Unref_0053c740",
@@ -2393,7 +2501,8 @@
       "namespace": "D2Game::GAME::Clients",
       "calledFunctions": [
         "ReturnVoid_Unref_0053c740"
-      ]
+      ],
+      "dh": "060c6e89"
     }
   ]
 }

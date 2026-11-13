@@ -23,7 +23,8 @@
         "deflate_state",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "2e77ae7f"
     },
     {
       "name": "deflateSetHeader",
@@ -42,7 +43,8 @@
         "deflate_state",
         "gz_header",
         "z_stream"
-      ]
+      ],
+      "dh": "0179c009"
     },
     {
       "name": "deflatePending",
@@ -59,7 +61,8 @@
       ],
       "usedTypes": [
         "z_stream"
-      ]
+      ],
+      "dh": "acb1f4f7"
     },
     {
       "name": "deflatePrime",
@@ -80,7 +83,8 @@
         "int32_t",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "e0f0c01a"
     },
     {
       "name": "deflateTune",
@@ -100,7 +104,8 @@
         "int32_t",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "d1b5a93d"
     },
     {
       "name": "deflateBound",
@@ -122,7 +127,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "b9657eaa"
     },
     {
       "name": "putShortMSB",
@@ -140,7 +146,8 @@
       "usedTypes": [
         "deflate_state",
         "uint32_t"
-      ]
+      ],
+      "dh": "6a4f8a84"
     },
     {
       "name": "flush_pending",
@@ -161,7 +168,8 @@
         "deflate_state",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "78a2e9a8"
     },
     {
       "name": "deflateEnd",
@@ -180,7 +188,8 @@
         "deflate_state",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "3d28ae27"
     },
     {
       "name": "deflateCopy",
@@ -202,7 +211,8 @@
         "uint16_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "74914a48"
     },
     {
       "name": "read_buf",
@@ -224,7 +234,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "f45956a4"
     },
     {
       "name": "lm_init",
@@ -243,7 +254,8 @@
       "usedTypes": [
         "deflate_state",
         "uint16_t"
-      ]
+      ],
+      "dh": "c73c8adc"
     },
     {
       "name": "longest_match",
@@ -262,7 +274,8 @@
         "deflate_state",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7fa6b25e"
     },
     {
       "name": "fill_window",
@@ -287,7 +300,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "162d8dc8"
     },
     {
       "name": "deflate_stored",
@@ -313,7 +327,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "af94c1f7"
     },
     {
       "name": "deflate_fast",
@@ -341,7 +356,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "c5f8d061"
     },
     {
       "name": "deflate_slow",
@@ -369,7 +385,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "1722eebe"
     },
     {
       "name": "deflate_rle",
@@ -396,7 +413,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "5fd6a4c5"
     },
     {
       "name": "deflate_huff",
@@ -423,7 +441,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "e89b1a7a"
     },
     {
       "name": "deflateSetDictionary",
@@ -445,7 +464,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "fd0b8299"
     },
     {
       "name": "deflateReset",
@@ -465,7 +485,8 @@
       "usedTypes": [
         "int32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "12e5ce48"
     },
     {
       "name": "deflate",
@@ -496,7 +517,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "353ae4e4"
     },
     {
       "name": "deflateInit2_",
@@ -520,7 +542,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "80d98b1b"
     },
     {
       "name": "deflateParams",
@@ -541,7 +564,8 @@
         "int32_t",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "c086a546"
     },
     {
       "name": "deflateInit_",
@@ -561,7 +585,8 @@
         "int32_t",
         "uint32_t",
         "z_stream"
-      ]
+      ],
+      "dh": "686dae82"
     }
   ]
 }

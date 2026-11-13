@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "DDPIXELFORMAT"
-      ]
+      ],
+      "dh": "72bb27df"
     },
     {
       "name": "ClearCaches",
@@ -35,7 +36,8 @@
         "D3DFLOOR_Free",
         "D3DSUBTILE_Free",
         "D3DTEXCACHE_Free"
-      ]
+      ],
+      "dh": "e8910304"
     },
     {
       "name": "CheckCutScene",
@@ -49,7 +51,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "CheckCutScene"
-      ]
+      ],
+      "dh": "e3f16248"
     },
     {
       "name": "UpdateScaleFactor",
@@ -63,7 +66,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "UpdateScaleFactor"
-      ]
+      ],
+      "dh": "b38c06bc"
     },
     {
       "name": "CheckGamma",
@@ -77,7 +81,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "CheckGamma"
-      ]
+      ],
+      "dh": "dd5c9d1f"
     },
     {
       "name": "EndScene2",
@@ -91,7 +96,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "EndScene2"
-      ]
+      ],
+      "dh": "14a1491a"
     },
     {
       "name": "GetScreenSize",
@@ -105,7 +111,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "GetScreenSize"
-      ]
+      ],
+      "dh": "85853687"
     },
     {
       "name": "SetPalette",
@@ -125,7 +132,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8c472205"
     },
     {
       "name": "PALETTE_GetColorByIndex",
@@ -142,7 +150,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4f68a52a"
     },
     {
       "name": "SetPaletteTable",
@@ -159,7 +168,8 @@
       ],
       "usedTypes": [
         "BYTE *"
-      ]
+      ],
+      "dh": "d733c00b"
     },
     {
       "name": "RENDERER_D3D_ConvertPalettedTo16Bit",
@@ -177,7 +187,8 @@
       "usedTypes": [
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "92a61952"
     },
     {
       "name": "RENDERER_D3D_ConvertPalettedTo32Bit",
@@ -195,7 +206,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d4508369"
     },
     {
       "name": "RENDERER_D3D_SetBlendMode",
@@ -209,7 +221,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_SetBlendMode"
-      ]
+      ],
+      "dh": "24331e35"
     },
     {
       "name": "SetBlendMode",
@@ -226,7 +239,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "07c1c4f6"
     },
     {
       "name": "RENDERER_D3D_SetTextureFilterMode",
@@ -240,7 +254,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_SetTextureFilterMode"
-      ]
+      ],
+      "dh": "404cccd9"
     },
     {
       "name": "GetRenderStatistics",
@@ -254,7 +269,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "GetRenderStatistics"
-      ]
+      ],
+      "dh": "145a1cfe"
     },
     {
       "name": "ActivateWindow",
@@ -268,7 +284,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "ActivateWindow"
-      ]
+      ],
+      "dh": "427f8559"
     },
     {
       "name": "SetOption",
@@ -282,7 +299,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "SetOption"
-      ]
+      ],
+      "dh": "20d83c3a"
     },
     {
       "name": "DIRECTD3D_LogError",
@@ -297,7 +315,8 @@
       "calledFunctions": [
         "DIRECTD3D_LogError",
         "LOGFILE_WriteStringToFile"
-      ]
+      ],
+      "dh": "31f51c4e"
     },
     {
       "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
@@ -314,7 +333,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "091f6fa2"
     },
     {
       "name": "SPRITECACHE_SetMaxSize_Unref_006b2f30",
@@ -328,7 +348,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "SPRITECACHE_SetMaxSize_Unref_006b2f30"
-      ]
+      ],
+      "dh": "720f8179"
     },
     {
       "name": "RENDERER_D3D_SaveDeviceConfigToRegistry",
@@ -349,7 +370,8 @@
         "HKEY",
         "LSTATUS",
         "uint32_t"
-      ]
+      ],
+      "dh": "29b968e1"
     },
     {
       "name": "RENDERER_D3D_AllocateTextureCaches",
@@ -373,7 +395,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5ff6f785"
     },
     {
       "name": "RENDERER_D3D_FreeTextureCaches",
@@ -393,7 +416,8 @@
         "D3DSUBTILE_Free",
         "D3DTEXCACHE_Free",
         "RENDERER_D3D_ReleaseTexturePools"
-      ]
+      ],
+      "dh": "9c050f0c"
     },
     {
       "name": "RENDERER_D3D_ReleaseDevice",
@@ -411,7 +435,8 @@
         "D3D_FreeSystemMemoryTexturesForTiles",
         "RENDERER_D3D_FreeTextureCaches",
         "DIRECTD3D_LogError"
-      ]
+      ],
+      "dh": "37a82f07"
     },
     {
       "name": "RENDERER_D3D_DestroyWindow",
@@ -426,7 +451,8 @@
       "calledFunctions": [
         "RENDERER_D3D_DestroyWindow",
         "RENDERER_D3D_ReleaseDevice"
-      ]
+      ],
+      "dh": "54a3bd11"
     },
     {
       "name": "RENDERER_D3D_InitializeCutsceneMode",
@@ -450,7 +476,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6f96dfd"
     },
     {
       "name": "BeginCutScene",
@@ -466,7 +493,8 @@
         "BeginCutScene",
         "RENDERER_D3D_ReleaseDevice",
         "RENDERER_D3D_InitializeCutsceneMode"
-      ]
+      ],
+      "dh": "626600da"
     },
     {
       "name": "SetGamma",
@@ -485,7 +513,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e4436a8a"
     },
     {
       "name": "GetBackBuffer",
@@ -505,7 +534,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "uint32_t"
-      ]
+      ],
+      "dh": "3377db69"
     },
     {
       "name": "RENDERER_D3D_CreateSystemMemoryTexture",
@@ -528,7 +558,8 @@
         "IDirectDrawSurface7 *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cde9c9ce"
     },
     {
       "name": "RENDERER_D3D_ClearBackbuffer",
@@ -548,7 +579,8 @@
       "usedTypes": [
         "DDSURFACEDESC",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "833d8eb6"
     },
     {
       "name": "RENDERER_D3D_CopySurfacePixels",
@@ -570,7 +602,8 @@
         "DDSURFACEDESC",
         "IDirectDrawSurface7",
         "uint8_t"
-      ]
+      ],
+      "dh": "56675915"
     },
     {
       "name": "RENDERER_DIRECT3D_ErrorLog",
@@ -586,7 +619,8 @@
         "RENDERER_DIRECT3D_ErrorLog",
         "LOGFILE_WriteStringToFile",
         "DIRECTD3D_LogError"
-      ]
+      ],
+      "dh": "e64d6fd8"
     },
     {
       "name": "RENDERER_D3D_EnumDisplayModeCallback",
@@ -612,7 +646,8 @@
         "IDirect3DDevice",
         "IDirectDrawSurface7",
         "uint32_t"
-      ]
+      ],
+      "dh": "cb51c5ff"
     },
     {
       "name": "Direct3DCallBack",
@@ -647,7 +682,8 @@
         "pfnEHHandlerRoutine",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab100dc2"
     },
     {
       "name": "Catch_All_006b4c42",
@@ -662,7 +698,8 @@
       "calledFunctions": [
         "Catch_All_006b4c42",
         "LOGFILE_WriteStringToFile"
-      ]
+      ],
+      "dh": "360bedcd"
     },
     {
       "name": "Catch_All_006b4c73",
@@ -677,7 +714,8 @@
       "calledFunctions": [
         "Catch_All_006b4c73",
         "LOGFILE_WriteStringToFile"
-      ]
+      ],
+      "dh": "b1513c84"
     },
     {
       "name": "BootDirect3d",
@@ -700,7 +738,8 @@
         "ATOM",
         "WNDCLASSA",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "5e16b84b"
     },
     {
       "name": "Catch_All_006b4d4b",
@@ -715,7 +754,8 @@
       "calledFunctions": [
         "Catch_All_006b4d4b",
         "LOGFILE_WriteStringToFile"
-      ]
+      ],
+      "dh": "e0ce1468"
     },
     {
       "name": "Initialize",
@@ -742,7 +782,8 @@
         "D2SystemInfoStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "42ccbde3"
     },
     {
       "name": "RENDERER_D3D_InitializeDevice",
@@ -772,7 +813,8 @@
         "D3DVIEWPORT",
         "DDSCAPS",
         "DDSURFACEDESC"
-      ]
+      ],
+      "dh": "8ffb0b1b"
     },
     {
       "name": "Unreferenced_006b5520",
@@ -787,7 +829,8 @@
       "calledFunctions": [
         "Unreferenced_006b5520",
         "RENDERER_D3D_ClearBackbuffer"
-      ]
+      ],
+      "dh": "607ad97e"
     },
     {
       "name": "Release",
@@ -804,7 +847,8 @@
         "RENDERER_D3D_ReleaseSmackerBuffer",
         "RENDERER_D3D_ReleaseDevice",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "b3b80d65"
     },
     {
       "name": "CreateWindow",
@@ -820,7 +864,8 @@
         "CreateWindow",
         "RENDERER_D3D_InitializeDevice",
         "RENDERER_D3D_ClearBackbuffer"
-      ]
+      ],
+      "dh": "45aba728"
     },
     {
       "name": "EndCutScene",
@@ -839,7 +884,8 @@
         "exit",
         "RENDERER_D3D_ReleaseDevice",
         "CreateWindow"
-      ]
+      ],
+      "dh": "24a8b918"
     },
     {
       "name": "PlayCutScene",
@@ -855,7 +901,8 @@
         "PlayCutScene",
         "RENDERER_D3D_ClearBackbuffer",
         "D3D_PlayBinkVideo"
-      ]
+      ],
+      "dh": "7f77fe6e"
     },
     {
       "name": "BeginScene",
@@ -875,7 +922,8 @@
         "ClearScreen",
         "SetGlobalLight",
         "RENDERER_DIRECT3D_ErrorLog"
-      ]
+      ],
+      "dh": "8190ce3f"
     },
     {
       "name": "EndScene1",
@@ -893,7 +941,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "004796f5"
     },
     {
       "name": "ResizeWindow",
@@ -910,7 +959,8 @@
         "RENDERER_D3D_ReleaseDevice",
         "RENDERER_D3D_InitializeDevice",
         "RENDERER_D3D_ClearBackbuffer"
-      ]
+      ],
+      "dh": "7607c7c1"
     },
     {
       "name": "RENDERER_D3D_CreateSurfaceWithTexture",
@@ -933,7 +983,8 @@
         "IDirectDrawSurface7 *",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "97ee77fd"
     },
     {
       "name": "thunk_Release",
@@ -972,7 +1023,8 @@
         "D2GfxSettingsStrc",
         "IDirectDraw1",
         "uint8_t"
-      ]
+      ],
+      "dh": "5d81be8f"
     },
     {
       "name": "RENDERER_D3D_ReleaseTexturePools",
@@ -991,7 +1043,8 @@
       "usedTypes": [
         "IDirect3DTexture2",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "bc2336a7"
     },
     {
       "name": "D3D_PixelDataFreeCallback_ClearCacheNodes",
@@ -1005,7 +1058,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "D3D_PixelDataFreeCallback_ClearCacheNodes"
-      ]
+      ],
+      "dh": "e7b06cca"
     },
     {
       "name": "RENDERER_D3D_ExtractSpriteInfo",
@@ -1030,7 +1084,8 @@
         "D2D3DSpriteInfoStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7e910db4"
     },
     {
       "name": "RENDERER_D3D_CalculateTextureSize",
@@ -1047,7 +1102,8 @@
       ],
       "usedTypes": [
         "D2D3DSpriteInfoStrc"
-      ]
+      ],
+      "dh": "4e079582"
     },
     {
       "name": "RENDERER_DIRECT3D_UploadTextureToCache",
@@ -1081,7 +1137,8 @@
         "IDirectDrawSurface7",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a1d5a164"
     },
     {
       "name": "RENDERER_D3D_DrawShadowQuad",
@@ -1101,7 +1158,8 @@
         "D2D3DSpriteInfoStrc",
         "D2D3DVertexStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "ece6541d"
     },
     {
       "name": "RENDERER_DIRECT3D_DrawPalettedQuad",
@@ -1125,7 +1183,8 @@
         "D2D3DVertexStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3fd45f85"
     },
     {
       "name": "SetDrawModeAndGetAlpha",
@@ -1143,7 +1202,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "b53daa4a"
     },
     {
       "name": "DrawPerspectiveImage",
@@ -1171,7 +1231,8 @@
         "D2D3DVertexStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "12c3a7f5"
     },
     {
       "name": "DrawImage",
@@ -1195,7 +1256,8 @@
         "D2D3DSpriteInfoStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c0b7ac1e"
     },
     {
       "name": "DrawShiftedImage",
@@ -1219,7 +1281,8 @@
         "D2D3DSpriteInfoStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "70d01e0f"
     },
     {
       "name": "DrawVerticalCropImage",
@@ -1243,7 +1306,8 @@
         "D2D3DSpriteInfoStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e18b2535"
     },
     {
       "name": "RENDERER_D3D_ClipSpriteToRect",
@@ -1264,7 +1328,8 @@
       "usedTypes": [
         "D2RenderClipOutStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "41e0e249"
     },
     {
       "name": "DrawClippedImage",
@@ -1290,7 +1355,8 @@
         "D2GfxDataStrc",
         "D2RenderClipOutStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5b7fb9f9"
     },
     {
       "name": "DrawShadow",
@@ -1318,7 +1384,8 @@
         "D2GfxDataStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5f1e1226"
     },
     {
       "name": "DrawImageFast",
@@ -1342,7 +1409,8 @@
         "D2D3DSpriteInfoStrc",
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "17462b44"
     },
     {
       "name": "DebugFillBackBuffer",
@@ -1356,7 +1424,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "DebugFillBackBuffer"
-      ]
+      ],
+      "dh": "5a1671b0"
     },
     {
       "name": "RENDERER_D3D_InitializeTexturePools",
@@ -1381,7 +1450,8 @@
       "usedTypes": [
         "D3DVERTEXBUFFERDESC",
         "int32_t"
-      ]
+      ],
+      "dh": "63bf06e4"
     },
     {
       "name": "RENDERER_D3D_ReleaseFontTextures",
@@ -1398,7 +1468,8 @@
       ],
       "usedTypes": [
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "65f3df0e"
     },
     {
       "name": "RENDERER_D3D_CreateFontTextures",
@@ -1431,7 +1502,8 @@
         "IDirectDrawSurface7",
         "IDirectDrawSurface7 *",
         "tagRECT"
-      ]
+      ],
+      "dh": "ce2ba457"
     },
     {
       "name": "Unreferenced_006b74f0",
@@ -1447,7 +1519,8 @@
         "Unreferenced_006b74f0",
         "DIRECTD3D_LogError",
         "SetPalette"
-      ]
+      ],
+      "dh": "4b511025"
     },
     {
       "name": "RENDERER_D3D_DrawGlyph",
@@ -1461,7 +1534,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_DrawGlyph"
-      ]
+      ],
+      "dh": "21c519d4"
     },
     {
       "name": "DrawString",
@@ -1482,7 +1556,8 @@
       ],
       "usedTypes": [
         "va_list"
-      ]
+      ],
+      "dh": "588c05dd"
     },
     {
       "name": "DrawLight",
@@ -1496,7 +1571,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "DrawLight"
-      ]
+      ],
+      "dh": "8e7e0a46"
     },
     {
       "name": "RENDERER_D3D_InitializeFontSystem",
@@ -1511,7 +1587,8 @@
       "calledFunctions": [
         "RENDERER_D3D_InitializeFontSystem",
         "RENDERER_D3D_CreateFontTextures"
-      ]
+      ],
+      "dh": "1fd5469d"
     },
     {
       "name": "RENDERER_D3D_IsShadowBlendingEnabled",
@@ -1525,7 +1602,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_IsShadowBlendingEnabled"
-      ]
+      ],
+      "dh": "a4113d79"
     },
     {
       "name": "DrawSolidRectEx",
@@ -1550,7 +1628,8 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3074785"
     },
     {
       "name": "DrawSolidRectAlpha",
@@ -1575,7 +1654,8 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d22943e8"
     },
     {
       "name": "DrawLine",
@@ -1597,7 +1677,8 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0612296a"
     },
     {
       "name": "DrawRect",
@@ -1620,7 +1701,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8700ed69"
     },
     {
       "name": "DrawRectEx",
@@ -1642,7 +1724,8 @@
       "usedTypes": [
         "RECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ded1608"
     },
     {
       "name": "DrawSolidRect",
@@ -1663,7 +1746,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "1998fab0"
     },
     {
       "name": "DrawSolidSquare",
@@ -1683,7 +1767,8 @@
         "POINT",
         "tagRECT",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3b60298"
     },
     {
       "name": "ClearScreen",
@@ -1701,7 +1786,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "1e3f5be6"
     },
     {
       "name": "RENDERER_D3D_CalculateViewportRect",
@@ -1721,7 +1807,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "90e7c488"
     },
     {
       "name": "RENDERER_D3D_InitPerspectiveVertexBuffer",
@@ -1738,7 +1825,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1bad11a1"
     },
     {
       "name": "RENDERER_D3D_BuildShadowTileVertices",
@@ -1759,7 +1847,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9efa5e4c"
     },
     {
       "name": "RENDERER_D3D_RenderShadowTileWithPerspective",
@@ -1784,7 +1873,8 @@
         "RECT",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c25d2086"
     },
     {
       "name": "DrawShadowTile",
@@ -1810,7 +1900,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8558d14d"
     },
     {
       "name": "RENDERER_D3D_BuildWallTileVerticesNoPerspective",
@@ -1832,7 +1923,8 @@
         "D2TileLibraryEntryStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "50bdb213"
     },
     {
       "name": "RENDERER_D3D_RenderWallTileWithPerspective",
@@ -1862,7 +1954,8 @@
         "RECT",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "25be347e"
     },
     {
       "name": "RENDERER_D3D_DrawTransparentWallTile",
@@ -1888,7 +1981,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "924d5e4a"
     },
     {
       "name": "DrawTransWallTile",
@@ -1907,7 +2001,8 @@
       "usedTypes": [
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "f9dc0a6c"
     },
     {
       "name": "DrawWallTile",
@@ -1932,7 +2027,8 @@
       "usedTypes": [
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc"
-      ]
+      ],
+      "dh": "991de12a"
     },
     {
       "name": "RENDERER_D3D_InitGroundTileCache",
@@ -1953,7 +2049,8 @@
         "D2FloatIntUnion",
         "D3DVERTEXBUFFERDESC",
         "uint16_t"
-      ]
+      ],
+      "dh": "cd3e5c56"
     },
     {
       "name": "RENDERER_D3D_ReleaseGroundTileCache",
@@ -1967,7 +2064,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_ReleaseGroundTileCache"
-      ]
+      ],
+      "dh": "324825fd"
     },
     {
       "name": "DrawGroundTile",
@@ -1993,7 +2091,8 @@
         "D3DVB_Lock",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b529c18c"
     },
     {
       "name": "RENDERER_D3D_InitLightingTable",
@@ -2010,7 +2109,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "39fc755d"
     },
     {
       "name": "SetGlobalLight",
@@ -2024,7 +2124,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "SetGlobalLight"
-      ]
+      ],
+      "dh": "fac92490"
     },
     {
       "name": "RENDERER_D3D_ApplyShadowTextureCoords",
@@ -2042,7 +2143,8 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "098c8cb0"
     },
     {
       "name": "RENDERER_D3D_SetTextureStageColor",
@@ -2060,7 +2162,8 @@
       "usedTypes": [
         "D2D3DVertexStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc9f4af1"
     },
     {
       "name": "RENDERER_D3D_InitPerspectiveTransformTable",
@@ -2077,7 +2180,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1f2b2a5b"
     },
     {
       "name": "RENDERER_D3D_IsPerspectiveEnabled",
@@ -2091,7 +2195,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "RENDERER_D3D_IsPerspectiveEnabled"
-      ]
+      ],
+      "dh": "9b8b4b12"
     },
     {
       "name": "SetPerspectiveScale",
@@ -2105,7 +2210,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "SetPerspectiveScale"
-      ]
+      ],
+      "dh": "4b6f1992"
     },
     {
       "name": "AdjustPerspectivePosition",
@@ -2122,7 +2228,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8fc376de"
     },
     {
       "name": "PerspectiveScalePosition",
@@ -2139,7 +2246,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6ce009ba"
     },
     {
       "name": "SetDefaultPerspectiveFactor",
@@ -2153,7 +2261,8 @@
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
         "SetDefaultPerspectiveFactor"
-      ]
+      ],
+      "dh": "1c98eae2"
     },
     {
       "name": "RENDERER_D3D_InitSmackerVertexBuffer",
@@ -2169,7 +2278,8 @@
         "RENDERER_D3D_InitSmackerVertexBuffer",
         "AllocClientMemory",
         "memset"
-      ]
+      ],
+      "dh": "0f934080"
     },
     {
       "name": "RENDERER_D3D_CreateSmackerSurfaces",
@@ -2191,7 +2301,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8adac66d"
     },
     {
       "name": "RENDERER_D3D_ReleaseSmackerBuffer",
@@ -2206,7 +2317,8 @@
       "calledFunctions": [
         "RENDERER_D3D_ReleaseSmackerBuffer",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "357de7f2"
     },
     {
       "name": "RENDERER_D3D_ReleaseSmackerSurfaces",
@@ -2224,7 +2336,8 @@
       "usedTypes": [
         "IDirect3DTexture2",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "ae034641"
     },
     {
       "name": "CloseSmacker",
@@ -2241,7 +2354,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "0836dff6"
     },
     {
       "name": "RENDERER_D3D_ResetSmackerSurfaces",
@@ -2256,7 +2370,8 @@
       "calledFunctions": [
         "RENDERER_D3D_ResetSmackerSurfaces",
         "RENDERER_D3D_CopySurfacePixels"
-      ]
+      ],
+      "dh": "5c28a95a"
     },
     {
       "name": "RENDERER_D3D_BlitSmackerFrame",
@@ -2276,7 +2391,8 @@
       ],
       "usedTypes": [
         "D2SmackerContextStrc"
-      ]
+      ],
+      "dh": "db049b47"
     },
     {
       "name": "RENDERER_D3D_CopySmackerRowWithAlpha",
@@ -2294,7 +2410,8 @@
       "usedTypes": [
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "71e7c83d"
     },
     {
       "name": "RENDERER_D3D_PresentSmackerFrame",
@@ -2317,7 +2434,8 @@
       ],
       "usedTypes": [
         "DDSURFACEDESC"
-      ]
+      ],
+      "dh": "cdc6d471"
     },
     {
       "name": "DecodeSmacker",
@@ -2346,7 +2464,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cb534789"
     },
     {
       "name": "PlayerSmacker",
@@ -2368,7 +2487,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "Smack"
-      ]
+      ],
+      "dh": "62c0fc20"
     },
     {
       "name": "SehHandler_6ca520",
@@ -2388,7 +2508,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "06c7f63e"
     },
     {
       "name": "SehHandler_6ca530",
@@ -2408,7 +2529,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "a2178a80"
     }
   ]
 }

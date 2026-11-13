@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "522820e4"
     },
     {
       "name": "OOGUTIL_DrawCallback_SetModeAndClearMsgLoop",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "a33fb715"
     }
   ]
 }

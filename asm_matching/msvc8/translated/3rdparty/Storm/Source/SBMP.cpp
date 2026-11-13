@@ -510,7 +510,7 @@ static void __stdcall SBMP_FlushPacket(D2GifLzwEncoderStrc * pState, uint8_t * *
 }
 
 // @blizzard Output (SBMP.CPP)
-static void __fastcall SBMP_Output(int value, uint8_t * * ppOutput, D2GifLzwEncoderStrc * pState) {
+static void __fastcall SBMP_Output(D2GifLzwEncoderStrc * pState, uint8_t * * ppOutput, int value) {
     int iVar1;
     pState->nBitAccum |= value << D2_SHIFT_COUNT(pState->nBitCount);
     iVar1 = pState->nCodeSize + pState->nBitCount;
@@ -1000,7 +1000,7 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
 static void __stdcall SBMP_ClearBlock(D2GifLzwEncoderStrc * pState, uint8_t * * pDstBuf) {
     SMem::SMemZero(pState->pHashTable, 0x4e2c);
     pState->nNextCode = pState->nClearCode + 2;
-    SBMP_Output(pState->nClearCode, pDstBuf, pState);
+    SBMP_Output(pState, pDstBuf, pState->nClearCode);
     pState->nCodeSize = pState->nInitCodeSize;
     pState->nMaxCode = (1 << D2_SHIFT_COUNT(pState->nInitCodeSize)) - 1;
 }
@@ -1054,7 +1054,7 @@ static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, uint8_t
       }
     }
 
-    SBMP_Output(pState->nLastCode, pDstBuf, pState);
+    SBMP_Output(pState, pDstBuf, pState->nLastCode);
     if (pState->nNextCode < 0x1000) {
       pState->pHashTable[nHashIndex] = pState->nNextCode;
       pState->nNextCode++;
@@ -1082,17 +1082,17 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t 
     sEncoder.bFirst = 1;
     sEncoder.pHashTable = (int32_t*)SMem::SMemAlloc(0x4e2c, ".\\SOURCE\\SBMP.CPP", 0x388, 8);
     sEncoder.pCodeTable = (uint32_t*)SMem::SMemAlloc(0x4e2c, ".\\SOURCE\\SBMP.CPP", 0x389, 8);
-    SBMP_Output(sEncoder.nClearCode, &nDstOffset, &sEncoder);
+    SBMP_Output(&sEncoder, &nDstOffset, sEncoder.nClearCode);
     for (; nSrcLen; nSrcLen--) {
       SBMP_CompressGifByte(&sEncoder, &nDstOffset, (uint32_t)*pSrcPixels);
       pSrcPixels++;
     }
 
     if (!sEncoder.bFirst) {
-      SBMP_Output(sEncoder.nLastCode, &nDstOffset, &sEncoder);
+      SBMP_Output(&sEncoder, &nDstOffset, sEncoder.nLastCode);
     }
 
-    SBMP_Output(sEncoder.nEOFCode, &nDstOffset, &sEncoder);
+    SBMP_Output(&sEncoder, &nDstOffset, sEncoder.nEOFCode);
     if (sEncoder.nBitCount > 0) {
       sEncoder.abBlock[sEncoder.nBlockLen + 1] = (uint8_t)sEncoder.nBitAccum;
       sEncoder.nBlockLen++;

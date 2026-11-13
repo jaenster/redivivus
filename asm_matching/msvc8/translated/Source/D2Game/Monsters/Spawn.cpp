@@ -306,7 +306,7 @@ static D2UnitStrc * __stdcall MONSTER_SpawnMonsterGroup(::SGAMEDATA * pGame, D2R
     return nullptr;
 }
 
-static BOOL __stdcall SPAWN_SpawnMonsterFormation(::SGAMEDATA * pGame, int32_t nClassId, D2RoomStrc * pRoom, int * pGroupOffsetTable) {
+static BOOL __stdcall SPAWN_SpawnMonsterFormation(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nClassId, int * pGroupOffsetTable) {
     BOOL _bSuccess;
     bool bSuccess;
     int32_t nOffsetX;
@@ -893,7 +893,7 @@ void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoo
                   pFormationUnit = SPAWN_SpawnMonsterWithMinions(pGame, pRoom, pCoordListIter, (uint8_t)nMinGrp, (uint8_t)nMaxGrp, dwClassId);
                 } else {
                   pGroupOffsetTable = SKILLS::SkillItem::RollRoomSeed(pRoom);
-                  pFormationUnit = (D2UnitStrc*)SPAWN_SpawnMonsterFormation(pGame, dwClassId, pRoom, pGroupOffsetTable);
+                  pFormationUnit = (D2UnitStrc*)SPAWN_SpawnMonsterFormation(pGame, pRoom, dwClassId, pGroupOffsetTable);
                 }
                 if (pFormationUnit) {
                   bDidSpawn = true;

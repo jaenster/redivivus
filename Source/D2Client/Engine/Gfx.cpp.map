@@ -21,7 +21,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "296fdcec"
     },
     {
       "name": "GFX_HashTextureName",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d36939d1"
     },
     {
       "name": "GFX_ExtractFilenameFromPath",
@@ -58,7 +60,8 @@
       "calledFunctions": [
         "GFX_ExtractFilenameFromPath",
         "strncpy"
-      ]
+      ],
+      "dh": "3c2aae26"
     },
     {
       "name": "GFX_FindTextureInCache",
@@ -81,7 +84,8 @@
         "D2CofCacheStrc",
         "D2CofTextureCacheEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f50b479"
     },
     {
       "name": "GFX_LoadCofFile",
@@ -114,7 +118,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "541ed0de"
     },
     {
       "name": "GFX_LoadAndHashCofArchive",
@@ -141,7 +146,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "57de7c87"
     },
     {
       "name": "GFX_SyncStateOverlayPriority",
@@ -159,7 +165,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "D2GfxUnknown_0xa8"
-      ]
+      ],
+      "dh": "4c5c1968"
     },
     {
       "name": "GFX_RemoveStateOverlayAndReprioritize",
@@ -184,7 +191,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "17bd58e1"
     },
     {
       "name": "GFX_RemoveOverlayFromUnit",
@@ -211,7 +219,8 @@
         "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "40f449f9"
     },
     {
       "name": "GFX_HasOverlayOfType",
@@ -235,7 +244,8 @@
         "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c5835461"
     },
     {
       "name": "GFX_SetOverlayFrame",
@@ -259,7 +269,8 @@
         "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3ad408fe"
     },
     {
       "name": "GFX_DrawOverlayOnUnit",
@@ -288,7 +299,8 @@
         "eOverlayId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3f2b1301"
     },
     {
       "name": "DRAW_UNIT_States",
@@ -337,7 +349,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d467010"
     },
     {
       "name": "DRAW_UNIT_States_HaltTail",
@@ -354,7 +367,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "562891c0"
     },
     {
       "name": "GFX_GetGfxInfoCofData",
@@ -376,7 +390,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "62635c0a"
     },
     {
       "name": "GFX_FindGfxInfoByModeAndWeapon",
@@ -401,7 +416,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d83919a5"
     },
     {
       "name": "GFX_FreeGfxInfoEntry",
@@ -426,7 +442,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ba5b1d74"
     },
     {
       "name": "GFX_FindOrEvictGfxInfoEntry",
@@ -456,7 +473,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "2e032dd4"
     },
     {
       "name": "GFX_LoadCompositCof",
@@ -497,7 +515,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "885a5338"
     },
     {
       "name": "GFX_LoadMonsterModeCof",
@@ -527,7 +546,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "205aa8fd"
     },
     {
       "name": "GFX_LoadObjectModeCof",
@@ -558,7 +578,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "77a2e31b"
     },
     {
       "name": "GFX_LoadGenericModeCof",
@@ -579,7 +600,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "080a7191"
     },
     {
       "name": "GFX_FreeAllGfxInfoEntries",
@@ -605,7 +627,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d028ff84"
     },
     {
       "name": "GFX_FreeOverlayList",
@@ -625,7 +648,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "D2GfxUnknown_0xa8"
-      ]
+      ],
+      "dh": "77733972"
     },
     {
       "name": "AllocGfxInfo",
@@ -648,7 +672,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c023cdcc"
     },
     {
       "name": "FreeGfxInfo",
@@ -674,7 +699,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6d018fcd"
     },
     {
       "name": "GFX_FreeUnitGfxInfoList",
@@ -699,7 +725,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dd122771"
     },
     {
       "name": "GFX_FreeNonBaseGfxInfoEntries",
@@ -724,7 +751,8 @@
         "D2GfxInfoUnkStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ed5217dc"
     },
     {
       "name": "GFX_GetUnitHealthBarColor",
@@ -750,7 +778,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "af1027fb"
     },
     {
       "name": "DrawItemGfx",
@@ -785,7 +814,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98bdcb8b"
     },
     {
       "name": "D2GFX_DrawSolidRectExBySize",
@@ -804,7 +834,8 @@
       "usedTypes": [
         "DRAWMODE",
         "int32_t"
-      ]
+      ],
+      "dh": "8925abe4"
     },
     {
       "name": "GFX_FreeAllModesGfxInfo",
@@ -822,7 +853,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c55b8bfe"
     },
     {
       "name": "GFX_SetAllGfxInfoFlags",
@@ -846,7 +878,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1aa35081"
     },
     {
       "name": "GetParticleFromUnit",
@@ -866,7 +899,8 @@
         "D2GfxInfoStrc",
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c540247a"
     },
     {
       "name": "SetParticle",
@@ -886,7 +920,8 @@
         "D2GfxInfoStrc",
         "D2ParticleStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "980fb084"
     },
     {
       "name": "GFX_RemoveOverlayById",
@@ -912,7 +947,8 @@
         "D2GfxUnknown_0xa8 *",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6f6629c3"
     },
     {
       "name": "GFX_RemoveAllOverlays",
@@ -937,7 +973,8 @@
         "D2GfxUnknown_0xa8",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "34bd392d"
     },
     {
       "name": "GFX_SetCofDataFlags",
@@ -957,7 +994,8 @@
       ],
       "usedTypes": [
         "D2GfxInfoStrc"
-      ]
+      ],
+      "dh": "44590830"
     },
     {
       "name": "GFX_GetCofDataFlags",
@@ -978,7 +1016,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "711bef38"
     },
     {
       "name": "GFX_SetPalShiftIndex",
@@ -999,7 +1038,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9dced6d3"
     },
     {
       "name": "GFX_GetPalShiftIndex",
@@ -1020,7 +1060,8 @@
       "usedTypes": [
         "D2GfxInfoStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c2dbe409"
     },
     {
       "name": "GFX_ClearAllModeFlags",
@@ -1045,7 +1086,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21640cce"
     },
     {
       "name": "GFX_LoadMonsterCofArchive",
@@ -1063,7 +1105,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "cb478d6d"
     },
     {
       "name": "GFX_FreeUnusedCofEntries",
@@ -1083,7 +1126,8 @@
         "D2CofCacheStrc",
         "D2CofTextureCacheEntryStrc",
         "D2CofTextureCacheEntryStrc *"
-      ]
+      ],
+      "dh": "9280135d"
     },
     {
       "name": "GFX_FreePlayerCofCache",
@@ -1103,7 +1147,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2742ee9d"
     },
     {
       "name": "GFX_FreeMonsterCofCache",
@@ -1120,7 +1165,8 @@
         "GFX_FreeUnusedCofEntries",
         "FreeClientMemory",
         "memset"
-      ]
+      ],
+      "dh": "199f45d1"
     },
     {
       "name": "GFX_BuildMonsterCofPath",
@@ -1146,7 +1192,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4ef7ba92"
     },
     {
       "name": "GFX_PrecacheMonsterCofSprites",
@@ -1180,7 +1227,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5dbe38d0"
     },
     {
       "name": "GFX_PrecacheMonsterAllModes",
@@ -1202,7 +1250,8 @@
         "D2MonStatsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5265bdc6"
     },
     {
       "name": "GFX_GetCofCacheFlags",
@@ -1216,7 +1265,8 @@
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
         "GFX_GetCofCacheFlags"
-      ]
+      ],
+      "dh": "9cfa2419"
     },
     {
       "name": "GFX_GetCofCacheMemUsage",
@@ -1230,7 +1280,8 @@
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
         "GFX_GetCofCacheMemUsage"
-      ]
+      ],
+      "dh": "567dce30"
     },
     {
       "name": "GFX_GetGfxSystemFlags",
@@ -1244,7 +1295,8 @@
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
         "GFX_GetGfxSystemFlags"
-      ]
+      ],
+      "dh": "d6493898"
     },
     {
       "name": "GFX_GetModeStatusEntry",
@@ -1262,7 +1314,8 @@
       "usedTypes": [
         "D2MonsterCofStatusEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4a268e1b"
     },
     {
       "name": "GFX_LoadMonsterModeCofByState",
@@ -1287,7 +1340,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "773d825c"
     },
     {
       "name": "GFX_EnsureUnitCofLoaded",
@@ -1316,7 +1370,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2d36e2ff"
     },
     {
       "name": "GFX_AsyncLoadUnitSprites",
@@ -1361,7 +1416,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "065ae393"
     },
     {
       "name": "GFX_AsyncLoadMonsterSprites",
@@ -1385,7 +1441,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "d5cd0e99"
     },
     {
       "name": "GFX_PrecacheMonsterModeSprites",
@@ -1407,7 +1464,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8f1a8a7"
     },
     {
       "name": "GFX_AsyncLoadPlayerSprites",
@@ -1431,7 +1489,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "f0aea1b2"
     },
     {
       "name": "Gfx_UpdateNearbyUnitGfx",
@@ -1462,7 +1521,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "196b52bd"
     },
     {
       "name": "GFX_InitCofSystem",
@@ -1480,7 +1540,8 @@
         "AllocServerMemory",
         "D2WINARCHIVE_GetArchiveHandle",
         "InitializeModeTokens"
-      ]
+      ],
+      "dh": "90c66526"
     },
     {
       "name": "GFX_ShutdownCofSystem",
@@ -1498,7 +1559,8 @@
         "FreeClientMemory",
         "memset",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "d113ad95"
     },
     {
       "name": "GFXProcessGameGfxLists",
@@ -1518,7 +1580,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "df2da2db"
     },
     {
       "name": "GFX_AddOverlayToUnit",
@@ -1559,7 +1622,8 @@
         "eOverlayId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "48a31881"
     },
     {
       "name": "GFX_LoadUnitModeCof",
@@ -1589,7 +1653,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ffb5ddf7"
     },
     {
       "name": "GFX_GetUnitSpriteOffset",
@@ -1632,7 +1697,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5e16b050"
     },
     {
       "name": "GFX_IsUnitInsideBounds",
@@ -1667,7 +1733,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f548ea4"
     },
     {
       "name": "GFX_IsUnitOnScreen",
@@ -1702,7 +1769,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "25ac687b"
     },
     {
       "name": "GFX_UpdateGfxThrottled",
@@ -1721,7 +1789,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8e0186a5"
     },
     {
       "name": "ANIM_ResetMonsterFrameCache",
@@ -1748,7 +1817,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "4ad58c12"
     },
     {
       "name": "GFX_UpdateOverlayAnimations",
@@ -1781,7 +1851,8 @@
         "eOverlayId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "442b051c"
     },
     {
       "name": "GFX_DrawUnitComponents",
@@ -1857,7 +1928,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8519eb58"
     },
     {
       "name": "GFX_DrawUnitShadow",
@@ -1901,7 +1973,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8317aee8"
     },
     {
       "name": "DrawUnitShadows",
@@ -1969,7 +2042,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2121eed3"
     },
     {
       "name": "GFX_DrawUnitColoredShape",
@@ -2011,7 +2085,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ebbe29c2"
     },
     {
       "name": "GFX_DrawUnitSelectionShape",
@@ -2070,7 +2145,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1f7309cc"
     },
     {
       "name": "DRAW_WORLD_Unit_1",
@@ -2131,7 +2207,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "80113d4e"
     },
     {
       "name": "GFX_GetGfxSystemFlags_Unref_004723f0",
@@ -2145,7 +2222,8 @@
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
         "GFX_GetGfxSystemFlags_Unref_004723f0"
-      ]
+      ],
+      "dh": "0d77d0f0"
     }
   ]
 }

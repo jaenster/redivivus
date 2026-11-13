@@ -20,7 +20,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "378fd39f"
     },
     {
       "name": "D2WINSMACK_LoadAndDecodeSmacker",
@@ -44,7 +45,8 @@
       "usedTypes": [
         "D2WinSmack",
         "int32_t"
-      ]
+      ],
+      "dh": "fe7594ec"
     },
     {
       "name": "D2WINSMACK_CloseAndDeleteFile",
@@ -66,7 +68,8 @@
       "usedTypes": [
         "D2WinSmack",
         "int32_t"
-      ]
+      ],
+      "dh": "e277abfb"
     },
     {
       "name": "D2WINSMACK_SetPosition",
@@ -87,7 +90,8 @@
       "usedTypes": [
         "D2WinSmack",
         "int32_t"
-      ]
+      ],
+      "dh": "14270477"
     },
     {
       "name": "FORMS_DestroyD2WinSmack",
@@ -110,7 +114,8 @@
       "usedTypes": [
         "D2WinSmack",
         "int32_t"
-      ]
+      ],
+      "dh": "0d142e9b"
     },
     {
       "name": "D2GFX_EnableVSync_Unref_00506a80",
@@ -124,7 +129,8 @@
       "namespace": "D2Win::Src::D2WinSmack",
       "calledFunctions": [
         "D2GFX_EnableVSync_Unref_00506a80"
-      ]
+      ],
+      "dh": "e6200200"
     },
     {
       "name": "Draw",
@@ -147,7 +153,8 @@
       "usedTypes": [
         "D2WinSmack",
         "int32_t"
-      ]
+      ],
+      "dh": "e364b480"
     },
     {
       "name": "Push",
@@ -170,7 +177,8 @@
         "D2WinSmack",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e96eb7d2"
     },
     {
       "name": "D2WinSmack",
@@ -193,7 +201,8 @@
         "OnPress",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2e582d7"
     }
   ]
 }

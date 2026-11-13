@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2SLogStrc"
-      ]
+      ],
+      "dh": "7fc784e6"
     },
     {
       "name": "SLOG_LockLog",
@@ -39,7 +40,8 @@
         "LPCRITICAL_SECTION",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7e36fb7"
     },
     {
       "name": "SLOG_OutputIndent",
@@ -57,7 +59,8 @@
       ],
       "usedTypes": [
         "D2SLogStrc"
-      ]
+      ],
+      "dh": "886f1cff"
     },
     {
       "name": "SLOG_OutputReturn",
@@ -75,7 +78,8 @@
       ],
       "usedTypes": [
         "D2SLogStrc"
-      ]
+      ],
+      "dh": "9a6e881d"
     },
     {
       "name": "SLOG_OutputTime",
@@ -100,7 +104,8 @@
         "_SYSTEMTIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c51fcc87"
     },
     {
       "name": "SLOG_UnlockDeleteLog",
@@ -119,7 +124,8 @@
         "D2SLogStrc",
         "D2SLogStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "a3667940"
     },
     {
       "name": "SLOG_UnlockLog",
@@ -136,7 +142,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6e9c5b6e"
     },
     {
       "name": "SLogClose",
@@ -157,7 +164,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1781376b"
     },
     {
       "name": "SLogCreate",
@@ -178,7 +186,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ee336e2"
     },
     {
       "name": "SLogDump",
@@ -204,7 +213,8 @@
         "D2SLogStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c0a47d39"
     },
     {
       "name": "SLogFlush",
@@ -225,7 +235,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8f0dc6f"
     },
     {
       "name": "SLogFlushAll",
@@ -245,7 +256,8 @@
         "CRITICAL_SECTION",
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3aa8d8ac"
     },
     {
       "name": "SLogInitialize",
@@ -262,7 +274,8 @@
       ],
       "usedTypes": [
         "CRITICAL_SECTION"
-      ]
+      ],
+      "dh": "4e7cb343"
     },
     {
       "name": "SLogPend",
@@ -286,7 +299,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "73c76053"
     },
     {
       "name": "SLogSetAbsIndent",
@@ -307,7 +321,8 @@
         "D2SLogStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e0dfdb6"
     },
     {
       "name": "SLogSetIndent",
@@ -328,7 +343,8 @@
         "D2SLogStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6740890a"
     },
     {
       "name": "SLogSetTimestamp",
@@ -348,7 +364,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3151583"
     },
     {
       "name": "SLogWrite",
@@ -373,7 +390,8 @@
       "usedTypes": [
         "D2SLogStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cc42a4bf"
     },
     {
       "name": "SLogDestroy",
@@ -395,7 +413,8 @@
         "CRITICAL_SECTION",
         "D2SLogStrc",
         "D2SLogStrc *"
-      ]
+      ],
+      "dh": "70eca22b"
     }
   ]
 }

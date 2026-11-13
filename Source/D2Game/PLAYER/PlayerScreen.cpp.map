@@ -23,7 +23,8 @@
         "D2Packet0x5aEventStructure",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "afecdeaf"
     },
     {
       "name": "SendPlayerInfo",
@@ -47,7 +48,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2018d175"
     },
     {
       "name": "PARTYSCREEN_SetCorpseLootPermission",
@@ -72,7 +74,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a0c3b39f"
     },
     {
       "name": "PARTYSCREEN_UpdateMuteRelation",
@@ -95,7 +98,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d89eb00"
     },
     {
       "name": "PARTYSCREEN_UpdateSquelchRelation",
@@ -118,7 +122,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c999a5f2"
     },
     {
       "name": "RefreshPlayerStatus",
@@ -139,7 +144,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "458ad6f0"
     },
     {
       "name": "AssignPlayerToParty",
@@ -167,7 +173,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b70537d7"
     },
     {
       "name": "PARTYSCREEN_AcceptPartyInvite",
@@ -198,7 +205,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee3a794a"
     },
     {
       "name": "PARTYSCREEN_CancelPartyInvite",
@@ -227,7 +235,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5c5c9331"
     },
     {
       "name": "PARTYSCREEN_SendPartyInvite",
@@ -254,7 +263,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "77a6086e"
     },
     {
       "name": "PARTY_SendPlayerLeftEvent",
@@ -276,7 +286,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "039a4195"
     },
     {
       "name": "SendPlayerPartyInfo",
@@ -298,7 +309,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "05d59efe"
     },
     {
       "name": "PARTYSCREEN_LeaveParty",
@@ -321,7 +333,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "24669a7b"
     },
     {
       "name": "PARTYSCREEN_SetHostileForPlayer",
@@ -347,7 +360,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "eb1572eb"
     },
     {
       "name": "PARTYSCREEN_SetHostileWithParty",
@@ -376,7 +390,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "681c52ae"
     },
     {
       "name": "PARTYSCREEN_ToggleHostile",
@@ -419,7 +434,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "933e4208"
     },
     {
       "name": "SendAllPlayersPartyInfo",
@@ -438,7 +454,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "03198da1"
     },
     {
       "name": "PlayerScreen_DispatchAction",
@@ -459,7 +476,8 @@
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
-      ]
+      ],
+      "dh": "e78087e1"
     },
     {
       "name": "PARTYSCREEN_ClearHostileRelation",
@@ -483,7 +501,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "efa9ce79"
     },
     {
       "name": "PARTYSCREEN_SetHostileRelation",
@@ -507,7 +526,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8ef2ee0c"
     },
     {
       "name": "PLAYERSCREEN_CheckUnitsCanSeeEachOther",
@@ -528,7 +548,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "4bdf6888"
     }
   ]
 }

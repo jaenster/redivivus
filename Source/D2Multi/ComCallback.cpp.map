@@ -16,7 +16,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_COMCALLBACK_ClearChannelUserList",
         "COMCALLBACK_ClearChannelUserList"
-      ]
+      ],
+      "dh": "17fdd0ab"
     },
     {
       "name": "COMCALLBACK_HandleBannerAdFile",
@@ -41,7 +42,8 @@
       ],
       "usedTypes": [
         "D2BnBannerAdMsgStrc"
-      ]
+      ],
+      "dh": "6c945326"
     },
     {
       "name": "Unreferenced_00446ca0",
@@ -58,7 +60,8 @@
         "strrchr",
         "tolower",
         "D2WINSMACK_LoadAndDecodeSmacker"
-      ]
+      ],
+      "dh": "9cf89e18"
     },
     {
       "name": "COMCALLBACK_GetCurrentChannelName",
@@ -72,7 +75,8 @@
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
         "COMCALLBACK_GetCurrentChannelName"
-      ]
+      ],
+      "dh": "c4994bc2"
     },
     {
       "name": "COMCALLBACK_ReturnTrue",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "635f71ac"
     },
     {
       "name": "COMCALLBACK_CreateChannelUser",
@@ -114,7 +119,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "40e48cb8"
     },
     {
       "name": "COMCALLBACK_FormatChannelUserData",
@@ -140,7 +146,8 @@
         "D2ChannelUserStrc",
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "256873c0"
     },
     {
       "name": "COMCALLBACK_AddOrUpdateChannelUser",
@@ -161,7 +168,8 @@
       "usedTypes": [
         "D2ChannelUserNameNodeStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f5994e1"
     },
     {
       "name": "COMCALLBACK_FormatChatMessage",
@@ -186,7 +194,8 @@
         "D2ChannelUserStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "585d443e"
     },
     {
       "name": "COMCALLBACK_HandleGameListError",
@@ -204,7 +213,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3c4b126f"
     },
     {
       "name": "COMCALLBACK_ReturnFalse",
@@ -221,7 +231,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0da61688"
     },
     {
       "name": "COMCALLBACK_CheckUserListFlags",
@@ -239,7 +250,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7be83b87"
     },
     {
       "name": "COMCALLBACK_ClearChannelUserList",
@@ -262,7 +274,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "26d8ecf7"
     },
     {
       "name": "COMCALLBACK_FormatWhisperFrom",
@@ -288,7 +301,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "819ff60f"
     },
     {
       "name": "COMCALLBACK_FormatWhisperTo",
@@ -314,7 +328,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "d2157f3f"
     },
     {
       "name": "COMCALLBACK_ValidateGameJoinability",
@@ -334,7 +349,8 @@
       ],
       "usedTypes": [
         "D2BnBannerAdMsgStrc"
-      ]
+      ],
+      "dh": "9f90f93f"
     },
     {
       "name": "CHATDLG_OpenChatCommandsDialogRestoreFocus2",
@@ -353,7 +369,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "269f5a37"
     },
     {
       "name": "PrintChannelText",
@@ -374,7 +391,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "1c19e55b"
     },
     {
       "name": "COMCALLBACK_AppendChatWithUser",
@@ -399,7 +417,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "919f2f6b"
     },
     {
       "name": "COMCALLBACK_UpdateChannelUserList",
@@ -424,7 +443,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "83c8fd6b"
     },
     {
       "name": "COMCALLBACK_AddUserToChannelList",
@@ -449,7 +469,8 @@
         "D2ChannelUserStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9a43406b"
     },
     {
       "name": "COMCALLBACK_ClearChannelListView",
@@ -474,7 +495,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4a2b5830"
     },
     {
       "name": "COMCALLBACK_HandleChannelJoin",
@@ -493,7 +515,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c8d2a97"
     },
     {
       "name": "COMCALLBACK_AppendServerMessage",
@@ -513,7 +536,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "3d1f4d7f"
     },
     {
       "name": "COMCALLBACK_AppendChatWithColor",
@@ -532,7 +556,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "bdc2b195"
     },
     {
       "name": "COMCALLBACK_BroadcastChatMessage",
@@ -557,7 +582,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ae833962"
     },
     {
       "name": "COMCALLBACK_HandleWhisperMessage",
@@ -582,7 +608,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0cb8c3f8"
     },
     {
       "name": "COMCALLBACK_AppendErrorMessage",
@@ -603,7 +630,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "6fa920fd"
     },
     {
       "name": "COMCALLBACK_AppendInfoMessage",
@@ -624,7 +652,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "7cf8be8b"
     },
     {
       "name": "COMCALLBACK_HandleInfoRequest1",
@@ -646,7 +675,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ab13071"
     },
     {
       "name": "COMCALLBACK_HandleInfoRequest2",
@@ -668,7 +698,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "3108a57f"
     },
     {
       "name": "COMCALLBACK_ValidateWhisperTarget",
@@ -689,7 +720,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "a3e87cd6"
     },
     {
       "name": "COMCALLBACK_ProcessWhisperCommand",
@@ -711,7 +743,8 @@
       "usedTypes": [
         "IgnoreList",
         "uint32_t"
-      ]
+      ],
+      "dh": "2ad69ed4"
     },
     {
       "name": "COMCALLBACK_FormatWhisperReply",
@@ -734,7 +767,8 @@
       "usedTypes": [
         "WCHAR",
         "uint8_t"
-      ]
+      ],
+      "dh": "6df49dba"
     },
     {
       "name": "COMCALLBACK_HandleWhisperReply",
@@ -758,7 +792,8 @@
         "IgnoreList",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ad6a77c"
     },
     {
       "name": "COMCALLBACK_ValidateEmoteTarget",
@@ -779,7 +814,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "6796e2e9"
     },
     {
       "name": "COMCALLBACK_ProcessEmoteCommand",
@@ -800,7 +836,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5c150216"
     },
     {
       "name": "COMCALLBACK_ScrollChannelUserList",
@@ -820,7 +857,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a721bbc7"
     },
     {
       "name": "COMCALLBACK_HandleUserListClick",
@@ -853,7 +891,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1bc188de"
     },
     {
       "name": "COMCALLBACK_HandleGameListError1",
@@ -882,7 +921,8 @@
         "IgnoreList",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "30d6c993"
     },
     {
       "name": "COMCALLBACK_HandleGameListError2",
@@ -910,7 +950,8 @@
         "IgnoreList",
         "WCHAR",
         "uint8_t"
-      ]
+      ],
+      "dh": "78145742"
     },
     {
       "name": "COMCALLBACK_CreateChannelUserEntry",
@@ -957,7 +998,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4a048bae"
     },
     {
       "name": "COMCALLBACK_AddChannelUser",
@@ -975,7 +1017,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9be44986"
     },
     {
       "name": "COMCALLBACK_OnChannelUserJoined",
@@ -996,7 +1039,8 @@
       "usedTypes": [
         "D2ChannelUserStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c3fc5fa"
     },
     {
       "name": "COMCALLBACK_Unused3",
@@ -1014,7 +1058,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e7538e96"
     },
     {
       "name": "COMCALLBACK_RemoveChannelUser",
@@ -1044,7 +1089,8 @@
         "D2ChannelUserStrc",
         "WCHAR",
         "uint8_t"
-      ]
+      ],
+      "dh": "ca9e77f8"
     },
     {
       "name": "COMCALLBACK_ClearAllChannelUsers",
@@ -1070,7 +1116,8 @@
         "D2ChannelUserNameNodeStrc",
         "D2ChannelUserStrc",
         "WCHAR"
-      ]
+      ],
+      "dh": "2ebe2787"
     },
     {
       "name": "COMCALLBACK_HandleChannelUserLeave",
@@ -1088,7 +1135,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ff9b17b1"
     },
     {
       "name": "COMCALLBACK_HandleJoinedChannel",
@@ -1115,7 +1163,8 @@
         "WCHAR",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c020d2e"
     },
     {
       "name": "COMCALLBACK_RemoveUserFromList",
@@ -1133,7 +1182,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4a3dd998"
     },
     {
       "name": "COMCALLBACK_DetectCDKeyInMessage",
@@ -1156,7 +1206,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bb4ba0ab"
     }
   ]
 }

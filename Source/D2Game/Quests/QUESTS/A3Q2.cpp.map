@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1ce61dc9"
     },
     {
       "name": "Q19_Callback10_PlayerLeavesGame",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "30ccbaaf"
     },
     {
       "name": "Q19_Callback03_ChangedLevel",
@@ -61,7 +63,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "52f7362e"
     },
     {
       "name": "Q19_Callback02_NpcDeactivate",
@@ -80,7 +83,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "32f9216d"
     },
     {
       "name": "Q19_Callback11_ScrollMessage",
@@ -105,7 +109,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "759804d5"
     },
     {
       "name": "Q19_SequenceFilter",
@@ -127,7 +132,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2acbe663"
     },
     {
       "name": "Q19_SendQuestStatePacket",
@@ -150,7 +156,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "471ed070"
     },
     {
       "name": "Q19_Callback04_ItemPickedUp",
@@ -179,7 +186,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "96e9e427"
     },
     {
       "name": "Q19_Callback13_PlayerStartedGame",
@@ -203,7 +211,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "42d2f646"
     },
     {
       "name": "OBJOP_UseStairDirect",
@@ -222,7 +231,8 @@
       "usedTypes": [
         "D2ObjectOperateFnArg",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d8fcbc81"
     },
     {
       "name": "Q19_IsKhalimsWillNotComplete",
@@ -241,7 +251,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ce2d30d3"
     },
     {
       "name": "OBJOP_A3Q2_PullSewerLever",
@@ -269,7 +280,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3faf35f3"
     },
     {
       "name": "Q19_UpdateSewerStairsObject",
@@ -293,7 +305,8 @@
         "D2QuestDataA3Q2Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bf1cf05f"
     },
     {
       "name": "Objects_InitFn41_SewerStairs",
@@ -313,7 +326,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
-      ]
+      ],
+      "dh": "95b9d6f5"
     },
     {
       "name": "Objects_InitFn42_SewerLever",
@@ -333,7 +347,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "14668fba"
     },
     {
       "name": "Q19_OnPlayerCubeKhalimsWill",
@@ -354,7 +369,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ba78eec5"
     },
     {
       "name": "Unreferenced_005b8750",
@@ -373,7 +389,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0205709e"
     },
     {
       "name": "Q19_CheckPlayerHasKhalimsEye",
@@ -394,7 +411,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a763c7d9"
     },
     {
       "name": "Q19_CheckPlayerHasKhalimsBrain",
@@ -415,7 +433,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "15d30dff"
     },
     {
       "name": "Q19_CheckPlayerHasKhalimsHeart",
@@ -436,7 +455,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "68b12bfc"
     },
     {
       "name": "OBJOP_A3Q2_KhalimsRelicPortalDrop1",
@@ -463,7 +483,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bf39adf2"
     },
     {
       "name": "OBJOP_A3Q2_KhalimsRelicPortalDrop2",
@@ -490,7 +511,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f0d11c0e"
     },
     {
       "name": "OBJOP_A3Q2_KhalimsRelicPortalDrop3",
@@ -517,7 +539,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1c66b731"
     },
     {
       "name": "Q19_UpdateOrbCount",
@@ -538,7 +561,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "55c205e8"
     },
     {
       "name": "Q19_ActiveFilter",
@@ -561,7 +585,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "da87fd1e"
     },
     {
       "name": "Q19_Callback00_NpcActivate",
@@ -589,7 +614,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "4e1a529c"
     },
     {
       "name": "Q19_StatusFilter",
@@ -611,7 +637,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "e36a6906"
     },
     {
       "name": "Q19_InitData",
@@ -633,7 +660,8 @@
         "D2QuestDataA3Q2Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "aac8c4e7"
     },
     {
       "name": "Q19_Callback10_PlayerLeavesGame_Unref_005bdb10",
@@ -651,7 +679,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "3a6a9a50"
     }
   ]
 }

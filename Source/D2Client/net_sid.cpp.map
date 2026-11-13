@@ -15,7 +15,8 @@
       "namespace": "D2Client::_net_sid",
       "calledFunctions": [
         "NET_SID_CLIENT_SHA1Init"
-      ]
+      ],
+      "dh": "6f36231c"
     },
     {
       "name": "SHA0_Update",
@@ -33,7 +34,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c42cae99"
     }
   ]
 }

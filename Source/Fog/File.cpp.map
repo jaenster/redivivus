@@ -19,7 +19,8 @@
       "usedTypes": [
         "CONTAINER_TypeInitialValue",
         "int32_t"
-      ]
+      ],
+      "dh": "466756ff"
     },
     {
       "name": "CRASH_DumpRegisters",
@@ -43,7 +44,8 @@
         "Report",
         "fnCrashOutputLine",
         "uint32_t"
-      ]
+      ],
+      "dh": "b296e3a4"
     },
     {
       "name": "CRASH_EnumerateThreads",
@@ -64,7 +66,8 @@
         "THREADENTRY",
         "fnCrashOutputLine",
         "uint32_t"
-      ]
+      ],
+      "dh": "aef6e267"
     },
     {
       "name": "CRASH_GetExceptionName",
@@ -79,7 +82,8 @@
       "calledFunctions": [
         "CRASH_GetExceptionName",
         "strncpy_s"
-      ]
+      ],
+      "dh": "59d466d7"
     },
     {
       "name": "ERRORMANAGER_UnhandledExceptionFilter",
@@ -100,7 +104,8 @@
         "D2CrashReportStrc",
         "_EXCEPTION_POINTERS",
         "uint32_t"
-      ]
+      ],
+      "dh": "89aa9c8b"
     },
     {
       "name": "CRASH_SetExceptionHandler",
@@ -117,7 +122,8 @@
       ],
       "usedTypes": [
         "pfnFogExceptionFilter"
-      ]
+      ],
+      "dh": "70320148"
     },
     {
       "name": "FILETOOLS_ExtractDirectory",
@@ -136,7 +142,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f21a48ff"
     },
     {
       "name": "FILETOOLS_ExtractFilename",
@@ -154,7 +161,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ff5be53b"
     },
     {
       "name": "STRING_AppendBlizzardErrorSubfolderToPath",
@@ -169,7 +177,8 @@
       "calledFunctions": [
         "STRING_AppendBlizzardErrorSubfolderToPath",
         "STRING_CopyStringBounded"
-      ]
+      ],
+      "dh": "241329e7"
     },
     {
       "name": "STRING_CopyStringBounded",
@@ -186,7 +195,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d7b8b7d4"
     },
     {
       "name": "STRING_AppendStringToString",
@@ -203,7 +213,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "49aa5334"
     },
     {
       "name": "STRING_FormatVarArgs",
@@ -221,7 +232,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8a3d49ff"
     },
     {
       "name": "FILETOOLS_StartApplicationWithCommandLine_UTF8",
@@ -243,7 +255,8 @@
         "_PROCESS_INFORMATION",
         "_STARTUPINFOW",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ac80b94"
     },
     {
       "name": "FILETOOLS_CheckIfFileExists_UTF8",
@@ -263,7 +276,8 @@
         "WCHAR",
         "_WIN32_FIND_DATAW",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8e1d2e7"
     },
     {
       "name": "FILETOOLS_OpenFile_WriteMode_UTF8",
@@ -284,7 +298,8 @@
         "FILE",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "74cb3998"
     },
     {
       "name": "FILETOOLS_CopyFile_UTF8",
@@ -303,7 +318,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "c39105b8"
     },
     {
       "name": "FILETOOLS_GetTempPath_UTF8",
@@ -322,7 +338,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "73c9e4ff"
     },
     {
       "name": "FILETOOLS_CreateDirectoryW",
@@ -337,7 +354,8 @@
       "calledFunctions": [
         "FILETOOLS_CreateDirectoryW",
         "wcsrchr"
-      ]
+      ],
+      "dh": "edf6d86f"
     },
     {
       "name": "FILETOOLS_CreateFolder_UTF8",
@@ -357,7 +375,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c994949"
     },
     {
       "name": "DEBUG_CaptureThreadContext",
@@ -375,7 +394,8 @@
       "usedTypes": [
         "LPCONTEXT",
         "uint32_t"
-      ]
+      ],
+      "dh": "6cc62a72"
     }
   ]
 }

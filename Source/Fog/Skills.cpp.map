@@ -15,7 +15,8 @@
       "namespace": "Fog::Skills",
       "calledFunctions": [
         "SKILLS_PushValue"
-      ]
+      ],
+      "dh": "af910520"
     },
     {
       "name": "SKILLS_PopValue",
@@ -29,7 +30,8 @@
       "namespace": "Fog::Skills",
       "calledFunctions": [
         "SKILLS_PopValue"
-      ]
+      ],
+      "dh": "382e1bba"
     },
     {
       "name": "SKILLS_CompileSkillFormula",
@@ -52,7 +54,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "96745083"
     },
     {
       "name": "SKILLS_ParseSkillDescription",
@@ -78,7 +81,8 @@
         "D2SkillCalcOperandStackStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "64d9c472"
     },
     {
       "name": "SKILLS_GetOpcodePrecedence",
@@ -97,7 +101,8 @@
         "CalcGetFunctionParameterCount_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c52a705c"
     },
     {
       "name": "SKILLS_EmitFormulaBytecode",
@@ -117,7 +122,8 @@
         "CalcGetFunctionParameterCount_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c88174b0"
     },
     {
       "name": "SKILLS_WriteValueToBuffer",
@@ -135,7 +141,8 @@
       "usedTypes": [
         "D2QuestDataA5Q2Strc",
         "uint8_t"
-      ]
+      ],
+      "dh": "56e75d0f"
     },
     {
       "name": "SKILLS_WriteValueToBuffer2",
@@ -153,7 +160,8 @@
       "usedTypes": [
         "D2QuestDataA5Q2Strc",
         "uint8_t"
-      ]
+      ],
+      "dh": "37a2fddf"
     },
     {
       "name": "SKILLS_ParseCalcExpression",
@@ -183,7 +191,8 @@
         "eD2SkillCalcOp",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "08831b51"
     }
   ]
 }

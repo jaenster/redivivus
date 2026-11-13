@@ -137,6 +137,6 @@ struct D2CUnitEventStrc * __fastcall AttachClientStateHandler(struct D2UnitStrc 
 // 6 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
-int32_t __stdcall SKILLS_CastSkillClient_Extern(eD2Skills eSkill, struct D2UnitStrc * pUnit, int32_t nOwnerGUID, uint32_t nSkillLevel);
+int32_t __stdcall SKILLS_CastSkillClient_Extern(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nOwnerGUID, uint32_t nSkillLevel);
 
 }}} // namespace D2Client::SKILLS::Skills

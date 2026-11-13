@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "3f775f02"
     },
     {
       "name": "ITEMTBLS_CalcExpr_ParseTokenType",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3680660f"
     },
     {
       "name": "ITEMTBLS_CalcExpr_GetConstTwo",
@@ -50,7 +52,8 @@
       "namespace": "D2Common",
       "calledFunctions": [
         "ITEMTBLS_CalcExpr_GetConstTwo"
-      ]
+      ],
+      "dh": "52953bdb"
     },
     {
       "name": "MISSILE_CalcVMCallback_GetSpecialParam",
@@ -70,7 +73,8 @@
         "D2MissileCalcContextStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d880fdf8"
     },
     {
       "name": "ITEMMOD_RollRandomInRange",
@@ -90,7 +94,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2b568e62"
     },
     {
       "name": "DRLGPRESET_GetObjectTableActCount",
@@ -108,7 +113,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "00e20d9d"
     },
     {
       "name": "DRLGPRESET_GetObjectIdFromActTable",
@@ -126,7 +132,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "923c1d23"
     }
   ]
 }

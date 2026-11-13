@@ -25,7 +25,8 @@
         "D2WinList",
         "D2WinListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "3a0128ac"
     },
     {
       "name": "D2WINLIST_AddListItem",
@@ -55,7 +56,8 @@
         "fpListEntryCallback",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0cfa0da1"
     },
     {
       "name": "D2WINLIST_GetSelectedIndex",
@@ -75,7 +77,8 @@
       ],
       "usedTypes": [
         "D2WinList"
-      ]
+      ],
+      "dh": "f88429d1"
     },
     {
       "name": "D2WINLIST_GetEntryByIndex",
@@ -96,7 +99,8 @@
       "usedTypes": [
         "D2WinList",
         "D2WinListEntry"
-      ]
+      ],
+      "dh": "e237de15"
     },
     {
       "name": "D2WINLIST_GetItemCount",
@@ -116,7 +120,8 @@
       ],
       "usedTypes": [
         "D2WinList"
-      ]
+      ],
+      "dh": "6eb43943"
     },
     {
       "name": "D2WINLIST_LoadPentSpinCursor",
@@ -137,7 +142,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a918a1f5"
     },
     {
       "name": "D2WINLIST_FreePentSpinCursor",
@@ -152,7 +158,8 @@
       "calledFunctions": [
         "D2WINLIST_FreePentSpinCursor",
         "IMAGE_FreeImage"
-      ]
+      ],
+      "dh": "d9c5bfbc"
     },
     {
       "name": "Draw",
@@ -179,7 +186,8 @@
         "D2WinList",
         "D2WinListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "b668ff21"
     },
     {
       "name": "Push",
@@ -203,7 +211,8 @@
         "D2WinList",
         "D2WinListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "dd3e69d2"
     },
     {
       "name": "ListCheck",
@@ -226,7 +235,8 @@
         "D2WinList",
         "D2WinListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "4702421c"
     },
     {
       "name": "Key",
@@ -251,7 +261,8 @@
         "D2WinListEntry",
         "fpListEntryCallback",
         "int32_t"
-      ]
+      ],
+      "dh": "59a7f0e5"
     },
     {
       "name": "D2WinList",
@@ -283,7 +294,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f09c8407"
     }
   ]
 }

@@ -28,7 +28,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "88347af5"
     },
     {
       "name": "SendRoomUnitUpdates",
@@ -53,7 +54,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "00e4f40f"
     },
     {
       "name": "SendAdjacentRoomUpdates",
@@ -80,7 +82,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bb63c975"
     },
     {
       "name": "GAME_SendRemoveObjectsForAdjacentRooms",
@@ -111,7 +114,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56c6af5e"
     },
     {
       "name": "CLIENT_RevealRoomAndSendUnits",
@@ -145,7 +149,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "77011785"
     },
     {
       "name": "RoomClearForClientAndHideMap",
@@ -178,7 +183,8 @@
         "eD2LevelId",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "335007dc"
     },
     {
       "name": "CLIENT_RemoveFromAdjacentRooms",
@@ -204,7 +210,8 @@
         "D2RoomStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9be499b"
     },
     {
       "name": "TellClientToLoadAct",
@@ -231,7 +238,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "889867f8"
     },
     {
       "name": "InitDrlgAct",
@@ -256,7 +264,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ecb9130"
     },
     {
       "name": "CLIENT_WarpToAct",
@@ -306,7 +315,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5e3d193a"
     },
     {
       "name": "InitLevel",
@@ -343,7 +353,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "42ec622d"
     },
     {
       "name": "EnsureDrlgActLoaded",
@@ -361,7 +372,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0720386f"
     },
     {
       "name": "FreeAllUnits",
@@ -384,7 +396,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fd4b9fd1"
     },
     {
       "name": "ProcessUnitUpdateFlags",
@@ -409,7 +422,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7a4ef22a"
     },
     {
       "name": "LEVEL_CountRoomsInAct",
@@ -432,7 +446,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "b719f149"
     }
   ]
 }

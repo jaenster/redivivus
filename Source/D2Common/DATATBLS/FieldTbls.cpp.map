@@ -27,7 +27,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7b110859"
     },
     {
       "name": "FIELDTBLS_FreeFieldData",
@@ -42,7 +43,8 @@
       "calledFunctions": [
         "FIELDTBLS_FreeFieldData",
         "FreeServerMemory"
-      ]
+      ],
+      "dh": "679cefff"
     },
     {
       "name": "FIELDTBLS_GetFieldCenterOffsets",
@@ -56,7 +58,8 @@
       "namespace": "D2Common::DATATBLS::FieldTbls",
       "calledFunctions": [
         "FIELDTBLS_GetFieldCenterOffsets"
-      ]
+      ],
+      "dh": "ac44fd63"
     },
     {
       "name": "FIELDTBLS_AllocPoint",
@@ -78,7 +81,8 @@
       "usedTypes": [
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "905401f8"
     },
     {
       "name": "FIELDTBLS_FreePoint",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "c8624707"
     },
     {
       "name": "SetXY",
@@ -121,7 +126,8 @@
       "usedTypes": [
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "ed975cbd"
     },
     {
       "name": "FIELDTBLS_GetFieldValueAtCoords",
@@ -142,7 +148,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b6705e2b"
     },
     {
       "name": "FIELDTBLS_StepFieldTowardsPoint",
@@ -165,7 +172,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d03138d6"
     },
     {
       "name": "FIELDTBLS_TracePathCheckCollision",
@@ -189,7 +197,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e129540"
     },
     {
       "name": "FIELDTBLS_LoadExpFieldFile",
@@ -211,7 +220,8 @@
         "D2ExpFieldFileStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "efe87e8c"
     }
   ]
 }

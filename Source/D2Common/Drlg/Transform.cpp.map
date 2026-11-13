@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "24c35350"
     },
     {
       "name": "DRLG_MapWorldToScreenCoords",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5ce41fb9"
     },
     {
       "name": "DRLG_CoordsWorldToScreenTile",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3bf7dfba"
     },
     {
       "name": "CoordsMiniMapToScreen",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f1ef019c"
     },
     {
       "name": "DRLG_OrthToIsoCoordsDiv160",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "35f58233"
     },
     {
       "name": "SizeMiniMapToScreen",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "afa34871"
     },
     {
       "name": "DRLG_OrthToIsoCoordsDiv32",
@@ -120,7 +126,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fb0a01b7"
     },
     {
       "name": "SizeMapToScreen",
@@ -137,7 +144,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "55f8c593"
     },
     {
       "name": "SizeRoomToWorld",
@@ -154,7 +162,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "493fa2a7"
     },
     {
       "name": "SizeWorldToRoom",
@@ -171,7 +180,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "29383b15"
     },
     {
       "name": "DRLG_WorldToScreenShift5",
@@ -188,7 +198,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "548d2100"
     },
     {
       "name": "DRLG_WorldToScreenNoShift",
@@ -205,7 +216,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a6127147"
     },
     {
       "name": "CoordsRoomToWorld",
@@ -222,7 +234,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7b39e9c4"
     }
   ]
 }

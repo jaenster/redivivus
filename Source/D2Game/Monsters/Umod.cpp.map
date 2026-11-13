@@ -20,7 +20,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bc83674e"
     },
     {
       "name": "UMOD_IncreaseMonsterHp",
@@ -42,7 +43,8 @@
         "D2UnitStrc",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a561e13"
     },
     {
       "name": "MONUMOD_ApplyHpBonus",
@@ -68,7 +70,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "73db0d07"
     },
     {
       "name": "MONUMOD_ApplyChampionLevelBonus",
@@ -89,7 +92,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "595e0f4e"
     },
     {
       "name": "MONUMOD_ApplyChampionStats",
@@ -119,7 +123,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a554311"
     },
     {
       "name": "MONUMOD_ApplyColdEnchant",
@@ -149,7 +154,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "10ab87ba"
     },
     {
       "name": "MONUMOD_ApplyBerserker",
@@ -169,7 +175,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9192c60d"
     },
     {
       "name": "MONUMOD_ApplyPossessed",
@@ -190,7 +197,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2b1a265e"
     },
     {
       "name": "MONUMOD_ApplyFanatic",
@@ -216,7 +224,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "103e343f"
     },
     {
       "name": "MONUMOD_SetEventTimer",
@@ -237,7 +246,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "3bd891af"
     },
     {
       "name": "MagicResist",
@@ -257,7 +267,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "12658515"
     },
     {
       "name": "TeleHeal",
@@ -279,7 +290,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5b28b1e6"
     },
     {
       "name": "AuraEnchanted",
@@ -306,7 +318,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb4f169e"
     },
     {
       "name": "ExtraStrong",
@@ -331,7 +344,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b595d85a"
     },
     {
       "name": "ExtraFast",
@@ -350,7 +364,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eee59767"
     },
     {
       "name": "FireEnchanted",
@@ -376,7 +391,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a89df4d"
     },
     {
       "name": "LightningEnchanted",
@@ -402,7 +418,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ac9c50a1"
     },
     {
       "name": "ColdEnchanted",
@@ -428,7 +445,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "327f335b"
     },
     {
       "name": "PoisonEnchanted",
@@ -454,7 +472,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "aff4d46e"
     },
     {
       "name": "ManaBurn",
@@ -480,7 +499,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7ac551e7"
     }
   ]
 }

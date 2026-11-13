@@ -20,7 +20,8 @@
       "usedTypes": [
         "_PROCESS_INFORMATION",
         "_STARTUPINFOA"
-      ]
+      ],
+      "dh": "1f23db22"
     },
     {
       "name": "D2FILE_VerifyFileSignature",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1282c9da"
     },
     {
       "name": "CheckIfFileExists",
@@ -63,7 +65,8 @@
         "D2MPQFileStrc *",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fb60165b"
     },
     {
       "name": "D2FILE_CloseFile",
@@ -86,7 +89,8 @@
         "D2MPQFileStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ac61883a"
     },
     {
       "name": "D2FILE_GetFileSize",
@@ -113,7 +117,8 @@
         "LPDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f7c6f618"
     },
     {
       "name": "D2FILE_SeekFile",
@@ -139,7 +144,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "74b259cb"
     },
     {
       "name": "D2FILE_ReadFile",
@@ -165,7 +171,8 @@
         "D2MPQFileStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ded2669b"
     },
     {
       "name": "D2FILE_ReadFile_HaltTail",
@@ -182,7 +189,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "c3b877a3"
     },
     {
       "name": "D2FILE_OpenAndReadFile",
@@ -209,7 +217,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b1ccae56"
     },
     {
       "name": "D2FILE_AllocAndLoadD2File",
@@ -234,7 +243,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "69604576"
     },
     {
       "name": "FindMPQOnCd",
@@ -257,7 +267,8 @@
       "usedTypes": [
         "D2ArchiveStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c4487c4"
     },
     {
       "name": "FindMpqFromDiskOrCd",
@@ -279,7 +290,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4834cb1a"
     },
     {
       "name": "ARCHIVE_LoadMPQ",
@@ -302,7 +314,8 @@
         "D2FogArchiveStrc",
         "fpRequiredUserAction",
         "int32_t"
-      ]
+      ],
+      "dh": "0777435d"
     },
     {
       "name": "ARCHIVE_FreeMpqFile",
@@ -321,7 +334,8 @@
       ],
       "usedTypes": [
         "D2FogArchiveStrc"
-      ]
+      ],
+      "dh": "053592a8"
     },
     {
       "name": "RegisterExitFunction",
@@ -338,7 +352,8 @@
       ],
       "usedTypes": [
         "pfnFaultError"
-      ]
+      ],
+      "dh": "0e0f337e"
     },
     {
       "name": "FAULT_TerminateCurrentProcess",
@@ -352,7 +367,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "FAULT_TerminateCurrentProcess"
-      ]
+      ],
+      "dh": "c0a66a0d"
     },
     {
       "name": "FAULT_ShowErrorAndTerminate",
@@ -367,7 +383,8 @@
       "calledFunctions": [
         "FAULT_ShowErrorAndTerminate",
         "FAULT_TerminateCurrentProcess"
-      ]
+      ],
+      "dh": "0a1eb3be"
     },
     {
       "name": "FAULT_ShowErrorMessageBox",
@@ -381,7 +398,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "FAULT_ShowErrorMessageBox"
-      ]
+      ],
+      "dh": "d1d887c3"
     },
     {
       "name": "FAULT_FormatAndShowError",
@@ -400,7 +418,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1fb6ba0b"
     },
     {
       "name": "LINKEDLIST_GetNodePointer",
@@ -419,7 +438,8 @@
         "StormLinkStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "948659eb"
     },
     {
       "name": "TSLink_TMESSAGESOURCE_Unlink",
@@ -437,7 +457,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "0c6bbf77"
     },
     {
       "name": "LINKEDLIST_GetOffset",
@@ -455,7 +476,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "87c4ab28"
     },
     {
       "name": "LINKEDLIST_SetNodeValue",
@@ -473,7 +495,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "be98f82f"
     },
     {
       "name": "LINKEDLIST_InsertNode",
@@ -495,7 +518,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2dd18434"
     },
     {
       "name": "LINKEDLIST_GetNodeAt",
@@ -514,7 +538,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d87c19f8"
     },
     {
       "name": "LINKEDLIST_RemoveNode",
@@ -534,7 +559,8 @@
       "usedTypes": [
         "StormFaultHandlerNodeStrc",
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "1b36d3de"
     },
     {
       "name": "LINKEDLIST_GetNodeLinkAtOffset",
@@ -553,7 +579,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d6a3941a"
     },
     {
       "name": "TSList_TMESSAGESOURCE_UnlinkAll",
@@ -571,7 +598,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "1b2a06fd"
     },
     {
       "name": "TSList_TMESSAGESOURCE_Destructor",
@@ -590,7 +618,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "7d65cde0"
     },
     {
       "name": "LINKEDLIST_AllocAndInsertNode",
@@ -611,7 +640,8 @@
         "StormLinkedListStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad1c506a"
     },
     {
       "name": "LINKEDLIST_DetachNode",
@@ -631,7 +661,8 @@
       "usedTypes": [
         "FILE",
         "uint8_t"
-      ]
+      ],
+      "dh": "044a64cb"
     },
     {
       "name": "TSList_TMESSAGESOURCE_Destructor_5176d3",
@@ -650,7 +681,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "21107d4f"
     },
     {
       "name": "TSList_TMESSAGESOURCE_Clear",
@@ -670,7 +702,8 @@
       "usedTypes": [
         "FILE",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "defe367e"
     },
     {
       "name": "LINKEDLIST_FindNode",
@@ -690,7 +723,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0b0f7834"
     },
     {
       "name": "AtexitCleanup_FreeLinkedListAndCritSec",
@@ -705,7 +739,8 @@
       "calledFunctions": [
         "AtexitCleanup_FreeLinkedListAndCritSec",
         "TSList_TMESSAGESOURCE_Clear"
-      ]
+      ],
+      "dh": "051bbc58"
     },
     {
       "name": "FAULT_RegisterErrorHandler",
@@ -725,7 +760,8 @@
       "usedTypes": [
         "StormFaultHandlerNodeStrc",
         "pfnStormErrorHandler"
-      ]
+      ],
+      "dh": "1cd952e8"
     },
     {
       "name": "FAULT_LookupErrorString",
@@ -745,7 +781,8 @@
         "StormFaultHandlerNode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc5fb373"
     },
     {
       "name": "FAULT_ShowFormattedError",
@@ -765,7 +802,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b34ce094"
     },
     {
       "name": "FAULT_ShowFormattedErrorAndTerminate",
@@ -785,7 +823,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9bc19c90"
     },
     {
       "name": "FAULT_ShowFormattedErrorWithArgs",
@@ -805,7 +844,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ce27551f"
     },
     {
       "name": "D2MEM_VirtualAlloc",
@@ -819,7 +859,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "D2MEM_VirtualAlloc"
-      ]
+      ],
+      "dh": "4e82f224"
     },
     {
       "name": "D2MEM_VirtualFree",
@@ -833,7 +874,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "D2MEM_VirtualFree"
-      ]
+      ],
+      "dh": "e8282d60"
     },
     {
       "name": "D2MEM_CopyRows",
@@ -852,7 +894,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b76f1154"
     },
     {
       "name": "D2MEM_CompareBytes",
@@ -870,7 +913,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fc83d1a7"
     },
     {
       "name": "D2MEM_FindLowestSetBit",
@@ -888,7 +932,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "743377f4"
     },
     {
       "name": "D2FILE_VerifySignatureWinTrust",
@@ -913,7 +958,8 @@
         "GUID",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b4e1269"
     },
     {
       "name": "D2FILE_GetSignerOrganization",
@@ -941,7 +987,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7e0f4a51"
     },
     {
       "name": "CRC32_Calculate",
@@ -962,7 +1009,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cb666bdb"
     },
     {
       "name": "SSTR_StringLength",
@@ -976,7 +1024,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "SSTR_StringLength"
-      ]
+      ],
+      "dh": "6cf92495"
     },
     {
       "name": "FOG_ParseFieldValue",
@@ -993,7 +1042,8 @@
       ],
       "usedTypes": [
         "char *"
-      ]
+      ],
+      "dh": "7a4272fd"
     },
     {
       "name": "FOG_FindCharInString",
@@ -1007,7 +1057,8 @@
       "namespace": "D2Hell",
       "calledFunctions": [
         "FOG_FindCharInString"
-      ]
+      ],
+      "dh": "9e0deb92"
     },
     {
       "name": "StaticInit_gFaultHandlerList",
@@ -1022,7 +1073,8 @@
       "calledFunctions": [
         "StaticInit_gFaultHandlerList",
         "atexit"
-      ]
+      ],
+      "dh": "f5c903b1"
     },
     {
       "name": "StaticFini_gFaultHandlerList",
@@ -1038,7 +1090,8 @@
         "StaticFini_gFaultHandlerList",
         "TSList_TMESSAGESOURCE_UnlinkAll",
         "TSLink_TMESSAGESOURCE_Unlink"
-      ]
+      ],
+      "dh": "40916600"
     }
   ]
 }

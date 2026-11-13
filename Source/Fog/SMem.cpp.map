@@ -20,7 +20,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ce7494aa"
     },
     {
       "name": "SMemInitPerfCounters",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "LARGE_INTEGER",
         "int64_t"
-      ]
+      ],
+      "dh": "6d9406ca"
     },
     {
       "name": "SMemResetHeapStats",
@@ -56,7 +58,8 @@
       "calledFunctions": [
         "SMemResetHeapStats",
         "GetTickCount"
-      ]
+      ],
+      "dh": "ebff6067"
     },
     {
       "name": "GetTickCount",
@@ -82,7 +85,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c2cc1f4"
     }
   ]
 }

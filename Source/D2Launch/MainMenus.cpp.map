@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e4c57903"
     },
     {
       "name": "FORMS_DestroyListJmp_Unref_0041f940",
@@ -37,7 +38,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4a2d98dd"
     },
     {
       "name": "Unreferenced_0042e5c0",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "ba63c6d3"
     },
     {
       "name": "CRYPTO_ByteSwap16Array",
@@ -72,7 +75,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c6cb321"
     },
     {
       "name": "CRYPTO_ByteSwap32Array",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "34636f05"
     },
     {
       "name": "Unreferenced_0042e620",
@@ -106,7 +111,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "8727d629"
     },
     {
       "name": "Unreferenced_0042e630",
@@ -124,7 +130,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "1d5c9211"
     },
     {
       "name": "CRYPTO_ByteSwap64Array",
@@ -141,7 +148,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "820f19eb"
     },
     {
       "name": "MAINMENU_SetGlobalValue1",
@@ -158,7 +166,8 @@
       ],
       "usedTypes": [
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "ec039bd2"
     },
     {
       "name": "MAINMENU_SetGlobalFlag",
@@ -172,7 +181,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_SetGlobalFlag"
-      ]
+      ],
+      "dh": "24b0030b"
     },
     {
       "name": "MAINMENU_GetGlobalValue2_Unref_0042e6c0",
@@ -186,7 +196,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_GetGlobalValue2_Unref_0042e6c0"
-      ]
+      ],
+      "dh": "43f367ba"
     },
     {
       "name": "IMAGE_LoadPredefinedImages",
@@ -203,7 +214,8 @@
         "IMAGE_LoadDC6",
         "D2CheckExpansionGame",
         "sprintf"
-      ]
+      ],
+      "dh": "77db4bf0"
     },
     {
       "name": "IMAGE_FreePredefinedImages",
@@ -222,7 +234,8 @@
       ],
       "usedTypes": [
         "DC6 *"
-      ]
+      ],
+      "dh": "c9ef0276"
     },
     {
       "name": "D2GFX_SetPaletteForDraw",
@@ -237,7 +250,8 @@
       "calledFunctions": [
         "D2GFX_SetPaletteForDraw",
         "LoadPalette"
-      ]
+      ],
+      "dh": "7f7bd708"
     },
     {
       "name": "Unreferenced_0042f370",
@@ -252,7 +266,8 @@
       "calledFunctions": [
         "Unreferenced_0042f370",
         "D2GFX_SetPaletteForDraw"
-      ]
+      ],
+      "dh": "78cef0dd"
     },
     {
       "name": "FORMS_CreateAnyFormFromList",
@@ -274,7 +289,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "651fb10b"
     },
     {
       "name": "FORMS_DestroyList",
@@ -292,7 +308,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc *"
-      ]
+      ],
+      "dh": "2a2535f2"
     },
     {
       "name": "FORMS_CreateAnyFormFromListExEx",
@@ -314,7 +331,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8c43f55e"
     },
     {
       "name": "FORMS_DestroyLists",
@@ -337,7 +355,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc *"
-      ]
+      ],
+      "dh": "29f81a89"
     },
     {
       "name": "MAINMENU_CreateMessageBox",
@@ -366,7 +385,8 @@
         "OnPress",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "62c97264"
     },
     {
       "name": "MAINMENU_SetConnectFlag",
@@ -380,7 +400,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_SetConnectFlag"
-      ]
+      ],
+      "dh": "2fb5cedb"
     },
     {
       "name": "MAINMENU_GetGlobalValue2",
@@ -394,7 +415,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_GetGlobalValue2"
-      ]
+      ],
+      "dh": "2de675ba"
     },
     {
       "name": "UIMENU_PleaseWaitWithCancelButton",
@@ -420,7 +442,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3a18760e"
     },
     {
       "name": "MAINMENU_OnPressShowBnetConnectFailedPopup",
@@ -442,7 +465,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "579fa4c6"
     },
     {
       "name": "UIMENU_PleaseWaitWithWorkingCancelButton",
@@ -467,7 +491,8 @@
         "D2ControlStrc",
         "D2WinTextBox",
         "WCHAR"
-      ]
+      ],
+      "dh": "6263cc54"
     },
     {
       "name": "FORMS_DestroyListJmp",
@@ -504,7 +529,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9157d72f"
     },
     {
       "name": "MAINMENU_UpdateProgressBar",
@@ -523,7 +549,8 @@
         "D2WINIMAGE_SetFrame",
         "sprintf",
         "D2WINTEXTBOX_SetTextFromAnsi"
-      ]
+      ],
+      "dh": "ee3e38dd"
     },
     {
       "name": "LAUNCHER_ClearPatchDownloadFlag",
@@ -537,7 +564,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "LAUNCHER_ClearPatchDownloadFlag"
-      ]
+      ],
+      "dh": "7d6ce8e2"
     },
     {
       "name": "LAUNCHER_GetPatchDownloadFlag",
@@ -551,7 +579,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "LAUNCHER_GetPatchDownloadFlag"
-      ]
+      ],
+      "dh": "fe9d7161"
     },
     {
       "name": "MAINMENU_ReadBattleNetRegistry",
@@ -571,7 +600,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b750042e"
     },
     {
       "name": "MAINMENU_CheckBattleNetIPFlag",
@@ -591,7 +621,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e955cb9e"
     },
     {
       "name": "UIMENU_MainScreenBeforeMenu",
@@ -627,7 +658,8 @@
         "int32_t",
         "uint32_t",
         "wchar_t"
-      ]
+      ],
+      "dh": "2b3049f7"
     },
     {
       "name": "MAINMENU_CheckFileExists",
@@ -646,7 +678,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "3527ca2a"
     },
     {
       "name": "MAINMENU_GetLocalizedFilePath",
@@ -669,7 +702,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cf49b782"
     },
     {
       "name": "MAINMENU_CloseAndLaunchCharSelect",
@@ -686,7 +720,8 @@
         "SOUND_FadeOutAllSoundEffects",
         "FORMS_DestroyLists",
         "UIMENU_CharacterSelectAllGameTypes"
-      ]
+      ],
+      "dh": "17be6fc7"
     },
     {
       "name": "MAINMENU_ValidateCharNameChar",
@@ -703,7 +738,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "4c119e16"
     },
     {
       "name": "MAINMENUS_EditBoxFilter_ReturnTrue_ForMainMenuAgain",
@@ -720,7 +756,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "e34aef0f"
     },
     {
       "name": "MAINMENU_ValidateGameNameChar",
@@ -737,7 +774,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "4b46c2be"
     },
     {
       "name": "MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect",
@@ -755,7 +793,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "e9d4cfe1"
     },
     {
       "name": "MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms",
@@ -772,7 +811,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "3e449a9a"
     },
     {
       "name": "MAINMENU_SetGlobalValue3",
@@ -786,7 +826,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_SetGlobalValue3"
-      ]
+      ],
+      "dh": "1a1f7674"
     },
     {
       "name": "MAINMENU_UpdateIPAddressDisplay",
@@ -809,7 +850,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "2f2bc940"
     },
     {
       "name": "MAINMENU_OnPressUpdateIpAddressDisplay",
@@ -827,7 +869,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "8f3a01e5"
     },
     {
       "name": "UIMENU_TCPIPOptions",
@@ -857,7 +900,8 @@
         "D2ControlStrc",
         "D2WinTextBox",
         "WCHAR"
-      ]
+      ],
+      "dh": "5aaa410c"
     },
     {
       "name": "MAINMENU_DisableControlIfDataNonZero",
@@ -875,7 +919,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "86aed14f"
     },
     {
       "name": "MAINMENU_DisableControlIfDataNonZero2",
@@ -893,7 +938,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "ba9e7a1a"
     },
     {
       "name": "UIMENU_CreateBattleNetAccount",
@@ -924,7 +970,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "75d94725"
     },
     {
       "name": "UIMENU_BackgroundAndExpansionText",
@@ -945,7 +992,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImage"
-      ]
+      ],
+      "dh": "3c58bacf"
     },
     {
       "name": "MAINMENU_FilterNewlineKey",
@@ -963,7 +1011,8 @@
       "usedTypes": [
         "int16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "da7ec9f0"
     },
     {
       "name": "MAINMENU_PollRevisionCheckPump",
@@ -978,7 +1027,8 @@
       "calledFunctions": [
         "MAINMENU_PollRevisionCheckPump",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "2a6fec4b"
     },
     {
       "name": "MAINMENU_OnPressCreateBattleNetAccount",
@@ -996,7 +1046,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "3b7071fd"
     },
     {
       "name": "MAINMENU_ScrollListExUp",
@@ -1021,7 +1072,8 @@
         "D2ControlMsg",
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "b6797bae"
     },
     {
       "name": "MAINMENU_ScrollListExDown",
@@ -1046,7 +1098,8 @@
         "D2ControlMsg",
         "D2WinTextBox",
         "int32_t"
-      ]
+      ],
+      "dh": "ae5eeb32"
     },
     {
       "name": "UIMENU_AreYouSureToCreateHardcoreCharacter",
@@ -1071,7 +1124,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "37a0edf1"
     },
     {
       "name": "MAINMENU_ValidateCharacterName",
@@ -1091,7 +1145,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "WCHAR"
-      ]
+      ],
+      "dh": "1da6e269"
     },
     {
       "name": "MAINMENU_ValidateCharacterNameCallback",
@@ -1113,7 +1168,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "67df2a25"
     },
     {
       "name": "MAINMENU_ValidatePasswordChangeForm",
@@ -1134,7 +1190,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "fcf67a07"
     },
     {
       "name": "MAINMENU_OnPressToggleLadderFlag",
@@ -1151,7 +1208,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "ac53f53a"
     },
     {
       "name": "MAINMENU_OnPressToggleExpansionFlag",
@@ -1169,7 +1227,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "75c95c5c"
     },
     {
       "name": "MAINMENU_SetClassDescriptionTooltip",
@@ -1191,7 +1250,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "5f21b8af"
     },
     {
       "name": "MAINMENU_SetSorceressDescription",
@@ -1209,7 +1269,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "93263ec6"
     },
     {
       "name": "MAINMENU_SetAmazonDescription",
@@ -1227,7 +1288,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "57815b41"
     },
     {
       "name": "MAINMENU_SetAssassinDescription",
@@ -1246,7 +1308,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "d1938cde"
     },
     {
       "name": "MAINMENU_SetDruidDescription",
@@ -1265,7 +1328,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "155b8679"
     },
     {
       "name": "MAINMENU_SetNecromancerDescription",
@@ -1283,7 +1347,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "9e9318d5"
     },
     {
       "name": "MAINMENU_SetBarbarianDescription",
@@ -1301,7 +1366,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "edded8f3"
     },
     {
       "name": "MAINMENU_SetPaladinDescription",
@@ -1319,7 +1385,8 @@
       ],
       "usedTypes": [
         "D2WinAnimImageNotifyStrc"
-      ]
+      ],
+      "dh": "9afb25de"
     },
     {
       "name": "LAUNCHER_SetExitAppModeResult",
@@ -1333,7 +1400,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "LAUNCHER_SetExitAppModeResult"
-      ]
+      ],
+      "dh": "72665d7f"
     },
     {
       "name": "MAINMENU_AddRealmToList",
@@ -1354,7 +1422,8 @@
       "usedTypes": [
         "D2BNetRealmEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "92129c8e"
     },
     {
       "name": "MAINMENU_FreeRealmList",
@@ -1376,7 +1445,8 @@
       "usedTypes": [
         "D2BNetRealmEntryStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "1846b06c"
     },
     {
       "name": "MAINMENU_CompareRealmNames",
@@ -1393,7 +1463,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "5d4a361a"
     },
     {
       "name": "MAINMENU_GetRealmCount",
@@ -1407,7 +1478,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_GetRealmCount"
-      ]
+      ],
+      "dh": "d01ec45a"
     },
     {
       "name": "MAINMENU_GetRealmName",
@@ -1427,7 +1499,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9f488719"
     },
     {
       "name": "MAINMENU_GetRealmDescription",
@@ -1444,7 +1517,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "4b40f715"
     },
     {
       "name": "MAINMENU_ReturnTrue",
@@ -1458,7 +1532,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_ReturnTrue"
-      ]
+      ],
+      "dh": "107e278a"
     },
     {
       "name": "SAVEFILE_FindAllSaveFiles",
@@ -1477,7 +1552,8 @@
       ],
       "usedTypes": [
         "_WIN32_FIND_DATAA"
-      ]
+      ],
+      "dh": "612d61a9"
     },
     {
       "name": "MAINMENU_OnPressGotoCharacterSelect",
@@ -1497,7 +1573,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "eefafe19"
     },
     {
       "name": "Test",
@@ -1516,7 +1593,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "2d3a440c"
     },
     {
       "name": "MAINMENU_AppendCreditsEnd",
@@ -1532,7 +1610,8 @@
         "MAINMENU_AppendCreditsEnd",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
         "D2WINTEXTBOX_GetScrollPosition"
-      ]
+      ],
+      "dh": "e4726b4b"
     },
     {
       "name": "MAINMENU_LoadCreditsFile",
@@ -1568,7 +1647,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "68343bef"
     },
     {
       "name": "MAINMENU_SyncCreditsColumns",
@@ -1584,7 +1664,8 @@
         "MAINMENU_SyncCreditsColumns",
         "D2WINTEXTBOX_GetScrollPosition",
         "D2WINTEXTBOX_SetTextFromAnsiSimple"
-      ]
+      ],
+      "dh": "79cd36ff"
     },
     {
       "name": "Unreferenced_00431020",
@@ -1599,7 +1680,8 @@
       "calledFunctions": [
         "Unreferenced_00431020",
         "D2WINTEXTBOX_SetTextFromAnsiSimple"
-      ]
+      ],
+      "dh": "233e16b5"
     },
     {
       "name": "MAINMENU_DisplayCredits",
@@ -1632,7 +1714,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efac29bf"
     },
     {
       "name": "MAINMENU_InitCreditsScreen",
@@ -1657,7 +1740,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "0afbdb37"
     },
     {
       "name": "UIMENU_SelectCinematics",
@@ -1685,7 +1769,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "cc1cab70"
     },
     {
       "name": "UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton",
@@ -1713,7 +1798,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "419ebdfb"
     },
     {
       "name": "MAINMENU_ShowCinematicsMenu",
@@ -1749,7 +1835,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "be01648d"
     },
     {
       "name": "GetAndDispatchAllPossible",
@@ -1766,7 +1853,8 @@
       ],
       "usedTypes": [
         "tagMSG"
-      ]
+      ],
+      "dh": "341d10c1"
     },
     {
       "name": "UIMENU_PlayCutScene",
@@ -1793,7 +1881,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "06df19ad"
     },
     {
       "name": "MAINMENU_OnPressSetInsertPlayCd",
@@ -1810,7 +1899,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "297aaed1"
     },
     {
       "name": "MAINMENUS_OnPressSetInsertPlayCd_ForCinematicDisc",
@@ -1827,7 +1917,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "b70eb533"
     },
     {
       "name": "MAINMENU_ShowCinematicsMenuAndSetFlag",
@@ -1845,7 +1936,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "254cb69b"
     },
     {
       "name": "MAINMENU_PollDisconnectFlagPump",
@@ -1860,7 +1952,8 @@
       "calledFunctions": [
         "MAINMENU_PollDisconnectFlagPump",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "23b49a28"
     },
     {
       "name": "UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons",
@@ -1887,7 +1980,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c24eece"
     },
     {
       "name": "fpRequiredUserAction",
@@ -1904,7 +1998,8 @@
         "UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons",
         "MessagePump",
         "FORMS_DestroyList"
-      ]
+      ],
+      "dh": "66d0aa13"
     },
     {
       "name": "MAINMENU_OnPressTcpIpOptions",
@@ -1922,7 +2017,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "79063b34"
     },
     {
       "name": "MAINMENU_DetectDoubleClick",
@@ -1942,7 +2038,8 @@
         "D2ControlMsg",
         "tagPOINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "e4e1c4a4"
     },
     {
       "name": "UIMENU_ShowRealmNameOnButton",
@@ -1970,7 +2067,8 @@
         "D2BNetGatewayAccessStr",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "d99d6880"
     },
     {
       "name": "MAINMENU_CleanupSoundAndClearMessageLoop",
@@ -1989,7 +2087,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "201bbae8"
     },
     {
       "name": "Unreferenced_00431c60",
@@ -2006,7 +2105,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "120b7e66"
     },
     {
       "name": "MAINMENU_HandleNetworkPacket",
@@ -2022,7 +2122,8 @@
         "MAINMENU_HandleNetworkPacket",
         "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "6e87acfa"
     },
     {
       "name": "MAINMENU_ClearLoopFlagPump",
@@ -2037,7 +2138,8 @@
       "calledFunctions": [
         "MAINMENU_ClearLoopFlagPump",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "d2f37588"
     },
     {
       "name": "UIMENU_TCPIPAddressInput",
@@ -2065,7 +2167,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "e6cf69cc"
     },
     {
       "name": "MAINMENU_OnPressStartTcpIpTimer",
@@ -2086,7 +2189,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "bea56c72"
     },
     {
       "name": "MAINMENU_CreateGameServerThreadPump",
@@ -2102,7 +2206,8 @@
         "MAINMENU_CreateGameServerThreadPump",
         "CreateThreadClientSocketOrSingleplayer",
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "1f325576"
     },
     {
       "name": "MAINMENU_SetSelectedClassInINI",
@@ -2119,7 +2224,8 @@
       ],
       "usedTypes": [
         "eD2PlayerClassID"
-      ]
+      ],
+      "dh": "bbcd759a"
     },
     {
       "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00431f50",
@@ -2139,7 +2245,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "5a0695ca"
     },
     {
       "name": "MAINMENU_CheckCharacterSaveFileExists",
@@ -2162,7 +2269,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "345de20b"
     },
     {
       "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00432020",
@@ -2182,7 +2290,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "a94032bf"
     },
     {
       "name": "MAINMENU_OnPressGotoCharacterSelect_Unref_00432040",
@@ -2202,7 +2311,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "876411dc"
     },
     {
       "name": "MAINMENU_OnPressInvokeCurrentMenuInstance",
@@ -2219,7 +2329,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "d1c53cb9"
     },
     {
       "name": "MAINMENU_SaveAccountAndPasswordToINI",
@@ -2242,7 +2353,8 @@
         "D2ControlStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "8f7951ae"
     },
     {
       "name": "UIMENU_ChangePassword",
@@ -2273,7 +2385,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "47282913"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300",
@@ -2291,7 +2404,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "f53866f2"
     },
     {
       "name": "MAINMENU_OnPressSaveAccountNameAndShowDisconnected",
@@ -2311,7 +2425,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "8d093dc5"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2",
@@ -2329,7 +2444,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "a4cee67a"
     },
     {
       "name": "MAINMENU_IsD2GSJoinErrorRecoverable",
@@ -2346,7 +2462,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f3ae7807"
     },
     {
       "name": "MAINMENU_PollMCPThreadStatus",
@@ -2367,7 +2484,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "917915f8"
     },
     {
       "name": "MAINMENU_PollMCPThreadStatusPump",
@@ -2386,7 +2504,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "90a6f71b"
     },
     {
       "name": "MAINMENU_ConnectToRealm",
@@ -2413,7 +2532,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "853405e5"
     },
     {
       "name": "UIMENU_PleaseReadAfterCreatingAccount",
@@ -2444,7 +2564,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0385ccc"
     },
     {
       "name": "IMAGE_LoadPredefinedImagesEx",
@@ -2460,7 +2581,8 @@
         "IMAGE_LoadPredefinedImagesEx",
         "IMAGE_LoadDC6",
         "D2CheckExpansionGame"
-      ]
+      ],
+      "dh": "d4b0a89c"
     },
     {
       "name": "MAINMENU_OnPressDestroyFormList",
@@ -2478,7 +2600,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "f2b612dc"
     },
     {
       "name": "MAINMENU_AdjustFormsForKorean",
@@ -2496,7 +2619,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "02237f81"
     },
     {
       "name": "MAINMENU_PollMCPConnectionPump",
@@ -2518,7 +2642,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c4ddc9e9"
     },
     {
       "name": "MAINMENU_PollMCPCharLogonPump",
@@ -2540,7 +2665,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "56ca7d39"
     },
     {
       "name": "MAINMENU_PollMCPJoinGamePump",
@@ -2562,7 +2688,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a5acde3b"
     },
     {
       "name": "MAINMENU_PollMCPCreateGamePump",
@@ -2584,7 +2711,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "81f8587d"
     },
     {
       "name": "MAINMENU_SetMultilineText",
@@ -2606,7 +2734,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "89a71867"
     },
     {
       "name": "UIMENU_CreatePopupWithContent",
@@ -2631,7 +2760,8 @@
         "D2WinTextBox",
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "1efc50aa"
     },
     {
       "name": "UIMENU_CreatePopupWithContentAndFooter",
@@ -2656,7 +2786,8 @@
         "D2WinTextBox",
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "5605239d"
     },
     {
       "name": "UIMENU_CrashingCantTestIt",
@@ -2681,7 +2812,8 @@
         "D2WinTextBox",
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "eacbd93d"
     },
     {
       "name": "MAINMENU_ShowPopupDialog",
@@ -2707,7 +2839,8 @@
         "WCHAR",
         "int32_t",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "8ea461da"
     },
     {
       "name": "Unreferenced_00433440",
@@ -2726,7 +2859,8 @@
       "usedTypes": [
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "e277fcbf"
     },
     {
       "name": "MAINMENU_ShowPopupWithCancel",
@@ -2745,7 +2879,8 @@
       "usedTypes": [
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "e980119d"
     },
     {
       "name": "UIMENU_CreateSmallPopup",
@@ -2770,7 +2905,8 @@
         "D2WinTextBox",
         "WCHAR",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "a810cdd3"
     },
     {
       "name": "MAINMENU_DismissPopup",
@@ -2788,7 +2924,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "52825f24"
     },
     {
       "name": "MAINMENU_PlayExpansionIntro",
@@ -2817,7 +2954,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ce5899f"
     },
     {
       "name": "MAINMENU_PlayD2Intro",
@@ -2839,7 +2977,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "185d25ea"
     },
     {
       "name": "UIMENU_MainMenu",
@@ -2869,7 +3008,8 @@
         "D2ControlStrc",
         "D2WinTextBox",
         "uint32_t"
-      ]
+      ],
+      "dh": "786fb2b5"
     },
     {
       "name": "UIMENU_ShowTermsOfService",
@@ -2912,7 +3052,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "e89ed135"
     },
     {
       "name": "EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback",
@@ -2927,7 +3068,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback",
         "MAINMENU_ValidateCharacterNameCallback"
-      ]
+      ],
+      "dh": "ab89c79f"
     },
     {
       "name": "EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm",
@@ -2942,7 +3084,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm",
         "MAINMENU_ValidatePasswordChangeForm"
-      ]
+      ],
+      "dh": "e89505d2"
     },
     {
       "name": "ClickOnClassCreate",
@@ -2975,7 +3118,8 @@
         "D2ControlStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c6930bc"
     },
     {
       "name": "MAINMENU_QueryAndBuildRealmList",
@@ -3007,7 +3151,8 @@
         "D2BNetRealmEntryStrc *",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "560f413b"
     },
     {
       "name": "MAINMENU_OnPressCreditsEndCheck",
@@ -3027,7 +3172,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "8b545447"
     },
     {
       "name": "fpInsertPlayCd",
@@ -3055,7 +3201,8 @@
         "WCHAR",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "32341162"
     },
     {
       "name": "fpInsertExpansionCd",
@@ -3072,7 +3219,8 @@
         "UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton",
         "MessagePump",
         "FORMS_DestroyList"
-      ]
+      ],
+      "dh": "d343c4d9"
     },
     {
       "name": "MAINMENU_OnPressPlayIntroCinematic",
@@ -3093,7 +3241,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "6da9d647"
     },
     {
       "name": "MAINMENU_OnPressPlayAct2StartCinematic",
@@ -3114,7 +3263,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "3f5df4d1"
     },
     {
       "name": "MAINMENU_OnPressPlayAct3StartCinematic",
@@ -3135,7 +3285,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "a1634d80"
     },
     {
       "name": "MAINMENU_OnPressPlayAct4StartCinematic",
@@ -3156,7 +3307,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "1ae996df"
     },
     {
       "name": "MAINMENU_OnPressPlayAct4EndCinematic",
@@ -3177,7 +3329,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "f6b5b0e6"
     },
     {
       "name": "MAINMENU_OnPressPlayExpansionIntroCinematic",
@@ -3197,7 +3350,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "d78ed5a0"
     },
     {
       "name": "MAINMENU_OnPressPlayExpansionOutroCinematic",
@@ -3217,7 +3371,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "122fbe9f"
     },
     {
       "name": "MAINMENU_OnPressReloadMediaMpqAndReturnToMainMenu",
@@ -3239,7 +3394,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "b5e5a543"
     },
     {
       "name": "MAINMENU_OnPressShowGatewaySelect",
@@ -3271,7 +3427,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b6adcb5c"
     },
     {
       "name": "StorePreferedRealmAgain",
@@ -3296,7 +3453,8 @@
         "D2BNetGatewayAccessStr",
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "0881ba56"
     },
     {
       "name": "MAINMENU_OnPressDestroyListsAndReturnToMainMenu",
@@ -3317,7 +3475,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "0c929713"
     },
     {
       "name": "UIMENU_ConnectToServerCallback",
@@ -3352,7 +3511,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "WCHAR"
-      ]
+      ],
+      "dh": "93d8d04b"
     },
     {
       "name": "MAINMENU_DeleteCharacterOnRealm",
@@ -3378,7 +3538,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "765f737e"
     },
     {
       "name": "MAINMENU_UpgradeCharacterToExpansion",
@@ -3405,7 +3566,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3d4ca3e9"
     },
     {
       "name": "SelectedCharBnetSingleTcpIp",
@@ -3446,7 +3608,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "698a22f3"
     },
     {
       "name": "UIMENU_PlayIntroAndReturnToMainScreen",
@@ -3467,7 +3630,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "e3c60d03"
     },
     {
       "name": "thunk_UIMENU_MainMenu",
@@ -3485,7 +3649,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "e7131a34"
     },
     {
       "name": "MAINMENU_OnPressReturnToMainMenu",
@@ -3503,7 +3668,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "569bbd08"
     },
     {
       "name": "UIMENU_AndOneMorePleaseWait",
@@ -3539,7 +3705,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2bd6f28d"
     },
     {
       "name": "MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain",
@@ -3557,7 +3724,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "88a0e97a"
     },
     {
       "name": "MAINMENU_HandlePasswordChange",
@@ -3590,7 +3758,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "67c1dce0"
     },
     {
       "name": "UIMENU_AnotherSmallPopupWithContentAndSomeKindofTypeSelection",
@@ -3616,7 +3785,8 @@
         "WCHAR",
         "int32_t",
         "pfnUIMenuInstance"
-      ]
+      ],
+      "dh": "4c691d25"
     },
     {
       "name": "MAINMENU_OnPressCancelTermsOfServiceDownload",
@@ -3634,7 +3804,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "38034cc1"
     },
     {
       "name": "PlaysBlizzardNorthCutScene",
@@ -3671,7 +3842,8 @@
         "D2ArchiveStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a79a45a1"
     },
     {
       "name": "UIMENU_MainMenuAgain",
@@ -3712,7 +3884,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78b36a90"
     },
     {
       "name": "UIMENU_CreateHeroSinglePlayer",
@@ -3747,7 +3920,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "afb337dc"
     },
     {
       "name": "fAPPMODE_launcher_ReturnAppMode_Caller",
@@ -3796,7 +3970,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "98e2a9a2"
     },
     {
       "name": "MAINMENU_OnPressSinglePlayer",
@@ -3818,7 +3993,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "68758434"
     },
     {
       "name": "MAINMENU_Unused10",
@@ -3836,7 +4012,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "eb8af662"
     },
     {
       "name": "MAINMENU_OnPressSelectBattleNet",
@@ -3854,7 +4031,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "4333ed94"
     },
     {
       "name": "MAINMENU_OnPressRealmList",
@@ -3874,7 +4052,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "uint32_t"
-      ]
+      ],
+      "dh": "a33a1015"
     },
     {
       "name": "thunk_UIMENU_CreateHeroSinglePlayer",
@@ -3892,7 +4071,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "7b01b7a7"
     },
     {
       "name": "NET_MCP_CLIENT_HandleCharCreation",
@@ -3938,7 +4118,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0b1b89aa"
     },
     {
       "name": "MAINMENU_Unused13",
@@ -3966,7 +4147,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "86a9c88f"
     },
     {
       "name": "MAINMENU_OnPressReturnToMainMenuAgain",
@@ -3984,7 +4166,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "d7ee17f7"
     },
     {
       "name": "MAINMENU_Unused14",
@@ -4009,7 +4192,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "0d856d2b"
     },
     {
       "name": "MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain",
@@ -4028,7 +4212,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "dc28af71"
     },
     {
       "name": "MAINMENU_OnPressSelectBattleNet_Unref_00436320",
@@ -4046,7 +4231,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "ff7f34de"
     },
     {
       "name": "Unreferenced_00436340",
@@ -4062,7 +4248,8 @@
         "Unreferenced_00436340",
         "FORMS_DestroyList",
         "UIMENU_MainMenuAgain"
-      ]
+      ],
+      "dh": "8146ecf4"
     },
     {
       "name": "MAINMENU_OnPressCommitNewCharacterAndStartGame",
@@ -4085,7 +4272,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "6bb670cd"
     },
     {
       "name": "MAINMENU_OnPressCreateHeroSinglePlayer",
@@ -4104,7 +4292,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "22e774c4"
     },
     {
       "name": "UIMENU_ConfirmCreateCharacter",
@@ -4137,7 +4326,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "76dbbcce"
     },
     {
       "name": "MAINMENU_OnSubmitCreateBattleNetAccount",
@@ -4165,7 +4355,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "afa10e58"
     },
     {
       "name": "MAINMENU_OnPressCreateCharacterOk",
@@ -4190,7 +4381,8 @@
         "D2ControlStrc",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "a940f72a"
     },
     {
       "name": "UI_ClearCursorAnimationState_Unref_00436ac0",
@@ -4204,7 +4396,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "UI_ClearCursorAnimationState_Unref_00436ac0"
-      ]
+      ],
+      "dh": "45304774"
     },
     {
       "name": "MAINMENU_BnetConnectionProgress",
@@ -4228,7 +4421,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "c40c02d9"
     },
     {
       "name": "MAINMENU_IsValidEmailAddress",
@@ -4247,7 +4441,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c1ee1ba7"
     },
     {
       "name": "MAINMENU_OnPressConfirmSkipEmailPopup",
@@ -4267,7 +4462,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "OnPress"
-      ]
+      ],
+      "dh": "0f0dadee"
     },
     {
       "name": "MAINMENU_OnPressAcceptEmailAddress",
@@ -4285,7 +4481,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "746535f5"
     },
     {
       "name": "MAINMENU_EnterEmailCleanup",
@@ -4306,7 +4503,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b17fc060"
     },
     {
       "name": "EDITBOX_Cb_MAINMENU_EnterEmailCleanup",
@@ -4321,7 +4519,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_MAINMENU_EnterEmailCleanup",
         "MAINMENU_EnterEmailCleanup"
-      ]
+      ],
+      "dh": "36a09190"
     },
     {
       "name": "UIMENU_EnterEmailAddress",
@@ -4349,7 +4548,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "74b03213"
     },
     {
       "name": "MAINMENU_ReturnOnePump",
@@ -4363,7 +4563,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_ReturnOnePump"
-      ]
+      ],
+      "dh": "8d7ae51d"
     },
     {
       "name": "MAINMENU_EnterEmailCallback",
@@ -4377,7 +4578,8 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_EnterEmailCallback"
-      ]
+      ],
+      "dh": "013f03cf"
     },
     {
       "name": "MAINMENU_ShowDisconnectMessage",
@@ -4400,7 +4602,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "3b4863a9"
     },
     {
       "name": "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage",
@@ -4415,7 +4618,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage",
         "MAINMENU_ShowDisconnectMessage"
-      ]
+      ],
+      "dh": "f861fbec"
     },
     {
       "name": "UIMENU_YouWereDisconnectedFromBattleNet",
@@ -4447,7 +4651,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "bd7817cd"
     },
     {
       "name": "UIMENU_YouWereDisconnectedFromBattleNet2",
@@ -4471,7 +4676,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "deeb5512"
     },
     {
       "name": "MAINMENU_OnPressChangePassword",
@@ -4489,7 +4695,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "6cb66a0f"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet",
@@ -4507,7 +4714,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "c85ace71"
     },
     {
       "name": "MAINMENU_OnPressReturnToMainMenuAgain_ForBnetDisconnected2",
@@ -4525,7 +4733,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "e12a6226"
     },
     {
       "name": "MAINMENU_ShowDisconnectMessage2",
@@ -4548,7 +4757,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b3936786"
     },
     {
       "name": "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2",
@@ -4563,7 +4773,8 @@
       "calledFunctions": [
         "EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2",
         "MAINMENU_ShowDisconnectMessage2"
-      ]
+      ],
+      "dh": "d80d26e8"
     },
     {
       "name": "UIMENU_YouWereDisconnectedFromBattleNet3",
@@ -4595,7 +4806,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "97eb6aa8"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_ForBnetDisconnected3",
@@ -4613,7 +4825,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "74e1de0f"
     },
     {
       "name": "LAUNCHER_BnetConnectionPollCallback",
@@ -4631,7 +4844,8 @@
         "LAUNCHER_ClearBusyFlag",
         "D2WINMAIN_ClearMessageLoopFlag",
         "LAUNCHER_GetBusyFlag"
-      ]
+      ],
+      "dh": "48ee70a5"
     },
     {
       "name": "UIMENU_ConnectinToBattleNetWitProgressDots",
@@ -4661,7 +4875,8 @@
         "D2WinTextBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "402aaea8"
     },
     {
       "name": "MAINMENU_OnPressSubmitEmailAddress",
@@ -4688,7 +4903,8 @@
         "OnPress",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "7c780d0d"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2Alt2",
@@ -4706,7 +4922,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "7623b0a0"
     },
     {
       "name": "thunk_UIMENU_YouWereDisconnectedFromBattleNet3",
@@ -4724,7 +4941,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "d4b6e432"
     },
     {
       "name": "MAINMENU_HandleEmailChange",
@@ -4754,7 +4972,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "61f95c6c"
     },
     {
       "name": "MAINMENU_OnSubmitResetPassword",
@@ -4780,7 +4999,8 @@
         "OnPress",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "33a3a9c0"
     },
     {
       "name": "MAINMENU_GetTime32",
@@ -4798,7 +5018,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "ec5d5b50"
     },
     {
       "name": "MAINMENU_TestFlag0x20",
@@ -4815,7 +5036,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6879bff7"
     },
     {
       "name": "MAINMENU_GetFlagBits8To12",
@@ -4832,7 +5054,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "071bce71"
     },
     {
       "name": "MAINMENU_GetRealmNameIfValid",
@@ -4848,7 +5071,8 @@
         "MAINMENU_GetRealmName",
         "MAINMENU_GetRealmCount",
         "MAINMENU_GetRealmNameIfValid"
-      ]
+      ],
+      "dh": "570311ab"
     },
     {
       "name": "LAUNCHER_PollBNConnectionPump",
@@ -4864,7 +5088,8 @@
         "LAUNCHER_PollBNConnectionPump",
         "D2WINMAIN_ClearMessageLoopFlag",
         "MAINMENU_GetGlobalValue2"
-      ]
+      ],
+      "dh": "9e5137b8"
     }
   ]
 }

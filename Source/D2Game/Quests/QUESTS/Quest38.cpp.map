@@ -22,7 +22,8 @@
         "D2QuestDataStrc",
         "eD2MonsterClassId",
         "uint16_t"
-      ]
+      ],
+      "dh": "627b37a5"
     },
     {
       "name": "Q38_Callback00_NpcActivate",
@@ -44,7 +45,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "eD2MonsterClassId"
-      ]
+      ],
+      "dh": "97acd4f5"
     },
     {
       "name": "Q38_StatusFilter",
@@ -63,7 +65,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "dc70d71e"
     },
     {
       "name": "Q38_ActiveFilter",
@@ -83,7 +86,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8ec79bf9"
     },
     {
       "name": "Q38_InitData",
@@ -101,7 +105,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "b2e2c909"
     }
   ]
 }

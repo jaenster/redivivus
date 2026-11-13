@@ -17,7 +17,8 @@
       "calledFunctions": [
         "MISC_OperatorDeleteShim",
         "SMemFree"
-      ]
+      ],
+      "dh": "89f80f78"
     },
     {
       "name": "SMEM_FatalError",
@@ -36,7 +37,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "053e7724"
     },
     {
       "name": "SMEM_GetHandleByCaller",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "41652773"
     },
     {
       "name": "Unreferenced_004116e0",
@@ -71,7 +74,8 @@
       ],
       "usedTypes": [
         "D2FogHeapBlockHdrStrc"
-      ]
+      ],
+      "dh": "3571fcf5"
     },
     {
       "name": "SMemExtractBucketIndex",
@@ -88,7 +92,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f2f11b07"
     },
     {
       "name": "SMEM_LockHeapByBlockPtr",
@@ -107,7 +112,8 @@
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "640fd41b"
     },
     {
       "name": "SMemFindHeapByHash",
@@ -126,7 +132,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "de554715"
     },
     {
       "name": "SMEM_Warning",
@@ -146,7 +153,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8568ea8"
     },
     {
       "name": "SMEM_UnlockHeap",
@@ -160,7 +168,8 @@
       "namespace": "Storm::Source::SMem",
       "calledFunctions": [
         "SMEM_UnlockHeap"
-      ]
+      ],
+      "dh": "d5589b8b"
     },
     {
       "name": "SMEM_AllocateHeap",
@@ -182,7 +191,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "91bba2c1"
     },
     {
       "name": "SMEM_CheckValidBlock",
@@ -202,7 +212,8 @@
         "D2FogHeapBlockHdrStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d6cd0d9"
     },
     {
       "name": "SMemCalculateAllocationLayout",
@@ -219,7 +230,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "92f2beb0"
     },
     {
       "name": "SMEM_ComputePageSize",
@@ -237,7 +249,8 @@
       "usedTypes": [
         "_SYSTEM_INFO",
         "uint32_t"
-      ]
+      ],
+      "dh": "e93e4a9f"
     },
     {
       "name": "SMemWriteBlockHeader",
@@ -257,7 +270,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d22db92e"
     },
     {
       "name": "SMEM_FreeHeap",
@@ -271,7 +285,8 @@
       "namespace": "Storm::Source::SMem",
       "calledFunctions": [
         "SMEM_FreeHeap"
-      ]
+      ],
+      "dh": "46756a32"
     },
     {
       "name": "SMEM_FreeHeapBlock",
@@ -291,7 +306,8 @@
         "D2FogHeapDescStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5541a56d"
     },
     {
       "name": "SMemGetBlockDataAndSize",
@@ -309,7 +325,8 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "fc799b6f"
     },
     {
       "name": "SMemCommitMorePages",
@@ -328,7 +345,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e984c53c"
     },
     {
       "name": "SMEM_SatisfyFreeRequest",
@@ -348,7 +366,8 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc"
-      ]
+      ],
+      "dh": "3c7fa082"
     },
     {
       "name": "SMemCoalesceFreeBlocks",
@@ -367,7 +386,8 @@
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "33b78281"
     },
     {
       "name": "SMemInitialize",
@@ -385,7 +405,8 @@
       ],
       "usedTypes": [
         "CRITICAL_SECTION"
-      ]
+      ],
+      "dh": "10385037"
     },
     {
       "name": "SMemSetDebugFlags",
@@ -403,7 +424,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "248f5470"
     },
     {
       "name": "Unreferenced_00411da0",
@@ -418,7 +440,8 @@
       "calledFunctions": [
         "Unreferenced_00411da0",
         "SMemInitialize"
-      ]
+      ],
+      "dh": "33627e1c"
     },
     {
       "name": "SMEM_CombineFreeBlocks",
@@ -438,7 +461,8 @@
         "uint16_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "3c033208"
     },
     {
       "name": "SMEM_DestroyHeap",
@@ -462,7 +486,8 @@
         "D2FogHeapDescStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d836839e"
     },
     {
       "name": "SMEM_FreeEmptyHeaps",
@@ -480,7 +505,8 @@
       ],
       "usedTypes": [
         "CRITICAL_SECTION"
-      ]
+      ],
+      "dh": "f4385d5b"
     },
     {
       "name": "SMemReallocInPlace",
@@ -506,7 +532,8 @@
         "SMemReallocInPlace_Slotm",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b30fde5e"
     },
     {
       "name": "SMemShrinkBlock",
@@ -530,7 +557,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6797c48e"
     },
     {
       "name": "SMemDestroy",
@@ -550,7 +578,8 @@
       ],
       "usedTypes": [
         "CRITICAL_SECTION"
-      ]
+      ],
+      "dh": "ec0ad139"
     },
     {
       "name": "SMemFindNextBlock",
@@ -579,7 +608,8 @@
         "uint16_t *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "67060657"
     },
     {
       "name": "SMemFindNextHeap",
@@ -604,7 +634,8 @@
         "SMemHeapDetailsStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c73a03d8"
     },
     {
       "name": "SMemFree",
@@ -627,7 +658,8 @@
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c7ac3994"
     },
     {
       "name": "SMemGetHeapByCaller",
@@ -647,7 +679,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a12ca5e6"
     },
     {
       "name": "SMemGetHeapByPtr",
@@ -668,7 +701,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5a9601b4"
     },
     {
       "name": "SMemGetSize",
@@ -691,7 +725,8 @@
         "D2FogHeapBlockHdrStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0baaab38"
     },
     {
       "name": "SMemHeapCreate",
@@ -713,7 +748,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f30a9929"
     },
     {
       "name": "SMemHeapDestroy",
@@ -735,7 +771,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "3e654d44"
     },
     {
       "name": "SMemHeapFree",
@@ -759,7 +796,8 @@
         "D2FogHeapBlockHdrStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "51a6ad39"
     },
     {
       "name": "SMemHeapSize",
@@ -781,7 +819,8 @@
       "usedTypes": [
         "D2FogHeapBlockHdrStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5bd35813"
     },
     {
       "name": "SMEM_AllocateHeapBlock",
@@ -813,7 +852,8 @@
         "uint32_t",
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "2c777734"
     },
     {
       "name": "SMEM_SatisfyAllocRequest",
@@ -837,7 +877,8 @@
         "D2FogHeapDescStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f1764ba8"
     },
     {
       "name": "SMemReallocCore",
@@ -865,7 +906,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ec906073"
     },
     {
       "name": "SMemAlloc",
@@ -889,7 +931,8 @@
       "usedTypes": [
         "D2FogHeapDescStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "58e0a4fe"
     },
     {
       "name": "SMemDumpState",
@@ -913,7 +956,8 @@
         "SMemHeapDetailsStrc",
         "pfnSMemDumpCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "28d9b70b"
     },
     {
       "name": "SMemHeapAlloc",
@@ -935,7 +979,8 @@
       "usedTypes": [
         "D2FogHeapDescStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c332888"
     },
     {
       "name": "SMemHeapReAlloc",
@@ -961,7 +1006,8 @@
         "D2FogHeapBlockHdrStrc",
         "D2FogHeapDescStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3799b349"
     },
     {
       "name": "SMemReAlloc",
@@ -986,7 +1032,8 @@
         "D2FogHeapDescStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "65284bc2"
     },
     {
       "name": "SMemCmp",
@@ -1004,7 +1051,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "281705d4"
     },
     {
       "name": "SMemCopy",
@@ -1019,7 +1067,8 @@
       "calledFunctions": [
         "SMemCopy",
         "memcpy"
-      ]
+      ],
+      "dh": "eed7332d"
     },
     {
       "name": "SMemFill",
@@ -1037,7 +1086,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "070a07f0"
     },
     {
       "name": "SMemMove",
@@ -1052,7 +1102,8 @@
       "calledFunctions": [
         "SMemMove",
         "memmove"
-      ]
+      ],
+      "dh": "293531d9"
     },
     {
       "name": "SMemZero",
@@ -1067,7 +1118,8 @@
       "calledFunctions": [
         "SMemZero",
         "memset"
-      ]
+      ],
+      "dh": "c44eb7f3"
     }
   ]
 }

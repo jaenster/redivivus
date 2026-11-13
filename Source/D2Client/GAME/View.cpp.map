@@ -19,7 +19,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dff4e79a"
     },
     {
       "name": "DrawLight",
@@ -34,7 +35,8 @@
       "calledFunctions": [
         "DrawLight",
         "D2GFX_DrawLight"
-      ]
+      ],
+      "dh": "12c3daa3"
     },
     {
       "name": "VIEW_Init",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "uint64_t"
-      ]
+      ],
+      "dh": "a7ec0278"
     },
     {
       "name": "VIEW_AllocByteTable",
@@ -72,7 +75,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf889987"
     },
     {
       "name": "Unreferenced_00475c30",
@@ -87,7 +91,8 @@
       "calledFunctions": [
         "Unreferenced_00475c30",
         "D2MEM_VirtualFree"
-      ]
+      ],
+      "dh": "2529c1f8"
     },
     {
       "name": "VIEW_AllocPalettePointerTable",
@@ -106,7 +111,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "f5406450"
     },
     {
       "name": "Unreferenced_00475d20",
@@ -121,7 +127,8 @@
       "calledFunctions": [
         "Unreferenced_00475d20",
         "D2MEM_VirtualFree"
-      ]
+      ],
+      "dh": "e1804f32"
     },
     {
       "name": "VIEW_AllocPalettePointerTable2",
@@ -141,7 +148,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "d719ad47"
     },
     {
       "name": "Unreferenced_00475de0",
@@ -156,7 +164,8 @@
       "calledFunctions": [
         "Unreferenced_00475de0",
         "D2MEM_VirtualFree"
-      ]
+      ],
+      "dh": "124fa08d"
     },
     {
       "name": "VIEW_InitLookupTables",
@@ -180,7 +189,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3439c704"
     },
     {
       "name": "VIEW_FreeDC6Images",
@@ -195,7 +205,8 @@
       "calledFunctions": [
         "VIEW_FreeDC6Images",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "8ca2ebbc"
     },
     {
       "name": "VIEW_FreeLookupTables",
@@ -217,7 +228,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "250c2a22"
     },
     {
       "name": "FreeGameView",
@@ -236,7 +248,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "83b3d692"
     },
     {
       "name": "SetFlag0x1",
@@ -253,7 +266,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "b33b7399"
     },
     {
       "name": "SetViewRectangleSize",
@@ -273,7 +287,8 @@
         "D2GameViewStrc",
         "int32_t",
         "tagRECT"
-      ]
+      ],
+      "dh": "808dc2d2"
     },
     {
       "name": "VIEW_GetViewRect",
@@ -290,7 +305,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "1bf2f55d"
     },
     {
       "name": "SetCenterXY",
@@ -308,7 +324,8 @@
       "usedTypes": [
         "D2GameViewStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b5af31a"
     },
     {
       "name": "GetCenterXY",
@@ -325,7 +342,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "1c37e5d4"
     },
     {
       "name": "VIEW_ConvertViewCoordsToIsometric",
@@ -347,7 +365,8 @@
       "usedTypes": [
         "D2GameViewStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3ff8a82c"
     },
     {
       "name": "GAMEVIEW_PrepareScene",
@@ -371,7 +390,8 @@
         "D2GameViewStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5f5475d0"
     },
     {
       "name": "VIEW_GenerateRandomViewParams",
@@ -391,7 +411,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fa30ad4e"
     },
     {
       "name": "DRAW_Overlay_ArcaneStars",
@@ -416,7 +437,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d10e0d9"
     },
     {
       "name": "DRAW_Background_Ancients",
@@ -448,7 +470,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "628b3121"
     },
     {
       "name": "RENDERER_TogglePerspective_Unref_004769b0",
@@ -462,7 +485,8 @@
       "namespace": "D2Client::GAME::View",
       "calledFunctions": [
         "RENDERER_TogglePerspective_Unref_004769b0"
-      ]
+      ],
+      "dh": "312deb24"
     },
     {
       "name": "SHAKE_UpdateShakeSoundVolume",
@@ -484,7 +508,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d62ed24a"
     },
     {
       "name": "SetShake",
@@ -502,7 +527,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "85432c1f"
     },
     {
       "name": "SHAKE_GetShake",
@@ -516,7 +542,8 @@
       "namespace": "D2Client::GAME::View",
       "calledFunctions": [
         "SHAKE_GetShake"
-      ]
+      ],
+      "dh": "c1b4bb5c"
     },
     {
       "name": "SHAKE_Reset",
@@ -530,7 +557,8 @@
       "namespace": "D2Client::GAME::View",
       "calledFunctions": [
         "SHAKE_Reset"
-      ]
+      ],
+      "dh": "9b3cdf90"
     },
     {
       "name": "AllocGameView",
@@ -556,7 +584,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "baa7e3fe"
     },
     {
       "name": "ViewDraw2",
@@ -604,7 +633,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f3f87ea"
     },
     {
       "name": "SHAKE_AdjustCenterByShake",
@@ -626,7 +656,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "398dbd76"
     }
   ]
 }

@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "8d70b0d2"
     },
     {
       "name": "CHATDLG_Unused2",
@@ -39,7 +40,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "9473fa91"
     },
     {
       "name": "CHATDLG_ShowGatewaySelectTitle",
@@ -59,7 +61,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "c034420d"
     },
     {
       "name": "CHATDLG_DestroyFormsAndOpenChannelDialog",
@@ -79,7 +82,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "30d8ce1a"
     },
     {
       "name": "CHATDLG_DestroyFormsAndJoinGame",
@@ -99,7 +103,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "1bea48fb"
     },
     {
       "name": "CHATDLG_DestroyFormsAndOpenCreateGameDialog",
@@ -119,7 +124,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "b9eebb26"
     },
     {
       "name": "CHATDLG_OpenChatCommandsDialogRestoreFocus",
@@ -138,7 +144,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "59fe2ab5"
     }
   ]
 }

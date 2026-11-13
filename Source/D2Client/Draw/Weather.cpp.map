@@ -15,7 +15,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "Abs"
-      ]
+      ],
+      "dh": "f5fddc70"
     },
     {
       "name": "Abs2",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "Abs2"
-      ]
+      ],
+      "dh": "7c4f8240"
     },
     {
       "name": "WEATHER_Init",
@@ -45,7 +47,8 @@
         "WEATHER_Init",
         "FOG_CreateDataArray",
         "FOG_CloseDataArray"
-      ]
+      ],
+      "dh": "ee9af93a"
     },
     {
       "name": "Free",
@@ -60,7 +63,8 @@
       "calledFunctions": [
         "Free",
         "FreeWeatherPointer"
-      ]
+      ],
+      "dh": "19496ac3"
     },
     {
       "name": "LoadCustomSettingsPerAreaAct5",
@@ -84,7 +88,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "527d70c4"
     },
     {
       "name": "WEATHER_ResetEnvironmentParticles",
@@ -102,7 +107,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "8e10d22d"
     },
     {
       "name": "WEATHER_SetEnabledState",
@@ -123,7 +129,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "73e03d5a"
     },
     {
       "name": "WEATHER_InitializeRngParams",
@@ -143,7 +150,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "uint64_t"
-      ]
+      ],
+      "dh": "6116f6b8"
     },
     {
       "name": "WEATHER_UpdateStateAct5",
@@ -176,7 +184,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "5a5f92be"
     },
     {
       "name": "MISC_PrepareWeatherOverlay",
@@ -203,7 +212,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9399973a"
     },
     {
       "name": "WEATHER_FreeDC6Graphics",
@@ -221,7 +231,8 @@
       ],
       "usedTypes": [
         "DC6 *"
-      ]
+      ],
+      "dh": "3713eea5"
     },
     {
       "name": "WEATHER_ClearParticleArrays",
@@ -237,7 +248,8 @@
         "WEATHER_ClearParticleArrays",
         "FOG_InitDataArray",
         "WEATHER_UpdateStateAct5"
-      ]
+      ],
+      "dh": "33fde4c3"
     },
     {
       "name": "WEATHER_InitBlizzardState",
@@ -251,7 +263,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "WEATHER_InitBlizzardState"
-      ]
+      ],
+      "dh": "8acc62ea"
     },
     {
       "name": "WEATHER_UpdateSplashes",
@@ -272,7 +285,8 @@
         "D2DataArrayStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc002459"
     },
     {
       "name": "WEATHER_UpdateBubbles",
@@ -293,7 +307,8 @@
         "D2DataArrayStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e622b8b2"
     },
     {
       "name": "WEATHER_SpawnSplash",
@@ -321,7 +336,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a4aa765"
     },
     {
       "name": "WEATHER_SpawnBubble",
@@ -349,7 +365,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d8a3ba5e"
     },
     {
       "name": "WEATHER_GetLightingTint",
@@ -376,7 +393,8 @@
         "eD2RendererMode",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "078586c9"
     },
     {
       "name": "WEATHER_SpawnParticle",
@@ -403,7 +421,8 @@
         "D2WeatherParticleStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe8fbca6"
     },
     {
       "name": "WEATHER_UpdateParticles",
@@ -425,7 +444,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "D2WeatherParticleStrc"
-      ]
+      ],
+      "dh": "a499c0e3"
     },
     {
       "name": "WEATHER_DrawParticles",
@@ -449,7 +469,8 @@
         "D2WeatherParticleStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5426ba92"
     },
     {
       "name": "Unreferenced_00473720",
@@ -468,7 +489,8 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "LEVEL_CanHaveRain",
         "LEVEL_CanHaveMud"
-      ]
+      ],
+      "dh": "1f569738"
     },
     {
       "name": "WEATHER_GetCurrentLevelWeatherFlags",
@@ -494,7 +516,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "91fc64af"
     },
     {
       "name": "WEATHER_UpdateParticleCount",
@@ -514,7 +537,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint64_t"
-      ]
+      ],
+      "dh": "9ff6073c"
     },
     {
       "name": "DRAW_Overlay_Weather",
@@ -552,7 +576,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "30a13c20"
     },
     {
       "name": "WEATHER_DrawBubbles",
@@ -580,7 +605,8 @@
         "D2WeatherBubbleStrc",
         "DC6 *",
         "uint32_t"
-      ]
+      ],
+      "dh": "a27f406a"
     },
     {
       "name": "DRAW_WORLD_RainEffectOnFloor",
@@ -595,7 +621,8 @@
       "calledFunctions": [
         "DRAW_WORLD_RainEffectOnFloor",
         "WEATHER_DrawBubbles"
-      ]
+      ],
+      "dh": "973b48ba"
     },
     {
       "name": "WEATHER_CanHaveRain",
@@ -621,7 +648,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "27e74c68"
     },
     {
       "name": "WEATHER_FloatPassthrough",
@@ -635,7 +663,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "WEATHER_FloatPassthrough"
-      ]
+      ],
+      "dh": "5e549983"
     },
     {
       "name": "WEATHER_SetGlobalFlag",
@@ -649,7 +678,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "WEATHER_SetGlobalFlag"
-      ]
+      ],
+      "dh": "7c2d4b3e"
     },
     {
       "name": "ENV_Rcv0x54_NoOp",
@@ -663,7 +693,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp"
-      ]
+      ],
+      "dh": "d44fa75e"
     },
     {
       "name": "ENV_Rcv0x54_NoOp_Unref_00473cb0",
@@ -677,7 +708,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp_Unref_00473cb0"
-      ]
+      ],
+      "dh": "8ece6528"
     },
     {
       "name": "ENV_Rcv0x54_NoOp_Unref_00473cc0",
@@ -691,7 +723,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_Rcv0x54_NoOp_Unref_00473cc0"
-      ]
+      ],
+      "dh": "41a76974"
     },
     {
       "name": "ENV_InitClientSide_NoOp_Unref_00473cd0",
@@ -705,7 +738,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_InitClientSide_NoOp_Unref_00473cd0"
-      ]
+      ],
+      "dh": "0125b9db"
     },
     {
       "name": "ENV_InitClientSide_NoOp",
@@ -719,7 +753,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_InitClientSide_NoOp"
-      ]
+      ],
+      "dh": "49e95743"
     },
     {
       "name": "ENV_FreeClientSide_NoOp",
@@ -733,7 +768,8 @@
       "namespace": "D2Client::Draw::Weather",
       "calledFunctions": [
         "ENV_FreeClientSide_NoOp"
-      ]
+      ],
+      "dh": "dbcd33df"
     },
     {
       "name": "WEATHER_TransitionState",
@@ -759,7 +795,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56ac5d62"
     },
     {
       "name": "WEATHER_ToggleTransitionLock",
@@ -779,7 +816,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "f6c02e95"
     },
     {
       "name": "WEATHER_UpdateTransition",
@@ -806,7 +844,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ea46215"
     },
     {
       "name": "WeatherEffects",
@@ -845,7 +884,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "85521d6c"
     },
     {
       "name": "WEATHER_ApproximateDistance",
@@ -862,7 +902,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "512502c9"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "UTILS_OnUnitModeChange_NoOp"
-      ]
+      ],
+      "dh": "630f88d4"
     },
     {
       "name": "UTILS_OnUnitModeChange_NoOp_Unref_004e4030",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "UTILS_OnUnitModeChange_NoOp_Unref_004e4030"
-      ]
+      ],
+      "dh": "a06fa9a3"
     },
     {
       "name": "ANIM_OnSkillCastStub",
@@ -43,7 +45,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "ANIM_OnSkillCastStub"
-      ]
+      ],
+      "dh": "69de8a64"
     },
     {
       "name": "UTILS_SqrtFloat",
@@ -58,7 +61,8 @@
       "calledFunctions": [
         "UTILS_SqrtFloat",
         "__CIsqrt"
-      ]
+      ],
+      "dh": "046ae60b"
     },
     {
       "name": "thunk___CIsqrt",
@@ -73,7 +77,8 @@
       "calledFunctions": [
         "thunk___CIsqrt",
         "__CIsqrt"
-      ]
+      ],
+      "dh": "be575dcd"
     },
     {
       "name": "RollRandomNumerUpToArgument",
@@ -94,7 +99,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "e8468dde"
     },
     {
       "name": "RollRandomNumber",
@@ -112,7 +118,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f3c18efe"
     },
     {
       "name": "RollRandomNumberTimesTwo",
@@ -130,7 +137,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bef19327"
     },
     {
       "name": "CalculateHypotenuse",
@@ -145,7 +153,8 @@
       "calledFunctions": [
         "CalculateHypotenuse",
         "__CIsqrt"
-      ]
+      ],
+      "dh": "f81a5a00"
     },
     {
       "name": "CalculateHypotenusePowered",
@@ -159,7 +168,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "CalculateHypotenusePowered"
-      ]
+      ],
+      "dh": "6d1e53bc"
     },
     {
       "name": "ANIM_OnSkillCastStub_Unref_004f52c0",
@@ -173,7 +183,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "ANIM_OnSkillCastStub_Unref_004f52c0"
-      ]
+      ],
+      "dh": "bce85573"
     },
     {
       "name": "ANIM_OnSkillCastStub_Unref_004f52d0",
@@ -187,7 +198,8 @@
       "namespace": "D2Client::_Utils",
       "calledFunctions": [
         "ANIM_OnSkillCastStub_Unref_004f52d0"
-      ]
+      ],
+      "dh": "bf5a2f6f"
     }
   ]
 }

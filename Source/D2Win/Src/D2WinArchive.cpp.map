@@ -22,7 +22,8 @@
       "usedTypes": [
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "fe3305b0"
     },
     {
       "name": "D2WINARCHIVE_LoadImageFromArchive",
@@ -43,7 +44,8 @@
       "usedTypes": [
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "fcbc01f3"
     },
     {
       "name": "IMAGE_FreeImage",
@@ -62,7 +64,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "4bc3fab9"
     },
     {
       "name": "MessageBoxA_InsertExpansionDisc",
@@ -77,7 +80,8 @@
       "calledFunctions": [
         "MessageBoxA_InsertExpansionDisc",
         "GetHwnd"
-      ]
+      ],
+      "dh": "ddf5dc18"
     },
     {
       "name": "MessageBoxA_InsertPlayDisc",
@@ -92,7 +96,8 @@
       "calledFunctions": [
         "MessageBoxA_InsertPlayDisc",
         "GetHwnd"
-      ]
+      ],
+      "dh": "df86e2f1"
     },
     {
       "name": "Unreferenced_004fab60",
@@ -107,7 +112,8 @@
       "calledFunctions": [
         "Unreferenced_004fab60",
         "GetHwnd"
-      ]
+      ],
+      "dh": "60f6c29c"
     },
     {
       "name": "MPQ_LoadAllDataMpqFiles",
@@ -124,7 +130,8 @@
         "ARCHIVE_LoadMPQ",
         "GetUseDirectCommand",
         "D2CheckExpansionGame"
-      ]
+      ],
+      "dh": "39be6fab"
     },
     {
       "name": "ReturnZero",
@@ -141,7 +148,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "69858976"
     },
     {
       "name": "D2WINARCHIVE_GetArchiveHandle",
@@ -162,7 +170,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "64e67458"
     },
     {
       "name": "MPQ_LoadVideoMpqFiles",
@@ -182,7 +191,8 @@
       "usedTypes": [
         "fpRequiredUserAction",
         "int32_t"
-      ]
+      ],
+      "dh": "e9544d02"
     },
     {
       "name": "MPQ_UnloadAllMediaMpqFiles",
@@ -197,7 +207,8 @@
       "calledFunctions": [
         "MPQ_UnloadAllMediaMpqFiles",
         "ARCHIVE_FreeMpqFile"
-      ]
+      ],
+      "dh": "8c3ccfa1"
     },
     {
       "name": "MPQ_UnloadAllDataMpqFiles",
@@ -213,7 +224,8 @@
         "MPQ_UnloadAllDataMpqFiles",
         "ARCHIVE_FreeMpqFile",
         "MPQ_UnloadAllMediaMpqFiles"
-      ]
+      ],
+      "dh": "3b861aa1"
     },
     {
       "name": "MPQ_LoadAllMediaMpqFiles",
@@ -237,7 +249,8 @@
         "D2IniConfigStrc",
         "fpRequiredUserAction",
         "int32_t"
-      ]
+      ],
+      "dh": "c9857d1d"
     }
   ]
 }

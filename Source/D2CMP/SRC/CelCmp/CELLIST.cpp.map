@@ -22,7 +22,8 @@
         "TSLink<TCELENTRY>",
         "TSLink<TCELENTRY> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "46eba190"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -45,7 +46,8 @@
         "TSLink<TCELENTRY>",
         "TSLink<TCELENTRY> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "92cd4f27"
     },
     {
       "name": "CopyConstructor",
@@ -62,7 +64,8 @@
       ],
       "usedTypes": [
         "CELLIST"
-      ]
+      ],
+      "dh": "9ce0dd8e"
     }
   ]
 }

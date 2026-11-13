@@ -25,7 +25,8 @@
       "usedTypes": [
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "2f06a3fe"
     },
     {
       "name": "D3DTEXCACHE_SetPalette",
@@ -45,7 +46,8 @@
       "usedTypes": [
         "D3DTextureCacheStrc",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "38227c1c"
     },
     {
       "name": "D3DTEXCACHE_InsertNodeAtTail",
@@ -63,7 +65,8 @@
       "usedTypes": [
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "2576cb26"
     },
     {
       "name": "D3DTEXCACHE_RemoveNodeByIndex",
@@ -81,7 +84,8 @@
       "usedTypes": [
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "f880af90"
     },
     {
       "name": "D3DTEXCACHE_AllocateNodeFromFreeList",
@@ -102,7 +106,8 @@
       "usedTypes": [
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "88fd6a4c"
     },
     {
       "name": "D3DTEXCACHE_InvalidateByIndex",
@@ -124,7 +129,8 @@
       ],
       "usedTypes": [
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "9c8dd3f1"
     },
     {
       "name": "D3DTEXCACHE_InvalidateByTilePtr",
@@ -142,7 +148,8 @@
       "usedTypes": [
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc"
-      ]
+      ],
+      "dh": "a16b6a56"
     },
     {
       "name": "D3DTEXCACHE_Free",
@@ -166,7 +173,8 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc",
         "IUnknown"
-      ]
+      ],
+      "dh": "c5003104"
     },
     {
       "name": "D3DTEXCACHE_EnsureAvailableNode",
@@ -186,7 +194,8 @@
         "D3DTextureCacheNodeStrc",
         "D3DTextureCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c72d05e"
     }
   ]
 }

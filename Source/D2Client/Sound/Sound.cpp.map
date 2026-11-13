@@ -38,7 +38,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "d1666c7c"
     },
     {
       "name": "SOUND_CalculateAngle1",
@@ -52,7 +53,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_CalculateAngle1"
-      ]
+      ],
+      "dh": "d8421f90"
     },
     {
       "name": "SOUND_CalculateAngle2",
@@ -66,7 +68,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_CalculateAngle2"
-      ]
+      ],
+      "dh": "2508acbf"
     },
     {
       "name": "SOUND_CalculatePanning",
@@ -80,7 +83,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_CalculatePanning"
-      ]
+      ],
+      "dh": "94477875"
     },
     {
       "name": "SOUND_GetChannelArray",
@@ -99,7 +103,8 @@
       ],
       "usedTypes": [
         "D2SoundChannelStrc"
-      ]
+      ],
+      "dh": "77ecbc1f"
     },
     {
       "name": "Unreferenced_004b9440",
@@ -116,7 +121,8 @@
       ],
       "usedTypes": [
         "D2SoundChannelStrc"
-      ]
+      ],
+      "dh": "d985d27f"
     },
     {
       "name": "SOUNDINST_StopChannel",
@@ -137,7 +143,8 @@
       ],
       "usedTypes": [
         "D2SoundChannelStrc"
-      ]
+      ],
+      "dh": "a88b9d5b"
     },
     {
       "name": "SOUND_ReleaseChannel",
@@ -163,7 +170,8 @@
         "D2SoundChannelStrc",
         "D2SoundListNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "90b5dfe6"
     },
     {
       "name": "Unreferenced_004b9560",
@@ -177,7 +185,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "Unreferenced_004b9560"
-      ]
+      ],
+      "dh": "77cbff1b"
     },
     {
       "name": "SOUND_GetSoundId",
@@ -195,7 +204,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e1f14d85"
     },
     {
       "name": "SOUND_GetSoundByIndex",
@@ -216,7 +226,8 @@
         "D2ClientSoundChannelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a326003"
     },
     {
       "name": "SOUND_StopSound",
@@ -233,7 +244,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "76fccacd"
     },
     {
       "name": "SOUND_IsChannelPlaying",
@@ -253,7 +265,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "93a8abca"
     },
     {
       "name": "SOUND_SetChannelProperties",
@@ -274,7 +287,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "dcaf81df"
     },
     {
       "name": "SOUND_FindActiveStreamChannel",
@@ -293,7 +307,8 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "b4a4a304"
     },
     {
       "name": "SOUND_CalculateDistance",
@@ -315,7 +330,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4f1127fe"
     },
     {
       "name": "SOUND_CalculateUnitDirection",
@@ -336,7 +352,8 @@
         "D2UnitStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "35d9e771"
     },
     {
       "name": "SOUND_CalculateUnitDistance",
@@ -362,7 +379,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d9c78c5"
     },
     {
       "name": "SOUND_Calculate3DPosition",
@@ -385,7 +403,8 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4817b357"
     },
     {
       "name": "SOUND_PlayEnvironmentSound",
@@ -405,7 +424,8 @@
         "D2SoundChannelNodeStrc",
         "D2SoundChannelNodeStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "2b82f396"
     },
     {
       "name": "SOUND_PlaySound",
@@ -436,7 +456,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "int32_t"
-      ]
+      ],
+      "dh": "58ff93bf"
     },
     {
       "name": "SOUND_SetMasterVolume",
@@ -453,7 +474,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d6c47be0"
     },
     {
       "name": "SOUND_SetChannelPriority",
@@ -472,7 +494,8 @@
         "D2SoundChannelNodeStrc",
         "D2SoundChannelNodeStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "93994b25"
     },
     {
       "name": "SOUND_PlayItemSound",
@@ -490,7 +513,8 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2aa3be6a"
     },
     {
       "name": "SOUND_GetSoundChannel",
@@ -508,7 +532,8 @@
       "usedTypes": [
         "D2SoundListNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9039934b"
     },
     {
       "name": "SOUND_IsMusicPlaying",
@@ -522,7 +547,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_IsMusicPlaying"
-      ]
+      ],
+      "dh": "59cc71a8"
     },
     {
       "name": "SOUND_GetAmbientMusicState",
@@ -536,7 +562,8 @@
       "namespace": "D2Client::Sound",
       "calledFunctions": [
         "SOUND_GetAmbientMusicState"
-      ]
+      ],
+      "dh": "cde18b34"
     },
     {
       "name": "SOUND_GetSoundIdByChannelHandle",
@@ -553,7 +580,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "036ec1aa"
     },
     {
       "name": "Unreferenced_004b9cd0",
@@ -570,7 +598,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "0a35ebe2"
     },
     {
       "name": "SOUND_PauseAll",
@@ -585,7 +614,8 @@
       "calledFunctions": [
         "SOUND_PauseAll",
         "SOUND_TogglePauseAll"
-      ]
+      ],
+      "dh": "51ceca54"
     },
     {
       "name": "SOUND_ResumeAll",
@@ -601,7 +631,8 @@
         "SOUND_ResumeAll",
         "SOUND_TogglePauseAll",
         "SOUND_ReleaseChannel"
-      ]
+      ],
+      "dh": "d016ccd0"
     },
     {
       "name": "SOUND_GetCurrentMusic",
@@ -624,7 +655,8 @@
         "D2ClientSoundChannelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a9f0396f"
     },
     {
       "name": "SOUND_IsChannelAvailable",
@@ -643,7 +675,8 @@
         "D2SoundChannelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "437ec7b3"
     },
     {
       "name": "SOUND_FindChannelForSound",
@@ -663,7 +696,8 @@
         "D2SoundChannelStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f74bd059"
     },
     {
       "name": "Unreferenced_004b9eb0",
@@ -680,7 +714,8 @@
         "SOUNDHDR_GetGlobal3",
         "RollRandomNumber",
         "SOUND_PlaySound"
-      ]
+      ],
+      "dh": "6a77430d"
     },
     {
       "name": "SOUND_StopChannelGracefully",
@@ -710,7 +745,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ced457ca"
     },
     {
       "name": "SOUND_UpdateAllChannels",
@@ -768,7 +804,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c83de75"
     },
     {
       "name": "SOUND_StopUnitSound",
@@ -788,7 +825,8 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "D2SoundsTxt"
-      ]
+      ],
+      "dh": "0792cc8a"
     },
     {
       "name": "SOUND_StopUnitSoundByIndex",
@@ -815,7 +853,8 @@
         "D2SoundsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c8aa8bff"
     },
     {
       "name": "SOUND_StopById",
@@ -838,7 +877,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "e4ca8b8a"
     },
     {
       "name": "SOUND_FadeOutMusic",
@@ -859,7 +899,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "c6de5df6"
     },
     {
       "name": "SOUND_StopMusic",
@@ -881,7 +922,8 @@
       "usedTypes": [
         "D2SoundChannelStrc",
         "D2SoundsTxt"
-      ]
+      ],
+      "dh": "4b05a8ac"
     },
     {
       "name": "SOUND_SetLeftVolume",
@@ -903,7 +945,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4d37da38"
     },
     {
       "name": "SOUND_SetRightVolume",
@@ -925,7 +968,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "2e644bae"
     },
     {
       "name": "SOUND_DebugPrintChannels",
@@ -946,7 +990,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "1032b966"
     },
     {
       "name": "SOUND_ShutdownSystem",
@@ -972,7 +1017,8 @@
         "D2SoundsTxt",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1efb4000"
     },
     {
       "name": "SoundChaosDebug",
@@ -987,7 +1033,8 @@
       "calledFunctions": [
         "SoundChaosDebug",
         "SOUND_DebugPrintChannels"
-      ]
+      ],
+      "dh": "f5ef30e0"
     },
     {
       "name": "SOUND_IsDirectSoundAvailable",
@@ -1002,7 +1049,8 @@
       "calledFunctions": [
         "SOUND_IsDirectSoundAvailable",
         "SOUND_GetPrimaryBufferModeFlag"
-      ]
+      ],
+      "dh": "6bed95b1"
     },
     {
       "name": "SOUND_IsEaxAvailable",
@@ -1017,7 +1065,8 @@
       "calledFunctions": [
         "SOUND_IsEaxAvailable",
         "SOUND_GetSound3DFlag"
-      ]
+      ],
+      "dh": "b2aeaeb5"
     },
     {
       "name": "SOUND_ToggleSoundMixerBinary",
@@ -1039,7 +1088,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5554ae81"
     },
     {
       "name": "SOUND_CycleSoundMixerMode",
@@ -1061,7 +1111,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "7b9390ca"
     },
     {
       "name": "SOUND_PlayFootstepSound",
@@ -1079,7 +1130,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3d164d0"
     },
     {
       "name": "Unreferenced_004e41e0",
@@ -1094,7 +1146,8 @@
       "calledFunctions": [
         "Unreferenced_004e41e0",
         "DRLGENV_GetCycleIndexFromAct"
-      ]
+      ],
+      "dh": "123d8cfa"
     },
     {
       "name": "Unreferenced_004e4200",
@@ -1110,7 +1163,8 @@
         "Unreferenced_004e4200",
         "WEATHER_CanHaveRain",
         "WEATHER_FloatPassthrough"
-      ]
+      ],
+      "dh": "750887f6"
     },
     {
       "name": "Unreferenced_004e4220",
@@ -1125,7 +1179,8 @@
       "calledFunctions": [
         "Unreferenced_004e4220",
         "SOUNDHDR_ClearReferenceCounts"
-      ]
+      ],
+      "dh": "008ee439"
     },
     {
       "name": "SOUND_SetVolumeForChannel",
@@ -1143,7 +1198,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f1572bf5"
     },
     {
       "name": "SOUND_TogglePauseAll",
@@ -1158,7 +1214,8 @@
       "calledFunctions": [
         "SOUND_TogglePauseAll",
         "SOUND_StopById"
-      ]
+      ],
+      "dh": "ca3c6fc8"
     },
     {
       "name": "SOUND_UpdateEnvironmentAmbience",
@@ -1200,7 +1257,8 @@
         "eD2Sounds",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "324ca65e"
     }
   ]
 }

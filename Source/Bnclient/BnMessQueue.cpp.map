@@ -24,7 +24,8 @@
       "namespace": "Bnclient::BnMessQueue",
       "calledFunctions": [
         "BNMESSQUEUE_Initialize"
-      ]
+      ],
+      "dh": "a5f76fb5"
     },
     {
       "name": "BNMESSQUEUE_Shutdown",
@@ -38,7 +39,8 @@
       "namespace": "Bnclient::BnMessQueue",
       "calledFunctions": [
         "BNMESSQUEUE_Shutdown"
-      ]
+      ],
+      "dh": "69d2645a"
     },
     {
       "name": "BNMESSQUEUE_EnqueueBytes",
@@ -61,7 +63,8 @@
       "usedTypes": [
         "BnMessQueue",
         "int32_t"
-      ]
+      ],
+      "dh": "06f5f32a"
     },
     {
       "name": "BNMESSQUEUE_EnqueueString",
@@ -84,7 +87,8 @@
       "usedTypes": [
         "BnMessQueue",
         "int32_t"
-      ]
+      ],
+      "dh": "e2d4f7df"
     },
     {
       "name": "BNMESSQUEUE_DequeueMessage",
@@ -103,7 +107,8 @@
       ],
       "usedTypes": [
         "BnMessQueue"
-      ]
+      ],
+      "dh": "cea07062"
     },
     {
       "name": "BNMESSQUEUE_ClearAll",
@@ -121,7 +126,8 @@
       ],
       "usedTypes": [
         "BnMessQueue"
-      ]
+      ],
+      "dh": "9ffb8898"
     },
     {
       "name": "BNMESSQUEUE_SetStateIfZero",
@@ -138,7 +144,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2cbf6f5f"
     },
     {
       "name": "BNMESSQUEUE_SetStateWithString",
@@ -156,7 +163,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "14695847"
     },
     {
       "name": "SID_SetStateFlag1",
@@ -170,7 +178,8 @@
       "namespace": "Bnclient::BnMessQueue",
       "calledFunctions": [
         "SID_SetStateFlag1"
-      ]
+      ],
+      "dh": "a1d7190f"
     },
     {
       "name": "SID_SetStateFlag2",
@@ -184,7 +193,8 @@
       "namespace": "Bnclient::BnMessQueue",
       "calledFunctions": [
         "SID_SetStateFlag2"
-      ]
+      ],
+      "dh": "6dfaba92"
     }
   ]
 }

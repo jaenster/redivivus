@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2de7200c"
     },
     {
       "name": "DRLGPATH_GetApproxDistancePacked",
@@ -36,7 +37,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0d1e01c"
     },
     {
       "name": "DRLGPATH_GetDirectionIndex",
@@ -54,7 +56,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "957cfeab"
     },
     {
       "name": "DRLGPATH_GetDirectionIndexPacked",
@@ -72,7 +75,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d241d413"
     },
     {
       "name": "DRLGPATH_GetDirection",
@@ -91,7 +95,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3e65e1a"
     },
     {
       "name": "DRLGPATH_GetDirectionPacked",
@@ -110,7 +115,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "35ca630d"
     },
     {
       "name": "DRLGPATH_GetPathDirection",
@@ -128,7 +134,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fc79e8c9"
     },
     {
       "name": "DRLGPATH_GetPathDirectionPacked",
@@ -147,7 +154,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a30eef50"
     },
     {
       "name": "DRLGPATH_GetPathDirectionTriplet",
@@ -165,7 +173,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3f109410"
     },
     {
       "name": "DRLGPATH_GetPathDirectionTripletPacked",
@@ -184,7 +193,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b4abd7af"
     },
     {
       "name": "DRLGPATH_GetDirectionTriplet",
@@ -203,7 +213,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "06b8c4cf"
     },
     {
       "name": "DRLGPATH_GetDirectionTripletPacked",
@@ -222,7 +233,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e9308a9b"
     },
     {
       "name": "DRLGPATH_UpdatePathVelocityAndDirection",
@@ -240,7 +252,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3fb7409e"
     },
     {
       "name": "DRLGPATH_NormalizeFixedPointPair",
@@ -254,7 +267,8 @@
       "namespace": "D2Common::Drlg::Path",
       "calledFunctions": [
         "DRLGPATH_NormalizeFixedPointPair"
-      ]
+      ],
+      "dh": "36333d35"
     },
     {
       "name": "DRLGPATH_StepPathWithCollisionCheck",
@@ -281,7 +295,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4c1532ed"
     },
     {
       "name": "DRLGPATH_ApplyMissileOffset",
@@ -307,7 +322,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e4e73cbc"
     },
     {
       "name": "DRLGPATH_GetMissileTargetPosition",
@@ -336,7 +352,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2506de28"
     },
     {
       "name": "DRLGPATH_GetWeightedDistancePacked",
@@ -354,7 +371,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "005b10e8"
     },
     {
       "name": "DRLGPATH_FindNonBlockedDirectionFromTriplet",
@@ -379,7 +397,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "35059b2c"
     },
     {
       "name": "DRLGPATH_RaycastCollisionLine",
@@ -406,7 +425,8 @@
         "eD2CollisionShapeType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fad7094c"
     },
     {
       "name": "DRLGPATH_RaycastBresenhamLine",
@@ -430,7 +450,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4516bf87"
     },
     {
       "name": "DRLGPATH_CheckTargetReachable",
@@ -455,7 +476,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "adb7f43b"
     },
     {
       "name": "DRLGPATH_SmoothPathPoints",
@@ -478,7 +500,8 @@
         "D2PathTypeArg",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "16572b20"
     },
     {
       "name": "PATH_FindPathToward",
@@ -505,7 +528,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8069cf38"
     },
     {
       "name": "PATH_FindPathTowardFromStart",
@@ -524,7 +548,8 @@
       "usedTypes": [
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "39e66f23"
     },
     {
       "name": "PATH_FindPathSmoothed",
@@ -544,7 +569,8 @@
         "D2DynamicPathStrc",
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "e1eb1042"
     },
     {
       "name": "PATH_FindPathTowardWithAStarFallback",
@@ -568,7 +594,8 @@
         "D2PathTypeArg",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "43ade82c"
     },
     {
       "name": "PATH_FindPathSingleStep",
@@ -589,7 +616,8 @@
         "D2PathPointStrc",
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "0cf03f47"
     },
     {
       "name": "PATH_FindPathForceMove",
@@ -609,7 +637,8 @@
         "D2DynamicPathStrc",
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "ea2e0ac4"
     },
     {
       "name": "PATH_FindPathKnockback",
@@ -636,7 +665,8 @@
         "eD2UnitType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2de9078b"
     },
     {
       "name": "DRLGPATH_BuildCircularPathPoints",
@@ -658,7 +688,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "56715c56"
     },
     {
       "name": "DRLGPATH_BuildRandomizedPathPoints",
@@ -679,7 +710,8 @@
         "D2PathPointStrc",
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "8685c4bc"
     },
     {
       "name": "DRLGPATH_ScaleVelocityVector",
@@ -702,7 +734,8 @@
         "POINT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99e10d03"
     },
     {
       "name": "DRLGPATH_CheckRayCollisionToTarget",
@@ -728,7 +761,8 @@
         "POINT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9588b64"
     },
     {
       "name": "DRLGPATH_ValidateFullPath",
@@ -751,7 +785,8 @@
         "D2PathTypeArg",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c42b8906"
     },
     {
       "name": "DRLGPATH_GetSimpleDistancePacked",
@@ -769,7 +804,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb80e18d"
     },
     {
       "name": "DRLGPATH_GetDirectionDeltaTable",
@@ -786,7 +822,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "970186c2"
     },
     {
       "name": "DRLGPATH_IsPositionInBounds",
@@ -805,7 +842,8 @@
         "D2DrlgAStarContextStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd65e053"
     },
     {
       "name": "DRLGPATH_AdvanceNodeDirection",
@@ -824,7 +862,8 @@
         "D2DrlgAStarContextStrc",
         "D2DrlgRoomAStarNodeStrc",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "e89d190e"
     },
     {
       "name": "DRLGPATH_AdvancePathNodeChain",
@@ -844,7 +883,8 @@
         "D2DrlgAStarContextStrc",
         "D2DrlgRoomAStarNodeStrc",
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "8295cd62"
     },
     {
       "name": "DRLGPATH_AStarExpandNode",
@@ -871,7 +911,8 @@
         "int64_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eaeb2485"
     },
     {
       "name": "DRLGPATH_ExtractPathFromResult",
@@ -893,7 +934,8 @@
         "D2PathTypeArg",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "02aa2fec"
     },
     {
       "name": "DRLGPATH_FindPathAStar",
@@ -923,7 +965,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33be2c1b"
     },
     {
       "name": "PATH_FindPathAStar",
@@ -945,7 +988,8 @@
         "D2PathTypeArg",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "03beb451"
     },
     {
       "name": "DRLGPATH_GetSimpleDistancePacked2",
@@ -963,7 +1007,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0be4b133"
     },
     {
       "name": "DRLGPATH_FindNodeInOpenList",
@@ -982,7 +1027,8 @@
         "D2CoordsShort",
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
-      ]
+      ],
+      "dh": "5ac92be8"
     },
     {
       "name": "DRLGPATH_FindNodeInClosedList",
@@ -1001,7 +1047,8 @@
         "D2CoordsShort",
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
-      ]
+      ],
+      "dh": "3de0a487"
     },
     {
       "name": "DRLGPATH_InsertNodeSorted",
@@ -1020,7 +1067,8 @@
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "68d7b179"
     },
     {
       "name": "DRLGPATH_PopBestNodeFromOpenList",
@@ -1040,7 +1088,8 @@
         "D2DrlgPathSearchCtxStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "527dc5ba"
     },
     {
       "name": "DRLGPATH_PropagateNodeCosts",
@@ -1060,7 +1109,8 @@
         "D2DrlgPathNodeStrc *",
         "D2DrlgPathSearchCtxStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "078efa21"
     },
     {
       "name": "DRLGPATH_AllocPathNode",
@@ -1079,7 +1129,8 @@
       "usedTypes": [
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc"
-      ]
+      ],
+      "dh": "381f5fc5"
     },
     {
       "name": "DRLGPATH_TryExpandNeighborNode",
@@ -1105,7 +1156,8 @@
         "D2DrlgPathSearchCtxStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab762d80"
     },
     {
       "name": "DRLGPATH_ExpandAllNeighbors",
@@ -1130,7 +1182,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "731f9255"
     },
     {
       "name": "DRLGPATH_ExtractPathFromResult2",
@@ -1151,7 +1204,8 @@
         "D2PathExtractFrameStrc",
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "083ae98e"
     },
     {
       "name": "DRLGPATH_CheckSurroundingCollisions",
@@ -1173,7 +1227,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "deea813e"
     },
     {
       "name": "PATH_FindPathAStarLocalPool",
@@ -1200,7 +1255,8 @@
         "D2PathPointStrc",
         "D2PathTypeArg",
         "int32_t"
-      ]
+      ],
+      "dh": "86aa3386"
     },
     {
       "name": "DRLGPATH_GetSquaredDistancePacked",
@@ -1218,7 +1274,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0b8261e"
     },
     {
       "name": "DRLGPATH_BuildBresenhamPointList",
@@ -1237,7 +1294,8 @@
         "D2PathPointStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "73c3b88a"
     },
     {
       "name": "DRLGPATH_GetDirectionLookupFromPacked",
@@ -1254,7 +1312,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "b10492fa"
     },
     {
       "name": "DRLGPATH_TryStepWithFallbackDirections",
@@ -1280,7 +1339,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2358f86e"
     },
     {
       "name": "DRLGPATH_InsertWaypointsIntoBuffer",
@@ -1301,7 +1361,8 @@
         "D2DrlgPathScannerStrc",
         "D2PathPointStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "224e7163"
     },
     {
       "name": "DRLGPATH_FindPathDualScan",
@@ -1328,7 +1389,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2dc0ba98"
     },
     {
       "name": "DRLGPATH_SimplifyCollinearWaypoints",
@@ -1347,7 +1409,8 @@
         "D2PathPointStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e890194"
     },
     {
       "name": "PATH_FindPathTowardFallback",
@@ -1377,7 +1440,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "76fde0fa"
     }
   ]
 }

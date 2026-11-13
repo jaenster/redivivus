@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "fnAppModeRun *"
-      ]
+      ],
+      "dh": "e7851160"
     },
     {
       "name": "AppModeLauncherShutdown",
@@ -32,7 +33,8 @@
       "namespace": "D2Launch",
       "calledFunctions": [
         "AppModeLauncherShutdown"
-      ]
+      ],
+      "dh": "0575b4fb"
     },
     {
       "name": "thunk__strstr",
@@ -47,7 +49,8 @@
       "calledFunctions": [
         "thunk__strstr",
         "strstr"
-      ]
+      ],
+      "dh": "4f5d5657"
     },
     {
       "name": "MAINMENU_ShowBnetConnectionError",
@@ -65,7 +68,8 @@
         "FORMS_SetGlobalFormImage",
         "SetUnsetFlag0x08",
         "D2WINTEXTBOX_SetTextFromAnsiSimple"
-      ]
+      ],
+      "dh": "c58c1921"
     },
     {
       "name": "UIMENU_ToggleHardcoreMode",
@@ -82,7 +86,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "27afbeaa"
     },
     {
       "name": "UIMENU_DisconnectAndReturnToMainMenu",
@@ -101,7 +106,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "b8892dd9"
     },
     {
       "name": "MAINMENU_ConnectViaTCPIPAndSelectChar",
@@ -124,7 +130,8 @@
       ],
       "usedTypes": [
         "D2ControlMsg"
-      ]
+      ],
+      "dh": "dd153309"
     },
     {
       "name": "MAINMENU_OnPressSkipEmailAddress",
@@ -142,7 +149,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "0e11cc50"
     },
     {
       "name": "thunk_UIMENU_MainMenuAgain",
@@ -160,7 +168,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "7ab556ec"
     }
   ]
 }

@@ -25,7 +25,8 @@
         "D2QuestDataA3Q0Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f2b4556b"
     },
     {
       "name": "Q17_GetHratliCoords",
@@ -46,7 +47,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "aa99fa62"
     },
     {
       "name": "Objects_InitFn50_HratliEnd",
@@ -73,7 +75,8 @@
         "D2QuestDataA3Q0Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ce6e1497"
     },
     {
       "name": "Q17_SetupHratliMapAi",
@@ -96,7 +99,8 @@
         "D2MapAIStrc",
         "D2QuestDataA3Q0Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "6786ea46"
     },
     {
       "name": "Q18_ActiveFilter",
@@ -118,7 +122,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6c0d7869"
     },
     {
       "name": "Q18_InitObjectMode",
@@ -137,7 +142,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "f0c2ac33"
     },
     {
       "name": "Q18_PlayerNotifyCompleted",
@@ -160,7 +166,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "7a527a2a"
     },
     {
       "name": "Q18_PlayerUpdateTomeState",
@@ -184,7 +191,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2fdd480c"
     },
     {
       "name": "Q18_Callback00_NpcActivate",
@@ -213,7 +221,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a661d014"
     },
     {
       "name": "CompleteQuestStates",
@@ -243,7 +252,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "4bc41263"
     },
     {
       "name": "RewardStatPoints",
@@ -266,7 +276,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "70a7a44f"
     },
     {
       "name": "LockCompletingQuest",
@@ -287,7 +298,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "26aba353"
     },
     {
       "name": "Q18_Callback10_PlayerLeavesGame",
@@ -328,7 +340,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fe7275b2"
     },
     {
       "name": "QUEST_StateHandler_PlayTomeHandInSound",
@@ -349,7 +362,8 @@
         "D2QuestDataA3Q1Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "78b58bf3"
     },
     {
       "name": "Q18_Callback11_ScrollMessage",
@@ -387,7 +401,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "501ad92d"
     },
     {
       "name": "Q18_Callback04_ItemPickedUp",
@@ -410,7 +425,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA3Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "276b7c43"
     },
     {
       "name": "Q18_Callback05_ItemDropped",
@@ -432,7 +448,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "160f0344"
     },
     {
       "name": "OBJOP_A3Q1_ActivateLamEsensTome",
@@ -464,7 +481,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d8bbebf8"
     },
     {
       "name": "Q18_Callback09_PlayerDroppedWithQuestItem",
@@ -485,7 +503,8 @@
         "D2QuestDataA3Q1Strc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "503c6078"
     },
     {
       "name": "Q18_Callback14_PlayerJoinedGame",
@@ -507,7 +526,8 @@
         "D2QuestDataA3Q1Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bb8aeec6"
     },
     {
       "name": "Q18_Callback13_PlayerStartedGame",
@@ -535,7 +555,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "741efc9e"
     },
     {
       "name": "Q18_SequenceFilter",
@@ -557,7 +578,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eba51d9f"
     },
     {
       "name": "Q18_CheckPlayerHasTome",
@@ -578,7 +600,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "79e4f2ab"
     },
     {
       "name": "Q18_StatusFilter",
@@ -609,7 +632,8 @@
         "eAct",
         "eD2LevelId",
         "uint16_t"
-      ]
+      ],
+      "dh": "41c3e699"
     },
     {
       "name": "Q18_InitData",
@@ -630,7 +654,8 @@
       "usedTypes": [
         "D2QuestDataA3Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "031a7be9"
     }
   ]
 }

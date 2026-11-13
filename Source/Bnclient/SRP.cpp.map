@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "432af834"
     },
     {
       "name": "SRP_ConstructContext",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "D2Srp"
-      ]
+      ],
+      "dh": "22d7037e"
     },
     {
       "name": "SRP_InitializeRandomState",
@@ -63,7 +65,8 @@
         "D2Srp",
         "D2SrpSeedEntropyStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d1c3400"
     },
     {
       "name": "SRP_ExtractSessionKeyBytes",
@@ -88,7 +91,8 @@
         "D2Srp",
         "D2Srp *",
         "uint32_t"
-      ]
+      ],
+      "dh": "c63b90f7"
     },
     {
       "name": "SRP_ComputePasswordHash",
@@ -116,7 +120,8 @@
         "D2Srp",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "494772c3"
     },
     {
       "name": "SRP_ComputeScramblingParam",
@@ -135,7 +140,8 @@
       "usedTypes": [
         "BigData *",
         "D2Srp"
-      ]
+      ],
+      "dh": "1768ae49"
     },
     {
       "name": "SRP_HashBigNumToU32",
@@ -161,7 +167,8 @@
         "D2Srp",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2cf93c82"
     },
     {
       "name": "SRP_ClientComputeSharedSecret",
@@ -192,7 +199,8 @@
         "D2Srp",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70f622e4"
     },
     {
       "name": "SRP_ServerComputeSharedSecret",
@@ -221,7 +229,8 @@
         "BigData *",
         "D2Srp",
         "int32_t"
-      ]
+      ],
+      "dh": "4493a1bd"
     },
     {
       "name": "SRP_ComputeClientProof",
@@ -247,7 +256,8 @@
         "D2Srp",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "264f04a9"
     },
     {
       "name": "SRP_ComputeServerProof",
@@ -270,7 +280,8 @@
         "D2BnSha1ContextStrc",
         "D2Srp",
         "uint8_t"
-      ]
+      ],
+      "dh": "341e6bcf"
     },
     {
       "name": "SRP_IsContextInitialized",
@@ -287,7 +298,8 @@
       ],
       "usedTypes": [
         "D2Srp"
-      ]
+      ],
+      "dh": "dcd074e2"
     },
     {
       "name": "SRP_CreateContext",
@@ -307,7 +319,8 @@
       "usedTypes": [
         "D2Srp",
         "D2Srp *"
-      ]
+      ],
+      "dh": "52b45a8b"
     },
     {
       "name": "SRP_ExportPublicValues",
@@ -326,7 +339,8 @@
       "usedTypes": [
         "D2Srp *",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5d3568b"
     },
     {
       "name": "SRP_SetParameters",
@@ -349,7 +363,8 @@
         "D2Srp *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cee8b1b2"
     },
     {
       "name": "SRP_SeedRandom",
@@ -368,7 +383,8 @@
       "usedTypes": [
         "D2Srp *",
         "uint32_t"
-      ]
+      ],
+      "dh": "6beddd83"
     },
     {
       "name": "SRP_FreeParameters",
@@ -386,7 +402,8 @@
       ],
       "usedTypes": [
         "D2Srp *"
-      ]
+      ],
+      "dh": "5ac0f831"
     },
     {
       "name": "SRP_ClientGenerateVerifier",
@@ -410,7 +427,8 @@
       "usedTypes": [
         "BigData",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e0833f9"
     },
     {
       "name": "SRP_GenerateAccountCredentials",
@@ -435,7 +453,8 @@
       "usedTypes": [
         "BigData",
         "D2Srp *"
-      ]
+      ],
+      "dh": "a86c1198"
     },
     {
       "name": "SRP_ClientKeyExchange",
@@ -467,7 +486,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dc8ed7ba"
     },
     {
       "name": "SRP_ClientVerifyServerProof",
@@ -488,7 +508,8 @@
         "D2Srp *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0fea1361"
     },
     {
       "name": "SRP_ParseChallenge",
@@ -511,7 +532,8 @@
         "BigData",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0883c295"
     },
     {
       "name": "SRP_ServerComputePublicB",
@@ -539,7 +561,8 @@
         "BigData",
         "D2Srp *",
         "uint8_t"
-      ]
+      ],
+      "dh": "f80318a6"
     },
     {
       "name": "SRP_ClientVerifyAndComputeKey",
@@ -566,7 +589,8 @@
         "BigData",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2a7f1ed2"
     },
     {
       "name": "SRP_ComputeFinalProof",
@@ -585,7 +609,8 @@
       "usedTypes": [
         "D2Srp *",
         "uint8_t"
-      ]
+      ],
+      "dh": "bda4b34c"
     },
     {
       "name": "SRP_GlobalInit",
@@ -601,7 +626,8 @@
         "SRP_GlobalInit",
         "SRP_CreateContext",
         "atexit"
-      ]
+      ],
+      "dh": "a67a0793"
     },
     {
       "name": "SRP_AtexitCleanup",
@@ -616,7 +642,8 @@
       "calledFunctions": [
         "SRP_AtexitCleanup",
         "SRP_DestroyContext"
-      ]
+      ],
+      "dh": "f566996c"
     }
   ]
 }

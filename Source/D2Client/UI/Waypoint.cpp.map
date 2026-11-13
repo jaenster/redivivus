@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0160d4ea"
     },
     {
       "name": "WAYPOINT_GetWaypointIndexFromMouse",
@@ -39,7 +40,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a2a18adb"
     },
     {
       "name": "Unreferenced_0049c560",
@@ -53,7 +55,8 @@
       "namespace": "D2Client::UI::Waypoint",
       "calledFunctions": [
         "Unreferenced_0049c560"
-      ]
+      ],
+      "dh": "732dfd6e"
     },
     {
       "name": "DRAW_UI_WaypointGFXLoad",
@@ -71,7 +74,8 @@
         "IMAGE_LoadDC6Ex",
         "D2CheckExpansionGame",
         "CLIENT_CheckExpansion"
-      ]
+      ],
+      "dh": "ba1ccc0d"
     },
     {
       "name": "FreeUiImages",
@@ -86,7 +90,8 @@
       "calledFunctions": [
         "FreeUiImages",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "9c1a8198"
     },
     {
       "name": "InitializeWaypoints",
@@ -101,7 +106,8 @@
       "calledFunctions": [
         "InitializeWaypoints",
         "Alloc"
-      ]
+      ],
+      "dh": "18d32950"
     },
     {
       "name": "WAYPOINT_SendClosePacket",
@@ -122,7 +128,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4d9dccb1"
     },
     {
       "name": "WAYPOINT_Shutdown",
@@ -145,7 +152,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a5e8d2a9"
     },
     {
       "name": "Waypoint_SetWaypointArea",
@@ -167,7 +175,8 @@
         "eD2QuestState",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "e64c3b65"
     },
     {
       "name": "WAYPOINT_PopulateList",
@@ -195,7 +204,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "46e23949"
     },
     {
       "name": "Unreferenced_0049c980",
@@ -215,7 +225,8 @@
         "GetActNoFromLevelNumber",
         "Waypoint_SetWaypointArea",
         "WAYPOINT_PopulateList"
-      ]
+      ],
+      "dh": "0977e4eb"
     },
     {
       "name": "DRAW_UI_Waypoint",
@@ -264,7 +275,8 @@
         "eD2Quests",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87cbf6dd"
     },
     {
       "name": "INPUT_WaypointTravel",
@@ -288,7 +300,8 @@
         "D2RoomStrc",
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5dbd560d"
     },
     {
       "name": "WAYPOINT_SendOpenPacket",
@@ -309,7 +322,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f114fe23"
     },
     {
       "name": "WAYPOINT_Init",
@@ -339,7 +353,8 @@
         "eAct",
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "789b011b"
     },
     {
       "name": "INPUT_WaypointMouseUp",
@@ -365,7 +380,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e972a4e2"
     },
     {
       "name": "INPUT_WaypointMouseDown",
@@ -396,7 +412,8 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ff524706"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "D2DrlgVertexStrc",
         "D2PoolManagerStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "3474e783"
     },
     {
       "name": "DRLGVER_SetVertexFlags",
@@ -38,7 +39,8 @@
       ],
       "usedTypes": [
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "9205d96f"
     },
     {
       "name": "DRLGVER_CreateVerticesFromEdges",
@@ -64,7 +66,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e575cfa7"
     },
     {
       "name": "DRLGVER_CreateRoomVertices",
@@ -88,7 +91,8 @@
         "D2DrlgVertexStrc *",
         "D2PoolManagerStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "e6d11ae8"
     },
     {
       "name": "DRLGVER_FreeVertices",
@@ -108,7 +112,8 @@
         "D2DrlgVertexStrc",
         "D2DrlgVertexStrc *",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "096266e7"
     },
     {
       "name": "Unreferenced_0067d250",
@@ -125,7 +130,8 @@
       ],
       "usedTypes": [
         "D2DrlgVertexStrc *"
-      ]
+      ],
+      "dh": "2e931499"
     },
     {
       "name": "GetCoordDiff",
@@ -142,7 +148,8 @@
       ],
       "usedTypes": [
         "D2DrlgVertexStrc"
-      ]
+      ],
+      "dh": "f8a90c6e"
     }
   ]
 }

@@ -19,7 +19,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "871476a3"
     },
     {
       "name": "ZLIB_Adler32Combine",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eaa44abf"
     },
     {
       "name": "ZLIB_Adler32Combine32",
@@ -56,7 +58,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a6758abc"
     },
     {
       "name": "ZLIB_Adler32Combine64",
@@ -74,7 +77,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "183bddb7"
     }
   ]
 }

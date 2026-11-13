@@ -19,7 +19,8 @@
       "usedTypes": [
         "EH4_EXCEPTION_REGISTRATION",
         "THREADNAME_INFO"
-      ]
+      ],
+      "dh": "cac4e6d0"
     },
     {
       "name": "DEBUG_LoadDbgHelp64Apis",
@@ -33,7 +34,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "DEBUG_LoadDbgHelp64Apis"
-      ]
+      ],
+      "dh": "f71367be"
     },
     {
       "name": "Unreferenced_00401c80",
@@ -47,7 +49,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "Unreferenced_00401c80"
-      ]
+      ],
+      "dh": "55595b0a"
     },
     {
       "name": "InitializeDebugSymbols",
@@ -64,7 +67,8 @@
         "__security_check_cookie",
         "strrchr",
         "strncpy_s"
-      ]
+      ],
+      "dh": "1b97a8ba"
     },
     {
       "name": "Unreferenced_00401dd0",
@@ -78,7 +82,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "Unreferenced_00401dd0"
-      ]
+      ],
+      "dh": "27315543"
     },
     {
       "name": "GetModuleInfoForAddress",
@@ -103,7 +108,8 @@
         "pfnEHHandlerRoutine",
         "pfnSymGetModuleInfo64",
         "uint32_t"
-      ]
+      ],
+      "dh": "32e71d8d"
     },
     {
       "name": "GetSymbolNameForAddress",
@@ -128,7 +134,8 @@
         "IMAGEHLP_MODULE",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "503c5336"
     },
     {
       "name": "GetSourceLineForAddress",
@@ -150,7 +157,8 @@
         "IMAGEHLP_LINE",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "6c368b89"
     },
     {
       "name": "EnumerateLoadedModules",
@@ -168,7 +176,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "d7204888"
     },
     {
       "name": "SetSymbolSearchPath",
@@ -188,7 +197,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "c1c84af7"
     },
     {
       "name": "FindSymbolFile",
@@ -208,7 +218,8 @@
       "usedTypes": [
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "5924df61"
     },
     {
       "name": "LoadModuleSymbols",
@@ -228,7 +239,8 @@
       "usedTypes": [
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "afa2ed50"
     },
     {
       "name": "UnloadModuleSymbols",
@@ -248,7 +260,8 @@
       "usedTypes": [
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "d74eedb1"
     },
     {
       "name": "WalkStackFrame",
@@ -267,7 +280,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "6b071c92"
     },
     {
       "name": "WriteCrashDumpViaThread",
@@ -288,7 +302,8 @@
         "_EXCEPTION_POINTERS *",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "715ae0e4"
     },
     {
       "name": "DEBUG_CrashDumpRequestThreadProc",
@@ -305,7 +320,8 @@
         "DebugThread",
         "WriteCrashDumpViaThread",
         "SetEvent"
-      ]
+      ],
+      "dh": "7b7220cc"
     },
     {
       "name": "CrashDumpWriterThread",
@@ -329,7 +345,8 @@
         "_EXCEPTION_POINTERS",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b451183d"
     },
     {
       "name": "InitializeDebugSubsystem",
@@ -343,7 +360,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "InitializeDebugSubsystem"
-      ]
+      ],
+      "dh": "79516405"
     },
     {
       "name": "DEBUG_GetDbgHelpModuleRange",
@@ -361,7 +379,8 @@
       "usedTypes": [
         "_MODULEINFO",
         "uint32_t"
-      ]
+      ],
+      "dh": "89244eb7"
     },
     {
       "name": "CleanupDebugSymbols",
@@ -378,7 +397,8 @@
       ],
       "usedTypes": [
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "257d6566"
     },
     {
       "name": "ZeroStruct36Bytes",
@@ -392,7 +412,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "ZeroStruct36Bytes"
-      ]
+      ],
+      "dh": "c815976c"
     },
     {
       "name": "ZeroStruct16Bytes",
@@ -406,7 +427,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "ZeroStruct16Bytes"
-      ]
+      ],
+      "dh": "9bd7853a"
     },
     {
       "name": "ZeroStruct16BytesDuplicate",
@@ -420,7 +442,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "ZeroStruct16BytesDuplicate"
-      ]
+      ],
+      "dh": "e5d5ef96"
     },
     {
       "name": "SKILLSTXT_ZeroOutFields",
@@ -437,7 +460,8 @@
       ],
       "usedTypes": [
         "D2SkillsTxt"
-      ]
+      ],
+      "dh": "6ce55a66"
     },
     {
       "name": "CompareUintDescending",
@@ -451,7 +475,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "CompareUintDescending"
-      ]
+      ],
+      "dh": "45ef80b3"
     },
     {
       "name": "Unreferenced_00402c30",
@@ -469,7 +494,8 @@
       "usedTypes": [
         "D2FogDebugModuleEntryStrc",
         "D2FogDebugModuleTableStrc"
-      ]
+      ],
+      "dh": "10c4a823"
     },
     {
       "name": "FormatModuleDebugString",
@@ -489,7 +515,8 @@
       "usedTypes": [
         "D2FogDebugModuleEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac5e55d4"
     },
     {
       "name": "FormatAddressDebugString",
@@ -509,7 +536,8 @@
       "usedTypes": [
         "D2CrashFrameStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7edbf882"
     },
     {
       "name": "EnumerateAndDumpAllFunctions",
@@ -537,7 +565,8 @@
         "Report",
         "fnCrashOutputLine",
         "uint32_t"
-      ]
+      ],
+      "dh": "22408e30"
     },
     {
       "name": "InitializeDebugInfoTable",
@@ -557,7 +586,8 @@
         "D2FogDebugModuleTableStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8378b94e"
     },
     {
       "name": "CRASH_DumpThreadContext",
@@ -580,7 +610,8 @@
         "fnCrashOutputLine",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "852f149b"
     },
     {
       "name": "CRASH_FormatStackTrace",
@@ -607,7 +638,8 @@
         "fnCrashOutputLine",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "459cc8d0"
     },
     {
       "name": "DEBUG_UnloadStackCrawlDbgHelp",
@@ -621,7 +653,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "DEBUG_UnloadStackCrawlDbgHelp"
-      ]
+      ],
+      "dh": "4a76794d"
     },
     {
       "name": "DumpThreadContext",
@@ -642,7 +675,8 @@
       ],
       "usedTypes": [
         "CONTEXT"
-      ]
+      ],
+      "dh": "651580db"
     },
     {
       "name": "GetSourceLineWithRetry",
@@ -656,7 +690,8 @@
       "namespace": "Fog::Debug",
       "calledFunctions": [
         "GetSourceLineWithRetry"
-      ]
+      ],
+      "dh": "1f4e47e9"
     },
     {
       "name": "FOG_FreeModuleList",
@@ -674,7 +709,8 @@
       ],
       "usedTypes": [
         "D2FogModuleNodeStrc"
-      ]
+      ],
+      "dh": "52dc91a4"
     },
     {
       "name": "EnumerateModulesToolhelp32",
@@ -700,7 +736,8 @@
         "pfnModule32First",
         "pfnModule32Next",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e03cee7"
     },
     {
       "name": "EnumerateModulesPsapi",
@@ -728,7 +765,8 @@
         "pfnGetModuleFileNameExA",
         "pfnGetModuleInformation",
         "uint32_t"
-      ]
+      ],
+      "dh": "e4bd3c9b"
     },
     {
       "name": "EnumerateAndLogModules",
@@ -749,7 +787,8 @@
       "usedTypes": [
         "D2FogModuleNodeStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ba47d63"
     },
     {
       "name": "FindModuleContainingAddress",
@@ -767,7 +806,8 @@
       "usedTypes": [
         "D2FogModuleNodeStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cb1ff8c1"
     },
     {
       "name": "DumpAnnotatedStackMemory",
@@ -799,7 +839,8 @@
         "D2FogModuleNodeStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "08c8263e"
     },
     {
       "name": "LoadSymbolsForAllModules",
@@ -820,7 +861,8 @@
       "usedTypes": [
         "D2FogModuleNodeStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "13ad498d"
     },
     {
       "name": "FILETOOLS_GetExecutableFolderPath",
@@ -837,7 +879,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "07e3bfcf"
     },
     {
       "name": "BuildSymbolSearchPath",
@@ -858,7 +901,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "fbdf9452"
     },
     {
       "name": "COMPRESS_Implode",
@@ -876,7 +920,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8430011d"
     },
     {
       "name": "InitializeSymbolsWithRefcount",
@@ -897,7 +942,8 @@
       ],
       "usedTypes": [
         "D2FogModuleNodeStrc"
-      ]
+      ],
+      "dh": "303ef136"
     },
     {
       "name": "CleanupSymbolsWithRefcount",
@@ -914,7 +960,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8adf3073"
     },
     {
       "name": "QuickStackWalkWithSymbols",
@@ -945,7 +992,8 @@
         "ULONGLONG",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "296e68c9"
     },
     {
       "name": "FullStackWalkWithAnnotations",
@@ -983,7 +1031,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "70218551"
     },
     {
       "name": "WriteCrashDump",
@@ -1010,7 +1059,8 @@
         "FILE",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "51f02a72"
     },
     {
       "name": "LoadPreviousCrashDump",
@@ -1041,7 +1091,8 @@
         "FILE",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1e8116e5"
     },
     {
       "name": "HandleExceptionWithStackDump",
@@ -1060,7 +1111,8 @@
       ],
       "usedTypes": [
         "_EXCEPTION_POINTERS"
-      ]
+      ],
+      "dh": "d625977f"
     },
     {
       "name": "DEBUG_LoadStackCrawlDbgHelp",
@@ -1076,7 +1128,8 @@
         "DEBUG_LoadStackCrawlDbgHelp",
         "_set_se_translator",
         "LOGFILE_WriteStringToFile"
-      ]
+      ],
+      "dh": "fabd74a4"
     },
     {
       "name": "TriggerManualStackDump",
@@ -1097,7 +1150,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "31aaadf4"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca575",
@@ -1118,7 +1172,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "7a02f1d7"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca595",
@@ -1139,7 +1194,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "8ca3dc62"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5b5",
@@ -1160,7 +1216,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "7287dad6"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5d5",
@@ -1181,7 +1238,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "e58c422f"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca5f5",
@@ -1202,7 +1260,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "fc17fbcf"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca615",
@@ -1223,7 +1282,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "f33015a7"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca635",
@@ -1244,7 +1304,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "350668b2"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca655",
@@ -1265,7 +1326,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "575eb913"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca675",
@@ -1286,7 +1348,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "d454976f"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca695",
@@ -1307,7 +1370,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "00272bc2"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca6c5",
@@ -1328,7 +1392,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "9cf50bf4"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
         "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020"
-      ]
+      ],
+      "dh": "d072ff9b"
     },
     {
       "name": "D2WINMAIN_SetBackgroundDC6",
@@ -32,7 +33,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "04ee7055"
     },
     {
       "name": "D2WINMAIN_SetCursorDC6",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "DC6"
-      ]
+      ],
+      "dh": "c98080e2"
     },
     {
       "name": "D2WINMAIN_SetExitCallback",
@@ -66,7 +69,8 @@
       ],
       "usedTypes": [
         "pfnVoidNoArgCallback"
-      ]
+      ],
+      "dh": "dc0c637c"
     },
     {
       "name": "D2WINMAIN_ClearMessageLoopFlag",
@@ -80,7 +84,8 @@
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
         "D2WINMAIN_ClearMessageLoopFlag"
-      ]
+      ],
+      "dh": "8ebfd98c"
     },
     {
       "name": "D2WINMAIN_SetControlField4",
@@ -98,7 +103,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "DC6"
-      ]
+      ],
+      "dh": "df5a72ba"
     },
     {
       "name": "D2WINMAIN_SetFocusedControl",
@@ -116,7 +122,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "f4ae88b9"
     },
     {
       "name": "FORMS_GetFormTextAndEditBox",
@@ -133,7 +140,8 @@
       ],
       "usedTypes": [
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "ab1d2f10"
     },
     {
       "name": "FORMS_AddControlToGlobalList",
@@ -150,7 +158,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "3e3af818"
     },
     {
       "name": "FORMS_AppendFormToDestroyQueue",
@@ -167,7 +176,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "7c2691fa"
     },
     {
       "name": "D2WINMAIN_FreeLeadingFormControls",
@@ -182,7 +192,8 @@
       "calledFunctions": [
         "D2WINMAIN_FreeLeadingFormControls",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "a7154c9e"
     },
     {
       "name": "FORMS_DestroyControl",
@@ -200,7 +211,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "7f7b8b01"
     },
     {
       "name": "FORMS_CreateAnyForm",
@@ -232,7 +244,8 @@
         "D2WinProgressBar",
         "DC6",
         "FORMS_PredefinedFormStrc"
-      ]
+      ],
+      "dh": "2ae153fa"
     },
     {
       "name": "FORMS_DestroyAnyForm",
@@ -262,7 +275,8 @@
       "usedTypes": [
         "D2ControlStrc *",
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "0be8d7bd"
     },
     {
       "name": "D2WINMAIN_SetControlVisible",
@@ -279,7 +293,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "5cf9cf63"
     },
     {
       "name": "D2WINMAIN_GetControlVisible",
@@ -300,7 +315,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2cfa5dec"
     },
     {
       "name": "D2WINMAIN_SetControlActive",
@@ -321,7 +337,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f93dff2"
     },
     {
       "name": "D2WINMAIN_IsControlActive",
@@ -341,7 +358,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "47bab727"
     },
     {
       "name": "D2WINMAIN_TestMouseInRect",
@@ -358,7 +376,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "f1bfb17c"
     },
     {
       "name": "FORMS_GetFormTextAndEditBox_Unref_004f97d0",
@@ -375,7 +394,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e43ae2b2"
     },
     {
       "name": "DrawCursorOOG",
@@ -394,7 +414,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "29e025eb"
     },
     {
       "name": "DRAW_UI_Sprites",
@@ -417,7 +438,8 @@
       ],
       "usedTypes": [
         "D2CharSelCompStrc"
-      ]
+      ],
+      "dh": "5ec3779a"
     },
     {
       "name": "RENDERER_DrawOutOfGameScene",
@@ -448,7 +470,8 @@
         "D2GfxDataStrc",
         "DC6",
         "int32_t"
-      ]
+      ],
+      "dh": "10ae1180"
     },
     {
       "name": "WndProc",
@@ -466,7 +489,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "587d86b9"
     },
     {
       "name": "Unreferenced_004f9b30",
@@ -483,7 +507,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "4afd5538"
     },
     {
       "name": "INPUT_FormKeyHandler",
@@ -504,7 +529,8 @@
         "D2ControlStrc",
         "D2UIMouseMsgStrc",
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "870db147"
     },
     {
       "name": "INPUT_FormKeyUpHandler",
@@ -525,7 +551,8 @@
         "D2ControlStrc",
         "D2UIMouseMsgStrc",
         "D2WinEditBox"
-      ]
+      ],
+      "dh": "984180e5"
     },
     {
       "name": "INPUT_FormActivate",
@@ -543,7 +570,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f08ca232"
     },
     {
       "name": "INPUT_FormDeactivate",
@@ -561,7 +589,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "a1f5a4d5"
     },
     {
       "name": "D2WIN_HandleSystemCommand",
@@ -590,7 +619,8 @@
         "tagRECT",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "290ba34c"
     },
     {
       "name": "D2WIN_HandleActivation",
@@ -615,7 +645,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0990eda5"
     },
     {
       "name": "D2WIN_SaveScreenshotToFile",
@@ -638,7 +669,8 @@
         "JPEG_CORE_PROPERTIES",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "39f00555"
     },
     {
       "name": "D2WIN_TakeThrottledScreenshot",
@@ -658,7 +690,8 @@
         "D2GFX_GetBackBuffer",
         "D2WIN_SaveScreenshotToFile",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "ec96c758"
     },
     {
       "name": "D2WIN_ToggleMusicOptions",
@@ -680,7 +713,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "aa6254d7"
     },
     {
       "name": "D2WIN_FindClosestControlToMouse",
@@ -697,7 +731,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "3ac8bbb5"
     },
     {
       "name": "INPUT_FormMouseWheel",
@@ -723,7 +758,8 @@
         "D2UIMouseMsgStrc",
         "D2WinScrollbar",
         "int32_t"
-      ]
+      ],
+      "dh": "f258f44a"
     },
     {
       "name": "D2WINMAIN_SetCursorVisible",
@@ -737,7 +773,8 @@
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
         "D2WINMAIN_SetCursorVisible"
-      ]
+      ],
+      "dh": "cfe1fa9e"
     },
     {
       "name": "SetUnsetFlag0x08",
@@ -755,7 +792,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c9d308fb"
     },
     {
       "name": "D2WINMAIN_SetFormFourth",
@@ -772,7 +810,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "312a9379"
     },
     {
       "name": "D2WINMAIN_GetWinMainState",
@@ -789,7 +828,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "00e2a9d4"
     },
     {
       "name": "FORMS_SetGlobalFormImage",
@@ -807,7 +847,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2edaa83a"
     },
     {
       "name": "D2WINMAIN_GetFirstElement",
@@ -824,7 +865,8 @@
       ],
       "usedTypes": [
         "void *"
-      ]
+      ],
+      "dh": "2cff8f44"
     },
     {
       "name": "D2WINMAIN_GetFormImage",
@@ -841,7 +883,8 @@
       ],
       "usedTypes": [
         "D2ControlStrc"
-      ]
+      ],
+      "dh": "de7ba827"
     },
     {
       "name": "D2WIN_HandleCursorHide",
@@ -859,7 +902,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "b7c7bcaf"
     },
     {
       "name": "D2WIN_HandleMouseLeave",
@@ -877,7 +921,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "30da5f2c"
     },
     {
       "name": "D2GFX_PreSetupBeforeCreatingWindow",
@@ -896,7 +941,8 @@
       ],
       "usedTypes": [
         "eD2RendererMode"
-      ]
+      ],
+      "dh": "24c2c6d7"
     },
     {
       "name": "FreeInGameGFX",
@@ -918,7 +964,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f8a2554c"
     },
     {
       "name": "MessagePump",
@@ -939,7 +986,8 @@
         "pfnFramePump",
         "tagMSG",
         "uint32_t"
-      ]
+      ],
+      "dh": "769b9894"
     },
     {
       "name": "MOUSE_CaptureMousePosition",
@@ -961,7 +1009,8 @@
         "D2UIMouseMsgStrc",
         "tagTRACKMOUSEEVENT",
         "uint32_t"
-      ]
+      ],
+      "dh": "5690118f"
     },
     {
       "name": "INPUT_FormTabKey",
@@ -982,7 +1031,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "7c5976bf"
     },
     {
       "name": "TakeScreenshot",
@@ -1002,7 +1052,8 @@
         "D2GFX_GetBackBuffer",
         "D2WIN_SaveScreenshotToFile",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "7f97d811"
     },
     {
       "name": "D2WIN_TakeScreenshotMsgHandler",
@@ -1020,7 +1071,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "b42de4de"
     },
     {
       "name": "INPUT_FormMouseHandler",
@@ -1043,7 +1095,8 @@
       "usedTypes": [
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "6b0b18ef"
     }
   ]
 }

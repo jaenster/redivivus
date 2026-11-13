@@ -19,7 +19,8 @@
       "usedTypes": [
         "TGAHeaderStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "d067c8f2"
     },
     {
       "name": "SBMP_DecodeTGAPalette",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "D2TgaHeaderStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7112343d"
     },
     {
       "name": "SBMP_DecodeTGAPixels",
@@ -57,7 +59,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4f2181b7"
     },
     {
       "name": "SBMP_DecodeTgaFile",
@@ -86,7 +89,8 @@
         "D2TgaHeaderStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0887f3cf"
     },
     {
       "name": "SBMP_LoadFromMemory",
@@ -108,7 +112,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8bdf43e5"
     },
     {
       "name": "SBMP_WriteTGA",
@@ -127,7 +132,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "11d37151"
     },
     {
       "name": "SBMP_FlipImage",
@@ -146,7 +152,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "524b5024"
     },
     {
       "name": "SBMP_FlushPacket",
@@ -165,7 +172,8 @@
       "usedTypes": [
         "D2GifLzwEncoderStrc",
         "uint8_t *"
-      ]
+      ],
+      "dh": "e1b37db6"
     },
     {
       "name": "SBMP_Output",
@@ -184,7 +192,8 @@
       "usedTypes": [
         "D2GifLzwEncoderStrc",
         "uint8_t *"
-      ]
+      ],
+      "dh": "b4541925"
     },
     {
       "name": "SBMP_CompressPcxRow",
@@ -202,7 +211,8 @@
       "usedTypes": [
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "8c730cab"
     },
     {
       "name": "SBMP_EncodePcx256File",
@@ -225,7 +235,8 @@
       "usedTypes": [
         "D2PcxHeaderStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "19eab62b"
     },
     {
       "name": "SBMP_UncompressPcxImage",
@@ -244,7 +255,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "98beda17"
     },
     {
       "name": "SBMP_FindExtension",
@@ -259,7 +271,8 @@
       "calledFunctions": [
         "SBMP_FindExtension",
         "SStrChr"
-      ]
+      ],
+      "dh": "3a837370"
     },
     {
       "name": "SBMP_DetermineImageType",
@@ -276,7 +289,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "e0486b88"
     },
     {
       "name": "SBMP_DecodeBmpFile",
@@ -303,7 +317,8 @@
         "tagRGBQUAD",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8c7a2c6c"
     },
     {
       "name": "SBMP_DecodeBmpMem",
@@ -322,7 +337,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "29d2163a"
     },
     {
       "name": "SBMP_EncodeBmp256File",
@@ -347,7 +363,8 @@
         "RGBQUAD",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c1a9e17"
     },
     {
       "name": "SBMP_ClearBlock",
@@ -367,7 +384,8 @@
       "usedTypes": [
         "D2GifLzwEncoderStrc",
         "uint8_t *"
-      ]
+      ],
+      "dh": "a870c0ee"
     },
     {
       "name": "SBMP_CompressGifByte",
@@ -388,7 +406,8 @@
         "D2GifLzwEncoderStrc",
         "uint32_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "dfc98705"
     },
     {
       "name": "SBMP_CompressGifImage",
@@ -413,7 +432,8 @@
       "usedTypes": [
         "D2GifLzwEncoderStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "14a20ba8"
     },
     {
       "name": "SBMP_EncodeGif256File",
@@ -434,7 +454,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "10de04ad"
     },
     {
       "name": "SBMP_DecodePcxFile",
@@ -461,7 +482,8 @@
         "D2PcxHeaderStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bc8e120b"
     },
     {
       "name": "SBMP_DecodePcxMem",
@@ -481,7 +503,8 @@
         "D2PcxHeaderStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3d97e31d"
     },
     {
       "name": "SBmpDecodeImage",
@@ -504,7 +527,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d6bb40cd"
     },
     {
       "name": "SBmpLoadImage",
@@ -531,7 +555,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5a2d6db"
     },
     {
       "name": "SBmpSaveImageEx",
@@ -557,7 +582,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7ea1e933"
     },
     {
       "name": "SBmpAllocLoadImage",
@@ -586,7 +612,8 @@
         "pfnSBmpAllocCallback",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "b1d96a62"
     },
     {
       "name": "SBmpSaveImage",
@@ -605,7 +632,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c7ea83c"
     }
   ]
 }

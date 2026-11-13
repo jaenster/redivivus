@@ -20,7 +20,8 @@
         "ButtonWrapper",
         "PFN_CrtExceptionFilter",
         "int32_t"
-      ]
+      ],
+      "dh": "958ee500"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "uint32_t"
-      ]
+      ],
+      "dh": "cda94cc5"
     },
     {
       "name": "OnMouseWheel",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "c288f966"
     },
     {
       "name": "OnMouseDown",
@@ -76,7 +79,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f28086bf"
     },
     {
       "name": "OnMouseUp",
@@ -94,7 +98,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8b0e7031"
     },
     {
       "name": "OnMouseMove",
@@ -112,7 +117,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "d01598ca"
     },
     {
       "name": "Draw",
@@ -129,7 +135,8 @@
       ],
       "usedTypes": [
         "ButtonWrapper"
-      ]
+      ],
+      "dh": "f375c6b3"
     },
     {
       "name": "OnChar",
@@ -147,7 +154,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "347b9530"
     },
     {
       "name": "OnDownArrow",
@@ -165,7 +173,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "56f04f52"
     },
     {
       "name": "OnUpArrow",
@@ -183,7 +192,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "8900de0a"
     },
     {
       "name": "OnRightArrow",
@@ -201,7 +211,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "74253d64"
     },
     {
       "name": "OnLeftArrow",
@@ -219,7 +230,8 @@
       "usedTypes": [
         "ButtonWrapper",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "ebadd74c"
     },
     {
       "name": "GetValue",
@@ -236,7 +248,8 @@
       ],
       "usedTypes": [
         "ButtonWrapper"
-      ]
+      ],
+      "dh": "c5367d04"
     },
     {
       "name": "SetAccelerator",
@@ -253,7 +266,8 @@
       ],
       "usedTypes": [
         "ButtonWrapper"
-      ]
+      ],
+      "dh": "81c64faf"
     },
     {
       "name": "Constructor",
@@ -275,7 +289,8 @@
         "fpButtonOnActivate",
         "int32_t",
         "pfnEHHandlerRoutine"
-      ]
+      ],
+      "dh": "8c7b8d26"
     }
   ]
 }

@@ -26,7 +26,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1890eeae"
     },
     {
       "name": "SOUNDSMP_ClearBuffer",
@@ -48,7 +49,8 @@
       "usedTypes": [
         "IDirectSoundBuffer",
         "int32_t"
-      ]
+      ],
+      "dh": "39d67941"
     },
     {
       "name": "SOUNDSMP_CreateSoundBuffer",
@@ -75,7 +77,8 @@
         "WAVEFORMATEX",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bf67141c"
     },
     {
       "name": "CallSounds",
@@ -99,7 +102,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0f7ac8c"
     },
     {
       "name": "SOUNDSMP_LoadWavDataIntoBuffer",
@@ -125,7 +129,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e2bb79af"
     },
     {
       "name": "SOUNDSMP_Play",
@@ -146,7 +151,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "49745729"
     },
     {
       "name": "SOUNDSMP_IsPlaying",
@@ -167,7 +173,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fef5b132"
     },
     {
       "name": "SOUNDSMP_GetStatus",
@@ -189,7 +196,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c27a37df"
     },
     {
       "name": "SOUNDSMP_SetVolume",
@@ -211,7 +219,8 @@
       ],
       "usedTypes": [
         "D2SoundSmpStrc"
-      ]
+      ],
+      "dh": "3f636fc6"
     },
     {
       "name": "SOUNDSMP_GetVolume",
@@ -231,7 +240,8 @@
       ],
       "usedTypes": [
         "D2SoundSmpStrc"
-      ]
+      ],
+      "dh": "11c0bd8b"
     },
     {
       "name": "SOUNDSMP_SetPan",
@@ -253,7 +263,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b131f4d2"
     },
     {
       "name": "SOUNDSMP_Set3DPosition",
@@ -274,7 +285,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "09418a5e"
     },
     {
       "name": "SOUNDSMP_GetStreamProgress",
@@ -297,7 +309,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ebeddbb3"
     },
     {
       "name": "SOUNDSMP_SetFrequency",
@@ -318,7 +331,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c3951b7f"
     },
     {
       "name": "SOUNDSMP_SetMinDistance",
@@ -340,7 +354,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1f87fd1"
     },
     {
       "name": "SOUNDSMP_SetEaxObstruction",
@@ -363,7 +378,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2c979f8e"
     },
     {
       "name": "SOUNDSMP_SetEaxRoomLevel",
@@ -387,7 +403,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8687425e"
     },
     {
       "name": "SOUNDSMP_IsStreaming",
@@ -409,7 +426,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04b96ad6"
     },
     {
       "name": "SOUNDSMP_StartFade",
@@ -433,7 +451,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b88b762"
     },
     {
       "name": "SOUNDSMP_SetGlobalVolume",
@@ -458,7 +477,8 @@
         "IDirectSound",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6137768"
     },
     {
       "name": "SOUNDSMP_GetEffectiveVolume",
@@ -477,7 +497,8 @@
       "usedTypes": [
         "IDirectSound",
         "uint32_t"
-      ]
+      ],
+      "dh": "2995aa71"
     },
     {
       "name": "SOUNDSMP_OpenAndStreamFile",
@@ -502,7 +523,8 @@
         "D2MPQFileStrc",
         "int *",
         "int32_t"
-      ]
+      ],
+      "dh": "a42f1e6d"
     },
     {
       "name": "SOUNDSMP_CancelStream",
@@ -525,7 +547,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "296e79ea"
     },
     {
       "name": "SOUNDSMP_Stop",
@@ -547,7 +570,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ec837ec4"
     },
     {
       "name": "CleanupSoundBuffer",
@@ -571,7 +595,8 @@
         "IDirectSound",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6e1fcbe"
     },
     {
       "name": "SOUNDSMP_CheckBufferLost",
@@ -593,7 +618,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e0dc2ced"
     },
     {
       "name": "SOUNDSMP_ReleaseInterfaces",
@@ -613,7 +639,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "IKsPropertySet"
-      ]
+      ],
+      "dh": "f1359d53"
     },
     {
       "name": "SOUNDSMP_Destroy",
@@ -637,7 +664,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1b819837"
     },
     {
       "name": "SOUNDSMP_Reset",
@@ -664,7 +692,8 @@
       "usedTypes": [
         "D2SoundSmpStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "14047cbc"
     },
     {
       "name": "D2SOUNDSMP_SoundUpdateThreadProc",
@@ -698,7 +727,8 @@
         "D2SoundSmpStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7971e93d"
     },
     {
       "name": "SOUNDSMP_CreateSoundThread",
@@ -718,7 +748,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7052b3d6"
     },
     {
       "name": "SOUNDSMP_LogVolumeToLinear",
@@ -733,7 +764,8 @@
       "calledFunctions": [
         "SOUNDSMP_LogVolumeToLinear",
         "CRT_CILog"
-      ]
+      ],
+      "dh": "72bb512b"
     },
     {
       "name": "SOUNDSMP_LinearToLogVolume",
@@ -748,7 +780,8 @@
       "calledFunctions": [
         "SOUNDSMP_LinearToLogVolume",
         "CRT_CIPow"
-      ]
+      ],
+      "dh": "ed86bac7"
     },
     {
       "name": "SOUNDSMP_LogToLinearNoParam",
@@ -763,7 +796,8 @@
       "calledFunctions": [
         "SOUNDSMP_LogToLinearNoParam",
         "CRT_CILog"
-      ]
+      ],
+      "dh": "06b018e3"
     },
     {
       "name": "SOUNDSMP_LinearToLogNoParam",
@@ -778,7 +812,8 @@
       "calledFunctions": [
         "SOUNDSMP_LinearToLogNoParam",
         "CRT_CIPow"
-      ]
+      ],
+      "dh": "59b4f975"
     },
     {
       "name": "SOUNDSMP_ClampVolume",
@@ -793,7 +828,8 @@
       "calledFunctions": [
         "SOUNDSMP_ClampVolume",
         "CRT_CILog10"
-      ]
+      ],
+      "dh": "a969edd0"
     },
     {
       "name": "SOUNDSMP_ClampAttenuation",
@@ -808,7 +844,8 @@
       "calledFunctions": [
         "SOUNDSMP_ClampAttenuation",
         "CRT_CIPow"
-      ]
+      ],
+      "dh": "39259e9d"
     },
     {
       "name": "SOUNDSMP_FindWavChunk",
@@ -826,7 +863,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0e94dd8e"
     },
     {
       "name": "SOUNDSMP_InitWaveFormat",
@@ -843,7 +881,8 @@
       ],
       "usedTypes": [
         "WAVEFORMATEX"
-      ]
+      ],
+      "dh": "1a24e99c"
     },
     {
       "name": "SOUNDSMP_ParseWavHeader",
@@ -862,7 +901,8 @@
       "usedTypes": [
         "WAVEFORMATEX",
         "uint32_t"
-      ]
+      ],
+      "dh": "99d89876"
     },
     {
       "name": "SOUNDSMP_CalculateVolumeAndPan",
@@ -882,7 +922,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7a3c99cb"
     }
   ]
 }

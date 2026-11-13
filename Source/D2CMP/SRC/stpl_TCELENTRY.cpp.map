@@ -20,7 +20,8 @@
         "TCELENTRY",
         "TSLink<TCELENTRY>",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
-      ]
+      ],
+      "dh": "28768894"
     },
     {
       "name": "LinkNode",
@@ -42,7 +43,8 @@
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dfc87226"
     },
     {
       "name": "Next",
@@ -61,7 +63,8 @@
         "TCELENTRY",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "intptr_t"
-      ]
+      ],
+      "dh": "930507e8"
     },
     {
       "name": "UnlinkNode",
@@ -82,7 +85,8 @@
         "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce8e6d6b"
     },
     {
       "name": "RawNext",
@@ -100,7 +104,8 @@
       "usedTypes": [
         "TCELENTRY",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
-      ]
+      ],
+      "dh": "e3f20820"
     },
     {
       "name": "UnlinkAll",
@@ -120,7 +125,8 @@
         "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "01f43b96"
     },
     {
       "name": "Destructor",
@@ -141,7 +147,8 @@
         "TSLink<TCELENTRY> *",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "intptr_t"
-      ]
+      ],
+      "dh": "64c42a1a"
     },
     {
       "name": "CopyConstructor",
@@ -158,7 +165,8 @@
       ],
       "usedTypes": [
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>"
-      ]
+      ],
+      "dh": "7b4c0d11"
     },
     {
       "name": "NewNode",
@@ -179,7 +187,8 @@
         "TCELENTRY",
         "TSList<TCELENTRY, TSGetLink<TCELENTRY>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "a68dee2e"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b8ac9f5c"
     },
     {
       "name": "MONMODE_UpdateHoverTextExpiry",
@@ -46,7 +47,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "02389f85"
     },
     {
       "name": "AI_ClearSwitchAiTargetParamsCallback",
@@ -66,7 +68,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f8d187d7"
     },
     {
       "name": "MONSTEREVENT_DefaultCallback",
@@ -88,7 +91,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "87f34d35"
     },
     {
       "name": "BarbFindItemSkill",
@@ -109,7 +113,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "787b1000"
     },
     {
       "name": "MONSTER_EndOfFrameAiDispatch",
@@ -138,7 +143,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode"
-      ]
+      ],
+      "dh": "37f74a7f"
     },
     {
       "name": "MonsterKilledBySystem",
@@ -166,7 +172,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "f06babf3"
     },
     {
       "name": "MonsterKilledByTarget",
@@ -194,7 +201,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "6c1ec3ae"
     },
     {
       "name": "MONMODE_ProcessWalkWithTrails",
@@ -218,7 +226,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ac8b8a05"
     },
     {
       "name": "MONMODE_ProcessRunMovement",
@@ -239,7 +248,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "4bc63a75"
     },
     {
       "name": "MONSTER_ProcessGetHitRecovery",
@@ -266,7 +276,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c33d0a58"
     },
     {
       "name": "MONSTER_UpdateGetHitAnimation",
@@ -289,7 +300,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffc49a9d"
     },
     {
       "name": "MONSTER_UpdateSkillCastAnimation",
@@ -320,7 +332,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3ad2a256"
     }
   ]
 }

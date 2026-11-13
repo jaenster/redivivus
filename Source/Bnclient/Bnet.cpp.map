@@ -24,7 +24,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eef7fcbf"
     },
     {
       "name": "BnetLog_WriteLine",
@@ -43,7 +44,8 @@
         "atexit",
         "SLogWrite",
         "__security_check_cookie"
-      ]
+      ],
+      "dh": "180665ca"
     },
     {
       "name": "StaticInit_6cae80",
@@ -58,7 +60,8 @@
       "calledFunctions": [
         "StaticInit_6cae80",
         "atexit"
-      ]
+      ],
+      "dh": "a330d764"
     },
     {
       "name": "StaticFini_CriticalSection_00881860",
@@ -72,7 +75,8 @@
       "namespace": "Bnclient::Bnet",
       "calledFunctions": [
         "StaticFini_CriticalSection_00881860"
-      ]
+      ],
+      "dh": "cfd3a967"
     },
     {
       "name": "StaticFini_gnBnetLogFileHandle",
@@ -87,7 +91,8 @@
       "calledFunctions": [
         "StaticFini_gnBnetLogFileHandle",
         "SLogClose"
-      ]
+      ],
+      "dh": "5c68dec0"
     }
   ]
 }

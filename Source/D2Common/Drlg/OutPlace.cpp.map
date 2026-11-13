@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "97644951"
     },
     {
       "name": "DRLGOUTPLACE_GetAdjacentRoadPresetId",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fd132586"
     },
     {
       "name": "SetBlankBorderGridCells",
@@ -57,7 +59,8 @@
         "D2DrlgLevelStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "420d37a1"
     },
     {
       "name": "SetOutGridLinkFlags",
@@ -80,7 +83,8 @@
         "D2DrlgVertexStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "155964d5"
     },
     {
       "name": "PlaceAct1245OutdoorBorders",
@@ -110,7 +114,8 @@
         "eAct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5e12b2ad"
     },
     {
       "name": "DRLGACT_SetWarpConnectionsBetweenTwoAreas",
@@ -134,7 +139,8 @@
         "D2DrlgLevelStrc",
         "D2DrlgStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "8ce5cfa6"
     },
     {
       "name": "DRLGLEVEL_AllocOrthForAdjacentLevel",
@@ -158,7 +164,8 @@
         "D2DrlgStrc",
         "eD2LevelId",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "45f86964"
     },
     {
       "name": "DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId",
@@ -184,7 +191,8 @@
         "D2DrlgStrc",
         "eD2LevelId",
         "eDrlgDirection"
-      ]
+      ],
+      "dh": "34fa9c7e"
     },
     {
       "name": "DRLGOUTPLACE_CalcSubLevelPlacement",
@@ -202,7 +210,8 @@
       "usedTypes": [
         "D2DrlgSubLevelPlaceStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "64e88a5c"
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForSpiderForest",
@@ -236,7 +245,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "29009d6f"
     },
     {
       "name": "DRLGLEVEL_FixDrlgLevelForLowerKurast",
@@ -258,7 +268,8 @@
         "D2DrlgStrc",
         "D2LevelDefsTxt",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d8c621fa"
     },
     {
       "name": "DRLGActMisc_InitAct3",
@@ -283,7 +294,8 @@
         "D2DrlgLevelStrc",
         "D2DrlgStrc",
         "D2LevelDefsTxt"
-      ]
+      ],
+      "dh": "4d8fd93a"
     },
     {
       "name": "DRLGACTMISC_AllocDrlgLevelForAct",
@@ -307,7 +319,8 @@
         "D2DrlgLevelStrc",
         "D2DrlgStrc",
         "eAct"
-      ]
+      ],
+      "dh": "e00d5549"
     },
     {
       "name": "DRLGOUTROOM_CreateOutdoorRoomEx",
@@ -333,7 +346,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8b338ede"
     },
     {
       "name": "BuildKurast",
@@ -356,7 +370,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "e84bf72d"
     },
     {
       "name": "BuildTravincal",
@@ -374,7 +389,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "a10d91e6"
     },
     {
       "name": "InitAct3OutdoorLevel",
@@ -395,7 +411,8 @@
       ],
       "usedTypes": [
         "D2DrlgLevelStrc"
-      ]
+      ],
+      "dh": "91184b94"
     }
   ]
 }

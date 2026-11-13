@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a24ef088"
     },
     {
       "name": "Q26_CheckIzualProximity",
@@ -41,7 +42,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b65dab95"
     },
     {
       "name": "Q26_CheckIzualNearPlayer",
@@ -63,7 +65,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "86318976"
     },
     {
       "name": "Q26_PlayIzualCompleteSoundToAll",
@@ -81,7 +84,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0c35fe85"
     },
     {
       "name": "Q27_ActiveFilter",
@@ -102,7 +106,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1bd33971"
     },
     {
       "name": "Q27_SequenceFilter",
@@ -120,7 +125,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "eaa54203"
     },
     {
       "name": "Q27_PlayerUpdateTerrorsEndState",
@@ -142,7 +148,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0f27a4d8"
     },
     {
       "name": "Q27_SpawnDiabloPortal",
@@ -168,7 +175,8 @@
         "D2UnitStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "0316057c"
     },
     {
       "name": "Q27_Callback11_ScrollMessage",
@@ -197,7 +205,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "f3e4f835"
     },
     {
       "name": "Q27_Callback00_NpcActivate",
@@ -223,7 +232,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "77d00358"
     },
     {
       "name": "Q27_PartyMember_SetCannotComplete",
@@ -245,7 +255,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e1a5534a"
     },
     {
       "name": "Q27_PlayerCheckCompletionSendState",
@@ -270,7 +281,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "788577cf"
     },
     {
       "name": "Q27_InitPandemoniumAndSendState",
@@ -292,7 +304,8 @@
         "D2GSPacketSrv0x5D",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1e4ef288"
     },
     {
       "name": "Q27_PlayerEnterGame",
@@ -324,7 +337,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "06406dfa"
     },
     {
       "name": "Q27_SpawnDiablo",
@@ -345,7 +359,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "80dc4229"
     },
     {
       "name": "QuitGameAfterDia",
@@ -374,7 +389,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "b5dad755"
     },
     {
       "name": "Q27_SetTerrorsEndCompleted",
@@ -399,7 +415,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "346c4e18"
     },
     {
       "name": "Q27_PartyMember_SetCompleted",
@@ -425,7 +442,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "02ae6e94"
     },
     {
       "name": "Q27_PropagateCompletionToParty",
@@ -447,7 +465,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4054a514"
     },
     {
       "name": "Q27_PlayerNotifyCompleted",
@@ -468,7 +487,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e4ea441e"
     },
     {
       "name": "Q27_Callback03_ChangedLevel",
@@ -491,7 +511,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "6eca63c9"
     },
     {
       "name": "Q27_Callback02_NpcDeactivate",
@@ -511,7 +532,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "70b7eaab"
     },
     {
       "name": "Q23_UnlockHarrogathWaypoint",
@@ -533,7 +555,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int16_t"
-      ]
+      ],
+      "dh": "98efba61"
     },
     {
       "name": "Q27_Callback14_PlayerJoinedGame",
@@ -556,7 +579,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "db437781"
     },
     {
       "name": "Q27_Callback13_PlayerStartedGame",
@@ -579,7 +603,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "88569b2e"
     },
     {
       "name": "Q27_PlayerCheckNearDiablo",
@@ -606,7 +631,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "bb98cb1b"
     },
     {
       "name": "Q27_GetAllSealsActivated",
@@ -625,7 +651,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f641cb0c"
     },
     {
       "name": "Q27_ActivateAllSealsKillChaos",
@@ -654,7 +681,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "93de8d10"
     },
     {
       "name": "Q27_Callback_08_KillHandler",
@@ -686,7 +714,8 @@
         "D2RoomStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0b073601"
     },
     {
       "name": "Q27_InitData",
@@ -706,7 +735,8 @@
       "usedTypes": [
         "D2QuestDataA4Q2Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "9958a024"
     },
     {
       "name": "Objects_InitFn55_DiabloStartPoint",
@@ -726,7 +756,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "70c75e50"
     },
     {
       "name": "Objects_InitFn56_Seal",
@@ -743,7 +774,8 @@
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
-      ]
+      ],
+      "dh": "cf1a154e"
     },
     {
       "name": "OBJOP_A4Q2_DiabloSealActivateKillChaos",
@@ -768,7 +800,8 @@
         "D2ObjectOperateFnArg",
         "D2ObjectsTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a8add388"
     },
     {
       "name": "Q27_IsDiabloSpawned",
@@ -787,7 +820,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3b23f78b"
     },
     {
       "name": "OBJOP_A4Q2_PandemoniumFortressGate",
@@ -828,7 +862,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "9bb70f37"
     }
   ]
 }

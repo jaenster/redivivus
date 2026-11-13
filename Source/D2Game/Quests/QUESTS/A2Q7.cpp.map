@@ -20,7 +20,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "77e495bf"
     },
     {
       "name": "Q14_IsSevenTombsAtState1",
@@ -40,7 +41,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "4596c592"
     },
     {
       "name": "Q14_IsSevenTombsProgressed",
@@ -59,7 +61,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ad10ec6b"
     },
     {
       "name": "Q14_GetPortalCreatedFlag",
@@ -79,7 +82,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "c4d8c911"
     },
     {
       "name": "Q14_CheckUnitDistanceToTyrael",
@@ -100,7 +104,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fc4d4bc9"
     },
     {
       "name": "Q14_IsNpcStationary",
@@ -122,7 +127,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e56c7941"
     },
     {
       "name": "Q14_IsSevenTombsLessThanState4",
@@ -140,7 +146,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3ae9d4d7"
     },
     {
       "name": "Q14_GetTyraelSpawnCoords",
@@ -165,7 +172,8 @@
         "D2RoomStrc *",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "85720c1d"
     },
     {
       "name": "Q14_SetTyraelState",
@@ -185,7 +193,8 @@
         "D2QuestDataA2Q6Strc",
         "D2QuestDataStrc",
         "eD2HostGameType"
-      ]
+      ],
+      "dh": "e10b44e7"
     },
     {
       "name": "Q15_Callback02_NpcDeactivate",
@@ -203,7 +212,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "40da7afa"
     },
     {
       "name": "Q15_Callback11_ScrollMessage",
@@ -226,7 +236,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "1806b48e"
     },
     {
       "name": "Q15_Callback00_NpcActivate",
@@ -255,7 +266,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "721dcac0"
     },
     {
       "name": "Q15_Callback08_MonsterKilled",
@@ -273,7 +285,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "0662338f"
     },
     {
       "name": "Q15_StatusFilter",
@@ -292,7 +305,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "61b06929"
     },
     {
       "name": "Q15_ActiveFilter",
@@ -316,7 +330,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "7a04cc46"
     },
     {
       "name": "Q15_InitData",
@@ -337,7 +352,8 @@
         "D2QuestDataA2Q7Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3401fbcb"
     }
   ]
 }

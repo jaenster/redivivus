@@ -16,7 +16,8 @@
       "calledFunctions": [
         "CMD_AutomapCenterOnPlayer_Unref_0040d530",
         "CleanupSymbolsWithRefcount"
-      ]
+      ],
+      "dh": "d91ba8ea"
     },
     {
       "name": "WINMAIN_TestMemoryAccess",
@@ -36,7 +37,8 @@
       "usedTypes": [
         "CMDPARAMS",
         "uint8_t"
-      ]
+      ],
+      "dh": "52668dd0"
     },
     {
       "name": "TriggerEndGameCongratsExit",
@@ -51,7 +53,8 @@
       "calledFunctions": [
         "TriggerEndGameCongratsExit",
         "NET_D2GS_CLIENT_Send_0x69"
-      ]
+      ],
+      "dh": "d6a4b489"
     },
     {
       "name": "LOADER_RunInsertDiscPopup",
@@ -77,7 +80,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cda84262"
     },
     {
       "name": "LOADER_PopupGameLoopCallback",
@@ -97,7 +101,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a40b235f"
     },
     {
       "name": "SKILL_SelectProc_IsSelectableCorpse2",
@@ -115,7 +120,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b26b5dd6"
     },
     {
       "name": "SKILL_SelectProc_IsCorpseConsumableBasic",
@@ -134,7 +140,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4fe8c752"
     },
     {
       "name": "SKILL_SelectProc_IsConvertibleCorpse",
@@ -156,7 +163,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e1614c2"
     },
     {
       "name": "SKILL_SelectProc_IsCorpseValidForRevive",
@@ -175,7 +183,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "828dbd82"
     },
     {
       "name": "SKILL_SelectProc_CanReviveMonster",
@@ -194,7 +203,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b8f084b"
     },
     {
       "name": "SKILL_SelectProc_IsSelectableCorpse",
@@ -212,7 +222,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ce5094d7"
     },
     {
       "name": "ITEM_IsQuestItem",
@@ -232,7 +243,8 @@
         "D2UnitFindArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "81e5099d"
     },
     {
       "name": "CMD_ToggleCharScreen",
@@ -247,7 +259,8 @@
       "calledFunctions": [
         "CMD_ToggleCharScreen",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "00d665ba"
     },
     {
       "name": "CMD_ToggleInventory",
@@ -262,7 +275,8 @@
       "calledFunctions": [
         "CMD_ToggleInventory",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "7e15822d"
     },
     {
       "name": "CMD_TogglePartyScreen",
@@ -281,7 +295,8 @@
       ],
       "usedTypes": [
         "eD2GSGameType"
-      ]
+      ],
+      "dh": "cc75cda4"
     },
     {
       "name": "CMD_ToggleMsgLog",
@@ -296,7 +311,8 @@
       "calledFunctions": [
         "CMD_ToggleMsgLog",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "148a8701"
     },
     {
       "name": "CMD_ToggleQuestLog",
@@ -316,7 +332,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a1f90dab"
     },
     {
       "name": "CMD_ToggleChatBox",
@@ -332,7 +349,8 @@
         "CMD_ToggleChatBox",
         "GAMEDATA_GetExitFlag3",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "951a35aa"
     },
     {
       "name": "CMD_ToggleAutomap",
@@ -349,7 +367,8 @@
         "SetUIFlag",
         "GetUIFlag",
         "AUTOMAP_CenterOnPlayer"
-      ]
+      ],
+      "dh": "bcf5fa5b"
     },
     {
       "name": "CMD_AutomapCenterOnPlayer",
@@ -364,7 +383,8 @@
       "calledFunctions": [
         "CMD_AutomapCenterOnPlayer",
         "AUTOMAP_CenterOnPlayer"
-      ]
+      ],
+      "dh": "12ff61ba"
     },
     {
       "name": "CMD_AutomapCycleFade",
@@ -383,7 +403,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9697f71c"
     },
     {
       "name": "CMD_AutomapToggleParty",
@@ -399,7 +420,8 @@
         "CMD_AutomapToggleParty",
         "AUTOMAP_GetParty",
         "AUTOMAP_SetParty"
-      ]
+      ],
+      "dh": "de27ce37"
     },
     {
       "name": "CMD_AutomapTogglePartyNames",
@@ -418,7 +440,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8bc1d05e"
     },
     {
       "name": "CMD_AutomapToggleLeft",
@@ -437,7 +460,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d8574156"
     },
     {
       "name": "CMD_ToggleSkillTree",
@@ -452,7 +476,8 @@
       "calledFunctions": [
         "CMD_ToggleSkillTree",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "e429a2d0"
     },
     {
       "name": "CMD_ToggleSkillSelect",
@@ -468,7 +493,8 @@
         "CMD_ToggleSkillSelect",
         "SetUIFlag",
         "SPELLSEL_SetMouseHandFlag"
-      ]
+      ],
+      "dh": "7fea3748"
     },
     {
       "name": "CMD_SelectSkillHotkeySlot",
@@ -494,7 +520,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f453e90c"
     },
     {
       "name": "CMD_ActivateSkillSlot_F1",
@@ -516,7 +543,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f94c12e5"
     },
     {
       "name": "CMD_ActivateSkillSlot_F2",
@@ -538,7 +566,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "573f6f92"
     },
     {
       "name": "CMD_ActivateSkillSlot_F3",
@@ -560,7 +589,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "21be2797"
     },
     {
       "name": "CMD_ActivateSkillSlot_F4",
@@ -582,7 +612,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c0360bdd"
     },
     {
       "name": "CMD_ActivateSkillSlot_F5",
@@ -604,7 +635,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9101c275"
     },
     {
       "name": "CMD_ActivateSkillSlot_F6",
@@ -626,7 +658,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6622a844"
     },
     {
       "name": "CMD_ActivateSkillSlot_F7",
@@ -648,7 +681,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "dc7ae0c2"
     },
     {
       "name": "CMD_ActivateSkillSlot_F8",
@@ -670,7 +704,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "635f0788"
     },
     {
       "name": "CMD_ActivateSkillSlot_F9",
@@ -692,7 +727,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0e7ae784"
     },
     {
       "name": "CMD_ActivateSkillSlot_F10",
@@ -715,7 +751,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "58d98531"
     },
     {
       "name": "CMD_ActivateSkillSlot_F11",
@@ -738,7 +775,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c093d221"
     },
     {
       "name": "CMD_ActivateSkillSlot_F12",
@@ -761,7 +799,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "12ded19f"
     },
     {
       "name": "CMD_ActivateSkillSlot_F13",
@@ -784,7 +823,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "65261fbe"
     },
     {
       "name": "CMD_ActivateSkillSlot_F14",
@@ -807,7 +847,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "33c219a7"
     },
     {
       "name": "CMD_ActivateSkillSlot_F15",
@@ -830,7 +871,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7b44572e"
     },
     {
       "name": "CMD_ActivateSkillSlot_F16",
@@ -853,7 +895,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3ebf5dab"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_Walk",
@@ -868,7 +911,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_Walk",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "e20166a1"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_WalkToEntity",
@@ -883,7 +927,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_WalkToEntity",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "d80e520e"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_Run",
@@ -898,7 +943,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_Run",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "20f78ad4"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_RunToEntity",
@@ -913,7 +959,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_RunToEntity",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "66170559"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLoc",
@@ -928,7 +975,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLoc",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "a426d85f"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnEntity",
@@ -943,7 +991,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnEntity",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "fcc82ddb"
     },
     {
       "name": "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLocEx",
@@ -958,7 +1007,8 @@
       "calledFunctions": [
         "thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLocEx",
         "NET_D2GS_CLIENT_Send_SHORT"
-      ]
+      ],
+      "dh": "d9f62616"
     },
     {
       "name": "CMD_SetHoldAlt",
@@ -973,7 +1023,8 @@
       "calledFunctions": [
         "CMD_SetHoldAlt",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "594aa893"
     },
     {
       "name": "CMD_StopRun",
@@ -992,7 +1043,8 @@
         "GetGlobalAlwaysRun",
         "UNITMODE_SetAnimMode",
         "NET_D2GS_CLIENT_Send_CMD"
-      ]
+      ],
+      "dh": "722f0eee"
     },
     {
       "name": "CMD_ClearClickModifier",
@@ -1007,7 +1059,8 @@
       "calledFunctions": [
         "CMD_ClearClickModifier",
         "GAMEDATA_SetClickModifier"
-      ]
+      ],
+      "dh": "ef368bbe"
     },
     {
       "name": "CMD_ReleaseHoldAltAndClearSelection",
@@ -1023,7 +1076,8 @@
         "CMD_ReleaseHoldAltAndClearSelection",
         "SetUIFlag",
         "ClearSelectedUnit"
-      ]
+      ],
+      "dh": "2e5ba1a5"
     },
     {
       "name": "ClientLight_UpdateRoomLightPulse",
@@ -1048,7 +1102,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f8b908ef"
     },
     {
       "name": "RNG_GetRandomInRangeWithMin",
@@ -1067,7 +1122,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ccb8eac"
     },
     {
       "name": "CLIENT_IsArenaLevel",
@@ -1084,7 +1140,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e6d94f08"
     },
     {
       "name": "CLIENT_GetArenaFlags",
@@ -1101,7 +1158,8 @@
       ],
       "usedTypes": [
         "eD2ArenaFlags"
-      ]
+      ],
+      "dh": "5b1741ae"
     },
     {
       "name": "CLIENT_SetArenaFlags",
@@ -1118,7 +1176,8 @@
       ],
       "usedTypes": [
         "eD2ArenaFlags"
-      ]
+      ],
+      "dh": "08aac515"
     },
     {
       "name": "CLIENT_ToggleDefaultActiveFlag",
@@ -1135,7 +1194,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0f822969"
     },
     {
       "name": "ROSTER_GetArenaKillCountGlobal",
@@ -1149,7 +1209,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "ROSTER_GetArenaKillCountGlobal"
-      ]
+      ],
+      "dh": "5223b6f4"
     },
     {
       "name": "Unreferenced_0047a9e0",
@@ -1163,7 +1224,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "Unreferenced_0047a9e0"
-      ]
+      ],
+      "dh": "3546f667"
     },
     {
       "name": "Unreferenced_0047a9f0",
@@ -1177,7 +1239,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "Unreferenced_0047a9f0"
-      ]
+      ],
+      "dh": "44f60de1"
     },
     {
       "name": "Unreferenced_0047aa00",
@@ -1191,7 +1254,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "Unreferenced_0047aa00"
-      ]
+      ],
+      "dh": "6528c661"
     },
     {
       "name": "ROSTER_SetArenaKillCountGlobal",
@@ -1208,7 +1272,8 @@
       ],
       "usedTypes": [
         "eD2PlayerClassIDDWORD"
-      ]
+      ],
+      "dh": "71788bb4"
     },
     {
       "name": "CLIENT_GetDefaultCharClass",
@@ -1225,7 +1290,8 @@
       ],
       "usedTypes": [
         "eD2PlayerClassIDDWORD"
-      ]
+      ],
+      "dh": "96d6409a"
     },
     {
       "name": "CLIENT_IsArenaMode",
@@ -1242,7 +1308,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a34412cf"
     },
     {
       "name": "Unreferenced_0047aa40",
@@ -1260,7 +1327,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "ab28986a"
     },
     {
       "name": "INPUT_HandleIMEComposition",
@@ -1289,7 +1357,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f56ca955"
     },
     {
       "name": "INPUT_HandleIMEStartComposition",
@@ -1307,7 +1376,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0b7e684b"
     },
     {
       "name": "INPUT_HandleIMEEndComposition",
@@ -1325,7 +1395,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "0e391fec"
     },
     {
       "name": "AUTOMAP_UpdatePartyNamesCallback",
@@ -1344,7 +1415,8 @@
       "usedTypes": [
         "D2EscMenuItemStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "3c69037e"
     },
     {
       "name": "SOUND_LocalizeSoundPath",
@@ -1367,7 +1439,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc1953a2"
     },
     {
       "name": "ExitGamePlayCutScene",
@@ -1410,7 +1483,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6f2e8827"
     },
     {
       "name": "INV_SetItemDescFlag",
@@ -1424,7 +1498,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "INV_SetItemDescFlag"
-      ]
+      ],
+      "dh": "74db1ac0"
     },
     {
       "name": "INV_ResetItemDescFlags",
@@ -1439,7 +1514,8 @@
       "calledFunctions": [
         "INV_ResetItemDescFlags",
         "GetLoggerState_Stub"
-      ]
+      ],
+      "dh": "179676a3"
     },
     {
       "name": "INV_SetItemDescHighlight",
@@ -1453,7 +1529,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "INV_SetItemDescHighlight"
-      ]
+      ],
+      "dh": "de29891b"
     },
     {
       "name": "INV_GetItemDescDirtyFlag",
@@ -1470,7 +1547,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "8948f000"
     },
     {
       "name": "MONUNIQUE_Clt_ClearMonsterOverride",
@@ -1488,7 +1566,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "03c5ad47"
     },
     {
       "name": "MONUNIQUE_DispatchDeathEffect",
@@ -1520,7 +1599,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6d6b447"
     },
     {
       "name": "MONUNIQUE_Clt_SpawnPainWormDeathExplosion",
@@ -1539,7 +1619,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "367d28ae"
     },
     {
       "name": "MONSTER_FreeMonsterPath",
@@ -1558,7 +1639,8 @@
       "usedTypes": [
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "952c737f"
     },
     {
       "name": "NPCMENU_GetCurrentMenuId",
@@ -1582,7 +1664,8 @@
         "NPCMENU_CloseNpcInteraction",
         "SetUIFlag",
         "NPCMENU_OpenInteractionDialog"
-      ]
+      ],
+      "dh": "dd5a8e3d"
     },
     {
       "name": "TRADE_HandleTradeComplete",
@@ -1599,7 +1682,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2c4ebedf"
     },
     {
       "name": "D2CLIENT_GetTradeAcceptedFlags",
@@ -1613,7 +1697,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "D2CLIENT_GetTradeAcceptedFlags"
-      ]
+      ],
+      "dh": "f7395268"
     },
     {
       "name": "D2CLIENT_GetTradePlayerGoldAmount",
@@ -1627,7 +1712,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "D2CLIENT_GetTradePlayerGoldAmount"
-      ]
+      ],
+      "dh": "9e64532e"
     },
     {
       "name": "TRADE_SendGoldToPartner",
@@ -1650,7 +1736,8 @@
         "eD2UnitStat",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a120682"
     },
     {
       "name": "TRADE_IsTradeThrottled",
@@ -1671,7 +1758,8 @@
         "D2CLIENT_SetExitVar1",
         "D2CLIENT_SetExitVar2",
         "D2CLIENT_SetExitVar3ToTrue"
-      ]
+      ],
+      "dh": "a322d9ac"
     },
     {
       "name": "SHOP_CleanupAssets",
@@ -1686,7 +1774,8 @@
       "calledFunctions": [
         "SHOP_CleanupAssets",
         "UI_CloseTradeWindow"
-      ]
+      ],
+      "dh": "cc1fd369"
     },
     {
       "name": "NET_D2GS_CLIENT_Handle0x50_QuestSpecial",
@@ -1712,7 +1801,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x50"
-      ]
+      ],
+      "dh": "a10bb611"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS",
@@ -1729,7 +1819,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "a004752d"
     },
     {
       "name": "Unreferenced_004b92d0",
@@ -1743,7 +1834,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "Unreferenced_004b92d0"
-      ]
+      ],
+      "dh": "b4891cba"
     },
     {
       "name": "GetQuestAvailabilityByIndex",
@@ -1764,7 +1856,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a564c0c"
     },
     {
       "name": "thunk_ExitGamePlayCutScene",
@@ -1782,7 +1875,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "207f0c39"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER",
@@ -1797,7 +1891,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER",
         "HandleIncoming0x89"
-      ]
+      ],
+      "dh": "17cccfb1"
     },
     {
       "name": "TEXT_EmptyCallback",
@@ -1811,7 +1906,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "TEXT_EmptyCallback"
-      ]
+      ],
+      "dh": "abcbf27c"
     },
     {
       "name": "TEXT_InitializeTextSystem",
@@ -1829,7 +1925,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "cbc16874"
     },
     {
       "name": "TEXT_SetUnknownFlag",
@@ -1849,7 +1946,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "53e64966"
     },
     {
       "name": "TEXT_EmptyCallback_Unref_004c2530",
@@ -1863,7 +1961,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "TEXT_EmptyCallback_Unref_004c2530"
-      ]
+      ],
+      "dh": "b88e89b3"
     },
     {
       "name": "SOUND_ClearGlobalState",
@@ -1878,7 +1977,8 @@
       "calledFunctions": [
         "SOUND_ClearGlobalState",
         "memset"
-      ]
+      ],
+      "dh": "ecd46aaa"
     },
     {
       "name": "MISSILES_StatExpireCallback_ClearState",
@@ -1898,7 +1998,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "591755ce"
     },
     {
       "name": "DRAW_WORLD_SetWarpFadeTimer",
@@ -1913,7 +2014,8 @@
       "calledFunctions": [
         "DRAW_WORLD_SetWarpFadeTimer",
         "GetTickCount"
-      ]
+      ],
+      "dh": "f3f6b941"
     },
     {
       "name": "dSceneTransitionDraw",
@@ -1934,7 +2036,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6ba327db"
     },
     {
       "name": "DRAW_WORLD_ClearWarpFadeTimer",
@@ -1948,7 +2051,8 @@
       "namespace": "D2Client",
       "calledFunctions": [
         "DRAW_WORLD_ClearWarpFadeTimer"
-      ]
+      ],
+      "dh": "5714f90f"
     },
     {
       "name": "CUNITEVENT_DispatchCallbacks",
@@ -1967,7 +2071,8 @@
         "D2CUnitEventStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1f8c7b1e"
     },
     {
       "name": "DRAW_ShouldDrawEdges",
@@ -1991,7 +2096,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "483d3f52"
     },
     {
       "name": "DFLOOR_IsPointInRect",
@@ -2011,7 +2117,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "dfb2cd54"
     },
     {
       "name": "UI_GetDialogLineCount",
@@ -2030,7 +2137,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ad4181f1"
     },
     {
       "name": "WARDEN_DecryptBuffer",
@@ -2050,7 +2158,8 @@
         "int32_t",
         "pfnWardenCreateInterface",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a514405"
     },
     {
       "name": "WARDEN_DecryptModule",
@@ -2073,7 +2182,8 @@
         "uint32_t",
         "uint32_t *",
         "uint8_t"
-      ]
+      ],
+      "dh": "ca927cd1"
     },
     {
       "name": "WARDEN_RC4Init",
@@ -2092,7 +2202,8 @@
         "D2RC4StateStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b5e2608e"
     },
     {
       "name": "SKILLSSOR_StatExpireCallback_ClearState",
@@ -2112,7 +2223,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "0879bf7b"
     },
     {
       "name": "SKILLSCLT_CheckSkillIsValid",
@@ -2130,7 +2242,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f78d30f0"
     },
     {
       "name": "SKILLSASS_StatExpireCallback_ClearState",
@@ -2150,7 +2263,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "1261b52f"
     },
     {
       "name": "SehHandler_6ca218",
@@ -2170,7 +2284,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "7e8015a7"
     },
     {
       "name": "SehHandler_6ca238",
@@ -2190,7 +2305,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "c231af90"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SELECT_GetConstant13_X"
-      ]
+      ],
+      "dh": "3d0aa76a"
     },
     {
       "name": "SELECT_GetConstant13_Y",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SELECT_GetConstant13_Y"
-      ]
+      ],
+      "dh": "34713aae"
     },
     {
       "name": "SetSelectedUnit_I",
@@ -71,7 +73,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c7ac4ba2"
     },
     {
       "name": "ClearSelectedUnit",
@@ -85,7 +88,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "ClearSelectedUnit"
-      ]
+      ],
+      "dh": "b6f3d6e3"
     },
     {
       "name": "SetCanBeSelectedToFalse",
@@ -99,7 +103,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SetCanBeSelectedToFalse"
-      ]
+      ],
+      "dh": "d08304ab"
     },
     {
       "name": "SELECT_IsWarpDoubleClicked",
@@ -124,7 +129,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "837f292d"
     },
     {
       "name": "SELECT_ScreenToWorldCoords",
@@ -145,7 +151,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d361012"
     },
     {
       "name": "SELECT_HandleMouseInput",
@@ -178,7 +185,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae08396b"
     },
     {
       "name": "SELECT_IsDoorBlockingUnit",
@@ -201,7 +209,8 @@
         "D2ObjectsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fa52e95c"
     },
     {
       "name": "SELECT_IsUnitBehindDoor",
@@ -224,7 +233,8 @@
         "D2UnitStrc",
         "POINT",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5439e49"
     },
     {
       "name": "SELECT_GetDistanceSquared",
@@ -244,7 +254,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0c2a49cc"
     },
     {
       "name": "SELECT_GetConstant13_Y_Unref_00467400",
@@ -258,7 +269,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SELECT_GetConstant13_Y_Unref_00467400"
-      ]
+      ],
+      "dh": "e2e8f633"
     },
     {
       "name": "SELECT_SetPetSeedTimestamp",
@@ -278,7 +290,8 @@
         "D2RosterPetSeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "11429490"
     },
     {
       "name": "SELECT_SetExclusionRect",
@@ -295,7 +308,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "4f7fb11c"
     },
     {
       "name": "SKILL_FindTargetInRange",
@@ -335,7 +349,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efeac9ff"
     },
     {
       "name": "UnitIsOfTypeMonster",
@@ -353,7 +368,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2ec1a0bf"
     },
     {
       "name": "SELECT_FindTargetInFacingDirection",
@@ -384,7 +400,8 @@
         "eCollisionFlags",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa2aca65"
     },
     {
       "name": "SELECT_GetTargetCoords",
@@ -410,7 +427,8 @@
         "POINT",
         "eCollisionFlags",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "3ce0e8e7"
     },
     {
       "name": "SKILL_ValidateTarget",
@@ -447,7 +465,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dec38fd1"
     },
     {
       "name": "SELECT_InitConstants",
@@ -461,7 +480,8 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SELECT_InitConstants"
-      ]
+      ],
+      "dh": "b46e9cbc"
     },
     {
       "name": "GetSelectedUnit",
@@ -481,7 +501,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9955e41"
     },
     {
       "name": "SELECT_UpdateUnitSelection",
@@ -501,7 +522,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "080d8ed7"
     },
     {
       "name": "SELECT_UpdateSelectedUnit",
@@ -544,7 +566,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3edc0c2"
     }
   ]
 }

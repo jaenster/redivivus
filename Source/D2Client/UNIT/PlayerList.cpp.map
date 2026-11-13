@@ -23,7 +23,8 @@
       "usedTypes": [
         "D2PlayerListStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "95ec872f"
     },
     {
       "name": "FreePlayerList",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2PlayerListStrc",
         "D2PlayerListSubStrc"
-      ]
+      ],
+      "dh": "d2dee939"
     },
     {
       "name": "AllocPlayerListSub",
@@ -63,7 +65,8 @@
         "D2PlayerListStrc",
         "D2PlayerListSubStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cb2c918d"
     },
     {
       "name": "FreePlayerListSub",
@@ -84,7 +87,8 @@
         "D2PlayerListStrc",
         "D2PlayerListSubStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0b989822"
     },
     {
       "name": "SetUnsetFlags",
@@ -105,7 +109,8 @@
         "D2PlayerListSubStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8fdbe80"
     },
     {
       "name": "GetFlag",
@@ -126,7 +131,8 @@
         "D2PlayerListSubStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb56f911"
     },
     {
       "name": "Unreferenced_004dc480",
@@ -141,7 +147,8 @@
       "calledFunctions": [
         "Unreferenced_004dc480",
         "GetPlayerList"
-      ]
+      ],
+      "dh": "998bc6fd"
     },
     {
       "name": "SetFlag",
@@ -162,7 +169,8 @@
         "D2PlayerListSubStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b027058d"
     }
   ]
 }

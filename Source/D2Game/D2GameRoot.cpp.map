@@ -21,7 +21,8 @@
         "D2ClientStrc",
         "D2ClientStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "ca336454"
     },
     {
       "name": "CLIENT_GetFirstActiveClient",
@@ -35,7 +36,8 @@
       "namespace": "D2Game",
       "calledFunctions": [
         "CLIENT_GetFirstActiveClient"
-      ]
+      ],
+      "dh": "96e90e52"
     },
     {
       "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20",
@@ -58,7 +60,8 @@
       "namespace": "D2Game",
       "calledFunctions": [
         "GAME_SetNoSaveFlag"
-      ]
+      ],
+      "dh": "a76905f3"
     },
     {
       "name": "QSERVER_FindUnitInFirstActiveGame",
@@ -80,7 +83,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "3864a2fc"
     },
     {
       "name": "QSERVER_GetActFromFirstActiveGame",
@@ -104,7 +108,8 @@
         "D2DrlgActStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "af4750eb"
     },
     {
       "name": "QSERVER_CountMonstersInFirstActiveGame",
@@ -127,7 +132,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fe949185"
     },
     {
       "name": "QSERVER_FindRoomInFirstActiveGame",
@@ -153,7 +159,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9f1b2c83"
     },
     {
       "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
@@ -168,7 +175,8 @@
       "calledFunctions": [
         "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
         "GAME_ClearGlobalFlag"
-      ]
+      ],
+      "dh": "37e1d7a9"
     },
     {
       "name": "nullsub",
@@ -185,7 +193,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "191d39ee"
     },
     {
       "name": "SUNITDMG_DebugTraceAvoidRoll",
@@ -203,7 +212,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a882412f"
     },
     {
       "name": "nullsub_7Arg",
@@ -220,7 +230,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fb799a92"
     },
     {
       "name": "nullsub_B",
@@ -237,7 +248,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "814c4c3e"
     },
     {
       "name": "QSERVER_CountClientsWithStatusFlag0x20",
@@ -255,7 +267,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2ClientStrc *"
-      ]
+      ],
+      "dh": "729da989"
     },
     {
       "name": "GAME_SetNoSaveFlag_Unref_00544090",
@@ -269,7 +282,8 @@
       "namespace": "D2Game",
       "calledFunctions": [
         "GAME_SetNoSaveFlag_Unref_00544090"
-      ]
+      ],
+      "dh": "3f5b7eeb"
     },
     {
       "name": "GAME_ClearGlobalFlag",
@@ -283,7 +297,8 @@
       "namespace": "D2Game",
       "calledFunctions": [
         "GAME_ClearGlobalFlag"
-      ]
+      ],
+      "dh": "7be94b1e"
     },
     {
       "name": "TASK_InitializeClock",
@@ -297,7 +312,8 @@
       "namespace": "D2Game",
       "calledFunctions": [
         "TASK_InitializeClock"
-      ]
+      ],
+      "dh": "12dc3843"
     },
     {
       "name": "TASK_GetTimeUntilNextTask",
@@ -320,7 +336,8 @@
         "D2TaskQueueSlotStrc",
         "PD2TaskNodeLink",
         "uint32_t"
-      ]
+      ],
+      "dh": "03ae9e6d"
     },
     {
       "name": "Q33_SetCompleteForPartyMember",
@@ -346,7 +363,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "66844e79"
     },
     {
       "name": "Q03_AutoCompleteIfHighLevel",
@@ -370,7 +388,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c2b492d2"
     },
     {
       "name": "Q11_SetTaintedSunRewardOnPartyMember",
@@ -396,7 +415,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "411984d3"
     },
     {
       "name": "Q11_OnEndCallback",
@@ -416,7 +436,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "e8360ada"
     },
     {
       "name": "Q12_SetArcaneCompleteOnPartyMember",
@@ -443,7 +464,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "57a9212f"
     },
     {
       "name": "MONSTER_ScheduleDeathIfRunningOrDead",
@@ -464,7 +486,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b5bebc2"
     },
     {
       "name": "Q24_PartyMember_SetAbleGoToAct4",
@@ -491,7 +514,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eAct"
-      ]
+      ],
+      "dh": "9a589a26"
     },
     {
       "name": "SKILLSSOR_StatExpireCallback_ClearStateSetFlag",
@@ -511,7 +535,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "95850bdb"
     },
     {
       "name": "SKILLSASS_StatExpireCallback_ClearState2",
@@ -531,7 +556,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "6f055776"
     },
     {
       "name": "MONSTERAI_FlagIfDeadOrNull",
@@ -549,7 +575,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c69324a3"
     }
   ]
 }

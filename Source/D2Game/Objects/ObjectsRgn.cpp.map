@@ -37,7 +37,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3557f7aa"
     },
     {
       "name": "FreeObjectControl",
@@ -62,7 +63,8 @@
         "D2ObjectRngStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "1459656b"
     },
     {
       "name": "GetObjectLevelRng",
@@ -81,7 +83,8 @@
         "D2ObjectRngStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "7bde42b7"
     },
     {
       "name": "GetObjectControlSeed",
@@ -100,7 +103,8 @@
         "D2RoomStrc",
         "D2SeedStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d497f0da"
     },
     {
       "name": "GetShrinesRng",
@@ -118,7 +122,8 @@
       "usedTypes": [
         "D2ObjectRngShrines",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e4ff5872"
     },
     {
       "name": "IncrementObjectTypeCount",
@@ -135,7 +140,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "26c12b21"
     },
     {
       "name": "Send_0x26_Chat",
@@ -154,7 +160,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "char *"
-      ]
+      ],
+      "dh": "bb779a05"
     },
     {
       "name": "SendDebugMessageToEveryone",
@@ -175,7 +182,8 @@
         "D2GSPacketSrv0x",
         "D2GSPacketSrv0x26",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "5e44ce06"
     },
     {
       "name": "Debug",
@@ -196,7 +204,8 @@
         "D2ObjectControlStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c024dece"
     },
     {
       "name": "AllocObjectControlSub0x1110",
@@ -222,7 +231,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3e339757"
     },
     {
       "name": "Objects_InitFn17_Waypoint",
@@ -250,7 +260,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f4973f3"
     },
     {
       "name": "QUEST_GetLevelQuestStatus",
@@ -268,7 +279,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "3f0054db"
     },
     {
       "name": "OBJECTRGN_CheckDensityThreshold",
@@ -288,7 +300,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "uint8_t"
-      ]
+      ],
+      "dh": "07674ae9"
     },
     {
       "name": "OBJECTRGN_CheckPointsCapacity",
@@ -306,7 +319,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d163bbf9"
     },
     {
       "name": "OBJECT_IncrementLevelSpawnCount",
@@ -324,7 +338,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "6b05e010"
     },
     {
       "name": "OBJECT_IsPositionNearSpawnPoint2",
@@ -343,7 +358,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "6209c354"
     },
     {
       "name": "AddPointsToLevelRngPoints2",
@@ -363,7 +379,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "84513b9d"
     },
     {
       "name": "OBJECT_IsPositionNearSpawnPoint1",
@@ -382,7 +399,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "c0118b5b"
     },
     {
       "name": "AddPointsToLevelRngPoints1",
@@ -402,7 +420,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "5584fafc"
     },
     {
       "name": "OBJECT_HandleObjectMode",
@@ -430,7 +449,8 @@
         "eAct",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "a7cc6689"
     }
   ]
 }

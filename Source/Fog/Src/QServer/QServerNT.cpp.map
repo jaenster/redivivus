@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "9c748306"
     },
     {
       "name": "BeginAsyncReadForClient",
@@ -42,7 +43,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "361d058b"
     },
     {
       "name": "NET_QServerClientPacket_CreateStructAndCopyBytesThere",
@@ -62,7 +64,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerClientPacketStrc"
-      ]
+      ],
+      "dh": "164e838c"
     },
     {
       "name": "AcceptConnection",
@@ -99,7 +102,8 @@
         "SOCKET",
         "sockaddr",
         "u_long"
-      ]
+      ],
+      "dh": "a0caa3d7"
     },
     {
       "name": "BeginAsyncWriteForClient",
@@ -123,7 +127,8 @@
       "usedTypes": [
         "D2QServerClientConnectionStrc",
         "D2QServerStrc"
-      ]
+      ],
+      "dh": "37ff40ab"
     },
     {
       "name": "PopAndFreeCompletedSendPacket",
@@ -141,7 +146,8 @@
       ],
       "usedTypes": [
         "D2QServerClientConnectionStrc"
-      ]
+      ],
+      "dh": "1187dd96"
     },
     {
       "name": "AcceptThreadMain",
@@ -171,7 +177,8 @@
         "sockaddr",
         "timeval",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc5d674a"
     },
     {
       "name": "SendToClientLocal",
@@ -196,7 +203,8 @@
         "D2QServerClientConnectionStrc",
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee0de15c"
     },
     {
       "name": "PumpIoCompletionQueueForWorker",
@@ -232,7 +240,8 @@
         "LPOVERLAPPED",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "341206e9"
     },
     {
       "name": "IoWorkerThreadMain",
@@ -255,7 +264,8 @@
       ],
       "usedTypes": [
         "D2QServerWorkerThreadContextStrc"
-      ]
+      ],
+      "dh": "1ce06f01"
     },
     {
       "name": "PumpIoCompletionQueues",
@@ -274,7 +284,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ebcb9d73"
     },
     {
       "name": "StartListening",
@@ -306,7 +317,8 @@
         "u_long",
         "u_short",
         "uint32_t"
-      ]
+      ],
+      "dh": "2cb0efb1"
     },
     {
       "name": "CreateSocketLocal",
@@ -328,7 +340,8 @@
         "SOCKET",
         "WSADATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c9b39c50"
     }
   ]
 }

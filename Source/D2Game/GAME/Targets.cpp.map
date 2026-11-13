@@ -23,7 +23,8 @@
         "D2UnitNodeStrc *",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "c013ead0"
     },
     {
       "name": "CreateUnitNode",
@@ -45,7 +46,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "dad77eb5"
     },
     {
       "name": "AddNodeToTable",
@@ -67,7 +69,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "62c12d5e"
     },
     {
       "name": "UNIT_FreeUnitNodes",
@@ -87,7 +90,8 @@
         "D2UnitNodeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "60cc7168"
     },
     {
       "name": "MONSTER_FreeUnitNodes",
@@ -107,7 +111,8 @@
         "D2UnitNodeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8926bf73"
     },
     {
       "name": "TARGETS_FreeAllUnitNodes",
@@ -127,7 +132,8 @@
         "D2UnitNodeStrc",
         "D2UnitNodeStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a13f2efc"
     }
   ]
 }

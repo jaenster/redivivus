@@ -32,7 +32,8 @@
         "pfnCelPixelDataFree",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e2c2d846"
     },
     {
       "name": "GFXHASH_InitHashTable",
@@ -47,7 +48,8 @@
       "calledFunctions": [
         "GFXHASH_InitHashTable",
         "memset"
-      ]
+      ],
+      "dh": "92d98bae"
     },
     {
       "name": "GFX_UnlinkCacheEntry",
@@ -70,7 +72,8 @@
         "D2GfxHashEntryStrc",
         "D2PoolManagerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1d5a9539"
     },
     {
       "name": "IGNORELIST_Initialize_Unref_0060ab70",
@@ -84,7 +87,8 @@
       "namespace": "D2CMP::SRC::GfxHash",
       "calledFunctions": [
         "IGNORELIST_Initialize_Unref_0060ab70"
-      ]
+      ],
+      "dh": "5a2f193e"
     },
     {
       "name": "GFXHASH_CalcDirectionIndex",
@@ -105,7 +109,8 @@
         "D2GfxDataStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "14338fb0"
     },
     {
       "name": "GFXHASH_CalcHashKey",
@@ -131,7 +136,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "273c6ee3"
     },
     {
       "name": "GFXHASH_FindEntryByGfxData",
@@ -154,7 +160,8 @@
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "444baea4"
     },
     {
       "name": "GFX_AllocCacheEntry",
@@ -179,7 +186,8 @@
         "D2PoolManagerStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "64b33965"
     }
   ]
 }

@@ -24,7 +24,8 @@
         "D2WinAccountList",
         "D2WinAccountListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "4dcf6fcc"
     },
     {
       "name": "D2WINACCOUNTLIST_AddAccount",
@@ -48,7 +49,8 @@
         "D2WinAccountList",
         "D2WinAccountListEntry",
         "int32_t"
-      ]
+      ],
+      "dh": "b3c5ee90"
     },
     {
       "name": "D2WINACCOUNTLIST_RemoveAccount",
@@ -72,7 +74,8 @@
         "D2WinAccountListEntry",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e391ae89"
     },
     {
       "name": "D2WINACCOUNTLIST_GetSelectedAccountName",
@@ -92,7 +95,8 @@
       ],
       "usedTypes": [
         "D2WinAccountList"
-      ]
+      ],
+      "dh": "13f8a445"
     },
     {
       "name": "Push",
@@ -116,7 +120,8 @@
         "D2WinAccountListEntry",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0aca312c"
     },
     {
       "name": "FORMS_DestroyD2WinAccountList",
@@ -139,7 +144,8 @@
       "usedTypes": [
         "D2WinAccountList",
         "int32_t"
-      ]
+      ],
+      "dh": "42e86bf4"
     },
     {
       "name": "Draw",
@@ -169,7 +175,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a1b0d8bd"
     },
     {
       "name": "D2WinAccountList",
@@ -191,7 +198,8 @@
         "D2WinAccountList",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e47ec30d"
     }
   ]
 }

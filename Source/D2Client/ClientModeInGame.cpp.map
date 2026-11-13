@@ -20,7 +20,8 @@
       ],
       "usedTypes": [
         "fnAppModeRun *"
-      ]
+      ],
+      "dh": "bc5a96bc"
     },
     {
       "name": "AppModeClientShutdown",
@@ -36,7 +37,8 @@
         "AppModeClientShutdown",
         "ServerClose_nullsub",
         "CloseProfCore"
-      ]
+      ],
+      "dh": "94bb8203"
     },
     {
       "name": "fAPPMODE_client_ReturnAppMode_Caller",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "D2IniConfigStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "17b3faa6"
     },
     {
       "name": "ClientAppModeQueue",
@@ -76,7 +79,8 @@
       "usedTypes": [
         "eD2ClientAppMode",
         "int32_t"
-      ]
+      ],
+      "dh": "27688ab0"
     },
     {
       "name": "CLIENTMODE_GetCurrentAppMode",
@@ -97,7 +101,8 @@
       "usedTypes": [
         "eD2ClientAppMode",
         "int32_t"
-      ]
+      ],
+      "dh": "fcee8b66"
     },
     {
       "name": "CmdLine_ShowHelpIfNotDeveloper",
@@ -116,7 +121,8 @@
       "usedTypes": [
         "CMDPARAMS",
         "int32_t"
-      ]
+      ],
+      "dh": "ed9dd558"
     },
     {
       "name": "CmdLine_StopRecordingSetFlags",
@@ -134,7 +140,8 @@
       ],
       "usedTypes": [
         "CMDPARAMS"
-      ]
+      ],
+      "dh": "aeafada1"
     },
     {
       "name": "CmdLine_EnableRecording",
@@ -152,7 +159,8 @@
       ],
       "usedTypes": [
         "CMDPARAMS"
-      ]
+      ],
+      "dh": "b5d5887c"
     },
     {
       "name": "CmdLine_ShowHelpCallback",
@@ -167,7 +175,8 @@
       "calledFunctions": [
         "CmdLine_ShowHelpCallback",
         "CmdLine_ShowHelpIfNotDeveloper"
-      ]
+      ],
+      "dh": "f167e64f"
     },
     {
       "name": "CLIENTMODEIN_CmdLineCallback_ShowHelp",
@@ -185,7 +194,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ca204491"
     },
     {
       "name": "CmdLine_SaveDefaultCommandLine",
@@ -204,7 +214,8 @@
       "usedTypes": [
         "CMDPARAMS",
         "int32_t"
-      ]
+      ],
+      "dh": "32e63bca"
     },
     {
       "name": "CmdLine_SetAppMode",
@@ -225,7 +236,8 @@
         "CMDPARAMS",
         "eD2ClientAppMode",
         "int32_t"
-      ]
+      ],
+      "dh": "80dddff3"
     },
     {
       "name": "LoadDataForGameAndSetupServer",
@@ -248,7 +260,8 @@
         "D2IniConfigStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ebdde50"
     },
     {
       "name": "Unreferenced_0044b780",
@@ -264,7 +277,8 @@
         "Unreferenced_0044b780",
         "GetHwnd",
         "D2GFX_ResetViewport"
-      ]
+      ],
+      "dh": "024584a4"
     },
     {
       "name": "D2IniData_Getter",
@@ -281,7 +295,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "6d9b822b"
     },
     {
       "name": "CLIENT_GetGameVersionInfo",
@@ -298,7 +313,8 @@
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"
-      ]
+      ],
+      "dh": "cefaf1ee"
     },
     {
       "name": "CLIENTMODE_GetGamePasswordPart1",
@@ -312,7 +328,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "CLIENTMODE_GetGamePasswordPart1"
-      ]
+      ],
+      "dh": "a823d2e1"
     },
     {
       "name": "CLIENTMODE_GetGamePasswordPart2",
@@ -326,7 +343,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "CLIENTMODE_GetGamePasswordPart2"
-      ]
+      ],
+      "dh": "2bc202a7"
     },
     {
       "name": "CLIENTMODE_GetGamePasswordPart3",
@@ -340,7 +358,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "CLIENTMODE_GetGamePasswordPart3"
-      ]
+      ],
+      "dh": "7688ee55"
     },
     {
       "name": "CLIENTMODE_GetIngameUIFlags",
@@ -357,7 +376,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "99e65121"
     },
     {
       "name": "CLIENTMODE_ClearIngameUIFlag",
@@ -371,7 +391,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "CLIENTMODE_ClearIngameUIFlag"
-      ]
+      ],
+      "dh": "73617e1c"
     },
     {
       "name": "D2CLIENT_SetExitVar1",
@@ -385,7 +406,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "D2CLIENT_SetExitVar1"
-      ]
+      ],
+      "dh": "80900777"
     },
     {
       "name": "D2IniData_Getter_Unref_0044b890",
@@ -399,7 +421,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "D2IniData_Getter_Unref_0044b890"
-      ]
+      ],
+      "dh": "52ca5a92"
     },
     {
       "name": "fAPPMODE_client_ReturnAppMode",
@@ -439,7 +462,8 @@
         "D2PoolManagerStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0128a264"
     },
     {
       "name": "CLIENT_SetScreenResolution",
@@ -463,7 +487,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c05662f2"
     },
     {
       "name": "CLIENTMODE_WaitForQServerConnection",
@@ -488,7 +513,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "59d4032e"
     },
     {
       "name": "Unreferenced_0044bb70",
@@ -503,7 +529,8 @@
       "calledFunctions": [
         "Unreferenced_0044bb70",
         "QSERVER_InitializeServerState"
-      ]
+      ],
+      "dh": "3c00722a"
     },
     {
       "name": "FreeQServer",
@@ -518,7 +545,8 @@
       "calledFunctions": [
         "FreeQServer",
         "FreeServer"
-      ]
+      ],
+      "dh": "3330fb7f"
     },
     {
       "name": "CLIENTMODE_InitializeCallback",
@@ -532,7 +560,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "CLIENTMODE_InitializeCallback"
-      ]
+      ],
+      "dh": "f7b3107f"
     },
     {
       "name": "GameLoopFuncInitGame",
@@ -552,7 +581,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e7773f85"
     },
     {
       "name": "Unreferenced_0044bc10",
@@ -568,7 +598,8 @@
         "Unreferenced_0044bc10",
         "NET_D2GS_ConnectToServer",
         "MessageGameLoop"
-      ]
+      ],
+      "dh": "3a07f86b"
     },
     {
       "name": "NET_QServer_StartServer",
@@ -595,7 +626,8 @@
       "usedTypes": [
         "eD2ClientAppMode",
         "eD2GSConnectionType"
-      ]
+      ],
+      "dh": "f214b5af"
     },
     {
       "name": "CLIENTMODE_WaitForServerShutdown",
@@ -618,7 +650,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f7fa189b"
     },
     {
       "name": "NET_QServer_ShutdownServer",
@@ -640,7 +673,8 @@
       ],
       "usedTypes": [
         "eD2ClientAppMode"
-      ]
+      ],
+      "dh": "afa0667c"
     },
     {
       "name": "StaticInit_gpszCmdLineCaptionStr",
@@ -654,7 +688,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "StaticInit_gpszCmdLineCaptionStr"
-      ]
+      ],
+      "dh": "1db6ef9f"
     },
     {
       "name": "StaticInit_gpszDiabloIICaptionCopy",
@@ -668,7 +703,8 @@
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
         "StaticInit_gpszDiabloIICaptionCopy"
-      ]
+      ],
+      "dh": "c32ad462"
     },
     {
       "name": "QSERVER_InitGlobalGameState",
@@ -684,7 +720,8 @@
         "QSERVER_InitGlobalGameState",
         "Constructor",
         "atexit"
-      ]
+      ],
+      "dh": "7103fd0f"
     },
     {
       "name": "QSERVER_DestroyGlobalGameState",
@@ -699,7 +736,8 @@
       "calledFunctions": [
         "QSERVER_DestroyGlobalGameState",
         "Destructor"
-      ]
+      ],
+      "dh": "fa5130aa"
     }
   ]
 }

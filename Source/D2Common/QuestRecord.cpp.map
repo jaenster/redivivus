@@ -25,7 +25,8 @@
         "eD2QuestState",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "d7ab6c43"
     },
     {
       "name": "SetQuestState",
@@ -49,7 +50,8 @@
         "eD2QuestState",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "15b3d6cf"
     },
     {
       "name": "UnsetQuestState",
@@ -73,7 +75,8 @@
         "eD2QuestState",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "14b3bd34"
     },
     {
       "name": "UnsetQuestStepStates",
@@ -96,7 +99,8 @@
         "D2BitBufferStrc",
         "eD2Quests",
         "int32_t"
-      ]
+      ],
+      "dh": "60ef1779"
     },
     {
       "name": "CreateBitBuffer",
@@ -118,7 +122,8 @@
         "D2BitBufferStrc",
         "D2PoolManagerStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "403b36c4"
     },
     {
       "name": "FreeQuestRecordPool",
@@ -137,7 +142,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "d13c2735"
     },
     {
       "name": "ReadQuestRecordFromBuffer",
@@ -163,7 +169,8 @@
         "int16_t",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c11947c7"
     },
     {
       "name": "CopyQuestBitBuffer",
@@ -187,7 +194,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ac258977"
     }
   ]
 }

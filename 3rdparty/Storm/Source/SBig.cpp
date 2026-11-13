@@ -66,7 +66,7 @@ static int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, 
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method PLAUSIBLE, and the strongest of the plausibles. It is byte-for-byte the loop the oracle inlines in .FromStream__FR9BigBufferPCvUiPUi @1009b620, and it is the exact inverse of BigBuffer_EncodeDataBytes 00421bd0, which pass 5 confirmed against .EncodeDataBytes__FR29TSGrowableArray<Uc,8TSCD<Uc>>Ui @1009b8a0. The oracle has no separate DecodeDataBytes symbol, so the name is the inferred counterpart of a confirmed one rather than a read export.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
-static void BigBuffer_DecodeDataBytes(uint32_t * pnReadPos, uint8_t * pBuffer, uint32_t * pnValue, uint32_t nBufferLen) {
+static void BigBuffer_DecodeDataBytes(uint32_t nBufferLen, uint32_t * pnReadPos, uint32_t * pnValue, uint8_t * pBuffer) {
     *pnValue = 0;
     *pnReadPos = 0;
     if (nBufferLen > 0) {
@@ -2466,10 +2466,10 @@ static void BigBuffer_FromStr(BigBuffer * pResult, char * szText) {
 // @renamed-from SBIG_ImportVarint (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm mangled symbol .FromStream__FR9BigBufferPCvUiPUi @1009b620 -- 4 args with a bytes-consumed out-param; decodes the length prefix then calls FromBinary, exactly as .FromStream does. Was SBIG_ImportVarint.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
-static void __stdcall BigBuffer_FromStream(BigBuffer * pResult, int * pnBytesRead, uint8_t * pSrc, uint32_t nMaxLen) {
+static void __stdcall BigBuffer_FromStream(BigBuffer * pResult, int * pnBytesRead, uint32_t nMaxLen, uint8_t * pSrc) {
     uint32_t nPayloadLen;
     uint32_t nHeaderLen;
-    BigBuffer_DecodeDataBytes(&nHeaderLen, pSrc, &nPayloadLen, nMaxLen);
+    BigBuffer_DecodeDataBytes(nMaxLen, &nHeaderLen, &nPayloadLen, pSrc);
     BigBuffer_FromBinary(pSrc + nHeaderLen, nPayloadLen, pResult);
     if (!pnBytesRead) {
       return;
@@ -2694,7 +2694,7 @@ void __stdcall SBigFromStr(BigData * pDstBignum, char * szText) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFromStream -> 10099c40, single bl .FromStream__FR9BigBufferPCvUiPUi (4 args). 1.14d: 4-arg forwarder onto BigBuffer_FromStream 004234f0, which decodes a varint length then calls FromBinary - same as .FromStream -> .FromBinary.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigFromStream(BigData * pDstBignum, uint8_t * pSrc, uint32_t nMaxLen, int * pnBytesRead) {
-    BigBuffer_FromStream(&pDstBignum->sPrimary, pnBytesRead, pSrc, nMaxLen);
+    BigBuffer_FromStream(&pDstBignum->sPrimary, pnBytesRead, nMaxLen, pSrc);
 }
 
 // @renamed-from SBIG_SetValueWrapper (2026-08-28, Storm PowerPC oracle pass 4)

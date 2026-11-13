@@ -22,7 +22,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f6ad2ed3"
     },
     {
       "name": "SOUND_IsAmbientStreaming",
@@ -40,7 +41,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "530c5d63"
     },
     {
       "name": "SOUND_ResetAmbientSoundFlags",
@@ -61,7 +63,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0da6331d"
     },
     {
       "name": "SOUND_SetMusicEnabled",
@@ -79,7 +82,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c38b4bf6"
     },
     {
       "name": "SOUND_GetMusicEnabled",
@@ -93,7 +97,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetMusicEnabled"
-      ]
+      ],
+      "dh": "80b0b1ff"
     },
     {
       "name": "SOUND_StopMusic",
@@ -112,7 +117,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "186c5484"
     },
     {
       "name": "SOUND_FadeOutMusic",
@@ -131,7 +137,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "29fe11c8"
     },
     {
       "name": "SOUND_PlayNextAmbientSound",
@@ -161,7 +168,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "346893e4"
     },
     {
       "name": "SOUND_LoadRegistrySettings",
@@ -179,7 +187,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "90b6dc6b"
     },
     {
       "name": "SOUND_GetSoundMixer",
@@ -196,7 +205,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "129b555b"
     },
     {
       "name": "SOUND_SetSoundMixer",
@@ -214,7 +224,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d15d220c"
     },
     {
       "name": "SOUND_GetMasterVolume",
@@ -228,7 +239,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetMasterVolume"
-      ]
+      ],
+      "dh": "0f354294"
     },
     {
       "name": "SOUND_SetMasterVolume",
@@ -246,7 +258,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3c2e7da4"
     },
     {
       "name": "SOUND_GetMusicVolume",
@@ -260,7 +273,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetMusicVolume"
-      ]
+      ],
+      "dh": "ca0d21fd"
     },
     {
       "name": "SOUND_SetMusicVolume",
@@ -278,7 +292,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "267bea39"
     },
     {
       "name": "SOUND_GetPositionalBias",
@@ -292,7 +307,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetPositionalBias"
-      ]
+      ],
+      "dh": "aa2586b3"
     },
     {
       "name": "SOUND_SetPositionalBias",
@@ -310,7 +326,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "19933adc"
     },
     {
       "name": "SOUND_GetNpcSpeech",
@@ -324,7 +341,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetNpcSpeech"
-      ]
+      ],
+      "dh": "2ad86d99"
     },
     {
       "name": "SOUND_SetNpcSpeech",
@@ -342,7 +360,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "26ff4361"
     },
     {
       "name": "SOUND_GetOptionsMusic",
@@ -356,7 +375,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_GetOptionsMusic"
-      ]
+      ],
+      "dh": "6fe6d548"
     },
     {
       "name": "SOUND_SetOptionsMusic",
@@ -374,7 +394,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6862ea5e"
     },
     {
       "name": "SOUND_InitSoundEffectBuffers",
@@ -394,7 +415,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "e524a8c1"
     },
     {
       "name": "SOUND_LoadWavFile",
@@ -416,7 +438,8 @@
         "D2SoundWavCacheEntryStrc",
         "WAVEFORMATEX",
         "uint32_t"
-      ]
+      ],
+      "dh": "109631fc"
     },
     {
       "name": "SOUND_PlaySoundEffect",
@@ -441,7 +464,8 @@
         "D2SoundWavCacheEntryStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "59ae8921"
     },
     {
       "name": "SOUND_IsAnySoundEffectPlaying",
@@ -460,7 +484,8 @@
       "usedTypes": [
         "int *",
         "int32_t"
-      ]
+      ],
+      "dh": "dba2fe97"
     },
     {
       "name": "Unreferenced_00514ff0",
@@ -475,7 +500,8 @@
       "calledFunctions": [
         "Unreferenced_00514ff0",
         "SOUNDSMP_Stop"
-      ]
+      ],
+      "dh": "e72f85a8"
     },
     {
       "name": "SOUND_FadeOutAllSoundEffects",
@@ -495,7 +521,8 @@
       "usedTypes": [
         "D2SoundSmpStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "9d953d79"
     },
     {
       "name": "SOUND_IsSoundEffectsInitialized",
@@ -509,7 +536,8 @@
       "namespace": "D2Sound::Src::D2SoundFast",
       "calledFunctions": [
         "SOUND_IsSoundEffectsInitialized"
-      ]
+      ],
+      "dh": "a68cef93"
     },
     {
       "name": "SOUND_FreeSoundEffectBuffers",
@@ -530,7 +558,8 @@
       "usedTypes": [
         "D2SoundSmpStrc *",
         "D2SoundWavCacheEntryStrc"
-      ]
+      ],
+      "dh": "2b442c52"
     }
   ]
 }

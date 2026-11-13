@@ -119,7 +119,7 @@ static void __stdcall SCMD_ConvertNumber(CMDDEF * cmdDef, char * str, int * outC
 
 // @sourcefile .\SOURCE\SCMD.CPP
 // @blizzard ConvertString (SCMD.CPP)
-static void __stdcall SCMD_ConvertString(char * str, CMDDEF * cmdDef, uint32_t * outConsumed) {
+static void __stdcall SCMD_ConvertString(CMDDEF * cmdDef, char * str, uint32_t * outConsumed) {
     uint32_t nLen = SSTR::SStrLen(str);
     *outConsumed = nLen;
     if (cmdDef->uValue.szStringValue) {
@@ -428,7 +428,7 @@ static BOOL __fastcall SCMD_PerformConversion(char * str, CMDDEF * cmdDef, int *
           return 0;
         }
 
-        SCMD_ConvertString(str, cmdDef, (uint32_t*)outConsumed);
+        SCMD_ConvertString(cmdDef, str, (uint32_t*)outConsumed);
       } else {
         SCMD_ConvertNumber(cmdDef, str, outConsumed);
       }

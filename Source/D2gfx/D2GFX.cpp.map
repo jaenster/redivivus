@@ -15,7 +15,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "RENDERER_TogglePerspective_Unref_00477be0"
-      ]
+      ],
+      "dh": "21709478"
     },
     {
       "name": "D2GFX_GetPerspectiveCapable_ForPerspectiveItem",
@@ -56,7 +57,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "Unreferenced_004f5040"
-      ]
+      ],
+      "dh": "72e18788"
     },
     {
       "name": "D2GFX_Release",
@@ -71,7 +73,8 @@
       "calledFunctions": [
         "D2GFX_Release",
         "sprintf"
-      ]
+      ],
+      "dh": "a3b6f1e8"
     },
     {
       "name": "D2GFX_GetRendererMode",
@@ -88,7 +91,8 @@
       ],
       "usedTypes": [
         "eD2RendererMode"
-      ]
+      ],
+      "dh": "1d5c3c6e"
     },
     {
       "name": "D2GFX_GetRendererMode_Unref_004f5150",
@@ -105,7 +109,8 @@
       ],
       "usedTypes": [
         "eD2RendererMode"
-      ]
+      ],
+      "dh": "b18e67fe"
     },
     {
       "name": "D2GFX_GetResolutionMode",
@@ -119,7 +124,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetResolutionMode"
-      ]
+      ],
+      "dh": "9e8a0232"
     },
     {
       "name": "D2GFX_GetPerspectiveCapable",
@@ -133,7 +139,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetPerspectiveCapable"
-      ]
+      ],
+      "dh": "7f5375fb"
     },
     {
       "name": "D2GFX_GetFixAspect",
@@ -147,7 +154,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetFixAspect"
-      ]
+      ],
+      "dh": "d6834d82"
     },
     {
       "name": "D2GFX_SetPerspectiveCapable",
@@ -161,7 +169,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetPerspectiveCapable"
-      ]
+      ],
+      "dh": "8dfc3c3a"
     },
     {
       "name": "IsWindowMode",
@@ -178,7 +187,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f2a25188"
     },
     {
       "name": "D2GFX_IsPerspectiveActive",
@@ -195,7 +205,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9a9f437a"
     },
     {
       "name": "D2GFX_SetPerspective",
@@ -209,7 +220,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetPerspective"
-      ]
+      ],
+      "dh": "5dd70211"
     },
     {
       "name": "D2GFX_GetLowQuality_Unref_004f51f0",
@@ -223,7 +235,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetLowQuality_Unref_004f51f0"
-      ]
+      ],
+      "dh": "9da754df"
     },
     {
       "name": "D2GFX_SetBlendedShadows",
@@ -237,7 +250,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetBlendedShadows"
-      ]
+      ],
+      "dh": "0f0fb76e"
     },
     {
       "name": "D2GFX_GetLowQuality",
@@ -251,7 +265,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetLowQuality"
-      ]
+      ],
+      "dh": "1e17ad2d"
     },
     {
       "name": "D2GFX_SetLowQuality",
@@ -265,7 +280,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetLowQuality"
-      ]
+      ],
+      "dh": "6307561f"
     },
     {
       "name": "D2GFX_SetGamma",
@@ -279,7 +295,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetGamma"
-      ]
+      ],
+      "dh": "1fceb3cd"
     },
     {
       "name": "D2GFX_CheckGamma",
@@ -293,7 +310,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_CheckGamma"
-      ]
+      ],
+      "dh": "f43ce7b3"
     },
     {
       "name": "D2GFX_EnableVSync",
@@ -307,7 +325,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_EnableVSync"
-      ]
+      ],
+      "dh": "acaa0e6c"
     },
     {
       "name": "D2GFX_DisableFixAspect",
@@ -321,7 +340,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_DisableFixAspect"
-      ]
+      ],
+      "dh": "6a2b9af6"
     },
     {
       "name": "D2GFX_GetRenderStatistics",
@@ -335,7 +355,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetRenderStatistics"
-      ]
+      ],
+      "dh": "1eb769dc"
     },
     {
       "name": "D2GFX_SetOverlayMode",
@@ -349,7 +370,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetOverlayMode"
-      ]
+      ],
+      "dh": "e923bf1f"
     },
     {
       "name": "D2GFX_SetOption",
@@ -366,7 +388,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a53d7dc6"
     },
     {
       "name": "D2GFX_Initialize",
@@ -393,7 +416,8 @@
         "WNDCLASSA",
         "WNDPROC",
         "eD2RendererMode"
-      ]
+      ],
+      "dh": "178e1489"
     },
     {
       "name": "RENDERER_TogglePerspective",
@@ -407,7 +431,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "RENDERER_TogglePerspective"
-      ]
+      ],
+      "dh": "43e98eed"
     },
     {
       "name": "RENDERER_ToggleBlendedShadows",
@@ -421,7 +446,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "RENDERER_ToggleBlendedShadows"
-      ]
+      ],
+      "dh": "f2f9b35e"
     },
     {
       "name": "D2GFX_ToggleLowQuality",
@@ -435,7 +461,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_ToggleLowQuality"
-      ]
+      ],
+      "dh": "dd8e3b03"
     },
     {
       "name": "HideOSCursor",
@@ -449,7 +476,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "HideOSCursor"
-      ]
+      ],
+      "dh": "f0e3f26d"
     },
     {
       "name": "ShowOSCursor",
@@ -463,7 +491,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "ShowOSCursor"
-      ]
+      ],
+      "dh": "ae82a531"
     },
     {
       "name": "D2GFX_GetWindowSizeByResolutionMode",
@@ -483,7 +512,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "056a4beb"
     },
     {
       "name": "D2GFX_CreateWindow",
@@ -512,7 +542,8 @@
         "DEVMODEA",
         "int32_t",
         "tagRECT"
-      ]
+      ],
+      "dh": "2414b58e"
     },
     {
       "name": "D2GFX_DestroyWindow",
@@ -533,7 +564,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c14e24d4"
     },
     {
       "name": "D2GFX_OnActivationChange",
@@ -547,7 +579,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_OnActivationChange"
-      ]
+      ],
+      "dh": "19a54639"
     },
     {
       "name": "GetHwnd",
@@ -561,7 +594,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "GetHwnd"
-      ]
+      ],
+      "dh": "07af245d"
     },
     {
       "name": "D2GFX_GetScreenSize",
@@ -581,7 +615,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4b83e63e"
     },
     {
       "name": "UpdateOSCursorVisibilty",
@@ -600,7 +635,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ddb75e9e"
     },
     {
       "name": "IsFullscreen",
@@ -617,7 +653,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "07f5c42b"
     },
     {
       "name": "D2GFX_ActivateWindow",
@@ -637,7 +674,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c63cb13a"
     },
     {
       "name": "D2GFX_ResizeWindow",
@@ -660,7 +698,8 @@
       "usedTypes": [
         "int32_t",
         "tagRECT"
-      ]
+      ],
+      "dh": "f338dbdd"
     },
     {
       "name": "D2GFX_UpdateWindowSize",
@@ -682,7 +721,8 @@
       "usedTypes": [
         "int32_t",
         "tagRECT"
-      ]
+      ],
+      "dh": "ae0e2aa8"
     },
     {
       "name": "D2GFX_ClearCaches",
@@ -696,7 +736,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_ClearCaches"
-      ]
+      ],
+      "dh": "4231f4e3"
     },
     {
       "name": "D2GFX_BeginCutScene",
@@ -716,7 +757,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c01dfff4"
     },
     {
       "name": "D2GFX_PlayCutScene",
@@ -736,7 +778,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "84c40174"
     },
     {
       "name": "D2GFX_CheckCutScene",
@@ -756,7 +799,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e5f8c926"
     },
     {
       "name": "D2GFX_DecodeSmacker",
@@ -777,7 +821,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "58ff6c4b"
     },
     {
       "name": "D2GFX_PlayerSmacker",
@@ -798,7 +843,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "108d379d"
     },
     {
       "name": "D2GFX_CloseSmacker",
@@ -819,7 +865,8 @@
       "usedTypes": [
         "D2SmackerContextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b086ebc"
     },
     {
       "name": "DRAW_HideTaskbarAppBars",
@@ -837,7 +884,8 @@
       "usedTypes": [
         "D2GFXWindowPlacementStrc",
         "_AppBarData"
-      ]
+      ],
+      "dh": "3c5abc07"
     },
     {
       "name": "D2GFX_ResetViewport",
@@ -854,7 +902,8 @@
       ],
       "usedTypes": [
         "D2GFXWindowPlacementStrc"
-      ]
+      ],
+      "dh": "2b075a77"
     },
     {
       "name": "D2GFX_EndCutScene",
@@ -878,7 +927,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bf891642"
     },
     {
       "name": "D2GFX_EndCutSceneReturnSceneState",
@@ -896,7 +946,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "93e512ee"
     },
     {
       "name": "EndCutScene",
@@ -920,7 +971,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "602feb31"
     },
     {
       "name": "D2GFX_BeginScene",
@@ -934,7 +986,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_BeginScene"
-      ]
+      ],
+      "dh": "a77e5a71"
     },
     {
       "name": "D2GFX_GetPerformanceFrequency",
@@ -951,7 +1004,8 @@
       ],
       "usedTypes": [
         "LARGE_INTEGER"
-      ]
+      ],
+      "dh": "0e53c8a8"
     },
     {
       "name": "D2GFX_CalculateGammaRamp",
@@ -969,7 +1023,8 @@
       "usedTypes": [
         "LARGE_INTEGER",
         "int64_t"
-      ]
+      ],
+      "dh": "56860eea"
     },
     {
       "name": "D2GFX_EndScene",
@@ -984,7 +1039,8 @@
       "calledFunctions": [
         "D2GFX_EndScene",
         "D2GFX_CalculateGammaRamp"
-      ]
+      ],
+      "dh": "39115b64"
     },
     {
       "name": "D2GFX_GetBackBuffer",
@@ -998,7 +1054,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_GetBackBuffer"
-      ]
+      ],
+      "dh": "5e777aaa"
     },
     {
       "name": "D2GFX_IsWindowActive",
@@ -1015,7 +1072,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c10df7ce"
     },
     {
       "name": "D2GFX_DrawRect",
@@ -1032,7 +1090,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "03006abd"
     },
     {
       "name": "D2GFX_DrawRectEx",
@@ -1049,7 +1108,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "81824d34"
     },
     {
       "name": "D2GFX_DrawSolidRect",
@@ -1066,7 +1126,8 @@
       ],
       "usedTypes": [
         "RECT"
-      ]
+      ],
+      "dh": "898d9b84"
     },
     {
       "name": "D2GFX_DrawSolidSquare",
@@ -1083,7 +1144,8 @@
       ],
       "usedTypes": [
         "POINT"
-      ]
+      ],
+      "dh": "d199a09e"
     },
     {
       "name": "D2GFX_DrawSolidRectEx",
@@ -1101,7 +1163,8 @@
       "usedTypes": [
         "DRAWMODE",
         "int32_t"
-      ]
+      ],
+      "dh": "a5fbca1f"
     },
     {
       "name": "D2GFX_DrawSolidRectAlpha",
@@ -1118,7 +1181,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e9919b96"
     },
     {
       "name": "D2GFX_DrawLine",
@@ -1135,7 +1199,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "67843bd9"
     },
     {
       "name": "D2GFX_ClearScreen",
@@ -1149,7 +1214,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_ClearScreen"
-      ]
+      ],
+      "dh": "9d88171c"
     },
     {
       "name": "D2GFX_SetPalette",
@@ -1167,7 +1233,8 @@
       "usedTypes": [
         "LPPALETTEENTRY",
         "tagPALETTEENTRY"
-      ]
+      ],
+      "dh": "3be6d477"
     },
     {
       "name": "D2GFX_SetPaletteTable",
@@ -1185,7 +1252,8 @@
       ],
       "usedTypes": [
         "BYTE *"
-      ]
+      ],
+      "dh": "93381c19"
     },
     {
       "name": "D2GFX_SetGlobalLight",
@@ -1199,7 +1267,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetGlobalLight"
-      ]
+      ],
+      "dh": "e5b5a2d2"
     },
     {
       "name": "D2GFX_DrawPerspectiveImage",
@@ -1217,7 +1286,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fdff1a93"
     },
     {
       "name": "D2GFX_DrawImage",
@@ -1237,7 +1307,8 @@
         "D2GfxDataStrc",
         "DRAWMODE",
         "int32_t"
-      ]
+      ],
+      "dh": "3ece0c9e"
     },
     {
       "name": "D2GFX_DrawShiftedImage",
@@ -1257,7 +1328,8 @@
         "DRAWMODE",
         "GLOBALPALLETE",
         "int32_t"
-      ]
+      ],
+      "dh": "a41294ab"
     },
     {
       "name": "D2GFX_DrawVerticalCropImage",
@@ -1276,7 +1348,8 @@
         "D2GfxDataStrc",
         "DRAWMODE",
         "int32_t"
-      ]
+      ],
+      "dh": "2eecc10c"
     },
     {
       "name": "D2GFX_DrawSprite6",
@@ -1295,7 +1368,8 @@
         "D2GfxDataStrc",
         "D2GfxTileRectStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bb8ee36f"
     },
     {
       "name": "D2GFX_DrawShadow",
@@ -1313,7 +1387,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "96ce0f12"
     },
     {
       "name": "D2GFX_DrawImageColoredShape",
@@ -1331,7 +1406,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d2232469"
     },
     {
       "name": "D2GFX_DebugFillBackBuffer",
@@ -1348,7 +1424,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cce59a51"
     },
     {
       "name": "D2GFX_UpdateScaleFactor",
@@ -1362,7 +1439,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_UpdateScaleFactor"
-      ]
+      ],
+      "dh": "3acdc150"
     },
     {
       "name": "D2GFX_GetScaleFactor",
@@ -1379,7 +1457,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ddd85e51"
     },
     {
       "name": "D2GFX_SetDefaultScaleFactor",
@@ -1393,7 +1472,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "D2GFX_SetDefaultScaleFactor"
-      ]
+      ],
+      "dh": "f8363869"
     },
     {
       "name": "Unreferenced_004f6610",
@@ -1407,7 +1487,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "Unreferenced_004f6610"
-      ]
+      ],
+      "dh": "fb3a8b15"
     },
     {
       "name": "Unreferenced_004f6640",
@@ -1421,7 +1502,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "Unreferenced_004f6640"
-      ]
+      ],
+      "dh": "ea18b9f0"
     },
     {
       "name": "D2GFX_SetPerspectiveScale",
@@ -1441,7 +1523,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a62adfaa"
     },
     {
       "name": "D2GFX_IsInPerspectiveBounds",
@@ -1462,7 +1545,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff4bf1fb"
     },
     {
       "name": "D2GFX_AdjustPerspectivePosition",
@@ -1482,7 +1566,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d2e63834"
     },
     {
       "name": "D2GFX_PerspecitveScalePosition",
@@ -1502,7 +1587,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8f00f79c"
     },
     {
       "name": "D2GFX_SetDefaultPerspectiveFactor",
@@ -1522,7 +1608,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "80fb4b24"
     },
     {
       "name": "D2GFX_DrawString",
@@ -1539,7 +1626,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0695ca15"
     },
     {
       "name": "D2GFX_DrawLight",
@@ -1556,7 +1644,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a5f3b35a"
     },
     {
       "name": "D2GFX_DrawGroundTile",
@@ -1575,7 +1664,8 @@
         "D2GfxLightExStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7f2684c3"
     },
     {
       "name": "D2GFX_DrawWallTile",
@@ -1594,7 +1684,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "66b587b8"
     },
     {
       "name": "D2GFX_DrawTransWallTile",
@@ -1613,7 +1704,8 @@
         "D2GfxLightStrc",
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "27eb6542"
     },
     {
       "name": "D2GFX_DrawShadowTile",
@@ -1631,7 +1723,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0d56c9fa"
     },
     {
       "name": "D2GFX_DrawTileSimple",
@@ -1648,7 +1741,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "271bd325"
     },
     {
       "name": "D2GFX_DrawTileAdvanced",
@@ -1666,7 +1760,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f4f728aa"
     },
     {
       "name": "D2GFX_DrawWallTileBasic",
@@ -1685,7 +1780,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "da6d2653"
     },
     {
       "name": "D2GFX_DrawWallTileWithPerspective",
@@ -1705,7 +1801,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t[32]"
-      ]
+      ],
+      "dh": "e1cba0f5"
     },
     {
       "name": "D2GFX_DrawGroundTileBasic",
@@ -1724,7 +1821,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f5ff6905"
     },
     {
       "name": "D2GFX_DrawGroundTileWithPerspective",
@@ -1744,7 +1842,8 @@
         "uint32_t",
         "uint8_t",
         "uint8_t[32]"
-      ]
+      ],
+      "dh": "9234372d"
     },
     {
       "name": "D2GFX_InitializeLineBuffer",
@@ -1764,7 +1863,8 @@
       ],
       "usedTypes": [
         "uint8_t[32]"
-      ]
+      ],
+      "dh": "0fbf66b5"
     },
     {
       "name": "D2GFX_FillYBufferFast",
@@ -1781,7 +1881,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ea87f000"
     },
     {
       "name": "PALETTE_InitColorLookupTables",
@@ -1799,7 +1900,8 @@
       "usedTypes": [
         "BYTE *",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ab965ad"
     },
     {
       "name": "Unreferenced_004f8e90",
@@ -1814,7 +1916,8 @@
       "calledFunctions": [
         "Unreferenced_004f8e90",
         "D2GFX_SetPaletteTable"
-      ]
+      ],
+      "dh": "87b11d56"
     },
     {
       "name": "D2GFX_InitializeWindowSize",
@@ -1834,7 +1937,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8a9593ed"
     },
     {
       "name": "StaticInit_gpszWindowClassName",
@@ -1848,7 +1952,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "StaticInit_gpszWindowClassName"
-      ]
+      ],
+      "dh": "131a2e01"
     },
     {
       "name": "StaticInit_szWindowClassName",
@@ -1862,7 +1967,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "StaticInit_szWindowClassName"
-      ]
+      ],
+      "dh": "3068f882"
     },
     {
       "name": "StaticInit_gpszWindowTitle",
@@ -1876,7 +1982,8 @@
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
         "StaticInit_gpszWindowTitle"
-      ]
+      ],
+      "dh": "8eceaa31"
     }
   ]
 }

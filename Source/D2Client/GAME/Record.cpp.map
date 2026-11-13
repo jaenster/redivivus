@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2GameRecordStrc"
-      ]
+      ],
+      "dh": "8845a9c1"
     },
     {
       "name": "AddGameEntry",
@@ -40,7 +41,8 @@
         "D2GameRecordEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c281896b"
     },
     {
       "name": "HandleWinProcMsg",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d111f0db"
     },
     {
       "name": "SaveGameRecordToFile",
@@ -78,7 +81,8 @@
       "usedTypes": [
         "D2GameRecordFileHeaderStrc",
         "D2GameRecordStrc"
-      ]
+      ],
+      "dh": "48406dd3"
     },
     {
       "name": "LoadGameRecordFromFile",
@@ -101,7 +105,8 @@
         "D2GameRecordStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b3da0bd4"
     },
     {
       "name": "FreeGameRecord",
@@ -119,7 +124,8 @@
       ],
       "usedTypes": [
         "D2GameRecordStrc"
-      ]
+      ],
+      "dh": "1a815e18"
     },
     {
       "name": "GAME_ReplayRecordedWindowMessage",
@@ -144,7 +150,8 @@
         "D2GameRecordEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff0dfe2b"
     },
     {
       "name": "SetupRecording",
@@ -160,7 +167,8 @@
         "SetupRecording",
         "LoadGameRecordFromFile",
         "GAME_SetForcedGameSeed"
-      ]
+      ],
+      "dh": "0d902553"
     },
     {
       "name": "IsNotRecording",
@@ -174,7 +182,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "IsNotRecording"
-      ]
+      ],
+      "dh": "a7b262a5"
     },
     {
       "name": "CallCloseRecordingFunction",
@@ -189,7 +198,8 @@
       "calledFunctions": [
         "CallCloseRecordingFunction",
         "SaveGameRecordToFile"
-      ]
+      ],
+      "dh": "4d6ebbde"
     },
     {
       "name": "SetCleanupFunction",
@@ -204,7 +214,8 @@
       "calledFunctions": [
         "SetCleanupFunction",
         "RegisterExitFunction"
-      ]
+      ],
+      "dh": "ca0e36b5"
     },
     {
       "name": "IsRecording_Unref_00451960",
@@ -218,7 +229,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "IsRecording_Unref_00451960"
-      ]
+      ],
+      "dh": "b62b27ff"
     },
     {
       "name": "RECORD_SetPlaybackActive",
@@ -232,7 +244,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "RECORD_SetPlaybackActive"
-      ]
+      ],
+      "dh": "b7d3517b"
     },
     {
       "name": "IsRecording",
@@ -246,7 +259,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "IsRecording"
-      ]
+      ],
+      "dh": "09286a3a"
     },
     {
       "name": "IsPlaybackActive",
@@ -260,7 +274,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "IsPlaybackActive"
-      ]
+      ],
+      "dh": "ddec6acb"
     },
     {
       "name": "StopRecordingSetFlags",
@@ -274,7 +289,8 @@
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
         "StopRecordingSetFlags"
-      ]
+      ],
+      "dh": "90bea76f"
     },
     {
       "name": "RecordCurrentStep",
@@ -298,7 +314,8 @@
         "D2GameRecordEntryStrc",
         "D2GameRecordStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2dc9e33e"
     }
   ]
 }

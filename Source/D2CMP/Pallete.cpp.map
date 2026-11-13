@@ -21,7 +21,8 @@
         "D2TileProjectStrc",
         "int32_t",
         "pfnTileEntryEnum"
-      ]
+      ],
+      "dh": "8bed9af7"
     },
     {
       "name": "TILEPROJECT_FindLibraryOfTile",
@@ -40,7 +41,8 @@
         "D2TileLibraryEntryStrc",
         "D2TileLibraryHeaderStrc",
         "D2TileProjectStrc"
-      ]
+      ],
+      "dh": "f9bac078"
     },
     {
       "name": "PALETTE_LoadFromFile",
@@ -67,7 +69,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "91d55974"
     },
     {
       "name": "PALETTE_InitItemPalettes",
@@ -82,7 +85,8 @@
       "calledFunctions": [
         "PALETTE_InitItemPalettes",
         "PALETTE_LoadFromFile"
-      ]
+      ],
+      "dh": "a549c82a"
     },
     {
       "name": "PALETTE_SetAct",
@@ -99,7 +103,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5cc61ddb"
     },
     {
       "name": "PALETTE_GetItemPalette",
@@ -117,7 +122,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f792aa5f"
     },
     {
       "name": "Unreferenced_00600c60",
@@ -132,7 +138,8 @@
       "calledFunctions": [
         "Unreferenced_00600c60",
         "D2MEM_FindLowestSetBit"
-      ]
+      ],
+      "dh": "1a1cbc3d"
     },
     {
       "name": "PALETTE_GetColorShiftIndex",
@@ -151,7 +158,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "35640398"
     }
   ]
 }

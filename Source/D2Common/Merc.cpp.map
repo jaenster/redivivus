@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8736b307"
     },
     {
       "name": "GetMonsterSequenceTable",
@@ -51,7 +52,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2994ba84"
     },
     {
       "name": "MERC_GetSequenceTxt",
@@ -71,7 +73,8 @@
         "D2MonSeqMonsterTbls",
         "D2MonSeqTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "2226ee0f"
     },
     {
       "name": "GetCounter1",
@@ -91,7 +94,8 @@
         "D2MonSeqMonsterTbls",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3188fba6"
     },
     {
       "name": "GetCounter2",
@@ -111,7 +115,8 @@
         "D2MonSeqMonsterTbls",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2bf75f7c"
     },
     {
       "name": "ANIM_GetSequenceFrameInfo",
@@ -131,7 +136,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "161ac9dc"
     },
     {
       "name": "ANIM_GetEventFrame",
@@ -150,7 +156,8 @@
         "D2MonSeqTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce9c5b1a"
     },
     {
       "name": "MERC_GenerateStatsFromSeed",
@@ -174,7 +181,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ee5d855d"
     },
     {
       "name": "GetMercTypeString",
@@ -193,7 +201,8 @@
       "usedTypes": [
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0708eb3"
     },
     {
       "name": "GetMercAct",
@@ -214,7 +223,8 @@
         "D2HirelingTxt",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b466c0a4"
     },
     {
       "name": "GetBaseExperience",
@@ -231,7 +241,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "60ab1322"
     },
     {
       "name": "GetReviveCost",
@@ -250,7 +261,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "70971a7a"
     },
     {
       "name": "RollMercStats",
@@ -277,7 +289,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "141035cd"
     }
   ]
 }

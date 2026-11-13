@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "7bf44e7e"
     },
     {
       "name": "GetArenaTxtRecord",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2ArenaTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "2cbe118f"
     },
     {
       "name": "FreeArenaTxt",
@@ -56,7 +58,8 @@
       "calledFunctions": [
         "FreeArenaTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "ed941d60"
     },
     {
       "name": "TXT_BuildCharTemplateLevelIndex",
@@ -79,7 +82,8 @@
         "D2CharTemplateTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "00c0e080"
     },
     {
       "name": "TXT_LoadCharTemplateTxt",
@@ -99,7 +103,8 @@
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "642e41f8"
     },
     {
       "name": "FreeCharTemplateTxt",
@@ -114,7 +119,8 @@
       "calledFunctions": [
         "FreeCharTemplateTxt",
         "UnloadBin"
-      ]
+      ],
+      "dh": "365611e4"
     },
     {
       "name": "TXT_CharTemplate_GetLine",
@@ -134,7 +140,8 @@
       ],
       "usedTypes": [
         "D2CharTemplateTxt"
-      ]
+      ],
+      "dh": "2ddd036b"
     },
     {
       "name": "GetClassFromCharTemplateTxt",
@@ -155,7 +162,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "caa458c6"
     }
   ]
 }

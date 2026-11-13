@@ -21,7 +21,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ad887c7"
     },
     {
       "name": "PLAYER_InitBaseStats",
@@ -45,7 +46,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "a67df8ac"
     },
     {
       "name": "thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f1b08943"
     },
     {
       "name": "UpdateGameInfo",
@@ -102,7 +105,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "928038f4"
     },
     {
       "name": "PLAYER_AddEnergyStatPoints",
@@ -124,7 +128,8 @@
         "D2CharStatsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9ecb91fd"
     },
     {
       "name": "PLAYER_AddVitalityStatPoints",
@@ -146,7 +151,8 @@
         "D2CharStatsTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "549e166a"
     },
     {
       "name": "ClearStats",
@@ -171,7 +177,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b462c1e3"
     },
     {
       "name": "PLAYER_AssignStatPoint",
@@ -194,7 +201,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce63de91"
     },
     {
       "name": "PLAYER_SendStateListToClient",
@@ -232,7 +240,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e3c0ac2a"
     },
     {
       "name": "PLAYER_SendStateDeltaToClient",
@@ -274,7 +283,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "53bd2265"
     },
     {
       "name": "PLAYER_SendStateUpdate",
@@ -295,7 +305,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f914471a"
     },
     {
       "name": "PLAYER_SendOverlayToClient",
@@ -318,7 +329,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "151e1c22"
     },
     {
       "name": "SendRemoveObject",
@@ -337,7 +349,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "64bda70d"
     },
     {
       "name": "PLAYER_SendHoverTextToClient",
@@ -369,7 +382,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9305d44d"
     },
     {
       "name": "UNITMSG_SendSoundPacketToClient",
@@ -390,7 +404,8 @@
         "D2ClientStrc",
         "D2GSPacketSrv0x2C",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "73236ad6"
     },
     {
       "name": "UnitQueuePacket0x99",
@@ -415,7 +430,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a0c56fb"
     },
     {
       "name": "UnitQueuePacket0x9A",
@@ -439,7 +455,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "17bee64f"
     },
     {
       "name": "UnitQueuePacket0x9E",
@@ -466,7 +483,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff5dafbc"
     },
     {
       "name": "UnitQueuePacket0xA1",
@@ -492,7 +510,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "2a05157a"
     },
     {
       "name": "UnitQueuePacket0xAB",
@@ -515,7 +534,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a3c84290"
     },
     {
       "name": "SERVER_SendUnitMessagePacket",
@@ -541,7 +561,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9575f8ec"
     },
     {
       "name": "UnitQueuePacket0xA5",
@@ -565,7 +586,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f7c4f89a"
     },
     {
       "name": "SERVER_UnitQueuePacket0xA4",
@@ -587,7 +609,8 @@
         "D2SUnitMsgStrc",
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "9680a00a"
     },
     {
       "name": "SERVER_SendPacket0x23",
@@ -610,7 +633,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33315b26"
     },
     {
       "name": "SERVER_UnitQueuePacketSend",
@@ -650,7 +674,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c20f2295"
     },
     {
       "name": "SERVER_UnitQueuePacketFree",
@@ -672,7 +697,8 @@
         "D2SUnitMsgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "75b1d1c1"
     },
     {
       "name": "SERVER_SendInitUnitPacket",
@@ -737,7 +763,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2cb012bc"
     }
   ]
 }

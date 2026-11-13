@@ -37,7 +37,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "11afcf34"
     },
     {
       "name": "SKILLSCLT_CreateMultiMissileDirected",
@@ -71,7 +72,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "983f2b5c"
     },
     {
       "name": "Skills_CltDoFunc_MultiMissileDirected",
@@ -99,7 +101,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "46c51ff4"
     },
     {
       "name": "Skills_CltDoFunc_DualMissileWithZ",
@@ -126,7 +129,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "301bf513"
     },
     {
       "name": "Skills_CltDoFunc_DualMissileAtCoords",
@@ -151,7 +155,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3a60e526"
     },
     {
       "name": "Skills_CltStFunc_CheckTargetIsMonsterOrPlayer",
@@ -171,7 +176,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "cdb0dc95"
     },
     {
       "name": "SKILLSCLT_CreateMissileWithGfx",
@@ -200,7 +206,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a58aff8a"
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_MissileAtTarget",
@@ -230,7 +237,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cabfb96f"
     },
     {
       "name": "SKILLSCLT_SetMissilePathAndCalc",
@@ -257,7 +265,8 @@
         "D2UnitStrc",
         "int32_t",
         "intptr_t"
-      ]
+      ],
+      "dh": "9a5b3cc1"
     },
     {
       "name": "SKILLSCLT_CltCreateMissileAtTarget",
@@ -285,7 +294,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e476e42"
     },
     {
       "name": "SKILLSCLT_SetMissilePathExtended",
@@ -325,7 +335,8 @@
         "uint32_t",
         "uint64_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a852415b"
     },
     {
       "name": "SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath",
@@ -353,7 +364,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ec32782c"
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_MissilesOnTargetVelocity",
@@ -377,7 +389,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "71fc3c53"
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget",
@@ -405,7 +418,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c100542"
     },
     {
       "name": "SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath",
@@ -433,7 +447,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8347b609"
     },
     {
       "name": "Skills_CltDoFunc_AuraState_OverlayOnTarget",
@@ -461,7 +476,8 @@
         "eD2Sounds",
         "eOverlayId",
         "int32_t"
-      ]
+      ],
+      "dh": "83011e92"
     },
     {
       "name": "Skills_CltDoFunc_AuraState_OverlayOnCaster",
@@ -488,7 +504,8 @@
         "eD2Sounds",
         "eOverlayId",
         "int32_t"
-      ]
+      ],
+      "dh": "65106081"
     },
     {
       "name": "SKILLSCLT_CreateProjectileMissile",
@@ -518,7 +535,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "9ab7e4ec"
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_CastAttackAtCoords",
@@ -541,7 +559,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "e88f0022"
     },
     {
       "name": "Skills_CltDoFunc_AuraLevel_ProjectileMissile",
@@ -565,7 +584,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c8b1069"
     },
     {
       "name": "SKILLSCLT_ValidateSkillAndMissile",
@@ -585,7 +605,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5dbea3ed"
     },
     {
       "name": "SKILLSCLT_CalcChargeSkillDuration",
@@ -607,7 +628,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cef8cdd2"
     }
   ]
 }

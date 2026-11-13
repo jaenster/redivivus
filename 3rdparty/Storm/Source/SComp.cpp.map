@@ -19,7 +19,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkStrc *"
-      ]
+      ],
+      "dh": "f0c2ff58"
     },
     {
       "name": "LINKEDLIST_Unlink",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2BitStreamReaderStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "590538ce"
     },
     {
       "name": "Unreferenced_0041d8a0",
@@ -54,7 +56,8 @@
       ],
       "usedTypes": [
         "D2BitStreamReader32Strc"
-      ]
+      ],
+      "dh": "5ea9a7c5"
     },
     {
       "name": "BITBUFFER_PeekBits",
@@ -73,7 +76,8 @@
         "uint16_t",
         "uint16_t *",
         "uint32_t"
-      ]
+      ],
+      "dh": "28e8d634"
     },
     {
       "name": "LINKEDLIST_Clear",
@@ -91,7 +95,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8def77cb"
     },
     {
       "name": "LINKEDLIST_InsertAfter",
@@ -110,7 +115,8 @@
         "D2BitStreamWriterStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f4f78899"
     },
     {
       "name": "BITBUFFER_GetRemainingBits",
@@ -127,7 +133,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3e4b67e6"
     },
     {
       "name": "BITSTREAM_WriteBits",
@@ -146,7 +153,8 @@
         "D2BitStreamWriterStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "22a9d8a7"
     },
     {
       "name": "BITSTREAM_Flush",
@@ -164,7 +172,8 @@
       "usedTypes": [
         "D2BitStreamWriterStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d61ce67a"
     },
     {
       "name": "BITSTREAM_WriteLiteralByte",
@@ -186,7 +195,8 @@
         "D2CompressHuffNodeStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f5eede68"
     },
     {
       "name": "SCOMP_SelectADPCMParams",
@@ -204,7 +214,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "57f0b2f9"
     },
     {
       "name": "SCOMP_ADPCMEncode",
@@ -223,7 +234,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0c09e52d"
     },
     {
       "name": "SCOMP_ADPCMDecode",
@@ -242,7 +254,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0434350d"
     },
     {
       "name": "SCOMP_PkwareBufferRead",
@@ -261,7 +274,8 @@
       "usedTypes": [
         "PKWARE_STREAM",
         "uint32_t"
-      ]
+      ],
+      "dh": "94df2338"
     },
     {
       "name": "SCOMP_PkwareBufferWrite",
@@ -280,7 +294,8 @@
       "usedTypes": [
         "PKWARE_STREAM",
         "uint32_t"
-      ]
+      ],
+      "dh": "09ceb926"
     },
     {
       "name": "SCOMP_PkwareCompress",
@@ -302,7 +317,8 @@
         "PKWARE_STREAM",
         "TCmpStruct",
         "uint32_t"
-      ]
+      ],
+      "dh": "5fc83457"
     },
     {
       "name": "SCOMP_PkwareDecompress",
@@ -324,7 +340,8 @@
         "PKWARE_STREAM",
         "TDcmpStruct",
         "uint32_t"
-      ]
+      ],
+      "dh": "96deffeb"
     },
     {
       "name": "SCOMP_ArenaAlloc",
@@ -345,7 +362,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "636880f6"
     },
     {
       "name": "SCOMP_ArenaFree",
@@ -363,7 +381,8 @@
       ],
       "usedTypes": [
         "D2ScompArenaStrc"
-      ]
+      ],
+      "dh": "69de7a59"
     },
     {
       "name": "SCOMP_ZlibCompress",
@@ -387,7 +406,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "2afbc187"
     },
     {
       "name": "SCOMP_ZlibCompressWithLevel",
@@ -407,7 +427,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "801f8095"
     },
     {
       "name": "SCOMP_InflateZlibStackArena",
@@ -432,7 +453,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "7b3b0d87"
     },
     {
       "name": "SCOMP_Bzip2Decompress",
@@ -451,7 +473,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f1fc6347"
     },
     {
       "name": "SCOMP_AdpcmMonoCompress",
@@ -470,7 +493,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "569fcedd"
     },
     {
       "name": "SCOMP_AdpcmMonoDecompress",
@@ -490,7 +514,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7e3ab520"
     },
     {
       "name": "SCOMP_AdpcmStereoCompress",
@@ -509,7 +534,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "be1cb7cb"
     },
     {
       "name": "SCOMP_AdpcmStereoDecompress",
@@ -529,7 +555,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "54094429"
     },
     {
       "name": "SCOMP_s_AllocDecompressBuffer",
@@ -549,7 +576,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c42529ea"
     },
     {
       "name": "SCOMP_ReleaseTempBuffer",
@@ -567,7 +595,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "93ba4267"
     },
     {
       "name": "SCompCompress",
@@ -589,7 +618,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "88827f3d"
     },
     {
       "name": "SCompDecompress",
@@ -613,7 +643,8 @@
         "pfnSCompCodec *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fdae2db3"
     },
     {
       "name": "SCOMP_CleanupTempBuffer",
@@ -628,7 +659,8 @@
       "calledFunctions": [
         "SCOMP_CleanupTempBuffer",
         "SMemFree"
-      ]
+      ],
+      "dh": "e6010603"
     },
     {
       "name": "HUFFMAN_GetDecodedOffset",
@@ -647,7 +679,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "378027af"
     },
     {
       "name": "Unreferenced_0041e930",
@@ -664,7 +697,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "0bd943b8"
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041e970",
@@ -682,7 +716,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkStrc *"
-      ]
+      ],
+      "dh": "264a2202"
     },
     {
       "name": "Unreferenced_0041e9b0",
@@ -699,7 +734,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "6709c326"
     },
     {
       "name": "Unreferenced_0041e9d0",
@@ -713,7 +749,8 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041e9d0"
-      ]
+      ],
+      "dh": "806b5a05"
     },
     {
       "name": "BITBUFFER_ReadBits",
@@ -732,7 +769,8 @@
         "D2BitStreamReaderStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b2d0261"
     },
     {
       "name": "SCOMP_DecompressSimple",
@@ -750,7 +788,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3119f46e"
     },
     {
       "name": "Unreferenced_0041ea40",
@@ -767,7 +806,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "cb9381ab"
     },
     {
       "name": "Unreferenced_0041ea60",
@@ -781,7 +821,8 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "Unreferenced_0041ea60"
-      ]
+      ],
+      "dh": "84c21823"
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041eae0",
@@ -799,7 +840,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkStrc *"
-      ]
+      ],
+      "dh": "18e1f7d7"
     },
     {
       "name": "HUFFMAN_GetNextNodeOrDefault",
@@ -816,7 +858,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "11b36612"
     },
     {
       "name": "LINKEDLIST_UnlinkNode",
@@ -836,7 +879,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "96988586"
     },
     {
       "name": "Unreferenced_0041ebb0",
@@ -853,7 +897,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4fcd084e"
     },
     {
       "name": "HUFFMAN_DecodeSymbol",
@@ -875,7 +920,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e67e1c3d"
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_0041ed30",
@@ -893,7 +939,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkStrc *"
-      ]
+      ],
+      "dh": "ad68aa29"
     },
     {
       "name": "Unreferenced_0041ed70",
@@ -910,7 +957,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "520e5d46"
     },
     {
       "name": "LINKEDLIST_MoveNode",
@@ -931,7 +979,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a620cf7a"
     },
     {
       "name": "LINKEDLIST_UnlinkAll",
@@ -951,7 +1000,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "42ca7904"
     },
     {
       "name": "LINKEDLIST_LinkBefore",
@@ -965,7 +1015,8 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "LINKEDLIST_LinkBefore"
-      ]
+      ],
+      "dh": "e2c25bd2"
     },
     {
       "name": "LINKEDLIST_NodeDestructor",
@@ -982,7 +1033,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a6b699e6"
     },
     {
       "name": "HUFFMAN_AllocateNode",
@@ -1002,7 +1054,8 @@
         "D2CompressHuffNodeStrc",
         "D2HuffmanContextStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d5730704"
     },
     {
       "name": "COMPRESS_InitEncoderContext",
@@ -1024,7 +1077,8 @@
         "D2CompressHuffNodeStrc *",
         "int *",
         "uint32_t"
-      ]
+      ],
+      "dh": "fde5148a"
     },
     {
       "name": "COMPRESS_UpdateFrequencies",
@@ -1043,7 +1097,8 @@
         "D2CompressEncoderStrc",
         "D2CompressHuffNodeStrc",
         "D2CompressHuffNodeStrc *"
-      ]
+      ],
+      "dh": "06775690"
     },
     {
       "name": "COMPRESS_FlushEncoderState",
@@ -1064,7 +1119,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b953bb87"
     },
     {
       "name": "HUFFMAN_InitContext",
@@ -1081,7 +1137,8 @@
       ],
       "usedTypes": [
         "D2CompressEncoderStrc"
-      ]
+      ],
+      "dh": "d9453687"
     },
     {
       "name": "COMPRESS_EncodeSymbol",
@@ -1102,7 +1159,8 @@
         "D2CompressHuffNodeStrc",
         "D2CompressHuffNodeStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "a8a187e7"
     },
     {
       "name": "COMPRESS_DestroyEncoderContext",
@@ -1122,7 +1180,8 @@
         "D2CompressEncoderStrc",
         "D2CompressHuffNodeStrc",
         "D2CompressHuffNodeStrc *"
-      ]
+      ],
+      "dh": "efd5bb6d"
     },
     {
       "name": "HUFFMAN_DecompressBlock",
@@ -1148,7 +1207,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2ec1f1f9"
     },
     {
       "name": "COMPRESS_EncodeBuffer",
@@ -1176,7 +1236,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ae107149"
     },
     {
       "name": "HUFFMAN_Constructor",
@@ -1194,7 +1255,8 @@
       ],
       "usedTypes": [
         "D2CompressEncoderStrc"
-      ]
+      ],
+      "dh": "d9aba57a"
     },
     {
       "name": "HUFFMAN_ConstructorWithTable",
@@ -1213,7 +1275,8 @@
       "usedTypes": [
         "D2HuffmanContextStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "40d04412"
     },
     {
       "name": "SCOMP_HuffmanCompress",
@@ -1237,7 +1300,8 @@
         "D2CompressEncoderStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a6538ab9"
     },
     {
       "name": "SCOMP_HuffmanDecompress",
@@ -1258,7 +1322,8 @@
       ],
       "usedTypes": [
         "D2HuffmanContextStrc"
-      ]
+      ],
+      "dh": "293324e9"
     },
     {
       "name": "LINKEDLIST_NodeDestructor_Unref_00420430",
@@ -1276,7 +1341,8 @@
       "usedTypes": [
         "StormLinkStrc",
         "StormLinkStrc *"
-      ]
+      ],
+      "dh": "c5a3ff44"
     },
     {
       "name": "StaticInit_CriticalSection_00779214",
@@ -1291,7 +1357,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_00779214",
         "atexit"
-      ]
+      ],
+      "dh": "f7b73c25"
     },
     {
       "name": "StaticFini_CriticalSection_00779214",
@@ -1305,7 +1372,8 @@
       "namespace": "Storm::Source::SComp",
       "calledFunctions": [
         "StaticFini_CriticalSection_00779214"
-      ]
+      ],
+      "dh": "2d3ba37f"
     }
   ]
 }

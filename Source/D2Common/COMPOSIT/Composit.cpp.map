@@ -19,7 +19,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9240912"
     },
     {
       "name": "COMPOSIT_GetItemTypeIndex",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "47233697"
     },
     {
       "name": "COMPOSIT_ResolveWeaponClass",
@@ -72,7 +74,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0e97fbbe"
     },
     {
       "name": "COMPOSIT_GetWeaponClassWithTransform",
@@ -96,7 +99,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f9c10848"
     },
     {
       "name": "DoesBodyHaveAppearanceColors",
@@ -113,7 +117,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d879e7b0"
     },
     {
       "name": "COMPOSIT_HasWeaponDrawn",
@@ -136,7 +141,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7f773e57"
     },
     {
       "name": "COMPOSIT_GetBodyPartTransform",
@@ -159,7 +165,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "38e49b27"
     },
     {
       "name": "COMPOSIT_BuildCofPath",
@@ -188,7 +195,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "dd86a03b"
     },
     {
       "name": "COMPOSIT_GetCofPathWithTransform",
@@ -215,7 +223,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9f02016"
     }
   ]
 }

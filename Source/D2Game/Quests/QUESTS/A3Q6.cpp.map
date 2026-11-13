@@ -21,7 +21,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "474698a5"
     },
     {
       "name": "Q23_CheckDuranceOfHateLevel2",
@@ -46,7 +47,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "7484d010"
     },
     {
       "name": "Q23_ActiveFilter",
@@ -67,7 +69,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ff84547f"
     },
     {
       "name": "Q23_PlayerUpdateGuardianSteps",
@@ -92,7 +95,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "59e42c76"
     },
     {
       "name": "Q23_SetGuardianQuestComplete",
@@ -114,7 +118,8 @@
         "D2BitBufferStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9699fcb4"
     },
     {
       "name": "Q23_PlayerCheckDuranceLevel3Complete",
@@ -142,7 +147,8 @@
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "c764f4ce"
     },
     {
       "name": "Q23_PlayerNotifyCompleted",
@@ -164,7 +170,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "17b23d71"
     },
     {
       "name": "Q23_Callback00_NpcActivate",
@@ -191,7 +198,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d8c9769"
     },
     {
       "name": "Q23_Callback02_NpcDeactivate",
@@ -211,7 +219,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA3Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "cac3aeb2"
     },
     {
       "name": "Q23_Callback03_ChangedLevel",
@@ -240,7 +249,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "877f6b01"
     },
     {
       "name": "Q23_Callback11_ScrollMessage",
@@ -270,7 +280,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "55893dd1"
     },
     {
       "name": "Q23_Callback10_PlayerLeavesGame",
@@ -304,7 +315,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "ed1a9108"
     },
     {
       "name": "Q23_PartyMember_SetCompleted",
@@ -333,7 +345,8 @@
         "SGAMEDATA",
         "eAct",
         "int32_t"
-      ]
+      ],
+      "dh": "9764bbc9"
     },
     {
       "name": "Q23_PropagateCompletionToParty",
@@ -356,7 +369,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4f428708"
     },
     {
       "name": "Q23_PartyMember_SetCannotComplete",
@@ -379,7 +393,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "42db264d"
     },
     {
       "name": "Q23_PartyMember_PlayCompleteSound",
@@ -401,7 +416,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2a2b3b0e"
     },
     {
       "name": "Q23_Callback08_MonsterKilled",
@@ -442,7 +458,8 @@
         "Q23_Callback08_MonsterKilled_Slotm",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a69938d0"
     },
     {
       "name": "Q23_TimerCallback_MephistoApproach",
@@ -469,7 +486,8 @@
         "D2UnitStrc",
         "eD2MonsterAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "e372a1ec"
     },
     {
       "name": "Objects_InitFn45_MephistoBridge",
@@ -490,7 +508,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
-      ]
+      ],
+      "dh": "a84b82e3"
     },
     {
       "name": "Objects_InitFn44_HellGatePortal",
@@ -511,7 +530,8 @@
       "usedTypes": [
         "D2ObjectInitFnArg",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "987b2046"
     },
     {
       "name": "Q23_SequenceFilter",
@@ -528,7 +548,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "21efb2c6"
     },
     {
       "name": "Q23_Callback13_PlayerStartedGame",
@@ -551,7 +572,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e65497db"
     },
     {
       "name": "Q23_InitData",
@@ -572,7 +594,8 @@
         "D2QuestDataA3Q6Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "72da709f"
     }
   ]
 }

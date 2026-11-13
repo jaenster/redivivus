@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2DialogStrc"
-      ]
+      ],
+      "dh": "93550a2d"
     },
     {
       "name": "UI_ScrollNpcMenuList",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3a8ad79e"
     },
     {
       "name": "DIALOG_HandleMouseUpEvent",
@@ -57,7 +59,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "151ea61d"
     },
     {
       "name": "DIALOG_HandleMouseDownEvent",
@@ -81,7 +84,8 @@
         "D2DialogStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0bddee8f"
     },
     {
       "name": "INPUT_DialogClickHandler",
@@ -101,7 +105,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "ceeb16c7"
     },
     {
       "name": "INPUT_DialogMouseUp",
@@ -131,7 +136,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "4cda3204"
     },
     {
       "name": "INPUT_DialogMouseDown",
@@ -161,7 +167,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c840f98e"
     },
     {
       "name": "DIALOG_HandleEscapeKeyEvent",
@@ -184,7 +191,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d08b8bd2"
     },
     {
       "name": "INPUT_DialogEscapeKey",
@@ -204,7 +212,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "824ded3f"
     },
     {
       "name": "INPUT_DialogMouseWheel",
@@ -229,7 +238,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "64cb0223"
     },
     {
       "name": "INPUT_DialogConfirm",
@@ -254,7 +264,8 @@
         "D2DialogStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d2e9d23c"
     },
     {
       "name": "INPUT_DialogNavigateUp",
@@ -279,7 +290,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "71911b65"
     },
     {
       "name": "INPUT_DialogNavigateDown",
@@ -304,7 +316,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "30cdcc60"
     },
     {
       "name": "INPUT_DialogPageUp",
@@ -329,7 +342,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "03cb02bb"
     },
     {
       "name": "INPUT_DialogPageDown",
@@ -354,7 +368,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7a316880"
     },
     {
       "name": "DIALOG_HandleEnterKeyEvent",
@@ -374,7 +389,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "982f2b6e"
     },
     {
       "name": "INPUT_DialogEnterKey",
@@ -400,7 +416,8 @@
         "D2UIMouseMsgStrc",
         "fpDialogFunc",
         "int32_t"
-      ]
+      ],
+      "dh": "3f98d9e0"
     },
     {
       "name": "INPUT_DialogKeyHandler",
@@ -426,7 +443,8 @@
         "D2DialogSubStrc",
         "D2UIMouseMsgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fc37c646"
     },
     {
       "name": "DIALOG_InitializeSystem",
@@ -440,7 +458,8 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "DIALOG_InitializeSystem"
-      ]
+      ],
+      "dh": "8c4144d1"
     },
     {
       "name": "DIALOG_CleanupSystem",
@@ -461,7 +480,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a0c4af45"
     },
     {
       "name": "Unreferenced_004b7bc0",
@@ -479,7 +499,8 @@
       ],
       "usedTypes": [
         "D2DialogStrc"
-      ]
+      ],
+      "dh": "a45fc729"
     },
     {
       "name": "AllocDialogSub",
@@ -502,7 +523,8 @@
         "D2DialogStrc",
         "D2DialogSubStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ca370ac6"
     },
     {
       "name": "DIALOG_RegisterHandler",
@@ -521,7 +543,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "852a1d4c"
     },
     {
       "name": "AllocDialogStrcWithBackground",
@@ -560,7 +583,8 @@
         "DC6Block",
         "fpDialogFunc",
         "int32_t"
-      ]
+      ],
+      "dh": "980fe714"
     },
     {
       "name": "AllocDialogStrc",
@@ -591,7 +615,8 @@
         "D2DialogStrc",
         "fpDialogFunc",
         "int32_t"
-      ]
+      ],
+      "dh": "e3da2686"
     },
     {
       "name": "FreeDialogStrc",
@@ -620,7 +645,8 @@
         "D2DialogStrc",
         "D2DialogSubStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "71a9cdbb"
     },
     {
       "name": "DIALOG_DrawBackground",
@@ -651,7 +677,8 @@
         "D2GfxDataStrc",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "ab29d28b"
     },
     {
       "name": "DIALOG_SetSelectedLine",
@@ -672,7 +699,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b76552f8"
     },
     {
       "name": "DIALOG_SetHighlightStyle",
@@ -693,7 +721,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "59a5b7c6"
     },
     {
       "name": "DIALOG_CenterStringLine",
@@ -713,7 +742,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "05b9802d"
     },
     {
       "name": "DIALOG_RecalculateLayout",
@@ -737,7 +767,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3777af5b"
     },
     {
       "name": "DIALOG_GetSelectedIndex",
@@ -755,7 +786,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "81c743e8"
     },
     {
       "name": "Unreferenced_004b8590",
@@ -773,7 +805,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "D2DialogStringData"
-      ]
+      ],
+      "dh": "4a98970f"
     },
     {
       "name": "Unreferenced_004b85b0",
@@ -791,7 +824,8 @@
       "usedTypes": [
         "D2DialogStrc",
         "RECT"
-      ]
+      ],
+      "dh": "05749429"
     },
     {
       "name": "GetDialogCounter",
@@ -805,7 +839,8 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "GetDialogCounter"
-      ]
+      ],
+      "dh": "ca04e33e"
     },
     {
       "name": "AddStringData",
@@ -836,7 +871,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "651b8c8a"
     },
     {
       "name": "DIALOG_InitializeSystem_Unref_004b9200",
@@ -850,7 +886,8 @@
       "namespace": "D2Client::UI::Dialog",
       "calledFunctions": [
         "DIALOG_InitializeSystem_Unref_004b9200"
-      ]
+      ],
+      "dh": "0fc79de5"
     }
   ]
 }

@@ -15,7 +15,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init_Unref_00421040"
-      ]
+      ],
+      "dh": "dc808ec1"
     },
     {
       "name": "tr_static_init_Unref_00421060",
@@ -29,7 +30,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init_Unref_00421060"
-      ]
+      ],
+      "dh": "3d73605f"
     },
     {
       "name": "tr_static_init_Unref_00421070",
@@ -43,7 +45,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init_Unref_00421070"
-      ]
+      ],
+      "dh": "a2d28304"
     },
     {
       "name": "tr_static_init_Unref_00421080",
@@ -57,7 +60,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init_Unref_00421080"
-      ]
+      ],
+      "dh": "3a09bc87"
     },
     {
       "name": "tr_static_init_Unref_004212b0",
@@ -71,7 +75,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init_Unref_004212b0"
-      ]
+      ],
+      "dh": "0d970019"
     },
     {
       "name": "tr_static_init",
@@ -85,7 +90,8 @@
       "namespace": "Storm::_3rdparty::zlib::trees",
       "calledFunctions": [
         "tr_static_init"
-      ]
+      ],
+      "dh": "03d0fa05"
     },
     {
       "name": "init_block",
@@ -103,7 +109,8 @@
       "usedTypes": [
         "ct_data",
         "deflate_state"
-      ]
+      ],
+      "dh": "3a3692e1"
     },
     {
       "name": "pqdownheap",
@@ -122,7 +129,8 @@
         "ct_data",
         "deflate_state",
         "int32_t"
-      ]
+      ],
+      "dh": "f7a1e52a"
     },
     {
       "name": "gen_bitlen",
@@ -145,7 +153,8 @@
         "tree_desc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7fea4b5d"
     },
     {
       "name": "scan_tree",
@@ -166,7 +175,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "afb3c488"
     },
     {
       "name": "send_tree",
@@ -188,7 +198,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "65f9cda7"
     },
     {
       "name": "send_all_trees",
@@ -208,7 +219,8 @@
         "deflate_state",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "3eaf75c6"
     },
     {
       "name": "_tr_tally",
@@ -228,7 +240,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2928218a"
     },
     {
       "name": "compress_block",
@@ -249,7 +262,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f59b894c"
     },
     {
       "name": "detect_data_type",
@@ -268,7 +282,8 @@
         "ct_data",
         "deflate_state",
         "uint32_t"
-      ]
+      ],
+      "dh": "fce5a120"
     },
     {
       "name": "bi_reverse",
@@ -285,7 +300,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "aaed1f92"
     },
     {
       "name": "bi_flush",
@@ -303,7 +319,8 @@
       "usedTypes": [
         "deflate_state",
         "uint8_t"
-      ]
+      ],
+      "dh": "22425cfd"
     },
     {
       "name": "bi_windup",
@@ -321,7 +338,8 @@
       "usedTypes": [
         "deflate_state",
         "uint8_t"
-      ]
+      ],
+      "dh": "327c2d41"
     },
     {
       "name": "copy_block",
@@ -340,7 +358,8 @@
         "deflate_state",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b5d81cf3"
     },
     {
       "name": "_tr_init",
@@ -358,7 +377,8 @@
       ],
       "usedTypes": [
         "deflate_state"
-      ]
+      ],
+      "dh": "b20161e9"
     },
     {
       "name": "gen_codes",
@@ -379,7 +399,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8cd6aa40"
     },
     {
       "name": "build_tree",
@@ -403,7 +424,8 @@
         "int32_t",
         "tree_desc",
         "uint8_t"
-      ]
+      ],
+      "dh": "f261e2ec"
     },
     {
       "name": "build_bl_tree",
@@ -423,7 +445,8 @@
       "usedTypes": [
         "deflate_state",
         "int32_t"
-      ]
+      ],
+      "dh": "fc2c02d2"
     },
     {
       "name": "_tr_stored_block",
@@ -444,7 +467,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1cf48853"
     },
     {
       "name": "_tr_flush_bits",
@@ -462,7 +486,8 @@
       ],
       "usedTypes": [
         "deflate_state"
-      ]
+      ],
+      "dh": "c1fabe18"
     },
     {
       "name": "_tr_align",
@@ -480,7 +505,8 @@
       ],
       "usedTypes": [
         "deflate_state"
-      ]
+      ],
+      "dh": "b15b0d47"
     },
     {
       "name": "_tr_flush_block",
@@ -509,7 +535,8 @@
         "uint32_t",
         "uint8_t",
         "z_stream"
-      ]
+      ],
+      "dh": "80aa271f"
     }
   ]
 }

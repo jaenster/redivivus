@@ -41,7 +41,8 @@
         "SGAMEDATA",
         "eD2PlayerAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "e06097df"
     },
     {
       "name": "SKILLS_ClampHpManaStamina",
@@ -65,7 +66,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1a35cf95"
     },
     {
       "name": "SKILLS_InvokeCallbackNoTarget",
@@ -85,7 +87,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "pfnSkillNoTargetCb"
-      ]
+      ],
+      "dh": "1f2e96ca"
     },
     {
       "name": "SKILLS_IsRoomInRange",
@@ -105,7 +108,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "189939dc"
     },
     {
       "name": "SKILLS_ApplyAreaEffect",
@@ -141,7 +145,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5d4ff4d0"
     },
     {
       "name": "SKILLS_ApplyDamageToTarget",
@@ -167,7 +172,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "22e4e017"
     },
     {
       "name": "SKILLS_ApplyDamageCallback",
@@ -188,7 +194,8 @@
         "D2SkillCallbackContextStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ecea7951"
     },
     {
       "name": "SKILLS_ApplyAreaDamage",
@@ -210,7 +217,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8314bd3"
     },
     {
       "name": "SKILLS_AreaEffect_FindNearestUnit",
@@ -233,7 +241,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "040d28d2"
     },
     {
       "name": "SKILLS_ApplyAreaHitAtUnit",
@@ -258,7 +267,8 @@
         "eD2UnitType",
         "fpAreaHitUnitFilter",
         "int32_t"
-      ]
+      ],
+      "dh": "357bc1af"
     },
     {
       "name": "SKILLS_AreaEffect_IncrementHitCount",
@@ -277,7 +287,8 @@
         "D2SkillCallbackContextStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e80cfc8d"
     },
     {
       "name": "SKILLS_ApplyAreaHitAtPos",
@@ -299,7 +310,8 @@
         "eD2MissileHitFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "396d3b44"
     },
     {
       "name": "SKILLS_AreaEffect_TrackBestUnitByUnitId",
@@ -319,7 +331,8 @@
         "D2SkillCallbackContextStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2927a11"
     },
     {
       "name": "SKILLS_FindNextUnitInAreaByGUID",
@@ -341,7 +354,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "125b3cf7"
     },
     {
       "name": "SKILLS_UpdatePetMax",
@@ -371,7 +385,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ee21012"
     },
     {
       "name": "SKILLS_UseChargedSkillCharge",
@@ -402,7 +417,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d110147"
     },
     {
       "name": "CalculateManaUse",
@@ -433,7 +449,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8d9436d5"
     },
     {
       "name": "SKILLS_DeductManaCost",
@@ -455,7 +472,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "30de00f5"
     },
     {
       "name": "SKILL_CheckManaForCast",
@@ -482,7 +500,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb2d8f12"
     },
     {
       "name": "SKILLS_FindUnitsInRange",
@@ -509,7 +528,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "8ab5027b"
     },
     {
       "name": "SKILLS_FreeUnitFindData",
@@ -529,7 +549,8 @@
       "usedTypes": [
         "D2UnitFindDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6d21b1ad"
     },
     {
       "name": "SKILLS_SetSrvDoFuncAndAttackTarget",
@@ -550,7 +571,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "0dfaea32"
     },
     {
       "name": "BowDecreaseQuantity",
@@ -579,7 +601,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d587ecc"
     },
     {
       "name": "RemoveQuanityOnUse",
@@ -607,7 +630,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "22489fc9"
     },
     {
       "name": "SKILLS_CheckThrowableAmmo",
@@ -637,7 +661,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "90e6f618"
     },
     {
       "name": "SKILLS_ApplySkillToHitAndDamage",
@@ -659,7 +684,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "723e4642"
     },
     {
       "name": "SKILLS_GetWeaponBySkillType",
@@ -678,7 +704,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "942e0bdb"
     },
     {
       "name": "Transmorgify",
@@ -702,7 +729,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "391073dd"
     },
     {
       "name": "IsSkillBoundToClass",
@@ -721,7 +749,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "46421b2f"
     },
     {
       "name": "D2UpdateState",
@@ -748,7 +777,8 @@
         "eD2States",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3db6b51f"
     },
     {
       "name": "SKILLS_SetSkillDataByEType",
@@ -767,7 +797,8 @@
         "D2DamageStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b6b873a"
     },
     {
       "name": "SERVER_AppendDamageToUnitEvent",
@@ -789,7 +820,8 @@
         "eSkillEType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9ab6ea1"
     },
     {
       "name": "SKILLS_SrvStFn01_Attack",
@@ -817,7 +849,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cb39e2d9"
     },
     {
       "name": "SKILLS_SrvStFn65_Throw",
@@ -840,7 +873,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3e7b6b61"
     },
     {
       "name": "SKILLS_SrvStFn02_Kick",
@@ -865,7 +899,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "555d755b"
     },
     {
       "name": "SKILLS_SrvStFn03_Unsummon",
@@ -893,7 +928,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b93ad810"
     },
     {
       "name": "Skills_SrvDoFunc_004_RemovePetBySkillParam",
@@ -917,7 +953,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "fbaeb44a"
     },
     {
       "name": "SKILLS_ValidateSkillTarget",
@@ -943,7 +980,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "380c8a66"
     },
     {
       "name": "SKILLS_CalcPerDelayInterval",
@@ -965,7 +1003,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e1b7b50d"
     },
     {
       "name": "SKILLS_SetPeriodicSkillTimer",
@@ -989,7 +1028,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5cf54d17"
     },
     {
       "name": "SKILLS_SetPeriodicStatOrSkillTimer",
@@ -1013,7 +1053,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c6ff533c"
     },
     {
       "name": "LinkPortal",
@@ -1057,7 +1098,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "16a9baad"
     },
     {
       "name": "SERVER_SpawnPortal",
@@ -1098,7 +1140,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ad2431c"
     },
     {
       "name": "SKILLS_GetTargetOrCursorPos",
@@ -1124,7 +1167,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4006403"
     },
     {
       "name": "SKILLS_NormalizeDirectionMin",
@@ -1138,7 +1182,8 @@
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
         "SKILLS_NormalizeDirectionMin"
-      ]
+      ],
+      "dh": "111b6edd"
     },
     {
       "name": "SKILLS_NormalizeDirectionPerp",
@@ -1152,7 +1197,8 @@
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
         "SKILLS_NormalizeDirectionPerp"
-      ]
+      ],
+      "dh": "c2b57c44"
     },
     {
       "name": "SKILLS_CreateMissileRing",
@@ -1179,7 +1225,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "75652674"
     },
     {
       "name": "SKILLS_CreateMissileStar",
@@ -1202,7 +1249,8 @@
         "D2SkillArgStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "9d07afef"
     },
     {
       "name": "SKILLS_SpawnWeaponForHand",
@@ -1237,7 +1285,8 @@
         "eD2BodyLocDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac09b6dc"
     },
     {
       "name": "SKILLS_DispatchStateActiveFunc",
@@ -1258,7 +1307,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "6ed30484"
     },
     {
       "name": "SKILLS_DispatchSrvDoFunc",
@@ -1279,7 +1329,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a02f61bc"
     },
     {
       "name": "ClearNecroPet",
@@ -1307,7 +1358,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bcd0cfe4"
     },
     {
       "name": "SKILLS_InitSummonedPet",
@@ -1330,7 +1382,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "39678b36"
     },
     {
       "name": "SKILL_CreateSummon",
@@ -1368,7 +1421,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b531ba6c"
     },
     {
       "name": "SKILLS_DropItemByCode",
@@ -1401,7 +1455,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "913be606"
     },
     {
       "name": "SKILLS_ForEachUnitInRangeCallback",
@@ -1435,7 +1490,8 @@
         "fnSkillUnitProc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "812fda52"
     },
     {
       "name": "SKILLS_ForEachUnitBaalWave",
@@ -1468,7 +1524,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a9926d7"
     },
     {
       "name": "SKILLS_SetupBaalWaveParams",
@@ -1491,7 +1548,8 @@
         "eD2Skills",
         "fpBaalWaveFunction",
         "int32_t"
-      ]
+      ],
+      "dh": "bf77eb27"
     },
     {
       "name": "SKILLS_UpdatePassivesAndPets",
@@ -1512,7 +1570,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "235e0b70"
     },
     {
       "name": "SKILLS_AllocSkillAndUpdatePassives",
@@ -1536,7 +1595,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "fbb3e047"
     },
     {
       "name": "SetSkill",
@@ -1560,7 +1620,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3e2db219"
     },
     {
       "name": "SKILLS_FreeSkillAndUpdatePassives",
@@ -1583,7 +1644,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "33d2f935"
     },
     {
       "name": "SKILLS_IsSkillEquipped",
@@ -1605,7 +1667,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "bbf840d2"
     },
     {
       "name": "SKILLS_ApplyAllPassiveStates",
@@ -1631,7 +1694,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2States"
-      ]
+      ],
+      "dh": "ba0a074a"
     },
     {
       "name": "SKILLS_CalcSkillMinMaxToHit",
@@ -1655,7 +1719,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "320aec72"
     },
     {
       "name": "SKILLS_CalcPetSkillDamage",
@@ -1674,7 +1739,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ea432ef4"
     },
     {
       "name": "SetDamageOnEvent",
@@ -1701,7 +1767,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cabb7503"
     },
     {
       "name": "SKILLS_AddRandomSkillDamage",
@@ -1724,7 +1791,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9eccc332"
     },
     {
       "name": "SKILLS_GetWeaponClassBitfield",
@@ -1744,7 +1812,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0d309e0"
     },
     {
       "name": "SKILLS_SetupAnimTimerPercent",
@@ -1765,7 +1834,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "866051b0"
     },
     {
       "name": "SKILLS_ForceAttackTarget",
@@ -1794,7 +1864,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "55a22b8a"
     },
     {
       "name": "D2CheckCorpseConsumed",
@@ -1814,7 +1885,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f1ef811d"
     },
     {
       "name": "SKILLS_UnitFindTestCallback",
@@ -1835,7 +1907,8 @@
         "D2UnitFindArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7f0b8a82"
     },
     {
       "name": "SKILLS_FindNearbyCorpse",
@@ -1866,7 +1939,8 @@
         "SGAMEDATA",
         "UNITFINDTEST",
         "int32_t"
-      ]
+      ],
+      "dh": "3bcbfc5f"
     },
     {
       "name": "SKILLS_CheckMissileCollision",
@@ -1895,7 +1969,8 @@
         "eCollisionFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2257139"
     },
     {
       "name": "GetMeleeRangePlusFour",
@@ -1914,7 +1989,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5516f86d"
     },
     {
       "name": "SKILLS_ApplyAttackRateBuff",
@@ -1938,7 +2014,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "06cb663d"
     },
     {
       "name": "SKILLS_FreeMonsterMinions",
@@ -1958,7 +2035,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "a6b98ac8"
     },
     {
       "name": "SKILLS_GetUnitWalkVelocity",
@@ -1976,7 +2054,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "251f81e9"
     },
     {
       "name": "SKILLS_GetSummonMonsterClassId",
@@ -1996,7 +2075,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "234a4230"
     },
     {
       "name": "SKILLS_CalcToHitAndApply",
@@ -2021,7 +2101,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a97f532a"
     },
     {
       "name": "SKILLS_CalcMissileToHit",
@@ -2044,7 +2125,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "30713355"
     },
     {
       "name": "D2SetAuraEvent",
@@ -2067,7 +2149,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "759cbe73"
     },
     {
       "name": "SKILLS_ApplyEffectToUnitsInRange",
@@ -2101,7 +2184,8 @@
         "int32_t",
         "pfnSkillRangeCb",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc2d1299"
     },
     {
       "name": "DefaultExpireFunction",
@@ -2131,7 +2215,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ef20aa3"
     },
     {
       "name": "SetStateWithExpiryTime",
@@ -2184,7 +2269,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c75e7502"
     },
     {
       "name": "SKILLS_SetStateWithCurse",
@@ -2212,7 +2298,8 @@
         "eD2States",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "4b3539fd"
     },
     {
       "name": "CreatingAMissile",
@@ -2242,7 +2329,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "36418d39"
     },
     {
       "name": "SKILLS_CreateMissileAtTarget",
@@ -2269,7 +2357,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e1229915"
     },
     {
       "name": "SKILLS_CreateMissileFromUnit",
@@ -2298,7 +2387,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "8f1c6d25"
     },
     {
       "name": "SetTimeoutEffect",
@@ -2325,7 +2415,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c4647159"
     },
     {
       "name": "SKILLS_ApplySkillDelay",
@@ -2347,7 +2438,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e71c3b20"
     },
     {
       "name": "Skills_SrvDoFunc_001_ShootArrow",
@@ -2387,7 +2479,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "73dd8f6f"
     },
     {
       "name": "Skills_SrvDoFunc_002_GenericMeleeHit",
@@ -2423,7 +2516,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fc3fecf5"
     },
     {
       "name": "Skills_SrvDoFunc_003_ThrowWeaponLeftHand",
@@ -2454,7 +2548,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "fd423956"
     },
     {
       "name": "Skills_SrvDoFunc_005_ThrowWeaponRightHand",
@@ -2485,7 +2580,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "f94e68bd"
     },
     {
       "name": "SKILLS_SrvStartSkill",
@@ -2517,7 +2613,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "08b98bac"
     },
     {
       "name": "SKILL_SpawnMissileFunction",
@@ -2562,7 +2659,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e71d4e8"
     },
     {
       "name": "SKILLS_OnModeComplete",
@@ -2599,7 +2697,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bcfab0dc"
     },
     {
       "name": "SKILLS_PeriodicSkillSpawnAndTimer",
@@ -2624,7 +2723,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "9ed84b43"
     },
     {
       "name": "SKILLS_PeriodicSkillsCallback",
@@ -2658,7 +2758,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "a914e6f3"
     },
     {
       "name": "SKILLS_PeriodicStatsCallback",
@@ -2682,7 +2783,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "64bb8cbc"
     },
     {
       "name": "SKILLS_InitAuraSkill",
@@ -2717,7 +2819,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c22ae40b"
     },
     {
       "name": "SKILL_AllocSkillPoint",
@@ -2756,7 +2859,8 @@
         "eD2States",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "034a8a6e"
     },
     {
       "name": "Server_SelectSkill",
@@ -2799,7 +2903,8 @@
         "eD2TimerTypeDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d156212b"
     },
     {
       "name": "ClearSkills",
@@ -2833,7 +2938,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6cb809d1"
     },
     {
       "name": "SKILL_ApplyStunState",
@@ -2867,7 +2973,8 @@
         "SGAMEDATA",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "4867f604"
     },
     {
       "name": "SKILL_StunExpireAndRestoreAi",
@@ -2892,7 +2999,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States"
-      ]
+      ],
+      "dh": "6fce8f54"
     },
     {
       "name": "SKILL_CreateTimedAuraStatList",
@@ -2923,7 +3031,8 @@
         "eD2States",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "e10bb37d"
     },
     {
       "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
@@ -2942,7 +3051,8 @@
       "usedTypes": [
         "WCHAR",
         "eD2States"
-      ]
+      ],
+      "dh": "4e70b5b9"
     }
   ]
 }

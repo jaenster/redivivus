@@ -15,7 +15,8 @@
       "namespace": "D2Client::SRC::CelCmp",
       "calledFunctions": [
         "GFX_Noop"
-      ]
+      ],
+      "dh": "132d4b4b"
     },
     {
       "name": "GFX_Noop_Unref_0046f9b0",
@@ -29,7 +30,8 @@
       "namespace": "D2Client::SRC::CelCmp",
       "calledFunctions": [
         "GFX_Noop_Unref_0046f9b0"
-      ]
+      ],
+      "dh": "32027826"
     },
     {
       "name": "GFX_Noop_Unref_0046f9c0",
@@ -43,7 +45,8 @@
       "namespace": "D2Client::SRC::CelCmp",
       "calledFunctions": [
         "GFX_Noop_Unref_0046f9c0"
-      ]
+      ],
+      "dh": "f31745cb"
     }
   ]
 }

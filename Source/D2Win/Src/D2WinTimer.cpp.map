@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "D2WinTimer"
-      ]
+      ],
+      "dh": "21a4c77d"
     },
     {
       "name": "D2WINTIMER_Start",
@@ -39,7 +40,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "dbf04672"
     },
     {
       "name": "DrawEx",
@@ -63,7 +65,8 @@
         "D2WinTimer",
         "OnPress",
         "int32_t"
-      ]
+      ],
+      "dh": "d809d849"
     },
     {
       "name": "D2WINTIMER_GetElapsed",
@@ -87,7 +90,8 @@
         "D2WinTimer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ce629f2"
     },
     {
       "name": "Key",
@@ -110,7 +114,8 @@
         "D2WinTimer",
         "OnPress",
         "int32_t"
-      ]
+      ],
+      "dh": "7d9d9f93"
     },
     {
       "name": "D2WinTimer",
@@ -133,7 +138,8 @@
         "D2WinTimer",
         "OnPress",
         "int32_t"
-      ]
+      ],
+      "dh": "a4341543"
     },
     {
       "name": "D2WINTIMER_SetRepeating",
@@ -154,7 +160,8 @@
       "usedTypes": [
         "D2WinTimer",
         "int32_t"
-      ]
+      ],
+      "dh": "09eda102"
     }
   ]
 }

@@ -26,7 +26,8 @@
         "D2UnitStrc",
         "D2UnknownItemRelatedStruct",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f7400895"
     },
     {
       "name": "PLRSAVE_RestoreItemFromSaveData",
@@ -62,7 +63,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "19bb7b48"
     },
     {
       "name": "PLRSAVE_RestoreItemToUnit",
@@ -95,7 +97,8 @@
         "eD2BodyLoc",
         "eD2ItemAnimMode",
         "int32_t"
-      ]
+      ],
+      "dh": "9da91d1b"
     },
     {
       "name": "PLRSAVE_RestoreEquippedItem",
@@ -137,7 +140,8 @@
         "eD2ItemAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d4268d56"
     },
     {
       "name": "PLRSAVE_RestoreItemToBodyLoc",
@@ -175,7 +179,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0aa8582a"
     },
     {
       "name": "SAVE_SerializeItemIfValid",
@@ -199,7 +204,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "57e44f51"
     },
     {
       "name": "GetCarriedItemsCount",
@@ -222,7 +228,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "f251984c"
     },
     {
       "name": "SAVE_SerializeInventoryItems",
@@ -258,7 +265,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "906d7e68"
     },
     {
       "name": "GetCopyInventory",
@@ -279,7 +287,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "a708fdaf"
     },
     {
       "name": "PLRSAVE_SerializeCorpseData",
@@ -311,7 +320,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37871a70"
     },
     {
       "name": "PLRSAVE_MakeSaveFileReturnBuffer",
@@ -332,7 +342,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "158c9a27"
     },
     {
       "name": "PLAYERSAVE_ByteToHexChar",
@@ -351,7 +362,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f99c04ca"
     },
     {
       "name": "PLAYERSAVE_ByteArrayToHexString",
@@ -370,7 +382,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6afb8ae7"
     },
     {
       "name": "PLAYERSAVE_CRC32MissileTable",
@@ -390,7 +403,8 @@
         "D2MissilesTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "396896cb"
     },
     {
       "name": "SaveToFileBnet",
@@ -425,7 +439,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b3516ee6"
     },
     {
       "name": "SaveToFile",
@@ -454,7 +469,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a4519f4"
     },
     {
       "name": "SaveToBuffer",
@@ -487,7 +503,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "380cdeac"
     },
     {
       "name": "SaveGameAllGameTypes",
@@ -517,7 +534,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a7ad30e"
     },
     {
       "name": "SERVER_InitPlayer",
@@ -544,7 +562,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0100dca1"
     },
     {
       "name": "SERVER_CreatePlayerUnit",
@@ -581,7 +600,8 @@
         "SGAMEDATA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b1f064fd"
     },
     {
       "name": "_oldSaveGameLoadingPart",
@@ -623,7 +643,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d4126006"
     },
     {
       "name": "_oldSaveGameLoadingPart2",
@@ -646,7 +667,8 @@
         "D2UnitStrc",
         "char[96]",
         "uint32_t"
-      ]
+      ],
+      "dh": "6e3ab5b0"
     },
     {
       "name": "_oldSaveGameLoadingPart3",
@@ -671,7 +693,8 @@
         "D2WaypointStrc *",
         "int16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0f75791"
     },
     {
       "name": "_oldSaveGameLoadingPart4",
@@ -695,7 +718,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t[8]"
-      ]
+      ],
+      "dh": "b0804c45"
     },
     {
       "name": "_oldSaveGameLoadingPart5",
@@ -722,7 +746,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c150cfdb"
     },
     {
       "name": "PLAYERSAVE_RestoreSkillLevel",
@@ -742,7 +767,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "uint8_t"
-      ]
+      ],
+      "dh": "57739bed"
     },
     {
       "name": "_oldSaveGameLoadingPart6",
@@ -770,7 +796,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fcad3d3e"
     },
     {
       "name": "PLAYERSAVE_ParseItemFromBuffer",
@@ -800,7 +827,8 @@
         "D2UnknownItemRelatedStruct",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d2524c3"
     },
     {
       "name": "PLRSAVE_RestoreItemsFromStream",
@@ -829,7 +857,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ab96e14b"
     },
     {
       "name": "PLRSAVE_LoadItemListFromStream",
@@ -863,7 +892,8 @@
         "short *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b1bbe568"
     },
     {
       "name": "PLRSAVE_DispatchItemLoadByFormat",
@@ -886,7 +916,8 @@
         "int32_t",
         "short *",
         "uint32_t"
-      ]
+      ],
+      "dh": "ecbcedf4"
     },
     {
       "name": "_oldSaveGameLoadingPart7_part1",
@@ -920,7 +951,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c62b8b57"
     },
     {
       "name": "_oldSaveGameLoadingPart7",
@@ -943,7 +975,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94b4529a"
     },
     {
       "name": "Unreferenced_00533a60",
@@ -957,7 +990,8 @@
       "namespace": "D2Game::PLAYER::PlayerSave",
       "calledFunctions": [
         "Unreferenced_00533a60"
-      ]
+      ],
+      "dh": "0ba28d33"
     },
     {
       "name": "_oldSaveGameLoadingPart8_part1_part1",
@@ -974,7 +1008,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "52ed2d7a"
     },
     {
       "name": "_oldSaveGameLoadingPart8_part1",
@@ -998,7 +1033,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc168bb7"
     },
     {
       "name": "_oldSaveGameLoadingPart8",
@@ -1045,7 +1081,8 @@
         "uint32_t",
         "uint32_t *",
         "uint8_t"
-      ]
+      ],
+      "dh": "2afa5230"
     },
     {
       "name": "_oldSaveGameLoadingPart9",
@@ -1070,7 +1107,8 @@
         "eD2Skills",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fa61789c"
     },
     {
       "name": "SEVER_loadFrom_Old_Savegame",
@@ -1119,7 +1157,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5e2ebfec"
     },
     {
       "name": "SERVER_LoadPlayerFromSaveFile",
@@ -1144,7 +1183,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54ec6465"
     },
     {
       "name": "CLIENT_ReadAndLoadSaveFile",
@@ -1176,7 +1216,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a97730a4"
     },
     {
       "name": "CLIENT_LoadPlayerFromDisk",
@@ -1201,7 +1242,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8190ebd5"
     },
     {
       "name": "CLIENT_LoadPlayerFromNetworkSave",
@@ -1228,7 +1270,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b5f3cc53"
     },
     {
       "name": "CLIENT_LoadOrCreatePlayerUnit",
@@ -1253,7 +1296,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "85f259b2"
     },
     {
       "name": "WapperSaveGameAllGameTypes",
@@ -1272,7 +1316,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2d270040"
     }
   ]
 }

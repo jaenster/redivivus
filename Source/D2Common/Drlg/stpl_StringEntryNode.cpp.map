@@ -19,7 +19,8 @@
       "usedTypes": [
         "TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "02921d3c"
     },
     {
       "name": "RoundToMultiple",
@@ -36,7 +37,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c495b1bb"
     },
     {
       "name": "Assign",
@@ -55,7 +57,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "8bc3aa66"
     },
     {
       "name": "Link",
@@ -74,7 +77,8 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>"
-      ]
+      ],
+      "dh": "40df01f2"
     },
     {
       "name": "SetLinkOffset",
@@ -93,7 +97,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
         "int32_t"
-      ]
+      ],
+      "dh": "28f8d02d"
     },
     {
       "name": "LinkNode",
@@ -115,7 +120,8 @@
         "TSLink<StringEntryNode> *",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2d23fdeb"
     },
     {
       "name": "RawNext",
@@ -133,7 +139,8 @@
       "usedTypes": [
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>"
-      ]
+      ],
+      "dh": "6687ba7b"
     },
     {
       "name": "UnlinkNode",
@@ -154,7 +161,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "90837633"
     },
     {
       "name": "Next",
@@ -173,7 +181,8 @@
         "StringEntryNode",
         "TSExplicitList<StringEntryNode, -572662307>",
         "intptr_t"
-      ]
+      ],
+      "dh": "abc5d3d4"
     },
     {
       "name": "Unlink",
@@ -194,7 +203,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "550289cb"
     },
     {
       "name": "Delete",
@@ -213,7 +223,8 @@
       "usedTypes": [
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>"
-      ]
+      ],
+      "dh": "1d06f53a"
     },
     {
       "name": "UnlinkAll",
@@ -233,7 +244,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "dba49e4d"
     },
     {
       "name": "CopyConstructor",
@@ -252,7 +264,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "5282c604"
     },
     {
       "name": "CopyConstructor_Unreferenced",
@@ -271,7 +284,8 @@
         "TSExplicitList<StringEntryNode, -572662307>",
         "TSLink<StringEntryNode>",
         "uint32_t"
-      ]
+      ],
+      "dh": "4e96a363"
     },
     {
       "name": "Next",
@@ -290,7 +304,8 @@
         "StringEntryNode",
         "TSHashTable<StringEntryNode, HASHKEY_STRI>",
         "intptr_t"
-      ]
+      ],
+      "dh": "5a9fc556"
     },
     {
       "name": "Destructor",
@@ -311,7 +326,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "intptr_t"
-      ]
+      ],
+      "dh": "3bc6a16e"
     },
     {
       "name": "InternalClear",
@@ -334,7 +350,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e7e96464"
     },
     {
       "name": "Destructor_Unreferenced",
@@ -355,7 +372,8 @@
         "TSLink<StringEntryNode>",
         "TSLink<StringEntryNode> *",
         "uint32_t"
-      ]
+      ],
+      "dh": "2654f77b"
     },
     {
       "name": "ChangeLinkOffset",
@@ -374,7 +392,8 @@
       "usedTypes": [
         "TSExplicitList<StringEntryNode, -572662307>",
         "int32_t"
-      ]
+      ],
+      "dh": "668b3cec"
     }
   ]
 }

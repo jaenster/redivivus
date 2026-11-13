@@ -22,7 +22,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0bcc20db"
     },
     {
       "name": "RiskAssignmentBaal",
@@ -54,7 +55,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "462daf7f"
     },
     {
       "name": "SelectTargetBaal",
@@ -91,7 +93,8 @@
         "eD2UnitType",
         "fpAiTargetPredicate",
         "int32_t"
-      ]
+      ],
+      "dh": "980727d9"
     },
     {
       "name": "AI_BAAL_IsUnitInRange",
@@ -116,7 +119,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94bb554d"
     },
     {
       "name": "AI_BAAL_IsSkillPowerful",
@@ -137,7 +141,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "c48d8340"
     },
     {
       "name": "AI_BAAL_HasPowerfulSkill",
@@ -161,7 +166,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2Skills"
-      ]
+      ],
+      "dh": "bcc605fd"
     },
     {
       "name": "AI_BAAL_SelectWeightedAction",
@@ -182,7 +188,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "08333538"
     },
     {
       "name": "AI_BAAL_CloneChooseAction",
@@ -206,7 +213,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "3c249206"
     },
     {
       "name": "AI_BAAL_ThroneRoomChooseAction",
@@ -230,7 +238,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1055e04f"
     },
     {
       "name": "AI_Baal_SelectActionWeighted",
@@ -260,7 +269,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "d46ac4ac"
     },
     {
       "name": "AI_BaalEvaluateCombatAction",
@@ -302,7 +312,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f17d19ac"
     },
     {
       "name": "AI_BAAL_CountPowerfulSkills",
@@ -320,7 +331,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *"
-      ]
+      ],
+      "dh": "a5b037e8"
     },
     {
       "name": "AI_Baal_SpawnClone",
@@ -366,7 +378,8 @@
         "uint16_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "3205b688"
     },
     {
       "name": "AI_Baal_ExecuteAction",
@@ -406,7 +419,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "ab6881d3"
     },
     {
       "name": "BaalCrabAi_ResetInfernoAndReattach",
@@ -434,7 +448,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "19cbbf39"
     },
     {
       "name": "AI_Fn1_BaalCrab",
@@ -466,7 +481,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "af322b23"
     },
     {
       "name": "AI_Baal_SpawnTentacle",
@@ -497,7 +513,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f9b5d5fd"
     },
     {
       "name": "AI_Fn1_UberBaal",
@@ -516,7 +533,8 @@
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2c2bacf1"
     },
     {
       "name": "AI_Fn1_BaalCrabClone",
@@ -550,7 +568,8 @@
         "D2MonsterAiCmdStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "808272e9"
     }
   ]
 }

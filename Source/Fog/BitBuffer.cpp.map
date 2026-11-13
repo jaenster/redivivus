@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "09eca77b"
     },
     {
       "name": "CheckBitAtOffset",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d118f92d"
     },
     {
       "name": "UnsetBitAtOffset",
@@ -54,7 +56,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bfda43ff"
     },
     {
       "name": "XorBitAtOffset",
@@ -71,7 +74,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4de0f50e"
     },
     {
       "name": "BITBUF_AndBuffers",
@@ -89,7 +93,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b99b1b3a"
     },
     {
       "name": "BITBUF_OrBuffers",
@@ -108,7 +113,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "19a6e8ef"
     },
     {
       "name": "BITBUF_NotBuffer",
@@ -127,7 +133,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f1b1bdc"
     },
     {
       "name": "BITBUF_XorBuffers",
@@ -146,7 +153,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f5d91d4c"
     },
     {
       "name": "InitBitBuffer",
@@ -168,7 +176,8 @@
         "D2BitBufferStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a0402d46"
     },
     {
       "name": "GetNextPositon",
@@ -186,7 +195,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "59e07488"
     },
     {
       "name": "WriteValueToBitBuffer",
@@ -204,7 +214,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "12d5ffd8"
     },
     {
       "name": "Read",
@@ -224,7 +235,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "22c75d75"
     },
     {
       "name": "ReadUnsigned",
@@ -244,7 +256,8 @@
         "D2BitBufferStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c5fc620"
     },
     {
       "name": "ReadSigned",
@@ -264,7 +277,8 @@
         "D2BitBufferStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a5d6f84"
     },
     {
       "name": "BitBufferEndCurrentByte",
@@ -281,7 +295,8 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc"
-      ]
+      ],
+      "dh": "4d3281ba"
     },
     {
       "name": "BITBUFFER_WriteDwordPair",
@@ -300,7 +315,8 @@
       "usedTypes": [
         "D2BitBufferStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "659dbe68"
     },
     {
       "name": "BITBUFFER_ReadHuffmanValue",
@@ -319,7 +335,8 @@
         "D2BitBufferStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab1c0906"
     }
   ]
 }

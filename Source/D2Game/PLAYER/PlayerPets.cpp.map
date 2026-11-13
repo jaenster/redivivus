@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2PetTypeTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "f7073989"
     },
     {
       "name": "Send0x7aSummonLog",
@@ -44,7 +45,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9eda8d38"
     },
     {
       "name": "KillHandlerPet",
@@ -74,7 +76,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "161ff00f"
     },
     {
       "name": "GetPetListFromId",
@@ -93,7 +96,8 @@
         "D2PetListStrc",
         "D2UnitDataPlayerPetsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c378755"
     },
     {
       "name": "PETS_FreeOrKillPetList",
@@ -133,7 +137,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93551ee2"
     },
     {
       "name": "FreePets",
@@ -161,7 +166,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "f5050c46"
     },
     {
       "name": "GetPetUidByIndex",
@@ -185,7 +191,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b4c0c437"
     },
     {
       "name": "Unreferenced_00574810",
@@ -203,7 +210,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7f8b02ee"
     },
     {
       "name": "KillingPets",
@@ -232,7 +240,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "96249ea3"
     },
     {
       "name": "SummonAndAssign",
@@ -258,7 +267,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "547c0636"
     },
     {
       "name": "PETS_UpdatePetData",
@@ -281,7 +291,8 @@
         "D2UnitStrc",
         "ePetType",
         "int32_t"
-      ]
+      ],
+      "dh": "d69a4cfa"
     },
     {
       "name": "GetOwnersPetType",
@@ -305,7 +316,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8dfd23ad"
     },
     {
       "name": "PETS_ResummonPetByUnit",
@@ -334,7 +346,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "33f2f976"
     },
     {
       "name": "GetPlayersPetData",
@@ -360,7 +373,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4c425eee"
     },
     {
       "name": "PLAYERPETS_FreeAllPetsInList",
@@ -381,7 +395,8 @@
         "D2PetListStrc",
         "D2PetStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "014c6105"
     },
     {
       "name": "PETS_TeleportToRoom",
@@ -413,7 +428,8 @@
         "eAct",
         "eD2LevelId",
         "uint16_t"
-      ]
+      ],
+      "dh": "aac5ada2"
     },
     {
       "name": "ROOM_SpawnPetsFromSaveData",
@@ -437,7 +453,8 @@
         "uint16_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "7865f144"
     },
     {
       "name": "PetsForEach",
@@ -466,7 +483,8 @@
         "SGAMEDATA",
         "int32_t",
         "pfnPetForEachCallback"
-      ]
+      ],
+      "dh": "7c9da546"
     },
     {
       "name": "SERVER_GetUnitPetByTypeId",
@@ -490,7 +508,8 @@
         "SGAMEDATA",
         "ePetType",
         "int32_t"
-      ]
+      ],
+      "dh": "0587b8fb"
     },
     {
       "name": "PETS_GetTotalPetCount",
@@ -510,7 +529,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "354dbf8f"
     },
     {
       "name": "PLAYERPETS_SendPetListToClient",
@@ -538,7 +558,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "231f5b41"
     },
     {
       "name": "PETS_HasMercenary",
@@ -563,7 +584,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "879340c0"
     },
     {
       "name": "RemovePetByGuidAndNotify",
@@ -592,7 +614,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "3485fe54"
     },
     {
       "name": "SERVERUNIT_RemovePetFromUnit",
@@ -626,7 +649,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a15d9ed6"
     },
     {
       "name": "PETS_HandleDeadPet",
@@ -656,7 +680,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "b3e7b3af"
     },
     {
       "name": "PETS_RemoveDistantPets",
@@ -683,7 +708,8 @@
         "int32_t",
         "uint8_t",
         "uint8_t *"
-      ]
+      ],
+      "dh": "fdbfd78d"
     },
     {
       "name": "PETS_ManagePetsByType",
@@ -711,7 +737,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint16_t"
-      ]
+      ],
+      "dh": "bf5617c7"
     },
     {
       "name": "PETS_RemoveDeadPets",
@@ -736,7 +763,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "fd48e8ce"
     },
     {
       "name": "SendAllyInfo",
@@ -765,7 +793,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "69194d37"
     },
     {
       "name": "PLAYERPETS_RemoveConflictingPetsByGroup",
@@ -793,7 +822,8 @@
         "SGAMEDATA",
         "ePetType",
         "int32_t"
-      ]
+      ],
+      "dh": "6b4fb224"
     },
     {
       "name": "PETS_SetMaxAndTrimExcess",
@@ -819,7 +849,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "5ffefaa3"
     },
     {
       "name": "PETS_RecalculateAllPetLimits",
@@ -853,7 +884,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "132daf04"
     },
     {
       "name": "PETS_ResetAllPetLimitsToBase",
@@ -874,7 +906,8 @@
         "D2PetTypeTxt",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "51c8c79f"
     },
     {
       "name": "AllocPets",
@@ -904,7 +937,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "35780e4c"
     },
     {
       "name": "PETS_FreeAllPetsByType",
@@ -932,7 +966,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "65bc9c85"
     },
     {
       "name": "KillPetOnRecast",
@@ -961,7 +996,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "91af925c"
     },
     {
       "name": "SKILL_ResummonPet",
@@ -990,7 +1026,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "82e688d2"
     },
     {
       "name": "RecastPetAndAssign",
@@ -1018,7 +1055,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "543c834a"
     },
     {
       "name": "GetCarry1FlagOfitem",
@@ -1040,7 +1078,8 @@
         "D2UniqueItemsTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "57e7db25"
     },
     {
       "name": "GetHirelingNamesAndSize",
@@ -1064,7 +1103,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "15914f0a"
     }
   ]
 }

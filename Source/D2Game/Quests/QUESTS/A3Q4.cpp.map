@@ -23,7 +23,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a61828ee"
     },
     {
       "name": "Q21_PlayerNotifyCompleted",
@@ -45,7 +46,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ba7f726a"
     },
     {
       "name": "Q21_Callback00_NpcActivate",
@@ -71,7 +73,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "42c7dcde"
     },
     {
       "name": "Q21_Callback03_ChangedLevel",
@@ -90,7 +93,8 @@
       "usedTypes": [
         "D2QuestArgStrc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "9eb4eb99"
     },
     {
       "name": "Q21_Callback02_NpcDeactivate",
@@ -111,7 +115,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "f45bc2b7"
     },
     {
       "name": "Q21_StatusFilter",
@@ -132,7 +137,8 @@
         "D2BitBufferStrc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "0449e6b4"
     },
     {
       "name": "Q21_PlayerSetGoldenBirdQuestState",
@@ -156,7 +162,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "8f25d7bd"
     },
     {
       "name": "Q21_PartySetGoldenBirdState",
@@ -176,7 +183,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "23d56b82"
     },
     {
       "name": "Q21_Callback11_ScrollMessage",
@@ -219,7 +227,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "53a30bd3"
     },
     {
       "name": "Q21_Callback04_ItemPickedUp",
@@ -248,7 +257,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "79e0ff29"
     },
     {
       "name": "Q21_SequenceFilter",
@@ -270,7 +280,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "96228548"
     },
     {
       "name": "Q21_Callback13_PlayerStartedGame",
@@ -295,7 +306,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2acf814a"
     },
     {
       "name": "Q21_Callback10_PlayerLeavesGame",
@@ -329,7 +341,8 @@
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "23d9e37c"
     },
     {
       "name": "Q21_Callback14_PlayerJoinedGame",
@@ -351,7 +364,8 @@
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "96a1e042"
     },
     {
       "name": "Q21_InitData",
@@ -372,7 +386,8 @@
       "usedTypes": [
         "D2QuestDataA3Q4Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "b855f6d3"
     },
     {
       "name": "Q21_Callback08_MonsterKilled",
@@ -401,7 +416,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "c509ed1c"
     }
   ]
 }

@@ -70,7 +70,8 @@
         "WAVEFORMATEX",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d78d97ed"
     },
     {
       "name": "SOUND_SetEaxEnvironment",
@@ -93,7 +94,8 @@
         "D2SoundEaxEnvironStrc",
         "D2SoundEnvironTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "08a24730"
     },
     {
       "name": "SOUND_MatchesSoundId",
@@ -111,7 +113,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "953c2806"
     },
     {
       "name": "SOUND_DetachUnit",
@@ -128,7 +131,8 @@
       ],
       "usedTypes": [
         "D2ClientSoundChannelStrc"
-      ]
+      ],
+      "dh": "c9e2f728"
     },
     {
       "name": "SOUND_StopAndDetach",
@@ -148,7 +152,8 @@
       "usedTypes": [
         "D2ClientSoundChannelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0b0d7465"
     },
     {
       "name": "CleanUpGame",
@@ -171,7 +176,8 @@
         "D2SoundChannelStrc *",
         "IDirectSound",
         "uint32_t"
-      ]
+      ],
+      "dh": "d28309a6"
     },
     {
       "name": "SOUND_IsInitialized",
@@ -185,7 +191,8 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "SOUND_IsInitialized"
-      ]
+      ],
+      "dh": "0a3a9903"
     },
     {
       "name": "SOUND_IsInitializedDup",
@@ -199,7 +206,8 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "SOUND_IsInitializedDup"
-      ]
+      ],
+      "dh": "bc8b4048"
     },
     {
       "name": "SOUND_UpdateNonLoopingStreams",
@@ -223,7 +231,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4bc3ea5e"
     },
     {
       "name": "SOUND_GetStreamProgress",
@@ -242,7 +251,8 @@
       "usedTypes": [
         "D2ClientSoundChannelStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3f64ae22"
     },
     {
       "name": "SOUND_ShutdownAudio_Thunk_Unref_004df910",
@@ -257,7 +267,8 @@
       "calledFunctions": [
         "SOUND_ShutdownAudio_Thunk_Unref_004df910",
         "SOUND_GetSoundMixer"
-      ]
+      ],
+      "dh": "3609953c"
     },
     {
       "name": "SOUND_Is3DMixerActive",
@@ -275,7 +286,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e5f5602a"
     },
     {
       "name": "SOUND_IsEaxMixerActive",
@@ -294,7 +306,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e9f5faa"
     },
     {
       "name": "SOUND_FindPlayingByIdSafe",
@@ -313,7 +326,8 @@
       "usedTypes": [
         "D2ClientSoundChannelStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5249f519"
     },
     {
       "name": "SOUND_GetPlaybackStatus",
@@ -332,7 +346,8 @@
       "usedTypes": [
         "int *",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d53e1f5"
     },
     {
       "name": "SOUND_ShutdownAudio",
@@ -351,7 +366,8 @@
       ],
       "usedTypes": [
         "D2ClientSoundChannelStrc"
-      ]
+      ],
+      "dh": "0fa4196a"
     },
     {
       "name": "SOUND_InitStreamChannels",
@@ -377,7 +393,8 @@
         "D2SoundSmpStrc",
         "IDirectSound",
         "int32_t"
-      ]
+      ],
+      "dh": "e862ba9b"
     },
     {
       "name": "SOUND_FindAvailableChannel",
@@ -402,7 +419,8 @@
         "D2SoundChannelStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87877f32"
     },
     {
       "name": "SOUND_UpdateChannelParams",
@@ -441,7 +459,8 @@
         "SOUND_UpdateChannelParams_Slotm0c",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d4f22f21"
     },
     {
       "name": "SOUND_SetSoundMixer",
@@ -463,7 +482,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7ea5c789"
     },
     {
       "name": "SOUND_SetBackgroundSoundsActive",
@@ -486,7 +506,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d88efa08"
     },
     {
       "name": "SOUND_ShutdownAudio_Thunk",
@@ -530,7 +551,8 @@
         "D2SoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "830d28f1"
     },
     {
       "name": "SOUND_GetNpcGreetingSounds",
@@ -549,7 +571,8 @@
         "D2NpcGreetingSoundsStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b97755a5"
     },
     {
       "name": "SOUND_SelectNpcGreetingSound",
@@ -574,7 +597,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4efea4df"
     },
     {
       "name": "SOUND_IsInitializedDup_Unref_004e0680",
@@ -588,7 +612,8 @@
       "namespace": "D2Client::GAME::Sound",
       "calledFunctions": [
         "SOUND_IsInitializedDup_Unref_004e0680"
-      ]
+      ],
+      "dh": "e1f26ff9"
     }
   ]
 }

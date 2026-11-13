@@ -1503,7 +1503,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         if (!pSrv || !pGame) { lstrcpynA(reply, "{\"err\":\"no server unit or game\"}", replyMax); return; }
         D2SkillStrc* pR = D2Common::Units::GetRightSkill(pSrv);
         int nMode = pR ? (int)D2Common::Skills::GetSkillMode(pSrv, pR) : -1;
-        int nCanInt = (int)D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode_Extern(pSrv, pGame, (uint32_t)nMode);
+        int nCanInt = (int)D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode_Extern((uint32_t)nMode, pGame, pSrv);
         wsprintfA(scOut,
             "{\"game\":\"%08X\",\"unit\":\"%08X\",\"skillmode\":%d,\"caninterrupt\":%d,"
             "\"cancel\":%d,\"cast\":%d,\"before\":[%d,%d]}",
@@ -1553,7 +1553,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             int nCode = 0;
             int nValid = (int)D2Client::UNIT::Player::PLAYER_ValidateSkillMessage_Extern(&nCode, pPl, &msg);
             int nCast  = (int)D2Client::SKILLS::Skills::SKILLS_CastSkillClient_Extern(
-                                  (eD2Skills)msg.nSkillId, pPl, (int32_t)msg.nItemId, msg.nSkillLvl);
+                                  pPl, (eD2Skills)msg.nSkillId, (int32_t)msg.nItemId, msg.nSkillLvl);
             int u = (int)strlen(cdOut);
             wsprintfA(cdOut + u - 1, ",\"validate\":%d,\"vcode\":%d,\"castclient\":%d,"
                                      "\"los\":%d,\"txtid\":%d}",

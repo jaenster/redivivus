@@ -16,7 +16,8 @@
       "calledFunctions": [
         "SetupGamma",
         "D2GFX_SetGamma"
-      ]
+      ],
+      "dh": "03942bfb"
     },
     {
       "name": "SetCurrentEngineToOne",
@@ -30,7 +31,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "SetCurrentEngineToOne"
-      ]
+      ],
+      "dh": "918586f2"
     },
     {
       "name": "RENDERER_Set3DFX",
@@ -44,7 +46,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "RENDERER_Set3DFX"
-      ]
+      ],
+      "dh": "b1815a5d"
     },
     {
       "name": "RENDERER_SetOpenGL",
@@ -58,7 +61,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "RENDERER_SetOpenGL"
-      ]
+      ],
+      "dh": "47f5a624"
     },
     {
       "name": "RENDERER_SetMode6",
@@ -72,7 +76,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "RENDERER_SetMode6"
-      ]
+      ],
+      "dh": "5250cd32"
     },
     {
       "name": "RENDERER_SetMode7",
@@ -86,7 +91,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "RENDERER_SetMode7"
-      ]
+      ],
+      "dh": "0472e357"
     },
     {
       "name": "GetCurrentEngine",
@@ -100,7 +106,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "GetCurrentEngine"
-      ]
+      ],
+      "dh": "86febc80"
     },
     {
       "name": "GetCurrentEngine_Unref_00477740",
@@ -114,7 +121,8 @@
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
         "GetCurrentEngine_Unref_00477740"
-      ]
+      ],
+      "dh": "ec3a1399"
     },
     {
       "name": "IsWindowMode",
@@ -131,7 +139,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3d53b82f"
     },
     {
       "name": "DrawRenderStats",
@@ -154,7 +163,8 @@
         "D2FloatIntUnion",
         "ULONG_PTR",
         "uint32_t"
-      ]
+      ],
+      "dh": "724c8a73"
     },
     {
       "name": "DRAW_UI_FPSStats",
@@ -189,7 +199,8 @@
         "_MEMORYSTATUS",
         "eD2RendererMode",
         "int32_t"
-      ]
+      ],
+      "dh": "9dc7d00d"
     },
     {
       "name": "ResetStats",
@@ -205,7 +216,8 @@
         "ResetStats",
         "D2GFX_GetRenderStatistics",
         "SPRITECACHE_Lock"
-      ]
+      ],
+      "dh": "513b332b"
     },
     {
       "name": "STATLIST_ResetIfNotUpdating",
@@ -220,7 +232,8 @@
       "calledFunctions": [
         "STATLIST_ResetIfNotUpdating",
         "ResetStats"
-      ]
+      ],
+      "dh": "d27bbd4b"
     }
   ]
 }

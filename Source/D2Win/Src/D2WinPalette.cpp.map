@@ -20,7 +20,8 @@
       "usedTypes": [
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "f544efc5"
     },
     {
       "name": "D2WINPAL_GetActPalettePointer",
@@ -38,7 +39,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3a76b6cf"
     },
     {
       "name": "DRAW_SetOrReloadPalleteMain",
@@ -54,7 +56,8 @@
         "DRAW_SetOrReloadPalleteMain",
         "GetTickCount",
         "D2GFX_SetPalette"
-      ]
+      ],
+      "dh": "6fdc0019"
     },
     {
       "name": "D2WINPALETTE_SetPaletteIndex",
@@ -73,7 +76,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b868a8e4"
     },
     {
       "name": "D2GFX_GetColorFromCurrentPallete",
@@ -91,7 +95,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "4ee3ea42"
     },
     {
       "name": "Unreferenced_004fb1b0",
@@ -106,7 +111,8 @@
       "calledFunctions": [
         "Unreferenced_004fb1b0",
         "D2GFX_SetPalette"
-      ]
+      ],
+      "dh": "f3e8bb3c"
     },
     {
       "name": "D2WINPAL_CopyPalette",
@@ -121,7 +127,8 @@
       "calledFunctions": [
         "D2WINPAL_CopyPalette",
         "memcpy"
-      ]
+      ],
+      "dh": "4e953fae"
     },
     {
       "name": "D2WINPAL_LoadPaletteFiles",
@@ -149,7 +156,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a1b3a268"
     },
     {
       "name": "D2WINPAL_LoadActPalette",
@@ -170,7 +178,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4dbb0d01"
     },
     {
       "name": "LoadPalette",
@@ -186,7 +195,8 @@
         "LoadPalette",
         "D2WINPAL_LoadPaletteFiles",
         "D2COMP_InitEmblemColorTables"
-      ]
+      ],
+      "dh": "ed0c6b86"
     },
     {
       "name": "D2WINPAL_SetGammaRamp",
@@ -200,7 +210,8 @@
       "namespace": "D2Win::Src::D2WinPalette",
       "calledFunctions": [
         "D2WINPAL_SetGammaRamp"
-      ]
+      ],
+      "dh": "bfa429ee"
     }
   ]
 }

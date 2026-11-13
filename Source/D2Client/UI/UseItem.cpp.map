@@ -23,7 +23,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "int32_t"
-      ]
+      ],
+      "dh": "70f60a2a"
     },
     {
       "name": "TEXT_HandleMouseMove",
@@ -52,7 +53,8 @@
         "fpDialogFunc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a2a98622"
     },
     {
       "name": "TEXT_HandleItemUse",
@@ -72,7 +74,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "4b28d859"
     },
     {
       "name": "INPUT_UseItemClick",
@@ -108,7 +111,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "34c38543"
     },
     {
       "name": "INPUT_UseItemPassthrough",
@@ -126,7 +130,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "56cd56eb"
     },
     {
       "name": "TEXT_DrawCashDisplay",
@@ -164,7 +169,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d122c225"
     },
     {
       "name": "UI_CloseHoradricCubeWindow",
@@ -190,7 +196,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "10188c55"
     }
   ]
 }

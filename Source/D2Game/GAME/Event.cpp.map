@@ -21,7 +21,8 @@
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "1bc42288"
     },
     {
       "name": "EVENT_AllocTimerPool",
@@ -42,7 +43,8 @@
         "D2TimerListStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "186fc123"
     },
     {
       "name": "EVENT_GetTimerOrAllocNew",
@@ -64,7 +66,8 @@
         "D2TimerQueueStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bb180478"
     },
     {
       "name": "EVENT_RemoveAndRecycleTimer",
@@ -87,7 +90,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "322428e5"
     },
     {
       "name": "EVENT_AllocTimerToUnit",
@@ -110,7 +114,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "7ad6e1cd"
     },
     {
       "name": "EVENT_RemoveUnitTimersByType",
@@ -133,7 +138,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "c728667e"
     },
     {
       "name": "EVENT_RemoveCustomTimer",
@@ -156,7 +162,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "fpTimerFunctionUnit"
-      ]
+      ],
+      "dh": "87b3f68a"
     },
     {
       "name": "EVENT_FreeAllTimersForUnit",
@@ -178,7 +185,8 @@
         "D2TimerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a378b977"
     },
     {
       "name": "EVENT_ClearTimerList",
@@ -200,7 +208,8 @@
         "D2TimerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f7d9f7f6"
     },
     {
       "name": "EVENT_DispatchPlayerTimers",
@@ -222,7 +231,8 @@
         "D2TimerStrc",
         "SGAMEDATA",
         "fpTimerFunctionUnit"
-      ]
+      ],
+      "dh": "358cea73"
     },
     {
       "name": "EVENT_DispatchMonsterTimers",
@@ -243,7 +253,8 @@
         "D2TimerQueueStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "802748d4"
     },
     {
       "name": "EVENT_DispatchObjectTimers",
@@ -264,7 +275,8 @@
         "D2TimerQueueStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ec08f3ed"
     },
     {
       "name": "EVENT_DispatchMissileTimers",
@@ -285,7 +297,8 @@
         "D2TimerQueueStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d8918781"
     },
     {
       "name": "EVENT_DispatchItemTimers",
@@ -306,7 +319,8 @@
         "D2TimerQueueStrc",
         "D2TimerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "721622af"
     },
     {
       "name": "EVENT_FreeTimerQueue",
@@ -326,7 +340,8 @@
         "D2TimerListStrc",
         "D2TimerQueueStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1950dc39"
     },
     {
       "name": "EVENT_AllocTimerQueue",
@@ -349,7 +364,8 @@
         "D2TimerListStrc",
         "D2TimerQueueStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0bd3712f"
     },
     {
       "name": "EVENT_DispatchAllTimers",
@@ -373,7 +389,8 @@
         "D2TimerQueueStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3e473ae"
     },
     {
       "name": "EVENT_TimerTypeExistsOnUnit",
@@ -394,7 +411,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2TimerTypeDWORD"
-      ]
+      ],
+      "dh": "8df2a0c2"
     },
     {
       "name": "EVENT_TriggerTimerInternal",
@@ -418,7 +436,8 @@
         "eD2UnitType",
         "fpTimerFunctionUnit",
         "int32_t"
-      ]
+      ],
+      "dh": "3fcaa216"
     },
     {
       "name": "EVENT_TriggerImmediate",
@@ -439,7 +458,8 @@
         "SGAMEDATA",
         "eD2TimerTypeDWORD",
         "int32_t"
-      ]
+      ],
+      "dh": "04196958"
     },
     {
       "name": "EVENT_TriggerWithCallback",
@@ -461,7 +481,8 @@
         "eD2TimerTypeDWORD",
         "fpTimerFunctionUnit",
         "int32_t"
-      ]
+      ],
+      "dh": "f3a0df17"
     },
     {
       "name": "SetEventInternal",
@@ -489,7 +510,8 @@
         "fpTimerFunctionUnit",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "be7f2286"
     },
     {
       "name": "SetEvent",
@@ -509,7 +531,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "626dbd7e"
     },
     {
       "name": "SetEventMapReveal",
@@ -531,7 +554,8 @@
         "eD2TimerTypeDWORD",
         "fpTimerFunctionUnit",
         "int32_t"
-      ]
+      ],
+      "dh": "aa8fff07"
     }
   ]
 }

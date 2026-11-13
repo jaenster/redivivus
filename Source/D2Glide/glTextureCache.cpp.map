@@ -22,7 +22,8 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "80e8194e"
     },
     {
       "name": "GLTEXCACHE_AppendNodeToTail",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
-      ]
+      ],
+      "dh": "af89d41b"
     },
     {
       "name": "GLTEXCACHE_RemoveNodeByIndex",
@@ -58,7 +60,8 @@
       "usedTypes": [
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
-      ]
+      ],
+      "dh": "ce88c14e"
     },
     {
       "name": "GLTEXCACHE_AllocateNode",
@@ -80,7 +83,8 @@
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "34e6a768"
     },
     {
       "name": "GLTEXCACHE_PromoteNodeToMRU",
@@ -103,7 +107,8 @@
       "usedTypes": [
         "GlTextureCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f8ef0f00"
     },
     {
       "name": "GLTEXCACHE_EvictLRU",
@@ -121,7 +126,8 @@
       "usedTypes": [
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
-      ]
+      ],
+      "dh": "dc9aefce"
     },
     {
       "name": "GLTEXCACHE_Destroy",
@@ -141,7 +147,8 @@
       "usedTypes": [
         "GlTextureCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8407783"
     },
     {
       "name": "GLTEXCACHE_EnsureCapacity",
@@ -160,7 +167,8 @@
       "usedTypes": [
         "GlTextureCacheNodeStrc",
         "GlTextureCacheStrc"
-      ]
+      ],
+      "dh": "ee0f848b"
     }
   ]
 }

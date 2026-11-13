@@ -19,7 +19,8 @@
       "usedTypes": [
         "CMDDEF",
         "uint32_t"
-      ]
+      ],
+      "dh": "a39f7865"
     },
     {
       "name": "SCMD_ConvertNumber",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "CMDDEF",
         "uint32_t"
-      ]
+      ],
+      "dh": "14c38467"
     },
     {
       "name": "SCMD_ConvertString",
@@ -63,7 +65,8 @@
       "usedTypes": [
         "CMDDEF",
         "uint32_t"
-      ]
+      ],
+      "dh": "0c19c1b3"
     },
     {
       "name": "SCMD_GenerateError",
@@ -88,7 +91,8 @@
         "CMDERROR",
         "pfnSCmdErrorCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "8cef338e"
     },
     {
       "name": "SCMD_ProcessFile",
@@ -112,7 +116,8 @@
         "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
-      ]
+      ],
+      "dh": "c05abf50"
     },
     {
       "name": "Unreferenced_006c4010",
@@ -129,7 +134,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "57016e69"
     },
     {
       "name": "Unreferenced_006c40b0",
@@ -147,7 +153,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "1341e202"
     },
     {
       "name": "Unreferenced_006c40d0",
@@ -164,7 +171,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "53b49896"
     },
     {
       "name": "SCMD_FindFlagDef",
@@ -185,7 +193,8 @@
       "usedTypes": [
         "CMDDEF",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0c59a27"
     },
     {
       "name": "Unreferenced_006c4360",
@@ -202,7 +211,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "e9aa6b8b"
     },
     {
       "name": "Unreferenced_006c4470",
@@ -219,7 +229,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "f2eb8c0b"
     },
     {
       "name": "SCMD_FreeNode",
@@ -240,7 +251,8 @@
         "StormLinkStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "15756d3e"
     },
     {
       "name": "SCmdRegisterArgument",
@@ -265,7 +277,8 @@
         "SCMDCALLBACK",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "43f91fb1"
     },
     {
       "name": "SCMD_PerformConversion",
@@ -292,7 +305,8 @@
         "CMDPARAMS",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "698f88ed"
     },
     {
       "name": "SCMD_ProcessCurrentFlag",
@@ -312,7 +326,8 @@
       "usedTypes": [
         "CMDDEF",
         "StormCmdProcessingStrc"
-      ]
+      ],
+      "dh": "d7966c43"
     },
     {
       "name": "SCMD_ProcessFlags",
@@ -339,7 +354,8 @@
         "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "40256ae4"
     },
     {
       "name": "SCMD_ProcessToken",
@@ -365,7 +381,8 @@
         "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
-      ]
+      ],
+      "dh": "50a466be"
     },
     {
       "name": "SCmdCheckId",
@@ -383,7 +400,8 @@
       "usedTypes": [
         "CMDDEF",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "c4aef211"
     },
     {
       "name": "SCmdDestroy",
@@ -403,7 +421,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "749784d9"
     },
     {
       "name": "SCmdGetNum",
@@ -421,7 +440,8 @@
       "usedTypes": [
         "CMDDEF",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "a99a2578"
     },
     {
       "name": "SCmdGetString",
@@ -441,7 +461,8 @@
       "usedTypes": [
         "CMDDEF",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "2068de0c"
     },
     {
       "name": "SCmdRegisterArgList",
@@ -461,7 +482,8 @@
       "usedTypes": [
         "ARGLIST",
         "uint32_t"
-      ]
+      ],
+      "dh": "e9e9f602"
     },
     {
       "name": "SCMD_ProcessString",
@@ -486,7 +508,8 @@
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback",
         "uint32_t"
-      ]
+      ],
+      "dh": "b110fa79"
     },
     {
       "name": "SCmdGetBool",
@@ -501,7 +524,8 @@
       "calledFunctions": [
         "SCmdGetBool",
         "SCmdGetNum"
-      ]
+      ],
+      "dh": "9709e1a8"
     },
     {
       "name": "SCmdProcess",
@@ -527,7 +551,8 @@
         "StormCmdProcessingStrc",
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
-      ]
+      ],
+      "dh": "fab7a255"
     },
     {
       "name": "SCmdProcessCommandLine",
@@ -546,7 +571,8 @@
       "usedTypes": [
         "pfnSCmdErrorCallback",
         "pfnSCmdUnknownArgCallback"
-      ]
+      ],
+      "dh": "50c79cba"
     },
     {
       "name": "StaticInit_gStormCmdListBackslash",
@@ -561,7 +587,8 @@
       "calledFunctions": [
         "StaticInit_gStormCmdListBackslash",
         "atexit"
-      ]
+      ],
+      "dh": "05e89486"
     },
     {
       "name": "StaticInit_gStormCmdListSlash",
@@ -576,7 +603,8 @@
       "calledFunctions": [
         "StaticInit_gStormCmdListSlash",
         "atexit"
-      ]
+      ],
+      "dh": "4b07d3bf"
     },
     {
       "name": "StaticFini_gStormCmdListBackslash",
@@ -591,7 +619,8 @@
       "calledFunctions": [
         "StaticFini_gStormCmdListBackslash",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "e15e5fdf"
     },
     {
       "name": "StaticFini_gStormCmdListSlash",
@@ -606,7 +635,8 @@
       "calledFunctions": [
         "StaticFini_gStormCmdListSlash",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "4c36f310"
     }
   ]
 }

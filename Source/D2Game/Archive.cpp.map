@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "df78b564"
     }
   ]
 }

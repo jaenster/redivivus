@@ -24,7 +24,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8d66fcf3"
     },
     {
       "name": "CACHE_DecryptBlock",
@@ -41,7 +42,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ac5a9234"
     },
     {
       "name": "CACHE_EncryptBlock",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "66b9ceba"
     },
     {
       "name": "CACHE_GetFileTime",
@@ -78,7 +81,8 @@
         "LPFILETIME",
         "_SYSTEMTIME",
         "uint32_t"
-      ]
+      ],
+      "dh": "288c9201"
     },
     {
       "name": "CACHE_HashString",
@@ -97,7 +101,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "eaba1c02"
     },
     {
       "name": "CACHE_InitCryptTable",
@@ -114,7 +119,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "376f727b"
     },
     {
       "name": "CACHE_FindHashEntry",
@@ -132,7 +138,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6e4687ba"
     },
     {
       "name": "CACHE_RemoveEntry",
@@ -151,7 +158,8 @@
       "usedTypes": [
         "D2BnCacheBlockEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3902833"
     },
     {
       "name": "CACHE_BuildFilePath",
@@ -172,7 +180,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e3a6dc01"
     },
     {
       "name": "CACHE_DeleteFile",
@@ -191,7 +200,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "39757dd1"
     },
     {
       "name": "CACHE_FreeAll",
@@ -206,7 +216,8 @@
       "calledFunctions": [
         "CACHE_FreeAll",
         "SMemFree"
-      ]
+      ],
+      "dh": "2a1a34ac"
     },
     {
       "name": "CACHE_FreeMem",
@@ -224,7 +235,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "130f36dd"
     },
     {
       "name": "CACHE_Open",
@@ -256,7 +268,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a7fb3c8d"
     },
     {
       "name": "CACHE_Rebuild",
@@ -278,7 +291,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "34120738"
     },
     {
       "name": "CACHE_ReadData",
@@ -311,7 +325,8 @@
         "LPFILETIME",
         "uint32_t",
         "uint32_t *"
-      ]
+      ],
+      "dh": "f4950278"
     },
     {
       "name": "CACHE_WriteData",
@@ -346,7 +361,8 @@
         "LPFILETIME",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dac7da0a"
     },
     {
       "name": "StaticInit_CriticalSection_00881894",
@@ -361,7 +377,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_00881894",
         "atexit"
-      ]
+      ],
+      "dh": "22a0149f"
     },
     {
       "name": "StaticFini_CriticalSection_00881894",
@@ -375,7 +392,8 @@
       "namespace": "Bnclient::Cache",
       "calledFunctions": [
         "StaticFini_CriticalSection_00881894"
-      ]
+      ],
+      "dh": "930397cb"
     }
   ]
 }

@@ -22,7 +22,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6a7e62e0"
     },
     {
       "name": "MONUNIQUE_DispatchModIdle",
@@ -40,7 +41,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "895caa5f"
     },
     {
       "name": "MONUNIQUE_DispatchModWalk",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ecf37c4b"
     },
     {
       "name": "MONUNIQUE_DispatchModGetHit",
@@ -76,7 +79,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b18cf347"
     },
     {
       "name": "MONUNIQUE_DispatchModDeath",
@@ -94,7 +98,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c54d2f50"
     },
     {
       "name": "MONUNIQUE_DispatchModAttack",
@@ -112,7 +117,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "8f6e8b0d"
     },
     {
       "name": "MONSTER_BuildUniqueName",
@@ -141,7 +147,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9bb5f429"
     },
     {
       "name": "MONSTER_GetNameModifierStringId",
@@ -160,7 +167,8 @@
         "D2UnitStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04a95669"
     },
     {
       "name": "MONSTER_SetMonStatsTxtAndType",
@@ -178,7 +186,8 @@
       "usedTypes": [
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "9f1225d5"
     },
     {
       "name": "GetMonsterAi",
@@ -196,7 +205,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c7edc97"
     },
     {
       "name": "GetOwnerGUID",
@@ -214,7 +224,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "afeb4a13"
     },
     {
       "name": "SetOwnerGUID",
@@ -232,7 +243,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2472ff41"
     },
     {
       "name": "MONSTER_GetAiDataPtr",
@@ -249,7 +261,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bcc4cbbf"
     },
     {
       "name": "Unreferenced_004ae190",
@@ -266,7 +279,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "4f321d80"
     },
     {
       "name": "MONSTER_ResetToNeutralFacingTarget",
@@ -287,7 +301,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "eD2MonsterAnimMode"
-      ]
+      ],
+      "dh": "4b7fb46a"
     },
     {
       "name": "MONSTER_InitLightMap",
@@ -320,7 +335,8 @@
         "eD2LevelId",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "84a52a3b"
     },
     {
       "name": "IsMonsterChampion",
@@ -338,7 +354,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "197c4577"
     },
     {
       "name": "IsMonsterGhostly",
@@ -357,7 +374,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fe0d1357"
     },
     {
       "name": "IsMonsterUnique",
@@ -375,7 +393,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "861af926"
     },
     {
       "name": "IsMonsterMinion",
@@ -394,7 +413,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "32607744"
     },
     {
       "name": "IsMonsterSuperUnique",
@@ -412,7 +432,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d8cc0e2f"
     },
     {
       "name": "MONSTER_ExplodeOwnerMissile",
@@ -435,7 +456,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "72091324"
     },
     {
       "name": "MONSTER_SpawnRandomAttachedMissile",
@@ -465,7 +487,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "ce73b732"
     },
     {
       "name": "MONSTER_InitSpecialMonster",
@@ -497,7 +520,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "8211a389"
     },
     {
       "name": "MONSTER_CheckCatapultFiringPosition",
@@ -523,7 +547,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "65c079f5"
     },
     {
       "name": "MONSTER_InitMonsterUnit",
@@ -582,7 +607,8 @@
         "eD2UnitFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ba3df52f"
     },
     {
       "name": "FreeMonster",
@@ -610,7 +636,8 @@
         "D2LightMapStrc",
         "D2UnitDataMonsterStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b1463e64"
     },
     {
       "name": "MONSTER_TransformToClassId",
@@ -662,7 +689,8 @@
         "eD2UnitFlags",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0325943"
     },
     {
       "name": "MONSTER_SpawnFetishMissileSpread",
@@ -688,7 +716,8 @@
         "eMissilesId",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "f4bb85b3"
     },
     {
       "name": "MONSTER_CastMissileAtTarget",
@@ -720,7 +749,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "eMissilesId"
-      ]
+      ],
+      "dh": "472c3ec9"
     },
     {
       "name": "MONSTER_GetAnimModeDataEntry",
@@ -742,7 +772,8 @@
         "D2MonStats2Txt",
         "D2UnitStrc",
         "eD2MonsterAnimMode"
-      ]
+      ],
+      "dh": "c5eea2a5"
     },
     {
       "name": "MONSTER_ProcessSkillAnimation",
@@ -775,7 +806,8 @@
         "eD2Skills",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "89d1769c"
     },
     {
       "name": "MONSTER_HandleSkillAnimEnd",
@@ -809,7 +841,8 @@
         "eD2PlayerAnimMode",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c332b8c"
     },
     {
       "name": "MONSTER_SpawnBloodParticles",
@@ -843,7 +876,8 @@
         "int64_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6a0021c5"
     },
     {
       "name": "MONSTER_PreloadSequenceAnimations",
@@ -868,7 +902,8 @@
         "int32_t",
         "uD2UnitMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "da243ea1"
     },
     {
       "name": "MONSTER_IsModeMoveFlagSet",
@@ -889,7 +924,8 @@
         "D2MonStats2Txt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc9fc7f5"
     },
     {
       "name": "MONSTER_SpawnDeathEffectMissiles",
@@ -913,7 +949,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "7c2d50ef"
     },
     {
       "name": "MONSTER_HandleBurrowTransition",
@@ -947,7 +984,8 @@
         "eCollisionFlags",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7d52c3dd"
     },
     {
       "name": "MonsterMessage",
@@ -1066,7 +1104,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "81995621"
     },
     {
       "name": "Unreferenced_004b1030",
@@ -1084,7 +1123,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b00edb12"
     },
     {
       "name": "NPCMENU_ParseSpeechData",
@@ -1101,7 +1141,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3c07660e"
     },
     {
       "name": "MERC_InitializeFromPacket",
@@ -1139,7 +1180,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f5957a84"
     },
     {
       "name": "MONSTER_CanBeConverted",
@@ -1158,7 +1200,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "f5f8c8d9"
     },
     {
       "name": "NPCMENU_HandleQuestUpdate",
@@ -1178,7 +1221,8 @@
         "D2GSPacketSrv0x98",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "eea08c12"
     },
     {
       "name": "CLIENT_UpdateMonsterAnimByMode",
@@ -1201,7 +1245,8 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee850ea8"
     },
     {
       "name": "CLIENT_UpdateUnitNameplate",
@@ -1256,7 +1301,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f4d7cc6"
     },
     {
       "name": "StaticInit_gnMonsterUniqueNameBuffer",
@@ -1270,7 +1316,8 @@
       "namespace": "D2Client::UNIT::Monster",
       "calledFunctions": [
         "StaticInit_gnMonsterUniqueNameBuffer"
-      ]
+      ],
+      "dh": "f61a8b60"
     }
   ]
 }

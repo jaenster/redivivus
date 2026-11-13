@@ -16,7 +16,8 @@
       "calledFunctions": [
         "CreateThreadClientSocketOrSingleplayer",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
-      ]
+      ],
+      "dh": "4fe01b6d"
     },
     {
       "name": "HandleIncomingPacketBuffer",
@@ -35,7 +36,8 @@
       "usedTypes": [
         "D2QServerStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "059c26c8"
     },
     {
       "name": "NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect",
@@ -56,7 +58,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "35333b5c"
     },
     {
       "name": "WaitForEmptyEvent",
@@ -70,7 +73,8 @@
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
         "WaitForEmptyEvent"
-      ]
+      ],
+      "dh": "b8ee0003"
     },
     {
       "name": "NET_Thunk_QServerSwapWorkerSlotValue",
@@ -85,7 +89,8 @@
       "calledFunctions": [
         "NET_Thunk_QServerSwapWorkerSlotValue",
         "SwapWorkerSlotValue"
-      ]
+      ],
+      "dh": "27e7bda7"
     },
     {
       "name": "NET_Thunk_QServerAddGameTokenFilter",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0ec29f40"
     },
     {
       "name": "NET_SetPlayersCount",
@@ -121,7 +127,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "99a74e9e"
     },
     {
       "name": "_NullSub_Unref_0052b270",
@@ -136,7 +143,8 @@
       "calledFunctions": [
         "_NullSub_Unref_0052b270",
         "GetConnectedClients"
-      ]
+      ],
+      "dh": "0e5c8fc5"
     },
     {
       "name": "NET_HACK_SetUseQServerHack",
@@ -151,7 +159,8 @@
       "calledFunctions": [
         "NET_HACK_SetUseQServerHack",
         "SetHackMode"
-      ]
+      ],
+      "dh": "844ffb2b"
     },
     {
       "name": "NET_QServer_FreeAndSend0xB0ToEveryone",
@@ -169,7 +178,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "993e983e"
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode1",
@@ -184,7 +194,8 @@
       "calledFunctions": [
         "NET_D2GS_SERVER_DequeueModePacket_Mode1",
         "DequeueModePacket"
-      ]
+      ],
+      "dh": "f4ffa37c"
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode0",
@@ -202,7 +213,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a9f69d2e"
     },
     {
       "name": "NET_D2GS_SERVER_DequeueModePacket_Mode2",
@@ -217,7 +229,8 @@
       "calledFunctions": [
         "NET_D2GS_SERVER_DequeueModePacket_Mode2",
         "DequeueModePacket"
-      ]
+      ],
+      "dh": "d9d1abfb"
     },
     {
       "name": "NET_D2GS_SERVER_SendPacketToClient",
@@ -244,7 +257,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fd865fc5"
     },
     {
       "name": "NET_QServer_FindIpAddressByClientIdForQServer",
@@ -262,7 +276,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f9bdeb2d"
     },
     {
       "name": "GetIpFromToken",
@@ -280,7 +295,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "d4be57a6"
     },
     {
       "name": "SERVER_GetClientSocketByToken",
@@ -298,7 +314,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1650c6bb"
     },
     {
       "name": "NET_HACK_AddClientToHackList",
@@ -316,7 +333,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4f5a903c"
     },
     {
       "name": "NET_HACK_CloseAndBanHackerIP",
@@ -335,7 +353,8 @@
       "usedTypes": [
         "in_addr",
         "int32_t"
-      ]
+      ],
+      "dh": "24716a98"
     },
     {
       "name": "NET_HACK_UnlistIP",
@@ -354,7 +373,8 @@
       "usedTypes": [
         "in_addr",
         "uint32_t"
-      ]
+      ],
+      "dh": "2cac53ff"
     },
     {
       "name": "NET_DisconnectIP",
@@ -373,7 +393,8 @@
       "usedTypes": [
         "in_addr",
         "int32_t"
-      ]
+      ],
+      "dh": "fe1870d4"
     },
     {
       "name": "QSERVER_KillConnection",
@@ -391,7 +412,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a68b3cc0"
     },
     {
       "name": "NET_Thunk_QServerSetHacklistAddLineHook",
@@ -409,7 +431,8 @@
       ],
       "usedTypes": [
         "fpD2QServerLineHook"
-      ]
+      ],
+      "dh": "cfa612df"
     },
     {
       "name": "NET_SetQServerCallbackFunction",
@@ -424,7 +447,8 @@
       "calledFunctions": [
         "NET_SetQServerCallbackFunction",
         "SetReservedHook"
-      ]
+      ],
+      "dh": "a7f0c5df"
     },
     {
       "name": "AssignClientToToken",
@@ -442,7 +466,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c2f2e248"
     },
     {
       "name": "QSERVER_GetClientGameToken",
@@ -460,7 +485,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "24cedb86"
     },
     {
       "name": "NET_SendPacketWithFlags",
@@ -482,7 +508,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "88cecca6"
     },
     {
       "name": "NET_SendPacketToClient",
@@ -505,7 +532,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "21eaca91"
     },
     {
       "name": "NET_WaitForEmptyEvent",
@@ -520,7 +548,8 @@
       "calledFunctions": [
         "NET_WaitForEmptyEvent",
         "WaitForEmptyEventOrPumpIo"
-      ]
+      ],
+      "dh": "86a63b6e"
     },
     {
       "name": "_NullSub",
@@ -535,7 +564,8 @@
       "calledFunctions": [
         "_NullSub",
         "_NullSubRet4"
-      ]
+      ],
+      "dh": "a03b07c8"
     },
     {
       "name": "_NullSubRet8",
@@ -550,7 +580,8 @@
       "calledFunctions": [
         "_NullSubRet8",
         "_NullSubRet4"
-      ]
+      ],
+      "dh": "6ede9989"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAF01",
@@ -571,7 +602,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "84653163"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x70",
@@ -592,7 +624,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a584ae8"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xAF00",
@@ -610,7 +643,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "2656b0cf"
     },
     {
       "name": "QSERVER_CreateAndInit",
@@ -629,7 +663,8 @@
       "usedTypes": [
         "eD2GSConnectionType",
         "eD2GSGameType"
-      ]
+      ],
+      "dh": "fd4a4294"
     },
     {
       "name": "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer",
@@ -643,7 +678,8 @@
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
-      ]
+      ],
+      "dh": "2d28e862"
     },
     {
       "name": "Unreferenced_0052b800",
@@ -657,7 +693,8 @@
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
         "Unreferenced_0052b800"
-      ]
+      ],
+      "dh": "04ba4924"
     },
     {
       "name": "NET_D2GS_CLIENT_SetD2GSConnectionType",
@@ -674,7 +711,8 @@
       ],
       "usedTypes": [
         "eD2GSConnectionType"
-      ]
+      ],
+      "dh": "7dc26c20"
     },
     {
       "name": "WSAGetLastError",
@@ -700,7 +738,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "97f64363"
     },
     {
       "name": "NET_D2GS_CLIENT_GetOutgoingPacketSizeFromTableAndVariableSize",
@@ -721,7 +760,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ebd8d00f"
     }
   ]
 }

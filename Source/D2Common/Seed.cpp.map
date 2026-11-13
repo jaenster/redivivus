@@ -21,7 +21,8 @@
         "D2SeedStrc",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "735987f3"
     },
     {
       "name": "RANDOM_RandomNumberSelector",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f47c15ca"
     },
     {
       "name": "RNG_GetRandomInRange",
@@ -59,7 +61,8 @@
         "D2SeedStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "30aeba31"
     },
     {
       "name": "GetSeed_nSeedLow_Unref_0060dcf0",
@@ -77,7 +80,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "371705b5"
     },
     {
       "name": "SEED_GetTime32",
@@ -95,7 +99,8 @@
       ],
       "usedTypes": [
         "__time32_t"
-      ]
+      ],
+      "dh": "81d50949"
     },
     {
       "name": "SEED_GenerateRandomSeed",
@@ -115,7 +120,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2c487c08"
     },
     {
       "name": "SEED_InitDefault",
@@ -132,7 +138,8 @@
       ],
       "usedTypes": [
         "D2SeedStrc"
-      ]
+      ],
+      "dh": "54804edd"
     },
     {
       "name": "InitSeed_Param_666",
@@ -150,7 +157,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "eb2111b9"
     },
     {
       "name": "GetSeed_nSeedLow",
@@ -168,7 +176,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ee7f939"
     },
     {
       "name": "SetSeed",
@@ -186,7 +195,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "12937814"
     },
     {
       "name": "GetSeed",
@@ -204,7 +214,8 @@
       "usedTypes": [
         "D2SeedStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a35faf0"
     }
   ]
 }

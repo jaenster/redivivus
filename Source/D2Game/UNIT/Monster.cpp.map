@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "4f95fc6e"
     },
     {
       "name": "GetAiGeneral",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "33533ec3"
     }
   ]
 }

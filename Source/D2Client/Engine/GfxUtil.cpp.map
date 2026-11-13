@@ -15,7 +15,8 @@
       "namespace": "D2Client::Engine::GfxUtil",
       "calledFunctions": [
         "GFXUTIL_PadTokenString"
-      ]
+      ],
+      "dh": "aa0ed7fb"
     },
     {
       "name": "GFXUTIL_GetCompositePaletteIndex",
@@ -33,7 +34,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc6f0493"
     },
     {
       "name": "InitializeModeTokens",
@@ -65,7 +67,8 @@
         "D2PlrTypeModeTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f29eda46"
     },
     {
       "name": "GFXUTIL_SetMissileCelFile",
@@ -83,7 +86,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "035f6ecf"
     },
     {
       "name": "AllocGfxUtil",
@@ -105,7 +109,8 @@
       "usedTypes": [
         "int32_t",
         "void *"
-      ]
+      ],
+      "dh": "fb3a4513"
     },
     {
       "name": "GFXUTIL_FindGfxNodeByTypeAndId",
@@ -123,7 +128,8 @@
       "usedTypes": [
         "D2GfxUtilNodeStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c19d6f0f"
     },
     {
       "name": "GFXUTIL_FreeGfxNodeList",
@@ -142,7 +148,8 @@
       "usedTypes": [
         "D2GfxUtilNodeStrc",
         "D2GfxUtilNodeStrc *"
-      ]
+      ],
+      "dh": "afec55fc"
     },
     {
       "name": "GFXUTIL_GetUnitToken",
@@ -164,7 +171,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "980167b3"
     },
     {
       "name": "GFXUTIL_NormalizeItemMode",
@@ -182,7 +190,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1d4ed01b"
     },
     {
       "name": "GFXUTIL_GetArmorAppearanceFromTorso",
@@ -206,7 +215,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6ba7437d"
     },
     {
       "name": "GFXUTIL_IsDC6BlockOnScreen",
@@ -229,7 +239,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a56e699"
     },
     {
       "name": "GFXUTIL_SetItemGfxFile",
@@ -262,7 +273,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f9258d83"
     },
     {
       "name": "GFXUTIL_GetOverlayNumDirections",
@@ -279,7 +291,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f8be4833"
     },
     {
       "name": "GFXUTIL_GetBodyLocWeaponToken",
@@ -307,7 +320,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18c5f4f5"
     },
     {
       "name": "GFXUTIL_UnitHasAnimMode",
@@ -333,7 +347,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "94021f37"
     },
     {
       "name": "GFXUTIL_GetNumDirectionsForUnit",
@@ -362,7 +377,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "db8a9061"
     },
     {
       "name": "GFXUTIL_Identity",
@@ -376,7 +392,8 @@
       "namespace": "D2Client::Engine::GfxUtil",
       "calledFunctions": [
         "GFXUTIL_Identity"
-      ]
+      ],
+      "dh": "a297cc66"
     },
     {
       "name": "GFXUTIL_GetCofFrameCount",
@@ -394,7 +411,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0cd830b2"
     },
     {
       "name": "GFXUTIL_GetCofAnimSpeed",
@@ -412,7 +430,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94c10c31"
     },
     {
       "name": "GFXUTIL_GetCofDirection",
@@ -430,7 +449,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2b487c7d"
     },
     {
       "name": "GFXUTIL_GetCofLayerData",
@@ -448,7 +468,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f80aad6d"
     },
     {
       "name": "GFXUTIL_GetCofDrawOrder",
@@ -466,7 +487,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "549e4ad9"
     },
     {
       "name": "GFXUTIL_IsValidUnitType",
@@ -483,7 +505,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5f8070bc"
     },
     {
       "name": "GFXUTIL_GetGfxInfoComponent",
@@ -504,7 +527,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "10944915"
     },
     {
       "name": "GFXUTIL_SetGfxInfoComponent",
@@ -525,7 +549,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a174791e"
     },
     {
       "name": "GFXUTIL_UpdateDirectionForMode",
@@ -548,7 +573,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d293b92"
     },
     {
       "name": "GFXUTIL_ConvertDirectionBits",
@@ -567,7 +593,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a60b425b"
     },
     {
       "name": "GFXUTIL_CalcDirectionAndFrame",
@@ -590,7 +617,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "20593dc7"
     },
     {
       "name": "GFXUTIL_GetEtherealTransparency",
@@ -622,7 +650,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79262f86"
     },
     {
       "name": "GFXUTIL_GetItemColorForBodyLoc",
@@ -651,7 +680,8 @@
         "eD2UnitType",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "02f859f1"
     },
     {
       "name": "GFXUTIL_GetUnitCofDirectionOnScreen",
@@ -691,7 +721,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c29f3006"
     },
     {
       "name": "GFXUTIL_BuildCofParams",
@@ -742,7 +773,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "09fdcb7c"
     },
     {
       "name": "DC6_AssignParams",
@@ -764,7 +796,8 @@
         "DC6",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f537c97"
     },
     {
       "name": "GFXUTIL_BuildMonsterCofParams",
@@ -791,7 +824,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6e84f2af"
     },
     {
       "name": "GFXUTIL_InitAndBuildMonsterCofParams",
@@ -812,7 +846,8 @@
         "D2MonStatsTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f0f41d1e"
     },
     {
       "name": "GFXUTIL_CalcMaxSpriteHeight",
@@ -842,7 +877,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d13aa944"
     },
     {
       "name": "GFXUTIL_GetOverlayFrameDelay",
@@ -868,7 +904,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "74606e1d"
     },
     {
       "name": "GFXUTIL_GetOverlayDimensions",
@@ -893,7 +930,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "01dd4668"
     },
     {
       "name": "GFXUTIL_IsUnitSpriteOnScreen",
@@ -923,7 +961,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "48ea4e65"
     },
     {
       "name": "GFXUTIL_Identity_Unref_005641e0",
@@ -937,7 +976,8 @@
       "namespace": "D2Client::Engine::GfxUtil",
       "calledFunctions": [
         "GFXUTIL_Identity_Unref_005641e0"
-      ]
+      ],
+      "dh": "ba45788a"
     },
     {
       "name": "GFXUTIL_Identity_Unref_006c40c0",
@@ -951,7 +991,8 @@
       "namespace": "D2Client::Engine::GfxUtil",
       "calledFunctions": [
         "GFXUTIL_Identity_Unref_006c40c0"
-      ]
+      ],
+      "dh": "c3605a72"
     }
   ]
 }

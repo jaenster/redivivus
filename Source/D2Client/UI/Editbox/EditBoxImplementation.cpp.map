@@ -22,7 +22,8 @@
         "EditBoxImplementation",
         "PFN_CrtExceptionFilter",
         "int32_t"
-      ]
+      ],
+      "dh": "c31e9395"
     },
     {
       "name": "SetNumericOnly",
@@ -39,7 +40,8 @@
       ],
       "usedTypes": [
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "089c919e"
     },
     {
       "name": "Draw",
@@ -69,7 +71,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "867a48af"
     },
     {
       "name": "SetNumber",
@@ -91,7 +94,8 @@
         "EditBoxImplementation",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3afc4dda"
     },
     {
       "name": "SetText",
@@ -111,7 +115,8 @@
       "usedTypes": [
         "EditBoxImplementation",
         "int32_t"
-      ]
+      ],
+      "dh": "5f940fc1"
     },
     {
       "name": "GetValue",
@@ -132,7 +137,8 @@
         "EditBoxImplementation",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "07a2aa9a"
     },
     {
       "name": "GetText",
@@ -150,7 +156,8 @@
       ],
       "usedTypes": [
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "5886ac87"
     },
     {
       "name": "GetRepeatDelta",
@@ -167,7 +174,8 @@
       ],
       "usedTypes": [
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "c52ffcc9"
     },
     {
       "name": "OnMouseDown",
@@ -185,7 +193,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "4cf85860"
     },
     {
       "name": "OnMouseWheel",
@@ -203,7 +212,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "dd39ae0c"
     },
     {
       "name": "OnMouseUp",
@@ -221,7 +231,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "3b019eda"
     },
     {
       "name": "OnChar",
@@ -253,7 +264,8 @@
         "EditBoxImplementation",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "37579b33"
     },
     {
       "name": "OnMouseMove",
@@ -271,7 +283,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "dd17f890"
     },
     {
       "name": "OnUpArrow",
@@ -289,7 +302,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "b87583f5"
     },
     {
       "name": "OnDownArrow",
@@ -307,7 +321,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "22262840"
     },
     {
       "name": "SetCharFilter",
@@ -325,7 +340,8 @@
       "usedTypes": [
         "EditBoxImplementation",
         "fpUIWidgetCharFilter"
-      ]
+      ],
+      "dh": "76aba13a"
     },
     {
       "name": "SetWidth",
@@ -342,7 +358,8 @@
       ],
       "usedTypes": [
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "55ec0ef0"
     },
     {
       "name": "SetKeyRepeat",
@@ -359,7 +376,8 @@
       ],
       "usedTypes": [
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "0ae706e0"
     },
     {
       "name": "OnRightArrow",
@@ -377,7 +395,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "85e8ecb5"
     },
     {
       "name": "OnLeftArrow",
@@ -395,7 +414,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "EditBoxImplementation"
-      ]
+      ],
+      "dh": "331055c4"
     },
     {
       "name": "Constructor",
@@ -425,7 +445,8 @@
         "int32_t",
         "pfnEHHandlerRoutine",
         "uint16_t"
-      ]
+      ],
+      "dh": "f332f61d"
     },
     {
       "name": "ScalarDeletingDestructor",
@@ -445,7 +466,8 @@
       "usedTypes": [
         "EditBoxImplementation",
         "uint32_t"
-      ]
+      ],
+      "dh": "3c5369d2"
     }
   ]
 }

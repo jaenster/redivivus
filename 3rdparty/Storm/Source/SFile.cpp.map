@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "32191a49"
     },
     {
       "name": "SFILE_CopyStreamBuffer4",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "70da71f1"
     },
     {
       "name": "Unreferenced_00415190",
@@ -49,7 +51,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00415190"
-      ]
+      ],
+      "dh": "7b325499"
     },
     {
       "name": "Unreferenced_004151b0",
@@ -63,7 +66,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_004151b0"
-      ]
+      ],
+      "dh": "14977e2a"
     },
     {
       "name": "SFILE_DecompressLzw_BufferRead",
@@ -82,7 +86,8 @@
       "usedTypes": [
         "D2LzwBufferStateStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e65a2b09"
     },
     {
       "name": "SFILE_DecompressLzw_BufferWrite",
@@ -101,7 +106,8 @@
       "usedTypes": [
         "D2LzwBufferStateStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab31b86f"
     },
     {
       "name": "SFILE_DecompressLzw",
@@ -122,7 +128,8 @@
         "D2LzwBufferStateStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1b5b798f"
     },
     {
       "name": "SFILE_Decrypt",
@@ -139,7 +146,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "bc1b6bba"
     },
     {
       "name": "SFILE_Hash",
@@ -158,7 +166,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93b386c6"
     },
     {
       "name": "SFILE_InitializeHashSource",
@@ -176,7 +185,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "14d3d28b"
     },
     {
       "name": "SFILE_ReadFileChecked",
@@ -197,7 +207,8 @@
         "LPDWORD",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79a1ed15"
     },
     {
       "name": "SFILE_SyncReadFile",
@@ -217,7 +228,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2189d407"
     },
     {
       "name": "SFILE_GetBlockTableEntry",
@@ -236,7 +248,8 @@
         "D2ArchiveStrc",
         "D2MPQBlockEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1f2113d5"
     },
     {
       "name": "SFILE_SearchHashTable",
@@ -258,7 +271,8 @@
         "int16_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "04985ebc"
     },
     {
       "name": "SFILE_ShiftSectorTable",
@@ -278,7 +292,8 @@
         "D2MPQBlockEntryStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "70514bf9"
     },
     {
       "name": "Unreferenced_00415730",
@@ -292,7 +307,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00415730"
-      ]
+      ],
+      "dh": "711bc836"
     },
     {
       "name": "SFILE_GetStreamPosition",
@@ -311,7 +327,8 @@
         "D2StormAudioStreamRec",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c6c2b25"
     },
     {
       "name": "SFILE_HandleAsyncReadError",
@@ -333,7 +350,8 @@
         "D2StormAudioStreamRec",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "8e469920"
     },
     {
       "name": "SFILE_BuildDefaultBasePath",
@@ -349,7 +367,8 @@
         "SFILE_BuildDefaultBasePath",
         "SStrChrR",
         "SStrPack"
-      ]
+      ],
+      "dh": "c60db5df"
     },
     {
       "name": "SFILE_CheckArchiveHandle",
@@ -367,7 +386,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "d64fff17"
     },
     {
       "name": "SFILE_FileExistsOnDisk",
@@ -384,7 +404,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5e545e2b"
     },
     {
       "name": "SFILE_CheckFileHandle",
@@ -402,7 +423,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "D2MPQFileStrc *"
-      ]
+      ],
+      "dh": "7dbeb339"
     },
     {
       "name": "SFILE_CheckForCdRom",
@@ -424,7 +446,8 @@
         "LPDWORD",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b87b5bb7"
     },
     {
       "name": "SFILE_ConvertRelativePathName",
@@ -446,7 +469,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "26c909dd"
     },
     {
       "name": "SFILE_FindFileOnDisk",
@@ -468,7 +492,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3cb6e247"
     },
     {
       "name": "SFILE_EnsureHashSource",
@@ -483,7 +508,8 @@
       "calledFunctions": [
         "SFILE_EnsureHashSource",
         "SFILE_InitializeHashSource"
-      ]
+      ],
+      "dh": "1662a9a0"
     },
     {
       "name": "SFileAuthenticateArchiveEx",
@@ -509,7 +535,8 @@
         "D2ArchiveStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f986a0e7"
     },
     {
       "name": "SFILE_ComputeFileHash",
@@ -531,7 +558,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d875a912"
     },
     {
       "name": "SFileRegisterLoadNotifyProc",
@@ -548,7 +576,8 @@
       ],
       "usedTypes": [
         "pfnSFileOpenCallback"
-      ]
+      ],
+      "dh": "f95a46bd"
     },
     {
       "name": "SFileDdaInitialize",
@@ -566,7 +595,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "c6cbfd25"
     },
     {
       "name": "SFILE_SetArchivePriority",
@@ -585,7 +615,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "190243e3"
     },
     {
       "name": "SFileEnableDirectAccess",
@@ -604,7 +635,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4b554170"
     },
     {
       "name": "SFileEnableSeekOptimization",
@@ -618,7 +650,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "SFileEnableSeekOptimization"
-      ]
+      ],
+      "dh": "03e127d1"
     },
     {
       "name": "SFileGetArchiveInfo",
@@ -637,7 +670,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1c6762d"
     },
     {
       "name": "SFileGetArchiveName",
@@ -658,7 +692,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f959ba4a"
     },
     {
       "name": "SFileGetBasePath",
@@ -678,7 +713,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "82397c5b"
     },
     {
       "name": "SFILE_GetFileTime",
@@ -698,7 +734,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b50dc00d"
     },
     {
       "name": "SFILE_GetFileLocale",
@@ -717,7 +754,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7449cbea"
     },
     {
       "name": "SFILE_GetFilePlatform",
@@ -736,7 +774,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e953d6ee"
     },
     {
       "name": "SFileGetFileName",
@@ -758,7 +797,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e8133f39"
     },
     {
       "name": "SFILE_CopyFileRecordNameOrAlias",
@@ -779,7 +819,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2a124fbe"
     },
     {
       "name": "SFileGetFileCompressedSize",
@@ -797,7 +838,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "6132ba97"
     },
     {
       "name": "SFileGetFileSize",
@@ -816,7 +858,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "LPDWORD"
-      ]
+      ],
+      "dh": "71065731"
     },
     {
       "name": "SFILE_GetFileTimestamp",
@@ -836,7 +879,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "LPFILETIME"
-      ]
+      ],
+      "dh": "7e4e3ddf"
     },
     {
       "name": "SFileSetAsyncBudget",
@@ -850,7 +894,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "SFileSetAsyncBudget"
-      ]
+      ],
+      "dh": "1fc14702"
     },
     {
       "name": "SFileSetBasePath",
@@ -873,7 +918,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bd136ce4"
     },
     {
       "name": "SFileSetDataChunkSize",
@@ -891,7 +937,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "05b1c1a3"
     },
     {
       "name": "SFileSetFilePointer",
@@ -911,7 +958,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "58badd5b"
     },
     {
       "name": "SFileSetIoErrorMode",
@@ -929,7 +977,8 @@
       "usedTypes": [
         "int32_t",
         "pfnSFileReadError"
-      ]
+      ],
+      "dh": "12b03c65"
     },
     {
       "name": "SFileSetLocale",
@@ -946,7 +995,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "f4224b54"
     },
     {
       "name": "SFileSetPlatform",
@@ -960,7 +1010,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "SFileSetPlatform"
-      ]
+      ],
+      "dh": "8c158240"
     },
     {
       "name": "SFileUnloadFile",
@@ -979,7 +1030,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ee681e77"
     },
     {
       "name": "SFILE_CompareFileTime1",
@@ -998,7 +1050,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e69ec59d"
     },
     {
       "name": "Unreferenced_004167a0",
@@ -1015,7 +1068,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "a4badbdc"
     },
     {
       "name": "Unreferenced_004167f0",
@@ -1032,7 +1086,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "3a48b276"
     },
     {
       "name": "Unreferenced_00416820",
@@ -1049,7 +1104,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "baeecc61"
     },
     {
       "name": "Unreferenced_00416850",
@@ -1066,7 +1122,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "449083ce"
     },
     {
       "name": "SFILE_CompareFileTime2",
@@ -1085,7 +1142,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ef1ee9b"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004168f0",
@@ -1103,7 +1161,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "cff1ceae"
     },
     {
       "name": "SFILE_CompareFileSize1",
@@ -1122,7 +1181,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8510e4c"
     },
     {
       "name": "SFILE_CompareFileSize2",
@@ -1141,7 +1201,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "41ab708d"
     },
     {
       "name": "SFILE_CompareFileName",
@@ -1160,7 +1221,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cfbb63da"
     },
     {
       "name": "Unreferenced_004169f0",
@@ -1177,7 +1239,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "b9e3e57d"
     },
     {
       "name": "Unreferenced_00416a00",
@@ -1194,7 +1257,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "42d679e8"
     },
     {
       "name": "Unreferenced_00416a10",
@@ -1212,7 +1276,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "1b84cbd3"
     },
     {
       "name": "Unreferenced_00416a20",
@@ -1230,7 +1295,8 @@
       "usedTypes": [
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "049e5590"
     },
     {
       "name": "Unreferenced_00416a30",
@@ -1247,7 +1313,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "b31cbee9"
     },
     {
       "name": "Unreferenced_00416a90",
@@ -1261,7 +1328,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416a90"
-      ]
+      ],
+      "dh": "afd74813"
     },
     {
       "name": "Unreferenced_00416ab0",
@@ -1275,7 +1343,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "Unreferenced_00416ab0"
-      ]
+      ],
+      "dh": "fca8225a"
     },
     {
       "name": "SFILE_InternalReadAligned",
@@ -1303,7 +1372,8 @@
         "D2ArchiveStrc",
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "93207221"
     },
     {
       "name": "SFILE_InternalReadAlignedSector",
@@ -1323,7 +1393,8 @@
         "D2ArchiveStrc",
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a04314da"
     },
     {
       "name": "SFILE_InternalReadUnaligned",
@@ -1347,7 +1418,8 @@
         "D2MPQFileStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c5c4c6a8"
     },
     {
       "name": "SFileAuthenticateArchive",
@@ -1387,7 +1459,8 @@
         "pfnCryptVerifySignatureA",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "00884bc3"
     },
     {
       "name": "Unreferenced_00417850",
@@ -1404,7 +1477,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "00df4d0c"
     },
     {
       "name": "Unreferenced_004178a0",
@@ -1421,7 +1495,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "3b7e5cce"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00417900",
@@ -1439,7 +1514,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "cf83c698"
     },
     {
       "name": "Unreferenced_00417940",
@@ -1456,7 +1532,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "076005d4"
     },
     {
       "name": "Unreferenced_00417990",
@@ -1473,7 +1550,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "bdebc6d5"
     },
     {
       "name": "SFILE_AllocateFileRecord1",
@@ -1490,7 +1568,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "35a9b653"
     },
     {
       "name": "SFILE_FreeFileRecord1",
@@ -1507,7 +1586,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9d61484f"
     },
     {
       "name": "TSList_FILEREC_LinkNode",
@@ -1529,7 +1609,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2f6a8ae0"
     },
     {
       "name": "SFILE_CompareFileRecord1",
@@ -1548,7 +1629,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e6932b02"
     },
     {
       "name": "SFILE_FreeFileRecord2",
@@ -1565,7 +1647,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "c04836a5"
     },
     {
       "name": "SFILE_InsertFileRecordIntoList2",
@@ -1588,7 +1671,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "39fc759e"
     },
     {
       "name": "SFILE_FreeFileRecord3",
@@ -1605,7 +1689,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "159f3ab0"
     },
     {
       "name": "SFILE_InsertFileRecordIntoList3",
@@ -1626,7 +1711,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78fcf13d"
     },
     {
       "name": "SFILE_CompareFileRecord2",
@@ -1645,7 +1731,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2ccf7b49"
     },
     {
       "name": "SFILE_FreeFileRecord4",
@@ -1662,7 +1749,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b6383cf7"
     },
     {
       "name": "SFILE_InsertFileRecordIntoList4",
@@ -1683,7 +1771,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7865d1d0"
     },
     {
       "name": "SFILE_CompareFileRecord3",
@@ -1702,7 +1791,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "865ed52b"
     },
     {
       "name": "TSList_UnlinkNode_00417e90",
@@ -1722,7 +1812,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c13e67c2"
     },
     {
       "name": "SFILE_SearchFileInArchives",
@@ -1751,7 +1842,8 @@
         "D2MPQBlockEntryStrc *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8f7e903f"
     },
     {
       "name": "SFileDdaGetPos",
@@ -1772,7 +1864,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "38d53577"
     },
     {
       "name": "SFileDdaGetVolume",
@@ -1793,7 +1886,8 @@
         "D2MPQFileStrc",
         "D2StormAudioStreamRec",
         "int32_t"
-      ]
+      ],
+      "dh": "0b6f88d4"
     },
     {
       "name": "SFileDdaSetVolume",
@@ -1814,7 +1908,8 @@
         "D2MPQFileStrc",
         "D2StormAudioStreamRec",
         "int32_t"
-      ]
+      ],
+      "dh": "9c691bc6"
     },
     {
       "name": "SFILE_OpenFileInternal",
@@ -1835,7 +1930,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "755d598a"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004183f0",
@@ -1853,7 +1949,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "d211721e"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418430",
@@ -1871,7 +1968,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "8ffba0a6"
     },
     {
       "name": "Unreferenced_00418470",
@@ -1888,7 +1986,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "6f3e1c53"
     },
     {
       "name": "SFILE_InsertFileRecordIntoList5",
@@ -1909,7 +2008,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6be1ec44"
     },
     {
       "name": "TSList_UnlinkNode_00418560",
@@ -1929,7 +2029,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ff57262f"
     },
     {
       "name": "Unreferenced_004185b0",
@@ -1946,7 +2047,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "7bc74dca"
     },
     {
       "name": "TSList_RawNext_004185d0",
@@ -1965,7 +2067,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "787cdf15"
     },
     {
       "name": "TSList_UnlinkNode_004185f0",
@@ -1985,7 +2088,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7be4a31a"
     },
     {
       "name": "TSList_UnlinkNode_00418660",
@@ -2005,7 +2109,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c2b9c80e"
     },
     {
       "name": "TSList_RawNext_004186d0",
@@ -2024,7 +2129,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "2aef76f8"
     },
     {
       "name": "TSList_RawNext_004186f0",
@@ -2043,7 +2149,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "9d6e6b1a"
     },
     {
       "name": "TSList_UnlinkNode_00418710",
@@ -2063,7 +2170,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "09bec48e"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004187c0",
@@ -2081,7 +2189,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "2dc8ae11"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418800",
@@ -2099,7 +2208,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "1c31742f"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418840",
@@ -2117,7 +2227,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "ef3722cf"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418880",
@@ -2135,7 +2246,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "56fadabe"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_004188c0",
@@ -2153,7 +2265,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "cee61fc7"
     },
     {
       "name": "UnlinkAll",
@@ -2173,7 +2286,8 @@
         "TSLink<ARCHIVEREC> *",
         "TSList<ARCHIVEREC, TSGetLink<ARCHIVEREC>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "973d809f"
     },
     {
       "name": "SFILE_CloseStreamHandle2",
@@ -2193,7 +2307,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d9fcf168"
     },
     {
       "name": "UnlinkAll",
@@ -2213,7 +2328,8 @@
         "TSLink<FILEREC> *",
         "TSList<FILEREC, TSGetLink<FILEREC>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a0f5b84"
     },
     {
       "name": "UnlinkAll",
@@ -2233,7 +2349,8 @@
         "TSLink<EVENTREC> *",
         "TSList<EVENTREC, TSGetLink<EVENTREC>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f7e8d3a"
     },
     {
       "name": "SFILE_CloseStreamHandle5",
@@ -2253,7 +2370,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "286b0e61"
     },
     {
       "name": "Unreferenced_00418a40",
@@ -2270,7 +2388,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "124c8163"
     },
     {
       "name": "SFILE_FreeArchiveRecord",
@@ -2289,7 +2408,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "c9a61f9b"
     },
     {
       "name": "SFILE_FreeArchiveRecord1",
@@ -2309,7 +2429,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "0dc6ff5e"
     },
     {
       "name": "SFILE_GetOpenFlags",
@@ -2326,7 +2447,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2ee75a10"
     },
     {
       "name": "SFILE_CloseArchiveByName",
@@ -2345,7 +2467,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8c18425f"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1_Unref_00418ba0",
@@ -2363,7 +2486,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "ec0d5f49"
     },
     {
       "name": "SFILE_CloseAllOpenFiles1",
@@ -2381,7 +2505,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "dc091523"
     },
     {
       "name": "SFILE_CloseAllOpenFiles2",
@@ -2399,7 +2524,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "9ba75b18"
     },
     {
       "name": "SFILE_CloseStream1",
@@ -2420,7 +2546,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a3d2fad"
     },
     {
       "name": "SFILE_CloseStream2",
@@ -2441,7 +2568,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0c20add"
     },
     {
       "name": "SFILE_CloseStream3",
@@ -2462,7 +2590,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac1ccbb2"
     },
     {
       "name": "SFILE_CloseStream4",
@@ -2483,7 +2612,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "95e6d6e2"
     },
     {
       "name": "Unreferenced_00418d80",
@@ -2500,7 +2630,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "a6b9da30"
     },
     {
       "name": "SFILE_CloseStream5",
@@ -2521,7 +2652,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d58896f"
     },
     {
       "name": "Unreferenced_00418de0",
@@ -2538,7 +2670,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "6f050e97"
     },
     {
       "name": "Unreferenced_00418e50",
@@ -2555,7 +2688,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "28331e16"
     },
     {
       "name": "SFILE_DestroyFileRecord",
@@ -2575,7 +2709,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "121727e7"
     },
     {
       "name": "SFILE_AllocFileRecord1",
@@ -2597,7 +2732,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a5a0c75a"
     },
     {
       "name": "SFILE_AllocFileRecord",
@@ -2619,7 +2755,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc427c34"
     },
     {
       "name": "SFILE_AllocFileRecord2",
@@ -2641,7 +2778,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0f096964"
     },
     {
       "name": "Unreferenced_00418ff0",
@@ -2658,7 +2796,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "2dd9d406"
     },
     {
       "name": "SFILE_FreeArchiveRecord2",
@@ -2678,7 +2817,8 @@
         "D2ArchiveStrc",
         "D2ArchiveStrc *",
         "uint8_t"
-      ]
+      ],
+      "dh": "76a6fafb"
     },
     {
       "name": "Unreferenced_00419060",
@@ -2695,7 +2835,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "f43eddc8"
     },
     {
       "name": "SFILE_FreeFileRecord",
@@ -2715,7 +2856,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "D2MPQFileStrc *"
-      ]
+      ],
+      "dh": "8387f04a"
     },
     {
       "name": "SFILE_FreeArchiveRecord3",
@@ -2735,7 +2877,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "dd85d19b"
     },
     {
       "name": "SFILE_EnumFilesInternal",
@@ -2759,7 +2902,8 @@
         "D2ArchiveStrc *",
         "StormLinkStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "3797dea3"
     },
     {
       "name": "SFileOpenFileEx",
@@ -2790,7 +2934,8 @@
         "D2MPQFileStrc",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "d958f8ab"
     },
     {
       "name": "SFILE_AllocFileRecord3",
@@ -2812,7 +2957,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "29fc092f"
     },
     {
       "name": "SFILE_RemoveAsyncRequestFromQueue",
@@ -2833,7 +2979,8 @@
         "StormLinkStrc",
         "StormLinkStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "81d4e512"
     },
     {
       "name": "SFILE_AllocFileRecord4",
@@ -2855,7 +3002,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "637c3c27"
     },
     {
       "name": "SFILE_IssueRequest",
@@ -2882,7 +3030,8 @@
         "IDirectSoundBuffer",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5645d523"
     },
     {
       "name": "SFileCloseFile",
@@ -2904,7 +3053,8 @@
         "D2MPQFileStrc",
         "D2MPQFileStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "32abc98e"
     },
     {
       "name": "SFileOpenFile",
@@ -2925,7 +3075,8 @@
         "D2MPQFileStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8c29949"
     },
     {
       "name": "AUDIOSTREAM_Destructor",
@@ -2947,7 +3098,8 @@
         "D2StormAudioStreamRec *",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "2d7e1cb2"
     },
     {
       "name": "SFILE_DeleteAudioStream",
@@ -2967,7 +3119,8 @@
       "usedTypes": [
         "D2StormAudioStreamRec",
         "uint8_t"
-      ]
+      ],
+      "dh": "a41ab815"
     },
     {
       "name": "SFileCloseArchive",
@@ -2990,7 +3143,8 @@
       "usedTypes": [
         "D2ArchiveStrc",
         "D2ArchiveStrc *"
-      ]
+      ],
+      "dh": "1bacab78"
     },
     {
       "name": "SFILE_AudioStreamListDeleteNode",
@@ -3010,7 +3164,8 @@
       "usedTypes": [
         "D2StormAudioStreamRec",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "7f8b17b9"
     },
     {
       "name": "SFILE_ReleaseAudioStream",
@@ -3030,7 +3185,8 @@
       "usedTypes": [
         "D2StormAudioStreamRec",
         "uint32_t"
-      ]
+      ],
+      "dh": "4dfea73c"
     },
     {
       "name": "SFILE_CheckAudioStreams",
@@ -3054,7 +3210,8 @@
         "SFILE_CheckAudioStreams_Slotmc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8fe0dbe4"
     },
     {
       "name": "SFileDdaDestroy",
@@ -3075,7 +3232,8 @@
         "D2StormAudioStreamRec",
         "D2StormAudioStreamRec *",
         "uint32_t"
-      ]
+      ],
+      "dh": "c88c9601"
     },
     {
       "name": "SFILE_ReleaseAsyncRequest",
@@ -3099,7 +3257,8 @@
         "StormLinkStrc *",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "8c777dcb"
     },
     {
       "name": "SFILE_DeleteAsyncRequest",
@@ -3119,7 +3278,8 @@
       "usedTypes": [
         "D2StormAsyncOpStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "cf47a50d"
     },
     {
       "name": "SFileDestroy",
@@ -3146,7 +3306,8 @@
       "usedTypes": [
         "D2StormAsyncOpStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "d2e77103"
     },
     {
       "name": "SFILE_DeleteAsyncRequestGetNext",
@@ -3166,7 +3327,8 @@
       "usedTypes": [
         "D2StormAsyncOpStrc",
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "ff3a92f1"
     },
     {
       "name": "SFILE_CancelRequest",
@@ -3191,7 +3353,8 @@
         "StormLinkStrc",
         "StormLinkStrc *",
         "uint32_t"
-      ]
+      ],
+      "dh": "a6bd3341"
     },
     {
       "name": "SFILE_SelectAsyncRequest",
@@ -3213,7 +3376,8 @@
         "D2StormAsyncOpStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "69213809"
     },
     {
       "name": "SFILE_CdThreadProc",
@@ -3249,7 +3413,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "876f8a81"
     },
     {
       "name": "SFILE_CreateCdThread",
@@ -3263,7 +3428,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "SFILE_CreateCdThread"
-      ]
+      ],
+      "dh": "b211a5cb"
     },
     {
       "name": "Unreferenced_0041a8d0",
@@ -3278,7 +3444,8 @@
       "calledFunctions": [
         "Unreferenced_0041a8d0",
         "SFILE_CreateCdThread"
-      ]
+      ],
+      "dh": "affcaf6c"
     },
     {
       "name": "SFILE_SetRequestUrgentByBuffer",
@@ -3295,7 +3462,8 @@
       ],
       "usedTypes": [
         "D2StormAsyncOpStrc"
-      ]
+      ],
+      "dh": "8d43d8ab"
     },
     {
       "name": "SFILE_CancelAsyncRequestNoReturn",
@@ -3311,7 +3479,8 @@
         "SFILE_CancelAsyncRequestNoReturn",
         "SErrSetLastError",
         "SFILE_CancelRequest"
-      ]
+      ],
+      "dh": "9e4464ca"
     },
     {
       "name": "SFILE_CancelAsyncRequestWithStatus",
@@ -3327,7 +3496,8 @@
         "SFILE_CancelAsyncRequestWithStatus",
         "SErrSetLastError",
         "SFILE_CancelRequest"
-      ]
+      ],
+      "dh": "9fdb088d"
     },
     {
       "name": "SFileDdaEnd",
@@ -3351,7 +3521,8 @@
         "D2StormAudioStreamRec",
         "D2StormAudioStreamRec *",
         "uint32_t"
-      ]
+      ],
+      "dh": "cdb8d838"
     },
     {
       "name": "SFILE_SetRequestPriorityByBuffer",
@@ -3368,7 +3539,8 @@
         "SFILE_SetRequestPriorityByBuffer",
         "SErrSetLastError",
         "SetEvent"
-      ]
+      ],
+      "dh": "ec8f5c32"
     },
     {
       "name": "SFileReadFileEx2",
@@ -3402,7 +3574,8 @@
         "LPOVERLAPPED",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2ce089c3"
     },
     {
       "name": "SFileLoadFileEx2",
@@ -3431,7 +3604,8 @@
         "uint32_t",
         "uint8_t",
         "void *"
-      ]
+      ],
+      "dh": "44f83e0e"
     },
     {
       "name": "SFileReadFile",
@@ -3451,7 +3625,8 @@
         "D2MPQFileStrc",
         "LPOVERLAPPED",
         "uint32_t"
-      ]
+      ],
+      "dh": "3e8fd3c0"
     },
     {
       "name": "SFileReadFileEx",
@@ -3472,7 +3647,8 @@
         "D2StormAsyncCompletionStrc",
         "LPOVERLAPPED",
         "uint32_t"
-      ]
+      ],
+      "dh": "cfacc77f"
     },
     {
       "name": "SFILE_ReadAdditionalAttributes",
@@ -3499,7 +3675,8 @@
         "D2MPQFileStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f0e92fd7"
     },
     {
       "name": "SFILE_FindChunk",
@@ -3521,7 +3698,8 @@
         "D2MPQFileStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "83967dfd"
     },
     {
       "name": "SFileDdaBeginEx",
@@ -3554,7 +3732,8 @@
         "WAVEFORMATEX",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c1e643c"
     },
     {
       "name": "SFileLoadFile",
@@ -3576,7 +3755,8 @@
         "LPOVERLAPPED",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "1f89a581"
     },
     {
       "name": "SFileLoadFileEx",
@@ -3597,7 +3777,8 @@
         "LPOVERLAPPED",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "d8786718"
     },
     {
       "name": "SFILE_s_OpenArchive",
@@ -3633,7 +3814,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "81c690b4"
     },
     {
       "name": "SFileDdaBegin",
@@ -3652,7 +3834,8 @@
       "usedTypes": [
         "D2MPQFileStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7ebe945"
     },
     {
       "name": "SFileOpenArchive",
@@ -3682,7 +3865,8 @@
         "D2ArchiveStrc *",
         "D2MPQHeaderStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "82b9faa5"
     },
     {
       "name": "SFileOpenFileAsArchive",
@@ -3715,7 +3899,8 @@
         "D2MPQFileStrc *",
         "D2MPQHeaderStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed474445"
     },
     {
       "name": "CrcBuffer",
@@ -3734,7 +3919,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "080df563"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9e98",
@@ -3755,7 +3941,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "986b4a32"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9ec8",
@@ -3776,7 +3963,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "78e297dd"
     },
     {
       "name": "StaticInit_gMpqArchiveList",
@@ -3791,7 +3979,8 @@
       "calledFunctions": [
         "StaticInit_gMpqArchiveList",
         "atexit"
-      ]
+      ],
+      "dh": "c80ff2e6"
     },
     {
       "name": "StaticInit_gSFileAsyncReqQueue",
@@ -3806,7 +3995,8 @@
       "calledFunctions": [
         "StaticInit_gSFileAsyncReqQueue",
         "atexit"
-      ]
+      ],
+      "dh": "fe323cf8"
     },
     {
       "name": "StaticInit_CriticalSection_00779068",
@@ -3821,7 +4011,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_00779068",
         "atexit"
-      ]
+      ],
+      "dh": "642ff023"
     },
     {
       "name": "StaticInit_gSFileOpenFileList",
@@ -3836,7 +4027,8 @@
       "calledFunctions": [
         "StaticInit_gSFileOpenFileList",
         "atexit"
-      ]
+      ],
+      "dh": "27641dc1"
     },
     {
       "name": "StaticInit_gSFileAudioStreamList",
@@ -3851,7 +4043,8 @@
       "calledFunctions": [
         "StaticInit_gSFileAudioStreamList",
         "atexit"
-      ]
+      ],
+      "dh": "947a5464"
     },
     {
       "name": "StaticInit_gSFileStreamRecordList",
@@ -3866,7 +4059,8 @@
       "calledFunctions": [
         "StaticInit_gSFileStreamRecordList",
         "atexit"
-      ]
+      ],
+      "dh": "ea0b0a05"
     },
     {
       "name": "StaticInit_CriticalSection_00779080",
@@ -3881,7 +4075,8 @@
       "calledFunctions": [
         "StaticInit_CriticalSection_00779080",
         "atexit"
-      ]
+      ],
+      "dh": "5b45d55a"
     },
     {
       "name": "StaticFini_CriticalSection_00779068",
@@ -3895,7 +4090,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "StaticFini_CriticalSection_00779068"
-      ]
+      ],
+      "dh": "48c18274"
     },
     {
       "name": "StaticFini_CriticalSection_00779080",
@@ -3909,7 +4105,8 @@
       "namespace": "Storm::Source::SFile",
       "calledFunctions": [
         "StaticFini_CriticalSection_00779080"
-      ]
+      ],
+      "dh": "d80d3465"
     },
     {
       "name": "StaticFini_gMpqArchiveList",
@@ -3924,7 +4121,8 @@
       "calledFunctions": [
         "StaticFini_gMpqArchiveList",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "b2a72db8"
     },
     {
       "name": "StaticFini_gSFileAsyncReqQueue",
@@ -3939,7 +4137,8 @@
       "calledFunctions": [
         "StaticFini_gSFileAsyncReqQueue",
         "SFILE_CloseStreamHandle2"
-      ]
+      ],
+      "dh": "7f2ae61d"
     },
     {
       "name": "StaticFini_gSFileOpenFileList",
@@ -3954,7 +4153,8 @@
       "calledFunctions": [
         "StaticFini_gSFileOpenFileList",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "388b745a"
     },
     {
       "name": "StaticFini_gSFileAudioStreamList",
@@ -3969,7 +4169,8 @@
       "calledFunctions": [
         "StaticFini_gSFileAudioStreamList",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "24001f5e"
     },
     {
       "name": "StaticFini_gSFileStreamRecordList",
@@ -3984,7 +4185,8 @@
       "calledFunctions": [
         "StaticFini_gSFileStreamRecordList",
         "SFILE_CloseStreamHandle5"
-      ]
+      ],
+      "dh": "3ebe5197"
     }
   ]
 }

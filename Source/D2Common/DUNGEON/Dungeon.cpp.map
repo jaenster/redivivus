@@ -19,7 +19,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "d22a99bc"
     },
     {
       "name": "AllocAct",
@@ -49,7 +50,8 @@
         "fAutoMap",
         "fTownAutoMap",
         "int32_t"
-      ]
+      ],
+      "dh": "eb55ff6c"
     },
     {
       "name": "GetMemPoolFromAct",
@@ -67,7 +69,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "d0352daf"
     },
     {
       "name": "DRLGROOM_SetWarpTileSelect",
@@ -89,7 +92,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3623e9f3"
     },
     {
       "name": "TakeStairsInternal",
@@ -114,7 +118,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "ae91263a"
     },
     {
       "name": "DUNGEON_GetLvlWarpTxtForWarpUnit",
@@ -138,7 +143,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4fc78b05"
     },
     {
       "name": "DRLGROOM_GetFloorTilesFromRoom",
@@ -156,7 +162,8 @@
       "usedTypes": [
         "D2DrlgTileDataStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "e1ce7b79"
     },
     {
       "name": "DRLGROOM_GetWallTilesFromRoom",
@@ -178,7 +185,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b1572c5b"
     },
     {
       "name": "DRLGROOM_GetRoofTilesFromRoom",
@@ -200,7 +208,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cb91e8ef"
     },
     {
       "name": "GetTileDataFromAct",
@@ -218,7 +227,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "D2DrlgTileDataStrc"
-      ]
+      ],
+      "dh": "2b6d0abc"
     },
     {
       "name": "DRLGROOM_GetRoomCoordinates",
@@ -240,7 +250,8 @@
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1dee55ac"
     },
     {
       "name": "DRLGROOM_GetAdjacentRoomsList",
@@ -262,7 +273,8 @@
         "D2RoomStrc",
         "D2RoomStrc * *",
         "int32_t"
-      ]
+      ],
+      "dh": "243465da"
     },
     {
       "name": "DRLGROOM_AllocRoomStrc",
@@ -282,7 +294,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "0f2b7ec5"
     },
     {
       "name": "DRLGROOM_UpdateRoomsNearAndCount",
@@ -309,7 +322,8 @@
         "D2RoomStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7775dc28"
     },
     {
       "name": "AllocRoom",
@@ -340,7 +354,8 @@
         "D2RoomExStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "314e52c9"
     },
     {
       "name": "DoRoomsTouchOrOverlap",
@@ -362,7 +377,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7a6521e2"
     },
     {
       "name": "AreTileCoordinatesInsideRoom",
@@ -383,7 +399,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4dea5c16"
     },
     {
       "name": "DRLGROOM_GetRoomShape",
@@ -404,7 +421,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5ad6dd7c"
     },
     {
       "name": "FindRoomByTileCoordinates",
@@ -423,7 +441,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a58fb6d5"
     },
     {
       "name": "GetAdjacentRoomByCoordinates",
@@ -446,7 +465,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "36b3830c"
     },
     {
       "name": "CallRoomCallback",
@@ -469,7 +489,8 @@
         "ROOMCALLBACKFN",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b732ff3"
     },
     {
       "name": "DRLGROOM_GetMinimapRect",
@@ -491,7 +512,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c0646d56"
     },
     {
       "name": "GetSubtileRect",
@@ -513,7 +535,8 @@
         "D2RoomStrc",
         "RECT",
         "int32_t"
-      ]
+      ],
+      "dh": "6610958f"
     },
     {
       "name": "GetRGB_IntensityFromRoom",
@@ -531,7 +554,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "bbb85def"
     },
     {
       "name": "FindRoomBySubtileCoordinates",
@@ -550,7 +574,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b7205adb"
     },
     {
       "name": "AreSubtileCoordinatesInsideRoom",
@@ -571,7 +596,8 @@
       "usedTypes": [
         "D2DrlgCoordsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2f905d0c"
     },
     {
       "name": "FindActSpawnLocation",
@@ -595,7 +621,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "e1f11828"
     },
     {
       "name": "DRLGROOM_GetFirstUnitInRoom",
@@ -618,7 +645,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c3a484f"
     },
     {
       "name": "DRLGROOM_IncreaseAlliedCount",
@@ -635,7 +663,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "3beff321"
     },
     {
       "name": "GetAlliedCountFromRoom",
@@ -653,7 +682,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "97708e0b"
     },
     {
       "name": "DRLGROOM_DecreaseAlliedCount",
@@ -674,7 +704,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "208c4265"
     },
     {
       "name": "DRLGROOM_GetUnitListFromRoom",
@@ -696,7 +727,8 @@
         "D2RoomStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "41d42fb7"
     },
     {
       "name": "DRLGROOM_GetUnitUpdateListFromRoom",
@@ -718,7 +750,8 @@
         "D2RoomStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "9ea1007e"
     },
     {
       "name": "GetPresetUnitsFromRoom",
@@ -741,7 +774,8 @@
         "D2PresetUnitStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "48666774"
     },
     {
       "name": "DRLGROOM_GetCollisionGridFromRoom",
@@ -763,7 +797,8 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "549f0610"
     },
     {
       "name": "DRLGROOM_SetCollisionGridInRoom",
@@ -785,7 +820,8 @@
         "D2RoomCollisionGridStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c136d977"
     },
     {
       "name": "AddRoomData",
@@ -810,7 +846,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "b5d6eba8"
     },
     {
       "name": "RemoveRoomData",
@@ -835,7 +872,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "fd194aa1"
     },
     {
       "name": "DRLGROOM_SwapRoomDataForRoomEx",
@@ -854,7 +892,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "239d8172"
     },
     {
       "name": "DRLGROOM_GetRoomFromActAndCoord",
@@ -877,7 +916,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a1923fde"
     },
     {
       "name": "DRLGROOM_GetRoomFromAct",
@@ -899,7 +939,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9b891b12"
     },
     {
       "name": "DRLGROOM_GetLevelIdFromRoom",
@@ -918,7 +959,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "55dac136"
     },
     {
       "name": "GetWarpDestinationLevel",
@@ -937,7 +979,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "d2247c12"
     },
     {
       "name": "GetLevelIdFromPopulatedRoom",
@@ -956,7 +999,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "79c4c531"
     },
     {
       "name": "HasWaypoint",
@@ -977,7 +1021,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "92011100"
     },
     {
       "name": "GetPickedLevelPrestFilePathFromRoom",
@@ -995,7 +1040,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "7613bff9"
     },
     {
       "name": "AllocDrlgDelete",
@@ -1016,7 +1062,8 @@
         "D2RoomStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "16bbe375"
     },
     {
       "name": "DRLGROOM_FreeDrlgDelete",
@@ -1040,7 +1087,8 @@
         "D2PoolManagerStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cdfac809"
     },
     {
       "name": "GetDrlgDeleteFromRoom",
@@ -1062,7 +1110,8 @@
         "D2DrlgDeleteStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d308005b"
     },
     {
       "name": "DRLGROOM_GetActMiscSubA0FromAct",
@@ -1085,7 +1134,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "85426dd9"
     },
     {
       "name": "DRLGROOM_GetActMiscSubA0FromRoom",
@@ -1108,7 +1158,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3c0a1957"
     },
     {
       "name": "DRLGROOM_TestRoomCanUntile",
@@ -1131,7 +1182,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2ded7a91"
     },
     {
       "name": "Is0x44Above2",
@@ -1151,7 +1203,8 @@
         "D2RoomStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "78c57cec"
     },
     {
       "name": "DRLGROOM_AreAllNearRoomsActive",
@@ -1175,7 +1228,8 @@
         "D2RoomStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f8701be8"
     },
     {
       "name": "DRLGROOM_IsUnitInactiveProcessed",
@@ -1196,7 +1250,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bacd3711"
     },
     {
       "name": "DRLGROOM_SetUnitInactiveProcessed",
@@ -1217,7 +1272,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5a9f215e"
     },
     {
       "name": "DRLGROOM_ValidateClientList",
@@ -1240,7 +1296,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4f1b28c8"
     },
     {
       "name": "DRLGROOM_SortClientList",
@@ -1265,7 +1322,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1c2786c3"
     },
     {
       "name": "DRLGROOM_AddClientToRoom",
@@ -1292,7 +1350,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "54782ad3"
     },
     {
       "name": "DRLGROOM_RemoveClientFromRoom",
@@ -1318,7 +1377,8 @@
         "D2ClientStrc *",
         "D2RoomStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "448d2ac1"
     },
     {
       "name": "DRLGROOM_RemoveClientFromRoom_HaltTail",
@@ -1335,7 +1395,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "63965364"
     },
     {
       "name": "DRLGROOM_GetIdleTicks",
@@ -1356,7 +1417,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1cac48c2"
     },
     {
       "name": "DRLGROOM_HasUniqueClient",
@@ -1374,7 +1436,8 @@
       "usedTypes": [
         "D2ClientStrc *",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "022c252d"
     },
     {
       "name": "FreeRoom",
@@ -1397,7 +1460,8 @@
         "D2PoolManagerStrc",
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b5c0271e"
     },
     {
       "name": "DUNGEON_ClearRoomTiles",
@@ -1417,7 +1481,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "d2e13ea5"
     },
     {
       "name": "DRLGROOM_RemoveRoomFromAct",
@@ -1443,7 +1508,8 @@
         "D2RoomStrc *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "872a3cc4"
     },
     {
       "name": "DRLGROOM_SwapActiveRoomExBetweenLevels",
@@ -1462,7 +1528,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "dbe307a8"
     },
     {
       "name": "FreeDungeons",
@@ -1480,7 +1547,8 @@
       ],
       "usedTypes": [
         "D2DrlgActStrc"
-      ]
+      ],
+      "dh": "96e6998c"
     },
     {
       "name": "DRLGROOM_CheckLOSDraw",
@@ -1499,7 +1567,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bbdea2a0"
     },
     {
       "name": "DRLGENV_GetEnvironmentFromAct",
@@ -1521,7 +1590,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6edcb10a"
     },
     {
       "name": "GetDrlgFromAct",
@@ -1543,7 +1613,8 @@
         "D2DrlgActStrc",
         "D2DrlgStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "798da48b"
     },
     {
       "name": "GetInitSeedFromAct",
@@ -1561,7 +1632,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa805dec"
     },
     {
       "name": "GetRoomExFromRoom",
@@ -1579,7 +1651,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "0144643d"
     },
     {
       "name": "IsTownLevelId",
@@ -1597,7 +1670,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "316c9498"
     },
     {
       "name": "DRLGROOM_IsRoomInTown",
@@ -1617,7 +1691,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "10cc6261"
     },
     {
       "name": "Return0",
@@ -1638,7 +1713,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "9bd9426e"
     },
     {
       "name": "DRLGROOM_IsUpdateLocked",
@@ -1655,7 +1731,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "40c92b94"
     },
     {
       "name": "GetTownLevelIdFromActNo",
@@ -1677,7 +1754,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6a64b3dc"
     },
     {
       "name": "DRLGROOM_HasOutdoorBorder",
@@ -1700,7 +1778,8 @@
         "D2RoomStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97ed0732"
     },
     {
       "name": "GetNumberOfPopulatedRoomsInLevel",
@@ -1720,7 +1799,8 @@
         "D2DrlgActStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "e40c4e77"
     },
     {
       "name": "GetWarpCoordinatesFromRoom",
@@ -1743,7 +1823,8 @@
         "D2DrlgLevelWarpCoordinatesStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a8cab3b8"
     },
     {
       "name": "UpdateWarpRoomSelect",
@@ -1766,7 +1847,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "a3e1f52c"
     },
     {
       "name": "UpdateWarpRoomDeselect",
@@ -1789,7 +1871,8 @@
         "D2RoomStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "05b7e78f"
     },
     {
       "name": "UpdatePops",
@@ -1810,7 +1893,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aa478266"
     },
     {
       "name": "GetTombStoneTileCoords",
@@ -1828,7 +1912,8 @@
       "usedTypes": [
         "D2CoordStrc *",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "e802715a"
     },
     {
       "name": "DRLGROOM_GetCoordListFromSubtilePos",
@@ -1848,7 +1933,8 @@
         "D2RoomCoordListStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "001c6ebf"
     },
     {
       "name": "GetCoordList",
@@ -1866,7 +1952,8 @@
       "usedTypes": [
         "D2RoomCoordListStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "8abeb2fa"
     },
     {
       "name": "GetPortalLevelArrayFromPortalFlags",
@@ -1892,7 +1979,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e8a75415"
     },
     {
       "name": "GetPortalFlagFromLevelId",
@@ -1911,7 +1999,8 @@
       "usedTypes": [
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "54280b61"
     },
     {
       "name": "GetTownLevelIdFromAct",
@@ -1933,7 +2022,8 @@
         "D2DrlgActStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "f45c2c9d"
     },
     {
       "name": "GetHoradricStaffTombLevelId",
@@ -1951,7 +2041,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "796218b9"
     },
     {
       "name": "ToggleHasPortalFlagRoom",
@@ -1969,7 +2060,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "bdb6c8f1"
     },
     {
       "name": "AnimateTiles",
@@ -1986,7 +2078,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "cf83bfdc"
     },
     {
       "name": "InitRoomTileAnimation",
@@ -2006,7 +2099,8 @@
         "D2DrlgActStrc",
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "720a7ab2"
     },
     {
       "name": "SetActCallbackFunc",
@@ -2028,7 +2122,8 @@
         "ACTCALLBACKFN",
         "D2DrlgActStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ee905bad"
     },
     {
       "name": "SaveKilledUnitGUID",
@@ -2046,7 +2141,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bc531e25"
     },
     {
       "name": "FreeAct",
@@ -2072,7 +2168,8 @@
         "D2DrlgActStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "449b6cce"
     },
     {
       "name": "SpawnUnit",
@@ -2101,7 +2198,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4d365911"
     },
     {
       "name": "GetGridIndex",
@@ -2121,7 +2219,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "af3594d2"
     },
     {
       "name": "DRLGROOMEX_InitRoomExData",
@@ -2144,7 +2243,8 @@
         "D2DrlgStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "3657e5e1"
     },
     {
       "name": "DRLGROOMEX_MoveToActivationList",
@@ -2162,7 +2262,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "36a305f6"
     },
     {
       "name": "DRLGROOMEX_SetPriority0",
@@ -2180,7 +2281,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "23db4d7d"
     },
     {
       "name": "DRLGROOMEX_SetPriority1",
@@ -2198,7 +2300,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "637824e5"
     },
     {
       "name": "DRLGROOMEX_SetPriority3",
@@ -2216,7 +2319,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "a28cf4b7"
     },
     {
       "name": "DUNGEON_ActivationHandler0_SetRoomExPriority0",
@@ -2234,7 +2338,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "68c30466"
     },
     {
       "name": "DRLGROOMEX_ActivateRoomEx",
@@ -2255,7 +2360,8 @@
       "usedTypes": [
         "D2DrlgStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "4ada1167"
     },
     {
       "name": "DRLGROOMEX_InitTileDataAndPresets",
@@ -2275,7 +2381,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "9ac3c3ed"
     },
     {
       "name": "InitNearRooms",
@@ -2297,7 +2404,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9646c8d5"
     },
     {
       "name": "AddRoomDataActual",
@@ -2318,7 +2426,8 @@
         "D2RoomExStrc",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c546aebb"
     },
     {
       "name": "DRLGROOMEX_RecalcPriority",
@@ -2338,7 +2447,8 @@
         "D2RoomExStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9c7c44f2"
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case4",
@@ -2356,7 +2466,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "6472b5cc"
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case5",
@@ -2374,7 +2485,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "2ab1630c"
     },
     {
       "name": "DRLGROOMEX_RecalcPriority_Case6",
@@ -2392,7 +2504,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "511b43c0"
     },
     {
       "name": "ClearRoomExIfFlag0x01",
@@ -2412,7 +2525,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "3c0f6f3d"
     },
     {
       "name": "DRLGROOMEX_PropagateDecRefCount",
@@ -2430,7 +2544,8 @@
       "usedTypes": [
         "D2RoomExStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "3315ab56"
     },
     {
       "name": "AddRoomDataPrepare",
@@ -2453,7 +2568,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "442085a1"
     },
     {
       "name": "DRLGROOMEX_RemoveRoomDataPrepare",
@@ -2477,7 +2593,8 @@
         "D2RoomExStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "fb51e07a"
     },
     {
       "name": "DRLGROOMEX_SwapActiveRoomEx",
@@ -2496,7 +2613,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "403dfe8e"
     },
     {
       "name": "InitRoomEx",
@@ -2521,7 +2639,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "f33ea5fd"
     },
     {
       "name": "DRLGROOMEX_GetRoomByCoords",
@@ -2543,7 +2662,8 @@
         "D2RoomExStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "19539889"
     },
     {
       "name": "DRLGACTMISC_InitializeSubA0",
@@ -2562,7 +2682,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "c85c2022"
     },
     {
       "name": "DRLGROOMEX_GetCurrentSubA0",
@@ -2581,7 +2702,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "f1a5cbc6"
     },
     {
       "name": "DRLGROOMEX_GetSubA0ForRoom",
@@ -2600,7 +2722,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "708203be"
     },
     {
       "name": "DRLGROOM_GetActMiscCacheInfo",
@@ -2617,7 +2740,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a2970245"
     },
     {
       "name": "DRLGROOMEX_UpdateClientRoomExActivation",
@@ -2638,7 +2762,8 @@
         "D2DrlgStrc",
         "D2RoomExStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "7797d9f7"
     },
     {
       "name": "LEVEL_IsNotTownAndNotArreatSummit",
@@ -2656,7 +2781,8 @@
       ],
       "usedTypes": [
         "eD2LevelId"
-      ]
+      ],
+      "dh": "56a6623f"
     },
     {
       "name": "DRLGROOMEX_TestCanUntile",
@@ -2682,7 +2808,8 @@
         "D2RoomExStrc",
         "eD2LevelId",
         "int32_t"
-      ]
+      ],
+      "dh": "8db444ca"
     },
     {
       "name": "ToggleHasPortalFlag",
@@ -2699,7 +2826,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "042dc7e4"
     },
     {
       "name": "Get0x44FromRoomEx",
@@ -2716,7 +2844,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "8788295c"
     },
     {
       "name": "DRLGROOMEX_DemoteAndActivate",
@@ -2735,7 +2864,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "a7f34813"
     },
     {
       "name": "DRLGROOMEX_DemoteIfReady",
@@ -2754,7 +2884,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "f4d1ac98"
     },
     {
       "name": "thunk_DRLGROOMEX_ActivateRoomEx",
@@ -2784,7 +2915,8 @@
       "usedTypes": [
         "D2DrlgEnvironmentStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "88d71adc"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "2555b208"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca103",
@@ -41,7 +42,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "0e1d904c"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e4825079"
     },
     {
       "name": "Skills_CltStFunc_SetParam1Zero",
@@ -43,7 +44,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "7e74a80e"
     },
     {
       "name": "Skills_CltStFunc_CheckAmmoFindClosestTarget",
@@ -76,7 +78,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "e0f63c18"
     },
     {
       "name": "Skills_CltStFunc_FindClosestMeleeTargetSetParams",
@@ -111,7 +114,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f9b91fd7"
     },
     {
       "name": "Skills_CltStFunc_FindMeleeTargetSetCalcParam",
@@ -144,7 +148,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "19cca62e"
     },
     {
       "name": "Skills_CltDoFunc_Ama_PlayDoSound",
@@ -165,7 +170,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "d6be669e"
     },
     {
       "name": "Skills_CltDoFunc_Ama_MultiShotArrows",
@@ -197,7 +203,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b2ff9597"
     },
     {
       "name": "Skills_CltDoFunc_Ama_GuidedArrow",
@@ -227,7 +234,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "66a5c3eb"
     },
     {
       "name": "Skills_CltDoFunc_Ama_LinearMissileSpray",
@@ -256,7 +264,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "8dbe548e"
     },
     {
       "name": "Skills_CltDoFunc_Ama_Strafe",
@@ -301,7 +310,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8590159d"
     },
     {
       "name": "Skills_CltDoFunc_Ama_Fend",
@@ -344,7 +354,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "20f12e53"
     },
     {
       "name": "Skills_CltDoFunc_Ama_PiercingShot",
@@ -376,7 +387,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ed92298"
     }
   ]
 }

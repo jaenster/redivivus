@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8a434c59"
     },
     {
       "name": "NET_D2GS_SERVER_LogSentPacket",
@@ -37,7 +38,8 @@
       "usedTypes": [
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "957e7268"
     },
     {
       "name": "NET_D2GS_SERVER_CompressPacket",
@@ -55,7 +57,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e25e3481"
     },
     {
       "name": "NET_D2GS_CLIENT_DecompressPacket",
@@ -74,7 +77,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7fd92628"
     }
   ]
 }

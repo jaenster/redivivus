@@ -23,7 +23,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ee746cea"
     },
     {
       "name": "DRLGENV_UpdateLightColor",
@@ -43,7 +44,8 @@
         "D2DrlgEnvironmentStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9199367e"
     },
     {
       "name": "DRLGENV_InitEnvironmentCycle",
@@ -60,7 +62,8 @@
       ],
       "usedTypes": [
         "D2DrlgEnvironmentStrc"
-      ]
+      ],
+      "dh": "eef715a1"
     },
     {
       "name": "DRLGENV_AllocEnvironment",
@@ -85,7 +88,8 @@
         "D2DrlgEnvironmentStrc",
         "D2PoolManagerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "1e3ebd7e"
     },
     {
       "name": "DRLGENV_FreeEnvironment",
@@ -104,7 +108,8 @@
       "usedTypes": [
         "D2DrlgEnvironmentStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "4cc19bdf"
     },
     {
       "name": "DRLGENV_UpdateEnvironmentCycle",
@@ -122,7 +127,8 @@
       "usedTypes": [
         "D2DrlgActEnvironmentData",
         "D2DrlgEnvironmentStrc"
-      ]
+      ],
+      "dh": "ba977b95"
     },
     {
       "name": "DRLGENV_UpdatePeriodOfDay",
@@ -148,7 +154,8 @@
         "D2DrlgEnvironmentStrc",
         "D2RoomStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7cab9b3e"
     },
     {
       "name": "DRLGENV_UpdateCycleIndex",
@@ -169,7 +176,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cab87199"
     },
     {
       "name": "DRLGENV_GetLightColorFromAct",
@@ -189,7 +197,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "35ba7caa"
     },
     {
       "name": "DRLGENV_GetIntensityFromAct",
@@ -209,7 +218,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7c72a89a"
     },
     {
       "name": "DRLGENV_GetPeriodOfDayFromAct",
@@ -229,7 +239,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bd23f718"
     },
     {
       "name": "DRLGENV_GetUnusedMember",
@@ -249,7 +260,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a23b7846"
     },
     {
       "name": "DRLGENV_NextEnvCycle",
@@ -274,7 +286,8 @@
         "D2DrlgEnvironmentStrc",
         "D2RoomStrc",
         "eAct"
-      ]
+      ],
+      "dh": "b53dae0e"
     },
     {
       "name": "DRLGENV_GetCycleIndexFromAct",
@@ -294,7 +307,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2c364ad7"
     },
     {
       "name": "DRLGENV_InitializeEnvironment",
@@ -324,7 +338,8 @@
         "D2RoomStrc",
         "eAct",
         "int32_t"
-      ]
+      ],
+      "dh": "b80c4a13"
     },
     {
       "name": "DRLGENV_GetCycleIndex_Ticks_EclipseFromAct",
@@ -343,7 +358,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc"
-      ]
+      ],
+      "dh": "1d00061f"
     },
     {
       "name": "DRLGENV_GetStatistics",
@@ -362,7 +378,8 @@
       "usedTypes": [
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc"
-      ]
+      ],
+      "dh": "f68f7e1e"
     },
     {
       "name": "DRLGENV_GetTimeRateFromAct",
@@ -382,7 +399,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "3373b82b"
     },
     {
       "name": "DRLGENV_SetNextTimeRate",
@@ -408,7 +426,8 @@
         "D2RoomStrc",
         "eAct",
         "uint32_t"
-      ]
+      ],
+      "dh": "d0b0b0c0"
     },
     {
       "name": "DRLGENV_TaintedSunBegin",
@@ -432,7 +451,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "eAct"
-      ]
+      ],
+      "dh": "df2ff47b"
     },
     {
       "name": "DRLGENV_TaintedSunEnd",
@@ -454,7 +474,8 @@
         "D2DrlgActStrc",
         "D2DrlgEnvironmentStrc",
         "eAct"
-      ]
+      ],
+      "dh": "53b37c9f"
     }
   ]
 }

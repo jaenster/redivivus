@@ -28,7 +28,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "ebffb705"
     },
     {
       "name": "thunk_PATH_SnapPositionToTile",
@@ -46,7 +47,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "6f74fbf2"
     },
     {
       "name": "PATH_SetTargetAndCalculate",
@@ -67,7 +69,8 @@
         "D2DynamicPathStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7196ee80"
     },
     {
       "name": "Unreferenced_004804d0",
@@ -82,7 +85,8 @@
       "calledFunctions": [
         "Unreferenced_004804d0",
         "GetPing"
-      ]
+      ],
+      "dh": "dd94d169"
     },
     {
       "name": "PATH_MoveUnitToPoint",
@@ -120,7 +124,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "60413702"
     },
     {
       "name": "PATH_SetTargetUnitAndCalculate",
@@ -144,7 +149,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4aa4a18e"
     },
     {
       "name": "PATH_StepAndCreateTrailEffects",
@@ -169,7 +175,8 @@
         "D2UnitStrc",
         "eD2States",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc6910d5"
     },
     {
       "name": "CLIENT_UpdateUnitFrame",
@@ -203,7 +210,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "041b6eab"
     }
   ]
 }

@@ -25,7 +25,8 @@
         "D2GfxInfoStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "40867bce"
     },
     {
       "name": "WALL2_DrawDebugUnitDiamond",
@@ -54,7 +55,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0a18bb04"
     },
     {
       "name": "DRAW_WORLD_IsUnitInLineOfSight",
@@ -80,7 +82,8 @@
         "eD2LevelId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "782caae4"
     },
     {
       "name": "DRAW_WORLD_Unit",
@@ -124,7 +127,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a420b4f"
     },
     {
       "name": "WALL2_ResetAmbientSound",
@@ -142,7 +146,8 @@
         "SOUNDHDR_GetGlobal0",
         "SOUNDHDR_GetGlobal1",
         "memset"
-      ]
+      ],
+      "dh": "b6363d14"
     },
     {
       "name": "WALL2_UpdateAmbientMusic",
@@ -183,7 +188,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "de99c042"
     },
     {
       "name": "WALL2_ScheduleSoundSequence",
@@ -210,7 +216,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc420455"
     },
     {
       "name": "WALL2_UpdateScheduledSound",
@@ -228,7 +235,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "45de6620"
     },
     {
       "name": "WALL2_AllocDrawList",
@@ -248,7 +256,8 @@
       "usedTypes": [
         "D2GameViewStrc",
         "D2Wall2CellStrc"
-      ]
+      ],
+      "dh": "81a63806"
     },
     {
       "name": "ResetWall2Data",
@@ -265,7 +274,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "b3e7ee71"
     },
     {
       "name": "FreeWall2",
@@ -283,7 +293,8 @@
       ],
       "usedTypes": [
         "D2GameViewStrc"
-      ]
+      ],
+      "dh": "c0f73bb8"
     },
     {
       "name": "WALL2_IsInDrawGrid",
@@ -300,7 +311,8 @@
       ],
       "usedTypes": [
         "D2Wall2DrawListStrc"
-      ]
+      ],
+      "dh": "fe7c23e1"
     },
     {
       "name": "WALL2_InsertUnitDrawBelow",
@@ -324,7 +336,8 @@
         "D2Wall2DrawListStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "496b7a59"
     },
     {
       "name": "WALL2_IsTileOccludingPlayer",
@@ -345,7 +358,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "0211d85c"
     },
     {
       "name": "WALL2_AddWallTile",
@@ -371,7 +385,8 @@
         "D2Wall2DrawEntryStrc",
         "D2Wall2DrawListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "85c7d3ad"
     },
     {
       "name": "WALL2_AddLowerWallTile",
@@ -395,7 +410,8 @@
         "D2Wall2DrawEntryStrc",
         "D2Wall2DrawListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ffd9e8d4"
     },
     {
       "name": "WALL2_AddRoofTile",
@@ -419,7 +435,8 @@
         "D2Wall2DrawEntryStrc",
         "D2Wall2DrawListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b717fb3b"
     },
     {
       "name": "WALL2_AddShadowPassTile",
@@ -443,7 +460,8 @@
         "D2Wall2DrawEntryStrc",
         "D2Wall2DrawListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "64425c70"
     },
     {
       "name": "WALL2_InsertUnitDraw",
@@ -467,7 +485,8 @@
         "D2Wall2DrawListStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "ac34eec1"
     },
     {
       "name": "WALL2_InsertUnitShadowDraw",
@@ -491,7 +510,8 @@
         "D2Wall2DrawListStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "beae5355"
     },
     {
       "name": "WALL2_CollectRoomTilesAndUnits",
@@ -538,7 +558,8 @@
         "RECT",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "870186b7"
     },
     {
       "name": "WALL2_BuildSceneDrawList",
@@ -576,7 +597,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6d19ae9b"
     },
     {
       "name": "Unreferenced_004dddd0",
@@ -590,7 +612,8 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "Unreferenced_004dddd0"
-      ]
+      ],
+      "dh": "470a88d9"
     },
     {
       "name": "WALL2_OnAllocGameView_NoOp_Unref_004ddde0",
@@ -604,7 +627,8 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "WALL2_OnAllocGameView_NoOp_Unref_004ddde0"
-      ]
+      ],
+      "dh": "1be2f3a1"
     },
     {
       "name": "WALL2_OnAllocGameView_NoOp",
@@ -618,7 +642,8 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "WALL2_OnAllocGameView_NoOp"
-      ]
+      ],
+      "dh": "94693a25"
     },
     {
       "name": "WALL2_OnAllocGameView_NoOp_Unref_004df920",
@@ -632,7 +657,8 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "WALL2_OnAllocGameView_NoOp_Unref_004df920"
-      ]
+      ],
+      "dh": "a9fd9b28"
     },
     {
       "name": "WALL2_OnAllocGameView_NoOp_Unref_004df930",
@@ -646,7 +672,8 @@
       "namespace": "D2Client::GAME::Wall2",
       "calledFunctions": [
         "WALL2_OnAllocGameView_NoOp_Unref_004df930"
-      ]
+      ],
+      "dh": "2e761a1f"
     }
   ]
 }

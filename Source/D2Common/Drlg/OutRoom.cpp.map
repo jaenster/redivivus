@@ -22,7 +22,8 @@
       "usedTypes": [
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "c947cfec"
     },
     {
       "name": "DRLGOUTROOM_FreeOutRoomEx",
@@ -43,7 +44,8 @@
         "D2DrlgOutdoorRoomStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "8902e9f0"
     },
     {
       "name": "DRLGOUTROOM_AllocOutdoorRoomData",
@@ -63,7 +65,8 @@
       "usedTypes": [
         "D2DrlgOutdoorRoomStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "7cc4a040"
     }
   ]
 }

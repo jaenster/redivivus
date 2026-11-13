@@ -27,7 +27,8 @@
         "D2LevelDefsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "83574293"
     },
     {
       "name": "SpawnRandomPreset",
@@ -54,7 +55,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "45eefdb8"
     }
   ]
 }

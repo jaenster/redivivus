@@ -20,7 +20,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "237099b0"
     },
     {
       "name": "MISSILETBLS_PadCodeTo4Chars",
@@ -34,7 +35,8 @@
       "namespace": "D2Common::DATATBLS::MissileTbls",
       "calledFunctions": [
         "MISSILETBLS_PadCodeTo4Chars"
-      ]
+      ],
+      "dh": "beb5a0fa"
     },
     {
       "name": "MapMissilesTxtKeywordToNumber",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b75214c9"
     },
     {
       "name": "MISSILETBLS_ValidateCalcCode",
@@ -72,7 +75,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "af177ac7"
     },
     {
       "name": "MissileCalcLinker",
@@ -94,7 +98,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9b563347"
     },
     {
       "name": "MISSILETBLS_ValidateAndClampField",
@@ -115,7 +120,8 @@
         "eD2BinFieldInputType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a426ba8"
     },
     {
       "name": "TXT_AllocTxt_missiles",
@@ -139,7 +145,8 @@
         "D2MissilesTxt",
         "D2PoolManagerStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "3dd141ed"
     },
     {
       "name": "MISSILETBLS_FreeTxt",
@@ -156,7 +163,8 @@
         "FreeServerMemory",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
-      ]
+      ],
+      "dh": "0e48437e"
     },
     {
       "name": "MISSILETBLS_CalculateVelocity",
@@ -174,7 +182,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "7ffce72c"
     }
   ]
 }

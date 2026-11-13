@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x4E"
-      ]
+      ],
+      "dh": "f4cb9291"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST",
@@ -32,7 +33,8 @@
       "namespace": "D2Client::UI::npcmenu::Merc",
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST"
-      ]
+      ],
+      "dh": "d572be94"
     },
     {
       "name": "NPCMENU_GetMercHireCost",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc"
-      ]
+      ],
+      "dh": "f33351d3"
     },
     {
       "name": "NPCMENU_SetSelectedMercIndex",
@@ -68,7 +71,8 @@
       "usedTypes": [
         "D2MercForHire",
         "int16_t"
-      ]
+      ],
+      "dh": "26bb9d81"
     },
     {
       "name": "NPCMENU_MercItemFoundCb",
@@ -85,7 +89,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "29ed48d1"
     },
     {
       "name": "NPCMENU_HandleMercListPacket",
@@ -111,7 +116,8 @@
         "D2GSPacketSrv0x8A",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6091caa8"
     },
     {
       "name": "NPCMENU_ResurrectMerc",
@@ -127,7 +133,8 @@
         "NPCMENU_ResurrectMerc",
         "FreeDialogStrc",
         "NPCMENU_ShowTransactionConfirmDialog"
-      ]
+      ],
+      "dh": "ad07c124"
     },
     {
       "name": "NPCMENU_ShowMercResurrectDialog",
@@ -153,7 +160,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6287f4b1"
     },
     {
       "name": "MERC_ClearHireInventory",
@@ -177,7 +185,8 @@
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "7b447cfc"
     }
   ]
 }

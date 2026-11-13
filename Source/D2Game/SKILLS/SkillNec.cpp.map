@@ -26,7 +26,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0f2f717e"
     },
     {
       "name": "Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown",
@@ -52,7 +53,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ef9b6ba9"
     },
     {
       "name": "Skills_SrvStFunc_16_ApplyHitAndDamage",
@@ -85,7 +87,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f1a1899d"
     },
     {
       "name": "Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown",
@@ -110,7 +113,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b07f6bef"
     },
     {
       "name": "SKILLNEC_ValidateCorpseTarget",
@@ -137,7 +141,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ec0ae4dc"
     },
     {
       "name": "Skills_SrvStFunc_18_AlwaysAllow",
@@ -156,7 +161,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "cd9238f1"
     },
     {
       "name": "Skills_SrvStFunc_19_IsTargetOutsideTown",
@@ -180,7 +186,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "df161feb"
     },
     {
       "name": "Skills_SrvStFunc_20_IsGroundItemForIronGolem",
@@ -205,7 +212,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3b3f7d8c"
     },
     {
       "name": "CorpseConsumedCheck",
@@ -227,7 +235,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b2c2bde"
     },
     {
       "name": "Skills_SrvStFunc_21_IsRevivableCorpse",
@@ -249,7 +258,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "99187fb1"
     },
     {
       "name": "SKILLNEC_OnCurseExpire",
@@ -275,7 +285,8 @@
         "SGAMEDATA",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "649d60ab"
     },
     {
       "name": "Unreferenced_005c33d0",
@@ -289,7 +300,8 @@
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
         "Unreferenced_005c33d0"
-      ]
+      ],
+      "dh": "74ef8cb2"
     },
     {
       "name": "SKILLNEC_IsReviveOrRaiseSkeleton",
@@ -307,7 +319,8 @@
       "usedTypes": [
         "eD2Skills",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d35d209"
     },
     {
       "name": "SKILLNEC_ValidateAttackableTarget",
@@ -331,7 +344,8 @@
         "SGAMEDATA",
         "eD2UnitFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "6b7829fa"
     },
     {
       "name": "SKILLNEC_AssignCurseAiBehavior",
@@ -352,7 +366,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "553d7279"
     },
     {
       "name": "SKILLNEC_ClampResistPenalty",
@@ -374,7 +389,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "684c2bc3"
     },
     {
       "name": "SKILLNEC_ApplyCurseToUnit",
@@ -408,7 +424,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93a31548"
     },
     {
       "name": "SKILLNEC_ApplyCurseDifficultyDivisor",
@@ -428,7 +445,8 @@
         "D2DifficultyLevelsTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d1f91ca0"
     },
     {
       "name": "Skills_SrvDoFunc_030_CastCurseAoE",
@@ -459,7 +477,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b598cd67"
     },
     {
       "name": "SKILLNEC_ApplyDimVision",
@@ -486,7 +505,8 @@
         "SGAMEDATA",
         "eD2UnitStat",
         "int32_t"
-      ]
+      ],
+      "dh": "8501e8c6"
     },
     {
       "name": "SKILLS_NecroShredAlignmentCallback",
@@ -511,7 +531,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "9475a059"
     },
     {
       "name": "SKILLNEC_CorpseTarget_ValidateAndScheduleEvent",
@@ -532,7 +553,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ee0e2a7"
     },
     {
       "name": "Skills_SrvDoFunc_059_CastCorpseSkill",
@@ -565,7 +587,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8cb16e2a"
     },
     {
       "name": "SKILLNEC_ValidateReviveTarget",
@@ -589,7 +612,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c4e049ac"
     },
     {
       "name": "SKILLNEC_OnConvertExpire",
@@ -612,7 +636,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "903bbf32"
     },
     {
       "name": "SKILLNEC_ApplyConvertToUnit",
@@ -644,7 +669,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e97ba18"
     },
     {
       "name": "Skills_SrvDoFunc_061_CastConvertAoE",
@@ -673,7 +699,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4ef83875"
     },
     {
       "name": "SKILLNEC_ApplySummonResistPassive",
@@ -697,7 +724,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "dcb79678"
     },
     {
       "name": "SKILLNEC_SetSkeletonComponentsByMasteryLvl",
@@ -718,7 +746,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e788be06"
     },
     {
       "name": "SKILLNEC_RollSkeletonMastery",
@@ -743,7 +772,8 @@
         "D2UnitStrc",
         "eD2States",
         "int32_t"
-      ]
+      ],
+      "dh": "d50a657c"
     },
     {
       "name": "SKILLNEC_SpawnSkeletonsForRevive",
@@ -765,7 +795,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5e02933a"
     },
     {
       "name": "SKILLNEC_DispatchSummonMastery",
@@ -785,7 +816,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4ce84443"
     },
     {
       "name": "SKILLNEC_ApplySummonBuffs",
@@ -833,7 +865,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6f19a370"
     },
     {
       "name": "SKILLNEC_ReviveCorpseAsMinion",
@@ -857,7 +890,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1e9d85ce"
     },
     {
       "name": "Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse",
@@ -898,7 +932,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2eab8441"
     },
     {
       "name": "Skills_SrvDoFunc_032_ApplyDirectDamage",
@@ -920,7 +955,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "6f0344e2"
     },
     {
       "name": "SKILLNEC_ApplyCorpseExplosionToUnit",
@@ -949,7 +985,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "74f4434b"
     },
     {
       "name": "Skills_SrvDoFunc_055_CorpseExplosion",
@@ -990,7 +1027,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9a7ad865"
     },
     {
       "name": "SKILLNEC_CorpseExplosionDispatch",
@@ -1028,7 +1066,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b6858071"
     },
     {
       "name": "Skills_SrvDoFunc_056_SummonGolem",
@@ -1058,7 +1097,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a64ec64d"
     },
     {
       "name": "Skills_SrvDoFunc_057_IronGolem",
@@ -1102,7 +1142,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "fa02de11"
     },
     {
       "name": "SKILLNEC_ReviveCorpse",
@@ -1142,7 +1183,8 @@
         "eD2CollisionShapeType",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3217ad64"
     },
     {
       "name": "SKILLNEC_ApplyReviveToCorpse",
@@ -1173,7 +1215,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3c21351a"
     },
     {
       "name": "Skills_SrvDoFunc_058_ReviveCorpseCheck",
@@ -1212,7 +1255,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a2082efc"
     },
     {
       "name": "Skills_SrvDoFunc_060_SummonBoneWall",
@@ -1256,7 +1300,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "992e196c"
     },
     {
       "name": "SKILLNEC_CreateSummonAtPosition",
@@ -1289,7 +1334,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "5dc50185"
     },
     {
       "name": "Skills_SrvDoFunc_062_BonePrison",
@@ -1322,7 +1368,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9b769842"
     },
     {
       "name": "Skills_SrvDoFunc_063_PoisonExplosion",
@@ -1348,7 +1395,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5219856b"
     },
     {
       "name": "SKILLNEC_AddHitpoints",
@@ -1369,7 +1417,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5847eaa1"
     },
     {
       "name": "ITEMEVENT_AuraThornsWithLifeSteal",
@@ -1414,7 +1463,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1febdea4"
     },
     {
       "name": "ITEMEVENT_AuraHealTarget",
@@ -1452,7 +1502,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05e7e6c8"
     },
     {
       "name": "ITEMEVENT_NecroAuraStatDrain",
@@ -1485,7 +1536,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c373d12c"
     },
     {
       "name": "ITEMEVENT_LifeTap",
@@ -1520,7 +1572,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1a84cc8a"
     },
     {
       "name": "ITEMEVENT_NecroReviveLeech",
@@ -1550,7 +1603,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f38ee74e"
     },
     {
       "name": "ITEMEVENT_ItemSlowTarget",
@@ -1579,7 +1633,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4908a9b"
     },
     {
       "name": "BloodGolemLifeLeech",
@@ -1605,7 +1660,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "daa4e238"
     }
   ]
 }

@@ -21,7 +21,8 @@
         "D2RoomStrc",
         "POINT",
         "int32_t"
-      ]
+      ],
+      "dh": "531ae143"
     },
     {
       "name": "MISSILE_InitializeVisual",
@@ -49,7 +50,8 @@
         "intptr_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1ddaea65"
     },
     {
       "name": "MISSILE_GetSpeedByRemainingFrames",
@@ -68,7 +70,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "29fd8f0c"
     },
     {
       "name": "MISSILE_GetPoisonNovaRadius",
@@ -86,7 +89,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "12b8743c"
     },
     {
       "name": "MISSILE_CltHitFn10_ProgOverlay",
@@ -105,7 +109,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4aa3b8d1"
     },
     {
       "name": "MISSILE_SetupHoming",
@@ -139,7 +144,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "14de6765"
     },
     {
       "name": "MISSILE_RetargetClosest",
@@ -164,7 +170,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "99268e56"
     },
     {
       "name": "MISSILE_CltHitFn13_Homing",
@@ -193,7 +200,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bbd3ef00"
     },
     {
       "name": "MISSILE_CltHitFn34_MephistoDoNotDraw",
@@ -212,7 +220,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "46ec0a7c"
     },
     {
       "name": "MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall",
@@ -238,7 +247,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd63b8a9"
     },
     {
       "name": "MISSILE_CltHitFn46_CatapultChargedBall",
@@ -269,7 +279,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "b69c982c"
     },
     {
       "name": "MISSILE_CltHitFn51_LightTrailJavelin",
@@ -296,7 +307,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "9749a3fe"
     },
     {
       "name": "MISSILE_CltHitFn61_WorldStoneShake",
@@ -315,7 +327,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "1c4de731"
     },
     {
       "name": "LIGHTMAP_SetQualityLevel",
@@ -329,7 +342,8 @@
       "namespace": "D2Client::UNIT::Missile",
       "calledFunctions": [
         "LIGHTMAP_SetQualityLevel"
-      ]
+      ],
+      "dh": "ddad5ca6"
     },
     {
       "name": "LIGHTMAP_GetQualityLevel",
@@ -343,7 +357,8 @@
       "namespace": "D2Client::UNIT::Missile",
       "calledFunctions": [
         "LIGHTMAP_GetQualityLevel"
-      ]
+      ],
+      "dh": "f70f0280"
     },
     {
       "name": "MISSILE_CanHitTarget",
@@ -365,7 +380,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "675dd5c2"
     },
     {
       "name": "Missiles_SrvDoFuncData_02",
@@ -386,7 +402,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a163ca9"
     },
     {
       "name": "Missiles_SrvDoFuncData_01",
@@ -408,7 +425,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bdee6c47"
     },
     {
       "name": "Missiles_SrvDoFuncData_03",
@@ -429,7 +447,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ee0c0ac"
     },
     {
       "name": "Missiles_SrvDoFuncData_07",
@@ -448,7 +467,8 @@
         "D2MissileCltCollideCtxStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7b11940a"
     },
     {
       "name": "MISSILE_InitMissileUnit",
@@ -475,7 +495,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "14b10c7e"
     },
     {
       "name": "MISSILE_FreeClientMissile",
@@ -499,7 +520,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "bcf28d4d"
     },
     {
       "name": "MISSILE_UpdateLightFlicker",
@@ -523,7 +545,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2cee1451"
     },
     {
       "name": "MISSILE_CltHitFn40_HealingBolt",
@@ -543,7 +566,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "69818b00"
     },
     {
       "name": "MISSILE_GetSpeedTier",
@@ -560,7 +584,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7827e0eb"
     },
     {
       "name": "MISSILE_CheckAndDecrementPierce",
@@ -582,7 +607,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "76c5d253"
     },
     {
       "name": "MISSILE_RemoveClientSide",
@@ -607,7 +633,8 @@
         "D2LightMapStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8387bc37"
     },
     {
       "name": "MISSILE_CalculatePierceCount",
@@ -634,7 +661,8 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "70ba579b"
     },
     {
       "name": "MakeMissile",
@@ -708,7 +736,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "30243994"
     },
     {
       "name": "CastAttack",
@@ -731,7 +760,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "53f92f89"
     },
     {
       "name": "MakeMissileAtXY",
@@ -755,7 +785,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "1cd8b168"
     },
     {
       "name": "MISSILE_CreateFromUnitWithOffset",
@@ -783,7 +814,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5ade0a0c"
     },
     {
       "name": "MISSILE_CreateAtOwnerCoords",
@@ -808,7 +840,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "04bdd89a"
     },
     {
       "name": "MISSILE_SpawnAreaOfEffect",
@@ -844,7 +877,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "99682610"
     },
     {
       "name": "MISSILE_CreateTrailMissile",
@@ -874,7 +908,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2db814b5"
     },
     {
       "name": "MISSILE_SpawnRandomScatter",
@@ -906,7 +941,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c3db7af7"
     },
     {
       "name": "MISSILE_CreatePeriodicTrail",
@@ -940,7 +976,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b761f956"
     },
     {
       "name": "MISSILE_SetupFallingZPos",
@@ -963,7 +1000,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "c6fd5585"
     },
     {
       "name": "MISSILE_SetupDescentAnim",
@@ -986,7 +1024,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "ffdaee8b"
     },
     {
       "name": "MISSILE_CreateRandomOffset",
@@ -1016,7 +1055,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "84578d71"
     },
     {
       "name": "MISSILE_CreateMultiShatter",
@@ -1047,7 +1087,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "43d2b901"
     },
     {
       "name": "MISSILE_CreateSubWithSound",
@@ -1079,7 +1120,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "163e7a67"
     },
     {
       "name": "MISSILE_CreateRandomSubInRadius",
@@ -1117,7 +1159,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ace8b9b0"
     },
     {
       "name": "MISSILE_CreatePeriodicAreaSub",
@@ -1137,7 +1180,8 @@
         "D2UnitStrc",
         "eMissilesId",
         "uint32_t"
-      ]
+      ],
+      "dh": "43d65bc6"
     },
     {
       "name": "MISSILE_CreateDirectionalSub",
@@ -1163,7 +1207,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a674f771"
     },
     {
       "name": "MISSILE_SpawnMissilesInArea",
@@ -1193,7 +1238,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "18cc0706"
     },
     {
       "name": "MISSILE_CreatePatternAtUnitPos",
@@ -1218,7 +1264,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "bf2f74e0"
     },
     {
       "name": "MISSILE_CreateRadialBurst",
@@ -1247,7 +1294,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "2e08a709"
     },
     {
       "name": "MISSILE_CltHitFn64_Unused",
@@ -1274,7 +1322,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6c5be502"
     },
     {
       "name": "MISSILE_CltHitFn01_FireExplosion",
@@ -1298,7 +1347,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0abe29ef"
     },
     {
       "name": "MISSILE_CltHitFn02_GasCloud",
@@ -1318,7 +1368,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f49b5027"
     },
     {
       "name": "MISSILE_CltHitFn03_PotionExplode",
@@ -1344,7 +1395,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "03267241"
     },
     {
       "name": "MISSILE_CltHitFn09_HolyBolt",
@@ -1375,7 +1427,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1549cada"
     },
     {
       "name": "MISSILE_CltHitFn12_ImmolationArrow",
@@ -1403,7 +1456,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "adcace6e"
     },
     {
       "name": "MISSILE_CltHitFn14_IceShatter",
@@ -1432,7 +1486,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d4764c82"
     },
     {
       "name": "MISSILE_CltHitFn16_ChainLightning",
@@ -1468,7 +1523,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "1dc8c5fc"
     },
     {
       "name": "MISSILE_CltHitFn18_MeteorCenter",
@@ -1500,7 +1556,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5f355ec8"
     },
     {
       "name": "MISSILE_CltHitFn19_RandomSubMissile",
@@ -1526,7 +1583,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "556d3dd9"
     },
     {
       "name": "MISSILE_CltHitFn24_BoneSpear",
@@ -1549,7 +1607,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "a401a67a"
     },
     {
       "name": "MISSILE_SkillFuncCreateAtTarget",
@@ -1574,7 +1633,8 @@
         "D2fpSkillFuncArg",
         "D2fpSkillFuncSub",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "b957265a"
     },
     {
       "name": "MISSILE_CltHitFn25_LightningFury",
@@ -1603,7 +1663,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e0da5ba2"
     },
     {
       "name": "MISSILE_SkillFuncCreateAtTargetB",
@@ -1628,7 +1689,8 @@
         "D2fpSkillFuncArg",
         "D2fpSkillFuncSub",
         "eD2UnitType"
-      ]
+      ],
+      "dh": "047c4d07"
     },
     {
       "name": "MISSILE_CltHitFn26_FistOfHeavensDelay",
@@ -1661,7 +1723,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "febd021d"
     },
     {
       "name": "MISSILE_Create8DirectionalClient",
@@ -1689,7 +1752,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d762138"
     },
     {
       "name": "MISSILE_CltHitFn28_PantherPotGreen",
@@ -1713,7 +1777,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "4f71c253"
     },
     {
       "name": "MISSILE_CltHitFn29_GrimWard",
@@ -1745,7 +1810,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bce75094"
     },
     {
       "name": "MISSILE_CltHitFn30_FrozenOrb",
@@ -1772,7 +1838,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "05ef2476"
     },
     {
       "name": "MISSILE_CltHitFn04_Unused",
@@ -1799,7 +1866,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "6e8cdbb4"
     },
     {
       "name": "MISSILE_CltHitFn32_FireHead",
@@ -1825,7 +1893,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "07ec98f3"
     },
     {
       "name": "MISSILE_CltHitFn33_MephistoFlyingRocks",
@@ -1853,7 +1922,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1f6dae13"
     },
     {
       "name": "MISSILE_CltHitFn36_HellMeteorDown",
@@ -1880,7 +1950,8 @@
         "eD2CollisionUnitSize",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "35a7b88e"
     },
     {
       "name": "MISSILE_CltHitFn44_InAirLanding",
@@ -1910,7 +1981,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9261e101"
     },
     {
       "name": "MISSILE_CltHitFn47_CatapultSpikeBall",
@@ -1940,7 +2012,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "70a1c137"
     },
     {
       "name": "MISSILE_CreateFlyingRockDebris",
@@ -1973,7 +2046,8 @@
         "int32_t",
         "int64_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18519924"
     },
     {
       "name": "MISSILE_CltHitFn50_CatapultMeteorBall",
@@ -1993,7 +2067,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b453eea5"
     },
     {
       "name": "MISSILE_CltHitFn52_MoltenBoulder",
@@ -2021,7 +2096,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "95160641"
     },
     {
       "name": "MISSILE_CltHitFn53_MoltenBoulderEmerge",
@@ -2054,7 +2130,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "5dc12430"
     },
     {
       "name": "MISSILE_CltHitFn54_VinesTrail",
@@ -2073,7 +2150,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "dfd5e59a"
     },
     {
       "name": "MISSILE_CltHitFn55_FallingRock",
@@ -2098,7 +2176,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "647131b2"
     },
     {
       "name": "MISSILE_CltHitFn56_RecyclerVine",
@@ -2126,7 +2205,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ecf90e99"
     },
     {
       "name": "MISSILE_CltHitFn57_BaalSpawnMonsters",
@@ -2150,7 +2230,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed86b524"
     },
     {
       "name": "MISSILE_CltHitFn60_Nihlithak",
@@ -2176,7 +2257,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ff27589e"
     },
     {
       "name": "MISSILE_CreateRandomOffsetHit",
@@ -2206,7 +2288,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "9a5c312e"
     },
     {
       "name": "MISSILE_CltHitFn31_IceBreak",
@@ -2239,7 +2322,8 @@
         "eMissilesId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "930578f3"
     },
     {
       "name": "MISSILE_CreateFootprint",
@@ -2264,7 +2348,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ba7fd7f2"
     },
     {
       "name": "MISSILE_CreateTowardObject",
@@ -2297,7 +2382,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "6e1d76ea"
     },
     {
       "name": "MISSILE_CltHitFn42_HfFragment1",
@@ -2323,7 +2409,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bf11b467"
     },
     {
       "name": "MISSILE_CltHitFn43_HfFragment2",
@@ -2354,7 +2441,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "461882dc"
     },
     {
       "name": "MISSILE_CreateCircularRing",
@@ -2382,7 +2470,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "7d05e03a"
     },
     {
       "name": "MISSILE_CltHitFn37_RadamentHandOfGod",
@@ -2414,7 +2503,8 @@
         "eD2UnitType",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "5c0c2758"
     },
     {
       "name": "MISSILE_CltHitFn38_TaintedSunFlash",
@@ -2445,7 +2535,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "3dea199a"
     },
     {
       "name": "MISSILE_CltHitFn39_QueenDeathGlob",
@@ -2473,7 +2564,8 @@
         "eD2Skills",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6f2719fc"
     },
     {
       "name": "MISSILE_CltHitFn41_DurielDeathRock",
@@ -2496,7 +2588,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "fad98eae"
     },
     {
       "name": "MISSILE_CreateAtMonsterFacing",
@@ -2532,7 +2625,8 @@
         "eD2UnitType",
         "eMissilesId",
         "uint32_t"
-      ]
+      ],
+      "dh": "d99541f9"
     },
     {
       "name": "MISSILE_CreateRandomCardinal",
@@ -2563,7 +2657,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c0b59cbb"
     },
     {
       "name": "MISSILE_CreateBaalLightningBolt",
@@ -2590,7 +2685,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4d7ed4a9"
     },
     {
       "name": "MISSILE_CreateDebrisWithCollision",
@@ -2624,7 +2720,8 @@
         "eCollisionFlags",
         "eD2CollisionUnitSize",
         "int32_t"
-      ]
+      ],
+      "dh": "b57a5c71"
     },
     {
       "name": "MISSILE_CltDoFn66_WorldStoneShake",
@@ -2658,7 +2755,8 @@
         "eD2LevelId",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "79d8cbc8"
     },
     {
       "name": "MISSILE_CltHitFn48_CatapultColdBall",
@@ -2693,7 +2791,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "67713dcd"
     },
     {
       "name": "MISSILE_CreateSteamVent",
@@ -2719,7 +2818,8 @@
         "D2UnitStrc",
         "eCollisionFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "ad699bde"
     },
     {
       "name": "MISSILE_CltHitFn62_BaalTauntLightning",
@@ -2749,7 +2849,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a19043c3"
     },
     {
       "name": "MISSILE_CltHitFn63_BaalTauntPoison",
@@ -2769,7 +2870,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8d4c113e"
     },
     {
       "name": "MISSILE_ClientFrameUpdate",
@@ -2797,7 +2899,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "c81a6a6a"
     },
     {
       "name": "MISSILE_ClientHitExplode",
@@ -2853,7 +2956,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fbef10b1"
     },
     {
       "name": "MISSILE_CltDoFn43_FollowOwner",
@@ -2876,7 +2980,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "41d03f69"
     },
     {
       "name": "MISSILE_CltDoFn01_BasicMissile",
@@ -2923,7 +3028,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94776450"
     },
     {
       "name": "MISSILE_CltDoFn02_GroundSplat",
@@ -2952,7 +3058,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "78cee978"
     },
     {
       "name": "MISSILE_CltDoFn03_TrailOnStep",
@@ -2978,7 +3085,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1ea6cc6d"
     },
     {
       "name": "MISSILE_CltDoFn04_PoisonCloud",
@@ -2998,7 +3106,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "fb93a16d"
     },
     {
       "name": "MISSILE_CltDoFn05_FireWall",
@@ -3023,7 +3132,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "402d7406"
     },
     {
       "name": "MISSILE_CltDoFn06_FireWallMaker",
@@ -3060,7 +3170,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ce491ea"
     },
     {
       "name": "MISSILE_CltDoFn07_Homing",
@@ -3094,7 +3205,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ddb4e605"
     },
     {
       "name": "MISSILE_CltDoFn08_LightningTrail",
@@ -3126,7 +3238,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "faa084fd"
     },
     {
       "name": "MISSILE_CltDoFn09_MeteorCenter",
@@ -3167,7 +3280,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "498d545f"
     },
     {
       "name": "MISSILE_CltDoFn10_MonBlizzCenter",
@@ -3194,7 +3308,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "16731c3f"
     },
     {
       "name": "MISSILE_CltDoFn11_DieAtAnimEnd",
@@ -3216,7 +3331,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "fb272cc0"
     },
     {
       "name": "MISSILE_CltDoFn12_ScreenShake",
@@ -3239,7 +3355,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "24a3d582"
     },
     {
       "name": "MISSILE_CltDoFn67_Unused",
@@ -3268,7 +3385,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "5ce3c23a"
     },
     {
       "name": "MISSILE_CltDoFn13_Blizzard",
@@ -3300,7 +3418,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "05d2258e"
     },
     {
       "name": "MISSILE_CltDoFn14_Unused",
@@ -3329,7 +3448,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c43c727c"
     },
     {
       "name": "MISSILE_CltDoFn15_FingerMageSpider",
@@ -3368,7 +3488,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8c0f7c0f"
     },
     {
       "name": "MISSILE_CltDoFn16_DiabWallMaker",
@@ -3399,7 +3520,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "58039b48"
     },
     {
       "name": "MISSILE_CltDoFn17_CurseCenter",
@@ -3429,7 +3551,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "92388f80"
     },
     {
       "name": "MISSILE_CltDoFn18_BoneSpear",
@@ -3469,7 +3592,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "24b998db"
     },
     {
       "name": "MISSILE_CltDoFn19_FrozenOrb",
@@ -3500,7 +3624,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b7aa8ceb"
     },
     {
       "name": "MISSILE_CltDoFn20_FrozenOrbNova",
@@ -3530,7 +3655,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8940a006"
     },
     {
       "name": "MISSILE_CltDoFn21_BrDeathControl",
@@ -3563,7 +3689,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e2b86646"
     },
     {
       "name": "MISSILE_CltDoFn22_BrDeathLightningBolt",
@@ -3603,7 +3730,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2d273a0f"
     },
     {
       "name": "MISSILE_CltDoFn23_DenOfEvilLight",
@@ -3624,7 +3752,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "71f44c60"
     },
     {
       "name": "MISSILE_CltDoFn24_CairnStones",
@@ -3665,7 +3794,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3040d3cf"
     },
     {
       "name": "MISSILE_CltDoFn25_Mist",
@@ -3698,7 +3828,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ce870d9e"
     },
     {
       "name": "MISSILE_CltDoFn26_MephistoDeathControl",
@@ -3731,7 +3862,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "bc0a8646"
     },
     {
       "name": "MISSILE_CltDoFn27_BossFireWallMaker",
@@ -3770,7 +3902,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87e6fb77"
     },
     {
       "name": "MISSILE_CltDoFn28_MephistoDoNotDraw",
@@ -3800,7 +3933,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e0054c2d"
     },
     {
       "name": "MISSILE_CltDoFn29_AndyControl",
@@ -3829,7 +3963,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a4f98862"
     },
     {
       "name": "MISSILE_CltDoFn30_TowerChestSpawner",
@@ -3863,7 +3998,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3359c0c2"
     },
     {
       "name": "MISSILE_CltDoFn44_Distraction",
@@ -3894,7 +4030,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7578fbb"
     },
     {
       "name": "MISSILE_CltDoFn45_DistractionFog",
@@ -3915,7 +4052,8 @@
       "usedTypes": [
         "D2MissilesTxt",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d488579c"
     },
     {
       "name": "MISSILE_CltDoFn46_LightningTrailingJavelin",
@@ -3953,7 +4091,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5b3a5488"
     },
     {
       "name": "MISSILE_CltDoFn68_SucFireball",
@@ -3983,7 +4122,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "61e18b6c"
     },
     {
       "name": "MISSILE_CltDoFn47_MoltenBoulder",
@@ -4008,7 +4148,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "a881e299"
     },
     {
       "name": "MISSILE_CltDoFn48_EruptionCenter",
@@ -4050,7 +4191,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "903d7fca"
     },
     {
       "name": "MISSILE_CltDoFn49_Vines",
@@ -4073,7 +4215,8 @@
         "D2MissilesTxt",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5dedf61b"
     },
     {
       "name": "MISSILE_CltDoFn50_Volcano",
@@ -4111,7 +4254,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f60a4ca7"
     },
     {
       "name": "MISSILE_CltDoFn51_RecyclerDelay",
@@ -4144,7 +4288,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed276600"
     },
     {
       "name": "MISSILE_CltDoFn52_WakeMaker",
@@ -4175,7 +4320,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "80827015"
     },
     {
       "name": "MISSILE_CltDoFn53_TigerFury",
@@ -4203,7 +4349,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "a0812a0c"
     },
     {
       "name": "MISSILE_CltDoFn56_BaalTauntControl",
@@ -4237,7 +4384,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c5465a7b"
     },
     {
       "name": "MISSILE_CltDoFn57_BladeShield",
@@ -4271,7 +4419,8 @@
         "D2SkillArgStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "655257d8"
     },
     {
       "name": "MISSILE_CltDoFn58_RoyalStrikeChaosIce",
@@ -4304,7 +4453,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "33fd1713"
     },
     {
       "name": "MISSILE_CltDoFn37_DiabloAppears",
@@ -4326,7 +4476,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fb257c37"
     },
     {
       "name": "MISSILE_CltDoFn41_HfSpirit",
@@ -4348,7 +4499,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f2f244dd"
     },
     {
       "name": "MISSILE_CltDoFn40_HfFragment3",
@@ -4372,7 +4524,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "f81a0d75"
     },
     {
       "name": "MISSILE_CltDoFn39_HfFragment",
@@ -4391,7 +4544,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "cab6af21"
     },
     {
       "name": "MISSILE_CltDoFn38_HfControl",
@@ -4415,7 +4569,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "68b3363b"
     },
     {
       "name": "MISSILE_CltDoFn42_IzualControl",
@@ -4450,7 +4605,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c08febb7"
     },
     {
       "name": "MISSILE_CltDoFn31_HoradricStaff",
@@ -4492,7 +4648,8 @@
         "uint32_t",
         "uint64_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f4b3ac72"
     },
     {
       "name": "MISSILE_CltDoFn32_RadamentDeath",
@@ -4525,7 +4682,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "93937901"
     },
     {
       "name": "MISSILE_CltDoFn33_TaintedSunControl",
@@ -4562,7 +4720,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4636b3cf"
     },
     {
       "name": "MISSILE_CltDoFn34_TaintedSunBall",
@@ -4600,7 +4759,8 @@
         "int16_t",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f3db2ee9"
     },
     {
       "name": "MISSILE_CltDoFn35_QueenDeathCenter",
@@ -4629,7 +4789,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "uint32_t"
-      ]
+      ],
+      "dh": "df4cc538"
     },
     {
       "name": "MISSILE_CltDoFn36_DurielDeathControl",
@@ -4666,7 +4827,8 @@
         "int32_t",
         "uint32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "efd9bb65"
     },
     {
       "name": "MISSILE_CltDoFn61_OverseerControl",
@@ -4692,7 +4854,8 @@
         "D2UnitStrc",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "453473d8"
     },
     {
       "name": "MISSILE_CltDoFn62_NehlithakControl",
@@ -4722,7 +4885,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "215e9469"
     },
     {
       "name": "MISSILE_CltDoFn63_NehlithakOrbit",
@@ -4749,7 +4913,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "a6e3db4b"
     },
     {
       "name": "MISSILE_CltDoFn64_BaalFxControl",
@@ -4790,7 +4955,8 @@
         "eMissilesId",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "57fcc550"
     },
     {
       "name": "MISSILE_CltDoFn65_BaalFxSpirit",
@@ -4824,7 +4990,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5014f6a1"
     },
     {
       "name": "MISSILE_CltDoFn59_WorldStoneChip",
@@ -4847,7 +5014,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c8afebb7"
     },
     {
       "name": "MISSILE_CltDoFn54_AnyaCenter",
@@ -4883,7 +5051,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "359244e7"
     },
     {
       "name": "MISSILE_CltDoFn55_AncientDeathCenter",
@@ -4914,7 +5083,8 @@
         "eD2UnitType",
         "int32_t",
         "uint64_t"
-      ]
+      ],
+      "dh": "963b8544"
     },
     {
       "name": "MISSILE_CltDoFn60_Hurricane",
@@ -4943,7 +5113,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7ed656dc"
     }
   ]
 }

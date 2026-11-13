@@ -25,7 +25,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "bdf71010"
     },
     {
       "name": "SOUND_GetCurrentLevelId",
@@ -47,7 +48,8 @@
         "D2RoomStrc",
         "D2UnitStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "166e8b5e"
     },
     {
       "name": "GetSoundEnv",
@@ -72,7 +74,8 @@
         "D2UnitStrc",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "2516c1b8"
     },
     {
       "name": "SOUNDHDR_GetGlobal0_Unref_004817d0",
@@ -86,7 +89,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal0_Unref_004817d0"
-      ]
+      ],
+      "dh": "a1dcc02c"
     },
     {
       "name": "SOUNDHDR_GetGlobal0_Unref_004817e0",
@@ -100,7 +104,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal0_Unref_004817e0"
-      ]
+      ],
+      "dh": "e355cbcb"
     },
     {
       "name": "SOUNDHDR_GetGlobal0",
@@ -114,7 +119,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal0"
-      ]
+      ],
+      "dh": "5e273479"
     },
     {
       "name": "SOUNDHDR_GetGlobal1",
@@ -128,7 +134,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal1"
-      ]
+      ],
+      "dh": "69dd1641"
     },
     {
       "name": "SOUNDHDR_GetGlobal2",
@@ -142,7 +149,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal2"
-      ]
+      ],
+      "dh": "6e60b688"
     },
     {
       "name": "SOUNDHDR_GetGlobal3",
@@ -156,7 +164,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_GetGlobal3"
-      ]
+      ],
+      "dh": "e893f483"
     },
     {
       "name": "Cleanup",
@@ -172,7 +181,8 @@
         "Cleanup",
         "CleanUpGame",
         "SOUND_ShutdownSystem"
-      ]
+      ],
+      "dh": "2d266290"
     },
     {
       "name": "SOUNDHDR_SetGlobal4",
@@ -186,7 +196,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_SetGlobal4"
-      ]
+      ],
+      "dh": "7c48496f"
     },
     {
       "name": "SOUNDHDR_Nop",
@@ -200,7 +211,8 @@
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
         "SOUNDHDR_Nop"
-      ]
+      ],
+      "dh": "6cd71a1e"
     },
     {
       "name": "TXT_sounds_GetLineBySoundId",
@@ -218,7 +230,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "58c29cd7"
     },
     {
       "name": "SOUNDHDR_GetSoundField0x60",
@@ -235,7 +248,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "8b506be9"
     },
     {
       "name": "SOUNDHDR_GetSoundGroupSize",
@@ -253,7 +267,8 @@
       "usedTypes": [
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "31bb15b9"
     },
     {
       "name": "SOUNDHDR_GetSoundLoopFlag",
@@ -271,7 +286,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "52949686"
     },
     {
       "name": "GetSoundEnvironLine",
@@ -289,7 +305,8 @@
       "usedTypes": [
         "D2SoundEnvironTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "930d77c8"
     },
     {
       "name": "TXT_AllocTxt_sounds_soundenviron",
@@ -324,7 +341,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0004e487"
     },
     {
       "name": "SOUNDHDR_Init",
@@ -348,7 +366,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "2408c3fe"
     },
     {
       "name": "SOUNDHDR_AdjustReferenceCount",
@@ -369,7 +388,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "eaa0fda1"
     },
     {
       "name": "SOUNDHDR_ClearReferenceCounts",
@@ -387,7 +407,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "eD2Sounds"
-      ]
+      ],
+      "dh": "832104b6"
     },
     {
       "name": "SOUNDHDR_FreeSoundBuffer",
@@ -413,7 +434,8 @@
         "D2ClientSoundChannelStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "07b79640"
     },
     {
       "name": "SOUNDHDR_EvictLeastRecentlyUsed",
@@ -435,7 +457,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9851d62"
     },
     {
       "name": "SOUNDHDR_GetFalloffMin",
@@ -453,7 +476,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "90889904"
     },
     {
       "name": "SOUNDHDR_GetFalloffMax",
@@ -471,7 +495,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "9a61f591"
     },
     {
       "name": "SOUNDHDR_RandomizeSoundFromGroup",
@@ -491,7 +516,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6e590001"
     },
     {
       "name": "SOUNDHDR_BuildSoundPath",
@@ -513,7 +539,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9352b600"
     },
     {
       "name": "SOUNDHDR_UpdateLRUTimestamp",
@@ -533,7 +560,8 @@
       "usedTypes": [
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "286dcddb"
     },
     {
       "name": "SOUNDHDR_Shutdown",
@@ -549,7 +577,8 @@
         "SOUNDHDR_Shutdown",
         "FreeClientMemory",
         "SOUNDHDR_FreeSoundBuffer"
-      ]
+      ],
+      "dh": "8f1ab5b6"
     },
     {
       "name": "SOUNDHDR_ShutdownCleanup",
@@ -572,7 +601,8 @@
       ],
       "usedTypes": [
         "IDirectSound"
-      ]
+      ],
+      "dh": "8e4abdf3"
     },
     {
       "name": "SOUNDHDR_LoadSoundFile",
@@ -608,7 +638,8 @@
         "D2PoolManagerStrc",
         "D2SoundsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "4bc204d1"
     },
     {
       "name": "SOUNDHDR_ProcessAsyncLoads",
@@ -630,7 +661,8 @@
         "D2SoundsTxt",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3fe219d7"
     },
     {
       "name": "DRAW_AfterDraw",
@@ -650,7 +682,8 @@
         "SOUNDHDR_ProcessAsyncLoads",
         "SOUND_UpdateAllChannels",
         "SOUND_UpdateNonLoopingStreams"
-      ]
+      ],
+      "dh": "010a3144"
     },
     {
       "name": "SOUNDHDR_UpdateRegistryVersion",
@@ -673,7 +706,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fa8ff635"
     },
     {
       "name": "Cleanup_Unref_00522c20",
@@ -689,7 +723,8 @@
         "Cleanup_Unref_00522c20",
         "NET_SID_CLIENT_ClearIDEAContexts",
         "NET_SID_CLIENT_ClearSHAContexts"
-      ]
+      ],
+      "dh": "5c6dbd52"
     }
   ]
 }

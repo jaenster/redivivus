@@ -26,7 +26,8 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cd74c8f8"
     },
     {
       "name": "D3DSUBTILE_SetPalette",
@@ -46,7 +47,8 @@
       "usedTypes": [
         "D3DSubtileCacheStrc",
         "IDirectDrawSurface7"
-      ]
+      ],
+      "dh": "d9628a02"
     },
     {
       "name": "D3DSUBTILE_InsertNodeAtTail",
@@ -64,7 +66,8 @@
       "usedTypes": [
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
-      ]
+      ],
+      "dh": "3d5a411c"
     },
     {
       "name": "D3DSUBTILE_RemoveNodeByIndex",
@@ -84,7 +87,8 @@
         "D2UnitStrc",
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
-      ]
+      ],
+      "dh": "727fb66e"
     },
     {
       "name": "D3DSUBTILE_AllocateNodeFromFreeList",
@@ -102,7 +106,8 @@
       "usedTypes": [
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc"
-      ]
+      ],
+      "dh": "8b10791f"
     },
     {
       "name": "D3DSUBTILE_PromoteNodeToMRU",
@@ -125,7 +130,8 @@
       ],
       "usedTypes": [
         "D3DSubtileCacheStrc"
-      ]
+      ],
+      "dh": "779c3075"
     },
     {
       "name": "D3DSUBTILE_InvalidateByIndex",
@@ -144,7 +150,8 @@
       ],
       "usedTypes": [
         "D3DSubtileCacheStrc"
-      ]
+      ],
+      "dh": "54957f1e"
     },
     {
       "name": "D3DSUBTILE_Free",
@@ -167,7 +174,8 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc",
         "IUnknown"
-      ]
+      ],
+      "dh": "f99f9ca0"
     },
     {
       "name": "D3DSUBTILE_EnsureAvailableNode",
@@ -187,7 +195,8 @@
         "D3DSubtileCacheNodeStrc",
         "D3DSubtileCacheStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "14cf22c9"
     }
   ]
 }

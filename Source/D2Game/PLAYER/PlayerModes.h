@@ -85,6 +85,6 @@ void __fastcall PLAYEREVENT_DefaultCallback(::SGAMEDATA * pGame, struct D2UnitSt
 // 17 internal functions (defined in .cpp)
 
 // Extern entries for hand-written callers (each forwards to the function of its name)
-BOOL PLRMODES_CanInterruptCurrentMode_Extern(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nNewMode);
+BOOL PLRMODES_CanInterruptCurrentMode_Extern(uint32_t nNewMode, ::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 
 } // namespace D2Game::PLAYER::PlayerModes

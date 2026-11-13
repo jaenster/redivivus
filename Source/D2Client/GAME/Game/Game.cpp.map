@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "392ed8ac"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_0040f860",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "b3a82249"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_004179f0",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "99d045d6"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00417a30",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "4c705b55"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00417c30",
@@ -86,7 +90,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "e03665ed"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_0041c540",
@@ -103,7 +108,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "bb89f9a2"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_0041eb20",
@@ -120,7 +126,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "8ac0dd18"
     },
     {
       "name": "TSIntrusiveList_Clear_Unref_00426ac0",
@@ -137,7 +144,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "0d74717c"
     },
     {
       "name": "GAME_SetMouseButtonEventPending_Unref_0044b870",
@@ -151,7 +159,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAME_SetMouseButtonEventPending_Unref_0044b870"
-      ]
+      ],
+      "dh": "b5f693c9"
     },
     {
       "name": "GAMEDATA_TimerInitWithTickCount",
@@ -169,7 +178,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "82a80c1a"
     },
     {
       "name": "Unreferenced_0044be10",
@@ -183,7 +193,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "Unreferenced_0044be10"
-      ]
+      ],
+      "dh": "99772ec3"
     },
     {
       "name": "GAMEDATA_SetByteInUshort",
@@ -201,7 +212,8 @@
       "usedTypes": [
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "abf15592"
     },
     {
       "name": "SetRunKeyDown",
@@ -215,7 +227,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "SetRunKeyDown"
-      ]
+      ],
+      "dh": "2a21e667"
     },
     {
       "name": "GetGlobalAlwaysRun_Unref_0044be70",
@@ -229,7 +242,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GetGlobalAlwaysRun_Unref_0044be70"
-      ]
+      ],
+      "dh": "b0e34c84"
     },
     {
       "name": "SetGlobalAlwaysRun",
@@ -246,7 +260,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "882bcf99"
     },
     {
       "name": "GetGlobalAlwaysRun",
@@ -260,7 +275,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GetGlobalAlwaysRun"
-      ]
+      ],
+      "dh": "498a5185"
     },
     {
       "name": "GAMEDATA_SetClickModifier",
@@ -277,7 +293,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9a0610bf"
     },
     {
       "name": "GetGlobalAlwaysRun_Unref_0044beb0",
@@ -291,7 +308,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GetGlobalAlwaysRun_Unref_0044beb0"
-      ]
+      ],
+      "dh": "14377795"
     },
     {
       "name": "GetMouseClickFlags",
@@ -308,7 +326,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "11e868e4"
     },
     {
       "name": "GAME_SetMouseButtonEventPending",
@@ -322,7 +341,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAME_SetMouseButtonEventPending"
-      ]
+      ],
+      "dh": "f3e4626c"
     },
     {
       "name": "GAME_GetPrimaryClickState",
@@ -339,7 +359,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "149cff44"
     },
     {
       "name": "GAME_GetMouseButtonEventState",
@@ -353,7 +374,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAME_GetMouseButtonEventState"
-      ]
+      ],
+      "dh": "dc1b2044"
     },
     {
       "name": "GAME_GetMouseButtonEventState_Unref_0044bf20",
@@ -367,7 +389,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAME_GetMouseButtonEventState_Unref_0044bf20"
-      ]
+      ],
+      "dh": "8b74bc2a"
     },
     {
       "name": "GAMEDATA_GetQueuedPrimaryClick",
@@ -381,7 +404,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_GetQueuedPrimaryClick"
-      ]
+      ],
+      "dh": "6424dc28"
     },
     {
       "name": "UnderMouse_PrimaryClick",
@@ -404,7 +428,8 @@
         "D2UIMouseMsgStrc",
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "13349ae7"
     },
     {
       "name": "GAME_HasQueuedPrimaryClick",
@@ -421,7 +446,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "c460fbf0"
     },
     {
       "name": "GAME_HasQueuedPrimaryClick_Unref_0044bff0",
@@ -438,7 +464,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "bb7366e8"
     },
     {
       "name": "ProcessQueuedPrimaryClick",
@@ -461,7 +488,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "32156224"
     },
     {
       "name": "ProcessPrimaryClickImmediate",
@@ -484,7 +512,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "6ec98a8d"
     },
     {
       "name": "INPUT_HandlePrimaryClickUp",
@@ -502,7 +531,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "362dfaa2"
     },
     {
       "name": "INPUT_HandleRightClick",
@@ -527,7 +557,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2bacf9c5"
     },
     {
       "name": "ProcessQueuedSecondaryClick",
@@ -549,7 +580,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "uint16_t"
-      ]
+      ],
+      "dh": "1b87ca3a"
     },
     {
       "name": "Unreferenced_0044c340",
@@ -564,7 +596,8 @@
       "calledFunctions": [
         "Unreferenced_0044c340",
         "SetCanBeSelectedToFalse"
-      ]
+      ],
+      "dh": "29ea7ead"
     },
     {
       "name": "INPUT_HandleSecondaryClick",
@@ -586,7 +619,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3d18e572"
     },
     {
       "name": "INPUT_HandleMouseWheel",
@@ -605,7 +639,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "f06d91c1"
     },
     {
       "name": "INPUT_HandleScrollDown",
@@ -624,7 +659,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "405e5085"
     },
     {
       "name": "INPUT_HandleScrollUp",
@@ -643,7 +679,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "78bee9d3"
     },
     {
       "name": "INPUT_HandlePageUpDown",
@@ -663,7 +700,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "35ea700e"
     },
     {
       "name": "INPUT_HandleScrollToEnd",
@@ -683,7 +721,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4cc4eef4"
     },
     {
       "name": "INPUT_HandleSysCommand",
@@ -704,7 +743,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "539a6e72"
     },
     {
       "name": "INPUT_HandlePassthrough",
@@ -722,7 +762,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "5eb71c21"
     },
     {
       "name": "HandleMouseButtonEvent",
@@ -748,7 +789,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3fb14f46"
     },
     {
       "name": "ClientInit_Noop04_Unref_0044c6a0",
@@ -765,7 +807,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "1289da52"
     },
     {
       "name": "GAMEDATA_CheckAutomapCenterOnLoad",
@@ -781,7 +824,8 @@
         "GAMEDATA_CheckAutomapCenterOnLoad",
         "UI_CloseActivePanels",
         "AUTOMAP_CenterOnPlayer"
-      ]
+      ],
+      "dh": "f494a8a4"
     },
     {
       "name": "NET_D2GS_CLIENT_HandleAllNonVariableSizePackets",
@@ -802,7 +846,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "a05124cc"
     },
     {
       "name": "GameLoop",
@@ -823,7 +868,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "9b4b71c8"
     },
     {
       "name": "ClientSideGameLoop",
@@ -854,7 +900,8 @@
       "usedTypes": [
         "D2DrlgStrc",
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "cb1e13b9"
     },
     {
       "name": "GAMEDATA_InitializeEclipseEnvironment",
@@ -874,7 +921,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e551fa18"
     },
     {
       "name": "ExitFunction",
@@ -890,7 +938,8 @@
         "ExitFunction",
         "D2GFX_DestroyWindow",
         "D2GFX_Release"
-      ]
+      ],
+      "dh": "1e0f517d"
     },
     {
       "name": "D2CLIENT_SetExitVar2",
@@ -904,7 +953,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "D2CLIENT_SetExitVar2"
-      ]
+      ],
+      "dh": "5dec354f"
     },
     {
       "name": "GAMEDATA_GetExitFlag2",
@@ -918,7 +968,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_GetExitFlag2"
-      ]
+      ],
+      "dh": "cacd9f53"
     },
     {
       "name": "thunk_WEATHER_FreeDC6Graphics",
@@ -956,7 +1007,8 @@
         "FreeMemoryPool",
         "memset",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "50bdce7d"
     },
     {
       "name": "GAMEDATA_SetDrawFunction",
@@ -973,7 +1025,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f65137d5"
     },
     {
       "name": "GAMEDATA_GetCurrentLevelBlankScreen",
@@ -993,7 +1046,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "79515c39"
     },
     {
       "name": "InGameDraw",
@@ -1046,7 +1100,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8bf9506c"
     },
     {
       "name": "DrawLoadingMessage",
@@ -1079,7 +1134,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4e0f2148"
     },
     {
       "name": "ComputeFrameSkipLevel",
@@ -1097,7 +1153,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "dc80da5b"
     },
     {
       "name": "UpdateFrameStats",
@@ -1111,7 +1168,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "UpdateFrameStats"
-      ]
+      ],
+      "dh": "0d6c5601"
     },
     {
       "name": "Unreferenced_0044cd40",
@@ -1125,7 +1183,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "Unreferenced_0044cd40"
-      ]
+      ],
+      "dh": "8b83c544"
     },
     {
       "name": "GAMEDATA_SendPeriodicPing",
@@ -1141,7 +1200,8 @@
         "GAMEDATA_SendPeriodicPing",
         "GetTickCount",
         "NET_D2GS_CLIENT_Send_0x6D_PING"
-      ]
+      ],
+      "dh": "bbc0442f"
     },
     {
       "name": "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING",
@@ -1156,7 +1216,8 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING",
         "GetTickCount"
-      ]
+      ],
+      "dh": "a9775634"
     },
     {
       "name": "GAME_SetSkillDelayEndFrame",
@@ -1173,7 +1234,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4b307583"
     },
     {
       "name": "GAME_GetSkillDelayEndFrame",
@@ -1190,7 +1252,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "fa0dc921"
     },
     {
       "name": "GetPing",
@@ -1207,7 +1270,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "57fdd36b"
     },
     {
       "name": "GAME_GetAveragePing",
@@ -1224,7 +1288,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "8ec9e7fd"
     },
     {
       "name": "zlibVersion_Unref_0044ce80",
@@ -1238,7 +1303,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "zlibVersion_Unref_0044ce80"
-      ]
+      ],
+      "dh": "e10c0f14"
     },
     {
       "name": "UpdateMouseModifierKeyState",
@@ -1258,7 +1324,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95ced930"
     },
     {
       "name": "pfModes_Save",
@@ -1276,7 +1343,8 @@
       ],
       "usedTypes": [
         "eD2ClientAppMode"
-      ]
+      ],
+      "dh": "348e9d7b"
     },
     {
       "name": "BetaScreen_NextPage",
@@ -1294,7 +1362,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "9c6611a0"
     },
     {
       "name": "BetaScreen_NextPageIfVisible",
@@ -1312,7 +1381,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "df7e5e3f"
     },
     {
       "name": "DrawBetaScreen",
@@ -1343,7 +1413,8 @@
         "DC6 *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d4445ea"
     },
     {
       "name": "GAMEDATA_IsMouseInRect",
@@ -1362,7 +1433,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6eefcad4"
     },
     {
       "name": "Congratz_SetOkClicked",
@@ -1380,7 +1452,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4dffadf8"
     },
     {
       "name": "GAMEDATA_GetCenteredTextX",
@@ -1402,7 +1475,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e0d48277"
     },
     {
       "name": "GAMEDATA_DrawLoadingScreenText",
@@ -1425,7 +1499,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "e743c560"
     },
     {
       "name": "SetExitCutscenePlayed",
@@ -1439,7 +1514,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "SetExitCutscenePlayed"
-      ]
+      ],
+      "dh": "9abaf99a"
     },
     {
       "name": "D2CLIENT_SetExitVar3ToTrue",
@@ -1453,7 +1529,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "D2CLIENT_SetExitVar3ToTrue"
-      ]
+      ],
+      "dh": "2c4f6d98"
     },
     {
       "name": "SetPendingExitCutsceneId",
@@ -1470,7 +1547,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "27dd34a0"
     },
     {
       "name": "GetGameVersionInfo",
@@ -1487,7 +1565,8 @@
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"
-      ]
+      ],
+      "dh": "8548ab34"
     },
     {
       "name": "pfModes_ExitGame",
@@ -1510,7 +1589,8 @@
       ],
       "usedTypes": [
         "eD2ClientAppMode"
-      ]
+      ],
+      "dh": "4637b550"
     },
     {
       "name": "ClientInit_NoSaveFlag",
@@ -1528,7 +1608,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "21507610"
     },
     {
       "name": "ClientInit_StartingAct",
@@ -1549,7 +1630,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "fc6f8792"
     },
     {
       "name": "ClientInit_JoinTcpIpServer",
@@ -1567,7 +1649,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "438e09f2"
     },
     {
       "name": "ClientInit_JoinBNetServer",
@@ -1585,7 +1668,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "adf85d28"
     },
     {
       "name": "ClientInit_JoinMcpServer",
@@ -1603,7 +1687,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "d8f6bf0b"
     },
     {
       "name": "ClientInit_PlayerClass",
@@ -1620,7 +1705,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "73c880b5"
     },
     {
       "name": "ClientInit_Noop04",
@@ -1637,7 +1723,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "32caf1cc"
     },
     {
       "name": "ClientInit_Noop05",
@@ -1654,7 +1741,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "112eab36"
     },
     {
       "name": "ClientInit_Noop03",
@@ -1671,7 +1759,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "7150e00c"
     },
     {
       "name": "ClientInit_Fullscreen",
@@ -1689,7 +1778,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "5d97abdf"
     },
     {
       "name": "ClientInit_AspectRatio",
@@ -1707,7 +1797,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "4db8fd24"
     },
     {
       "name": "ClientInit_Renderer_3DFX",
@@ -1725,7 +1816,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "f4a70da5"
     },
     {
       "name": "ClientInit_Renderer_OpenGL",
@@ -1743,7 +1835,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "93c0f912"
     },
     {
       "name": "ClientInit_Renderer_D3D",
@@ -1761,7 +1854,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "a4dbecbb"
     },
     {
       "name": "ClientInit_Renderer_Rave",
@@ -1779,7 +1873,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "8f2e5b32"
     },
     {
       "name": "ClientInit_Noop01",
@@ -1796,7 +1891,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "45979f8c"
     },
     {
       "name": "ClientInit_Gamma",
@@ -1814,7 +1910,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "d696ba44"
     },
     {
       "name": "ClientInit_Vsync",
@@ -1832,7 +1929,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "8bcd4f46"
     },
     {
       "name": "ClientInit_Noop06",
@@ -1849,7 +1947,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "2eee8219"
     },
     {
       "name": "ClientInit_Noop12",
@@ -1866,7 +1965,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "ccf8a752"
     },
     {
       "name": "ClientInit_Noop02",
@@ -1883,7 +1983,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "e0f18b5e"
     },
     {
       "name": "ClientInit_Noop07",
@@ -1900,7 +2001,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "c6bff51a"
     },
     {
       "name": "ClientInit_Noop08",
@@ -1917,7 +2019,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "f854745d"
     },
     {
       "name": "ClientInit_Log",
@@ -1935,7 +2038,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "6193e914"
     },
     {
       "name": "ClientInit_CustomSeed",
@@ -1953,7 +2057,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "46430cb9"
     },
     {
       "name": "ClientInit_Noop09",
@@ -1970,7 +2075,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "4d17c4b4"
     },
     {
       "name": "ClientInit_CharName",
@@ -1988,7 +2094,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "cb3b81f0"
     },
     {
       "name": "ClientInit_Realm",
@@ -2006,7 +2113,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "c265bcc9"
     },
     {
       "name": "ClientInit_ArenaFlags",
@@ -2024,7 +2132,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "24a72bf4"
     },
     {
       "name": "ClientInit_Noop10",
@@ -2041,7 +2150,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "8de77050"
     },
     {
       "name": "ClientInit_Noop11",
@@ -2058,7 +2168,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "d7750e45"
     },
     {
       "name": "ClientInit_Noop15",
@@ -2075,7 +2186,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "dba4f453"
     },
     {
       "name": "ClientInit_PlayerClassId",
@@ -2093,7 +2205,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "59edbf94"
     },
     {
       "name": "GLOBAL_SetGameVersionInfo",
@@ -2110,7 +2223,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "2ccd2e0f"
     },
     {
       "name": "ClientInit_Noop13",
@@ -2127,7 +2241,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "93a508b9"
     },
     {
       "name": "ClientInit_Noop14",
@@ -2144,7 +2259,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "8f62843a"
     },
     {
       "name": "ClientInit_NoCompression",
@@ -2162,7 +2278,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "f5ce3ef8"
     },
     {
       "name": "ClientInit_UseTxt",
@@ -2180,7 +2297,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "b6c14c8a"
     },
     {
       "name": "ClientInit_Noop16",
@@ -2197,7 +2315,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "28dcf5a9"
     },
     {
       "name": "LoadDataForGame",
@@ -2215,7 +2334,8 @@
       "usedTypes": [
         "D2IniConfigStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4b6bb1c0"
     },
     {
       "name": "GAMEDATA_GetExitFlag3",
@@ -2229,7 +2349,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_GetExitFlag3"
-      ]
+      ],
+      "dh": "05b0ed55"
     },
     {
       "name": "UI_ResetInputState",
@@ -2244,7 +2365,8 @@
       "calledFunctions": [
         "UI_ResetInputState",
         "ClearSelectedUnit"
-      ]
+      ],
+      "dh": "b14af66e"
     },
     {
       "name": "GAMEDATA_ClearQueuedClicks",
@@ -2258,7 +2380,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_ClearQueuedClicks"
-      ]
+      ],
+      "dh": "a0f8f979"
     },
     {
       "name": "GetEntryIndex",
@@ -2275,7 +2398,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f446e61d"
     },
     {
       "name": "GAMEDATA_GetGlobalTickCount",
@@ -2292,7 +2416,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "16777565"
     },
     {
       "name": "GAMEDATA_GetGlobalTickCount_Unref_0044dab0",
@@ -2309,7 +2434,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ec5d307d"
     },
     {
       "name": "GAME_GetSyncTickCount",
@@ -2326,7 +2452,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a5b63743"
     },
     {
       "name": "GAME_SetSyncTickCount",
@@ -2343,7 +2470,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f5f1ab15"
     },
     {
       "name": "GAMEDATA_GetFpsDrawn",
@@ -2360,7 +2488,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1b45c722"
     },
     {
       "name": "GetFPSSkip",
@@ -2377,7 +2506,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e7eac254"
     },
     {
       "name": "gnRecordingIndex",
@@ -2394,7 +2524,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5d4d354d"
     },
     {
       "name": "GetStepsOfMissileMovement",
@@ -2411,7 +2542,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "0c4a0af5"
     },
     {
       "name": "GetStepsOfMissileMovement_Unref_0044db20",
@@ -2428,7 +2560,8 @@
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "7c9ea60e"
     },
     {
       "name": "CLIENT_GetD2GSGameType",
@@ -2445,7 +2578,8 @@
       ],
       "usedTypes": [
         "eD2GSGameType"
-      ]
+      ],
+      "dh": "81f271ca"
     },
     {
       "name": "GAMEDATA_ExtendTimeout",
@@ -2463,7 +2597,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "23115ec5"
     },
     {
       "name": "GAMEDATA_LoadActTiles",
@@ -2483,7 +2618,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6519eadc"
     },
     {
       "name": "GAMEDATA_CheckColorTxtOverride",
@@ -2503,7 +2639,8 @@
       ],
       "usedTypes": [
         "D2MPQFileStrc"
-      ]
+      ],
+      "dh": "69189c3d"
     },
     {
       "name": "RENDERER_TogglePerspective_Unref_0044dc40",
@@ -2517,7 +2654,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "RENDERER_TogglePerspective_Unref_0044dc40"
-      ]
+      ],
+      "dh": "0f6b1f5c"
     },
     {
       "name": "GAMEDATA_GetBloodFlag",
@@ -2531,7 +2669,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_GetBloodFlag"
-      ]
+      ],
+      "dh": "d0e6100b"
     },
     {
       "name": "CLIENT_SetDifficulty",
@@ -2545,7 +2684,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "CLIENT_SetDifficulty"
-      ]
+      ],
+      "dh": "0f7714e7"
     },
     {
       "name": "CLIENT_SetExpansion",
@@ -2559,7 +2699,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "CLIENT_SetExpansion"
-      ]
+      ],
+      "dh": "fd62706f"
     },
     {
       "name": "CLIENT_SetLadder",
@@ -2573,7 +2714,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "CLIENT_SetLadder"
-      ]
+      ],
+      "dh": "443e5f4d"
     },
     {
       "name": "GAMEDATA_GetLadderOrGameType",
@@ -2590,7 +2732,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "e4fcb85d"
     },
     {
       "name": "CLIENT_CheckExpansion",
@@ -2604,7 +2747,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "CLIENT_CheckExpansion"
-      ]
+      ],
+      "dh": "40c6d033"
     },
     {
       "name": "GetDificulity",
@@ -2621,7 +2765,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "0f3fe953"
     },
     {
       "name": "ClearInGameUIFlags",
@@ -2640,7 +2785,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9e234578"
     },
     {
       "name": "GAMEDATA_RegisterEventHandlers",
@@ -2659,7 +2805,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a1d1ed52"
     },
     {
       "name": "D2CLIENT_ExitGame",
@@ -2678,7 +2825,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a9480280"
     },
     {
       "name": "GAMEDATA_TimerGetRemaining",
@@ -2696,7 +2844,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "68231685"
     },
     {
       "name": "GAMEDATA_CheckTimerExpired",
@@ -2715,7 +2864,8 @@
       "usedTypes": [
         "D2ClientTimerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "13e7078f"
     },
     {
       "name": "Timer_IsActiveAndUpdate",
@@ -2734,7 +2884,8 @@
       "usedTypes": [
         "D2ClientTimerStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "53120e3c"
     },
     {
       "name": "SendExitGameRequest",
@@ -2754,7 +2905,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "aaebe4c9"
     },
     {
       "name": "CLIENT_AllocAct",
@@ -2787,7 +2939,8 @@
         "eD2LevelId",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1d330f52"
     },
     {
       "name": "GAME_InitClientSide",
@@ -2826,7 +2979,8 @@
         "LIGHTMAP_ClearToBlack",
         "WEATHER_Init",
         "CHAT_InitHistoryIndices"
-      ]
+      ],
+      "dh": "d985adf5"
     },
     {
       "name": "CLIENT_ConnectionRefused",
@@ -2848,7 +3002,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "efe3bc63"
     },
     {
       "name": "LoadingScreen_TickOrCleanup",
@@ -2868,7 +3023,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "14da5b2e"
     },
     {
       "name": "INPUT_HandleMinimapClick",
@@ -2888,7 +3044,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "2e26d5e1"
     },
     {
       "name": "Congratz_HandleOkButton",
@@ -2908,7 +3065,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "ae048183"
     },
     {
       "name": "GAMEDATA_DrawCharacterPortrait",
@@ -2935,7 +3093,8 @@
         "eD2PlayerStatus",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a876214"
     },
     {
       "name": "DRAW_Congratz",
@@ -2973,7 +3132,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6deef78"
     },
     {
       "name": "GAMEDATA_ShowEndGameCutscene",
@@ -2987,7 +3147,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "GAMEDATA_ShowEndGameCutscene"
-      ]
+      ],
+      "dh": "dff45aa0"
     },
     {
       "name": "TSIntrusiveList_Clear",
@@ -3004,7 +3165,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "5f096a0d"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced",
@@ -3021,7 +3183,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "55d12037"
     },
     {
       "name": "Client_CheckConnectionTimeouts",
@@ -3041,7 +3204,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fa250536"
     },
     {
       "name": "CLIENT_GameLoopFrame",
@@ -3094,7 +3258,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5740436"
     },
     {
       "name": "pfModes_EnterGame",
@@ -3149,7 +3314,8 @@
         "tagMSG",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a3b70e8f"
     },
     {
       "name": "GAME_TryCopyFrom",
@@ -3167,7 +3333,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "3ee5e44f"
     },
     {
       "name": "RegisterCmdLineLngOption",
@@ -3182,7 +3349,8 @@
       "calledFunctions": [
         "RegisterCmdLineLngOption",
         "SCmdRegisterArgument"
-      ]
+      ],
+      "dh": "2d44e3d2"
     },
     {
       "name": "FreeLanguage",
@@ -3196,7 +3364,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "FreeLanguage"
-      ]
+      ],
+      "dh": "9d39dda4"
     },
     {
       "name": "ClientInit_Noop16_Unref_00452160",
@@ -3213,7 +3382,8 @@
       ],
       "usedTypes": [
         "D2IniConfigStrc"
-      ]
+      ],
+      "dh": "3452661c"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10",
@@ -3230,7 +3400,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "7e6cddd6"
     },
     {
       "name": "thunk_GAMEDATA_CheckAutomapCenterOnLoad",
@@ -3253,7 +3424,8 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "CLIENT_SetDifficulty_Unref_00552830"
-      ]
+      ],
+      "dh": "1ada3384"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602370",
@@ -3270,7 +3442,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "01617e40"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00602390",
@@ -3287,7 +3460,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "be1a97b8"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_00603510",
@@ -3304,7 +3478,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "c2d4eb53"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_0060e610",
@@ -3321,7 +3496,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "43187ca6"
     },
     {
       "name": "TSIntrusiveList_Clear_Unreferenced_Unref_006c4140",
@@ -3338,7 +3514,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "1bb9d66f"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca026",
@@ -3358,7 +3535,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "643fcb5d"
     }
   ]
 }

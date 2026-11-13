@@ -54,7 +54,7 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client { namespace UNIT { namespace CUnit {
 
-static D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, int32_t nListIndex, eD2UnitType eUnitType, D2UnitStrc * * ppUnitHashTable) {
+static D2UnitStrc * __stdcall FindUnit(D2UnitStrc * * ppUnitHashTable, int32_t nListIndex, eD2UnitType eUnitType, int32_t nUnitGUID) {
     D2UnitStrc* pCurUnit = ppUnitHashTable[nListIndex];
     while (true) {
       if (!pCurUnit) {
@@ -76,19 +76,19 @@ static D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, int32_t nListIndex, eD
 }
 
 D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
+    D2UnitStrc* pUnit = FindUnit(ServerSideUnitHashTables[eUnitType], nUnitGUID & 0x7f, eUnitType, nUnitGUID);
     return pUnit;
 }
 
 D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ClientSideUnitHashTables[eUnitType]);
+    D2UnitStrc* pUnit = FindUnit(ClientSideUnitHashTables[eUnitType], nUnitGUID & 0x7f, eUnitType, nUnitGUID);
     return pUnit;
 }
 
 D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
+    uint32_t nUnitGUID;
     D2UnitStrc* pOwnerUnit;
     eD2UnitType eOwnerType;
-    uint32_t nUnitGUID;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);
@@ -98,11 +98,11 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eOwnerType;
       nUnitGUID = pUnit->nOwnerGUID;
       if (eUnitType == UNIT_MISSILE) {
-        pOwnerUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, UNIT_MISSILE, ClientSideUnitHashTables[3]);
+        pOwnerUnit = FindUnit(ClientSideUnitHashTables[3], nUnitGUID & 0x7f, UNIT_MISSILE, nUnitGUID);
         return pOwnerUnit;
       }
 
-      pOwnerUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
+      pOwnerUnit = FindUnit(ServerSideUnitHashTables[eUnitType], nUnitGUID & 0x7f, eUnitType, nUnitGUID);
       return pOwnerUnit;
     }
 
@@ -116,9 +116,9 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
     D2UnitStrc* pCurUnit;
     D2UnitStrc* pNextUnit;
     if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
+      pPrevUnit = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
+        pPrevUnit = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
         if (pPrevUnit) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
           exit(-1);
@@ -128,9 +128,9 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
       }
     } else {
       D2UnitStrc* (*papDVar1)[128];
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ClientSideUnitHashTables[pUnit->eUnitType]);
+      pPrevUnit = FindUnit(ClientSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ClientSideUnitHashTables[pUnit->eUnitType]);
+        pPrevUnit = FindUnit(ClientSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
         if (!pPrevUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
@@ -480,7 +480,7 @@ BOOL __fastcall CUNIT_IsPlayerOrMonster(D2UnitStrc * pUnit) {
 }
 
 void __fastcall SetTargetByTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetGUID) {
-    D2UnitStrc* pTargetUnit = FindUnit(nTargetGUID, nTargetGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
+    D2UnitStrc* pTargetUnit = FindUnit(ServerSideUnitHashTables[eUnitType], nTargetGUID & 0x7f, eUnitType, nTargetGUID);
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
 }
 
@@ -1967,7 +1967,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     return 1;
 }
 
-static void RemoveObject(int32_t nIndex, D2UnitStrc * * ppUnitTable, eD2UnitType eUnitType, int32_t nUnitGUID) {
+static void RemoveObject(int32_t nUnitGUID, eD2UnitType eUnitType, D2UnitStrc * * ppUnitTable, int32_t nIndex) {
     D2UnitStrc** ppNextSlot;
     D2UnitStrc* pUnit = ppUnitTable[nIndex];
     D2UnitStrc* pPrevUnit = 0;
@@ -1998,11 +1998,11 @@ static void RemoveObject(int32_t nIndex, D2UnitStrc * * ppUnitTable, eD2UnitType
 }
 
 void __fastcall RemoveObjectFromServerObjectTable(uint32_t nUnitGUID, eD2UnitType eUnitType) {
-    CUnit::RemoveObject(nUnitGUID & 0x7f, ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID);
+    CUnit::RemoveObject(nUnitGUID, eUnitType, ServerSideUnitHashTables[eUnitType], nUnitGUID & 0x7f);
 }
 
 void __fastcall UNITS_RemoveFromClientHashTable(uint32_t dwUnitGUID, int32_t nUnitType) {
-    CUnit::RemoveObject(dwUnitGUID & 0x7f, ClientSideUnitHashTables[nUnitType], nUnitType, dwUnitGUID);
+    CUnit::RemoveObject(dwUnitGUID, nUnitType, ClientSideUnitHashTables[nUnitType], dwUnitGUID & 0x7f);
 }
 
 // Inserts a newly allocated unit into the server-side hash table. If insertion fails due to a GUID collision, evicts the existing unit and retries. If the retry also fails, frees pUnit and returns null. Returns pUnit on success.
@@ -2012,14 +2012,14 @@ static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
       return pUnit;
     }
 
-    D2UnitStrc* pExisting = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
+    D2UnitStrc* pExisting = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
     if (pExisting == pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c6);
       exit(-1);
     }
     if (pExisting) {
       D2UnitStrc* (*papDVar1)[128] = !(pExisting->eUnitFlags >> 0x15 & 1) ? ServerSideUnitHashTables : ClientSideUnitHashTables;
-      CUnit::RemoveObject(pExisting->nUnitGUID & 0x7f, papDVar1[pExisting->eUnitType], pExisting->eUnitType, pExisting->nUnitGUID);
+      CUnit::RemoveObject(pExisting->nUnitGUID, pExisting->eUnitType, papDVar1[pExisting->eUnitType], pExisting->nUnitGUID & 0x7f);
       bInserted = InsertIntoHashTable(pUnit);
       if (bInserted) {
         return pUnit;
@@ -2220,7 +2220,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     uint32_t nPalShiftIdx = pCreateData->nUnitGUID;
     uint32_t nDifficulty = GAME::RosterPets::GetRosterPetGUID(pPlayerUnit, 7, 1);
     if (nPalShiftIdx == nDifficulty) {
-      pUnit = FindUnit(nPalShiftIdx, nPalShiftIdx & 0x7f, UNIT_MONSTER, ServerSideUnitHashTables[1]);
+      pUnit = FindUnit(ServerSideUnitHashTables[1], nPalShiftIdx & 0x7f, UNIT_MONSTER, nPalShiftIdx);
       if (pUnit) {
         Engine::Gfx::FreeGfxInfo(pUnit);
         GAME::Wall2::WALL2_InitUnitGfx(pUnit);
@@ -2692,7 +2692,7 @@ void __fastcall CleanupInventory(D2UnitStrc * pUnit, int32_t bCheckInventory) {
               exit(-1);
             }
 
-            CUnit::RemoveObject(pHashItem->nUnitGUID & 0x7f, ServerSideUnitHashTables[pHashItem->eUnitType], pHashItem->eUnitType, pHashItem->nUnitGUID);
+            CUnit::RemoveObject(pHashItem->nUnitGUID, pHashItem->eUnitType, ServerSideUnitHashTables[pHashItem->eUnitType], pHashItem->nUnitGUID & 0x7f);
           } else {
             pHashItem = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pHashItem);
             if (!pHashItem) {

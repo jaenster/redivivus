@@ -19,7 +19,8 @@
       "usedTypes": [
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8ca432cf"
     },
     {
       "name": "FORMS_DestroyD2WinEditBox",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "54b7f05e"
     },
     {
       "name": "D2WINEDITBOX_SetFilterCallback",
@@ -63,7 +65,8 @@
         "D2WinEditBox",
         "fpD2WinEditBoxFilter",
         "int32_t"
-      ]
+      ],
+      "dh": "f19c5806"
     },
     {
       "name": "D2WINEDITBOX_SetChangeCallback",
@@ -85,7 +88,8 @@
         "D2WinEditBox",
         "fpD2WinEditBoxChange",
         "int32_t"
-      ]
+      ],
+      "dh": "7aa62801"
     },
     {
       "name": "D2WINEDITBOX_GetTextBuffer",
@@ -101,7 +105,8 @@
         "D2WINEDITBOX_GetTextBuffer",
         "GetHwnd",
         "strncpy"
-      ]
+      ],
+      "dh": "c9dd9265"
     },
     {
       "name": "D2WINEDITBOX_ValidateInput",
@@ -117,7 +122,8 @@
         "D2WINEDITBOX_ValidateInput",
         "GetHwnd",
         "memcpy"
-      ]
+      ],
+      "dh": "30ef1c17"
     },
     {
       "name": "D2WINEDITBOX_HasSelection",
@@ -138,7 +144,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "82add528"
     },
     {
       "name": "D2WINEDITBOX_ClearSelection",
@@ -159,7 +166,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "efcd0245"
     },
     {
       "name": "D2WINEDITBOX_SelectAll",
@@ -181,7 +189,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "21d12125"
     },
     {
       "name": "D2WINEDITBOX_SetPasswordMode",
@@ -203,7 +212,8 @@
         "D2WinEditBox",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa73ce48"
     },
     {
       "name": "FORMS_TextInput_GetValue",
@@ -225,7 +235,8 @@
         "D2ControlStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "9de0527e"
     },
     {
       "name": "D2WINEDITBOX_LinkTabOrder",
@@ -246,7 +257,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "e24bd229"
     },
     {
       "name": "D2WINEDITBOX_HandleMouseClick",
@@ -274,7 +286,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d14fc62a"
     },
     {
       "name": "D2WINEDITBOX_HandleTextSelection",
@@ -303,7 +316,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f839c482"
     },
     {
       "name": "Mouse",
@@ -324,7 +338,8 @@
       "usedTypes": [
         "D2ControlMsg",
         "int32_t"
-      ]
+      ],
+      "dh": "e392e4b8"
     },
     {
       "name": "D2WINEDITBOX_CreateControl",
@@ -360,7 +375,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0946dd2"
     },
     {
       "name": "Push",
@@ -383,7 +399,8 @@
         "D2ControlMsg",
         "D2WinEditBox",
         "int32_t"
-      ]
+      ],
+      "dh": "6d79f717"
     },
     {
       "name": "D2WINEDITBOX_FilterDigitChar",
@@ -397,7 +414,8 @@
       "namespace": "D2Win::Src::D2WinEditBox",
       "calledFunctions": [
         "D2WINEDITBOX_FilterDigitChar"
-      ]
+      ],
+      "dh": "94658695"
     },
     {
       "name": "D2WINEDITBOX_FilterLetterChar",
@@ -411,7 +429,8 @@
       "namespace": "D2Win::Src::D2WinEditBox",
       "calledFunctions": [
         "D2WINEDITBOX_FilterLetterChar"
-      ]
+      ],
+      "dh": "41d0a773"
     },
     {
       "name": "D2WINEDITBOX_UpdateCursorPosition",
@@ -437,7 +456,8 @@
         "WCHAR",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c90ad926"
     },
     {
       "name": "D2WINEDITBOX_HandleDelete",
@@ -464,7 +484,8 @@
         "D2WinEditBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "5c8db3d7"
     },
     {
       "name": "D2WINEDITBOX_HandleKeyPress",
@@ -505,7 +526,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3f6d44b4"
     },
     {
       "name": "D2WINEDITBOX_HandleKeyRelease",
@@ -541,7 +563,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "47a60a0c"
     },
     {
       "name": "D2WINEDITBOX_SetTextWide",
@@ -566,7 +589,8 @@
         "D2WinEditBox",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "79391fcf"
     },
     {
       "name": "Draw",
@@ -608,7 +632,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d9aab0e5"
     },
     {
       "name": "PushFlag0x8",
@@ -640,7 +665,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7f03528b"
     },
     {
       "name": "D2WINEDITBOX_SetTextFromAnsi",
@@ -660,7 +686,8 @@
       "usedTypes": [
         "D2WinEditBox",
         "WCHAR"
-      ]
+      ],
+      "dh": "f2be2995"
     },
     {
       "name": "DrawFlag0x8",
@@ -705,7 +732,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "45be1e92"
     },
     {
       "name": "D2WinEditBox",
@@ -732,7 +760,8 @@
         "fpD2WinEditBoxSubmit",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7488a8e"
     }
   ]
 }

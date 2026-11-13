@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2dbc6c94"
     },
     {
       "name": "SetSeenHelpMenu",
@@ -34,7 +35,8 @@
       "calledFunctions": [
         "SetSeenHelpMenu",
         "SRegSaveValue"
-      ]
+      ],
+      "dh": "fbef6b08"
     },
     {
       "name": "LoadBorder",
@@ -51,7 +53,8 @@
         "D2GFX_GetResolutionMode",
         "DC6_FreeAndDelete",
         "ARCHIVE_LoadOverlayImageUsedInGame"
-      ]
+      ],
+      "dh": "82c90ed7"
     },
     {
       "name": "DrawBorderClassic",
@@ -70,7 +73,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "857083bb"
     },
     {
       "name": "DrawBorderXpac",
@@ -89,7 +93,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "f24843c5"
     },
     {
       "name": "HELP_DrawDarkOverlay_B",
@@ -105,7 +110,8 @@
         "HELP_DrawDarkOverlay_B",
         "SetRedToBlack",
         "D2GFX_DrawSolidRectExBySize"
-      ]
+      ],
+      "dh": "0b468ca8"
     },
     {
       "name": "DrawYellowBullet",
@@ -124,7 +130,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "19285118"
     },
     {
       "name": "DrawWhiteBulletClassic",
@@ -144,7 +151,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "f187c845"
     },
     {
       "name": "DrawWhiteBulletXpac",
@@ -164,7 +172,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "4e1133b1"
     },
     {
       "name": "DrawSellBtn",
@@ -185,7 +194,8 @@
       ],
       "usedTypes": [
         "D2GfxDataStrc"
-      ]
+      ],
+      "dh": "ffde0b4a"
     },
     {
       "name": "HELP_DrawDarkOverlay",
@@ -201,7 +211,8 @@
         "HELP_DrawDarkOverlay",
         "SetRedToBlack",
         "D2GFX_DrawSolidRectExBySize"
-      ]
+      ],
+      "dh": "53e8d21b"
     },
     {
       "name": "FreeHelpBorder",
@@ -216,7 +227,8 @@
       "calledFunctions": [
         "FreeHelpBorder",
         "DC6_FreeAndDelete"
-      ]
+      ],
+      "dh": "1f499ed6"
     },
     {
       "name": "INPUT_HelpCloseButtonDown",
@@ -238,7 +250,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b320e761"
     },
     {
       "name": "HELP_MiniPanelKeyNoOp",
@@ -255,7 +268,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4c94970d"
     },
     {
       "name": "HELP_HideMiniPanel",
@@ -270,7 +284,8 @@
       "calledFunctions": [
         "HELP_HideMiniPanel",
         "SetUIFlag"
-      ]
+      ],
+      "dh": "60f95bd6"
     },
     {
       "name": "MouseIsInRange",
@@ -289,7 +304,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "61e62b51"
     },
     {
       "name": "HELP_DrawHelpButtonTooltip",
@@ -316,7 +332,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "e210b7c6"
     },
     {
       "name": "HELP_DrawHelpButton",
@@ -340,7 +357,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "68d16816"
     },
     {
       "name": "INPUT_HelpScrollButtonDown",
@@ -360,7 +378,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "78881d33"
     },
     {
       "name": "INPUT_HelpScrollButtonUp",
@@ -382,7 +401,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "3aafd756"
     },
     {
       "name": "HELP_CenterTextAndGetX",
@@ -404,7 +424,8 @@
         "WCHAR",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "507d0cea"
     },
     {
       "name": "DRAW_UI_HelpXpac",
@@ -429,7 +450,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "a4a8ad6d"
     },
     {
       "name": "DRAW_UI_HelpClassic",
@@ -454,7 +476,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "4f341d38"
     },
     {
       "name": "DrawBackgroundHelpMenu",
@@ -479,7 +502,8 @@
         "DrawBorderClassic",
         "DrawWhiteBulletClassic",
         "DRAW_UI_HelpClassic"
-      ]
+      ],
+      "dh": "ff7163af"
     },
     {
       "name": "INPUT_HelpCloseButtonUp",
@@ -503,7 +527,8 @@
         "D2UIMouseMsgStrc",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c1a6ab4d"
     },
     {
       "name": "HELP_OnEscapeOrSpace",
@@ -521,7 +546,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "2144e3aa"
     },
     {
       "name": "HELP_SetUIVarW",
@@ -540,7 +566,8 @@
       "usedTypes": [
         "eD2UIvars",
         "eD2UIvarsSetType"
-      ]
+      ],
+      "dh": "fdd403f4"
     },
     {
       "name": "HELP_MiniPanelKeyNoOp_Unref_004e4040",
@@ -557,7 +584,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "9da3a6df"
     }
   ]
 }

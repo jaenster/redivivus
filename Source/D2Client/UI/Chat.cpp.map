@@ -15,7 +15,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "CHAT_InitEmpty_Unref_00477970"
-      ]
+      ],
+      "dh": "e021ff0c"
     },
     {
       "name": "CHAT_HandleIMECandidateList",
@@ -34,7 +35,8 @@
       ],
       "usedTypes": [
         "HIMC"
-      ]
+      ],
+      "dh": "550cf65e"
     },
     {
       "name": "INPUT_HandleIMENotify",
@@ -58,7 +60,8 @@
         "HIMC",
         "HKL",
         "LPCANDIDATELIST"
-      ]
+      ],
+      "dh": "4c975859"
     },
     {
       "name": "CHAT_CheckIMELanguage",
@@ -77,7 +80,8 @@
         "HKL",
         "LANGID",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a5bbac7"
     },
     {
       "name": "CHAT_ResetIMEState",
@@ -94,7 +98,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "e0aab33c"
     },
     {
       "name": "CHAT_InitIME",
@@ -118,7 +123,8 @@
         "HKL",
         "LANGID",
         "int32_t"
-      ]
+      ],
+      "dh": "b70ad180"
     },
     {
       "name": "CHAT_ShutdownIME",
@@ -139,7 +145,8 @@
       "usedTypes": [
         "HIMC",
         "int32_t"
-      ]
+      ],
+      "dh": "83b8379b"
     },
     {
       "name": "CHAT_CompareCaseInsensitive",
@@ -157,7 +164,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5b3688c5"
     },
     {
       "name": "CHAT_DrawCursor",
@@ -178,7 +186,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "257f8e37"
     },
     {
       "name": "CHAT_InitEmpty",
@@ -192,7 +201,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "CHAT_InitEmpty"
-      ]
+      ],
+      "dh": "ab02d3f2"
     },
     {
       "name": "CHAT_ShutdownEmpty",
@@ -206,7 +216,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "CHAT_ShutdownEmpty"
-      ]
+      ],
+      "dh": "76e3debd"
     },
     {
       "name": "CHAT_DrawIMEComposition",
@@ -227,7 +238,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0b40949e"
     },
     {
       "name": "CHAT_DrawIMECandidates",
@@ -250,7 +262,8 @@
         "LPCANDIDATELIST",
         "WCHAR",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a3a52bf"
     },
     {
       "name": "DRAW_UI_ChatInput",
@@ -283,7 +296,8 @@
         "D2TextLineStrc",
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "dd65f960"
     },
     {
       "name": "CHAT_RestoreFromHistory",
@@ -302,7 +316,8 @@
       "usedTypes": [
         "WCHAR",
         "uint16_t"
-      ]
+      ],
+      "dh": "ded26bd8"
     },
     {
       "name": "CHAT_AddToHistory",
@@ -319,7 +334,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "c5dff635"
     },
     {
       "name": "CHAT_ScrollHistory",
@@ -336,7 +352,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e90b0ddd"
     },
     {
       "name": "CHAT_ParseCommand",
@@ -364,7 +381,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "13a6e3bc"
     },
     {
       "name": "CHAT_CheckChatboxBounds",
@@ -382,7 +400,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "4b7c2970"
     },
     {
       "name": "INPUT_HandleChatScroll",
@@ -402,7 +421,8 @@
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
-      ]
+      ],
+      "dh": "e70894ac"
     },
     {
       "name": "CHAT_IsWideStringASCII",
@@ -421,7 +441,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "40a06185"
     },
     {
       "name": "CHAT_InitHistoryIndices",
@@ -435,7 +456,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "CHAT_InitHistoryIndices"
-      ]
+      ],
+      "dh": "36d9e08e"
     },
     {
       "name": "CHAT_ExtractWhisperTarget",
@@ -450,7 +472,8 @@
       "calledFunctions": [
         "CHAT_ExtractWhisperTarget",
         "SStrChr"
-      ]
+      ],
+      "dh": "bedc4415"
     },
     {
       "name": "CHAT_ExtractWhisperPrefix",
@@ -467,7 +490,8 @@
         "SStrChr",
         "memcpy",
         "SStrCopy"
-      ]
+      ],
+      "dh": "f8e68569"
     },
     {
       "name": "CHAT_ClearInput",
@@ -482,7 +506,8 @@
       "calledFunctions": [
         "CHAT_ClearInput",
         "memset"
-      ]
+      ],
+      "dh": "cbe2e54b"
     },
     {
       "name": "CHAT_ProcessBattleNetMessage",
@@ -517,7 +542,8 @@
         "int32_t",
         "uint16_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "6b259d90"
     },
     {
       "name": "CHAT_HandleResignCommand",
@@ -541,7 +567,8 @@
         "D2BNetClientCallbacksStrc",
         "MessageStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "cc8f5b43"
     },
     {
       "name": "CHAT_HandleWhisperCommand",
@@ -572,7 +599,8 @@
         "D2RosterStrc",
         "MessageStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "415b2b37"
     },
     {
       "name": "CHAT_ExtractCommandParameter",
@@ -591,7 +619,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2f243afa"
     },
     {
       "name": "ChatCommandProcessor",
@@ -643,7 +672,8 @@
         "eD2GSGameType",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "bf57932a"
     },
     {
       "name": "INPUT_HandleChatCharInput",
@@ -674,7 +704,8 @@
         "D2UIMouseMsgStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2a0a302e"
     },
     {
       "name": "StaticInit_gwszChatInputText",
@@ -691,7 +722,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "e47ea915"
     },
     {
       "name": "StaticInit_gaChatHistoryBuffer",
@@ -708,7 +740,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "38cc958a"
     },
     {
       "name": "StaticInit_gwcIMECompositionString",
@@ -722,7 +755,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "StaticInit_gwcIMECompositionString"
-      ]
+      ],
+      "dh": "758e1d8a"
     },
     {
       "name": "StaticInit_gwcImeCompositionBuffer",
@@ -736,7 +770,8 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "StaticInit_gwcImeCompositionBuffer"
-      ]
+      ],
+      "dh": "f5122035"
     }
   ]
 }

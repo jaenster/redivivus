@@ -15,7 +15,8 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "WND_GetActiveWindow_Unref_0041c2a0"
-      ]
+      ],
+      "dh": "123dc32b"
     },
     {
       "name": "WND_GetActiveWindow_Unref_0041c2b0",
@@ -32,7 +33,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "79221bc9"
     },
     {
       "name": "SMsgDoMessageLoop",
@@ -50,7 +52,8 @@
       "usedTypes": [
         "pfnStormMsgIdleCallback",
         "tagMSG"
-      ]
+      ],
+      "dh": "682366c0"
     },
     {
       "name": "WND_GetActiveWindow",
@@ -64,7 +67,8 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "WND_GetActiveWindow"
-      ]
+      ],
+      "dh": "d7ebd275"
     },
     {
       "name": "SMsgPopRegisterState",
@@ -79,7 +83,8 @@
       "calledFunctions": [
         "SMsgPopRegisterState",
         "SEvtPopState"
-      ]
+      ],
+      "dh": "1dfc6d8e"
     },
     {
       "name": "SMsgPushRegisterState",
@@ -94,7 +99,8 @@
       "calledFunctions": [
         "SMsgPushRegisterState",
         "SEvtPushState"
-      ]
+      ],
+      "dh": "5e3e76cb"
     },
     {
       "name": "WND_SetActiveWindow",
@@ -108,7 +114,8 @@
       "namespace": "Storm::WindowHandle",
       "calledFunctions": [
         "WND_SetActiveWindow"
-      ]
+      ],
+      "dh": "1e84f3d7"
     },
     {
       "name": "Unreferenced_004203c0",
@@ -125,7 +132,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "0e6aa392"
     },
     {
       "name": "WND_ResolveListOffset",
@@ -144,7 +152,8 @@
         "StormLinkStrc",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3d3da26f"
     },
     {
       "name": "Unreferenced_00420470",
@@ -161,7 +170,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "93e373d5"
     },
     {
       "name": "Unreferenced_004204f0",
@@ -178,7 +188,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "8d4828da"
     },
     {
       "name": "WND_GetNodeOrDefault",
@@ -195,7 +206,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "221b9f0c"
     },
     {
       "name": "WND_InsertListNode",
@@ -216,7 +228,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79f5674b"
     },
     {
       "name": "WND_GetNodeMaskedOffset",
@@ -235,7 +248,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7e5d8740"
     },
     {
       "name": "WND_UnlinkListNode",
@@ -255,7 +269,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e324a889"
     },
     {
       "name": "Unreferenced_004206a0",
@@ -272,7 +287,8 @@
       ],
       "usedTypes": [
         "StormLinkedListStrc"
-      ]
+      ],
+      "dh": "a6062aaf"
     },
     {
       "name": "WND_GetNodeData",
@@ -291,7 +307,8 @@
         "StormLinkStrc",
         "StormLinkedListStrc",
         "intptr_t"
-      ]
+      ],
+      "dh": "5566daa1"
     },
     {
       "name": "UnlinkAll",
@@ -311,7 +328,8 @@
         "TSLink<WNDREC> *",
         "TSList<WNDREC, TSGetLink<WNDREC>>",
         "uint32_t"
-      ]
+      ],
+      "dh": "ed80f61c"
     },
     {
       "name": "WND_DetachAndClearChildren",
@@ -332,7 +350,8 @@
         "StormLinkStrc *",
         "StormLinkedListStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "ca880893"
     },
     {
       "name": "Unreferenced_004207d0",
@@ -349,7 +368,8 @@
       ],
       "usedTypes": [
         "StormLinkStrc"
-      ]
+      ],
+      "dh": "a97c18f7"
     },
     {
       "name": "WND_AllocRecord",
@@ -370,7 +390,8 @@
         "int *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "925326f2"
     },
     {
       "name": "WND_UnlinkAndFreeRecord",
@@ -389,7 +410,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "8acf9654"
     },
     {
       "name": "SMSG_AddWindow",
@@ -410,7 +432,8 @@
         "StormLinkStrc *",
         "StormWndRecStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "4a4a854a"
     },
     {
       "name": "WND_RemoveAndFreeRecord",
@@ -432,7 +455,8 @@
         "StormLinkedListStrc",
         "StormWndRecStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5239f0c7"
     },
     {
       "name": "SMSG_FindWindow",
@@ -449,7 +473,8 @@
       ],
       "usedTypes": [
         "StormWndRecStrc"
-      ]
+      ],
+      "dh": "5b2be9b1"
     },
     {
       "name": "SMSG_DeleteWindow",
@@ -469,7 +494,8 @@
       ],
       "usedTypes": [
         "StormWndRecStrc"
-      ]
+      ],
+      "dh": "c6fc5018"
     },
     {
       "name": "SMSG_InternalRegister",
@@ -492,7 +518,8 @@
         "StormWndRecStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "743e345c"
     },
     {
       "name": "SMSG_InternalUnregister",
@@ -513,7 +540,8 @@
       "usedTypes": [
         "StormWndRecStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d976d50"
     },
     {
       "name": "Unreferenced_00420ae0",
@@ -528,7 +556,8 @@
       "calledFunctions": [
         "Unreferenced_00420ae0",
         "SMSG_DeleteWindow"
-      ]
+      ],
+      "dh": "e3db8c76"
     },
     {
       "name": "SMsgDispatchMessage",
@@ -548,7 +577,8 @@
       "usedTypes": [
         "D2UIMouseMsgStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "957ce643"
     },
     {
       "name": "SMsgRegisterCommand",
@@ -567,7 +597,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d52227e"
     },
     {
       "name": "SMsgRegisterKeyDown",
@@ -586,7 +617,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0d902521"
     },
     {
       "name": "SMsgRegisterKeyUp",
@@ -605,7 +637,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "79576fc1"
     },
     {
       "name": "SMsgRegisterMessage",
@@ -624,7 +657,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "95e48869"
     },
     {
       "name": "SMsgUnregisterCommand",
@@ -642,7 +676,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2a81781b"
     },
     {
       "name": "SMsgUnregisterKeyDown",
@@ -660,7 +695,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4f20ecfe"
     },
     {
       "name": "SMsgUnregisterKeyUp",
@@ -678,7 +714,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "344f720e"
     },
     {
       "name": "SMsgUnregisterMessage",
@@ -696,7 +733,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3c531806"
     },
     {
       "name": "GenericWndProc",
@@ -714,7 +752,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "11d0d070"
     },
     {
       "name": "WND_GetWndProc",
@@ -732,7 +771,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "ea714f86"
     },
     {
       "name": "Unreferenced_00420d80",
@@ -749,7 +789,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ed662ec3"
     },
     {
       "name": "Unreferenced_00420da0",
@@ -766,7 +807,8 @@
       ],
       "usedTypes": [
         "BigBuffer"
-      ]
+      ],
+      "dh": "24997a2a"
     },
     {
       "name": "WND_ByteBuffer_HasRoom",
@@ -785,7 +827,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "38b62fc4"
     },
     {
       "name": "WND_EntryArray_AllocNext",
@@ -803,7 +846,8 @@
       "usedTypes": [
         "BigBuffer",
         "BigStack"
-      ]
+      ],
+      "dh": "17bbd4f9"
     },
     {
       "name": "WND_EntryArray_FreeEntries",
@@ -821,7 +865,8 @@
       "usedTypes": [
         "BigStack",
         "int32_t"
-      ]
+      ],
+      "dh": "57ac8620"
     },
     {
       "name": "WND_EntryArray_AllocOrReuse",
@@ -840,7 +885,8 @@
         "BigBuffer",
         "BigStack",
         "int32_t"
-      ]
+      ],
+      "dh": "8270797b"
     },
     {
       "name": "StaticInit_gWndTrackingList",
@@ -855,7 +901,8 @@
       "calledFunctions": [
         "StaticInit_gWndTrackingList",
         "atexit"
-      ]
+      ],
+      "dh": "a74bef08"
     },
     {
       "name": "StaticFini_gWndTrackingList",
@@ -870,7 +917,8 @@
       "calledFunctions": [
         "StaticFini_gWndTrackingList",
         "UnlinkAll"
-      ]
+      ],
+      "dh": "cfa82aea"
     }
   ]
 }

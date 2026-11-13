@@ -16,7 +16,8 @@
       "calledFunctions": [
         "BNCLIENT_InitFilestream",
         "SLogCreate"
-      ]
+      ],
+      "dh": "8236a2aa"
     },
     {
       "name": "BNCLIENT_DestroyCompressor",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "aae0010b"
     },
     {
       "name": "NET_InitAndGetLobbyChatQueue",
@@ -53,7 +55,8 @@
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"
-      ]
+      ],
+      "dh": "c74b1799"
     },
     {
       "name": "NET_GetLobbyChatQueue",
@@ -70,7 +73,8 @@
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"
-      ]
+      ],
+      "dh": "a4e5874c"
     },
     {
       "name": "BNCLIENT_GetBnetLogFilestream",
@@ -86,7 +90,8 @@
         "BNCLIENT_GetBnetLogFilestream",
         "SLogCreate",
         "atexit"
-      ]
+      ],
+      "dh": "d1103e3b"
     },
     {
       "name": "BNSEND_FreeUserProfileData",
@@ -101,7 +106,8 @@
       "calledFunctions": [
         "BNSEND_FreeUserProfileData",
         "FreeClientMemory"
-      ]
+      ],
+      "dh": "3a97fd61"
     },
     {
       "name": "NET_SID_CLIENT_IDEAEncryptDecrypt",
@@ -120,7 +126,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "f58b2158"
     },
     {
       "name": "NET_SID_CLIENT_SetupIDEAKey",
@@ -141,7 +148,8 @@
       "usedTypes": [
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "e12ef901"
     },
     {
       "name": "SRP_DestroyContext",
@@ -159,7 +167,8 @@
       ],
       "usedTypes": [
         "D2Srp *"
-      ]
+      ],
+      "dh": "4ce57fa2"
     }
   ]
 }

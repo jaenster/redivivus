@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5a1c8424"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0041e960",
@@ -35,7 +36,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "970b0a9e"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00420d90",
@@ -52,7 +54,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a934bc63"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0044bdd0",
@@ -69,7 +72,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "4f257416"
     },
     {
       "name": "ServerInit_nullsub_Unref_0052b8f0",
@@ -83,7 +87,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "ServerInit_nullsub_Unref_0052b8f0"
-      ]
+      ],
+      "dh": "ec74711b"
     },
     {
       "name": "ServerInit_nullsub_Unref_0052b900",
@@ -97,7 +102,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "ServerInit_nullsub_Unref_0052b900"
-      ]
+      ],
+      "dh": "565f4442"
     },
     {
       "name": "ServerInit_nullsub",
@@ -111,7 +117,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "ServerInit_nullsub"
-      ]
+      ],
+      "dh": "f56928fe"
     },
     {
       "name": "ServerClose_nullsub",
@@ -125,7 +132,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "ServerClose_nullsub"
-      ]
+      ],
+      "dh": "90b9b951"
     },
     {
       "name": "GAME_GetUnusedServerConstant_Unref_0052bdc0",
@@ -142,7 +150,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3ab6a982"
     },
     {
       "name": "Unreferenced_0052bdd0",
@@ -156,7 +165,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052bdd0"
-      ]
+      ],
+      "dh": "46583181"
     },
     {
       "name": "Unreferenced_0052bde0",
@@ -173,7 +183,8 @@
       ],
       "usedTypes": [
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "6fa3e6fc"
     },
     {
       "name": "Unreferenced_0052bdf0",
@@ -190,7 +201,8 @@
       ],
       "usedTypes": [
         "LPCRITICAL_SECTION"
-      ]
+      ],
+      "dh": "299377b0"
     },
     {
       "name": "Unreferenced_0052be00",
@@ -204,7 +216,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052be00"
-      ]
+      ],
+      "dh": "91661229"
     },
     {
       "name": "Unreferenced_0052be10",
@@ -218,7 +231,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052be10"
-      ]
+      ],
+      "dh": "79530e5b"
     },
     {
       "name": "SRVLog",
@@ -235,7 +249,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "13f53963"
     },
     {
       "name": "_TableNullSub0",
@@ -249,7 +264,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub0"
-      ]
+      ],
+      "dh": "ad86946f"
     },
     {
       "name": "_TableNullSub1",
@@ -263,7 +279,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub1"
-      ]
+      ],
+      "dh": "87779db2"
     },
     {
       "name": "_TableNullSub2",
@@ -277,7 +294,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub2"
-      ]
+      ],
+      "dh": "9076245b"
     },
     {
       "name": "_TableNullSub3",
@@ -291,7 +309,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub3"
-      ]
+      ],
+      "dh": "59d5fb8b"
     },
     {
       "name": "_TableNullSub4",
@@ -305,7 +324,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub4"
-      ]
+      ],
+      "dh": "2bdd152c"
     },
     {
       "name": "_TableNullSub5",
@@ -319,7 +339,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub5"
-      ]
+      ],
+      "dh": "8dae6dff"
     },
     {
       "name": "_TableNullSub6",
@@ -333,7 +354,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub6"
-      ]
+      ],
+      "dh": "b9254f2d"
     },
     {
       "name": "_TableNullSub7",
@@ -347,7 +369,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub7"
-      ]
+      ],
+      "dh": "77f752d9"
     },
     {
       "name": "_TableNullSub8",
@@ -361,7 +384,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub8"
-      ]
+      ],
+      "dh": "98b5c0cd"
     },
     {
       "name": "_TableNullSub9",
@@ -375,7 +399,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub9"
-      ]
+      ],
+      "dh": "4498bace"
     },
     {
       "name": "_TableNullSub10",
@@ -389,7 +414,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub10"
-      ]
+      ],
+      "dh": "6286c052"
     },
     {
       "name": "_TableNullSub11",
@@ -403,7 +429,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub11"
-      ]
+      ],
+      "dh": "3d135c4f"
     },
     {
       "name": "_TableNullSub12",
@@ -417,7 +444,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub12"
-      ]
+      ],
+      "dh": "ad28db8a"
     },
     {
       "name": "_TableNullSub13",
@@ -431,7 +459,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub13"
-      ]
+      ],
+      "dh": "c3f013fe"
     },
     {
       "name": "_TableNullSub14",
@@ -445,7 +474,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub14"
-      ]
+      ],
+      "dh": "e723bd48"
     },
     {
       "name": "_TableNullSub15",
@@ -459,7 +489,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub15"
-      ]
+      ],
+      "dh": "6ef92f7a"
     },
     {
       "name": "_TableNullSub16",
@@ -473,7 +504,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16"
-      ]
+      ],
+      "dh": "16ae0616"
     },
     {
       "name": "_TableNullSub17",
@@ -487,7 +519,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub17"
-      ]
+      ],
+      "dh": "e111a21b"
     },
     {
       "name": "_TableNullSub18",
@@ -501,7 +534,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub18"
-      ]
+      ],
+      "dh": "202aead7"
     },
     {
       "name": "_TableNullSub19",
@@ -515,7 +549,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub19"
-      ]
+      ],
+      "dh": "052a09ca"
     },
     {
       "name": "_TableNullSub20",
@@ -529,7 +564,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub20"
-      ]
+      ],
+      "dh": "af3fe60f"
     },
     {
       "name": "_TableNullSub21",
@@ -544,7 +580,8 @@
       "calledFunctions": [
         "_TableNullSub21",
         "SMemZero"
-      ]
+      ],
+      "dh": "325ecf80"
     },
     {
       "name": "_TableNullSub22",
@@ -558,7 +595,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub22"
-      ]
+      ],
+      "dh": "0f619d61"
     },
     {
       "name": "_TableNullSub23",
@@ -572,7 +610,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub23"
-      ]
+      ],
+      "dh": "2984168a"
     },
     {
       "name": "_TableNullSub24",
@@ -586,7 +625,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub24"
-      ]
+      ],
+      "dh": "07a9c932"
     },
     {
       "name": "Unreferenced_0052bfc0",
@@ -600,7 +640,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052bfc0"
-      ]
+      ],
+      "dh": "d00be76c"
     },
     {
       "name": "Unreferenced_0052bfe0",
@@ -614,7 +655,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Unreferenced_0052bfe0"
-      ]
+      ],
+      "dh": "59099faf"
     },
     {
       "name": "FreeServer",
@@ -630,7 +672,8 @@
         "FreeServer",
         "DeleteCriticalSections",
         "SUNITPROXY_FreeAllNpcItemTables"
-      ]
+      ],
+      "dh": "eb214c7a"
     },
     {
       "name": "SERVER_IsTokenValid",
@@ -649,7 +692,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b9982026"
     },
     {
       "name": "QSERVER_SetGlobalInstance",
@@ -670,7 +714,8 @@
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
-      ]
+      ],
+      "dh": "f699aa1f"
     },
     {
       "name": "SetupAsBnetServer",
@@ -687,7 +732,8 @@
       ],
       "usedTypes": [
         "D2BattleNetEventCallbackTable"
-      ]
+      ],
+      "dh": "00add54b"
     },
     {
       "name": "QSERVER_PutNewGameOnTokenList",
@@ -709,7 +755,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "0ded18c3"
     },
     {
       "name": "QSERVER_GenerateToken",
@@ -728,7 +775,8 @@
         "SGAMEDATA",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f7793df"
     },
     {
       "name": "CLIENT_LoadActAndSetState2",
@@ -753,7 +801,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "80c4a4eb"
     },
     {
       "name": "CLIENT_SendGameFlagsAndSetState1",
@@ -774,7 +823,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "2b386421"
     },
     {
       "name": "RollSeed",
@@ -797,7 +847,8 @@
         "LARGE_INTEGER",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "644f4fbd"
     },
     {
       "name": "GAME_SetForcedGameSeed",
@@ -811,7 +862,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "GAME_SetForcedGameSeed"
-      ]
+      ],
+      "dh": "60a8f424"
     },
     {
       "name": "SetupGameChecks",
@@ -836,7 +888,8 @@
         "eD2PlayerClassID",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3a4dcac8"
     },
     {
       "name": "QSERVER_InitializeMemoryCounters",
@@ -853,7 +906,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7e093247"
     },
     {
       "name": "NET_SendPong",
@@ -872,7 +926,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "98c3699d"
     },
     {
       "name": "BroadcastPlayerJoin",
@@ -904,7 +959,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "289b9fb7"
     },
     {
       "name": "BroadcastPlayerLeave",
@@ -927,7 +983,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "f6d42c44"
     },
     {
       "name": "NET_IsClientAllowedToJoin",
@@ -945,7 +1002,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5bde7ac5"
     },
     {
       "name": "LeaveHackPlayer",
@@ -967,7 +1025,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1cf5763f"
     },
     {
       "name": "STRING_CheckIfPlayerNameDoNotContainForbidenChars",
@@ -985,7 +1044,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7d86b7e3"
     },
     {
       "name": "NET_D2GS_SERVER_IsValidChecks",
@@ -1014,7 +1074,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f685574e"
     },
     {
       "name": "GAME_DestroyGame",
@@ -1048,7 +1109,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "24069855"
     },
     {
       "name": "NET_IsClientAllowedToLeave",
@@ -1066,7 +1128,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "7e43cb1e"
     },
     {
       "name": "SavePlayerOnCleanUp",
@@ -1095,7 +1158,8 @@
         "fnUpdateCharacterLadder *",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d05ffff6"
     },
     {
       "name": "SaveAllPlayers",
@@ -1125,7 +1189,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f76b0390"
     },
     {
       "name": "SERVER_DisconnectClient",
@@ -1156,7 +1221,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9d066e89"
     },
     {
       "name": "FindMe_6E_Handler",
@@ -1176,7 +1242,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0f90c4a"
     },
     {
       "name": "KillConnection",
@@ -1195,7 +1262,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a506003d"
     },
     {
       "name": "NET_D2GS_SERVER_ProcessClientMessage_System",
@@ -1221,7 +1289,8 @@
         "D2PacketD2GS_SC_0xFF",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "98ea0cad"
     },
     {
       "name": "NET_D2GS_SERVER_HandleAnyIncomingPacket",
@@ -1245,7 +1314,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "260c5ae3"
     },
     {
       "name": "QSERVER_CleanupUnitChain",
@@ -1264,7 +1334,8 @@
       "usedTypes": [
         "D2UnitStrc *",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "9b0d247d"
     },
     {
       "name": "SERVER_PopulateRoom",
@@ -1286,7 +1357,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "366dc776"
     },
     {
       "name": "SetSomeRoomFlags",
@@ -1312,7 +1384,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "0785d35d"
     },
     {
       "name": "InitNewRooms",
@@ -1344,7 +1417,8 @@
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "85e1e239"
     },
     {
       "name": "CleanupIdleRooms",
@@ -1370,7 +1444,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "7dcc670c"
     },
     {
       "name": "GAME_FreeUnusedItemsPeriodic",
@@ -1389,7 +1464,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "10ef8d1c"
     },
     {
       "name": "CheckClientTimeouts",
@@ -1416,7 +1492,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "ae6187ba"
     },
     {
       "name": "UpdateClients",
@@ -1459,7 +1536,8 @@
         "fnEnterGame *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0069867e"
     },
     {
       "name": "UpdatePerformanceMetrics",
@@ -1479,7 +1557,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "f856bc82"
     },
     {
       "name": "UpdateActEnvironments",
@@ -1506,7 +1585,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "9171993d"
     },
     {
       "name": "ServerGameLoop",
@@ -1541,7 +1621,8 @@
         "D2DrlgActStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "24e67036"
     },
     {
       "name": "GAME_SendPlayerVitalStats",
@@ -1567,7 +1648,8 @@
         "D2PacketListStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "e19a5fc9"
     },
     {
       "name": "GAME_SendNearbyUnitPositions",
@@ -1595,7 +1677,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a12b7cd7"
     },
     {
       "name": "Unlock",
@@ -1616,7 +1699,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "eea01fe2"
     },
     {
       "name": "QSERVER_Unused_HaltLine4453",
@@ -1633,7 +1717,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
-      ]
+      ],
+      "dh": "d45f9604"
     },
     {
       "name": "SERVER_IsHostedGamesRequestAllowed",
@@ -1647,7 +1732,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "SERVER_IsHostedGamesRequestAllowed"
-      ]
+      ],
+      "dh": "04d4aeae"
     },
     {
       "name": "Return1_GameSetup_1",
@@ -1661,7 +1747,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "Return1_GameSetup_1"
-      ]
+      ],
+      "dh": "1ea16bc1"
     },
     {
       "name": "CLIENT_ReceiveUploadedSave",
@@ -1680,7 +1767,8 @@
       "usedTypes": [
         "D2GSMsg6CUploadSaveStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "766e8bcc"
     },
     {
       "name": "GAME_GetUnusedServerConstant_Unref_0052db90",
@@ -1697,7 +1785,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5832b713"
     },
     {
       "name": "QSERVER_GetMemoryUsage",
@@ -1715,7 +1804,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9c9af871"
     },
     {
       "name": "GetUnitCount",
@@ -1735,7 +1825,8 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "7f0b2946"
     },
     {
       "name": "ReturnArgument",
@@ -1749,7 +1840,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "ReturnArgument"
-      ]
+      ],
+      "dh": "8865e43d"
     },
     {
       "name": "GAME_GetUnusedServerConstant",
@@ -1766,7 +1858,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "9a4ab0af"
     },
     {
       "name": "GAME_TrackGameStatistics",
@@ -1789,7 +1882,8 @@
       "usedTypes": [
         "D2Game_Line0x13af",
         "int32_t"
-      ]
+      ],
+      "dh": "c705862f"
     },
     {
       "name": "SERVER_GetPlayerClassName",
@@ -1806,7 +1900,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7734ac40"
     },
     {
       "name": "MonsterIdToName",
@@ -1826,7 +1921,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6c89fe6b"
     },
     {
       "name": "ObjectIdToName",
@@ -1845,7 +1941,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "333b997c"
     },
     {
       "name": "ItemIdToName",
@@ -1867,7 +1964,8 @@
       "usedTypes": [
         "D2ItemsTxt",
         "int32_t"
-      ]
+      ],
+      "dh": "a7d16831"
     },
     {
       "name": "MissileIdToname",
@@ -1885,7 +1983,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "96580737"
     },
     {
       "name": "ForEachClient",
@@ -1908,7 +2007,8 @@
         "SGAMEDATA",
         "fpForEachClientFn",
         "int32_t"
-      ]
+      ],
+      "dh": "08fa8a05"
     },
     {
       "name": "LeaveCriticalSectionLastGameServer",
@@ -1928,7 +2028,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6d5f9d34"
     },
     {
       "name": "GAME_SetFrameRate",
@@ -1945,7 +2046,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e8299362"
     },
     {
       "name": "SetupStartingAct",
@@ -1959,7 +2061,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "SetupStartingAct"
-      ]
+      ],
+      "dh": "6708ec95"
     },
     {
       "name": "RemoveObject",
@@ -1987,7 +2090,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5c9dbe7f"
     },
     {
       "name": "RemoveObjects",
@@ -2007,7 +2111,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "bc7e0975"
     },
     {
       "name": "_TableNullSub20_Unref_0052e070",
@@ -2021,7 +2126,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub20_Unref_0052e070"
-      ]
+      ],
+      "dh": "f2fd0c51"
     },
     {
       "name": "_TableNullSub20_Unref_0052e080",
@@ -2035,7 +2141,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub20_Unref_0052e080"
-      ]
+      ],
+      "dh": "25be330e"
     },
     {
       "name": "SERVER_EnterCriticalSection",
@@ -2053,7 +2160,8 @@
       "usedTypes": [
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t"
-      ]
+      ],
+      "dh": "8f460990"
     },
     {
       "name": "ParamIsOne",
@@ -2071,7 +2179,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0be72555"
     },
     {
       "name": "QSERVER_TestGameFlags",
@@ -2089,7 +2198,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ddaf1334"
     },
     {
       "name": "QSERVER_HasActiveTaskQueue",
@@ -2106,7 +2216,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bc5672be"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer",
@@ -2123,7 +2234,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "93ffb20d"
     },
     {
       "name": "NET_D2GS_SERVER_Send_0xB3_SendSaveFile",
@@ -2148,7 +2260,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "684865d7"
     },
     {
       "name": "SendSaveFileToClient",
@@ -2172,7 +2285,8 @@
         "D2ClientStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e86499a9"
     },
     {
       "name": "FlushClientPackets",
@@ -2203,7 +2317,8 @@
         "D2PacketListStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "54bdbd0e"
     },
     {
       "name": "FlushAllClientPackets",
@@ -2222,7 +2337,8 @@
       "usedTypes": [
         "D2ClientStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "757685eb"
     },
     {
       "name": "QSERVER_DestroyGameByToken",
@@ -2249,7 +2365,8 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3e74a90"
     },
     {
       "name": "QSERVER_FindAndLockGame",
@@ -2274,7 +2391,8 @@
         "TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a7233724"
     },
     {
       "name": "RequestHostedGames",
@@ -2302,7 +2420,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "18c20183"
     },
     {
       "name": "NET_RequestHostedGames",
@@ -2320,7 +2439,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0598866b"
     },
     {
       "name": "QSERVER_ShutdownAllGames",
@@ -2355,7 +2475,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "a031cb5f"
     },
     {
       "name": "QSERVER_CountExpansionGames",
@@ -2377,7 +2498,8 @@
       "usedTypes": [
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "47c83cfe"
     },
     {
       "name": "QSERVER_GetGameListByPlayerCount",
@@ -2401,7 +2523,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "85605810"
     },
     {
       "name": "QSERVER_GetGameListByAge",
@@ -2425,7 +2548,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "c44557fd"
     },
     {
       "name": "QSERVER_GetClientCountByServerId",
@@ -2449,7 +2573,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "064c211a"
     },
     {
       "name": "QSERVER_ExportGameStats",
@@ -2480,7 +2605,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c9bc3bd0"
     },
     {
       "name": "QSERVER_FillServerTokenArray",
@@ -2504,7 +2630,8 @@
         "SGAMEDATA *",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "05e8aba6"
     },
     {
       "name": "GetUnitCountByServerId",
@@ -2528,7 +2655,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "00931f28"
     },
     {
       "name": "QSERVER_ExportUnitListByServerId",
@@ -2555,7 +2683,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0cff5898"
     },
     {
       "name": "Unused_GetUnitList",
@@ -2582,7 +2711,8 @@
         "D2UnitStrc *",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "20e26bda"
     },
     {
       "name": "QSERVER_FindUnitsAndExportByServerId",
@@ -2610,7 +2740,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "85901d0f"
     },
     {
       "name": "QSERVER_CountObjectsAndPlayersAllGames",
@@ -2636,7 +2767,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "7168500e"
     },
     {
       "name": "QSERVER_BroadcastPlayerMessage",
@@ -2664,7 +2796,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e94a375"
     },
     {
       "name": "QSERVER_BroadcastChatByServerId",
@@ -2689,7 +2822,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "40166cf5"
     },
     {
       "name": "QSERVER_GetFirstActiveGame",
@@ -2707,7 +2841,8 @@
       ],
       "usedTypes": [
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "4fc016ea"
     },
     {
       "name": "QSERVER_PlayerMessageThread",
@@ -2725,7 +2860,8 @@
       ],
       "usedTypes": [
         "D2PlayerMessageThreadArgsStrc"
-      ]
+      ],
+      "dh": "55ea374b"
     },
     {
       "name": "GAME_CreatePlayerMessageThread",
@@ -2745,7 +2881,8 @@
       "usedTypes": [
         "D2PlayerMessageThreadArgsStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "d00fd8af"
     },
     {
       "name": "QSERVER_FindGameTokenByName",
@@ -2771,7 +2908,8 @@
         "SGAMEDATA *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9d7e240c"
     },
     {
       "name": "QSERVER_GetFirstActiveGameSeed",
@@ -2792,7 +2930,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "5ba627c2"
     },
     {
       "name": "GAME_CheckIfGameNameExistsSafely",
@@ -2817,7 +2956,8 @@
         "SGAMEDATA",
         "SGAMEDATA *",
         "int32_t"
-      ]
+      ],
+      "dh": "6c94da93"
     },
     {
       "name": "SetGameName",
@@ -2843,7 +2983,8 @@
       "usedTypes": [
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "7b5ca80b"
     },
     {
       "name": "NET_D2GS_SERVER_SrvJoinGame",
@@ -2878,7 +3019,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "151cf4b1"
     },
     {
       "name": "SrvProcessAllGames",
@@ -2904,7 +3046,8 @@
         "SGAMEDATA *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d3893803"
     },
     {
       "name": "QSERVER_DispatchAndCleanup",
@@ -2930,7 +3073,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "88cb6a9e"
     },
     {
       "name": "NET_SERVER_FindGameByClientId",
@@ -2953,7 +3097,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "49bde339"
     },
     {
       "name": "QSERVER_ClientDisconnectCallback",
@@ -2981,7 +3126,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "cbf6c8f8"
     },
     {
       "name": "NET_D2GS_SERVER_SrvJoinAct",
@@ -3017,7 +3163,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e3a5608e"
     },
     {
       "name": "QServer_AlternativeDisconnect",
@@ -3042,7 +3189,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "c94afa85"
     },
     {
       "name": "QSERVER_DisconnectClientByName",
@@ -3061,7 +3209,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "f51425a4"
     },
     {
       "name": "QSERVER_DisconnectClientFromGame",
@@ -3093,7 +3242,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6310c66b"
     },
     {
       "name": "NET_D2GS_SERVER_LeaveServer",
@@ -3138,7 +3288,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "2d8e7926"
     },
     {
       "name": "LeaveServer",
@@ -3160,7 +3311,8 @@
         "D2ClientStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "a39c7185"
     },
     {
       "name": "QSERVER_InitializeServerState",
@@ -3178,7 +3330,8 @@
         "QServerClearAll",
         "NET_SetQServerCallbackFunction",
         "SUNITPROXY_InitAllNpcItemTables"
-      ]
+      ],
+      "dh": "7fb8ce99"
     },
     {
       "name": "CLIENT_OnDatabaseCharacterReceived",
@@ -3206,7 +3359,8 @@
         "int32_t",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "afbe2622"
     },
     {
       "name": "GAME_CreateBattleNetGame",
@@ -3255,7 +3409,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9cb07228"
     },
     {
       "name": "GAME_CreateSingleplayerGame",
@@ -3310,7 +3465,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e32b98d1"
     },
     {
       "name": "SetStat",
@@ -3333,7 +3489,8 @@
         "eD2UnitStat",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "97e0004b"
     },
     {
       "name": "_TableNullSub12_Unref_00532580",
@@ -3347,7 +3504,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub12_Unref_00532580"
-      ]
+      ],
+      "dh": "09431360"
     },
     {
       "name": "_TableNullSub12_Unref_005385e0",
@@ -3361,7 +3519,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub12_Unref_005385e0"
-      ]
+      ],
+      "dh": "b7f72305"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00539090",
@@ -3378,7 +3537,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "15064073"
     },
     {
       "name": "_TableNullSub16_Unref_0053bbc0",
@@ -3392,7 +3552,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbc0"
-      ]
+      ],
+      "dh": "b8d37839"
     },
     {
       "name": "_TableNullSub16_Unref_0053bbd0",
@@ -3406,7 +3567,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbd0"
-      ]
+      ],
+      "dh": "516ae545"
     },
     {
       "name": "_TableNullSub16_Unref_0053bbe0",
@@ -3420,7 +3582,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbe0"
-      ]
+      ],
+      "dh": "c1113b25"
     },
     {
       "name": "_TableNullSub16_Unref_0053bbf0",
@@ -3434,7 +3597,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bbf0"
-      ]
+      ],
+      "dh": "2488092e"
     },
     {
       "name": "_TableNullSub16_Unref_0053bc00",
@@ -3448,7 +3612,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "_TableNullSub16_Unref_0053bc00"
-      ]
+      ],
+      "dh": "14520d5a"
     },
     {
       "name": "QSERVER_HasActiveTaskQueue_Unref_00601dc0",
@@ -3465,7 +3630,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bcc68b8a"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00601dd0",
@@ -3482,7 +3648,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3c1ebc0a"
     },
     {
       "name": "QSERVER_HasActiveTaskQueue_Unref_0060e0c0",
@@ -3499,7 +3666,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "d22c2d53"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_0060e230",
@@ -3516,7 +3684,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "fd2217bd"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00650e90",
@@ -3533,7 +3702,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7b78aaf7"
     },
     {
       "name": "QSERVER_GetTaskQueuePointer_Unref_00666eb0",
@@ -3550,7 +3720,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "90f6ce33"
     },
     {
       "name": "StaticInit_Frames_TimeBetweenFrames",
@@ -3564,7 +3735,8 @@
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
         "StaticInit_Frames_TimeBetweenFrames"
-      ]
+      ],
+      "dh": "94d700a9"
     }
   ]
 }

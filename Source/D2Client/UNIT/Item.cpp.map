@@ -35,7 +35,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5a9bd156"
     },
     {
       "name": "ITEM_RemoveItemStatsFromOwner",
@@ -57,7 +58,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "8f596c04"
     },
     {
       "name": "ITEM_CreateItemFromGroundPacket",
@@ -87,7 +89,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "e55fe114"
     },
     {
       "name": "ITEM_CreateItemFromBodyPacket",
@@ -117,7 +120,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2c15607f"
     },
     {
       "name": "Unreferenced_004c10c0",
@@ -136,7 +140,8 @@
       "usedTypes": [
         "D2SkillStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "5dd7efa8"
     },
     {
       "name": "ITEM_CheckItemEquipRequirements",
@@ -161,7 +166,8 @@
         "eD2ItemTypes",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bf193ea"
     },
     {
       "name": "ITEM_SaveSkillSelections",
@@ -186,7 +192,8 @@
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "3584c19d"
     },
     {
       "name": "ITEM_RestoreSkillSelections",
@@ -211,7 +218,8 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "319ce697"
     },
     {
       "name": "ITEM_RemoveItemFromBodyAndRecalc",
@@ -234,7 +242,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "fcf0f2ac"
     },
     {
       "name": "ITEM_ReequipItemOnBody",
@@ -260,7 +269,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "int32_t"
-      ]
+      ],
+      "dh": "d2cabc10"
     },
     {
       "name": "ITEM_RecalcAllEquippedItems_EBX",
@@ -307,7 +317,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1249daa8"
     },
     {
       "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
@@ -325,7 +336,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "98e25953"
     },
     {
       "name": "ITEM_GetItemDropSound",
@@ -350,7 +362,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "63e7c2df"
     },
     {
       "name": "ITEM_GetItemUseSound",
@@ -375,7 +388,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "31125716"
     },
     {
       "name": "ITEM_PlayItemDropSound",
@@ -397,7 +411,8 @@
         "D2UnitStrc",
         "eD2Sounds",
         "uint32_t"
-      ]
+      ],
+      "dh": "4e936ba6"
     },
     {
       "name": "ITEM_SetAnimModeAndPlace",
@@ -431,7 +446,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "b155d6dd"
     },
     {
       "name": "ITEM_FreeItemUnit",
@@ -457,7 +473,8 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "1a8c61ec"
     },
     {
       "name": "ITEM_UpdateItemAnimation",
@@ -483,7 +500,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "916e6f49"
     },
     {
       "name": "ItemMessage",
@@ -502,7 +520,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bcdd4c22"
     },
     {
       "name": "ITEM_CltRecalcAllEquippedItems",
@@ -523,7 +542,8 @@
         "D2GSPacketSrv0x47",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "33ddbeea"
     },
     {
       "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
@@ -541,7 +561,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "31e045eb"
     },
     {
       "name": "ITEM_CltRecalcAllEquippedItems2",
@@ -562,7 +583,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x48",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "b4141944"
     },
     {
       "name": "ITEM_RecalcAllEquippedItems_ECX",
@@ -580,7 +602,8 @@
       ],
       "usedTypes": [
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "81507c07"
     },
     {
       "name": "ITEM_SaveWeaponHandClassId",
@@ -599,7 +622,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int16_t"
-      ]
+      ],
+      "dh": "8694873f"
     },
     {
       "name": "ITEM_SetItemInBodyLocation",
@@ -621,7 +645,8 @@
         "D2InventoryStrc",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "be243eda"
     },
     {
       "name": "ITEM_RemoveEquippedItemForSwap",
@@ -652,7 +677,8 @@
         "D2UnitStrc",
         "eD2BodyLoc",
         "uint32_t"
-      ]
+      ],
+      "dh": "7837882a"
     },
     {
       "name": "SOUND_GetIdFromUnit",
@@ -675,7 +701,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d6aba4d9"
     },
     {
       "name": "ITEM_PlayItemUseSound",
@@ -694,7 +721,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "bb794d2a"
     },
     {
       "name": "ITEM_ResetWeaponHandClassIds",
@@ -708,7 +736,8 @@
       "namespace": "D2Client::UNIT::Item",
       "calledFunctions": [
         "ITEM_ResetWeaponHandClassIds"
-      ]
+      ],
+      "dh": "0afcf035"
     },
     {
       "name": "ITEM_UpdateChargedSkillStat",
@@ -735,7 +764,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "aa482686"
     },
     {
       "name": "ITEM_HandleStatUpdatePacket",
@@ -762,7 +792,8 @@
         "eD2UnitStat",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "1a4beea5"
     },
     {
       "name": "ITEM_HandleItemFlagEditPacket",
@@ -782,7 +813,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x40",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "d9bcaca4"
     },
     {
       "name": "ITEM_HandleCursorItemRemoval",
@@ -808,7 +840,8 @@
         "D2GSPacketSrv0x42",
         "D2InventoryStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "130addc7"
     },
     {
       "name": "HandleItemToCursor",
@@ -840,7 +873,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "07681ebd"
     },
     {
       "name": "Unreferenced_004c2150",
@@ -854,7 +888,8 @@
       "namespace": "D2Client::UNIT::Item",
       "calledFunctions": [
         "Unreferenced_004c2150"
-      ]
+      ],
+      "dh": "e1ab43dc"
     },
     {
       "name": "ITEM_RemoveUninterruptableState",
@@ -881,7 +916,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "aeca6965"
     },
     {
       "name": "ITEM_ClearUnitState",
@@ -901,7 +937,8 @@
         "D2StatListExStrc",
         "D2UnitStrc",
         "eD2States"
-      ]
+      ],
+      "dh": "60d60584"
     },
     {
       "name": "ITEM_RemoveClientSide",
@@ -925,7 +962,8 @@
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "eaa29e45"
     },
     {
       "name": "PlayerIsUnInterruptable",
@@ -946,7 +984,8 @@
       "usedTypes": [
         "D2StatListExStrc",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "3ef8595e"
     },
     {
       "name": "ITEM_HandleItemRepairBreak",
@@ -975,7 +1014,8 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode",
         "uint32_t"
-      ]
+      ],
+      "dh": "85e19010"
     },
     {
       "name": "ITEM_HandleItemCopyToCursor",
@@ -1007,7 +1047,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a2a61d88"
     },
     {
       "name": "ITEM_HandleUnsocketItems",
@@ -1047,7 +1088,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "87df4854"
     },
     {
       "name": "ITEM_DropItemToGroundWithMode",
@@ -1074,7 +1116,8 @@
         "eInventoryPage",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "b29269ed"
     },
     {
       "name": "HandleItemAddToGround",
@@ -1103,7 +1146,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b2eb8cbe"
     },
     {
       "name": "HandleItemPickedFromGround",
@@ -1135,7 +1179,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "91010cd4"
     },
     {
       "name": "HandleItemDroppedToGround",
@@ -1174,7 +1219,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "026ba910"
     },
     {
       "name": "HandleItemOnGround",
@@ -1219,7 +1265,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d991d7f7"
     },
     {
       "name": "ITEM_PlaceItemInContainer",
@@ -1261,7 +1308,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9471687b"
     },
     {
       "name": "HandleItemPutInContainer",
@@ -1309,7 +1357,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "2c599aab"
     },
     {
       "name": "HandleItemRemoveFromContainer",
@@ -1358,7 +1407,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1b1edf81"
     },
     {
       "name": "HandleItemEquip",
@@ -1404,7 +1454,8 @@
         "D2UnitStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f3240cb0"
     },
     {
       "name": "HandleItemIndirectSwapBodyItem",
@@ -1465,7 +1516,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "a55ac605"
     },
     {
       "name": "HandleItemUnequip",
@@ -1518,7 +1570,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b4ccb891"
     },
     {
       "name": "ITEM_HandleSwapBodyEquipItem",
@@ -1562,7 +1615,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "88a38906"
     },
     {
       "name": "ITEM_HandleSwapBodyUnequipItem",
@@ -1610,7 +1664,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc935412"
     },
     {
       "name": "HandleItemSwapBodyItem",
@@ -1633,7 +1688,8 @@
         "D2UnitDataItemDetailsStrc",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "345fc8ff"
     },
     {
       "name": "ITEM_HandleWeaponSwitchItems",
@@ -1675,7 +1731,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1b1aa2f6"
     },
     {
       "name": "HandleItemWeaponSwitch",
@@ -1695,7 +1752,8 @@
       "usedTypes": [
         "D2UnitDataItemDetailsStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "7009f4f8"
     },
     {
       "name": "NET_D2GS_CLIENT_HandleItemAddQuantity",
@@ -1730,7 +1788,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "80ad006f"
     },
     {
       "name": "HandleItemInShop",
@@ -1775,7 +1834,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ead7015c"
     },
     {
       "name": "ITEM_HandleSwapContainerNewItem",
@@ -1821,7 +1881,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "959d4859"
     },
     {
       "name": "ITEM_HandleSwapContainerOldItem",
@@ -1866,7 +1927,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "bc31d7d6"
     },
     {
       "name": "HandleItemSwapInContainer",
@@ -1889,7 +1951,8 @@
         "D2UnitDataItemDetailsStrc",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "ba163933"
     },
     {
       "name": "HandleItemPutInBelt",
@@ -1937,7 +2000,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0a8d8c04"
     },
     {
       "name": "HandleItemRemoveFromBelt",
@@ -1979,7 +2043,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "fd03591d"
     },
     {
       "name": "ITEM_HandleSwapBeltNewItem",
@@ -2018,7 +2083,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "7a2e0685"
     },
     {
       "name": "ITEM_HandleSwapBeltOldItem",
@@ -2054,7 +2120,8 @@
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "48a30fe3"
     },
     {
       "name": "HandleItemSwapInBelt",
@@ -2077,7 +2144,8 @@
         "D2UnitDataItemDetailsStrc",
         "D2UnitStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "d68c8874"
     },
     {
       "name": "ITEM_HandleItemCursorAssign",
@@ -2103,7 +2171,8 @@
         "D2GSPacketSrv0x3F",
         "D2UnitStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "5bfa5a8b"
     },
     {
       "name": "HandleItemAutoUnequip",
@@ -2159,7 +2228,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "94644d05"
     },
     {
       "name": "HandleItemInSocket",
@@ -2197,7 +2267,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "c204ca96"
     },
     {
       "name": "ITEM_HandleItemMoveToBodyLoc",
@@ -2247,7 +2318,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0fb0270e"
     },
     {
       "name": "HandleItemUpdateStats",
@@ -2324,7 +2396,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f5f9f68a"
     },
     {
       "name": "ITEM_HandleServerItemAction",
@@ -2344,7 +2417,8 @@
       "usedTypes": [
         "D2GSPacketSrv0x7C",
         "D2UnitStrc"
-      ]
+      ],
+      "dh": "83987508"
     }
   ]
 }

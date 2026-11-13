@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "85c76a93"
     },
     {
       "name": "FOG_ReturnZeroCallback",
@@ -32,7 +33,8 @@
       "namespace": "Fog::Src::ErrorManager",
       "calledFunctions": [
         "FOG_ReturnZeroCallback"
-      ]
+      ],
+      "dh": "bf7234d0"
     },
     {
       "name": "StubHook1_Unref_00403f50",
@@ -49,7 +51,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "92262f84"
     },
     {
       "name": "StubHook1_Unref_00405a50",
@@ -66,7 +69,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "42ac23a2"
     },
     {
       "name": "StubHook1_Unref_00405a60",
@@ -83,7 +87,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "3330e360"
     },
     {
       "name": "StubHook1_Unref_004072c0",
@@ -100,7 +105,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "2c06c44f"
     },
     {
       "name": "StubHook1_Unref_004072d0",
@@ -117,7 +123,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "4ca6b15f"
     },
     {
       "name": "StubHook1_Unref_004072e0",
@@ -134,7 +141,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "474b1b31"
     },
     {
       "name": "StubHook1_Unref_004072f0",
@@ -151,7 +159,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "562989a5"
     },
     {
       "name": "StubHook1_Unref_00407300",
@@ -168,7 +177,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "ee9572f2"
     },
     {
       "name": "CrashGame",
@@ -182,7 +192,8 @@
       "namespace": "Fog::Src::ErrorManager",
       "calledFunctions": [
         "CrashGame"
-      ]
+      ],
+      "dh": "8938562c"
     },
     {
       "name": "FILETOOLS_WriteOneStringToFile",
@@ -200,7 +211,8 @@
       ],
       "usedTypes": [
         "Report"
-      ]
+      ],
+      "dh": "a58a7636"
     },
     {
       "name": "GetParentProcessId",
@@ -219,7 +231,8 @@
       "usedTypes": [
         "PROCESSENTRY",
         "int32_t"
-      ]
+      ],
+      "dh": "22e60e36"
     },
     {
       "name": "GetModuleFileNameForProcess",
@@ -236,7 +249,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "43ffc12e"
     },
     {
       "name": "WriteCrashReportProcessInfo",
@@ -268,7 +282,8 @@
         "_SID_IDENTIFIER_AUTHORITY",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "10b732b0"
     },
     {
       "name": "Unreferenced_00407dd0",
@@ -285,7 +300,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "b6b648e3"
     },
     {
       "name": "InitializeSystemInfo",
@@ -305,7 +321,8 @@
         "_MEMORYSTATUS",
         "_OSVERSIONINFOA",
         "uint32_t"
-      ]
+      ],
+      "dh": "276cd5b9"
     },
     {
       "name": "EXIT_AtExit",
@@ -325,7 +342,8 @@
         "ExitOrCrashCleanup",
         "LOGMGR_DeleteHighResTimerLock",
         "StopLogWriterThread"
-      ]
+      ],
+      "dh": "f8cc3d1e"
     },
     {
       "name": "StubHook1",
@@ -342,7 +360,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "1b9d3103"
     },
     {
       "name": "StubHook2",
@@ -359,7 +378,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "e4551768"
     },
     {
       "name": "StubHook2_Unref_00407fa0",
@@ -376,7 +396,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a2857e89"
     },
     {
       "name": "StubHook2_Unref_00407fb0",
@@ -393,7 +414,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6461cbb3"
     },
     {
       "name": "LogStringConditional",
@@ -412,7 +434,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "2ac4d77f"
     },
     {
       "name": "GetErrorState",
@@ -429,7 +452,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "96d91a91"
     },
     {
       "name": "StripPathPrefixToRelative",
@@ -447,7 +471,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "37f5a54a"
     },
     {
       "name": "StubHook2_Unref_00408050",
@@ -464,7 +489,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "5ec02026"
     },
     {
       "name": "StubHook2_Unref_00408060",
@@ -481,7 +507,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "3511c6a7"
     },
     {
       "name": "StubHook2_Unref_00408070",
@@ -498,7 +525,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "25c9f322"
     },
     {
       "name": "StubHook2_Unref_00408080",
@@ -515,7 +543,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "0e7b44e5"
     },
     {
       "name": "GetInstructionPointer",
@@ -529,7 +558,8 @@
       "namespace": "Fog::Src::ErrorManager",
       "calledFunctions": [
         "GetInstructionPointer"
-      ]
+      ],
+      "dh": "2e687cdc"
     },
     {
       "name": "FormatDebugOutput",
@@ -552,7 +582,8 @@
         "SYSTEMTIME",
         "uint8_t",
         "va_list"
-      ]
+      ],
+      "dh": "4ab4bd9a"
     },
     {
       "name": "OutputDebugStringSimple",
@@ -568,7 +599,8 @@
         "OutputDebugStringSimple",
         "_vsnprintf",
         "__security_check_cookie"
-      ]
+      ],
+      "dh": "abb5090e"
     },
     {
       "name": "OutputDebugStringIfCapsLock",
@@ -587,7 +619,8 @@
       ],
       "usedTypes": [
         "uint16_t"
-      ]
+      ],
+      "dh": "cd413dae"
     },
     {
       "name": "FormatDebugOutputVariadic",
@@ -605,7 +638,8 @@
       ],
       "usedTypes": [
         "uint8_t"
-      ]
+      ],
+      "dh": "e2863e0f"
     },
     {
       "name": "FormatDebugOutputLogOnly",
@@ -620,7 +654,8 @@
       "calledFunctions": [
         "FormatDebugOutputLogOnly",
         "FormatDebugOutput"
-      ]
+      ],
+      "dh": "2dae8038"
     },
     {
       "name": "DumpLog",
@@ -662,7 +697,8 @@
         "char[1024]",
         "pfnEHHandlerRoutine",
         "uint32_t"
-      ]
+      ],
+      "dh": "7234311d"
     },
     {
       "name": "CRASH_FillupCrashTxt",
@@ -697,7 +733,8 @@
         "char *",
         "char[1024]",
         "uint32_t"
-      ]
+      ],
+      "dh": "b04be6fe"
     },
     {
       "name": "CheckErrorDuringError",
@@ -716,7 +753,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "bb51672c"
     },
     {
       "name": "FOG_ErrorHandler",
@@ -743,7 +781,8 @@
         "eFOG_ErrorType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c79aa647"
     },
     {
       "name": "ERROR_UnrecoverableInternalError_AssertionFailure",
@@ -763,7 +802,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "6166ce02"
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Halt",
@@ -785,7 +825,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b6fd25f2"
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Warning",
@@ -805,7 +846,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "b4759388"
     },
     {
       "name": "ERROR_DeadlockedThread",
@@ -825,7 +867,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "9dac70c5"
     },
     {
       "name": "ERROR_UnrecoverableInternalError_Any",
@@ -846,7 +889,8 @@
       "usedTypes": [
         "eFOG_ErrorType",
         "int32_t"
-      ]
+      ],
+      "dh": "01508232"
     },
     {
       "name": "ShowUnrecoverableErrorDialog",
@@ -875,7 +919,8 @@
       "usedTypes": [
         "int32_t",
         "va_list"
-      ]
+      ],
+      "dh": "a8d187d3"
     },
     {
       "name": "ERRORMANAGER_InitErrorManager",
@@ -916,7 +961,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc874adb"
     },
     {
       "name": "StubHook2_Unref_004095d0",
@@ -933,7 +979,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "7949afb5"
     },
     {
       "name": "__GSHandlerCheck_EH_6c9bfb",
@@ -954,7 +1001,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "3c9b6ebe"
     }
   ]
 }

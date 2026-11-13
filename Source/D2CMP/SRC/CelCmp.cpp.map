@@ -20,7 +20,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "41833be3"
     },
     {
       "name": "CELCMP_GetPaletteShiftValue",
@@ -41,7 +42,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3329fc31"
     },
     {
       "name": "CELCMP_CanConvertFormat",
@@ -58,7 +60,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "caca69a9"
     },
     {
       "name": "CELCMP_GetFrameDecodeHandlerForward",
@@ -80,7 +83,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "16e101b1"
     },
     {
       "name": "CELCMP_GetFrameDecodeHandlerReverse",
@@ -102,7 +106,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "90729280"
     },
     {
       "name": "CELCMP_ValidateCelFilePointer",
@@ -122,7 +127,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "cd8d2ae0"
     },
     {
       "name": "CELCMP_AllocateDecodedCelFile",
@@ -146,7 +152,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ed28c0b2"
     },
     {
       "name": "CELCMP_FixupOffsetsAndSerialize",
@@ -169,7 +176,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "82eb4ae1"
     },
     {
       "name": "CELCMP_ApplyPaletteToAllFrames",
@@ -192,7 +200,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0ab7e973"
     },
     {
       "name": "CELCMP_SerializeCelFileToMemory",
@@ -215,7 +224,8 @@
         "DC6",
         "DC6Block *",
         "uint32_t"
-      ]
+      ],
+      "dh": "2e3e2add"
     },
     {
       "name": "CELCMP_FixupPointersAndPrepare",
@@ -240,7 +250,8 @@
         "DC6 *",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "09a5b060"
     },
     {
       "name": "CELCMP_FreeCelFileMemory",
@@ -261,7 +272,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "93b72b78"
     },
     {
       "name": "CELCMP_InvokeFormatSpecificCleanup",
@@ -283,7 +295,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6786f1f5"
     },
     {
       "name": "CELCMP_DrawCelFrame",
@@ -306,7 +319,8 @@
         "DC6",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b0a3eab8"
     },
     {
       "name": "CELCMP_CopyCelDataToBuffer",
@@ -331,7 +345,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c332f96"
     },
     {
       "name": "CELCMP_DrawCelFrameFromGfxData",
@@ -354,7 +369,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "b81a579d"
     },
     {
       "name": "CELCMP_DrawCelFrameCentered",
@@ -379,7 +395,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "ddf0654a"
     },
     {
       "name": "CELCMP_ValidateGfxDataIndexInRange",
@@ -397,7 +414,8 @@
       "usedTypes": [
         "D2GfxDataStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "2399403a"
     },
     {
       "name": "CELCMP_GetDC6BlockFromGfxData",
@@ -421,7 +439,8 @@
         "DC6Block",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "4c9eb80f"
     },
     {
       "name": "GetDC6Width",
@@ -442,7 +461,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "13f874ff"
     },
     {
       "name": "GetDC6Height",
@@ -463,7 +483,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "17a213f5"
     },
     {
       "name": "GetDC6OffsetX",
@@ -484,7 +505,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "25af3f7c"
     },
     {
       "name": "GetDC6OffsetY",
@@ -505,7 +527,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "6f4e915e"
     },
     {
       "name": "CELCMP_GetDC6BlockDataPointer",
@@ -525,7 +548,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "a5b22a4e"
     },
     {
       "name": "CELCMP_GetDC6DirectionCount",
@@ -545,7 +569,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "146b532a"
     },
     {
       "name": "IMAGE_GetFramesCount",
@@ -566,7 +591,8 @@
       "usedTypes": [
         "DC6",
         "int32_t"
-      ]
+      ],
+      "dh": "17ad5e63"
     },
     {
       "name": "CELCMP_SetPixelDataFreeCallback",
@@ -583,7 +609,8 @@
       ],
       "usedTypes": [
         "pfnCelPixelDataFree"
-      ]
+      ],
+      "dh": "ab097236"
     },
     {
       "name": "CELCMP_GetPixelDataFreeCallback",
@@ -600,7 +627,8 @@
       ],
       "usedTypes": [
         "pfnCelPixelDataFree"
-      ]
+      ],
+      "dh": "c9863591"
     },
     {
       "name": "DeleteCellFile",
@@ -624,7 +652,8 @@
         "int32_t",
         "pfnCelPixelDataFree",
         "uint32_t"
-      ]
+      ],
+      "dh": "abbb56c3"
     },
     {
       "name": "CELCMP_GetDC6BlockPixelData",
@@ -645,7 +674,8 @@
       "usedTypes": [
         "DC6Block",
         "int32_t"
-      ]
+      ],
+      "dh": "90777329"
     },
     {
       "name": "CELCMP_RoundUpToMultiple",
@@ -662,7 +692,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "a62b4b84"
     },
     {
       "name": "CELCMP_FreeCelFileAndData",
@@ -685,7 +716,8 @@
       "usedTypes": [
         "DC6",
         "int32_t"
-      ]
+      ],
+      "dh": "d6b8bf3d"
     },
     {
       "name": "CELCMP_AddCelFrameToCache",
@@ -715,7 +747,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "1768c8a9"
     },
     {
       "name": "CELCMP_FreeCachedCelFrame",
@@ -737,7 +770,8 @@
       "usedTypes": [
         "CELLIST",
         "uint32_t"
-      ]
+      ],
+      "dh": "f0901035"
     },
     {
       "name": "CELCMP_CreateCelFileFromCache",
@@ -759,7 +793,8 @@
         "CELLIST",
         "DC6",
         "uint32_t"
-      ]
+      ],
+      "dh": "9e8e788f"
     },
     {
       "name": "CELCMP_RoundUpToMultiple_Unreferenced",
@@ -776,7 +811,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "6af9f3a2"
     },
     {
       "name": "GFX_SetSpriteCacheMaxSize",
@@ -791,7 +827,8 @@
       "calledFunctions": [
         "GFX_SetSpriteCacheMaxSize",
         "SPRITECACHE_SetMaxSize"
-      ]
+      ],
+      "dh": "4fc5534b"
     },
     {
       "name": "BITSTREAM_InitWriter",
@@ -810,7 +847,8 @@
         "D2CodecBitStateStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "ab0225dd"
     },
     {
       "name": "BITSTREAM_CopyState",
@@ -827,7 +865,8 @@
       ],
       "usedTypes": [
         "D2CodecBitStateStrc"
-      ]
+      ],
+      "dh": "d245385e"
     },
     {
       "name": "BITSTREAM_GetByteOffset",
@@ -845,7 +884,8 @@
       "usedTypes": [
         "D2CodecBitStateStrc",
         "uint8_t"
-      ]
+      ],
+      "dh": "d5566bd6"
     },
     {
       "name": "BITSTREAM_AdvanceBits",
@@ -864,7 +904,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "74f34784"
     },
     {
       "name": "GFX_InitGlobalCriticalSection",
@@ -878,7 +919,8 @@
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
         "GFX_InitGlobalCriticalSection"
-      ]
+      ],
+      "dh": "23df428f"
     },
     {
       "name": "GFX_DestroyGlobalCriticalSection",
@@ -892,7 +934,8 @@
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
         "GFX_DestroyGlobalCriticalSection"
-      ]
+      ],
+      "dh": "45d25af4"
     },
     {
       "name": "CELCMP_ApplyColorKeyToAllPixels",
@@ -911,7 +954,8 @@
         "pfnTilecmpPixelCallback",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d5c4645f"
     },
     {
       "name": "__GSHandlerCheck_EH_6ca286",
@@ -932,7 +976,8 @@
         "EHRegistrationNode",
         "_CONTEXT",
         "_EXCEPTION_DISPOSITION"
-      ]
+      ],
+      "dh": "506d22cc"
     },
     {
       "name": "StaticInit_gCelCmpCacheHandler",
@@ -948,7 +993,8 @@
         "StaticInit_gCelCmpCacheHandler",
         "Constructor",
         "atexit"
-      ]
+      ],
+      "dh": "f4d779bf"
     },
     {
       "name": "StaticFini_gCelCmpCacheHandler",
@@ -963,7 +1009,8 @@
       "calledFunctions": [
         "StaticFini_gCelCmpCacheHandler",
         "Destructor"
-      ]
+      ],
+      "dh": "8407f9a8"
     }
   ]
 }

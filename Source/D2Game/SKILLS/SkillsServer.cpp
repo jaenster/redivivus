@@ -2641,7 +2641,7 @@ void __fastcall SKILLS_ApplyAllPassiveStates(D2UnitStrc * pUnit) {
     }
 }
 
-static void __stdcall SKILLS_CalcSkillMinMaxToHit(int * pnMinMaxToHit, eD2Skills eSkill, D2UnitStrc * pUnit) {
+static void __stdcall SKILLS_CalcSkillMinMaxToHit(int * pnMinMaxToHit, D2UnitStrc * pUnit, eD2Skills eSkill) {
     int32_t nTotalLevel = D2Common::Skills::SKILLS_GetTotalSkillLevel(pUnit, eSkill);
     int32_t nDamage = D2Common::Skills::SKILL_CalcMinDamage(pUnit, eSkill, nTotalLevel, 1) >> 8;
     *pnMinMaxToHit = nDamage;
@@ -2672,7 +2672,7 @@ void __thiscall SKILLS_CalcPetSkillDamage(D2UnitStrc * pThis, int * pnDamageOut)
       return;
     }
 
-    SKILLS_CalcSkillMinMaxToHit(pnDamageOut, (int)nSkillDamage, pOwner);
+    SKILLS_CalcSkillMinMaxToHit(pnDamageOut, pOwner, (int)nSkillDamage);
 }
 
 int32_t __fastcall SetDamageOnEvent(D2UnitStrc * pUnit, D2DamageStrc * pEvent, eD2Skills eSkill, int32_t nSkillLvl) {

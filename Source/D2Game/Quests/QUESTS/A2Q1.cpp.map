@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "cc729d74"
     },
     {
       "name": "Q09_ActiveFilter",
@@ -45,7 +46,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "44e42977"
     },
     {
       "name": "Q09_Callback10_PlayerLeavesGame",
@@ -78,7 +80,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA2Q1Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "76b35b8c"
     },
     {
       "name": "Q09_UpdateQuestRecord",
@@ -100,7 +103,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "0077ec04"
     },
     {
       "name": "Q09_Callback11_ScrollMessage",
@@ -138,7 +142,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t"
-      ]
+      ],
+      "dh": "8cd92c33"
     },
     {
       "name": "Q09_Callback00_NpcActivate",
@@ -166,7 +171,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "3787403b"
     },
     {
       "name": "Q09_SetRadamentRewardOnPartyMember",
@@ -196,7 +202,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "73791abf"
     },
     {
       "name": "Q09_SetCannotComplete",
@@ -220,7 +227,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "1c747dc0"
     },
     {
       "name": "Q09_CheckRadamentKillAndReward",
@@ -257,7 +265,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "c8b3a1b3"
     },
     {
       "name": "Q09_OnEndCallback",
@@ -278,7 +287,8 @@
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
-      ]
+      ],
+      "dh": "99c83d04"
     },
     {
       "name": "Q09_CheckBookOfSkillAndSound",
@@ -304,7 +314,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "1d9c63ff"
     },
     {
       "name": "Q09_Callback08_MonsterKilled",
@@ -334,7 +345,8 @@
         "D2QuestDataStrc",
         "D2RoomStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "ed3f17fc"
     },
     {
       "name": "Q09_Callback03_ChangedLevel",
@@ -360,7 +372,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "a1a9ec27"
     },
     {
       "name": "Q09_OnPlayerJoinNoop",
@@ -379,7 +392,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e8cb9727"
     },
     {
       "name": "Q09_SequenceFilter",
@@ -401,7 +415,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "c3aac6c6"
     },
     {
       "name": "Q09_Callback13_PlayerStartedGame",
@@ -428,7 +443,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "f79996c1"
     },
     {
       "name": "Q09_InitData",
@@ -449,7 +465,8 @@
         "D2QuestDataA2Q1Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "ba8ce163"
     }
   ]
 }

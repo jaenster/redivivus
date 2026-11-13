@@ -18,7 +18,8 @@
       ],
       "usedTypes": [
         "int32_t"
-      ]
+      ],
+      "dh": "f34a9031"
     },
     {
       "name": "SKILLSOR_OnInfernoExpire",
@@ -40,7 +41,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "307103cf"
     },
     {
       "name": "INFERNO_CastInfernoTick",
@@ -78,7 +80,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0432b566"
     },
     {
       "name": "INFERNO_BeginOrContinueChannel",
@@ -114,7 +117,8 @@
         "eD2UnitType",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "fbd7de60"
     },
     {
       "name": "SKILLSOR_SrvStFn11_InfernoChannel",
@@ -139,7 +143,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "0f0acdee"
     },
     {
       "name": "SKILLSOR_SrvStFn12_TargetInAuraRange",
@@ -169,7 +174,8 @@
         "eD2Skills",
         "eD2UnitType",
         "int32_t"
-      ]
+      ],
+      "dh": "7633e52b"
     },
     {
       "name": "SKILLSOR_SrvStFn13_ThunderStorm",
@@ -192,7 +198,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
-      ]
+      ],
+      "dh": "e1b86e9e"
     },
     {
       "name": "SKILLSOR_SrvStFn14_Hydra",
@@ -218,7 +225,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fa4cd023"
     },
     {
       "name": "SKILL_InitChargedBoltPath",
@@ -247,7 +255,8 @@
         "int32_t",
         "intptr_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "58ee0d11"
     },
     {
       "name": "Skills_SrvDoFunc_017_ChargedBolt",
@@ -277,7 +286,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "1b1bb569"
     },
     {
       "name": "SetFrozenArmorState",
@@ -306,7 +316,8 @@
         "eD2States",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "9f162d49"
     },
     {
       "name": "Skills_SrvDoFunc_018_Armor",
@@ -338,7 +349,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "2151fc7f"
     },
     {
       "name": "Skills_SrvDoFunc_019_Inferno",
@@ -360,7 +372,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "df59b172"
     },
     {
       "name": "SKILLSOR_ApplyStaticFieldToUnit",
@@ -391,7 +404,8 @@
         "eSkillEType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fd633071"
     },
     {
       "name": "Skills_SrvDoFunc_020_Static",
@@ -418,7 +432,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "c9d1ec81"
     },
     {
       "name": "Skills_SrvDoFunc_021_Telekenis",
@@ -458,7 +473,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e10606a7"
     },
     {
       "name": "Skills_SrvDoFunc_022_Nova_FrostNova",
@@ -484,7 +500,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "bf3cbc43"
     },
     {
       "name": "Skills_SrvDoFunc_023_Blaze_EnergyShield",
@@ -513,7 +530,8 @@
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "ea637c76"
     },
     {
       "name": "BlazePath",
@@ -550,7 +568,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "27f5534e"
     },
     {
       "name": "Skills_SrvDoFunc_024_FireWall",
@@ -586,7 +605,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "446ac9e2"
     },
     {
       "name": "Skills_SrvDoFunc_025_Enchant",
@@ -616,7 +636,8 @@
         "Skills_SrvDoFunc_025_Enchant_Slotmc",
         "eD2Skills",
         "int32_t"
-      ]
+      ],
+      "dh": "23612292"
     },
     {
       "name": "Skills_SrvDoFunc_026_ChainLighting",
@@ -641,7 +662,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "736a55d3"
     },
     {
       "name": "Skills_SrvDoFunc_151_FireDirectionalMissile",
@@ -669,7 +691,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "70e059d6"
     },
     {
       "name": "Skills_SrvDoFunc_027_Teleport",
@@ -699,7 +722,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "28397041"
     },
     {
       "name": "Skills_SrvDoFunc_028_Meteor_Blizzard",
@@ -722,7 +746,8 @@
         "eD2Skills",
         "eMissilesId",
         "int32_t"
-      ]
+      ],
+      "dh": "dc447e31"
     },
     {
       "name": "SKILLSOR_CreateMissileAtTarget",
@@ -750,7 +775,8 @@
         "eMissilesId",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8247581"
     },
     {
       "name": "Skills_SrvDoFunc_029_ThunderStorm",
@@ -791,7 +817,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "6331a726"
     },
     {
       "name": "ITEMEVENT_SorAuraManaAbsorb",
@@ -829,7 +856,8 @@
         "eD2Skills",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "0695132a"
     },
     {
       "name": "Skills_SrvDoFunc_144_Hydra",
@@ -872,7 +900,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "b9b840bf"
     }
   ]
 }

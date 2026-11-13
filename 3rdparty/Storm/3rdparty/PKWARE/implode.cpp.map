@@ -24,7 +24,8 @@
         "pfnPkwareWrite",
         "uint16_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "a8d6484c"
     },
     {
       "name": "WriteCmpData",
@@ -49,7 +50,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "cc149c4a"
     },
     {
       "name": "FindRep",
@@ -69,7 +71,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "adf1b015"
     },
     {
       "name": "OutputBits",
@@ -89,7 +92,8 @@
         "TCmpStruct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "f5acd34b"
     },
     {
       "name": "lmemcpy",
@@ -106,7 +110,8 @@
       ],
       "usedTypes": [
         "uint32_t"
-      ]
+      ],
+      "dh": "fb7c8ab7"
     },
     {
       "name": "lmemset",
@@ -124,7 +129,8 @@
       "usedTypes": [
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "d078d6dd"
     },
     {
       "name": "FlushBuf",
@@ -144,7 +150,8 @@
         "TCmpStruct",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "faf81ac5"
     },
     {
       "name": "SortBuffer",
@@ -164,7 +171,8 @@
         "uint16_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "0e421f5f"
     }
   ]
 }

@@ -21,7 +21,8 @@
       ],
       "usedTypes": [
         "D2LRUCacheNodeStrc"
-      ]
+      ],
+      "dh": "f9dc009c"
     },
     {
       "name": "SPRITECACHE_LRU_RemoveCacheEntryCallback",
@@ -39,7 +40,8 @@
       ],
       "usedTypes": [
         "D2LRUCacheNodeStrc"
-      ]
+      ],
+      "dh": "c25deb3f"
     },
     {
       "name": "CELCMP_AllocateCelListKey",
@@ -64,7 +66,8 @@
         "int32_t",
         "uint32_t",
         "void *"
-      ]
+      ],
+      "dh": "9fd2ab80"
     },
     {
       "name": "TILEPROJECT_GetSoundIndexIndex",
@@ -85,7 +88,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "5e188252"
     },
     {
       "name": "TILEPROJECT_GetMainIndex",
@@ -107,7 +111,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d7582fc6"
     },
     {
       "name": "TILEPROJECT_GetAnimatedSubstDataPtr",
@@ -128,7 +133,8 @@
       "usedTypes": [
         "D2TileLibraryEntryStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "2158af92"
     },
     {
       "name": "D2CMP_MinDouble",
@@ -142,7 +148,8 @@
       "namespace": "D2CMP",
       "calledFunctions": [
         "D2CMP_MinDouble"
-      ]
+      ],
+      "dh": "2e0a176c"
     },
     {
       "name": "D2CMP_MaxDouble",
@@ -156,7 +163,8 @@
       "namespace": "D2CMP",
       "calledFunctions": [
         "D2CMP_MaxDouble"
-      ]
+      ],
+      "dh": "c7a9c4b4"
     },
     {
       "name": "SUBTILE_CountRunLength",
@@ -177,7 +185,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "101e9831"
     },
     {
       "name": "SUBTILE_CountRunLengthForByte",
@@ -198,7 +207,8 @@
       "usedTypes": [
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "331351a8"
     }
   ]
 }

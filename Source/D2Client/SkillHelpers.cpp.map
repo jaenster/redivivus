@@ -19,7 +19,8 @@
       ],
       "usedTypes": [
         "WCHAR"
-      ]
+      ],
+      "dh": "2bd0e597"
     },
     {
       "name": "INV_SubstituteFormatToken",
@@ -40,7 +41,8 @@
       "usedTypes": [
         "WCHAR",
         "int32_t"
-      ]
+      ],
+      "dh": "b04b5476"
     }
   ]
 }

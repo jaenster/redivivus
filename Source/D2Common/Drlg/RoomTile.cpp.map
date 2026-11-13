@@ -26,7 +26,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "50cc3a2d"
     },
     {
       "name": "DRLGROOMTILE_SetWallTileFlags",
@@ -47,7 +48,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5e2aae9"
     },
     {
       "name": "DRLGROOMTILE_WorldToTileScreenPos",
@@ -65,7 +67,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "1eddd4d4"
     },
     {
       "name": "DRLGROOMTILE_CreateWallTileData",
@@ -91,7 +94,8 @@
         "D2RoomExStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "42ebb1e4"
     },
     {
       "name": "DRLGROOMTILE_FillTileData",
@@ -113,7 +117,8 @@
         "D2RoomExStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "42ccf90b"
     },
     {
       "name": "DRLGROOMTILE_CreateFloorTileData",
@@ -136,7 +141,8 @@
         "D2RoomExStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "9ca1ce0d"
     },
     {
       "name": "DRLGROOMTILE_CreateShadowTileData",
@@ -160,7 +166,8 @@
         "D2RoomExStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "cd169a20"
     },
     {
       "name": "DRLGROOMTILE_CreateShadowTileFromGrid",
@@ -181,7 +188,8 @@
         "D2RoomExStrc",
         "D2TileLibraryEntryStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "b8212661"
     },
     {
       "name": "DRLGROOMTILE_CompactTileDataArray",
@@ -203,7 +211,8 @@
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "94063ac5"
     },
     {
       "name": "DRLGROOMTILE_GetWarpDirectionByte",
@@ -217,7 +226,8 @@
       "namespace": "D2Common::Drlg::RoomTile",
       "calledFunctions": [
         "DRLGROOMTILE_GetWarpDirectionByte"
-      ]
+      ],
+      "dh": "daa047a0"
     },
     {
       "name": "DRLGROOMTILE_SetWarpTileDirection",
@@ -241,7 +251,8 @@
         "D2LvlWarpTxt",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "9ce3b64d"
     },
     {
       "name": "DRLGROOMTILE_CreateExitWarp",
@@ -264,7 +275,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "3ba6d095"
     },
     {
       "name": "DRLGROOMTILE_SetupWarpTile",
@@ -292,7 +304,8 @@
         "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "uint32_t"
-      ]
+      ],
+      "dh": "6483fb0c"
     },
     {
       "name": "DRLGROOMTILE_InitWarpCacheTiles",
@@ -321,7 +334,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "7c23b2f4"
     },
     {
       "name": "DRLGROOMTILE_FindTileAtPosition",
@@ -343,7 +357,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "d5b42e78"
     },
     {
       "name": "DRLGROOMTILE_FindTileInNearRooms",
@@ -364,7 +379,8 @@
         "D2RoomExStrc",
         "D2RoomExStrc *",
         "int32_t"
-      ]
+      ],
+      "dh": "5d3d1d06"
     },
     {
       "name": "DRLGROOMTILE_AllocTileLink",
@@ -384,7 +400,8 @@
         "D2DrlgTileLinkStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "f8bc56e0"
     },
     {
       "name": "DRLGROOMTILE_AddTileData",
@@ -414,7 +431,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8068e882"
     },
     {
       "name": "DRLGROOMTILE_UpdateTileType",
@@ -444,7 +462,8 @@
         "D2TileLibraryEntryStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "e5b11578"
     },
     {
       "name": "DRLGROOMTILE_UpdateOrAddTile",
@@ -468,7 +487,8 @@
         "D2RoomExStrc",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "74ed71aa"
     },
     {
       "name": "DRLGROOMTILE_ProcessTile",
@@ -503,7 +523,8 @@
         "int32_t",
         "uint32_t",
         "uint8_t"
-      ]
+      ],
+      "dh": "00b05298"
     },
     {
       "name": "InitRoomTiles",
@@ -526,7 +547,8 @@
         "D2RoomExStrc",
         "eD2GridCellFlags",
         "int32_t"
-      ]
+      ],
+      "dh": "57369342"
     },
     {
       "name": "DRLGROOMTILE_CountTilesFromGrid",
@@ -549,7 +571,8 @@
         "D2RoomExStrc",
         "eD2GridCellFlags",
         "uint32_t"
-      ]
+      ],
+      "dh": "eb85ba80"
     },
     {
       "name": "DRLGROOMTILE_CountWallTilesFromGrid",
@@ -569,7 +592,8 @@
         "D2DrlgGridStrc",
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "1d6d58cf"
     },
     {
       "name": "InitGridCells",
@@ -589,7 +613,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "284e93e0"
     },
     {
       "name": "InitializorForDrlgType",
@@ -608,7 +633,8 @@
       ],
       "usedTypes": [
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "fb7b46b1"
     },
     {
       "name": "DRLGROOMTILE_AllocRoomTileGrid",
@@ -628,7 +654,8 @@
       "usedTypes": [
         "D2DrlgTileGridStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "90a68a5d"
     },
     {
       "name": "DRLGROOMTILE_AllocTileDataArrays",
@@ -650,7 +677,8 @@
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "440d813a"
     },
     {
       "name": "DRLGROOMTILE_GrowTileDataArray",
@@ -670,7 +698,8 @@
         "D2DrlgTileDataStrc",
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc"
-      ]
+      ],
+      "dh": "b5ee77d8"
     },
     {
       "name": "Unreferenced_0066f030",
@@ -688,7 +717,8 @@
       ],
       "usedTypes": [
         "D2RoomStrc"
-      ]
+      ],
+      "dh": "74b54abe"
     },
     {
       "name": "DRLGROOMTILE_FreeTileArrays",
@@ -709,7 +739,8 @@
         "D2DrlgTileGridStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "c1736bb6"
     },
     {
       "name": "DRLGROOMTILE_FreeRoomTilesAll",
@@ -732,7 +763,8 @@
         "D2DrlgTileLinkStrc",
         "D2PoolManagerStrc",
         "D2RoomExStrc"
-      ]
+      ],
+      "dh": "1b1c0018"
     }
   ]
 }

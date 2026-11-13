@@ -24,7 +24,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "07738cb4"
     },
     {
       "name": "CreateObject0x235Tentacle4",
@@ -50,7 +51,8 @@
         "POINT",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "138294f3"
     },
     {
       "name": "Q36_Callback02_NpcDeactivate",
@@ -70,7 +72,8 @@
         "D2QuestArgStrc",
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "76a10eb8"
     },
     {
       "name": "SetStep0x2And0x3",
@@ -101,7 +104,8 @@
         "SGAMEDATA",
         "eAct",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "7285890f"
     },
     {
       "name": "Q36_Callback11_ScrollMessage",
@@ -124,7 +128,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "eD2QuestState"
-      ]
+      ],
+      "dh": "a7b476d8"
     },
     {
       "name": "Q36_Callback00_NpcActivate",
@@ -153,7 +158,8 @@
         "eD2MonsterClassId",
         "eD2QuestState",
         "uint32_t"
-      ]
+      ],
+      "dh": "570de932"
     },
     {
       "name": "Q36_SetCompleteForPartyMember",
@@ -186,7 +192,8 @@
         "eAct",
         "eD2LevelId",
         "uint32_t"
-      ]
+      ],
+      "dh": "f4471d82"
     },
     {
       "name": "Q36_Callback10_PlayerLeavesGame",
@@ -206,7 +213,8 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "321cf07a"
     },
     {
       "name": "Q36_CompleteQuestAndSetStatus",
@@ -233,7 +241,8 @@
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "8170bf95"
     },
     {
       "name": "Q36_PropagateCompleteToParty",
@@ -255,7 +264,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "e3ede8fa"
     },
     {
       "name": "SetCannotComplete",
@@ -278,7 +288,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "808a5d44"
     },
     {
       "name": "Q36_SendCompletionNotification",
@@ -304,7 +315,8 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "d09210e9"
     },
     {
       "name": "Q36_CheckWorldstoneChamber",
@@ -331,7 +343,8 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "23898f4e"
     },
     {
       "name": "Q36_Callback_08_CompleteQuest",
@@ -377,7 +390,8 @@
         "eD2UnitType",
         "int32_t",
         "uint32_t"
-      ]
+      ],
+      "dh": "fc07cd48"
     },
     {
       "name": "Q36_SendQuestSpecialPacket",
@@ -402,7 +416,8 @@
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "6d845d3a"
     },
     {
       "name": "Q36_SendQuestSpecialPacketCallback",
@@ -421,7 +436,8 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "efa69a3e"
     },
     {
       "name": "Q36_Callback03_ChangedLevel",
@@ -450,7 +466,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "37c690e5"
     },
     {
       "name": "Q36_ActiveFilter",
@@ -473,7 +490,8 @@
         "D2UnitStrc",
         "eD2MonsterClassId",
         "eD2QuestState"
-      ]
+      ],
+      "dh": "522ce90f"
     },
     {
       "name": "Q36_SequenceFilter",
@@ -493,7 +511,8 @@
       ],
       "usedTypes": [
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "008fa995"
     },
     {
       "name": "Q36_Callback14_PlayerJoinedGame",
@@ -517,7 +536,8 @@
         "D2QuestDataStrc",
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "517142cd"
     },
     {
       "name": "Q36_Callback13_PlayerStartedGame",
@@ -545,7 +565,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "uint32_t"
-      ]
+      ],
+      "dh": "33d5b33f"
     },
     {
       "name": "Q36_InitData",
@@ -567,7 +588,8 @@
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "b63a32aa"
     },
     {
       "name": "SetFlagToOpenedStairs",
@@ -587,7 +609,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fcdd4423"
     },
     {
       "name": "Q36_IsBaalAlive",
@@ -606,7 +629,8 @@
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "fb4675cf"
     },
     {
       "name": "Objects_InitFn75_BaalsPortal",
@@ -627,7 +651,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "0932d6b3"
     },
     {
       "name": "OBJOP_A5Q6_WorldstoneLevelTransition",
@@ -651,7 +676,8 @@
         "D2QuestDataStrc",
         "D2RoomStrc",
         "eD2LevelId"
-      ]
+      ],
+      "dh": "09f3fb83"
     },
     {
       "name": "Objects_InitFn77_LastPortal",
@@ -672,7 +698,8 @@
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc"
-      ]
+      ],
+      "dh": "f3fd6a6d"
     },
     {
       "name": "OBJOP_A5Q6_TyraelPortalToEnd",
@@ -706,7 +733,8 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA",
         "int32_t"
-      ]
+      ],
+      "dh": "7cf9a8aa"
     },
     {
       "name": "Objects_InitFn79_Zoo",
@@ -731,7 +759,8 @@
         "D2QuestDataStrc",
         "D2SeedStrc",
         "int32_t"
-      ]
+      ],
+      "dh": "4bbee95a"
     },
     {
       "name": "SpawnTyrael",
@@ -754,7 +783,8 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA"
-      ]
+      ],
+      "dh": "89960667"
     }
   ]
 }
