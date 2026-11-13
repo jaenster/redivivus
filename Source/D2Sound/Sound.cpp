@@ -150,7 +150,8 @@ void __stdcall SOUND_InitDirectSound() {
       return;
     }
 
-    DSBUFFERDESC tPrimaryBufferDesc = {0};
+    DSBUFFERDESC tPrimaryBufferDesc;
+    memset(&tPrimaryBufferDesc, 0, sizeof(tPrimaryBufferDesc));
     tPrimaryBufferDesc.dwSize = 0x14;
     tPrimaryBufferDesc.dwFlags = 1;
     if (gbDSoundPrimaryBufferMode) {
@@ -201,7 +202,8 @@ void __stdcall SOUND_InitDirectSound() {
     gnSoundQualityMode = 0;
     if (gbSound3DEnabled) {
       Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tSecondaryFormat, 1);
-      DSBUFFERDESC tEaxBufferDesc = {0};
+      DSBUFFERDESC tEaxBufferDesc;
+      memset(&tEaxBufferDesc, 0, sizeof(tEaxBufferDesc));
       tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
       tEaxBufferDesc.dwSize = 0x14;
       tEaxBufferDesc.dwBufferBytes = 0x400;
@@ -229,7 +231,8 @@ void __stdcall SOUND_InitDirectSound() {
       }
     }
 
-    DSBCAPS sPrimaryBufferCaps = {0};
+    DSBCAPS sPrimaryBufferCaps;
+    memset(&sPrimaryBufferCaps, 0, sizeof(sPrimaryBufferCaps));
     sPrimaryBufferCaps.dwSize = 0x14;
     gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
     Src::D2SoundSmp::SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);

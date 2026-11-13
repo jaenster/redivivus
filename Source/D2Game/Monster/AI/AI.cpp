@@ -254,7 +254,8 @@ void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, D2UnitStrc
       pAiListEntry = MONSTERAI_GetAiFunctionFromTable(pUnit, nFunctionId);
       if (pAiListEntry) {
         if (pAiListEntry->fpInit) {
-          D2AiParamStrc pAiParam = {0};
+          D2AiParamStrc pAiParam;
+          memset(&pAiParam, 0, sizeof(pAiParam));
           pAiParam.pMonsterAiGeneral = pMonsterAiGeneral;
           pAiParam.pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nMonsterClassId);
           pAiParam.pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nMonsterClassId);
@@ -3379,7 +3380,8 @@ void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc *
       return;
     }
 
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pTarget = pTargetMonster;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = nTerrorDurationFrames;

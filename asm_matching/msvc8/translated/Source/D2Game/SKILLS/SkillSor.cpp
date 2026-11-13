@@ -422,7 +422,8 @@ BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     ::SGAMEDATA* pGameCtx = pGame;
     SkillsServer::D2UpdateState(pUnit, (int)pSkillTxt->aurastate, 1);
-    D2StateExArgStrc sStateArgs = {0};
+    D2StateExArgStrc sStateArgs;
+    memset(&sStateArgs, 0, sizeof(sStateArgs));
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
@@ -708,7 +709,8 @@ BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2U
       return 0;
     }
 
-    D2StateExArgStrc sStateArgs = {0};
+    D2StateExArgStrc sStateArgs;
+    memset(&sStateArgs, 0, sizeof(sStateArgs));
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
@@ -1125,7 +1127,8 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
 
     BOOL eThunderState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)pDVar1->aurastate);
     if (!eThunderState || (nSkillParam2 = D2Common::Skills::SKILL_GetParam2(pSkill) , nSkillParam2 != 0)) {
-      D2StateExArgStrc sStateArgs = {0};
+      D2StateExArgStrc sStateArgs;
+      memset(&sStateArgs, 0, sizeof(sStateArgs));
       sStateArgs.eSkill = eSkill;
       sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.pUnit = pUnit;

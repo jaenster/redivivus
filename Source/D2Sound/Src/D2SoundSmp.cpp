@@ -192,7 +192,8 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
     uint8_t* pObstructionGuid;
     IKsPropertySet** ppEaxInterface2;
     SOUNDSMP_InitWaveFormat(&tWaveFormat, (nFlags & 1) != 0 ? 2 : 1);
-    DSBUFFERDESC tBufferDesc = {0};
+    DSBUFFERDESC tBufferDesc;
+    memset(&tBufferDesc, 0, sizeof(tBufferDesc));
     uint32_t nBufSize = nFlags & 1 ? 0x40000 : 0x20000;
     uint32_t uVar1 = g_nSoundSampleParam ? 0x80a0 : 0xa0;
     uint32_t u3DFlag = nFlags & 2;

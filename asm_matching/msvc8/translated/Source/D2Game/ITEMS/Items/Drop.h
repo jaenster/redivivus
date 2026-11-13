@@ -92,12 +92,7 @@ __pragma(pack(push, 1)) struct D2ItemGenContextStrc {
 struct D2TCStackEntryStrc {
     /* 0x00 */ struct D2ParsedTreasureClassStrc * pTC;
     /* 0x04 */ int32_t nPicks;
-    /* 0x08 */ uint16_t nMagic;
-    /* 0x0A */ uint16_t nRare;
-    /* 0x0C */ uint16_t nSet;
-    /* 0x0E */ uint16_t nUnique;
-    /* 0x10 */ uint16_t nFromTCOffset0x30; // Carried from the parent treasure class at +0x30.
-    /* 0x12 */ uint16_t nFromTCOffset0x32;
+    /* 0x08 */ uint16_t aQualityRatios[6];
 };
 
 #endif // D2_MODULE_D2Game

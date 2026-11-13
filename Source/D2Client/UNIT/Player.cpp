@@ -2063,7 +2063,8 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
 
     bRecursionClick = 1;
     UI::Path::ConvertCoordToPerspectiveView(&nXConverted, &nY);
-    D2UnderMouseStrc mouse = {0};
+    D2UnderMouseStrc mouse;
+    memset(&mouse, 0, sizeof(mouse));
     mouse.flags = 0;
     mouse.pPlayer = GetPlayerUnit_UI();
     mouse.pTarget = GAME::Select::GetSelectedUnit();

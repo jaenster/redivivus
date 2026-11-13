@@ -655,12 +655,12 @@ void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States
     GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
 }
 
-void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
+BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, void * pSkillData) {
     int32_t nSwitchAiMode;
     uint32_t nTargetGUID;
     uint32_t bValidTarget = SKILLNEC_ValidateCorpseTarget(*(::SGAMEDATA**)pSkillData, *(D2UnitStrc**)((char*)pSkillData + 4), pUnit);
     if (!bValidTarget) {
-      return;
+      return 0;
     }
     if (*(char*)((char*)pSkillData + 0x10) == '\0') {
       nTargetGUID = *(uint32_t*)((char*)pSkillData + 0x14);
@@ -672,6 +672,7 @@ void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUni
 
     Monster::MonsterAI::AI_SetSwitchAiTargetParams(pUnit, nSwitchAiMode, nTargetGUID);
     GAME::Event::SetEvent(*(::SGAMEDATA**)pSkillData, pUnit, 10, (*(::SGAMEDATA**)pSkillData)->dwGameFrame + *(int*)((char*)pSkillData + 0x18), 0, 0);
+    return 1;
 }
 
 // Body continues at 005c3bcc, the JNZ target of 005c3bc0 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLNEC_CastCorpseSkill'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
@@ -713,7 +714,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
       sCorpseEventArg.pGame = pGame;
       sCorpseEventArg.pUnit = pUnit;
       sCorpseEventArg.nDuration = sStateExArg.nDurationInFrames;
-      SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, &sCorpseEventArg);
+      SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, (pfnSkillRangeCb)SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, &sCorpseEventArg);
       sStateExArg.nSkillCalc = 0;
       sStateExArg.nSkillLvl = nSkillLvl;
       sStateExArg.eSkill = eSkill;
@@ -2576,7 +2577,8 @@ BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     }
 
     nSlowAmount = -nSlowAmount;
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTarget;
     sStateArg.nSkillLvl = 1;

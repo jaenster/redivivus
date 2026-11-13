@@ -142,7 +142,8 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
 
 void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Report * pReport, DWORD dwSkipThreadId) {
     uint32_t dwCurrentPid;
-    THREADENTRY32 threadEntry = {0};
+    THREADENTRY32 threadEntry;
+    memset(&threadEntry, 0, sizeof(threadEntry));
     threadEntry.dwSize = 0x1c;
     HANDLE hObject = (HANDLE)CreateToolhelp32Snapshot(4, 0);
     if (hObject == (HANDLE)-1) {

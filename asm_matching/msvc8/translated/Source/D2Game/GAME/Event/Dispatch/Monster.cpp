@@ -269,7 +269,8 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       }
 
       D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-      D2MonsterKillStrc sMonsterKill = {0};
+      D2MonsterKillStrc sMonsterKill;
+      memset(&sMonsterKill, 0, sizeof(sMonsterKill));
       sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
       sMonsterKill.nAnimatedMode1 = '\0';
       sMonsterKill.nAnimatedMode2 = 'd';
@@ -285,7 +286,8 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2MonsterKillStrc sMonsterKill = {0};
+    D2MonsterKillStrc sMonsterKill;
+    memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
     sMonsterKill.pVictim = pUnit;
@@ -316,7 +318,8 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2MonsterKillStrc killStrc = {0};
+    D2MonsterKillStrc killStrc;
+    memset(&killStrc, 0, sizeof(killStrc));
     killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
     killStrc.pVictim = pUnit;

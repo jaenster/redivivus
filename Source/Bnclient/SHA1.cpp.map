@@ -32,6 +32,9 @@
       "namespace": "Bnclient::SHA1",
       "calledFunctions": [
         "SHA1_Init"
+      ],
+      "usedTypes": [
+        "D2BnSha1ContextStrc"
       ]
     },
     {
@@ -50,6 +53,7 @@
         "SHA1_Transform"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "uint32_t"
       ]
     },
@@ -69,6 +73,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "uint32_t",
         "uint8_t"
       ]

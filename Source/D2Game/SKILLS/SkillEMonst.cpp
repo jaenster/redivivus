@@ -540,7 +540,8 @@ static void __stdcall SKILLEMONST_ApplyAuraBuff(D2UnitStrc * pUnit, D2UnitStrc *
       return;
     }
 
-    D2StateExArgStrc sStateExArg = {0};
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     sStateExArg.pUnit = pUnit;
     sStateExArg.pTarget = pTarget;
     sStateExArg.eSkill = eSkill;
@@ -1244,7 +1245,8 @@ BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, 
 // SrvDoFunc 141: initiates Baal's corpse explosion wave. Builds a D2BaalWaveParamStrc from the caster's position, sets skill to SKILL_BaalCorpseExplode, computes wave distance from Param[4]+Param[5]*(lvl-1), assigns fpBaalWaveFunction callback, then calls SKILLS_ForEachUnitBaalWave to propagate the wave.
 BOOL __fastcall Skills_SrvDoFunc_141_BaalCorpseExplosionWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord;
-    D2BaalWaveParamStrc sBaalWaveParam = {0};
+    D2BaalWaveParamStrc sBaalWaveParam;
+    memset(&sBaalWaveParam, 0, sizeof(sBaalWaveParam));
     eD2UnitType ePosUnitType = pUnit->eUnitType;
     sBaalWaveParam.nUnitFindFlags = 12290;
     int nXValue;

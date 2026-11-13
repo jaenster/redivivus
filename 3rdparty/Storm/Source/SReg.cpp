@@ -276,29 +276,29 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
       DWORD dwDataLen;
       DWORD dwType;
       uint32_t* pnOutVal;
-      uint32_t valueBuf[64];
+      char valueBuf[256];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 268, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    BOOL bReadOk;
     uint32_t nParsed;
     __frame0.pnOutVal = (uint32_t*)pnOut;
     if (*pTree == '\0' || !pTree || !pKey || *pKey == '\0' || !pnOut) {
       SErr::SErrSetLastError(0x57);
     } else {
-      __frame0.valueBuf[0] &= -256;
+      BOOL bReadOk;
+      *(uint32_t*)(char*)&__frame0.valueBuf &= -256;
       bReadOk = SREG_InternalLoadEntry(&__frame0.dwType, (LPBYTE)__frame0.valueBuf, pTree, byFlags, 0x100, pKey, &__frame0.dwDataLen);
       if (bReadOk) {
         switch (__frame0.dwType) {
           case 1:
             {
-              nParsed = strtoul((char*)__frame0.valueBuf, nullptr, 0);
+              nParsed = strtoul(__frame0.valueBuf, nullptr, 0);
               *__frame0.pnOutVal = nParsed;
               break;
             }
           case 4:
             {
-              *__frame0.pnOutVal = __frame0.valueBuf[0];
+              *__frame0.pnOutVal = *(uint32_t*)(char*)&__frame0.valueBuf;
               break;
             }
         }

@@ -2,7 +2,7 @@
 
 #include "Source/Bnclient/SHA.h"
 #include "Source/Bnclient/SHA1.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Bnclient/SRP.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -15,7 +15,7 @@ namespace Bnclient { namespace SHA {
 int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength) {
     uint32_t i;
     uint8_t* pDstByte;
-    uint32_t shaCtx[23];
+    D2BnSha1ContextStrc shaCtx;
     uint8_t aHashBuf[20];
     do {
       if (*pWideStr != '\0') {
@@ -42,9 +42,9 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
         } while (nByteIdx < nHalfLen);
       }
 
-      SHA1::SHA1_Init(shaCtx);
-      SHA1::SHA1_Update(shaCtx, pTmpBuf, nHalfLen);
-      SHA1::SHA1_Final(aHashBuf, shaCtx);
+      SHA1::SHA1_Init(&shaCtx);
+      SHA1::SHA1_Update(&shaCtx, pTmpBuf, nHalfLen);
+      SHA1::SHA1_Final(aHashBuf, &shaCtx);
       i = 0;
       do {
         pHashOut[i * 2] = aHashBuf[i];
@@ -61,9 +61,9 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
         } while (i < nHalfLen);
       }
 
-      SHA1::SHA1_Init(shaCtx);
-      SHA1::SHA1_Update(shaCtx, pTmpBuf, nHalfLen);
-      SHA1::SHA1_Final(aHashBuf, shaCtx);
+      SHA1::SHA1_Init(&shaCtx);
+      SHA1::SHA1_Update(&shaCtx, pTmpBuf, nHalfLen);
+      SHA1::SHA1_Final(aHashBuf, &shaCtx);
       i = 0;
       pDstByte = pHashOut + 1;
       do {

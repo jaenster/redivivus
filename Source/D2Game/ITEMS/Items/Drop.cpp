@@ -3601,12 +3601,12 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
       pTCStack[0].nPicks = 1;
     }
 
-    pTCStack[0].nMagic = pTreasure->nMagic;
-    pTCStack[0].nRare = pTreasure->nRare;
-    pTCStack[0].nSet = pTreasure->nSet;
-    pTCStack[0].nUnique = pTreasure->nUnique;
-    pTCStack[0].nFromTCOffset0x30 = pTreasure->nFromTCOffset0x30;
-    pTCStack[0].nFromTCOffset0x32 = pTreasure->nFromTCOffset0x32;
+    pTCStack[0].aQualityRatios[0] = pTreasure->nMagic;
+    pTCStack[0].aQualityRatios[1] = pTreasure->nRare;
+    pTCStack[0].aQualityRatios[2] = pTreasure->nSet;
+    pTCStack[0].aQualityRatios[3] = pTreasure->nUnique;
+    pTCStack[0].aQualityRatios[4] = pTreasure->nFromTCOffset0x30;
+    pTCStack[0].aQualityRatios[5] = pTreasure->nFromTCOffset0x32;
     int nTCStackDepth;
     nTCStackDepth = 1;
     do {
@@ -3791,8 +3791,8 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   }
 
                   *pStackEntryData = nDropCount;
-                  pChildQualMods = &pTCStack[nTCStackDepth].nRare;
-                  pParentQualMods = &pTCStack[nParentDepth].nRare;
+                  pChildQualMods = pTCStack[nTCStackDepth].aQualityRatios + 1;
+                  pParentQualMods = pTCStack[nParentDepth].aQualityRatios + 1;
                   pNestedQualMods = &pNestedTC->nRare;
                   nDropCount = 2;
                   do {
@@ -3848,23 +3848,23 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       }
 
                       pEntry = pNestedTC->pEntries;
-                      if ((uint16_t)pEntry[nEntryIdx].nMagicMod > pTCStack[nParentDepth].nMagic) {
-                        pTCStack[nParentDepth].nMagic = pEntry[nEntryIdx].nMagicMod;
+                      if ((uint16_t)pEntry[nEntryIdx].nMagicMod > pTCStack[nParentDepth].aQualityRatios[0]) {
+                        pTCStack[nParentDepth].aQualityRatios[0] = pEntry[nEntryIdx].nMagicMod;
                       }
-                      if ((uint16_t)pEntry[nEntryIdx].nRareMod > pTCStack[nParentDepth].nRare) {
-                        pTCStack[nParentDepth].nRare = pEntry[nEntryIdx].nRareMod;
+                      if ((uint16_t)pEntry[nEntryIdx].nRareMod > pTCStack[nParentDepth].aQualityRatios[1]) {
+                        pTCStack[nParentDepth].aQualityRatios[1] = pEntry[nEntryIdx].nRareMod;
                       }
-                      if ((uint16_t)pEntry[nEntryIdx].nSetMod > pTCStack[nParentDepth].nSet) {
-                        pTCStack[nParentDepth].nSet = pEntry[nEntryIdx].nSetMod;
+                      if ((uint16_t)pEntry[nEntryIdx].nSetMod > pTCStack[nParentDepth].aQualityRatios[2]) {
+                        pTCStack[nParentDepth].aQualityRatios[2] = pEntry[nEntryIdx].nSetMod;
                       }
-                      if ((uint16_t)pEntry[nEntryIdx].nUniqueMod > pTCStack[nParentDepth].nUnique) {
-                        pTCStack[nParentDepth].nUnique = pEntry[nEntryIdx].nUniqueMod;
+                      if ((uint16_t)pEntry[nEntryIdx].nUniqueMod > pTCStack[nParentDepth].aQualityRatios[3]) {
+                        pTCStack[nParentDepth].aQualityRatios[3] = pEntry[nEntryIdx].nUniqueMod;
                       }
-                      if ((uint16_t)pEntry[nEntryIdx].nFromTC0x30Mod > pTCStack[nParentDepth].nFromTCOffset0x30) {
-                        pTCStack[nParentDepth].nFromTCOffset0x30 = pEntry[nEntryIdx].nFromTC0x30Mod;
+                      if ((uint16_t)pEntry[nEntryIdx].nFromTC0x30Mod > pTCStack[nParentDepth].aQualityRatios[4]) {
+                        pTCStack[nParentDepth].aQualityRatios[4] = pEntry[nEntryIdx].nFromTC0x30Mod;
                       }
-                      if ((uint16_t)pEntry[nEntryIdx].nFromTC0x32Mod > pTCStack[nParentDepth].nFromTCOffset0x32) {
-                        pTCStack[nParentDepth].nFromTCOffset0x32 = pEntry[nEntryIdx].nFromTC0x32Mod;
+                      if ((uint16_t)pEntry[nEntryIdx].nFromTC0x32Mod > pTCStack[nParentDepth].aQualityRatios[5]) {
+                        pTCStack[nParentDepth].aQualityRatios[5] = pEntry[nEntryIdx].nFromTC0x32Mod;
                       }
                     }
 
@@ -3879,22 +3879,22 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       } else {
                         eRolledQuality = eItemType;
                         if (eItemType == ITEMTYPE_None1) {
-                          eRolledQuality = GAME_GetItemQuality(nRolledItemClassId, nVictimLevel, pGame, pUnit, pAttacker, (uint16_t*)((intptr_t)&pTCStack[0].nMagic + nStackOffset));
+                          eRolledQuality = GAME_GetItemQuality(nRolledItemClassId, nVictimLevel, pGame, pUnit, pAttacker, (uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset));
                         }
                       }
                     }
 
                     nDropFlags = 0;
-                    if ((uint16_t)*(short int*)((intptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset) > 0) {
+                    if ((uint16_t)*(short int*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 8) > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
-                      wTempMod = *(uint16_t*)((intptr_t)&pTCStack[0].nFromTCOffset0x30 + nStackOffset);
+                      wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 8);
                       pUnit->sSeed = sNewSeed;
                       if ((sNewSeed.nSeedLow & 0x3ff) < (uint32_t)wTempMod) {
                         nDropFlags = 4;
                       }
                     }
 
-                    wTempMod = *(uint16_t*)((intptr_t)&pTCStack[0].nFromTCOffset0x32 + nStackOffset);
+                    wTempMod = *(uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset + 10);
                     local_550[1] = (int32_t)wTempMod;
                     if (wTempMod > 0) {
                       sNewSeed = D2_SEED_NEXT(pUnit->sSeed);

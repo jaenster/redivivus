@@ -742,7 +742,8 @@ void __stdcall DRAW_HideTaskbarAppBars() {
       return;
     }
 
-    _AppBarData appBarData = {0};
+    _AppBarData appBarData;
+    memset(&appBarData, 0, sizeof(appBarData));
     appBarData.cbSize = 0x24;
     appBarData.hWnd = hwndD2GFX_Window;
     UINT nEdge = 0;

@@ -1381,7 +1381,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE(D2UnitStrc * pUnit, D2GSPacketSrv0x0C * pBytes) {
-    D2ServerMessageHandleStrc msg = {0};
+    D2ServerMessageHandleStrc msg;
+    memset(&msg, 0, sizeof(msg));
     msg.nItemId = (uint32_t)pBytes->nHpPercent;
     msg.nSkillId = (uint32_t)pBytes->nHitClass;
     UNIT::UnitMode::HandleMessage((uint32_t)pBytes->nMessageType, pUnit, &msg, 1);
@@ -2224,7 +2225,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID(D2UnitStrc * pUnit, D2GSPa
       return;
     }
 
-    D2ServerMessageHandleStrc stMsg = {0};
+    D2ServerMessageHandleStrc stMsg;
+    memset(&stMsg, 0, sizeof(stMsg));
     stMsg.nSkillId = (uint32_t)pBytes->wSkillId;
     stMsg.nTargetUnitType = (uint32_t)pBytes->nTargetType;
     stMsg.nTargetUnitId = pBytes->dwTargetGUID;
@@ -2238,7 +2240,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY(D2UnitStrc * pUnit, D2GSPa
       return;
     }
 
-    D2ServerMessageHandleStrc nSkillId = {0};
+    D2ServerMessageHandleStrc nSkillId;
+    memset(&nSkillId, 0, sizeof(nSkillId));
     nSkillId.nSkillId = pBytes->dwSkillId;
     nSkillId.nTargetUnitType = (uint32_t)pBytes->wTargetX;
     nSkillId.nTargetUnitId = (uint32_t)pBytes->wTargetY;

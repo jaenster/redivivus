@@ -87,6 +87,15 @@ __pragma(pack(push, 1)) struct D2BnReadUserDataStrc {
     /* 0x0C */ char szValues[0];
 }; __pragma(pack(pop))
 #endif // D2_DEFINED_D2BnReadUserDataStrc
+#ifndef D2_DEFINED_D2BnSha1ContextStrc
+#define D2_DEFINED_D2BnSha1ContextStrc
+struct D2BnSha1ContextStrc {
+    /* 0x00 */ uint32_t aState[5];
+    /* 0x14 */ uint32_t nBitCountLow;
+    /* 0x18 */ uint32_t nBitCountHigh;
+    /* 0x1C */ uint8_t abyBlock[64];
+};
+#endif // D2_DEFINED_D2BnSha1ContextStrc
 #ifndef D2_DEFINED_D2SrpCredentialsStrc
 #define D2_DEFINED_D2SrpCredentialsStrc
 struct D2SrpCredentialsStrc {

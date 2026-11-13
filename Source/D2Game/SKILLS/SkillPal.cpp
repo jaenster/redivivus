@@ -293,7 +293,8 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
     D2ItemStatCostTxt* pItemStatCostTxt;
     eD2UnitStat eUnitStat;
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
-    D2StateExArgStrc sAuraArg = {0};
+    D2StateExArgStrc sAuraArg;
+    memset(&sAuraArg, 0, sizeof(sAuraArg));
     sAuraArg.pUnit = pContext->pUnit;
     sAuraArg.eSkill = pAuraArgs->eSkill;
     sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;

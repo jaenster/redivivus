@@ -2568,7 +2568,7 @@ int32_t __stdcall DRLGPATH_GetSimpleDistancePacked2(uint32_t nPackedPos, uint32_
 
 // Searches the open list hash table for a node matching the given packed position. Returns the node if found, NULL otherwise.
 D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInOpenList(D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos) {
-    D2DrlgPathNodeStrc* pNode = *(D2DrlgPathNodeStrc**)(nOpenListBase->abyOpenBuckets + (gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7fU) * 4);
+    D2DrlgPathNodeStrc* pNode = nOpenListBase->apOpenBuckets[gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7f];
     while (pNode) {
       if (nPackedPos.nX == pNode->nX && nPackedPos.nY == pNode->nY) {
         return pNode;
@@ -2582,7 +2582,7 @@ D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInOpenList(D2DrlgPathSearchCtxSt
 
 // Searches the closed list hash table (offset 0x200 from the open list) for a node matching the given packed position. Returns the node if found, NULL otherwise.
 D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInClosedList(D2DrlgPathSearchCtxStrc * nOpenListBase, D2CoordsShort nPackedPos) {
-    D2DrlgPathNodeStrc* pNode = *(D2DrlgPathNodeStrc**)(nOpenListBase->abyClosedBuckets + (gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7fU) * 4);
+    D2DrlgPathNodeStrc* pNode = nOpenListBase->apClosedBuckets[gnPathNodeMax[(uint32_t)d2_bits_of(nPackedPos) >> 0x10 & 0x7f] + gnPathSearchMax[(uint32_t)d2_bits_of(nPackedPos) & 0x7f] & 0x7f];
     while (pNode) {
       if (nPackedPos.nX == pNode->nX && nPackedPos.nY == pNode->nY) {
         return pNode;
@@ -2598,8 +2598,8 @@ D2DrlgPathNodeStrc * __stdcall DRLGPATH_FindNodeInClosedList(D2DrlgPathSearchCtx
 static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * pSearchCtx, D2DrlgPathNodeStrc * pNode) {
     D2DrlgPathNodeStrc* pNextSortedNode = (D2DrlgPathNodeStrc*)pSearchCtx->pSortedHead;
     uint32_t nHashIdx = gnPathNodeMax[(uint8_t)pNode->nY & 0x7f] + gnPathSearchMax[(uint8_t)pNode->nX & 0x7f] & 0x7f;
-    pNode->pHashNext = *(D2DrlgPathNodeStrc**)(pSearchCtx->abyOpenBuckets + nHashIdx * 4);
-    *(D2DrlgPathNodeStrc**)(pSearchCtx->abyOpenBuckets + nHashIdx * 4) = (D2DrlgPathNodeStrc*)pNode;
+    pNode->pHashNext = pSearchCtx->apOpenBuckets[nHashIdx];
+    pSearchCtx->apOpenBuckets[nHashIdx] = pNode;
     D2DrlgPathNodeStrc* pPrevSortedNode = 0;
     if (pNextSortedNode) {
       D2DrlgPathNodeStrc* pSortedNode;
@@ -2627,40 +2627,37 @@ static void DRLGPATH_InsertNodeSorted(D2DrlgPathSearchCtxStrc * pSearchCtx, D2Dr
 
 // Removes the best (lowest f-cost) node from the open priority list and moves it to the closed list hash table. This is the standard A* open list pop operation.
 static int32_t * DRLGPATH_PopBestNodeFromOpenList(D2DrlgPathSearchCtxStrc * nOpenListBase) {
-    uint8_t* pHeadNode;
-    pHeadNode = (uint8_t*)nOpenListBase->pSortedHead;
-    if (!pHeadNode) {
-      return (int32_t*)pHeadNode;
+    D2DrlgPathNodeStrc* pDVar1;
+    pDVar1 = (D2DrlgPathNodeStrc*)nOpenListBase->pSortedHead;
+    if (!pDVar1) {
+      return (int32_t*)pDVar1;
     }
 
-    nOpenListBase->pSortedHead = *(void**)(pHeadNode + 0x34);
+    nOpenListBase->pSortedHead = pDVar1->pSortedNext;
     uint32_t nHashIdx;
-    nHashIdx = gnPathNodeMax[pHeadNode[2] & 0x7f] + gnPathSearchMax[*pHeadNode & 0x7f] & 0x7f;
-    uint8_t* pBucketNode;
-    pBucketNode = *(uint8_t**)(nOpenListBase->abyOpenBuckets + nHashIdx * 4);
-    if (*(uint8_t**)(nOpenListBase->abyOpenBuckets + nHashIdx * 4) != pHeadNode) {
-      uint8_t* pHashWalker;
+    nHashIdx = gnPathNodeMax[(uint8_t)pDVar1->nY & 0x7f] + gnPathSearchMax[(uint8_t)pDVar1->nX & 0x7f] & 0x7f;
+    D2DrlgPathNodeStrc* pBucketNode;
+    pBucketNode = nOpenListBase->apOpenBuckets[nHashIdx];
+    if (nOpenListBase->apOpenBuckets[nHashIdx] != pDVar1) {
+      D2DrlgPathNodeStrc* pHashWalker;
       do {
         pHashWalker = pBucketNode;
-        pBucketNode = *(uint8_t**)(pHashWalker + 0x30);
-      } while (*(uint8_t**)(pHashWalker + 0x30) != pHeadNode);
+        pBucketNode = pHashWalker->pHashNext;
+      } while (pHashWalker->pHashNext != pDVar1);
 
       if (pHashWalker) {
-        *(uint32_t*)(pHashWalker + 0x30) = *(uint32_t*)(pHeadNode + 0x30);
+        pHashWalker->pHashNext = pDVar1->pHashNext;
         goto push_to_closed_list;
       }
     }
 
-    *(uint32_t*)(nOpenListBase->abyOpenBuckets + nHashIdx * 4) = *(uint32_t*)(pHeadNode + 0x30);
+    nOpenListBase->apOpenBuckets[nHashIdx] = pDVar1->pHashNext;
     push_to_closed_list:
-    pHeadNode[0x30] = 0;
-    pHeadNode[0x31] = 0;
-    pHeadNode[0x32] = 0;
-    pHeadNode[0x33] = 0;
-    nHashIdx = gnPathNodeMax[pHeadNode[2] & 0x7f] + gnPathSearchMax[*pHeadNode & 0x7f] & 0x7f;
-    *(uint32_t*)(pHeadNode + 0x30) = *(uint32_t*)(nOpenListBase->abyClosedBuckets + nHashIdx * 4);
-    *(uint8_t**)(nOpenListBase->abyClosedBuckets + nHashIdx * 4) = (uint8_t*)pHeadNode;
-    return (int32_t*)pHeadNode;
+    pDVar1->pHashNext = 0;
+    nHashIdx = gnPathNodeMax[(uint8_t)pDVar1->nY & 0x7f] + gnPathSearchMax[(uint8_t)pDVar1->nX & 0x7f] & 0x7f;
+    pDVar1->pHashNext = nOpenListBase->apClosedBuckets[nHashIdx];
+    nOpenListBase->apClosedBuckets[nHashIdx] = pDVar1;
+    return (int32_t*)pDVar1;
 }
 
 // Propagates improved path costs through the A* node graph. When a shorter path is found to a node, updates its g-cost and recursively updates all 8 directional neighbors that could benefit from the shorter path.
@@ -3083,7 +3080,7 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     abyOpenList.pSortedHead = 0;
     abyOpenList.nPropagateCount = 0;
     memset(&abyOpenList, 0, 0x200);
-    memset(abyOpenList.abyClosedBuckets, 0, 0x200);
+    memset(abyOpenList.apClosedBuckets, 0, 0x200);
     D2PathPointStrc DVar1 = pPathTypeArg->tStartCoord;
     D2PathPointStrc nStartPacked = pPathTypeArg->tTargetCoord;
     if (abyOpenList.nPoolCount != 200) {

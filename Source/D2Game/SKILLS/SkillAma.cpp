@@ -370,7 +370,8 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
 }
 
 uint32_t __fastcall SKILL_GetPhoenixBoltCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pContext->pUnit;
     eD2Skills* pSkillParamArr = (eD2Skills*)pContext->pCallbackArg;
     sStateArg.eSkill = *pSkillParamArr;

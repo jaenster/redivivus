@@ -1520,7 +1520,8 @@ static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2Monst
       }
     }
 
-    D2MonsterKillStrc sMonsterKill = {0};
+    D2MonsterKillStrc sMonsterKill;
+    memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
     sMonsterKill.pVictim = pUnit;
     PlanExecutionOfMonster(pGame, &sMonsterKill);

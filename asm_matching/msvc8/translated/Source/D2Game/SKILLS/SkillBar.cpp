@@ -865,7 +865,8 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     SkillsServer::D2UpdateState(pUnit, (int)eAuraState, 0);
-    D2StateExArgStrc sStateArgs = {0};
+    D2StateExArgStrc sStateArgs;
+    memset(&sStateArgs, 0, sizeof(sStateArgs));
     sStateArgs.eSkill = eSkill;
     sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;

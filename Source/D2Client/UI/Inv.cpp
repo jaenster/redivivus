@@ -7652,7 +7652,8 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
     int nAdjReqDex;
     int32_t nAdjReqStr;
     D2ItemsTxt* pItemsTxtCopy;
-    ITEM_BuildSetItemTooltip_Slotm8 uSlot8 = {0};
+    ITEM_BuildSetItemTooltip_Slotm8 uSlot8;
+    memset(&uSlot8, 0, sizeof(uSlot8));
     uSlot8.nAdjReqDexValue = 0x48d1dd;
     for (nSetItemLoopIdx = 0; nSetItemLoopIdx < 0x400; nSetItemLoopIdx++) {
       wszWorkBuf[nSetItemLoopIdx] = L'\0';

@@ -1287,7 +1287,8 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pTarget = pAttacker;
     sStateArg.eSkill = SKILL_AmplifyDamage;
     sStateArg.nSkillLvl = nDuration;

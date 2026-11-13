@@ -89,8 +89,8 @@ struct D2PathPointStrc {
 #endif // D2_DEFINED_D2PathPointStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2DrlgPathSearchCtxStrc {
-    /* 0x0000 */ uint8_t abyOpenBuckets[512]; // open-list hash buckets
-    /* 0x0200 */ uint8_t abyClosedBuckets[512]; // closed-list hash buckets; DRLGPATH_InsertNodeSorted uses base+0x200
+    /* 0x0000 */ struct D2DrlgPathNodeStrc * apOpenBuckets[128]; // open-list hash buckets
+    /* 0x0200 */ struct D2DrlgPathNodeStrc * apClosedBuckets[128]; // closed-list hash buckets; DRLGPATH_InsertNodeSorted uses base+0x200
     /* 0x0400 */ void * pSortedHead; // f-cost sorted list head, base+0x400
     /* 0x0404 */ D2DrlgPathNodeStrc aNodePool[200]; // base + 0x404 + n*0x38, per DRLGPATH_AllocPathNode
     /* 0x2FC4 */ int32_t nPoolCount; // base+0x2FC4, the node-pool count

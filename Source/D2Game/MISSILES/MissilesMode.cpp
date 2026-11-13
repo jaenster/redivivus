@@ -2177,7 +2177,8 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered(::SGAMEDATA * pG
     uTargetFlags = SKILLS::SkillsServer::SKILLS_CheckTargetFlags(pUnit_00, pTarget, uTargetFlags);
     if (uTargetFlags) {
       D2StatListExStrc* pStatList;
-      D2StateExArgStrc sStateArgs = {0};
+      D2StateExArgStrc sStateArgs;
+      memset(&sStateArgs, 0, sizeof(sStateArgs));
       sStateArgs.pTarget = pTarget;
       sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.pUnit = pUnit_00;

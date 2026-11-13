@@ -590,7 +590,8 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     nCoordIndexStart = nCoordCount;
     DrlgGrid::FillGrid(&sLocalGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1, aCellsFlags, aCellsRowOffsets);
     DRLGLOGIC_SetGridWallFlags(pRoomEx, &sLocalGrid);
-    D2DrlgCoordIndexCtxStrc sCoordCtx = {0};
+    D2DrlgCoordIndexCtxStrc sCoordCtx;
+    memset(&sCoordCtx, 0, sizeof(sCoordCtx));
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;
     sCoordCtx.pOrientGrid = nOrientGridFlagsSave;
     sCoordCtx.pFloorGrid = &sLocalGrid;

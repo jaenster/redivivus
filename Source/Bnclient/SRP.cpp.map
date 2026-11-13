@@ -59,6 +59,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "D2Srp",
         "D2SrpSeedEntropyStrc",
         "uint32_t"
@@ -83,6 +84,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "D2Srp",
         "D2Srp *",
         "uint32_t"
@@ -110,6 +112,7 @@
       "usedTypes": [
         "BigData",
         "BigData *",
+        "D2BnSha1ContextStrc",
         "D2Srp",
         "uint32_t",
         "uint8_t"
@@ -154,6 +157,7 @@
       ],
       "usedTypes": [
         "BigData *",
+        "D2BnSha1ContextStrc",
         "D2Srp",
         "uint32_t",
         "uint8_t"
@@ -239,6 +243,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "D2Srp",
         "uint32_t",
         "uint8_t"
@@ -262,8 +267,8 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "D2Srp",
-        "uint32_t",
         "uint8_t"
       ]
     },

@@ -585,33 +585,20 @@ int __fastcall Sha1_Finalize(D2Sha1ContextStrc * pCtx, int, uint8_t * pDigest) {
     0x0
 }; D2_STATIC_GUARD(gaSha1PaddingBlock, "Storm::Source::SSignature::Sha1_Finalize::gaSha1PaddingBlock");
 
-    // Frame slots -16..-8 are ONE object: &byLen7 is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint8_t byLen7;
-      uint8_t byLen6;
-      uint8_t byLen5;
-      uint8_t byLen4;
-      uint8_t byLen3;
-      uint8_t byLen2;
-      uint8_t byLen1;
-      uint8_t byLen0;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
+    uint8_t abyBitLength[8];
     uint32_t dwStateWord;
     uint32_t dwCountLow = pCtx->nBitCountLow;
     uint32_t dwCountHigh = pCtx->nBitCountHigh;
-    __frame0.byLen0 = (uint8_t)dwCountLow;
-    __frame0.byLen1 = (uint8_t)(dwCountLow >> 8);
-    __frame0.byLen2 = (uint8_t)(dwCountLow >> 0x10);
-    __frame0.byLen3 = (uint8_t)(dwCountLow >> 0x18);
-    __frame0.byLen7 = (uint8_t)(dwCountHigh >> 0x18);
-    __frame0.byLen4 = (uint8_t)dwCountHigh;
-    __frame0.byLen5 = (uint8_t)(dwCountHigh >> 8);
-    __frame0.byLen6 = (uint8_t)(dwCountHigh >> 0x10);
+    abyBitLength[7] = (uint8_t)dwCountLow;
+    abyBitLength[6] = (uint8_t)(dwCountLow >> 8);
+    abyBitLength[5] = (uint8_t)(dwCountLow >> 0x10);
+    abyBitLength[4] = (uint8_t)(dwCountLow >> 0x18);
+    abyBitLength[0] = (uint8_t)(dwCountHigh >> 0x18);
+    abyBitLength[3] = (uint8_t)dwCountHigh;
+    abyBitLength[2] = (uint8_t)(dwCountHigh >> 8);
+    abyBitLength[1] = (uint8_t)(dwCountHigh >> 0x10);
     vc8_thiscall(Sha1_Append)(pCtx, gaSha1PaddingBlock, (-(pCtx->nBitCountLow >> 3) - 9 & 0x3f) + 1);
-    vc8_thiscall(Sha1_Append)(pCtx, &__frame0.byLen7, 8);
+    vc8_thiscall(Sha1_Append)(pCtx, abyBitLength, 8);
     uint32_t* pStateCursor = pCtx->aState;
     uint8_t* pDigestCursor = pDigest + 1;
     int nWordsLeft = 5;

@@ -1917,7 +1917,8 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
         nY = nSpawnY;
         pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), nX, nY);
         if (pRoom && (*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] || (_bHasPos = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !_bHasPos))) {
-          D2MonsterCastPetHeadStrc sSummonArgs = {0};
+          D2MonsterCastPetHeadStrc sSummonArgs;
+          memset(&sSummonArgs, 0, sizeof(sSummonArgs));
           sSummonArgs.nMode = eAnimMode;
           sSummonArgs.nX = nX;
           sSummonArgs.nY2 = nSpawnY;
@@ -3106,7 +3107,8 @@ BOOL __fastcall SKILLASS_SrvStFn28_BladeShield(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     SkillsServer::D2UpdateState(pUnit, (int)sAuraState, 0);
-    D2StateExArgStrc sStateExArg = {0};
+    D2StateExArgStrc sStateExArg;
+    memset(&sStateExArg, 0, sizeof(sStateExArg));
     sStateExArg.eSkill = eSkill;
     sStateExArg.nSkillLvl = nSkillLvl;
     sStateExArg.pUnit = pUnit;

@@ -130,7 +130,8 @@ static void __stdcall PETS_FreeOrKillPetList(D2UnitStrc * pUnit, D2PetListStrc *
       if (bIsHireable) {
         pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pPetStrc->nPetGUID);
         if (pPetUnit) {
-          D2PetArgStrc sPetArgs = {0};
+          D2PetArgStrc sPetArgs;
+          memset(&sPetArgs, 0, sizeof(sPetArgs));
           sPetArgs.nPetGUID = pPetStrc->nPetGUID;
           UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)Send0x7aSummonLog, &sPetArgs);
           nPetUnitGUID = pPetUnit->nUnitGUID;
@@ -409,7 +410,8 @@ void __fastcall PETS_ResummonPetByUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
             nPetUnitGUID = D2Common::Units::GetGUID(pPetUnit);
             if (pPetEntry->nPetGUID == nPetUnitGUID) {
               *(uint32_t*)pPetEntry &= -2;
-              D2PetArgStrc sPetArgs = {0};
+              D2PetArgStrc sPetArgs;
+              memset(&sPetArgs, 0, sizeof(sPetArgs));
               sPetArgs.nPetGUID = pPetEntry->nPetGUID;
               uint16_t nPetClassIdValue;
               if (!pPetUnit) {

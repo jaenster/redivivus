@@ -1296,7 +1296,8 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
 }
 
 D2StatListExStrc * __fastcall ApplyShrineBonus(D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint32_t nDurationInFrames, int32_t nSkillCalc, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
-    D2StateExArgStrc stateArg = {0};
+    D2StateExArgStrc stateArg;
+    memset(&stateArg, 0, sizeof(stateArg));
     stateArg.eStat = eStat;
     stateArg.nDurationInFrames = nDurationInFrames;
     stateArg.pFunction = pFunction;
@@ -2095,7 +2096,8 @@ void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, D2Sta
 }
 
 void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
-    D2StateExArgStrc stateArg = {0};
+    D2StateExArgStrc stateArg;
+    memset(&stateArg, 0, sizeof(stateArg));
     stateArg.pUnit = pArguments->sArg.pVictim;
     stateArg.pTarget = pArguments->pAttacker;
     stateArg.nDurationInFrames = pTxtShrines->dwDurationInFrames;

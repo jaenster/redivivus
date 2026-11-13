@@ -1550,7 +1550,8 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
         }
         if (pCelEntry->dwCacheFlags & 2) {
           pCacheEntry->tDecode.nFlags |= 4;
-          D2SpriteDecodeRequestStrc tDecodeRequest = {0};
+          D2SpriteDecodeRequestStrc tDecodeRequest;
+          memset(&tDecodeRequest, 0, sizeof(tDecodeRequest));
           tDecodeRequest.nStartFrame = nDirection * nFrameCount;
           tDecodeRequest.pDecodeState = &pCacheEntry->tDecode;
           tDecodeRequest.pfnComplete = SPRITECACHE_DecodeFrameByIndex;

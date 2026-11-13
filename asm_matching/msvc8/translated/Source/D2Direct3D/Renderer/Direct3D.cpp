@@ -1767,7 +1767,8 @@ HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, D
             goto release_test_objects;
           }
 
-          DDSCAPS2 ddscaps2Caps = {0};
+          DDSCAPS2 ddscaps2Caps;
+          memset(&ddscaps2Caps, 0, sizeof(ddscaps2Caps));
           ddscaps2Caps.dwCaps = 4;
           nDDCallResult = __frame0.pTestSurface->lpVtbl->GetAttachedSurface(__frame0.pTestSurface, &ddscaps2Caps, (void**)&__frame0.pEnumBackbuffer);
           if (nDDCallResult) {
@@ -1982,7 +1983,8 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
                 if (hResult) {
                   pszErrorMsg = "Failed to create primary surface";
                 } else {
-                  DDSCAPS2 dwGetSurfCaps = {0};
+                  DDSCAPS2 dwGetSurfCaps;
+                  memset(&dwGetSurfCaps, 0, sizeof(dwGetSurfCaps));
                   dwGetSurfCaps.dwCaps = 4;
                   hResult = __frame0.pPrimarySurface->lpVtbl->GetAttachedSurface(__frame0.pPrimarySurface, &dwGetSurfCaps, (void**)&__frame0.pBackBufferSurface);
                   if (hResult) {
@@ -2058,7 +2060,8 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
 
                       Fog::Src::LogManager::LOGFILE_WriteStringToFile("\t\tVideo Memory Total= %2.3f MB, Free= %2.3f MB", (double)(fTotalBytes * 9.5367431640625e-7), (double)(fFreeBytes * 9.5367431640625e-7));
                       pdwTotalMemOut = &gD3DDeviceBlock0[nEnumDeviceIdx].dwTextureMemFree;
-                      DDSCAPS2 dwMemCapsFlags = {0};
+                      DDSCAPS2 dwMemCapsFlags;
+                      memset(&dwMemCapsFlags, 0, sizeof(dwMemCapsFlags));
                       ppMemInterface = &gD3DDeviceBlock0[nEnumDeviceIdx].dwTextureMemTotal;
                       dwMemCapsFlags.dwCaps = 0x5000;
                       hResult = g_pDirectDraw7->lpVtbl->GetAvailableVidMem(g_pDirectDraw7, &dwMemCapsFlags, (DWORD*)ppMemInterface, (DWORD*)pdwTotalMemOut);
@@ -2247,7 +2250,8 @@ int __stdcall BootDirect3d(HINSTANCE hInstance) {
     uint32_t nSehState = 0;
     ExceptionList = &pPrevExceptionRegistration;
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("Detecting boards which support Direct3D...");
-    WNDCLASSA wndclass = {0};
+    WNDCLASSA wndclass;
+    memset(&wndclass, 0, sizeof(wndclass));
     /* int i for GetStockObject */ gnDirect3DDeviceCount = 0;
     wndclass.style = 0;
     wndclass.lpfnWndProc = DefWindowProcA;
@@ -2703,7 +2707,8 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, HWND hW
       return 0;
     }
 
-    DDSCAPS2 iidData2 = {0};
+    DDSCAPS2 iidData2;
+    memset(&iidData2, 0, sizeof(iidData2));
     iidData2.dwCaps = 4;
     nResult = g_pD3DSurfaceBackbuffer->lpVtbl->GetAttachedSurface(g_pD3DSurfaceBackbuffer, &iidData2, (void**)&D3DSurfaceSecondary);
     if (nResult) {

@@ -445,7 +445,8 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
       return;
     }
 
-    D2ServerMessageHandleStrc msgSkillId = {0};
+    D2ServerMessageHandleStrc msgSkillId;
+    memset(&msgSkillId, 0, sizeof(msgSkillId));
     msgSkillId.nSkillId = nTargetOrX;
     msgSkillId.nItemId = nTargetGUIDOrY;
     switch (nActionType) {

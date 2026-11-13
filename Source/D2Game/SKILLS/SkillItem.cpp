@@ -2181,7 +2181,8 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
     }
 
     nSlowAmount = -nSlowAmount;
-    D2StateExArgStrc sStateArg = {0};
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTarget;
     sStateArg.nSkillLvl = 1;

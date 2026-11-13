@@ -95,7 +95,7 @@ union Skills_SrvDoFunc_081_HolyFreeze_Slotmc {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct __attribute__((packed)) D2DamageAuraArgView {
-    /* 0x00 */ uint8_t abDamageHead[32]; // D2DamageStrc +0x00..+0x1f, unused by this facet
+    /* 0x00 */ uint32_t adwDamageHead[8]; // D2DamageStrc +0x00..+0x1f, unused by this facet
     /* 0x20 */ D2SkillAuraArgStrc sAuraArg; // aura block MSVC places over D2DamageStrc +0x20..+0x6f; 005d0828 LEA EDX,[EBP-0x68] with sDamage at EBP-0x88
 };
 

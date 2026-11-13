@@ -14,14 +14,17 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
+// Forward declarations
+struct D2BnSha1ContextStrc;
+
 namespace Bnclient { namespace SHA1 {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-void __fastcall SHA1_Init(uint32_t * pState);
-void __fastcall SHA1_Update(uint32_t * pShaCtx, void * pData, uint32_t nByteLen);
-void __fastcall SHA1_Final(uint8_t * pHashOut, uint32_t * pShaCtx);
+void __fastcall SHA1_Init(struct D2BnSha1ContextStrc * pState);
+void __fastcall SHA1_Update(struct D2BnSha1ContextStrc * pShaCtx, void * pData, uint32_t nByteLen);
+void __fastcall SHA1_Final(uint8_t * pHashOut, struct D2BnSha1ContextStrc * pShaCtx);
 #endif // D2_MODULE_Bnclient
 // 1 internal function (defined in .cpp)
 

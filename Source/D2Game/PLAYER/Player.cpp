@@ -809,7 +809,8 @@ void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, D2U
 // PLAYER_CountLivingPlayerInLevelCallback and returns nCount.
 // No references in 1.14d. It counts; it finds no unit.
 int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2LevelId eLevelId) {
-    D2LevelPlayerCountArgStrc sArgs = {0};
+    D2LevelPlayerCountArgStrc sArgs;
+    memset(&sArgs, 0, sizeof(sArgs));
     sArgs.eLevelId = eLevelId;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayerInLevelCallback, &sArgs);
     return sArgs.nCount;

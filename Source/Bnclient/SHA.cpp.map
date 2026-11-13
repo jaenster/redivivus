@@ -23,6 +23,7 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
+        "D2BnSha1ContextStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"
