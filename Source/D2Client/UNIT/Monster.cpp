@@ -965,8 +965,9 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     *(uint8_t*)(char*)&nY = 0;
     if (pUnit->eUnitType == UNIT_MONSTER) {
       i = nMonStats2Idx;
-      if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx) {
-        i = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx].BaseId;
+      D2MonStatsTxt* pMonStatsTxt2 = nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx : nullptr;
+      if (pMonStatsTxt2) {
+        i = (int)pMonStatsTxt2->BaseId;
       }
       if (i < 0 || i >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         i = -1;

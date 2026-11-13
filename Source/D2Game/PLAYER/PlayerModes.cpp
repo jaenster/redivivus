@@ -1860,7 +1860,8 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pSkill = D2Common::Units::GetCurrentSkill(pUnit);
       if (pSkill) {
         eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrModes.cpp", 0x779);
-        if ((int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId] + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+        D2SkillsTxt* pSkillsTxt;
+        if ((pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr) && *((uint8_t*)pSkillsTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
           PLRMODES_CheckWeaponQuantityAndDurability(pGame, pUnit);
           PLRMODES_BreakZeroDurabilityWeapons(pGame, pUnit);
         }

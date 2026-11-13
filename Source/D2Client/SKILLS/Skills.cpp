@@ -1076,17 +1076,12 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsPetWithFlag(D2UnitStrc * pUnit, eD
     }
 
     int32_t nPetTypeIdx = GAME::RosterPets::GetSkillId(pTargetUnit->nUnitGUID);
-    if (nPetTypeIdx < 0) {
-      return 0;
-    }
-    if (!(nPetTypeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize)) {
-      return 0;
-    }
-    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetTypeIdx)) {
+    D2PetTypeTxt* pPetTypeTxt = nPetTypeIdx >= 0 && nPetTypeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetTypeIdx : nullptr;
+    if (!pPetTypeTxt) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtPetType[nPetTypeIdx] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) != 0);
+    return (uint32_t)((*((uint8_t*)pPetTypeTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) != 0);
 }
 
 BOOL __fastcall Skills_CltStFunc_AlwaysAllow(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl) {
@@ -2331,11 +2326,12 @@ void __fastcall SKILLS_CltProcessActiveSkill(D2UnitStrc * pUnit, eD2Skills eExpi
     }
 
     eD2Skills eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x93d);
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    switch (D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvdofunc) {
+    switch (pSkillsTxt->srvdofunc) {
       case 0x43:
         SkillsPal::SKILL_StopAndClearUninterruptable(pUnit, eSkill);
       return;

@@ -977,7 +977,8 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && (pNpcUnit ? pNpcUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nTargetClassId;
       nTargetClassId = pNpcUnit->nClassId;
-      if (nTargetClassId < 0 || nTargetClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nTargetClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
+      D2MonStatsTxt* pMonStatsTxt;
+      if (!(pMonStatsTxt = nTargetClassId >= 0 && nTargetClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nTargetClassId : nullptr) || !((uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
         return 0;
       }
 

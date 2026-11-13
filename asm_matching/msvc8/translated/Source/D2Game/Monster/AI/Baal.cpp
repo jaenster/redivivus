@@ -135,7 +135,8 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
     }
     if (pTarget && pTarget->eUnitType == UNIT_MONSTER) {
       nMonClassId = pTarget->nClassId;
-      if (nMonClassId < 0 || nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId) || D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].threat <= 1) {
+      D2MonStatsTxt* pMonStatsTxt;
+      if (!(pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr) || pMonStatsTxt->threat <= 1) {
         return 0;
       }
     }

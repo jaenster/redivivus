@@ -260,11 +260,12 @@ static BOOL MISSILE_RetargetClosest(D2UnitStrc * pUnit) {
     }
 
     int nSearchRadius = pUnit->nClassId;
-    if (nSearchRadius < 0 || nSearchRadius >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nSearchRadius)) {
+    D2MissilesTxt* pMissilesTxt = nSearchRadius >= 0 && nSearchRadius < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nSearchRadius : nullptr;
+    if (!pMissilesTxt) {
       return 1;
     }
 
-    nSearchRadius = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nSearchRadius].Param2;
+    nSearchRadius = pMissilesTxt->Param2;
     uint32_t nTargetFlagsCheck = D2Common::Units::Missile::GetTargetX(pUnit);
     if (nTargetFlagsCheck & 4) {
       return 1;
@@ -518,7 +519,8 @@ int32_t __fastcall Missiles_SrvDoFuncData_07(D2UnitStrc * pUnit, D2MissileCltCol
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       int nClassId;
       nClassId = pUnit->nClassId;
-      if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      D2MissilesTxt* pMissilesTxt;
+      if ((pMissilesTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
         return 1;
       }
     }
@@ -7819,12 +7821,13 @@ void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
     int nNewDestX;
     int nOffsetY;
     int iVar1;
-    if (!pUnit || (iVar1 = pUnit->nClassId , iVar1 < 0) || iVar1 >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + iVar1)) {
+    D2MissilesTxt* pMissilesTxt;
+    if (!pUnit || !(iVar1 = pUnit->nClassId , pMissilesTxt = iVar1 >= 0 && iVar1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + iVar1 : nullptr)) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }
 
-    iVar1 = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[iVar1].Param1;
+    iVar1 = pMissilesTxt->Param1;
     int iVar2 = 1;
     if (iVar1 >= 1) {
       iVar2 = iVar1;

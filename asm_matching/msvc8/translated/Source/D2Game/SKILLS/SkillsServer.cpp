@@ -4095,7 +4095,8 @@ void __fastcall SKILLS_PeriodicSkillsCallback(::SGAMEDATA * pGame, D2UnitStrc * 
         eD2Skills eSkill;
         eSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0xcbb);
         nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+        D2SkillsTxt* pSkillsTxt2;
+        if ((pSkillsTxt2 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr) && *((uint8_t*)pSkillsTxt2 + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
           bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
           if (!bIsDead) {
             SKILL_SpawnMissileFunction(pGame, pUnit, eSkill, nSkillLevel, 1, 0, 0);

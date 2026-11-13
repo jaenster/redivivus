@@ -1232,7 +1232,9 @@ D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUn
     } else if ((int)eUnitStat < 0) {
       return pStatList;
     }
-    if ((int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat && *(uint8_t*)((intptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+
+    D2ItemStatCostTxt* pItemStatCostTxt;
+    if ((pItemStatCostTxt = (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr) && *(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\PlrSkills.cpp", 0x5d2);
     }
 

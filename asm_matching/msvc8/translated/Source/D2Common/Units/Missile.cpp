@@ -197,7 +197,8 @@ void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize && ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+    D2MissilesTxt* pMissilesTxt;
+    if (!((pMissilesTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       return;
     }
 
@@ -219,7 +220,8 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     if (pMissile && pUnit && pMissile->eUnitType == UNIT_MISSILE) {
       D2UnitDataMissileStrc* pDVar1;
       nClassId = pMissile->nClassId;
-      if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize && ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId && *((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+      D2MissilesTxt* pMissilesTxt;
+      if ((pMissilesTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pDVar1 = pMissile->pUnitData.pUnitDataMissile;
         if (pDVar1 && pDVar1->eOwnerType == pUnit->eUnitType && pDVar1->nOwnerGUID == pUnit->nUnitGUID) {
           return 1;

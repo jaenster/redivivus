@@ -350,16 +350,16 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
 }
 
 uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    D2MonStatsTxt* pMonStatsTxt = nullptr;
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      int pMonData = pUnit->nClassId;
+      pMonStatsTxt = pMonData >= 0 && pMonData < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + pMonData : nullptr;
+    }
+    if (!pMonStatsTxt) {
       return 0;
     }
 
-    int pMonData = pUnit->nClassId;
-    if (!(pMonData >= 0 && pMonData < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && ITEMS::Items::sgptDataTable->pTxtMonStats + pMonData)) {
-      return 0;
-    }
-
-    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[pMonData] + 0xd);
+    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsTxt + 0xd);
     if (Fog::BitBuffer::gadwBitMasks[0] & dwMonStatsFlags) {
       return 1;
     }
@@ -397,17 +397,12 @@ uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
     }
 
     int pMonStatsTxt = pUnit->nClassId;
-    if (pMonStatsTxt < 0) {
-      return 0;
-    }
-    if (!(pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
-    }
-    if (!(ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
+    D2MonStatsTxt* pMonStatsTxt2 = pMonStatsTxt >= 0 && pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt : nullptr;
+    if (!pMonStatsTxt2) {
       return 0;
     }
 
-    return (uint32_t)((*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[pMonStatsTxt] + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) != 0);
+    return (uint32_t)((*((uint8_t*)pMonStatsTxt2 + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) != 0);
 }
 
 BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
@@ -416,11 +411,12 @@ BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
     }
 
     int pMonStatsTxt = pUnit->nClassId;
-    if (!(pMonStatsTxt >= 0 && pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
+    D2MonStatsTxt* pMonStatsTxt2 = pMonStatsTxt >= 0 && pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt : nullptr;
+    if (!pMonStatsTxt2) {
       return 0;
     }
 
-    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[pMonStatsTxt] + 0xd);
+    uint32_t dwMonStatsFlags = (uint32_t)(uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xd);
     if (!(Fog::BitBuffer::gadwBitMasks[3] & dwMonStatsFlags || Fog::BitBuffer::gadwBitMasks[4] & dwMonStatsFlags)) {
       return 0;
     }
@@ -634,17 +630,12 @@ uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
     }
 
     int pMonStatsTxt = pUnit->nClassId;
-    if (pMonStatsTxt < 0) {
-      return 0;
-    }
-    if (!(pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
-    }
-    if (!(ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt)) {
+    D2MonStatsTxt* pMonStatsTxt2 = pMonStatsTxt >= 0 && pMonStatsTxt < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + pMonStatsTxt : nullptr;
+    if (!pMonStatsTxt2) {
       return 0;
     }
 
-    return (uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtMonStats[pMonStatsTxt] + 0xc) & Fog::BitBuffer::gadwBitMasks[7];
+    return (uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xc) & Fog::BitBuffer::gadwBitMasks[7];
 }
 
 // Retrieves the animation flags and valid-flags for a monster's upgrade tier by looking up its class id in the MonStats upgrade table. Writes the flags from gdwMonStatAnimFlagsTable into pdwAnimFlags and pdwValidFlags. Halts with a fatal error if the unit is not a monster or the upgrade index is out of range.

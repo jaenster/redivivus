@@ -520,7 +520,8 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
     }
 
     int32_t nClassId = pMonster->nClassId;
-    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xe) & Fog::BitBuffer::gadwBitMasks[0])) {
+    D2MonStatsTxt* pMonStatsTxt;
+    if (!((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xe) & Fog::BitBuffer::gadwBitMasks[0])) {
       return 0;
     }
 

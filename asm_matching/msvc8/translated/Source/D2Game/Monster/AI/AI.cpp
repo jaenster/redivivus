@@ -4997,12 +4997,13 @@ void __fastcall AI_Fn0_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     }
 
     int nSkillId = (int)nFirstSkill;
-    if (nSkillId < 0 || nSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId)) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    if (!pSkillsTxt) {
       pAiParam->pMonsterAiGeneral->dwArg0 = pGame->dwGameFrame;
       return;
     }
 
-    pAiParam->pMonsterAiGeneral->dwArg0 = pGame->dwGameFrame + D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[nSkillId].Param[1];
+    pAiParam->pMonsterAiGeneral->dwArg0 = pGame->dwGameFrame + pSkillsTxt->Param[1];
 }
 
 void __fastcall AI_Fn1_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
@@ -8625,7 +8626,8 @@ uint8_t __fastcall AI_GetRandomMonsterClassForLevel(::SGAMEDATA * pGame, D2UnitS
     }
 
     int nClassId = (int)(short int)pMonsterRegion->pMonData[nRandMonIdx].nClassId;
-    if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xe) & Fog::BitBuffer::gadwBitMasks[5]) {
+    D2MonStatsTxt* pMonStatsTxt;
+    if ((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xe) & Fog::BitBuffer::gadwBitMasks[5]) {
       pAiGeneral->nFunctionId = nClassId;
       return '\x01';
     }
@@ -8635,7 +8637,8 @@ uint8_t __fastcall AI_GetRandomMonsterClassForLevel(::SGAMEDATA * pGame, D2UnitS
       pMonData = pMonsterRegion->pMonData;
       do {
         nFallbackClassId = (int)(short int)pMonData->nClassId;
-        if (nFallbackClassId >= 0 && nFallbackClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nFallbackClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nFallbackClassId] + 0xe) & Fog::BitBuffer::gadwBitMasks[5]) {
+        D2MonStatsTxt* pMonStatsTxt2;
+        if ((pMonStatsTxt2 = nFallbackClassId >= 0 && nFallbackClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nFallbackClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xe) & Fog::BitBuffer::gadwBitMasks[5]) {
           pAiGeneral->nFunctionId = nFallbackClassId;
           return '\x01';
         }
@@ -10028,7 +10031,8 @@ void __fastcall AITHINK_Fn1_SpecialDimVision(::SGAMEDATA * pGame, D2UnitStrc * p
       uint32_t nMonFlag4;
       if (pUnit) {
         nClassId = pUnit->nClassId;
-        if (nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1]) {
+        D2MonStatsTxt* pMonStatsTxt;
+        if ((pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xd) & Fog::BitBuffer::gadwBitMasks[1]) {
           goto wander_or_idle;
         }
       } else {
@@ -10333,7 +10337,8 @@ int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2Uni
     /* If unit is a monster and not valid safety check, or just harmless in general
                          (npc's / chickens / flavie / layed traps / hydra) */ if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER) {
       nMonsterThreat = pTargetUnit->nClassId;
-      if (nMonsterThreat < 0 || nMonsterThreat >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterThreat) || D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonsterThreat].threat <= 1) {
+      D2MonStatsTxt* pMonStatsTxt;
+      if (!(pMonStatsTxt = nMonsterThreat >= 0 && nMonsterThreat < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterThreat : nullptr) || pMonStatsTxt->threat <= 1) {
         return 0;
       }
     }

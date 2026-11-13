@@ -690,10 +690,13 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
           if (pUnit) {
             nExcludeIdx = pUnit->nClassId;
             if (nExcludeIdx >= 0) {
-              if (nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xc) & Fog::BitBuffer::gadwBitMasks[1]) {
+              D2MonStatsTxt* pMonStatsTxt;
+              if ((pMonStatsTxt = nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt + 0xc) & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
-              if (nExcludeIdx >= 0 && nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nExcludeIdx] + 0xe) & Fog::BitBuffer::gadwBitMasks[1]) {
+
+              D2MonStatsTxt* pMonStatsTxt2;
+              if ((pMonStatsTxt2 = nExcludeIdx >= 0 && nExcludeIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nExcludeIdx : nullptr) && (uint8_t)*((uint8_t*)pMonStatsTxt2 + 0xe) & Fog::BitBuffer::gadwBitMasks[1]) {
                 return 0;
               }
             }
@@ -2116,7 +2119,8 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     eMissilesId eMissileId = nMissileId;
     D2UnitStrc* pMissileUnit = pUnit;
     D2UnitStrc* pOwnerUnit = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!(pOwnerUnit && (int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nMissileId] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
+    D2MissilesTxt* pMissilesTxt;
+    if (!(pOwnerUnit && (pMissilesTxt = (int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr) && !(*((uint8_t*)pMissilesTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]))) {
       return;
     }
 

@@ -462,10 +462,11 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     uint32_t nFileIndex = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pUnit);
-    if (!((int)nFileIndex >= 0 && (int)nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex)) {
+    D2UniqueItemsTxt* pUniqueItemsTxt = (int)nFileIndex >= 0 && (int)nFileIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + nFileIndex : nullptr;
+    if (!pUniqueItemsTxt) {
       return 0;
     }
-    if (*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems[nFileIndex] + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+    if (*((uint8_t*)pUniqueItemsTxt + 0x2c) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       return 1;
     }
     if (pItemsTxt->bQuest == '\0') {

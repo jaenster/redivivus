@@ -620,10 +620,12 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       if ((int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         break;
       }
-      if ((int)eUnitStat < 0 || !(D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat)) {
+
+      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      if (!pItemStatCostTxt) {
         goto apply_curse;
       }
-      if (*(uint8_t*)((intptr_t)&D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[eUnitStat].dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (*(uint8_t*)((intptr_t)&pItemStatCostTxt->dwItemStatFlags + 1) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         sNecroArg.bUpdateAnimSpeed = 1;
       }
 

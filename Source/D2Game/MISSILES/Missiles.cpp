@@ -349,7 +349,8 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
     }
 
     int nMissileClassId = pUnit->nClassId;
-    if (!(nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nMissileClassId] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
+    D2MissilesTxt* pMissilesTxt;
+    if (!((pMissilesTxt = nMissileClassId >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr) && *((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
       return;
     }
 

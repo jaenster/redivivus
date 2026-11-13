@@ -772,7 +772,9 @@ BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * 
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
-    if (!((int)nMonStatId >= 0 && (int)nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId && *((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatId] + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+
+    D2MonStatsTxt* pMonStatsTxt;
+    if (!((pMonStatsTxt = (int)nMonStatId >= 0 && (int)nMonStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatId : nullptr) && *((uint8_t*)pMonStatsTxt + 0xf) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
       return 0;
     }
 

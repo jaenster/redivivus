@@ -236,7 +236,8 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
     }
 
     int nPlayerGUID = pPet->nSkillID;
-    if (nPlayerGUID < 0 || nPlayerGUID >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPlayerGUID) || !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtPetType[nPlayerGUID] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
+    D2PetTypeTxt* pPetTypeTxt;
+    if (!(pPetTypeTxt = nPlayerGUID >= 0 && nPlayerGUID < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPlayerGUID : nullptr) || !(*((uint8_t*)pPetTypeTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
       return 3;
     }
 

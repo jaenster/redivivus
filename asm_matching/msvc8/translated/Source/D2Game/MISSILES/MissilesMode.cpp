@@ -1204,11 +1204,12 @@ BOOL __fastcall Missiles_SrvHitFunc_AreaSplashDamage(::SGAMEDATA * pGame, D2Unit
       eD2Skills eSkill;
       eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
       nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+      D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+      if (!pSkillsTxt) {
         return 1;
       }
 
-      nRadius = D2Common::Skills::D2GetSkillCalc(pOwner, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].aurarangecalc, eSkill, nSkillLevel);
+      nRadius = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillsTxt->aurarangecalc, eSkill, nSkillLevel);
       if (nRadius < 1) {
         nRadius = 1;
       }
@@ -1518,11 +1519,12 @@ static BOOL __stdcall MISSILES_ApplyAreaHitEffect(::SGAMEDATA * pGame, D2UnitStr
     }
 
     int nClassId = pUnit->nClassId;
-    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId)) {
+    D2MissilesTxt* pMissilesTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!pMissilesTxt) {
       return 1;
     }
 
-    int nRadius = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nClassId].Param2;
+    int nRadius = pMissilesTxt->Param2;
     uint32_t uTargetFlags = D2Common::Units::Missile::GetTargetX(pUnit);
     if (uTargetFlags & 4) {
       return 1;
@@ -3733,13 +3735,14 @@ void __fastcall Missiles_SrvDmgFunc_SetStunLengthFromSkillParam(::SGAMEDATA * pG
     eD2Skills eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
     nClassId = pMissilesTxt->dParam1;
     if (nClassId <= 0) {
-      if ((int)eSkillId < 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId)) {
+      D2SkillsTxt* pSkillsTxt = (int)eSkillId >= 0 && (int)eSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
+      if (!pSkillsTxt) {
         pDamage->dwStunLen = 0;
         pDamage->dwHitClass = 0x60;
         return;
       }
 
-      nClassId = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkillId].Param[1];
+      nClassId = pSkillsTxt->Param[1];
     }
 
     pDamage->dwStunLen = nClassId;
@@ -6228,11 +6231,12 @@ int __fastcall MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce(::SGAMEDATA * pGame, D
     }
 
     int nMissileId = pUnit->nClassId;
-    if (nMissileId < 0 || nMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId)) {
+    D2MissilesTxt* pMissilesTxt = nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
+    if (!pMissilesTxt) {
       return 2;
     }
 
-    nMissileId = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles[nMissileId].Param1;
+    nMissileId = pMissilesTxt->Param1;
     int nFrameInterval = 1;
     if (nMissileId >= 1) {
       nFrameInterval = nMissileId;

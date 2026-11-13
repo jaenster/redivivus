@@ -16,9 +16,9 @@ Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler
 
 |Measure|Identical machine code|
 |-|-|
-|Functions|8,507 of 14,644 (58.1%)|
-|Code|736,851 of 2,600,766 bytes (28.33%)|
-|Instructions|1,861,721 of 2,600,766 bytes (71.6%), counting identical instructions in functions that still differ|
+|Functions|8,519 of 14,644 (58.2%)|
+|Code|739,267 of 2,600,766 bytes (28.42%)|
+|Instructions|1,863,184 of 2,600,766 bytes (71.6%), counting identical instructions in functions that still differ|
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">

@@ -1413,7 +1413,8 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       nIdx = pUnit->nClassId;
-      if (nIdx < 0 || nIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nIdx) || D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nIdx].aColdEffect[pGame->nDifficulty] >= 0) {
+      D2MonStatsTxt* pMonStatsTxt;
+      if (!(pMonStatsTxt = nIdx >= 0 && nIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nIdx : nullptr) || pMonStatsTxt->aColdEffect[pGame->nDifficulty] >= 0) {
         return 0;
       }
     }

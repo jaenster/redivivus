@@ -1834,10 +1834,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
 
     D2UnitStrc* pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwValue2, (eD2UnitType)pBytes->nTargetType);
     eD2Skills eSkill = (eD2Skills)(short int)pBytes->wSkillId;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
-    if (*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
+    if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
       SKILLS::Skills::SKILL_ExecuteClientProgressWithAura(pUnit, pTargetUnit, eSkill, (int)(short int)pBytes->wSkillLevel, pBytes->dwValue3, pBytes->dwValue4, (uint32_t)pBytes->nParam2);
       return;
     }
@@ -1853,11 +1854,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * 
     }
 
     eD2Skills eSkill = (eD2Skills)nSkill;
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    switch (D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvdofunc) {
+    switch (pSkillsTxt->srvdofunc) {
       case 0x43:
         SKILLS::SkillsPal::SKILL_StopAndClearUninterruptable(pUnit, eSkill);
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);

@@ -1814,8 +1814,9 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
 
         for (nOp45Count = 0; nOp45Count < nStatListEx; nOp45Count++) {
           eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
-          if (true && (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx) {
-            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &ITEMS::Items::sgptDataTable->pTxtItemStatCost[eStatIdx].stat, nullptr);
+          D2ItemStatCostTxt* pItemStatCostTxt2;
+          if (true && (pItemStatCostTxt2 = (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx : nullptr)) {
+            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &pItemStatCostTxt2->stat, nullptr);
           }
         }
       }
@@ -1833,7 +1834,8 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
         for (; nOp45StatCount < pStatEntryEnd; nOp45StatCount++) {
           nShiftedStatToAdd = (int)((uint32_t)(uint16_t)nOp45StatCount->wSubIndex | (uint32_t)(uint16_t)nOp45StatCount->wStatIndex << 16);
           eStatIdx = nShiftedStatToAdd >> 0x10 & 0xffff;
-          if (true && (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx && !((char)ITEMS::Items::sgptDataTable->pTxtItemStatCost[eStatIdx].dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+          D2ItemStatCostTxt* pItemStatCostTxt3;
+          if (true && (pItemStatCostTxt3 = (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx : nullptr) && !((char)pItemStatCostTxt3->dwItemStatFlags & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
             STATLIST_PropagateStatChange(pParent, nShiftedStatToAdd, -nOp45StatCount->nStatValue, pOwner);
           }
         }

@@ -2388,11 +2388,12 @@ int __stdcall SKILL_GetArrowModifierSkill(D2UnitStrc * pUnit, int * pnStatLevel)
 }
 
 uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId) {
-    if (!(nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount && ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId)) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
-    return (uint8_t)*((uint8_t*)&ITEMS::Items::sgptDataTable->pTxtSkills[nSkillId] + 0x6) & Fog::BitBuffer::gadwBitMasks[1];
+    return (uint8_t)*((uint8_t*)pSkillsTxt + 0x6) & Fog::BitBuffer::gadwBitMasks[1];
 }
 
 // Strips all progressive (stackable/timed) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (states with flag 0x10 set), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
