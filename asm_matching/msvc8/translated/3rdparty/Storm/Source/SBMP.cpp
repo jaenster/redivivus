@@ -838,6 +838,7 @@ static int __fastcall SBMP_DecodeBmpFile(int * pWidth, int, void * palette, D2MP
     tagRGBQUAD aPaletteScratch[256];
     BITMAPFILEHEADER sBmpFileHeader;
     BITMAPINFOHEADER aBmpInfoExtraBuf;
+    uint32_t nHeight;
     int nResult = SFile::SFileReadFile(hFile, &sBmpFileHeader, 0xe, nullptr, (LPOVERLAPPED)0x0);
     if (!nResult) {
       return 0;
@@ -880,9 +881,9 @@ static int __fastcall SBMP_DecodeBmpFile(int * pWidth, int, void * palette, D2MP
     }
     if (pixels) {
       SFile::SFileSetFilePointer(hFile, sBmpFileHeader.bfOffBits - (palette ? 0x400 : 0) - 0x36, nullptr, 1);
-      pHeight = 0;
+      nHeight = 0x0;
       pRawBits = (uint8_t*)SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
-      SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, (uint32_t*)&pHeight, (LPOVERLAPPED)0x0);
+      SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, (uint32_t*)&nHeight, (LPOVERLAPPED)0x0);
       rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
       srcStride = rowWidth;
       if (rowWidth & 3) {
@@ -891,7 +892,7 @@ static int __fastcall SBMP_DecodeBmpFile(int * pWidth, int, void * palette, D2MP
 
       SBMP_FlipImage(aBmpInfoExtraBuf.biHeight, 0, pixels, pRawBits, nDstStride, rowWidth, srcStride);
       SMem::SMemFree(pRawBits, ".\\SOURCE\\SBMP.CPP", 0x20b, 0);
-      if ((uintptr_t)pHeight < aBmpInfoExtraBuf.biSizeImage) {
+      if ((uintptr_t)nHeight < aBmpInfoExtraBuf.biSizeImage) {
         return 0;
       }
     }

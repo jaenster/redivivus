@@ -36,6 +36,21 @@ struct D2CorpseExplosionArgStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
+struct __attribute__((packed)) D2CorpseSkillEventArgStrc {
+    /* 0x00 */ struct SGAMEDATA * pGame;
+    /* 0x04 */ struct D2UnitStrc * pUnit;
+    /* 0x08 */ eD2Skills eSkill;
+    /* 0x0C */ int32_t nSkillLvl;
+    /* 0x10 */ uint8_t nCorpseUnitType;
+    /* 0x11 */ uint8_t field_0x11;
+    /* 0x12 */ uint8_t field_0x12;
+    /* 0x13 */ uint8_t field_0x13;
+    /* 0x14 */ int nCorpseGUID;
+    /* 0x18 */ int32_t nDuration;
+};
+
+#endif // D2_MODULE_D2Game
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MonsterCastPetHeadStrc {
     /* 0x00 */ uint32_t nFlags;
     /* 0x04 */ struct D2UnitStrc * pPlayer;

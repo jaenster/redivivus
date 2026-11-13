@@ -1550,7 +1550,7 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
       {
         D2DrlgStrc** ppDVar1;
         ppDVar1 = &pDrlgAct->pDrlg;
-        pDrlgAct = 0;
+        nDrlgAct = 0x0;
         nLocalY = 0;
         pSpawnRoom = Drlg::DrlgRoom::DRLGSPAWN_FindSpawnLocationInLevel(*ppDVar1, eLevel, nSpawnTypeOrMode, (int*)&nDrlgAct, &nLocalY);
         if (pSpawnRoom) {

@@ -461,7 +461,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(D2GroundSubTileStrc * nSubTi
     D2GFX::D2GFX_DrawTileAdvanced(nSubTilePtr->pPixelData, pDst, nLightY, nDeltaX, nLightX, nDeltaY);
 }
 
-void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint32_t nLightVal) {
+void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint8_t nLightVal) {
     uint8_t* pbSrcEnd;
     uint8_t* nDstBase;
     uint8_t* pDst;
@@ -471,7 +471,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
     uint32_t nClipLeft;
     uint8_t* pbSrcRunEnd;
     if (pSubTile->wFormat & 4) {
-      D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, pSubTile->pPixelData, pDstBase, D2GFX::gaPaletteColorLUT[nLightVal >> 3 & 0x1f], 0xf);
+      D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, pSubTile->pPixelData, pDstBase, D2GFX::gaPaletteColorLUT[nLightVal >> 3], 0xf);
       return;
     }
 
@@ -497,7 +497,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithLight(D2GroundSubTileStrc * pSubTi
         pDst = nDstBase + nClipLeft + D2GFX::gaGroundTileRowOffsets[nStartRow];
         pbSrcRunEnd = pbSrcEnd + (nClipRight - nClipLeft);
         for (; pbSrcEnd < pbSrcRunEnd; pbSrcEnd++) {
-          *pDst = D2GFX::gaPaletteColorLUT[nLightVal >> 3 & 0x1f][*pbSrcEnd];
+          *pDst = D2GFX::gaPaletteColorLUT[nLightVal >> 3][*pbSrcEnd];
           pDst++;
         }
       }
@@ -561,6 +561,7 @@ void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(D2GroundSubTileSt
 
 // Renders a single ground tile at isometric coordinates with perspective lighting. Checks collision bounds and dispatches to perspective or flat-shaded path based on RenderMode and quality settings.
 BOOL __fastcall fpDrawGroundTile(D2TileLibraryEntryStrc * nTileBlockPtr, int32_t nScreenX, int32_t nScreenY, D2GfxLightExStrc * nLightTablePtr) {
+    uint8_t byLightVal_00;
     uint8_t* pDst_00;
     D2GroundSubTileStrc* pSubTile;
     uint8_t byLightVal;
@@ -576,9 +577,7 @@ BOOL __fastcall fpDrawGroundTile(D2TileLibraryEntryStrc * nTileBlockPtr, int32_t
     int32_t aLightCorners[4];
     uint8_t* pDst;
     int nSubTileY;
-    uint32_t nSubTileIdx;
     bool bFlatShaded;
-    uint32_t nLightShiftedHi;
     uint8_t* puVar2 = pRenderSurfaceBuffer;
     int iVar4 = gRenderBufferPitch * nScreenY;
     BOOL BVar3 = 0;
@@ -593,12 +592,11 @@ BOOL __fastcall fpDrawGroundTile(D2TileLibraryEntryStrc * nTileBlockPtr, int32_t
           nScreenX_00 = pSubTile->nOffsetX + nScreenX;
           nScreenY_00 = nScreenY + pSubTile->nOffsetY;
           if (nScreenY_00 >= D2GFX::gnTileClipZMin && nScreenY_00 < D2GFX::gnTileClipBottom && nScreenX_00 >= D2GFX::gnTileClipXMin && nScreenX_00 < D2GFX::gnTileInnerXMax) {
-            nLightShiftedHi = nSubTileIdx >> 8;
-            nSubTileIdx &= -256;
+            byLightVal_00 = 0;
             if (gbPerspectiveRenderEnabled) {
               byLightVal = nLightTablePtr[pSubTile->nSubIdxLo + 9 + (uint32_t)pSubTile->nSubIdxHi * 8].sLight.nIntensity;
-              nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
               bFlatShaded = true;
+              byLightVal_00 = byLightVal;
             } else {
               iVar1 = (uint32_t)pSubTile->nSubIdxLo + (uint32_t)pSubTile->nSubIdxHi * 8;
               uVar6 = (uint32_t)nLightTablePtr[iVar1 + 0x12].sLight.nIntensity;
@@ -621,8 +619,8 @@ BOOL __fastcall fpDrawGroundTile(D2TileLibraryEntryStrc * nTileBlockPtr, int32_t
                 nLightTableIdx = -nLightTableIdx;
               }
               if (D2GFXRenderedData.bLowQuality || nLightTableIdx + nLightDiff2 + nLightDiff1 < 10) {
-                nSubTileIdx = (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)nLightShiftedHi << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byLightVal);
                 bFlatShaded = true;
+                byLightVal_00 = byLightVal;
               } else {
                 aLightCorners[0] = (int)(nLightTableBase + nLightTablePtr[iVar1 + 0x10].sLight.nIntensity + nLightIndex + (uint32_t)nLightTablePtr[iVar1 + 8].sLight.nIntensity) >> 2;
                 aLightCorners[2] = (int)(nLightTablePtr[iVar1 + 0x13].sLight.nIntensity + nLightTableBase + (uint32_t)nLightTablePtr[iVar1 + 0xb].sLight.nIntensity + uVar5) >> 2;
@@ -633,12 +631,12 @@ BOOL __fastcall fpDrawGroundTile(D2TileLibraryEntryStrc * nTileBlockPtr, int32_t
             }
             if (nScreenY_00 < D2GFX::gnTileInnerClipZMin || nScreenY_00 >= D2GFX::gnTileClipZMax || nScreenX_00 < D2GFX::gnTileViewportXOffset || nScreenX_00 >= D2GFX::gnTileInnerClipXMax) {
               if (bFlatShaded) {
-                D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, nSubTileIdx);
+                D2GFXHELPER_DrawGroundTileWithLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, byLightVal_00);
               } else {
                 D2GFXHELPER_DrawGroundTileWithPerspectiveLight(pSubTile, nScreenX_00, nScreenY_00, pDst_00, aLightCorners);
               }
             } else if (bFlatShaded) {
-              D2GFXHELPER_DrawGroundTileDispatch1(pSubTile, pDst_00, (uint8_t)nSubTileIdx);
+              D2GFXHELPER_DrawGroundTileDispatch1(pSubTile, pDst_00, byLightVal_00);
             } else {
               D2GFXHELPER_DrawGroundTileDispatch2(pSubTile, pDst_00, aLightCorners);
             }

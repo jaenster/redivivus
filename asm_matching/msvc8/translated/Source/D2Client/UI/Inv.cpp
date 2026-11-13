@@ -1912,7 +1912,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
       D2DrlgActStrc** ppDVar1;
       ppDVar1 = &pUnit->pDrlgAct;
       if (*ppDVar1) {
-        pUnit = 0;
+        nUnit = 0x0;
         nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
         nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeBonus, nServerMin, nUnit, nullptr, nullptr, nullptr);
         nServerMax = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nServerMin, 100);
@@ -2334,7 +2334,7 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
       D2DrlgActStrc** ppDVar1;
       ppDVar1 = &pUnit->pDrlgAct;
       if (*ppDVar1) {
-        pUnit = 0;
+        nUnit = 0x0;
         nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
         nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nByTimeMod, nServerOrMod, nUnit, nullptr, nullptr, nullptr);
         nPercentApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nServerOrMod, 100);

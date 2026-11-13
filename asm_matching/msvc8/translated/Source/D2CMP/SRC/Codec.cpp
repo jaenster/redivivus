@@ -1277,7 +1277,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         sPixelCodeBits.nReserved00 = sBitState.nReserved00;
         sPixelCodeBits.nReserved08 = sBitState.nReserved08;
         sEqualCellBits.nReserved00 = sBitState.nReserved00;
-        local_318.pLocal_318 = 0;
+        local_318.nLocal_318 = 0x0;
         __frame0.pRemapOutputBuf = gaCodecFrameWorkBuffer2;
         __frame0.nRemapByteCount = 0;
         sEqualCellBits.nReserved08 = sBitState.nReserved08;

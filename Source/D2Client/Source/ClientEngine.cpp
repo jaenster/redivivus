@@ -967,11 +967,9 @@ void thunk_DRAW_Overlay_SecondsLeftToGame() {
     ::D2Client::Source::ClientEngine::DRAW_Overlay_SecondsLeftToGame();
 }
 
-static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32_t nMonsterClassId, uint32_t * pSeed) {
+static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32_t nMonsterClassId, D2SeedStrc * pSeed) {
     uint32_t nRandOffset;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    uint64_t nSeedModBranch;
-    int64_t nSeedPow2Branch;
     int nY;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     int nXStart = sRoomCoords.dwXStart;
@@ -992,31 +990,9 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
     int nAttempts = 0;
     while (true) {
       eCollisionFlags eCollision;
-      if ((int)nXRange <= 0) {
-        nRandOffset = 0;
-      } else if (nXRange & nXRange - 1) {
-        nSeedModBranch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-        *(uint64_t*)pSeed = nSeedModBranch;
-        nRandOffset = (uint32_t)((uint32_t)nSeedModBranch % nXRange);
-      } else {
-        nSeedPow2Branch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-        *(int64_t*)pSeed = nSeedPow2Branch;
-        nRandOffset = nXRange - 1 & (uint32_t)nSeedPow2Branch;
-      }
-
+      nRandOffset = D2_SeedRollLimited(pSeed, nXRange);
       nSpawnX = nRandOffset + nXStart;
-      if ((int)nYRange <= 0) {
-        nRandOffset = 0;
-      } else if (nYRange & nYRange - 1) {
-        nSeedModBranch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-        *(uint64_t*)pSeed = nSeedModBranch;
-        nRandOffset = (uint32_t)((uint32_t)nSeedModBranch % nYRange);
-      } else {
-        nSeedPow2Branch = (uint64_t)*pSeed * 0x6ac690c5 + (uint64_t)pSeed[1];
-        *(int64_t*)pSeed = nSeedPow2Branch;
-        nRandOffset = nYRange - 1 & (uint32_t)nSeedPow2Branch;
-      }
-
+      nRandOffset = D2_SeedRollLimited(pSeed, nYRange);
       nY = nRandOffset + nYStart;
       eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nSpawnX, nY, nMonsterSizeX, 0x3f11);
       if (eCollision == COLLIDE_NONE) {
@@ -1112,7 +1088,7 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
         }
 
         for (; nSpawnCount > 0; nSpawnCount--) {
-          ROOM_FindSpawnPositionForMonster(pRoom, (int)*pMonsterPtr, &pSeed->nSeedLow);
+          ROOM_FindSpawnPositionForMonster(pRoom, (int)*pMonsterPtr, pSeed);
         }
       }
 

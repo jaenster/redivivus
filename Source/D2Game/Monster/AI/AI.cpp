@@ -5514,10 +5514,9 @@ void __fastcall AI_Fn1_PantherJavelin(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t nDifficulty;
     uint32_t nSeedHighDiscard;
     uint32_t sNewSeed;
-    int nAiParam;
+    int nAiParam = pAiParam->nDistanceToTarget;
     D2UnitStrc* pPrimaryTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pClosestTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&nAiParam, nullptr);
     if (nAiParam < 8) {
       sNewSeed = D2_SeedRoll(&pUnit->sSeed);
@@ -9896,9 +9895,8 @@ int __fastcall Unreferenced_005e7d30(D2UnitStrc * param_1) {
 }
 
 void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    int nAiParam;
+    int nAiParam = pAiParam->nDistanceToTarget;
     int nDistToTarget = pAiParam->bEngagedInCombat;
-    pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&nAiParam, (bool*)&nDistToTarget);
     if (pTarget && nAiParam < 0x19) {
       AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
@@ -9909,9 +9907,8 @@ void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 void __fastcall AITHINK_Fn1_SpecialTownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    int nAiParam;
+    int nAiParam = pAiParam->nDistanceToTarget;
     int nDistToTarget = pAiParam->bEngagedInCombat;
-    pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&nAiParam, (bool*)&nDistToTarget);
     if (pTarget && nAiParam < 0x19) {
       AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
@@ -20642,10 +20639,9 @@ void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 // Server AI tick for Skeleton Mage monsters. Finds the nearest enemy via FindTargetAndDistance. If the target is beyond MonStats range-param[0] and a random roll beats flee-chance, applies combat state 0xa and walks toward the target with minimum step. If within melee range and roll beats melee-chance, applies state 0x19 and calls WalkTowardsUnitOffset (offset 5); on failure falls back to CalledOnEndAiFunction1 with mode 4. If within cast range and roll beats cast-chance, calls CalledOnEndAiFunction1 (cast mode 4) on the found target. When no target found but out of range, repeats the walk-toward-fallback-target logic. Otherwise rolls idle vs approach via PlanNextAiMove or SetCombatStateAndApproachTarget.
 void __fastcall AI_Fn1_SkeletonMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t sNextSeed;
-    int nAiParam;
+    int nAiParam = pAiParam->nDistanceToTarget;
     D2UnitStrc* pFallbackTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    pAiParam = (D2AiParamStrc*)pAiParam->nDistanceToTarget;
     D2UnitStrc* pFoundTarget = FindTargetAndDistance(pGame, pUnit, (uint32_t*)&nAiParam, nullptr);
     if (pFoundTarget) {
       int32_t bWalkToTarget;

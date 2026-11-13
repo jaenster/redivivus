@@ -557,6 +557,7 @@
         "SetStateWithExpiryTime"
       ],
       "usedTypes": [
+        "D2CorpseSkillEventArgStrc",
         "D2SkillsTxt",
         "D2StateExArgStrc",
         "D2UnitStrc",

@@ -2469,14 +2469,15 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     *pnKeyLo = 0;
     strcpy((char*)abKeyBuf, szChatText);
     uint8_t* pbScan = abKeyBuf;
-    while (abKeyBuf[0]) {
+    uint8_t byNext = abKeyBuf[0];
+    while (byNext) {
       byChar = *pbScan;
       pbScan++;
       if (0x17 < gaBnetCdKeyCharDecodeTable[byChar]) {
         return 0;
       }
 
-      abKeyBuf[0] = *pbScan;
+      byNext = *pbScan;
     }
 
     COMCALLBACK_RemoveUserFromList((char*)abKeyBuf, &nChecksum);

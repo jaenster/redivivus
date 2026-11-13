@@ -3836,6 +3836,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
     char szNameBuf[20];
     char byChar;
     int32_t nMaxName;
+    uint16_t wcNext;
     if (!pMessage->entityType) {
       nCheckResult = GAME::Roster::ROSTER_CheckPlayerNotHostile(pMessage->id);
       if (!nCheckResult) {
@@ -3965,9 +3966,10 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
             nCheckResult = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
             if (byMsgType != nCheckResult) {
               pszWideOut = wcWideStart;
-              while (wcWideStart[0] != L'\0') {
+              wcNext = wcWideStart[0];
+              while (wcNext != L'\0') {
                 pszWideOut++;
-                wcWideStart[0] = *pszWideOut;
+                wcNext = *pszWideOut;
               }
             }
 

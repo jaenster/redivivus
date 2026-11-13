@@ -36,7 +36,7 @@ void __stdcall D2GFX_ClearYBuffer();
 void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nScreenX, int32_t nScreenY, uint32_t nLightLevel);
 void __fastcall D2GFXHELPER_DrawGroundTileDispatch1(struct D2GroundSubTileStrc * pSubTile, uint8_t * pDst, uint8_t byLightVal);
 void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(struct D2GroundSubTileStrc * nSubTilePtr, uint8_t * pDst, int * pLightCorners);
-void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint32_t nLightVal);
+void __fastcall D2GFXHELPER_DrawGroundTileWithLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, uint8_t nLightVal);
 void __fastcall D2GFXHELPER_DrawGroundTileWithPerspectiveLight(struct D2GroundSubTileStrc * pSubTile, int32_t nScreenX, int32_t nScreenY, uint8_t * pDstBase, int * pLightCorners);
 void __stdcall D2GFX_SetupRenderFunctions();
 #endif // D2_MODULE_D2gfx

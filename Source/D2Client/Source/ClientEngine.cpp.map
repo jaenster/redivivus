@@ -834,12 +834,11 @@
       "usedTypes": [
         "D2DrlgRoomCoordsStrc",
         "D2RoomStrc",
+        "D2SeedStrc",
         "eCollisionFlags",
         "eD2CollisionUnitSize",
         "int32_t",
-        "int64_t",
-        "uint32_t",
-        "uint64_t"
+        "uint32_t"
       ]
     },
     {

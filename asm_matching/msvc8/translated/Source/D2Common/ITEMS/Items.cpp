@@ -2643,7 +2643,6 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
     eD2UnitType eUnitType;
     int32_t nErrLine;
     D2ItemStatCostTxt* pStatCostTxt;
-    int32_t nItemsTxtLine;
     if (!pItem) {
       nClassId = -1;
     } else {
@@ -2849,15 +2848,15 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
       return;
     }
 
-    pItemsTxtLine = 0;
-    pStatListEx = 0;
-    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, (int*)&pStatListEx);
-    D2StatListExStrc* pSeedHigh = pStatListEx;
+    int32_t nItemsTxtLine = 0x0;
+    int nStatListEx = 0x0;
+    ITEM_GetItemData_0x1Cand0x20(pItem, (int*)&nItemsTxtLine, (int*)&nStatListEx);
+    int32_t nSeedHigh = nStatListEx;
     nErrLine = 1;
-    if (pStatListEx) {
+    if (nStatListEx) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 1, 1);
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nItemsTxtLine, 0x20);
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (int32_t)pSeedHigh, 0x20);
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nSeedHigh, 0x20);
       nErrLine = 0x20;
     }
 
@@ -3490,6 +3489,7 @@ uint32_t __stdcall ITEM_IsSocketable(D2UnitStrc * pUnit) {
 
 // Determines which runeword (if any) an item currently forms from its socketed runes. Collects the class-ids of the items socketed into pItem, then scans the runes.txt rune table for a completed row whose rune sequence exactly matches the socketed runes (in order, count == socket count) and whose itype/etype constraints the base item satisfies (must be of an allowed itype and not of any excluded etype) via IsOfType. Returns the matching D2RuneTableStrc row, or NULL if none / the item is ineligible (not a normal-quality non-quest socketed item, or has no inventory). Read-only lookup, no state change.
 D2RuneTableStrc * __stdcall CalculateRunewordByItem(D2UnitStrc * pItem) {
+    int32_t _nSocketCount;
     D2RunesTxtTableStrc* pRuneTable;
     int nRuneSlot;
     uint32_t bIsType;
@@ -3499,6 +3499,7 @@ D2RuneTableStrc * __stdcall CalculateRunewordByItem(D2UnitStrc * pItem) {
     short int* pTypeEntry;
     int anSocketedClassIds[6];
     D2RunesTxtTableStrc* pRuneTableHeader;
+    uint8_t nSocketCount;
     int nRowIdx;
     short int* nEtypeIdx;
     /* This function loops trough the items and calculates which runeword it should
@@ -3537,10 +3538,9 @@ D2RuneTableStrc * __stdcall CalculateRunewordByItem(D2UnitStrc * pItem) {
 
     uint32_t nFilledSocketCount;
     nFilledSocketCount = nSocketedItemCount;
-    uint32_t nSocketCount;
-    nSocketCount = ITEM_GetSocketsCount(pItem);
-    nSocketCount &= 0xff;
-    if (nSocketCount != nSocketedItemCount) {
+    _nSocketCount = ITEM_GetSocketsCount(pItem);
+    _nSocketCount &= 0xff;
+    if (_nSocketCount != nSocketedItemCount) {
       return nullptr;
     }
 
@@ -3572,7 +3572,7 @@ D2RuneTableStrc * __stdcall CalculateRunewordByItem(D2UnitStrc * pItem) {
           pRuneEntry++;
         } while (nRuneSlot < 6);
 
-        if (nRuneSlot >= (int)nSocketCount) {
+        if ((int)_nSocketCount <= nRuneSlot) {
           nRuneSlot = 0;
           pTypeEntry = &runeTableRow->etype1;
           do {

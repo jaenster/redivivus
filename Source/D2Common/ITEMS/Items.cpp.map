@@ -3226,7 +3226,8 @@
         "D2RuneTableStrc",
         "D2RunesTxtTableStrc",
         "D2UnitStrc",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ]
     },
     {

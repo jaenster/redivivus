@@ -848,8 +848,9 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     pbScan = pbArgName + 1;
     pbArgName = pbArgName + strlen((char*)pbArgName) + 1;
     nCmdLen = 0;
-    while (szArgNameBuf[0] != '\0') {
-      szArgNameBuf[0] = szArgNameBuf[nCmdLen + 1];
+    char cNext = szArgNameBuf[0];
+    while (cNext != '\0') {
+      cNext = szArgNameBuf[nCmdLen + 1];
       pOutValue[nCmdLen] = pbArgName[(int)((char*)szArgNameBuf - (char*)pbScan + nCmdLen)];
       nCmdLen++;
     }

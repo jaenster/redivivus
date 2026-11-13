@@ -94,7 +94,7 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
         break;
       }
 
-      sSeedState = D2_SEED_NEXT_VAL(sSeedState);
+      D2_SeedRoll(&sSeedState);
       if ((int)(sSeedState.nSeedLow % 100) >= nPierceStat + nItemPierceStat) {
         break;
       }

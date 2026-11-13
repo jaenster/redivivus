@@ -715,7 +715,7 @@ static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStr
         break;
       }
 
-      sSeed = D2_SEED_NEXT_VAL(sSeed);
+      D2_SeedRoll(&sSeed);
       if ((int)(sSeed.nSeedLow % 100) >= nPierceChance) {
         break;
       }

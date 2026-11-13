@@ -676,64 +676,49 @@ void __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUni
 // Retired notes from 'SKILLNEC_CastCorpseSkill':
 // Server-side execution body for Necromancer corpse-targeting skills (e.g. Corpse Explosion, Bone Spirit from corpse). Validates the targeted corpse via SKILLNEC_ValidateCorpseTarget, sets the corpse's alignment/aura-state, frees its minions, computes radius and duration from skill calcs with difficulty divisor, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, and finally applies the necro-shred alignment state. Returns 1 on success, 0 on invalid target.
 BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    // Frame slots -48..-40 are ONE object: &pCbGame is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      ::SGAMEDATA* pCbGame;
-      D2UnitStrc* pCbUnit;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    eD2Skills eCbSkill;
-    int32_t nCbSkillLvl;
-    uint8_t byCbCorpseUnitType;
-    int nCbCorpseGUID;
-    int32_t nCbDuration;
-    int32_t nStateDuration;
-    int32_t nAuraRange;
+    int32_t nAuraLen;
+    D2CorpseSkillEventArgStrc sCorpseEventArg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
-    D2UnitStrc* pCaster = pUnit;
-    ::SGAMEDATA* pGameSaved = pGame;
     D2UnitStrc* pCorpse = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    uint32_t bValidCorpse = SKILLNEC_ValidateCorpseTarget(pGameSaved, pUnit, pCorpse);
+    uint32_t bValidCorpse = SKILLNEC_ValidateCorpseTarget(pGame, pUnit, pCorpse);
     if (bValidCorpse && pSkillsTxt->aurastat[0] >= -1 && (int)pSkillsTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt->auratargetstate >= 0 && (int)pSkillsTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-      int32_t nAuraLen;
+      int32_t nRadius;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
       UNIT::SUnit::SetAlignment(pCorpse, '\x01', 1);
-      GAME::Targets::AddNodeToTable(pGameSaved, pCorpse, nullptr, 9);
+      GAME::Targets::AddNodeToTable(pGame, pCorpse, nullptr, 9);
       SkillsServer::SKILLS_FreeMonsterMinions(pCorpse);
-      nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
+      nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       nAuraLen = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
-      nCbDuration = SKILLNEC_ApplyCurseDifficultyDivisor(pGameSaved->nDifficulty, nAuraLen);
       D2StateExArgStrc sStateExArg = {0};
-      sStateExArg.pUnit = pCaster;
-      eCbSkill = eSkill;
-      __frame0.pCbGame = pGameSaved;
-      __frame0.pCbUnit = pCaster;
-      nCbSkillLvl = nSkillLvl;
-      byCbCorpseUnitType = 6;
+      sStateExArg.nDurationInFrames = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nAuraLen);
+      sCorpseEventArg.eSkill = eSkill;
+      sCorpseEventArg.nSkillLvl = nSkillLvl;
+      sCorpseEventArg.nCorpseUnitType = '\x06';
       if (pCorpse) {
-        byCbCorpseUnitType = (uint8_t)pCorpse->eUnitType;
-        nCbCorpseGUID = pCorpse->nUnitGUID;
+        sCorpseEventArg.nCorpseUnitType = (uint8_t)pCorpse->eUnitType;
+        sCorpseEventArg.nCorpseGUID = pCorpse->nUnitGUID;
       } else {
-        nCbCorpseGUID = -1;
+        sCorpseEventArg.nCorpseGUID = -1;
       }
 
-      nStateDuration = nCbDuration;
-      SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGameSaved, pSkillsTxt->aurafilter, pCaster, nAuraRange, SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, &__frame0.pCbGame);
+      sCorpseEventArg.pGame = pGame;
+      sCorpseEventArg.pUnit = pUnit;
+      sCorpseEventArg.nDuration = sStateExArg.nDurationInFrames;
+      SkillsServer::SKILLS_ApplyEffectToUnitsInRange(pGame, pSkillsTxt->aurafilter, pUnit, nRadius, SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, &sCorpseEventArg);
+      sStateExArg.nSkillCalc = 0;
       sStateExArg.nSkillLvl = nSkillLvl;
       sStateExArg.eSkill = eSkill;
-      sStateExArg.nDurationInFrames = nStateDuration;
       sStateExArg.eStat = ~UNITSTAT_strength;
       sStateExArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
       sStateExArg.pFunction = SKILLS_NecroShredAlignmentCallback;
+      sStateExArg.pUnit = pUnit;
       sStateExArg.pTarget = pCorpse;
       SkillsServer::SetStateWithExpiryTime(&sStateExArg);
       return 1;

@@ -17,6 +17,7 @@
 // Forward declarations
 struct D2OverlayTxt;
 struct D2RoomStrc;
+struct D2SeedStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2UnitType;
 #ifndef RECON_FPTD_fnRoomUnitScanCallback
