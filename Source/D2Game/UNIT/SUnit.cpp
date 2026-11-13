@@ -1616,7 +1616,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
           D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
           iVar1 = ITEMS::Items::Drop::ITEM_CalculateDespawnTimer(pGame, pUnit);
-          pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = iVar1;
+          pUnit->pUnitData.pUnitDataItem->nActionStamp = iVar1;
         }
       break;
       case UNIT_MISSILE:

@@ -763,7 +763,7 @@ eAct __stdcall GetActNoFromLevelNumber(eD2LevelId eLevel) {
     int i = 1;
     do {
       if ((int)eLevel < aActTownLevelId[i]) {
-        return (char)i - ACT_II;
+        return (eAct)(i - ACT_II);
       }
 
       i++;

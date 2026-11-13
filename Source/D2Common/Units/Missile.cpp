@@ -2,12 +2,12 @@
 
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DATATBLS/DataTbls.h"
 #include "Source/D2Common/Txt/Skills.h"
 #include "Source/D2Common/Units.h"
 #include "Source/Fog/Fog.h"
+#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
@@ -383,18 +383,18 @@ void __stdcall SetHomeType(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
       return;
     }
 
-    D2UnitDataObjectStrc* pUnitDataMissile = pUnit->pUnitData.pUnitDataObject;
+    D2UnitDataMissileStrc* pUnitDataMissile = pUnit->pUnitData.pUnitDataMissile;
     if (!pUnitDataMissile) {
       return;
     }
     if (pTarget) {
-      pUnitDataMissile->nLinkedPortalX = pTarget->eUnitType;
-      pUnitDataMissile->nLinkedPortalY = pTarget->nUnitGUID;
+      pUnitDataMissile->eTargetType = pTarget->eUnitType;
+      pUnitDataMissile->nTargetGUID = pTarget->nUnitGUID;
       return;
     }
 
-    pUnitDataMissile->nLinkedPortalX = 0;
-    pUnitDataMissile->nLinkedPortalY = -1;
+    pUnitDataMissile->eTargetType = UNIT_PLAYER;
+    pUnitDataMissile->nTargetGUID = -1;
 }
 
 void __stdcall GetHomeType(D2UnitStrc * pUnit, int * nHomeType, int * nHomeGUID) {

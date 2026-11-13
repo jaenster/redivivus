@@ -2235,8 +2235,6 @@ int __thiscall SFILE_FreeFileRecord1(int32_t pThis, int32_t pLink) {
 
 // @blizzard TSList::LinkNode (STORM.H)
 void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* ppSlot = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppSlot = (StormLinkStrc*)(ppListContainer + 1);
@@ -2245,7 +2243,6 @@ void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, 
     StormLinkStrc* pEntry = ppSlot->pPrevLink;
     if (pEntry) {
       StormLinkStrc** pLink;
-      piVar2 = ppSlot->pNext;
       pLink = (StormLinkStrc**)D2_StormNextLink(ppSlot, -1);
       *pLink = pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
@@ -2261,18 +2258,7 @@ void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, 
         {
           ppSlot->pPrevLink = (StormLinkStrc*)ppListHead;
           ppSlot->pNext = ((StormLinkStrc*)ppListHead)->pNext;
-          piVar1 = *ppListContainer;
-          piVar2 = ((StormLinkStrc*)ppListHead)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)ppSlot;
-            ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppListHead - ((StormLinkStrc*)ppListHead)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)ppSlot;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppListHead, (intptr_t)*ppListContainer) = (StormLinkStrc*)ppSlot;
           ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
           return;
         }
@@ -2306,8 +2292,6 @@ int __thiscall SFILE_FreeFileRecord2(int32_t pThis, int32_t pLink) {
 }
 
 void __thiscall SFILE_InsertFileRecordIntoList2(StormLinkedListStrc * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
-    intptr_t nLinkOffset;
-    intptr_t uPrevLinkRaw;
     StormLinkStrc* ppSlot = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppSlot = &ppListContainer->head;
@@ -2316,7 +2300,6 @@ void __thiscall SFILE_InsertFileRecordIntoList2(StormLinkedListStrc * ppListCont
     StormLinkStrc* pEntry = ppSlot->pPrevLink;
     if (pEntry) {
       StormLinkStrc** pLink;
-      uPrevLinkRaw = ppSlot->pNext;
       pLink = (StormLinkStrc**)D2_StormNextLink(ppSlot, -1);
       *pLink = pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
@@ -2332,18 +2315,7 @@ void __thiscall SFILE_InsertFileRecordIntoList2(StormLinkedListStrc * ppListCont
         {
           ppSlot->pPrevLink = (StormLinkStrc*)ppListHead;
           ppSlot->pNext = ((StormLinkStrc*)ppListHead)->pNext;
-          nLinkOffset = ppListContainer->nLinkOffset;
-          uPrevLinkRaw = ((StormLinkStrc*)ppListHead)->pNext;
-          if (uPrevLinkRaw < 0) {
-            *(StormLinkStrc**)~uPrevLinkRaw = (StormLinkStrc*)ppSlot;
-            ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if (nLinkOffset < 0) {
-            nLinkOffset = (intptr_t)ppListHead - ((StormLinkStrc*)ppListHead)->pPrevLink->pNext;
-          }
-
-          *(StormLinkStrc**)(uPrevLinkRaw + nLinkOffset) = (StormLinkStrc*)ppSlot;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppListHead, ppListContainer->nLinkOffset) = (StormLinkStrc*)ppSlot;
           ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
           return;
         }
@@ -2369,8 +2341,6 @@ int __thiscall SFILE_FreeFileRecord3(int32_t pThis, int32_t pLink) {
 }
 
 void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* ppSlot = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppSlot = (StormLinkStrc*)(ppListContainer + 1);
@@ -2379,7 +2349,6 @@ void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * *
     StormLinkStrc* pEntry = ppSlot->pPrevLink;
     if (pEntry) {
       StormLinkStrc** pLink;
-      piVar2 = ppSlot->pNext;
       pLink = (StormLinkStrc**)D2_StormNextLink(ppSlot, -1);
       *pLink = pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
@@ -2395,18 +2364,7 @@ void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * *
         {
           ppSlot->pPrevLink = (StormLinkStrc*)ppListHead;
           ppSlot->pNext = ((StormLinkStrc*)ppListHead)->pNext;
-          piVar1 = *ppListContainer;
-          piVar2 = ((StormLinkStrc*)ppListHead)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)ppSlot;
-            ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppListHead - ((StormLinkStrc*)ppListHead)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)ppSlot;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppListHead, (intptr_t)*ppListContainer) = (StormLinkStrc*)ppSlot;
           ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
           return;
         }
@@ -2440,8 +2398,6 @@ int __thiscall SFILE_FreeFileRecord4(int32_t pThis, int32_t pLink) {
 }
 
 void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* ppSlot = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppSlot = (StormLinkStrc*)(ppListContainer + 1);
@@ -2450,7 +2406,6 @@ void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * *
     StormLinkStrc* pEntry = ppSlot->pPrevLink;
     if (pEntry) {
       StormLinkStrc** pLink;
-      piVar2 = ppSlot->pNext;
       pLink = (StormLinkStrc**)D2_StormNextLink(ppSlot, -1);
       *pLink = pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
@@ -2466,18 +2421,7 @@ void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * *
         {
           ppSlot->pPrevLink = (StormLinkStrc*)ppListHead;
           ppSlot->pNext = ((StormLinkStrc*)ppListHead)->pNext;
-          piVar1 = *ppListContainer;
-          piVar2 = ((StormLinkStrc*)ppListHead)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)ppSlot;
-            ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppListHead - ((StormLinkStrc*)ppListHead)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)ppSlot;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppListHead, (intptr_t)*ppListContainer) = (StormLinkStrc*)ppSlot;
           ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
           return;
         }
@@ -2791,8 +2735,6 @@ StormLinkedListStrc * __fastcall Unreferenced_00418470(StormLinkedListStrc * par
 }
 
 void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* ppSlot = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppSlot = (StormLinkStrc*)(ppListContainer + 1);
@@ -2801,7 +2743,6 @@ void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * *
     StormLinkStrc* pEntry = ppSlot->pPrevLink;
     if (pEntry) {
       StormLinkStrc** pLink;
-      piVar2 = ppSlot->pNext;
       pLink = (StormLinkStrc**)D2_StormNextLink(ppSlot, -1);
       *pLink = pEntry;
       ppSlot->pPrevLink->pNext = ppSlot->pNext;
@@ -2817,18 +2758,7 @@ void __thiscall SFILE_InsertFileRecordIntoList5(int * * ppListContainer, int * *
         {
           ppSlot->pPrevLink = (StormLinkStrc*)ppListHead;
           ppSlot->pNext = ((StormLinkStrc*)ppListHead)->pNext;
-          piVar1 = *ppListContainer;
-          piVar2 = ((StormLinkStrc*)ppListHead)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)ppSlot;
-            ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppListHead - ((StormLinkStrc*)ppListHead)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)ppSlot;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppListHead, (intptr_t)*ppListContainer) = (StormLinkStrc*)ppSlot;
           ((StormLinkStrc*)ppListHead)->pNext = (intptr_t)pNode;
           return;
         }

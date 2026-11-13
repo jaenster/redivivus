@@ -67,6 +67,7 @@ void __fastcall Q13_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSummoner, QUESTSTATE_RewardAwaits);
     if (BVar1) {
       nMessageIndexMaybe = 1;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
     } else {
       int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
       BVar1 = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
@@ -98,9 +99,9 @@ void __fastcall Q13_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nMessageIndexMaybe >= 4) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
+    }
 }
 
 // A2Q5 "The Summoner" - completion notifier. If the quest is in a "done"-ish state (Completed OR FinishedInPreviousGame) but NOT (JustCompleted OR CannotCompleteQuestInGame), it does nothing (return 0). Otherwise it sends quest-update packet 0xc to the player (QUEST_SendQuestUpdateToPlayer), pushing the current quest status/log to the client. Used as the post-state callback when the quest transitions to JustCompleted (0xd) / Cain step (4).

@@ -6288,12 +6288,9 @@ void __stdcall SKILLDESC_DescLine35_BonusList(short * pSkillArgs, uint16_t wLabe
       wszBonusText[nInitLoop] = L'\0';
     }
 
-    uint16_t* pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0x1058);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBonusText, pLocalStr, pSkillArgs);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszBonusText, pLocalStr);
-    pLocalStr = D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszBonusText, pLocalStr);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszBonusText, D2Lang::StrTable::strtable::GetLocaleString(0x1058), pSkillArgs);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszBonusText, D2Lang::StrTable::strtable::GetLocaleString(0xf9e));
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszBonusText, D2Lang::StrTable::strtable::GetLocaleString(wLabelStringId));
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszBonusText, ui::ScreenSizeX - 0x80, Inv::ScreenSizeY - 0x34, 0, 1);
 }
 

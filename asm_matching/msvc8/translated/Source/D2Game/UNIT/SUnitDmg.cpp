@@ -125,11 +125,7 @@ static int32_t __stdcall DAMAGE_ApplyHealingToUnit(int32_t nHealAmount, D2UnitSt
 
     int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nValue = nCurHp + nHealAmount;
-    if (nValue >= nMaxHp) {
-      nValue = nMaxHp;
-    }
-
+    int32_t nValue = nCurHp + nHealAmount < nMaxHp ? nCurHp + nHealAmount : nMaxHp;
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nValue, 0);
     if (nValue != nMaxHp) {
       return nHealAmount;

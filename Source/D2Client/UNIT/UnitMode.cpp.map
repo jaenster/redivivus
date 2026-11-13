@@ -306,6 +306,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "eD2UnitType",
         "int32_t",
         "uint32_t"
       ]
@@ -331,6 +332,7 @@
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "eD2UnitType",
         "int32_t"
       ]
     },
@@ -359,6 +361,7 @@
         "D2UnitStrc",
         "eD2Skills",
         "eD2UnitModeAction",
+        "eD2UnitType",
         "int32_t"
       ]
     },
@@ -379,8 +382,8 @@
         "SELECT_UpdateUnitSelection"
       ],
       "usedTypes": [
-        "D2PathPointStrc",
         "D2UnitStrc",
+        "eD2UnitType",
         "int32_t"
       ]
     },

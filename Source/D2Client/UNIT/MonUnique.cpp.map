@@ -365,7 +365,7 @@
       ],
       "usedTypes": [
         "D2SeedStrc",
-        "D2UnitDataPlayerStrc",
+        "D2UnitDataMonsterStrc",
         "D2UnitStrc",
         "int32_t"
       ]

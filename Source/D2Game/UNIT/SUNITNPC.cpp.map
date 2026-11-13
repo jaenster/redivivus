@@ -1446,7 +1446,7 @@
         "ITEM_GetMaxStack",
         "ToCursorItem",
         "GetBodyLocation",
-        "EquipItem",
+        "ITEMMODE_TakeItemFromBodyLoc",
         "ITEMS_IsA",
         "GetMagicSuffix",
         "TXT_Books_GetLine",

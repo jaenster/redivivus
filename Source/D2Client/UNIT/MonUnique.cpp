@@ -629,7 +629,7 @@ void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod,
       return;
     }
 
-    D2UnitDataPlayerStrc* pMonData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataMonsterStrc* pMonData = pUnit->pUnitData.pUnitDataMonster;
     if (!pMonData) {
       return;
     }
@@ -645,11 +645,11 @@ void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod,
       }
     } else if (pUnit->eAnimMode.ePlayerMode == Kick) {
       sNewSeed = D2_SeedRoll(&pUnit->sSeed);
-      if (sNewSeed % 100 == 0 && (intptr_t)pMonData->pQuestRecord[2] < 100) {
+      if (sNewSeed % 100 == 0 && pMonData->nDurielUnk < 100) {
         D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         Source::ClientEngine::CLIENT_SpawnMonstersAroundUnit(pUnit, 0xe3, 4);
-        pMonData->pQuestRecord[2] = (D2BitBufferStrc*)&pMonData->pQuestRecord[2]->nBitsInBuffer;
+        pMonData->nDurielUnk += 4;
       }
     }
 }

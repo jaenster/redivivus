@@ -49,7 +49,7 @@ static void DRLGLOGIC_PopulateGridCoordIndices(D2DrlgCoordIndexCtxStrc * pnFlood
           pnFloodFillContext->nCoordIndex++;
           pnFloodFillContext->dwCoordFlags = pnFloodFillContext->nCoordIndex & 0xfffffffU | 0x10000000;
           nCellFlags = DrlgGrid::GetGridFlags(pnFloodFillContext->nCallerArg10, nGridX, nGridY);
-          if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || (int)nCellFlags < 0) {
+          if ((nCellFlags & 0x1e0ff00) == 0x1e00000 || nCellFlags & 0x80000000) {
             pnFloodFillContext->dwCoordFlags |= 0x20000000;
           }
 

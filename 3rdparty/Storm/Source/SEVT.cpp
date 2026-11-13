@@ -592,8 +592,6 @@ int32_t __thiscall LINKEDLIST_GetNextOrHead(int32_t pThis, int32_t nNode) {
 // everywhere else (ARCHIVE_LinkNode @0045bbe0, SFILE_InsertFileRecordIntoList1..5). This was the only
 // false one.
 void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t nInsertMode, int * * ppTargetList) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* pTargetNode = (StormLinkStrc*)ppNodeSlot;
     if (!ppNodeSlot) {
       pTargetNode = (StormLinkStrc*)(pList + 1);
@@ -602,7 +600,6 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
     StormLinkStrc* pPrevNode = pTargetNode->pPrevLink;
     if (pPrevNode) {
       StormLinkStrc** pLinkSlot;
-      piVar2 = pTargetNode->pNext;
       pLinkSlot = (StormLinkStrc**)D2_StormNextLink(pTargetNode, -1);
       *pLinkSlot = pPrevNode;
       pTargetNode->pPrevLink->pNext = pTargetNode->pNext;
@@ -618,18 +615,7 @@ void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t n
         {
           pTargetNode->pPrevLink = (StormLinkStrc*)ppTargetList;
           pTargetNode->pNext = ((StormLinkStrc*)ppTargetList)->pNext;
-          piVar1 = *pList;
-          piVar2 = ((StormLinkStrc*)ppTargetList)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pTargetNode;
-            ((StormLinkStrc*)ppTargetList)->pNext = (intptr_t)ppNodeSlot;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppTargetList - ((StormLinkStrc*)ppTargetList)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)pTargetNode;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppTargetList, (intptr_t)*pList) = (StormLinkStrc*)pTargetNode;
           ((StormLinkStrc*)ppTargetList)->pNext = (intptr_t)ppNodeSlot;
           return;
         }

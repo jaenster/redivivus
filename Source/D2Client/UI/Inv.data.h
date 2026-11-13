@@ -17,7 +17,7 @@
 struct D2GridScreenCoordinates;
 
 extern int gnInvMouseX;
-extern int gpInvCursorItem;
+extern int gnInvMouseY;
 
 namespace D2Client::UI::Inv {
 extern D2GridScreenCoordinates pTradePage2GridScreenCoordinates;

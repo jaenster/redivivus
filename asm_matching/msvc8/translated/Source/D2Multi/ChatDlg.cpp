@@ -3739,11 +3739,7 @@ BOOL __stdcall CHATDLG_UpdateChatRoomList() {
     char szCell[256];
     int32_t nScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollPosition(g_pLadderBoardTextBox);
     int32_t nVisibleLines = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetVisibleLineCount(g_pLadderBoardTextBox);
-    int32_t nEndLine = nVisibleLines + nScrollPos;
-    if (nEndLine >= gnLadderListRowCount) {
-      nEndLine = gnLadderListRowCount;
-    }
-
+    int32_t nEndLine = nVisibleLines + nScrollPos < gnLadderListRowCount ? nVisibleLines + nScrollPos : gnLadderListRowCount;
     while (nScrollPos < nEndLine) {
       uint16_t* pwszCell;
       pwszCell = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLineCellValue(g_pLadderBoardTextBox, nScrollPos, 0);

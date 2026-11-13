@@ -199,18 +199,16 @@ static uint8_t __stdcall Q10_CheckQuestItemsForDialog(D2QuestDataStrc * pQuestDa
 // this quest's dialog) only for classId 0xf4 AND when either RewardAwaits bit is set
 // OR Q10_CheckQuestItemsForDialog finds a relevant quest item. Read-only.
 bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    if (nTargetClassId != 0xf4) {
-      return false;
-    }
+    if (nTargetClassId == 0xf4) {
+      BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
+      if (BVar2 == 1) {
+        return true;
+      }
 
-    BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
-    if (BVar2 == 1) {
-      return true;
-    }
-
-    uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pQuestData, pUnit, (uint8_t*)((intptr_t)&pBitBuffer + 3));
-    if (uVar1 != '\0') {
-      return true;
+      uint8_t uVar1 = Q10_CheckQuestItemsForDialog(pQuestData, pUnit, (uint8_t*)((intptr_t)&pBitBuffer + 3));
+      if (uVar1 != '\0') {
+        return true;
+      }
     }
 
     return false;

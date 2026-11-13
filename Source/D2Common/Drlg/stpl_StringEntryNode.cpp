@@ -59,8 +59,6 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::SetLinkOffset(int32
 template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEntryNode * pNode, uint32_t nLinkType, ::StringEntryNode * pExisting) {
     TSLink<::StringEntryNode>* pTVar1;
     TSLink<::StringEntryNode>* pSrcSlot;
-    intptr_t pCurHead;
-    intptr_t pTailLink2;
     if (pNode) {
       pSrcSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
     } else {
@@ -87,18 +85,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::LinkNode(::StringEn
         {
           pSrcSlot->m_prevlink = pDstSlot;
           pSrcSlot->m_next = pDstSlot->m_next;
-          pCurHead = this->m_linkoffset;
-          pTailLink2 = pDstSlot->m_next;
-          if (pTailLink2 < 0) {
-            *(TSLink<::StringEntryNode>**)~pTailLink2 = (TSLink<::StringEntryNode>*)pSrcSlot;
-            pDstSlot->m_next = (intptr_t)pNode;
-            return;
-          }
-          if (pCurHead < 0) {
-            pCurHead = (intptr_t)pDstSlot - pDstSlot->m_prevlink->m_next;
-          }
-
-          *(TSLink<::StringEntryNode>**)(pTailLink2 + pCurHead) = (TSLink<::StringEntryNode>*)pSrcSlot;
+          *(TSLink<::StringEntryNode>**)D2_StormNextLink(pDstSlot, this->m_linkoffset) = (TSLink<::StringEntryNode>*)pSrcSlot;
           pDstSlot->m_next = (intptr_t)pNode;
           return;
         }

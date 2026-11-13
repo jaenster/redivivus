@@ -7761,8 +7761,9 @@ BOOL __stdcall StorePreferedRealmAgain(D2ControlMsg * pControlMsg) {
     int32_t nSelectedLine = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLine(gpMainMenuGatewayListTextBox);
     if (nSelectedLine != -1) {
       char* pszRealmName;
-      Bnclient::BNGatewayAccess::SetCurGateway(pGatewayAccess, nSelectedLine + 1);
-      pszRealmName = Bnclient::BNGatewayAccess::Realm(pGatewayAccess, nSelectedLine + 1);
+      nSelectedLine += 1;
+      Bnclient::BNGatewayAccess::SetCurGateway(pGatewayAccess, nSelectedLine);
+      pszRealmName = Bnclient::BNGatewayAccess::Realm(pGatewayAccess, nSelectedLine);
       Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, pszRealmName);
     }
 

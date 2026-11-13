@@ -419,7 +419,7 @@ void __stdcall Free(D2UnitStrc * pUnit) {
     switch (pUnit->eUnitType) {
       case UNIT_MONSTER:
         {
-          D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataPlayer, ".\\UNITS\\Units.cpp", 0x69a);
+          D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataMonster, ".\\UNITS\\Units.cpp", 0x69a);
           break;
         }
     }

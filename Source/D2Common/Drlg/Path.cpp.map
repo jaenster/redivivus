@@ -567,8 +567,7 @@
         "D2PathPointStrc",
         "D2PathTypeArg",
         "int32_t",
-        "uint16_t",
-        "uint32_t"
+        "uint16_t"
       ]
     },
     {
@@ -608,7 +607,6 @@
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
-        "D2PathPointStrc",
         "D2PathTypeArg",
         "int32_t"
       ]
@@ -1199,9 +1197,9 @@
       "usedTypes": [
         "D2DrlgPathNodeStrc",
         "D2DrlgPathSearchCtxStrc",
+        "D2PathPointStrc",
         "D2PathTypeArg",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

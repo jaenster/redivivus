@@ -1394,8 +1394,6 @@ StormLinkedListStrc * __fastcall Unreferenced_0041ed70(StormLinkedListStrc * par
 }
 
 void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nInsertAtHead, int * * pInsertRef) {
-    int* piVar1;
-    intptr_t pNeighbor2;
     StormLinkStrc* pNodeCur = (StormLinkStrc*)pNode;
     if (!pNode) {
       pNodeCur = (StormLinkStrc*)(pListHead + 1);
@@ -1404,7 +1402,6 @@ void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nI
     StormLinkStrc* pNeighbor = pNodeCur->pPrevLink;
     if (pNeighbor) {
       StormLinkStrc** pLinkTarget;
-      pNeighbor2 = pNodeCur->pNext;
       pLinkTarget = (StormLinkStrc**)D2_StormNextLink(pNodeCur, -1);
       *pLinkTarget = pNeighbor;
       pNodeCur->pPrevLink->pNext = pNodeCur->pNext;
@@ -1420,18 +1417,7 @@ void __thiscall LINKEDLIST_MoveNode(int * * pListHead, int * * pNode, int32_t nI
         {
           pNodeCur->pPrevLink = (StormLinkStrc*)pInsertRef;
           pNodeCur->pNext = ((StormLinkStrc*)pInsertRef)->pNext;
-          piVar1 = *pListHead;
-          pNeighbor2 = ((StormLinkStrc*)pInsertRef)->pNext;
-          if (pNeighbor2 < 0) {
-            *(StormLinkStrc**)~pNeighbor2 = (StormLinkStrc*)pNodeCur;
-            ((StormLinkStrc*)pInsertRef)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)pInsertRef - ((StormLinkStrc*)pInsertRef)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(pNeighbor2 + (char*)piVar1) = (StormLinkStrc*)pNodeCur;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)pInsertRef, (intptr_t)*pListHead) = (StormLinkStrc*)pNodeCur;
           ((StormLinkStrc*)pInsertRef)->pNext = (intptr_t)pNode;
           return;
         }

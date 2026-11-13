@@ -18,6 +18,7 @@
 struct D2ServerMessageHandleStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2PlayerAnimMode;
+typedef uint32_t eD2UnitType;
 
 namespace D2Client::UNIT::UnitMode {
 

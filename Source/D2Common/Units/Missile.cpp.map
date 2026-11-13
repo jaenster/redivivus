@@ -578,7 +578,7 @@
         "SetHomeType"
       ],
       "usedTypes": [
-        "D2UnitDataObjectStrc",
+        "D2UnitDataMissileStrc",
         "D2UnitStrc"
       ]
     },

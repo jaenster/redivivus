@@ -102,9 +102,9 @@ static void __stdcall PATH_GetTargetCoordinates(int32_t nDirIndex, int32_t * pnO
 
 // PATH_ExtendPathEndpoint - Nudges a path endpoint further in the direction of movement, stepping up to 5 subtiles as long as no collision is encountered. Used to extend paths past obstacles for smoother movement.
 static void PATH_ExtendPathEndpoint(D2PathTypeArg * pPathData) {
-    uint32_t nX = (uint32_t)(uint16_t)pPathData->pCoords.nOffsetY;
-    int nDeltaX = nX - (uint16_t)pPathData->pCoords.nOffsetX;
-    int nDeltaY = (uint32_t)(uint16_t)pPathData->pCoords.nPosY - (uint32_t)(uint16_t)pPathData->pCoords.nPosX;
+    uint32_t nX = (uint32_t)pPathData->tTargetCoord.nX;
+    int nDeltaX = nX - pPathData->tStartCoord.nX;
+    int nDeltaY = (uint32_t)pPathData->tTargetCoord.nY - (uint32_t)pPathData->tStartCoord.nY;
     int32_t nAbsDelta = nDeltaX;
     if (nDeltaX < 0) {
       nAbsDelta = -nDeltaX;
@@ -122,7 +122,7 @@ static void PATH_ExtendPathEndpoint(D2PathTypeArg * pPathData) {
     int32_t eCollisionFlag = pPathData->nCollisionPattern;
     int nStepX = gaPathDirectionStepDeltas[nDeltaX + nDeltaY * 9];
     nDeltaX = gaPathDirectionStepDeltas[nDeltaY + nDeltaX * 9];
-    uint32_t nY = (uint32_t)(uint16_t)pPathData->pCoords.nPosY;
+    uint32_t nY = (uint32_t)pPathData->tTargetCoord.nY;
     if (nAbsDelta <= nAbsDeltaY) {
       nAbsDelta = nAbsDeltaY;
     }
@@ -136,8 +136,8 @@ static void PATH_ExtendPathEndpoint(D2PathTypeArg * pPathData) {
         return;
       }
 
-      pPathData->pCoords.nOffsetY = (short int)nX;
-      pPathData->pCoords.nPosY = (short int)nY;
+      pPathData->tTargetCoord.nX = (uint16_t)nX;
+      pPathData->tTargetCoord.nY = (uint16_t)nY;
     }
 }
 
@@ -163,7 +163,6 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
     -0x1
 }; D2_STATIC_GUARD(gnObstacleAvoidanceXOffsets, "D2Common::PATH::Path::PATH_FindAlternateAroundObstacle::gnObstacleAvoidanceXOffsets");
 
-    uint32_t nPackedDst_00;
     uint16_t nAltX;
     int32_t iVar2;
     uint16_t nAltY;
@@ -182,31 +181,27 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
     }
 
     uint16_t nStartY;
-    nStartY = pPathState->pCoords.nPosX;
+    nStartY = pPathState->tStartCoord.nY;
     uint16_t nStartX;
-    nStartX = pPathState->pCoords.nOffsetX;
+    nStartX = pPathState->tStartCoord.nX;
     D2UnitStrc* pDVar1;
     pDVar1 = pPathState->pDynamicPath->pOwner;
     uint16_t nCurX;
-    nCurX = pPathState->pCoords.nOffsetY;
+    nCurX = pPathState->tTargetCoord.nX;
     D2RoomStrc* pRoom;
     pRoom = pPathState->pRoom;
     eD2CollisionShapeType nType;
     nType = pPathState->nUnitWidth;
     nLine = pPathState->nCollisionPattern;
     uint16_t nCurY;
-    nCurY = pPathState->pCoords.nPosY;
+    nCurY = pPathState->tTargetCoord.nY;
     if (!pDVar1) {
       nPathMode = UNIT_COUNT;
     } else {
       nPathMode = pDVar1->eUnitType;
     }
 
-    uint32_t nPackedDst;
-    nPackedDst = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathState->pCoords.nPosX << 16);
-    uint32_t nPackedSrc;
-    nPackedSrc = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetY | (uint32_t)(uint16_t)pPathState->pCoords.nPosY << 16);
-    vc8_thiscall(Drlg::Path::DRLGPATH_GetDirectionTripletPacked)((uint32_t*)anDirections, nPackedSrc, nPackedDst);
+    vc8_thiscall(Drlg::Path::DRLGPATH_GetDirectionTripletPacked)((uint32_t*)anDirections, (uint32_t)d2_bits_of(pPathState->tTargetCoord), (uint32_t)d2_bits_of(pPathState->tStartCoord));
     uint16_t nSecAltX;
     nSecAltX = nCurX;
     uint16_t nSecAltY;
@@ -225,8 +220,8 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
       nPackedCurXY = (uint32_t)((uint32_t)(uint16_t)nCurY << 16 | (uint32_t)(uint16_t)nCurX);
       iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)nCurX, (uint32_t)nCurY, nType, nLine);
       if (!iVar2) {
-        pPathState->pCoords.nOffsetY = nCurX;
-        pPathState->pCoords.nPosY = nCurY;
+        pPathState->tTargetCoord.nX = nCurX;
+        pPathState->tTargetCoord.nY = nCurY;
         nAltY = nCurY;
         nAltX = nCurX;
         goto joined_r0x006482ad;
@@ -251,13 +246,12 @@ BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
         }
       }
 
-      nPackedDst_00 = (uint32_t)((uint32_t)(uint16_t)pPathState->pCoords.nOffsetX | (uint32_t)(uint16_t)pPathState->pCoords.nPosX << 16);
-      vc8_thiscall(Drlg::Path::DRLGPATH_GetDirectionTripletPacked)(nDirTriplet, nPackedCurXY, nPackedDst_00);
+      vc8_thiscall(Drlg::Path::DRLGPATH_GetDirectionTripletPacked)(nDirTriplet, nPackedCurXY, (uint32_t)d2_bits_of(pPathState->tStartCoord));
       anDirections[0] = nDirTriplet[0];
     }
 
-    pPathState->pCoords.nPosY = nAltY;
-    pPathState->pCoords.nOffsetY = nAltX;
+    pPathState->tTargetCoord.nY = nAltY;
+    pPathState->tTargetCoord.nX = nAltX;
     joined_r0x006482ad:
     if (nAltX == nStartX && nAltY == nStartY) {
       return 0;

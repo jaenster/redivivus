@@ -890,7 +890,7 @@ uint8_t __fastcall Q20_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
       return '\x01';
     }
 
-    D2RoomStrc* pSpawnRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(pGame->pAct[2], pQuestSpecific->nSerpentKillerGUID, pQuestSpecific->nSerpentSpawnX);
+    D2RoomStrc* pSpawnRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(pGame->pAct[2], pQuestSpecific->nGidbinnX, pQuestSpecific->nGidbinnY);
     if (!pSpawnRoom) {
       return '\x01';
     }
@@ -927,8 +927,8 @@ void __fastcall Objects_InitFn25_Gidbinn(D2ObjectInitFnArg * pInitArg) {
         D2QuestDataA3Q3Strc* pA3Q3Data;
         pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
         pA3Q3Data->bSerpentLocationValid = true;
-        pA3Q3Data->nSerpentKillerGUID = pInitArg->nX;
-        pA3Q3Data->nSerpentSpawnX = pInitArg->nY;
+        pA3Q3Data->nGidbinnX = pInitArg->nX;
+        pA3Q3Data->nGidbinnY = pInitArg->nY;
         if (!(pA3Q3Data->bSerpentArrived && !pA3Q3Data->bCanDropBlade)) {
           return;
         }
@@ -1083,8 +1083,8 @@ void __fastcall Objects_InitFn39_GidbinnAltar(D2ObjectInitFnArg * pInitArg) {
     }
 
     pA1Q1Data->nSerpentObjectGUID = nObjectGUID;
-    pA1Q1Data->nSerpentSpawnY = pInitArg->nX;
-    pA1Q1Data->nSerpentObjectY = pInitArg->nY;
+    pA1Q1Data->nAltarX = pInitArg->nX;
+    pA1Q1Data->nAltarY = pInitArg->nY;
     D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pA1Q1Data->nQuestStage);
 }
 

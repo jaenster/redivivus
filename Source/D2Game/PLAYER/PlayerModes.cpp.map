@@ -837,7 +837,7 @@
         "GetBodyLocation",
         "ITEM_GetTxtItemTypes_reequip",
         "SetupUpdateFlag",
-        "EquipItem",
+        "ITEMMODE_TakeItemFromBodyLoc",
         "ITEM_EditItemData_eD2ItemCmd",
         "INVENTORY_FindItemByType",
         "GetClassId",

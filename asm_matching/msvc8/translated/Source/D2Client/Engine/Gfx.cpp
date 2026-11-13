@@ -1154,7 +1154,7 @@ static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
-uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWidth) {
+uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     uint32_t nGoldAmount;
     D2GfxDataStrc sGfxData;
     int nPalShiftIndex;
@@ -1164,7 +1164,7 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWi
     }
 
     int32_t nDC6Height = 0;
-    int32_t nSavedX = nHeight;
+    int32_t nSavedX = nX;
     eD2ItemTypes eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
     if (eItemType == ITEMTYPE_Gold) {
       nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -1188,7 +1188,7 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWi
       return 0;
     }
 
-    uint32_t bOnScreen = GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nHeight, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nWidth, 0);
+    uint32_t bOnScreen = GfxUtil::GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nX, D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) + nY, 0);
     if (!bOnScreen) {
       return 0;
     }
@@ -1203,10 +1203,10 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nHeight, int32_t nWi
     int32_t nBlendMode = -1;
     int32_t nDC6HeightTmp = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
     nDC6Height = nSavedX;
-    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSavedX, nDC6HeightTmp + nWidth, nBlendMode, eDrawMode, pPalette);
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSavedX, nDC6HeightTmp + nY, nBlendMode, eDrawMode, pPalette);
     nDC6HeightTmp = 0;
     nGoldAmount = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-    nDrawX = (nGoldAmount >> 1) + nWidth;
+    nDrawX = (nGoldAmount >> 1) + nY;
     nGoldAmount = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
     DRAW_UNIT_States(pUnit, 0xff, 0, (nGoldAmount >> 1) + nDC6Height, nDrawX, nDC6HeightTmp);
     return 1;

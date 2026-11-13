@@ -248,10 +248,10 @@ void __stdcall INPUT_DialogMouseUp(D2UIMouseMsgStrc * pMsg) {
     int32_t nLine;
     fpDialogFunc pfnOnClick;
     D2DialogStrc* pDialog = gpDialogActual;
-    uint16_t wMouseX = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t wMouseY = pMsg->uLParam.sMousePos.nMouseX;
+    uint16_t wMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    uint16_t wMouseX = pMsg->uLParam.sMousePos.nMouseX;
     BOOL bMiniPanelFlag = ui::GetUIFlag(UI_MINIPANEL);
-    if (!bMiniPanelFlag || (bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea((uint32_t)wMouseY, (uint32_t)wMouseX) , !bMiniPanelFlag)) {
+    if (!bMiniPanelFlag || (bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea((uint32_t)wMouseX, (uint32_t)wMouseY) , !bMiniPanelFlag)) {
       ::UIWidget* self;
       pMsg->bHandled = 1;
       pMsg->dwResult = 0;
@@ -315,8 +315,8 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     D2DialogSubStrc* pDVar1;
     ::UIWidget* self;
     int iResult;
-    int32_t nMouseX;
     int32_t nMouseY;
+    int32_t nMouseX;
     D2DialogStrc* pDialog;
     pDialog = gpDialogActual;
     if (!gpDialogActual) {
@@ -347,13 +347,13 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     iResult = DIALOG_HandleMouseDownEvent(pDialog, pMsg);
     if (!iResult) {
       BOOL bMiniPanelFlag;
-      nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
+      nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
       iResult = pDialog->pCoords2.x;
-      nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-      if (nMouseY < iResult - 4 || nMouseY > pDialog->nBackgroundWidth + 4 + iResult || (iResult = pDialog->pCoords2.y , nMouseX < iResult - 4) || nMouseX > pDialog->nBackgroundHeight + 4 + iResult) {
+      nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
+      if (nMouseX < iResult - 4 || nMouseX > pDialog->nBackgroundWidth + 4 + iResult || (iResult = pDialog->pCoords2.y , nMouseY < iResult - 4) || nMouseY > pDialog->nBackgroundHeight + 4 + iResult) {
         bMiniPanelFlag = ui::GetUIFlag(UI_MINIPANEL);
         if (bMiniPanelFlag) {
-          bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea(nMouseY, nMouseX);
+          bMiniPanelFlag = MiniPanel::MINIPANEL_IsMouseInArea(nMouseX, nMouseY);
           if (bMiniPanelFlag) {
             return;
           }
@@ -366,7 +366,7 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
 
           bMiniPanelFlag = ui::GetUIFlag(UI_NEWSTATS);
           if (bMiniPanelFlag) {
-            bMiniPanelFlag = ui::UI_IsMouseOnStatButton(Path::DRAW_GetTypeOfBorder(), nMouseY, nMouseX);
+            bMiniPanelFlag = ui::UI_IsMouseOnStatButton(Path::DRAW_GetTypeOfBorder(), nMouseX, nMouseY);
             if (bMiniPanelFlag) {
               pMsg->bHandled = 1;
               pMsg->dwResult = 0;
@@ -379,7 +379,7 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          bMiniPanelFlag = ui::UI_IsMouseOnSkillButton(Path::DRAW_GetTypeOfBorder(), nMouseY, nMouseX);
+          bMiniPanelFlag = ui::UI_IsMouseOnSkillButton(Path::DRAW_GetTypeOfBorder(), nMouseX, nMouseY);
           if (!bMiniPanelFlag) {
             return;
           }

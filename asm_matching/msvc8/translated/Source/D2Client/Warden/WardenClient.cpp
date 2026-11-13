@@ -892,11 +892,15 @@ void __stdcall WARDEN_UnloadActiveModule() {
       vc8_thiscall(gpWardenActiveModule->pModuleObject->pFuncs->pfnUnload)(gpWardenActiveModule->pModuleObject);
       WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
       pModule = gpWardenActiveModule;
-      if (gpWardenActiveModule) {
+      if (!gpWardenActiveModule) {
+        gpWardenActiveModule = 0;
+        return;
+      }
+
+      {
         WARDEN_FreeModuleLibraries(&gpWardenActiveModule->pLibrary);
         Storm::Source::SMem::SMemFree(pModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       }
-
       gpWardenActiveModule = 0;
       return;
     }

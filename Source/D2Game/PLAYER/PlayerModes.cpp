@@ -1050,7 +1050,7 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
       nBodyLocWord = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nBodyLocWord + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eBodyLoc);
       bCanReequip = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_reequip(pUnit);
       D2Common::Units::SetupUpdateFlag(pWeaponOwner, 1);
-      ITEMS::ItemMode::EquipItem(pGame, pWeaponOwner, (eD2BodyLoc)nBodyLocWord, 1, &dwEquipResult);
+      ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pWeaponOwner, (eD2BodyLoc)nBodyLocWord, 1, &dwEquipResult);
       D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, ITEMCMD_DELETE, 1);
       if (bIsWeapon) {
         for (pReloadItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pWeaponOwner->pInventory, eItemType, nullptr); pReloadItem; pReloadItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pWeaponOwner->pInventory, eItemType, pReloadItem)) {

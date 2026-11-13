@@ -112,11 +112,11 @@ void __stdcall ITEMDATA_Free(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     }
 
     INVENTORY::Inventory::INVENTORY_RemoveItemFromInventory(pUnit);
-    if (!pUnit->pUnitData.pUnitDataPlayer) {
+    if (!pUnit->pUnitData.pUnitDataItem) {
       return;
     }
 
-    D2_FREE_POOL_AT(pMemory, pUnit->pUnitData.pUnitDataPlayer, ".\\ITEMS\\Items.cpp", 0x10a);
+    D2_FREE_POOL_AT(pMemory, pUnit->pUnitData.pUnitDataItem, ".\\ITEMS\\Items.cpp", 0x10a);
 }
 
 eD2BodyLoc __stdcall GetBodyLocation(D2UnitStrc * pUnit) {

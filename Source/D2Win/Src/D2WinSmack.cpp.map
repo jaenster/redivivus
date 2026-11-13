@@ -69,7 +69,7 @@
       ]
     },
     {
-      "name": "D2WINSMACK_SetBounds",
+      "name": "D2WINSMACK_SetPosition",
       "address": "005069f0",
       "lines": [
         {
@@ -79,7 +79,7 @@
       ],
       "namespace": "D2Win::Src::D2WinSmack",
       "calledFunctions": [
-        "D2WINSMACK_SetBounds",
+        "D2WINSMACK_SetPosition",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"

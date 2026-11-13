@@ -261,8 +261,6 @@ template<> void TSHashObject<CELLIST, HASHKEY_NONE>::Destructor() {
 template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode, uint32_t nLinkType, ::CELLIST * pExisting) {
     TSLink<::CELLIST>* pTVar1;
     TSLink<::CELLIST>* pSrcSlot;
-    intptr_t pSrcEntry;
-    intptr_t pTailLink2;
     if (pNode) {
       pSrcSlot = (TSLink<::CELLIST>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
     } else {
@@ -289,18 +287,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::LinkNode(::CELLIST * pNode,
         {
           pSrcSlot->m_prevlink = pDstSlot;
           pSrcSlot->m_next = pDstSlot->m_next;
-          pSrcEntry = this->m_linkoffset;
-          pTailLink2 = pDstSlot->m_next;
-          if (pTailLink2 < 0) {
-            *(TSLink<::CELLIST>**)~pTailLink2 = (TSLink<::CELLIST>*)pSrcSlot;
-            pDstSlot->m_next = (intptr_t)pNode;
-            return;
-          }
-          if (pSrcEntry < 0) {
-            pSrcEntry = (intptr_t)pDstSlot - pDstSlot->m_prevlink->m_next;
-          }
-
-          *(TSLink<::CELLIST>**)(pTailLink2 + pSrcEntry) = (TSLink<::CELLIST>*)pSrcSlot;
+          *(TSLink<::CELLIST>**)D2_StormNextLink(pDstSlot, this->m_linkoffset) = (TSLink<::CELLIST>*)pSrcSlot;
           pDstSlot->m_next = (intptr_t)pNode;
           return;
         }
@@ -756,8 +743,6 @@ template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExp
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pExisting) {
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar1;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* ppSrcSlot;
-    intptr_t pOldNext;
-    intptr_t pBackLinkDst2;
     if (pNode) {
       ppSrcSlot = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)((intptr_t)&pNode->nArrayAlloc + this->m_linkoffset);
     } else {
@@ -784,18 +769,7 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Li
         {
           ppSrcSlot->m_prevlink = ppDstSlot;
           ppSrcSlot->m_next = ppDstSlot->m_next;
-          pOldNext = this->m_linkoffset;
-          pBackLinkDst2 = ppDstSlot->m_next;
-          if (pBackLinkDst2 < 0) {
-            *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)~pBackLinkDst2 = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)ppSrcSlot;
-            ppDstSlot->m_next = (intptr_t)pNode;
-            return;
-          }
-          if (pOldNext < 0) {
-            pOldNext = (intptr_t)ppDstSlot - ppDstSlot->m_prevlink->m_next;
-          }
-
-          *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)(pBackLinkDst2 + pOldNext) = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)ppSrcSlot;
+          *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(ppDstSlot, this->m_linkoffset) = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)ppSrcSlot;
           ppDstSlot->m_next = (intptr_t)pNode;
           return;
         }

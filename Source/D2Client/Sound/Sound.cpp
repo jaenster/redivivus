@@ -1555,7 +1555,7 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFr
 
 int Unreferenced_004e41e0() {
     int32_t iVar1 = D2Common::Environment::DRLGENV_GetCycleIndexFromAct(GAME::Game::sgpDrlgAct);
-    return (uint32_t)(2 < iVar1 - 1U);
+    return (uint32_t)(iVar1 < 1 || iVar1 > 3);
 }
 
 float __stdcall Unreferenced_004e4200() {

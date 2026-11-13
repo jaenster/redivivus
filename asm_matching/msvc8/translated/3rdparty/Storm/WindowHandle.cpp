@@ -151,8 +151,6 @@ int32_t __fastcall WND_GetNodeOrDefault(int32_t pThis, int, int32_t pNode) {
 }
 
 void __fastcall WND_InsertListNode(int * * ppList, int, int * * pNode, int32_t nMode, int * * ppAnchor) {
-    int* piVar1;
-    intptr_t piTmp;
     StormLinkStrc* ppCur = (StormLinkStrc*)pNode;
     if (!pNode) {
       ppCur = (StormLinkStrc*)(ppList + 1);
@@ -161,7 +159,6 @@ void __fastcall WND_InsertListNode(int * * ppList, int, int * * pNode, int32_t n
     StormLinkStrc* piNext = ppCur->pPrevLink;
     if (piNext) {
       StormLinkStrc** pBacklink;
-      piTmp = ppCur->pNext;
       pBacklink = (StormLinkStrc**)D2_StormNextLink(ppCur, -1);
       *pBacklink = piNext;
       ppCur->pPrevLink->pNext = ppCur->pNext;
@@ -177,18 +174,7 @@ void __fastcall WND_InsertListNode(int * * ppList, int, int * * pNode, int32_t n
         {
           ppCur->pPrevLink = (StormLinkStrc*)ppAnchor;
           ppCur->pNext = ((StormLinkStrc*)ppAnchor)->pNext;
-          piVar1 = *ppList;
-          piTmp = ((StormLinkStrc*)ppAnchor)->pNext;
-          if (piTmp < 0) {
-            *(StormLinkStrc**)~piTmp = (StormLinkStrc*)ppCur;
-            ((StormLinkStrc*)ppAnchor)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppAnchor - ((StormLinkStrc*)ppAnchor)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piTmp + (char*)piVar1) = (StormLinkStrc*)ppCur;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppAnchor, (intptr_t)*ppList) = (StormLinkStrc*)ppCur;
           ((StormLinkStrc*)ppAnchor)->pNext = (intptr_t)pNode;
           return;
         }

@@ -767,8 +767,8 @@ static uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint3
     return 0;
 }
 
-// Scores a candidate inventory grid placement for an item of dimensions (byItemWidth x byItemHeight) at grid position (nStartRow, nStartCol). Counts occupied neighbouring cells on all four sides (left column, right column, top row, bottom row) of the placement rectangle; adds byItemWidth or byItemHeight when the rectangle touches a grid boundary. Returns the score (lower = more isolated = better fit); returns 0xFF if the score equals or exceeds the item perimeter, indicating a fully surrounded or impossible placement. byItemWidth is a single byte: the prologue does MOVZX EDX, CL, so the upper 24 bits of ECX are dead and callers set only CL.
-static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, D2InventoryGridInfoStrc * pGridInfo, int32_t nStartCol, uint8_t byItemHeight, int32_t nStartRow) {
+// Scores a candidate inventory grid placement for an item of dimensions (byItemWidth x byItemHeight) at grid position (nStartRow, nStartCol). Counts occupied neighbouring cells on all four sides (left column, right column, top row, bottom row) of the placement rectangle; adds byItemWidth or byItemHeight when the rectangle touches a grid boundary. Returns the score (lower = more isolated = better fit); returns 0xFF if the score equals or exceeds the item perimeter, indicating a fully surrounded or impossible placement. byItemHeight is a single byte: the prologue does MOVZX EDX, CL, so the upper 24 bits of ECX are dead and callers set only CL.
+static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo, int32_t nStartCol, uint8_t byItemWidth, int32_t nStartRow) {
     D2UnitStrc** pScanCell;
     int iVar1;
     int nRowCount;
@@ -776,9 +776,9 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
     int32_t nSavedStartCol = nStartCol;
     uint32_t nScore = 0;
     if (nStartCol > 0) {
-      if (nStartRow < (int)((uint32_t)byItemWidth + nStartRow)) {
+      if (nStartRow < (int)((uint32_t)byItemHeight + nStartRow)) {
         pScanCell = pGridInfo->pGridCells + (uint32_t)pGridInfo->bWidth * nStartRow + nStartCol - 1;
-        iVar1 = (uint32_t)byItemWidth + nStartRow - nStartRow;
+        iVar1 = (uint32_t)byItemHeight + nStartRow - nStartRow;
         do {
           if (*pScanCell) {
             nScore++;
@@ -789,16 +789,16 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
         } while (iVar1);
       }
     } else {
-      nScore = (uint32_t)byItemWidth;
+      nScore = (uint32_t)byItemHeight;
     }
 
-    uint32_t nItemWidth = (uint32_t)byItemWidth;
+    uint32_t nItemHeight = (uint32_t)byItemHeight;
     uint32_t nGridWidth = (uint32_t)pGridInfo->bWidth;
-    iVar1 = (uint32_t)byItemHeight + nStartCol;
+    iVar1 = (uint32_t)byItemWidth + nStartCol;
     if (iVar1 < (int)nGridWidth) {
-      if (nStartRow < (int)(nItemWidth + nStartRow)) {
+      if (nStartRow < (int)(nItemHeight + nStartRow)) {
         pScanCell = pGridInfo->pGridCells + nGridWidth * nStartRow + iVar1;
-        nRowCount = nItemWidth + nStartRow - nStartRow;
+        nRowCount = nItemHeight + nStartRow - nStartRow;
         do {
           if (*pScanCell) {
             nScore++;
@@ -809,7 +809,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
         } while (nRowCount);
       }
     } else {
-      nScore += nItemWidth;
+      nScore += nItemHeight;
     }
     if (nStartRow > 0) {
       if (nStartCol < iVar1) {
@@ -825,12 +825,12 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
         } while (nRowCount);
       }
     } else {
-      nScore += byItemHeight;
+      nScore += byItemWidth;
     }
-    if ((int)(nStartRow + nItemWidth) < (int)(uint32_t)pGridInfo->bHeight) {
+    if ((int)(nStartRow + nItemHeight) < (int)(uint32_t)pGridInfo->bHeight) {
       int32_t* pCell;
       if (nSavedStartCol < iVar1) {
-        pCell = (int32_t*)(pGridInfo->pGridCells + nGridWidth * (nStartRow + nItemWidth) + nSavedStartCol);
+        pCell = (int32_t*)(pGridInfo->pGridCells + nGridWidth * (nStartRow + nItemHeight) + nSavedStartCol);
         iVar1 -= nSavedStartCol;
         do {
           if (*pCell) {
@@ -842,9 +842,9 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemWidth, 
         } while (iVar1);
       }
     } else {
-      nScore += byItemHeight;
+      nScore += byItemWidth;
     }
-    if ((int)nScore < (int)((byItemHeight + nItemWidth) * 2)) {
+    if ((int)nScore < (int)((byItemWidth + nItemHeight) * 2)) {
       return nScore;
     }
 
@@ -930,17 +930,17 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
     return 0;
 }
 
-static BOOL __stdcall INVENTORY_FindPlacementSlot(uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
+static BOOL __stdcall INVENTORY_FindPlacementSlot(uint8_t byItemHeight, uint8_t byItemWidth, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
     if (!pInventory) {
       return 0;
     }
     if (pInventory->pOwner && pInventory->pOwner->eUnitType == UNIT_PLAYER) {
       uint32_t bFound;
-      bFound = INVENTORY_FindBestPlacementWithScore((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+      bFound = INVENTORY_FindBestPlacementWithScore((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
       return bFound;
     }
 
-    BOOL BVar1 = INVENTORY_FindFirstEmptySlot((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+    BOOL BVar1 = INVENTORY_FindFirstEmptySlot((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
     return BVar1;
 }
 
@@ -1027,45 +1027,45 @@ static BOOL __stdcall INVENTORY_FindBestGridPositionNonPlayer(int * pnOutX, int 
     return 0;
 }
 
-static BOOL __stdcall INVENTORY_FindGridPositionByOwner(uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
+static BOOL __stdcall INVENTORY_FindGridPositionByOwner(uint8_t byItemHeight, uint8_t byItemWidth, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
     if (!pInventory) {
       return 0;
     }
     if (pInventory->pOwner && pInventory->pOwner->eUnitType == UNIT_PLAYER) {
       uint32_t bFound;
-      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
       return bFound;
     }
 
-    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
     return BVar1;
 }
 
-static BOOL __stdcall INVENTORY_FindGridPositionByOwner2(uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
+static BOOL __stdcall INVENTORY_FindGridPositionByOwner2(uint8_t byItemHeight, uint8_t byItemWidth, D2InventoryStrc * pInventory, int * pnOutY, int * * ppnOutX, D2InventoryGridInfoStrc * pGridInfo) {
     if (!pInventory) {
       return 0;
     }
     if (pInventory->pOwner && pInventory->pOwner->eUnitType == UNIT_PLAYER) {
       uint32_t bFound;
-      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
       return bFound;
     }
 
-    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
     return BVar1;
 }
 
-static BOOL __stdcall INVENTORY_FindGridPositionByOwner3(uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryStrc * pInventory, int * * ppnOutX, int * pnOutY, D2InventoryGridInfoStrc * pGridInfo) {
+static BOOL __stdcall INVENTORY_FindGridPositionByOwner3(uint8_t byItemHeight, uint8_t byItemWidth, D2InventoryStrc * pInventory, int * * ppnOutX, int * pnOutY, D2InventoryGridInfoStrc * pGridInfo) {
     if (!pInventory) {
       return 0;
     }
     if (pInventory->pOwner && pInventory->pOwner->eUnitType == UNIT_PLAYER) {
       uint32_t bFound;
-      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+      bFound = INVENTORY_FindBestGridPosition((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
       return bFound;
     }
 
-    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemHeight, byItemWidth, pGridInfo);
+    BOOL BVar1 = INVENTORY_FindBestGridPositionNonPlayer((int*)ppnOutX, pnOutY, byItemWidth, byItemHeight, pGridInfo);
     return BVar1;
 }
 

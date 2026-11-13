@@ -4475,9 +4475,9 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
     } while (true);
 }
 
-// Server-side unequip/take action for an equipped item by body location (nItemGUID low byte = eD2BodyLoc). Requires an empty cursor and an item at that body slot. Validates the equip action (must be 3 or 4) via INVENTORY_GetEquipActionForBodySlot, then removes the item: swaps primary weapon, clears the body location, handles belt removal, either moves the item to the player's inventory grid (eBodyLoc==0) or flags it ITEMFLAG_REMOVED, unequips its stats, marks it for client update, sets RELOAD if it has sockets, clears ITEMFLAG_DISABLED, refreshes inventory and recomputes equipped item states. Writes status (0/1) to *pdwParam; returns 1 on success, 0 on no-op, halts on consistency errors.
+// Server-side unequip/take action for an equipped item by body location (eBodyLoc, read as a byte). Requires an empty cursor and an item at that body slot. Validates the equip action (must be 3 or 4) via INVENTORY_GetEquipActionForBodySlot, then removes the item: swaps primary weapon, clears the body location, handles belt removal, either puts the item on the cursor (bRemoveItem == 0) or flags it ITEMFLAG_REMOVED (bRemoveItem != 0), unequips its stats, marks it for client update, sets RELOAD if it has sockets, clears ITEMFLAG_DISABLED, refreshes inventory and recomputes equipped item states. Writes status (0/1) to *pdwParam; returns 1 on success, 0 on no-op, halts on consistency errors.
 // @sourcefile .\ITEMS\ItemMode.cpp
-BOOL __fastcall EquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc nItemGUID, int32_t eBodyLoc, uint32_t * pbBadParams) {
+BOOL __fastcall ITEMMODE_TakeItemFromBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc eBodyLoc, int32_t bRemoveItem, uint32_t * pbBadParams) {
     bool bIsDisabled;
     D2UnitStrc* pItemInInv;
     int32_t nEquipActionResult;
@@ -4508,7 +4508,7 @@ BOOL __fastcall EquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc nI
       return 0;
     }
 
-    nBodyLoc = (eD2BodyLocDWORD)nItemGUID;
+    nBodyLoc = (eD2BodyLocDWORD)eBodyLoc;
     pEquippedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc);
     if (!pEquippedItem) {
       *pbBadParams = 0;
@@ -4548,7 +4548,7 @@ BOOL __fastcall EquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc nI
       if (eItemType == ITEMTYPE_Belt) {
         ITEMMODE_RemoveItemFromBelt(pGame, pUnit, nullptr);
       }
-      if (eBodyLoc) {
+      if (bRemoveItem) {
         D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pEquippedItem, ITEMFLAG_REMOVED, 1);
       } else {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, pEquippedItem);
@@ -5834,7 +5834,6 @@ BOOL __fastcall ITEMMODE_ProcessItemBuy(::SGAMEDATA * ppUnit, D2UnitStrc * pUnit
     bool bIsDisabled;
     BOOL nEquipResult;
     D2UnitStrc* pVerifiedItem;
-    eInventoryPage eInvPage;
     uint32_t bIsCharm;
     int32_t nPageResult;
     D2InventoryStrc* pInventory;
@@ -5875,8 +5874,7 @@ BOOL __fastcall ITEMMODE_ProcessItemBuy(::SGAMEDATA * ppUnit, D2UnitStrc * pUnit
       exit(-1);
     } else {
       nPageResult = D2Common::Units::GetInventoryPage(pUnit, '\0', ppUnit->bExpansion);
-      eInvPage = (eInventoryPage)nPageResult;
-      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x1515, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), eInvPage, 0, 0);
+      D2Common::INVENTORY::Inventory::UnusedDebug(".\\ITEMS\\ItemMode.cpp", 0x1515, pInventory, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (eInventoryPage)nPageResult, 0, 0);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
       nEquipResult = D2Common::INVENTORY::Inventory::INVENTORY_GetItemAtBodyLoc(pInventory, pItem, (uint32_t)eBodyLoc);
       if (nEquipResult) {
@@ -6362,7 +6360,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
       case Equipment:
         {
           nBodyLocOrXPos = D2Common::INVENTORY::Inventory::INVENTORY_GetItemXPosition(pPlayer->pInventory, pRuneword);
-          EquipItem(pGame, pPlayer, (eD2BodyLoc)nBodyLocOrXPos, 1, (uint32_t*)&pRuneword);
+          ITEMMODE_TakeItemFromBodyLoc(pGame, pPlayer, (eD2BodyLoc)nBodyLocOrXPos, 1, (uint32_t*)&pRuneword);
           return;
         }
       case Cursor:

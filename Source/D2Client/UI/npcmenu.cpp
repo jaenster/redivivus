@@ -3611,7 +3611,6 @@ eD2NpcUiState geNpcUiState = 0; D2_GLOBAL_GUARD(geNpcUiState, "D2Client::_Intera
 static int PLAYER_CurrentGold = 0; D2_STATIC_GUARD(PLAYER_CurrentGold, "PLAYER_CurrentGold");
 static uint16_t gnNpcMenuRepairCostGold = 0; D2_STATIC_GUARD(gnNpcMenuRepairCostGold, "gnNpcMenuRepairCostGold");
 static int16_t gnNpcMenuTradeActionGold = 0; D2_STATIC_GUARD(gnNpcMenuTradeActionGold, "gnNpcMenuTradeActionGold");
-static uint16_t gnNpcMenuScrollCompleteMode = 0; D2_STATIC_GUARD(gnNpcMenuScrollCompleteMode, "gnNpcMenuScrollCompleteMode");
 // also labelled: g_nNpcTradeMenuState
 static D2NPCSpeechStrc * gpNpcCurrentSpeech = 0; D2_STATIC_GUARD(gpNpcCurrentSpeech, "gpNpcCurrentSpeech");
 static uint32_t gnNpcMenuCainIdentifyGUID = 0; D2_STATIC_GUARD(gnNpcMenuCainIdentifyGUID, "gnNpcMenuCainIdentifyGUID");

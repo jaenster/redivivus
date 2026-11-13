@@ -14,6 +14,7 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/PATH/DynamicPath.h"
 
 // Forward declarations
 struct D2RoomStrc;

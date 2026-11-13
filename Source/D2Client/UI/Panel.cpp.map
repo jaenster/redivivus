@@ -861,7 +861,7 @@
       ]
     },
     {
-      "name": "PANEL_GetPanelLayoutHeight",
+      "name": "PANEL_GetBeltBoxAtPoint",
       "address": "004987e0",
       "lines": [
         {
@@ -871,7 +871,7 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_GetPanelLayoutHeight",
+        "PANEL_GetBeltBoxAtPoint",
         "GetBeltsLine",
         "GetInvRectFromBeltsTxt"
       ],
@@ -893,7 +893,7 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "ClickBelt",
-        "PANEL_GetPanelLayoutHeight",
+        "PANEL_GetBeltBoxAtPoint",
         "INVENTORY_GetHandItem",
         "INVENTORY_GetItemInBeltSlot",
         "GetItemType",
@@ -925,7 +925,7 @@
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
         "CLIENT_HandleBeltMouseDown",
-        "PANEL_GetPanelLayoutHeight",
+        "PANEL_GetBeltBoxAtPoint",
         "INVENTORY_GetHandItem",
         "GetItemType",
         "INVENTORY_GetItemInBeltSlot",
@@ -1422,7 +1422,7 @@
         "GetItemType",
         "UI_DropCursorItemOnGround",
         "NET_D2GS_CLIENT_Send_INT",
-        "PANEL_GetPanelLayoutHeight",
+        "PANEL_GetBeltBoxAtPoint",
         "ClickBeltRight",
         "SMsgBreakHandlerChain"
       ],

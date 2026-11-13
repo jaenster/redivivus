@@ -64,18 +64,6 @@ struct D2DrlgRoomAStarNodeStrc {
 };
 
 #endif // D2_MODULE_D2Common
-#ifndef D2_DEFINED_D2DynamicPathCoordsStrc
-#define D2_DEFINED_D2DynamicPathCoordsStrc
-struct D2DynamicPathCoordsStrc {
-    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
-
-    /* 0x00 */ short nOffsetX;
-    /* 0x02 */ short nPosX;
-    /* 0x04 */ short nOffsetY;
-    /* 0x06 */ short nPosY;
-};
-
-#endif // D2_DEFINED_D2DynamicPathCoordsStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2PathExtractFrameStrc {
     /* 0x000 */ uint32_t aWaypoints[78]; // packed x|y<<16 of each kept node; filled from element 77 downwards, copied out from &aWaypoints[78 - n]

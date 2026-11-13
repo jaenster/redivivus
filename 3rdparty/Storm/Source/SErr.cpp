@@ -293,8 +293,6 @@ int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {
 }
 
 void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_t nInsertMode, int * * ppTarget) {
-    int* piVar1;
-    intptr_t piVar2;
     StormLinkStrc* pEffectiveNode = (StormLinkStrc*)pNode;
     if (!pNode) {
       pEffectiveNode = (StormLinkStrc*)(pList + 1);
@@ -303,7 +301,6 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
     StormLinkStrc* pLink = pEffectiveNode->pPrevLink;
     if (pLink) {
       StormLinkStrc** ppPrevLink;
-      piVar2 = pEffectiveNode->pNext;
       ppPrevLink = (StormLinkStrc**)D2_StormNextLink(pEffectiveNode, -1);
       *ppPrevLink = pLink;
       pEffectiveNode->pPrevLink->pNext = pEffectiveNode->pNext;
@@ -319,18 +316,7 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
         {
           pEffectiveNode->pPrevLink = (StormLinkStrc*)ppTarget;
           pEffectiveNode->pNext = ((StormLinkStrc*)ppTarget)->pNext;
-          piVar1 = *pList;
-          piVar2 = ((StormLinkStrc*)ppTarget)->pNext;
-          if (piVar2 < 0) {
-            *(StormLinkStrc**)~piVar2 = (StormLinkStrc*)pEffectiveNode;
-            ((StormLinkStrc*)ppTarget)->pNext = (intptr_t)pNode;
-            return;
-          }
-          if ((intptr_t)piVar1 < 0) {
-            piVar1 = (int*)((char*)ppTarget - ((StormLinkStrc*)ppTarget)->pPrevLink->pNext);
-          }
-
-          *(StormLinkStrc**)(piVar2 + (char*)piVar1) = (StormLinkStrc*)pEffectiveNode;
+          *(StormLinkStrc**)D2_StormNextLink((StormLinkStrc*)ppTarget, (intptr_t)*pList) = (StormLinkStrc*)pEffectiveNode;
           ((StormLinkStrc*)ppTarget)->pNext = (intptr_t)pNode;
           return;
         }

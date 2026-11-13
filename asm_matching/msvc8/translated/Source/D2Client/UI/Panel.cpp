@@ -121,7 +121,7 @@ uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0047ec40() {
 
 void __stdcall PANEL_SetBottomPanelGlobals1_Unref_004880f0() {
     gnInvMouseX = 0;
-    gpInvCursorItem = 0;
+    gnInvMouseY = 0;
 }
 
 uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0048a690() {
@@ -1428,7 +1428,7 @@ void __stdcall DRAW_UI_BorderRight() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 400, 0x229, -1, DRAW_SOLID, nullptr);
 }
 
-static int32_t __stdcall PANEL_GetPanelLayoutHeight(int32_t nMouseX, int32_t nMouseY) {
+static int32_t __stdcall PANEL_GetBeltBoxAtPoint(int32_t nMouseY, int32_t nMouseX) {
     D2BeltsTxt sBeltsTxt;
     D2Common::DATATBLS::BeltsTbls::GetBeltsLine(gnBeltPanelState, Inv::nScreenMode, &sBeltsTxt);
     int nBoxId = 0;
@@ -1440,7 +1440,7 @@ static int32_t __stdcall PANEL_GetPanelLayoutHeight(int32_t nMouseX, int32_t nMo
     do {
       D2BeltsEntryStrc sInvRect;
       D2Common::DATATBLS::BeltsTbls::GetInvRectFromBeltsTxt(gnBeltPanelState, Inv::nScreenMode, &sInvRect.nLeft, nBoxId);
-      if (nMouseY >= sInvRect.nLeft && nMouseY <= sInvRect.nRight && nMouseX >= sInvRect.nTop && nMouseX <= sInvRect.nBottom) {
+      if (nMouseX >= sInvRect.nLeft && nMouseX <= sInvRect.nRight && nMouseY >= sInvRect.nTop && nMouseY <= sInvRect.nBottom) {
         return nBoxId;
       }
 
@@ -1450,13 +1450,13 @@ static int32_t __stdcall PANEL_GetPanelLayoutHeight(int32_t nMouseX, int32_t nMo
     return -1;
 }
 
-void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t nMouseX) {
+void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
     BOOL BVar1;
     uint8_t nPacketId;
     int32_t nSoundArg1;
     int32_t nSoundArg3;
     uint32_t nBeltSlot;
-    nBeltSlot = PANEL_GetPanelLayoutHeight(nMouseX, nMouseY);
+    nBeltSlot = PANEL_GetBeltBoxAtPoint(nMouseY, nMouseX);
     if (nBeltSlot == -1) {
       return;
     }
@@ -1512,9 +1512,9 @@ void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t 
     Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, 0, 0, nSoundArg3);
 }
 
-static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMouseY, int32_t nMouseX) {
+static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
     int aInvRect[4];
-    uint32_t nBeltSlot = PANEL_GetPanelLayoutHeight(nMouseX, nMouseY);
+    uint32_t nBeltSlot = PANEL_GetBeltBoxAtPoint(nMouseY, nMouseX);
     if ((int)nBeltSlot < 0) {
       return;
     }
@@ -2418,7 +2418,7 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
             }
           }
 
-          bIsDeadOrSlot = PANEL_GetPanelLayoutHeight((uint32_t)wMouseY, (uint32_t)wMouseX);
+          bIsDeadOrSlot = PANEL_GetBeltBoxAtPoint((uint32_t)wMouseY, (uint32_t)wMouseX);
           if ((int)bIsDeadOrSlot < 0) {
             pMsg->bHandled = 0;
             return;

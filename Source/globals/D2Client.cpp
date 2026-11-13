@@ -43,6 +43,7 @@ extern uint8_t RTTI_Type_Descriptor;
 // Initialized scalars
 // =============================================================================
 
+uint16_t gnNpcMenuScrollCompleteMode = 0; D2_GLOBAL_GUARD(gnNpcMenuScrollCompleteMode, "gnNpcMenuScrollCompleteMode");
 
 namespace D2Common::Drlg::Maze {
 

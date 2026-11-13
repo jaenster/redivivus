@@ -24,6 +24,19 @@ struct D2UnitStrc;
 typedef uint16_t eCollisionFlags;
 typedef uint32_t eD2UnitType;
 
+// Data types
+#ifndef D2_DEFINED_D2DynamicPathCoordsStrc
+#define D2_DEFINED_D2DynamicPathCoordsStrc
+struct D2DynamicPathCoordsStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ short nOffsetX;
+    /* 0x02 */ short nPosX;
+    /* 0x04 */ short nOffsetY;
+    /* 0x06 */ short nPosY;
+};
+
+#endif // D2_DEFINED_D2DynamicPathCoordsStrc
 namespace D2Common { namespace PATH { namespace DynamicPath {
 
 // Function declarations

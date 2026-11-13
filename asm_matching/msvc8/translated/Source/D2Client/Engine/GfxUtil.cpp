@@ -147,12 +147,8 @@ void __stdcall InitializeModeTokens() {
 }
 
 static void __stdcall GFXUTIL_SetMissileCelFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pMissile) {
-    if (!pMissile) {
-      return;
-    }
-
-    int nMissileTxtIdx = pMissile->nClassId;
-    D2MissilesTxt* pMissilesTxt = nMissileTxtIdx >= 0 && nMissileTxtIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileTxtIdx : nullptr;
+    int nMissileTxtIdx;
+    D2MissilesTxt* pMissilesTxt = pMissile && (nMissileTxtIdx = pMissile->nClassId) >= 0 && nMissileTxtIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileTxtIdx : nullptr;
     if (!pMissilesTxt) {
       return;
     }

@@ -1476,17 +1476,17 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
       if ((int)(nMinDmg & -16) < 0x640) {
         nDivResult = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg / 100;
       } else {
-        nDivResult = (int)nMinDmg / 100 * nEnhDmgPctWork;
+        *(uint32_t*)(char*)&nDivResult = (int)nMinDmg / 100 * nEnhDmgPctWork;
       }
     } else {
       if ((int)nEnhDmgPctWork > 0x10000) {
         if ((int)(nEnhDmgPctWork & -16) < 0x640) {
           nDivResult = (int64_t)(int)nEnhDmgPctWork * (int64_t)(int)nMinDmg / 100;
         } else {
-          nDivResult = (int)nEnhDmgPctWork / 100 * nMinDmg;
+          *(uint32_t*)(char*)&nDivResult = (int)nEnhDmgPctWork / 100 * nMinDmg;
         }
       } else {
-        nDivResult = (int)(nEnhDmgPctWork * nMinDmg) / 100;
+        *(uint32_t*)(char*)&nDivResult = (int)(nEnhDmgPctWork * nMinDmg) / 100;
       }
     }
     if (nMaxDmg > 0x100000) {
@@ -2322,7 +2322,8 @@ BOOL __fastcall Skills_SrvDoFunc_048_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     uint32_t nChargeCalcVal = SKILLASS_GetChargeUpCalcValue(pUnit, eSkill, nSkillLvl);
-    if ((int)(nChargeCalcVal - 1) <= 0) {
+    nChargeCalcVal -= 1;
+    if ((int)nChargeCalcVal <= 0) {
       return 0;
     }
     if (pUnit) {
@@ -2344,12 +2345,12 @@ BOOL __fastcall Skills_SrvDoFunc_048_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nUnitX = nCursorX;
       sSkillArg.nFlags = 0x20;
-      sSkillArg.nUnitY = nCursorY;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
+      sSkillArg.nUnitY = nCursorY;
       MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       bMissileCreated = 1;
-      D2Common::Skills::SKILL_SetParam1(pSkill, pGame->dwGameFrame + (nChargeCalcVal - 1));
+      D2Common::Skills::SKILL_SetParam1(pSkill, pGame->dwGameFrame + nChargeCalcVal);
     }
 
     bHasTarget = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);

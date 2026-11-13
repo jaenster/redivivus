@@ -1969,7 +1969,7 @@
         "INVENTORY_GetItemByGridOffset",
         "CheckItemMovePermission",
         "PLAYERTRADE_CheckNoEquippedTradeItems",
-        "EquipItem"
+        "ITEMMODE_TakeItemFromBodyLoc"
       ],
       "usedTypes": [
         "D2GSPacketClt0x1C_SwapEquippedItem",

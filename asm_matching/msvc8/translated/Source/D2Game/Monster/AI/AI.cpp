@@ -3127,8 +3127,8 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
       } else {
         bNeedLOS = (int32_t)!((uint8_t)pMonsterAiGeneral->nAiFlags >> 3 & 1);
         if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-          if (pUnit->pUnitData.pUnitDataPlayer) {
-            pMonDataPtr = pUnit->pUnitData.pUnitDataPlayer->dwTradeState;
+          if (pUnit->pUnitData.pUnitDataMonster) {
+            pMonDataPtr = (uint32_t)pUnit->pUnitData.pUnitDataMonster->pVision;
           } else {
             pMonDataPtr = 0;
           }
@@ -4807,11 +4807,7 @@ void __fastcall AI_Diablo_SpawnRingAttack(::SGAMEDATA * pGame, D2UnitStrc * pUni
       pDVar2 = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + 0x15b;
     }
 
-    int32_t nMissileRange = pDVar2->Range - 100;
-    if (nMissileRange < 100) {
-      nMissileRange = 100;
-    }
-
+    int32_t nMissileRange = pDVar2->Range - 100 >= 100 ? pDVar2->Range - 100 : 100;
     MONSTERAI_ConvertMonstersInRadius(pGame, pUnit, 0x23, 0x28, nMissileRange, 0);
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -18678,7 +18674,6 @@ void __fastcall AndarielAi_DecideSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUn
 void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar2;
     BOOL bEngagedInCombat;
-    uint32_t uRandResult;
     uint32_t nDistance = pAiParam->nDistanceToTarget;
     int iVar1 = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -18717,9 +18712,8 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     short int sApproachRange = pMonStats->aip[7][pGame->nDifficulty];
     if (sApproachRange > 0 && (int)nDistance > (int)sApproachRange) {
-      uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
       pTarget = pUnitSelf;
-      if ((int)uRandResult < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+      if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
         ApplyCombatAndMonStats(pUnitSelf, 0, 10, '\0');
         MONSTERAI_CommandWalkToUnitMinStep(pGame, pTarget, pAttacker, (uint8_t)pMonStats->aip[7][pGame->nDifficulty]);
         return;
@@ -18736,15 +18730,13 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
     DVar2 = D2_SeedRoll(pSeed);
     if (!((int)(DVar2 % 100) >= (int)pMonStats->aip[1][pGame->nDifficulty])) {
       if (pMonStats->aSkill[1] >= 0) {
-        uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
-        if ((int)uRandResult < (int)pMonStats->aip[5][pGame->nDifficulty]) {
+        if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[5][pGame->nDifficulty]) {
           SERVER_UNIT_CastSkill(pGame, pUnitSelf, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pAttacker, 0, 0);
           return;
         }
       }
       if (pMonStats->aSkill[2] >= 0) {
-        uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
-        if ((int)uRandResult < (int)pMonStats->aip[6][pGame->nDifficulty]) {
+        if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[6][pGame->nDifficulty]) {
           SERVER_UNIT_CastSkill(pGame, pUnitSelf, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], pAttacker, 0, 0);
           return;
         }

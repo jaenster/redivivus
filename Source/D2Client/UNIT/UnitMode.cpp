@@ -582,13 +582,13 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
 
 // Client-side move-action callback invoked by the unit-mode system. Checks mouse-button flags: right-click (bit 3) issues message 0x18 and sends packet 4; otherwise issues message 0 and sends packet 2. Both paths call UNITMODE_CanInterruptSkill first; if the skill cannot be interrupted the pending-interact state is queued (eQueuedSkillId, eTargetUnitType, nTargetUnitGUID). Clears pending-interact on successful dispatch.
 // The whole 28-byte local area (SUB ESP,0x1c) is ONE message object, the first seven fields of D2ServerMessageHandleStrc. Both click paths zero all seven dwords and then write TWO of them before the call: MOV [EBP-0x1c],EAX = the target unit TYPE (arg at EBP+0xc) and MOV [EBP-0x18],EBX = the target GUID. Typed uint32_t[7] (the seven dwords) rather than D2ServerMessageHandleStrc because that struct is declared 32 bytes and does not fit this frame - its 8th field (nOwnerGUID) belongs to a different caller's frame.
-static void __stdcall UNITMODE_HandleMoveAction(uint32_t dwUnused, int32_t nX, int32_t nY, D2UnitStrc * pUnit) {
+static void __stdcall UNITMODE_HandleMoveAction(uint32_t nActionType, eD2UnitType eTargetType, int32_t nTargetGUID, D2UnitStrc * pUnit) {
     BOOL bHandled;
     uint8_t nPacketId;
     uint32_t sMsg[7];
     uint32_t dwClickFlags;
     dwClickFlags = GAME::Game::GetMouseClickFlags();
-    sMsg[1] = nY;
+    sMsg[1] = nTargetGUID;
     if (dwClickFlags & 8) {
       dwClickFlags = UNITMODE_CanInterruptSkill(pUnit);
       if (!dwClickFlags) {
@@ -596,11 +596,11 @@ static void __stdcall UNITMODE_HandleMoveAction(uint32_t dwUnused, int32_t nX, i
       }
 
       memset(sMsg + 2, 0, 5 * sizeof(sMsg[0]));
-      sMsg[0] = nX;
+      sMsg[0] = eTargetType;
       bHandled = HandleMessage(0x18, pUnit, (D2ServerMessageHandleStrc*)sMsg, 0);
       if (bHandled) {
         nPacketId = 4;
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, nX, nY);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, eTargetType, nTargetGUID);
       }
     } else {
       dwClickFlags = UNITMODE_CanInterruptSkill(pUnit);
@@ -609,11 +609,11 @@ static void __stdcall UNITMODE_HandleMoveAction(uint32_t dwUnused, int32_t nX, i
       }
 
       memset(sMsg + 2, 0, 5 * sizeof(sMsg[0]));
-      sMsg[0] = nX;
+      sMsg[0] = eTargetType;
       bHandled = HandleMessage(0, pUnit, (D2ServerMessageHandleStrc*)sMsg, 0);
       if (bHandled) {
         nPacketId = 2;
-        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, nX, nY);
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(nPacketId, eTargetType, nTargetGUID);
       }
     }
     if (!pUnit) {
@@ -629,27 +629,27 @@ static void __stdcall UNITMODE_HandleMoveAction(uint32_t dwUnused, int32_t nX, i
     queue_pending_interact:
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
       pUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 1;
-      pUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = dwUnused;
-      pUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = nX;
-      pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nY;
+      pUnit->pUnitData.pUnitDataPlayer->eQueuedSkillId = nActionType;
+      pUnit->pUnitData.pUnitDataPlayer->eTargetUnitType = eTargetType;
+      pUnit->pUnitData.pUnitDataPlayer->nTargetUnitGUID = nTargetGUID;
     }
 }
 
-static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType, int32_t nX, int32_t nTargetGUID, D2UnitStrc * pTargetUnit, D2UnitStrc * pPlayerUnit) {
+static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType, eD2UnitType eTargetType, int32_t nTargetGUID, D2UnitStrc * pTargetUnit, D2UnitStrc * pPlayerUnit) {
     BOOL BVar1;
     int nResult = CUnit::IsActive(pTargetUnit);
     if (nResult) {
       int32_t nLooterGUID = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
       BVar1 = GAME::Roster::ROSTER_CheckPlayerCanLoot(nLooterGUID, nTargetGUID);
       if (BVar1) {
-        UNITMODE_ExecuteSkillAction(nActionType, pPlayerUnit, nX, nTargetGUID, 0);
+        UNITMODE_ExecuteSkillAction(nActionType, pPlayerUnit, eTargetType, nTargetGUID, 0);
         return 0;
       }
     } else {
       if (pTargetUnit && pTargetUnit->eUnitFlags >> 1 & 1) {
         BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pPlayerUnit, nActionType);
         if (BVar1) {
-          UNITMODE_HandleMoveAction(nActionType, nX, nTargetGUID, pPlayerUnit);
+          UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pPlayerUnit);
           return 0;
         }
 
@@ -663,7 +663,7 @@ static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType
 
 // Validates a skill-use interaction between a player and a target unit. Checks target liveness and unit flags; for active targets selects the left- or right-skill based on nActionType and verifies the skill's aura flag (flags4 bit 0). If the target is in action range, dispatches UNITMODE_HandleMoveAction; otherwise clears the selection and returns false.
 // @sourcefile .\UNIT\UnitMode.cpp
-static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nActionType, int32_t nX, D2UnitStrc * pPlayerUnit, D2UnitStrc * pTargetUnit, int32_t nTargetGUID) {
+static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nActionType, eD2UnitType eTargetType, D2UnitStrc * pPlayerUnit, D2UnitStrc * pTargetUnit, int32_t nTargetGUID) {
     eD2Skills eSkillId;
     int nIsActive;
     nIsActive = CUnit::IsActive(pTargetUnit);
@@ -718,19 +718,19 @@ static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nA
 
     BOOL BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pPlayerUnit, nActionType);
     if (BVar1) {
-      UNITMODE_HandleMoveAction(nActionType, nX, nTargetGUID, pPlayerUnit);
+      UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pPlayerUnit);
       return 0;
     }
 
     return 1;
 }
 
-static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, D2PathPointStrc pathPoint, int32_t nActionType, D2UnitStrc * pTargetUnit, int32_t nTargetGUID) {
+static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, eD2UnitType eTargetType, int32_t nActionType, D2UnitStrc * pTargetUnit, int32_t nTargetGUID) {
     if (pTargetUnit && pTargetUnit->eUnitFlags >> 1 & 1) {
       BOOL BVar1;
       BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType);
       if (BVar1) {
-        UNITMODE_HandleMoveAction(nActionType, (int32_t)d2_bits_of(pathPoint), nTargetGUID, pUnit);
+        UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pUnit);
         return 0;
       }
 
@@ -784,17 +784,17 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
     switch (eTargetType) {
       case UNIT_PLAYER:
         {
-          fInteractResult = UNITMODE_HandleItemOrObjectInteraction(nActionType, 0, nUnitGUID, pTargetUnit, pUnit);
+          fInteractResult = UNITMODE_HandleItemOrObjectInteraction(nActionType, UNIT_PLAYER, nUnitGUID, pTargetUnit, pUnit);
           break;
         }
       case UNIT_MONSTER:
         {
-          fInteractResult = UNITMODE_HandleSkillTargetInteraction(nActionType, 1, pUnit, pTargetUnit, nUnitGUID);
+          fInteractResult = UNITMODE_HandleSkillTargetInteraction(nActionType, UNIT_MONSTER, pUnit, pTargetUnit, nUnitGUID);
           break;
         }
       case UNIT_OBJECT:
         {
-          fInteractResult = UNITMODE_TryInteractWithObject(pUnit, (D2PathPointStrc)0x2, nActionType, pTargetUnit, nUnitGUID);
+          fInteractResult = UNITMODE_TryInteractWithObject(pUnit, UNIT_OBJECT, nActionType, pTargetUnit, nUnitGUID);
           break;
         }
       default:

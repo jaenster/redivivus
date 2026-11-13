@@ -3583,7 +3583,7 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
             nYMid = nWorldYFixed + nLeftFixedY >> 1;
             fSubtileIndex = __frame0.DStack_4c;
             glBlocks::GLBLOCKS_LoadWallSubtileTexture(&pTile->pSubTiles[nSubtileCount]);
-            fSubtileIndex = (D2GfxLightStrc)(float)nScreenXOffset;
+            fSubtileIndex = d2_bits_as<D2GfxLightStrc>((float)nScreenXOffset);
             fScreenMinX.fValue = 0.0;
             pfVertexSlot = gaGlidePerspectiveVertices + 2;
             do {

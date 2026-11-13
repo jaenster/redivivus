@@ -1203,8 +1203,10 @@ struct D2PathPosStrc {
 #endif // D2_DEFINED_D2PathPosStrc
 #ifndef D2_DEFINED_D2PathTypeArg
 #define D2_DEFINED_D2PathTypeArg
-struct __attribute__((packed)) D2PathTypeArg {
-    /* 0x00 */ D2DynamicPathCoordsStrc pCoords; // Source + destination coords packed
+#pragma pack(push, 1)
+struct D2PathTypeArg {
+    /* 0x00 */ D2PathPointStrc tStartCoord; // Search start point (X, Y); PATH_CalculatePath stores the unit's subtile X | Y << 16 here (0x00649a0a)
+    /* 0x04 */ D2PathPointStrc tTargetCoord; // Search target point (X, Y); PATH_CalculatePath copies nTargetX/nTargetY here as one dword (0x00649a68)
     /* 0x08 */ struct D2RoomStrc * pRoom; // Source room
     /* 0x0C */ struct D2RoomStrc * pRoomNext; // Destination room
     /* 0x10 */ int field_0x10; // Unused 4-byte gap: never read or written by any path consumer (PATH_CalculatePath builder, ResolveTargetPosition, FindAlternate, CanMonsterPathInArea, A* builders). Likely struct-alignment slack. Left unnamed - no evidence for a name.
@@ -1220,6 +1222,7 @@ struct __attribute__((packed)) D2PathTypeArg {
     /* 0x2C */ int nCollisionPattern; // Collision check pattern
     /* 0x30 */ struct D2DynamicPathStrc * pDynamicPath; // Owner dynamic path
 };
+#pragma pack(pop)
 #endif // D2_DEFINED_D2PathTypeArg
 #ifndef D2_DEFINED_D2PetDataStrc
 #define D2_DEFINED_D2PetDataStrc
@@ -1742,10 +1745,10 @@ struct D2QuestDataA3Q3Strc {
     /* 0x05 */ uint8_t field_0x5;
     /* 0x06 */ uint8_t field_0x6;
     /* 0x07 */ uint8_t field_0x7;
-    /* 0x08 */ int32_t nSerpentKillerGUID; // GUID of player who killed the serpent
-    /* 0x0C */ int32_t nSerpentSpawnX; // Serpent spawn X coordinate for QuestUpdate
-    /* 0x10 */ int32_t nSerpentSpawnY; // Serpent spawn Y coordinate (GetSerpentLocation)
-    /* 0x14 */ int32_t nSerpentObjectY; // GetSerpentLocation returns this as Y
+    /* 0x08 */ int32_t nGidbinnX; // X of the Gidbinn object (objects.txt InitFn 25, Objects_InitFn25_Gidbinn); Q20_QuestUpdate passes it as the X of FindRoomBySubtileCoordinates
+    /* 0x0C */ int32_t nGidbinnY; // Y of the Gidbinn object (InitFn 25); the Y of FindRoomBySubtileCoordinates in Q20_QuestUpdate
+    /* 0x10 */ int32_t nAltarX; // X of the Gidbinn altar object (InitFn 39, Objects_InitFn39_GidbinnAltar); Q20_GetSerpentLocation returns it as X
+    /* 0x14 */ int32_t nAltarY; // Y of the Gidbinn altar object (InitFn 39); Q20_GetSerpentLocation returns it as Y
     /* 0x18 */ bool bSerpentLocationValid; // Checked in GetSerpentLocation and QuestUpdate (byte at +0x18)
     /* 0x19 */ uint8_t field_0x19;
     /* 0x1A */ uint8_t field_0x1A;
@@ -1755,7 +1758,7 @@ struct D2QuestDataA3Q3Strc {
     /* 0x21 */ uint8_t field_0x21;
     /* 0x22 */ uint8_t field_0x22;
     /* 0x23 */ uint8_t field_0x23;
-    /* 0x24 */ int32_t nSerpentUnitGUID; // Q20_SpawnUniqueSerpent (005b9930) writes pSerpentUnit->nUnitGUID here after spawning the unique serpent pack (monClass 0x197). Distinct from nSerpentObjectGUID (+0x28) and nSerpentKillerGUID (+8); write site is the only reference
+    /* 0x24 */ int32_t nSerpentUnitGUID; // Q20_SpawnUniqueSerpent (005b9930) writes pSerpentUnit->nUnitGUID here after spawning the unique serpent pack (monClass 0x197). Distinct from nSerpentObjectGUID (+0x28); write site is the only reference
     /* 0x28 */ int32_t nSerpentObjectGUID; // GUID of serpent altar object (ActivateSerpentObject)
     /* 0x2C */ int32_t nQuestStage; // Quest progress stage (2=complete, used in Callback_13)
 };

@@ -649,9 +649,7 @@ void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     } else {
       uint32_t vKey = UI::CmdTbl::CMD_IsCommandBound(0x22, 1);
       if (vKey) {
-        uint16_t wVirtualKey;
-        wVirtualKey = UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1);
-        /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)wVirtualKey);
+        /* int vKey for GetAsyncKeyState */ keyState = GetAsyncKeyState((uint32_t)UI::CmdTbl::CMD_GetKeyForCommand(0x22, 1));
         if (!(keyState & 0x8000)) {
           gRunKeyDown = 0;
         }

@@ -136,6 +136,7 @@ extern D2WaypointStrc * pWaypoint;
 }} // namespace D2Client::Waypoint
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+extern uint16_t gnNpcMenuScrollCompleteMode;
 namespace D2Client {
 extern char s___AV__TSExplicitList_USGAMEDATA__0070f584[48];
 // D2ClientLightPulseStrc (44 bytes, 0x007a742c..0x007a7457). CMD_InitKeyConfigUI (0046ae50) opens with memset(&gRoomLightPulse, 0, 0x2c) then writes bRoomLightPulseActive / nFadeInDuration / nFadeOutDuration / nHoldDuration / nTotalDuration / eLevelId - so the 44-byte clear and the field writes are one object.

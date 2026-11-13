@@ -171,15 +171,16 @@ static BOOL __stdcall QUEST_AttachToUnit(::SGAMEDATA * pGame, D2QuestDataStrc * 
 
 D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal) {
     D2QuestDataStrc* pQuestData;
+    struct D2QuestControlStrc* t2_c0 = pGame->pQuestControl;
     if ((int)eQuestNoInternal < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);
       exit(-1);
     }
-    if (!pGame->pQuestControl) {
+    if (!t2_c0) {
       return nullptr;
     }
 
-    for (pQuestData = pGame->pQuestControl->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
+    for (pQuestData = t2_c0->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
       if (pQuestData->nQuestNoInternal == eQuestNoInternal) {
         return pQuestData;
       }
@@ -746,7 +747,7 @@ static void __stdcall QUEST_RemoveItemFromInventory(D2InventoryStrc * pInventory
       case Equipment:
         {
           dwXPos = D2Common::INVENTORY::Inventory::INVENTORY_GetItemXPosition(pInventory, pItem);
-          ITEMS::ItemMode::EquipItem(pGame, pUnit, (eD2BodyLoc)dwXPos, 1, (uint32_t*)&pInventory);
+          ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pUnit, (eD2BodyLoc)dwXPos, 1, (uint32_t*)&pInventory);
           return;
         }
       case Cursor:

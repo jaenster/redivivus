@@ -1130,7 +1130,7 @@ D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc 
     return pUnit;
 }
 
-BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nY, int32_t nX, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t nFlags) {
+BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     BOOL bAnySpawned = 0;
     if (!pUnit) {
@@ -1146,12 +1146,12 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
         sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
         sMonsterSpawnData.eMode = eMode;
         sMonsterSpawnData.pRoom = pRoom;
-        sMonsterSpawnData.nY = nX;
+        sMonsterSpawnData.nY = nY;
         sMonsterSpawnData.nGUID = 0;
         sMonsterSpawnData.pGame = pGame;
         sMonsterSpawnData.pCoordList = 0;
         sMonsterSpawnData.nFlags = nFlags;
-        sMonsterSpawnData.nX = nY;
+        sMonsterSpawnData.nX = nX;
         pSpawnedMinion = CreateMonster(&sMonsterSpawnData);
         if (pSpawnedMinion) {
           bAnySpawned = 1;

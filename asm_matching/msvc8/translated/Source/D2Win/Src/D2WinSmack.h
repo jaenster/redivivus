@@ -37,8 +37,8 @@ BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 ::D2WinSmack * __fastcall D2WinSmack(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
-// Sets smacker playback bounds. Updates fields 3,4 (current bounds) and 0x52,0x53 (original bounds). Validates form type is FORM_Smack.
-BOOL __stdcall D2WINSMACK_SetBounds(::D2WinSmack * pSmack, int32_t nWidth, int32_t nHeight);
+// Sets the smacker control's position: nPosX/nPosY go to the control header's dwPosX/dwPosY (+0x0C/+0x10) and to the smacker frame's draw position (+0x148/+0x14C). The size is not touched. Validates form type is FORM_Smack.
+BOOL __stdcall D2WINSMACK_SetPosition(::D2WinSmack * pSmack, int32_t nPosX, int32_t nPosY);
 void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack);
 void __stdcall D2GFX_EnableVSync_Unref_00506a80();
 #endif // D2_MODULE_D2Win

@@ -344,8 +344,9 @@ static D2UnitStrc * __stdcall MONSTER_SpawnMonsterGroup(::SGAMEDATA * pGame, D2R
         return nullptr;
       }
 
-      nMinionCount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)(uint8_t)(byMaxGrp - 1) - (uint32_t)(uint8_t)(byMinGrp - 1) + 1);
-      for (nMinionIdx = nMinionCount + (uint8_t)(byMinGrp - 1); nMinionIdx > 0; nMinionIdx--) {
+      byMinGrp -= 1;
+      nMinionCount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)(uint8_t)(byMaxGrp - 1) - (uint32_t)(uint8_t)byMinGrp + 1);
+      for (nMinionIdx = nMinionCount + (uint8_t)byMinGrp; nMinionIdx > 0; nMinionIdx--) {
         Monster::Create::SpawnMonsterAtCoordList(pGame, pCoordList, pUnit, nClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0);
       }
 
@@ -925,12 +926,12 @@ void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoo
               }
               if (nDensityResult) {
                 if (nDensityResult != 1) {
-                  nMinGrp = 1;
-                  nMaxGrp = 1;
+                  *(uint8_t*)(char*)&nMinGrp = 1;
+                  *(uint8_t*)(char*)&nMaxGrp = 1;
                   bIsFallenOrScarab = CheckIfBaseIsFallenOrScarabAndSet(dwClassId);
                   if (!bIsFallenOrScarab) {
-                    nMinGrp = pMonStatLine->MinGrp;
-                    nMaxGrp = pMonStatLine->MaxGrp;
+                    *(uint8_t*)(char*)&nMinGrp = pMonStatLine->MinGrp;
+                    *(uint8_t*)(char*)&nMaxGrp = pMonStatLine->MaxGrp;
                   }
                   if (pMonStatLine->sparsePopulate != '\0') {
                     seedNext = D2_SeedRoll(&pGame->pGameSeed);

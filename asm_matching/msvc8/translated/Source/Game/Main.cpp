@@ -1637,7 +1637,7 @@ static BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService
     *phService = (SC_HANDLE)0x0;
     *phSCManager = (SC_HANDLE)0x0;
     DWORD DVar1 = GetVersion();
-    if ((int)DVar1 < 0) {
+    if (DVar1 & 0x80000000) {
       return 0;
     }
 

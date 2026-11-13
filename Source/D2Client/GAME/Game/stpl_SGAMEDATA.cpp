@@ -439,8 +439,6 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
 template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::LinkNode(::SGAMEDATA * pNode, uint32_t nLinkType, ::SGAMEDATA * pExisting) {
     TSLink<::SGAMEDATA>* pTVar1;
     TSLink<::SGAMEDATA>* pNodeLink;
-    intptr_t pTarget;
-    intptr_t dwNext2;
     if (pNode) {
       pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
     } else {
@@ -467,18 +465,7 @@ template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -5726
         {
           pNodeLink->m_prevlink = pAnchorLink;
           pNodeLink->m_next = pAnchorLink->m_next;
-          pTarget = this->m_linkoffset;
-          dwNext2 = pAnchorLink->m_next;
-          if (dwNext2 < 0) {
-            *(TSLink<::SGAMEDATA>**)~dwNext2 = (TSLink<::SGAMEDATA>*)pNodeLink;
-            pAnchorLink->m_next = (intptr_t)pNode;
-            return;
-          }
-          if (pTarget < 0) {
-            pTarget = (intptr_t)pAnchorLink - pAnchorLink->m_prevlink->m_next;
-          }
-
-          *(TSLink<::SGAMEDATA>**)(dwNext2 + pTarget) = (TSLink<::SGAMEDATA>*)pNodeLink;
+          *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pAnchorLink, this->m_linkoffset) = (TSLink<::SGAMEDATA>*)pNodeLink;
           pAnchorLink->m_next = (intptr_t)pNode;
           return;
         }
@@ -796,8 +783,6 @@ template<> uint32_t __stdcall TSGrowableArray<SGAMEDATA>::RoundToMultiple(uint32
 template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pExisting) {
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* ppNodeLink;
-    intptr_t pExistingReg;
-    intptr_t dwNext2;
     if (pNode) {
       ppNodeLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)((intptr_t)&pNode->nArrayAlloc + this->m_linkoffset);
     } else {
@@ -824,18 +809,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
         {
           ppNodeLink->m_prevlink = ppTargetLink;
           ppNodeLink->m_next = ppTargetLink->m_next;
-          pExistingReg = this->m_linkoffset;
-          dwNext2 = ppTargetLink->m_next;
-          if (dwNext2 < 0) {
-            *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)~dwNext2 = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)ppNodeLink;
-            ppTargetLink->m_next = (intptr_t)pNode;
-            return;
-          }
-          if (pExistingReg < 0) {
-            pExistingReg = (intptr_t)ppTargetLink - ppTargetLink->m_prevlink->m_next;
-          }
-
-          *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)(dwNext2 + pExistingReg) = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)ppNodeLink;
+          *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(ppTargetLink, this->m_linkoffset) = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)ppNodeLink;
           ppTargetLink->m_next = (intptr_t)pNode;
           return;
         }

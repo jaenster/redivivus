@@ -2884,8 +2884,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToInventory(::SGAMEDATA * pG
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t wBodyLoc = pPacket->nBodyLoc;
-    uint32_t nBodyLoc = (uint32_t)wBodyLoc;
+    uint32_t wBodyLoc = pPacket->nBodyLoc;
+    uint32_t nBodyLoc = wBodyLoc;
     if (!(nBodyLoc - 1 <= 9)) {
       return SERVERSTATUS_BAD_DATA;
     }
@@ -2897,7 +2897,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToInventory(::SGAMEDATA * pG
     }
 
     nSize = 0;
-    BOOL nEquipResult = ITEMS::ItemMode::EquipItem(pGame, pUnit, (eD2BodyLoc)wBodyLoc, 0, &nSize);
+    BOOL nEquipResult = ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pUnit, (eD2BodyLoc)wBodyLoc, 0, &nSize);
     if (!(!nEquipResult && nSize)) {
       return SERVERSTATUS_OK;
     }
@@ -4288,10 +4288,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2U
 }
 
 // Checks if target position is reachable by temporarily overriding path settings (collision=0x409, pathType=0xf, maxDist=77), calculating a path, then restoring originals. Returns 1 only if final path point exactly matches destination (fully walkable, no obstacles).
-static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nY) {
+static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nY, uint32_t nX) {
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nY, nX);
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pRoom) {
       return 0;
     }
@@ -4324,16 +4324,16 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0x409);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xf);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, 0x4d);
-    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nY, (int16_t)nX);
+    D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nX, (int16_t)nY);
     uint32_t bCalcOk;
     bCalcOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
     uint32_t bPathReachable;
     bPathReachable = 0;
     if (bCalcOk) {
       bPathReachable = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-      if (nY == bPathReachable) {
+      if (nX == bPathReachable) {
         bPathReachable = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
-        if (nX == bPathReachable) {
+        if (nY == bPathReachable) {
           bPathReachable = 1;
           goto restore_path_settings;
         }

@@ -84,7 +84,7 @@ static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoo
 void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     uintptr_t nClient;
     D2ClientStrc* pRoomEnd = pClient;
-    ::SGAMEDATA* pGameSave = pGame;
+    ::SGAMEDATA* pGameSave;
     uint8_t bActNo = Clients::GetAct(pClient);
     if (pGame->pAct[bActNo]->eLevelIdFirst == LEVEL_None) {
       return;

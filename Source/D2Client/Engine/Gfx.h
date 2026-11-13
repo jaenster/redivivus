@@ -7309,7 +7309,7 @@ void __fastcall GFX_FreeUnitGfxInfoList(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_FreeNonBaseGfxInfoEntries(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
-uint32_t __fastcall DrawItemGfx(struct D2UnitStrc * pUnit, int32_t nHeight, int32_t nWidth);
+uint32_t __fastcall DrawItemGfx(struct D2UnitStrc * pUnit, int32_t nX, int32_t nY);
 void __fastcall D2GFX_DrawSolidRectExBySize(int32_t nStartX, int32_t nStartY, int32_t nSizeX, int32_t nSizeY, int32_t nColor, DRAWMODE nDrawMode);
 void __fastcall GFX_FreeAllModesGfxInfo(struct D2UnitStrc * pUnit);
 void __fastcall GFX_SetAllGfxInfoFlags(struct D2UnitStrc * pUnit, uint8_t byFlag);

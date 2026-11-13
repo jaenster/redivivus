@@ -734,10 +734,10 @@ void __fastcall SUNITNPC_ApplyScrollSkill(D2UnitStrc * pUnit, eD2Skills eSkill, 
     D2Common::Skills::SKILL_SetQuantity(pSkill, nQuantity);
     if (!pUnit) {
       nUnitGUID = -1;
-      *(uint8_t*)(char*)&eUnitType = UNIT_COUNT;
+      eUnitType = UNIT_COUNT;
     } else {
       nUnitGUID = pUnit->nUnitGUID;
-      *(uint8_t*)(char*)&eUnitType = (uint8_t)pUnit->eUnitType;
+      eUnitType = pUnit->eUnitType;
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x22_UpdateItemSkill(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0x40b), (uint8_t)eUnitType, nUnitGUID, eSkill, (uint8_t)nQuantity);
@@ -2933,7 +2933,7 @@ eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, D2Unit
         }
       } else {
         pnMode = (uint32_t*)&nMode;
-        bHasItemFlag = ITEMS::ItemMode::EquipItem(pGame, pPlayer, D2Common::ITEMS::Items::GetBodyLocation(pItemSaved), 1, pnMode);
+        bHasItemFlag = ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pPlayer, D2Common::ITEMS::Items::GetBodyLocation(pItemSaved), 1, pnMode);
         if (!bHasItemFlag) {
           if (!pClonedItem) {
             return SERVERSTATUS_BAD_TARGET;

@@ -22,8 +22,10 @@ struct D2RoomStrc;
 // Data types
 #ifndef D2_DEFINED_D2PathTypeArg
 #define D2_DEFINED_D2PathTypeArg
-struct __attribute__((packed)) D2PathTypeArg {
-    /* 0x00 */ D2DynamicPathCoordsStrc pCoords; // Source + destination coords packed
+#pragma pack(push, 1)
+struct D2PathTypeArg {
+    /* 0x00 */ D2PathPointStrc tStartCoord; // Search start point (X, Y); PATH_CalculatePath stores the unit's subtile X | Y << 16 here (0x00649a0a)
+    /* 0x04 */ D2PathPointStrc tTargetCoord; // Search target point (X, Y); PATH_CalculatePath copies nTargetX/nTargetY here as one dword (0x00649a68)
     /* 0x08 */ struct D2RoomStrc * pRoom; // Source room
     /* 0x0C */ struct D2RoomStrc * pRoomNext; // Destination room
     /* 0x10 */ int field_0x10; // Unused 4-byte gap: never read or written by any path consumer (PATH_CalculatePath builder, ResolveTargetPosition, FindAlternate, CanMonsterPathInArea, A* builders). Likely struct-alignment slack. Left unnamed - no evidence for a name.
@@ -39,5 +41,6 @@ struct __attribute__((packed)) D2PathTypeArg {
     /* 0x2C */ int nCollisionPattern; // Collision check pattern
     /* 0x30 */ struct D2DynamicPathStrc * pDynamicPath; // Owner dynamic path
 };
+#pragma pack(pop)
 
 #endif // D2_DEFINED_D2PathTypeArg

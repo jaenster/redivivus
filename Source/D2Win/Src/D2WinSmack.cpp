@@ -108,17 +108,17 @@ BOOL __stdcall D2WINSMACK_CloseAndDeleteFile(::D2WinSmack * pSmack) {
     return 1;
 }
 
-// Sets smacker playback bounds. Updates fields 3,4 (current bounds) and 0x52,0x53 (original bounds). Validates form type is FORM_Smack.
-BOOL __stdcall D2WINSMACK_SetBounds(::D2WinSmack * pSmack, int32_t nWidth, int32_t nHeight) {
+// Sets the smacker control's position: nPosX/nPosY go to the control header's dwPosX/dwPosY (+0x0C/+0x10) and to the smacker frame's draw position (+0x148/+0x14C). The size is not touched. Validates form type is FORM_Smack.
+BOOL __stdcall D2WINSMACK_SetPosition(::D2WinSmack * pSmack, int32_t nPosX, int32_t nPosY) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
       exit(-1);
     }
 
-    pSmack->sControl.dwPosX = nWidth;
-    pSmack->sControl.dwPosY = nHeight;
-    pSmack->sSmackerCtx.nX = nWidth;
-    pSmack->sSmackerCtx.nY = nHeight;
+    pSmack->sControl.dwPosX = nPosX;
+    pSmack->sControl.dwPosY = nPosY;
+    pSmack->sSmackerCtx.nX = nPosX;
+    pSmack->sSmackerCtx.nY = nPosY;
     return 1;
 }
 

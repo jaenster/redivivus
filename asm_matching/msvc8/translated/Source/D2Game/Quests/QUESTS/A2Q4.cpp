@@ -336,6 +336,7 @@ void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
     if (bQuestState) {
       nGossipLineIndex = 4;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIndex);
     } else {
       if (!pQuestArgs->pPlayer) {
         nPlayerGUID = -1;
@@ -373,9 +374,9 @@ void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nGossipLineIndex >= 0xc) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIndex);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nGossipLineIndex);
+    }
 }
 
 // A2Q4 - SetCannotComplete. Per-player iterator callback (nParam = unit, byte[0x6d]=difficulty). If the Sanctuary is neither Completed(0) nor RewardAwaits(1), sets CannotCompleteQuestInGame(0xe) on that player's record - marks the quest unreachable this game (e.g. portal placed but reward not earned by this player).

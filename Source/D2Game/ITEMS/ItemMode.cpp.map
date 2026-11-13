@@ -2628,7 +2628,7 @@
       ]
     },
     {
-      "name": "EquipItem",
+      "name": "ITEMMODE_TakeItemFromBodyLoc",
       "address": "00560cd0",
       "lines": [
         {
@@ -2638,7 +2638,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "EquipItem",
+        "ITEMMODE_TakeItemFromBodyLoc",
         "INVENTORY_GetHandItem",
         "INVENTORY_GetItemByGridOffset",
         "SERVER_ITEM_SendStackableUsagePackets",
@@ -3450,7 +3450,7 @@
         "Send0x9DRemoveItemFromContainer",
         "ITEMMODE_DeleteItemFromInventory",
         "INVENTORY_GetItemXPosition",
-        "EquipItem",
+        "ITEMMODE_TakeItemFromBodyLoc",
         "ToCursorItem"
       ],
       "usedTypes": [

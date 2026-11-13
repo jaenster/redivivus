@@ -217,6 +217,7 @@ void __fastcall Q11_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     bQuestState = QUEST_HasPlayerParticipated(pQuestData, nPlayerGUID);
     if (bQuestState == 1) {
       nMessageIndexMaybe = 4;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
     } else {
       if (!pQuestData->nStateFlag) {
         return;
@@ -241,9 +242,9 @@ void __fastcall Q11_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       if (nMessageIndexMaybe >= 6) {
         return;
       }
-    }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
+    }
 }
 
 // A2Q3 - Q11_BeginTaintedSun: begins the Tainted-Sun darkening. Sets quest display state 1 (broadcast via
