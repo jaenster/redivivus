@@ -39,7 +39,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
     char* szSrcFile;
     D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
     eD2UnitType eUnitType_00 = (eD2UnitType)eUnitType;
-    D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, eUnitType_00);
+    D2UnitStrc* pTargetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, eUnitType_00);
     if (!pTargetUnit) {
       return;
     }
@@ -471,7 +471,7 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
         nLine = 0x18;
       break;
       case UNITMODEACTION_ITEM_INTERACT:
-        if (nTargetOrX == 4 && (pItemUnit = Player::UNITS_FindClientSideUnit(nTargetGUIDOrY, UNIT_ITEM) , pItemUnit != 0) && pItemUnit->eUnitType == UNIT_ITEM && (bCanProceed = D2Common::Units::CheckFlags(pItemUnit, UNITFLAG_TARGETABLE) , !bCanProceed)) {
+        if (nTargetOrX == 4 && (pItemUnit = CUnit::UNITS_FindClientSideUnit(nTargetGUIDOrY, UNIT_ITEM) , pItemUnit != 0) && pItemUnit->eUnitType == UNIT_ITEM && (bCanProceed = D2Common::Units::CheckFlags(pItemUnit, UNITFLAG_TARGETABLE) , !bCanProceed)) {
           return;
         }
       nLine = 2;
@@ -771,7 +771,7 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
     eTargetType = pPlayerData->eTargetUnitType;
     nUnitGUID = pPlayerData->nTargetUnitGUID;
     D2UnitStrc* pTargetUnit;
-    pTargetUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, eTargetType);
+    pTargetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, eTargetType);
     GAME::SCmd::SCMD_ClearPlayerTradeFields(pUnit);
     if (nActionType == UNITMODEACTION_ITEM_INTERACT && eTargetType == UNIT_WARP) {
       bTargetable = GAME::Game::GAMEDATA_GetGlobalTickCount();

@@ -89,7 +89,7 @@ void __fastcall NPCMENU_MercItemFoundCb(D2UnitStrc * pUnit) {
 
 void __fastcall NPCMENU_HandleMercListPacket(D2GSPacketSrv0x8A * pPacket) {
     D2UnitStrc* pInteractedNpc;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, (eD2UnitType)pPacket->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, (eD2UnitType)pPacket->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -105,7 +105,7 @@ void __fastcall NPCMENU_HandleMercListPacket(D2GSPacketSrv0x8A * pPacket) {
       return;
     }
     if (_Interaction::bInteractingWithNpc) {
-      pInteractedNpc = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pInteractedNpc = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     } else {
       pInteractedNpc = 0;
     }

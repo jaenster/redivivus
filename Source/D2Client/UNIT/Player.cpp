@@ -979,7 +979,7 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     eD2States eCurseState;
     eD2States eState;
     int32_t nLine;
-    D2UnitStrc* pObject = UNITS_FindClientSideUnit(nObjectGUID, UNIT_OBJECT);
+    D2UnitStrc* pObject = CUnit::UNITS_FindClientSideUnit(nObjectGUID, UNIT_OBJECT);
     if (!pObject) {
       return;
     }
@@ -1156,7 +1156,7 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
     }
 
     int32_t nWeaponClass = D2Common::Skills::SKILLS_GetSkillWeaponClass(pUnderMouse->pPlayer, *ppSkill);
-    D2UnitStrc* pUnit = UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
+    D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
     if (!pUnit) {
       return;
     }
@@ -1455,7 +1455,7 @@ static uint32_t INPUT_ValidateSkillAction(D2UnderMouseStrc * pUnderMouse) {
             nWeaponClassOrGUID = pPlayerUnit_lcl->pUnitData.pUnitDataPlayer->nTargetUnitGUID;
           }
 
-          pPlayerUnit_lcl = UNITS_FindClientSideUnit(nWeaponClassOrGUID, eUnitType);
+          pPlayerUnit_lcl = CUnit::UNITS_FindClientSideUnit(nWeaponClassOrGUID, eUnitType);
           if (pPlayerUnit_lcl) {
             GAME::SCmd::SCMD_ClearPlayerTradeFields(pUnderMouse->pPlayer);
           }
@@ -1958,7 +1958,7 @@ static BOOL INPUT_HandleLeftClickWithPet(D2UnderMouseStrc * pUnderMouse) {
     int32_t nUnitGUID = GAME::RosterPets::GetRosterPetGUID(pUnderMouse->pPlayer, 7, 0);
     if (nUnitGUID != -1) {
       D2UnitStrc* pPetUnit;
-      pPetUnit = UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
+      pPetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
       if (pPetUnit) {
         pSeed = GAME::RosterPets::GetSeed(nUnitGUID);
         if (pSeed->nState == 2) {
@@ -2033,7 +2033,7 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
     int32_t nUnitGUID = GAME::RosterPets::GetRosterPetGUID(pUnderMouse->pPlayer, 7, 0);
     if (nUnitGUID != -1) {
       D2UnitStrc* pPetUnit;
-      pPetUnit = UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
+      pPetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_MONSTER);
       if (!pPetUnit) {
         return 0;
       }
@@ -2184,7 +2184,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
       return;
     }
 
-    D2UnitStrc* pUnit = UNITS_FindClientSideUnit(pDeathMsg->dwPlayerGUID, UNIT_PLAYER);
+    D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(pDeathMsg->dwPlayerGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2197,7 +2197,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
     D2UnitStrc* pKillerOrCorpse = GetPlayerUnit_UI();
     if (pUnit == pKillerOrCorpse) {
       int16_t nPosX;
-      pKillerOrCorpse = UNITS_FindClientSideUnit(pDeathMsg->dwCorpseGUID, UNIT_PLAYER);
+      pKillerOrCorpse = CUnit::UNITS_FindClientSideUnit(pDeathMsg->dwCorpseGUID, UNIT_PLAYER);
       if (!pKillerOrCorpse) {
         return;
       }
@@ -2694,11 +2694,6 @@ uint16_t * __fastcall PLAYER_GetMonsterOwnerId(D2UnitStrc * pUnit) {
     }
 
     return nullptr;
-}
-
-D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = CUnit::FindUnit(nUnitGUID, CUnit::ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
-    return pUnit;
 }
 
 static void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t nY) {

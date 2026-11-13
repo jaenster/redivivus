@@ -307,7 +307,7 @@ void __stdcall InitializeiInventoryPages() {
     if (!gbInvNpcScreenCoordsInitialized && g_nCurrentInventoryPage) {
       bIsExpansion = npcmenu::GetInteractedUnitGuid(&nInteractedNpcGUID);
       if (bIsExpansion) {
-        pNpc = UNIT::Player::UNITS_FindClientSideUnit(nInteractedNpcGUID, UNIT_MONSTER);
+        pNpc = UNIT::CUnit::UNITS_FindClientSideUnit(nInteractedNpcGUID, UNIT_MONSTER);
         if (pNpc) {
           bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
           iVar1 = D2Common::Units::GetInventoryPage(pNpc, '\0', bIsExpansion);
@@ -3665,7 +3665,7 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
       return;
     }
 
-    D2UnitStrc* pItem = UNIT::Player::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+    D2UnitStrc* pItem = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
     if (!(pItem && pItem->pInventory)) {
       return;
     }
@@ -3889,7 +3889,7 @@ void __stdcall INV_InitNpcButtonsByClass() {
     }
 
     D2UnitStrc* pNpcUnit;
-    pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+    pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
     if (!pNpcUnit) {
       return;
     }
@@ -4160,7 +4160,7 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     BOOL bHasGuid = npcmenu::GetInteractedUnitGuid(&nNpcGuid);
     if (bHasGuid) {
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
       if (pUnit) {
         DRAW_UI_InventoryContent(pUnit);
       }
@@ -4343,7 +4343,7 @@ void __stdcall INV_HandleShopMouseMove(D2UIMouseMsgStrc * pMsg) {
       BOOL bHasGuid;
       bHasGuid = npcmenu::GetInteractedUnitGuid((int*)&nMsg);
       if (bHasGuid) {
-        pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
+        pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
         if (pUnit) {
           pInventory = pUnit->pInventory;
           if (nMouseX >= pNpcInventoryScreenCoordinates.nLeft && nMouseX <= pNpcInventoryScreenCoordinates.nRight && nMouseY >= pNpcInventoryScreenCoordinates.nTop && nMouseY <= pNpcInventoryScreenCoordinates.nBottom) {
@@ -4576,7 +4576,7 @@ void __stdcall INV_HandleShopReturnAction() {
       return;
     }
 
-    pCursorItem_lcl = UNIT::Player::UNITS_FindClientSideUnit(nInteractedUnitGuid, UNIT_MONSTER);
+    pCursorItem_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(nInteractedUnitGuid, UNIT_MONSTER);
     if (!pCursorItem_lcl) {
       return;
     }
@@ -5333,7 +5333,7 @@ void __stdcall CloseCube() {
       return;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(gnStashNpcGuid, UNIT_OBJECT);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnStashNpcGuid, UNIT_OBJECT);
     if (pNpcUnit) {
       UNIT::UnitMode::INTERACT_AnyObject(2, gnStashNpcGuid);
     }
@@ -6558,7 +6558,7 @@ D2UnitStrc * Unreferenced_0048b640() {
     int32_t iVar2 = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (iVar2 != -1) {
       D2UnitStrc* pDVar1;
-      pDVar1 = UNIT::Player::UNITS_FindClientSideUnit(iVar2, UNIT_MONSTER);
+      pDVar1 = UNIT::CUnit::UNITS_FindClientSideUnit(iVar2, UNIT_MONSTER);
       if (pDVar1) {
         return pDVar1;
       }
@@ -6578,7 +6578,7 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pUnit;
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pUnit) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
@@ -6632,7 +6632,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pPlayerUnit_lcl;
-      pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+      pMercUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pMercUnit) {
         pMsg->bHandled = 0;
         Cursor::UI_HandleCursorMouseUp(pMsg);
@@ -6737,7 +6737,7 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid != -1) {
       D2UnitStrc* pUnit;
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
       if (pUnit) {
         pMsg->bHandled = 0;
         nScreenBottom = ScreenSizeY - 0x31;
@@ -9240,7 +9240,7 @@ void __stdcall DRAW_UI_Inventory() {
     if (g_nCurrentInventoryPage - 1U <= 8 && nMouseX < ui::ScreenSizeX / 2) {
       bIsExpansion = npcmenu::GetInteractedUnitGuid(&nMouseX);
       if (bIsExpansion) {
-        pMonsterUnit = UNIT::Player::UNITS_FindClientSideUnit(nMouseX, UNIT_MONSTER);
+        pMonsterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMouseX, UNIT_MONSTER);
         if (pMonsterUnit) {
           nDrawTextWidth = 1;
           pSlotItem = pMonsterUnit;
@@ -9407,7 +9407,7 @@ BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D
       if (sCtrlKeyState & 0x8000) {
         nItemType = npcmenu::GetInteractedUnitGuid((int*)&nInventory2);
         if (nItemType) {
-          pTargetItem = UNIT::Player::UNITS_FindClientSideUnit(nInventory2, UNIT_MONSTER);
+          pTargetItem = UNIT::CUnit::UNITS_FindClientSideUnit(nInventory2, UNIT_MONSTER);
           if (pTargetItem) {
             nItemType = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemFlag_Monster(pCursorItem_lcl);
             if (nItemType) {
@@ -10669,7 +10669,7 @@ void __stdcall SelectDefaultTabForNPC() {
     }
 
     D2UnitStrc* pNpcUnit;
-    pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+    pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
     bool bPageSelected;
     bPageSelected = false;
     if (pNpcUnit) {
@@ -10835,7 +10835,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
       } else {
         bResult = npcmenu::GetInteractedUnitGuid((int*)&nMsg);
         if (bResult) {
-          pMyUnit = UNIT::Player::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
+          pMyUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
           if (pMyUnit) {
             if (pItemToDescribe) {
               nCallResult = npcmenu::ShopAction(pMyUnit, pItemToDescribe, 0, nMouseX, nMouseY, pMouseMsg->nWParam, 1, 0);
@@ -10946,7 +10946,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          __frame0.uSlot8.pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nMsg3, UNIT_MONSTER);
+          __frame0.uSlot8.pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg3, UNIT_MONSTER);
           if (!__frame0.uSlot8.pNpcUnit) {
             return;
           }
@@ -11063,7 +11063,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
           if ((g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2) && x >= pNpcInventoryGridScreenCoordinates.nPixelLeft && x <= pNpcInventoryGridScreenCoordinates.nRight && y >= pNpcInventoryGridScreenCoordinates.nTop && y <= pNpcInventoryGridScreenCoordinates.nBottom) {
             bHasNpcGuid = npcmenu::GetInteractedUnitGuid((int*)&nMsg);
             if (bHasNpcGuid) {
-              pCursorItem_lcl = UNIT::Player::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
+              pCursorItem_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
               if (pCursorItem_lcl) {
                 ClickItemLeft(pCursorItem_lcl, pCursorItem_lcl->pInventory, x, y, (D2UnitStrc*)pUnderMouse2->nWParam, (D2InventoryLayout*)&pNpcInventoryGridScreenCoordinates, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pCursorItem_lcl >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)CurrentInventoryPage));
               }
@@ -11476,7 +11476,7 @@ void __stdcall DrawMercInventory() {
       return;
     }
 
-    D2UnitStrc* pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+    D2UnitStrc* pMercUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
     if (!pMercUnit) {
       ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
       return;

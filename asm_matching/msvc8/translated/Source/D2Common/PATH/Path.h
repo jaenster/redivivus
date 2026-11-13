@@ -37,8 +37,8 @@ BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUn
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 void __fastcall PATH_CheckPathPointsInRoom(struct D2DynamicPathStrc * pPath);
-// PATH_FindAlternateAroundObstacle - Attempts to find an alternate path around an obstacle using directional triplets (left/right alternatives). Checks primary, secondary, and tertiary directions until a collision-free direction is found. Returns 1 if an alternate path was found.
-BOOL PATH_FindAlternateAroundObstacle(struct D2PathTypeArg * pPathState);
+// PATH_ExtendPathEndpoint - Nudges a path endpoint further in the direction of movement, stepping up to 5 subtiles as long as no collision is encountered. Used to extend paths past obstacles for smoother movement.
+void PATH_ExtendPathEndpoint(struct D2PathTypeArg * pPathData);
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
 void __stdcall DRLGPATH_ClearPathPosition(struct D2DynamicPathStrc * pDynamicPath);
 // Given two 16.16 fixed-point coordinate pairs (from/to), computes a unit direction POINT (pPoint->x/y) and a 0..63 direction index (returned and written to *pnParam). Determines the dominant axis (X vs Y), normalizes the minor/major ratio to a 0..0x7f index, and looks up the vector components and base direction in the gnDrlgPathDirectionX / gaPathCalcDirectionVectorX tables, then applies octant/sign corrections (axis swap, Y-negate, X-negate, +8 rotation) to produce the final 64-direction value. __fastcall. Core direction primitive used by the DRLG path-building routines.
@@ -55,6 +55,6 @@ BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
 struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * param_1);
 uint32_t __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 #endif // D2_MODULE_D2Common
-// 13 internal functions (defined in .cpp)
+// 12 internal functions (defined in .cpp)
 
 }}} // namespace D2Common::PATH::Path

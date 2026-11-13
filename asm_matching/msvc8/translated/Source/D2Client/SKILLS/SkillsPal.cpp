@@ -513,7 +513,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Charge(D2UnitStrc * pUnit, eD2Skills eSkill
       eUnitType = D2Common::Skills::SKILL_GetParam1(pSkill);
       pSavedTarget = D2Common::Skills::SKILL_GetParam2(pSkill);
       if (eUnitType != UNIT_COUNT) {
-        pCurrentTarget = UNIT::Player::UNITS_FindClientSideUnit(pSavedTarget, eUnitType);
+        pCurrentTarget = UNIT::CUnit::UNITS_FindClientSideUnit(pSavedTarget, eUnitType);
       }
       if (nSkillFlags & 1) {
         if (pCurrentTarget) {

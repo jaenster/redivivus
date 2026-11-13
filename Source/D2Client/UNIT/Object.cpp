@@ -988,7 +988,7 @@ static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2Unit
     }
 
     uint32_t nShrineCode = (uint32_t)byShrineCode;
-    D2UnitStrc* pPlayer = Player::UNITS_FindClientSideUnit(*pMessage, UNIT_PLAYER);
+    D2UnitStrc* pPlayer = CUnit::UNITS_FindClientSideUnit(*pMessage, UNIT_PLAYER);
     if (!pPlayer) {
       return;
     }
@@ -1458,7 +1458,7 @@ void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
       exit(-1);
     } else {
       uint8_t byPortalFlags;
-      pUnit = Player::UNITS_FindClientSideUnit(*(int32_t*)(pMessage + 3), UNIT_OBJECT);
+      pUnit = CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pMessage + 3), UNIT_OBJECT);
       if (!pUnit) {
         return;
       }

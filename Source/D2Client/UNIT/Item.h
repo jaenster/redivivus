@@ -176,9 +176,6 @@ namespace D2Client::UNIT {
 void __fastcall ITEM_RemoveItemStatsFromOwner(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t bRecalc, int32_t bUpdateResources);
 BOOL __fastcall Unreferenced_004c10c0(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 int32_t __fastcall ITEM_CheckItemEquipRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-// Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
-// @sourcefile .\UNIT\Item.cpp
-void ITEM_RecalcAllEquippedItems_EBX(struct D2UnitStrc * pUnit);
 // Sets an item unit's animation mode and places it in the world. For mode Run (on-ground targetable), initialises a static path, blocks collision, and adds the unit to pRoom. For mode TownNeutral (dropped item), does the same and also plays the drop sound. Modes Death/Neutral/Walk/TownWalk/GetHit clear the targetable flag. When nParam is non-zero, marks the item identified, allocates a fresh stat list, and creates an inventory struct if the item type supports one.
 void __fastcall ITEM_SetAnimModeAndPlace(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nAnimMode, int32_t bInitItemData);
 void __fastcall ITEM_FreeItemUnit(struct D2UnitStrc * pUnit);
@@ -273,6 +270,6 @@ void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pPacket);
 struct D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket);
 void __fastcall ITEM_HandleServerItemAction(struct D2GSPacketSrv0x7C * pPacket);
 #endif // D2_MODULE_D2Client
-// 19 internal functions (defined in .cpp)
+// 22 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT

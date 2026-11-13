@@ -125,7 +125,6 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(struct D2UnitStrc * pUnit, stru
 void __fastcall PLAYER_ProcessPlayerModeSimulation(struct D2UnitStrc * pUnit);
 uint8_t * __fastcall Unreferenced_004637f0(struct D2UnitStrc * param_1);
 uint16_t * __fastcall PLAYER_GetMonsterOwnerId(struct D2UnitStrc * pUnit);
-struct D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);
 void __fastcall CLIENT_UpdateMonsterAllegiance(struct D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance);
 void __stdcall CLIENT_ClearServerAndClientUnitLists();
 // Iterates all 128 buckets of the server-side unit hash table. For each unit calls CLIENT_UpdateUnitFrame, then looks up the matching entry in the client-side hash table and dispatches CLIENT_DispatchMonsterAiBehavior (monsters) or OBJECT_ExecuteClientFunction (objects). Halts fatally on unit-type mismatch.

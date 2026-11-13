@@ -49,7 +49,7 @@ void __fastcall ConfirmTarget(D2UnitStrc * pUnit) {
         }
 
         D2Common::PATH::DynamicPath::GetTargetTypeAndGUID(pDynamicPath, &eUnitType, &nUnitGUID);
-        pDataTargetUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, eUnitType);
+        pDataTargetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, eUnitType);
         pSetTargetUnit = D2Common::PATH::DynamicPath::GetTargetUnit(pDynamicPath);
         if (pDataTargetUnit == pSetTargetUnit) {
           return;
@@ -208,7 +208,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
 
 uint32_t __fastcall PATH_SetTargetUnitAndCalculate(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetUnitId) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit(nTargetUnitId, eUnitType);
+    D2UnitStrc* pTargetUnit = CUnit::UNITS_FindClientSideUnit(nTargetUnitId, eUnitType);
     D2Common::PATH::DynamicPath::SetTarget(pDynamicPath, pTargetUnit);
     if (!pTargetUnit) {
       return 0;
@@ -275,7 +275,7 @@ void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
       if (bIsServerSide) {
         pPlayerUnit_lcl = CUnit::UNITS_FindServerSideUnit(nUnitGUID, eUnitType);
       } else {
-        pPlayerUnit_lcl = Player::UNITS_FindClientSideUnit(nUnitGUID, eUnitType);
+        pPlayerUnit_lcl = CUnit::UNITS_FindClientSideUnit(nUnitGUID, eUnitType);
       }
       if (pPlayerUnit_lcl) {
         GAME::SCmd::SCMD_ProcessIncomingPacketBuffer(pPlayerUnit_lcl);

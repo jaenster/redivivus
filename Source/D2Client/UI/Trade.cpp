@@ -6,6 +6,7 @@
 #include "Source/D2Client/UI/Dialog.h"
 #include "Source/D2Client/UI/Inv.h"
 #include "Source/D2Client/UI/ui.h"
+#include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
@@ -148,7 +149,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes) {
       UNIT::UnitSnd::UNITSND_PlayPlayerSound(pPlayerUnit_lcl, 0x17);
       return;
       case 10:
-        pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(gnTradeGoldUpdateBuffer, UNIT_PLAYER);
+        pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(gnTradeGoldUpdateBuffer, UNIT_PLAYER);
       if (!pPlayerUnit_lcl) {
         return;
       }

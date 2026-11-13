@@ -164,7 +164,7 @@ void __fastcall AddRosterPetMerc(DWORD nRosterGUID, int32_t nOwnerGUID, int32_t 
 
     sMercInit.nSeed = pMercArg->nSeed;
     sMercInit.wInitSeed = (uint16_t)pMercArg->nInitSeed;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER);
     if (!pUnit) {
       return;
     }
@@ -397,7 +397,7 @@ void __stdcall ROSTER_UpdateHostileColors() {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     for (; pRosterIter; pRosterIter = pRosterIter->pNext) {
       if (pRosterIter->nSkillID == 4) {
-        pRosterUnit = UNIT::Player::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
+        pRosterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
         if (pRosterUnit) {
           bHostile = ROSTER_AreUnitsHostile(pPlayer, pRosterUnit);
           BOOL bNotHostile = !bHostile;
@@ -430,7 +430,7 @@ void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_
       return;
     }
 
-    D2UnitStrc* pRosterUnit = UNIT::Player::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER);
+    D2UnitStrc* pRosterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER);
     if (!pRosterUnit) {
       return;
     }
@@ -573,7 +573,7 @@ void __fastcall ROSTER_UpdateMercHostileColors(int32_t nOwnerGUID) {
     D2RosterPetStrc* pRosterIter;
     for (pRosterIter = pRosterPet; pRosterIter; pRosterIter = pRosterIter->pNext) {
       if (pRosterIter->nOwnerGUID == nOwnerGUID && pRosterIter->nRosterClass - 0x16bU <= 1) {
-        pRosterUnit = UNIT::Player::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
+        pRosterUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pRosterIter->nRosterGUID, UNIT_MONSTER);
         if (pRosterUnit) {
           nPalShift = UNIT::CUnit::GetPalShiftIndex(pRosterUnit);
           bHostile = ROSTER_IsUnitHostileToPlayer(pRosterUnit);

@@ -43,7 +43,6 @@
 #include "Source/D2Client/UI/Waypoint.h"
 #include "Source/D2Client/UI/npcmenu.h"
 #include "Source/D2Client/UNIT/CUnit.h"
-#include "Source/D2Client/UNIT/Item.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Object.h"
 #include "Source/D2Client/UNIT/Player.h"
@@ -3658,7 +3657,7 @@ void __stdcall UI_DrawMercenaryHealthBar() {
     }
 
     D2UnitStrc* pMercUnit;
-    pMercUnit = UNIT::Player::UNITS_FindClientSideUnit(nCoord, UNIT_MONSTER);
+    pMercUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nCoord, UNIT_MONSTER);
     if (!pMercUnit) {
       return;
     }
@@ -10040,7 +10039,7 @@ void __stdcall DRAW_UI_CASH() {
         return;
       }
 
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(UseItem::gnCursorItemUnitId, UNIT_ITEM);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(UseItem::gnCursorItemUnitId, UNIT_ITEM);
       if (!pUnit) {
         return;
       }
@@ -10252,14 +10251,6 @@ void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab) {
     UI_ShowHoradricCubeTransmuteDialog();
 }
 
-static void thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(D2UnitStrc * pUnit) {
-    UNIT::ITEM_RecalcAllEquippedItems_EBX(pUnit);
-}
-
-static void thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(D2UnitStrc * pUnit) {
-    UNIT::ITEM_RecalcAllEquippedItems_EBX(pUnit);
-}
-
 // compiler-generated C++ EH handler; its frame is never registered with the OS
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca05c(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
@@ -10315,7 +10306,5 @@ static void * keep_004535f0 = (0 ? (UI_SetButtonKeyBinding(*(D2UIKeyBindingSetSt
 static void * keep_0049d310 = (0 ? (UI_ReadLineFromShortArray(*(short * *)0, *(int32_t *)0, *(short * * *)0), (void *)0) : (void *)0);
 static void * keep_004a4a00 = (0 ? (UI_IsMouseOverControlConfigTab(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_004a4a80 = (0 ? (UI_IsMouseOverActiveControlConfigButton(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
-static void * keep_004c16c0 = (0 ? (thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
-static void * keep_004c1be0 = (0 ? (thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0(*(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::UI::ui

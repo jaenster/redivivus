@@ -861,7 +861,7 @@ static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
     if (pLightMap->bServerSideUnit != '\0') {
       pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
     } else {
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
     }
     if (!pUnit) {
       return;
@@ -1066,7 +1066,7 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
         if (pLightMap->bServerSideUnit != '\0') {
           pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eUnitType);
         } else {
-          pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
+          pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eUnitType);
         }
         if (pUnit) {
           nPrecisionX = D2Common::Units::GetPrecisionX(pUnit);
@@ -1304,7 +1304,7 @@ void __fastcall ACTCALLBACKFN(D2RoomStrc * pRoom) {
         if (pLightMap->bServerSideUnit != '\0') {
           pUnit = UNIT::CUnit::UNITS_FindServerSideUnit(pLightMap->nUnitGUID, eLightUnitType);
         } else {
-          pUnit = UNIT::Player::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eLightUnitType);
+          pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pLightMap->nUnitGUID, eLightUnitType);
         }
         if (!pUnit) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x591);

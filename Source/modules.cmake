@@ -190,7 +190,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/GAME/Record.cpp  # 00451400, 1 run
     Source/D2Client/Message.cpp  # 00451a90, 1 run
     Source/D2Client/DataTbls/MonsterTbls.cpp  # 00451fb0, 1 run
-    Source/D2Client/UI/ui.cpp  # 00452090, 35 runs
+    Source/D2Client/UI/ui.cpp  # 00452090, 33 runs
     Source/D2Client/UI/stpl_SGAMEDATA.cpp  # 004545a0, 1 run
     Source/D2Client/UI/Draw.cpp  # 00456550, 2 runs
     Source/D2Client/UNIT.cpp  # 00457460, 1 run
@@ -200,8 +200,8 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/Text.cpp  # 0045afe0, 9 runs
     Source/D2Client/GAME/SCmd.cpp  # 0045b090, 3 runs
     Source/D2Client/Archive.cpp  # 0045b960, 4 runs
-    Source/D2Client/UNIT/Player.cpp  # 00460830, 7 runs
-    Source/D2Client/UNIT/CUnit.cpp  # 00463940, 6 runs
+    Source/D2Client/UNIT/Player.cpp  # 00460830, 6 runs
+    Source/D2Client/UNIT/CUnit.cpp  # 00463940, 5 runs
     Source/D2Client/GAME/Select.cpp  # 00466dc0, 2 runs
     Source/D2Client/Cursor.cpp  # 00467df0, 3 runs
     Source/D2Client/UI/Panel.cpp  # 00468f40, 7 runs
@@ -256,7 +256,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/ListBox/ListBoxWrapper.cpp  # 004becc0, 2 runs
     Source/D2Client/UI/UseItem.cpp  # 004bfa70, 2 runs
     Source/D2Client/UI/ShowItems.cpp  # 004c0640, 3 runs
-    Source/D2Client/UNIT/Item.cpp  # 004c0d20, 4 runs
+    Source/D2Client/UNIT/Item.cpp  # 004c0d20, 2 runs
     Source/D2Client/SKILLS/Skills.cpp  # 004c51e0, 1 run
     Source/D2Client/SKILLS/SkillsBar.cpp  # 004c7c90, 1 run
     Source/D2Client/SKILLS/SkillsPal.cpp  # 004c9490, 1 run
@@ -806,8 +806,8 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Txt/Cube.cpp  # 006429d0, 11 runs
     Source/D2Common/Drlg/Transform.cpp  # 00643260, 1 run
     Source/D2Common/Txt/Skills.cpp  # 00643580, 7 runs
-    Source/D2Common/PATH/Path.cpp  # 00647fb0, 2 runs
-    Source/D2Common/PATH/DynamicPath.cpp  # 006483a0, 2 runs
+    Source/D2Common/PATH/Path.cpp  # 00647fb0, 3 runs
+    Source/D2Common/PATH/DynamicPath.cpp  # 00648120, 3 runs
     Source/D2Common/Units/Missile.cpp  # 0064a100, 2 runs
     Source/D2Common/Unit.cpp  # 0064bf60, 1 run
     Source/D2Common/COMPOSIT/Composit.cpp  # 0064efe0, 1 run
@@ -836,9 +836,7 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Drlg/RoomTile.cpp  # 0066d9e0, 1 run
     Source/D2Common/Drlg/Outdoors.cpp  # 0066f380, 4 runs
     Source/D2Common/Drlg/TileSub.cpp  # 0066f990, 3 runs
-    Source/D2Common/Drlg/Maze.cpp  # 00670880, 3 runs
-    Source/D2Common/Drlg/Maze/Act3/Durance.cpp  # 00672f60, 1 run
-    Source/D2Common/Drlg/Maze/Act5/IceCaves.cpp  # 00673530, 1 run
+    Source/D2Common/Drlg/Maze.cpp  # 00670880, 1 run
     Source/D2Common/Drlg/OutPlace.cpp  # 006755c0, 4 runs
     Source/D2Common/Drlg/Path.cpp  # 00678b10, 1 run
     Source/D2Common/Drlg/DrlgVer.cpp  # 0067cdd0, 1 run

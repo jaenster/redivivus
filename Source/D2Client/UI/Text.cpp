@@ -3381,11 +3381,11 @@ uint32_t __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0() {
 D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit() {
     D2UnitStrc* pUnit;
     if (gnTextNpcInteractGuid) {
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
       return pUnit;
     }
     if (gbTextScrollBoxActive) {
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(gpOverHeadUnitGUID, UNIT_OBJECT);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gpOverHeadUnitGUID, UNIT_OBJECT);
       return pUnit;
     }
 
@@ -3844,7 +3844,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
       }
     }
 
-    D2UnitStrc* unit = UNIT::Player::UNITS_FindClientSideUnit(pMessage->id, (eD2UnitType)pMessage->entityType);
+    D2UnitStrc* unit = UNIT::CUnit::UNITS_FindClientSideUnit(pMessage->id, (eD2UnitType)pMessage->entityType);
     memset(szNameBuf, 0, 17 * sizeof(szNameBuf[0]));
     if (unit && unit->eUnitType == UNIT_PLAYER || pMessage->name[0] != '\0') {
       ::IgnoreList* pIgnoreList;
@@ -3981,7 +3981,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
 }
 
 void __fastcall TEXT_ClearUnitHoverText(D2GSPacketSrv0x76 * pPacket) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, (eD2UnitType)pPacket->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, (eD2UnitType)pPacket->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -7128,7 +7128,7 @@ void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
       nVisibleCount = TEXT_UpdateScrollingText(gbTextScrollBoxAnimating, gpTextScrollingBox);
       pNpcUnit = 0;
       if (gnTextNpcInteractGuid) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
       }
 
       bPlayerDead = UNIT::Player::IsPlayerDead();
@@ -7224,7 +7224,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId,
       gnTextNpcGuid = 0;
     } else {
       if (gnTextNpcInteractGuid) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
         if (pNpcUnit && pNpcUnit != pUnit) {
           GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x30, 1, gnTextNpcGuid);
           npcmenu::NPCMENU_ClearHireListAndStopNpcSound(gnTextNpcGuid);
@@ -7387,7 +7387,7 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
     char szMsgBuffer[20];
     if (pPacket->eUnitType == 1) {
       D2HoverTextStrc* pHoverText;
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_MONSTER);
       if (pUnit && pPacket->nMessageCount == 1 && pPacket->aMessages[0].bShow == '\x03') {
         if (pUnit->pHoverText) {
           D2Common::Chat::Free(nullptr, pUnit->pHoverText);
@@ -7408,7 +7408,7 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
       return;
     }
     if (pPacket->eUnitType == 2) {
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_OBJECT);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_OBJECT);
       if (pPacket->aMessages[0].bShow == '\x03') {
         TEXT_ShowStaticTextPopup(pPacket->aMessages[0].nMessage);
         return;
@@ -7472,7 +7472,7 @@ void __stdcall INPUT_TextClickHandler(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pSelectedUnit = GAME::Select::GetSelectedUnit();
     if (pSelectedUnit) {
       if (gnTextNpcInteractGuid) {
-        pSelectedUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
+        pSelectedUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
         pNpcUnit = GAME::Select::GetSelectedUnit();
         if (pSelectedUnit == pNpcUnit) {
           return;
@@ -7481,12 +7481,12 @@ void __stdcall INPUT_TextClickHandler(D2UIMouseMsgStrc * pMsg) {
     } else {
       pSelectedUnit = GAME::Select::GetSelectedUnit();
       if (!pSelectedUnit && gbTextNpcMenuSelection != '\0') {
-        pSelectedUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcMenuIndex, UNIT_MONSTER);
+        pSelectedUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcMenuIndex, UNIT_MONSTER);
         if (!pSelectedUnit) {
           return;
         }
 
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnTextNpcGuid, UNIT_MONSTER);
         if (pSelectedUnit != pNpcUnit) {
           return;
         }

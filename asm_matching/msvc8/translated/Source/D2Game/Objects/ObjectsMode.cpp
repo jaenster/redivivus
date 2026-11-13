@@ -2504,7 +2504,6 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
 
 ::SGAMEDATA * __fastcall Interact(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nObjectType, DWORD nGid) {
     BOOL bInRange;
-    ::SGAMEDATA* pResultFlags = pGame;
     D2UnitStrc* pObject = UNIT::SUnit::FindUnitFromTable(pGame, nObjectType & 0xffff, nGid);
     if (!pObject) {
       return nullptr;
@@ -2526,7 +2525,7 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
       }
     }
 
-    pResultFlags = (::SGAMEDATA*)0x1;
+    ::SGAMEDATA* pResultFlags = (::SGAMEDATA*)0x1;
     InteractWithObject(pGame, pUnit, nObjectType, nGid, (int*)&pResultFlags);
     return pResultFlags;
 }

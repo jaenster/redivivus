@@ -61,6 +61,7 @@
 #include "Source/D2Client/D2GameViewStrc.h"
 #include "Source/D2Game/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/GAME/Select.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
@@ -939,12 +940,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                     int tt = *(const int*)(pWT + (size_t)k * 0x30 + 0x1C);
                     if (tt >= 0 && tt < 24) aT[tt]++;
                 }
-            D2Wall2DrawContextStrc ctx;
-            ctx.pGameView = pGV; ctx.pRoom = pR; ctx.nTickCount = 0;
-            ctx.rcCull.left = L; ctx.rcCull.top = T; ctx.rcCull.right = R; ctx.rcCull.bottom = B;
             int mm[4] = { 0, 0, 0, 0 };
-            D2Common::DUNGEON::Dungeon::DRLGROOM_GetMinimapRect((uint32_t)(uintptr_t)&ctx,
-                                                                pR, mm);
+            D2Common::DUNGEON::Dungeon::DRLGROOM_GetMinimapRect(pR, mm);
             if (mm[0] <= R && mm[1] <= B + 400 && L - 200 <= mm[2] && T <= mm[3]) {
                 nPass++; nTilesPass += nW;
             }
@@ -2666,7 +2663,7 @@ extern "C" void D2CONTROL_Pump(void) {
         int u = wsprintfA(g_shopList, "{\"npc\":%d,\"items\":[",
                           (int)D2Client::_Interaction::nCurrentInteractedNpcGUID);
         int n = 0;
-        D2UnitStrc* pNpc = D2Client::UNIT::Player::UNITS_FindClientSideUnit(
+        D2UnitStrc* pNpc = D2Client::UNIT::CUnit::UNITS_FindClientSideUnit(
             D2Client::_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         D2InventoryStrc* pInv = pNpc ? pNpc->pInventory : nullptr;
         if (pInv) {

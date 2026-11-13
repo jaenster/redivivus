@@ -43,8 +43,6 @@ struct D2RoomExStrc * __fastcall DRLGMAZE_FindLeftMostRoom(struct D2DrlgLevelStr
 struct D2RoomExStrc * __fastcall DRLGMAZE_FindRightMostRoom(struct D2DrlgLevelStrc * pLevel);
 // Finds the bottom-most room in the level by iterating RoomEx list and comparing Y coordinates.
 struct D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(struct D2DrlgLevelStrc * pLevel);
-// Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
-uint32_t * __stdcall ReplaceRoom(struct D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, struct D2DrlgLevelStrc * pLevel, uint32_t * pRoll);
 void __fastcall PickSummonerLocation(struct D2DrlgLevelStrc * pLevel);
 // DRLG maze generation: for special-room levels (selected by nLevelType, mapping to a base preset-file offset), randomly marks a fraction (~roomCount/5, min 2) of the level's RoomEx entries with a chosen preset variant. Uses the level's LCG seed to Fisher-Yates shuffle a 15-entry index table, then walks RoomEx rooms matching a target file index and rewrites their room-data fields (sets bit 2, replaces the file id, sets field[1]=-1). Skips eD2LevelId 8 (Den of Evil), hence the name. Mutates pLevel->sSeed as it consumes randoms.
 void __fastcall ForAllButDenOfEvil(struct D2DrlgLevelStrc * pLevel);
@@ -53,6 +51,6 @@ void __fastcall DRLGMAZE_InitializeLevel(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLGMAZE_GenerateLevel(struct D2DrlgLevelStrc * pLevel);
 void __fastcall DRLGMAZE_ResetMazeRecord(struct D2DrlgLevelStrc * pLevel, BOOL bKeepRecord);
 #endif // D2_MODULE_D2Common
-// 28 internal functions (defined in .cpp)
+// 31 internal functions (defined in .cpp)
 
 }}} // namespace D2Common::Drlg::Maze

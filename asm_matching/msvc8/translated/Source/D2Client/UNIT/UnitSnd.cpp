@@ -4062,7 +4062,7 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
     int32_t nDelay;
     
     D2UnitStrc* pMercUnit;
-    pMercUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
+    pMercUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
     if (!pMercUnit) {
       return;
     }

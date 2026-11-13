@@ -1112,7 +1112,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
     D2RoomStrc* pRoom_00 = pRoom;
     D2GameViewStrc* pGameView = pDrawContext->pGameView;
     D2Wall2DrawListStrc* pAllocBase = &pGameView->sWall2;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetMinimapRect((uint32_t)pDrawContext, pRoom, (int32_t*)&nMinimapLeft.left);
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetMinimapRect(pRoom, (int32_t*)&nMinimapLeft.left);
     if (nMinimapLeft.left <= pDVar1->rcCull.right && nMinimapLeft.top <= pDVar1->rcCull.bottom + 400 && nMinimapLeft.right >= pDVar1->rcCull.left - 200 && nMinimapLeft.bottom >= pDVar1->rcCull.top) {
       D2DrlgTileDataStrc* pTileData;
       pTileData = D2Common::DUNGEON::Dungeon::DRLGROOM_GetWallTilesFromRoom(pRoom_00, (int*)&nTileCount);

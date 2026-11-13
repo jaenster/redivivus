@@ -1349,26 +1349,6 @@
       ]
     },
     {
-      "name": "UNITS_FindClientSideUnit",
-      "address": "00463990",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00463990"
-        }
-      ],
-      "namespace": "D2Client::UNIT::Player",
-      "calledFunctions": [
-        "UNITS_FindClientSideUnit",
-        "FindUnit"
-      ],
-      "usedTypes": [
-        "D2UnitStrc",
-        "eD2UnitType",
-        "int32_t"
-      ]
-    },
-    {
       "name": "PLAYER_PlaceUnitInRoom",
       "address": "00463bc0",
       "lines": [

@@ -428,7 +428,7 @@ void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallba
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
-int32_t * __stdcall DRLGROOM_GetMinimapRect(uint32_t nLine, D2RoomStrc * pRoom, int32_t * pRect) {
+int32_t * __stdcall DRLGROOM_GetMinimapRect(D2RoomStrc * pRoom, int32_t * pRect) {
     int* pRect2;
     int32_t* pX = pRect;
     D2RoomStrc* pTopLeft = pRoom;

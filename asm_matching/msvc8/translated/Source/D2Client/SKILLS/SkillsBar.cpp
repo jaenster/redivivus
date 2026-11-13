@@ -593,7 +593,7 @@ static void __stdcall CLIENT_UpdateSkillMissilePosition(D2SkillStrc * pSkill, in
 
     eD2UnitType eTargetUnitType = D2Common::Skills::SKILL_GetParam3(pSkill);
     int32_t nTargetUnitId = D2Common::Skills::SKILL_GetParam4(pSkill);
-    D2UnitStrc* pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(nTargetUnitId, eTargetUnitType);
+    D2UnitStrc* pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nTargetUnitId, eTargetUnitType);
     if (!pTargetUnit) {
       return;
     }
@@ -988,7 +988,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, 
 
       eUnitType = D2Common::Skills::SKILL_GetParam3(pSkill);
       nDestX = D2Common::Skills::SKILL_GetParam4(pSkill);
-      if ((eUnitType == UNIT_COUNT || (pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(nDestX, eUnitType) , !pTargetUnit)) && (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, -1, nullptr) , !pTargetUnit)) {
+      if ((eUnitType == UNIT_COUNT || (pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nDestX, eUnitType) , !pTargetUnit)) && (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, 3, 0, -1, nullptr) , !pTargetUnit)) {
         pUnit->nFrameCount = 0x400;
       } else {
         D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);

@@ -2755,7 +2755,7 @@ int32_t __fastcall MISSILE_CltHitFn26_FistOfHeavensDelay(D2UnitStrc * pUnit, D2U
 
     eD2UnitType eTargetUnitType = D2Common::Units::Missile::GetTargetX(pUnit);
     int32_t nTargetGUID = D2Common::Units::Missile::GetTargetY(pUnit);
-    D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
+    D2UnitStrc* pTargetUnit = CUnit::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
     if (!pTargetUnit) {
       return 0;
     }
@@ -3985,7 +3985,7 @@ void __thiscall MISSILE_CreateTowardObject(int32_t nObjectId, D2UnitStrc * pUnit
     int nUnitY;
     int nObjectY;
     D2SkillArgStrc sSkillArg;
-    D2UnitStrc* pTargetObject = Player::UNITS_FindClientSideUnit(nObjectId, UNIT_OBJECT);
+    D2UnitStrc* pTargetObject = CUnit::UNITS_FindClientSideUnit(nObjectId, UNIT_OBJECT);
     if (!pTargetObject) {
       return;
     }
@@ -6804,7 +6804,7 @@ void __fastcall MISSILE_CltDoFn24_CairnStones(D2UnitStrc * pUnit) {
                 bFrameAligned = !((int)nCurrentFrame % 8);
                 if (bFrameAligned) {
                   nMissileLevel = D2Common::Units::Missile::GetTargetX(pUnit);
-                  if (!nMissileLevel || (pSubMissile = Player::UNITS_FindClientSideUnit(nMissileLevel, UNIT_OBJECT) , !pSubMissile)) {
+                  if (!nMissileLevel || (pSubMissile = CUnit::UNITS_FindClientSideUnit(nMissileLevel, UNIT_OBJECT) , !pSubMissile)) {
                     D2Common::Units::Missile::SetTargetX(pUnit, pTrailMissile->nUnitGUID);
                   } else {
                     memset(&sSkillArg, 0, 0x5c);
@@ -7948,7 +7948,7 @@ void __fastcall MISSILE_CltDoFn39_HfFragment(D2UnitStrc * pUnit) {
 void __fastcall MISSILE_CltDoFn38_HfControl(D2UnitStrc * pUnit) {
     int32_t nUnitGUID = D2Common::Units::Missile::GetTargetX(pUnit);
     int32_t nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-    D2UnitStrc* pObject = Player::UNITS_FindClientSideUnit(nUnitGUID, UNIT_OBJECT);
+    D2UnitStrc* pObject = CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_OBJECT);
     if (!pObject) {
       MISSILE_CltDoFn01_BasicMissile(pUnit);
       return;
@@ -8407,7 +8407,7 @@ void __fastcall MISSILE_CltDoFn33_TaintedSunControl(D2UnitStrc * pUnit) {
     attach_horadric_light:
     if (nCurrentFrame <= 1) {
       nLightRadius = D2Common::Units::Missile::GetTargetY(pUnit);
-      pHoradricObj = Player::UNITS_FindClientSideUnit(nLightRadius, UNIT_OBJECT);
+      pHoradricObj = CUnit::UNITS_FindClientSideUnit(nLightRadius, UNIT_OBJECT);
       if (pHoradricObj) {
         Engine::Gfx::GFX_AddOverlayToUnit(pHoradricObj, OVERLAY_horadric_light, 3, 0, 0, 0, 0, 0);
         if (!pHoradricObj->uSideData.pClientSide.pLight) {

@@ -36,7 +36,7 @@ namespace D2Client::UNIT::CUnit {
 void __fastcall IsAttackable(struct D2UnitStrc * pUnit);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, struct D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex);
+struct D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);
 struct D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);
 struct D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(struct D2UnitStrc * pUnit);
 // Thunk callback for CUNIT_IterateHashTableWithCallback. Receives unit pointer in ECX and forwards to STATLIST_ClearChangedStatFlags. Called at end of CLIENT_UpdateUnitGfxState to clear changed-stat dirty flags on all client-side units (players, missiles, server units).
@@ -120,6 +120,6 @@ uint32_t __fastcall HitTestScreen(struct D2UnitStrc * pUnit, int32_t nClickX, in
 // Removes all items from pUnit's inventory: for each item, strips its stats from the owner via ITEM_RemoveItemStatsFromOwner, then removes it from the server-side hash table. If bCheckInventory!=0, skips items that are genuinely still in the inventory. Halts on type mismatch or broken inventory linkage.
 void __fastcall CleanupInventory(struct D2UnitStrc * pUnit, int32_t bCheckInventory);
 #endif // D2_MODULE_D2Client
-// 17 internal functions (defined in .cpp)
+// 18 internal functions (defined in .cpp)
 
 } // namespace D2Client::UNIT::CUnit

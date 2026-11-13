@@ -4419,42 +4419,6 @@
       ]
     },
     {
-      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
-      "address": "004c16c0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004c16c0"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
-        "ITEM_RecalcAllEquippedItems_EBX"
-      ],
-      "usedTypes": [
-        "D2UnitStrc"
-      ]
-    },
-    {
-      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
-      "address": "004c1be0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004c1be0"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
-        "ITEM_RecalcAllEquippedItems_EBX"
-      ],
-      "usedTypes": [
-        "D2UnitStrc"
-      ]
-    },
-    {
       "name": "__GSHandlerCheck_EH_6ca05c",
       "address": "006ca05c",
       "lines": [

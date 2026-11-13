@@ -7,7 +7,6 @@
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/UNIT/Missile.h"
 #include "Source/D2Client/UNIT/Monster.h"
-#include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitMode.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
@@ -1599,7 +1598,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills e
 
     eD2UnitType eUnitType = D2Common::Skills::SKILL_GetParam3(pSkill);
     int32_t nTargetGUID = D2Common::Skills::SKILL_GetParam2(pSkill);
-    D2UnitStrc* pTarget = UNIT::Player::UNITS_FindClientSideUnit(nTargetGUID, eUnitType);
+    D2UnitStrc* pTarget = UNIT::CUnit::UNITS_FindClientSideUnit(nTargetGUID, eUnitType);
     if (!pTarget) {
       D2Common::Skills::SKILL_SetParam1(pSkill, 0);
     } else {

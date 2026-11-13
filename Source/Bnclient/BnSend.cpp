@@ -1145,10 +1145,9 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
     static D2DnsThreadParamStrc lpParameter_00881be8 = {}; D2_STATIC_GUARD(lpParameter_00881be8, "Bnclient::BnSend::GetDnsRecordSync::lpParameter_00881be8");
 
     /* DWORD dwMilliseconds for Sleep */ g_nBNetConnectionState = 1;
-    char** dwThreadId = ppszDnsOutput;
     Sleep(10);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ *(uint8_t*)ppszDnsOutput = 0;
-    /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ dwThreadId = 0;
+    char** dwThreadId = 0;
     lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
     lpParameter_00881be8.pszHost = nDnsThreadParam2;
     HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, (LPDWORD)&dwThreadId);

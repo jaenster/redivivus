@@ -54,7 +54,7 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client { namespace UNIT { namespace CUnit {
 
-D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTable, eD2UnitType eUnitType, int32_t nListIndex) {
+static D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, int32_t nListIndex, eD2UnitType eUnitType, D2UnitStrc * * ppUnitHashTable) {
     D2UnitStrc* pCurUnit = ppUnitHashTable[nListIndex];
     while (true) {
       if (!pCurUnit) {
@@ -75,8 +75,13 @@ D2UnitStrc * __stdcall FindUnit(int32_t nUnitGUID, D2UnitStrc * * ppUnitHashTabl
     exit(-1);
 }
 
+D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
+    D2UnitStrc* pUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
+    return pUnit;
+}
+
 D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
-    D2UnitStrc* pUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+    D2UnitStrc* pUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ClientSideUnitHashTables[eUnitType]);
     return pUnit;
 }
 
@@ -93,11 +98,11 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eOwnerType;
       nUnitGUID = pUnit->nOwnerGUID;
       if (eUnitType == UNIT_MISSILE) {
-        pOwnerUnit = FindUnit(nUnitGUID, ClientSideUnitHashTables[3], UNIT_MISSILE, nUnitGUID & 0x7f);
+        pOwnerUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, UNIT_MISSILE, ClientSideUnitHashTables[3]);
         return pOwnerUnit;
       }
 
-      pOwnerUnit = FindUnit(nUnitGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nUnitGUID & 0x7f);
+      pOwnerUnit = FindUnit(nUnitGUID, nUnitGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
       return pOwnerUnit;
     }
 
@@ -111,9 +116,9 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
     D2UnitStrc* pCurUnit;
     D2UnitStrc* pNextUnit;
     if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
         if (pPrevUnit) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
           exit(-1);
@@ -123,9 +128,9 @@ static uint32_t InsertIntoHashTable(D2UnitStrc * pUnit) {
       }
     } else {
       D2UnitStrc* (*papDVar1)[128];
-      pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+      pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ClientSideUnitHashTables[pUnit->eUnitType]);
       if (!pPrevUnit) {
-        pPrevUnit = FindUnit(pUnit->nUnitGUID, ClientSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+        pPrevUnit = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ClientSideUnitHashTables[pUnit->eUnitType]);
         if (!pPrevUnit) {
           insert_sorted:
           UnitSnd::MuteOrUnmuteUnitSounds(pUnit, 1);
@@ -475,7 +480,7 @@ BOOL __fastcall CUNIT_IsPlayerOrMonster(D2UnitStrc * pUnit) {
 }
 
 void __fastcall SetTargetByTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetGUID) {
-    D2UnitStrc* pTargetUnit = FindUnit(nTargetGUID, ServerSideUnitHashTables[eUnitType], eUnitType, nTargetGUID & 0x7f);
+    D2UnitStrc* pTargetUnit = FindUnit(nTargetGUID, nTargetGUID & 0x7f, eUnitType, ServerSideUnitHashTables[eUnitType]);
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
 }
 
@@ -2007,7 +2012,7 @@ static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
       return pUnit;
     }
 
-    D2UnitStrc* pExisting = FindUnit(pUnit->nUnitGUID, ServerSideUnitHashTables[pUnit->eUnitType], pUnit->eUnitType, pUnit->nUnitGUID & 0x7f);
+    D2UnitStrc* pExisting = FindUnit(pUnit->nUnitGUID, pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, ServerSideUnitHashTables[pUnit->eUnitType]);
     if (pExisting == pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c6);
       exit(-1);
@@ -2215,7 +2220,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     uint32_t nPalShiftIdx = pCreateData->nUnitGUID;
     uint32_t nDifficulty = GAME::RosterPets::GetRosterPetGUID(pPlayerUnit, 7, 1);
     if (nPalShiftIdx == nDifficulty) {
-      pUnit = FindUnit(nPalShiftIdx, ServerSideUnitHashTables[1], UNIT_MONSTER, nPalShiftIdx & 0x7f);
+      pUnit = FindUnit(nPalShiftIdx, nPalShiftIdx & 0x7f, UNIT_MONSTER, ServerSideUnitHashTables[1]);
       if (pUnit) {
         Engine::Gfx::FreeGfxInfo(pUnit);
         GAME::Wall2::WALL2_InitUnitGfx(pUnit);

@@ -296,6 +296,128 @@ static uint8_t DIFFDIRECTIONS[256] = {
 
 namespace D2Common::PATH::DynamicPath {
 
+// PATH_FindAlternateAroundObstacle - Attempts to find an alternate path around an obstacle using directional triplets (left/right alternatives). Checks primary, secondary, and tertiary directions until a collision-free direction is found. Returns 1 if an alternate path was found.
+static BOOL PATH_FindAlternateAroundObstacle(D2PathTypeArg * pPathState) {
+    // Static local variables (originally global data)
+    static int gnObstacleAvoidanceXOffsets[16] = {
+    0x1,
+    0x0,
+    0x1,
+    0x1,
+    0x0,
+    0x1,
+    -0x1,
+    0x1,
+    -0x1,
+    0x0,
+    -0x1,
+    -0x1,
+    0x0,
+    -0x1,
+    0x1,
+    -0x1
+}; D2_STATIC_GUARD(gnObstacleAvoidanceXOffsets, "D2Common::PATH::DynamicPath::PATH_FindAlternateAroundObstacle::gnObstacleAvoidanceXOffsets");
+
+    uint16_t nAltX;
+    int32_t iVar2;
+    uint16_t nAltY;
+    uint32_t nDirTriplet[3];
+    int32_t anDirections[3];
+    uint32_t nPackedCurXY;
+    uint32_t nCollType;
+    uint32_t nCollFlags;
+    eD2UnitType nPathMode;
+    uint32_t nTargetY;
+    uint32_t nTargetX;
+    int32_t nLine;
+    if (pPathState->pDynamicPath->nFlags & 0x40000U) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 199);
+      exit(-1);
+    }
+
+    uint16_t nStartY;
+    nStartY = pPathState->tStartCoord.nY;
+    uint16_t nStartX;
+    nStartX = pPathState->tStartCoord.nX;
+    D2UnitStrc* pDVar1;
+    pDVar1 = pPathState->pDynamicPath->pOwner;
+    uint16_t nCurX;
+    nCurX = pPathState->tTargetCoord.nX;
+    D2RoomStrc* pRoom;
+    pRoom = pPathState->pRoom;
+    eD2CollisionShapeType nType;
+    nType = pPathState->nUnitWidth;
+    nLine = pPathState->nCollisionPattern;
+    uint16_t nCurY;
+    nCurY = pPathState->tTargetCoord.nY;
+    if (!pDVar1) {
+      nPathMode = UNIT_COUNT;
+    } else {
+      nPathMode = pDVar1->eUnitType;
+    }
+
+    Drlg::Path::DRLGPATH_GetDirectionTripletPacked((uint32_t*)anDirections, (uint32_t)d2_bits_of(pPathState->tTargetCoord), (uint32_t)d2_bits_of(pPathState->tStartCoord));
+    uint16_t nSecAltX;
+    nSecAltX = nCurX;
+    uint16_t nSecAltY;
+    nSecAltY = nCurY;
+    uint16_t nTerAltX;
+    nTerAltX = nCurX;
+    uint16_t nTerAltY;
+    nTerAltY = nCurY;
+    while (true) {
+      if (nStartX == nCurX && nStartY == nCurY) {
+        return 0;
+      }
+
+      nCurY += (short int)gnObstacleAvoidanceXOffsets[anDirections[0] * 2 + 1];
+      nCurX += (short int)gnObstacleAvoidanceXOffsets[anDirections[0] * 2];
+      nPackedCurXY = (uint32_t)((uint32_t)(uint16_t)nCurY << 16 | (uint32_t)(uint16_t)nCurX);
+      iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)nCurX, (uint32_t)nCurY, nType, nLine);
+      if (!iVar2) {
+        pPathState->tTargetCoord.nX = nCurX;
+        pPathState->tTargetCoord.nY = nCurY;
+        nAltY = nCurY;
+        nAltX = nCurX;
+        goto joined_r0x006482ad;
+      }
+
+      nSecAltX += (short int)gnObstacleAvoidanceXOffsets[anDirections[1] * 2];
+      nSecAltY += (short int)gnObstacleAvoidanceXOffsets[anDirections[1] * 2 + 1];
+      iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)nSecAltX, (uint32_t)nSecAltY, nType, nLine);
+      nAltY = nSecAltY;
+      nAltX = nSecAltX;
+      if (!iVar2) {
+        break;
+      }
+      if (anDirections[2] != 0xff) {
+        nTerAltX += (short int)gnObstacleAvoidanceXOffsets[anDirections[2] * 2];
+        nAltY = nTerAltY + (short int)gnObstacleAvoidanceXOffsets[anDirections[2] * 2 + 1];
+        iVar2 = Collision::CheckCollision_BlockPlayer_Type(pRoom, (uint32_t)nTerAltX, (uint32_t)nAltY, nType, nLine);
+        nTerAltY = nAltY;
+        nAltX = nTerAltX;
+        if (!iVar2) {
+          break;
+        }
+      }
+
+      Drlg::Path::DRLGPATH_GetDirectionTripletPacked(nDirTriplet, nPackedCurXY, (uint32_t)d2_bits_of(pPathState->tStartCoord));
+      anDirections[0] = nDirTriplet[0];
+    }
+
+    pPathState->tTargetCoord.nY = nAltY;
+    pPathState->tTargetCoord.nX = nAltX;
+    joined_r0x006482ad:
+    if (nAltX == nStartX && nAltY == nStartY) {
+      return 0;
+    }
+    if (nPathMode == UNIT_PLAYER) {
+      Path::PATH_ExtendPathEndpoint(pPathState);
+    }
+
+    return 1;
+}
+
 static uint32_t PATH_CanMonsterPathInArea(D2UnitStrc * pUnit, uint16_t * pPathData) {
     uint16_t nMidY;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -1642,7 +1764,7 @@ uint32_t __stdcall PATH_CalculatePath(D2DynamicPathStrc * pDynamicPath, D2UnitSt
                 if (pDynamicPath_00->nFlags & 0x1000U) {
                   iVar1 = Collision::CheckCollision_BlockPlayer_Type(sPathTypeArg.pRoom, (uint32_t)d2_bits_of(sPathTypeArg.tTargetCoord) & 0xffff, (uint32_t)d2_bits_of(sPathTypeArg.tTargetCoord) >> 0x10, pDynamicPath_00->nUnitWidth, pDynamicPath_00->nCollisionPattern);
                   if (iVar1) {
-                    bCanProceed = Path::PATH_FindAlternateAroundObstacle(&sPathTypeArg);
+                    bCanProceed = PATH_FindAlternateAroundObstacle(&sPathTypeArg);
                   }
                 }
 

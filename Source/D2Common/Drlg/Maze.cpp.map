@@ -767,6 +767,26 @@
       ]
     },
     {
+      "name": "DRLGMAZE_ReplaceDuranceRooms",
+      "address": "00672f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00672f60"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "exit",
+        "DRLGMAZE_ReplaceDuranceRooms",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "ReplaceRooms",
       "address": "00673000",
       "lines": [
@@ -866,6 +886,25 @@
         "D2DrlgPresetRoomStrc",
         "D2LvlMazeTxt",
         "D2RoomExStrc"
+      ]
+    },
+    {
+      "name": "DRLGMAZE_ReplaceIceCavesRooms",
+      "address": "00673530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00673530"
+        }
+      ],
+      "namespace": "D2Common::Drlg::Maze",
+      "calledFunctions": [
+        "DRLGMAZE_ReplaceIceCavesRooms",
+        "ReplaceRoom"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "uint32_t"
       ]
     },
     {
@@ -980,13 +1019,15 @@
         "Lair",
         "RollArcaneTypePath",
         "PickSummonerLocation",
-        "ReplaceRooms",
+        "DRLGMAZE_ReplaceDuranceRooms",
         "DungeonRoll",
         "DRLGMAZE_ReplaceSewerRooms",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
+        "ReplaceRooms",
         "UNIT_GetModuloFromSeed",
+        "DRLGMAZE_ReplaceIceCavesRooms",
         "PutRedNextLevelAreasInPlace",
         "SetupBaalChamber",
         "DRLGMAZE_GenerateBarracksLayout",

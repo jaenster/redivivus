@@ -335,7 +335,7 @@ void __stdcall DRAW_Overlay_PetsAndPartyMembers() {
     } else {
       int32_t nPetGUID;
       nPetGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
-      if (nPetGUID == -1 || (pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nPetGUID, UNIT_MONSTER) , pPlayer && (bIsActive = UNIT::CUnit::IsActive(pPlayer) , bIsActive != 0))) {
+      if (nPetGUID == -1 || (pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nPetGUID, UNIT_MONSTER) , pPlayer && (bIsActive = UNIT::CUnit::IsActive(pPlayer) , bIsActive != 0))) {
         gnHireIconHoverX = 0;
         gnHireIconHoverY = 0;
         gnHireIconHoverIndex = 0;
@@ -360,7 +360,7 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
     int32_t nPetGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
     if (nPetGUID == -1) {
       D2UnitStrc* pPetUnit;
-      pPetUnit = UNIT::Player::UNITS_FindClientSideUnit(-1, UNIT_MONSTER);
+      pPetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(-1, UNIT_MONSTER);
       if (pPetUnit) {
         GAME::Select::SELECT_SetPetSeedTimestamp(pPlayer, pPetUnit, 1);
         pMsg->bHandled = 1;
@@ -441,7 +441,7 @@ int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
       bCanEquip = 1;
     }
 
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nMercGUID, UNIT_MONSTER);
+    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGUID, UNIT_MONSTER);
     if (!pPlayer) {
       return 0;
     }
@@ -825,7 +825,7 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
     DrawHealthBar((uint32_t)pUnit, 7, *pnX);
     int nY = *pnY;
     int nX = *pnX;
-    D2UnitStrc* pMercUnit = UNIT::Player::UNITS_FindClientSideUnit((int32_t)pUnit, UNIT_MONSTER);
+    D2UnitStrc* pMercUnit = UNIT::CUnit::UNITS_FindClientSideUnit((int32_t)pUnit, UNIT_MONSTER);
     UI_DrawHirelingNameFromUnit(nX, nY, pMercUnit);
     if (*pnYToggle) {
       *pnY -= *pnYToggle;

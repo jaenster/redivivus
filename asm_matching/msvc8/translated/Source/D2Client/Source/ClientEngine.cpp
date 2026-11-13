@@ -945,7 +945,7 @@ void DRAW_Overlay_SecondsLeftToGame() {
       return;
     }
 
-    D2UnitStrc* pQuestMonster = UNIT::Player::UNITS_FindClientSideUnit(gnQuestMonsterUnitId, UNIT_MONSTER);
+    D2UnitStrc* pQuestMonster = UNIT::CUnit::UNITS_FindClientSideUnit(gnQuestMonsterUnitId, UNIT_MONSTER);
     if (!(!pQuestMonster || pQuestMonster->eAnimMode.ePlayerMode == Kick || gnGameEndTime - 0x46 <= nHighResTime)) {
       return;
     }

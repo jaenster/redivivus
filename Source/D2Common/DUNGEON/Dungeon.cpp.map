@@ -490,8 +490,7 @@
       ],
       "usedTypes": [
         "D2RoomStrc",
-        "int32_t",
-        "uint32_t"
+        "int32_t"
       ]
     },
     {

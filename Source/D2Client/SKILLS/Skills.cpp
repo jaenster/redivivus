@@ -1839,7 +1839,7 @@ int32_t __fastcall SKILLS_CltStartSkillCast(D2UnitStrc * pUnit, int * pnCastArgs
       SKILLS_HandleDualWieldWeaponSwap(pnCastArgs, pUnit);
     }
 
-    D2UnitStrc* pFoundTarget = UNIT::Player::UNITS_FindClientSideUnit(pnCastArgs[3], pnCastArgs[2]);
+    D2UnitStrc* pFoundTarget = UNIT::CUnit::UNITS_FindClientSideUnit(pnCastArgs[3], pnCastArgs[2]);
     if (pFoundTarget) {
       int32_t nCastResult;
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pFoundTarget);

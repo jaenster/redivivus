@@ -5745,8 +5745,7 @@ static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2U
     int nMaxDamage;
     int nMaxDmgRaw;
     int nOwner;
-    int32_t nMinElemRaw = nMissileId;
-    nMinElemRaw = D2Common::Units::Missile::GetMinElemDamage(nullptr, pOwner, nMissileId, nLevel);
+    int32_t nMinElemRaw = D2Common::Units::Missile::GetMinElemDamage(nullptr, pOwner, nMissileId, nLevel);
     nMinElemRaw *= 0x4b;
     nMinDmgRaw = D2Common::Units::Missile::GetMaxElemDamage(nullptr, pOwner, nMissileId, nLevel);
     nOwner = nMinDmgRaw * 0x4b;

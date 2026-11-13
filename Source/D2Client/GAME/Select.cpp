@@ -111,7 +111,7 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       }
     }
     if (_Selection::bHasSelectedUnit && _Selection::eSelectedUnitType == UNIT_WARP) {
-      pLookupUnit = UNIT::Player::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, UNIT_WARP);
+      pLookupUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, UNIT_WARP);
       if (pLookupUnit) {
         nWarpClassId = pLookupUnit->nClassId;
         D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(D2Common::Units::UNITS_GetRoom(pLookupUnit), nWarpClassId);
@@ -262,7 +262,7 @@ static BOOL SELECT_HandleMouseInput(int * pnMouseX, int * pnMouseY) {
 
       UI::Text::TEXT_ClearNpcMenuSelection();
       if (_Selection::bHasSelectedUnit && _Selection::eSelectedUnitType == UNIT_WARP) {
-        pUnit = UNIT::Player::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, UNIT_WARP);
+        pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, UNIT_WARP);
         if (pUnit) {
           eLevel = pUnit->nClassId;
           D2Common::DUNGEON::Dungeon::UpdateWarpRoomDeselect(D2Common::Units::UNITS_GetRoom(pUnit), eLevel);
@@ -709,7 +709,7 @@ void __stdcall SELECT_InitConstants() {
 
 D2UnitStrc * __stdcall GetSelectedUnit() {
     if (_Selection::bHasSelectedUnit) {
-      D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, _Selection::eSelectedUnitType);
+      D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, _Selection::eSelectedUnitType);
       if (pUnit) {
         uint32_t bIsOnScreen;
         bIsOnScreen = UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr);

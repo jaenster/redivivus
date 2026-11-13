@@ -4,6 +4,34 @@
   "file": "Source/D2Common/PATH/DynamicPath.cpp",
   "functions": [
     {
+      "name": "PATH_FindAlternateAroundObstacle",
+      "address": "00648120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648120"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_FindAlternateAroundObstacle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_GetDirectionTripletPacked",
+        "CheckCollision_BlockPlayer_Type",
+        "PATH_ExtendPathEndpoint"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ]
+    },
+    {
       "name": "PATH_CanMonsterPathInArea",
       "address": "006483a0",
       "lines": [

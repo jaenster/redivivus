@@ -2795,7 +2795,7 @@ D2UnitStrc * __fastcall Unreferenced_004b1030(D2UnitStrc * param_1) {
       int nUnitGUID;
       nUnitGUID = param_1->pUnitData.pUnitDataMonster->nOwnerGUID;
       if (nUnitGUID != -1) {
-        pDVar1 = Player::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
+        pDVar1 = CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
         return pDVar1;
       }
     }
@@ -2927,7 +2927,7 @@ int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
 
 void __fastcall NPCMENU_HandleQuestUpdate(D2GSPacketSrv0x98 * pPacket) {
     uint32_t nNecroPetGUID;
-    D2UnitStrc* pMonsterUnit = Player::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_MONSTER);
+    D2UnitStrc* pMonsterUnit = CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_MONSTER);
     if (!pMonsterUnit) {
       return;
     }
@@ -3080,7 +3080,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
           pTargetUnit = D2Common::PATH::DynamicPath::GetTargetUnit(pUnitDynamicPath);
           if (pTargetUnit) {
             D2Common::PATH::DynamicPath::GetTargetTypeAndGUID(pUnitDynamicPath, &eTargetUnitType, &nTargetGUID);
-            pTargetUnit = Player::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
+            pTargetUnit = CUnit::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
             D2Common::PATH::DynamicPath::SetTarget(pUnitDynamicPath, pTargetUnit);
             if (!pTargetUnit) {
               goto after_path_recalc;

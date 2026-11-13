@@ -1372,7 +1372,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x0A_RemoveObject(D2GSPacketSrv0x0A * pB
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
     if (pUnit) {
       UNIT::Player::HANDSHAKE_SetClientPlayerUnit(pUnit);
     }
@@ -1560,7 +1560,7 @@ void __fastcall SCMD_Rcv0x72_UnitIgnore(D2UnitStrc * pUnit, char * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay(D2GSPacketSrv0x11 * pBytes) {
     uint16_t nOverlayId = pBytes->wParam;
     uint32_t t2_c0 = pBytes->dwUnitGUID;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(t2_c0, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(t2_c0, (eD2UnitType)pBytes->nUnitType);
     if (!(pUnit && (int)(uint32_t)nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
     }
@@ -1588,7 +1588,7 @@ void __fastcall SCMD_Rcv0x14_Ignore(char * pBytes) {
 void __fastcall NET_D2GS_CLIENT_Incoming0x15_WarpXY(D2GSPacketSrv0x15 * pBytes) {
     uint16_t nX = pBytes->wX;
     uint16_t nY = pBytes->wY;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -1673,7 +1673,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x16_UPDATE(char * pBytes) {
       do {
         nX = *(uint16_t*)(pUnitEntry + 5);
         nY = (int)*(uint16_t*)(pUnitEntry + 7);
-        pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pUnitEntry + 1), (eD2UnitType)*pUnitEntry);
+        pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pUnitEntry + 1), (eD2UnitType)*pUnitEntry);
         if (pUnit) {
           UNIT::Path::PATH_MoveUnitToPoint(pUnit, nX, nY, 0, 0, 0);
         }
@@ -1812,7 +1812,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
     }
 
     eD2UnitStat eUnitStat = (eD2UnitStat)pBytes[1];
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
     if (!pUnit) {
       return;
     }
@@ -1828,12 +1828,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3 * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwValue1, (eD2UnitType)pBytes->nCasterType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwValue1, (eD2UnitType)pBytes->nCasterType);
     if (!pUnit) {
       return;
     }
 
-    D2UnitStrc* pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwValue2, (eD2UnitType)pBytes->nTargetType);
+    D2UnitStrc* pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwValue2, (eD2UnitType)pBytes->nTargetType);
     eD2Skills eSkill = (eD2Skills)(short int)pBytes->wSkillId;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1849,7 +1849,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * pBytes) {
     uint16_t nSkill = pBytes->wSkillId;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -1938,7 +1938,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x20(D2GSPacketSrv0x20 * pBytes) {
     uint32_t nValue = pBytes->dwValue;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2112,7 +2112,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBy
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes) {
     uint16_t nOSkill = *(uint16_t*)(pBytes + 7);
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 3), (eD2UnitType)(uint8_t)pBytes[1]);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 3), (eD2UnitType)(uint8_t)pBytes[1]);
     if (!pUnit) {
       return;
     }
@@ -2130,7 +2130,7 @@ void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
 
     uint8_t nElementType = pBytes[6];
     uint8_t nSkillPage = pBytes[7];
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 1), UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 1), UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2143,7 +2143,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS(char * pBytes) {
     uint32_t nRemaining;
     uint8_t nSkillCount = pBytes[1];
     D2GSPacketSrv0x94SkillStrc* pSkillEntry = (D2GSPacketSrv0x94SkillStrc*)(pBytes + 6);
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2160,7 +2160,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS(D2GSPacketSrv0x22_
     }
 
     uint16_t nSkill = pBytes->skill;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->unitId, UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->unitId, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2177,7 +2177,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS(D2GSPacketSrv0x22_
 void __fastcall NET_D2GS_CLIENT_Incoming0x23_SETSKILL(D2GSPacketSrv0x23 * pBytes) {
     uint16_t nSkill = pBytes->wSkillId;
     uint32_t nItemGUID = pBytes->dwSkillOwnerGUID;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
@@ -2198,12 +2198,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
     if (!pUnit) {
       return;
     }
 
-    D2UnitStrc* pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 10), (eD2UnitType)(uint8_t)pBytes[9]);
+    D2UnitStrc* pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 10), (eD2UnitType)(uint8_t)pBytes[9]);
     if (!pTargetUnit) {
       return;
     }
@@ -2212,7 +2212,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
     if (!pUnit) {
       return;
     }
@@ -2450,7 +2450,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT(D2GSPacketSrv0x57
       return;
     }
 
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(t2_c5, UNIT_MONSTER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(t2_c5, UNIT_MONSTER);
     if (!pUnit) {
       return;
     }
@@ -2514,7 +2514,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK(D2GSPacketSrv0x91 * pB
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY(char * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), (eD2UnitType)(uint8_t)pBytes[1]);
     if (!pUnit) {
       return;
     }
@@ -2711,7 +2711,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL(D2GSPacketSrv0x82 * 
     uint32_t nUnitGUID = pBytes->nSourceObjectGUID;
     uint32_t nRosterGUID = pBytes->nOwnerGUID;
     uint32_t eDestinationLevelId = pBytes->nPortalDestinationGUID;
-    D2UnitStrc* pObject = UNIT::Player::UNITS_FindClientSideUnit(nUnitGUID, UNIT_OBJECT);
+    D2UnitStrc* pObject = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_OBJECT);
     if (pObject) {
       UNIT::Object::SetObjectDataOwnerName(pObject, pBytes->szOwnerName);
     }
@@ -2719,7 +2719,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL(D2GSPacketSrv0x82 * 
       return;
     }
 
-    pObject = UNIT::Player::UNITS_FindClientSideUnit(eDestinationLevelId, UNIT_OBJECT);
+    pObject = UNIT::CUnit::UNITS_FindClientSideUnit(eDestinationLevelId, UNIT_OBJECT);
     if (pObject) {
       UNIT::Object::SetObjectDataOwnerName(pObject, pBytes->szOwnerName);
     }
@@ -2930,7 +2930,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA6(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA7(D2GSPacketSrv0xA7 * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -2947,7 +2947,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(D2GSPacketSrv0xA
     D2ItemStatCostTxt* pItemStatCost;
     D2BitBufferStrc bitBuffer;
     uint8_t nSendBits;
-    D2UnitStrc* pFoundUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pFoundUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pFoundUnit) {
       return;
     }
@@ -2999,7 +2999,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX(D2GSPacketSrv0xA
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX(D2GSPacketSrv0xA9 * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -3018,7 +3018,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
     D2BitBufferStrc bitBuffer;
     D2StatListExStrc* pStatList;
     uint8_t nSendBits;
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -3072,7 +3072,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xAB(D2GSPacketSrv0xAB * pBytes) {
-    D2UnitStrc* pUnit = UNIT::Player::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
@@ -3469,7 +3469,7 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize)
               eUnitType = UNIT_MONSTER;
             }
 
-            pUnit = UNIT::Player::UNITS_FindClientSideUnit(nLine, eUnitType);
+            pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nLine, eUnitType);
             if (pUnit) {
               NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure(nConsumed & 0xffff, pUnit, pBytes);
               pBytes = (char*)pCurrentPacket;
@@ -3488,7 +3488,7 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize)
             break;
             case 0xd:
               if (pBytes[1] == 1) {
-                UNIT::Player::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
+                UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
               }
             break;
           }

@@ -10,8 +10,6 @@
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Drlg/Maze/Act3/Durance.h"
-#include "Source/D2Common/Drlg/Maze/Act5/IceCaves.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1393,7 +1391,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
 }
 
 // Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
-uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
+static uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
     uint32_t nNextRoll;
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     int32_t nDestPresetId = pDrlgReplaceRoom->nDestLevelPrestId;
@@ -2686,6 +2684,102 @@ static void DRLGMAZE_ReplaceSewerRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
     ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_TWO + nVariant, pDrlgLevelStrc, &nVariant);
 }
 
+// Selects and places the variant room tiles for the Durance of Hate maze (Act 3, levels 0x65/100). Advances the level RNG seed, uses the low 2 bits to pick among 4 entry-tile variants, then calls ReplaceRoom for entry (always), waypoint+exit (level 0x65 only), or exit only (level 100). Controls which pre-set room template is placed in the generated dungeon layout.
+static void DRLGMAZE_ReplaceDuranceRooms(D2DrlgLevelStrc * pLevel) {
+    // Static local variables (originally global data)
+    static D2DrlgReplaceRoomStrc DRLG_DURA_ENTRY[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x2f9,
+        /* .nDestLevelPrestId = */ 0x313,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f3,
+        /* .nDestLevelPrestId = */ 0x311,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f5,
+        /* .nDestLevelPrestId = */ 0x312,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f2,
+        /* .nDestLevelPrestId = */ 0x310,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_DURA_ENTRY, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceDuranceRooms::DRLG_DURA_ENTRY");
+    static D2DrlgReplaceRoomStrc DRLG_DURA_WAYPOINT[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x2f9,
+        /* .nDestLevelPrestId = */ 0x31b,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f3,
+        /* .nDestLevelPrestId = */ 0x319,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f5,
+        /* .nDestLevelPrestId = */ 0x31a,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f2,
+        /* .nDestLevelPrestId = */ 0x318,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_DURA_WAYPOINT, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceDuranceRooms::DRLG_DURA_WAYPOINT");
+    static D2DrlgReplaceRoomStrc DRLG_DURA_EXIT[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x2f9,
+        /* .nDestLevelPrestId = */ 0x317,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f3,
+        /* .nDestLevelPrestId = */ 0x315,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f5,
+        /* .nDestLevelPrestId = */ 0x316,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x2f2,
+        /* .nDestLevelPrestId = */ 0x314,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_DURA_EXIT, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceDuranceRooms::DRLG_DURA_EXIT");
+
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
+    ReplaceRoom(DRLG_DURA_ENTRY + nRoll, pLevel, &nRoll);
+    if (pLevel->eD2LevelId == 0x65) {
+      ReplaceRoom(DRLG_DURA_WAYPOINT + nRoll, pLevel, &nRoll);
+      ReplaceRoom(DRLG_DURA_EXIT + nRoll, pLevel, &nRoll);
+    }
+    if (pLevel->eD2LevelId != 100) {
+      return;
+    }
+
+    ReplaceRoom(DRLG_DURA_EXIT + nRoll, pLevel, &nRoll);
+}
+
 // Randomises the stair/Nilathak spawn layout for the Halls of Pain / Halls of Vaught area (Act 5 Temple levels 0x7b-0x7c). Rolls a seed-derived value mod 3 to pick one of three room replacement sets, then calls ReplaceRoom with gaDrlgRoomReplacementsA (non-Vaught) and/or gaDrlgRoomReplacementsB (level 0x7b only). Halts with an internal error if the Vaught level did not have its replacement applied by replacement set A.
 static void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
@@ -3035,6 +3129,164 @@ static void DRLGMAZE_GenerateRiverOfFlames(D2DrlgLevelStrc * pDrlgLevelStrc) {
     pDrlgLevelStrc->sCoordinatesAndSize.WorldSize.y = nMaxX - nMinY;
 }
 
+// Act5 Ice Caves preset-room roller. Advances the level RNG seed (LCG: low*0x6AC690C5 + high), nRoll = seedLow &amp; 3, then unconditionally replaces three room sets (ICECAVES_REPLACE_ONE/TWO/THREE + nRoll via ReplaceRoom). Additionally, for level ids 0x71 and 0x76 replaces set FIVE, and for 0x73 replaces set FOUR then FIVE; other levels return after the first three. Side effect: mutates pLevel->sSeed and swaps preset rooms. Server-side D2Common DRLG maze generation.
+static void DRLGMAZE_ReplaceIceCavesRooms(D2DrlgLevelStrc * pLevel) {
+    // Static local variables (originally global data)
+    static D2DrlgReplaceRoomStrc DRLG_ICECAVES_REPLACE_ONE[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x3f2,
+        /* .nDestLevelPrestId = */ 0x3fd,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ec,
+        /* .nDestLevelPrestId = */ 0x3fb,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ee,
+        /* .nDestLevelPrestId = */ 0x3fc,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3eb,
+        /* .nDestLevelPrestId = */ 0x3fa,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_ONE, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceIceCavesRooms::DRLG_ICECAVES_REPLACE_ONE");
+    static D2DrlgReplaceRoomStrc DRLG_ICECAVES_REPLACE_TWO[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x3f2,
+        /* .nDestLevelPrestId = */ 0x401,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ec,
+        /* .nDestLevelPrestId = */ 0x3ff,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ee,
+        /* .nDestLevelPrestId = */ 0x400,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3eb,
+        /* .nDestLevelPrestId = */ 0x3fe,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_TWO, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceIceCavesRooms::DRLG_ICECAVES_REPLACE_TWO");
+    static D2DrlgReplaceRoomStrc DRLG_ICECAVES_REPLACE_THREE[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x3f2,
+        /* .nDestLevelPrestId = */ 0x405,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ec,
+        /* .nDestLevelPrestId = */ 0x403,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ee,
+        /* .nDestLevelPrestId = */ 0x404,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3eb,
+        /* .nDestLevelPrestId = */ 0x402,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_THREE, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceIceCavesRooms::DRLG_ICECAVES_REPLACE_THREE");
+    static D2DrlgReplaceRoomStrc DRLG_ICECAVES_REPLACE_FOUR[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x3f2,
+        /* .nDestLevelPrestId = */ 0x409,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ec,
+        /* .nDestLevelPrestId = */ 0x407,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ee,
+        /* .nDestLevelPrestId = */ 0x408,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3eb,
+        /* .nDestLevelPrestId = */ 0x406,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_FOUR, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceIceCavesRooms::DRLG_ICECAVES_REPLACE_FOUR");
+    static D2DrlgReplaceRoomStrc DRLG_ICECAVES_REPLACE_FIVE[4] = {
+    {
+        /* .nSourceLevelPrestId = */ 0x3f2,
+        /* .nDestLevelPrestId = */ 0x40a,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x3
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ec,
+        /* .nDestLevelPrestId = */ 0x40c,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x0
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3ee,
+        /* .nDestLevelPrestId = */ 0x40b,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x1
+    },
+    {
+        /* .nSourceLevelPrestId = */ 0x3eb,
+        /* .nDestLevelPrestId = */ 0x40d,
+        /* .nDestPickedFile = */ -0x1,
+        /* .nDirection = */ 0x2
+    }
+}; D2_STATIC_GUARD(DRLG_ICECAVES_REPLACE_FIVE, "D2Common::Drlg::Maze::DRLGMAZE_ReplaceIceCavesRooms::DRLG_ICECAVES_REPLACE_FIVE");
+
+    uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
+    uint32_t nRoll = DVar1 & 3;
+    ReplaceRoom(DRLG_ICECAVES_REPLACE_ONE + nRoll, pLevel, &nRoll);
+    ReplaceRoom(DRLG_ICECAVES_REPLACE_TWO + nRoll, pLevel, &nRoll);
+    ReplaceRoom(DRLG_ICECAVES_REPLACE_THREE + nRoll, pLevel, &nRoll);
+    int nLevelId = pLevel->eD2LevelId;
+    switch (nLevelId) {
+      case 0x73:
+        {
+          ReplaceRoom(DRLG_ICECAVES_REPLACE_FOUR + nRoll, pLevel, &nRoll);
+        }
+      case 0x71:
+        case 0x76:
+          {
+            ReplaceRoom(DRLG_ICECAVES_REPLACE_FIVE + nRoll, pLevel, &nRoll);
+            return;
+          }
+      default:
+        {
+          return;
+        }
+    }
+}
+
 // DRLG maze generation: for special-room levels (selected by nLevelType, mapping to a base preset-file offset), randomly marks a fraction (~roomCount/5, min 2) of the level's RoomEx entries with a chosen preset variant. Uses the level's LCG seed to Fisher-Yates shuffle a 15-entry index table, then walks RoomEx rooms matching a target file index and rewrites their room-data fields (sets bit 2, replaces the file id, sets field[1]=-1). Skips eD2LevelId 8 (Den of Evil), hence the name. Mutates pLevel->sSeed as it consumes randoms.
 void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pDVar1;
@@ -3346,7 +3598,7 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
       case 0x16:
         /* Kurast */ DRLGMAZE_BuildRoomGrid(2, pLevel);
       ActualLevelGeneration(pLevel);
-      Act3::Durance::ReplaceRooms(pLevel);
+      DRLGMAZE_ReplaceDuranceRooms(pLevel);
       break;
       case 0x18:
         DRLGMAZE_BuildRoomGrid(2, pLevel);
@@ -3466,14 +3718,14 @@ void __fastcall DRLGMAZE_GenerateLevel(D2DrlgLevelStrc * pLevel) {
           {
             DRLGMAZE_BuildRoomGrid(2, pLevel);
             ActualLevelGeneration(pLevel);
-            Act5::IceCaves::ReplaceRooms(pLevel);
+            DRLGMAZE_ReplaceIceCavesRooms(pLevel);
           }
       }
 
       break;
       case 0x20:
         /* Temples picker */ DRLGMAZE_BuildRoomGrid(2, pLevel);
-      Maze::ReplaceRooms(pLevel);
+      ReplaceRooms(pLevel);
       break;
       case 0x22:
         /* Worldstone */ GenerateWolrdstoneAndTombs(pLevel);

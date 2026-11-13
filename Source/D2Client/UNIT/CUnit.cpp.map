@@ -27,6 +27,26 @@
       ]
     },
     {
+      "name": "UNITS_FindClientSideUnit",
+      "address": "00463990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463990"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnit",
+      "calledFunctions": [
+        "UNITS_FindClientSideUnit",
+        "FindUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ]
+    },
+    {
       "name": "UNITS_FindServerSideUnit",
       "address": "004639b0",
       "lines": [

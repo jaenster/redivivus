@@ -5,7 +5,6 @@
 #include "Source/D2Client/SKILLS/SkillsAss.h"
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UNIT/CUnit.h"
-#include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
@@ -421,7 +420,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eCurrentSkill, nSkillLvl);
     eMissilesId nPrevTargetGUID = D2Common::Skills::SKILL_GetParam3(pSkill);
     eD2UnitType ePrevTargetType = D2Common::Skills::SKILL_GetParam2(pSkill);
-    D2UnitStrc* pTargetUnit = UNIT::Player::UNITS_FindClientSideUnit(nPrevTargetGUID, ePrevTargetType);
+    D2UnitStrc* pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nPrevTargetGUID, ePrevTargetType);
     if (pTargetUnit || (pTargetUnit = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, nAuraRange, 3, nPrevTargetGUID, nullptr) , pTargetUnit != 0)) {
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
     }
@@ -491,7 +490,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, 
 
     int32_t nShotsLeft = D2Common::Skills::SKILL_GetParam3(pSkill);
     eD2UnitType ePrevTargetType = D2Common::Skills::SKILL_GetParam2(pSkill);
-    D2UnitStrc* pNextTarget = UNIT::Player::UNITS_FindClientSideUnit(nShotsLeft, ePrevTargetType);
+    D2UnitStrc* pNextTarget = UNIT::CUnit::UNITS_FindClientSideUnit(nShotsLeft, ePrevTargetType);
     int32_t nMeleeRange = Skills::GetMeleeRangePlusFour(pUnit);
     if (!pNextTarget || (bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pNextTarget, 0) , !bInMeleeRange)) {
       pNextTarget = Skills::SKILL_FindClosestTargetWithStats(pUnit, 0, 0, nMeleeRange, 0x20003, nShotsLeft, nullptr);

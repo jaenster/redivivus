@@ -2920,7 +2920,7 @@ void __stdcall AUTOMAP_DrawPlayersAndParty() {
     for (pRoster = GAME::Roster::GetNextRosterPlayer(pRoster); pRoster; pRoster = GAME::Roster::GetNextRosterPlayer(pRoster)) {
       int32_t nMemberGUID;
       nMemberGUID = GAME::Roster::GetRosterGUID(pRoster);
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(nMemberGUID, UNIT_PLAYER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMemberGUID, UNIT_PLAYER);
       if (!pUnit) {
         nMemberPartyId = GAME::Roster::GetRosterPartyId(pRoster);
         if (nMyPartyId == nMemberPartyId) {

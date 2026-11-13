@@ -3703,7 +3703,7 @@ void __thiscall NPCMENU_ConvertQuestId(short * nInput, uint16_t * pResult) {
 D2UnitStrc * __stdcall GetInteractedUnit() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pUnit;
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       return pUnit;
     }
 
@@ -3836,11 +3836,11 @@ int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t
       uint16_t wDialogStringId;
       wDialogStringId = NPCMENU_FindNextUnhandledMessage(gnNpcMenuScrollCompleteMode);
       if (wDialogStringId != 0xffff && _Interaction::bInteractingWithNpc) {
-        pDVar1 = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pDVar1 = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         if (pDVar1) {
           gnNpcMenuScrollCompleteMode = wDialogStringId;
           if (_Interaction::bInteractingWithNpc) {
-            pDVar1 = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+            pDVar1 = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
           } else {
             pDVar1 = 0;
           }
@@ -3920,7 +3920,7 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
       return 0;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit) {
       uint16_t wDialogStringId;
       nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
@@ -3933,7 +3933,7 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
       wDialogStringId = D2Common::Text::TEXT_GetMessageByIndex(pOverheadText, nSelectedIndex - nDialogBaseOffset);
       gnNpcMenuScrollCompleteMode = wDialogStringId;
       if (_Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
         pNpcUnit = 0;
       }
@@ -3952,10 +3952,10 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
 int __stdcall NPCMENU_ShowGossipDialog() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         } else {
           pNpcUnit = 0;
         }
@@ -3974,10 +3974,10 @@ int __stdcall NPCMENU_ShowGossipDialog() {
 int __stdcall NPCMENU_ShowIntroduceDialog() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         } else {
           pNpcUnit = 0;
         }
@@ -4004,11 +4004,11 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
       return 0;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit) {
       tagRECT rcViewport;
       if (_Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
         pNpcUnit = 0;
       }
@@ -4454,7 +4454,7 @@ void __fastcall NPCMENU_SetTransactionMode(D2GSPacketSrv0x50 * pMsg) {
       return;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!pNpcUnit) {
       return;
     }
@@ -4527,7 +4527,7 @@ void __stdcall NPCMENU_ExecuteShopTransaction(int32_t bSkipConfirm, uint8_t byMo
       gbNpcMenuExecutingTransaction = GetTickCount();
     } else {
       D2UnitStrc* pCursorItem_lcl;
-      pUnit = UNIT::Player::UNITS_FindClientSideUnit(gnNpcMenuTransactionItemGUID, UNIT_ITEM);
+      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnNpcMenuTransactionItemGUID, UNIT_ITEM);
       if (!pUnit) {
         _Interaction::geNpcUiState = NPCUI_SHOP;
         Inv::INV_HandleGambleMessage();
@@ -4698,7 +4698,7 @@ void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID) {
       return;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!(pNpcUnit && pSelectedUnit->eUnitType == UNIT_ITEM && pSelectedUnit->nUnitGUID == nUnitGUID)) {
       return;
     }
@@ -4735,7 +4735,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
       if (gnNpcMenuShopMode) {
         nCalcCost = 2;
       }
-      if (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
+      if (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
         iVar2 = -1;
       } else {
         iVar2 = pNpcUnit->nClassId;
@@ -4757,7 +4757,7 @@ BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t
       return 0;
     }
 
-    pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!pNpcUnit) {
       return 0;
     }
@@ -5049,7 +5049,7 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     }
 
     D2UnitStrc* pUnit;
-    pUnit = UNIT::Player::UNITS_FindClientSideUnit(gnNpcMenuTransactionItemGUID, UNIT_ITEM);
+    pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(gnNpcMenuTransactionItemGUID, UNIT_ITEM);
     if (!pUnit) {
       return;
     }
@@ -5127,7 +5127,7 @@ void __stdcall ResetNPCSpeeches() {
 int __stdcall NPCMENU_IsNpcMenuStateActive() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit && _Interaction::geNpcUiState == NPCUI_MENU) {
         return 1;
       }
@@ -5230,7 +5230,7 @@ int __stdcall NPCMENU_EnableAnyaPersonalizeOption() {
 // Resets the NPC interaction state for the NPC with GUID nNpcGuid: finds the client-side monster unit, clears the mercenary hire list and the NPC's hire inventory (MERC_ClearHireInventory), and stops the NPC sound if one is playing (SOUND_StopById), clearing gnNpcMenuNpcClassId and gnNpcMenuNpcSoundIndex.
 // Called when an NPC dialog or interaction ends (TEXT_ShowNpcDialog, TEXT_DrawMessageLogAndOverhead, NPCMENU_HandleMenuSelection, UI_HandleNpcInteractionPacket).
 void __fastcall NPCMENU_ClearHireListAndStopNpcSound(int32_t nNpcGuid) {
-    D2UnitStrc* pNpc = UNIT::Player::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
+    D2UnitStrc* pNpc = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGuid, UNIT_MONSTER);
     if (pNpc) {
       Merc::MERC_ClearHireInventory(pNpc);
     }
@@ -5258,7 +5258,7 @@ int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, 
     }
 
     D2UnitStrc* pNpc;
-    pNpc = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    pNpc = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!pNpc) {
       return 0;
     }
@@ -5475,7 +5475,7 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
       }
     }
 
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
+    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (pPlayer) {
       Merc::MERC_ClearHireInventory(pPlayer);
     }
@@ -5485,7 +5485,7 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
 
     gnNpcMenuNpcSoundIndex = 0;
     gnNpcMenuNpcClassId = 0;
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
+    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (pPlayer) {
       pPlayer->eUnitFlags |= UNITFLAG_TARGETABLE;
     }
@@ -5508,7 +5508,7 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
 
 void __fastcall NPCMENU_CloseScrollAndInteraction(int32_t nNpcGUID) {
     NPCMENU_CloseNpcInteraction(nNpcGUID);
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
     if (!pNpcUnit) {
       return;
     }
@@ -5522,7 +5522,7 @@ int __stdcall NPCMENU_OpenNpcShop() {
       Dialog::gpNpcInteractionDialog = 0;
     }
 
-    D2UnitStrc* pNpc = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpc = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if ((pNpc && pNpc->pInventory) == 0) {
       NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
     } else {
@@ -5575,7 +5575,7 @@ void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
       return;
     }
 
-    pPlayer = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!pPlayer) {
       return;
     }
@@ -5672,7 +5672,7 @@ int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
 static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSpeechIndex) {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         gnNpcMenuActiveMode = 1;
         Text::TEXT_SetScrollCompleteCallback(NPCMENU_ScrollCompleteShowNextMessage, nullptr);
@@ -5686,7 +5686,7 @@ static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSp
           }
         }
         if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         } else {
           pNpcUnit = 0;
         }
@@ -5725,7 +5725,7 @@ int __stdcall NPCMENU_CainIdentifyCallback() {
     }
     if (_Interaction::bInteractingWithNpc) {
       int nNpcClass;
-      pPlayer = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pPlayer) {
         nNpcClass = pPlayer->nClassId;
         if (nNpcClass != 0x201) {
@@ -5781,7 +5781,7 @@ int __stdcall NPCMENU_TradeOptionCallback() {
       Dialog::gpNpcInteractionDialog = 0;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (pNpcUnit && pNpcUnit->pInventory) {
       _Interaction::geNpcUiState = NPCUI_SHOP;
       gnNpcMenuShopMode = 0;
@@ -5804,7 +5804,7 @@ void DRAW_UI_NPC_INTERACTION() {
     D2UnitStrc* pNpcUnit;
     eD2GSGameType eD2GameType;
     uint32_t bDead = UNIT::Player::IsPlayerDead();
-    if (bDead || !_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , pNpcUnit && (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , pNpcUnit && pNpcUnit->eAnimMode.ePlayerMode == Kick))) || !_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
+    if (bDead || !_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , pNpcUnit && (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , pNpcUnit && pNpcUnit->eAnimMode.ePlayerMode == Kick))) || !_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
       NPCMENU_CloseAllDialogs();
       _Interaction::geNpcUiState = NPCUI_NONE;
       Inv::INV_ResetHoverAndContextState();
@@ -5962,10 +5962,10 @@ int __stdcall NPCMENU_TradeDrawCallback() {
     }
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         } else {
           pNpcUnit = 0;
         }
@@ -6023,7 +6023,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc74);
       exit(-1);
     }
-    if (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
+    if (!_Interaction::bInteractingWithNpc || (pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) , !pNpcUnit)) {
       _Interaction::geNpcUiState = NPCUI_NONE;
       Inv::INV_ResetHoverAndContextState();
       NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
@@ -6051,7 +6051,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
     }
 
     if (_Interaction::bInteractingWithNpc) {
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     } else {
       pNpcUnit = 0;
     }
@@ -6065,7 +6065,7 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
       return;
     }
 
-    pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+    pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     if (!pNpcUnit) {
       return;
     }
@@ -6217,7 +6217,7 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
     uint32_t seedUpdated;
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (Dialog::gpNpcMainMenuDialog) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd69);
@@ -6234,7 +6234,7 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
         }
 
         if (_Interaction::bInteractingWithNpc) {
-          pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+          pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         } else {
           pNpcUnit = 0;
         }
@@ -6289,7 +6289,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
       return;
     }
     if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pPlayerUnit_lcl) {
         goto close_interaction;
       }
@@ -6303,7 +6303,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
     ui::UI_CloseActivePanels(0, 0);
     GAME::Game::UI_ResetInputState();
     if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pPlayerUnit_lcl) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdc9);
         exit(-1);
@@ -6312,7 +6312,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
 
     SetInteractedUnitInfo(pUnit);
     if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pPlayerUnit_lcl) {
         pPlayerUnit_lcl->eUnitFlags &= ~UNITFLAG_TARGETABLE;
       }
@@ -6425,7 +6425,7 @@ void __fastcall NPCMENU_HandleQuestItemPacket(uint8_t byUnitType, int32_t nUnitG
     D2UnitStrc* pInteractedUnit;
     pInteractedUnit = 0;
     if (byUnitType < 6) {
-      pInteractedUnit = UNIT::Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)byUnitType);
+      pInteractedUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)byUnitType);
     }
 
     switch (byUnitType) {
@@ -6493,7 +6493,7 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
           {
             Sound::SOUND_PlaySound(gnNpcMenuLastTransactionGold, nullptr, 0, 0, 0);
             gnNpcMenuLastTransactionGold = SOUND_NONE;
-            pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(D2GSPacketSrv0x2A_007c0d87.nUnitGUID, UNIT_ITEM);
+            pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(D2GSPacketSrv0x2A_007c0d87.nUnitGUID, UNIT_ITEM);
             if (!pPlayerUnit_lcl) {
               gnNpcMenuActiveContainer = 1;
               return;
@@ -6504,7 +6504,7 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
         case 1:
           {
             Sound::SOUND_PlaySound(SOUND_ITEM_METALSHIELD, nullptr, 0, 0, 0);
-            pPlayerUnit_lcl = UNIT::Player::UNITS_FindClientSideUnit(D2GSPacketSrv0x2A_007c0d87.nUnitGUID, UNIT_ITEM);
+            pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(D2GSPacketSrv0x2A_007c0d87.nUnitGUID, UNIT_ITEM);
             if (pPlayerUnit_lcl) {
               gnNpcMenuActiveContainer = 1;
               return;
@@ -6686,7 +6686,7 @@ void __stdcall NPCMENU_HandleTradeRejected() {
     }
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         nNpcClass = pNpcUnit->nClassId;
         switch (nNpcClass) {
@@ -7405,19 +7405,19 @@ static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStr
     PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eStat, wStatLayer);
     ui::UI_CloseActivePanels(0, 0);
     if (!bReopenMenu) {
-      D2UnitStrc* pNpcUnit = !_Interaction::bInteractingWithNpc ? 0 : UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      D2UnitStrc* pNpcUnit = !_Interaction::bInteractingWithNpc ? 0 : UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pUnit == pNpcUnit) {
         return;
       }
       if (_Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         if (pNpcUnit) {
           NPCMENU_CloseAndResetAll();
           return;
         }
       }
     } else if (_Interaction::bInteractingWithNpc) {
-      UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
     }
 
     int32_t nMenuEntryIdx;
@@ -7571,11 +7571,11 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
     if (gnNpcMenuActiveMode == '\x01') {
       bool bIsSideNpc;
       if (gnNpcMenuTradeActionGold != -1 && _Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
         if (pNpcUnit) {
           gnNpcMenuScrollCompleteMode = gnNpcMenuTradeActionGold;
           if (_Interaction::bInteractingWithNpc) {
-            pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+            pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
           } else {
             pNpcUnit = 0;
           }
@@ -7597,7 +7597,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
       gnNpcMenuActiveMode = 0;
       Text::TEXT_SetScrollCompleteCallback(nullptr, nullptr);
       if (_Interaction::bInteractingWithNpc) {
-        pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+        pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       } else {
         pNpcUnit = 0;
       }
@@ -7644,7 +7644,7 @@ int __stdcall NPCMENU_TalkOptionCallback() {
     int nNpcSpeechIdx;
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (Dialog::gpNpcInteractionDialog) {
           Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -7671,7 +7671,7 @@ int __stdcall NPCMENU_TalkOptionCallback() {
 int __stdcall NPCMENU_AkaraRespecOptionCallback() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
-      pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
       if (pNpcUnit) {
         if (Dialog::gpNpcInteractionDialog) {
           Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -7714,7 +7714,7 @@ void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnit
       return;
     }
 
-    D2UnitStrc* pNpcUnit = UNIT::Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)nUpdateType);
+    D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)nUpdateType);
     if (!pNpcUnit) {
       pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
       if (pNpcUnit && pNpcUnit->eUnitType == UNIT_PLAYER && pNpcUnit->pUnitData.pUnitDataPlayer) {
