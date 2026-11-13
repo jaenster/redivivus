@@ -4537,7 +4537,6 @@ int __fastcall SetCombatStateAndApproachTarget(::SGAMEDATA * pGame, D2UnitStrc *
 void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nRange, eD2Skills eSkill, char nSkillMode) {
     uint32_t nRandom;
     int nPos;
-    D2SeedStrc sSeedNext;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPos = pUnit->pPath.pStaticPath->nPosX;
@@ -4548,23 +4547,7 @@ void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nR
     }
 
     uint32_t nDiameter = nRange * 2;
-    if ((int)nDiameter <= 0) {
-      nRandom = 0;
-    } else {
-      nRandom = pUnit->sSeed.nSeedLow;
-      if (nDiameter & nDiameter - 1) {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandom = (uint32_t)(sSeedNext.nSeedLow % nDiameter);
-      } else {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandom = nDiameter - 1 & sSeedNext.nSeedLow;
-      }
-    }
-
+    nRandom = D2_SeedRollLimited(&pUnit->sSeed, nDiameter);
     eUnitType = pUnit->eUnitType;
     int nTargetX = nRandom - nRange + nPos;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -4574,25 +4557,8 @@ void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nR
     } else {
       nPos = 0;
     }
-    if ((int)nDiameter <= 0) {
-      nDiameter = 0;
-    } else {
-      int64_t nSeedProduct;
-      nSeedProduct = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5;
-      nRandom = pUnit->sSeed.nSeedHigh;
-      if (nDiameter & nDiameter - 1) {
-        sSeedNext = (D2SeedStrc)(nSeedProduct + (uint64_t)nRandom);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDiameter = (uint32_t)(sSeedNext.nSeedLow % nDiameter);
-      } else {
-        sSeedNext = (D2SeedStrc)(nSeedProduct + (uint64_t)nRandom);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDiameter = nDiameter - 1 & sSeedNext.nSeedLow;
-      }
-    }
 
+    nDiameter = D2_SeedRollLimited(&pUnit->sSeed, nDiameter);
     SERVER_UNIT_CastSkill(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSkillMode, eSkill, 0, nTargetX, nDiameter - nRange + nPos);
 }
 
@@ -11933,8 +11899,6 @@ void __fastcall AITHINK_Fn1_InvisoPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     eD2PlayerAnimMode eOwnerMode;
     uint32_t nRandOffsetX;
     int nOwnerPosCoord;
-    int64_t nSeedProduct;
-    D2SeedStrc sSeedNext;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
@@ -11966,23 +11930,7 @@ void __fastcall AITHINK_Fn1_InvisoPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     }
 
     uint32_t nRandRange = nAiParam * 2;
-    if ((int)nRandRange <= 0) {
-      nRandOffsetX = 0;
-    } else {
-      nRandOffsetX = pUnit->sSeed.nSeedLow;
-      if (nRandRange & nRandRange - 1) {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandOffsetX = (uint32_t)(sSeedNext.nSeedLow % nRandRange);
-      } else {
-        sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandOffsetX = nRandRange - 1 & sSeedNext.nSeedLow;
-      }
-    }
-
+    nRandOffsetX = D2_SeedRollLimited(&pUnit->sSeed, nRandRange);
     eOwnerUnitType = pOwner->eUnitType;
     int nTargetX = nRandOffsetX - nAiParam + nOwnerPosCoord;
     if (eOwnerUnitType == UNIT_OBJECT || (int)eOwnerUnitType > 3 && (int)eOwnerUnitType <= 5) {
@@ -11992,24 +11940,8 @@ void __fastcall AITHINK_Fn1_InvisoPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     } else {
       nOwnerPosCoord = 0;
     }
-    if ((int)nRandRange <= 0) {
-      nRandRange = 0;
-    } else {
-      nSeedProduct = (uint64_t)pUnit->sSeed.nSeedLow * 0x6ac690c5;
-      nRandOffsetX = pUnit->sSeed.nSeedHigh;
-      if (nRandRange & nRandRange - 1) {
-        sSeedNext = (D2SeedStrc)(nSeedProduct + (uint64_t)nRandOffsetX);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandRange = (uint32_t)(sSeedNext.nSeedLow % nRandRange);
-      } else {
-        sSeedNext = (D2SeedStrc)(nSeedProduct + (uint64_t)nRandOffsetX);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nRandRange = nRandRange - 1 & sSeedNext.nSeedLow;
-      }
-    }
 
+    nRandRange = D2_SeedRollLimited(&pUnit->sSeed, nRandRange);
     SERVER_UNIT_CastSkill(pGame, pUnit, 9, SKILL_Teleport2, nullptr, nTargetX, nRandRange - nAiParam + nOwnerPosCoord);
     pAiGeneral->dwArg0 = (int)pMonStats->aip[1][pGame->nDifficulty] + pGame->dwGameFrame;
 }

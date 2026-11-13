@@ -1495,7 +1495,6 @@ static BOOL __stdcall ITEMMOD_GenerateSetItem(D2ItemGenContextStrc * pItemGenCon
 // Retired notes from 'ITEMMOD_GenerateUniqueItemInternal':
 // Server-side: attempts to convert an item into a random Set item. Doubles the item's durability/maxdurability (clamped to 255), counts eligible set entries from sgptDataTable->pTxtSets (version<100), then uses the item's RNG seed to pick a set index. Iterates the set's items to find one whose base-item code matches this unit, sets that file index, marks it IDENTIFIED, and applies rune/gem stats. Restores the original seed (low=saved, high=0x29a) on failure. Returns 1 if an item was assigned, 0 otherwise.
 BOOL __stdcall ITEMMOD_GenerateUniqueItem(D2UnitStrc * pItem) {
-    uint32_t DVar3;
     uint32_t nItemClassId;
     int32_t nResult;
     D2SetItemsTxt** ppDVar5;
@@ -1546,16 +1545,7 @@ BOOL __stdcall ITEMMOD_GenerateUniqueItem(D2UnitStrc * pItem) {
     }
 
     pDVar4 = D2Common::ITEMS::Items::GetItemSeed(pItem);
-    if ((int)nSetCount <= 0) {
-      nStartSetIdx = 0;
-    } else if (nSetCount & nSetCount - 1) {
-      DVar3 = D2_SeedRoll(pDVar4);
-      nStartSetIdx = DVar3 % nSetCount;
-    } else {
-      DVar3 = D2_SeedRoll(pDVar4);
-      nStartSetIdx = nSetCount - 1 & DVar3;
-    }
-
+    nStartSetIdx = D2_SeedRollLimited(pDVar4, nSetCount);
     DWORD DStack_14 = -1;
     int nSetTry = 0;
     if ((int)nSetCount > 0) {
@@ -1611,7 +1601,6 @@ BOOL __fastcall ITEMMOD_GenerateSetOrUniqueVersioned(D2UnitStrc * pUnit, D2ItemG
 // @returns BOOL in EAX (1/0 on both cookie-checked exits)
 // Randomly selects and applies a superior-quality mod row from QualityItems.txt to pUnit. Limits the table to 4 entries for throwable or no-durability items. Uses the item's own seed in a rejection-sampling loop (tracks visited slots in aVisitedSlots[12]) to find a row that passes ITEMMOD_MatchesRepairType, then writes the file index, applies rune/gem stats via ApplyRuneAndGemStats, and calls StaffMod(pUnit, pItemGenContext). Protected by a stack-guard cookie.
 static BOOL __thiscall ITEMMOD_GenerateQualityItem(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
-    uint32_t DVar1;
     int32_t iVar2;
     D2SeedStrc* pDVar7;
     D2MagicAffixTxt* pMagicAffixLine;
@@ -1639,15 +1628,7 @@ static BOOL __thiscall ITEMMOD_GenerateQualityItem(D2UnitStrc * pUnit, D2ItemGen
       while (true) {
         do {
           pDVar7 = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-          if ((int)nTableSize <= 0) {
-            nRandIdx = 0;
-          } else if (nTableSize & nTableSize - 1) {
-            DVar1 = D2_SeedRoll(pDVar7);
-            nRandIdx = (DWORD)(DVar1 % nTableSize);
-          } else {
-            DVar1 = D2_SeedRoll(pDVar7);
-            nRandIdx = nTableSize - 1 & DVar1;
-          }
+          nRandIdx = D2_SeedRollLimited(pDVar7, nTableSize);
         } while (aVisitedSlots[nRandIdx] != '\0');
 
         pMagicAffixLine = (D2MagicAffixTxt*)D2Common::DATATBLS::ItemTbls::TXT_QualityItems_GetLine(nRandIdx);

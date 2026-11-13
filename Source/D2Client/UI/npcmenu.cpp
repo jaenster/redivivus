@@ -3729,9 +3729,6 @@ void __stdcall NPCMENU_SelectRandomDialogOption(D2NPCSpeechStrc * pSpeech) {
     D2SpeechBankStrc* pDVar1;
     BOOL BVar2;
     int nPlayerClassId;
-    uint64_t nSeedHighAddend;
-    uint32_t nSeedLow;
-    D2SeedStrc sNewSeed;
     int nRetryCount = 10;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayerUnit_lcl) {
@@ -3744,24 +3741,7 @@ void __stdcall NPCMENU_SelectRandomDialogOption(D2NPCSpeechStrc * pSpeech) {
       uint32_t nOptionCount;
       nOptionCount = pSpeech->nCount;
       nRetryCount--;
-      if ((int)nOptionCount <= 0) {
-        nOptionCount = 0;
-      } else {
-        nSeedLow = pPlayerUnit_lcl->sSeed.nSeedLow;
-        nSeedHighAddend = (uint64_t)pPlayerUnit_lcl->sSeed.nSeedHigh;
-        if (nOptionCount & nOptionCount - 1) {
-          sNewSeed = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighAddend);
-          pPlayerUnit_lcl->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayerUnit_lcl->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nOptionCount = (uint32_t)(sNewSeed.nSeedLow % nOptionCount);
-        } else {
-          sNewSeed = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHighAddend);
-          pPlayerUnit_lcl->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayerUnit_lcl->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nOptionCount = nOptionCount - 1 & sNewSeed.nSeedLow;
-        }
-      }
-
+      nOptionCount = D2_SeedRollLimited(&pPlayerUnit_lcl->sSeed, nOptionCount);
       pSpeech->nGossip = nOptionCount;
       if ((int)nOptionCount >= 2) {
         pDVar1 = pSpeech->pBank;

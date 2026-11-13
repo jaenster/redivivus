@@ -1465,7 +1465,6 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     int nMaxDmg;
     int nMinDmgKick;
     D2InventoryStrc* pInventory;
-    uint32_t sNewSeed;
     D2UnitStrc* pUnit3;
     SKILLASS_ApplyProgressiveDamageToTarget(pUnit2, pDamage);
     pDamage->dwHitFlags |= 3;
@@ -1560,19 +1559,7 @@ static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2Damag
     nMinDmgKick = nMinDmgKick + nMinDmg + (int)nDivResult;
     nMaxDmgKick = nEnhMaxDmg + nEnhKickDmg + nMaxDmg;
     nEnhDmgPctWork = nMaxDmgKick - nMinDmgKick;
-    if ((int)nEnhDmgPctWork <= 0) {
-      nEnhDmgPctWork = 0;
-    } else {
-      nMinDmg = pUnit2->sSeed.nSeedLow;
-      if (nEnhDmgPctWork & nEnhDmgPctWork - 1) {
-        sNewSeed = D2_SeedRoll(&pUnit2->sSeed);
-        nEnhDmgPctWork = sNewSeed % nEnhDmgPctWork;
-      } else {
-        sNewSeed = D2_SeedRoll(&pUnit2->sSeed);
-        nEnhDmgPctWork = nEnhDmgPctWork - 1 & sNewSeed;
-      }
-    }
-
+    nEnhDmgPctWork = D2_SeedRollLimited(&pUnit2->sSeed, nEnhDmgPctWork);
     pDamage->dwPhysDamage = pDamage->dwPhysDamage + nEnhDmgPctWork + nMinDmgKick;
     SkillsServer::SetDamageOnEvent(pUnit2, pDamage, eSkill, pUnit1);
     pInventory = pUnit2->pInventory;

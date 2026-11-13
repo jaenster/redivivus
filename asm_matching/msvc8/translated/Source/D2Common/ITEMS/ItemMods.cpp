@@ -1776,16 +1776,7 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     uint32_t seedAdvanced;
     uint32_t nTableSize = gaGemRuneTypeTable;
     D2SeedStrc* pSeed = Items::GetItemSeed(pUnit);
-    if ((int)nTableSize <= 0) {
-      nTableSize = 0;
-    } else if (nTableSize & nTableSize - 1) {
-      seedAdvanced = D2_SeedRoll(pSeed);
-      nTableSize = (uint32_t)(seedAdvanced % nTableSize);
-    } else {
-      seedAdvanced = D2_SeedRoll(pSeed);
-      nTableSize = nTableSize - 1 & seedAdvanced;
-    }
-
+    nTableSize = D2_SeedRollLimited(pSeed, nTableSize);
     Items::ITEM_SetItemData_nFileIndex(pUnit, gaGemRuneTypeIds[nTableSize]);
     if (gaGemRuneTypeIds[nTableSize] != 9 && gaGemRuneTypeIds[nTableSize] != 7) {
       Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, 1, 0);

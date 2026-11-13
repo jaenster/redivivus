@@ -3568,7 +3568,6 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2TCStackEntryStrc pTCStack[64];
     int nCumulativeWeight;
     int nParentDepth;
-    uint64_t nSeedHighWide;
     D2SeedStrc sNewSeed;
     int bIsExpansion;
     bIsExpansion = pGame->bExpansion;
@@ -3703,23 +3702,8 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
               if (!bIsItemFindDrop) {
                 nTCWeightSum = nRolledItemClassId + nTCWeightSum;
               }
-              if ((int)nTCWeightSum <= 0) {
-                nRoll = 0;
-              } else {
-                nRoll = pUnit->sSeed.nSeedLow;
-                nSeedHighWide = (uint64_t)pUnit->sSeed.nSeedHigh;
-                if (nTCWeightSum & nTCWeightSum - 1) {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nRoll * 0x6ac690c5 + nSeedHighWide);
-                  pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nRoll = (uint32_t)(sNewSeed.nSeedLow % nTCWeightSum);
-                } else {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nRoll * 0x6ac690c5 + nSeedHighWide);
-                  pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nRoll = nTCWeightSum - 1 & sNewSeed.nSeedLow;
-                }
-              }
+
+              nRoll = D2_SeedRollLimited(&pUnit->sSeed, nTCWeightSum);
               if (bIsItemFindDrop) {
                 goto pick_entry;
               }

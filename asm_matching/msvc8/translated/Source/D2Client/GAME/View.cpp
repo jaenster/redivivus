@@ -452,16 +452,7 @@ void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespaw
 
     int nWindowHeight = UI::ui::WindowSizeY;
     gaArcaneStarXPos[nStarIndex] = nStarXPos;
-    if (nWindowHeight <= 0) {
-      nYPos = 0;
-    } else if (nWindowHeight & nWindowHeight - 1U) {
-      seed = D2_SeedRoll(pStarSeed);
-      nYPos = (uint32_t)(seed % (uint32_t)nWindowHeight);
-    } else {
-      seed = D2_SeedRoll(pStarSeed);
-      nYPos = nWindowHeight - 1U & seed;
-    }
-
+    nYPos = D2_SeedRollLimited(pStarSeed, nWindowHeight);
     gaArcaneStarYPos[nStarIndex] = nYPos;
     seed = D2_SeedRoll(pStarSeed);
     gaArcaneStarXVelocity[nStarIndex] = (int)(seed / 5) * 5 - seed - 1;

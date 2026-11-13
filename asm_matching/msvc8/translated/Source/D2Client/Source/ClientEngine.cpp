@@ -81,8 +81,6 @@ void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
     D2SkillArgStrc sSkillArg;
     D2DrlgRoomCoordsStrc sRoomCoords;
     int nSavedX;
-    uint64_t nSeedHigh;
-    D2SeedStrc sNewSeed;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pPlayer) {
       return;
@@ -102,43 +100,10 @@ void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
       if (nAttempt >= 0x19) {
         return;
       }
-      if (sRoomCoords.dwXSize <= 0) {
-        nRandCoord = 0;
-      } else {
-        nSeedHigh = (uint64_t)pPlayer->sSeed.nSeedHigh;
-        nRandCoord = pPlayer->sSeed.nSeedLow;
-        if (sRoomCoords.dwXSize & sRoomCoords.dwXSize - 1U) {
-          sNewSeed = (D2SeedStrc)((uint64_t)nRandCoord * 0x6ac690c5 + nSeedHigh);
-          pPlayer->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayer->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandCoord = (uint32_t)(sNewSeed.nSeedLow % (uint32_t)sRoomCoords.dwXSize);
-        } else {
-          sNewSeed = (D2SeedStrc)((uint64_t)nRandCoord * 0x6ac690c5 + nSeedHigh);
-          pPlayer->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayer->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandCoord = sRoomCoords.dwXSize - 1U & sNewSeed.nSeedLow;
-        }
-      }
 
+      nRandCoord = D2_SeedRollLimited(&pPlayer->sSeed, sRoomCoords.dwXSize);
       sSkillArg.nX = nRandCoord + sRoomCoords.dwXStart;
-      if (sRoomCoords.dwYSize <= 0) {
-        nRandCoord = 0;
-      } else {
-        nRandCoord = pPlayer->sSeed.nSeedLow;
-        nSeedHigh = (uint64_t)pPlayer->sSeed.nSeedHigh;
-        if (sRoomCoords.dwYSize & sRoomCoords.dwYSize - 1U) {
-          sNewSeed = (D2SeedStrc)((uint64_t)nRandCoord * 0x6ac690c5 + nSeedHigh);
-          pPlayer->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayer->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandCoord = (uint32_t)(sNewSeed.nSeedLow % (uint32_t)sRoomCoords.dwYSize);
-        } else {
-          sNewSeed = (D2SeedStrc)((uint64_t)nRandCoord * 0x6ac690c5 + nSeedHigh);
-          pPlayer->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pPlayer->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nRandCoord = sRoomCoords.dwYSize - 1U & sNewSeed.nSeedLow;
-        }
-      }
-
+      nRandCoord = D2_SeedRollLimited(&pPlayer->sSeed, sRoomCoords.dwYSize);
       sSkillArg.nY = nRandCoord + sRoomCoords.dwYStart;
       nSavedX = sSkillArg.nX;
       eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, sSkillArg.nX, sSkillArg.nY, COLLIDE_WALL | COLLIDE_BLOCK_PLAYER);

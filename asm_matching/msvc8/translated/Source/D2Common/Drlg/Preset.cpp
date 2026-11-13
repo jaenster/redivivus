@@ -1645,23 +1645,13 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     int nSizeY;
     uint32_t nFileSelector;
     uint32_t seedProduct;
-    uint32_t newSeed;
     D2DrlgMapStrc* pDrlgMap = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgMapStrc, ".\\DRLG\\Preset.cpp", 0x9ad);
     memset(pDrlgMap, 0, 0x58);
     D2LvlPrestTxt* pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
     pDrlgMap->pTxtLevelPrest = pLvlPrest;
     pDrlgMap->nNumber = nLvlPrestId;
     uint32_t nFiles = pLvlPrest->Files;
-    if ((int)nFiles <= 0) {
-      nFileSelector = 0;
-    } else if (nFiles & nFiles - 1) {
-      newSeed = D2_SeedRoll(pSeed);
-      nFileSelector = newSeed % nFiles;
-    } else {
-      newSeed = D2_SeedRoll(pSeed);
-      nFileSelector = nFiles - 1 & newSeed;
-    }
-
+    nFileSelector = D2_SeedRollLimited(pSeed, nFiles);
     pDrlgMap->nRandomMapFileSelector = nFileSelector;
     pDrlgMap->nRealOffsetX = pDrlgCoord->nPosX;
     D2LvlPrestTxt* pLvlPrestTxt = pDrlgMap->pTxtLevelPrest;

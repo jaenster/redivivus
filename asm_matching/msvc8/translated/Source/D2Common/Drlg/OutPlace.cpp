@@ -1664,24 +1664,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
 
           trim_exit_candidates:
           if ((int)nRandIdx > 3) {
-            if ((int)nRandIdx <= 0) {
-              nRandExitIdx = 0;
-            } else {
-              uSeedHigh64 = (uint64_t)pDrlg->nSeed.nSeedHigh;
-              nConnFlags = pDrlg->nSeed.nSeedLow;
-              if (nRandIdx & nRandIdx - 1) {
-                sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
-                pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
-                nRandExitIdx = (int)(sNewSeed.nSeedLow % nRandIdx);
-              } else {
-                sNewSeed = (D2SeedStrc)((uint64_t)nConnFlags * 0x6ac690c5 + uSeedHigh64);
-                pDrlg->nSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                pDrlg->nSeed.nSeedLow = sNewSeed.nSeedLow;
-                nRandExitIdx = nRandIdx - 1 & sNewSeed.nSeedLow;
-              }
-            }
-
+            nRandExitIdx = D2_SeedRollLimited(&pDrlg->nSeed, nRandIdx);
             bSwapped = false;
             pExitCount.nExitCount = 0x0;
             nRowIter = 0;

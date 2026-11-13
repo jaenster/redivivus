@@ -105,7 +105,6 @@ BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomSt
     uint32_t nRoomTop;
     int nX;
     int nY;
-    uint32_t seedNext;
     ::SGAMEDATA* pGameLocal = pGame;
     D2RoomStrc* pRoomWork = pRoom;
     GetRoomCorners(pRoom, &nRoomWidth, &nRoomLeft, &nRoomHeight, (int*)&nRoomTop, pCoordList);
@@ -123,27 +122,9 @@ BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomSt
 
     for (nTryCount = 0; nTryCount < 0x14; nTryCount++) {
       BOOL bWarpCheckOk;
-      if (nRoomWidth <= 0) {
-        nRand = 0;
-      } else if (nRoomWidth & nRoomWidth - 1U) {
-        seedNext = D2_SeedRoll(pRoomSeed);
-        nRand = (uint32_t)(seedNext % (uint32_t)nRoomWidth);
-      } else {
-        seedNext = D2_SeedRoll(pRoomSeed);
-        nRand = nRoomWidth - 1U & seedNext;
-      }
-
+      nRand = D2_SeedRollLimited(pRoomSeed, nRoomWidth);
       nX = nRand + nRoomLeft;
-      if ((int)nRoomTop <= 0) {
-        nRand = 0;
-      } else if (nRoomTop & nRoomTop - 1) {
-        seedNext = D2_SeedRoll(pRoomSeed);
-        nRand = (uint32_t)(seedNext % nRoomTop);
-      } else {
-        seedNext = D2_SeedRoll(pRoomSeed);
-        nRand = nRoomTop - 1 & seedNext;
-      }
-
+      nRand = D2_SeedRollLimited(pRoomSeed, nRoomTop);
       nY = nRand + nRoomHeight;
       if (!bCheckWarpDistance || (bWarpCheckOk = CheckWarpSpawnCoords(pRoomWork, pGameLocal, nX, nY) , !bWarpCheckOk)) {
         if (bUseCoordList) {
@@ -179,10 +160,8 @@ BOOL __stdcall SPAWN_SpawnMonsterGroupAtRandom(::SGAMEDATA * pGame, D2RoomStrc *
     int nRoomWidth;
     int32_t nSpawnedCount;
     int nBaseX;
-    uint64_t ullSeedProduct;
     int nBaseY;
     int32_t* pGroupOffsets;
-    D2SeedStrc seedNext;
     GetRoomCorners(pRoom, &nRoomWidth, &nRoomLeft, &nRoomTop, &nRoomHeight, pCoordList);
     int nCoordListIdx = 0;
     if (pCoordList) {
@@ -200,38 +179,9 @@ BOOL __stdcall SPAWN_SpawnMonsterGroupAtRandom(::SGAMEDATA * pGame, D2RoomStrc *
     int nTryCount = 0;
     while (true) {
       uint32_t nRand;
-      if (nRoomWidth <= 0) {
-        nRand = 0;
-      } else if (nRoomWidth & nRoomWidth - 1U) {
-        seedNext = D2_SEED_NEXT(*pRoomSeed);
-        pRoomSeed->nSeedHigh = seedNext.nSeedHigh;
-        pRoomSeed->nSeedLow = seedNext.nSeedLow;
-        nRand = (uint32_t)(seedNext.nSeedLow % (uint32_t)nRoomWidth);
-      } else {
-        seedNext = D2_SEED_NEXT(*pRoomSeed);
-        pRoomSeed->nSeedHigh = seedNext.nSeedHigh;
-        pRoomSeed->nSeedLow = seedNext.nSeedLow;
-        nRand = nRoomWidth - 1U & seedNext.nSeedLow;
-      }
-
+      nRand = D2_SeedRollLimited(pRoomSeed, nRoomWidth);
       nBaseX = nRand + nRoomLeft;
-      if (nRoomHeight <= 0) {
-        nRand = 0;
-      } else {
-        ullSeedProduct = (uint64_t)pRoomSeed->nSeedLow * 0x6ac690c5;
-        if (nRoomHeight & nRoomHeight - 1U) {
-          seedNext = (D2SeedStrc)(ullSeedProduct + pRoomSeed->nSeedHigh);
-          pRoomSeed->nSeedHigh = seedNext.nSeedHigh;
-          pRoomSeed->nSeedLow = seedNext.nSeedLow;
-          nRand = (uint32_t)(seedNext.nSeedLow % (uint32_t)nRoomHeight);
-        } else {
-          seedNext = (D2SeedStrc)(ullSeedProduct + pRoomSeed->nSeedHigh);
-          pRoomSeed->nSeedHigh = seedNext.nSeedHigh;
-          pRoomSeed->nSeedLow = seedNext.nSeedLow;
-          nRand = nRoomHeight - 1U & seedNext.nSeedLow;
-        }
-      }
-
+      nRand = D2_SeedRollLimited(pRoomSeed, nRoomHeight);
       nBaseY = nRand + nRoomTop;
       nSpawnedCount = 0;
       pGroupOffsets = (int32_t*)pnGroupLayout;

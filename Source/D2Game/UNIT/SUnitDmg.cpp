@@ -2605,48 +2605,11 @@ D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc 
 }
 
 uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(D2UnitStrc * pUnit, uint32_t * pnMinDamage, uint32_t * pnMaxDamage) {
-    uint32_t uVar1;
-    uint64_t uVar2;
-    D2SeedStrc nSeedStateGeneral;
     uint32_t nRangeRoll = *pnMinDamage;
-    if ((int)nRangeRoll <= 0) {
-      nRangeRoll = 0;
-    } else {
-      uVar1 = pUnit->sSeed.nSeedLow;
-      uVar2 = (uint64_t)pUnit->sSeed.nSeedHigh;
-      if (nRangeRoll & nRangeRoll - 1) {
-        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
-        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
-        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
-        nRangeRoll = (uint32_t)(nSeedStateGeneral.nSeedLow % nRangeRoll);
-      } else {
-        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
-        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
-        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
-        nRangeRoll = nRangeRoll - 1 & nSeedStateGeneral.nSeedLow;
-      }
-    }
-
+    nRangeRoll = D2_SeedRollLimited(&pUnit->sSeed, nRangeRoll);
     *pnMinDamage = nRangeRoll;
     nRangeRoll = *pnMaxDamage;
-    if ((int)nRangeRoll <= 0) {
-      nRangeRoll = 0;
-    } else {
-      uVar2 = (uint64_t)pUnit->sSeed.nSeedHigh;
-      uVar1 = pUnit->sSeed.nSeedLow;
-      if (nRangeRoll & nRangeRoll - 1) {
-        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
-        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
-        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
-        nRangeRoll = (uint32_t)(nSeedStateGeneral.nSeedLow % nRangeRoll);
-      } else {
-        nSeedStateGeneral = (D2SeedStrc)((uint64_t)uVar1 * 0x6ac690c5 + uVar2);
-        pUnit->sSeed.nSeedHigh = nSeedStateGeneral.nSeedHigh;
-        pUnit->sSeed.nSeedLow = nSeedStateGeneral.nSeedLow;
-        nRangeRoll = nRangeRoll - 1 & nSeedStateGeneral.nSeedLow;
-      }
-    }
-
+    nRangeRoll = D2_SeedRollLimited(&pUnit->sSeed, nRangeRoll);
     *pnMaxDamage = nRangeRoll;
     return (uint32_t)((int)*pnMinDamage >= (int)nRangeRoll);
 }

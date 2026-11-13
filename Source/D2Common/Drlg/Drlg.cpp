@@ -1373,7 +1373,6 @@ D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int n
     uint32_t nRaritySum;
     uint32_t nRandom;
     D2TileLibraryEntryStrc* aTileResults[40];
-    uint32_t sNewSeed;
     if (nGridFlags) {
       nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
       nRaritySum = nGridFlags >> 8;
@@ -1407,19 +1406,8 @@ D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int n
         nRaritySum += nRarityEntry;
       } while (nRandom < nTileMatchCount);
     }
-    if ((int)nRaritySum <= 0) {
-      nRandom = 0;
-    } else {
-      nRandom = pRoomEx->sSeed.nSeedLow;
-      if (nRaritySum & nRaritySum - 1) {
-        sNewSeed = D2_SeedRoll(&pRoomEx->sSeed);
-        nRandom = (uint32_t)(sNewSeed % nRaritySum);
-      } else {
-        sNewSeed = D2_SeedRoll(&pRoomEx->sSeed);
-        nRandom = nRaritySum - 1 & sNewSeed;
-      }
-    }
 
+    nRandom = D2_SeedRollLimited(&pRoomEx->sSeed, nRaritySum);
     int nSelectedIndex = 0;
     nRarityEntry = nRandom + 1;
     if (nRaritySum) {
@@ -1701,8 +1689,6 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt 
     int* pGroupEntry;
     int32_t nColIter;
     int nRowIter;
-    uint64_t nSeedHigh;
-    uint32_t uSeedLow;
     D2RoomExStrc* pDVar1 = pWallLayerGrids->pRoomEx;
     D2PoolManagerStrc* pMemory = pDVar1->pLevel->pDrlg->pMemoryPool;
     D2DrlgFileStrc* pFile = pSubTxt->pDrlgFile;
@@ -1728,24 +1714,7 @@ void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt 
                   pDVar1->sSeed = DVar2;
                   if (pSubTxt->Prob[pWallLayerGrids->nSubTypeIndex] < (int)(DVar2.nSeedLow % 100)) {
                     nVariantIdx = pGroupEntry[5];
-                    if ((int)nVariantIdx <= 0) {
-                      nVariantIdx = 0;
-                    } else {
-                      uSeedLow = pDVar1->sSeed.nSeedLow;
-                      nSeedHigh = (uint64_t)pDVar1->sSeed.nSeedHigh;
-                      if (nVariantIdx & nVariantIdx - 1) {
-                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + nSeedHigh);
-                        pDVar1->sSeed.nSeedHigh = DVar2.nSeedHigh;
-                        pDVar1->sSeed.nSeedLow = DVar2.nSeedLow;
-                        nVariantIdx = (uint32_t)(DVar2.nSeedLow % nVariantIdx);
-                      } else {
-                        DVar2 = (D2SeedStrc)((uint64_t)uSeedLow * 0x6ac690c5 + nSeedHigh);
-                        pDVar1->sSeed.nSeedHigh = DVar2.nSeedHigh;
-                        pDVar1->sSeed.nSeedLow = DVar2.nSeedLow;
-                        nVariantIdx = nVariantIdx - 1 & DVar2.nSeedLow;
-                      }
-                    }
-
+                    nVariantIdx = D2_SeedRollLimited(&pDVar1->sSeed, nVariantIdx);
                     DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nColIter, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, (pGroupEntry[2] + 1) * (nVariantIdx + 1));
                   }
                 }
@@ -1779,18 +1748,13 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
     uint32_t nRandIdxB;
     int nPosX;
     uint32_t nTotalPositions;
-    int32_t nSeedHighTempB;
     int nShuffleGridY;
-    int32_t nSeedHighTempA;
     uint32_t nMaxXSaved;
     int nTrialCount;
     D2DrlgSubstGroupStrc* pSubstGroup;
     uint32_t nTrialIter;
     uint32_t nMaxY;
-    int64_t llSeedProduct;
     uint32_t nShuffleRem;
-    D2SeedStrc sNewSeed;
-    uint64_t ullSeedHigh;
     D2RoomExStrc* pRoomEx;
     pRoomEx = pRoomCtx->pRoomEx;
     D2PoolManagerStrc* pMemory;
@@ -1806,24 +1770,7 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
     while (true) {
       int aShuffledCoordinates[513];
       nMaxX = pDsOneFile->nSubstGroups;
-      if ((int)nMaxX <= 0) {
-        nMaxX = 0;
-      } else {
-        ullSeedHigh = (uint64_t)pRoomEx->sSeed.nSeedHigh;
-        nTotalPositions = pRoomEx->sSeed.nSeedLow;
-        if (nMaxX & nMaxX - 1) {
-          sNewSeed = (D2SeedStrc)((uint64_t)nTotalPositions * 0x6ac690c5 + ullSeedHigh);
-          pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nMaxX = (uint32_t)(sNewSeed.nSeedLow % nMaxX);
-        } else {
-          sNewSeed = (D2SeedStrc)((uint64_t)nTotalPositions * 0x6ac690c5 + ullSeedHigh);
-          pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-          pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-          nMaxX = nMaxX - 1 & sNewSeed.nSeedLow;
-        }
-      }
-
+      nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxX);
       nMaxY = pRoomEx->sCoords.WorldSize.y - pDsOneFile->pSubstGroups[nMaxX].tBox.nHeight;
       pSubstGroup = pDsOneFile->pSubstGroups + nMaxX;
       nMaxX = pRoomEx->sCoords.WorldSize.x - pSubstGroup->tBox.nWidth;
@@ -1845,43 +1792,8 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
               } while (nPosX < (int)nTotalPositions);
 
               do {
-                if ((int)nTotalPositions <= 0) {
-                  nMaxX = 0;
-                } else {
-                  nMaxX = pRoomEx->sSeed.nSeedLow;
-                  if (nTotalPositions & nTotalPositions - 1) {
-                    sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-                    pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                    pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                    nMaxX = (uint32_t)(sNewSeed.nSeedLow % nTotalPositions);
-                  } else {
-                    sNewSeed = D2_SEED_NEXT(pRoomEx->sSeed);
-                    pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                    pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                    nMaxX = nTotalPositions - 1 & sNewSeed.nSeedLow;
-                  }
-                }
-                if ((int)nTotalPositions <= 0) {
-                  nRandIdxB = 0;
-                } else {
-                  nRandIdxB = pRoomEx->sSeed.nSeedLow;
-                  if (nTotalPositions & nTotalPositions - 1) {
-                    llSeedProduct = (uint64_t)nRandIdxB * 0x6ac690c5;
-                    nSeedHighTempB = (int32_t)((uint64_t)llSeedProduct >> 0x20);
-                    sNewSeed = (D2SeedStrc)(llSeedProduct + (uint64_t)pRoomEx->sSeed.nSeedHigh);
-                    pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                    pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                    nRandIdxB = sNewSeed.nSeedLow % nTotalPositions;
-                  } else {
-                    llSeedProduct = (uint64_t)nRandIdxB * 0x6ac690c5;
-                    nSeedHighTempA = (int32_t)((uint64_t)llSeedProduct >> 0x20);
-                    sNewSeed = (D2SeedStrc)(llSeedProduct + (uint64_t)pRoomEx->sSeed.nSeedHigh);
-                    pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                    pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                    nRandIdxB = nTotalPositions - 1 & sNewSeed.nSeedLow;
-                  }
-                }
-
+                nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nTotalPositions);
+                nRandIdxB = D2_SeedRollLimited(&pRoomEx->sSeed, nTotalPositions);
                 nShuffleRem = nMaxY - 1;
                 nMaxY = nShuffleRem;
                 nPosX = aShuffledCoordinates[nMaxX * 2];
@@ -1914,43 +1826,9 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
           if (nTrialCount > 0) {
             do {
               nMaxXSaved = nMaxX;
-              if ((int)nMaxXSaved <= 0) {
-                nMaxX = 0;
-              } else {
-                nMaxX = pRoomEx->sSeed.nSeedLow;
-                ullSeedHigh = (uint64_t)pRoomEx->sSeed.nSeedHigh;
-                if (nMaxXSaved & nMaxXSaved - 1) {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nMaxX * 0x6ac690c5 + ullSeedHigh);
-                  pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nMaxX = (uint32_t)(sNewSeed.nSeedLow % nMaxXSaved);
-                } else {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nMaxX * 0x6ac690c5 + ullSeedHigh);
-                  pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nMaxX = nMaxXSaved - 1 & sNewSeed.nSeedLow;
-                }
-              }
-
+              nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxXSaved);
               nPosX = nMaxX + 1;
-              if ((int)nMaxY <= 0) {
-                nMaxX = 0;
-              } else {
-                nMaxX = pRoomEx->sSeed.nSeedLow;
-                ullSeedHigh = (uint64_t)pRoomEx->sSeed.nSeedHigh;
-                if (nMaxY & nMaxY - 1) {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nMaxX * 0x6ac690c5 + ullSeedHigh);
-                  pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nMaxX = (uint32_t)(sNewSeed.nSeedLow % nMaxY);
-                } else {
-                  sNewSeed = (D2SeedStrc)((uint64_t)nMaxX * 0x6ac690c5 + ullSeedHigh);
-                  pRoomEx->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-                  pRoomEx->sSeed.nSeedLow = sNewSeed.nSeedLow;
-                  nMaxX = nMaxY - 1 & sNewSeed.nSeedLow;
-                }
-              }
-
+              nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxY);
               BVar1 = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nPosX, nMaxX + 1, pRoomCtx, (int*)pSubstGroup, pSubTxt);
               nMaxX++;
               if (BVar1) {

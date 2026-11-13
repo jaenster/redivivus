@@ -84,14 +84,12 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     int32_t nY;
     BOOL bCanSpawn;
     uint32_t nRandIdxA;
-    uint32_t uVar2;
     uint32_t nGridWidthCells;
     uint32_t nShuffleCountdown;
     int32_t nSwapTmpX;
     int32_t nSwapTmpY;
     int64_t lSeedProduct;
     int32_t nFreeSrcLine;
-    uint32_t sNewSeed;
     D2PoolManagerStrc* pMemory;
     pMemory = pLevel->pDrlg->pMemoryPool;
     uint32_t nSwapIdxA;
@@ -123,39 +121,8 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
       nShuffleCountdown = nTotalCells;
       if ((int)nTotalCells > 0) {
         do {
-          if ((int)nTotalCells <= 0) {
-            nRandIdxA = 0;
-          } else {
-            nRandIdxA = pLevel->sSeed.nSeedLow;
-            if (nTotalCells & nTotalCells - 1) {
-              sNewSeed = D2_SeedRoll(&pLevel->sSeed);
-              nRandIdxA = sNewSeed % nTotalCells;
-            } else {
-              sNewSeed = D2_SeedRoll(&pLevel->sSeed);
-              nRandIdxA = nTotalCells - 1 & sNewSeed;
-            }
-          }
-          if ((int)nTotalCells <= 0) {
-            nGridWidthCells = 0;
-          } else {
-            nGridWidthCells = pLevel->sSeed.nSeedLow;
-            if (nTotalCells & nTotalCells - 1) {
-              lSeedProduct = (uint64_t)nGridWidthCells * 0x6ac690c5 + (uint64_t)pLevel->sSeed.nSeedHigh;
-              nGridWidthCells = (uint32_t)lSeedProduct;
-              uVar2 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
-              pLevel->sSeed.nSeedLow = nGridWidthCells;
-              nGridWidthCells %= nTotalCells;
-            } else {
-              lSeedProduct = (uint64_t)nGridWidthCells * 0x6ac690c5 + (uint64_t)pLevel->sSeed.nSeedHigh;
-              nGridWidthCells = (uint32_t)lSeedProduct;
-              uVar2 = (uint32_t)((uint64_t)lSeedProduct >> 0x20);
-              pLevel->sSeed.nSeedLow = nGridWidthCells;
-              nGridWidthCells = nTotalCells - 1 & nGridWidthCells;
-            }
-
-            pLevel->sSeed.nSeedHigh = uVar2;
-          }
-
+          nRandIdxA = D2_SeedRollLimited(&pLevel->sSeed, nTotalCells);
+          nGridWidthCells = D2_SeedRollLimited(&pLevel->sSeed, nTotalCells);
           nShuffleCountdown--;
           nSwapTmpX = pMemoryToFree[nRandIdxA].nX;
           nSwapTmpY = pMemoryToFree[nRandIdxA].nY;

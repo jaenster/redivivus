@@ -569,28 +569,8 @@ static void __stdcall DRLGMAZE_BuildRoomGrid(int32_t nGridSize, D2DrlgLevelStrc 
 }
 
 D2RoomExStrc * __fastcall GetRandomRoomExFromLevel(D2DrlgLevelStrc * pLevel) {
-    uint32_t nSeedLowOld;
-    D2SeedStrc sSeed;
     uint32_t nSelectedRoom = pLevel->nRoomExCount;
-    if ((int)nSelectedRoom <= 0) {
-      nSelectedRoom = 0;
-    } else {
-      uint64_t nSeedLowCopy;
-      nSeedLowCopy = (uint64_t)pLevel->sSeed.nSeedHigh;
-      nSeedLowOld = pLevel->sSeed.nSeedLow;
-      if (nSelectedRoom & nSelectedRoom - 1) {
-        sSeed = (D2SeedStrc)((uint64_t)nSeedLowOld * 0x6ac690c5 + nSeedLowCopy);
-        pLevel->sSeed.nSeedHigh = sSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = sSeed.nSeedLow;
-        nSelectedRoom = (uint32_t)(sSeed.nSeedLow % nSelectedRoom);
-      } else {
-        sSeed = (D2SeedStrc)((uint64_t)nSeedLowOld * 0x6ac690c5 + nSeedLowCopy);
-        pLevel->sSeed.nSeedHigh = sSeed.nSeedHigh;
-        pLevel->sSeed.nSeedLow = sSeed.nSeedLow;
-        nSelectedRoom = nSelectedRoom - 1 & sSeed.nSeedLow;
-      }
-    }
-
+    nSelectedRoom = D2_SeedRollLimited(&pLevel->sSeed, nSelectedRoom);
     D2RoomExStrc* pRoom = pLevel->pRoomExFirst;
     for (; nSelectedRoom; nSelectedRoom--) {
       pRoom = pRoom->pRoomExNext;

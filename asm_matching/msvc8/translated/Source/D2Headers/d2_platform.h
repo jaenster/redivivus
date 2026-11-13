@@ -564,6 +564,11 @@ template <class TSeed> static D2_SEED_ROLL_INLINE uint32_t D2_SeedRoll(TSeed* pS
     pSeed->nSeedLow = (uint32_t)lNext;
     return (uint32_t)lNext;
 }
+template <class TSeed> static D2_SEED_ROLL_INLINE uint32_t D2_SeedRollLimited(TSeed* pSeed, int nMax) {
+    if (nMax <= 0) return 0;
+    if ((nMax - 1) & nMax) return D2_SeedRoll(pSeed) % (uint32_t)nMax;
+    return D2_SeedRoll(pSeed) & (uint32_t)(nMax - 1);
+}
 
 // A shift count as x86 takes it: SHL/SHR/SAR by CL use its low five bits. The decompiler
 // prints such a shift as `x << (n & 0x1f)`; the source shifted by n, and VC8 compiles the

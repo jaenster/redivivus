@@ -1323,7 +1323,6 @@ void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnIn
     uint32_t nRandY;
     D2SkillArgStrc sSkillArg;
     int nCenterY;
-    uint32_t sRolledSeed;
     if (!((int)nMissileId >= 0 && (int)nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
       return;
     }
@@ -1365,31 +1364,8 @@ void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnIn
     int32_t nCountRemaining = nCount;
     do {
       int32_t nClampY;
-      if ((int)nDiameter <= 0) {
-        nRandX = 0;
-      } else {
-        nRandX = pUnit->sSeed.nSeedLow;
-        if (nDiameter & nDiameter - 1) {
-          sRolledSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRandX = (uint32_t)(sRolledSeed % nDiameter);
-        } else {
-          sRolledSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRandX = nDiameter - 1 & sRolledSeed;
-        }
-      }
-      if ((int)nDiameter <= 0) {
-        nRandY = 0;
-      } else {
-        nRandY = pUnit->sSeed.nSeedLow;
-        if (nDiameter & nDiameter - 1) {
-          sRolledSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRandY = (uint32_t)(sRolledSeed % nDiameter);
-        } else {
-          sRolledSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRandY = nDiameter - 1 & sRolledSeed;
-        }
-      }
-
+      nRandX = D2_SeedRollLimited(&pUnit->sSeed, nDiameter);
+      nRandY = D2_SeedRollLimited(&pUnit->sSeed, nDiameter);
       nCurFrame = nRadius;
       if ((int)(nRandX - nRadius) < 0) {
         nCurFrame = -nRadius;
@@ -1600,31 +1576,8 @@ void __fastcall MISSILE_CreateMultiShatter(D2UnitStrc * pUnit, D2UnitStrc * pUni
       sSkillArg.nMissileTxtNo = nMissileId;
       pSubMissile = Missile::MakeMissile(&sSkillArg);
       if (pSubMissile) {
-        if ((int)nSpreadRangeVal <= 0) {
-          nRandX = 0;
-        } else {
-          nRandX = pUnit2->sSeed.nSeedLow;
-          if (nSpreadRangeVal & nSpreadRangeVal - 1) {
-            sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-            nRandX = (uint32_t)(sSeedTmp % nSpreadRangeVal);
-          } else {
-            sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-            nRandX = nSpreadRangeVal - 1 & sSeedTmp;
-          }
-        }
-        if ((int)nSpreadRangeVal <= 0) {
-          nRandY = 0;
-        } else {
-          nRandY = pUnit2->sSeed.nSeedLow;
-          if (nSpreadRangeVal & nSpreadRangeVal - 1) {
-            sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-            nRandY = (uint32_t)(sSeedTmp % nSpreadRangeVal);
-          } else {
-            sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-            nRandY = nSpreadRangeVal - 1 & sSeedTmp;
-          }
-        }
-
+        nRandX = D2_SeedRollLimited(&pUnit2->sSeed, nSpreadRangeVal);
+        nRandY = D2_SeedRollLimited(&pUnit2->sSeed, nSpreadRangeVal);
         nZSpreadRange = pMissileTxt->CltParam2;
         nRandZ = 0;
         if ((int)nZSpreadRange > 0) {
@@ -3985,49 +3938,13 @@ int32_t __fastcall MISSILE_CltHitFn60_Nihlithak(D2UnitStrc * pUnit, D2UnitStrc *
 
 // Spawns a missile at a random position within nRadius tiles of pUnit's current location. Advances pUnit->sSeed twice (LCG 0x6AC690C5) to pick independent random X and Y offsets in [0, 2*nRadius), then fills a D2SkillArgStrc with the owner, origin, skill id, level, and the jittered target coords (unitPos +/- offset - radius), and calls MakeMissile. Works for both static-path and dynamic-path units.
 static void __stdcall MISSILE_CreateRandomOffsetHit(int32_t nRadius, eMissilesId nMissileId, D2UnitStrc * pUnit) {
-    D2SeedStrc DVar1;
     int nPosXorY;
     uint32_t nRandX;
     D2SkillArgStrc sSkillArg;
     uint32_t nRandY;
-    uint64_t uSeedHigh;
     uint32_t nRandY2 = nRadius * 2;
-    if ((int)nRandY2 <= 0) {
-      nRandX = 0;
-    } else {
-      uSeedHigh = (uint64_t)pUnit->sSeed.nSeedHigh;
-      nRandX = pUnit->sSeed.nSeedLow;
-      if (nRandY2 & nRandY2 - 1) {
-        DVar1 = (D2SeedStrc)((uint64_t)nRandX * 0x6ac690c5 + uSeedHigh);
-        pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandX = (uint32_t)(DVar1.nSeedLow % nRandY2);
-      } else {
-        DVar1 = (D2SeedStrc)((uint64_t)nRandX * 0x6ac690c5 + uSeedHigh);
-        pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandX = nRandY2 - 1 & DVar1.nSeedLow;
-      }
-    }
-    if ((int)nRandY2 <= 0) {
-      nRandY2 = 0;
-    } else {
-      uint32_t nRandTmp;
-      uSeedHigh = (uint64_t)pUnit->sSeed.nSeedHigh;
-      nRandTmp = pUnit->sSeed.nSeedLow;
-      if (nRandY2 & nRandY2 - 1) {
-        DVar1 = (D2SeedStrc)((uint64_t)nRandTmp * 0x6ac690c5 + uSeedHigh);
-        pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandY2 = (uint32_t)(DVar1.nSeedLow % nRandY2);
-      } else {
-        DVar1 = (D2SeedStrc)((uint64_t)nRandTmp * 0x6ac690c5 + uSeedHigh);
-        pUnit->sSeed.nSeedHigh = DVar1.nSeedHigh;
-        pUnit->sSeed.nSeedLow = DVar1.nSeedLow;
-        nRandY2 = nRandY2 - 1 & DVar1.nSeedLow;
-      }
-    }
-
+    nRandX = D2_SeedRollLimited(&pUnit->sSeed, nRandY2);
+    nRandY2 = D2_SeedRollLimited(&pUnit->sSeed, nRandY2);
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);

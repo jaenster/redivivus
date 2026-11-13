@@ -362,8 +362,6 @@ static BOOL AI_BAAL_HasPowerfulSkill(D2UnitStrc * pUnit) {
 
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
 static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, D2UnitStrc * pUnit) {
-    uint32_t nSeedLow;
-    D2SeedStrc sNewSeed;
     uint32_t nRandResult = 0;
     int* pWeight = pnWeights;
     int nCount = nWeightCount;
@@ -374,25 +372,8 @@ static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t n
         pWeight++;
       } while (nCount);
     }
-    if ((int)nRandResult <= 0) {
-      nRandResult = 0;
-    } else {
-      uint64_t nSeedHigh;
-      nSeedHigh = (uint64_t)pUnit->sSeed.nSeedHigh;
-      nSeedLow = pUnit->sSeed.nSeedLow;
-      if (nRandResult & nRandResult - 1) {
-        sNewSeed = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHigh);
-        pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandResult = (uint32_t)(sNewSeed.nSeedLow % nRandResult);
-      } else {
-        sNewSeed = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nSeedHigh);
-        pUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-        nRandResult = nRandResult - 1 & sNewSeed.nSeedLow;
-      }
-    }
 
+    nRandResult = D2_SeedRollLimited(&pUnit->sSeed, nRandResult);
     int nAccum = 0;
     nCount = 0;
     if (nWeightCount <= 0) {

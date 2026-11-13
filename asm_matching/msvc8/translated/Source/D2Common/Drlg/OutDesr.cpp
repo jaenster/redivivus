@@ -109,20 +109,7 @@ static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId
     uint32_t nRandVariantIdx;
     int nFileIdx;
     int nFileCount;
-    if ((int)nVariants <= 0) {
-      nRandVariantIdx = 0;
-    } else {
-      uint32_t DVar1;
-      nRandVariantIdx = pLevel->sSeed.nSeedLow;
-      if (nVariants & nVariants - 1) {
-        DVar1 = D2_SeedRoll(&pLevel->sSeed);
-        nRandVariantIdx = (uint32_t)(DVar1 % nVariants);
-      } else {
-        DVar1 = D2_SeedRoll(&pLevel->sSeed);
-        nRandVariantIdx = nVariants - 1 & DVar1;
-      }
-    }
-
+    nRandVariantIdx = D2_SeedRollLimited(&pLevel->sSeed, nVariants);
     DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(pLevelPrestIds[nRandVariantIdx]);
     if ((int)nVariants <= 0) {
       return;

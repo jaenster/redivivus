@@ -802,7 +802,6 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
     int nCpickOffset;
     D2MonUModTxt* pUmodEntry;
     uint32_t nTotalWeight;
-    uint32_t sNewSeed;
     uint16_t wCpick;
     if (!pGame) {
       return 0;
@@ -846,19 +845,8 @@ static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t 
           pUmodEntry++;
         } while (nUmodIdx < nPickIdx);
       }
-      if ((int)nTotalWeight <= 0) {
-        nRoll = 0;
-      } else {
-        nRoll = pUnit->sSeed.nSeedLow;
-        if (nTotalWeight & nTotalWeight - 1) {
-          sNewSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRoll = (uint32_t)(sNewSeed % nTotalWeight);
-        } else {
-          sNewSeed = D2_SeedRoll(&pUnit->sSeed);
-          nRoll = nTotalWeight - 1 & sNewSeed;
-        }
-      }
 
+      nRoll = D2_SeedRollLimited(&pUnit->sSeed, nTotalWeight);
       nPickIdx = 0;
       if (nCandidates <= 0) {
         return 0;
@@ -2404,20 +2392,7 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     uint32_t nDmgRange = (int)pMonStatsTxt->aEl1MaxD[0] - (int)pMonStatsTxt->aEl1MinD[0];
-    if ((int)nDmgRange <= 0) {
-      nDmgRoll = 0;
-    } else {
-      uint32_t sSeedNext;
-      nDmgRoll = pUnit->sSeed.nSeedLow;
-      if (nDmgRange & nDmgRange - 1) {
-        sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-        nDmgRoll = sSeedNext % nDmgRange;
-      } else {
-        sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-        nDmgRoll = nDmgRange - 1 & sSeedNext;
-      }
-    }
-
+    nDmgRoll = D2_SeedRollLimited(&pUnit->sSeed, nDmgRange);
     int nClassId = ((int)pMonStatsTxt->aEl1MinD[0] + nDmgRoll) * 0x100;
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     short int nRadiusPerLevel = pMonStatsTxt->aip[2][pGame->nDifficulty];
@@ -2476,8 +2451,6 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     int32_t nMonClassId;
     D2MonStatsTxt* pMonStatsTxt;
     eD2UnitType eUnitType;
-    uint32_t nSeedLow;
-    D2SeedStrc sSeedNext;
     if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       pMonStatsTxt = 0;
     } else {
@@ -2500,25 +2473,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2MonStatsInitStrc* pScaledStats = &sMonStats;
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayerB, nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, pScaledStats);
     uint32_t nDmgRange = sMonStats.nA1MaxD - sMonStats.nA1MinD;
-    if ((int)nDmgRange <= 0) {
-      nDmgRange = 0;
-    } else {
-      uint64_t nDmgRollRaw;
-      nDmgRollRaw = (uint64_t)pUnit->sSeed.nSeedHigh;
-      nSeedLow = pUnit->sSeed.nSeedLow;
-      if (nDmgRange & nDmgRange - 1) {
-        sSeedNext = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nDmgRollRaw);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDmgRange = (uint32_t)(sSeedNext.nSeedLow % nDmgRange);
-      } else {
-        sSeedNext = (D2SeedStrc)((uint64_t)nSeedLow * 0x6ac690c5 + nDmgRollRaw);
-        pUnit->sSeed.nSeedHigh = sSeedNext.nSeedHigh;
-        pUnit->sSeed.nSeedLow = sSeedNext.nSeedLow;
-        nDmgRange = nDmgRange - 1 & sSeedNext.nSeedLow;
-      }
-    }
-
+    nDmgRange = D2_SeedRollLimited(&pUnit->sSeed, nDmgRange);
     int nPosX = (nDmgRange + sMonStats.nA1MinD) * 0x100;
     memset(&sDamage, 0, 0x70);
     sDamage.wResultFlags |= 8;

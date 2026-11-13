@@ -604,7 +604,6 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // Selects a random shrine type ID for a given shrine category (1–4; 0 or >4 clamped to 2) that satisfies the level's minimum level requirement. Draws from the pre-built shrine RNG pool (GetShrinesRng), retrying up to 8 times to find a shrine whose dwLevelMin <= nLevelId. Returns the chosen shrine type ID (never 0; remapped to 1). Halts if the shrine pool for the category is empty.
 static int32_t __stdcall OBJECT_SelectRandomShrineType(::SGAMEDATA * pGame, uint32_t nLevelId, uint8_t byShrineCategory, D2RoomStrc * pRoom) {
-    uint32_t DVar1;
     D2ShrinesTxt* pShrineLine;
     uint32_t nRandIdx;
     int nShrineId;
@@ -619,16 +618,7 @@ static int32_t __stdcall OBJECT_SelectRandomShrineType(::SGAMEDATA * pGame, uint
         D2SeedStrc* pObjSeed;
         nRandIdx = pShrinesRng->nShrinesCount[byShrineCategory];
         pObjSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-        if ((int)nRandIdx <= 0) {
-          nRandIdx = 0;
-        } else if (nRandIdx & nRandIdx - 1) {
-          DVar1 = D2_SeedRoll(pObjSeed);
-          nRandIdx = (uint32_t)(DVar1 % nRandIdx);
-        } else {
-          DVar1 = D2_SeedRoll(pObjSeed);
-          nRandIdx = nRandIdx - 1 & DVar1;
-        }
-
+        nRandIdx = D2_SeedRollLimited(pObjSeed, nRandIdx);
         nShrineId = *(int*)((uint8_t*)pShrinesRng->aShrinesRng[byShrineCategory] + nRandIdx * 4);
         if (!nShrineId) {
           nShrineId = 1;
@@ -1529,20 +1519,8 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
       if (nMaxRetries <= 0) {
         return pLastSpawnedUnit;
       }
-      if (nObjectClassId <= 0) {
-        nRandVal = 0;
-      } else if (nObjectClassId & nObjectClassId - 1U) {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = (uint32_t)(sNextSeed.nSeedLow % (uint32_t)nObjectClassId);
-      } else {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = nObjectClassId - 1U & sNextSeed.nSeedLow;
-      }
 
+      nRandVal = D2_SeedRollLimited(pCtrlSeed, nObjectClassId);
       nXRange = sRoomCoords.dwXSize - nTxtSizeX;
       nSpawnClassId = pObjClassIdTable[nRandVal];
       nRandVal = nXRange - 1;
@@ -1681,20 +1659,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
             nWalkIter++;
           } while (!_nDensity);
 
-          if (nObjectClassId <= 0) {
-            nRandVal = 0;
-          } else if (nObjectClassId & nObjectClassId - 1U) {
-            sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-            pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-            pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-            nRandVal = (uint32_t)(sNextSeed.nSeedLow % (uint32_t)nObjectClassId);
-          } else {
-            sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-            pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-            pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-            nRandVal = nObjectClassId - 1U & sNextSeed.nSeedLow;
-          }
-
+          nRandVal = D2_SeedRollLimited(pCtrlSeed, nObjectClassId);
           pLastSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, pObjClassIdTable[nRandVal], nCurX, nCurY, pGame, pRoom, 1, 0, 0);
           nChainLen++;
           goto extend_cluster;
@@ -2067,20 +2032,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn4(::SGAMEDATA * pGame, D2RoomStrc * pR
         }
 
         nCurX = nRandVal + sRoomCoords.dwXStart;
-        if (sRoomCoords.dwYSize <= 0) {
-          nRandVal = 0;
-        } else if (sRoomCoords.dwYSize & sRoomCoords.dwYSize - 1U) {
-          sSeedRoll2 = D2_SEED_NEXT(*pCtrlSeed);
-          pCtrlSeed->nSeedHigh = sSeedRoll2.nSeedHigh;
-          pCtrlSeed->nSeedLow = sSeedRoll2.nSeedLow;
-          nRandVal = (uint32_t)(sSeedRoll2.nSeedLow % (uint32_t)sRoomCoords.dwYSize);
-        } else {
-          sSeedRoll2 = D2_SEED_NEXT(*pCtrlSeed);
-          pCtrlSeed->nSeedHigh = sSeedRoll2.nSeedHigh;
-          pCtrlSeed->nSeedLow = sSeedRoll2.nSeedLow;
-          nRandVal = sRoomCoords.dwYSize - 1U & sSeedRoll2.nSeedLow;
-        }
-
+        nRandVal = D2_SeedRollLimited(pCtrlSeed, sRoomCoords.dwYSize);
         nCurY = nRandVal + sRoomCoords.dwYStart;
         sSpawnCoord.nY = nCurY;
         sSpawnCoord.nX = nCurX;
@@ -2233,27 +2185,10 @@ D2UnitStrc * __fastcall Objects_PopulateFn5_Crate(::SGAMEDATA * pGame, D2RoomStr
 
         _nDensity = gaObjectSpawnChanceTbl[nRandBit];
       }
-      if (sRoomCoords.dwXSize <= 0) {
-        nRandBit = 0;
-      } else if (sRoomCoords.dwXSize & sRoomCoords.dwXSize - 1U) {
-        sNewSeed = D2_SeedRoll(pSeed);
-        nRandBit = (uint32_t)(sNewSeed % (uint32_t)sRoomCoords.dwXSize);
-      } else {
-        sNewSeed = D2_SeedRoll(pSeed);
-        nRandBit = sRoomCoords.dwXSize - 1U & sNewSeed;
-      }
 
+      nRandBit = D2_SeedRollLimited(pSeed, sRoomCoords.dwXSize);
       nCurX = nRandBit + sRoomCoords.dwXStart;
-      if (sRoomCoords.dwYSize <= 0) {
-        nRandBit = 0;
-      } else if (sRoomCoords.dwYSize & sRoomCoords.dwYSize - 1U) {
-        sNewSeed = D2_SeedRoll(pSeed);
-        nRandBit = (uint32_t)(sNewSeed % (uint32_t)sRoomCoords.dwYSize);
-      } else {
-        sNewSeed = D2_SeedRoll(pSeed);
-        nRandBit = sRoomCoords.dwYSize - 1U & sNewSeed;
-      }
-
+      nRandBit = D2_SeedRollLimited(pSeed, sRoomCoords.dwYSize);
       nCurY = nRandBit + sRoomCoords.dwYStart;
       sSpawnCoord.nY = nCurY;
       sSpawnCoord.nX = nCurX;
@@ -2560,16 +2495,7 @@ static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D
         nDensityPct--;
       } while (nDensityPct);
 
-      if ((int)nEnabledCount <= 0) {
-        nBitMask = 0;
-      } else if (nEnabledCount & nEnabledCount - 1) {
-        newSeed = D2_SeedRoll(pCtrlSeed);
-        nBitMask = (uint32_t)(newSeed % nEnabledCount);
-      } else {
-        newSeed = D2_SeedRoll(pCtrlSeed);
-        nBitMask = nEnabledCount - 1 & newSeed;
-      }
-
+      nBitMask = D2_SeedRollLimited(pCtrlSeed, nEnabledCount);
       nDensityPct = nEnabledPopTypes[nBitMask];
       if ((int)nBitMask < (int)nEnabledCount && nDensityPct < (int)nEnabledCount && gaObjectPopulateTable[nDensityPct].nEnabled && gaObjectPopulateTable[nDensityPct].pfnPopulate) {
         int32_t nPopResult;
