@@ -1330,9 +1330,9 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
     }
 
     int32_t nSkipTopCopy = __frame0.nSkipTop;
-    int32_t nDrawHeightCopy = __frame0.nDrawHeight;
-    uint8_t* pPalettePtr = RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nClipLeft, __frame0.nClipRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, pPalettePtr, nSkipTopCopy, nDrawHeightCopy, bClipResult);
+    
+    
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nClipLeft, __frame0.nClipRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (uint8_t*)(RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect)), nSkipTopCopy, (int32_t)(__frame0.nDrawHeight), bClipResult);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY) {

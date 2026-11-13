@@ -527,7 +527,7 @@ void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2UnitStrc* pInteractUnit;
     uint32_t nInteractUnitId;
     eD2UnitType eInteractUnitType;
-    char byPacketUnitType;
+    int byPacketUnitType;
     int nInteractGUID;
     int32_t nLine;
     BOOL bHasInteraction;
@@ -570,9 +570,9 @@ void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       }
     }
 
-    uint32_t uVar6 = 0;
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", nLine);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(pClient, 'b', byPacketUnitType, nInteractGUID, uVar6);
+    
+    
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", nLine)), 'b', byPacketUnitType, nInteractGUID, (uint32_t)(0));
 }
 
 void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWORD dwPlayerId, POINT * pPoint) {

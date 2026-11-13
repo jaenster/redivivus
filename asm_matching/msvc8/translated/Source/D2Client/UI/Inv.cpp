@@ -3691,7 +3691,7 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     }
 
     int nScanCount = 0;
-    uint32_t nNextPage = (uint32_t)byPage;
+    uint8_t nNextPage = (uint32_t)byPage;
     int nTabIdx = 0;
     CurrentInventoryPage = byPage;
     if (nTabCount > 0) {
@@ -3707,14 +3707,14 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     if (!anPageItemCount[byPage]) {
       do {
         byNextPage = (char)nNextPage + 1;
-        nNextPage = (uint32_t)byNextPage;
+        nNextPage = byNextPage;
         nScanCount++;
         if (byNextPage > TypeOfShopMaybe || byNextPage == 0xff) {
           nNextPage = 0;
         }
       } while (!anPageItemCount[nNextPage] && nScanCount < 4);
 
-      CurrentInventoryPage = (uint8_t)nNextPage;
+      CurrentInventoryPage = nNextPage;
     }
 
     gaNpcShopTabs[nNextPage].nSelected = 1;
@@ -3993,7 +3993,7 @@ void __stdcall INV_InitNpcButtonsByClass() {
 
 // Draws gold amount and coin icon in inventory UI for three contexts: stash (param=0), inventory (param=1), and trade (param=2). Retrieves player's gold from appropriate stat (UNITSTAT_goldbank for stash, UNITSTAT_gold for inventory), formats the number, renders text and animated coin icon at context-specific screen coordinates.
 void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
-    D2UnitStrc* pPlayerUnit_lcl;
+    
     uint16_t* pwString;
     BOOL bIsExpansionGfx;
     int32_t iTmp;
@@ -4008,7 +4008,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     int nButtonX;
     int nGoldY;
     int nCoinX;
-    eD2UnitStat eStatType;
+    
     int32_t nColorFlag;
     int nTooltipXPos;
     int32_t nPrevFont;
@@ -4021,9 +4021,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     nLayer = 0;
     if (nGoldPanelMode) {
       if (nGoldPanelMode != 1) {
-        eStatType = UNITSTAT_goldbank;
-        pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-        nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
+        
+        
+        nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)(UNIT::Player::GetPlayerUnit_UI()), (eD2UnitStat)(UNITSTAT_goldbank), nLayer);
         pwString = D2Lang::StrTable::strtable::GetLocaleString(0xcf3);
         iTmp = D2Win::Src::D2WinFont::DRAW_text0(pwString);
         nGoldY = iTmp + 0x15 + gnPanelOffsetX;
@@ -4036,9 +4036,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
           goto draw_coin_or_label;
         }
       } else {
-        eStatType = UNITSTAT_gold;
-        pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-        nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
+        
+        
+        nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)(UNIT::Player::GetPlayerUnit_UI()), (eD2UnitStat)(UNITSTAT_gold), nLayer);
         nCoinY = gnPanelOffsetY - 0x48 + ScreenSizeY;
         nGoldY = ui::ScreenSizeX - gnPanelOffsetX - 0xd4;
         nButtonX = ui::ScreenSizeX - gnPanelOffsetX - 0xed;
@@ -4047,9 +4047,9 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
       }
     } else {
       int nTooltipY;
-      eStatType = UNITSTAT_goldbank;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, eStatType, nLayer);
+      
+      
+      nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)(UNIT::Player::GetPlayerUnit_UI()), (eD2UnitStat)(UNITSTAT_goldbank), nLayer);
       nGoldY = gnPanelOffsetX + 0xa5;
       bIsExpansionGfx = GAME::Game::CLIENT_CheckExpansion();
       if (bIsExpansionGfx) {

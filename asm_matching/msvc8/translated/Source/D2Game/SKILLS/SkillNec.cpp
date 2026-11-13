@@ -1446,8 +1446,8 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
     D2CorpseExplosionArgStrc sExplosionArgs;
     int32_t nPhysDmgMinVal;
     D2SkillsTxt* pSkillData;
-    int* pMonStatsOut;
-    uint32_t* pSynergyNull;
+    
+    
     D2UnitStrc* pCorpseTarget;
     pCorpseTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pCorpseTarget) {
@@ -1517,12 +1517,12 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
       }
     }
     if (pSkillData->EType != ELEMENTAL_NONE) {
-      int32_t nCalcResult;
+      
       nCorpseHpRaw = D2Common::Skills::SKILLS_GetElementalLength(pUnit, eSkill, nSkillLvl, 1);
-      pMonStatsOut = 0;
-      pSynergyNull = 0;
-      nCalcResult = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nEleConvPctClamped, 100);
-      SkillsServer::SERVER_AppendDamageToUnitEvent(pUnit, &damageEvent, (eSkillEType)pSkillData->EType, nCalcResult, nCorpseHpRaw, pSynergyNull, pMonStatsOut);
+      
+      
+      
+      SkillsServer::SERVER_AppendDamageToUnitEvent(pUnit, &damageEvent, (eSkillEType)pSkillData->EType, (int32_t)(D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nEleConvPctClamped, 100)), nCorpseHpRaw, (uint32_t*)(0), (int*)(0));
       nDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, 100 - nEleConvPctClamped, 100);
     }
 

@@ -364,7 +364,7 @@ void __fastcall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, int, 
         *(DWORD*)(pDstExtra - 0x10) = 0;
         ((FILETIME*)(pDstExtra - 0x14))->dwLowDateTime = 0;
         *(uint32_t*)(pDstExtra - 0xc) = 0;
-        memset(pDstExtra + 4294967288, 0, 8 * sizeof(pDstExtra[0]));
+        memset(pDstExtra - 8, 0, 8 * sizeof(pDstExtra[0]));
         memset(pDstExtra, 0, 8 * sizeof(pDstExtra[0]));
         pDst--;
         pDstExtra += -0x2c;
@@ -934,7 +934,6 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     HANDLE hFileResult = CreateFileA(szFileNameLocal, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
-    HANDLE hFile = hFileResult;
     if (hFileResult == (HANDLE)-1) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
@@ -952,19 +951,18 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
           nChunkSize = 0x1000;
         }
 
-        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, pReadBuffer, nChunkSize, &nBytesRead, (LPOVERLAPPED)0x0);
+        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFileResult, pReadBuffer, nChunkSize, &nBytesRead, (LPOVERLAPPED)0x0);
         if (nChunkSize != nBytesRead) {
           if (pReadBuffer) {
             SMem::SMemFree(pReadBuffer, ".\\SOURCE\\SFILE.CPP", 0xb8d, 0);
           }
 
-          /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
+          /* HANDLE hObject for CloseHandle */ CloseHandle(hFileResult);
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
           return 0;
         }
 
         CrcBuffer(pReadBuffer, nChunkSize, (uint32_t*)&nFileName, 2);
-        hFileResult = hFile;
       }
 
       CrcBuffer(nullptr, 0, (uint32_t*)&nFileName, 4);

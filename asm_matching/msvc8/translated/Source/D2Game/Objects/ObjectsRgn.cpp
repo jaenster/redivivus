@@ -204,27 +204,31 @@ void __fastcall Send_0x26_Chat(D2ClientStrc * pClient, char * * ppMessage) {
 }
 
 void __fastcall SendDebugMessageToEveryone(::SGAMEDATA * pThis, int, char * pMessage) {
-    D2GSPacketSrv0x26 nMsgBuf;
+    // Frame slots -296..-8 are ONE object: &pPacket is passed out and the callee reaches the rest by byte offset.
+    // Separate locals let the compiler reorder them, so the run is one struct.
+    struct __frame0_t {
+      D2GSPacketSrv0x26* pPacket;
+      D2GSPacketSrv0x26 sPacket;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 288, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    __frame0_t __frame0;
     char cChar;
-    nMsgBuf.szName[4] = '\0';
-    nMsgBuf.szName[3] = '\0';
-    intptr_t nBufOffset = 0x1e - (intptr_t)pMessage;
+    __frame0.sPacket.szName[0] = '\0';
+    __frame0.sPacket.nColor = '\0';
+    intptr_t nBufOffset = 0x1a - (intptr_t)pMessage;
     do {
       cChar = *pMessage;
-      pMessage[(intptr_t)&nMsgBuf + nBufOffset] = cChar;
+      pMessage[(intptr_t)&__frame0.sPacket + nBufOffset] = cChar;
       pMessage++;
     } while (cChar != '\0');
 
-    *(uint32_t*)(char*)&nMsgBuf = (uint32_t)(uintptr_t)&nMsgBuf.nUnitGUID;
-    nMsgBuf.szName[2] = '\0';
-    *(uint8_t*)(char*)&nMsgBuf.nUnitGUID = 0x26;
-    nMsgBuf.nMessageColor = '\0';
-    nMsgBuf.nColor = '\0';
-    nMsgBuf.szName[0] = '\0';
-    nMsgBuf.szName[1] = '\0';
-    *(uint8_t*)((char*)&nMsgBuf.nUnitGUID + 3) = 2;
-    *(uint8_t*)((char*)&nMsgBuf.nUnitGUID + 1) = 1;
-    GAME::Server::ForEachClient(pThis, (fpForEachClientFn)Send_0x26_Chat, &nMsgBuf);
+    __frame0.pPacket = &__frame0.sPacket;
+    __frame0.sPacket.nMessageColor = '\0';
+    __frame0.sPacket.nPacketId = '&';
+    __frame0.sPacket.nUnitGUID = 0;
+    __frame0.sPacket.nMsgSubType = '\x02';
+    __frame0.sPacket.nMessageType = '\x01';
+    GAME::Server::ForEachClient(pThis, (fpForEachClientFn)Send_0x26_Chat, &__frame0.pPacket);
 }
 
 void __fastcall Debug(::SGAMEDATA * pGame) {

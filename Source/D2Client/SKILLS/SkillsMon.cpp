@@ -778,7 +778,6 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
     }
 
     int nMissileB = (int)pSkillTxt->cltmissile[2];
-    eD2Skills eSkillSaved = eSkill;
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY);
     if (bGotCoords) {
       int nSelectedMissileId;
@@ -788,7 +787,6 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
         nSelectedMissileId = nMissileA;
         if (nMissileB > 0) {
           sNewSeed = D2_SeedRoll(&pUnit->sSeed);
-          eSkill = eSkillSaved;
           if (sNewSeed & 1) {
             nSelectedMissileId = nMissileB;
           }

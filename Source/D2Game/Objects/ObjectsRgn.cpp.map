@@ -173,6 +173,7 @@
       ],
       "usedTypes": [
         "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x26",
         "SGAMEDATA"
       ]
     },

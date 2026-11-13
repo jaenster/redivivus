@@ -16,9 +16,10 @@
 //!   oracle-zig judge --root <asm_matching/msvc8>
 //!       one JSON request per stdin line, one reply per stdout line:
 //!       {"tu": T, "obj": O|null}  ->  {"fns": [[start, status, "%.4f similarity",
-//!            register-only, [called symbols]], ...]}: every funcmap function of T, in funcmap
-//!            order; register-only is true for an INSN_MATCH whose differing instructions
-//!            differ in register names alone
+//!            register-only, [called symbols], our frame, the original's frame], ...]}: every
+//!            funcmap function of T, in funcmap order; register-only is true for an INSN_MATCH
+//!            whose differing instructions differ in register names alone; the frames are the
+//!            `sub esp, N` of each prologue as classify's frame tag reads them (0 for none)
 //!       {"bh": [[start, size], ...]}  ->  {"bh": ["size-sha256[:8]", ...]}: the original's
 //!            bytes with every reference masked, as a vc8form tag's bh records them
 const std = @import("std");
@@ -27,6 +28,7 @@ const util = @import("util.zig");
 const proc = @import("proc.zig");
 const compile = @import("compile.zig");
 const audit = @import("audit.zig");
+const classify = @import("classify.zig");
 const compare = @import("compare.zig");
 const dec = @import("decode.zig");
 const objfuncs = @import("objfuncs.zig");
@@ -277,7 +279,11 @@ const Judge = struct {
             var status: []const u8 = "MISSING";
             var sim: f64 = 0;
             var reg = false;
+            var frame_ours: u64 = 0;
+            var frame_ref: u64 = 0;
             if (f != null and j.model.contains(r.s)) {
+                frame_ours = try classify.frameSize(f.?.f.decoded.insns.items);
+                frame_ref = try classify.frameSize(j.model.getPtr(r.s).?.f.insns.items);
                 if (j.quarantined.get(try audit.qkey(r.tu, audit.lastPart(r.name))) != null) {
                     status = "QUARANTINE";
                 } else {
@@ -302,7 +308,7 @@ const Judge = struct {
                     try objcache.jsonString(out, ref.s);
                 };
             }
-            try out.appendSlice(gpa, "]]");
+            try out.print(gpa, "], {d}, {d}]", .{ frame_ours, frame_ref });
         }
         try out.appendSlice(gpa, "]}\n");
     }

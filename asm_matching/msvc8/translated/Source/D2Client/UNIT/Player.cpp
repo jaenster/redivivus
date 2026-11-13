@@ -2171,7 +2171,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
     eD2BodyLoc eBodyLoc;
     uint8_t nDirection;
     int32_t nTmpPos;
-    D2RoomStrc* pRoom;
+    
     BOOL BVar2;
     D2UnitStrc* pItem;
     D2UnitStrc* pItemOwner;
@@ -2195,7 +2195,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
 
     D2UnitStrc* pKillerOrCorpse = GetPlayerUnit_UI();
     if (pUnit == pKillerOrCorpse) {
-      int16_t nPosX;
+      
       pKillerOrCorpse = UNITS_FindClientSideUnit(pDeathMsg->dwCorpseGUID, UNIT_PLAYER);
       if (!pKillerOrCorpse) {
         return;
@@ -2207,9 +2207,9 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
       nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nPosY = (int16_t)nTmpPos;
       nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nPosX = (int16_t)nTmpPos;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      BVar2 = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pKillerOrCorpse, pRoom, nPosX, nPosY);
+      
+      
+      BVar2 = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pKillerOrCorpse, (D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pUnit)), (int16_t)((int16_t)nTmpPos), nPosY);
       if (!BVar2) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaba);
         exit(-1);

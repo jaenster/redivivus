@@ -848,9 +848,9 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     int eCollisionFlag = eUnitType == UNIT_PLAYER ? 0x80 : 0x100;
     eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
     uint32_t nCollideX = nTargetX;
-    uint32_t nCollideY = nTargetY;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2Common::Collision::AddCollision_Type(pRoom, nCollideX, nCollideY, nType, eCollisionFlag);
+    
+    
+    D2Common::Collision::AddCollision_Type((D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pUnit)), nCollideX, (uint32_t)(nTargetY), nType, eCollisionFlag);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
     D2SkillStrc* pSkill = pCurrentSkill;

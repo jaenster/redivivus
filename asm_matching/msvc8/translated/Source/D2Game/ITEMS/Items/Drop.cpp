@@ -3260,10 +3260,10 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 
     wStatLayer = 0;
-    int32_t nStatId = 0x48;
-    char bSendUpdateFlag = '\x01';
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", _bIsThrowable);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pItemUnit, bSendUpdateFlag, nStatId, bIsArmor, wStatLayer);
+    
+    
+    
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", _bIsThrowable)), pItemUnit, (char)('\x01'), (int32_t)(0x48), bIsArmor, wStatLayer);
 }
 
 // Splits nGoldAmount across up to nMaxPiles gold-item units dropped near pUnit's position. Each iteration creates a gold item via ITEM_CreateFromTemplate, caps the pile amount to the inventory gold limit if the recipient is a player, sets UNITSTAT_gold, and calls DropItem to place it at a collision-free nearby tile. Fills pUnitTable with created item pointers and updates *pnUnitCount. Uses the room collision system to find free coordinates; exits early if no free tile is found or the pile cap is reached.
@@ -3278,7 +3278,6 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
     int32_t nPileAmount;
     *pnUnitCount = 0;
     ::SGAMEDATA* pGameSaved = pGame;
-    D2UnitStrc* pSourceUnit = pUnit;
     D2ItemsTxt* pGoldItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20646c67, &nGoldClassId);
     if (!pGoldItemsTxt) {
       return;
@@ -3316,12 +3315,11 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       }
 
       pCurrentRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pCurrentRoom, &ptSpawnPos, &ptUnitCoords, 1, 0x3e01, 0x801, 0);
-      pUnit = pSourceUnit;
       if (!pCurrentRoom) {
         return;
       }
 
-      pGoldItem = ITEM_CreateFromTemplate(pSourceUnit, nGoldClassId, pGameSaved, 4, QUALITY_NORMAL, 1, 1, 1, 0, 0, 0);
+      pGoldItem = ITEM_CreateFromTemplate(pUnit, nGoldClassId, pGameSaved, 4, QUALITY_NORMAL, 1, 1, 1, 0, 0, 0);
       if (pGoldItem) {
         if (nPileAmount < 0) {
           nPileAmount = 0;

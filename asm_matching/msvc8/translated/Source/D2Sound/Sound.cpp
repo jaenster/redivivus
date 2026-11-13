@@ -140,9 +140,9 @@ void __stdcall SOUND_InitDirectSound() {
     }
 
     IDirectSoundVtbl* pIVar1 = gpDirectSound->lpVtbl;
-    uint32_t dwCoopLevel = 2;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, hWnd, dwCoopLevel);
+    
+    
+    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, (HWND)(D2gfx::D2GFX::GetHwnd()), (uint32_t)(2));
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on SetCooperativeLevel", szErrorMsg);

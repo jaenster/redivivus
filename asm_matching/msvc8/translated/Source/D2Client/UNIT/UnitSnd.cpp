@@ -4055,12 +4055,12 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
     DWORD nMercClassId;
     eD2UnitType eMercUnitType;
     D2MonSoundsTxt* pMonSoundsLine;
-    D2UnitStrc* pLocalPlayer;
-    eD2Sounds eGreetingSound;
+    
+    
     uint32_t nPlayedSoundId;
-    int32_t bStopChannels;
+    
     int32_t nDelay;
-    int32_t nReserved;
+    
     D2UnitStrc* pMercUnit;
     pMercUnit = Player::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
     if (!pMercUnit) {
@@ -4173,11 +4173,11 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
       return;
       case 0x12:
         nDelay = 0;
-      bStopChannels = 1;
-      nReserved = 0;
-      pLocalPlayer = Player::GetPlayerUnit_UI();
-      eGreetingSound = GAME::Sound::SOUND_SelectNpcGreetingSound(pMercUnit, 1);
-      Sound::SOUND_PlaySound(eGreetingSound, pLocalPlayer, nReserved, bStopChannels, nDelay);
+      
+      
+      
+      
+      Sound::SOUND_PlaySound((eD2Sounds)(GAME::Sound::SOUND_SelectNpcGreetingSound(pMercUnit, 1)), (D2UnitStrc*)(Player::GetPlayerUnit_UI()), (int32_t)(0), (int32_t)(1), nDelay);
       return;
       case 0xd:
         Sound::SOUND_PlaySound(SOUND_SORCERESS_ACT3_FIND_GUARDIAN, pMercUnit, 0, 0, 0);

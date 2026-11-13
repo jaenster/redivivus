@@ -2331,14 +2331,14 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int32_t nPosX, int3
     } else {
       if (nSkipLines) {
         nPosY -= nSkipLines;
-        nSpriteResult = texSizeBuf.nTexHeight - nSkipLines;
-        texSizeBuf.fTexT0 = (float)(nSpriteResult - nDrawLines);
-        if (nSpriteResult - nDrawLines < 0) {
+        int nSpriteResult_2 = texSizeBuf.nTexHeight - nSkipLines;
+        texSizeBuf.fTexT0 = (float)(nSpriteResult_2 - nDrawLines);
+        if (nSpriteResult_2 - nDrawLines < 0) {
           texSizeBuf.fTexT0 += 4294967296.0;
         }
 
-        texSizeBuf.fTexS1 = (float)nSpriteResult;
-        if (nSpriteResult < 0) {
+        texSizeBuf.fTexS1 = (float)nSpriteResult_2;
+        if (nSpriteResult_2 < 0) {
           texSizeBuf.fTexS1 += 4294967296.0;
         }
 

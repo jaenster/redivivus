@@ -847,10 +847,10 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     ptSpawn.y = yValue;
     BOOL bAllowNeighboorRooms = 0;
     int32_t nOwnerAlignment = 0x3c01;
-    int32_t nOwnerSizeX = D2Common::Units::GetUnitSizeX(pOwner);
-    POINT* pSpawnPoint = &ptSpawn;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOwner);
-    D2RoomStrc* pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pSpawnPoint, nOwnerSizeX, nOwnerAlignment, bAllowNeighboorRooms);
+    
+    
+    
+    D2RoomStrc* pFreeRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms((D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pOwner)), (POINT*)(&ptSpawn), (int32_t)(D2Common::Units::GetUnitSizeX(pOwner)), nOwnerAlignment, bAllowNeighboorRooms);
     nOwnerAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
     if (!nOwnerAlignment && pFreeRoom) {
       int32_t nCastResult;

@@ -1516,10 +1516,10 @@ void __fastcall HandleItemOnGround(uint8_t * pBuffer) {
 static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYPos, int32_t nInvPage, D2UnitStrc * pUnit2, uint32_t nItemX) {
     BOOL _bIsExpansion;
     bool bIsExpansion;
-    eD2Sounds eSoundId;
-    int32_t nDelay;
+    
+    
     int32_t nLine;
-    int32_t nSoundVolume;
+    
     D2Common::Units::SetXForStaticUnit(pUnit, (uint16_t)nItemX);
     D2Common::Units::SetYForStaticUnit(pUnit, nYPos & 0xffff);
     D2InventoryStrc* pInventory = pUnit2->pInventory;
@@ -1563,10 +1563,10 @@ static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYP
     if (pUnit2 == pLocalPlayer) {
       nLine = 0;
       if ((uint8_t)nInvPage == 1) {
-        nSoundVolume = 0;
-        nDelay = 0;
-        eSoundId = SOUND_GetIdFromUnit(pUnit);
-        Sound::SOUND_PlaySound(eSoundId, nullptr, nDelay, nSoundVolume, nLine);
+        
+        
+        
+        Sound::SOUND_PlaySound((eD2Sounds)(SOUND_GetIdFromUnit(pUnit)), nullptr, (int32_t)(0), (int32_t)(0), nLine);
       } else {
         D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
         pLocalPlayer = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
@@ -2573,11 +2573,11 @@ static void ITEM_HandleSwapContainerNewItem(uint8_t * pPacketData, D2UnitDataIte
     D2UnitStrc* pItem;
     uint32_t bIsReload;
     BOOL bIsLoD;
-    int32_t nYPos;
-    int32_t nInvPageInt;
+    
+    
     int32_t nInvSlot;
     eInventoryPage byPage;
-    int32_t nLine;
+    
     D2InventoryStrc* pInventory;
     D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
     if (!pPlayerUnit_lcl) {
@@ -2626,10 +2626,10 @@ static void ITEM_HandleSwapContainerNewItem(uint8_t * pPacketData, D2UnitDataIte
       nInvSlot = 1;
       byPage = eInvPage;
       bIsLoD = GAME::Game::CLIENT_CheckExpansion();
-      nLine = D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, eInvPage, bIsLoD);
-      nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pItem);
-      nInvPageInt = D2Common::Units::GetXPosFromDynamicPathUnit(pItem);
-      bIsLoD = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pItem, nInvPageInt, nYPos, nLine, nInvSlot, byPage);
+      
+      
+      
+      bIsLoD = D2Common::INVENTORY::Inventory::INVENTORY_PlaceItemAtCoords(pInventory, pItem, (int32_t)(D2Common::Units::GetXPosFromDynamicPathUnit(pItem)), (int32_t)(D2Common::Units::GetYPosFromDynamicPathUnit(pItem)), (int32_t)(D2Common::Units::GetInventoryPage(pPlayerUnit_lcl, eInvPage, bIsLoD)), nInvSlot, byPage);
       if (!bIsLoD) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x892);
         exit(-1);

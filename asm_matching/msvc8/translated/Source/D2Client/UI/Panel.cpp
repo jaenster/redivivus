@@ -372,7 +372,7 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
     int nAbsDiff;
     int32_t nInterp;
     int nSlotOffset;
-    bool bSkipLowClamp = true;
+    BOOL bSkipLowClamp = true;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     int nCurValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
     switch (eUnitStat) {

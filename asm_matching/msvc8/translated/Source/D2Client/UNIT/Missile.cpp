@@ -124,12 +124,8 @@ static bool __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRo
 
 void __fastcall MISSILE_InitializeVisual(D2UnitStrc * pUnit, intptr_t pSourceUnit) {
     uint32_t nRandFrame;
-    if (!pUnit) {
-      return;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pSourceUnit)) {
       return;
     }
@@ -413,28 +409,25 @@ int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(D2UnitStrc * pUnit, D2
 
 int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
-    if (pUnit) {
-      int nClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0 && pMissileTxt->cHitPar1 > 0)) {
-        return 1;
-      }
-
-      memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nFlags = 3;
-      sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-      sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-      sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
-      sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      if (pMissileTxt->cHitPar2) {
-        sSkillArg.fpFunction = SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear;
-      }
-
-      SKILLS::Skills::SKILLS_CreateMissileSpiralGrid(pMissileTxt->cHitPar1, &sSkillArg);
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0 && pMissileTxt->cHitPar1 > 0)) {
+      return 1;
     }
 
+    memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.nFlags = 3;
+    sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+    sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
+    sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
+    sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    if (pMissileTxt->cHitPar2) {
+      sSkillArg.fpFunction = SKILLS::SkillsMon::SKILLSMON_SetMissilePathLinear;
+    }
+
+    SKILLS::Skills::SKILLS_CreateMissileSpiralGrid(pMissileTxt->cHitPar1, &sSkillArg);
     return 1;
 }
 
@@ -2159,27 +2152,20 @@ int32_t __fastcall MISSILE_CltHitFn64_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
 }
 
 int32_t __fastcall MISSILE_CltHitFn01_FireExplosion(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (pUnit) {
-      int nClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
-        return 1;
-      }
-
-      uint32_t nHitPar2 = pMissileTxt->cHitPar2;
-      MISSILE_CreatePatternAtUnitPos(pUnit, pMissileTxt->cHitPar1, MISSILE_Fireexplosion2, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nHitPar2, 1);
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
+      return 1;
     }
 
+    uint32_t nHitPar2 = pMissileTxt->cHitPar2;
+    MISSILE_CreatePatternAtUnitPos(pUnit, pMissileTxt->cHitPar1, MISSILE_Fireexplosion2, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nHitPar2, 1);
     return 1;
 }
 
 int32_t __fastcall MISSILE_CltHitFn02_GasCloud(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }
@@ -2191,12 +2177,8 @@ int32_t __fastcall MISSILE_CltHitFn02_GasCloud(D2UnitStrc * pUnit, D2UnitStrc * 
 // Client-side hit function for missile type 003 (dual sub-missile on hit). Spawns CltHitSubMissile1 unconditionally. If CltHitSubMissile2 is valid, picks a random sub-missile ID in [CltHitSubMissile2, CltHitSubMissile3] via SEED_RollRangeInclusive, spawns it, then immediately marks it dead (SetDeadFlag) — used for visual-only secondary effects. Always returns 1.
 int32_t __fastcall MISSILE_CltHitFn03_PotionExplode(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     eMissilesId nSubMissileId;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }
@@ -2655,12 +2637,8 @@ int32_t __fastcall MISSILE_CltHitFn18_MeteorCenter(D2UnitStrc * pUnit, D2UnitStr
 }
 
 int32_t __fastcall MISSILE_CltHitFn19_RandomSubMissile(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }
@@ -2864,12 +2842,8 @@ int32_t __fastcall MISSILE_CltHitFn26_FistOfHeavensDelay(D2UnitStrc * pUnit, D2U
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->HitSubMissile1 >= 0)) {
       return 1;
     }
@@ -2887,9 +2861,9 @@ int32_t __fastcall MISSILE_CltHitFn26_FistOfHeavensDelay(D2UnitStrc * pUnit, D2U
       return 1;
     }
 
-    eD2UnitType eTargetUnitType = D2Common::Units::Missile::GetTargetX(pUnit);
-    int32_t nTargetGUID = D2Common::Units::Missile::GetTargetY(pUnit);
-    D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit(nTargetGUID, eTargetUnitType);
+    
+    
+    D2UnitStrc* pTargetUnit = Player::UNITS_FindClientSideUnit((int32_t)(D2Common::Units::Missile::GetTargetY(pUnit)), (eD2UnitType)(D2Common::Units::Missile::GetTargetX(pUnit)));
     if (!pTargetUnit) {
       return 0;
     }
@@ -3010,12 +2984,8 @@ int32_t __fastcall MISSILE_CltHitFn28_PantherPotGreen(D2UnitStrc * pUnit, D2Unit
 // Client-side missile hit callback (index 029): on impact, spawns the sub-missile defined in D2MissilesTxt.CltHitSubMissile1. Computes the sub-missile count from skill calc[0] (minimum 5), copies the parent missile's direction to the child, and sets owner/position/level from the parent. Returns 1 always.
 int32_t __fastcall MISSILE_CltHitFn29_GrimWard(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }
@@ -3565,22 +3535,21 @@ int32_t __fastcall MISSILE_CltHitFn44_InAirLanding(D2UnitStrc * pUnit, D2UnitStr
     if (pTarget) {
       return 0;
     }
-    if (pUnit) {
-      int nClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
-        return 1;
-      }
 
-      int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      D2UnitStrc* pSubMissile = MakeMissileAtXY(pUnit, (int)pMissileTxt->CltHitSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
-      if (pSubMissile) {
-        pDynamicPath = pSubMissile->pPath.pDynamicPath;
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath));
-        D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pDynamicPath, 0);
-        nSkillLevel = D2Common::Units::Missile::GetTargetX(pUnit);
-        D2Common::Units::Missile::SetTargetX(pSubMissile, nSkillLevel);
-      }
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
+      return 1;
+    }
+
+    int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    D2UnitStrc* pSubMissile = MakeMissileAtXY(pUnit, (int)pMissileTxt->CltHitSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
+    if (pSubMissile) {
+      pDynamicPath = pSubMissile->pPath.pDynamicPath;
+      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath));
+      D2Common::PATH::DynamicPath::SetUnsetFlags0x40(pDynamicPath, 0);
+      nSkillLevel = D2Common::Units::Missile::GetTargetX(pUnit);
+      D2Common::Units::Missile::SetTargetX(pSubMissile, nSkillLevel);
     }
 
     return 1;
@@ -3589,12 +3558,8 @@ int32_t __fastcall MISSILE_CltHitFn44_InAirLanding(D2UnitStrc * pUnit, D2UnitStr
 // Client-side hit function for missile type 047 (random-scatter + secondary missile). Computes sub-missile count = (level-1)*HitPar2+HitPar1 (fallback: skill calc[3], min 1). Calls SKILL_SpawnRandomMissilesInArea with CltHitSubMissile1 for the scatter burst, count/4 as the area radius. If CltHitSubMissile2 is valid, also spawns one direct missile at missile's current position. Always returns 1.
 int32_t __fastcall MISSILE_CltHitFn47_CatapultSpikeBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillsTxt* pSkillTxt;
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }
@@ -3841,49 +3806,47 @@ int32_t __fastcall MISSILE_CltHitFn52_MoltenBoulder(D2UnitStrc * pUnit, D2UnitSt
 // Client hit handler for missile 053. Spawns CltHitSubMissile1 as a bouncing projectile at the missile's impact position; sets bounce params (HitPar1/2), initialises projectile rotation (HitPar3), and clears its lifetime flag. Uses MakeMissile with the full D2SkillArgStrc including SP1 target coords for direction.
 int32_t __fastcall MISSILE_CltHitFn53_MoltenBoulderEmerge(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
-    if (pUnit) {
-      int nClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
-        return 1;
-      }
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
+      return 1;
+    }
 
-      memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nFlags = 0x21;
-      sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-      eD2UnitType eUnitType = pUnit->eUnitType;
-      int nXValue;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nXValue = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nXValue = 0;
-      }
+    memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.nFlags = 0x21;
+    sSkillArg.pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    int nXValue;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nXValue = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nXValue = 0;
+    }
 
-      sSkillArg.nX = nXValue;
-      eUnitType = pUnit->eUnitType;
-      int nYValue;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nYValue = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nYValue = 0;
-      }
+    sSkillArg.nX = nXValue;
+    eUnitType = pUnit->eUnitType;
+    int nYValue;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+      nYValue = pUnit->pPath.pStaticPath->nPosY;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nYValue = 0;
+    }
 
-      sSkillArg.nY = nYValue;
-      sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-      sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
-      sSkillArg.nUnitX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-      sSkillArg.nUnitY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-      D2UnitStrc* pNewMissile = Missile::MakeMissile(&sSkillArg);
-      if (pNewMissile) {
-        Engine::Particle::PARTICLE_SetBounceParams(pNewMissile, pMissileTxt->cHitPar1, pMissileTxt->cHitPar2);
-        Engine::Particle::PARTICLE_InitProjectile(pNewMissile, 0, pMissileTxt->cHitPar3);
-        Engine::Particle::PARTICLE_ClearLifetimeFlag(pNewMissile);
-      }
+    sSkillArg.nY = nYValue;
+    sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
+    sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
+    sSkillArg.nUnitX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
+    sSkillArg.nUnitY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
+    D2UnitStrc* pNewMissile = Missile::MakeMissile(&sSkillArg);
+    if (pNewMissile) {
+      Engine::Particle::PARTICLE_SetBounceParams(pNewMissile, pMissileTxt->cHitPar1, pMissileTxt->cHitPar2);
+      Engine::Particle::PARTICLE_InitProjectile(pNewMissile, 0, pMissileTxt->cHitPar3);
+      Engine::Particle::PARTICLE_ClearLifetimeFlag(pNewMissile);
     }
 
     return 1;
@@ -3977,19 +3940,16 @@ int32_t __fastcall MISSILE_CltHitFn56_RecyclerVine(D2UnitStrc * pUnit, D2UnitStr
 }
 
 int32_t __fastcall MISSILE_CltHitFn57_BaalSpawnMonsters(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (pUnit) {
-      int nClassId = pUnit->nClassId;
-      D2MissilesTxt* pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
-        return 1;
-      }
-      if (pTarget) {
-        return 0;
-      }
-
-      MISSILE_CreatePatternAtUnitPos(pUnit, pMissileTxt->cHitPar1, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), pMissileTxt->cHitPar2, 1);
+    int nClassId;
+    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
+      return 1;
+    }
+    if (pTarget) {
+      return 0;
     }
 
+    MISSILE_CreatePatternAtUnitPos(pUnit, pMissileTxt->cHitPar1, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), pMissileTxt->cHitPar2, 1);
     return 1;
 }
 
@@ -5135,12 +5095,8 @@ int32_t __fastcall MISSILE_CltHitFn62_BaalTauntLightning(D2UnitStrc * pUnit, D2U
 }
 
 int32_t __fastcall MISSILE_CltHitFn63_BaalTauntPoison(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    if (!pUnit) {
-      return 1;
-    }
-
-    int nBurstCount = pUnit->nClassId;
-    D2MissilesTxt* pMissileTxt = nBurstCount >= 0 && nBurstCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nBurstCount : nullptr;
+    int nBurstCount;
+    D2MissilesTxt* pMissileTxt = pUnit && (nBurstCount = pUnit->nClassId) >= 0 && nBurstCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nBurstCount : nullptr;
     if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
       return 1;
     }

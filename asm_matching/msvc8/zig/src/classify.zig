@@ -316,7 +316,7 @@ fn retImm(insns: []const dec.Insn) ![]u64 {
     return vals.items;
 }
 
-fn frameSize(insns: []const dec.Insn) !u64 {
+pub fn frameSize(insns: []const dec.Insn) !u64 {
     for (insns[0..@min(8, insns.len)]) |*i| {
         if (eql(i.mn, "sub") and std.mem.startsWith(u8, i.op, "esp, ")) return pyHex(i.op[5..]);
     }

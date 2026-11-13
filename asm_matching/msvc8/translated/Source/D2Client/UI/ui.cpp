@@ -9115,7 +9115,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
 }; D2_STATIC_GUARD(gaStatWindowRowLayout, "D2Client::UI::ui::DRAW_UI_StatWindow_II::gaStatWindowRowLayout");
 
     int nBtnIndex;
-    uint16_t* pClearPtr;
+    
     uint16_t wszMonNameTooltip[128];
     for (nBtnIndex = 0; nBtnIndex < 0x80; nBtnIndex++) {
       wszMonNameTooltip[nBtnIndex] = L'\0';
@@ -9170,10 +9170,10 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
       exit(-1);
     }
 
-    uint16_t* wszFmt;
-    pClearPtr = D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr);
-    wszFmt = D2Lang::StrTable::strtable::GetLocaleString(0x2777);
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMonNameTooltip, wszFmt, pClearPtr, bUpperEnabled);
+    
+    
+    
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMonNameTooltip, (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(0x2777)), (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr)), bUpperEnabled);
     D2Win::Src::D2WinFont::DRAW_text(wszMonNameTooltip, gaStatWindowRowLayout[nBtnIndex * 6 + 4] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 5] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0, 0);
     return;
 }

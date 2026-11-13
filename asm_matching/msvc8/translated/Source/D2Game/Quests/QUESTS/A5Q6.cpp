@@ -408,9 +408,9 @@ static void __stdcall Q36_CompleteQuestAndSetStatus(D2UnitStrc * pUnit, D2BitBuf
     /* SetQuestState(QUEST_EveOfDestruction, 0xd=JustCompleted) — fire self-session Baal-kill completion */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_JustCompleted);
     /* SetQuestState(QUEST_EveOfDestruction, 0=Completed) — mark Baal quest
                          permanently complete */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed);
-    uint32_t nDifficulty = (uint32_t)pGame->nDifficulty;
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x1a2);
-    GAME::Clients::SetClientStatus(pClient, 5, nDifficulty);
+    
+    
+    GAME::Clients::SetClientStatus((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x1a2)), 5, (uint32_t)((uint32_t)pGame->nDifficulty));
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_EveOfDestruction);
     if (!pQuestData) {
       return;

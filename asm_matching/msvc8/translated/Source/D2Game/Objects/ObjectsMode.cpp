@@ -324,7 +324,7 @@ void __fastcall OBJMODE_DeactivateShrine(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Advances the fill-progress animation for fillable objects (e.g. Mana Wells, Healing Wells). Reads Components[0] as the current fill level, increments it each tick, then recomputes SetupUpdateFlag based on the ratio of current level to the doubled/default txt sizes. Halts with an unrecoverable error if fill level exceeds its expected bounds. Used by the object-mode update tick to drive incremental fill visuals.
 void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t nErrorLine;
+    uint8_t nErrorLine;
     uint8_t byComponent = pUnit->pUnitData.pUnitDataObject->nShrineId;
     D2ObjectsTxt* pObjectTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit);
     uint32_t uFillLevel = (uint32_t)byComponent;
@@ -342,7 +342,7 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
       nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
       if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
         nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        pUnit->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nErrorLine;
+        pUnit->pUnitData.pUnitDataObject->nShrineId = nErrorLine;
         nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
         if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
@@ -350,9 +350,9 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
         }
       } else {
         nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        if (byComponent <= (uint8_t)nErrorLine) {
+        if (byComponent <= nErrorLine) {
           bVar1 = OBJECT_GetDefaultSize();
-          if (!(int)((int)(uint32_t)byComponent % (int)((uint8_t)nErrorLine / (int)(uint32_t)bVar1))) {
+          if (!(int)((int)(uint32_t)byComponent % (int)(nErrorLine / (int)(uint32_t)bVar1))) {
             bVar1 = OBJECT_GetDefaultSize();
             D2Common::Units::SetupUpdateFlag(pUnit, (uint32_t)bVar1 - (int)((int)(uint32_t)byComponent / pObjectTxt->Parm[2]));
           }
@@ -630,10 +630,10 @@ static void OBJMODE_WarpPlayerToObject(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, 
 
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     uint16_t nTileX = (uint16_t)roomCoords.sTileRect.left;
-    uint16_t nTileY = (uint16_t)roomCoords.sTileRect.top;
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\OBJECTS\\ObjMode.cpp", 0x361);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, eLevelId, nTileX, nTileY);
+    
+    
+    
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\OBJECTS\\ObjMode.cpp", 0x361)), (eD2LevelId)(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom)), nTileX, (uint16_t)((uint16_t)roomCoords.sTileRect.top));
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit2);
     if (!pUnit2) {
       return;
@@ -3572,7 +3572,7 @@ static BOOL __stdcall OBJMODE_ApplyWellHealing(::SGAMEDATA * pGame, D2ObjectsTxt
 BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
     uint8_t bVar1;
     eD2UnitType eHealedType;
-    int32_t nDoubledSize;
+    uint8_t nDoubledSize;
     D2ObjectsTxt* pTxtObjects = D2Common::Units::GetObjectTxtRecordFromObject(pOperation->sArg.pVictim);
     uint8_t byChargesLeft = pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId;
     if (byChargesLeft) {
@@ -3584,9 +3584,9 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
 
       byChargesLeft--;
       nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
-      if (byChargesLeft <= (uint8_t)nDoubledSize) {
+      if (byChargesLeft <= nDoubledSize) {
         bVar1 = OBJECT_GetDefaultSize();
-        if (!(int)(byChargesLeft % (int)((uint8_t)nDoubledSize / (int)(uint32_t)bVar1))) {
+        if (!(int)(byChargesLeft % (int)(nDoubledSize / (int)(uint32_t)bVar1))) {
           bVar1 = OBJECT_GetDefaultSize();
           D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)(byChargesLeft / pTxtObjects->Parm[2]));
         }

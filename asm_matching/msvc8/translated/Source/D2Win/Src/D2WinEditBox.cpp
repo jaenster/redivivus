@@ -1840,7 +1840,7 @@ BOOL __stdcall PushFlag0x8(D2ControlMsg * pControlMsg) {
     uint32_t nCursorPosSave;
     int nClickWidthMax;
     int nTextWidth;
-    bool bHitTest;
+    BOOL bHitTest;
     int32_t dwErrorLineOrTick;
     OnPress pfnOnPress;
     int nMouseY;

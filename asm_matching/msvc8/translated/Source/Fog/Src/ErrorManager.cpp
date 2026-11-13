@@ -711,13 +711,13 @@ void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, c
     va_list __va;
     va_start(__va, szReasonFormat);
     char cTmp;
-    char* szRelativeFile;
+    
     char szErrorMessageBuffer[4096];
     char szFormattedReasonBuffer[4096];
     uint32_t local_8;
     bool bIsFatalErrorType;
     uint32_t bDebuggerPresent;
-    int32_t nLineSaved;
+    
     if (eErrorType == ERROR_Deadlock) {
       szFile = ".\\Src\\ErrorManager.cpp";
     }
@@ -738,9 +738,9 @@ void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, c
       bDebuggerPresent = _3rdparty::crashy::isDebuggerPresent();
       if ((char)bDebuggerPresent == '\0') {
         Storm::Source::SSTR::SStrPrintf(szFormattedReasonBuffer, 0x1000, szReasonFormat, __va);
-        nLineSaved = nLine;
-        szRelativeFile = StripPathPrefixToRelative(szFile);
-        Storm::Source::SSTR::SStrPrintf(szErrorMessageBuffer, 0x1000, "[%s] (%s) failed at %s(%i)", gaErrorTypeNames[eErrorType], szFormattedReasonBuffer, szRelativeFile, nLineSaved);
+        
+        
+        Storm::Source::SSTR::SStrPrintf(szErrorMessageBuffer, 0x1000, "[%s] (%s) failed at %s(%i)", gaErrorTypeNames[eErrorType], szFormattedReasonBuffer, (char*)(StripPathPrefixToRelative(szFile)), (int32_t)(nLine));
         CRASH_FillupCrashTxt(szErrorMessageBuffer, szFormattedReasonBuffer, nullptr, 0, nLine, false);
       }
       if (!bIsFatalErrorType) {

@@ -3278,7 +3278,6 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
     int32_t nPileAmount;
     *pnUnitCount = 0;
     ::SGAMEDATA* pGameSaved = pGame;
-    D2UnitStrc* pSourceUnit = pUnit;
     D2ItemsTxt* pGoldItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(0x20646c67, &nGoldClassId);
     if (!pGoldItemsTxt) {
       return;
@@ -3316,12 +3315,11 @@ void __fastcall DROP_SpawnGoldPiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
       }
 
       pCurrentRoom = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pCurrentRoom, &ptSpawnPos, &ptUnitCoords, 1, 0x3e01, 0x801, 0);
-      pUnit = pSourceUnit;
       if (!pCurrentRoom) {
         return;
       }
 
-      pGoldItem = ITEM_CreateFromTemplate(pSourceUnit, nGoldClassId, pGameSaved, 4, QUALITY_NORMAL, 1, 1, 1, 0, 0, 0);
+      pGoldItem = ITEM_CreateFromTemplate(pUnit, nGoldClassId, pGameSaved, 4, QUALITY_NORMAL, 1, 1, 1, 0, 0, 0);
       if (pGoldItem) {
         if (nPileAmount < 0) {
           nPileAmount = 0;

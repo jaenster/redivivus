@@ -112,11 +112,11 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
     int nReason;
     int bServerValidRequest;
     uint32_t bAllowed;
-    void* bReturn1Result;
+    
     BOOL bFindMeCheckResult;
     D2ClientStrc* pClient;
     char szCharName[52];
-    int32_t nLine;
+    
     uint32_t nClientId = pPacket->nClientId;
     switch (pPacket->uMsg.nOpcode) {
       case 'g':
@@ -177,9 +177,9 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
       case 'l':
         /* D2GS_UPLOADSAVE */ if (pPacket->uMsg.sUploadSave.nTotalSize >= 0x2000) {
           /* Does self mean an entire game server crashes if you simply send a packet 0x6c
-                         00 00 00 00 FF FF FF FF */ nLine = 0x1a8;
-          bReturn1Result = Fog::Src::ErrorManager::GetInstructionPointer();
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", bReturn1Result, nLine);
+                         00 00 00 00 FF FF FF FF */ 
+          
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)(Fog::Src::ErrorManager::GetInstructionPointer()), (int32_t)(0x1a8));
           exit(-1);
         }
       bFindMeCheckResult = Server::Return1_GameSetup_1();

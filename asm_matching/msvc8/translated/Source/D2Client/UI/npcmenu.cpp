@@ -6491,14 +6491,14 @@ void __fastcall NPCMENU_HandleQuestItemPacket(uint8_t byUnitType, int32_t nUnitG
 }
 
 void __stdcall NPCMENU_HandleTradeAccepted() {
-    int nY;
-    int nDialogX;
+    
+    
     uint16_t nErrorStringId;
     fpDialogFunc pfnOnClick;
-    fpDialogFunc pfnDrawCallback;
+    
     int32_t dwBorder;
-    fpDialogFunc dwCallbackArg;
-    int32_t dwErrorCode;
+    
+    
     int32_t dwFontArg;
     int32_t dwHighlight;
     int32_t dwScrollable;
@@ -6609,12 +6609,12 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
         nAlignArg = 0;
         dwHighlight = 1;
         dwBorder = 1;
-        dwErrorCode = 0;
-        dwCallbackArg = 0;
-        pfnDrawCallback = NPCMENU_GetCurrentMenuId;
-        nY = Cursor::GetMouseY();
-        nDialogX = Cursor::GetMouseX();
-        Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nY, pfnDrawCallback, dwCallbackArg, dwErrorCode, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
+        
+        
+        
+        
+        
+        Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc((int)(Cursor::GetMouseX()), (int)(Cursor::GetMouseY()), (fpDialogFunc)(NPCMENU_GetCurrentMenuId), (fpDialogFunc)(0), (int32_t)(0), dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
         Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
         Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);
         dwBorder = 1;
@@ -6629,17 +6629,17 @@ void __stdcall NPCMENU_HandleTradeAccepted() {
 }
 
 void __stdcall NPCMENU_HandleTradeRejected() {
-    int nMouseY;
-    int nDialogX;
+    
+    
     uint16_t nErrorStringId;
     fpDialogFunc pfnOnClick;
-    fpDialogFunc pfnDrawCallback;
+    
     int32_t dwBorder;
-    fpDialogFunc dwCallbackArg;
+    
     int32_t dwFontArg;
     int32_t dwHighlight;
     int32_t dwScrollable;
-    int32_t dwTransparent;
+    
     int32_t nAlignArg;
     int32_t nColorArg;
     uint32_t nNpcClass;
@@ -6687,12 +6687,12 @@ void __stdcall NPCMENU_HandleTradeRejected() {
         nAlignArg = 0;
         dwHighlight = 1;
         dwBorder = 1;
-        dwTransparent = 0;
-        dwCallbackArg = 0;
-        pfnDrawCallback = NPCMENU_GetCurrentMenuId;
-        nMouseY = Cursor::GetMouseY();
-        nDialogX = Cursor::GetMouseX();
-        Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc(nDialogX, nMouseY, pfnDrawCallback, dwCallbackArg, dwTransparent, dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
+        
+        
+        
+        
+        
+        Dialog::gpNpcTradeErrorDialog = Dialog::AllocDialogStrc((int)(Cursor::GetMouseX()), (int)(Cursor::GetMouseY()), (fpDialogFunc)(NPCMENU_GetCurrentMenuId), (fpDialogFunc)(0), (int32_t)(0), dwBorder, dwHighlight, nAlignArg, nColorArg, dwFontArg, dwScrollable);
         Dialog::DIALOG_SetHighlightStyle(Dialog::gpNpcTradeErrorDialog, 1);
         Dialog::AddStringData(Dialog::gpNpcTradeErrorDialog, D2Lang::StrTable::strtable::GetLocaleString(nErrorStringId), 0x15, 0, 1, 1, 0, 0);
         dwBorder = 1;
@@ -6838,9 +6838,9 @@ void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechId
     nErrorLine = 0;
     uint32_t dwColorArg = 0;
     dwFontArg = 0xf;
-    fpDialogFunc pfnMercOnClick = NPCMENU_MercDrawCallback1;
-    uint16_t* pszDialogLine = D2Lang::StrTable::strtable::GetLocaleString(0xd48);
-    Dialog::AddStringData(Dialog::gpNpcGossipDialog, pszDialogLine, dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, pfnMercOnClick, iVar1);
+    
+    
+    Dialog::AddStringData(Dialog::gpNpcGossipDialog, (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(0xd48)), dwFontArg, dwColorArg, nErrorLine, dwEnabledArg, (fpDialogFunc)(NPCMENU_MercDrawCallback1), iVar1);
 }
 
 // Opens a confirm dialog for an NPC action (gpNpcRepairDialog). Line 1 is the localized string nTitleStringId (font 0x15), then "ok" (3401) -> NPCMENU_ConfirmDialogOkCallback and "cancel" (3400) -> NPCMENU_ConfirmDialogCancelCallback. The dialog's own callbacks are NPCMENU_ConfirmDialogCancelCallback and NPCMENU_EmptyDrawCallback2.

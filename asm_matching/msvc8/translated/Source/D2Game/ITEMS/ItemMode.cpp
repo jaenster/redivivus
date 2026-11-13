@@ -5267,7 +5267,7 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     eD2ItemTypes eItemType;
     int nSkillResult;
     eD2Skills eSkillId;
-    char bIsEquipped;
+    
     eD2UnitType eVar1;
     uint16_t nStatLayerOrCount;
     int iVar2;
@@ -5393,7 +5393,7 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         nLine = 0x1034;
       }
     } else {
-      D2ClientStrc* pClient;
+      
       if (eScrollAnimMode != Container) {
         goto reject_bad_scroll;
       }
@@ -5408,9 +5408,9 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           nStatLayerOrCount = 0;
           _bIsScrollType = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pScrollItem, UNITSTAT_quantity, 0);
           nLine = 0x46;
-          bIsEquipped = '\x01';
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x103c);
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(pClient, pScrollItem, bIsEquipped, nLine, _bIsScrollType, nStatLayerOrCount);
+          
+          
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats((D2ClientStrc*)(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x103c)), pScrollItem, (char)('\x01'), nLine, _bIsScrollType, nStatLayerOrCount);
           ITEMMODE_CastItemSkill(eSkillId, pUnit);
           iVar2 = pScrollItem->nUnitGUID;
           eVar1 = pScrollItem->eUnitType;

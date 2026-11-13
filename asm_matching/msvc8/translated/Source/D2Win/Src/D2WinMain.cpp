@@ -1127,7 +1127,7 @@ void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
 }
 
 D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pControl1, D2ControlStrc * pControl2) {
-    bool bVar1;
+    BOOL bVar1;
     bool bControl1Inside;
     if (!pControl1) {
       return pControl2;

@@ -1084,12 +1084,12 @@ BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(D2UnitStrc * pUnit
     D2CharStatsTxt* pCharStatsTxt;
     D2MonStatsTxt* pMonStatsTxt;
     eD2CollisionShapeType nType;
-    D2RoomStrc* pRoom;
+    
     D2PathPointStrc* pPathPoints;
     uint32_t nSrcY;
     uint32_t nSrcX;
     char* szSkillsBarCpp;
-    uint32_t nDestY;
+    
     int32_t nLine;
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
       return 0;
@@ -1165,9 +1165,9 @@ BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(D2UnitStrc * pUnit
         nSrcY = (uint32_t)pPathPoints[nLine - 1].nY;
         nType = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
         nSkillFlags = nSrcX;
-        nDestY = nSrcY;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-        D2Common::Collision::AddCollision_Type(pRoom, nSkillFlags, nDestY, nType, eCollisionFlag);
+        
+        
+        D2Common::Collision::AddCollision_Type((D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pUnit)), nSkillFlags, (uint32_t)(nSrcY), nType, eCollisionFlag);
         D2Common::Skills::SKILL_SetFlags(pSkill, 1);
         D2Common::Skills::SKILL_SetParam1(pSkill, nSrcX);
         D2Common::Skills::SKILL_SetParam2(pSkill, nSrcY);

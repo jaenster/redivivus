@@ -959,9 +959,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     uint16_t wszFormatted[340];
     char szSenderLabel[340];
     char szWhisperPrefix[340];
-    int aMessageBuffer[6];
-    char aMessageText[4];
-    uint16_t wszScratch[230];
+    D2BNetChatEventStrc sChatEvent;
     uint16_t wszMessageW[340];
     uint16_t wszPrefixW[340];
     char aHeaderBuffer[14];
@@ -975,7 +973,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     }
 
     int nResult;
-    nResult = pCallbacks->pfnDequeueMessage(&nMessageType, aMessageBuffer);
+    nResult = pCallbacks->pfnDequeueMessage(&nMessageType, &sChatEvent);
     if (!nResult) {
       return;
     }
@@ -987,12 +985,12 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     Fog::File::CONTAINER_InitializeBuffer(wszMessageW, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     Fog::File::CONTAINER_InitializeBuffer(wszFormatted, 2, 0x154, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
     char* pszMessageText;
-    pszMessageText = aMessageText;
+    pszMessageText = sChatEvent.szUserAndText;
     pszMessageText = pszMessageText + strlen(pszMessageText) + 1;
     ::IgnoreList* pIgnoreList;
     pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
     int bIgnored1;
-    bIgnored1 = vc8_thiscall(pIgnoreList->_vfptr->CheckIgnored)(pIgnoreList, aMessageText);
+    bIgnored1 = vc8_thiscall(pIgnoreList->_vfptr->CheckIgnored)(pIgnoreList, sChatEvent.szUserAndText);
     if (bIgnored1) {
       return;
     }
@@ -1004,7 +1002,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
       return;
     }
 
-    switch (aMessageBuffer[0]) {
+    switch (sChatEvent.nEventId) {
       case 1:
 
       case 2:
@@ -1029,10 +1027,10 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
 
       case 10:
         {
-          CHAT_ExtractWhisperPrefix(aMessageText, szWhisperPrefix);
+          CHAT_ExtractWhisperPrefix(sChatEvent.szUserAndText, szWhisperPrefix);
           if (szWhisperPrefix[0] != '\0') {
             if (szWhisperPrefix[0] == '*') {
-              pbyWhisperTarget = (uint8_t*)CHAT_ExtractWhisperTarget(aMessageText);
+              pbyWhisperTarget = (uint8_t*)CHAT_ExtractWhisperTarget(sChatEvent.szUserAndText);
               pbyPrefixScan = (uint8_t*)CHAT_ExtractWhisperTarget(szWhisperPrefix);
               nResult = strcmp((char*)pbyPrefixScan, (char*)pbyWhisperTarget);
               if (!nResult) {
@@ -1040,7 +1038,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
               }
             }
 
-            szWhisperTarget = CHAT_ExtractWhisperTarget(aMessageText);
+            szWhisperTarget = CHAT_ExtractWhisperTarget(sChatEvent.szUserAndText);
             sprintf(szSenderLabel, "%s (*%s)", szWhisperPrefix, szWhisperTarget);
           } else {
             sender_label_plain:
@@ -1053,7 +1051,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
           pwszSenderLine = wszPrefixW;
           wszPrefixW[0x153] = L'\0';
           wszMessageW[0x153] = L'\0';
-          pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(aMessageBuffer[0] != 10 ? 0x14d4 : 0x14d5);
+          pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(sChatEvent.nEventId != 10 ? 0x14d4 : 0x14d5);
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x153, wszFormatted, pwszFormat, pwszSenderLine, pWVar1);
           wszFormatted[0x153] = L'\0';
           Text::TEXT_PrintGameString(wszFormatted, 2);

@@ -51,6 +51,18 @@ struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At30c {
 };
 
 #endif // D2_MODULE_D2Client
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+struct D2BNetChatEventStrc {
+    /* 0x00 */ int nEventId; // 0x00 chat event id; CHAT_ProcessBattleNetMessage switches on it (4/6/10 whisper/broadcast/whisper-sent)
+    /* 0x04 */ uint32_t nUserFlags; // 0x04 unread in Game.exe; SID_CHATEVENT user flags
+    /* 0x08 */ uint32_t nPing; // 0x08 unread in Game.exe; SID_CHATEVENT ping
+    /* 0x0C */ uint32_t nIpAddress; // 0x0c unread in Game.exe; SID_CHATEVENT IP address (defunct)
+    /* 0x10 */ uint32_t nAccountNumber; // 0x10 unread in Game.exe; SID_CHATEVENT account number (defunct)
+    /* 0x14 */ uint32_t nRegAuthority; // 0x14 unread in Game.exe; SID_CHATEVENT registration authority (defunct)
+    /* 0x18 */ char szUserAndText[464]; // 0x18 packed strings: the user name, then the text right after its NUL (0047be77..0047be8e)
+};
+
+#endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2ChatCommandStrc
 #define D2_DEFINED_D2ChatCommandStrc
 struct __attribute__((packed)) D2ChatCommandStrc {

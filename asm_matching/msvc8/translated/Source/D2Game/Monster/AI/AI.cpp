@@ -15012,7 +15012,7 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     static uint32_t BAALWAVES_UniqueHardcodedIndex[5] = { 0x3d, 0x3e, 0x3f, 0x40, 0x41 }; D2_STATIC_GUARD(BAALWAVES_UniqueHardcodedIndex, "D2Game::Monster::AI::AI_Fn1_BaalThrone::BAALWAVES_UniqueHardcodedIndex");
 
     D2SuperUniquesTxt* pSuperUniqTxt;
-    D2AiGeneralStrc* pMonsterAiGeneral;
+    
     eD2UnitType eUnitType;
     D2StatListExStrc* pStatsEx;
     int32_t nMonsterPresetId;
@@ -15022,7 +15022,7 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     int nUnitGUID;
     int16_t nSoundClassId;
     D2MonsterAiParameterStruct DStack_30;
-    int nAiFunctionIdx;
+    
     int nWaveMonClassId;
     short int nAuraState;
     int nFramesToNextWave;
@@ -15048,9 +15048,9 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
         if (pAiParam->pMonsterAiGeneral->dwArg1 & 1) {
           if ((int)nWave >= 5) {
             MONSTER_TransformMonsterClass(pGame, pUnit, 0x22f, 1);
-            nAiFunctionIdx = 0;
-            pMonsterAiGeneral = UNIT::Monster::GetAiGeneral(pUnit);
-            AttachCorrectAiFunctionToMonster(pGame, pUnit, pMonsterAiGeneral, nAiFunctionIdx);
+            
+            
+            AttachCorrectAiFunctionToMonster(pGame, pUnit, (D2AiGeneralStrc*)(UNIT::Monster::GetAiGeneral(pUnit)), (int)(0));
             D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_changeclass, 1);
             if (!pUnit) {
               nUnitGUID = -1;

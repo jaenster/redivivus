@@ -238,7 +238,7 @@ static uint32_t CHARSEL_IsBetaRealm(uint16_t * wszText) {
     // Static local variables (originally global data)
     static uint8_t gbBetaRealmNamesInitialized; D2_STATIC_GUARD_BSS(gbBetaRealmNamesInitialized, "D2Launch::CharSel::CHARSEL_IsBetaRealm::gbBetaRealmNamesInitialized");
 
-    char szName[11];
+    char szName[256];
     if (gbBetaRealmNamesInitialized == '\0') {
       memcpy(szName, "Testv104", 8);
       *(uint16_t*)((char*)&szName + 8) &= 0xff00;

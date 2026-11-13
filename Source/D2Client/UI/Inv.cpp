@@ -3691,7 +3691,7 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     }
 
     int nScanCount = 0;
-    uint32_t nNextPage = (uint32_t)byPage;
+    uint8_t nNextPage = (uint32_t)byPage;
     int nTabIdx = 0;
     CurrentInventoryPage = byPage;
     if (nTabCount > 0) {
@@ -3707,14 +3707,14 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     if (!anPageItemCount[byPage]) {
       do {
         byNextPage = (char)nNextPage + 1;
-        nNextPage = (uint32_t)byNextPage;
+        nNextPage = byNextPage;
         nScanCount++;
         if (byNextPage > TypeOfShopMaybe || byNextPage == 0xff) {
           nNextPage = 0;
         }
       } while (!anPageItemCount[nNextPage] && nScanCount < 4);
 
-      CurrentInventoryPage = (uint8_t)nNextPage;
+      CurrentInventoryPage = nNextPage;
     }
 
     gaNpcShopTabs[nNextPage].nSelected = 1;

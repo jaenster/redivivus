@@ -113,9 +113,9 @@ void __fastcall SetItemSeeds(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     D2Common::ITEMS::Items::ResetItemSeed(pUnit);
     uint32_t DVar1 = D2_SeedRoll(pSeed);
     D2Common::ITEMS::Items::SetModSeed(pUnit, DVar1);
-    int32_t nModSeedVal = D2Common::ITEMS::Items::GetModSeed(pUnit);
-    D2SeedStrc* pItemSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
-    D2Common::Seed::InitSeed_Param_666(pItemSeed, nModSeedVal);
+    
+    
+    D2Common::Seed::InitSeed_Param_666((D2SeedStrc*)(D2Common::ITEMS::Items::GetItemSeed(pUnit)), (int32_t)(D2Common::ITEMS::Items::GetModSeed(pUnit)));
 }
 
 // Increments and returns pGame->anUnitGuidCounters[eUnitType] (+0x90), skipping -1. The incremented value IS the new unit's GUID and is returned in EAX; typing it void made every caller read the GUID out of an unassigned local.

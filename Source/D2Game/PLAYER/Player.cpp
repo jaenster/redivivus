@@ -527,7 +527,7 @@ void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2UnitStrc* pInteractUnit;
     uint32_t nInteractUnitId;
     eD2UnitType eInteractUnitType;
-    char byPacketUnitType;
+    int byPacketUnitType;
     int nInteractGUID;
     int32_t nLine;
     BOOL bHasInteraction;

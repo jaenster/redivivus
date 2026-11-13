@@ -1674,10 +1674,10 @@ void __stdcall SKILLTREE_RenderSkillTree() {
       nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x122;
     }
 
-    int32_t nShowTooltip = 1;
-    int32_t bMouseOver = 0;
-    uint16_t* pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTabLabel, nTooltipX, nTooltipY, bMouseOver, nShowTooltip);
+    
+    
+    
+    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes((uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(0x1030)), nTooltipX, nTooltipY, (int32_t)(0), (int32_t)(1));
 }
 
 int Unreferenced_004ab7b0() {

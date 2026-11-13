@@ -510,6 +510,7 @@
         "UNICODE_FormatWideString"
       ],
       "usedTypes": [
+        "D2BNetChatEventStrc",
         "D2BNetClientCallbacksStrc",
         "IgnoreList",
         "WCHAR",

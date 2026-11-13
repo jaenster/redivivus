@@ -289,9 +289,9 @@ void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     int32_t nDir = 1;
     int32_t nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    int nTargetY = nYPos + 10;
-    int32_t nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, nTargetX, nTargetY, nDir);
+    
+    
+    D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pDynamicPath, (int32_t)(D2Common::Units::GetXPosFromDynamicPathUnit(pUnit)), (int)(nYPos + 10), nDir);
 }
 
 static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nValue) {
