@@ -2491,7 +2491,7 @@ uint32_t __stdcall CLIENT_GameLoopFrame(uint32_t dwUnused) {
     uint32_t nFpsDrawn;
     bool didTick;
     didTick = false;
-    bool didClientLoop;
+    BOOL didClientLoop;
     didClientLoop = false;
     D2UnitStrc* pPlayer;
     pPlayer = UNIT::Player::GetPlayerUnit_UI();

@@ -598,39 +598,14 @@ BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * p
     int nX;
     uint32_t nRandOffsetY;
     uint32_t nRandOffsetX;
-    uint32_t nSeedLow;
-    uint32_t newSeed;
     int nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x;
     int nGridWidth = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsHeight;
     int nGridHeight = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth;
     uint32_t nRangeX = nGridHeight - 2;
     int nWorldY = pLevel->sCoordinatesAndSize.WorldPosition.y;
     uint32_t nRangeY = nGridWidth - 2;
-    if ((int)nRangeX <= 0) {
-      nRandOffsetY = 0;
-    } else {
-      nSeedLow = pLevel->sSeed.nSeedLow;
-      if (nRangeX & nGridHeight - 3U) {
-        newSeed = D2_SeedRoll(&pLevel->sSeed);
-        nRandOffsetY = newSeed % nRangeX;
-      } else {
-        newSeed = D2_SeedRoll(&pLevel->sSeed);
-        nRandOffsetY = nGridHeight - 3U & newSeed;
-      }
-    }
-    if ((int)nRangeY <= 0) {
-      nRandOffsetX = 0;
-    } else {
-      nSeedLow = pLevel->sSeed.nSeedLow;
-      if (nRangeY & nGridWidth - 3U) {
-        newSeed = D2_SeedRoll(&pLevel->sSeed);
-        nRandOffsetX = newSeed % nRangeY;
-      } else {
-        newSeed = D2_SeedRoll(&pLevel->sSeed);
-        nRandOffsetX = nGridWidth - 3U & newSeed;
-      }
-    }
-
+    nRandOffsetY = D2_SeedRollLimited(&pLevel->sSeed, nRangeX);
+    nRandOffsetX = D2_SeedRollLimited(&pLevel->sSeed, nRangeY);
     nGridWidth = pDrlgCoord->nWidth;
     nGridHeight = pDrlgCoord->nPosX;
     int nBestDist = 0;

@@ -1161,7 +1161,6 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
     int iOffsetYOuter;
     int32_t nCenterY;
     uint32_t sRolledSeed;
-    uint32_t uSeedHigh;
     int32_t* pMissileIdArray = pMissileIds;
     D2UnitStrc* pUnitOrig = pUnit;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1232,19 +1231,8 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
                     sSkillArg.nTotalFrames = sRolledSeed % 0x19 - 0xc + nChanceDivisor;
                     sSkillArg.nX = nTileX;
                   }
-                  if ((int)nMissileArraySize <= 0) {
-                    nMissileIdx = 0;
-                  } else {
-                    uSeedHigh = pUnit->sSeed.nSeedHigh;
-                    if (nMissileArraySize & nMissileArraySize - 1) {
-                      sRolledSeed = D2_SeedRoll(pSeedState);
-                      nMissileIdx = (uint32_t)(sRolledSeed % nMissileArraySize);
-                    } else {
-                      sRolledSeed = D2_SeedRoll(pSeedState);
-                      nMissileIdx = nMissileArraySize - 1 & sRolledSeed;
-                    }
-                  }
 
+                  nMissileIdx = D2_SeedRollLimited(&pUnit->sSeed, nMissileArraySize);
                   sSkillArg.nMissileTxtNo = pMissileIdArray[nMissileIdx];
                   sRolledSeed = D2_SeedRoll(pSeedState);
                   sSkillArg.nY = nTileY;
@@ -1487,8 +1475,6 @@ void __fastcall MISSILE_SetupDescentAnim(D2UnitStrc * pUnit) {
 static D2UnitStrc * __stdcall MISSILE_CreateRandomOffset(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nRadius, D2UnitStrc * pUnit2) {
     uint32_t nRandX;
     D2SkillArgStrc sSkillArg;
-    uint32_t sSeedTmp;
-    uint32_t uSeedHighWord;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 2;
     sSkillArg.nMissileTxtNo = nMissileId;
@@ -1499,33 +1485,9 @@ static D2UnitStrc * __stdcall MISSILE_CreateRandomOffset(D2UnitStrc * pUnit, eMi
     uint32_t nRandY = nRadius * 2;
     uint32_t nDiameter = nRandY + 1;
     D2SeedStrc* pSeed = &pUnit2->sSeed;
-    if ((int)nDiameter <= 0) {
-      nRandX = 0;
-    } else {
-      uSeedHighWord = pUnit2->sSeed.nSeedHigh;
-      if (nDiameter & nRandY) {
-        sSeedTmp = D2_SeedRoll(pSeed);
-        nRandX = (uint32_t)(sSeedTmp % nDiameter);
-      } else {
-        sSeedTmp = D2_SeedRoll(pSeed);
-        nRandX = nRandY & sSeedTmp;
-      }
-    }
-
+    nRandX = D2_SeedRollLimited(&pUnit2->sSeed, nDiameter);
     sSkillArg.nUnitX = nRandX - nRadius;
-    if ((int)nDiameter <= 0) {
-      nRandY = 0;
-    } else {
-      uSeedHighWord = pUnit2->sSeed.nSeedHigh;
-      if (nDiameter & nRandY) {
-        sSeedTmp = D2_SeedRoll(pSeed);
-        nRandY = (uint32_t)(sSeedTmp % nDiameter);
-      } else {
-        sSeedTmp = D2_SeedRoll(pSeed);
-        nRandY &= sSeedTmp;
-      }
-    }
-
+    nRandY = D2_SeedRollLimited(&pUnit2->sSeed, nDiameter);
     int nTargetY = nRandY - nRadius;
     sSkillArg.nUnitY = nTargetY;
     if (!sSkillArg.nUnitX && !nTargetY) {
@@ -1689,7 +1651,6 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
     D2SkillArgStrc sSkillArg;
     eD2UnitType eUnitType;
     uint32_t nDiameter;
-    uint32_t sSeedTmp;
     D2MissilesTxt* pMissileTxt = (int)pChosenMissileTxt >= 0 && (int)pChosenMissileTxt < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + pChosenMissileTxt : nullptr;
     if (!pMissileTxt) {
       return;
@@ -1728,35 +1689,11 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
     int nRetryCount = 0;
     do {
       nRetryCount++;
-      nDiameter = nRadius * 2;
-      nRandY = nDiameter + 1;
-      if ((int)nRandY <= 0) {
-        nRandX = 0;
-      } else {
-        nRandX = pUnit2->sSeed.nSeedLow;
-        if (nRandY & nDiameter) {
-          sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-          nRandX = (uint32_t)(sSeedTmp % nRandY);
-        } else {
-          sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-          nRandX = nDiameter & sSeedTmp;
-        }
-      }
-
+      nRandY = nRadius * 2;
+      nRandY += 1;
+      nRandX = D2_SeedRollLimited(&pUnit2->sSeed, nRandY);
       iOffsetX = nRandX - nRadius;
-      if ((int)nRandY <= 0) {
-        nRandY = 0;
-      } else {
-        nRandX = pUnit2->sSeed.nSeedLow;
-        if (nRandY & nDiameter) {
-          sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-          nRandY = (uint32_t)(sSeedTmp % (uint32_t)(nRadius * 2 + 1));
-        } else {
-          sSeedTmp = D2_SeedRoll(&pUnit2->sSeed);
-          nRandY = nRadius * 2 & sSeedTmp;
-        }
-      }
-
+      nRandY = D2_SeedRollLimited(&pUnit2->sSeed, nRandY);
       iOffsetY = nRandY - nRadius;
       if (iOffsetY * iOffsetY + iOffsetX * iOffsetX <= nRadius * nRadius) {
         eUnitType = pUnit2->eUnitType;
@@ -3597,10 +3534,8 @@ static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, 
     D2SkillArgStrc sSkillArg;
     int nPosY;
     int nPosX;
-    int64_t lSeedCalc;
     uint32_t nRangeP1;
     uint32_t nSplashX4;
-    D2SeedStrc sNewSeed;
     int32_t nSplashCountBak = nSplashCount;
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pMissileUnit);
     if (!pOwner) {
@@ -3637,45 +3572,12 @@ static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, 
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLevel;
       if (nSplashCount > 0) {
-        nSplashX4 = nSplashCount * 4;
-        nRangeP1 = nSplashX4 + 1;
+        nRangeP1 = nSplashCount * 4;
+        nRangeP1 += 1;
         do {
-          if ((int)nRangeP1 <= 0) {
-            nRandVal = 0;
-          } else {
-            lSeedCalc = (uint64_t)pMissileUnit->sSeed.nSeedLow * 0x6ac690c5;
-            nRandVal = pMissileUnit->sSeed.nSeedHigh;
-            if (nRangeP1 & nSplashX4) {
-              sNewSeed = (D2SeedStrc)(lSeedCalc + (uint64_t)nRandVal);
-              pMissileUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-              pMissileUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-              nRandVal = (uint32_t)(sNewSeed.nSeedLow % nRangeP1);
-            } else {
-              sNewSeed = (D2SeedStrc)(lSeedCalc + (uint64_t)nRandVal);
-              pMissileUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-              pMissileUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-              nRandVal = nSplashX4 & sNewSeed.nSeedLow;
-            }
-          }
-
+          nRandVal = D2_SeedRollLimited(&pMissileUnit->sSeed, nRangeP1);
           nTargetX = nRandVal + nSplashCountBak * -2 + nPosX;
-          if ((int)nRangeP1 <= 0) {
-            nRandVal = 0;
-          } else {
-            nRandVal = pMissileUnit->sSeed.nSeedLow;
-            if (nRangeP1 & nSplashX4) {
-              sNewSeed = D2_SEED_NEXT(pMissileUnit->sSeed);
-              pMissileUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-              pMissileUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-              nRandVal = (uint32_t)(sNewSeed.nSeedLow % nRangeP1);
-            } else {
-              sNewSeed = D2_SEED_NEXT(pMissileUnit->sSeed);
-              pMissileUnit->sSeed.nSeedHigh = sNewSeed.nSeedHigh;
-              pMissileUnit->sSeed.nSeedLow = sNewSeed.nSeedLow;
-              nRandVal = nSplashX4 & sNewSeed.nSeedLow;
-            }
-          }
-
+          nRandVal = D2_SeedRollLimited(&pMissileUnit->sSeed, nRangeP1);
           nTargetY = nRandVal + nSplashCountBak * -2 + nPosY;
           nDist = D2Common::Collision::GetDistanceToXY(pMissileUnit, nTargetX, nTargetY);
           if (nDist > 3) {

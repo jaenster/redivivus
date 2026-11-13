@@ -499,7 +499,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHpNew, 0);
     iPoisonSearch = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_last_sent_hp_pct, 0);
-    uint8_t byPrevHpPct = (uint8_t)iPoisonSearch;
+    int byPrevHpPct = (uint8_t)iPoisonSearch;
     *(uint8_t*)(char*)&nHpPct128 = Monsters::MONSTER_GetHpPercent128(pUnit);
     nHpPct128 = (uint32_t)(uint8_t)nHpPct128;
     iPoisonSearch = byPrevHpPct - nHpPct128;

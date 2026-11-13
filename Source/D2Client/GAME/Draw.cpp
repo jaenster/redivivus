@@ -844,7 +844,7 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
     D2Wall2DrawEntryStrc* pRoofNode;
     int32_t nWorldY;
     D2DrlgTileDataStrc* pRoofEntry;
-    uint8_t nAlpha;
+    int nAlpha;
     D2GfxLightExStrc* pLight;
     D2TileLibraryEntryStrc* pTile;
     D2GameViewStrc* pGameViewSaved = pGameView;

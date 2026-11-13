@@ -270,7 +270,7 @@ void __stdcall DRLGLOGIC_BuildCoordRegions(D2RoomExStrc * pRoomEx, D2DrlgCoordLi
     int iScanX;
     int nCellY;
     int iCellX;
-    bool bRowBreak;
+    BOOL bRowBreak;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     DrlgGrid::DRLGGRID_InitGridCells(pMemory, &pCoordList->sCoordIndexGrid, pRoomEx->sCoords.WorldSize.x + 1, pRoomEx->sCoords.WorldSize.y + 1);
     int nGridHeight = pRoomEx->sCoords.WorldSize.y + 1;

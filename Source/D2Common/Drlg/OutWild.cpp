@@ -67,20 +67,7 @@ static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDr
     dwRoadFlags = pWildData->dwFlags & 4;
     uint32_t nUsableRows;
     nUsableRows = nY - 2;
-    if ((int)nUsableRows <= 0) {
-      nStartYOffset = 0;
-    } else {
-      uint32_t DVar1;
-      nGridFlags = pDrlgLevelStrc->sSeed.nSeedLow;
-      if (nUsableRows & nY - 3U) {
-        DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
-        nStartYOffset = DVar1 % nUsableRows;
-      } else {
-        DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
-        nStartYOffset = nY - 3U & DVar1;
-      }
-    }
-
+    nStartYOffset = D2_SeedRollLimited(&pDrlgLevelStrc->sSeed, nUsableRows);
     int nYIter;
     nYIter = 0;
     if ((int)nUsableRows <= 0) {

@@ -732,16 +732,7 @@ void __fastcall Objects_InitFn01_Shrine(D2ObjectInitFnArg * pInitArg) {
         nShrinesCount = D2Common::DATATBLS::ObjectTbls::GetShrinesSize();
         pRandSeed = pInitArg->pSeed;
         nRandIdx = nShrinesCount - 1;
-        if ((int)nRandIdx <= 0) {
-          nRandIdx = 0;
-        } else if (nRandIdx & nShrinesCount - 2U) {
-          seedRolled = D2_SeedRoll(pRandSeed);
-          nRandIdx = (uint32_t)(seedRolled % nRandIdx);
-        } else {
-          seedRolled = D2_SeedRoll(pRandSeed);
-          nRandIdx = nShrinesCount - 2U & seedRolled;
-        }
-
+        nRandIdx = D2_SeedRollLimited(pRandSeed, nRandIdx);
         nShrineId = nRandIdx + 1;
         pShrineLine = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
       } while (eLevelId < pShrineLine->dwLevelMin && (nShrineTypeArg-- , nShrineTypeArg > 0));
@@ -1050,7 +1041,6 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t
     uint32_t nY;
     D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nCandX;
-    uint32_t seedNext;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     if (sRoomCoords.dwXSize < 2 || sRoomCoords.dwYSize < 2) {
       return nullptr;
@@ -1061,29 +1051,11 @@ D2UnitStrc * __stdcall OBJECT_PlaceAtRandomPosition(::SGAMEDATA * pGame, int32_t
     while (true) {
       nRange = sRoomCoords.dwXSize - nXMargin;
       dwTmp = nRange - 1;
-      if ((int)dwTmp <= 0) {
-        dwTmp = 0;
-      } else if (dwTmp & nRange - 2U) {
-        seedNext = D2_SeedRoll(pCtrlSeed);
-        dwTmp = (uint32_t)(seedNext % dwTmp);
-      } else {
-        seedNext = D2_SeedRoll(pCtrlSeed);
-        dwTmp = nRange - 2U & seedNext;
-      }
-
+      dwTmp = D2_SeedRollLimited(pCtrlSeed, dwTmp);
       nRange = sRoomCoords.dwYSize - nYMargin;
       nY = nRange - 1;
       dwTmp += sRoomCoords.dwXStart;
-      if ((int)nY <= 0) {
-        nY = 0;
-      } else if (nY & nRange - 2U) {
-        seedNext = D2_SeedRoll(pCtrlSeed);
-        nY = (uint32_t)(seedNext % nY);
-      } else {
-        seedNext = D2_SeedRoll(pCtrlSeed);
-        nY = nRange - 2U & seedNext;
-      }
-
+      nY = D2_SeedRollLimited(pCtrlSeed, nY);
       nY += sRoomCoords.dwYStart;
       if (dwTmp && nY && (int)(uint16_t)dwTmp >= sRoomCoords.dwXStart + 1 && (int)(uint16_t)nY >= sRoomCoords.dwYStart + 1 && (int)(uint16_t)dwTmp < sRoomCoords.dwXStart - 1 + sRoomCoords.dwXSize && (int)(uint16_t)nY < sRoomCoords.dwYStart - 1 + sRoomCoords.dwYSize) {
         nCandX = dwTmp;
@@ -1210,36 +1182,10 @@ void __fastcall Objects_InitFn46(D2ObjectInitFnArg * pInitArg) {
     for (nMaxRetries = 0xc; nRemainingToSpawn > 0 && nMaxRetries > 0; nMaxRetries--) {
       D2CoordStrc sSpawnCoord;
       dwTmp = sRoomCoords.dwXSize - 4;
-      if ((int)dwTmp <= 0) {
-        dwTmp = 0;
-      } else if (dwTmp & sRoomCoords.dwXSize - 5U) {
-        sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-        pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-        pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-        dwTmp = (uint32_t)(sSeedRoll.nSeedLow % dwTmp);
-      } else {
-        sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-        pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-        pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-        dwTmp = sRoomCoords.dwXSize - 5U & sSeedRoll.nSeedLow;
-      }
-
+      dwTmp = D2_SeedRollLimited(pObjCtrlSeed, dwTmp);
       nCurX = dwTmp + sRoomCoords.dwXStart;
       dwTmp = sRoomCoords.dwYSize - 4;
-      if ((int)dwTmp <= 0) {
-        dwTmp = 0;
-      } else if (dwTmp & sRoomCoords.dwYSize - 5U) {
-        sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-        pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-        pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-        dwTmp = (uint32_t)(sSeedRoll.nSeedLow % dwTmp);
-      } else {
-        sSeedRoll = D2_SEED_NEXT(*pObjCtrlSeed);
-        pObjCtrlSeed->nSeedHigh = sSeedRoll.nSeedHigh;
-        pObjCtrlSeed->nSeedLow = sSeedRoll.nSeedLow;
-        dwTmp = sRoomCoords.dwYSize - 5U & sSeedRoll.nSeedLow;
-      }
-
+      dwTmp = D2_SeedRollLimited(pObjCtrlSeed, dwTmp);
       nCurY = dwTmp + sRoomCoords.dwYStart;
       sSpawnCoord.nY = nCurY;
       sSpawnCoord.nX = nCurX;
@@ -1524,37 +1470,11 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
       nXRange = sRoomCoords.dwXSize - nTxtSizeX;
       nSpawnClassId = pObjClassIdTable[nRandVal];
       nRandVal = nXRange - 1;
-      if ((int)nRandVal <= 0) {
-        nRandVal = 0;
-      } else if (nRandVal & nXRange - 2U) {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = (uint32_t)(sNextSeed.nSeedLow % nRandVal);
-      } else {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = nXRange - 2U & sNextSeed.nSeedLow;
-      }
-
+      nRandVal = D2_SeedRollLimited(pCtrlSeed, nRandVal);
       nXRange = sRoomCoords.dwYSize - nTxtSizeY;
       nCurX = nRandVal + sRoomCoords.dwXStart;
       nRandVal = nXRange - 1;
-      if ((int)nRandVal <= 0) {
-        nRandVal = 0;
-      } else if (nRandVal & nXRange - 2U) {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = (uint32_t)(sNextSeed.nSeedLow % nRandVal);
-      } else {
-        sNextSeed = D2_SEED_NEXT(*pCtrlSeed);
-        pCtrlSeed->nSeedHigh = sNextSeed.nSeedHigh;
-        pCtrlSeed->nSeedLow = sNextSeed.nSeedLow;
-        nRandVal = nXRange - 2U & sNextSeed.nSeedLow;
-      }
-
+      nRandVal = D2_SeedRollLimited(pCtrlSeed, nRandVal);
       nCurY = nRandVal + sRoomCoords.dwYStart;
       sSpawnCoord.nY = nCurY;
       sSpawnCoord.nX = nCurX;
@@ -1738,29 +1658,11 @@ D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D
       do {
         nXRange = sRoomCoords.dwXSize - __frame0.nObjSizeX;
         nRandVal = nXRange - 1;
-        if ((int)nRandVal <= 0) {
-          nRandVal = 0;
-        } else if (nRandVal & nXRange - 2U) {
-          sNewSeed = D2_SeedRoll(pSeed);
-          nRandVal = (uint32_t)(sNewSeed % nRandVal);
-        } else {
-          sNewSeed = D2_SeedRoll(pSeed);
-          nRandVal = nXRange - 2U & sNewSeed;
-        }
-
+        nRandVal = D2_SeedRollLimited(pSeed, nRandVal);
         nXRange = sRoomCoords.dwYSize - nObjSizeY;
         __frame0.nSpawnX = nRandVal + sRoomCoords.dwXStart;
         nRandVal = nXRange - 1;
-        if ((int)nRandVal <= 0) {
-          nRandVal = 0;
-        } else if (nRandVal & nXRange - 2U) {
-          sNewSeed = D2_SeedRoll(pSeed);
-          nRandVal = (uint32_t)(sNewSeed % nRandVal);
-        } else {
-          sNewSeed = D2_SeedRoll(pSeed);
-          nRandVal = nXRange - 2U & sNewSeed;
-        }
-
+        nRandVal = D2_SeedRollLimited(pSeed, nRandVal);
         __frame0.nSpawnY = nRandVal + sRoomCoords.dwYStart;
         BVar1 = ROOM_CheckSpawnCollision(__frame0.pRoomSave, 5, &__frame0.nSpawnX, 5, &sRoomCoords.dwXStart);
         if (BVar1 == 1) {

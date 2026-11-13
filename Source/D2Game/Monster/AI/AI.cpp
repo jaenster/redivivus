@@ -11188,7 +11188,7 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
 
     D2UnitStrc* pArenaMarkerUnit;
     pArenaMarkerUnit = 0;
-    bool bMarkerNearArenaCenter;
+    BOOL bMarkerNearArenaCenter;
     bMarkerNearArenaCenter = false;
     if (pTargetUnit->eUnitType == UNIT_PLAYER) {
       nGuidOrCollisionDist = PLAYER::Player::GetPlayerUniqueId(pTargetUnit);
@@ -11206,7 +11206,7 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
       }
     }
 
-    bool bTargetHasFearedSkill;
+    BOOL bTargetHasFearedSkill;
     bTargetHasFearedSkill = false;
     D2SkillStrc* pSkill;
     pSkill = D2Common::Units::GetLeftSkill(pTargetUnit);

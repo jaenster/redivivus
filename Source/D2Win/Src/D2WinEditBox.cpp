@@ -820,7 +820,7 @@ static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
     }
 
     if (dwFlags & 1) {
-      uint16_t wWideCursorChar;
+      int wWideCursorChar;
       szMaskChar[0] = '*';
       szMaskChar[1] = '\0';
       wszMaskChar[0] = L'\0';

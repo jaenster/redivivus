@@ -1065,7 +1065,7 @@ D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex) {
 void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     int nGemsSize;
     char szGemCode[4];
-    uint8_t byCodeChar;
+    int byCodeChar;
     char* pGemOffset;
     D2BinFieldInputStrc aFieldDefs[42] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},

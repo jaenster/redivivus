@@ -1254,7 +1254,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
     D2ClientStrc* pClient;
     D2ClientStrc* pClientNext;
     uint32_t dwFrameMod8192 = pGame->dwGameFrame & 0x80001fff;
-    bool bIs8192thFrame = !dwFrameMod8192;
+    BOOL bIs8192thFrame = !dwFrameMod8192;
     int nCharNameLoop = 0x0;
     if ((int)dwFrameMod8192 < 0) {
       bIs8192thFrame = (dwFrameMod8192 - 1 | -8192) == -1;
