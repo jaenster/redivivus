@@ -439,6 +439,7 @@ int32_t __fastcall SUNITNPC_GetActCappedLevel(::SGAMEDATA * pGame, D2UnitStrc * 
     int aActLevels[5];
     int nNpcIndex;
     int32_t nEffectiveLevel;
+    D2_UNINIT(nEffectiveLevel, nLevel);
     if (pGame->nDifficulty) {
       return nEffectiveLevel;
     }

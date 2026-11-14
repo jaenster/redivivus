@@ -581,6 +581,15 @@ template <class TSeed> static D2_SEED_ROLL_INLINE uint32_t D2_SeedRollLimited(TS
 #  define D2_SHIFT_COUNT(n) ((n) & 0x1f)
 #endif
 
+// `T v; D2_UNINIT(v, x);`: the original reads v before storing it on some path. VC8 must
+// leave it uninitialised to compile the original's bytes; other compilers store x, the
+// value the original holds there, so the read is defined.
+#ifdef _MSC_VER
+#  define D2_UNINIT(v, x) ((void)0)
+#else
+#  define D2_UNINIT(v, x) ((v) = (x))
+#endif
+
 // Ghidra type conversion helpers
 static inline int32_t FloatToLong(float f) { return (int32_t)f; }
 static inline int32_t FloatToLong(double f) { return (int32_t)f; }
