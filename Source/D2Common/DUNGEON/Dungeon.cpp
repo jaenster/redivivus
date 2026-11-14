@@ -1751,7 +1751,7 @@ static void AddRoomDataActual(D2RoomExStrc * pRoomEx, uint8_t nInitDepth) {
     InitNearRooms(pRoomEx->pLevel->pDrlg->pMemoryPool, pRoomEx, nInitDepth + 1);
     int nDepth;
     nDepth = (int)nInitDepth;
-    if ((uint32_t)nDepth <= (uint32_t)pRoomEx->fRoomStatus) {
+    if (pRoomEx->fRoomStatus >= nDepth) {
       int nRefCheckIndex;
       nRefCheckIndex = 0;
       pnRefCount = pRoomEx->awRoomsInList;

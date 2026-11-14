@@ -465,7 +465,8 @@ set(D2_MODULE_D2DDraw_GENERATED ON)
 set(D2_MODULE_D2DDraw_DATA "Source/globals/D2DDraw.cpp")
 set(D2_MODULE_D2DDraw_UNIT_ORDER "original-address")
 set(D2_MODULE_D2DDraw_UNITS
-    Source/D2DDraw/Renderer/DirectDraw.cpp  # 00510020, 5 runs
+    Source/D2DDraw/Renderer/DirectDraw.cpp  # 00510020, 6 runs
+    Source/D2DDraw/ddSprite.cpp  # 00511df0, 1 run
 )
 
 # D2Sound -> Storm (import): 1.13d D2Sound import table: 13 symbol(s) from Storm; also in 1.13c, 1.10f

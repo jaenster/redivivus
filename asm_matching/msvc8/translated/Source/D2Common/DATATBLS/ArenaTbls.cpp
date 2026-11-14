@@ -57,11 +57,11 @@ static void __stdcall TXT_BuildCharTemplateLevelIndex(D2CharTemplateTxt * pCharT
     do {
       int nLevel;
       nLevel = (int)pCharTemplateTxt[i].level;
-      if ((uint32_t)nLevel < (uint32_t)nPrevLevel) {
+      if (nPrevLevel > nLevel) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5c);
         exit(-1);
       }
-      if ((uint32_t)nPrevLevel < (uint32_t)nLevel) {
+      if (nLevel > nPrevLevel) {
         sgCharTemplateLevelIndex[nLevel] = i;
         nPrevLevel = nLevel;
       }

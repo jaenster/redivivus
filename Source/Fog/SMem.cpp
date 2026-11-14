@@ -565,7 +565,7 @@ void __stdcall SMemInitPerfCounters() {
     int64_t nTicksPerMicrosecond = _alldiv(liFrequency.u.LowPart, liFrequency.u.HighPart, 1000000, 0);
     gnSMemPerfTicksPerMicrosecond = (uint32_t)nTicksPerMicrosecond;
     memset(gaSMemHeapStats, 0, 0x18000);
-    g_SMemLastTickCount = GetTickCount();
+    g_SMemLastTickCount = ::GetTickCount();
 }
 
 void __stdcall SMemResetHeapStats() {
@@ -585,7 +585,7 @@ void __stdcall SMemResetHeapStats() {
       } while (nStatsRemaining);
     }
 
-    g_SMemLastTickCount = GetTickCount();
+    g_SMemLastTickCount = ::GetTickCount();
 }
 
 // JMP thunk

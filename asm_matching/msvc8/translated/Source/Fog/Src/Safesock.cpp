@@ -345,7 +345,7 @@ char * __stdcall NET_GetLocalIp() {
 
     char* szIpAddress = inet_ntoa((in_addr)sLocalSockAddr.sin_addr);
     sprintf(cp_0075d040, "%s", szIpAddress);
-    WSACleanup();
+    ::WSACleanup();
     return cp_0075d040;
 }
 
@@ -402,7 +402,7 @@ char * __fastcall inet_nameToIp(char * szText) {
       } while (cChar != '\0');
 
       if (bDidStartUp) {
-        WSACleanup();
+        ::WSACleanup();
       }
 
       return cp_0075d040;
@@ -424,7 +424,7 @@ char * __fastcall inet_nameToIp(char * szText) {
       goto copy_resolved_ip;
     }
 
-    WSACleanup();
+    ::WSACleanup();
     return nullptr;
 }
 

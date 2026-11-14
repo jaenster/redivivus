@@ -3348,7 +3348,7 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
     } else {
       nLvlMaxSock = (int)(uint8_t)pItemTypesTxt->maxsock40;
     }
-    if ((uint32_t)nLvlMaxSock <= (uint32_t)byMaxSockets) {
+    if (byMaxSockets >= nLvlMaxSock) {
       byMaxSockets = (uint8_t)nLvlMaxSock;
     }
 

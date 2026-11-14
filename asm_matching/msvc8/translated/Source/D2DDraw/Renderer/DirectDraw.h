@@ -22,7 +22,6 @@ struct D2GfxLightStrc;
 struct D2GfxSettingsStrc;
 struct D2SmackerContextStrc;
 struct D2TileLibraryEntryStrc;
-struct DC6Block;
 struct DDSCAPS;
 struct IDirectDraw1;
 struct DDSURFACEDESC;
@@ -487,16 +486,6 @@ BOOL thunk_Release();
 BOOL __fastcall InitPerspective(struct D2GfxSettingsStrc * pSettings, ::D2GfxHelperStrc * pHelpers);
 // DirectDraw renderer: returns palette pointer for the specified render mode. Reads from gpPaletteTable offsets 0x0-0x10C based on the nPaletteMode index (0-6).
 BYTE * __fastcall RENDERER_DIRECTDRAW_GetPalettePointer(int32_t nPaletteMode, uint32_t * pnOutHeight);
-// DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-void __fastcall RENDERER_DDRAW_SetHorizontalBounds(int32_t bWidescreen);
-BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, BYTE * pPalette);
-void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
-void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, int32_t nDrawMode);
-void __fastcall DrawClippedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode);
-void __fastcall DrawShadow(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY);
-void __fastcall DrawImageFast(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, BYTE nPaletteIndex);
-void __fastcall DebugFillBackBuffer(int32_t nPosX, int32_t nPosY);
-void __fastcall DrawPerspectiveImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nScreenMode, BYTE * pPalette);
 // @sourcefile .\Src\ddDebugFont.cpp
 void __stdcall D2ddDebugFont_Alloc();
 // @sourcefile .\Src\ddDebugFont.cpp
@@ -533,6 +522,6 @@ BOOL __fastcall ActivateWindow_Unref_00513b80();
 void __fastcall SetDefaultPerspectiveFactor_Unref_00514040();
 void __fastcall SetDefaultPerspectiveFactor_Unref_00514050();
 #endif // D2_MODULE_D2DDraw
-// 5 internal functions (defined in .cpp)
+// 3 internal functions (defined in .cpp)
 
 }}} // namespace D2DDraw::Renderer::DirectDraw

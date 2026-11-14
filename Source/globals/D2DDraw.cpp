@@ -7,6 +7,7 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2DDraw/Renderer/DirectDraw.h"
+#include "Source/D2DDraw/ddSprite.h"
 
 
 namespace D2Common::Drlg::Maze {
@@ -328,13 +329,13 @@ D2RendererFunctionsStrc DirectDrawFunctionTable = {
     /* .nfpSetPaletteTable = */ &D2DDraw::Renderer::DirectDraw::SetPaletteTable,
     /* .nfpSetGlobalLight = */ &D2DDraw::Renderer::DirectDraw::SetGlobalLight,
     /* .nfpDrawGroundTile = */ (D2RendererFunctionsStrc_fpDrawGroundTile)&D2DDraw::Renderer::DirectDraw::DrawGroundTile,
-    /* .nfpDrawPerspectiveImage = */ (fpDrawPerspectiveImage)&D2DDraw::Renderer::DirectDraw::DrawPerspectiveImage,
-    /* .nfpDrawImage = */ (fpDrawImage)&D2DDraw::Renderer::DirectDraw::DrawImage,
-    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2DDraw::Renderer::DirectDraw::DrawShiftedImage,
-    /* .nfpDrawVerticalCropImage = */ (fpDrawVerticalCropImage)&D2DDraw::Renderer::DirectDraw::DrawVerticalCropImage,
-    /* .nfpDrawShadow = */ (fpDrawShadow)&D2DDraw::Renderer::DirectDraw::DrawShadow,
-    /* .nfpDrawImageFast = */ (fpDrawImageFast)&D2DDraw::Renderer::DirectDraw::DrawImageFast,
-    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2DDraw::Renderer::DirectDraw::DrawClippedImage,
+    /* .nfpDrawPerspectiveImage = */ (fpDrawPerspectiveImage)&D2DDraw::ddSprite::DrawPerspectiveImage,
+    /* .nfpDrawImage = */ (fpDrawImage)&D2DDraw::ddSprite::DrawImage,
+    /* .nfpDrawShiftedImage = */ (fpDrawShiftedImage)&D2DDraw::ddSprite::DrawShiftedImage,
+    /* .nfpDrawVerticalCropImage = */ (fpDrawVerticalCropImage)&D2DDraw::ddSprite::DrawVerticalCropImage,
+    /* .nfpDrawShadow = */ (fpDrawShadow)&D2DDraw::ddSprite::DrawShadow,
+    /* .nfpDrawImageFast = */ (fpDrawImageFast)&D2DDraw::ddSprite::DrawImageFast,
+    /* .nfpDrawClippedImage = */ (fpDrawClippedImage)&D2DDraw::ddSprite::DrawClippedImage,
     /* .nfpDrawWallTile = */ (D2RendererFunctionsStrc_fpDrawWallTile)&D2DDraw::Renderer::DirectDraw::DrawWallTile,
     /* .nfpDrawTransWallTile = */ (fpDrawTransWallTile)&D2DDraw::Renderer::DirectDraw::DrawTransWallTile,
     /* .nfpDrawShadowTile = */ (fpDrawShadowTile)&D2DDraw::Renderer::DirectDraw::DrawShadowTile,
@@ -348,7 +349,7 @@ D2RendererFunctionsStrc DirectDrawFunctionTable = {
     /* .nfpClearScreen = */ &D2DDraw::Renderer::DirectDraw::ClearScreen,
     /* .nfpDrawString = */ (fpDrawString)&D2DDraw::Renderer::DirectDraw::DrawString,
     /* .nfpDrawLight = */ (fpDrawLight)&D2DDraw::Renderer::DirectDraw::DrawLight,
-    /* .nfpDebugFillBackBuffer = */ (fpDebugFillBackBuffer)&D2DDraw::Renderer::DirectDraw::DebugFillBackBuffer,
+    /* .nfpDebugFillBackBuffer = */ (fpDebugFillBackBuffer)&D2DDraw::ddSprite::DebugFillBackBuffer,
     /* .nfpClearCaches = */ &D2DDraw::Renderer::DirectDraw::ClearCaches
 }; D2_GLOBAL_GUARD(DirectDrawFunctionTable, "D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable");
 

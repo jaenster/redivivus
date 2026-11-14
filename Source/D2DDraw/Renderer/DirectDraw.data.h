@@ -32,8 +32,6 @@ extern IDirectDrawSurface1 * pDirectDrawSurface;
 extern IDirectDrawPalette * pDirectDrawPalette;
 extern uint32_t gnDDrawFlipState;
 extern uint32_t gnDDrawPaletteSize;
-extern uint32_t gnDDrawSurfaceXMin;
-extern uint32_t gnDDrawRenderWidth;
 extern uint8_t gaSmackerPaletteRemap[256];
 extern void * gpSmackerImageBuffer;
 // @data gbSmackerPaletteDirty

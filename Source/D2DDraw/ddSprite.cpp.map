@@ -1,0 +1,487 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2DDraw/ddSprite.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_DDRAW_SetHorizontalBounds",
+      "address": "00511df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00511df0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "RENDERER_DDRAW_SetHorizontalBounds"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "8ec44981",
+      "paramStorage": [
+        [
+          "bWidescreen",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_DDRAW_IsDC6OffScreen",
+      "address": "00511e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00511e10"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "RENDERER_DDRAW_IsDC6OffScreen",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t"
+      ],
+      "dh": "a6771a3b",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bIsometric",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDC6Block",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_DDRAW_ComputeDC6ClipRect",
+      "address": "00511e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00511e80"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "RENDERER_DDRAW_ComputeDC6ClipRect",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "b3ef837e",
+      "paramStorage": [
+        [
+          "nY",
+          "ECX:4"
+        ],
+        [
+          "pDC6Block",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutClipRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInClipBounds",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImage",
+      "address": "00511fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00511fb0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_DIRECTDRAW_GetPalettePointer",
+        "CELCMP_DrawCelFrame"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c11bc696",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShiftedImage",
+      "address": "005120a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005120a0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawShiftedImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_DIRECTDRAW_GetPalettePointer",
+        "CELCMP_DrawCelFrame"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t"
+      ],
+      "dh": "79924705",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawVerticalCropImage",
+      "address": "005121a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005121a0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawVerticalCropImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_DIRECTDRAW_GetPalettePointer",
+        "CELCMP_DrawCelFrameFromGfxData"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t"
+      ],
+      "dh": "a10bfbff",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawClippedImage",
+      "address": "00512250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00512250"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawClippedImage",
+        "SPRITECACHE_GetOrLoadSprite",
+        "RENDERER_DDRAW_ComputeDC6ClipRect",
+        "RENDERER_DIRECTDRAW_GetPalettePointer",
+        "CELCMP_DrawCelFrameFromGfxData"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ddf247ad",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShadow",
+      "address": "005122e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005122e0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawShadow",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6Height",
+        "GetDC6OffsetX",
+        "GetDC6OffsetY",
+        "RENDERER_DDRAW_AreBlendedShadowsEnabled",
+        "CELCMP_DrawCelFrameCentered"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "DC6Block",
+        "int32_t"
+      ],
+      "dh": "63d7483c",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImageFast",
+      "address": "005123a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005123a0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawImageFast"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "1dbd0f0f",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DebugFillBackBuffer",
+      "address": "005123b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005123b0"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DebugFillBackBuffer",
+        "DRAW_DebugFillRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "72dc8481",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawPerspectiveImage",
+      "address": "00512410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00512410"
+        }
+      ],
+      "namespace": "D2DDraw::ddSprite",
+      "calledFunctions": [
+        "DrawPerspectiveImage",
+        "DrawImage"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "52f2563e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
+    }
+  ]
+}
