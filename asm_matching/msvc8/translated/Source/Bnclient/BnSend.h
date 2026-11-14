@@ -47,11 +47,11 @@ __pragma(pack(push, 1)) struct BnCDKeyHashInput26 {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct BnDoubleHashInput {
+struct BnDoubleHashInput {
     /* 0x00 */ uint32_t dwClientToken;
     /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2XSHA1Strc sHash;
-}; __pragma(pack(pop))
+    /* 0x08 */ uint8_t sHash[20];
+};
 
 #endif // D2_MODULE_Bnclient
 #ifndef D2_DEFINED_D2BnNewsEntryStrc

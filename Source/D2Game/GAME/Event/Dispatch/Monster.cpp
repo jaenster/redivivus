@@ -5,7 +5,6 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
@@ -89,10 +88,10 @@ void __fastcall MONSTEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 void __fastcall BarbFindItemSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint32_t dwParam) {
-    D2ObjectOperateFnArg sOpArg;
-    sOpArg.pAttacker = pAttacker;
-    sOpArg.sArg.pVictim = pUnit;
-    D2Game::Monster::MonsterMode::SERVER_ITEM_DecideDrops(pGame, pUnit, 1, &sOpArg);
+    D2ModeChangeStrc sModeChange;
+    sModeChange.pTargetUnit = pAttacker;
+    sModeChange.pUnit = pUnit;
+    D2Game::Monster::MonsterMode::SERVER_ITEM_DecideDrops(pGame, pUnit, 1, (D2ObjectOperateFnArg*)&sModeChange);
 }
 
 // END-OF-FRAME AI DISPATCHER:
@@ -272,11 +271,11 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       D2ModeChangeStrc sMonsterKill;
       memset(&sMonsterKill, 0, sizeof(sMonsterKill));
       sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
+      sMonsterKill.pUnit = pUnit;
       sMonsterKill.nAnimatedMode1 = '\0';
       sMonsterKill.nAnimatedMode2 = 'd';
       sMonsterKill.nUnknown1 = '\0';
       sMonsterKill.nUnknown2 = '\0';
-      sMonsterKill.pUnit = pUnit;
       sMonsterKill.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
       D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     }
@@ -413,12 +412,12 @@ void __fastcall MONMODE_EndKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     sMonsterKill.nMonType1 = 0;
     sMonsterKill.nMonType2 = 0;
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::GetHit;
+    sMonsterKill.pUnit = pUnit;
     sMonsterKill.nAnimatedMode1 = '\0';
     sMonsterKill.nAnimatedMode2 = 'd';
     sMonsterKill.nUnknown1 = '\0';
     sMonsterKill.nUnknown2 = '\0';
     pUnit->dwLastHitClass = 0xa0;
-    sMonsterKill.pUnit = pUnit;
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
 }
 

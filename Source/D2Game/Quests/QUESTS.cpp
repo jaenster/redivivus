@@ -1797,17 +1797,7 @@ void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32
 }
 
 void __fastcall Unreferenced_005454e0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType;
-    int nUnitGUID;
-    if (!pUnit) {
-      nUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     D2Common::Units::RemoveCollision_Vector(pUnit);
     D2Common::Unit::RemoveUnitFromRoom(pUnit);
     if (pUnit) {

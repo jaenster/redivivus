@@ -188,10 +188,11 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
       return;
     }
 
-    char* pcEndPtr = szText;
-    pcEndPtr = pcEndPtr + strlen(pcEndPtr) + 1;
+    char* pcEndPtr;
+    int nStrLen;
+    nStrLen = (int)strlen(szText);
     uint32_t dwModeCode = (uint32_t)szText;
-    if ((uint32_t)((intptr_t)pcEndPtr - (intptr_t)(szText + 1)) <= 3) {
+    if ((uint32_t)(int)nStrLen <= 3) {
       char cModeChar;
       pcEndPtr = szText;
       do {

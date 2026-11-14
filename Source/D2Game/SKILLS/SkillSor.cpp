@@ -424,10 +424,10 @@ BOOL __fastcall Skills_SrvDoFunc_018_Armor(::SGAMEDATA * pGame, D2UnitStrc * pUn
     SkillsServer::D2UpdateState(pUnit, (int)pSkillTxt->aurastate, 1);
     D2StateExArgStrc sStateArgs;
     memset(&sStateArgs, 0, sizeof(sStateArgs));
-    sStateArgs.eSkill = eSkill;
-    sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
     sStateArgs.pTarget = pUnit;
+    sStateArgs.eSkill = eSkill;
+    sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
     sStateArgs.eStat = ~UNITSTAT_strength;
     sStateArgs.eAuraState = (eD2States)pSkillTxt->aurastate;
@@ -711,10 +711,10 @@ BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2U
 
     D2StateExArgStrc sStateArgs;
     memset(&sStateArgs, 0, sizeof(sStateArgs));
-    sStateArgs.eSkill = eSkill;
-    sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
     sStateArgs.pTarget = pUnit;
+    sStateArgs.eSkill = eSkill;
+    sStateArgs.nSkillLvl = nSkillLvl;
     ::SGAMEDATA* pGameSaved = pGame;
     sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
     sStateArgs.eStat = ~UNITSTAT_strength;
@@ -925,9 +925,9 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
     sStateArg.nSkillCalc = 0;
     sStateArg.eAuraState = STATE_none;
     sStateArg.pFunction = 0;
+    sStateArg.pUnit = pUnit;
     sStateArg.eSkill = eSkill;
     sStateArg.nSkillLvl = nSkillLvl;
-    sStateArg.pUnit = pUnit;
     sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
     sStateArg.eStat = ~UNITSTAT_strength;
     sStateArg.eAuraState = (eD2States)pSkillTxt->aurastate;
@@ -1129,10 +1129,10 @@ BOOL __fastcall Skills_SrvDoFunc_029_ThunderStorm(::SGAMEDATA * pGame, D2UnitStr
     if (!eThunderState || (nSkillParam2 = D2Common::Skills::SKILL_GetParam2(pSkill) , nSkillParam2 != 0)) {
       D2StateExArgStrc sStateArgs;
       memset(&sStateArgs, 0, sizeof(sStateArgs));
-      sStateArgs.eSkill = eSkill;
-      sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.pUnit = pUnit;
       sStateArgs.pTarget = pUnit;
+      sStateArgs.eSkill = eSkill;
+      sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->auralencalc, eSkill, nSkillLvl);
       sStateArgs.eStat = ~UNITSTAT_strength;
       sStateArgs.nSkillCalc = 0;
@@ -1346,10 +1346,10 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   sSummonParams.nY2 = 0;
                   sSummonParams.nSkillCalc = 0;
                   sSummonParams.nFlags = 1;
+                  sSummonParams.pPlayer = pUnit;
                   sSummonParams.nFunctionId = 0;
                   sSummonParams.nMode = nAnimMode;
                   sSummonParams.nType = nPetType;
-                  sSummonParams.pPlayer = pUnit;
                   sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, iHydraIdx, nSkillLvl);
                   nPetType = 0;
                   iHydraIdx = SKILL_Attack;

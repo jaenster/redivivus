@@ -1143,8 +1143,8 @@ uint32_t ClickParty_II(int32_t eButtonType, D2RosterStrc * pRoster) {
         }
 
         pszName = GAME::Roster::GetRosterName(pRoster);
-        pszNameEnd = pszName;
-        pszNameEnd = pszNameEnd + strlen(pszNameEnd) + 1;
+        int nStrLen;
+        nStrLen = (int)strlen(pszName);
         pDst = (char*)((uint8_t*)&szCommand - 1);
         do {
           pSrc = pDst + 1;
@@ -1152,14 +1152,14 @@ uint32_t ClickParty_II(int32_t eButtonType, D2RosterStrc * pRoster) {
         } while (*pSrc != '\0');
 
         pSrc = pszName;
-        for (nCopyCount = (uint32_t)((intptr_t)pszNameEnd - (intptr_t)pszName) >> 2; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
           *(uint32_t*)pDst = *(uint32_t*)pSrc;
           pSrc += 4;
           pDst += 4;
         }
 
         pfnSend = pDVar1->pfnSendChatCommand;
-        for (nCopyCount = (intptr_t)pszNameEnd - (intptr_t)pszName & 3; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
           *pDst = *pSrc;
           pSrc++;
           pDst++;

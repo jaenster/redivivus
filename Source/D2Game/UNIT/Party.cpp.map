@@ -479,10 +479,10 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "fpExecuteOnUnitFunction",
-        "int16_t",
-        "int32_t"
+        "int32_t",
+        "uint16_t"
       ],
-      "dh": "3d7007ac",
+      "dh": "e0229499",
       "paramStorage": [
         [
           "pGame",

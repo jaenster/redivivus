@@ -1289,9 +1289,9 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pTarget = pTarget;
+    sStateArg.pUnit = pUnit;
     sStateArg.eSkill = SKILL_AmplifyDamage;
     sStateArg.nSkillLvl = nSkillLevel;
-    sStateArg.pUnit = pUnit;
     sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].auralencalc, SKILL_AmplifyDamage, nSkillLevel);
     sStateArg.eStat = (eD2UnitStat)pSkillsTxt[0x42].aurastat[0];
     sStateArg.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].aurastatcalc[0], SKILL_AmplifyDamage, nSkillLevel);

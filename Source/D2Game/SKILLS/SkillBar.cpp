@@ -867,10 +867,10 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     SkillsServer::D2UpdateState(pUnit, (int)eAuraState, 0);
     D2StateExArgStrc sStateArgs;
     memset(&sStateArgs, 0, sizeof(sStateArgs));
-    sStateArgs.eSkill = eSkill;
-    sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.pUnit = pUnit;
     sStateArgs.pTarget = pUnit;
+    sStateArgs.eSkill = eSkill;
+    sStateArgs.nSkillLvl = nSkillLvl;
     sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
     sStateArgs.eStat = ~UNITSTAT_strength;
     sStateArgs.eAuraState = (eD2States)pSkillsTxt->aurastate;

@@ -1355,7 +1355,7 @@
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "3ebf9c43"
+      "dh": "4be5406a"
     },
     {
       "name": "CHATDLG_GetLadderFilterForTab",

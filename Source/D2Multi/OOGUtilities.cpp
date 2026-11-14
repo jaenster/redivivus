@@ -297,8 +297,8 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
 
         pcScan[0] = ' ';
         pcScan[1] = '\0';
-        pcScan = pszUrl;
-        pcScan = pcScan + strlen(pcScan) + 1;
+        int nStrLen;
+        nStrLen = (int)strlen(pszUrl);
         pcCopyDst = szCommandLineBuffer;
         do {
           pcCopySrc = pcCopyDst + 1;
@@ -306,13 +306,13 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
         } while (*pcCopySrc != '\0');
 
         pcCopySrc = pszUrl;
-        for (nCopyCount = (uint32_t)((intptr_t)pcScan - (intptr_t)pszUrl) >> 2; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
           *(uint32_t*)pcCopyDst = *(uint32_t*)pcCopySrc;
           pcCopySrc += 4;
           pcCopyDst += 4;
         }
 
-        for (nCopyCount = (intptr_t)pcScan - (intptr_t)pszUrl & 3; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
           *pcCopyDst = *pcCopySrc;
           pcCopySrc++;
           pcCopyDst++;

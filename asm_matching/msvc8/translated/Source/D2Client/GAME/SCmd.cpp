@@ -3228,10 +3228,10 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
     sCreateMonster.eMonsterType = (int32_t)wMonsterFlagBits;
     sCreateMonster.nMonstatId = (int32_t)nPacketMonstatId;
     sCreateMonster.eUnitType = eUnitTypeBits & 0xff;
-    sCreateMonster.nOwnerGUID = nOwnerGUID;
-    sCreateMonster.nUnitGUID = nPacketUnitGUID;
     sCreateMonster.nX = (uint32_t)wPacketX;
+    sCreateMonster.nUnitGUID = nPacketUnitGUID;
     sCreateMonster.nY = (uint32_t)wPacketY;
+    sCreateMonster.nOwnerGUID = nOwnerGUID;
     PalShift::PALSHIFT_LoadMonsterPalShift(sCreateMonster.nMonstatId);
     D2UnitStrc* pUnit;
     pUnit = UNIT::CUnit::UNIT_CreateMonster(&sCreateMonster, pComponentData, pSuperUniqueName, nBitVal, nSuperUniqueIndex, 0);

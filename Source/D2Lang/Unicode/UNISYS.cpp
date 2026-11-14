@@ -606,9 +606,10 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
     int nWideLen;
     uint16_t wszBuffer[1024];
     char cTmp;
-    char* pszCur = pszBuffer;
-    pszCur = pszCur + strlen(pszCur) + 1;
-    int nCharsCopied = Storm::Source::SSTR::UTF8_ToUTF16((short*)wszBuffer, 0x3ff, (uint8_t*)pszBuffer, (int)(pszCur - (pszBuffer + 1) + 1), &nWideLen, nullptr);
+    char* pszCur;
+    int nStrLen;
+    nStrLen = (int)strlen(pszBuffer);
+    int nCharsCopied = Storm::Source::SSTR::UTF8_ToUTF16((short*)wszBuffer, 0x3ff, (uint8_t*)pszBuffer, (int)(nStrLen + 1), &nWideLen, nullptr);
     if (nCharsCopied) {
       nWideLen = 0;
     }

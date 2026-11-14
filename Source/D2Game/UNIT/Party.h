@@ -57,7 +57,7 @@ int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, struc
 int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyId);
 BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, struct D2UnitStrc * pUnit, int * pLevelSum);
 void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, struct D2UnitStrc * pUnit, int * pCount);
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs);
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, uint16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs);
 // Calls fpFilter(pGame, pMember, pDataForFunction) once for each party member of pUnit that is in the same level. Looks up pUnit's room and level ID, resolves its party ID, then iterates the party's sub-sub list; for each member found in the unit table whose room maps to the same level ID, invokes the filter callback. Also calls the callback (once, with pUnit itself) if pUnit has no room or no party, acting as a fallback. The callback is __fastcall(pGame@ECX, pUnit@EDX, pUserData@stack) - all three known implementations end in RET 0x4 - and its return value is discarded.
 void __fastcall PARTY_IteratePartyMembersInSameLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, pfnPartyMemberFilter pfnCallback, void * pArgs);
 // @sourcefile .\UNIT\Party.cpp

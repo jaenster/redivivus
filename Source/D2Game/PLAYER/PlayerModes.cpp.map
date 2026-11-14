@@ -1285,9 +1285,10 @@
         "SGAMEDATA",
         "eInventoryPage",
         "int32_t",
-        "uint32_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "f7e0cf5d",
+      "dh": "c6efc525",
       "paramStorage": [
         [
           "pGame",
@@ -1295,7 +1296,7 @@
         ],
         [
           "nBodyLocFlags",
-          "Stack[0x8]:4"
+          "Stack[0x8]:1"
         ],
         [
           "pUnit",
@@ -1345,7 +1346,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71bac7ff",
+      "dh": "e5158f08",
       "paramStorage": [
         [
           "pGame",

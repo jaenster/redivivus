@@ -24,8 +24,9 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
     char cChar;
     strcpy(aFullName, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
-    char* pszExtTail = szExtension;
-    pszExtTail = pszExtTail + strlen(pszExtTail) + 1;
+    char* pszExtTail;
+    int nStrLen;
+    nStrLen = (int)strlen(szExtension);
     char* pszNameEnd = (char*)((uint8_t*)&aFullName - 1);
     do {
       pszExtSrc = pszNameEnd + 1;
@@ -33,7 +34,7 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
     } while (*pszExtSrc != '\0');
 
     pszExtSrc = szExtension;
-    for (nWordsLeft = (uint32_t)((intptr_t)pszExtTail - (intptr_t)szExtension) >> 2; nWordsLeft; nWordsLeft--) {
+    for (nWordsLeft = (uint32_t)((int)nStrLen + 1) >> 2; nWordsLeft; nWordsLeft--) {
       *(uint32_t*)pszNameEnd = *(uint32_t*)pszExtSrc;
       pszExtSrc += 4;
       pszNameEnd += 4;
@@ -42,7 +43,7 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
     int32_t nSrcLine = 0x53;
     char* szSrcFile = ".\\CORE\\ARCHIVE.CPP";
     uint32_t* pnFileSize = 0;
-    for (nWordsLeft = (intptr_t)pszExtTail - (intptr_t)szExtension & 3; nWordsLeft; nWordsLeft--) {
+    for (nWordsLeft = (int)nStrLen + 1 & 3; nWordsLeft; nWordsLeft--) {
       *pszNameEnd = *pszExtSrc;
       pszExtSrc++;
       pszNameEnd++;
@@ -62,8 +63,9 @@ DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnS
     char cChar;
     strcpy(aFullName, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension((int32_t)pDC6);
-    char* pszExtTail = szExtension;
-    pszExtTail = pszExtTail + strlen(pszExtTail) + 1;
+    char* pszExtTail;
+    int nStrLen;
+    nStrLen = (int)strlen(szExtension);
     char* pszNameEnd = (char*)((uint8_t*)&aFullName - 1);
     do {
       pszExtSrc = pszNameEnd + 1;
@@ -71,7 +73,7 @@ DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnS
     } while (*pszExtSrc != '\0');
 
     pszExtSrc = szExtension;
-    for (nWordsLeft = (uint32_t)((intptr_t)pszExtTail - (intptr_t)szExtension) >> 2; nWordsLeft; nWordsLeft--) {
+    for (nWordsLeft = (uint32_t)((int)nStrLen + 1) >> 2; nWordsLeft; nWordsLeft--) {
       *(uint32_t*)pszNameEnd = *(uint32_t*)pszExtSrc;
       pszExtSrc += 4;
       pszNameEnd += 4;
@@ -79,7 +81,7 @@ DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnS
 
     int32_t nSrcLine = 0x68;
     char* szSrcFile = ".\\CORE\\ARCHIVE.CPP";
-    for (nWordsLeft = (intptr_t)pszExtTail - (intptr_t)szExtension & 3; nWordsLeft; nWordsLeft--) {
+    for (nWordsLeft = (int)nStrLen + 1 & 3; nWordsLeft; nWordsLeft--) {
       *pszNameEnd = *pszExtSrc;
       pszExtSrc++;
       pszNameEnd++;

@@ -1088,10 +1088,11 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     MessageStrc MStack_124;
     char szDelimiter[4];
     char cScanChar;
-    char* pScan = szCommandName;
-    pScan = pScan + strlen(pScan) + 1;
+    char* pScan;
+    int nStrLen;
+    nStrLen = (int)strlen(szCommandName);
     int32_t nCompareResult = CHAT_CompareCaseInsensitive(szInput, szCommandName);
-    if (nCompareResult || szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != ' ' && szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != '\0') {
+    if (nCompareResult || szInput[(int)nStrLen] != ' ' && szInput[(int)nStrLen] != '\0') {
       return 0;
     }
 
@@ -1141,11 +1142,11 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     D2ChatPacketBuildStrc sWhisperPacket;
     char cScanChar;
     char* pScan;
-    pScan = szCommandName;
-    pScan = pScan + strlen(pScan) + 1;
+    int nStrLen;
+    nStrLen = (int)strlen(szCommandName);
     int32_t nCompareResult;
     nCompareResult = CHAT_CompareCaseInsensitive(szInput, szCommandName);
-    if (nCompareResult || szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != ' ' && szInput[(intptr_t)pScan - (intptr_t)(szCommandName + 1)] != '\0') {
+    if (nCompareResult || szInput[(int)nStrLen] != ' ' && szInput[(int)nStrLen] != '\0') {
       return 0;
     }
 

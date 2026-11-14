@@ -78,13 +78,25 @@ typedef unsigned char D2GuardBytes[32];
 #endif
 
 // Ghidra models CPUID as one pseudo-op per leaf, each returning a pointer to
-// the four result registers, read back as *(uint32_t*)(r + 0|4|8|0xc).
+// the four result registers, read back as *(uint32_t*)(r + 0|4|8|0xc) in the
+// SLEIGH order eax, ebx, edx, ecx - not the eax, ebx, ecx, edx of __cpuid.
 static inline int D2_Cpuid(uint32_t nLeaf) {
   static uint32_t aRegs[4];
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-  __asm__ volatile("cpuid" : "=a"(aRegs[0]), "=b"(aRegs[1]), "=c"(aRegs[2]), "=d"(aRegs[3]) : "a"(nLeaf), "c"(0u));
+  __asm__ volatile("cpuid" : "=a"(aRegs[0]), "=b"(aRegs[1]), "=d"(aRegs[2]), "=c"(aRegs[3]) : "a"(nLeaf), "c"(0u));
+#elif defined(_MSC_VER) && defined(_M_IX86)
+  __asm {
+    mov eax, nLeaf
+    xor ecx, ecx
+    cpuid
+    mov aRegs[0], eax
+    mov aRegs[4], ebx
+    mov aRegs[8], edx
+    mov aRegs[12], ecx
+  }
 #elif defined(_MSC_VER)
   __cpuid((int*)aRegs, (int)nLeaf);
+  { uint32_t nEcx = aRegs[2]; aRegs[2] = aRegs[3]; aRegs[3] = nEcx; }
 #else
   aRegs[0] = aRegs[1] = aRegs[2] = aRegs[3] = 0;
 #endif

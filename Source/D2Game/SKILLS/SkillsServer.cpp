@@ -2537,13 +2537,13 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
 void __fastcall SKILLS_SetupBaalWaveParams(::SGAMEDATA * pGame, int32_t nUnitFindFlags, int32_t nX, int32_t nY, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, ::fpBaalWaveFunction pfnBaalWave) {
     D2BaalWaveParamStrc sBaalWaveParam;
     memset(&sBaalWaveParam, 0, sizeof(sBaalWaveParam));
+    sBaalWaveParam.nUnitFindFlags = nUnitFindFlags;
     sBaalWaveParam.nY = nY;
     sBaalWaveParam.nX = nX;
     sBaalWaveParam.eSkillId = eSkill;
     sBaalWaveParam.pAttacker = pUnit;
     sBaalWaveParam.fpFunction = pfnBaalWave;
     sBaalWaveParam.nSkillLevel = nSkillLevel;
-    sBaalWaveParam.nUnitFindFlags = nUnitFindFlags;
     SKILLS_ForEachUnitBaalWave(pGame, &sBaalWaveParam);
 }
 

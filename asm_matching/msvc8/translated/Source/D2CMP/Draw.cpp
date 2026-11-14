@@ -270,10 +270,10 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
       /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, -0x301, (PLONG)0x0, 2);
       /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, 0x301, &nBytesRead, (LPOVERLAPPED)0x0);
       if (nBytesRead == 0x301 && pcxPaletteTrailer.nMarker == 0xc) {
-        pbPaletteEntry = pcxPaletteTrailer.rgb + 1;
+        pbPaletteEntry = &pcxPaletteTrailer.rgb[0].g;
         iPaletteEntry = 0;
         do {
-          gaGlobalPaletteRed[iPaletteEntry].r = pbPaletteEntry[-1];
+          gaGlobalPaletteRed[iPaletteEntry].r = ((D2PcxRgbStrc*)(pbPaletteEntry - 1))->r;
           gaGlobalPaletteRed[iPaletteEntry].g = *pbPaletteEntry;
           gaGlobalPaletteRed[iPaletteEntry].b = pbPaletteEntry[1];
           iPaletteEntry++;

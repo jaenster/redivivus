@@ -744,10 +744,10 @@ static void INI_StripDelimiters(char * szText) {
       pCursor++;
     } while (cChar != '\0');
 
-    pCursor = szText;
-    pCursor = pCursor + strlen(pCursor) + 1;
+    int nStrLen;
+    nStrLen = (int)strlen(szText);
     int nLen;
-    nLen = (intptr_t)pCursor - (intptr_t)(szText + 1);
+    nLen = (int)nStrLen;
     int nReadIdx;
     nReadIdx = 0;
     if (nLen > 0) {

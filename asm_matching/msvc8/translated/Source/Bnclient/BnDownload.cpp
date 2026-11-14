@@ -47,9 +47,10 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
     char cTmp2;
     D2MPQFileStrc* pMpqFile = 0;
     D2MPQFileStrc* pMpqFileLocal = 0;
-    char* pExtDot = pszSrcFileName;
-    pExtDot = pExtDot + strlen(pExtDot) + 1;
-    DWORD dwFileSize = GetTempPathA(0x104 - ((intptr_t)pExtDot - (intptr_t)(pszSrcFileName + 1)), szText);
+    char* pExtDot;
+    int nStrLen;
+    nStrLen = (int)strlen(pszSrcFileName);
+    DWORD dwFileSize = GetTempPathA(0x104 - (int)nStrLen, szText);
     if (!dwFileSize) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("Failed to create temp file!");
     } else {
@@ -982,9 +983,9 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       if (!szDestPath || (pDestPtr = szDestPath , (pDestPtr = pDestPtr + strlen(pDestPtr) + 1 , pDestPtr == szDestPath + 1))) {
         __frame0.dwStackPad3 = 0;
       } else {
-        pDestPtr = szDestPath;
-        pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
-        __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (intptr_t)(szDestPath + 1))), ".\\BnDownload.cpp", 0x179);
+        int nStrLen;
+        nStrLen = (int)strlen(szDestPath);
+        __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(nStrLen + 1), ".\\BnDownload.cpp", 0x179);
         bOpened = (intptr_t)__frame0.dwStackPad3 - (intptr_t)szDestPath;
         do {
           byScanChar = *szDestPath;
@@ -994,9 +995,9 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
       }
       if (pPoolMgr) {
         if (strlen(pPoolMgr) != 0) {
-          pDestPtr = pPoolMgr;
-          pDestPtr = pDestPtr + strlen(pDestPtr) + 1;
-          __frame0.dwStackPad2 = (char*)D2_ALLOC_AT((size_t)(pDestPtr + (1 - (intptr_t)(pPoolMgr + 1))), ".\\BnDownload.cpp", 0x182);
+          int nStrLen2;
+          nStrLen2 = (int)strlen(pPoolMgr);
+          __frame0.dwStackPad2 = (char*)D2_ALLOC_AT((size_t)(nStrLen2 + 1), ".\\BnDownload.cpp", 0x182);
           pDestPtr = pPoolMgr;
           do {
             byScanChar = *pDestPtr;
@@ -1038,10 +1039,10 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           break;
         }
 
-        pbFtpEntryEnd = pDestPtr;
-        pbFtpEntryEnd = pbFtpEntryEnd + strlen(pbFtpEntryEnd) + 1;
-        pbStrCursor = pDestPtr + (int)(pbFtpEntryEnd - (pDestPtr + 1) + 1);
-        pDestPtr += (int)(pbFtpEntryEnd - (pDestPtr + 1) + 1);
+        int nStrLen3;
+        nStrLen3 = (int)strlen(pDestPtr);
+        pbStrCursor = pDestPtr + (int)(nStrLen3 + 1);
+        pDestPtr += (int)(nStrLen3 + 1);
         byScanChar = *pbStrCursor;
       }
 

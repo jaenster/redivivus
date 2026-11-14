@@ -3683,8 +3683,8 @@ static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFil
     char* pSrcScan = "Data\\Global\\Items\\Palette\\";
     char* pPathEnd = szFullPath;
     memcpy(pPathEnd, pSrcScan, 27);
-    pSrcScan = szPaletteFilename;
-    pSrcScan = pSrcScan + strlen(pSrcScan) + 1;
+    int nStrLen;
+    nStrLen = (int)strlen(szPaletteFilename);
     pPathEnd = (char*)((uint8_t*)&szFullPath - 1);
     do {
       pFilenameSrc = pPathEnd + 1;
@@ -3692,13 +3692,13 @@ static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFil
     } while (*pFilenameSrc != '\0');
 
     pFilenameSrc = szPaletteFilename;
-    for (nCopyDwords = (uint32_t)((intptr_t)pSrcScan - (intptr_t)szPaletteFilename) >> 2; nCopyDwords; nCopyDwords--) {
+    for (nCopyDwords = (uint32_t)((int)nStrLen + 1) >> 2; nCopyDwords; nCopyDwords--) {
       *(uint32_t*)pPathEnd = *(uint32_t*)pFilenameSrc;
       pFilenameSrc += 4;
       pPathEnd += 4;
     }
 
-    for (nCopyDwords = (intptr_t)pSrcScan - (intptr_t)szPaletteFilename & 3; nCopyDwords; nCopyDwords--) {
+    for (nCopyDwords = (int)nStrLen + 1 & 3; nCopyDwords; nCopyDwords--) {
       *pPathEnd = *pFilenameSrc;
       pFilenameSrc++;
       pPathEnd++;

@@ -2229,14 +2229,14 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    sStateExpiryArgs.eSkill = eSkill;
-    sStateExpiryArgs.nSkillLvl = nSkillLvl;
     sStateExpiryArgs.pUnit = pUnit;
     sStateExpiryArgs.pTarget = pUnit;
     sStateExpiryArgs.eStat = sStateExpiryArgs.nDurationInFrames;
     sStateExpiryArgs.nSkillCalc = sStateExpiryArgs.nDurationInFrames;
     sStateExpiryArgs.eAuraState = sStateExpiryArgs.nDurationInFrames;
     sStateExpiryArgs.pFunction = (PFN_StatExpireCallback)sStateExpiryArgs.nDurationInFrames;
+    sStateExpiryArgs.eSkill = eSkill;
+    sStateExpiryArgs.nSkillLvl = nSkillLvl;
     sStateExpiryArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnitSaved, pSkillTxt->auralencalc, eSkill, nSkillLvl);
     sStateExpiryArgs.eStat = (eD2UnitStat)pSkillTxt->passivestat[0];
     sStateExpiryArgs.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnitSaved, pSkillTxt->passivecalc[0], eSkill, nSkillLvl);
@@ -3113,10 +3113,10 @@ BOOL __fastcall SKILLASS_SrvStFn28_BladeShield(::SGAMEDATA * pGame, D2UnitStrc *
     SkillsServer::D2UpdateState(pUnit, (int)sAuraState, 0);
     D2StateExArgStrc sStateExArg;
     memset(&sStateExArg, 0, sizeof(sStateExArg));
-    sStateExArg.eSkill = eSkill;
-    sStateExArg.nSkillLvl = nSkillLvl;
     sStateExArg.pUnit = pUnit;
     sStateExArg.pTarget = pUnit;
+    sStateExArg.eSkill = eSkill;
+    sStateExArg.nSkillLvl = nSkillLvl;
     sStateExArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
     sStateExArg.eStat = ~UNITSTAT_strength;
     sStateExArg.eAuraState = (eD2States)pSkillsTxt->aurastate;

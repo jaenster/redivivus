@@ -47,10 +47,10 @@ struct __attribute__((packed)) BnCDKeyHashInput26 {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) BnDoubleHashInput {
+struct BnDoubleHashInput {
     /* 0x00 */ uint32_t dwClientToken;
     /* 0x04 */ uint32_t dwServerToken;
-    /* 0x08 */ D2XSHA1Strc sHash;
+    /* 0x08 */ uint8_t sHash[20];
 };
 
 #endif // D2_MODULE_Bnclient

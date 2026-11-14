@@ -1555,8 +1555,8 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
           tDecodeRequest.nStartFrame = nDirection * nFrameCount;
           tDecodeRequest.pDecodeState = &pCacheEntry->tDecode;
           tDecodeRequest.pfnComplete = SPRITECACHE_DecodeFrameByIndex;
-          tDecodeRequest.nFrameCount = nFrameCount;
           tDecodeRequest.pCelHeader = (uint8_t*)pCelEntry;
+          tDecodeRequest.nFrameCount = nFrameCount;
           pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *pStartOffset, nReadSize, nullptr, (D2AsyncDataCallbackStrc*)&tDecodeRequest, -2, ".\\SRC\\SpriteCache.cpp", 0x369);
           pCacheEntry->tDecode.pAsyncData = pAsyncData;
           Fog::Src::AsyncData::ASYNCDATA_GetReadSize(pAsyncData);

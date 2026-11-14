@@ -54,8 +54,8 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
     sSummonParams.nFlags = 0;
     sSummonParams.nFunctionId = 0;
     sSummonParams.nType = (uint32_t)byPetType;
-    sSummonParams.nMode = sSummonParams.nPetType;
     sSummonParams.pPlayer = pUnit;
+    sSummonParams.nMode = sSummonParams.nPetType;
     sSummonParams.pSkillTxt = (D2SkillsTxt*)sSummonParams.classId;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);
@@ -107,8 +107,8 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
     sCastPetParams.nFlags = 0;
     sCastPetParams.nFunctionId = 0;
     sCastPetParams.nType = (uint32_t)byPetType;
-    sCastPetParams.nMode = 8;
     sCastPetParams.pPlayer = pUnit;
+    sCastPetParams.nMode = 8;
     sCastPetParams.pSkillTxt = (D2SkillsTxt*)sCastPetParams.classId;
     sCastPetParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sCastPetParams);
@@ -542,8 +542,8 @@ uint32_t __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pU
     sPetCast.nFlags = 0;
     sPetCast.nFunctionId = 0;
     sPetCast.nType = (uint32_t)byPetType;
-    sPetCast.nMode = sPetCast.nPetType;
     sPetCast.pPlayer = pUnit;
+    sPetCast.nMode = sPetCast.nPetType;
     sPetCast.pSkillTxt = (D2SkillsTxt*)sPetCast.classId;
     sPetCast.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl2);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sPetCast);

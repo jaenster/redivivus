@@ -45,9 +45,10 @@ struct D2PaletteEntryStrc {
 
 #endif // D2_DEFINED_D2PaletteEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-struct PcxPaletteTrailer {
-    /* 0x00 */ uint8_t nMarker; // 0x0c
-    /* 0x01 */ uint8_t rgb[768]; // 256 R,G,B triplets
+struct D2PcxRgbStrc {
+    /* 0x00 */ uint8_t r;
+    /* 0x01 */ uint8_t g;
+    /* 0x02 */ uint8_t b;
 };
 
 #endif // D2_MODULE_D2CMP
@@ -67,6 +68,13 @@ struct __attribute__((packed)) tagRGBQUAD {
 
 #endif // _WIN32
 
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
+struct __attribute__((packed)) PcxPaletteTrailer {
+    /* 0x00 */ uint8_t nMarker; // 0x0c
+    /* 0x01 */ D2PcxRgbStrc rgb[256]; // 256 R,G,B triplets
+};
+
+#endif // D2_MODULE_D2CMP
 namespace D2CMP::Draw {
 
 // Function declarations

@@ -185,12 +185,12 @@
         "SERVER_ITEM_DecideDrops"
       ],
       "usedTypes": [
-        "D2ObjectOperateFnArg",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "787b1000",
+      "dh": "ce1a4b3b",
       "paramStorage": [
         [
           "pGame",

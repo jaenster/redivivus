@@ -2616,7 +2616,6 @@ uint32_t __stdcall DAMAGE_RollMinMaxDamageRange(D2UnitStrc * pUnit, uint32_t * p
 
 // Gives a monster defender the prevent-heal state when a player attacker has item_preventheal (stat 0x75): STATE 0x34 for 120000 frames on armorclass, through SKILLS_SetStateWithExpiryTime with no expire callback. Classes 0x2C0-0x2C5 are exempt. Register arguments: pDefender in ESI, pAttacker in EDI; nothing is returned.
 static void DAMAGE_CheckPreventHealAndSetState(D2UnitStrc * pDefender, D2UnitStrc * pAttacker) {
-    D2StateExArgStrc sStateArg;
     if (!(pAttacker && pAttacker->eUnitType == UNIT_PLAYER && (pDefender ? pDefender->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
@@ -2626,15 +2625,14 @@ static void DAMAGE_CheckPreventHealAndSetState(D2UnitStrc * pDefender, D2UnitStr
       return;
     }
 
-    sStateArg.pFunction = 0;
-    sStateArg.eSkill = SKILL_Attack;
+    D2StateExArgStrc sStateArg;
+    memset(&sStateArg, 0, sizeof(sStateArg));
+    sStateArg.pUnit = pAttacker;
+    sStateArg.pTarget = pDefender;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 120000;
     sStateArg.eStat = UNITSTAT_armorclass;
-    sStateArg.nSkillCalc = 0;
     sStateArg.eAuraState = STATE_preventheal;
-    sStateArg.pUnit = pAttacker;
-    sStateArg.pTarget = pDefender;
     SKILLS::SkillsServer::SetStateWithExpiryTime(&sStateArg);
 }
 

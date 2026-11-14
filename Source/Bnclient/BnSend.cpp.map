@@ -125,7 +125,7 @@
         "SID_C2S_LogonResponse",
         "uint32_t"
       ],
-      "dh": "64d839bf",
+      "dh": "4e1f020e",
       "paramStorage": [
         [
           "szText1",
@@ -162,7 +162,7 @@
         "SID_C2S_LogonResponse",
         "uint32_t"
       ],
-      "dh": "2cc09975",
+      "dh": "69be0ccf",
       "paramStorage": [
         [
           "szText1",
@@ -232,7 +232,7 @@
         "D2XSHA1Strc",
         "uint32_t"
       ],
-      "dh": "a19610d2",
+      "dh": "3c469f7f",
       "paramStorage": [
         [
           "szText1",

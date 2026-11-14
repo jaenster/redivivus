@@ -2676,10 +2676,11 @@ static BOOL CHATDLG_HandleNotifyCommand(char * szCommand, char * szInput) {
     uint16_t wszMessage[256];
     char szMessage[256];
     char cCur;
-    char* pcCmdEnd = szCommand;
-    pcCmdEnd = pcCmdEnd + strlen(pcCmdEnd) + 1;
+    char* pcCmdEnd;
+    int nStrLen;
+    nStrLen = (int)strlen(szCommand);
     int32_t nCmpResult = someStrCompare(szInput, szCommand);
-    if (!nCmpResult && (szInput[(intptr_t)pcCmdEnd - (intptr_t)(szCommand + 1)] == ' ' || szInput[(intptr_t)pcCmdEnd - (intptr_t)(szCommand + 1)] == '\0')) {
+    if (!nCmpResult && (szInput[(int)nStrLen] == ' ' || szInput[(int)nStrLen] == '\0')) {
       int i;
       nCmpResult = someStrCompare(szInput, szCommand);
       if (nCmpResult) {
@@ -3006,7 +3007,7 @@ void __stdcall CHATDLG_DisableAllLadderButtons() {
 
 void __stdcall CHATDLG_ClearLadderBoard() {
     uint16_t awszDash[2];
-    char szDash[4];
+    char szDash[2];
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(g_pLadderBoardTextBox);
     awszDash[0] = L'\0';
     awszDash[1] = 0;
@@ -4405,10 +4406,11 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
     char szTokenBuffer[256];
     char szMessageBuffer[260];
     char szDelimiter[4];
-    char* pcScan = szText1;
-    pcScan = pcScan + strlen(pcScan) + 1;
+    char* pcScan;
+    int nStrLen;
+    nStrLen = (int)strlen(szText1);
     int32_t nCmdCmp = someStrCompare(szText2, szText1);
-    if (!nCmdCmp && (szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == ' ' || szText2[(intptr_t)pcScan - (intptr_t)(szText1 + 1)] == '\0')) {
+    if (!nCmdCmp && (szText2[(int)nStrLen] == ' ' || szText2[(int)nStrLen] == '\0')) {
       char* pcEnd;
       pcScan = gszOogReplyCommandBuffer;
       pcEnd = pcScan + strlen(pcScan);

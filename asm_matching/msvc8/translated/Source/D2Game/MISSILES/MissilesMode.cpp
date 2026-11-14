@@ -2181,10 +2181,10 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTimedAuraStateFiltered(::SGAMEDATA * pG
       D2StatListExStrc* pStatList;
       D2StateExArgStrc sStateArgs;
       memset(&sStateArgs, 0, sizeof(sStateArgs));
-      sStateArgs.pTarget = pTarget;
-      sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.pUnit = pUnit_00;
+      sStateArgs.pTarget = pTarget;
       sStateArgs.eSkill = eSkill;
+      sStateArgs.nSkillLvl = nSkillLvl;
       sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit_00, pSkillTxt->auralencalc, eSkill, nSkillLvl);
       sStateArgs.eAuraState = (eD2States)pSkillTxt->auratargetstate;
       sStateArgs.pFunction = 0;
@@ -5087,9 +5087,9 @@ int __fastcall MISSILESMODE_SrvDoFn13_BoneWallMaker(::SGAMEDATA * pGame, D2UnitS
         sMonsterCastPet.nType = 0;
         sMonsterCastPet.nSkillCalc = 0;
         sMonsterCastPet.nFlags = 0xd;
+        sMonsterCastPet.pPlayer = pOwner;
         sMonsterCastPet.nFunctionId = 0;
         sMonsterCastPet.nMode = sMonsterCastPet.nPetType;
-        sMonsterCastPet.pPlayer = pOwner;
         sMonsterCastPet.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         sMonsterCastPet.nY2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         sMonsterCastPet.nType = (uint32_t)byPetTypeIdx;

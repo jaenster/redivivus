@@ -342,14 +342,14 @@ char * __thiscall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, char * szText
     char* pSrc = szText1;
     char* pEnd = pSrc + strlen(pSrc);
     pSrc = pEnd + 1;
-    pSrc = szText2;
-    pSrc = pSrc + strlen(pSrc) + 1;
+    int nStrLen;
+    nStrLen = (int)strlen(szText2);
     char cCur = *szText1;
     while (cCur != '\0' && *szText1 != ']') {
       int nCmp;
-      nCmp = _strnicmp(szText1, szText2, (intptr_t)pSrc - (intptr_t)(szText2 + 1));
+      nCmp = _strnicmp(szText1, szText2, (int)nStrLen);
       if (!nCmp) {
-        return szText1 + ((intptr_t)pSrc - (intptr_t)(szText2 + 1)) + 1;
+        return szText1 + (int)nStrLen + 1;
       }
 
       for (; szText1 < pEnd && (cCur = *szText1 , cCur != '\0') && cCur != '\r' && cCur != '\n'; szText1++) {}

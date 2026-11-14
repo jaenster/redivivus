@@ -783,9 +783,9 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
     sStateExArg.nSkillLvl = pCtx->nSkillLvl;
     sStateExArg.nDurationInFrames = pCtx->nDurationInFrames;
     sStateExArg.eAuraState = pCtx->eAuraState;
-    sStateExArg.pFunction = SKILLNEC_OnConvertExpire;
     sStateExArg.pTarget = pUnit;
     sStateExArg.eStat = eStatId;
+    sStateExArg.pFunction = SKILLNEC_OnConvertExpire;
     D2StatListExStrc* pStatListEx = SkillsServer::SetStateWithExpiryTime(&sStateExArg);
     if (!pStatListEx) {
       return 0;
@@ -1354,11 +1354,11 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     sPet.nFunctionId = 0;
     sPet.classId = nMonsterClassId;
     sPet.nMode = nSummonMode;
+    sPet.nX = nSpawnX;
     sPet.nY2 = (uint32_t)(uintptr_t)sPet.pSkillTxt;
     sPet.nType = sPet.nPetType;
     sPet.nFlags = 1;
     sPet.pPlayer = pUnit;
-    sPet.nX = nSpawnX;
     sPet.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl);
     pCorpse = SkillsServer::SKILL_CreateSummon(pGame, &sPet);
     if (pCorpse) {
@@ -1627,9 +1627,9 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
     sPetCastParams.nSkillCalc = 0;
     sPetCastParams.nFunctionId = 0;
     sPetCastParams.nType = (uint32_t)byPetTypeIdx;
+    sPetCastParams.pPlayer = pUnit;
     sPetCastParams.nMode = (uint32_t)(uintptr_t)sPetCastParams.pSkillTxt;
     sPetCastParams.nFlags = 1;
-    sPetCastParams.pPlayer = pUnit;
     sPetCastParams.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sPetCastParams.nY2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     sPetCastParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl);
@@ -2000,13 +2000,13 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
     }
 
     sSummonParams.nType = (uint32_t)byPetTypeIdx;
+    sSummonParams.nSkillCalc = sSummonParams.nFunctionId;
     sSummonParams.classId = (int32_t)sSummonParams.pSkillTxt;
     sSummonParams.nMode = sSummonParams.nPetType;
     sSummonParams.nFlags = 9;
+    sSummonParams.pPlayer = pUnit;
     sSummonParams.nX = nSpawnX;
     sSummonParams.nY2 = nSpawnY;
-    sSummonParams.pPlayer = pUnit;
-    sSummonParams.nSkillCalc = sSummonParams.nFunctionId;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
     if (!pSummon) {
@@ -2588,8 +2588,8 @@ BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 0x2ee;
     sStateArg.eStat = UNITSTAT_velocitypercent;
-    sStateArg.eAuraState = STATE_slowed;
     sStateArg.nSkillCalc = nSlowAmount;
+    sStateArg.eAuraState = STATE_slowed;
     D2StatListExStrc* pSlowedStatList = SkillsServer::SetStateWithExpiryTime(&sStateArg);
     if (!pSlowedStatList) {
       return 0;

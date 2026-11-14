@@ -245,7 +245,7 @@ void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId) {
 
     while (true) {
       pFoundSub = pIterSub;
-      if (pFoundSub->nPartyId == nPartyId) {
+      if (pFoundSub->nPartyId == (uint16_t)nPartyId) {
         break;
       }
 
@@ -277,7 +277,7 @@ static D2UnitPartyControlSub * FindPartyControlSub(::SGAMEDATA * pGame, int16_t 
       if (!pSub) {
         return nullptr;
       }
-      if (pSub->nPartyId == nPartyId) {
+      if (pSub->nPartyId == (uint16_t)nPartyId) {
         break;
       }
 
@@ -321,7 +321,7 @@ int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, D2Uni
     } else {
       BOOL bAlreadyInParty;
       for (pFoundSub = pGame->pPartyControl->pSub; pFoundSub; pFoundSub = pFoundSub->pPrev) {
-        if (pFoundSub->nPartyId == nPartyId) {
+        if (pFoundSub->nPartyId == (uint16_t)nPartyId) {
           goto add_to_found_party;
         }
       }
@@ -381,7 +381,7 @@ int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyI
     }
 
     for (pFoundSub = pGame->pPartyControl->pSub; pFoundSub; pFoundSub = pFoundSub->pPrev) {
-      if (pFoundSub->nPartyId == nPartyId) {
+      if (pFoundSub->nPartyId == (uint16_t)nPartyId) {
         goto count_members;
       }
     }
@@ -423,7 +423,7 @@ void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, D2UnitStrc * 
     (*pCount)++;
 }
 
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs) {
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, uint16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs) {
     D2UnitStrc* pUnit;
     D2UnitPartyControlSubSub* pSubSub;
     if (!pGame->pPartyControl) {
@@ -443,7 +443,7 @@ void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t 
     if (!pFoundSub) {
       return;
     }
-    if (nPartyId == -1) {
+    if (nPartyId == 0xffff) {
       return;
     }
 

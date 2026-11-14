@@ -4823,8 +4823,9 @@ void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
     size_t* pSizeOut = pSize;
     strcpy(szNameCopy, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(0);
-    char* pExtEnd = szExtension;
-    pExtEnd = pExtEnd + strlen(pExtEnd) + 1;
+    char* pExtEnd;
+    int nStrLen;
+    nStrLen = (int)strlen(szExtension);
     char* pCopyDst = (char*)((uint8_t*)&szNameCopy - 1);
     do {
       pCopySrc = pCopyDst + 1;
@@ -4832,13 +4833,13 @@ void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
     } while (*pCopySrc != '\0');
 
     /* HANDLE hTemplateFile for CreateFileA */ pCopySrc = szExtension;
-    for (nCopyCount = (uint32_t)((intptr_t)pExtEnd - (intptr_t)szExtension) >> 2; nCopyCount; nCopyCount--) {
+    for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
       *(uint32_t*)pCopyDst = *(uint32_t*)pCopySrc;
       pCopySrc += 4;
       pCopyDst += 4;
     }
 
-    /* LPCSTR lpFileName for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ for (nCopyCount = (intptr_t)pExtEnd - (intptr_t)szExtension & 3; nCopyCount; nCopyCount--) {
+    /* LPCSTR lpFileName for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
       *pCopyDst = *pCopySrc;
       pCopySrc++;
       pCopyDst++;

@@ -3381,13 +3381,13 @@ void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc *
 
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
+    sStateArg.pUnit = pUnit;
     sStateArg.pTarget = pTargetMonster;
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = nTerrorDurationFrames;
     sStateArg.eStat = ~UNITSTAT_strength;
     sStateArg.eSkill = SKILL_Terror;
     sStateArg.eAuraState = STATE_terror;
-    sStateArg.pUnit = pUnit;
     SKILLS::SkillsServer::SetStateWithExpiryTime(&sStateArg);
     D2Common::Units::SetTargetUnitForDynamicUnit(pTargetMonster, pUnit);
     if (pTargetMonster->eUnitType == UNIT_MONSTER && pTargetMonster->pUnitData.pUnitDataMonster) {
@@ -12887,9 +12887,9 @@ void __fastcall AITHINK_Fn1_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     minionScanParams.nInRangeCount = 0;
     minionScanParams.nMinionCount = 0;
     minionScanParams.pResurrectTarget = 0;
+    minionScanParams.pOwner = pOther;
     minionScanParams.nNearestEnemyDist = 0x7fffffff;
     minionScanParams.nOwnerNearestEnemyDist = 0x7fffffff;
-    minionScanParams.pOwner = pOther;
     ForEach(pGame, pUnit, (D2MonsterAiParameterStruct*)&minionScanParams, (fpMonsterAiForEach)AI_ShadowMaster_ScanCallback, 1);
     pTmpUnit = minionScanParams.pResurrectTarget;
     if (!nParam1) {

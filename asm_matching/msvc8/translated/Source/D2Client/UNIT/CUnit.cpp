@@ -2380,11 +2380,11 @@ D2UnitStrc * __fastcall CreateMissileOrMonster(int32_t nMonstatId, int32_t nX, i
     if (eUnitType == UNIT_MONSTER) {
       D2CreateMonsterUnitStrc sCreateData;
       memset(&sCreateData, 0, sizeof(sCreateData));
-      sCreateData.nY = nY;
-      sCreateData.eUnitType = eUnitType;
       sCreateData.nUnitGUID = nNextGUID;
       sCreateData.nMonstatId = nMonstatId;
       sCreateData.nX = nX;
+      sCreateData.nY = nY;
+      sCreateData.eUnitType = eUnitType;
       pCreatedUnit = UNIT_CreateMonster(&sCreateData, nullptr, nullptr, 0, 0, 1);
       return pCreatedUnit;
     }

@@ -2187,8 +2187,8 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
     sStateArg.nSkillLvl = 1;
     sStateArg.nDurationInFrames = 0x2ee;
     sStateArg.eStat = UNITSTAT_velocitypercent;
-    sStateArg.eAuraState = STATE_slowed;
     sStateArg.nSkillCalc = nSlowAmount;
+    sStateArg.eAuraState = STATE_slowed;
     D2StatListExStrc* pSlowedStatList = SkillsServer::SetStateWithExpiryTime(&sStateArg);
     if (!pSlowedStatList) {
       return 0;

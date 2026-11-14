@@ -152,7 +152,7 @@ int __fastcall NET_SID_CLIENT_Send_0x29_LogonResponse(char * szText1, char * szT
     /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(szPasswordLower, nLen);
     dwTickCount.dwClientToken = GetTickCount();
     dwTickCount.dwServerToken = g_nBNetServerToken;
-    _net_sid::XSHA1(&dwTickCount.sHash, szPasswordLower, nLen);
+    _net_sid::XSHA1((D2XSHA1Strc*)dwTickCount.sHash, szPasswordLower, nLen);
     dwClientToken.dwClientToken = dwTickCount.dwClientToken;
     dwClientToken.dwServerToken = dwTickCount.dwServerToken;
     _net_sid::XSHA1(&dwClientToken.sPasswordHash, (char*)&dwTickCount, 0x1c);
@@ -172,7 +172,7 @@ int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * sz
     /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(szPasswordLower, nLen);
     dwTickCount.dwClientToken = GetTickCount();
     dwTickCount.dwServerToken = g_nBNetServerToken;
-    _net_sid::XSHA1(&dwTickCount.sHash, szPasswordLower, nLen);
+    _net_sid::XSHA1((D2XSHA1Strc*)dwTickCount.sHash, szPasswordLower, nLen);
     dwClientToken.dwClientToken = dwTickCount.dwClientToken;
     dwClientToken.dwServerToken = dwTickCount.dwServerToken;
     _net_sid::XSHA1(&dwClientToken.sPasswordHash, (char*)&dwTickCount, 0x1c);
@@ -215,7 +215,7 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
     /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(__frame0.szPasswordLower, nLen);
     __frame0.dwTickCount.dwClientToken = GetTickCount();
     __frame0.dwTickCount.dwServerToken = g_nBNetServerToken;
-    _net_sid::XSHA1(&__frame0.dwTickCount.sHash, __frame0.szPasswordLower, nLen);
+    _net_sid::XSHA1((D2XSHA1Strc*)__frame0.dwTickCount.sHash, __frame0.szPasswordLower, nLen);
     Storm::Source::SSTR::SStrCopy(__frame0.szPasswordLower, szNewPassword, 0x100);
     uint32_t nStrLen = Storm::Source::SSTR::SStrLen(__frame0.szPasswordLower);
     /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(__frame0.szPasswordLower, nStrLen);
@@ -2080,13 +2080,13 @@ void __stdcall BNNEWS_SaveToCache() {
       nEntryIndex = g_nFirstUnreadNewsIndex;
       do {
         pStrScanEnd = pEntryText + 1;
-        pStrScan = pEntryText;
-        pStrScan = pStrScan + strlen(pStrScan) + 1;
-        if ((intptr_t)pStrScan - (intptr_t)pStrScanEnd >= 0x400) {
+        int nStrLen;
+        nStrLen = (int)strlen(pEntryText);
+        if ((int)nStrLen >= 0x400) {
           return;
         }
 
-        nTotalSize = nTotalSize + 5 + ((intptr_t)pStrScan - (intptr_t)pStrScanEnd);
+        nTotalSize = nTotalSize + 5 + (int)nStrLen;
         nEntryIndex++;
         pEntryText += 0x408;
         nAccumSize = nTotalSize;

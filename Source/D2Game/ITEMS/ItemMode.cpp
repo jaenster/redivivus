@@ -1000,17 +1000,7 @@ static void __stdcall PickingGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
 }
 
 static void __stdcall ITEMMODE_GetItemPageForUnit(int32_t nUpdateType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    eD2UnitType eUnitType;
-    int nUnit2Guid;
-    if (!pUnit2) {
-      nUnit2Guid = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nUnit2Guid = pUnit2->nUnitGUID;
-      eUnitType = pUnit2->eUnitType;
-    }
-
-    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit2), eUnitType, nUnit2Guid);
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit2), !pUnit2 ? UNIT_COUNT : pUnit2->eUnitType, !pUnit2 ? -1 : pUnit2->nUnitGUID);
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit2, INVPAGE_None);
     if (pUnit2) {
       pUnit2->eUnitFlags |= UNITFLAG_SENDREFRESHMSG;
@@ -3890,8 +3880,6 @@ static BOOL ITEMMODE_CheckInventorySpace(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int32_t bRemoveFromRoom, int32_t nInvPage, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, char * szSourceFile, int32_t nLine) {
     BOOL bPutResult;
     uint32_t bIsActiveCharm;
-    eD2UnitType eUnitType;
-    int32_t nUnitGUID;
     D2InventoryStrc* pInventory;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x746);
@@ -3910,15 +3898,7 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
           if (bRemoveFromRoom) {
             pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
             if (pRoom) {
-              if (!pUnit2) {
-                nUnitGUID = -1;
-                eUnitType = UNIT_COUNT;
-              } else {
-                nUnitGUID = pUnit2->nUnitGUID;
-                eUnitType = pUnit2->eUnitType;
-              }
-
-              D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, eUnitType, nUnitGUID);
+              D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pRoom, !pUnit2 ? UNIT_COUNT : pUnit2->eUnitType, !pUnit2 ? -1 : pUnit2->nUnitGUID);
               D2Common::Units::RemoveCollision_Vector(pUnit2);
               D2Common::Unit::RemoveUnitFromRoom(pUnit2);
             }

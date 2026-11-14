@@ -21,7 +21,7 @@ struct D2UnitPartyControlSubSub;
 #ifndef D2_DEFINED_D2UnitPartyControlSub
 #define D2_DEFINED_D2UnitPartyControlSub
 struct D2UnitPartyControlSub {
-    /* 0x00 */ int16_t nPartyId;
+    /* 0x00 */ uint16_t nPartyId;
     /* 0x04 */ struct D2UnitPartyControlSubSub * pSub;
     /* 0x08 */ struct D2UnitPartyControlSub * pPrev;
 };

@@ -1298,13 +1298,13 @@ uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUn
 D2StatListExStrc * __fastcall ApplyShrineBonus(D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint32_t nDurationInFrames, int32_t nSkillCalc, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
     D2StateExArgStrc stateArg;
     memset(&stateArg, 0, sizeof(stateArg));
+    stateArg.pUnit = pUnit;
     stateArg.eStat = eStat;
+    stateArg.pTarget = pAttacker;
     stateArg.nDurationInFrames = nDurationInFrames;
     stateArg.pFunction = pFunction;
     stateArg.nSkillCalc = nSkillCalc;
     stateArg.eAuraState = eAuraState;
-    stateArg.pUnit = pUnit;
-    stateArg.pTarget = pAttacker;
     D2StatListExStrc* pDVar1 = SKILLS::SkillsServer::SetStateWithExpiryTime(&stateArg);
     return pDVar1;
 }

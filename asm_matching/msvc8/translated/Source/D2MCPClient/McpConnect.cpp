@@ -468,16 +468,17 @@ static char * __stdcall STRING_GetStringLength(char * szText, char * * ppszText,
     int nCopyDelta;
     char byChar;
     char* pszLenBase = szText + 1;
-    char* pszScan = szText;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    *ppszText += (int)(pszScan - pszLenBase + 1);
+    char* pszScan;
+    int nStrLen;
+    nStrLen = (int)strlen(szText);
+    *ppszText += (int)(nStrLen + 1);
     if (*ppszText >= pszBufferEnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26);
       exit(-1);
     }
 
     strcpy(szDest, szText);
-    return szDest + (int)(pszScan - pszLenBase + 1);
+    return szDest + (int)(nStrLen + 1);
 }
 
 int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {

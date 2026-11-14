@@ -978,10 +978,10 @@ void __fastcall PLRMODES_StartCastAtEntity(::SGAMEDATA * pGame, D2UnitStrc * pUn
     SKILLS::SkillsServer::SKILLS_StartCurrentSkill(pGame, pUnit);
 }
 
-static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint32_t nBodyLocFlags, D2UnitStrc * pUnit) {
+static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint8_t nBodyLocFlags, D2UnitStrc * pUnit) {
     eD2BodyLoc eBodyLoc;
     BOOL bHasBodyLoc;
-    uint32_t nBestBodyLoc = nBodyLocFlags & 0xff;
+    uint32_t nBestBodyLoc = (uint32_t)nBodyLocFlags;
     uint32_t dwFindGUID = D2Common::Units::GetWeaponGUID(pUnit);
     if (!dwFindGUID) {
       return;
@@ -1082,7 +1082,7 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
         }
       }
       if (bCanReequip) {
-        PLRMODES_ReequipWeaponAfterThrow(pGame, nBodyLocWord, pWeaponOwner);
+        PLRMODES_ReequipWeaponAfterThrow(pGame, (uint8_t)nBodyLocWord, pWeaponOwner);
       }
     } else {
       bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x513, ".\\PLAYER\\PlrModes.cpp");

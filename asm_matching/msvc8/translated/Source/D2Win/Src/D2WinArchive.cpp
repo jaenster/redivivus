@@ -29,8 +29,9 @@ DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     char* pDstEnd;
     strcpy(szFullPath, szFilename);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
-    char* szExtensionEnd = szExtension;
-    szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;
+    char* szExtensionEnd;
+    int nStrLen;
+    nStrLen = (int)strlen(szExtension);
     char* pDstWrite = (char*)((uint8_t*)&szFullPath - 1);
     do {
       pDstEnd = pDstWrite + 1;
@@ -38,13 +39,13 @@ DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     } while (*pDstEnd != '\0');
 
     char* pSrcRead = szExtension;
-    for (nCopyCount = (uint32_t)((intptr_t)szExtensionEnd - (intptr_t)szExtension) >> 2; nCopyCount; nCopyCount--) {
+    for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
       *(uint32_t*)pDstWrite = *(uint32_t*)pSrcRead;
       pSrcRead += 4;
       pDstWrite += 4;
     }
 
-    for (nCopyCount = (intptr_t)szExtensionEnd - (intptr_t)szExtension & 3; nCopyCount; nCopyCount--) {
+    for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
       *pDstWrite = *pSrcRead;
       pSrcRead++;
       pDstWrite++;
@@ -63,8 +64,9 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
     char cByte;
     strcpy(szFilePath, szText);
     char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension((int32_t)pDC6);
-    char* szExtensionEnd = szExtension;
-    szExtensionEnd = szExtensionEnd + strlen(szExtensionEnd) + 1;
+    char* szExtensionEnd;
+    int nStrLen;
+    nStrLen = (int)strlen(szExtension);
     char* pDstWrite = (char*)((uint8_t*)&szFilePath - 1);
     do {
       pSrcRead = pDstWrite + 1;
@@ -72,13 +74,13 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
     } while (*pSrcRead != '\0');
 
     pSrcRead = szExtension;
-    for (nCopyCount = (uint32_t)((intptr_t)szExtensionEnd - (intptr_t)szExtension) >> 2; nCopyCount; nCopyCount--) {
+    for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
       *(uint32_t*)pDstWrite = *(uint32_t*)pSrcRead;
       pSrcRead += 4;
       pDstWrite += 4;
     }
 
-    for (nCopyCount = (intptr_t)szExtensionEnd - (intptr_t)szExtension & 3; nCopyCount; nCopyCount--) {
+    for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
       *pDstWrite = *pSrcRead;
       pSrcRead++;
       pDstWrite++;

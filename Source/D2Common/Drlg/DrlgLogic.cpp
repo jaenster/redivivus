@@ -595,10 +595,10 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     sCoordCtx.pCoordGrid = &pCoordListStrc->sOrientationGrid;
     sCoordCtx.pOrientGrid = nOrientGridFlagsSave;
     sCoordCtx.pFloorGrid = &sLocalGrid;
+    sCoordCtx.nCoordIndex = nCoordCount;
+    sCoordCtx.pRoomEx = pRoomEx;
     sCoordCtx.nReserved0C = pGrid;
     sCoordCtx.nCallerArg10 = nFloorGridFlags;
-    sCoordCtx.pRoomEx = pRoomEx;
-    sCoordCtx.nCoordIndex = nCoordCount;
     DRLGLOGIC_PopulateGridCoordIndices(&sCoordCtx);
     DrlgGrid::ResetGrid(&sLocalGrid);
     nCoordCount = sCoordCtx.nCoordIndex - nCoordIndexStart + 1;

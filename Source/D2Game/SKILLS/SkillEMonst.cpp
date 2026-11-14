@@ -763,12 +763,12 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
 
     sStateArg.nDurationInFrames = 0;
     sStateArg.nSkillCalc = 0;
+    sStateArg.pUnit = pUnit;
     sStateArg.eSkill = eSkill;
     sStateArg.nSkillLvl = nSkillLvl;
     sStateArg.eStat = ~UNITSTAT_strength;
     sStateArg.eAuraState = STATE_pregnant;
     sStateArg.pFunction = SKILLEMONST_OnDeathSpawnExpire;
-    sStateArg.pUnit = pUnit;
     SkillsServer::SetStateWithExpiryTime(&sStateArg);
     return 1;
 }
