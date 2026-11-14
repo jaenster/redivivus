@@ -4,7 +4,7 @@
   "file": "Source/D2Launch/MainMenus.cpp",
   "functions": [
     {
-      "name": "FORMS_DestroyListJmp_Unref_0041f930",
+      "name": "FORMS_DestroyEncoderContext_Thunk_Unref_0041f930",
       "address": "0041f930",
       "lines": [
         {
@@ -14,13 +14,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "FORMS_DestroyListJmp_Unref_0041f930",
+        "FORMS_DestroyEncoderContext_Thunk_Unref_0041f930",
         "COMPRESS_DestroyEncoderContext"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e4c57903",
+      "dh": "13aee83d",
       "paramStorage": [
         [
           "pEncoder",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "name": "FORMS_DestroyListJmp_Unref_0041f940",
+      "name": "FORMS_DestroyEncoderContext_Thunk_Unref_0041f940",
       "address": "0041f940",
       "lines": [
         {
@@ -39,13 +39,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "FORMS_DestroyListJmp_Unref_0041f940",
+        "FORMS_DestroyEncoderContext_Thunk_Unref_0041f940",
         "COMPRESS_DestroyEncoderContext"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "4a2d98dd",
+      "dh": "1c180de4",
       "paramStorage": [
         [
           "pEncoder",
@@ -251,7 +251,7 @@
       "dh": "24b0030b"
     },
     {
-      "name": "MAINMENU_GetGlobalValue2_Unref_0042e6c0",
+      "name": "MAINMENU_GetMainMenuUIActive",
       "address": "0042e6c0",
       "lines": [
         {
@@ -261,9 +261,9 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_GetGlobalValue2_Unref_0042e6c0"
+        "MAINMENU_GetMainMenuUIActive"
       ],
-      "dh": "43f367ba"
+      "dh": "17d648c3"
     },
     {
       "name": "IMAGE_LoadPredefinedImages",
@@ -648,7 +648,7 @@
         "D2WINIMAGE_SetDrawModeSolid",
         "GetLocaleString",
         "SetText",
-        "D2WINIMAGE_StopAnimation",
+        "D2WINIMAGE_GetFrameCount",
         "D2WINIMAGE_SetFrame",
         "sprintf",
         "D2WINTEXTBOX_SetTextFromAnsi"
@@ -658,7 +658,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "9157d72f"
+      "dh": "8475b759"
     },
     {
       "name": "MAINMENU_UpdateProgressBar",
@@ -673,12 +673,12 @@
       "calledFunctions": [
         "MAINMENU_UpdateProgressBar",
         "D2WINTEXTBOX_ClearAllLines",
-        "D2WINIMAGE_StopAnimation",
+        "D2WINIMAGE_GetFrameCount",
         "D2WINIMAGE_SetFrame",
         "sprintf",
         "D2WINTEXTBOX_SetTextFromAnsi"
       ],
-      "dh": "ee3e38dd"
+      "dh": "233c0fbe"
     },
     {
       "name": "LAUNCHER_ClearPatchDownloadFlag",
@@ -1121,8 +1121,8 @@
         "GetLocaleString",
         "D2WINTEXTBOX_SetTextW",
         "D2WINMAIN_SetControlActive",
-        "D2WINMAIN_SetFormFourth",
-        "D2WINTIMER_Start",
+        "CONTROL_SetEscapeButton",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating",
         "MAINMENU_UpdateIPAddressDisplay"
       ],
@@ -1131,7 +1131,7 @@
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "5aaa410c"
+      "dh": "0f27f9f3"
     },
     {
       "name": "MAINMENU_DisableControlIfDataNonZero",
@@ -1202,7 +1202,7 @@
         "D2CheckExpansionGame",
         "SetText",
         "D2WINEDITBOX_SetFilterCallback",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetTextFromAnsi",
         "D2WINMAIN_SetFocusedControl",
         "D2WINEDITBOX_LinkTabOrder"
@@ -1213,7 +1213,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "75d94725"
+      "dh": "e262c0f9"
     },
     {
       "name": "UIMENU_BackgroundAndExpansionText",
@@ -1321,7 +1321,7 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_ScrollListExUp",
-        "D2WINMAIN_GetFirstElement",
+        "CONTROL_GetType",
         "D2WINTEXTBOX_GetScrollPosition",
         "D2WINTEXTBOX_ScrollToLine",
         "GetInstructionPointer",
@@ -1331,9 +1331,10 @@
       "usedTypes": [
         "D2ControlMsg",
         "D2WinTextBox",
+        "eD2FormType",
         "int32_t"
       ],
-      "dh": "b6797bae",
+      "dh": "aec7c9ca",
       "paramStorage": [
         [
           "pControlMsg",
@@ -1353,7 +1354,7 @@
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
         "MAINMENU_ScrollListExDown",
-        "D2WINMAIN_GetFirstElement",
+        "CONTROL_GetType",
         "D2WINTEXTBOX_GetScrollPosition",
         "D2WINTEXTBOX_ScrollToLine",
         "GetInstructionPointer",
@@ -1363,9 +1364,10 @@
       "usedTypes": [
         "D2ControlMsg",
         "D2WinTextBox",
+        "eD2FormType",
         "int32_t"
       ],
-      "dh": "ae5eeb32",
+      "dh": "6ef3f111",
       "paramStorage": [
         [
           "pControlMsg",
@@ -2149,7 +2151,7 @@
         "D2GFX_SetPaletteForDraw",
         "FORMS_CreateAnyFormFromListExEx",
         "D2CheckExpansionGame",
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating",
         "MAINMENU_DisplayCredits",
         "D2WINTEXTBOX_ScrollToLine"
@@ -2157,7 +2159,7 @@
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "0afbdb37",
+      "dh": "78e05b2c",
       "paramStorage": [
         [
           "pControlMsg",
@@ -2677,12 +2679,12 @@
         "D2WINEDITBOX_SetTextFromAnsi",
         "D2WINMAIN_SetFocusedControl",
         "D2WINEDITBOX_SelectAll",
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "e6cf69cc",
+      "dh": "4fd421c3",
       "paramStorage": [
         [
           "pControlMsg",
@@ -2704,13 +2706,13 @@
         "MAINMENU_OnPressStartTcpIpTimer",
         "FORMS_DestroyList",
         "FORMS_CreateAnyFormFromListExEx",
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "bea56c72",
+      "dh": "e2ce3e53",
       "paramStorage": [
         [
           "pControlMsg",
@@ -2947,7 +2949,7 @@
         "D2CheckExpansionGame",
         "SetText",
         "D2WINEDITBOX_SetFilterCallback",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetTextFromAnsi",
         "D2WINMAIN_SetFocusedControl",
         "D2WINEDITBOX_LinkTabOrder"
@@ -2958,10 +2960,10 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "47282913"
+      "dh": "54e2bb1b"
     },
     {
-      "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300",
+      "name": "MAINMENU_OnPressChangePassword_Unref_00432300",
       "address": "00432300",
       "lines": [
         {
@@ -2971,13 +2973,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300",
+        "MAINMENU_OnPressChangePassword_Unref_00432300",
         "UIMENU_ChangePassword"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "f53866f2",
+      "dh": "5df76ee6",
       "paramStorage": [
         [
           "pControlMsg",
@@ -4821,7 +4823,7 @@
         "D2WINTEXTBOX_SetTextW",
         "D2CheckExpansionGame",
         "SetText",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINEDITBOX_SetFilterCallback",
         "SRegLoadString",
@@ -4839,7 +4841,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78b36a90"
+      "dh": "99b6659b"
     },
     {
       "name": "UIMENU_CreateHeroSinglePlayer",
@@ -4860,8 +4862,8 @@
         "GetLocaleString",
         "SetText",
         "D2WINTEXTBOX_SetLinePadding",
-        "D2WINMAIN_SetFormFourth",
-        "D2WINEDITBOX_SetPasswordMode",
+        "CONTROL_SetEscapeButton",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2CheckExpansionGame",
@@ -4875,7 +4877,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "afb337dc"
+      "dh": "7f05ef6a"
     },
     {
       "name": "fAPPMODE_launcher_ReturnAppMode_Caller",
@@ -4963,7 +4965,7 @@
       ]
     },
     {
-      "name": "MAINMENU_Unused10",
+      "name": "MAINMENU_OnPressSelectOpenBattleNet",
       "address": "00435d10",
       "lines": [
         {
@@ -4973,13 +4975,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_Unused10",
+        "MAINMENU_OnPressSelectOpenBattleNet",
         "UIMENU_MainMenuAgain"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "eb8af662",
+      "dh": "b701d51b",
       "paramStorage": [
         [
           "pControlMsg",
@@ -5230,7 +5232,7 @@
       ]
     },
     {
-      "name": "MAINMENU_OnPressSelectBattleNet_Unref_00436320",
+      "name": "MAINMENU_SetUIActiveAndMainMenuAgain",
       "address": "00436320",
       "lines": [
         {
@@ -5240,13 +5242,13 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "MAINMENU_OnPressSelectBattleNet_Unref_00436320",
+        "MAINMENU_SetUIActiveAndMainMenuAgain",
         "UIMENU_MainMenuAgain"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "ff7f34de",
+      "dh": "c3b19341",
       "paramStorage": [
         [
           "pControlMsg",
@@ -5435,7 +5437,7 @@
       ]
     },
     {
-      "name": "UI_ClearCursorAnimationState_Unref_00436ac0",
+      "name": "MAINMENU_ClearBnetProgressBarAndTimer",
       "address": "00436ac0",
       "lines": [
         {
@@ -5445,9 +5447,9 @@
       ],
       "namespace": "D2Launch::MainMenus",
       "calledFunctions": [
-        "UI_ClearCursorAnimationState_Unref_00436ac0"
+        "MAINMENU_ClearBnetProgressBarAndTimer"
       ],
-      "dh": "45304774"
+      "dh": "619712a7"
     },
     {
       "name": "MAINMENU_BnetConnectionProgress",
@@ -5472,7 +5474,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "c40c02d9"
+      "dh": "271b4ef2"
     },
     {
       "name": "MAINMENU_IsValidEmailAddress",
@@ -5725,7 +5727,7 @@
         "FORMS_CreateAnyFormFromListExEx",
         "SetText",
         "D2WINTEXTBOX_SetTextW",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINEDITBOX_SetTextFromAnsi",
@@ -5738,7 +5740,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "bd7817cd"
+      "dh": "f850afa7"
     },
     {
       "name": "UIMENU_YouWereDisconnectedFromBattleNet2",
@@ -5905,7 +5907,7 @@
         "SetText",
         "D2WINTEXTBOX_SetTextW",
         "D2WINEDITBOX_SetTextFromAnsi",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINMAIN_SetFocusedControl",
@@ -5917,7 +5919,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "97eb6aa8"
+      "dh": "0e49e1d2"
     },
     {
       "name": "MAINMENU_OnPressShowDisconnectedFromBattleNet2_ForBnetDisconnected3",
@@ -5998,7 +6000,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "402aaea8"
+      "dh": "f2ae8592"
     },
     {
       "name": "MAINMENU_OnPressSubmitEmailAddress",

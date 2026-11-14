@@ -197,11 +197,10 @@
         "D2ItemsTxt",
         "D2SeedStrc",
         "eAct",
-        "eD2LevelId",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7055df9",
+      "dh": "d64eb0c5",
       "paramStorage": [
         [
           "pSeed",
@@ -212,7 +211,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "eLevel",
+          "nItemLevel",
           "EAX:4"
         ],
         [
@@ -226,7 +225,7 @@
       ]
     },
     {
-      "name": "ITEMDROP_RollExceptionalItemClass",
+      "name": "ITEMDROP_RollArmorItemClass",
       "address": "00555e70",
       "lines": [
         {
@@ -236,7 +235,7 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "ITEMDROP_RollExceptionalItemClass",
+        "ITEMDROP_RollArmorItemClass",
         "TXT_Items_GetSize",
         "ITEMDROP_IsItemClassEligible"
       ],
@@ -245,11 +244,10 @@
         "D2ItemsTxt",
         "D2SeedStrc",
         "SGAMEDATA",
-        "eD2LevelId",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1a2402c",
+      "dh": "d4c6347f",
       "paramStorage": [
         [
           "pGame",
@@ -260,21 +258,21 @@
           "EDX:4"
         ],
         [
-          "eLevel",
+          "nItemLevel",
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ]
       ]
     },
     {
-      "name": "ITEMDROP_RollNormalItemClass",
+      "name": "ITEMDROP_RollWeaponItemClass",
       "address": "00555fb0",
       "lines": [
         {
@@ -284,7 +282,7 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "ITEMDROP_RollNormalItemClass",
+        "ITEMDROP_RollWeaponItemClass",
         "TXT_Items_GetSize",
         "ITEMDROP_IsItemClassEligible"
       ],
@@ -296,7 +294,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38b298d9",
+      "dh": "16c39b32",
       "paramStorage": [
         [
           "pGame",
@@ -307,21 +305,21 @@
           "EDX:4"
         ],
         [
-          "nMonsterLevel",
+          "nItemLevel",
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nLevelFilter",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ]
       ]
     },
     {
-      "name": "ITEMDROP_RollEliteItemClass",
+      "name": "ITEMDROP_RollMiscItemClass",
       "address": "005560f0",
       "lines": [
         {
@@ -331,7 +329,7 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "ITEMDROP_RollEliteItemClass",
+        "ITEMDROP_RollMiscItemClass",
         "TXT_Items_GetSize",
         "ITEMDROP_IsItemClassEligible"
       ],
@@ -341,11 +339,10 @@
         "D2ItemsTxt",
         "D2SeedStrc",
         "SGAMEDATA",
-        "eD2LevelId",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1d5aae1",
+      "dh": "4b03170f",
       "paramStorage": [
         [
           "pGame",
@@ -356,15 +353,15 @@
           "EDX:4"
         ],
         [
-          "eLevel",
+          "nItemLevel",
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ],
         [
@@ -387,9 +384,9 @@
         "ITEMDROP_RollItemClassByLevel",
         "TXT_Items_ConvertItemCodeToItemClassId",
         "RollBetweenMinAndMax",
-        "ITEMDROP_RollExceptionalItemClass",
-        "ITEMDROP_RollNormalItemClass",
-        "ITEMDROP_RollEliteItemClass",
+        "ITEMDROP_RollArmorItemClass",
+        "ITEMDROP_RollWeaponItemClass",
+        "ITEMDROP_RollMiscItemClass",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -400,7 +397,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "34913681",
+      "dh": "211cf46a",
       "paramStorage": [
         [
           "pGame",
@@ -411,11 +408,11 @@
           "Stack[0x8]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0xc]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0x10]:4"
         ],
         [
@@ -423,7 +420,7 @@
           "Stack[0x14]:4"
         ],
         [
-          "nLevel",
+          "nItemLevel",
           "EDI:4"
         ]
       ]
@@ -1420,16 +1417,16 @@
         "INVENTORY_RemoveItemFromOwner",
         "INVENTORY_GetFirstItem",
         "INVENTORY_GetHandItem",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "GetCarriedItem",
         "INVENTORY_GetNextItem",
-        "ItemBelongsToInventoryOfPlayer"
+        "INVENTORY_RemoveItem"
       ],
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "65fdc6e8",
+      "dh": "733d5026",
       "paramStorage": [
         [
           "pInventory",
@@ -1606,7 +1603,7 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "ffe8fa12",
+      "dh": "81ca1e91",
       "paramStorage": [
         [
           "pGame",
@@ -1808,14 +1805,15 @@
       "calledFunctions": [
         "RefreshDurability",
         "STATSEX_GetCurrentStat",
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "SetEvent"
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "int32_t"
       ],
-      "dh": "ecff7fa4",
+      "dh": "44868f95",
       "paramStorage": [
         [
           "pGame",
@@ -1840,14 +1838,15 @@
       "calledFunctions": [
         "RefreshQuantity",
         "STATSEX_GetCurrentStat",
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "SetEvent"
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "int32_t"
       ],
-      "dh": "46a4d0ac",
+      "dh": "e6ac0cd0",
       "paramStorage": [
         [
           "pGame",
@@ -1871,14 +1870,14 @@
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
         "ITEM_GetTotalMagicFind",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetOwnerUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "75f58982",
+      "dh": "ca7fd640",
       "paramStorage": [
         [
           "pUnit",
@@ -1951,7 +1950,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "93fe9900",
+      "dh": "bb16f9f7",
       "paramStorage": [
         [
           "nItemClassId",
@@ -1962,19 +1961,19 @@
           "ECX:4"
         ],
         [
-          "pAttacker",
+          "pGame",
           "Stack[0x4]:4"
         ],
         [
-          "pGame",
+          "pUnit",
           "Stack[0x8]:4"
         ],
         [
-          "pVictim",
+          "pAttacker",
           "Stack[0xc]:4"
         ],
         [
-          "pMagicFindUnit",
+          "pQualityMods",
           "Stack[0x10]:4"
         ]
       ]
@@ -1992,7 +1991,7 @@
       "calledFunctions": [
         "ITEM_ApplyGoldBonus",
         "ITEM_GetItemData_wType",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetOwnerUnit",
         "STATSEX_GetCurrentStat",
         "SetStat"
@@ -2002,7 +2001,7 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "0a45fce3",
+      "dh": "4bc35bec",
       "paramStorage": [
         [
           "pUnit",
@@ -2065,7 +2064,7 @@
         "InitializeStaticPath",
         "BlockCollisionPath",
         "DRLGROOM_AddUnitToRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "ITEM_CalculateDespawnTimer",
         "QUEST_OnItemDropped"
@@ -2076,7 +2075,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f0efea47",
+      "dh": "d6f18451",
       "paramStorage": [
         [
           "pGame",
@@ -2280,7 +2279,7 @@
         "SetStat",
         "STATLIST_SetUnitStat",
         "GetPlayerData",
-        "ITEM_GetPlayerNameAkaNamedString",
+        "ITEMS_SetPlayerName",
         "STATSEX_GetCurrentStat",
         "ITEM_SetItemData_nEarLevel",
         "SUNIT_GetClient",
@@ -2307,7 +2306,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4ea0e495",
+      "dh": "f49c1c6e",
       "paramStorage": [
         [
           "pGame",
@@ -2424,7 +2423,7 @@
       ]
     },
     {
-      "name": "DROP_SpawnExceptionalItem",
+      "name": "DROP_SpawnArmorItem",
       "address": "005594c0",
       "lines": [
         {
@@ -2434,10 +2433,10 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "DROP_SpawnExceptionalItem",
+        "DROP_SpawnArmorItem",
         "DRLGROOM_GetLevelIdFromRoom",
         "TXT_Levels_GetMonLvlForDifficulty",
-        "ITEMDROP_RollExceptionalItemClass",
+        "ITEMDROP_RollArmorItemClass",
         "FindBestSpotToSpawnItem",
         "memset",
         "ITEM_CreateItemInstance",
@@ -2453,7 +2452,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "ac7f7c4d",
+      "dh": "d4359c3f",
       "paramStorage": [
         [
           "pGame",
@@ -2468,11 +2467,11 @@
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ],
         [
@@ -2482,7 +2481,7 @@
       ]
     },
     {
-      "name": "DROP_SpawnNormalItem",
+      "name": "DROP_SpawnWeaponItem",
       "address": "00559630",
       "lines": [
         {
@@ -2492,10 +2491,10 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "DROP_SpawnNormalItem",
+        "DROP_SpawnWeaponItem",
         "DRLGROOM_GetLevelIdFromRoom",
         "TXT_Levels_GetMonLvlForDifficulty",
-        "ITEMDROP_RollNormalItemClass",
+        "ITEMDROP_RollWeaponItemClass",
         "TXT_Items_GetBitFieldAnd0x02",
         "DRLGROOM_FindBetterNearbyRoom",
         "GetFreeCoordinates_WithFieldCoords",
@@ -2514,7 +2513,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7fc9ce8",
+      "dh": "aa611a2e",
       "paramStorage": [
         [
           "pGame",
@@ -2529,11 +2528,11 @@
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ],
         [
@@ -2543,7 +2542,7 @@
       ]
     },
     {
-      "name": "DROP_SpawnEliteItem",
+      "name": "DROP_SpawnMiscItem",
       "address": "00559830",
       "lines": [
         {
@@ -2553,11 +2552,11 @@
       ],
       "namespace": "D2Game::ITEMS::Items::Drop",
       "calledFunctions": [
-        "ITEMDROP_RollEliteItemClass",
-        "DROP_SpawnEliteItem",
+        "DROP_SpawnMiscItem",
         "DRLGROOM_GetLevelIdFromRoom",
         "DRLGROOM_IsRoomInTown",
         "TXT_Levels_GetMonLvlForDifficulty",
+        "ITEMDROP_RollMiscItemClass",
         "DRLGROOM_FindBetterNearbyRoom",
         "GetFreeCoordinates_WithFieldCoords",
         "memset",
@@ -2574,7 +2573,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "565e5602",
+      "dh": "093d9ab7",
       "paramStorage": [
         [
           "pGame",
@@ -2589,11 +2588,11 @@
           "Stack[0x4]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x8]:4"
         ],
         [
-          "nMonsterLevel",
+          "bSkipRarityRoll",
           "Stack[0xc]:4"
         ],
         [
@@ -2622,7 +2621,7 @@
         "TXT_Levels_GetMonLvlForDifficulty",
         "ITEMDROP_RollItemClassByLevel",
         "TXT_Items_GetLine",
-        "ITEMDROP_RollNormalItemClass",
+        "ITEMDROP_RollWeaponItemClass",
         "TXT_Items_ConvertItemCodeToItemClassId",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -2641,12 +2640,12 @@
         "D2UnitStrc *",
         "POINT",
         "SGAMEDATA",
-        "eD2ItemTypes",
+        "eD2ItemQuality",
         "eD2LevelId",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3020aa03",
+      "dh": "af72f359",
       "paramStorage": [
         [
           "pGame",
@@ -2657,7 +2656,7 @@
           "EDX:4"
         ],
         [
-          "eItemType",
+          "eQuality",
           "Stack[0x4]:4"
         ],
         [
@@ -2669,11 +2668,11 @@
           "Stack[0xc]:4"
         ],
         [
-          "nTCFilter",
+          "nItemTypeFilter",
           "Stack[0x10]:4"
         ],
         [
-          "nParam2",
+          "bSkipRarityRoll",
           "Stack[0x14]:4"
         ]
       ]
@@ -2775,13 +2774,13 @@
         "ITEM_GetTxtItemTypes_throwable",
         "STATSEX_GetCurrentStat",
         "CheckItemFlag",
-        "ITEMMODE_SendItemUpdate",
+        "ITEMMODE_BreakItem",
         "ITEM_GetItemData_wItemVersion",
         "STATLIST_SetUnitStat",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
         "PLRMODES_CheckWeaponQuantityAndDurability",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "ITEM_GetMaxStack",
         "RefreshDurability"
       ],
@@ -2794,7 +2793,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "93f66e88",
+      "dh": "24725bbe",
       "paramStorage": [
         [
           "pGame",
@@ -2928,7 +2927,7 @@
         "ExtractItemDetails",
         "ITEM_CreateFromSaveData",
         "ITEM_EditItemData_eItemFlag",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetGUID",
         "PutItemInItem",
         "GetInstructionPointer",
@@ -2936,7 +2935,7 @@
         "exit",
         "ITEM_EditItemData_eD2ItemCmd",
         "STATSEX_GetCurrentStat",
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "SetEvent",
         "ITEM_ClearFlagsAndCommands",
         "__security_check_cookie"
@@ -2950,7 +2949,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5f1deabf",
+      "dh": "2198b87d",
       "paramStorage": [
         [
           "pGame",
@@ -3000,20 +2999,16 @@
         "D2UnitStrc",
         "POINT",
         "SGAMEDATA",
-        "eD2ItemTypes",
+        "eD2ItemQuality",
         "eD2LevelId",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e0b55b26",
+      "dh": "385f1de5",
       "paramStorage": [
         [
           "nItemClassId",
           "ECX:4"
-        ],
-        [
-          "eD2ItemType",
-          "EDX:4"
         ],
         [
           "pUnit",
@@ -3024,7 +3019,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "eItemType",
+          "eQuality",
           "Stack[0x8]:4"
         ],
         [
@@ -3064,7 +3059,7 @@
         "ITEM_ApplyGoldBonus",
         "TC_GetParsedTreasureClassByLevel",
         "GetOwnerUnit",
-        "CountDeadPartyMembers",
+        "PARTY_GetLivingPartyMemberCountInSameLevel",
         "SERVER_GAME_CountPlayers",
         "GetType",
         "__security_check_cookie"
@@ -3078,6 +3073,7 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
+        "eD2ItemQuality",
         "eD2ItemTypes",
         "eD2UnitType",
         "int16_t",
@@ -3086,7 +3082,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "88b77b7b",
+      "dh": "2c7ff1fd",
       "paramStorage": [
         [
           "pGame",
@@ -3105,7 +3101,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "eItemType",
+          "eQuality",
           "Stack[0xc]:4"
         ],
         [
@@ -3153,11 +3149,11 @@
         "D2UnitStrc",
         "D2UnitStrc *",
         "SGAMEDATA",
-        "eD2ItemTypes",
+        "eD2ItemQuality",
         "int32_t",
         "uint16_t"
       ],
-      "dh": "ea9fad1d",
+      "dh": "cfd0ea93",
       "paramStorage": [
         [
           "pGame",
@@ -3176,7 +3172,7 @@
           "Stack[0x8]:2"
         ],
         [
-          "eItemType",
+          "eQuality",
           "Stack[0xc]:4"
         ],
         [

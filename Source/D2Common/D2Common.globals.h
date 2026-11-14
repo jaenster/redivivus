@@ -70,6 +70,8 @@ struct D2PetTypeTxt;
 struct D2PlayerClassTxt;
 struct D2PlrModeTxt;
 struct D2PropertiesTxt;
+struct D2RunesTxt;
+struct D2RunesTxtTableStrc;
 struct D2SetItemsTxt;
 struct D2SetsTxt;
 struct D2SkillCalcTxt;
@@ -95,6 +97,9 @@ struct D2GemsTableStrc {
 };
 #endif // D2_DEFINED_D2GemsTableStrc
 
+namespace D2Common::DATATBLS::ItemTbls {
+extern D2RunesTxtTableStrc nTxtRunesSize;
+} // namespace D2Common::DATATBLS::ItemTbls
 namespace D2Common::ITEMS::Items {
 extern D2DataTableTxtStrc * sgptDataTable;
 } // namespace D2Common::ITEMS::Items
@@ -140,7 +145,7 @@ extern int nTxtLvlSubSize;
 } // namespace D2Common::DATATBLS::LvlTbls
 namespace D2Common::DATATBLS::MonsterTbls {
 extern D2DataTableTxtStrc sgtDataTable;
-extern unsigned int gnTreasureClassArraySize;
+extern unsigned int gnMonItemPercentTxtRecordCount;
 } // namespace D2Common::DATATBLS::MonsterTbls
 namespace D2Common::DATATBLS::ObjectTbls {
 extern D2ObjectsTxt * sgpTxtObjects;

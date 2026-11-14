@@ -103,12 +103,12 @@
       "namespace": "D2Win::Src::D2WinPalette",
       "calledFunctions": [
         "D2GFX_GetColorFromCurrentPallete",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "uint8_t"
       ],
-      "dh": "4ee3ea42",
+      "dh": "4a467712",
       "paramStorage": [
         [
           "nRed",
@@ -177,7 +177,7 @@
         "ReturnZero",
         "D2FILE_AllocAndLoadD2File",
         "memcpy",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "D2WINPALETTE_LoadPalettes",
         "D2GFX_SetPalette",
         "FreeClientMemory"
@@ -189,7 +189,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a1b3a268",
+      "dh": "4396aee4",
       "paramStorage": [
         [
           "szText1",
@@ -257,7 +257,7 @@
       ]
     },
     {
-      "name": "D2WINPAL_SetGammaRamp",
+      "name": "D2WINTEXTBOX_SetCompactLineSpacing",
       "address": "004fb590",
       "lines": [
         {
@@ -267,9 +267,9 @@
       ],
       "namespace": "D2Win::Src::D2WinPalette",
       "calledFunctions": [
-        "D2WINPAL_SetGammaRamp"
+        "D2WINTEXTBOX_SetCompactLineSpacing"
       ],
-      "dh": "bfa429ee",
+      "dh": "a9dc74e6",
       "paramStorage": [
         [
           "bCompactLineSpacingMode",

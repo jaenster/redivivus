@@ -31,13 +31,13 @@ typedef BOOL (__stdcall *OnPress)(D2ControlMsg * pControlMsg);
 #define RECON_FPTD_fpD2WinAnimImageNotify
 typedef void (__stdcall *fpD2WinAnimImageNotify)(void * pNotify);
 #endif
-#ifndef RECON_FPTD_Draw
-#define RECON_FPTD_Draw
-typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
-#endif
 #ifndef RECON_FPTD_DrawAnim
 #define RECON_FPTD_DrawAnim
 typedef BOOL (__fastcall *DrawAnim)(D2ControlStrc * pControl);
+#endif
+#ifndef RECON_FPTD_Draw
+#define RECON_FPTD_Draw
+typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 #endif
 
 namespace D2Win {
@@ -77,7 +77,7 @@ BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage
     return 1;
 }
 
-BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage) {
+BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage) {
     int32_t nOffsetX;
     D2GfxDataStrc sGfxData;
     int nPosX;
@@ -130,7 +130,7 @@ static BOOL D2WINANIMIMAGE_UpdateFrame(::D2WinAnimImage * pAnimImage) {
     uint32_t nAnimStateCopy;
     nAnimStateCopy = pAnimImage->nAnimState;
     if (!nAnimStateCopy || nAnimStateCopy == 1) {
-      bHitTest = DrawAnim(pAnimImage);
+      bHitTest = D2WINANIMIMAGE_HitTest(pAnimImage);
       nFrameCount = (uint32_t)(bHitTest != 0);
       pAnimImage->nAnimState = nFrameCount;
       if (nAnimStateCopy != nFrameCount) {
@@ -357,7 +357,7 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
     pNewAnimImage->dwAnimStartTick = dwTick;
     pNewAnimImage->nAnimState = 0;
     if (pAnimFrames) {
-      pNewAnimImage->sControl.fpDrawAnim = (::DrawAnim)DrawAnim;
+      pNewAnimImage->sControl.fpHitTest = (DrawAnim)D2WINANIMIMAGE_HitTest;
     }
     if (eDrawMode == DRAW_VERYTRANSPARENT) {
       pNewAnimImage->eDrawMode = DRAW_SOLID;

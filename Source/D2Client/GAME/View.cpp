@@ -75,7 +75,7 @@ uint8_t * * gpViewPalPointerTable32x32 = 0; D2_GLOBAL_GUARD(gpViewPalPointerTabl
 uint8_t * gpViewPalByteTable32x40 = 0; D2_GLOBAL_GUARD(gpViewPalByteTable32x40, "D2Client::GAME::View::gpViewPalByteTable32x40");
 } // namespace D2Client::GAME::View
 static DC6 * gpAncientsBgDC6 = 0; D2_STATIC_GUARD(gpAncientsBgDC6, "gpAncientsBgDC6");
-static DC6 * gnDrawBackgroundRenderOffset = 0; D2_STATIC_GUARD(gnDrawBackgroundRenderOffset, "gnDrawBackgroundRenderOffset");
+static DC6 * gpCloudBackgroundDC6 = 0; D2_STATIC_GUARD(gpCloudBackgroundDC6, "gpCloudBackgroundDC6");
 static uint32_t gnFrameDrawCounter = 0; D2_STATIC_GUARD(gnFrameDrawCounter, "gnFrameDrawCounter");
 
 namespace D2Client::GAME::View {
@@ -297,12 +297,12 @@ void __stdcall VIEW_FreeDC6Images() {
       Core::Archive::DC6_FreeAndDelete(gpAncientsBgDC6);
       gpAncientsBgDC6 = 0;
     }
-    if (!gnDrawBackgroundRenderOffset) {
+    if (!gpCloudBackgroundDC6) {
       return;
     }
 
-    Core::Archive::DC6_FreeAndDelete(gnDrawBackgroundRenderOffset);
-    gnDrawBackgroundRenderOffset = 0;
+    Core::Archive::DC6_FreeAndDelete(gpCloudBackgroundDC6);
+    gpCloudBackgroundDC6 = 0;
 }
 
 // Frees all five global palette lookup tables (gpViewPalPointerTable32x8, gpViewPalByteTable32x16, gpViewPalByteTable16x32, gpViewPalPointerTable32x32, gpViewPalByteTable32x40) via D2MEM_VirtualFree, NULLs them, resets gnSoundShakeVolume to 0, and calls VIEW_FreeDC6Images. Halts with an internal error if any table is NULL while an earlier one is not.
@@ -575,14 +575,14 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     }
     if (!(gbAncientsScrollInitialized & 1)) {
       gbAncientsScrollInitialized |= 1;
-      gnAncientsScrollBaseX = D2Common::Units::GetTargetX(pPlayerUnit);
+      gnAncientsScrollBaseX = D2Common::Units::GetScreenX(pPlayerUnit);
     }
     if (gbAncientsScrollBaseXSet == '\0') {
       gbAncientsScrollBaseXSet = '\x01';
       gnAncientsScrollBaseX = 0x274f;
     }
 
-    int32_t nTargetX = D2Common::Units::GetTargetX(pPlayerUnit);
+    int32_t nTargetX = D2Common::Units::GetScreenX(pPlayerUnit);
     gnAncientsScrollDelta = nTargetX - gnAncientsScrollBaseX;
     int nScrollOffset = gnAncientsScrollDelta + (gnAncientsScrollDelta >> 0x1f & 7U);
     uint32_t nCloudFrame = nScrollOffset >> 3;
@@ -602,11 +602,11 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
       memcpy(szFilePath, "data\\global\\ui\\summit01", 0x18);
       gpAncientsBgDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
-    if (!gnDrawBackgroundRenderOffset) {
+    if (!gpCloudBackgroundDC6) {
       pStrSrc = "data\\global\\ui\\cloud01";
       pStrDst = szFilePath;
       memcpy(pStrDst, pStrSrc, 23);
-      gnDrawBackgroundRenderOffset = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
+      gpCloudBackgroundDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
 
     DC6* pSummitDC6 = gpAncientsBgDC6;
@@ -658,7 +658,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
         }
       }
     }
-    if (!gnDrawBackgroundRenderOffset) {
+    if (!gpCloudBackgroundDC6) {
       return;
     }
 
@@ -700,7 +700,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     nScrollOffset = 0;
     do {
       nCloudIdx = *(int*)((char*)gaAncientsCloudXPos + nScrollOffset) / 16;
-      sGfxData.pDC6 = gnDrawBackgroundRenderOffset;
+      sGfxData.pDC6 = gpCloudBackgroundDC6;
       sGfxData.nFrameNumber = 0;
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nCloudIdx, *(int32_t*)((char*)gaAncientsCloudYPos + nScrollOffset), -0x22222223, DRAW_LIGHTTRANSPARENT, nullptr);
       sGfxData.nFrameNumber = 1;
@@ -709,7 +709,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     } while (nScrollOffset < 0x28);
 }
 
-void __stdcall RENDERER_TogglePerspective_Unref_004769b0() {
+void __stdcall VIEW_ToggleFrameDrawCounter() {
     gnFrameDrawCounter = (uint32_t)!gnFrameDrawCounter;
 }
 
@@ -864,7 +864,7 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
       if (SHAKE_Amplitude) {
         nShakeOffsetX = SHAKE_OFFSET_X << 0x10;
         nShakeOffsetY = SHAKE_OFFSET_Y << 0x10;
-        D2Common::Drlg::Transform::DRLG_WorldToScreenShift5(&nShakeOffsetX, &nShakeOffsetY);
+        D2Common::Drlg::Transform::DRLG_ScreenToWorldShift5(&nShakeOffsetX, &nShakeOffsetY);
         nXScale += nShakeOffsetX;
         nYScale += nShakeOffsetY;
       }
@@ -894,9 +894,9 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
         Core::Archive::DC6_FreeAndDelete(gpAncientsBgDC6);
         gpAncientsBgDC6 = 0;
       }
-      if (gnDrawBackgroundRenderOffset) {
-        Core::Archive::DC6_FreeAndDelete(gnDrawBackgroundRenderOffset);
-        gnDrawBackgroundRenderOffset = 0;
+      if (gpCloudBackgroundDC6) {
+        Core::Archive::DC6_FreeAndDelete(gpCloudBackgroundDC6);
+        gpCloudBackgroundDC6 = 0;
       }
     }
     if (pGameView->sWall2.dwWall2PassMask & Fog::BitBuffer::gadwBitMasks[0]) {

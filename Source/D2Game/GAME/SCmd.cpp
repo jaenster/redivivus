@@ -806,7 +806,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(D2ClientStrc * pClie
 }
 
 // Server-to-client player HP/MP update. Opcode 0x18.
-void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint8_t bLifePercent, uint8_t bManaPercent, uint16_t nMaxLife, uint16_t nMaxMana, uint8_t bMaxLifePercent, uint8_t bMaxManaPercent) {
+void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint8_t bLifePercent, uint8_t bManaPercent, uint16_t nX, uint16_t nY, uint8_t nDeltaX, uint8_t nDeltaY) {
     D2BitBufferStrc bitBuf;
     uint8_t pktBuf[16];
     Fog::BitBuffer::InitBitBuffer(&bitBuf, pktBuf, 0xf);
@@ -816,10 +816,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(D2ClientStr
     Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nStamina, 0xf);
     Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)bLifePercent, 7);
     Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)bManaPercent, 7);
-    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nMaxLife, 0x10);
-    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nMaxMana, 0x10);
-    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)bMaxLifePercent, 8);
-    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)bMaxManaPercent, 8);
+    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nX, 0x10);
+    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nY, 0x10);
+    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nDeltaX, 8);
+    Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, (uint32_t)nDeltaY, 8);
     size_t nSize = Fog::BitBuffer::GetNextPositon(&bitBuf);
     SCMD_QueuePacketForClient(pClient, pktBuf, nSize);
 }
@@ -1174,15 +1174,15 @@ void __fastcall NET_D2GS_SERVER_Send_0x79_TRADEGOLD(D2ClientStrc * pClient, uint
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
-static BOOL SCMD_DetectPositionDesync(D2PartyDataStrc * pState, int32_t nNewPos) {
-    int nDelta = nNewPos - pState->nLifePercent;
+static BOOL SCMD_ShouldSendLifeUpdate(D2PartyDataStrc * pLifeState, int32_t nLifePercent) {
+    int nDelta = nLifePercent - pLifeState->nLifePercent;
     if (nDelta) {
       if (nDelta < 0) {
         nDelta = -nDelta;
       }
-      if (nDelta > 8 || (*(char*)&pState->field3_0xc += '\x01' , *(uint8_t*)&pState->field3_0xc > 6)) {
-        *(uint8_t*)&pState->field3_0xc = 0;
-        pState->nLifePercent = nNewPos;
+      if (nDelta > 8 || (pLifeState->nSkippedUpdates++ , pLifeState->nSkippedUpdates > 6)) {
+        pLifeState->nSkippedUpdates = 0;
+        pLifeState->nLifePercent = nLifePercent;
         return 1;
       }
     }
@@ -1191,67 +1191,67 @@ static BOOL SCMD_DetectPositionDesync(D2PartyDataStrc * pState, int32_t nNewPos)
 }
 
 // Detects position desync for an owned monster. Verifies pUnit2 is a monster owned by pUnit, then compares its stored position against nNewPos. If the delta exceeds 8 units, or if a consecutive-desync counter exceeds 6, resets the counter and snaps the stored position to nNewPos, returning 1. Returns 0 if in sync or guard conditions fail.
-static BOOL __stdcall SCMD_CheckMonsterPositionDesync(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nNewPos) {
-    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit2);
-    if (pOwner != pUnit) {
+static BOOL __stdcall SCMD_ShouldSendPetLifeUpdate(D2UnitStrc * pRecipient, D2UnitStrc * pPet, int32_t nLifePercent) {
+    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pPet);
+    if (pOwner != pRecipient) {
       return 0;
     }
-    if (!pUnit2) {
+    if (!pPet) {
       return 0;
     }
-    if (pUnit2->eUnitType != UNIT_MONSTER) {
+    if (pPet->eUnitType != UNIT_MONSTER) {
       return 0;
     }
 
-    D2UnitDataMonsterStrc* pDVar1 = pUnit2->pUnitData.pUnitDataMonster;
+    D2UnitDataMonsterStrc* pDVar1 = pPet->pUnitData.pUnitDataMonster;
     if (!pDVar1) {
       return 0;
     }
     if (!&pDVar1->nOwnerGUID) {
       return 0;
     }
-    if (pDVar1->nNecroPetGUID == nNewPos) {
+    if (pDVar1->nNecroPetGUID == nLifePercent) {
       return 0;
     }
 
-    BOOL BVar2 = SCMD_DetectPositionDesync((D2PartyDataStrc*)&pDVar1->nOwnerGUID, nNewPos);
+    BOOL BVar2 = SCMD_ShouldSendLifeUpdate((D2PartyDataStrc*)&pDVar1->nOwnerGUID, nLifePercent);
     return BVar2;
 }
 
 // Ensures a D2PartyDataStrc entry exists in pUnit2's player-data party list for the unit identified by pUnit, then checks whether the position/life snapshot has changed enough to warrant a network update. Both units must share the same party ID. Allocates a new node from the server memory pool if one is not found. Returns 1 if a state update should be broadcast (area changed, or life delta &gt;8 accumulated 6+ times), 0 otherwise.
 // @sourcefile .\GAME\SCmd.cpp
-static BOOL __stdcall PLAYERDATA_AllocPartyData(D2UnitStrc * pUnit, int32_t nUnitLife, eD2LevelId eLevel, D2UnitStrc * pUnit2) {
+static BOOL __stdcall SCMD_ShouldSendPartyLifeUpdate(D2UnitStrc * pTarget, int32_t nLifePercent, eD2LevelId eLevel, D2UnitStrc * pRecipient) {
     int nUnitGUID;
     ::SGAMEDATA* pGame;
-    pGame = UNIT::SUnit::GetGamePointer(pUnit2);
+    pGame = UNIT::SUnit::GetGamePointer(pRecipient);
     if (!pGame) {
       return 0;
     }
 
     int16_t nPartyId2;
-    nPartyId2 = UNIT::Party::GetPartyIdFromUnit(pGame, pUnit2);
+    nPartyId2 = UNIT::Party::GetPartyIdFromUnit(pGame, pRecipient);
     if (nPartyId2 == -1) {
       return 0;
     }
 
     int16_t nPartyId1;
-    nPartyId1 = UNIT::Party::GetPartyIdFromUnit(pGame, pUnit);
+    nPartyId1 = UNIT::Party::GetPartyIdFromUnit(pGame, pTarget);
     if (nPartyId2 != nPartyId1) {
       return 0;
     }
 
     D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit2);
+    pPlayerData = D2Common::Units::GetPlayerData(pRecipient);
     if (!pPlayerData) {
       return 0;
     }
 
     D2PartyDataStrc* pPartyData;
     pPartyData = pPlayerData->pPartyData;
-    if (!pUnit) {
+    if (!pTarget) {
       nUnitGUID = -1;
     } else {
-      nUnitGUID = pUnit->nUnitGUID;
+      nUnitGUID = pTarget->nUnitGUID;
     }
 
     for (; pPartyData; pPartyData = pPartyData->pPrev) {
@@ -1266,18 +1266,18 @@ static BOOL __stdcall PLAYERDATA_AllocPartyData(D2UnitStrc * pUnit, int32_t nUni
       pPartyData->nUnitGUID = 0;
       pPartyData->nLifePercent = 0;
       pPartyData->eLevelId = LEVEL_None;
-      pPartyData->field3_0xc = 0;
+      *(uint32_t*)&pPartyData->nSkippedUpdates = 0;
       pPartyData->pPrev = 0;
       pPartyData->pPrev = pPlayerData->pPartyData;
       pPlayerData->pPartyData = pPartyData;
       pPartyData->nUnitGUID = nUnitGUID;
       check_update_needed:
       if (pPartyData->eLevelId != eLevel) {
-        pPartyData->nLifePercent = nUnitLife;
+        pPartyData->nLifePercent = nLifePercent;
         pPartyData->eLevelId = eLevel;
         return 1;
       }
-      BVar1 = SCMD_DetectPositionDesync(pPartyData, nUnitLife);
+      BVar1 = SCMD_ShouldSendLifeUpdate(pPartyData, nLifePercent);
       return BVar1;
     }
 
@@ -1295,12 +1295,12 @@ static BOOL __stdcall SCMD_DispatchUnitPartyData(D2UnitStrc * pUnit, int32_t nUn
         switch (pUnit2->eUnitType) {
           case UNIT_PLAYER:
             {
-              nPartyDataChanged = PLAYERDATA_AllocPartyData(pUnit2, nUnitLife, eLevel, pUnit);
+              nPartyDataChanged = SCMD_ShouldSendPartyLifeUpdate(pUnit2, nUnitLife, eLevel, pUnit);
               return nPartyDataChanged;
             }
           case UNIT_MONSTER:
             {
-              nResult = SCMD_CheckMonsterPositionDesync(pUnit, pUnit2, nUnitLife);
+              nResult = SCMD_ShouldSendPetLifeUpdate(pUnit, pUnit2, nUnitLife);
               return nResult;
             }
           default:
@@ -2116,13 +2116,13 @@ void __fastcall NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(D2ClientStrc * pClient, D
     SCMD_QueuePacketForClient(pClient, &nD2GSPacketSrv0x91.nPacketId, 0x1a);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(D2ClientStrc * pClient, uint32_t nUnitGUID, uint16_t wWaypointData) {
+void __fastcall NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(D2ClientStrc * pClient, uint32_t nUnitGUID, uint16_t wSpawnClassId) {
     D2GSPacketSrv0x98 tPacket;
     memset(&tPacket, 0, sizeof(tPacket));
     *(uint8_t*)((char*)&tPacket.nUnitGUID + 3) = (uint8_t)(nUnitGUID >> 0x18);
     d2_store24((char*)&tPacket.nUnitGUID, (int32_t)((uint32_t)nUnitGUID << 8) >> 8);
     tPacket.nPacketId = 0x98;
-    tPacket.wValue = wWaypointData;
+    tPacket.wValue = wSpawnClassId;
     SCMD_QueuePacketForClient(pClient, &tPacket.nPacketId, 7);
 }
 

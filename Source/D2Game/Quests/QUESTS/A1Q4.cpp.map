@@ -15,7 +15,7 @@
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
         "Q04_UpdateCainNpcAnimState",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestDataA1Q3Strc",
@@ -23,7 +23,7 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "77da363d",
+      "dh": "8e4eccbb",
       "paramStorage": [
         [
           "pCainUnit",
@@ -295,7 +295,7 @@
       ]
     },
     {
-      "name": "Q04_DespawnRogueGuards",
+      "name": "Q04_RemoveCainFromTristram",
       "address": "005928c0",
       "lines": [
         {
@@ -305,20 +305,20 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Q04_DespawnRogueGuards",
+        "Q04_RemoveCainFromTristram",
         "HasAiSub",
         "ClearAISub",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "GetQuestDataByQuestNoInternal"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c98a11dd",
+      "dh": "c04c8ab3",
       "paramStorage": [
         [
           "pGame",
@@ -465,7 +465,7 @@
       "calledFunctions": [
         "Q04_DeactivateCairnStones",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "QUEST_SetStateAndBroadcast",
         "QUEST_SetStateFlag",
         "IteratePlayerOrMonsterUnits"
@@ -474,7 +474,7 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "81fde931",
+      "dh": "2534f6ac",
       "paramStorage": [
         [
           "pQuestData",
@@ -922,7 +922,7 @@
       ]
     },
     {
-      "name": "Q04_TimerDespawnRogueGuards",
+      "name": "Q04_TimerRemoveCainFromTristram",
       "address": "00593260",
       "lines": [
         {
@@ -932,8 +932,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Q04_DespawnRogueGuards",
-        "Q04_TimerDespawnRogueGuards",
+        "Q04_TimerRemoveCainFromTristram",
         "IteratePlayerOrMonsterUnits"
       ],
       "usedTypes": [
@@ -941,7 +940,7 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "0fcd9ee7",
+      "dh": "ea981a4b",
       "paramStorage": [
         [
           "pGame",
@@ -966,7 +965,7 @@
       "calledFunctions": [
         "MakeTownPortalFromScroolTree",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
         "UNITS_GetRoom",
@@ -991,7 +990,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5dc6d5b9",
+      "dh": "2e14baa6",
       "paramStorage": [
         [
           "pGame",
@@ -1019,7 +1018,7 @@
         "GetPlayerData",
         "GetQuestState",
         "TXT_Objects_GetLine",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent",
         "UNITS_GetRoom",
         "ToggleHasPortalFlagRoom",
@@ -1039,7 +1038,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "4b18f422",
+      "dh": "38d291c1",
       "paramStorage": [
         [
           "pOperation",
@@ -1060,7 +1059,7 @@
       "calledFunctions": [
         "Objects_InitFn06_CairnStone",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "AddQuestTimer"
       ],
       "usedTypes": [
@@ -1071,7 +1070,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d4e0460",
+      "dh": "6cd9731b",
       "paramStorage": [
         [
           "pInitArg",
@@ -1145,7 +1144,7 @@
         "FindUnitFromTable",
         "QuestStartDebugNotify",
         "QUEST_SetStateFlag",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "QUEST_RemoveQuestItemFromPlayer",
         "GetCoords",
         "UNITS_GetRoom",
@@ -1173,7 +1172,7 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "2df97a68",
+      "dh": "ffb53062",
       "paramStorage": [
         [
           "pOperation",
@@ -1205,7 +1204,7 @@
         "QUEST_SetStateFlag",
         "ITEM_RewardItemToDrop",
         "QUEST_SetStateAndBroadcast",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg",
@@ -1214,7 +1213,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "58b82f35",
+      "dh": "429b884a",
       "paramStorage": [
         [
           "pOperation",
@@ -1382,7 +1381,7 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "125345e7",
+      "dh": "027fefc4",
       "paramStorage": [
         [
           "pQuestData",
@@ -1462,12 +1461,12 @@
       "calledFunctions": [
         "Objects_InitFn09_InifussTree",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "1949f413",
+      "dh": "432cce16",
       "paramStorage": [
         [
           "pInitArg",
@@ -1489,13 +1488,13 @@
         "Objects_InitFn13_InvisibleObject",
         "GetQuestDataByQuestNoInternal",
         "QUEST_AttachToUnitByQuestId",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "610bdbc7",
+      "dh": "b31cd72f",
       "paramStorage": [
         [
           "pInitArg",
@@ -1515,14 +1514,14 @@
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
         "Q04_InitializeCainGibbetObject",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "6a1db329",
+      "dh": "b54cec3e",
       "paramStorage": [
         [
           "pQuestData",
@@ -1707,13 +1706,13 @@
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
         "Objects_InitFn61_CainPortal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "959b325a",
+      "dh": "a8633b1c",
       "paramStorage": [
         [
           "pInitArg",
@@ -1722,7 +1721,7 @@
       ]
     },
     {
-      "name": "Q33_UpdateFrozenAnyaNpcState",
+      "name": "Q04_UpdateCainPortalInTown",
       "address": "005942c0",
       "lines": [
         {
@@ -1732,14 +1731,14 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q4",
       "calledFunctions": [
-        "Q33_UpdateFrozenAnyaNpcState",
+        "Q04_UpdateCainPortalInTown",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
-        "D2QuestDataA5Q3Strc",
+        "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc",
         "D2RoomStrc",
         "D2UnitStrc",
@@ -1748,7 +1747,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "35afa30d",
+      "dh": "48fbf9f7",
       "paramStorage": [
         [
           "pQuestData",
@@ -2018,7 +2017,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "472bcbd8",
+      "dh": "62dcfcf2",
       "paramStorage": [
         [
           "pQuestData",
@@ -2074,7 +2073,7 @@
       "calledFunctions": [
         "Q04_ActivateCairnStonesAndTree",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "IteratePlayerOrMonsterUnits",
         "AddQuestTimer",
         "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId"
@@ -2084,7 +2083,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "7f0fefe7",
+      "dh": "ad81445e",
       "paramStorage": [
         [
           "bDeferGuardDespawn",

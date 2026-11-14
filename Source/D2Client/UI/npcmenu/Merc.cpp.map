@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "NPCMENU_GetMercHireCost",
+      "name": "NPCMENU_GetGameQuestRecord",
       "address": "004b32e0",
       "lines": [
         {
@@ -59,12 +59,12 @@
       ],
       "namespace": "D2Client::UI::npcmenu::Merc",
       "calledFunctions": [
-        "NPCMENU_GetMercHireCost"
+        "NPCMENU_GetGameQuestRecord"
       ],
       "usedTypes": [
         "D2BitBufferStrc"
       ],
-      "dh": "f33351d3"
+      "dh": "5c75cf19"
     },
     {
       "name": "NPCMENU_SetSelectedMercIndex",

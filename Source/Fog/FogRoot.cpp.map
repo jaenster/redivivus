@@ -246,7 +246,7 @@
       ]
     },
     {
-      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70",
+      "name": "THREADING_EnterCriticalSection_Thunk",
       "address": "0040eb70",
       "lines": [
         {
@@ -256,9 +256,9 @@
       ],
       "namespace": "Fog",
       "calledFunctions": [
-        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70"
+        "THREADING_EnterCriticalSection_Thunk"
       ],
-      "dh": "a6b48283",
+      "dh": "55c74a2a",
       "paramStorage": [
         [
           "pElement",
@@ -267,7 +267,7 @@
       ]
     },
     {
-      "name": "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80",
+      "name": "THREADING_LeaveCriticalSection_Thunk",
       "address": "0040eb80",
       "lines": [
         {
@@ -277,9 +277,9 @@
       ],
       "namespace": "Fog",
       "calledFunctions": [
-        "THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80"
+        "THREADING_LeaveCriticalSection_Thunk"
       ],
-      "dh": "c1efa03c",
+      "dh": "9ec100aa",
       "paramStorage": [
         [
           "pElement",

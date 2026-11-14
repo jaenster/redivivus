@@ -309,8 +309,8 @@ static void __stdcall SOUND_CalculateUnitDirection(D2UnitStrc * pUnit, int32_t n
     POINT ptPlayer;
     POINT ptUnit;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    D2Common::Units::GetTargetCoords(pPlayerUnit_lcl, &ptPlayer);
-    D2Common::Units::GetTargetCoords(pUnit, &ptUnit);
+    D2Common::Units::GetScreenCoords(pPlayerUnit_lcl, &ptPlayer);
+    D2Common::Units::GetScreenCoords(pUnit, &ptUnit);
     if (nSoundId == 0xa27) {
       float fProjectedX;
       fProjectedX = ((float)ptPlayer.y + (float)ptPlayer.x * -2.0 - (float)ptUnit.x * 0.5 - (float)ptUnit.y) / -2.5;

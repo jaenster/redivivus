@@ -53,8 +53,8 @@
         "DRAW_GetWorldOffsetY",
         "DRAW_GetWorldOffsetX",
         "D2GFX_DrawLine",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "D2GFX_DrawSolidRectEx"
       ],
       "usedTypes": [
@@ -62,7 +62,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a18bb04",
+      "dh": "29d866ab",
       "paramStorage": [
         [
           "pUnit",
@@ -121,8 +121,8 @@
         "GetPrecisionY",
         "D2GFX_IsInPerspectiveBounds",
         "DRAW_WORLD_IsUnitInLineOfSight",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "TXT_Objects_GetLine",
         "GetAnimOrSeqMode",
         "D2GFX_PerspecitveScalePosition",
@@ -146,7 +146,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a420b4f",
+      "dh": "519b6c04",
       "paramStorage": [
         [
           "pUnit",
@@ -770,8 +770,8 @@
         "WALL2_AddWallTile",
         "DRLGROOM_GetRoofTilesFromRoom",
         "DRLGROOM_GetFirstUnitInRoom",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -793,7 +793,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "870186b7",
+      "dh": "e9edcf02",
       "paramStorage": [
         [
           "pRoom",

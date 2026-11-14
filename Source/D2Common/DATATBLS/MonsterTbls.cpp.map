@@ -308,18 +308,18 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "32848054",
+      "dh": "4092bc69",
       "paramStorage": [
         [
           "nMonStatsId",
           "Stack[0x4]:4"
         ],
         [
-          "pUpgradeCount",
+          "pnMaxChainId",
           "Stack[0x8]:4"
         ],
         [
-          "eSkill",
+          "pnChainId",
           "Stack[0xc]:4"
         ]
       ]
@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "name": "RollTreasureClass",
+      "name": "DATATBLS_GetChestTreasureClass",
       "address": "00654e80",
       "lines": [
         {
@@ -1051,14 +1051,14 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "RollTreasureClass"
+        "DATATBLS_GetChestTreasureClass"
       ],
       "usedTypes": [
         "D2ParsedTreasureClassStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8fa3b4b3",
+      "dh": "7a1de5a0",
       "paramStorage": [
         [
           "nDifficulty",
@@ -1069,7 +1069,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "nLevel",
+          "nTier",
           "Stack[0xc]:4"
         ]
       ]
@@ -1093,7 +1093,7 @@
       "dh": "4301f741"
     },
     {
-      "name": "DATATBLS_CompileBodyLocsTxt",
+      "name": "DATATBLS_LoadMonItemPercentTxt",
       "address": "00654f20",
       "lines": [
         {
@@ -1103,14 +1103,14 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "DATATBLS_CompileBodyLocsTxt",
+        "DATATBLS_LoadMonItemPercentTxt",
         "CompileTxt"
       ],
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "6e962507",
+      "dh": "c9ea3523",
       "paramStorage": [
         [
           "pMemory",
@@ -1119,7 +1119,7 @@
       ]
     },
     {
-      "name": "thunk_UnloadBin_MonStats",
+      "name": "DATATBLS_UnloadMonItemPercentTxt",
       "address": "00654fc0",
       "lines": [
         {
@@ -1129,13 +1129,13 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "thunk_UnloadBin_MonStats",
+        "DATATBLS_UnloadMonItemPercentTxt",
         "UnloadBin"
       ],
-      "dh": "c024d346"
+      "dh": "f1318b9d"
     },
     {
-      "name": "TC_GetTreasureClassArrayEntry",
+      "name": "DATATBLS_GetMonItemPercentTxtRecord",
       "address": "00654fe0",
       "lines": [
         {
@@ -1145,7 +1145,7 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "TC_GetTreasureClassArrayEntry",
+        "DATATBLS_GetMonItemPercentTxtRecord",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -1154,10 +1154,10 @@
         "D2MonItemPercentTxt",
         "int32_t"
       ],
-      "dh": "90215064",
+      "dh": "f08c40ea",
       "paramStorage": [
         [
-          "nTCArrayIdx",
+          "nRecordId",
           "Stack[0x4]:4"
         ]
       ]
@@ -1548,7 +1548,7 @@
       ]
     },
     {
-      "name": "thunk_UnloadBin_MonStats_Unref_006568f0",
+      "name": "DATATBLS_UnloadNpcTxt",
       "address": "006568f0",
       "lines": [
         {
@@ -1558,10 +1558,10 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "thunk_UnloadBin_MonStats_Unref_006568f0",
+        "DATATBLS_UnloadNpcTxt",
         "UnloadBin"
       ],
-      "dh": "774162c7"
+      "dh": "5bae180a"
     },
     {
       "name": "TXT_npc_GetLine",
@@ -1616,7 +1616,7 @@
       ]
     },
     {
-      "name": "TXT_FreeTxt_sounds_Unref_00656f60",
+      "name": "DATATBLS_UnloadMonSoundsTxt",
       "address": "00656f60",
       "lines": [
         {
@@ -1626,11 +1626,11 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "TXT_FreeTxt_sounds_Unref_00656f60",
+        "DATATBLS_UnloadMonSoundsTxt",
         "UnloadBin",
         "STRUCT_FreeTxtLink"
       ],
-      "dh": "a9cd40ca"
+      "dh": "95ff8140"
     },
     {
       "name": "TxtGetMonSoundsLine",
@@ -1683,7 +1683,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_ParseMonSeqField",
+      "name": "MONSTERTBLS_ParseMonStats2ComponentVariants",
       "address": "00657010",
       "lines": [
         {
@@ -1693,7 +1693,7 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_ParseMonSeqField",
+        "MONSTERTBLS_ParseMonStats2ComponentVariants",
         "strchr",
         "GetClassIdFromName"
       ],
@@ -1702,7 +1702,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "336eda9d",
+      "dh": "3a501d82",
       "paramStorage": [
         [
           "szText",
@@ -1713,7 +1713,7 @@
           "EDX:4"
         ],
         [
-          "nSeqSlot",
+          "nComponent",
           "Stack[0x4]:4"
         ],
         [
@@ -1749,7 +1749,7 @@
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc"
       ],
-      "dh": "beff2268",
+      "dh": "b3ebe4d4",
       "paramStorage": [
         [
           "pMemory",
@@ -1775,7 +1775,7 @@
       "dh": "a6763d72"
     },
     {
-      "name": "MONSTERTBLS_GetMonSeqFrameCount",
+      "name": "MONSTERTBLS_CheckNestedMonsterTypes",
       "address": "00658460",
       "lines": [
         {
@@ -1785,12 +1785,12 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_GetMonSeqFrameCount"
+        "MONSTERTBLS_CheckNestedMonsterTypes"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "9135e651",
+      "dh": "a229ee6c",
       "paramStorage": [
         [
           "nMonTypeId",
@@ -1818,14 +1818,14 @@
         "CompileTxt",
         "AllocServerMemory",
         "memset",
-        "MONSTERTBLS_GetMonSeqFrameCount"
+        "MONSTERTBLS_CheckNestedMonsterTypes"
       ],
       "usedTypes": [
         "D2BinFieldInputStrc",
         "D2PoolManagerStrc",
         "uint32_t"
       ],
-      "dh": "9ca7bc23",
+      "dh": "aeb7aa2a",
       "paramStorage": [
         [
           "pMemory",
@@ -1834,7 +1834,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_FreeMonPlaceTxt",
+      "name": "DATATBLS_UnloadMonTypeTxt",
       "address": "006586d0",
       "lines": [
         {
@@ -1844,12 +1844,12 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_FreeMonPlaceTxt",
+        "DATATBLS_UnloadMonTypeTxt",
         "UnloadBin",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
       ],
-      "dh": "b60cadf6"
+      "dh": "7eb3725a"
     },
     {
       "name": "TXT_AllocTxt_monprop",
@@ -2055,7 +2055,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_GetPresetActValue",
+      "name": "MONSTERTBLS_MapSuperUniqueId",
       "address": "00659b80",
       "lines": [
         {
@@ -2065,12 +2065,12 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_GetPresetActValue"
+        "MONSTERTBLS_MapSuperUniqueId"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "31d28eab",
+      "dh": "41fca284",
       "paramStorage": [
         [
           "nType",
@@ -2156,7 +2156,7 @@
       ]
     },
     {
-      "name": "MONSTERTBLS_FreeMonPropTxt",
+      "name": "DATATBLS_UnloadMonSeqTxt",
       "address": "00659de0",
       "lines": [
         {
@@ -2166,12 +2166,12 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_FreeMonPropTxt",
+        "DATATBLS_UnloadMonSeqTxt",
         "UnloadBin",
         "STRUCT_FreeTxtLink",
         "FreeServerMemory"
       ],
-      "dh": "666ecb0e"
+      "dh": "3b8b85c5"
     },
     {
       "name": "GetMonsterSequenceTableByIndex",
@@ -2248,7 +2248,7 @@
       "dh": "0d926c35"
     },
     {
-      "name": "MONSTERTBLS_FreeMonUModTxt",
+      "name": "MONSTERTBLS_UnloadMonsterTxts",
       "address": "0065a190",
       "lines": [
         {
@@ -2258,16 +2258,16 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "MONSTERTBLS_FreeMonUModTxt",
+        "MONSTERTBLS_UnloadMonsterTxts",
         "UnloadBin",
         "MONSTERTBLS_FreeHirelingTxt",
         "MONSTERTBLS_FreeMonPresetTxt",
         "STRUCT_FreeTxtLink",
-        "MONSTERTBLS_FreeMonPropTxt",
+        "DATATBLS_UnloadMonSeqTxt",
         "FreeParsedTC",
         "TXT_UnloadUniqueMonsterNameTables"
       ],
-      "dh": "d59e6ba6"
+      "dh": "c9fce363"
     },
     {
       "name": "TXT_AllocParsedTreasureClassDiffActChestABC",
@@ -2327,7 +2327,7 @@
       ]
     },
     {
-      "name": "ClearScreen_Unref_0065a3f0",
+      "name": "TXT_AllocItemDropData_Thunk",
       "address": "0065a3f0",
       "lines": [
         {
@@ -2337,13 +2337,13 @@
       ],
       "namespace": "D2Common::DATATBLS::MonsterTbls",
       "calledFunctions": [
-        "ClearScreen_Unref_0065a3f0",
+        "TXT_AllocItemDropData_Thunk",
         "TXT_AllocItemDropData"
       ],
       "usedTypes": [
         "D2PoolManagerStrc"
       ],
-      "dh": "64568337",
+      "dh": "1e4b401f",
       "paramStorage": [
         [
           "bPartial",

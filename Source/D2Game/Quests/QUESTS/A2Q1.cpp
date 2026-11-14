@@ -438,7 +438,7 @@ void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
     pQuestArgs->pTarget->dwDropItemCode = 0x20737361;
     for (nBookDropCount = 0; nBookDropCount < pDVar1->nBookOfSkillDropCount; nBookDropCount++) {
-      ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemCode, nullptr, -1, 0);
+      ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nDropItemCode, nullptr, -1, 0);
     }
 }
 

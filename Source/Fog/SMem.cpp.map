@@ -4,7 +4,7 @@
   "file": "Source/Fog/SMem.cpp",
   "functions": [
     {
-      "name": "SMemSizeClassBucketLookup",
+      "name": "FOG_GetLowestSetBitIndex",
       "address": "004111a0",
       "lines": [
         {
@@ -14,17 +14,17 @@
       ],
       "namespace": "Fog::SMem",
       "calledFunctions": [
-        "SMemSizeClassBucketLookup"
+        "FOG_GetLowestSetBitIndex"
       ],
       "usedTypes": [
         "int32_t",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ce7494aa",
+      "dh": "3a15c3d2",
       "paramStorage": [
         [
-          "nAllocSize",
+          "dwBits",
           "Stack[0x4]:4"
         ]
       ]

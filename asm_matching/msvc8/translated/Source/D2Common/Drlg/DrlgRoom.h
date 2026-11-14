@@ -146,7 +146,7 @@ BOOL __fastcall DRLGCOORDS_IsWithinDistance(struct D2DrlgCoordsStrc * pCoords, s
 int __fastcall DRLGROOM_CoordsWithinDistance(struct D2DrlgCoordsStrc * pCoords1, struct D2DrlgCoordsStrc * pCoords2, int32_t nDistance);
 // Returns true if two DRLG room coordinate rects are adjacent or overlapping within nMaxDist tiles. When nMaxDist==0, tests for direct overlap; when nMaxDist>0, accepts rooms separated by up to that many tiles in exactly one axis while touching in the other. Used by DefineRoomsNear and DRLGROOMEX_LinkNearRoomByDirection to find spatially neighbouring rooms.
 BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(struct D2DrlgCoordsStrc * pDrlgCoords, struct D2DrlgCoordsStrc * pCoordinatesAndSizeB, int32_t nMaxDist);
-BOOL __fastcall ComputeRectanglesManhattanDistance(struct D2DrlgLevelStrc * pLevel, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance);
+BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(struct D2DrlgLevelStrc * pLevel, struct D2RoomExStrc * pRoomEx, struct D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance);
 // NOTE: Register params: pLevelData (ECX): D2DrlgLevelStrc *, pRoomEx (EDX): D2RoomExStrc *
 void __fastcall AddRoomExToLevel(struct D2DrlgLevelStrc * pLevelData, struct D2RoomExStrc * pRoomEx);
 BOOL __fastcall AreXYInsideCoordinates(struct D2DrlgCoordsStrc * pDrlgCoords, int32_t nX, int32_t nY);

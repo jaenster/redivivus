@@ -113,7 +113,7 @@ uint32_t __stdcall COMCALLBACK_HandleGameListError2(struct D2ControlMsg * pContr
 // Creates or updates Battle.net channel user entry. If user doesn't exist in list, allocates D2ChannelUserStrc (180 bytes), copies username and character data, creates character composite sprite with class/items/level, randomizes animation frame, formats display name, appends to linked list, increments channel user count, formats channel title "Channel Name (N)" as Unicode, displays in chat window, sorts list, and updates UI. If user exists, updates via COMCALLBACK_AddUserToChannelList instead.
 struct D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUsername, uint32_t * pCharDataAndItems, uint32_t dwStatusFlags);
 BOOL __fastcall COMCALLBACK_AddChannelUser(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pszUsername, uint32_t * pCharData);
-BOOL __fastcall COMCALLBACK_Unused3(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername);
+BOOL __fastcall COMCALLBACK_OnChannelUserJoinedCallback(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername);
 // Removes user from Battle.net channel list. Searches linked list for username match (strips clan tag *prefix for comparison), unlinks from list, displays "username has left the channel" message if gnNotifyEnabled flag set, clears channel view if was selected user, destroys character composite sprite, frees D2ChannelUserStrc memory, decrements global channel user count, formats updated channel title "Channel Name (N)" as Unicode, and refreshes UI. Returns after first match found.
 void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername);
 void __stdcall COMCALLBACK_ClearAllChannelUsers();

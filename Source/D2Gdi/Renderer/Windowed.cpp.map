@@ -953,7 +953,7 @@
       ]
     },
     {
-      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240",
+      "name": "RENDERER_WINDOWED_GetInitFunctionsStrc",
       "address": "006c8240",
       "lines": [
         {
@@ -963,12 +963,12 @@
       ],
       "namespace": "D2Gdi::Renderer::Windowed",
       "calledFunctions": [
-        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240"
+        "RENDERER_WINDOWED_GetInitFunctionsStrc"
       ],
       "usedTypes": [
         "HBITMAP"
       ],
-      "dh": "4d58f9b1"
+      "dh": "479c1abd"
     },
     {
       "name": "RENDERER_WINDOWED_GetPalettePointer",
@@ -2291,7 +2291,7 @@
         "SFileLoadFileEx",
         "SBmpDecodeImage",
         "SMemFree",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "FreeClientMemory"
       ],
       "usedTypes": [
@@ -2300,7 +2300,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "76a48ce7",
+      "dh": "13959ff3",
       "paramStorage": [
         [
           "szSmacker",
@@ -2329,7 +2329,7 @@
       "calledFunctions": [
         "PlayerSmacker",
         "RENDERER_WINDOWED_BlitSmackerFrame",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "CloseSmacker"
       ],
       "usedTypes": [
@@ -2337,7 +2337,7 @@
         "Smack",
         "uint8_t"
       ],
-      "dh": "77f34d37",
+      "dh": "04ac266a",
       "paramStorage": [
         [
           "pContext",

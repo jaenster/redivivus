@@ -10,9 +10,9 @@
 
 namespace D2Common { namespace Logging {
 
-void __fastcall SPRITECACHE_SetMaxSize_Unref_00624700(size_t nSize) {
+void __fastcall D2COMMON_Set_gpItemTypeTableContext(size_t nSize) {
     // Static local variables (originally global data)
-    static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2Common::Logging::SPRITECACHE_SetMaxSize_Unref_00624700::gpItemTypeTableContext");
+    static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2Common::Logging::D2COMMON_Set_gpItemTypeTableContext::gpItemTypeTableContext");
 
     *(uint32_t*)(char*)&gpItemTypeTableContext = nSize;
 }

@@ -111,12 +111,12 @@ namespace D2Client { namespace UI { namespace Text {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __fastcall TEXT_SetScrollCompleteCallback_Unref_0045afe0(pfnTextScrollComplete pfnCallback, void * pUserParam);
+void __fastcall DRAW_SetMouseWorldOffsets(int nXOffset, int nYOffset);
 void __stdcall thunk_TEXT_ClearChatMessages();
-void __fastcall TEXT_SetScrollCompleteCallback_Unref_004776d0(pfnTextScrollComplete pfnCallback, void * pUserParam);
+void __fastcall RENDERING_SetCurrentEngineAndIndex(pfnTextScrollComplete pfnCallback, void * pUserParam);
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_004967e0();
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_00496980();
-struct D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049c160();
+struct D2GSPacketSrv0x27_TextStrc * __stdcall PARTY_GetPanelInvGoldBtn();
 void __stdcall TEXT_FreeTextBox(struct D2TextBoxStrc * pTextBox);
 void __stdcall TEXT_InitTextDisplaySettings();
 void __stdcall TEXT_FreeAllScreenMessages(struct D2ScreenMessageListStrc * pList);
@@ -143,7 +143,7 @@ void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e7f0();
 void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_0049e800();
 void __stdcall TEXT_SetTextBoxExclusionRect();
 void Unreferenced_0049e860();
-uint32_t __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0();
+uint32_t __stdcall TEXT_GetTextDisplayMode();
 struct D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit();
 // Handles the 0x5a event message packet: switches on pMessageCtx->nMessageType, formats the localized message from the packet's names and argument, and prints it in pMessageCtx->nColor. pEventData is the format argument for message type 0x12, which also shakes the view and plays sound 0x1220.
 void __fastcall TEXT_HandleEventMessagePacket(struct D2Packet0x5aEventStructure * pMessageCtx);

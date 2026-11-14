@@ -15,7 +15,7 @@
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
         "SKILLNEC_ApplyBloodCost",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "memset",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation"
@@ -27,7 +27,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0f2f717e",
+      "dh": "22ec9dcc",
       "paramStorage": [
         [
           "pGame",
@@ -201,7 +201,7 @@
       "calledFunctions": [
         "SKILLNEC_ValidateCorpseTarget",
         "STATSEX_GetAlignment",
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "CheckForModeZeroDeath",
         "UNITS_GetRoom",
         "DRLGROOM_IsRoomInTown",
@@ -214,7 +214,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec0ae4dc",
+      "dh": "97f0bb0b",
       "paramStorage": [
         [
           "pGame",
@@ -370,13 +370,13 @@
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
         "CheckForModeZeroDeath",
         "D2CheckIfCorpseIsConsumable",
-        "D2CheckCorpseConsumed"
+        "SKILLS_CanSwitchAi"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "9b2c2bde",
+      "dh": "1c74c4d5",
       "paramStorage": [
         [
           "pUnit",
@@ -641,7 +641,7 @@
       "calledFunctions": [
         "SKILLNEC_ApplyCurseToUnit",
         "STATSEX_GetAlignment",
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "SKILLNEC_ClampResistPenalty",
         "SKILLNEC_ValidateAttackableTarget",
         "SetStateWithExpiryTime",
@@ -661,7 +661,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93a31548",
+      "dh": "925c768e",
       "paramStorage": [
         [
           "pUnit",
@@ -939,7 +939,7 @@
         "STATSEX_GetAlignment",
         "UNITS_CheckIfCanAttackTarget",
         "CheckForModeZeroDeath",
-        "D2CheckCorpseConsumed"
+        "SKILLS_CanSwitchAi"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -947,7 +947,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c4e049ac",
+      "dh": "18accb6a",
       "paramStorage": [
         [
           "pGame",
@@ -1309,7 +1309,7 @@
         "STATLIST_AttachStatListToUnit",
         "D2AddStatToStatsListEx",
         "SetState",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "_alldiv",
         "STATLIST_SetUnitStat",
         "SetSkill",
@@ -1334,7 +1334,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "6f19a370",
+      "dh": "cae8001f",
       "paramStorage": [
         [
           "pGame",
@@ -1363,7 +1363,7 @@
       ]
     },
     {
-      "name": "SKILLNEC_ReviveCorpseAsMinion",
+      "name": "SKILLS_SetSummonBaseStats",
       "address": "005c49e0",
       "lines": [
         {
@@ -1373,7 +1373,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "STATLIST_AddUnitStat"
@@ -1385,18 +1385,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1e9d85ce",
+      "dh": "1da72142",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pOwner",
           "EDX:4"
         ],
         [
-          "pCorpseUnit",
+          "pPet",
           "Stack[0x4]:4"
         ],
         [
@@ -1432,7 +1432,7 @@
         "FreeServerUnit",
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_DispatchSummonMastery",
         "SKILLNEC_ApplySummonBuffs",
         "SKILLNEC_ApplySummonResistPassive",
@@ -1449,7 +1449,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2eab8441",
+      "dh": "8894293a",
       "paramStorage": [
         [
           "pGame",
@@ -1655,7 +1655,7 @@
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
         "SKILLNEC_InitializeSummon",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs",
         "SKILLNEC_ApplySummonResistPassive"
       ],
@@ -1665,7 +1665,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "b6858071",
+      "dh": "589c2ee4",
       "paramStorage": [
         [
           "pGame",
@@ -1762,7 +1762,7 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SERVER_EquipItemToBodyLoc",
         "SKILLNEC_InitializeSummon",
         "SUNIT_GetClient",
@@ -1781,7 +1781,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fa02de11",
+      "dh": "6b9f8128",
       "paramStorage": [
         [
           "pGame",
@@ -1815,13 +1815,13 @@
         "SKILLNEC_ReviveCorpse",
         "GetYPos",
         "GetXPos",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "RemoveCollision_Type",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
-        "MONSTERAI_TriggerMageThink",
-        "SetCurrentSkill",
+        "MONSTERAI_RescheduleThink",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "SKILLS_FreeMonsterMinions",
         "EVENT_RemoveUnitTimersByType",
@@ -1830,7 +1830,7 @@
         "SUNIT_RelocateUnit"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2UnitStrc",
@@ -1840,7 +1840,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3217ad64",
+      "dh": "9cd6a5b5",
       "paramStorage": [
         [
           "pGame",
@@ -1865,7 +1865,7 @@
       "calledFunctions": [
         "SKILLNEC_ApplyReviveToCorpse",
         "AssignMinionOwner",
-        "MONSTERAI_SetTargetUnit",
+        "MONSTERAI_SetOwnerGUIDAndType",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
         "SetAlignment",
@@ -1882,7 +1882,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3c21351a",
+      "dh": "b0b77f25",
       "paramStorage": [
         [
           "pUnit",
@@ -2197,14 +2197,14 @@
       "calledFunctions": [
         "SKILLNEC_AddHitpoints",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5847eaa1",
+      "dh": "c0ce39b9",
       "paramStorage": [
         [
           "pUnit",
@@ -2314,7 +2314,7 @@
         "D2GetSkillCalc",
         "D2ApplyPercent",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "SetOverlay"
       ],
@@ -2329,7 +2329,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05e7e6c8",
+      "dh": "e4ff1d2d",
       "paramStorage": [
         [
           "pGame",
@@ -2362,7 +2362,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_NecroAuraStatDrain",
+      "name": "ITEMEVENT_BoneArmorAbsorb",
       "address": "005c6370",
       "lines": [
         {
@@ -2372,7 +2372,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
-        "ITEMEVENT_NecroAuraStatDrain",
+        "ITEMEVENT_BoneArmorAbsorb",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
         "D2AddStatToStatsListEx",
@@ -2393,7 +2393,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c373d12c",
+      "dh": "fa1ce4d8",
       "paramStorage": [
         [
           "pGame",
@@ -2426,7 +2426,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_LifeTap",
+      "name": "ITEMEVENT_BloodGolemLifeSteal",
       "address": "005c6530",
       "lines": [
         {
@@ -2436,7 +2436,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
-        "ITEMEVENT_LifeTap",
+        "ITEMEVENT_BloodGolemLifeSteal",
         "GetMonsterData",
         "STATSEX_GetAlignment",
         "D2ApplyPercent",
@@ -2459,7 +2459,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a84cc8a",
+      "dh": "00cf5b0d",
       "paramStorage": [
         [
           "pGame",
@@ -2492,7 +2492,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_NecroReviveLeech",
+      "name": "ITEMEVENT_BloodGolemShareDamage",
       "address": "005c6690",
       "lines": [
         {
@@ -2502,7 +2502,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillNec",
       "calledFunctions": [
-        "ITEMEVENT_NecroReviveLeech",
+        "ITEMEVENT_BloodGolemShareDamage",
         "GetOwnerUnit",
         "CheckForModeZeroDeath",
         "STATSEX_GetCurrentStat",
@@ -2520,7 +2520,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f38ee74e",
+      "dh": "368ffa25",
       "paramStorage": [
         [
           "pGame",
@@ -2565,7 +2565,7 @@
       "calledFunctions": [
         "SetStateWithExpiryTime",
         "ITEMEVENT_ItemSlowTarget",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "CheckMonsterType",
         "STATLIST_SetStatValue",
         "UpdateAnimSpeed"
@@ -2580,7 +2580,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f4908a9b",
+      "dh": "2c0aae92",
       "paramStorage": [
         [
           "pGame",
@@ -2625,7 +2625,7 @@
       "calledFunctions": [
         "BloodGolemLifeLeech",
         "SERVER_GetUnitPetByTypeId",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "TXT_MonStats_GetLine",
         "GetTxtSkillParam5",
@@ -2637,7 +2637,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "daa4e238",
+      "dh": "e250c5eb",
       "paramStorage": [
         [
           "pGame",

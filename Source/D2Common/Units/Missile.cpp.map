@@ -912,7 +912,7 @@
       "calledFunctions": [
         "HasBonusStats",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLS_GetItemBonusDamage"
       ],
       "usedTypes": [
@@ -920,7 +920,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8bd645e0",
+      "dh": "a4696f7b",
       "paramStorage": [
         [
           "pUnit",
@@ -1511,7 +1511,7 @@
       "namespace": "D2Common::Units::Missile",
       "calledFunctions": [
         "MISSILE_EvalMissileCalc",
-        "SKILLS_CompileSkillFormula"
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2MissileCalcContextStrc",
@@ -1519,7 +1519,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "906a005c",
+      "dh": "7633a15f",
       "paramStorage": [
         [
           "pMissile",

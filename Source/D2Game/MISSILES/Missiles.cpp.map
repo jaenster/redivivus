@@ -4,7 +4,7 @@
   "file": "Source/D2Game/MISSILES/Missiles.cpp",
   "functions": [
     {
-      "name": "FreeMissiles",
+      "name": "ITEMS_RemoveAll",
       "address": "00557f10",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::MISSILES::Missiles",
       "calledFunctions": [
-        "FreeMissiles",
+        "ITEMS_RemoveAll",
         "GetNextUnit",
         "FreeServerUnit"
       ],
@@ -23,7 +23,7 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "19bfa75e",
+      "dh": "c0256397",
       "paramStorage": [
         [
           "pGame",
@@ -155,7 +155,7 @@
         "CalculatePierce",
         "GetMissleById",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SERVER_GetUnitStat",
         "InitSeed_Param_666",
         "STATLIST_SetUnitStat"
@@ -166,7 +166,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bcf4ac18",
+      "dh": "360d8bb5",
       "paramStorage": [
         [
           "pUnit",
@@ -206,7 +206,7 @@
         "SetSP1",
         "SetTarget",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_CalculatePath",
         "SetOwner",
         "SetAcceleration",
@@ -221,7 +221,7 @@
         "STATLIST_SetUnitStat",
         "GetFlags",
         "SetFlags",
-        "MONSTER_DispatchUModOnSkill"
+        "MONSTER_DispatchUModMissile"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
@@ -236,7 +236,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "39d033e6",
+      "dh": "896a3c2a",
       "paramStorage": [
         [
           "pGame",

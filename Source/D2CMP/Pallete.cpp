@@ -75,15 +75,23 @@ D2TileLibraryHeaderStrc * __stdcall TILEPROJECT_FindLibraryOfTile(D2TileLibraryE
 
 void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) {
     int nPrefixWords;
+    char* pFullPathEnd;
+    char* szInlineNameBuf;
     char nStrEndOffset1[260];
     D2MPQFileStrc* pArchive;
     char* pSrcWord = "Data\\Global\\Items\\Palette\\";
     char* szPathDst = nStrEndOffset1;
     memcpy(szPathDst, pSrcWord, 27);
     strcat(nStrEndOffset1, szPaletteName);
-    strcat(nStrEndOffset1, ".dat");
+    pSrcWord = (char*)((intptr_t)&szInlineNameBuf + 3);
+    do {
+      pFullPathEnd = pSrcWord;
+      pSrcWord = pFullPathEnd + 1;
+    } while (pFullPathEnd[1] != '\0');
+
+    memcpy(pFullPathEnd + 1, ".dat", 5);
     uint32_t nPaletteDataSize = 0x1500;
-    char* szInlineNameBuf = szPaletteName;
+    szInlineNameBuf = szPaletteName;
     BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, nStrEndOffset1, &pArchive, 1);
     if (!bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39);

@@ -804,12 +804,12 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     return nCombatAiState;
 }
 
-void __fastcall AI_BAAL_CountPowerfulSkills(D2UnitStrc * nSkillNode, D2UnitStrc * * pnSelfSkillNode, int * pnPowerfulSkillCount) {
-    if (!(nSkillNode != *pnSelfSkillNode && nSkillNode && nSkillNode->eAnimMode.ePlayerMode != Death && nSkillNode->eAnimMode.ePlayerMode != Kick)) {
+void __fastcall AI_BAAL_CountLivingMinions(D2UnitStrc * pMinion, D2UnitStrc * * ppSelf, int * pnCount) {
+    if (!(pMinion != *ppSelf && pMinion && pMinion->eAnimMode.ePlayerMode != Death && pMinion->eAnimMode.ePlayerMode != Kick)) {
       return;
     }
 
-    (*pnPowerfulSkillCount)++;
+    (*pnCount)++;
 }
 
 // Baal-AI helper that spawns a single weakened Baal clone minion. First counts existing "powerful skill" minions via CallForEachMinion/AI_BAAL_CountPowerfulSkills and bails if any already exist (one-clone guard). Resolves Baal's current target/owner, derives a spawn position near the target (or Baal) by jittering its X/Y with the room/unit RNG (mod 0x18 offsets), finds a valid nearby room, and spawns the clone monster (class id ~0x23a) via SpawnMonster. The clone is flagged NOXP|NOTC, restarts AI thinking, is registered as Baal's minion (AssignMinionOwner/AddMinionToList, mutual StoreOwner), and gets 1/3 of Baal's max-hp/current-hp with hpregen 0. On success increments a counter at *(nParam+0x18) and returns 1 (packed in EAX high bits); returns 0 if guard hit, owner dead, or spawn failed.
@@ -839,7 +839,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, D2AiGeneralStrc * 
     nPosY = 0;
     __frame1.nPowerfulSkillCount = 0;
     __frame0.nSeedMulHi = pUnit;
-    Ai::AiGeneral::CallForEachMinion(pUnit, &__frame0.nSeedMulHi, &__frame1.nPowerfulSkillCount, (pfnMinionForEachCallback)AI_BAAL_CountPowerfulSkills);
+    Ai::AiGeneral::CallForEachMinion(pUnit, &__frame0.nSeedMulHi, &__frame1.nPowerfulSkillCount, (pfnMinionForEachCallback)AI_BAAL_CountLivingMinions);
     if (__frame1.nPowerfulSkillCount) {
       return false;
     }
@@ -937,7 +937,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, D2AiGeneralStrc * 
     }
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pTargetUnit, nOwnerGuid, eOwnerType, 1, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) / 3, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) / 3, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) / 3, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_hpregen, 0, 0);
     D2Common::Units::StoreOwner(pTargetUnit, pUnit);
@@ -983,8 +983,8 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
             {
               if (pTarget) {
                 if (pMonStats->aSkill[5] > 0) {
-                  nTeleportParam = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
-                  nMaxMana = D2Common::Stats::StatsEx::GetTxtMaxMana(pTarget);
+                  nTeleportParam = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
+                  nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pTarget);
                   if (nTeleportParam > nMaxMana || pTarget->eUnitType != UNIT_PLAYER) {
                     SERVER_UNIT_CastSkill(__frame0.pGameForCast, pUnit, pMonStats->aSkMode[5], (int)pMonStats->aSkill[5], pTarget, 0, 0);
                     return;
@@ -1016,7 +1016,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
           case 2:
 
           case 6:
-            CastSkillWithDistanceOffset(pGame, pUnit, pTarget, 0xc, 0);
+            MONSTERAI_CommandWalkToDistance(pGame, pUnit, pTarget, 0xc, 0);
           return;
           case 9:
             SERVER_UNIT_CastSkill(pGame, pUnit, 9, SKILL_BaalTentacle, pTarget, 0, 0);

@@ -224,7 +224,7 @@
       ]
     },
     {
-      "name": "D2WINIMAGE_StopAnimation",
+      "name": "D2WINIMAGE_GetFrameCount",
       "address": "004fd1b0",
       "lines": [
         {
@@ -234,7 +234,7 @@
       ],
       "namespace": "D2Win::Src::D2WinImage",
       "calledFunctions": [
-        "D2WINIMAGE_StopAnimation",
+        "D2WINIMAGE_GetFrameCount",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -244,7 +244,7 @@
         "D2WinImage",
         "int32_t"
       ],
-      "dh": "9db3cccc",
+      "dh": "f623b61f",
       "paramStorage": [
         [
           "pImage",

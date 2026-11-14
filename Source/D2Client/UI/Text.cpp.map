@@ -4,7 +4,7 @@
   "file": "Source/D2Client/UI/Text.cpp",
   "functions": [
     {
-      "name": "TEXT_SetScrollCompleteCallback_Unref_0045afe0",
+      "name": "DRAW_SetMouseWorldOffsets",
       "address": "0045afe0",
       "lines": [
         {
@@ -14,19 +14,16 @@
       ],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
-        "TEXT_SetScrollCompleteCallback_Unref_0045afe0"
+        "DRAW_SetMouseWorldOffsets"
       ],
-      "usedTypes": [
-        "pfnTextScrollComplete"
-      ],
-      "dh": "cccf23e7",
+      "dh": "83768d6a",
       "paramStorage": [
         [
-          "pfnCallback",
+          "nXOffset",
           "ECX:4"
         ],
         [
-          "pUserParam",
+          "nYOffset",
           "EDX:4"
         ]
       ]
@@ -41,7 +38,7 @@
       ]
     },
     {
-      "name": "TEXT_SetScrollCompleteCallback_Unref_004776d0",
+      "name": "RENDERING_SetCurrentEngineAndIndex",
       "address": "004776d0",
       "lines": [
         {
@@ -51,12 +48,12 @@
       ],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
-        "TEXT_SetScrollCompleteCallback_Unref_004776d0"
+        "RENDERING_SetCurrentEngineAndIndex"
       ],
       "usedTypes": [
         "pfnTextScrollComplete"
       ],
-      "dh": "ce2c7d3f",
+      "dh": "782fde41",
       "paramStorage": [
         [
           "pfnCallback",
@@ -99,7 +96,7 @@
       "dh": "796e99a2"
     },
     {
-      "name": "TEXT_GetOverheadGlobalPointer_Unref_0049c160",
+      "name": "PARTY_GetPanelInvGoldBtn",
       "address": "0049c160",
       "lines": [
         {
@@ -109,12 +106,12 @@
       ],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
-        "TEXT_GetOverheadGlobalPointer_Unref_0049c160"
+        "PARTY_GetPanelInvGoldBtn"
       ],
       "usedTypes": [
         "D2GSPacketSrv0x27_TextStrc"
       ],
-      "dh": "8c09a186"
+      "dh": "9d17ad97"
     },
     {
       "name": "TEXT_FreeTextLineList",
@@ -1009,7 +1006,7 @@
       "dh": "ead65720"
     },
     {
-      "name": "TEXT_GetOverheadGlobalPointer_Unref_0049e8a0",
+      "name": "TEXT_GetTextDisplayMode",
       "address": "0049e8a0",
       "lines": [
         {
@@ -1019,12 +1016,12 @@
       ],
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
-        "TEXT_GetOverheadGlobalPointer_Unref_0049e8a0"
+        "TEXT_GetTextDisplayMode"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a3d1cac2"
+      "dh": "a5d814ae"
     },
     {
       "name": "TEXT_GetOverheadSpeakerUnit",
@@ -2002,7 +1999,7 @@
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
         "TEXT_DrawMonsterHoverText",
-        "GetTargetCoords",
+        "GetScreenCoords",
         "DRAW_GetTypeOfBorder",
         "TEXT_CopyHoverMessageString",
         "GetLocaleString",
@@ -2021,7 +2018,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7fe5c4df",
+      "dh": "8d28b982",
       "paramStorage": [
         [
           "pUnit",
@@ -2041,7 +2038,7 @@
       "namespace": "D2Client::UI::Text",
       "calledFunctions": [
         "TEXT_DrawObjectHoverText",
-        "GetTargetCoords",
+        "GetScreenCoords",
         "DRAW_GetTypeOfBorder",
         "TEXT_CopyHoverMessageString",
         "GetLocaleString",
@@ -2058,7 +2055,7 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "eb33833c",
+      "dh": "7a0f04a2",
       "paramStorage": [
         [
           "pUnit",

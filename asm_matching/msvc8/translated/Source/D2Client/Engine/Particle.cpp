@@ -341,7 +341,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
         pParticle->nScreenOffsetZ += nErrorLine;
         *pX = pParticle->nX;
         *pY = pParticle->nY;
-        D2Common::Drlg::Transform::DRLG_WorldToScreenShift5(pX, pY);
+        D2Common::Drlg::Transform::DRLG_ScreenToWorldShift5(pX, pY);
         pParticle->nPosZ = pParticle->nScreenOffsetZ * -0x800;
         goto project_to_screen;
       }

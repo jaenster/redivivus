@@ -228,7 +228,7 @@
       ]
     },
     {
-      "name": "AI_CanApplyColdState",
+      "name": "AI_CanSwitchAi",
       "address": "005b0da0",
       "lines": [
         {
@@ -239,18 +239,17 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "TXT_MonStats_GetLine",
-        "AI_CanApplyColdState",
+        "AI_CanSwitchAi",
         "CheckMonsterType",
         "CanSwitchAI"
       ],
       "usedTypes": [
         "D2MonStatsTxt",
         "D2UnitStrc",
-        "eD2States",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e99f0d73",
+      "dh": "cf423657",
       "paramStorage": [
         [
           "pUnit",
@@ -261,7 +260,7 @@
           "EDX:4"
         ],
         [
-          "eState",
+          "nAiSpecialState",
           "Stack[0x4]:4"
         ],
         [
@@ -379,7 +378,7 @@
         "CheckForModeZeroDeath",
         "GetDistance",
         "WalkTowardsUnitOffset",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkRandomOffsetAroundUnit"
       ],
       "usedTypes": [
@@ -390,7 +389,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6379ea6e",
+      "dh": "349c5449",
       "paramStorage": [
         [
           "pGame",
@@ -512,7 +511,7 @@
         "DRLGROOM_IsRoomInTown",
         "UNIT_GetUnitState",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_AddUnitStat",
         "SERVER_UNIT_CastSkill"
       ],
@@ -527,7 +526,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28d52716",
+      "dh": "e3925bcf",
       "paramStorage": [
         [
           "pGame",
@@ -1454,7 +1453,7 @@
       "calledFunctions": [
         "AI_ForEachFn09_FindOwnMinionCorpse",
         "GetDistance",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "GetOwnerUnit"
       ],
       "usedTypes": [
@@ -1462,7 +1461,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "021b0204",
+      "dh": "8b89065b",
       "paramStorage": [
         [
           "pGame",
@@ -2029,7 +2028,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_SetTargetUnit",
+      "name": "MONSTERAI_SetOwnerGUIDAndType",
       "address": "005dd330",
       "lines": [
         {
@@ -2039,20 +2038,20 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_SetTargetUnit"
+        "MONSTERAI_SetOwnerGUIDAndType"
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc"
       ],
-      "dh": "888f4463",
+      "dh": "ab95816f",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "pTargetUnitType",
+          "pOwner",
           "EDX:4"
         ]
       ]
@@ -2108,7 +2107,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_CanApplyDebuffState",
+      "name": "MONSTERAI_CanSwitchAi",
       "address": "005dd480",
       "lines": [
         {
@@ -2118,28 +2117,28 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_CanApplyDebuffState",
+        "MONSTERAI_CanSwitchAi",
         "UNIT_GetUnitState",
         "CanSwitchAI",
         "CheckFlags",
         "CheckForModeZeroDeath",
         "CheckMonsterType",
         "TXT_MonStats_GetLine",
-        "AI_CanApplyColdState"
+        "AI_CanSwitchAi"
       ],
       "usedTypes": [
         "D2UnitStrc",
-        "eD2States",
+        "int32_t",
         "uint32_t"
       ],
-      "dh": "3b40b5eb",
+      "dh": "956a2d0d",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "eState",
+          "nAiSpecialState",
           "EDX:4"
         ]
       ]
@@ -2398,7 +2397,7 @@
         "CheckFlags",
         "CheckMonsterType",
         "TXT_MonStats_GetLine",
-        "AI_CanApplyColdState",
+        "AI_CanSwitchAi",
         "SetTargetUnitForDynamicUnit",
         "AttachCorrectAiFunctionToMonster",
         "EVENT_RemoveUnitTimersByType",
@@ -2412,7 +2411,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "75a152f3",
+      "dh": "abebfdc4",
       "paramStorage": [
         [
           "pGame",
@@ -2489,7 +2488,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_FindNearestInteractNpc",
+      "name": "MONSTERAI_TargetCallback_FindNearbyPlayer",
       "address": "005dde80",
       "lines": [
         {
@@ -2499,7 +2498,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_FindNearestInteractNpc",
+        "MONSTERAI_TargetCallback_FindNearbyPlayer",
         "GetDistance",
         "QUEST_NpcWantsInteract"
       ],
@@ -2509,7 +2508,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "d7025524",
+      "dh": "4e98bd30",
       "paramStorage": [
         [
           "pGame",
@@ -2550,7 +2549,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b16bac5e",
+      "dh": "a586d665",
       "paramStorage": [
         [
           "pGame",
@@ -2578,16 +2577,16 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AI_ChangeModeAndTargetUnit",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "0fcff045",
+      "dh": "6840f208",
       "paramStorage": [
         [
           "pGame",
@@ -2602,7 +2601,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "pAttacker",
+          "pTarget",
           "Stack[0x8]:4"
         ]
       ]
@@ -2619,16 +2618,16 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "MONSTERAI_CommandSkillAtPosition",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "aef47d44",
+      "dh": "8f12d3dc",
       "paramStorage": [
         [
           "pGame",
@@ -2664,20 +2663,21 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "MONSTERAI_CommandSkillSequence",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetSkillByIdAndOwner",
+        "SetCurrentSkill",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "419a7689",
+      "dh": "ac081c6e",
       "paramStorage": [
         [
           "pGame",
@@ -2717,18 +2717,18 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "PlanNextAiMove",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f96c223f",
+      "dh": "70e524c9",
       "paramStorage": [
         [
           "pGame",
@@ -2792,7 +2792,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "ScheduleAiThink",
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent"
       ],
@@ -2802,7 +2802,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "73d370af",
+      "dh": "bbe51a19",
       "paramStorage": [
         [
           "pGame",
@@ -2819,7 +2819,7 @@
       ]
     },
     {
-      "name": "ApplyCombatAndMonStats",
+      "name": "AITACTICS_SetPathOverrides",
       "address": "005de190",
       "lines": [
         {
@@ -2829,18 +2829,18 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SetCombatAndMonStats"
+        "MONSTERMODE_SetPathOverrides"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0c119023",
+      "dh": "cc4ef192",
       "paramStorage": [
         [
           "pUnit",
@@ -2968,17 +2968,17 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "MONSTERAI_CommandMoveToPosition",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2c38cbcf",
+      "dh": "11ffe7ad",
       "paramStorage": [
         [
           "pGame",
@@ -3014,17 +3014,17 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "MONSTERAI_CommandSkillInPlace",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6fcf5166",
+      "dh": "c187b672",
       "paramStorage": [
         [
           "pGame",
@@ -3049,7 +3049,7 @@
       ]
     },
     {
-      "name": "MoveAndCastSkill",
+      "name": "MONSTERAI_MoveToDistance",
       "address": "005de4e0",
       "lines": [
         {
@@ -3059,23 +3059,23 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MoveAndCastSkill",
+        "MONSTERAI_MoveToDistance",
         "GetDistance",
         "GetXPos",
         "GetYPos",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05240c9a",
+      "dh": "14c4a94a",
       "paramStorage": [
         [
           "pGame",
@@ -3090,21 +3090,21 @@
           "Stack[0x4]:4"
         ],
         [
-          "nSkillId",
+          "nAnimMode",
           "Stack[0x8]:4"
         ],
         [
-          "nXOffset",
+          "nMaxStep",
           "Stack[0xc]:4"
         ],
         [
-          "nYOffset",
+          "nDistance",
           "Stack[0x10]:4"
         ]
       ]
     },
     {
-      "name": "CastSkillWithDistanceOffset",
+      "name": "MONSTERAI_CommandWalkToDistance",
       "address": "005de6d0",
       "lines": [
         {
@@ -3114,14 +3114,14 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MoveAndCastSkill",
-        "CastSkillWithDistanceOffset"
+        "MONSTERAI_CommandWalkToDistance",
+        "MONSTERAI_MoveToDistance"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2e698649",
+      "dh": "6afe8b49",
       "paramStorage": [
         [
           "pGame",
@@ -3136,11 +3136,11 @@
           "Stack[0x4]:4"
         ],
         [
-          "nXOffset",
+          "nMaxStep",
           "Stack[0x8]:4"
         ],
         [
-          "nYOffset",
+          "nDistance",
           "Stack[0xc]:4"
         ]
       ]
@@ -3160,18 +3160,18 @@
         "GetCollisionDistance",
         "GetXPos",
         "GetYPos",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "d29c170d",
+      "dh": "f66a7b23",
       "paramStorage": [
         [
           "pGame",
@@ -3243,7 +3243,7 @@
         "MONSTERAI_IsMonsterAttacking",
         "GetSomeMonsterStatFlag",
         "WalkRandomOffset",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "GetYPos",
         "GetXPos",
         "UNITS_GetRoom",
@@ -3259,7 +3259,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "965d8689",
+      "dh": "94e20141",
       "paramStorage": [
         [
           "pGame",
@@ -3296,7 +3296,7 @@
       "calledFunctions": [
         "MONSTERAI_GetTarget_Hidden",
         "MONSTERAI_FindBestTarget",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "GetYPos",
         "GetXPos",
         "UNITS_GetRoom",
@@ -3317,7 +3317,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a15e77f6",
+      "dh": "b329affd",
       "paramStorage": [
         [
           "pGame",
@@ -3353,14 +3353,15 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "SERVER_UNIT_CastSkill",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetSkillByIdAndOwner",
+        "SetCurrentSkill",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition",
         "PlanNextAiMove"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -3368,7 +3369,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "cbca00fd",
+      "dh": "c5b9fda4",
       "paramStorage": [
         [
           "pGame",
@@ -3415,7 +3416,7 @@
         "UNIT_GetUnitState",
         "ResetEngagedCombatAndStats",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "EVENT_RemoveUnitTimersByType",
         "SetUnsetAiFlag",
@@ -3424,7 +3425,7 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -3432,7 +3433,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c1fa7f8b",
+      "dh": "bbfea421",
       "paramStorage": [
         [
           "pGame",
@@ -3509,7 +3510,7 @@
       ]
     },
     {
-      "name": "ResetCombatTargetAndIdle",
+      "name": "MONSTERAI_WalkToUnit",
       "address": "005deca0",
       "lines": [
         {
@@ -3519,17 +3520,17 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c9d12246",
+      "dh": "de369a15",
       "paramStorage": [
         [
           "pGame",
@@ -3540,7 +3541,7 @@
           "EDX:4"
         ],
         [
-          "pAttacker",
+          "pTarget",
           "Stack[0x4]:4"
         ]
       ]
@@ -3620,7 +3621,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_CommandFleeFromUnit",
+      "name": "MONSTERAI_CommandWalkToUnitPathType13",
       "address": "005ded40",
       "lines": [
         {
@@ -3631,8 +3632,8 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "StartMonsterMove",
-        "MONSTERAI_CommandFleeFromUnit",
-        "SetCombatAndMonStats"
+        "MONSTERAI_CommandWalkToUnitPathType13",
+        "MONSTERMODE_SetPathOverrides"
       ],
       "usedTypes": [
         "D2MonsterPathParamStrc",
@@ -3641,7 +3642,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "35d1bdef",
+      "dh": "1d6218ec",
       "paramStorage": [
         [
           "pGame",
@@ -3675,15 +3676,15 @@
         "MONSTERAI_ExecuteLifecycleTransition",
         "WalkToCoords",
         "SetStepNum",
-        "SetCurrentSkill"
+        "MONMODE_InitModeChange"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "e3e9e662",
+      "dh": "332dd3d1",
       "paramStorage": [
         [
           "pGame",
@@ -3719,17 +3720,17 @@
         "UNIT_GetUnitState",
         "ResetEngagedCombatAndStats",
         "SetStepNum",
-        "SetCurrentSkill"
+        "MONMODE_InitModeChange"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
         "eD2States",
         "int32_t"
       ],
-      "dh": "3462bdfe",
+      "dh": "6313a065",
       "paramStorage": [
         [
           "pGame",
@@ -3762,17 +3763,17 @@
       "calledFunctions": [
         "MONSTERAI_CommandWalkToCoords",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "EVENT_RemoveUnitTimersByType"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "44609668",
+      "dh": "f00f8647",
       "paramStorage": [
         [
           "pGame",
@@ -3807,19 +3808,19 @@
         "UNIT_GetUnitState",
         "ResetEngagedCombatAndStats",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "EVENT_RemoveUnitTimersByType"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
         "eD2States",
         "int32_t"
       ],
-      "dh": "db2f90e1",
+      "dh": "0916daf3",
       "paramStorage": [
         [
           "pGame",
@@ -3853,15 +3854,15 @@
         "MONSTERAI_ExecuteLifecycleTransition",
         "MONSTERAI_CommandWalkToCoordsImmediate",
         "SetStepNum",
-        "SetCurrentSkill"
+        "MONMODE_InitModeChange"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "d1eba714",
+      "dh": "9de35555",
       "paramStorage": [
         [
           "pGame",
@@ -3975,7 +3976,7 @@
         "WalkTowardsUnitOffset",
         "GetXPos",
         "GetYPos",
-        "ApplyCombatAndMonStats"
+        "AITACTICS_SetPathOverrides"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -3984,7 +3985,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6f565ca1",
+      "dh": "45aab0a0",
       "paramStorage": [
         [
           "pGame",
@@ -4023,7 +4024,7 @@
         "MONSTERAI_CommandRunAwayFromUnit",
         "GetXPos",
         "GetYPos",
-        "SetCombatAndMonStats"
+        "MONSTERMODE_SetPathOverrides"
       ],
       "usedTypes": [
         "D2MonsterPathParamStrc",
@@ -4034,7 +4035,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc9e157e",
+      "dh": "dad4c738",
       "paramStorage": [
         [
           "pGame",
@@ -4074,18 +4075,18 @@
         "GetYPos",
         "UpdateDirection",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4ef42562",
+      "dh": "1d79c760",
       "paramStorage": [
         [
           "pGame",
@@ -4122,10 +4123,10 @@
         "GetYPos",
         "RANDOM_RandomNumberSelector",
         "SetStepNum",
-        "SetCurrentSkill"
+        "MONMODE_InitModeChange"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -4134,7 +4135,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "91d9b8ab",
+      "dh": "2a781b11",
       "paramStorage": [
         [
           "pGame",
@@ -4170,12 +4171,12 @@
         "GetYPos",
         "RANDOM_RandomNumberSelector",
         "SetStepNum",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "WalkRandomOffset"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -4183,7 +4184,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04c58fec",
+      "dh": "8682b712",
       "paramStorage": [
         [
           "pGame",
@@ -4215,7 +4216,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "SetCombatStateAndApproachTarget",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "StartMonsterMove"
       ],
       "usedTypes": [
@@ -4225,7 +4226,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "f36b613d",
+      "dh": "3597a4d7",
       "paramStorage": [
         [
           "pGame",
@@ -4401,7 +4402,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_ConvertMonstersInRadius",
+      "name": "QUESTFX_KillMonstersAroundBoss",
       "address": "005dfbf0",
       "lines": [
         {
@@ -4411,7 +4412,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_ConvertMonstersInRadius",
+        "QUESTFX_KillMonstersAroundBoss",
         "UNITS_GetRoom",
         "GetXPos",
         "GetYPos",
@@ -4438,7 +4439,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0c91103e",
+      "dh": "324fa6f6",
       "paramStorage": [
         [
           "pGame",
@@ -4449,7 +4450,7 @@
           "EBX:4"
         ],
         [
-          "nUnitType",
+          "nRadius",
           "Stack[0x4]:4"
         ],
         [
@@ -4467,7 +4468,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_ThinkRangedSpecial",
+      "name": "QUESTFX_BloodRavenDeath",
       "address": "005dfd90",
       "lines": [
         {
@@ -4477,14 +4478,14 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_ThinkRangedSpecial",
-        "MONSTERAI_ConvertMonstersInRadius"
+        "QUESTFX_BloodRavenDeath",
+        "QUESTFX_KillMonstersAroundBoss"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1f05efdb",
+      "dh": "45d301e3",
       "paramStorage": [
         [
           "pGame",
@@ -4529,7 +4530,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_ThinkRangedShort",
+      "name": "QUESTFX_AndarielDeath",
       "address": "005dfe00",
       "lines": [
         {
@@ -4539,14 +4540,14 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_ThinkRangedShort",
-        "MONSTERAI_ConvertMonstersInRadius"
+        "QUESTFX_AndarielDeath",
+        "QUESTFX_KillMonstersAroundBoss"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "e98e7133",
+      "dh": "c7cb5f00",
       "paramStorage": [
         [
           "pGame",
@@ -4559,7 +4560,7 @@
       ]
     },
     {
-      "name": "AI_Diablo_SpawnRingAttack",
+      "name": "QUESTFX_RadamentDeath",
       "address": "005dfe20",
       "lines": [
         {
@@ -4569,8 +4570,8 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "AI_Diablo_SpawnRingAttack",
-        "MONSTERAI_ConvertMonstersInRadius",
+        "QUESTFX_RadamentDeath",
+        "QUESTFX_KillMonstersAroundBoss",
         "GetYPos",
         "GetXPos",
         "SKILLS_CreateMissileAtTarget"
@@ -4583,7 +4584,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b62d17a1",
+      "dh": "dd3fff67",
       "paramStorage": [
         [
           "pGame",
@@ -4618,7 +4619,7 @@
         "CreatingMissile",
         "SetTargetX",
         "ToggleHasPortalFlagRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -4631,7 +4632,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "581d01ab",
+      "dh": "1b5e5f03",
       "paramStorage": [
         [
           "pGame",
@@ -4644,7 +4645,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_ThinkMeleeSkill",
+      "name": "QUESTFX_IzualDeath",
       "address": "005e0020",
       "lines": [
         {
@@ -4654,14 +4655,14 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_ThinkMeleeSkill",
-        "MONSTERAI_ConvertMonstersInRadius"
+        "QUESTFX_IzualDeath",
+        "QUESTFX_KillMonstersAroundBoss"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f10ba9ca",
+      "dh": "cc08388c",
       "paramStorage": [
         [
           "pGame",
@@ -4674,7 +4675,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_ThinkRangedNormal",
+      "name": "QUESTFX_ShenkDeath",
       "address": "005e0040",
       "lines": [
         {
@@ -4684,14 +4685,14 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_ThinkRangedNormal",
-        "MONSTERAI_ConvertMonstersInRadius"
+        "QUESTFX_ShenkDeath",
+        "QUESTFX_KillMonstersAroundBoss"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "72f49030",
+      "dh": "3d135622",
       "paramStorage": [
         [
           "pGame",
@@ -4734,14 +4735,14 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "ITEM_RewardItemToDrop",
-        "ITEMMODE_HandleCursorItem"
+        "ITEMMODE_RechargeItem"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "022cabed",
+      "dh": "e2d11c42",
       "paramStorage": [
         [
           "pGame",
@@ -5215,7 +5216,7 @@
         "FindUnitFromTable",
         "AI_ChangeModeAndTargetUnit",
         "FreeAi",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "WalkRandomOffsetAroundUnit",
         "FindTargetAndDistance",
@@ -5234,7 +5235,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "b3d829d8",
+      "dh": "32219897",
       "paramStorage": [
         [
           "pGame",
@@ -5268,7 +5269,7 @@
         "UNIT_GetModuloFromSeed",
         "SERVER_UNIT_CastSkill",
         "MONSTERAI_CommandWalkToUnit",
-        "CastSkillWithDistanceOffset"
+        "MONSTERAI_CommandWalkToDistance"
       ],
       "usedTypes": [
         "D2AiParamStrc",
@@ -5278,7 +5279,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "f35ebc6b",
+      "dh": "55e573ab",
       "paramStorage": [
         [
           "pGame",
@@ -5295,7 +5296,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_FindNeutralMonsterInRange",
+      "name": "MONSTERAI_FindUnassignedImpInRange",
       "address": "005e1720",
       "lines": [
         {
@@ -5305,7 +5306,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_FindNeutralMonsterInRange",
+        "MONSTERAI_FindUnassignedImpInRange",
         "CheckIfMonsterIsDead",
         "TXT_MonStats_GetBaseId",
         "IsAllyOf",
@@ -5320,7 +5321,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "23a1f129",
+      "dh": "779691dd",
       "paramStorage": [
         [
           "pGame",
@@ -5400,7 +5401,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "da2a5079",
+      "dh": "20d0f74f",
       "paramStorage": [
         [
           "pGame",
@@ -5439,8 +5440,8 @@
         "GetSkillParam4",
         "UNIT_GetModuloFromSeed",
         "TestIfMonsterCanHitTarget",
-        "ApplyCombatAndMonStats",
-        "CastSkillWithDistanceOffset"
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_CommandWalkToDistance"
       ],
       "usedTypes": [
         "D2AiParamStrc",
@@ -5453,7 +5454,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "c8bebb8e",
+      "dh": "5541f516",
       "paramStorage": [
         [
           "pGame",
@@ -5569,8 +5570,8 @@
         "GetStatsByFlags",
         "GetCurrentLifePercentage",
         "SERVER_UNIT_CastSkill",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
         "PlanNextAiMove",
         "AI_ChangeModeAndTargetUnit",
         "FindTargetAndDistance",
@@ -5587,7 +5588,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a4b85c8d",
+      "dh": "0708d49a",
       "paramStorage": [
         [
           "pGame",
@@ -5618,8 +5619,8 @@
         "GetStatsByFlags",
         "GetCurrentLifePercentage",
         "SERVER_UNIT_CastSkill",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
         "FindTargetAndDistance",
         "UNIT_GetModuloFromSeed",
         "WalkTowardsUnitOffset",
@@ -5638,7 +5639,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c211d29a",
+      "dh": "323789ea",
       "paramStorage": [
         [
           "pGame",
@@ -5693,7 +5694,7 @@
       ]
     },
     {
-      "name": "AI_Baal_FindMinionToHeal",
+      "name": "AI_Overseer_FindMinionCallback",
       "address": "005e26d0",
       "lines": [
         {
@@ -5703,7 +5704,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "AI_Baal_FindMinionToHeal",
+        "AI_Overseer_FindMinionCallback",
         "TXT_MonStats_GetBaseId",
         "CheckIfMonsterIsDead",
         "UNITS_CheckIfCanAttackTarget",
@@ -5719,7 +5720,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ccf2a1f",
+      "dh": "f8e4fd09",
       "paramStorage": [
         [
           "pGame",
@@ -5775,7 +5776,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2ba3410d",
+      "dh": "74abe96c",
       "paramStorage": [
         [
           "pGame",
@@ -5792,7 +5793,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_CountGolemReviveMonsters",
+      "name": "AI_MinionSpawner_CountMinionsCallback",
       "address": "005e2b70",
       "lines": [
         {
@@ -5802,17 +5803,18 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_CountGolemReviveMonsters",
+        "AI_MinionSpawner_CountMinionsCallback",
         "CheckIfMonsterIsDead",
         "TXT_MonStats_GetBaseId",
         "STATSEX_GetAlignment"
       ],
       "usedTypes": [
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99970ce5",
+      "dh": "b0ee20c4",
       "paramStorage": [
         [
           "pGame",
@@ -5857,7 +5859,7 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "eaca5d9b",
+      "dh": "f132b7e2",
       "paramStorage": [
         [
           "pGame",
@@ -6104,7 +6106,7 @@
         "UNIT_GetUnitState",
         "SERVER_UNIT_CastSkill",
         "SetState",
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove"
       ],
@@ -6116,7 +6118,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "1baa1a29",
+      "dh": "5bfe02d3",
       "paramStorage": [
         [
           "pGame",
@@ -6144,7 +6146,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_BloodLord",
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "PlanNextAiMove",
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit"
@@ -6157,7 +6159,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "8636cf12",
+      "dh": "ffc2c0b5",
       "paramStorage": [
         [
           "pGame",
@@ -6223,7 +6225,7 @@
         "AITHINK_Fn1_Smith",
         "AI_ChangeModeAndTargetUnit",
         "GetCurrentLifePercentage",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
@@ -6231,7 +6233,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16f12308",
+      "dh": "f2a3b818",
       "paramStorage": [
         [
           "pGame",
@@ -6300,7 +6302,7 @@
         "UNITS_GetRoom",
         "GetGridIndex",
         "MONSTERS_GetCompositeDimensions",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToCoords",
         "EVENT_RemoveUnitTimersByType",
         "MONSTERAI_CommandWalkRandomOffset",
@@ -6308,7 +6310,7 @@
         "GetAiParamFromUnit",
         "MONSTERAI_GetDistanceToCoords",
         "MONSTERAI_CommandMoveToCoords",
-        "SetCombatAndMonStats",
+        "MONSTERMODE_SetPathOverrides",
         "GetDistance",
         "PlanNextAiMove",
         "DRLGROOM_GetCoordListFromSubtilePos",
@@ -6333,7 +6335,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3309e721",
+      "dh": "e10fb29a",
       "paramStorage": [
         [
           "pGame",
@@ -6389,7 +6391,7 @@
         "UNITS_GetRoom",
         "GetGridIndex",
         "MONSTERS_GetCompositeDimensions",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToCoords",
         "MONSTERAI_CommandMoveToCoordsRetry",
         "EVENT_RemoveUnitTimersByType",
@@ -6399,7 +6401,7 @@
         "GetAiParamFromUnit",
         "MONSTERAI_GetDistanceToCoords",
         "MONSTERAI_CommandMoveToCoords",
-        "SetCombatAndMonStats",
+        "MONSTERMODE_SetPathOverrides",
         "GetDistance",
         "DRLGROOM_GetCoordListFromSubtilePos",
         "SPAWN_FindRandomPositionForMonster",
@@ -6425,7 +6427,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ffcfb8b8",
+      "dh": "681f4718",
       "paramStorage": [
         [
           "pGame",
@@ -6557,8 +6559,8 @@
         "DRLGROOM_IsRoomInTown",
         "UNIT_GetModuloFromSeed",
         "AI_ChangeModeAndTargetUnit",
-        "ApplyCombatAndMonStats",
-        "MONSTERAI_CommandFleeFromUnit",
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "MONSTERAI_CommandWalkRandomOffset"
       ],
       "usedTypes": [
@@ -6572,7 +6574,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "070cd11b",
+      "dh": "d3cacbba",
       "paramStorage": [
         [
           "pGame",
@@ -6871,7 +6873,7 @@
         "GetAiCmd",
         "GetDistance",
         "HirelingFollowOwnerAction",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UNITS_GetRoom",
@@ -6885,7 +6887,7 @@
         "GetPlayerData",
         "GetXSP3",
         "GetYSP3",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkRandomOffsetAroundUnit",
         "EVENT_RemoveUnitTimersByType",
         "WalkTowardsUnitOffset",
@@ -6905,7 +6907,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0f583e77",
+      "dh": "0d1ce63d",
       "paramStorage": [
         [
           "pGame",
@@ -7115,7 +7117,7 @@
         "GetXPos",
         "GetYPos",
         "GetGridIndex",
-        "SetCombatAndMonStats",
+        "MONSTERMODE_SetPathOverrides",
         "MONSTERAI_CommandMoveToCoords",
         "EVENT_RemoveUnitTimersByType",
         "AI_Monster_TryCastRateLimitedSkill",
@@ -7123,7 +7125,7 @@
         "MONSTERAI_GetDistanceToCoords",
         "UNIT_GetModuloFromSeed",
         "AI_ChangeModeAndTargetUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitDirect"
       ],
       "usedTypes": [
@@ -7139,7 +7141,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "99c8bee5",
+      "dh": "6e835e5b",
       "paramStorage": [
         [
           "pGame",
@@ -7329,7 +7331,7 @@
         "CreateAiCmdAndFill",
         "AI_GetWeightedDistanceToPoint",
         "PlanNextAiMove",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandMoveToCoords",
         "EVENT_RemoveUnitTimersByType",
         "AI_BloodRaven_MoveRandomNearTarget",
@@ -7359,7 +7361,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "da0d0042",
+      "dh": "421cca0d",
       "paramStorage": [
         [
           "pGame",
@@ -7471,7 +7473,6 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "CastSkillWithDistanceOffset",
         "_PlayerNpcInteraction",
         "MONSTERAI_FindNearestUnit",
         "GetDistance",
@@ -7482,7 +7483,8 @@
         "SetupUpdateEvent_AttachEventSound",
         "PlanNextAiMove",
         "AI_Monster_CheckReturnToHome",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_CommandWalkToDistance",
         "MONSTERAI_GetDistanceToCoords",
         "WalkToCoords"
       ],
@@ -7495,7 +7497,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d477fa7",
+      "dh": "2866aa5e",
       "paramStorage": [
         [
           "pGame",
@@ -7525,7 +7527,7 @@
         "AI_Monster_ExecuteAiCommands",
         "FindMonsterAiCmd",
         "MONSTERAI_GetDistanceToCoords",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToCoordsImmediate",
         "PlanNextAiMove",
         "WalkRandomOffset",
@@ -7542,7 +7544,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f0f69180",
+      "dh": "885ff5d3",
       "paramStorage": [
         [
           "pGame",
@@ -7571,7 +7573,7 @@
       "calledFunctions": [
         "AI_Monster_WalkToStoredPosition",
         "MONSTERAI_GetDistanceToCoords",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToCoordsImmediate",
         "AI_CreateCmdIfNotExists"
       ],
@@ -7583,7 +7585,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5808e3fd",
+      "dh": "5591e5dd",
       "paramStorage": [
         [
           "pGame",
@@ -7838,7 +7840,7 @@
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
         "Q22_IsGoldenBirdQuestActive",
-        "Q22_ClearGoldenBirdQuestFlag",
+        "Q21_ClearGoldenBirdQuestFlag",
         "_PlayerNpcInteraction",
         "AI_Monster_ExecuteAiCommands",
         "AI_Monster_ExecuteMapAiBehavior"
@@ -7852,7 +7854,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "68f42057",
+      "dh": "f9ca257e",
       "paramStorage": [
         [
           "pGame",
@@ -8554,7 +8556,7 @@
         "SetEvent",
         "PlanNextAiMove",
         "AI_ClearSwitchAiTargetParams",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "GetSomeMonsterStatFlag",
         "MONSTERAI_CommandRunAwayFromUnit",
         "WalkTowardsUnitOffset",
@@ -8570,7 +8572,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7f6bc67a",
+      "dh": "f6e94acd",
       "paramStorage": [
         [
           "pGame",
@@ -8601,7 +8603,7 @@
         "GetTargetEx",
         "UNITS_GetRoom",
         "DRLGROOM_IsRoomInTown",
-        "MONSTERAI_CommandFleeFromUnit",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "IsInMeleeRange",
         "AI_ChangeModeAndTargetUnit",
         "MONSTERAI_GetTarget_WithWander",
@@ -8618,7 +8620,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5b8c8e68",
+      "dh": "6f4a9b8e",
       "paramStorage": [
         [
           "pGame",
@@ -8932,7 +8934,7 @@
         "AI_Diablo_DecideAction",
         "UNIT_GetUnitState",
         "SERVER_UNIT_CastSkill",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "WalkToCoords",
@@ -8959,7 +8961,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "83a54218",
+      "dh": "4fbfdce3",
       "paramStorage": [
         [
           "pGame",
@@ -9288,7 +9290,7 @@
         "MONSTERAI_GetDistanceToCoords",
         "MONSTERAI_CommandSkillAtPosition",
         "Q24_StartDarkWandererPortalTimer",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "PlanNextAiMove"
       ],
       "usedTypes": [
@@ -9299,7 +9301,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "657a09d6",
+      "dh": "3ea0a7e3",
       "paramStorage": [
         [
           "pGame",
@@ -9513,7 +9515,7 @@
         "PLAYER_GetActiveWeaponForSkill",
         "SKILLS_GetItemBonusDamage",
         "GetAiCmd",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToCoords",
         "WalkRandomOffsetAroundUnit",
         "PlanNextAiMove"
@@ -9529,7 +9531,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3adafeed",
+      "dh": "b37a4e61",
       "paramStorage": [
         [
           "pGame",
@@ -9656,29 +9658,28 @@
         "GetOwnersPetType"
       ],
       "usedTypes": [
-        "D2PetStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "18153042",
+      "dh": "2e3e1df9",
       "paramStorage": [
         [
-          "pGameStrc",
+          "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pOwner",
           "EDX:4"
         ],
         [
-          "byPetTypeA",
+          "pTarget",
           "Stack[0x4]:4"
         ],
         [
-          "byPetTypeB",
+          "nSkillId",
           "Stack[0x8]:4"
         ]
       ]
@@ -9709,7 +9710,7 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "31c62df4",
+      "dh": "eae74dcf",
       "paramStorage": [
         [
           "pGame",
@@ -10013,7 +10014,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97beb1a7",
+      "dh": "17bcd1e2",
       "paramStorage": [
         [
           "pGame",
@@ -10108,7 +10109,7 @@
       ]
     },
     {
-      "name": "AI_Baal_FindEnemyAndMinionCallback",
+      "name": "AI_ShadowMaster_ScanCallback",
       "address": "005eb6d0",
       "lines": [
         {
@@ -10118,7 +10119,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "AI_Baal_FindEnemyAndMinionCallback",
+        "AI_ShadowMaster_ScanCallback",
         "CheckForModeZeroDeath",
         "IsAllyOf",
         "TXT_MonStats_GetBaseId",
@@ -10134,7 +10135,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c486f73e",
+      "dh": "73474732",
       "paramStorage": [
         [
           "pGame",
@@ -10292,7 +10293,7 @@
         "ForEach",
         "MONSTERAI_IsValidResurrectionTarget",
         "GetCurrentLifePercentage",
-        "STATES_HasTransformState",
+        "STATES_HasPgsvFlagState",
         "TestCollisionWithUnit",
         "MONSTERAI_CommandRunToUnitDirect",
         "MONSTERAI_CommandRunAwayFromUnit",
@@ -10326,7 +10327,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3febd085",
+      "dh": "2d03a9d1",
       "paramStorage": [
         [
           "pGame",
@@ -10451,8 +10452,8 @@
         "IsInMeleeRange",
         "AI_Pet_EvaluateMovementPriority",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
         "SERVER_UNIT_CastSkill",
         "UNIT_GetModuloFromSeed",
         "WalkTowardsUnitOffset",
@@ -10471,7 +10472,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1de900f",
+      "dh": "24558774",
       "paramStorage": [
         [
           "pGame",
@@ -10537,18 +10538,18 @@
       "calledFunctions": [
         "MONSTERAI_ExecuteLifecycleTransition",
         "MONSTERAI_CommandWalkToUnitWithCombat",
-        "ApplyCombatAndMonStats",
-        "SetCurrentSkill",
+        "AITACTICS_SetPathOverrides",
+        "MONMODE_InitModeChange",
         "SetStepNum"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0353bd14",
+      "dh": "cd5829d4",
       "paramStorage": [
         [
           "pGame",
@@ -10627,7 +10628,7 @@
       ]
     },
     {
-      "name": "AI_Hireling_ThinkRangedCombat",
+      "name": "AITHINK_Fn1_DruidWolf_SpiritWolf",
       "address": "005ecee0",
       "lines": [
         {
@@ -10637,7 +10638,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "AI_Hireling_ThinkRangedCombat",
+        "AITHINK_Fn1_DruidWolf_SpiritWolf",
         "GetOwnerUnit",
         "FindUnitFromTable",
         "GetYPosFromDynamicPathUnit",
@@ -10656,9 +10657,9 @@
         "GetCollisionDistance",
         "AI_Pet_ExecuteMovementBehavior",
         "AI_ChangeModeAndTargetUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitDirect",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "UNIT_GetModuloFromSeed",
         "WalkRandomOffset"
       ],
@@ -10672,7 +10673,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a6a0295",
+      "dh": "e2d87d1f",
       "paramStorage": [
         [
           "pGame",
@@ -10683,13 +10684,13 @@
           "EDX:4"
         ],
         [
-          "ppAiGeneralTable",
+          "pAiParam",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "AI_Hireling_ThinkMeleeCombat",
+      "name": "AITHINK_Fn1_DruidWolf_Fenris",
       "address": "005ed2a0",
       "lines": [
         {
@@ -10700,7 +10701,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "PlanNextAiMove",
-        "AI_Hireling_ThinkMeleeCombat",
+        "AITHINK_Fn1_DruidWolf_Fenris",
         "GetOwnerUnit",
         "FindUnitFromTable",
         "GetYPosFromDynamicPathUnit",
@@ -10721,14 +10722,14 @@
         "SKILLEMONST_FindNearbyCorpse",
         "IsInMeleeRange",
         "MONSTERAI_CommandRunToUnitDirect",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkRandomOffset",
         "AI_ChangeModeAndTargetUnit"
       ],
       "usedTypes": [
         "AI_Hireling_ThinkMeleeCombat_Slotm",
-        "D2AiGeneralStrc",
-        "D2AiGeneralStrc *",
+        "D2AiParamStrc",
+        "D2MonStatsTxt",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -10736,7 +10737,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8bc4267e",
+      "dh": "02c26738",
       "paramStorage": [
         [
           "pGame",
@@ -10747,7 +10748,7 @@
           "EDX:4"
         ],
         [
-          "ppAiGeneralTable",
+          "pAiParam",
           "Stack[0x4]:4"
         ]
       ]
@@ -10764,15 +10765,15 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_DruidWolf",
-        "AI_Hireling_ThinkRangedCombat",
-        "AI_Hireling_ThinkMeleeCombat"
+        "AITHINK_Fn1_DruidWolf_SpiritWolf",
+        "AITHINK_Fn1_DruidWolf_Fenris"
       ],
       "usedTypes": [
         "D2AiParamStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "becae7ca",
+      "dh": "422451e2",
       "paramStorage": [
         [
           "pGame",
@@ -10809,8 +10810,8 @@
         "MONSTERAI_FindTargetInRange",
         "TestIfMonsterCanHitTarget",
         "UNIT_GetModuloFromSeed",
-        "ApplyCombatAndMonStats",
-        "ResetCombatTargetAndIdle",
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_WalkToUnit",
         "MONSTERAI_CommandSkillSequence",
         "AI_ChangeModeAndTargetUnit",
         "RestartAiThink"
@@ -10825,7 +10826,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e2a59487",
+      "dh": "dcf5cae7",
       "paramStorage": [
         [
           "pGame",
@@ -10982,7 +10983,7 @@
         "AddNodeToTable",
         "AI_ChangeModeAndTargetUnit",
         "RestartAiThink",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitDirect",
         "GetXPos",
         "GetYPos",
@@ -11000,7 +11001,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "a45b3a45",
+      "dh": "28b86764",
       "paramStorage": [
         [
           "pGame",
@@ -11281,7 +11282,7 @@
         "MONSTERAI_CanSpawnMonsterAt",
         "GetMonsterBaseId",
         "WalkRandomOffset",
-        "ResetCombatTargetAndIdle"
+        "MONSTERAI_WalkToUnit"
       ],
       "usedTypes": [
         "D2AiMinionHealScanStrc",
@@ -11295,7 +11296,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ac2a3a52",
+      "dh": "72f01551",
       "paramStorage": [
         [
           "pGame",
@@ -11413,26 +11414,27 @@
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
         "GetDistanceToXY",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "SKILLS_GetSkillByEnum",
+        "SetCurrentSkill",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition",
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "RestartAiThink",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove"
       ],
       "usedTypes": [
         "D2AiParamStrc",
+        "D2ModeChangeStrc",
         "D2MonStatsTxt",
-        "D2MonsterKillStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3ed60f3",
+      "dh": "944701e7",
       "paramStorage": [
         [
           "pGame",
@@ -11518,7 +11520,7 @@
         "UNIT_GetModuloFromSeed",
         "MONSTERAI_HasSkillInSlots",
         "MONSTERAI_CommandSkillSequence",
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "RestartAiThink",
         "AI_ChangeModeAndTargetUnit"
       ],
@@ -11532,7 +11534,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "ffa74b0c",
+      "dh": "30fc43d7",
       "paramStorage": [
         [
           "pGame",
@@ -11750,7 +11752,7 @@
         "STATLIST_AttachStatListToUnit",
         "D2AddStatToStatsListEx",
         "TXT_SuperUniquesHardcoded_GetSuperUniqueIndex",
-        "MONSTERTBLS_GetPresetActValue",
+        "MONSTERTBLS_MapSuperUniqueId",
         "BaalThroneClearFunc",
         "TXT_SuperUniques_GetLine",
         "SERVER_UnitQueuePacket0xA4",
@@ -11775,7 +11777,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4ac0655e",
+      "dh": "92404585",
       "paramStorage": [
         [
           "pGame",
@@ -11815,8 +11817,8 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "FreeServerUnit",
-        "ApplyCombatAndMonStats",
-        "ResetCombatTargetAndIdle"
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_WalkToUnit"
       ],
       "usedTypes": [
         "D2AiParamStrc",
@@ -11828,7 +11830,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "87d26b0b",
+      "dh": "971e5d28",
       "paramStorage": [
         [
           "pGame",
@@ -11862,7 +11864,7 @@
         "GetXPosFromDynamicPathUnit",
         "UNITS_GetRoom",
         "SUNIT_RelocateUnit",
-        "ResetCombatTargetAndIdle"
+        "MONSTERAI_WalkToUnit"
       ],
       "usedTypes": [
         "D2AiParamStrc",
@@ -11873,7 +11875,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f997cf46",
+      "dh": "29080241",
       "paramStorage": [
         [
           "pGame",
@@ -11943,7 +11945,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_BaalMinion",
-        "ResetCombatTargetAndIdle",
+        "MONSTERAI_WalkToUnit",
         "UNIT_GetModuloFromSeed",
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit",
@@ -11958,7 +11960,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "cee37b4f",
+      "dh": "9fc06067",
       "paramStorage": [
         [
           "pGame",
@@ -11975,7 +11977,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_FindEnergyMonster",
+      "name": "AI_PutridDefiler_FindHostCallback",
       "address": "005efa50",
       "lines": [
         {
@@ -11985,15 +11987,15 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_FindEnergyMonster",
-        "SKILLSOR_GetFrozenOrbBoltCount",
+        "AI_PutridDefiler_FindHostCallback",
+        "SKILLMONST_CanImpregnateTarget",
         "GetDistance"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6a08f532",
+      "dh": "7e3580f7",
       "paramStorage": [
         [
           "dwUnused",
@@ -12031,7 +12033,7 @@
         "PlanNextAiMove",
         "IsInMeleeRange",
         "SERVER_UNIT_CastSkill",
-        "ResetCombatTargetAndIdle"
+        "MONSTERAI_WalkToUnit"
       ],
       "usedTypes": [
         "D2AiParamStrc",
@@ -12040,7 +12042,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2b3607ac",
+      "dh": "530714a8",
       "paramStorage": [
         [
           "pGame",
@@ -12069,8 +12071,8 @@
       "calledFunctions": [
         "AITHINK_Fn1_Brute",
         "GetCurrentLifePercentage",
-        "ApplyCombatAndMonStats",
-        "MONSTERAI_CommandFleeFromUnit",
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "AI_ChangeModeAndTargetUnit",
         "SetCombatStateAndApproachTarget",
         "PlanNextAiMove"
@@ -12081,7 +12083,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "58233905",
+      "dh": "1ee32aac",
       "paramStorage": [
         [
           "pGame",
@@ -12153,7 +12155,7 @@
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "WalkRandomOffset",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitDirect"
       ],
       "usedTypes": [
@@ -12165,7 +12167,7 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d304e93d",
+      "dh": "ce8517b3",
       "paramStorage": [
         [
           "pGame",
@@ -12199,7 +12201,7 @@
         "FindTargetAndDistance",
         "UNIT_GetModuloFromSeed",
         "MONSTERAI_CommandWalkToUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "MONSTERAI_CommandWalkToUnitMinStep",
         "PlanNextAiMove",
@@ -12213,7 +12215,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "759dbd9f",
+      "dh": "055e4be2",
       "paramStorage": [
         [
           "pGame",
@@ -12242,7 +12244,7 @@
       "calledFunctions": [
         "AITHINK_Fn1_BloodHawk",
         "AI_ChangeModeAndTargetUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "WalkRandomOffset",
         "WalkTowardsUnitOffset"
@@ -12257,7 +12259,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "c0f6018c",
+      "dh": "65558410",
       "paramStorage": [
         [
           "pGame",
@@ -12294,7 +12296,7 @@
         "FindUnitFromTable",
         "GetCollisionDistanceFromXY",
         "FreeAi",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "SetupUpdateEvent_AttachEventSound",
         "GetAiCmd",
@@ -12321,7 +12323,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6de3af9c",
+      "dh": "1231e916",
       "paramStorage": [
         [
           "pGame",
@@ -12443,7 +12445,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_Wraith",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove"
       ],
@@ -12454,7 +12456,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "6447f187",
+      "dh": "465eab97",
       "paramStorage": [
         [
           "pGame",
@@ -12484,7 +12486,7 @@
         "AITHINK_Fn1_CorruptRogue",
         "UNITS_GetRoom",
         "MONSTER_InitLevelDifficultyScaling",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitMinStep",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove",
@@ -12501,7 +12503,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "1b2493bb",
+      "dh": "ba0a02ab",
       "paramStorage": [
         [
           "pGame",
@@ -12530,12 +12532,12 @@
       "calledFunctions": [
         "AITHINK_Fn1_Baboon",
         "GetCurrentLifePercentage",
-        "MONSTERAI_CommandFleeFromUnit",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "MONSTERAI_IsMonsterAttacking",
         "UNIT_GetModuloFromSeed",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "SetCombatStateAndApproachTarget",
         "PlanNextAiMove",
@@ -12552,7 +12554,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49953e5b",
+      "dh": "bf625481",
       "paramStorage": [
         [
           "pGame",
@@ -12665,8 +12667,8 @@
         "MONSTERAI_FindFallenForRevival",
         "TXT_MonStats_GetBaseId",
         "STATSEX_GetAlignment",
-        "STATES_HasPassiveState",
-        "STATES_HasLightState",
+        "STATES_HasUdeadFlagState",
+        "STATES_HasHideFlagState",
         "GetDistanceBetween",
         "CheckMonsterType"
       ],
@@ -12677,7 +12679,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3de0e11e",
+      "dh": "534fb5f2",
       "paramStorage": [
         [
           "pGame",
@@ -12945,7 +12947,7 @@
         "AITHINK_Fn1_SandLeaper",
         "AI_Monster_ValidateSkillAtPosition",
         "SERVER_UNIT_CastSkill",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkRandomOffsetAroundUnit",
         "MONSTERAI_CommandWalkToUnit",
         "SetCombatStateAndApproachTarget",
@@ -12958,7 +12960,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e75d6af0",
+      "dh": "c0dafa42",
       "paramStorage": [
         [
           "pGame",
@@ -12988,8 +12990,8 @@
         "AITHINK_Fn1_PantherWoman",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove",
-        "ApplyCombatAndMonStats",
-        "MONSTERAI_CommandFleeFromUnit",
+        "AITACTICS_SetPathOverrides",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "ForEach",
         "MONSTERAI_CommandWalkToUnit",
         "SetCombatStateAndApproachTarget"
@@ -13003,7 +13005,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0b72d8da",
+      "dh": "4031ecda",
       "paramStorage": [
         [
           "pGame",
@@ -13076,7 +13078,7 @@
         "CreateAiCmdAndFill",
         "FreeAi",
         "SERVER_UNIT_CastSkill",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "SetCombatStateAndApproachTarget",
         "PlanNextAiMove",
@@ -13093,7 +13095,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "133feef0",
+      "dh": "1f0bcf78",
       "paramStorage": [
         [
           "pGame",
@@ -13163,14 +13165,14 @@
         "MONSTERAI_FindMonsterToResurrect",
         "IsAllyOf",
         "STATSEX_GetAlignment",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_GetLine",
         "MONSTER_IsMonsterUndead",
         "CheckMonsterType",
         "GetDistanceBetween",
-        "STATES_HasLightState",
+        "STATES_HasHideFlagState",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp"
+        "STATLIST_GetMaxLifeFromUnit"
       ],
       "usedTypes": [
         "D2AiResurrectScanStrc",
@@ -13179,7 +13181,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c17e19ee",
+      "dh": "4261be51",
       "paramStorage": [
         [
           "dwUnused",
@@ -13219,7 +13221,7 @@
         "AI_Monster_ValidateSkillAtPosition",
         "MONSTERAI_CommandSkillSequence",
         "FindTargetAndDistance",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnitMinStep",
         "PlanNextAiMove",
         "SetCombatStateAndApproachTarget"
@@ -13234,7 +13236,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "bdd8c293",
+      "dh": "d5fa1029",
       "paramStorage": [
         [
           "pGame",
@@ -13266,8 +13268,8 @@
         "GetXPos",
         "UNITS_GetRoom",
         "RemoveCollision",
-        "SetUnitWidth",
-        "PATH_SetCollisionPattern",
+        "PATH_SetUnitCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "RestartAiThink"
       ],
       "usedTypes": [
@@ -13277,7 +13279,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e586b004",
+      "dh": "581a24b3",
       "paramStorage": [
         [
           "pGame",
@@ -13301,14 +13303,14 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AI_Monster_ShrinkCollisionSize",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "GetYPos",
         "GetXPos",
         "UNITS_GetRoom",
         "SUNIT_RelocateUnit",
         "AddCollision_Type",
-        "SetUnitWidth",
-        "PATH_SetCollisionPattern",
+        "PATH_SetUnitCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "RestartAiThink"
       ],
       "usedTypes": [
@@ -13320,7 +13322,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c5955f09",
+      "dh": "d1296f73",
       "paramStorage": [
         [
           "pGame",
@@ -13347,7 +13349,7 @@
         "CheckIfMonsterIsDead",
         "GetDistanceBetween",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp"
+        "STATLIST_GetMaxLifeFromUnit"
       ],
       "usedTypes": [
         "D2AiLowLifeScanStrc",
@@ -13355,7 +13357,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d0eb2ea",
+      "dh": "4e0c170d",
       "paramStorage": [
         [
           "dwUnused",
@@ -13390,8 +13392,8 @@
         "AI_Monster_ShrinkCollisionSize",
         "GetDistanceBetween",
         "UNITS_GetRoom",
-        "CastSkillWithDistanceOffset",
-        "MoveAndCastSkill",
+        "MONSTERAI_CommandWalkToDistance",
+        "MONSTERAI_MoveToDistance",
         "RestartAiThink",
         "GetOwnerUnit",
         "UNIT_GetModuloFromSeed",
@@ -13402,7 +13404,7 @@
         "GetYPos",
         "MONSTERAI_GetDistanceToCoords",
         "RANDOM_RandomNumberSelector",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandMoveToPosition",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
@@ -13424,7 +13426,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "3d42d87d",
+      "dh": "07e51326",
       "paramStorage": [
         [
           "pGame",
@@ -13455,7 +13457,7 @@
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "WalkRandomOffset",
         "WalkTowardsUnitOffset"
@@ -13467,7 +13469,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "22c63be7",
+      "dh": "55633bfe",
       "paramStorage": [
         [
           "pGame",
@@ -13597,7 +13599,7 @@
       "calledFunctions": [
         "AITHINK_Fn1_Arach",
         "GetCurrentLifePercentage",
-        "MONSTERAI_CommandFleeFromUnit",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "SetCombatStateAndApproachTarget",
         "UNIT_GetModuloFromSeed",
         "MONSTERAI_IsMonsterAttacking",
@@ -13618,7 +13620,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f207f8df",
+      "dh": "1713c7f8",
       "paramStorage": [
         [
           "pGame",
@@ -13646,12 +13648,12 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_ThornHulk",
-        "MONSTERAI_CommandFleeFromUnit",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "UNIT_GetModuloFromSeed",
         "PlanNextAiMove",
         "SetCombatStateAndApproachTarget",
         "SERVER_UNIT_CastSkill",
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "RestartAiThink",
         "AI_ChangeModeAndTargetUnit"
       ],
@@ -13662,9 +13664,10 @@
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
+        "int32_t",
         "uint32_t"
       ],
-      "dh": "8f9f29f9",
+      "dh": "7b57049f",
       "paramStorage": [
         [
           "pGame",
@@ -13697,7 +13700,7 @@
         "UNIT_GetModuloFromSeed",
         "GetCurrentLifePercentage",
         "MONSTERAI_CommandWalkToUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "PlanNextAiMove",
         "SERVER_UNIT_CastSkill",
@@ -13714,7 +13717,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d5f872b0",
+      "dh": "a574738b",
       "paramStorage": [
         [
           "pGame",
@@ -13832,7 +13835,7 @@
         "AITHINK_Fn1_Fetish",
         "GetAiCmd",
         "FindUnitFromTable",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "FreeAi",
         "GetCurrentLifePercentage",
@@ -13853,7 +13856,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef30ab09",
+      "dh": "928f0011",
       "paramStorage": [
         [
           "pGame",
@@ -13928,7 +13931,7 @@
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit",
         "UNIT_GetModuloFromSeed",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
@@ -13939,7 +13942,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "0a556015",
+      "dh": "5a1c688e",
       "paramStorage": [
         [
           "pGame",
@@ -13972,7 +13975,7 @@
         "SetCombatStateAndApproachTarget",
         "MONSTERAI_IsMonsterAttacking",
         "AI_ChangeModeAndTargetUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunAwayFromUnit",
         "UNIT_GetModuloFromSeed",
         "MONSTERAI_CommandWalkToUnitMinStep",
@@ -13988,7 +13991,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "baad90b8",
+      "dh": "641bf762",
       "paramStorage": [
         [
           "pGame",
@@ -14017,7 +14020,7 @@
       "calledFunctions": [
         "AITHINK_Fn1_CorruptLancer",
         "SetStepNum",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunToUnitMinStep",
         "PlanNextAiMove",
         "MONSTERAI_CommandWalkToUnitMinStep",
@@ -14034,7 +14037,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "05d97c9a",
+      "dh": "606fa32e",
       "paramStorage": [
         [
           "pGame",
@@ -14065,7 +14068,7 @@
         "MONSTERAI_IsMonsterAttacking",
         "FindTargetAndDistance",
         "AI_ChangeModeAndTargetUnit",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "PlanNextAiMove",
         "SetCombatStateAndApproachTarget"
       ],
@@ -14076,7 +14079,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "6116a778",
+      "dh": "131f5d43",
       "paramStorage": [
         [
           "pGame",
@@ -14312,7 +14315,7 @@
         "SetSkill",
         "Server_SelectSkill",
         "SERVER_UNIT_CastSkill",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "AI_ChangeModeAndTargetUnit"
       ],
@@ -14324,7 +14327,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b0244f08",
+      "dh": "97429735",
       "paramStorage": [
         [
           "pGame",
@@ -14443,7 +14446,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AITHINK_Fn1_FlyingScimitar",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "MONSTERAI_CommandWalkToUnit",
         "AI_ChangeModeAndTargetUnit",
         "SetCombatStateAndApproachTarget",
@@ -14457,7 +14460,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "527e47fe",
+      "dh": "4a08f97e",
       "paramStorage": [
         [
           "pGame",
@@ -14510,14 +14513,14 @@
       "calledFunctions": [
         "AITHINK_Fn1_ZakarumZealot",
         "GetCurrentLifePercentage",
-        "GetMonsterNameAndAi",
+        "AIGENERAL_GetOwnerData",
         "FindUnitFromTable",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
         "GetPlayerData",
         "GetQuestState",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandRunAwayFromUnit",
         "WalkRandomOffset",
         "MONSTERAI_IsMonsterAttacking",
@@ -14548,7 +14551,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "008c45e9",
+      "dh": "25956f76",
       "paramStorage": [
         [
           "pGame",
@@ -14565,7 +14568,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_FindWoundedHydraGolem",
+      "name": "AI_ZakarumPriest_FindWoundedAllyCallback",
       "address": "005f7240",
       "lines": [
         {
@@ -14575,7 +14578,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_FindWoundedHydraGolem",
+        "AI_ZakarumPriest_FindWoundedAllyCallback",
         "IsAllyOf",
         "STATSEX_GetAlignment",
         "CheckIfMonsterIsDead",
@@ -14587,10 +14590,11 @@
       "usedTypes": [
         "D2AiWoundedAllyScanStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "95de9bb3",
+      "dh": "85096443",
       "paramStorage": [
         [
           "pGame",
@@ -14647,7 +14651,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "79be55af",
+      "dh": "716e22d6",
       "paramStorage": [
         [
           "pGame",
@@ -14760,7 +14764,7 @@
       "calledFunctions": [
         "AITHINK_Fn1_Mephisto",
         "GetCurrentLifePercentage",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "SetCombatStateAndApproachTarget",
         "PlanNextAiMove",
@@ -14770,7 +14774,7 @@
         "SERVER_UNIT_CastSkill",
         "WalkRandomOffsetAroundUnit",
         "EVENT_RemoveUnitTimersByType",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "WalkRandomOffset",
         "DecideMephistoAlternateTarget",
         "TestCollisionWithUnit"
@@ -14786,7 +14790,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "8e0898a9",
+      "dh": "92bc85bb",
       "paramStorage": [
         [
           "pGame",
@@ -15083,7 +15087,7 @@
         "UNIT_GetModuloFromSeed",
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
@@ -15096,7 +15100,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "02673300",
+      "dh": "f638824c",
       "paramStorage": [
         [
           "pGame",
@@ -15132,7 +15136,7 @@
         "PlanNextAiMove",
         "UNIT_GetModuloFromSeed",
         "AI_ChangeModeAndTargetUnit",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "MONSTERAI_CommandWalkToUnit"
       ],
       "usedTypes": [
@@ -15145,7 +15149,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40251ac2",
+      "dh": "20779b52",
       "paramStorage": [
         [
           "pGame",
@@ -15312,7 +15316,7 @@
         "WalkTowardsUnitOffset",
         "AI_Fn1_SkeletonMage",
         "FindTargetAndDistance",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnitMinStep",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove",
@@ -15326,7 +15330,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "13ecfd6c",
+      "dh": "0f05f58c",
       "paramStorage": [
         [
           "pGame",
@@ -15382,7 +15386,7 @@
       ]
     },
     {
-      "name": "AI_Necromancer_FindOwnedSummonCallback",
+      "name": "AI_FetishShaman_FindFetishCallback",
       "address": "005f99a0",
       "lines": [
         {
@@ -15392,8 +15396,8 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "AI_Necromancer_FindOwnedSummonCallback",
-        "STATES_HasPassiveState",
+        "AI_FetishShaman_FindFetishCallback",
+        "STATES_HasUdeadFlagState",
         "GetOwnerUnit",
         "TXT_MonStats_GetBaseId",
         "ValidateClassId",
@@ -15408,7 +15412,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a5151b7b",
+      "dh": "fb1f00f6",
       "paramStorage": [
         [
           "pGame",
@@ -15465,7 +15469,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "efe7bcb7",
+      "dh": "51caaf8f",
       "paramStorage": [
         [
           "pGame",
@@ -15686,7 +15690,7 @@
         "AI_Fn1_FingerMage",
         "GetCurrentLifePercentage",
         "MONSTERAI_IsMonsterAttacking",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "PlanNextAiMove",
         "GetOwnerUnit",
@@ -15707,7 +15711,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d217ce4",
+      "dh": "5596c2d4",
       "paramStorage": [
         [
           "pGame",
@@ -15736,7 +15740,7 @@
       "calledFunctions": [
         "MONSTERAI_FindCorpseForRaising",
         "CheckIfMonsterIsDead",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "STATSEX_GetAlignment",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
         "GetDistanceBetween"
@@ -15747,7 +15751,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b1da0c96",
+      "dh": "675c62bd",
       "paramStorage": [
         [
           "pGame",
@@ -15829,7 +15833,7 @@
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
         "AI_Fn1_DoomKnight",
-        "MONSTERAI_CommandFleeFromUnit",
+        "MONSTERAI_CommandWalkToUnitPathType13",
         "PlanNextAiMove",
         "AI_ChangeModeAndTargetUnit"
       ],
@@ -15840,7 +15844,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "20f9fc02",
+      "dh": "9927851d",
       "paramStorage": [
         [
           "pGame",
@@ -15874,7 +15878,7 @@
         "SERVER_UNIT_CastSkill",
         "AI_ChangeModeAndTargetUnit",
         "PlanNextAiMove",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "MONSTERAI_CommandWalkToUnit",
         "SetCombatStateAndApproachTarget"
       ],
@@ -15888,7 +15892,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "60f4d7dd",
+      "dh": "ca3caaf6",
       "paramStorage": [
         [
           "pGame",
@@ -15905,7 +15909,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_FindBloodLordTarget",
+      "name": "AI_OblivionKnight_ScanCallback",
       "address": "005fae40",
       "lines": [
         {
@@ -15915,7 +15919,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_FindBloodLordTarget",
+        "AI_OblivionKnight_ScanCallback",
         "CheckIfMonsterIsDead",
         "TXT_MonStats_GetBaseId",
         "GetDistanceBetween",
@@ -15926,13 +15930,14 @@
       "usedTypes": [
         "D2AiBloodLordScanStrc",
         "D2UnitStrc",
+        "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ba9e970",
+      "dh": "aee2a4aa",
       "paramStorage": [
         [
-          "nCallbackResult",
+          "pGame",
           "ECX:4"
         ],
         [
@@ -15965,7 +15970,7 @@
         "UNIT_GetUnitState",
         "GetDistanceBetween",
         "MONSTERAI_CommandWalkToUnit",
-        "ApplyCombatAndMonStats",
+        "AITACTICS_SetPathOverrides",
         "WalkTowardsUnitOffset",
         "SERVER_UNIT_CastSkill",
         "FindTargetAndDistance",
@@ -15986,7 +15991,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "34b26dd8",
+      "dh": "bc5ac683",
       "paramStorage": [
         [
           "pGame",
@@ -16435,7 +16440,7 @@
         "UNITS_GetRoom",
         "GetFreeCoordinates_WithNeighboorRooms",
         "DRLGROOM_IsRoomInTown",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockPlayer_Type",
         "SKILLS_HasLineOfSight",
         "MONSTER_SpawnPredefinedAtUnit",
@@ -16452,7 +16457,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3329b46b",
+      "dh": "c2439525",
       "paramStorage": [
         [
           "pGame",
@@ -16481,7 +16486,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_SetSpecialAttackSkill",
+      "name": "MONSTERAI_GetResurrectMode",
       "address": "005fd7b0",
       "lines": [
         {
@@ -16491,7 +16496,7 @@
       ],
       "namespace": "D2Game::Monster::AI",
       "calledFunctions": [
-        "MONSTERAI_SetSpecialAttackSkill",
+        "MONSTERAI_GetResurrectMode",
         "SKILLS_GetSkillByEnum",
         "SetCurrentSkill"
       ],
@@ -16502,14 +16507,14 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8d752348",
+      "dh": "b376baad",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "nParam",
+          "bUseResurrectConfig",
           "EDX:4"
         ]
       ]
@@ -16529,7 +16534,7 @@
         "UNITS_GetRoom",
         "GetXPos",
         "GetYPos",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "GetCollisionType",
         "CheckCollision_BlockAll_Type",
         "SetSP1"
@@ -16545,7 +16550,7 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "0d8511e7",
+      "dh": "a8d9ed46",
       "paramStorage": [
         [
           "pGame",

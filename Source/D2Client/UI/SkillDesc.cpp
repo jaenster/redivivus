@@ -1385,7 +1385,7 @@ static BOOL __stdcall ItemStatCost_DescFunc_DGrpFunc(D2UnitStrc * pUnit, D2StatL
         nStatParam = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(GAME::Game::sgpDrlgAct, (int32_t*)&nUnit);
       }
 
-      nRepairCostFinal = D2Common::ITEMS::ItemMods::ITEMMODS_CalculateRepairCost(nGroupValue, nStatParam, nUnit, (uint32_t*)&nStatParam, &nRepairCostBase, &nRepairCostAlt);
+      nRepairCostFinal = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nGroupValue, nStatParam, nUnit, (uint32_t*)&nStatParam, &nRepairCostBase, &nRepairCostAlt);
       if (!GAME::Game::sgpDrlgAct) {
         nRepairCostFinal = nRepairCostBase;
       }
@@ -1949,11 +1949,11 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
 
     D2StatListExStrc* pStatListNew;
     pStatListNew = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, 0, 0, eUnitType, nStatBonusCount);
-    D2Common::Stats::StatsEx::CopyStatListEx(pStatListNew, pStatListEx);
+    D2Common::Stats::StatsEx::STATLIST_MergeBaseStats(pStatListNew, pStatListEx);
     if (eState2 != STATE_none) {
       pStatListEx = D2Common::Stats::StatsEx::GetStatList(pUnit, eState2, eStatListFlags);
       if (pStatListEx) {
-        D2Common::Stats::StatsEx::CopyStatListEx(pStatListNew, pStatListEx);
+        D2Common::Stats::StatsEx::STATLIST_MergeBaseStats(pStatListNew, pStatListEx);
       }
     }
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pInventory) {
@@ -1972,7 +1972,7 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
         pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
         pStatListEx = D2Common::Stats::StatsEx::GetStatList(pCarriedItem, eState, eStatListFlags);
         if (pStatListEx) {
-          D2Common::Stats::StatsEx::CopyStatListEx(pStatListNew, pStatListEx);
+          D2Common::Stats::StatsEx::STATLIST_MergeBaseStats(pStatListNew, pStatListEx);
         }
       }
     }
@@ -1986,7 +1986,7 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
     if (bIncludeUndeadDamage) {
       bIsBlunt = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt);
       if (bIsBlunt) {
-        nResult = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_undeaddamage_percent, 0);
+        nResult = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_undeaddamage_percent, 0);
         if (!nResult) {
           DamageToUndeadText(pUnit, (short*)wszTempBuffer, 0x80);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszOutputBuffer, wszTempBuffer);
@@ -2064,7 +2064,7 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(D2UnitStrc * pUnit, uint16_t * wszOu
       if (pItemsTxtLine->bNoDurability == '\0' && pItemsTxtLine->bDurability != '\0') {
         nStatBonusCount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_indesctructible, 0);
         if (nStatBonusCount <= 0) {
-          nResult = D2Common::Stats::StatsEx::GetTxtMaxDurability(pUnit);
+          nResult = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pUnit);
           if (!nResult) {
             wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x52f8);
             if (bHasLine && !bAppendNewline) {
@@ -3486,18 +3486,18 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
         nDamagePctBonus += nAttrStat * sAttrBonus / 100;
       }
 
-      nItemBonusMin = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_normaldamage, 0);
+      nItemBonusMin = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_normaldamage, 0);
     } else {
       nAttrStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
       nDamagePctBonus += nAttrStat;
     }
 
-    BOOL bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAttackSpeedState(pUnit);
+    BOOL bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamBlueFlagState(pUnit);
     if (bHasAttackSpeedState) {
       *pnColor = 3;
     }
 
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAuraState(pUnit);
+    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamRedFlagState(pUnit);
     if (bHasAttackSpeedState) {
       *pnColor = 1;
     }
@@ -3693,12 +3693,12 @@ int __stdcall SKILLDESC_CalcElemDamageRange(D2UnitStrc * pUnit, int * pnMinDamag
       }
     }
 
-    BOOL bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAttackSpeedState(pUnit);
+    BOOL bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamBlueFlagState(pUnit);
     if (bHasAttackSpeedState) {
       *pnColor = 3;
     }
 
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAuraState(pUnit);
+    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamRedFlagState(pUnit);
     if (bHasAttackSpeedState) {
       *pnColor = 1;
     }
@@ -3792,7 +3792,7 @@ static void __stdcall SKILLDESC_CalcAttackRateBonus(int * pnAttackRate, int32_t 
 
     apply_tohit_bonuses:
     nAttackRate = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit2, pUnit, pSkill, 0);
-    int32_t nToHitFromStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_tohit_percent, 0);
+    int32_t nToHitFromStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_tohit_percent, 0);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit2, (int)pSkillsTxt->skill, nSkillLevel);
     int nTotalToHitBonus = nAttackRate + nToHitFromStat + nSkillToHit;
     if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
@@ -3805,12 +3805,12 @@ static void __stdcall SKILLDESC_CalcAttackRateBonus(int * pnAttackRate, int32_t 
     }
 
     *pnAttackRate = *pnAttackRate * nTotalToHitBonus / 100 + *pnAttackRate;
-    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasResistState(pUnit2);
+    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttBlueFlagState(pUnit2);
     if (bHasArmorState) {
       *pnColor = 3;
     }
 
-    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasArmorState(pUnit2);
+    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttRedFlagState(pUnit2);
     if (!bHasArmorState) {
       return;
     }
@@ -3864,7 +3864,7 @@ void __fastcall SKILLDESC_CalcCompareAttackRate(D2UnitStrc * pUnit, D2SkillStrc 
       *pnMinDamage = nAttackRate;
     }
 
-    nAttackRate = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_tohit_percent, 0);
+    nAttackRate = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit, (int)pSkillsTxt->skill, nSkillLevel);
     int nTotalToHitBonus = nAttackRate + nSkillToHit;
     if (*((uint8_t*)pSkillsTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
@@ -3876,12 +3876,12 @@ void __fastcall SKILLDESC_CalcCompareAttackRate(D2UnitStrc * pUnit, D2SkillStrc 
     }
 
     *pnMinDamage = *pnMinDamage * nTotalToHitBonus / 100 + *pnMinDamage;
-    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasResistState(pUnit);
+    BOOL bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttBlueFlagState(pUnit);
     if (bHasArmorState) {
       *pnMinColor = 3;
     }
 
-    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasArmorState(pUnit);
+    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttRedFlagState(pUnit);
     if (!bHasArmorState) {
       return;
     }
@@ -3916,16 +3916,16 @@ static void __stdcall SKILLDESC_CalcAttackRateWithState(int * pnAttackRate, int3
       nAttackRate = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit2, pUnit, pSkill, 0);
     }
 
-    int32_t nTotalToHitBonus = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_tohit_percent, 0);
+    int32_t nTotalToHitBonus = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_tohit_percent, 0);
     uint32_t nSkillToHit = D2Common::Skills::SKILLS_CalcToHit(pUnit2, (int)pSkillsTxt->skill, nSkillLevel);
     *pnAttackRate = (int)(*pnAttackRate * (nAttackRate + nTotalToHitBonus + nSkillToHit)) / 100 + *pnAttackRate;
     *pnColor = 0;
-    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasResistState(pUnit2);
+    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttBlueFlagState(pUnit2);
     if (bHasArmorState) {
       *pnColor = 3;
     }
 
-    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasArmorState(pUnit2);
+    bHasArmorState = D2Common::DATATBLS::ItemStats::STATES_HasAttRedFlagState(pUnit2);
     if (!bHasArmorState) {
       return;
     }
@@ -4556,7 +4556,7 @@ void __fastcall SKILLDESC_DrawSkillDmgBasic(D2UnitStrc * pUnit, D2SkillStrc * pS
 
     char cDmgShift = pSkillsTxt->HitShift;
     int nMaxDmgShifted = pSkillsTxt->MinDam;
-    int32_t nKickMinDmgStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_kickdamage, 0);
+    int32_t nKickMinDmgStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_kickdamage, 0);
     nMaxDmgShifted = (nMaxDmgShifted << D2_SHIFT_COUNT(cDmgShift - 8U)) + nKickMinDmgStat;
     SKILLDESC_DrawDamageNumbers(nMaxDmgShifted, nMaxDmgShifted, 0, nXLeft, nY, nXRight);
 }
@@ -5150,12 +5150,12 @@ void __fastcall SKILLDESC_DrawSkillDmgThrow(D2UnitStrc * pUnit, D2SkillStrc * pS
     nStrDexBonus = nDmgBonusTotal + nStrDexBonus;
     int nDmgPercentTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
     int nMinDmgPercBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAttackSpeedState(pUnit);
+    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamBlueFlagState(pUnit);
     if (bHasAttackSpeedState) {
       nElemType = 3;
     }
 
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasAuraState(pUnit);
+    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamRedFlagState(pUnit);
     nDmgBonusTotal = 1;
     if (!bHasAttackSpeedState) {
       nDmgBonusTotal = nElemType;

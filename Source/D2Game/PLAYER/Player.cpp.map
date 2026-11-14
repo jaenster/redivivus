@@ -467,7 +467,7 @@
       ]
     },
     {
-      "name": "PLAYER_CreateRewardItemFromTemplate",
+      "name": "PLAYER_CreateStartItemUnit",
       "address": "00534c70",
       "lines": [
         {
@@ -477,7 +477,7 @@
       ],
       "namespace": "D2Game::PLAYER::Player",
       "calledFunctions": [
-        "PLAYER_CreateRewardItemFromTemplate",
+        "PLAYER_CreateStartItemUnit",
         "GetLevel",
         "ITEM_CreateFromTemplate",
         "GetStatList",
@@ -497,14 +497,14 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8b266ae2",
+      "dh": "623c8fda",
       "paramStorage": [
         [
-          "nGamePtr",
+          "pGame",
           "Stack[0x4]:4"
         ],
         [
-          "bNoSkill",
+          "nItemIndex",
           "Stack[0x8]:4"
         ],
         [
@@ -534,13 +534,13 @@
       "calledFunctions": [
         "PLAYER_CreateStarterItems",
         "ConvertItemCodeToClassIdAndGetItemsTxtLine",
-        "PLAYER_CreateRewardItemFromTemplate",
+        "PLAYER_CreateStartItemUnit",
         "ITEM_EditItemData_eItemFlag",
         "SetBodyLoc",
         "ITEM_GetTxtItemTypes_beltable",
         "PLAYER_PlaceItemInInventory",
         "ITEMS_IsA",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATLIST_SetUnitStat",
         "PLAYER_EquipItemToBodyLoc",
         "GetInstructionPointer",
@@ -561,7 +561,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7cf6c13f",
+      "dh": "c0f6ad66",
       "paramStorage": [
         [
           "pGame",
@@ -572,11 +572,11 @@
           "EDX:4"
         ],
         [
-          "eClassId",
+          "pCharStatsTxt",
           "Stack[0x4]:4"
         ],
         [
-          "nDifficulty",
+          "nItemIndex",
           "Stack[0x8]:4"
         ],
         [
@@ -738,7 +738,7 @@
         "PLAYER_EndInteraction",
         "GetInteractInfo",
         "FindUnitFromTable",
-        "thunk_TRADE_CompleteTrade",
+        "thunk_PLRTRADE_AbortTrade",
         "Q35_OnPlayerLeavesSummit",
         "SUNITNPC_CloseNpcInteraction",
         "OBJMODE_HandleObjectDeactivation",
@@ -752,7 +752,7 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "a0bb6f8f",
+      "dh": "5cf3dacc",
       "paramStorage": [
         [
           "pGame",
@@ -825,10 +825,10 @@
         "GetFreeCoordinates_WithIncrementValue",
         "FindUnitFromTable",
         "PATH_GetCollisionTypeAt",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetState",
         "EVENT_RemoveUnitTimersByType",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender"
       ],
       "usedTypes": [
@@ -838,7 +838,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "86e4b5f5",
+      "dh": "ed6db6b2",
       "paramStorage": [
         [
           "pGame",
@@ -1078,10 +1078,9 @@
         "SGAMEDATA",
         "int32_t",
         "uint16_t",
-        "uint32_t",
         "uint8_t"
       ],
-      "dh": "7c749379",
+      "dh": "7b485e96",
       "paramStorage": [
         [
           "pGame",
@@ -1104,7 +1103,7 @@
           "Stack[0xc]:1"
         ],
         [
-          "dwSkillTxt",
+          "nItemGUID",
           "Stack[0x10]:4"
         ]
       ]
@@ -1180,7 +1179,7 @@
       ]
     },
     {
-      "name": "CountModeZeroDeath",
+      "name": "PLAYER_CountLivingPlayersCallback",
       "address": "00535760",
       "lines": [
         {
@@ -1190,14 +1189,14 @@
       ],
       "namespace": "D2Game::PLAYER::Player",
       "calledFunctions": [
-        "CountModeZeroDeath",
+        "PLAYER_CountLivingPlayersCallback",
         "CheckForModeZeroDeath"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "4a45b58f",
+      "dh": "df8c2e7b",
       "paramStorage": [
         [
           "pGame",
@@ -1252,7 +1251,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "29411457",
+      "dh": "98587ccf",
       "paramStorage": [
         [
           "pGame",
@@ -1316,7 +1315,7 @@
         "STATSEX_GetCurrentStat",
         "TXT_Experience_GetLineLevel",
         "SUNIT_GetClient",
-        "SetExperience",
+        "SetExperienceLoss",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
@@ -1326,7 +1325,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f6daffc4",
+      "dh": "c30d5f4c",
       "paramStorage": [
         [
           "pGame",
@@ -1411,7 +1410,7 @@
       ]
     },
     {
-      "name": "PLAYER_CountPlayersWithFilter",
+      "name": "PLAYER_HasHostilePlayer",
       "address": "00535b10",
       "lines": [
         {
@@ -1421,7 +1420,7 @@
       ],
       "namespace": "D2Game::PLAYER::Player",
       "calledFunctions": [
-        "PLAYER_CountPlayersWithFilter",
+        "PLAYER_HasHostilePlayer",
         "IterateAllUnits"
       ],
       "usedTypes": [
@@ -1429,14 +1428,14 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9b01ed24",
+      "dh": "00d4a1d4",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pnFilter",
+          "pPlayer",
           "EDX:4"
         ]
       ]

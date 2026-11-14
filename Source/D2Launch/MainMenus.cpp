@@ -3192,7 +3192,7 @@ static FORMS_PredefinedFormStrc gaPredefinedForms[333] = {
         /* .nExtraParam = */ 0x0,
         /* .nLabelAsLocaleStringId = */ 0x13fb,
         /* .pDC6 = */ &DC6_FrontEnd_WideButtonBlank,
-        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_Unused10,
+        /* .fpOnPressCallback = */ &D2Launch::MainMenus::MAINMENU_OnPressSelectOpenBattleNet,
         /* .pTypeArg1 = */ nullptr,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
@@ -4195,7 +4195,7 @@ static uint32_t gnBnetConnectionSuccessFlag = 0; D2_STATIC_GUARD(gnBnetConnectio
 static uint32_t gnMCPConnectThreadHandle = 0; D2_STATIC_GUARD(gnMCPConnectThreadHandle, "gnMCPConnectThreadHandle");
 static D2ControlStrc * gpCtlBnetProgressBar2 = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar2, "gpCtlBnetProgressBar2");
 static ::D2WinTextBox * gpCtlBnetProgressBar = 0; D2_STATIC_GUARD(gpCtlBnetProgressBar, "gpCtlBnetProgressBar");
-static ::D2WinTextBox * gbBnetConnectionTimerActive = 0; D2_STATIC_GUARD(gbBnetConnectionTimerActive, "gbBnetConnectionTimerActive");
+static ::D2WinTextBox * gpCtlBnetProgressText = 0; D2_STATIC_GUARD(gpCtlBnetProgressText, "gpCtlBnetProgressText");
 static int gbBnetProgressActive = 0; D2_STATIC_GUARD(gbBnetProgressActive, "gbBnetProgressActive");
 static HANDLE ghBnetConnectHandle = 0; D2_STATIC_GUARD(ghBnetConnectHandle, "ghBnetConnectHandle");
 static unsigned int gbBNetConnectionProgressFlag = {}; D2_STATIC_GUARD(gbBNetConnectionProgressFlag, "gbBNetConnectionProgressFlag");
@@ -4213,11 +4213,11 @@ static D2ControlStrc * gpCtlBnetPasswordOkButton = 0; D2_STATIC_GUARD(gpCtlBnetP
 
 namespace D2Launch::MainMenus {
 
-void __fastcall FORMS_DestroyListJmp_Unref_0041f930(uint32_t * pEncoder) {
+void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f930(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
 
-void __fastcall FORMS_DestroyListJmp_Unref_0041f940(uint32_t * pEncoder) {
+void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
 
@@ -4271,7 +4271,7 @@ void __stdcall MAINMENU_SetGlobalFlag() {
     gbMainMenuUIActive = 1;
 }
 
-BOOL __stdcall MAINMENU_GetGlobalValue2_Unref_0042e6c0() {
+BOOL __stdcall MAINMENU_GetMainMenuUIActive() {
     return gbMainMenuUIActive;
 }
 
@@ -4833,7 +4833,7 @@ void __stdcall UIMENU_DownloadingPatch() {
     pControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x112);
     D2Win::Src::D2WinTextBox::SetText(pControl, D2Lang::StrTable::strtable::GetLocaleString(0x143b), 0, false, 0);
     FORMS_CreateAnyFormFromListExEx(0x118);
-    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_StopAnimation(gpCtlPatchProgressAnimImage);
+    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_GetFrameCount(gpCtlPatchProgressAnimImage);
     D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpPatchProgressTextBox, szPercentBuffer, 0);
@@ -4848,7 +4848,7 @@ void __stdcall MAINMENU_UpdateProgressBar() {
       nProgressPercent = 100;
     }
 
-    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_StopAnimation(gpCtlPatchProgressAnimImage);
+    int nFrameCount = D2Win::Src::D2WinImage::D2WINIMAGE_GetFrameCount(gpCtlPatchProgressAnimImage);
     D2Win::Src::D2WinImage::D2WINIMAGE_SetFrame(gpCtlPatchProgressAnimImage, nFrameCount * nProgressPercent / 100);
     sprintf(szPercentBuffer, "%d%%", nProgressPercent);
     if (!gpPatchProgressTextBox) {
@@ -5145,9 +5145,9 @@ void __stdcall UIMENU_TCPIPOptions() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpAddress->sControl, 0);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpPort->sControl, 0);
     D2ControlStrc* pFormFourth = FORMS_CreateAnyFormFromListExEx(0x10a);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pFormFourth);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pFormFourth);
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
-    D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)gpMainMenuTcpIpTimerControl);
     D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(gpMainMenuTcpIpTimerControl);
     gpCtlTcpIpLocalIpTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x105);
     MAINMENU_UpdateIPAddressDisplay();
@@ -5198,14 +5198,14 @@ void __stdcall UIMENU_CreateBattleNetAccount() {
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1467), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x54);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateGameNameChar);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetAccountEditBox, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetAccountEditBox, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpBnetAccountEditBox, D2IniData_launcher->szLastBnetAccount);
     gpBnetPasswordEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x55);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetPasswordEditBox, MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetPasswordEditBox, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordEditBox, 0xd);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpBnetPasswordEditBox, D2IniData_launcher->szLastKnownIpTcpIp);
     gpBnetPasswordConfirmEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x56);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetPasswordConfirmEditBox, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordConfirmEditBox, 0xd);
     ::D2WinEditBox* pFocusControl = gpBnetAccountEditBox;
     if (D2IniData_launcher->szLastBnetAccount[0] != '\0') {
       pFocusControl = gpBnetPasswordEditBox;
@@ -5260,11 +5260,11 @@ BOOL __stdcall MAINMENU_ScrollListExUp(D2ControlMsg * pControlMsg) {
     ::D2WinTextBox* ppForm;
     int i = 0;
     if (FORMS_nListExExCount >= 0) {
-      uint8_t* pFirstElement;
+      eD2FormType pFirstElement;
       do {
         ppForm = (::D2WinTextBox*)FORMS_pListExEx[i];
-        pFirstElement = (uint8_t*)D2Win::Src::D2WinMain::D2WINMAIN_GetFirstElement((void**)ppForm);
-        if (pFirstElement == (unsigned char*)(void*)0x4) {
+        pFirstElement = D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)ppForm);
+        if (pFirstElement == FORM_TextBox) {
           break;
         }
 
@@ -5290,11 +5290,11 @@ BOOL __stdcall MAINMENU_ScrollListExDown(D2ControlMsg * pControlMsg) {
     ::D2WinTextBox* ppForm;
     int i = 0;
     if (FORMS_nListExExCount >= 0) {
-      uint8_t* pFirstElement;
+      eD2FormType pFirstElement;
       do {
         ppForm = (::D2WinTextBox*)FORMS_pListExEx[i];
-        pFirstElement = (uint8_t*)D2Win::Src::D2WinMain::D2WINMAIN_GetFirstElement((void**)ppForm);
-        if (pFirstElement == (unsigned char*)(void*)0x4) {
+        pFirstElement = D2Win::Src::D2WinMain::CONTROL_GetType((D2ControlStrc*)ppForm);
+        if (pFirstElement == FORM_TextBox) {
           break;
         }
 
@@ -5907,7 +5907,7 @@ BOOL __stdcall MAINMENU_InitCreditsScreen(D2ControlMsg * pControlMsg) {
 
     gpMainMenuCreditsLineTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(nFormIndex);
     gpMainMenuCreditTimerControl = FORMS_CreateAnyFormFromListExEx(0x2e);
-    D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuCreditTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)gpMainMenuCreditTimerControl);
     D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating((::D2WinTimer*)gpMainMenuCreditTimerControl);
     MAINMENU_DisplayCredits(0);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpMainMenuCreditsLineTextBox, 0x14);
@@ -6328,7 +6328,7 @@ BOOL __stdcall UIMENU_TCPIPAddressInput(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpMainMenuFormPtrs->sControl);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SelectAll(gpMainMenuFormPtrs);
     pDVar1 = FORMS_CreateAnyFormFromList(0x110);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pDVar1);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pDVar1);
     FORMS_CreateAnyFormFromList(0x111);
     return 1;
 }
@@ -6336,7 +6336,7 @@ BOOL __stdcall UIMENU_TCPIPAddressInput(D2ControlMsg * pControlMsg) {
 BOOL __stdcall MAINMENU_OnPressStartTcpIpTimer(D2ControlMsg * pControlMsg) {
     FORMS_DestroyList();
     gpMainMenuTcpIpTimerControl = (::D2WinTimer*)FORMS_CreateAnyFormFromListExEx(0x10b);
-    D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)gpMainMenuTcpIpTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)gpMainMenuTcpIpTimerControl);
     D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(gpMainMenuTcpIpTimerControl);
     return 1;
 }
@@ -6491,15 +6491,15 @@ void __stdcall UIMENU_ChangePassword() {
     D2Win::Src::D2WinTextBox::SetText(pCheckboxCtl, D2Lang::StrTable::strtable::GetLocaleString(0x2b2b), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x59);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateGameNameChar);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetAccountEditBox, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetAccountEditBox, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpBnetAccountEditBox, D2IniData_launcher->szLastBnetAccount);
     gpBnetPasswordEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x5a);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetPasswordEditBox, MAINMENUS_EditBoxFilter_ReturnTrue_ForBnetAccountForms);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetPasswordEditBox, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordEditBox, 0xd);
     gpCtlChangePasswordInput = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x5b);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCtlChangePasswordInput, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCtlChangePasswordInput, 0xd);
     gpBnetPasswordConfirmEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x5c);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetPasswordConfirmEditBox, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordConfirmEditBox, 0xd);
     ::D2WinEditBox* pFocusControl = gpBnetAccountEditBox;
     if (D2IniData_launcher->szLastBnetAccount[0] != '\0') {
       pFocusControl = gpBnetPasswordEditBox;
@@ -6514,7 +6514,7 @@ void __stdcall UIMENU_ChangePassword() {
     FORMS_CreateAnyFormFromListExEx(0x5e);
 }
 
-BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300(D2ControlMsg * pControlMsg) {
+BOOL __stdcall MAINMENU_OnPressChangePassword_Unref_00432300(D2ControlMsg * pControlMsg) {
     UIMENU_ChangePassword();
     return 1;
 }
@@ -8327,11 +8327,11 @@ void __stdcall UIMENU_MainMenuAgain() {
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x20);
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1455), 0, false, 0);
     gpBnetAccountEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x22);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetAccountEditBox, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetAccountEditBox, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpBnetAccountEditBox, EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetAccountEditBox, MAINMENU_ValidateCharNameChar);
     gpBnetPasswordEditBox = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x23);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpBnetPasswordEditBox, 0xd);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpBnetPasswordEditBox, 0xd);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpBnetPasswordEditBox, EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpBnetPasswordEditBox, MAINMENUS_EditBoxFilter_ReturnTrue_ForMainMenuAgain);
     int32_t bHasLastAccount = Storm::Source::SReg::SRegLoadString("Diablo II", "Last BNet", 0, szLastBnetAccount, 0x400);
@@ -8386,12 +8386,12 @@ void __stdcall UIMENU_CreateHeroSinglePlayer() {
 
     D2ControlStrc* pBottomForm;
     pBottomForm = FORMS_CreateAnyFormFromListExEx(0xaf);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pBottomForm);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pBottomForm);
     gpCtlCreateCharCancelButton = FORMS_CreateAnyFormFromListExEx(200);
     gpCtlCreateCharOKButton = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0xc9);
     D2Win::Src::D2WinTextBox::SetText(gpCtlCreateCharOKButton, D2Lang::StrTable::strtable::GetLocaleString(0x1405), 4, false, 0);
     gpaCharNameBuffers = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0xcc);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpaCharNameBuffers, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpaCharNameBuffers, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpaCharNameBuffers, MAINMENU_ValidateCharacterName);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpaCharNameBuffers, EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback);
     BOOL bIsExpansion;
@@ -8613,7 +8613,7 @@ BOOL __stdcall MAINMENU_OnPressSinglePlayer(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-BOOL __stdcall MAINMENU_Unused10(D2ControlMsg * pControlMsg) {
+BOOL __stdcall MAINMENU_OnPressSelectOpenBattleNet(D2ControlMsg * pControlMsg) {
     OogCurrentCharSelectionMode = CHAR_SELECTION_BNET_OPEN_Unsure;
     UIMENU_MainMenuAgain();
     return 1;
@@ -8819,7 +8819,7 @@ BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(D2ControlMsg 
     return 1;
 }
 
-BOOL __stdcall MAINMENU_OnPressSelectBattleNet_Unref_00436320(D2ControlMsg * pControlMsg) {
+BOOL __stdcall MAINMENU_SetUIActiveAndMainMenuAgain(D2ControlMsg * pControlMsg) {
     gbMainMenuUIActive = 1;
     UIMENU_MainMenuAgain();
     return 1;
@@ -9068,9 +9068,9 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
     return 1;
 }
 
-void __stdcall UI_ClearCursorAnimationState_Unref_00436ac0() {
+void __stdcall MAINMENU_ClearBnetProgressBarAndTimer() {
     gpCtlBnetProgressBar = 0;
-    gbBnetConnectionTimerActive = 0;
+    gpCtlBnetProgressText = 0;
 }
 
 void __stdcall MAINMENU_BnetConnectionProgress() {
@@ -9114,8 +9114,8 @@ void __stdcall MAINMENU_BnetConnectionProgress() {
 
     DWORD dwTickCount = GetTickCount();
     sprintf(szDots, "%.*s", (int)((dwTickCount - gbBNetConnectionProgressFlag) / 0xfa % 0x14) + 1, "....................");
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gbBnetConnectionTimerActive);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gbBnetConnectionTimerActive, szDots);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCtlBnetProgressText);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpCtlBnetProgressText, szDots);
 }
 
 static BOOL MAINMENU_IsValidEmailAddress(char * szText) {
@@ -9244,7 +9244,7 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet() {
     pwszText = D2Lang::StrTable::strtable::GetLocaleString(0x1468);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pControl, pwszText);
     gpCharSelPasswordInputControl = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x131);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCharSelPasswordInputControl, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCharSelPasswordInputControl, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCharSelPasswordInputControl, MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpCharSelPasswordInputControl, EDITBOX_Cb_MAINMENU_ShowDisconnectMessage);
     FORMS_CreateAnyFormFromListExEx(0x132);
@@ -9357,7 +9357,7 @@ void __stdcall UIMENU_YouWereDisconnectedFromBattleNet3() {
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pControl, pwszText);
     gpCharSelAccountNameInputControl = (::D2WinEditBox*)FORMS_CreateAnyFormFromListExEx(0x141);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpCharSelAccountNameInputControl, D2IniData_launcher->szLastBnetAccount);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCharSelAccountNameInputControl, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCharSelAccountNameInputControl, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCharSelAccountNameInputControl, MAINMENUS_EditBoxFilter_ValidateCharName_ForBnetDisconnect);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpCharSelAccountNameInputControl, EDITBOX_Cb_MAINMENU_ShowDisconnectMessage2);
     FORMS_CreateAnyFormFromListExEx(0x142);
@@ -9435,8 +9435,8 @@ void __stdcall UIMENU_ConnectinToBattleNetWitProgressDots() {
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1433), 0, false, 0);
     gpCtlBnetProgressBar = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe5);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)gpCtlBnetProgressBar, 1);
-    gbBnetConnectionTimerActive = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe6);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)gbBnetConnectionTimerActive, 1);
+    gpCtlBnetProgressText = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe6);
+    D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)gpCtlBnetProgressText, 1);
     gbBnetProgressActive = -1;
     ghBnetConnectHandle = (HANDLE)0x0;
     MAINMENU_SetGlobalValue1(Launcher::LAUNCHER_SetBusyFlag);

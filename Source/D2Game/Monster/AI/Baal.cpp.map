@@ -526,7 +526,7 @@
       ]
     },
     {
-      "name": "AI_BAAL_CountPowerfulSkills",
+      "name": "AI_BAAL_CountLivingMinions",
       "address": "005fc830",
       "lines": [
         {
@@ -536,24 +536,24 @@
       ],
       "namespace": "D2Game::Monster::AI::Baal",
       "calledFunctions": [
-        "AI_BAAL_CountPowerfulSkills"
+        "AI_BAAL_CountLivingMinions"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "D2UnitStrc *"
       ],
-      "dh": "a5b037e8",
+      "dh": "8994b82b",
       "paramStorage": [
         [
-          "nSkillNode",
+          "pMinion",
           "ECX:4"
         ],
         [
-          "pnSelfSkillNode",
+          "ppSelf",
           "EDX:4"
         ],
         [
-          "pnPowerfulSkillCount",
+          "pnCount",
           "Stack[0x4]:4"
         ]
       ]
@@ -583,7 +583,7 @@
         "RestartAiThink",
         "AssignMinionOwner",
         "AddMinionToList",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "STATSEX_GetCurrentStat",
         "StoreOwner",
@@ -603,7 +603,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "3205b688",
+      "dh": "78cadc05",
       "paramStorage": [
         [
           "pGame",
@@ -632,7 +632,7 @@
       "calledFunctions": [
         "AI_Baal_ExecuteAction",
         "PlanNextAiMove",
-        "CastSkillWithDistanceOffset",
+        "MONSTERAI_CommandWalkToDistance",
         "SetCombatStateAndApproachTarget",
         "WalkRandomOffset",
         "WalkToCoords",
@@ -645,8 +645,8 @@
         "UNITS_GetRoom",
         "SPAWN_FindRandomPositionForMonster",
         "AI_Baal_SpawnClone",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana"
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit"
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
@@ -658,7 +658,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ab6881d3",
+      "dh": "6ba011a6",
       "paramStorage": [
         [
           "pGame",

@@ -107,7 +107,7 @@ void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648440(struct D2UnitStrc *
 void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00648450(struct D2UnitStrc * pUnit);
 void __fastcall FIELDTBLS_FreePlayerData_STUB_Unref_00650ea0(struct D2UnitStrc * pUnit);
 void __stdcall FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740(struct D2UnitStrc * dwUnused);
-int32_t __stdcall CUBE_GetRecipeCount_Unref_00665760();
+int32_t __stdcall TXT_GetCharTemplateTxtRecordCount();
 // Wrapper for parsing a single input item field from CubMain.txt. Calls CUBE_ParseInputItem to populate a D2CubeInputStrc at the specified index in the recipe's pInputItem array. Used during CubMain.txt loading.
 void __fastcall CUBE_ParseInputItemField(char * pszField, struct D2CubeMainTxt * pLine, int32_t index, uint32_t dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3);
 // Wrapper for parsing a single output item field from CubMain.txt. Calls CUBE_ParseOutputItem to populate a D2CubeOutputStrc at the specified index in the recipe's pOutputItem array. Used during CubMain.txt loading.
@@ -125,8 +125,8 @@ void __stdcall FIELDTBLS_FreeTables_NoOp();
 // Body is only the halt at line 101.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall FIELDTBLS_Unused_HaltLine101();
-int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a490();
-int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a4a0();
+int32_t __stdcall FIELDTBLS_GetFieldDataTableWidth();
+int32_t __stdcall FIELDTBLS_GetFieldDataTableHeight();
 void __stdcall FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0();
 #endif // D2_MODULE_D2Common
 // 5 internal functions (defined in .cpp)

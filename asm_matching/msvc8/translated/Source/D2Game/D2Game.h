@@ -28,12 +28,13 @@ struct D2InactiveMonsterRecordStrc;
 struct D2InactiveUnitRecordStrc;
 struct D2InventoryStrc;
 struct D2LinkNodeStrc;
+struct D2LowQualityItemsTxt;
 struct D2MapAIStrc;
 struct D2MercForHire;
+struct D2ModeChangeStrc;
 struct D2MonsterAiCmdStrc;
 struct D2MonsterAiSubStrc;
 struct D2MonsterDataMinionList;
-struct D2MonsterKillStrc;
 struct D2MonsterPathParamStrc;
 struct D2MonsterRegionFieldSubStrc;
 struct D2NPCMessageStrc;
@@ -144,15 +145,6 @@ struct D2AiCmdArgumentsStrc {
     /* 0x18 */ int nCmdArg4;
 };
 #endif // D2_DEFINED_D2AiCmdArgumentsStrc
-#ifndef D2_DEFINED_D2AiDispatchCallbacksStrc
-#define D2_DEFINED_D2AiDispatchCallbacksStrc
-struct D2AiDispatchCallbacksStrc {
-    /* 0x00 */ BOOL (__fastcall *pFn1)(::SGAMEDATA *, struct D2MonsterKillStrc *);
-    /* 0x04 */ BOOL (__fastcall *pFn2)(::SGAMEDATA *, struct D2MonsterKillStrc *);
-    /* 0x08 */ void (__fastcall *pFn3)(::SGAMEDATA *, struct D2UnitStrc *);
-    /* 0x0C */ BOOL bBool;
-};
-#endif // D2_DEFINED_D2AiDispatchCallbacksStrc
 #ifndef D2_DEFINED_D2AiGeneralStrc
 #define D2_DEFINED_D2AiGeneralStrc
 __pragma(pack(push, 1)) struct D2AiGeneralStrc {
@@ -719,6 +711,20 @@ struct D2LinkNodeStrc {
     /* 0x04 */ struct D2LinkNodeStrc * pPrev;
 };
 #endif // D2_DEFINED_D2LinkNodeStrc
+#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
+#define D2_DEFINED_D2LowQualityItemsTableStrc
+struct D2LowQualityItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
+};
+#endif // D2_DEFINED_D2LowQualityItemsTableStrc
+#ifndef D2_DEFINED_D2LowQualityItemsTxt
+#define D2_DEFINED_D2LowQualityItemsTxt
+struct D2LowQualityItemsTxt {
+    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ uint16_t wNameStringId;
+};
+#endif // D2_DEFINED_D2LowQualityItemsTxt
 #ifndef D2_DEFINED_D2MapAIStrc
 #define D2_DEFINED_D2MapAIStrc
 struct D2MapAIStrc {
@@ -773,6 +779,31 @@ struct D2MissileDamageDataStrc {
     /* 0x78 */ int nDamagePercent;
 };
 #endif // D2_DEFINED_D2MissileDamageDataStrc
+#ifndef D2_DEFINED_D2ModeChangeStrc
+#define D2_DEFINED_D2ModeChangeStrc
+__pragma(pack(push, 1)) struct D2ModeChangeStrc {
+    /* 0x00 */ eD2MonsterAnimMode nUnitMode;
+    /* 0x04 */ struct D2UnitStrc * pUnit;
+    /* 0x08 */ struct D2UnitStrc * pTargetUnit;
+    /* 0x0C */ int nTargetX;
+    /* 0x10 */ int nTargetY;
+    /* 0x14 */ uint8_t nAnimatedMode1;
+    /* 0x15 */ uint8_t nAnimatedMode2;
+    /* 0x16 */ uint8_t nUnknown1;
+    /* 0x17 */ uint8_t nUnknown2;
+    /* 0x18 */ int nMonType1; // value: zeroed by SetCurrentSkill/ReviveCorpse, passed as an int argument
+    /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2ModeChangeStrc
+#ifndef D2_DEFINED_D2MonModeTableRowStrc
+#define D2_DEFINED_D2MonModeTableRowStrc
+struct D2MonModeTableRowStrc {
+    /* 0x00 */ BOOL (__fastcall *pfnStart)(::SGAMEDATA *, struct D2ModeChangeStrc *);
+    /* 0x04 */ BOOL (__fastcall *pfnUpdate)(::SGAMEDATA *, struct D2ModeChangeStrc *);
+    /* 0x08 */ void (__fastcall *pfnEnd)(::SGAMEDATA *, struct D2UnitStrc *);
+    /* 0x0C */ BOOL bScheduleEvents;
+};
+#endif // D2_DEFINED_D2MonModeTableRowStrc
 #ifndef D2_DEFINED_D2MonsterAiCmdStrc
 #define D2_DEFINED_D2MonsterAiCmdStrc
 struct D2MonsterAiCmdStrc {
@@ -833,22 +864,6 @@ struct D2MonsterDataMinionList {
     /* 0x04 */ struct D2MonsterDataMinionList * pNext;
 };
 #endif // D2_DEFINED_D2MonsterDataMinionList
-#ifndef D2_DEFINED_D2MonsterKillStrc
-#define D2_DEFINED_D2MonsterKillStrc
-__pragma(pack(push, 1)) struct D2MonsterKillStrc {
-    /* 0x00 */ eD2MonsterAnimMode nUnitMode;
-    /* 0x04 */ struct D2UnitStrc * pVictim;
-    /* 0x08 */ struct D2UnitStrc * pAttacker;
-    /* 0x0C */ int nTargetX;
-    /* 0x10 */ int nTargetY;
-    /* 0x14 */ uint8_t nAnimatedMode1;
-    /* 0x15 */ uint8_t nAnimatedMode2;
-    /* 0x16 */ uint8_t nUnknown1;
-    /* 0x17 */ uint8_t nUnknown2;
-    /* 0x18 */ int nMonType1; // value: zeroed by SetCurrentSkill/ReviveCorpse, passed as an int argument
-    /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2MonsterKillStrc
 #ifndef D2_DEFINED_D2MonsterPathParamOrNameUnion
 #define D2_DEFINED_D2MonsterPathParamOrNameUnion
 union D2MonsterPathParamOrNameUnion {
@@ -997,7 +1012,7 @@ __pragma(pack(push, 1)) struct D2ObjectRngStrc {
     /* 0x00 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x01 */ uint8_t pad_0x1[3];
     /* 0x04 */ int pad_0x4;
-    /* 0x08 */ int nMinDistance; // Init to 0x7FFFFFFF
+    /* 0x08 */ int nLevelRooms; // Init to 0x7FFFFFFF
     /* 0x0C */ int pad_0xC;
     /* 0x10 */ int pad_0x10;
     /* 0x14 */ int nPointsSize1; // Number of points1 entries, max 10
@@ -1189,7 +1204,10 @@ __pragma(pack(push, 1)) struct D2PartyDataStrc {
     /* 0x00 */ uint32_t nUnitGUID;
     /* 0x04 */ uint32_t nLifePercent;
     /* 0x08 */ eD2LevelId eLevelId;
-    /* 0x0C */ uint32_t field3_0xc;
+    /* 0x0C */ uint8_t nSkippedUpdates;
+    /* 0x0D */ uint8_t field_0xd;
+    /* 0x0E */ uint8_t field_0xe;
+    /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ struct D2PartyDataStrc * pPrev;
 }; __pragma(pack(pop))
 #endif // D2_DEFINED_D2PartyDataStrc
@@ -1218,8 +1236,8 @@ struct D2PathTypeArg {
     /* 0x1C */ int nIdaStarInitCopy; // Byte copy of D2DynamicPathStrc::nIdaStarVariable; used as A* minimum heuristic cost lower-bound in DRLGPATH_FindPathAStar
     /* 0x20 */ int ePathType; // eD2PathTypes for this search
     /* 0x24 */ int nUnitSize; // Unit collision size
-    /* 0x28 */ int nUnitWidth; // Unit interaction width
-    /* 0x2C */ int nCollisionPattern; // Collision check pattern
+    /* 0x28 */ eD2CollisionShapeType nCollisionPattern; // Unit interaction width
+    /* 0x2C */ int nCollisionMask; // Collision check pattern
     /* 0x30 */ struct D2DynamicPathStrc * pDynamicPath; // Owner dynamic path
 };
 #pragma pack(pop)
@@ -1516,7 +1534,7 @@ struct D2QuestDataA2Q2Strc {
     /* 0x08 */ int32_t field_0x08;
     /* 0x0C */ int32_t field_0x0C;
     /* 0x10 */ int32_t field_0x10;
-    /* 0x14 */ int32_t nQuestItemPickupNotifyCount; // Incremented on scroll/viper/cube pickup when quest not started
+    /* 0x14 */ int32_t nItemDropCount; // Incremented on scroll/viper/cube pickup when quest not started
     /* 0x18 */ int32_t nMsfCount; // Count of Horadric Staff components (msf) held by players
     /* 0x1C */ int32_t nHstCount; // Count of complete Horadric Staffs (hst) held by players
     /* 0x20 */ int32_t nBoxCount; // Count of Horadric Cubes (box) held by players
@@ -1573,9 +1591,9 @@ struct D2QuestDataA2Q4Strc {
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ bool bSummonerKilled; // Set when Summoner is killed (used for coords lookup)
     /* 0x19 */ bool bSummonerCoordsFallback; // Fallback flag for Summoner coordinate lookup
-    /* 0x1A */ uint8_t bDurielProximity; // set=1 in Q14_CheckDurielProximity when player is within ~31 units of Duriel coords
+    /* 0x1A */ uint8_t bPlayerNearHaremBlocker; // set=1 in Q14_CheckDurielProximity when player is within ~31 units of Duriel coords
     /* 0x1B */ uint8_t field_0x1B;
-    /* 0x1C */ int32_t nDurielProximityPlayerGUID; // GUID of the player near Duriel (-1 if no unit); set in Q14_CheckDurielProximity
+    /* 0x1C */ int32_t nPlayerNearHaremBlockerGUID; // GUID of the player near Duriel (-1 if no unit); set in Q14_CheckDurielProximity
     /* 0x20 */ int32_t nHaremBlockerX;
     /* 0x24 */ int32_t nHaremBlockerY;
     /* 0x28 */ int32_t nJerhynX;
@@ -1992,12 +2010,12 @@ __pragma(pack(push, 1)) struct D2QuestDataA5Q3Strc {
     /* 0x08C */ int32_t nTransformStep;
     /* 0x090 */ uint8_t bAnyaTransformed; // Set when transform begins
     /* 0x091 */ uint8_t bFrozenAnyaSpawned; // Frozen Anya monster created
-    /* 0x092 */ uint8_t bFrozensteinSpawned; // Set to 1 after Frozenstein guard monster (classId 0x202) spawned from preset
+    /* 0x092 */ uint8_t bNihlathakSpawned; // Set to 1 after Frozenstein guard monster (classId 0x202) spawned from preset
     /* 0x093 */ uint8_t bAnyaMonsterAlive; // Anya NPC monster spawned
     /* 0x094 */ int32_t nFrozenAnyaGUID; // GUID of frozen Anya object
     /* 0x098 */ int32_t nAnyaMonsterGUID; // GUID of Anya NPC monster
     /* 0x09C */ int32_t nAnyaCorpseGUID; // GUID of thawed Anya
-    /* 0x0A0 */ int32_t nFrozensteinGUID; // UnitGUID of the spawned Frozenstein guard monster
+    /* 0x0A0 */ int32_t nNihlathakGUID; // UnitGUID of the spawned Frozenstein guard monster
     /* 0x0A4 */ uint8_t bFrozenAnyaSpawning; // Guard: frozen Anya object (0x22e) creation started; prevents double-spawn
     /* 0x0A5 */ uint8_t field_0xa5;
     /* 0x0A6 */ uint8_t field_0xa6;
@@ -2504,10 +2522,10 @@ struct D2TradeItemUidPairStrc {
 #ifndef D2_DEFINED_D2TradeRecordStrc
 #define D2_DEFINED_D2TradeRecordStrc
 struct D2TradeRecordStrc {
-    /* 0x00 */ int32_t pCopyInventory;
+    /* 0x00 */ int32_t nSaveSize;
     /* 0x04 */ void * pSaveBuffer;
     /* 0x08 */ struct D2TradeItemUidPairStrc * pUidPairList;
-    /* 0x0C */ uint32_t nTradeStatus;
+    /* 0x0C */ uint32_t nGoldOffered;
     /* 0x10 */ uint32_t nGold;
     /* 0x14 */ uint32_t dwAcceptLockEndTick;
 };
@@ -2639,7 +2657,7 @@ struct D2WarpChanceStrc {
 // Functions
 namespace D2Game {
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
-void __fastcall GAME_SetNoSaveFlag(BOOL bResult);
+void __fastcall PLAYERSAVE_EnableSaveFileWriting(BOOL bEnable);
 struct D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId);
 } // namespace D2Game
 namespace D2Game { namespace GAME { namespace Event {
@@ -2702,12 +2720,6 @@ __declspec(noinline) inline int32_t __fastcall SEED_RollRangeInclusive(struct D2
 namespace D2Game { namespace SKILLS { namespace SkillEMonst {
 BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit, int32_t nSkillLvl, uint32_t dwParam);
 }}} // namespace D2Game::SKILLS::SkillEMonst
-namespace D2Game { namespace UNIT { namespace SUNITNPC {
-void __fastcall Init(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc);
-}}} // namespace D2Game::UNIT::SUNITNPC
-
-// Globals
-extern uint8_t gbObjectInitTableSetup;
 
 // Inline functions: the module compiled these into each caller
 namespace D2Game { namespace Seed {

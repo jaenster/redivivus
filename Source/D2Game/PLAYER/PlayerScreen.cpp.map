@@ -760,7 +760,7 @@
       ]
     },
     {
-      "name": "PlayerScreen_DispatchAction",
+      "name": "PARTYSCREEN_DispatchAction",
       "address": "005a6000",
       "lines": [
         {
@@ -770,7 +770,7 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerScreen",
       "calledFunctions": [
-        "PlayerScreen_DispatchAction",
+        "PARTYSCREEN_DispatchAction",
         "FindUnitFromTable"
       ],
       "usedTypes": [
@@ -779,7 +779,7 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "e78087e1",
+      "dh": "3b034ec9",
       "paramStorage": [
         [
           "pGame",

@@ -63,7 +63,7 @@ static uint32_t __stdcall WEATHER_ApproximateDistanceCustomCC(uint32_t nDeltaX, 
     return (uint32_t)(nAbsY * 0x3d7 + nAbsX * 0x197) >> 10;
 }
 
-void __stdcall RENDERER_TogglePerspective_Unref_00474140() {
+void __stdcall LIGHTMAP_ToggleColorEnabled() {
     gbLightmapColorEnabled = (uint32_t)!gbLightmapColorEnabled;
 }
 

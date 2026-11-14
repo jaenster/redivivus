@@ -346,7 +346,7 @@
         "SRegSaveValue",
         "SOUND_Initialize",
         "SOUND_ShutdownDirectSound",
-        "D2GFX_CheckVideoMode",
+        "D2GFX_ShutdownSpriteCacheAndWindow",
         "ApplicationRunCurrentMode",
         "STRUCT_FreeAsyncData",
         "FreeMCP",
@@ -360,7 +360,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "375c0e59",
+      "dh": "b9a32ac1",
       "paramStorage": [
         [
           "hInstance",

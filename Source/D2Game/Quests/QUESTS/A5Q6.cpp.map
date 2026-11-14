@@ -921,14 +921,14 @@
       "calledFunctions": [
         "Objects_InitFn75_BaalsPortal",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "0932d6b3",
+      "dh": "a4d0858d",
       "paramStorage": [
         [
           "pInitArg",
@@ -980,14 +980,14 @@
       "calledFunctions": [
         "Objects_InitFn77_LastPortal",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q6Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "f3fd6a6d",
+      "dh": "12c31310",
       "paramStorage": [
         [
           "pInitArg",

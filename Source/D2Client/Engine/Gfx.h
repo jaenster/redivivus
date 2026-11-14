@@ -7330,14 +7330,14 @@ void __fastcall GFX_FreePlayerCofCache(int32_t nParam);
 // @sourcefile .\ENGINE\Gfx.cpp
 void GFX_FreeMonsterCofCache();
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags);
-int __stdcall GFX_GetCofCacheFlags();
+int __stdcall GFX_GetGfxMemory();
 int __stdcall GFX_GetCofCacheMemUsage();
-int __stdcall GFX_GetGfxSystemFlags();
+int __stdcall GFX_GetCofCacheMemLimit();
 struct D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId);
 // @sourcefile .\ENGINE\Gfx.cpp
-struct D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(struct D2UnitStrc * pUnit, int32_t nAnimMode, int nWeaponClass);
+struct D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(struct D2UnitStrc * pUnit, int32_t nWeaponClass, int nAnimMode);
 // @sourcefile .\ENGINE\Gfx.cpp
-void __fastcall GFX_InitCofSystem(int nSystemFlags);
+void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit);
 // @sourcefile .\ENGINE\Gfx.cpp
 void GFX_ShutdownCofSystem();
 // Throttle body: guard global tested against zero, GetTickCount compared to a
@@ -7376,7 +7376,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(struct D2UnitStrc * pUnit);
 BOOL __fastcall GFX_DrawUnitSelectionShape(struct D2UnitStrc * pUnit);
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall DRAW_WORLD_Unit_1(struct D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, int32_t pPalShift, int32_t bDrawStates);
-int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0();
+int __stdcall GFX_GetWeatherCurrentTransitionState();
 #endif // D2_MODULE_D2Client
 // 25 internal functions (defined in .cpp)
 

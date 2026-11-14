@@ -44,7 +44,10 @@ __pragma(pack(push, 1)) struct D2PartyDataStrc {
     /* 0x00 */ uint32_t nUnitGUID;
     /* 0x04 */ uint32_t nLifePercent;
     /* 0x08 */ eD2LevelId eLevelId;
-    /* 0x0C */ uint32_t field3_0xc;
+    /* 0x0C */ uint8_t nSkippedUpdates;
+    /* 0x0D */ uint8_t field_0xd;
+    /* 0x0E */ uint8_t field_0xe;
+    /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ struct D2PartyDataStrc * pPrev;
 }; __pragma(pack(pop))
 
@@ -71,7 +74,7 @@ void __fastcall FreePlayers(::SGAMEDATA * pGame);
 void __fastcall PLAYER_ClearTargetIfMatch(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 void __fastcall PLAYER_MoveToLocationWithTimeout(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY);
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
-void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2CharStatsTxt * eClassId, int32_t nDifficulty, struct D2CharItemStrc * pCharItem);
+void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2CharStatsTxt * pCharStatsTxt, int32_t nItemIndex, struct D2CharItemStrc * pCharItem);
 void __fastcall PLAYER_CreateAllStarterItems(struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct);
 void __fastcall PLAYER_SendAllItemsToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 int32_t __fastcall GetPlayerTradeTickOrBusy(struct D2UnitStrc * pPlayer);
@@ -90,7 +93,7 @@ BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, struct D2UnitStr
 uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // NOTE: Register params: pGame (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\PLAYER\Player.cpp
-int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, uint32_t dwSkillTxt);
+int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID);
 // IterateAllUnits callback: increments pArgs->nCount when the player's room is in level
 // pArgs->eLevelId and the player is not in mode Death/Dead. Only user: PLAYER_CountLivingPlayersInLevel.
 void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2LevelPlayerCountArgStrc * pArgs);
@@ -100,11 +103,11 @@ void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, str
 // PLAYER_CountLivingPlayerInLevelCallback and returns nCount.
 // No references in 1.14d. It counts; it finds no unit.
 int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2LevelId eLevelId);
-void __fastcall CountModeZeroDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount);
+void __fastcall PLAYER_CountLivingPlayersCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount);
 int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame);
 void __fastcall PLAYER_HandleDeathPenalties(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pKillerUnit);
 void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PlayerHostileCheckArgStrc * pbHostile);
-DWORD __fastcall PLAYER_CountPlayersWithFilter(::SGAMEDATA * pGame, struct D2UnitStrc * pnFilter);
+BOOL __fastcall PLAYER_HasHostilePlayer(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);
 void __fastcall PLAYER_CheckPlayerIsHostileToThis(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PlayerHostileCheckArgStrc * pbHostile);
 DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, struct D2UnitStrc * pnFilter);
 // Returns the weapon unit the player should use when casting the current skill, respecting dual-wield and weapon-switch rules. For non-dual-wield classes returns the equipped primary weapon. For dual-wield capable classes dispatches on SkillsTxt.weapsel: 2=off-hand preference with main-hand fallback if no valid off-hand, 3=switch-state dependent (reads nSeqFrame weapon-switch bit), 4=no weapon (returns null), default/1=primary then off-hand fallback. Returns the equipped default if the resolved weapon is broken or disabled.

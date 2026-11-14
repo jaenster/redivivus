@@ -34,6 +34,10 @@ struct DC6Block;
 #define RECON_FPTD_pfnCelPixelDataFree
 typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 #endif
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 
 // Data types
 #ifndef D2_DEFINED_D2CelDecodeStateStrc
@@ -300,7 +304,7 @@ struct D2TileProjectStrc {
 
 // Functions
 namespace D2CMP::Draw {
-uint8_t __stdcall D2GFX_GetColorWithAlphaFromPallete(LPPALETTEENTRY pPallete, uint32_t nAlpha, int32_t nRed, int32_t Green, int32_t nBlue);
+uint8_t __stdcall D2GFX_FindNearestPaletteIndex(LPPALETTEENTRY pPallete, uint32_t nPaletteSize, int32_t nRed, int32_t nGreen, int32_t nBlue);
 } // namespace D2CMP::Draw
 namespace D2CMP::DUNGEON::Dungeon {
 // Tail-calls TileProjects::Alloc (already int* returning) and passes its result straight through unmodified to RET.
@@ -335,7 +339,7 @@ int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
 void __stdcall DeleteCellFile(struct DC6 * pDC6);
 int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
-void __stdcall GFX_SetSpriteCacheMaxSize(size_t nSize);
+void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry);
 } // namespace D2CMP::SRC::CelCmp
 namespace D2CMP::SRC::FastCmp {
 void __stdcall DRAW_DebugFillRect(uint8_t * nRowStart, int32_t nRowStride);
@@ -349,10 +353,10 @@ void __stdcall SPRITECACHE_Unlock();
 void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, uint32_t pPoolManager);
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc);
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData);
-uint32_t __stdcall SPRITECACHE_GetTotalEntries();
+uint32_t __stdcall SPRITECACHE_GetMemUsage();
 uint32_t __stdcall SPRITECACHE_GetCacheSize();
-int __stdcall SPRITECACHE_GetMaxSize();
-uint32_t __stdcall SPRITECACHE_GetCurrentSize();
+int __stdcall CELDATACACHE_GetMemUsage();
+uint32_t __stdcall CELDATACACHE_GetMemLimit();
 // Counts the LRU cache blocks whose async load has not completed (ASYNCDATA_IsComplete == 0); halts on a block with no pAsyncData.
 // It frees nothing, it only counts (returns nPendingCount).
 int32_t __stdcall SPRITECACHE_CountPendingLoads();

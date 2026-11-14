@@ -191,13 +191,13 @@
       "namespace": "D2Game::Quests::QUESTS::A3Q1",
       "calledFunctions": [
         "Q18_InitObjectMode",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "f0c2ac33",
+      "dh": "d40dca72",
       "paramStorage": [
         [
           "pQuestData",
@@ -672,7 +672,7 @@
         "GetQuestState",
         "SetupUpdateEvent_AttachEventSound",
         "ITEM_RewardItemToDrop",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "QUEST_SetStateFlag",
         "QUEST_SetStateAndBroadcast"
       ],
@@ -686,7 +686,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d8bbebf8",
+      "dh": "dd17fa16",
       "paramStorage": [
         [
           "pOperation",

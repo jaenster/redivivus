@@ -8,8 +8,8 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-D2SMemTablesStrc g_SMemSizeClassTable = {
-    /* .aSizeClassTable = */ {
+D2SMemTablesStrc gaLowestSetBitIndex = {
+    /* .aLowestSetBitIndex = */ {
         0xffffffff,
         0x0,
         0x1,
@@ -525,29 +525,29 @@ D2SMemTablesStrc g_SMemSizeClassTable = {
         0xfe,
         0xff
     }
-}; D2_GLOBAL_GUARD(g_SMemSizeClassTable, "g_SMemSizeClassTable");
+}; D2_GLOBAL_GUARD(gaLowestSetBitIndex, "gaLowestSetBitIndex");
 SMemHeapStatsStrc gaSMemHeapStats[4096] = {}; D2_GLOBAL_GUARD(gaSMemHeapStats, "gaSMemHeapStats");
 static int g_SMemLastTickCount = 0; D2_STATIC_GUARD(g_SMemLastTickCount, "g_SMemLastTickCount");
 
 namespace Fog::SMem {
 
-int32_t __stdcall SMemSizeClassBucketLookup(uint32_t nAllocSize) {
-    if (!nAllocSize) {
+int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits) {
+    if (!dwBits) {
       return -1;
     }
-    if ((uint8_t)(char)nAllocSize > '\0') {
-      return g_SMemSizeClassTable.aSizeClassTable[(uint8_t)nAllocSize];
+    if ((uint8_t)(char)dwBits > '\0') {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[(uint8_t)dwBits];
     }
 
-    uint8_t byClassByte = (uint8_t)(nAllocSize >> 8);
+    uint8_t byClassByte = (uint8_t)(dwBits >> 8);
     if (byClassByte > 0) {
-      return g_SMemSizeClassTable.aSizeClassTable[byClassByte] + 8;
+      return gaLowestSetBitIndex.aLowestSetBitIndex[byClassByte] + 8;
     }
-    if ((uint8_t)*(uint8_t*)((char*)&nAllocSize + 2) > 0) {
-      return g_SMemSizeClassTable.aSizeClassTable[*(uint8_t*)((char*)&nAllocSize + 2)] + 0x10;
+    if ((uint8_t)*(uint8_t*)((char*)&dwBits + 2) > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[*(uint8_t*)((char*)&dwBits + 2)] + 0x10;
     }
-    if ((uint8_t)*(uint8_t*)((char*)&nAllocSize + 3) > 0) {
-      return g_SMemSizeClassTable.aSizeClassTable[*(uint8_t*)((char*)&nAllocSize + 3)] + 0x18;
+    if ((uint8_t)*(uint8_t*)((char*)&dwBits + 3) > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[*(uint8_t*)((char*)&dwBits + 3)] + 0x18;
     }
 
     return -1;

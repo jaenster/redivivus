@@ -160,7 +160,7 @@
       "dh": "90b9b951"
     },
     {
-      "name": "GAME_GetUnusedServerConstant_Unref_0052bdc0",
+      "name": "GAME_GetQServerListenSocket",
       "address": "0052bdc0",
       "lines": [
         {
@@ -170,12 +170,12 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "GAME_GetUnusedServerConstant_Unref_0052bdc0"
+        "GAME_GetQServerListenSocket"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3ab6a982"
+      "dh": "38e8ba4b"
     },
     {
       "name": "Unreferenced_0052bdd0",
@@ -1273,7 +1273,7 @@
         "SetupGameChecks",
         "STRING_CheckIfStringLengthDoNotExceedSize",
         "NET_D2GS_SERVER_GetPlayerNameByClientId",
-        "SERVER_IsPlayerCharacterInGame",
+        "CLIENTS_IsCharacterNameFree",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -1283,7 +1283,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a4dcac8",
+      "dh": "3a228020",
       "paramStorage": [
         [
           "nClientID2",
@@ -1543,7 +1543,7 @@
         "NET_D2GS_SERVER_IsValidChecks",
         "STRING_CheckIfStringLengthDoNotExceedSize",
         "NET_D2GS_SERVER_GetPlayerNameByClientId",
-        "SERVER_IsPlayerCharacterInGame",
+        "CLIENTS_IsCharacterNameFree",
         "SERVER_IsTokenValid",
         "STRING_CheckIfPlayerNameDoNotContainForbidenChars",
         "GetInstructionPointer",
@@ -1557,7 +1557,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f685574e",
+      "dh": "57450ffc",
       "paramStorage": [
         [
           "nClientID",
@@ -2485,7 +2485,7 @@
       ]
     },
     {
-      "name": "GAME_GetUnusedServerConstant_Unref_0052db90",
+      "name": "GAME_GetCycleLastSecond",
       "address": "0052db90",
       "lines": [
         {
@@ -2495,12 +2495,12 @@
       ],
       "namespace": "D2Game::GAME::Server",
       "calledFunctions": [
-        "GAME_GetUnusedServerConstant_Unref_0052db90"
+        "GAME_GetCycleLastSecond"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5832b713"
+      "dh": "206ecd5e"
     },
     {
       "name": "QSERVER_GetMemoryUsage",
@@ -4780,7 +4780,7 @@
         "SetGameDataHook",
         "CreateClient",
         "AssignClientToToken",
-        "GAMECLIENT_GetFlags0x20",
+        "GAMECLIENT_SetFlags0x20",
         "AllocPartyControl",
         "AllocMonsterRegionForGame",
         "AllocObjectControl",
@@ -4810,7 +4810,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e32b98d1",
+      "dh": "455e802f",
       "paramStorage": [
         [
           "nClientId",
@@ -5084,6 +5084,27 @@
         [
           "dwArg2",
           "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GAME_SetObjectInitTableSetup",
+      "address": "00552830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00552830"
+        }
+      ],
+      "namespace": "D2Game::GAME::Server",
+      "calledFunctions": [
+        "GAME_SetObjectInitTableSetup"
+      ],
+      "dh": "c7f66d8f",
+      "paramStorage": [
+        [
+          "nDifficulty",
+          "CL:1"
         ]
       ]
     },

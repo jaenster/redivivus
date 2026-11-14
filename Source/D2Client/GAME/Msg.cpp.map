@@ -20,7 +20,7 @@
       "dh": "5395d90a"
     },
     {
-      "name": "LOADING_GetProgressRatio_Unref_00477c90",
+      "name": "RENDERING_GetEngineMode",
       "address": "00477c90",
       "lines": [
         {
@@ -30,9 +30,9 @@
       ],
       "namespace": "D2Client::GAME::Msg",
       "calledFunctions": [
-        "LOADING_GetProgressRatio_Unref_00477c90"
+        "RENDERING_GetEngineMode"
       ],
-      "dh": "fa75e172"
+      "dh": "797676fb"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x67",
@@ -121,13 +121,13 @@
       "calledFunctions": [
         "NET_D2GS_CLIENT_Send_0x69",
         "NET_D2GS_CLIENT_SendPacketAfterChecks",
-        "CLIENT_GetGameVersionInfo"
+        "CLIENT_GetBNetClientCallbacks"
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc",
         "uint8_t"
       ],
-      "dh": "e74b64e2"
+      "dh": "b7ad9365"
     },
     {
       "name": "NET_D2GS_CLIENT_Send_0x68",
@@ -141,7 +141,7 @@
       "namespace": "D2Client::GAME::Msg",
       "calledFunctions": [
         "NET_D2GS_CLIENT_Send_0x68",
-        "GetGameVersionInfo",
+        "GAME_GetBNetClientCallbacks",
         "D2CheckExpansionGame",
         "MISC_GetLanguageCode",
         "CLIENT_IsArenaMode",
@@ -157,7 +157,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a3bb78c",
+      "dh": "1dc52e16",
       "paramStorage": [
         [
           "nGameToken",

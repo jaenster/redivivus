@@ -175,8 +175,8 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       nDeltaY = -nDeltaY;
     }
     if (nDeltaY <= nArriveThreshold && nDeltaX <= nArriveThreshold || !eMoveType && nPrevTargetX > 0 && (nDistToClick = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nCurX, nCurY, nSendX, nClickY) , nDistToClick < 100) && (nDistToPrevTarget = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nCurX, nCurY, nPrevTargetX, nPrevTargetY) , nDistToPrevTarget < nDistToClick)) {
-      nPrevTargetY = D2Common::Units::GetTargetX(pUnit);
-      nPrevTargetX = D2Common::Units::GetTargetY(pUnit);
+      nPrevTargetY = D2Common::Units::GetScreenX(pUnit);
+      nPrevTargetX = D2Common::Units::GetScreenY(pUnit);
       nY = nClickY;
       eMoveType = nSendX;
       D2Common::Drlg::Transform::CoordsMapToScreen((int32_t*)&eMoveType, &nY);
@@ -203,7 +203,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, int32_t nY
       return;
     }
 
-    D2Common::PATH::Path::PATH_CheckCollisionFlags(pUnit->pPath.pDynamicPath, pUnit, pRoom, nX, (uint16_t)nClickYSaved);
+    D2Common::PATH::Path::PATH_MoveUnitToRoomPosition(pUnit->pPath.pDynamicPath, pUnit, pRoom, nX, (uint16_t)nClickYSaved);
 }
 
 uint32_t __fastcall PATH_SetTargetUnitAndCalculate(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetUnitId) {

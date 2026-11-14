@@ -4,7 +4,7 @@
   "file": "Source/D2Common/Drlg/Maze.cpp",
   "functions": [
     {
-      "name": "ReplaceRoomWithNewRoom",
+      "name": "DRLGMAZE_PlaceRoomAdjacent",
       "address": "00670880",
       "lines": [
         {
@@ -14,8 +14,8 @@
       ],
       "namespace": "D2Common::Drlg::Maze",
       "calledFunctions": [
-        "ReplaceRoomWithNewRoom",
-        "ComputeRectanglesManhattanDistance",
+        "DRLGMAZE_PlaceRoomAdjacent",
+        "DRLGROOM_IsRoomClearOfOthers",
         "DRLGROOM_CoordsWithinDistance"
       ],
       "usedTypes": [
@@ -23,7 +23,7 @@
         "D2DrlgOrthStrc",
         "D2RoomExStrc"
       ],
-      "dh": "3d0e961d",
+      "dh": "82b7bcec",
       "paramStorage": [
         [
           "nDirection",
@@ -198,7 +198,7 @@
       "calledFunctions": [
         "AllocateRoomEx",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -209,7 +209,7 @@
         "D2RoomExStrc",
         "eDrlgDirection"
       ],
-      "dh": "044df42c",
+      "dh": "f120670c",
       "paramStorage": [
         [
           "pSourceRoom",
@@ -238,7 +238,7 @@
       "calledFunctions": [
         "DRLGMAZE_AllocRoomExAndPickPreset",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "AddRoomExToLevel",
@@ -251,7 +251,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "737d3e18",
+      "dh": "367a07b1",
       "paramStorage": [
         [
           "eDir",
@@ -311,7 +311,7 @@
       ]
     },
     {
-      "name": "ReplaceRoomWith",
+      "name": "DRLGMAZE_AddSpecialPreset",
       "address": "00670eb0",
       "lines": [
         {
@@ -321,9 +321,9 @@
       ],
       "namespace": "D2Common::Drlg::Maze",
       "calledFunctions": [
-        "ReplaceRoomWith",
+        "DRLGMAZE_AddSpecialPreset",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "AddRoomExToLevel",
@@ -335,7 +335,7 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "8a7515e4",
+      "dh": "bc260b5c",
       "paramStorage": [
         [
           "nDirection",
@@ -368,7 +368,7 @@
       "calledFunctions": [
         "DRLGMAZE_BuildRoomGrid",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -381,7 +381,7 @@
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "d443b642",
+      "dh": "b6a1ce40",
       "paramStorage": [
         [
           "nGridSize",
@@ -435,7 +435,7 @@
         "ActualLevelGeneration",
         "GetRandomRoomExFromLevel",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -449,7 +449,7 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "5ec84607",
+      "dh": "3a6a8d93",
       "paramStorage": [
         [
           "pLevel",
@@ -471,7 +471,7 @@
         "DRLGMAZE_ExpandRoomsWithPresets",
         "AllocServerMemory",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "AddRoomExToLevel",
@@ -486,7 +486,7 @@
         "D2RoomExStrc *",
         "uint32_t"
       ],
-      "dh": "0e6aa628",
+      "dh": "22b5e2d7",
       "paramStorage": [
         [
           "pLevel",
@@ -503,7 +503,7 @@
       ]
     },
     {
-      "name": "SetupBaalChamber",
+      "name": "DRLGMAZE_PlaceAct5LavaPresets",
       "address": "00671430",
       "lines": [
         {
@@ -513,7 +513,7 @@
       ],
       "namespace": "D2Common::Drlg::Maze",
       "calledFunctions": [
-        "SetupBaalChamber",
+        "DRLGMAZE_PlaceAct5LavaPresets",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -526,7 +526,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "aee7fb06",
+      "dh": "886164cb",
       "paramStorage": [
         [
           "pLevel",
@@ -547,7 +547,7 @@
       "calledFunctions": [
         "DRLGMAZE_ExpandCatacombsLevel",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -562,7 +562,7 @@
         "D2SeedStrc",
         "int32_t"
       ],
-      "dh": "d1ea2ff7",
+      "dh": "6d62c2a9",
       "paramStorage": [
         [
           "pLevel",
@@ -587,7 +587,7 @@
       "calledFunctions": [
         "GenerateWolrdstoneAndTombs",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -601,7 +601,7 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "7d322ef1",
+      "dh": "3377b660",
       "paramStorage": [
         [
           "pLevel",
@@ -623,7 +623,7 @@
         "RollArcaneTypePath",
         "memset",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -638,7 +638,7 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "8c8cc484",
+      "dh": "d9fa16d3",
       "paramStorage": [
         [
           "pLevel",
@@ -659,7 +659,7 @@
       "calledFunctions": [
         "DRLGMAZE_CanPlaceRoomInDirection",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "AddRoomExToLevel",
@@ -671,7 +671,7 @@
         "D2RoomExStrc",
         "eDrlgDirection"
       ],
-      "dh": "11fbefc1",
+      "dh": "a2473e8b",
       "paramStorage": [
         [
           "eDirection",
@@ -799,7 +799,7 @@
       "namespace": "D2Common::Drlg::Maze",
       "calledFunctions": [
         "ReplaceRoom",
-        "ReplaceRoomWith"
+        "DRLGMAZE_AddSpecialPreset"
       ],
       "usedTypes": [
         "D2DrlgLevelStrc",
@@ -808,7 +808,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8100fd4c",
+      "dh": "c5badb40",
       "paramStorage": [
         [
           "pDrlgReplaceRoom",
@@ -945,7 +945,7 @@
         "DRLGMAZE_GenerateSewerLevel",
         "DRLGMAZE_FindTopMostRoom",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "DRLGMAZE_PickRoomPresets",
@@ -962,7 +962,7 @@
         "D2SeedStrc",
         "uint32_t"
       ],
-      "dh": "5b57afa0",
+      "dh": "dcbfa90a",
       "paramStorage": [
         [
           "pDrlgLevelStrc",
@@ -1243,7 +1243,7 @@
         "DRLGMAZE_AllocRoomExAndPickPreset",
         "DRLGMAZE_FindTopMostRoom",
         "DRLGROOMEX_AllocRoomEx",
-        "ReplaceRoomWithNewRoom",
+        "DRLGMAZE_PlaceRoomAdjacent",
         "DRLGROOMEX_FreeDrlgRoomEx",
         "DRLGROOMEX_AllocNodesForBothRoomEx",
         "AddRoomExToLevel",
@@ -1258,7 +1258,7 @@
         "D2LvlMazeTxt",
         "D2RoomExStrc"
       ],
-      "dh": "41f17171",
+      "dh": "3b528e7e",
       "paramStorage": [
         [
           "pDrlgLevelStrc",
@@ -1454,7 +1454,7 @@
         "UNIT_GetModuloFromSeed",
         "DRLGMAZE_ReplaceIceCavesRooms",
         "PutRedNextLevelAreasInPlace",
-        "SetupBaalChamber",
+        "DRLGMAZE_PlaceAct5LavaPresets",
         "DRLGMAZE_GenerateBarracksLayout",
         "DRLGMAZE_GenerateRiverOfFlames",
         "DRLGLEVEL_AdjustRoomCoordinates",
@@ -1470,7 +1470,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6dfe9aa8",
+      "dh": "a62633d2",
       "paramStorage": [
         [
           "pLevel",

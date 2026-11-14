@@ -17,7 +17,7 @@
         "QSERVER_CooperativeThreadMain",
         "QSERVER_ShutdownAllGames",
         "QSERVER_DispatchAndCleanup",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "GetUnitCountByServerId",
         "NET_D2GS_SERVER_HandleAnyIncomingPacket",
         "SrvProcessAllGames"
@@ -27,7 +27,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "adf30eb6",
+      "dh": "22e68c18",
       "paramStorage": [
         [
           "lpThreadParam",

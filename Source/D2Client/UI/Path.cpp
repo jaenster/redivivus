@@ -24,11 +24,11 @@ static uint32_t MouseYRelatedB = 0; D2_STATIC_GUARD(MouseYRelatedB, "MouseYRelat
 
 namespace D2Client::UI::Path {
 
-uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae60() {
+uint32_t __stdcall LOADER_GetScreenResolutionTableIndex() {
     return Engine::gaScreenResolutionTableIndexArray;
 }
 
-uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae80() {
+uint32_t __stdcall LOADER_GetScreenResolutionMode() {
     return Engine::gaScreenResolutionModeArray;
 }
 
@@ -99,7 +99,7 @@ void __fastcall ConvertCoordToPerspectiveView(int * pX, int * pY) {
 
     nY += MouseYOffset;
     nX += MouseXOffset - MouseYRelatedB;
-    D2Common::Drlg::Transform::DRLG_WorldToScreenShift5(&nX, &nY);
+    D2Common::Drlg::Transform::DRLG_ScreenToWorldShift5(&nX, &nY);
     *pX = nX;
     *pY = nY;
 }
@@ -120,9 +120,9 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, (int*)&nRoomCount);
     for (i = 0; i < nRoomCount; i++) {
       for (pUnit = pRoom->pUnitList; pUnit; pUnit = pUnit->pRoomNext) {
-        nScreenX = D2Common::Units::GetTargetX(pUnit);
+        nScreenX = D2Common::Units::GetScreenX(pUnit);
         nScreenX -= MouseXOffset;
-        nCoord = D2Common::Units::GetTargetY(pUnit);
+        nCoord = D2Common::Units::GetScreenY(pUnit);
         D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nScreenX, nCoord - MouseYOffset, nScreenX + 4, nCoord - MouseYOffset + 4, 0xff, DRAW_SOLID);
         if (pUnit && pUnit->eUnitType == UNIT_WARP) {
           for (pGfxInfo = pUnit->pGfxInfo; pGfxInfo; pGfxInfo = *(D2GfxInfoStrc**)(pGfxInfo->nComponentFlags + 0x20)) {
@@ -130,9 +130,9 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
             nScreenX = *(int*)pGfxInfo->nComponentFlags - MouseXOffset;
             nLineAlpha = 0xff;
             nColor_lcl = 0xff;
-            nYStart = D2Common::Units::GetTargetY(pUnit);
+            nYStart = D2Common::Units::GetScreenY(pUnit);
             nYStart -= MouseYOffset;
-            nCoord = D2Common::Units::GetTargetX(pUnit);
+            nCoord = D2Common::Units::GetScreenX(pUnit);
             D2gfx::D2GFX::D2GFX_DrawLine(nCoord - MouseXOffset, nYStart, nScreenX, nYEnd, nColor_lcl, nLineAlpha);
           }
         }
@@ -258,8 +258,8 @@ void __stdcall DRAW_UpdateMouseWorldOffsets() {
     }
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nTargetX = D2Common::Units::GetTargetX(pUnit);
-    int32_t nTargetY = D2Common::Units::GetTargetY(pUnit);
+    int32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
+    int32_t nTargetY = D2Common::Units::GetScreenY(pUnit);
     MouseXOffset = nTargetX - ui::ScreenSizeX / 2;
     MouseYOffset = nTargetY - Inv::ScreenSizeY / 2 + 0x10;
     BOOL bHasShake = GAME::View::SHAKE_GetShake(&nShakeX, &nShakeY);

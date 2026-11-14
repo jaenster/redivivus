@@ -587,7 +587,7 @@
       ]
     },
     {
-      "name": "D2WINFONT_DrawWideStringRightToLeft",
+      "name": "D2WINFONT_DrawTickerText",
       "address": "00501fe0",
       "lines": [
         {
@@ -597,7 +597,7 @@
       ],
       "namespace": "D2Win::Src::D2WinFont",
       "calledFunctions": [
-        "D2WINFONT_DrawWideStringRightToLeft",
+        "D2WINFONT_DrawTickerText",
         "STRING_GetWideStringLength",
         "memset",
         "UNICODE_CompareWideStringsN",
@@ -611,7 +611,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b0fab9ee",
+      "dh": "11592f53",
       "paramStorage": [
         [
           "wszText",
@@ -630,11 +630,11 @@
           "Stack[0x8]:4"
         ],
         [
-          "nLeftBound",
+          "nScrollOffsetX",
           "Stack[0xc]:4"
         ],
         [
-          "nRightBound",
+          "nClipWidth",
           "Stack[0x10]:4"
         ]
       ]
@@ -739,22 +739,22 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "74ca2fa6",
+      "dh": "970847f2",
       "paramStorage": [
         [
           "wszText",
           "ECX:4"
         ],
         [
-          "nFontId",
+          "nX",
           "EDX:4"
         ],
         [
-          "nX",
+          "nY",
           "Stack[0x4]:4"
         ],
         [
-          "nY",
+          "nColor",
           "Stack[0x8]:4"
         ],
         [
@@ -762,7 +762,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "nCustomField",
+          "nBarFill",
           "Stack[0x10]:4"
         ]
       ]

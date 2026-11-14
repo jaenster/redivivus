@@ -199,7 +199,7 @@ int * __fastcall GetRendererStatistics();
 void __fastcall RENDERER_WINDOWED_GetPalette(HPALETTE * phPalette, RGBQUAD * * ppRgbQuad);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __fastcall RENDERER_WINDOWED_GetFramebufferInfo(uint32_t * ppvBitsOut, uint32_t * pnHeightOut, uint32_t * pnWidthOut);
-HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240();
+HBITMAP __stdcall RENDERER_WINDOWED_GetInitFunctionsStrc();
 // Windowed renderer: returns palette pointer for the specified render mode. Reads from gpPaletteTable offsets 0x0-0x10C based on the nDrawMode index (0-6).
 BYTE * __fastcall RENDERER_WINDOWED_GetPalettePointer(int nDrawMode, uint32_t * pdwStateOut);
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting

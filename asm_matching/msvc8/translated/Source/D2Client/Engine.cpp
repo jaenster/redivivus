@@ -85,11 +85,11 @@ static uint32_t gnConnectionLostScreenState = 0; D2_STATIC_GUARD(gnConnectionLos
 
 namespace D2Client { namespace Engine {
 
-void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae50(BOOL bConnectionLost) {
+void __fastcall LOADER_SetScreenResolutionTableIndex(BOOL bConnectionLost) {
     gaScreenResolutionTableIndexArray = bConnectionLost;
 }
 
-void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost) {
+void __fastcall LOADER_SetScreenResolutionMode(BOOL bConnectionLost) {
     gaScreenResolutionModeArray = bConnectionLost;
 }
 
@@ -604,7 +604,7 @@ void __fastcall CLIENT_SetUnitLightColor(D2UnitStrc * pUnit, int32_t dwRGB) {
     Draw::LightMap::SetRGB(pLightMap, byRed, byGreen, byBlue);
 }
 
-void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost) {
+void __fastcall CURSOR_SetInitialized(BOOL bConnectionLost) {
     Cursor::gnCursorInitialized = bConnectionLost;
 }
 

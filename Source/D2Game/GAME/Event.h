@@ -2703,7 +2703,7 @@ void __fastcall EVENT_AllocTimerQueue(::SGAMEDATA * pGame);
 // Main timer dispatch loop called every game frame at 25 FPS. Iterates all 5 unit types (missile→player→monster→object→item) and processes both immediate timers (pTimerListByType) and frame-scheduled timers (pActiveTimersByType bucket hash). Each unit type calls its type-specific dispatcher which invokes default callbacks or custom fpTimerFunction handlers.
 void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame);
 // Checks if a timer of the specified type already exists on a unit. Walks the unit's timer linked list (pNextTimerOnUnit) and returns the earliest scheduled frame number if a matching timer type is found, 0 if not found. Used to prevent duplicate timers on units.
-BOOL __fastcall EVENT_TimerTypeExistsOnUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType);
+int32_t __fastcall EVENT_GetTimerFrame(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType);
 // Triggers a timer for immediate execution without going through the scheduler. Calls EVENT_TriggerTimerInternal with NULL fpFunction (use default callback), nTimerType < 15 enforced. Used when animation ends or mode changes need instant callback invocation.
 void __fastcall EVENT_TriggerImmediate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2TimerTypeDWORD nTimerType, int32_t nArg1, int32_t nArg2);
 // Triggers an immediate timer with a custom callback function. Calls EVENT_TriggerTimerInternal with the supplied fpTimerFunction. Unused in the codebase (0 call sites), but provided as API symmetry with EVENT_TriggerImmediate.

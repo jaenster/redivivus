@@ -113,7 +113,7 @@ BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDraw
     return 1;
 }
 
-int __stdcall D2WINIMAGE_StopAnimation(::D2WinImage * pImage) {
+int __stdcall D2WINIMAGE_GetFrameCount(::D2WinImage * pImage) {
     int32_t nLine;
     if (pImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa9);

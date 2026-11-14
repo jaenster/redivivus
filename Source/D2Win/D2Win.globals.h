@@ -25,7 +25,6 @@ typedef LRESULT (__stdcall *WndProcB)(HWND param_1, uint32_t uMsg, uint32_t para
 namespace D2Win::Src::D2WinMain {
 extern int nPosX;
 extern int nPosY;
-extern D2ControlStrc * pFormFourth;
 } // namespace D2Win::Src::D2WinMain
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
@@ -63,6 +62,7 @@ extern D2ControlStrc * pFormsList;
 extern D2ControlStrc * pFormUnknown;
 extern D2ControlStrc * pFormSecond;
 extern ::D2WinEditBox * pFormTextAndEditBox;
+extern D2ControlStrc * gpEscapeButton;
 extern D2ControlStrc * pFormImage;
 } // namespace D2Win::Src::D2WinMain
 namespace D2Win::Src::D2WinTextBox {

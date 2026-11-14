@@ -1133,7 +1133,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
           __frame0.bSoundInit = 0;
         }
         if (bWindowCreated) {
-          D2Win::D2GFX::D2GFX_CheckVideoMode();
+          D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
           D2gfx::D2GFX::D2GFX_Release();
           __frame0.dwTmp = 0;
           bWindowCreated = false;
@@ -1147,7 +1147,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       D2Sound::Sound::SOUND_ShutdownDirectSound();
     }
     if (bWindowCreated) {
-      D2Win::D2GFX::D2GFX_CheckVideoMode();
+      D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
       D2gfx::D2GFX::D2GFX_Release();
     }
 

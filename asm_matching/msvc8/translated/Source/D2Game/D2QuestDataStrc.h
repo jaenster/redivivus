@@ -199,7 +199,7 @@ struct D2QuestDataA2Q2Strc {
     /* 0x08 */ int32_t field_0x08;
     /* 0x0C */ int32_t field_0x0C;
     /* 0x10 */ int32_t field_0x10;
-    /* 0x14 */ int32_t nQuestItemPickupNotifyCount; // Incremented on scroll/viper/cube pickup when quest not started
+    /* 0x14 */ int32_t nItemDropCount; // Incremented on scroll/viper/cube pickup when quest not started
     /* 0x18 */ int32_t nMsfCount; // Count of Horadric Staff components (msf) held by players
     /* 0x1C */ int32_t nHstCount; // Count of complete Horadric Staffs (hst) held by players
     /* 0x20 */ int32_t nBoxCount; // Count of Horadric Cubes (box) held by players
@@ -258,9 +258,9 @@ struct D2QuestDataA2Q4Strc {
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ bool bSummonerKilled; // Set when Summoner is killed (used for coords lookup)
     /* 0x19 */ bool bSummonerCoordsFallback; // Fallback flag for Summoner coordinate lookup
-    /* 0x1A */ uint8_t bDurielProximity; // set=1 in Q14_CheckDurielProximity when player is within ~31 units of Duriel coords
+    /* 0x1A */ uint8_t bPlayerNearHaremBlocker; // set=1 in Q14_CheckDurielProximity when player is within ~31 units of Duriel coords
     /* 0x1B */ uint8_t field_0x1B;
-    /* 0x1C */ int32_t nDurielProximityPlayerGUID; // GUID of the player near Duriel (-1 if no unit); set in Q14_CheckDurielProximity
+    /* 0x1C */ int32_t nPlayerNearHaremBlockerGUID; // GUID of the player near Duriel (-1 if no unit); set in Q14_CheckDurielProximity
     /* 0x20 */ int32_t nHaremBlockerX;
     /* 0x24 */ int32_t nHaremBlockerY;
     /* 0x28 */ int32_t nJerhynX;
@@ -695,12 +695,12 @@ __pragma(pack(push, 1)) struct D2QuestDataA5Q3Strc {
     /* 0x08C */ int32_t nTransformStep;
     /* 0x090 */ uint8_t bAnyaTransformed; // Set when transform begins
     /* 0x091 */ uint8_t bFrozenAnyaSpawned; // Frozen Anya monster created
-    /* 0x092 */ uint8_t bFrozensteinSpawned; // Set to 1 after Frozenstein guard monster (classId 0x202) spawned from preset
+    /* 0x092 */ uint8_t bNihlathakSpawned; // Set to 1 after Frozenstein guard monster (classId 0x202) spawned from preset
     /* 0x093 */ uint8_t bAnyaMonsterAlive; // Anya NPC monster spawned
     /* 0x094 */ int32_t nFrozenAnyaGUID; // GUID of frozen Anya object
     /* 0x098 */ int32_t nAnyaMonsterGUID; // GUID of Anya NPC monster
     /* 0x09C */ int32_t nAnyaCorpseGUID; // GUID of thawed Anya
-    /* 0x0A0 */ int32_t nFrozensteinGUID; // UnitGUID of the spawned Frozenstein guard monster
+    /* 0x0A0 */ int32_t nNihlathakGUID; // UnitGUID of the spawned Frozenstein guard monster
     /* 0x0A4 */ uint8_t bFrozenAnyaSpawning; // Guard: frozen Anya object (0x22e) creation started; prevents double-spawn
     /* 0x0A5 */ uint8_t field_0xa5;
     /* 0x0A6 */ uint8_t field_0xa6;

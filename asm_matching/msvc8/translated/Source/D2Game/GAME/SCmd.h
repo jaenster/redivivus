@@ -471,7 +471,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xA5_FORCESTOPSKILL(struct D2ClientStrc * p
 // Server-to-client attribute update for units. Opcode 0x20.
 void __fastcall NET_D2GS_SERVER_Send_0x20_STATCHANGE_PLAYER(struct D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nUnitGUID, uint16_t nAttributeId, uint32_t dwValue);
 // Server-to-client player HP/MP update. Opcode 0x18.
-void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint8_t bLifePercent, uint8_t bManaPercent, uint16_t nMaxLife, uint16_t nMaxMana, uint8_t bMaxLifePercent, uint8_t bMaxManaPercent);
+void __fastcall NET_D2GS_SERVER_Send_0x18_PLAYERCOMMONSTATCHANGE_BIG(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint8_t bLifePercent, uint8_t bManaPercent, uint16_t nX, uint16_t nY, uint8_t nDeltaX, uint8_t nDeltaY);
 // Server-to-client life/mana update. Opcode 0x95.
 void __fastcall NET_D2GS_SERVER_Send_0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(struct D2ClientStrc * pClient, uint16_t nLife, uint16_t nMana, uint16_t nStamina, uint16_t nX, uint16_t nY, uint8_t nDeltaX, uint8_t nDeltaY);
 // Server-to-client walk verification. Opcode 0x96.
@@ -592,7 +592,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(struct D2ClientStrc 
 void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x8A * pPacket);
 void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(struct D2ClientStrc * pClient);
 void __fastcall NET_D2GS_SERVER_Send_0x91_WELCOME_BACK(struct D2ClientStrc * pClient, struct D2GSPacketSrv0x91 * pD2GSPacketSrv0x91);
-void __fastcall NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(struct D2ClientStrc * pClient, uint32_t nUnitGUID, uint16_t wWaypointData);
+void __fastcall NET_D2GS_SERVER_Send_0x98_SETSPAWNERMONSTER(struct D2ClientStrc * pClient, uint32_t nUnitGUID, uint16_t wSpawnClassId);
 void __fastcall NET_D2GS_SERVER_Send_0x9B_MercReviveCost(struct D2ClientStrc * pClient, uint16_t wMercNameId, uint32_t dwReviveCost);
 void __fastcall NET_D2GS_SERVER_Send_0x97_WeaponSwitch(struct D2ClientStrc * pClient);
 void __fastcall GAME_SendNearbyUnitPositionPacket(struct D2ClientStrc * pClient);

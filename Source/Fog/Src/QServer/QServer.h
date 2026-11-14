@@ -373,7 +373,7 @@ void __stdcall SetReservedHook(struct D2QServerStrc * pQServer, void * pfnHook);
 void __stdcall SetClientServerTokenByClientId(struct D2QServerStrc * pQServer, int nClientId, uint32_t nServerToken);
 uint32_t __stdcall GetClientServerTokenByClientId(struct D2QServerStrc * pQServer, uint32_t nClientId);
 // @sourcefile .\Src\QServer\QServer.cpp
-int __stdcall SendPacketToClient(struct D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId);
+int __stdcall QSERVER_EnqueueClientPacket(struct D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId);
 void __stdcall SetHackMode(struct D2QServerStrc * pQServer, BOOL bUseQServerHack);
 // The body here is RET 0x4 (bytes c2 04 00) - a __stdcall
 // no-op that pops one dword of arguments. Sole caller is D2Game::Game::Server::_NullSub

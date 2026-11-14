@@ -15401,8 +15401,8 @@ using eInventoryBodyLoc_ns::BODY_gloves;
 typedef uint8_t eInventoryPage;
 namespace eInventoryPage_ns {
 constexpr eInventoryPage INVPAGE_INVENTORY = 0;
-constexpr eInventoryPage INVPAGE_CORPSE = 1;
-constexpr eInventoryPage INVPAGE_MERC = 2;
+constexpr eInventoryPage INVPAGE_TRADEGRID1 = 1;
+constexpr eInventoryPage INVPAGE_TRADEGRID2 = 2;
 constexpr eInventoryPage INVPAGE_CUBE = 3;
 constexpr eInventoryPage INVPAGE_STASH = 4;
 constexpr eInventoryPage INVPAGE_Monster = 5;
@@ -15419,8 +15419,8 @@ constexpr eInventoryPage INVPAGE_Assassin = 15;
 constexpr eInventoryPage INVPAGE_None = 255;
 }
 using eInventoryPage_ns::INVPAGE_INVENTORY;
-using eInventoryPage_ns::INVPAGE_CORPSE;
-using eInventoryPage_ns::INVPAGE_MERC;
+using eInventoryPage_ns::INVPAGE_TRADEGRID1;
+using eInventoryPage_ns::INVPAGE_TRADEGRID2;
 using eInventoryPage_ns::INVPAGE_CUBE;
 using eInventoryPage_ns::INVPAGE_STASH;
 using eInventoryPage_ns::INVPAGE_Monster;

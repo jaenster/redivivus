@@ -36,6 +36,7 @@
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/GAME/Server.data.h"
+#include "Source/D2Game/Objects/Objects.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -131,9 +132,9 @@ void __stdcall ServerClose_nullsub() {
 
 }
 
-uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052bdc0() {
+uint32_t __stdcall GAME_GetQServerListenSocket() {
     // Static local variables (originally global data)
-    static uint32_t gnQServerListenSocket; D2_STATIC_GUARD_BSS(gnQServerListenSocket, "D2Game::GAME::Server::GAME_GetUnusedServerConstant_Unref_0052bdc0::gnQServerListenSocket");
+    static uint32_t gnQServerListenSocket; D2_STATIC_GUARD_BSS(gnQServerListenSocket, "D2Game::GAME::Server::GAME_GetQServerListenSocket::gnQServerListenSocket");
 
     return gnQServerListenSocket;
 }
@@ -457,7 +458,7 @@ BOOL __fastcall SetupGameChecks(int32_t nClientID2, D2GSMsg67GameLogonSPStrc * p
         if (bGotPlayerName && dwGameFlags & (ARENAFLAG_ClientUpdate | ARENAFLAG_ArenaLevel)) {
           bGotPlayerName = Clients::NET_D2GS_SERVER_GetPlayerNameByClientId(nClientID2, szPlayerName);
           if (bGotPlayerName) {
-            bGotPlayerName = Clients::SERVER_IsPlayerCharacterInGame(pMsg->szCharName, szPlayerName);
+            bGotPlayerName = Clients::CLIENTS_IsCharacterNameFree(pMsg->szCharName, szPlayerName);
             if (bGotPlayerName) {
               return (uint32_t)(byCharClassRaw < CLASS_COUNT);
             }
@@ -711,7 +712,7 @@ BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameT
     if (bGotPlayerName && language < 0xe) {
       bGotPlayerName = Clients::NET_D2GS_SERVER_GetPlayerNameByClientId(nClientID, szExistingPlayerName);
       if (bGotPlayerName) {
-        bGotPlayerName = Clients::SERVER_IsPlayerCharacterInGame(pPlayerName, szExistingPlayerName);
+        bGotPlayerName = Clients::CLIENTS_IsCharacterNameFree(pPlayerName, szExistingPlayerName);
         if (bGotPlayerName) {
           nCheckResult2 = SERVER_IsTokenValid(nGameToken);
           if (nCheckResult2 && charClass < 7) {
@@ -1580,7 +1581,7 @@ BOOL __fastcall CLIENT_ReceiveUploadedSave(uint32_t nClientId, D2GSMsg6CUploadSa
     return bResult;
 }
 
-uint32_t __stdcall GAME_GetUnusedServerConstant_Unref_0052db90() {
+uint32_t __stdcall GAME_GetCycleLastSecond() {
     return dwCycleLastSecond;
 }
 
@@ -3556,7 +3557,7 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
     D2ClientStrc* pClientCreated = Clients::CreateClient(pGame, nClientId, ePlayerClass, szCharName, "", nullptr, nLanguageCode, arg11, arg12);
     D2Net::Game::Server::AssignClientToToken(nClientId, dwGameToken);
     if (pGame->nGameType == SGAMETYPE_OBNET_HOST) {
-      Clients::GAMECLIENT_GetFlags0x20(pClientCreated);
+      Clients::GAMECLIENT_SetFlags0x20(pClientCreated);
     }
 
     UNIT::Party::AllocPartyControl(pGame);
@@ -3653,6 +3654,10 @@ void __stdcall _TableNullSub16_Unref_0053bbf0(uint32_t dwArg1, uint32_t dwArg2) 
 
 void __stdcall _TableNullSub16_Unref_0053bc00(uint32_t dwArg1, uint32_t dwArg2) {
 
+}
+
+void __fastcall GAME_SetObjectInitTableSetup(char nDifficulty) {
+    gbObjectInitTableSetup = nDifficulty;
 }
 
 BOOL __fastcall QSERVER_HasActiveTaskQueue_Unref_00601dc0(int32_t pQServer) {

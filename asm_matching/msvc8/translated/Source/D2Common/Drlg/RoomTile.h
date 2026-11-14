@@ -58,7 +58,7 @@ void __fastcall DRLGROOMTILE_CreateShadowTileFromGrid(struct D2RoomExStrc * pRoo
 void __fastcall DRLGROOMTILE_CompactTileDataArray(struct D2RoomExStrc * pRoomEx);
 // Returns the warp direction byte based on the tile orientation. Returns 0x72 for orientation 0xb (special case), or 0x6c otherwise. From RoomTile.cpp.
 char __stdcall DRLGROOMTILE_GetWarpDirectionByte(int nTileType);
-void __fastcall InitRoomTiles(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid, struct D2DrlgGridStrc * pOtherGrid, int32_t nTileParam, int32_t nY, int32_t nSizeMaybe);
+void __fastcall InitRoomTiles(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid, struct D2DrlgGridStrc * pOtherGrid, int32_t nTileParam, int32_t bKillEdgeX, int32_t bKillEdgeY);
 // Counts wall/floor/shadow tiles from grid flags.
 void __fastcall DRLGROOMTILE_CountTilesFromGrid(struct D2RoomExStrc * pRoomEx, struct D2DrlgGridStrc * pGrid, int bCountFloors, int bKillEdgeX, int bKillEdgeY);
 // Secondary counting pass for specific wall/shadow flag combos.

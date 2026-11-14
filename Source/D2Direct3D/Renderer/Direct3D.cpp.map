@@ -453,7 +453,7 @@
       ]
     },
     {
-      "name": "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20",
+      "name": "DIRECT3D_GetPerspectiveMode",
       "address": "006b2f20",
       "lines": [
         {
@@ -463,15 +463,15 @@
       ],
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
-        "RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20"
+        "DIRECT3D_GetPerspectiveMode"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "091f6fa2"
+      "dh": "ab647dfd"
     },
     {
-      "name": "SPRITECACHE_SetMaxSize_Unref_006b2f30",
+      "name": "DIRECT3D_SetPerspectiveMode",
       "address": "006b2f30",
       "lines": [
         {
@@ -481,9 +481,9 @@
       ],
       "namespace": "D2Direct3D::Renderer::Direct3D",
       "calledFunctions": [
-        "SPRITECACHE_SetMaxSize_Unref_006b2f30"
+        "DIRECT3D_SetPerspectiveMode"
       ],
-      "dh": "720f8179",
+      "dh": "101d47ab",
       "paramStorage": [
         [
           "nSize",
@@ -541,12 +541,12 @@
         "D3DFLOOR_Initialize",
         "D3DSUBTILE_Initialize",
         "RENDERER_D3D_InitializeTexturePools",
-        "GFX_SetSpriteCacheMaxSize"
+        "GFX_SetSpriteCacheFreeCallback"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5ff6f785"
+      "dh": "c1d3fce9"
     },
     {
       "name": "RENDERER_D3D_FreeTextureCaches",

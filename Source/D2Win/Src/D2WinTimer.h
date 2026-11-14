@@ -25,7 +25,7 @@ typedef BOOL (__stdcall *OnPress)(struct D2ControlMsg * pControlMsg);
 namespace D2Win::Src::D2WinTimer {
 
 // Function declarations
-void __fastcall D2WINTIMER_Start(int * pTimer);
+void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer);
 BOOL __fastcall DrawEx(::D2WinTimer * pTimer);
 BOOL __stdcall Key(struct D2ControlMsg * pTimer);
 // @sourcefile .\Src\D2WinTimer.cpp
@@ -34,7 +34,7 @@ void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 void __fastcall FORMS_DestroyD2WinTimer(::D2WinTimer * pTimer);
-int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer);
+int __fastcall D2WINTIMER_UpdateRepeating(::D2WinTimer * pTimer);
 #endif // D2_MODULE_D2Win
 
 } // namespace D2Win::Src::D2WinTimer

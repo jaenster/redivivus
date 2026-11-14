@@ -29,7 +29,7 @@ namespace D2Game::Quests::QUESTS::A4Q3 {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 // A4Q3 / TerrorsEnd — spawns the Chaos Sanctuary seal boss for whichever of the three seals (Infector of Souls 0x24, Lord De Seis 0x25, Grand Vizier of Chaos 0x26) the triggering unit is standing on, matching the unit's coordinates against the three cached seal-boss spawn points in the TerrorsEnd quest-specific data. On spawn failure schedules a retry event 10 frames later. No quest-state writes.
-void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall Q27_SpawnSealBoss(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // A4Q3 Hell's Forge — Q27_IsClassicGameCompleted: returns 1 only in a CLASSIC (non-expansion) game once Terror's End (Diablo killed) is done, i.e. the game's victory condition for classic D2. Reads TerrorsEnd quest data field_0x14 (Diablo-killed flag). No quest-state writes; pure predicate.
 BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame);
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.

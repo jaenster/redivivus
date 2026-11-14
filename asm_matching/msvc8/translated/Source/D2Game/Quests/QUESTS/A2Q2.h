@@ -46,15 +46,15 @@ bool __fastcall Q10_ActiveFilter(struct D2QuestDataStrc * pQuestData, int32_t nT
 // Skill scroll ('rt1 '). For each player who does NOT already hold the scroll and is
 // not past Step0x03, bumps a counter in A2Q2 quest-specific data so the portal-drop
 // loop knows how many scrolls to spawn. No QuestRecord writes.
-BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q10_CountPlayersNeedingScroll(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q10_OnStaffOrViperPickup. Per-player iterate callback for the Amulet-of-the-Viper
 // ('msf ') drop path. For each player not yet Completed who holds neither 'msf ' nor
 // 'tsh ' (Staff of Kings), bumps the A2Q2 drop counter. No QuestRecord writes.
-BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q10_CountPlayersNeedingStaff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // Q10_OnHoradricCubePickup. Per-player iterate callback for the Horadric Cube
 // ('box ') drop path. Bumps the A2Q2 drop counter for each player not already
 // holding the cube. No QuestRecord writes.
-BOOL __fastcall Q10_OnHoradricCubePickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q10_CountPlayersNeedingCube(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A2Q2 (Horadric Staff) NPC-gossip callback for Drognan (classId 0xf4). Dispatches on dialog message index: 0x14f removes the Staff of Kings item from inventory and sets Step0x03; 0x150/0x151/0x152 set the corresponding step bit plus Step0x03; 0x153 (told-everything) clears RewardAwaits, registers the player GUID in the quest list, sets Step0x10+0x04+0x06+0x05+0x03, and sends an NPC gossip packet. Early-exits if NPC is not Drognan.
 void __fastcall Q10_Callback11_ScrollMessage(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // Q10_Callback_00. Drognan (NPC 0xf4) gossip-MENU builder. Picks which gossip line

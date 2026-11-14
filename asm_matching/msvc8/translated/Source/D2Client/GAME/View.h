@@ -49,7 +49,7 @@ void __fastcall GAMEVIEW_PrepareScene(struct D2GameViewStrc * pGameView, uint32_
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn);
 // Renders the animated star-field overlay used in the Arcane Sanctuary. On first call, seeds a PRNG from SHAKE_StartTickcount, generates 8 brightness-graduated palette entries into gaArcaneStarColorTable, then calls VIEW_GenerateRandomViewParams for each of the 256 stars. Each frame, draws all 256 stars as single-pixel lines using D2GFX_DrawLine. Every 40 ms (tick delta > 0x28), advances each star's X position by its velocity; stars that fall off-screen are re-randomised via VIEW_GenerateRandomViewParams.
 void __stdcall DRAW_Overlay_ArcaneStars();
-void __stdcall RENDERER_TogglePerspective_Unref_004769b0();
+void __stdcall VIEW_ToggleFrameDrawCounter();
 void __fastcall SetShake(int32_t nAmplitude, int32_t nArg3, int32_t nArg1, int32_t nArg2);
 BOOL __fastcall SHAKE_GetShake(int * pShakeX, int * pShakeY);
 void __stdcall SHAKE_Reset();

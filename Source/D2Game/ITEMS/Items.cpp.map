@@ -4,7 +4,7 @@
   "file": "Source/D2Game/ITEMS/Items.cpp",
   "functions": [
     {
-      "name": "FreeItems",
+      "name": "MISSILES_RemoveAll",
       "address": "0059f840",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::ITEMS::Items",
       "calledFunctions": [
-        "FreeItems",
+        "MISSILES_RemoveAll",
         "GetNextUnit",
         "FreeServerUnit"
       ],
@@ -23,7 +23,7 @@
         "D2UnitStrc *",
         "SGAMEDATA"
       ],
-      "dh": "bfa89fd0",
+      "dh": "d5d9918a",
       "paramStorage": [
         [
           "pGame",

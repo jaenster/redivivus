@@ -170,7 +170,7 @@
         "Skills_CltDoFunc_Bar_ThrowItem",
         "GetWeaponBySkill",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetItemsTxt_wMissileType",
         "ITEMS_IsA",
         "MakeMissileAtSkillTarget",
@@ -184,7 +184,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "652bab45",
+      "dh": "5ed15717",
       "paramStorage": [
         [
           "pUnit",
@@ -343,7 +343,7 @@
         "DRLGROOM_FindBetterNearbyRoom",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockPlayer_Type",
         "SKILLS_HasLineOfSight",
         "UNITSND_PlayPlayerSound"
@@ -360,7 +360,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "897d6bed",
+      "dh": "0a330dc7",
       "paramStorage": [
         [
           "pUnit",
@@ -455,7 +455,7 @@
         "UNITS_GetRoom",
         "GetFreeCoordinates_WithNeighboorRooms",
         "DRLGROOM_FindBetterNearbyRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type",
         "SKILL_SetParam1",
         "SKILL_SetParam2",
@@ -473,7 +473,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6f007073",
+      "dh": "a7f5234f",
       "paramStorage": [
         [
           "pUnit",
@@ -504,7 +504,7 @@
         "SKILL_GetParam1",
         "SKILL_GetParam2",
         "SKILL_SetFlags",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_ChangeCollisionType",
         "SetSP1",
         "PATH_SetPathType",
@@ -522,7 +522,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "58897c1a",
+      "dh": "f380f262",
       "paramStorage": [
         [
           "pUnit",
@@ -606,14 +606,13 @@
         "PATH_CalculatePath"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "fc96c4a4",
+      "dh": "9be876ff",
       "paramStorage": [
         [
           "pSkill",
@@ -628,7 +627,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "pDynamicPath",
+          "pUnit",
           "EDI:4"
         ]
       ]
@@ -646,10 +645,10 @@
       "calledFunctions": [
         "PATH_ResetCollisionOnLanding",
         "UNITS_GetRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "RemoveCollision_Type",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "IsActive",
         "PATH_SetCorpseCollision"
@@ -662,7 +661,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "0daad93b",
+      "dh": "68370b62",
       "paramStorage": [
         [
           "nY",
@@ -705,13 +704,14 @@
         "GetDistanceToXY"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2SkillStrc",
+        "D2UnitStrc",
         "eD2Sounds",
+        "eD2UnitType",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "42fc9714",
+      "dh": "d0b7787d",
       "paramStorage": [
         [
           "pSkill",
@@ -722,7 +722,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "pDynamicPath",
+          "pUnit",
           "EAX:4"
         ]
       ]
@@ -745,7 +745,7 @@
         "SKILL_GetParam1",
         "GetYPos",
         "SKILL_GetParam2",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "RemoveCollision_Type",
         "CLIENT_TeleportUnitToPosition",
@@ -760,7 +760,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "5bc841fc",
+      "dh": "90592cc8",
       "paramStorage": [
         [
           "pUnit",
@@ -791,13 +791,14 @@
         "PATH_ResetCollisionOnLanding"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2SkillStrc",
+        "D2UnitStrc",
         "eD2Skills",
+        "eD2UnitType",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b5c4505a",
+      "dh": "2e345932",
       "paramStorage": [
         [
           "pUnit",
@@ -836,7 +837,7 @@
         "CLIENT_HandleUnitMessage0x16",
         "UNITSND_PlayPlayerSound",
         "UNITS_GetRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type",
         "SKILL_SetParam1",
         "SKILL_SetParam2",
@@ -854,7 +855,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e8b0f3c8",
+      "dh": "14deae34",
       "paramStorage": [
         [
           "pUnit",
@@ -910,7 +911,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "67049ba5",
+      "dh": "279196a7",
       "paramStorage": [
         [
           "pUnit",
@@ -941,8 +942,8 @@
         "GetDirection",
         "SetDirectionAndNewDirection",
         "D2GFX_IsPerspectiveActive",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "GetPrecisionY",
         "GetPrecisionX",
         "D2GFX_PerspecitveScalePosition",
@@ -958,7 +959,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2e8320b6",
+      "dh": "db847ed9",
       "paramStorage": [
         [
           "pUnit",
@@ -995,14 +996,14 @@
         "GetConfirmedTargetUnit",
         "IsInMeleeRange",
         "CLIENT_HandleUnitMessage0x16",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "PATH_CalculatePath",
         "TXT_MonStats_GetLine",
         "SetVelocities",
         "INV_GetCharStatsTxtLine",
         "GetPathPoint",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "AddCollision_Type",
         "SKILL_SetFlags",
@@ -1022,7 +1023,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a7245e3f",
+      "dh": "562e2faa",
       "paramStorage": [
         [
           "pUnit",
@@ -1054,11 +1055,11 @@
         "SKILL_GetParam1",
         "SKILL_GetParam2",
         "SKILL_GetFlags",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "RemoveCollision_Type",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "SKILL_SetFlags",
         "UNITSND_GetMissileSound",
         "SOUND_StopById",
@@ -1074,7 +1075,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3332010",
+      "dh": "b213cbac",
       "paramStorage": [
         [
           "pUnit",

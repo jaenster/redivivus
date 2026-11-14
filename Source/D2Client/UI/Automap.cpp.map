@@ -693,8 +693,8 @@
       "calledFunctions": [
         "AUTOMAP_AddCellForUnit",
         "AUTOMAP_AllocCell",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "AUTOMAP_InsertCellIntoTree",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -707,7 +707,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "abe875bd",
+      "dh": "f5cc41b4",
       "paramStorage": [
         [
           "nCellNo",
@@ -1125,8 +1125,8 @@
       "calledFunctions": [
         "AUTOMAP_Update",
         "GetPlayerUnit_UI",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "GetCurrentRoom",
         "DRLGROOM_GetAdjacentRoomsList",
         "DRLGROOM_GetLevelIdFromRoom",
@@ -1147,7 +1147,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ab274af"
+      "dh": "662ca19c"
     },
     {
       "name": "AUTOMAP_SetRefreshDelay",
@@ -1320,7 +1320,7 @@
         "AUTOMAP_GetUnitColor",
         "GetPlayerUnit_UI",
         "GetPlayerUnitPartyId",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "TXT_MonStats_GetFlagsByBitOffset",
         "SKILLS_GetStateTransformGfx",
         "ITEMSTATS_CheckUnitHasStateFlagIndex",
@@ -1341,7 +1341,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f2d66a15",
+      "dh": "7dfa3792",
       "paramStorage": [
         [
           "pUnit",
@@ -1741,8 +1741,8 @@
         "IsActive",
         "UNIT_GetUnitState",
         "AUTOMAP_GetUnitColor",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "AUTOMAP_DrawXMarker",
         "GetPlayerUnit_UI",
         "GetPlayerData",
@@ -1769,7 +1769,7 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "644ac315",
+      "dh": "73de6df4",
       "paramStorage": [
         [
           "pUnit",

@@ -22,12 +22,13 @@
         "AllocPresetUnit"
       ],
       "usedTypes": [
+        "D2DrlgTileDataStrc",
         "D2RoomExStrc",
         "eD2UnitType",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "50cc3a2d",
+      "dh": "63b16e19",
       "paramStorage": [
         [
           "pRoomEx",
@@ -38,11 +39,11 @@
           "EAX:4"
         ],
         [
-          "nPresetId",
+          "nRawTileFlags",
           "EDX:4"
         ],
         [
-          "pPresetUnit",
+          "pTileData",
           "Stack[0x4]:4"
         ],
         [
@@ -75,7 +76,7 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "e5e2aae9",
+      "dh": "5705e541",
       "paramStorage": [
         [
           "pTileData",
@@ -494,22 +495,22 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ba6d095",
+      "dh": "cf03ad70",
       "paramStorage": [
         [
           "nTileFlags",
           "EDX:4"
         ],
         [
-          "nXTileId",
+          "nWorldX",
           "Stack[0x4]:4"
         ],
         [
-          "nX",
+          "nTileType",
           "Stack[0x8]:4"
         ],
         [
-          "nYTileId",
+          "nWorldY",
           "EAX:4"
         ],
         [
@@ -952,7 +953,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "00b05298",
+      "dh": "dbcf681b",
       "paramStorage": [
         [
           "nFlags",
@@ -971,7 +972,7 @@
           "Stack[0x8]:4"
         ],
         [
-          "nSizeMaybe",
+          "nY",
           "Stack[0xc]:4"
         ],
         [
@@ -979,7 +980,7 @@
           "Stack[0x10]:4"
         ],
         [
-          "nOtherFlags",
+          "nTileType",
           "EAX:4"
         ]
       ]
@@ -1006,7 +1007,7 @@
         "eD2GridCellFlags",
         "int32_t"
       ],
-      "dh": "57369342",
+      "dh": "a093292e",
       "paramStorage": [
         [
           "pRoomEx",
@@ -1025,11 +1026,11 @@
           "Stack[0x8]:4"
         ],
         [
-          "nY",
+          "bKillEdgeX",
           "Stack[0xc]:4"
         ],
         [
-          "nSizeMaybe",
+          "bKillEdgeY",
           "Stack[0x10]:4"
         ]
       ]

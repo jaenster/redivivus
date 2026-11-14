@@ -57,7 +57,7 @@ size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(
 } // namespace D2Net::Game::Server
 namespace D2Net::SRC::Client {
 // Gets client connection timeout value from gnNetConnectionTimeoutMs. Thread-safe read via critical section. Returns 1 for singleplayer, 0 if no packet buffer.
-int32_t __stdcall NET_CLIENT_GetConnectionTimeout();
+int32_t __stdcall NET_CLIENT_IsConnected();
 // @sourcefile .\SRC\Client.cpp
 void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType, char * szIpAddress);
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.

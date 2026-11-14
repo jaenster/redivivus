@@ -114,7 +114,7 @@ uint32_t __fastcall QSERVER_IsClientAllowedToJoin(uint32_t nClientId, uint32_t n
 void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32_t dwClientTick, uint32_t dwUnused);
 BOOL __fastcall NET_D2GS_SERVER_GetPlayerNameByClientId(int32_t nClientId, char * szPlayerName);
 int32_t __fastcall GetClientId(char * szCharName);
-BOOL __fastcall SERVER_IsPlayerCharacterInGame(char * szCharName, char * szCharNameOut);
+BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharNameOut);
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
 // @sourcefile .\GAME\Clients.cpp
 int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size_t size, size_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2);
@@ -126,11 +126,11 @@ void __fastcall CopySafeBuffer(struct D2ClientStrc * pClient, void * pSaveBuffer
 void __fastcall DeleteCurrentSave(struct D2ClientStrc * pClient);
 void __fastcall CLIENTS_ResetSaveTransferState(struct D2ClientStrc * pClient);
 BOOL __fastcall CLIENT_HasSaveData(struct D2ClientStrc * pClient);
-void __fastcall GAMECLIENT_GetFlags0x20(struct D2ClientStrc * pClient);
+void __fastcall GAMECLIENT_SetFlags0x20(struct D2ClientStrc * pClient);
 uint32_t __fastcall CLIENT_GetSaveCompleteFlag(struct D2ClientStrc * pClient);
 struct D2ClientStrc * __fastcall GetFirstClientOfGame(::SGAMEDATA * pGame);
 struct D2ClientStrc * __fastcall GetNext(struct D2ClientStrc * pClient);
-void __fastcall SetGotkeyInfo(struct D2ClientStrc * pClient, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, uint32_t dwSkillTxt);
+void __fastcall SetGotkeyInfo(struct D2ClientStrc * pClient, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID);
 void __fastcall GetHotKey(struct D2ClientStrc * pClient, int32_t nHotKeyIndex, int * nSkillId, uint32_t * pSkillType, int * nItemGUID);
 uint16_t __fastcall GetGuildFlags(struct D2ClientStrc * pClient);
 void __fastcall SetGuildFlags(struct D2ClientStrc * pClient, short nGuildFlags);
@@ -140,8 +140,8 @@ void __fastcall GetGuildName(struct D2ClientStrc * pClient, char * szGuildName);
 void __fastcall SetGuildName(struct D2ClientStrc * pClient, char * szGuildName);
 void __fastcall GetGuildInfo(struct D2ClientStrc * pClient, uint8_t * pGuildInfo1, uint8_t * pGuildInfo2, uint8_t * pGuildInfo3);
 void __fastcall SetGuildInfo(struct D2ClientStrc * pClient, uint8_t byGuildInfo1, uint8_t byGuildInfo2, uint8_t byGuildInfo3);
-void __fastcall SetExperience(struct D2ClientStrc * pClient, int32_t nExp);
-int32_t __fastcall GetExperience(struct D2ClientStrc * pClient);
+void __fastcall SetExperienceLoss(struct D2ClientStrc * pClient, int32_t nExpLoss);
+int32_t __fastcall GetExperienceLoss(struct D2ClientStrc * pClient);
 BYTE __fastcall HasWeaponSwapped(struct D2ClientStrc * pClient);
 void __fastcall SetWeaponSwap(struct D2ClientStrc * pClient, uint8_t bWeaponSwapped);
 void __fastcall SERVER_PutPacketInQueueList(struct D2ClientStrc * pClient, struct D2PacketListStrc * pPacketList);
@@ -162,14 +162,14 @@ BOOL __fastcall CheckSyncWarpRateExceeded(::SGAMEDATA * pGame, struct D2UnitStrc
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall CLIENT_GetLangId(struct D2ClientStrc * pClient);
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t pDrlgAct, int32_t pSpawnXY);
+void __fastcall CLIENT_PlacePlayerInRoom(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, ::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(struct D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, struct D2RoomStrc * pRoom, uint32_t nX, uint32_t nY);
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.
 // @sourcefile .\GAME\Clients.cpp
 struct D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint8_t * pClientContainer, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2);
 // Serializes a client's character header/appearance block into the save/wire buffer pbParam (used in the player save & "exit game" cleanup path). Writes a 0x0E length tag, then the player's level, two SaveCharAppearance blobs (head+body, 0xFF-padded), class code (nClassId+1, wrapped), a level byte, char status (sets the death-flag bit 8 when dead and bit 4 set), guild flags, 3 guild-info bytes (0->0xFF), and the 4-byte guild tag. Returns (in the guarded value) the buffer pointer when the record is invalid (bad level/class/status or wrong length), having zeroed the first byte; otherwise null. __fastcall(pClient, pbParam).
-void __fastcall CleanUp(struct D2ClientStrc * pClient, uint8_t * pBuffer);
+void __fastcall CLIENTS_FillCharacterPreviewInfo(struct D2ClientStrc * pClient, uint8_t * pPreview);
 // Removes client from game and cleans up all resources. Optionally saves player (bSavePlayer), removes from hash tables (by ID and name), broadcasts 0x5A PlayerLeave event, frees player unit and pets, notifies quests, frees memory pools. Called on disconnect, timeout, or kick.
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t bSavePlayer);

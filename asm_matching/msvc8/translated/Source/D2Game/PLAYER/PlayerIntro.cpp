@@ -137,14 +137,14 @@ void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, D2UnitStrc
     Fog::BitBuffer::UnsetBitAtOffset((char*)pPlayerData->pInteractedNPCs[pGame->nDifficulty]->pIntro2->pBuffer, 0);
 }
 
-void __fastcall CopyBufferToPointer(D2BitBufferStrc * pBitBuffer, char * pDest) {
-    uint32_t* pSrcBuf = *(uint32_t**)pBitBuffer->pBuffer;
+void __fastcall PLAYERINTRO_CopyIntroToBuffer(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, char * pDest) {
+    uint32_t* pSrcBuf = (uint32_t*)pInteractedNPC->pIntro->pBuffer;
     *(uint32_t*)pDest = *pSrcBuf;
     *(uint32_t*)(pDest + 4) = pSrcBuf[1];
 }
 
-void __fastcall CopySizeAndPosToBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pDest) {
-    uint32_t* pSizePosData = *(uint32_t**)pBitBuffer->nBitsInBuffer;
+void __fastcall PLAYERINTRO_CopyIntro2ToBuffer(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, uint8_t * pDest) {
+    uint32_t* pSizePosData = (uint32_t*)pInteractedNPC->pIntro2->pBuffer;
     *(uint32_t*)pDest = *pSizePosData;
     *(uint32_t*)(pDest + 4) = pSizePosData[1];
 }

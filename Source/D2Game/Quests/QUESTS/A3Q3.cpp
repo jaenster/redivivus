@@ -868,7 +868,7 @@ void __fastcall Q20_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestArgs->pTarget->dwDropItemCode = 0x20333367;
-    D2UnitStrc* pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, (int32_t*)&pQuestDataArg, nullptr, -1, 0);
+    D2UnitStrc* pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, (int32_t*)&pQuestDataArg, nullptr, -1, 0);
     if (pDroppedItem) {
       pA3Q3Data->bSerpentItemDropped = '\x01';
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q20_PlayerUpdateBladeState);
@@ -937,11 +937,11 @@ void __fastcall Objects_InitFn25_Gidbinn(D2ObjectInitFnArg * pInitArg) {
         return;
       }
 
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
     return;
 }
 
@@ -975,7 +975,7 @@ BOOL __fastcall OBJOP_A3Q3_ActivateGidbinn(D2ObjectOperateFnArg * pOperation) {
             }
 
             pA2Q3Data = (D2QuestDataA2Q3Strc*)pQuestData->pQuestSpecificData.pA2Q3;
-            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+            D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
             pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
             pGame = pOperation->sArg.pGame;
             GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
@@ -1059,7 +1059,7 @@ void __fastcall Q20_ActivateSerpentObject(::SGAMEDATA * pGame) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pSerpentObj, 1);
+    D2Common::Units::ChangeAnimMode(pSerpentObj, 1);
     D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pSerpentObj->nClassId);
     GAME::Event::SetEvent(pGame, pSerpentObj, 1, (pObjTxt->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
     pA2Q3Data->sPlayerGUID.aPlayerGUID[6] = 2;
@@ -1085,7 +1085,7 @@ void __fastcall Objects_InitFn39_GidbinnAltar(D2ObjectInitFnArg * pInitArg) {
     pA1Q1Data->nSerpentObjectGUID = nObjectGUID;
     pA1Q1Data->nAltarX = pInitArg->nX;
     pA1Q1Data->nAltarY = pInitArg->nY;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pA1Q1Data->nQuestStage);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pA1Q1Data->nQuestStage);
 }
 
 } // namespace D2Game::Quests::QUESTS::A3Q3

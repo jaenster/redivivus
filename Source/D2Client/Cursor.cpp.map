@@ -186,7 +186,7 @@
       ]
     },
     {
-      "name": "GetCursorItem_Unref_00468030",
+      "name": "CURSOR_GetAnimationFrame",
       "address": "00468030",
       "lines": [
         {
@@ -196,12 +196,12 @@
       ],
       "namespace": "D2Client::Cursor",
       "calledFunctions": [
-        "GetCursorItem_Unref_00468030"
+        "CURSOR_GetAnimationFrame"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "453394bc"
+      "dh": "c44390ef"
     },
     {
       "name": "UI_SetCursorToSpecialIcon",

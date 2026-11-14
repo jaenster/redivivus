@@ -2,9 +2,8 @@
 
 #include "Source/D2Game/Monster/AI/BloodRaven.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
-#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Headers/d2_platform.h"
 
@@ -16,7 +15,7 @@ namespace D2Game { namespace Monster { namespace AI { namespace BloodRaven {
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
 int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t nRadius) {
     uint32_t nOffsetX;
-    D2MonsterKillStrc sMonsterKillArgs;
+    D2ModeChangeStrc sMonsterKillArgs;
     int32_t nTargetPosX;
     int nTarget;
     eD2UnitType eVar1 = pTarget->eUnitType;
@@ -74,7 +73,7 @@ int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2Uni
     }
 
     D2Common::PATH::DynamicPath::SetStepNum(pSelf->pPath.pDynamicPath, 1);
-    MonsterMode::SetCurrentSkill(pSelf, eMoveMode, &sMonsterKillArgs);
+    MonsterMode::MONMODE_InitModeChange(pSelf, eMoveMode, &sMonsterKillArgs);
     sMonsterKillArgs.nTargetX = nTargetUnitType;
     sMonsterKillArgs.nTargetY = (int)(((D2UnitStrc*)nTarget)->unk0x19 + (nRadius - 0x19));
     int32_t nLifecycleResult = MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameSaved, &sMonsterKillArgs, 1);

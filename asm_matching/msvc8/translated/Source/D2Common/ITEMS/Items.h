@@ -261,6 +261,70 @@ struct D2MagicAffixTableStrc {
 };
 
 #endif // D2_DEFINED_D2MagicAffixTableStrc
+#ifndef D2_DEFINED_D2RunesTxt
+#define D2_DEFINED_D2RunesTxt
+struct D2RunesTxt {
+    /* 0x000 */ char name[64]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x082 */ uint16_t field4_0x82;
+    /* 0x084 */ uint8_t field_0x84;
+    /* 0x085 */ uint8_t field_0x85;
+    /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x088 */ short itype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08A */ short itype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08C */ short itype4; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x08E */ short itype5; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x090 */ short itype6; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x092 */ short etype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x094 */ short etype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x096 */ short etype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x098 */ int rune1; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x09C */ int rune2; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A0 */ int rune3; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A4 */ int rune4; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0A8 */ int rune5; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0AC */ int rune6; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x0B0 */ int t1code1; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0B4 */ int t1param1; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0B8 */ int t1min1; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0BC */ int t1max1; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0C0 */ int t1code2; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0C4 */ int t1param2; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0C8 */ int t1min2; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0CC */ int t1max2; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0D0 */ int t1code3; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0D4 */ int t1param3; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0D8 */ int t1min3; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0DC */ int t1max3; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0E0 */ int t1code4; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0E4 */ int t1param4; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0E8 */ int t1min4; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0EC */ int t1max4; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0F0 */ int t1code5; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x0F4 */ int t1param5; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x0F8 */ int t1min5; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x0FC */ int t1max5; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x100 */ int t1code6; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x104 */ int t1param6; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x108 */ int t1min6; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x10C */ int t1max6; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x110 */ int t1code7; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x114 */ int t1param7; // d2bs binfields FIELDTYPE_LINKER_INT
+    /* 0x118 */ int t1min7; // d2bs binfields FIELDTYPE_SIGNEDINT
+    /* 0x11C */ int t1max7; // d2bs binfields FIELDTYPE_SIGNEDINT
+};
+
+#endif // D2_DEFINED_D2RunesTxt
+#ifndef D2_DEFINED_D2RunesTxtTableStrc
+#define D2_DEFINED_D2RunesTxtTableStrc
+struct D2RunesTxtTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2RunesTxt * pTable;
+};
+
+#endif // D2_DEFINED_D2RunesTxtTableStrc
 #ifndef D2_DEFINED_D2RuneTableStrc
 #define D2_DEFINED_D2RuneTableStrc
 __pragma(pack(push, 1)) struct D2RuneTableStrc {
@@ -293,7 +357,7 @@ __pragma(pack(push, 1)) struct D2RuneTableStrc {
 namespace D2Common { namespace ITEMS { namespace Items {
 
 // Function declarations
-uint32_t __stdcall ITEMS_SearchItemCodeTable(struct D2UnitStrc * pUnit, struct D2UnitStrc * dwContext, uint32_t nOffset);
+uint32_t __stdcall ITEMMODS_EvaluateItemFormula(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint32_t nOffset);
 // @sourcefile .\ITEMS\Items.cpp
 void __stdcall STRUCT_CreateDataItem(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit);
 // @sourcefile .\ITEMS\Items.cpp
@@ -332,7 +396,7 @@ void __stdcall ITEM_SetItemData_eExchangePage(struct D2UnitStrc * pUnit, uint8_t
 uint8_t __stdcall ITEM_GetItemData_ePreviousPage(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_ePreviousPage(struct D2UnitStrc * pUnit, uint8_t ePreviousPage);
 char * __stdcall ITEM_GetItemData_szPlayerName(struct D2UnitStrc * pUnit);
-void __stdcall ITEM_GetPlayerNameAkaNamedString(struct D2UnitStrc * pUnit, char * pCustomName);
+void __stdcall ITEMS_SetPlayerName(struct D2UnitStrc * pItem, char * szName);
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_nEarLevel(struct D2UnitStrc * pUnit, uint8_t nEarLevel);
 uint8_t __stdcall ITEM_GetItemData_bVariant(struct D2UnitStrc * pUnit);
@@ -398,8 +462,8 @@ struct D2SetItemsTxt * __stdcall GetSetItemsLine(struct D2UnitStrc * pUnit);
 BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(struct D2UnitStrc * pUnit);
 // Counts unidentified items in a player's inventory and equipped slots. Iterates all inventory slots; counts carried items on INVENTORY_GRID_TYPE_INVENTORY pages (INVPAGE_INVENTORY or INVPAGE_CUBE) and body-loc slots whose ITEMFLAG_IDENTIFIED is not set. Returns the count.
 int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(struct D2UnitStrc * pUnit);
-int32_t __stdcall ITEMS_ModifyPotionValueByDifficulty(struct D2UnitStrc * pNpc, int32_t nValue);
-int32_t __stdcall ITEMS_ModifyPotionSellValueByDifficulty(struct D2UnitStrc * pNpc, int32_t nValue);
+int32_t __stdcall ITEMS_GetBonusLifeBasedOnClass(struct D2UnitStrc * pPlayer, int32_t nValue);
+int32_t __stdcall ITEMS_GetBonusManaBasedOnClass(struct D2UnitStrc * pPlayer, int32_t nValue);
 uint16_t __stdcall ITEM_GetItemData_wItemVersion(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_wItemVersion(struct D2UnitStrc * pUnit, int16_t wItemVersion);
 // Calculates frames-per-attack for a weapon held by pUnit. Builds the COF path from unit/inventory state, looks up frame count and animation speed via ANIMDATA, then computes (frames&lt;&lt;8) / (((IAS+baseAttackRate+100)*animSpeed)/100). Halts with internal error if item is not a weapon or COF data is missing.
@@ -439,7 +503,7 @@ BOOL __stdcall ITEM_CheckIfItemCanBeNamed(struct D2UnitStrc * pUnit);
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(struct D2UnitStrc * pUnit);
 // Tests whether two item units are "identical enough" to be socketed/stacked together. Returns TRUE only if both items match on: class id, item quality (defaulting to 2 if not an item or no item data), file index (variant), stackable flag (must be stackable), ethereal flag, both qualities can-have-sockets, all damage stats (min/max, secondary min/max, throw min/max), and both have zero sockets. Returns FALSE on any mismatch. Pure comparison predicate, no side effects.
-BOOL __stdcall IsItemSocketable(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
+BOOL __stdcall ITEMS_AreStackablesEqual(struct D2UnitStrc * pItem1, struct D2UnitStrc * pItem2);
 void __stdcall ExtractItemDetails(uint8_t * pBytesAfterId, size_t size, BOOL isSave, struct D2UnitDataItemDetailsStrc * itemData);
 // Deserialises an item unit from a binary save-data bit buffer into pUnit. Validates the 0x4D4A ("JM") magic header when nParam1 is set, reads the 32-bit item flags word, strips invalid flags, resets all affix/prefix/suffix fields on the unit to clean state, then delegates to ITEM_DeserializeFromBitBuffer (full items) or ITEMS_DeserializeItemHeader (compact items). Returns the number of bits consumed.
 int32_t __stdcall ITEM_LoadFromSaveData(struct D2UnitStrc * pUnit, uint8_t * pSaveData, size_t nSize, uint32_t bCheckHeader, uint32_t * pnSocketedItemCount, uint32_t nVersion, int * pUnitDataItemDetails);
@@ -472,7 +536,7 @@ int32_t __stdcall SerializeItem(struct D2UnitStrc * pUnit, uint8_t * pBitStream,
 struct D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType);
 eD2ItemCmd __stdcall ITEM_GetItemData_eD2ItemCmd(struct D2UnitStrc * pUnit);
 uint8_t __stdcall ITEM_GetItemData_eExchangePage(struct D2UnitStrc * pUnit);
-int32_t __stdcall ITEMTYPE_IsShoots(int32_t nItemType);
+int32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int32_t nItemType);
 BOOL __stdcall ITEMTYPE_IsAutostack(int32_t nItemType);
 int32_t __stdcall ITEM_GetItemsTxt_dwWClass(struct D2UnitStrc * pUnit);
 int32_t __stdcall ITEM_GetItemsTxt_dw2HandedWClass(struct D2UnitStrc * pUnit);

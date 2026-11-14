@@ -13,5 +13,5 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-extern int gpaMiscTxtTables;
+extern int gbTxtAllocCountHeader;
 extern char * gaLanguageNames_0074430c[15];

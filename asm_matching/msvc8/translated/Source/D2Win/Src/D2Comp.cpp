@@ -54,8 +54,7 @@ typedef void (__fastcall *CONTAINER_TypeInitialValue)(void * pBuffer);
 #endif
 
 uint32_t gnStringTruncateConstant = 0x2e2e2e; D2_GLOBAL_GUARD(gnStringTruncateConstant, "gnStringTruncateConstant");
-uint32_t gnPaletteLoadBufferSize = 0x7461642e; D2_GLOBAL_GUARD(gnPaletteLoadBufferSize, "gnPaletteLoadBufferSize");
-uint8_t gaPaletteLoadData = 0x0; D2_GLOBAL_GUARD(gaPaletteLoadData, "gaPaletteLoadData");
+char gszDatExtension[5] = { '.', 'd', 'a', 't', '\x00' }; D2_GLOBAL_GUARD(gszDatExtension, "gszDatExtension");
 static uint32_t gaCompCharClassTokens[25] = {
     0x20204d41,
     0x20204f53,
@@ -4388,7 +4387,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     gnMaxCharacters = 0xff;
 }
 
-D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nClassicExpansion, uint8_t * pbyEquipSlots, char * szText) {
+D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText) {
     D2CharSelCompFlags DVar1;
     char* pTransformByte;
     BOOL BVar2;
@@ -4420,7 +4419,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
           }
         }
 
-        pCharSelComp->nAnimMode = nClassicExpansion;
+        pCharSelComp->nAnimMode = nAnimMode;
         pCharSelComp->nFlags |= Fog::BitBuffer::gadwBitMasks[0];
         DVar1 = pCharSelComp->nFlags | Fog::BitBuffer::gadwBitMasks[1];
         nComponentSlot = 0;
@@ -4477,7 +4476,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
 
         BVar2 = D2COMP_ValidateAndLoadCOFForUnit(pCharSelComp);
         if (BVar2) {
-          BVar2 = D2COMP_SetAnimationMode(pCharSelComp, nClassicExpansion);
+          BVar2 = D2COMP_SetAnimationMode(pCharSelComp, nAnimMode);
           if (!BVar2) {
             return nullptr;
           }

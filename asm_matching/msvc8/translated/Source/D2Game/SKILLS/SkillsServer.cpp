@@ -9,7 +9,6 @@
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -185,10 +184,10 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     nullptr,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_001_ShootArrow,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_002_GenericMeleeHit,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_003_ThrowWeaponLeftHand,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_003_Throw,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_004_RemovePetBySkillParam,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_005_ThrowWeaponRightHand,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAma::Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillsServer::Skills_SrvDoFunc_005_LeftHandThrow,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAma::Skills_SrvDoFunc_006_InnerSight_SlowMissiles,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAma::Skills_SrvDoFunc_007_Jab,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillAma::Skills_SrvDoFunc_008_MultipleShot,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_009_FrenzyMeleeHit,
@@ -277,7 +276,7 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::SKILLMONST_SrvDoFunc092_MeleeHitThenMissile,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_093_FireLeadingMissile,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_094_ResetAnimFrame,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_095_SpawnTrapMissile,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_095_MonInferno,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_096_HealTarget,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_097_ResurrectDeadMonster,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_098_TeleportToStoredPosition,
@@ -334,7 +333,7 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_149_FireMissileBodyPart11,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_150_Smite,
     (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillSor::Skills_SrvDoFunc_151_FireDirectionalMissile,
-    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_152_SpawnTrapMissileVariant,
+    (D2SkillSrvDoFunc)&D2Game::SKILLS::SkillMonst::Skills_SrvDoFunc_152_DiabLight,
     nullptr,
     nullptr,
     nullptr,
@@ -575,19 +574,19 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
 
 // @sourcefile .\SKILLS\Skills.cpp
 void __fastcall SKILLS_ClampHpManaStamina(D2UnitStrc * pUnit) {
-    int32_t nMax = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMax = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int32_t nCurrent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     if (nCurrent > nMax) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMax, 0);
     }
 
-    nMax = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    nMax = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     if (nCurrentValue > nMax) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nMax, 0);
     }
 
-    nMax = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+    nMax = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0);
     if (nCurrentValue > nMax) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nMax, 0);
@@ -1179,7 +1178,7 @@ int32_t __fastcall BowDecreaseQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_quantity, nValue, 0);
     ITEMS::Items::Drop::RefreshQuantity(pGame, pItem);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\Skills.cpp", 0x546), pItem, '\x01', 0x46, nValue, 0);
-    uint32_t nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItem);
+    uint32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
     uint32_t nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
     if (nCurrentDurability != nMaxDurability) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItem, UNITSTAT_durability, nMaxDurability, 0);
@@ -1214,7 +1213,7 @@ int32_t __fastcall RemoveQuanityOnUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-    if (!pItem || bAmmoMustBeWeapon && pItem != pActiveWeapon || (bIsStackableR = D2Common::ITEMS::Items::IsStackable(pItem) , !bIsStackableR && (nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem) , !nThrowableStat && (nThrowableStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItem, UNITSTAT_item_throwable, 0) , !nThrowableStat)))) {
+    if (!pItem || bAmmoMustBeWeapon && pItem != pActiveWeapon || (bIsStackableR = D2Common::ITEMS::Items::IsStackable(pItem) , !bIsStackableR && (nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem) , !nThrowableStat && (nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0) , !nThrowableStat)))) {
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
       if (!pItem || bAmmoMustBeWeapon && pItem != pActiveWeapon) {
         return 0;
@@ -1224,7 +1223,7 @@ int32_t __fastcall RemoveQuanityOnUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       if (!bIsStackableR) {
         nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem);
         if (!nThrowableStat) {
-          nThrowableStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItem, UNITSTAT_item_throwable, 0);
+          nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0);
           if (!nThrowableStat) {
             return 0;
           }
@@ -1265,7 +1264,7 @@ BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
       bAmmoMustBeWeapon = false;
       eCurrentSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x640);
       if (eCurrentSkillId == SKILL_Attack) {
-        nShootsType = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pActiveWeapon, UNITSTAT_item_magicarrow, 0);
+        nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pActiveWeapon, UNITSTAT_item_magicarrow, 0);
         if (nShootsType) {
           return 1;
         }
@@ -1278,7 +1277,7 @@ BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
     }
 
     D2UnitStrc* pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-    if (!pAmmoItem || bAmmoMustBeWeapon && pAmmoItem != pActiveWeapon || (fIsStackable = (float)D2Common::ITEMS::Items::IsStackable(pAmmoItem) , fIsStackable == 0.0 && (nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) , !nShootsType && (nShootsType = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAmmoItem, UNITSTAT_item_throwable, 0) , !nShootsType)))) {
+    if (!pAmmoItem || bAmmoMustBeWeapon && pAmmoItem != pActiveWeapon || (fIsStackable = (float)D2Common::ITEMS::Items::IsStackable(pAmmoItem) , fIsStackable == 0.0 && (nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) , !nShootsType && (nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0) , !nShootsType)))) {
       pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
       if (!pAmmoItem) {
         return 0;
@@ -1291,7 +1290,7 @@ BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
       if (!BVar1) {
         nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem);
         if (!nShootsType) {
-          nShootsType = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAmmoItem, UNITSTAT_item_throwable, 0);
+          nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0);
           if (!nShootsType) {
             return 0;
           }
@@ -1526,7 +1525,7 @@ void __fastcall SERVER_AppendDamageToUnitEvent(D2UnitStrc * pUnit, D2DamageStrc 
 }
 
 BOOL __fastcall SKILLS_SrvStFn01_Attack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nWeaponAnimClass = D2Common::Units::GetWeaponAnimClass(pUnit);
+    uint32_t nWeaponAnimClass = D2Common::Units::UNITS_GetFrameBonus(pUnit);
     pUnit->nGfxCurrentFrame = nWeaponAnimClass << 8;
     BOOL bAccumDmgResult = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x26);
     if (bAccumDmgResult) {
@@ -1794,7 +1793,7 @@ D2UnitStrc * __fastcall LinkPortal(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2U
       byPortalFlags = D2Common::Units::GetObjectPortalFlags(pNewPortal);
       byPortalFlags |= 3;
       D2Common::Units::SetObjectPortalFlags(pNewPortal, byPortalFlags);
-      D2Common::Units::SetupUpdateFlag(pNewPortal, 2);
+      D2Common::Units::ChangeAnimMode(pNewPortal, 2);
       UNIT::SUnit::LinkPortalCoords(pUnit, pNewPortal);
       D2Common::Units::StoreOwner(pUnit, pNewPortal);
       D2Common::Units::StoreOwner(pNewPortal, pUnit);
@@ -1856,7 +1855,7 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
           *ppPortal = pPortal;
         }
 
-        D2Common::Units::SetupUpdateFlag(pPortal, 1);
+        D2Common::Units::ChangeAnimMode(pPortal, 1);
         pPortal = LinkPortal(pGame, pUnit, pPortal, (D2RoomStrc*)eLevel, eLevel_00);
         if (!pPortal) {
           return 0;
@@ -1945,7 +1944,7 @@ void __fastcall SKILLS_NormalizeDirectionPerp(int * pnDx, int * pnDy) {
 }
 
 // Server-side helper that spawns a full ring of 64 missiles around a target unit's position (used by nova/ring-style skills). Resolves the ring center from the target's path (static path pos for objects/tiles, dynamic path GetXPos/GetYPos otherwise, else 0). Builds a D2SkillArgStrc owned by pUnit with the given missile txt id, skill no (nParam1), nToHit (eSkill), and an optional velocity override (nParam2, sets flag 4). Loops the 64-entry global ring cos/sin offset tables, setting each missile's directional unit X/Y and calling Missiles::CreatingMissile per angle. __fastcall: pGame(ECX), pUnit(EDX), remaining args (pTargetUnit, pMissileTxtNo, nParam1, eSkill, nParam2) on stack; no return.
-void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eMissilesId pMissileTxtNo, int32_t nSkillId, eD2Skills eSkill, int32_t nVelocity) {
+void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nVelocity) {
     // Static local variables (originally global data)
     static int ganMissileRingCosTable[64] = {
     0x1e,
@@ -2105,9 +2104,9 @@ void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     sSkillArg.nY = nYValue;
-    sSkillArg.nMissileTxtNo = pMissileTxtNo;
-    sSkillArg.eSkillNo = nSkillId;
-    sSkillArg.nSkillLevel = eSkill;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLevel;
     if (nVelocity) {
       sSkillArg.nFlags |= 4;
       sSkillArg.nVelocityOverride = nVelocity;
@@ -2377,7 +2376,7 @@ D2UnitStrc * __fastcall SKILL_CreateSummon(::SGAMEDATA * pGame, D2MonsterCastPet
       }
 
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pMonster, pMonsterAiGeneral, pPetCreation->nFunctionId);
-      Monster::MONSTERAI_TriggerMageThink(pGame, pMonster);
+      Monster::MONSTERAI_RescheduleThink(pGame, pMonster);
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pMonster, UNITEVENTCALLBACK_AITHINK, 0);
       GAME::Event::SetEvent(pGame, pMonster, 2, pGame->dwGameFrame + 0x19, 0, 0);
       return pMonster;
@@ -2728,7 +2727,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 
 BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillStrc* pSkill;
-    D2MonsterKillStrc sKillData;
+    D2ModeChangeStrc sKillData;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1211);
       exit(-1);
@@ -2752,8 +2751,8 @@ BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit
           }
         case UNIT_MONSTER:
           {
-            Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Attack1, &sKillData);
-            sKillData.pAttacker = pTarget;
+            Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Attack1, &sKillData);
+            sKillData.pTargetUnit = pTarget;
             Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillData, 1);
             return 1;
           }
@@ -2763,7 +2762,7 @@ BOOL __fastcall SKILLS_ForceAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 }
 
-BOOL __fastcall D2CheckCorpseConsumed(D2UnitStrc * pUnit, int32_t eState) {
+BOOL __fastcall SKILLS_CanSwitchAi(D2UnitStrc * pUnit, int32_t nAiSpecialState) {
     BOOL bCanApply;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       int nMonClassId;
@@ -2782,7 +2781,7 @@ BOOL __fastcall D2CheckCorpseConsumed(D2UnitStrc * pUnit, int32_t eState) {
       }
     }
 
-    bCanApply = Monster::AI::MONSTERAI_CanApplyDebuffState(pUnit, eState);
+    bCanApply = Monster::AI::MONSTERAI_CanSwitchAi(pUnit, nAiSpecialState);
     return (uint32_t)(bCanApply != 0);
 }
 
@@ -2967,13 +2966,13 @@ D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, D2UnitStrc * p
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_AuraThornsWithLifeSteal,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_AuraHealTarget,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_PhysDamageOnAttacked,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_CrushingBlowChance,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_Knockback,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_ChanceToFear,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_ChanceToDimVision,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_LightningDamageOnAttacked,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_FireDamageOnAttacked,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_ColdDamageWithFreezeLength,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_ReplenishManaOnKill,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_DamageToMana,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_FreezeTarget,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_OpenWounds,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_CrushingBlow,
@@ -2981,12 +2980,12 @@ D2SUnitEventStrc * __fastcall D2SetAuraEvent(::SGAMEDATA * pGame, D2UnitStrc * p
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_LifeDrainDemon,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_SlowTarget,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_CastOnAttack,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_CastOnStriking,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_NecroAuraStatDrain,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_LifeTap,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_SkillOnGetHit,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_BoneArmorAbsorb,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_BloodGolemLifeSteal,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillSor::ITEMEVENT_SorAuraManaAbsorb,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillDruid::ITEMEVENT_DruidSummonHpAura,
-    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_NecroReviveLeech,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillDruid::ITEMEVENT_CycloneArmorAbsorb,
+    (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_BloodGolemShareDamage,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillNec::ITEMEVENT_ItemSlowTarget,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_ReplenishLifeFlat,
     (D2ItemStatCostItemEventFunc)&D2Game::SKILLS::SkillItem::ITEMEVENT_SetRestInPeace,
@@ -3096,7 +3095,7 @@ void __fastcall DefaultExpireFunction(D2UnitStrc * pUnit, eD2States eState, D2St
     BOOL bModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bModeZeroDeath) {
       uint32_t bStateActive;
-      bStateActive = D2Common::DATATBLS::ItemStats::STATES_IsStateActive(pUnit, eState);
+      bStateActive = D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState);
       if (bStateActive) {
         return;
       }
@@ -3265,7 +3264,7 @@ D2StatListExStrc * __fastcall SetStateWithExpiryTime(D2StateExArgStrc * pStateEx
 }
 
 // Register params: pUnitStrc (ECX): D2UnitStrc *, pAttacker (EDX): D2UnitStrc *
-void __fastcall SKILLS_SetStateWithCurse(D2UnitStrc * pUnitStrc, D2UnitStrc * pAttacker, eD2Skills eSkill, int32_t nSkillLvl, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
+void __fastcall SKILLS_SetStateWithCurse(D2UnitStrc * pUnitStrc, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl, eD2UnitStat eStat, eD2States eAuraState, PFN_StatExpireCallback pFunction) {
     D2SkillsTxt* pSkillsTxt;
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       pSkillsTxt = 0;
@@ -3283,7 +3282,7 @@ void __fastcall SKILLS_SetStateWithCurse(D2UnitStrc * pUnitStrc, D2UnitStrc * pA
     sStateExArg.eStat = eStat;
     sStateExArg.pFunction = pFunction;
     sStateExArg.pUnit = pUnitStrc;
-    sStateExArg.pTarget = pAttacker;
+    sStateExArg.pTarget = pTarget;
     if (pFunction) {
       BOOL bIsBadCode;
       /* FARPROC lpfn for IsBadCodePtr */ bIsBadCode = IsBadCodePtr((FARPROC)pFunction);
@@ -3643,7 +3642,7 @@ BOOL __fastcall Skills_SrvDoFunc_002_GenericMeleeHit(::SGAMEDATA * pGame, D2Unit
 }
 
 // Server skill-do-func for throwing a weapon from the left hand (skill 3). Queries the equipped weapon info to determine which arm slot is active, verifies the item is throwable (via ITEM_GetTxtItemTypes_throwable or UNITSTAT_item_throwable stat). Sets UNITFLAG_SKSRVDOFUNC, reads the item's missile type, and spawns the throw missile via CreatingAMissile (normal throwable) or SKILLS_CreateMissileFromUnit (missile potion). Applies skill to-hit/damage modifiers via SKILLS_ApplySkillToHitAndDamage.
-BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_003_Throw(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bIsMissilePotion;
     eMissilesId nMissileId;
     bool bIsMissilePotion;
@@ -3671,7 +3670,7 @@ BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2
 
       nThrowableStatVal = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeaponItem);
       if (!nThrowableStatVal) {
-        nThrowableStatVal = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeaponItem, UNITSTAT_item_throwable, 0);
+        nThrowableStatVal = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeaponItem, UNITSTAT_item_throwable, 0);
         if (!nThrowableStatVal) {
           return 0;
         }
@@ -3695,7 +3694,7 @@ BOOL __fastcall Skills_SrvDoFunc_003_ThrowWeaponLeftHand(::SGAMEDATA * pGame, D2
 }
 
 // Server do-func for throw skill (eSkill 5). Reads the equipped right-hand weapon from pUnit's inventory; verifies it is throwable (type flag or UNITSTAT_item_throwable). Sets UNITFLAG_SKSRVDOFUNC, spawns either a normal missile (CreatingAMissile) or a potion-type missile (SKILLS_CreateMissileFromUnit) using the weapon's wMissileType, then applies hit/damage stats. Returns FALSE if no valid throwable weapon found.
-BOOL __fastcall Skills_SrvDoFunc_005_ThrowWeaponRightHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_005_LeftHandThrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bIsMissilePotion;
     bool bIsMissilePotion;
     eMissilesId nMissileId;
@@ -3723,7 +3722,7 @@ BOOL __fastcall Skills_SrvDoFunc_005_ThrowWeaponRightHand(::SGAMEDATA * pGame, D
 
       nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeaponItem);
       if (!nThrowableStat) {
-        nThrowableStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeaponItem, UNITSTAT_item_throwable, 0);
+        nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeaponItem, UNITSTAT_item_throwable, 0);
         if (!nThrowableStat) {
           return 0;
         }
@@ -3978,7 +3977,7 @@ int32_t __fastcall SKILL_SpawnMissileFunction(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server-side callback invoked when a unit's animation mode completes. Validates the current skill and its target (cancels into walk if invalid or in town without a usable-in-town skill), then calls SKILLS_SrvStartSkill to begin the server do-function. If SKILLS_SrvStartSkill fails for a player, falls back to PLRMODES_MoveToLocation mode 5 (stand/walk).
 // @sourcefile .\SKILLS\Skills.cpp
-int32_t __fastcall SKILLS_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+int32_t __fastcall SKILLS_StartCurrentSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bTargetValid;
     bool bTargetValid;
     D2RoomStrc* pUnitRoom;
@@ -4416,7 +4415,7 @@ void __fastcall ClearSkills(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // Applies STATE_stunned to a non-boss, non-special monster unit. Skips if already STATE_uninterruptable. Allocates a stat list expiring in 100 game frames, attaches STATE_stunned state, schedules a game event, then interrupts the monster's current AI by calling SetCurrentSkill(Neutral) and MONSTERAI_ExecuteLifecycleTransition. Extends existing stun timeout if a stun statlist is already present.
 void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pThis, int, D2UnitStrc * pUnit, eD2States eState) {
     int pExtendedExpiryFrame;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     ::SGAMEDATA* pGameSaved = pThis;
     BOOL eExistingStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (!(!eExistingStunState && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
@@ -4453,7 +4452,7 @@ void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pThis, int, D2UnitStrc * pUni
       GAME::Event::SetEvent(pThis, pUnit, 0xc, pExtendedExpiryFrame, 0, 0);
     }
 
-    Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Neutral, &sMonsterKill);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Neutral, &sMonsterKill);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pThis, &sMonsterKill, 1);
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
@@ -4503,7 +4502,7 @@ D2UnitStrc * __fastcall SKILL_CreateTimedAuraStatList(::SGAMEDATA * pGame, D2Uni
     return (D2UnitStrc*)pStatListEx;
 }
 
-void __fastcall MAINMENU_ShowPopupWithCancel_Unref_005c6cb0(uint16_t * wszText, eD2States pfnMenuInstance) {
+void __fastcall SKILLS_CallD2UpdateStateWithOne(uint16_t * wszText, eD2States pfnMenuInstance) {
     D2UpdateState((D2UnitStrc*)wszText, pfnMenuInstance, 1);
 }
 

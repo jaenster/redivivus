@@ -16,5 +16,5 @@
 // Forward declarations
 struct DC6;
 
-extern DC6 * gnWindowInitState;
+extern DC6 * gpOutOfGameBackgroundDC6;
 extern BOOL gbWindowed;

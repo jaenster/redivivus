@@ -7,7 +7,6 @@
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/MISSILES/Missiles.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Create.h"
@@ -145,7 +144,7 @@ BOOL __fastcall SKILLMONST_SrvStFn42_FireHit(::SGAMEDATA * pGame, D2UnitStrc * p
         sDamage.dwHitClass = pSkillTxt->HitClass;
       }
 
-      Monsters::MONSTER_RecalculateCombatStats(pUnit, 8);
+      Monsters::MONSTER_RecalculateCombatStats(pUnit, eD2MonsterAnimMode_ns::Skill1);
     }
 
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
@@ -367,7 +366,7 @@ BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * 
     if (nHealAmt > 0) {
       int nValue;
       nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      nSkillLvl = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nSkillLvl = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       nHealAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, nHealAmt, 100);
       nValue_00 = nValue + nHealAmt;
       if (nValue + nHealAmt >= nSkillLvl) {
@@ -586,7 +585,7 @@ BOOL __fastcall SKILLMONST_SrvStFn47_Jump(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     D2Common::Skills::SKILL_SetParam4(pSkill, nPar4);
-    D2Common::Collision::AddCollision_Type(pRoom, nLeapX, nLeapY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
+    D2Common::Collision::AddCollision_Type(pRoom, nLeapX, nLeapY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x100);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::Skills::SKILL_SetParam1(pSkill, nLeapX);
     D2Common::Skills::SKILL_SetParam2(pSkill, nLeapY);
@@ -647,9 +646,9 @@ BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2Uni
 
         D2Common::Skills::SKILL_SetFlags(pSkill, 0);
         UNIT::SUnit::SetUninterruptableState(pUnit, 0);
-        D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nMonBaseId, nLandX, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
+        D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nMonBaseId, nLandX, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x100);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x100);
-        D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0x3c01);
+        D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0x3c01);
         D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0x65);
         nMonBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
         nMonBaseId = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nMonBaseId);
@@ -680,7 +679,7 @@ BOOL __fastcall Skills_SrvDoFunc_089_ChargeLeapAttack(::SGAMEDATA * pGame, D2Uni
       }
       if (nSkillFlags & 0x80) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0x101);
-        D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0);
+        D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
         D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nX, nY);
         D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 9);
@@ -997,7 +996,7 @@ BOOL __fastcall SKILLMONST_SrvStFn53_MonInferno(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
-static void __stdcall SKILLASSN_GetTrapHealthBonus(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nSkillLvl, D2UnitStrc * pMissileUnit) {
+static void __stdcall SKILLMONST_UpdateInfernoAnimationParameters(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nSkillLvl, D2UnitStrc * pMissileUnit) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
@@ -1046,7 +1045,7 @@ static int SKILLMONST_TriggerModeChange(D2UnitStrc * pUnit, ::SGAMEDATA * pGame)
     return 1;
 }
 
-void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
+void __fastcall SKILLS_SetInfernoFrame(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStatsEx;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int nMonStats2Idx;
@@ -1075,7 +1074,7 @@ void __fastcall SKILLASSN_GetShadowHealthBonus(D2SkillsTxt * pSkillsTxt, D2UnitS
 }
 
 // SrvDoFunc #95: server-side trap/sentry skill handler that spawns one missile from the caster unit toward the target cursor. Looks up srvmissilea from the skill's txt row, computes velocity from VelLev×level/8+Vel, builds a D2SkillArgStrc, and calls CreatingMissile. On success, applies trap health bonuses, checks the inferno state to optionally reschedule the next fire frame via SetEvent, otherwise triggers a mode-change. Returns 0 if the skill, missile id, or target position is invalid.
-BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_095_MonInferno(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nNextFireFrame;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
@@ -1109,8 +1108,8 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
       D2UnitStrc* pMissileUnit;
       pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissileUnit) {
-        SKILLASSN_GetTrapHealthBonus(eSkill, pUnit, nSkillLvl, pMissileUnit);
-        SKILLASSN_GetShadowHealthBonus(pSkillsTxt, pUnit);
+        SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
+        SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
         nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
         if (pGame->dwGameFrame < nNextFireFrame) {
           eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -1137,7 +1136,7 @@ BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, D2Uni
 }
 
 // SrvDoFunc #152: alternate trap/sentry missile spawner, functionally identical to SrvDoFunc_095 (same body: srvmissilea lookup, velocity calculation, CreatingMissile, health bonus, inferno-state rescheduling, mode-change). Likely mapped to a different skill row that shares the same fire mechanics but differs in txt-table parameters (e.g. Lightning Sentry vs Death Sentry variant).
-BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_152_DiabLight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nNextFireFrame;
     int32_t dwTmp;
     D2SkillArgStrc sSkillArg;
@@ -1171,8 +1170,8 @@ BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame
       D2UnitStrc* pMissileUnit;
       pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       if (pMissileUnit) {
-        SKILLASSN_GetTrapHealthBonus(eSkill, pUnit, nSkillLvl, pMissileUnit);
-        SKILLASSN_GetShadowHealthBonus(pSkillsTxt, pUnit);
+        SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
+        SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
         nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
         if (pGame->dwGameFrame < nNextFireFrame) {
           eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -1235,7 +1234,7 @@ BOOL __fastcall Skills_SrvDoFunc_096_HealTarget(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     uint32_t nHealPct = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, eSkill - eSkillOrig);
-    int nValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+    int nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
     int32_t nNewHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, nHealPct + eSkillOrig, 100);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
     nCurHp = nNewHp + nCurHp;
@@ -1270,7 +1269,7 @@ int __fastcall SKILLMONST_ResurrectUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
       pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         pUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
-        Monster::MONSTERAI_TriggerMageThink(pGame, pUnit);
+        Monster::MONSTERAI_RescheduleThink(pGame, pUnit);
         Monster::MonsterRegion::DecreaseMonKillCount(pGame->pMonsterRegion, pUnit);
         Quests::QUESTS::AttachToUnit(pGame, pUnit, pRoom, 0);
         D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x100);
@@ -1293,7 +1292,7 @@ int __fastcall SKILLMONST_ResurrectUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
           nMaxHp = 0;
         }
 
-        D2Common::Collision::AddCollision_Type(pRoom, nMaxHp, nPosY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
+        D2Common::Collision::AddCollision_Type(pRoom, nMaxHp, nPosY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x100);
         return 1;
       }
     }
@@ -1318,7 +1317,7 @@ int __fastcall SKILLMONST_ResurrectUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
       nX = 0;
     }
 
-    D2Common::Collision::AddCollision_Type(pRoom, nX, nMaxHp, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
+    D2Common::Collision::AddCollision_Type(pRoom, nX, nMaxHp, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x80);
     return 1;
 }
 
@@ -1328,7 +1327,7 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
     eD2CollisionShapeType nCollisionWidth;
     uint16_t wCollideFlags;
     eD2MonsterAnimMode eReviveMode;
-    D2MonsterKillStrc sMonKillData;
+    D2ModeChangeStrc sMonKillData;
     int32_t nTargetX;
     eD2UnitType eUnitType;
     short int nSrvOverlay;
@@ -1353,7 +1352,7 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
       return 0;
     }
 
-    int bHasImmuneState = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pTarget);
+    int bHasImmuneState = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pTarget);
     if (!bHasImmuneState) {
       int32_t nTargetY;
       nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
@@ -1364,7 +1363,7 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
         return 0;
       }
 
-      nCollisionWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pTarget);
+      nCollisionWidth = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pTarget);
       wCollideFlags = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, nTargetX, nTargetY, nCollisionWidth, eUnitType != UNIT_PLAYER ? 0x3c01 : 0x1c09);
       if (wCollideFlags) {
         return 0;
@@ -1374,9 +1373,9 @@ BOOL __fastcall Skills_SrvDoFunc_097_ResurrectDeadMonster(::SGAMEDATA * pGame, D
       pGameForResurrect = pGameSaved;
       SKILLMONST_ResurrectUnit(pGameSaved, pTarget);
       if (pTarget->eUnitType == UNIT_MONSTER) {
-        eReviveMode = Monster::AI::MONSTERAI_SetSpecialAttackSkill(pTarget, 1);
-        Monster::MonsterMode::SetCurrentSkill(pTarget, eReviveMode, &sMonKillData);
-        Monster::AI::MONSTERAI_SetSpecialAttackSkill(pTarget, 1);
+        eReviveMode = Monster::AI::MONSTERAI_GetResurrectMode(pTarget, 1);
+        Monster::MonsterMode::MONMODE_InitModeChange(pTarget, eReviveMode, &sMonKillData);
+        Monster::AI::MONSTERAI_GetResurrectMode(pTarget, 1);
         Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameForResurrect, &sMonKillData, (uint32_t)(eReviveMode != eD2MonsterAnimMode_ns::Sequence));
       }
 
@@ -2098,7 +2097,7 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, D2U
     nDmgShifted = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtLeech->calc[2], eSkill, nSkillLvl);
     nDmgShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sDamage.dwPhysDamage, nDmgShifted, 100);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     nNewHp = nCurHp + nDmgShifted;
     if (nCurHp + nDmgShifted >= nMaxHp) {
       nNewHp = nMaxHp;
@@ -2138,13 +2137,13 @@ BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2Un
       return 0;
     }
 
-    int32_t nTargetMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+    int32_t nTargetMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
     int nMaxHp = pTarget->nUnitGUID;
     eD2UnitType eUnitType = UNIT_MONSTER;
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pTarget), eUnitType, nMaxHp);
     UNIT::SUnit::FreeServerUnit(pGame, pTarget);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if (nTargetMaxHp > 0) {
       int nNewHpClamped;
       nTargetMaxHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nTargetMaxHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl), 100);
@@ -2167,7 +2166,7 @@ BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, D2Un
 }
 
 // Returns the first non-zero animation event value from the current frame onward in the caster's anim data, used to determine how many Holy Bolt targets to hit. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.
-uint32_t __fastcall SKILLPAL_GetHolyBoltTargetCount(D2UnitStrc * pUnit) {
+uint32_t __fastcall SKILLMONST_GetMonFrenzySequenceFrame(D2UnitStrc * pUnit) {
     int32_t nTotalFrames;
     int nNextFrame;
     int nFrameIdx;
@@ -2275,7 +2274,7 @@ BOOL __fastcall Skills_SrvDoFunc_109_MonsterFrenzyAttack(::SGAMEDATA * pGame, D2
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    uint32_t nEventCount = SKILLPAL_GetHolyBoltTargetCount(pUnit);
+    uint32_t nEventCount = SKILLMONST_GetMonFrenzySequenceFrame(pUnit);
     if (nEventCount) {
       SkillsServer::SKILLS_SrvStartSkill(pGame, pUnit, eSkill, nSkillLvl, 0);
     }

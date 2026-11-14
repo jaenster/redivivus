@@ -423,7 +423,7 @@
       ]
     },
     {
-      "name": "CountModeZero",
+      "name": "PARTY_CountLivingUnitsCallback",
       "address": "005404f0",
       "lines": [
         {
@@ -433,14 +433,14 @@
       ],
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
-        "CountModeZero",
+        "PARTY_CountLivingUnitsCallback",
         "CheckForModeZeroDeath"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "a93d111b",
+      "dh": "51754a39",
       "paramStorage": [
         [
           "pContext",
@@ -482,7 +482,7 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "c92298b6",
+      "dh": "3d7007ac",
       "paramStorage": [
         [
           "pGame",
@@ -497,13 +497,13 @@
           "Stack[0x4]:4"
         ],
         [
-          "bExecute",
+          "pArgs",
           "Stack[0x8]:4"
         ]
       ]
     },
     {
-      "name": "FindUnitWithFilter",
+      "name": "PARTY_IteratePartyMembersInSameLevel",
       "address": "005405a0",
       "lines": [
         {
@@ -513,7 +513,7 @@
       ],
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
-        "FindUnitWithFilter",
+        "PARTY_IteratePartyMembersInSameLevel",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetPartyId",
@@ -530,7 +530,7 @@
         "pfnPartyMemberFilter",
         "uint16_t"
       ],
-      "dh": "1f22157f",
+      "dh": "a585cc82",
       "paramStorage": [
         [
           "pGame",
@@ -541,11 +541,11 @@
           "EDX:4"
         ],
         [
-          "fpFilter",
+          "pfnCallback",
           "Stack[0x4]:4"
         ],
         [
-          "pDataForFunction",
+          "pArgs",
           "Stack[0x8]:4"
         ]
       ]
@@ -640,7 +640,7 @@
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
         "GetPartyIdFromUnit",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -654,7 +654,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16592328",
+      "dh": "f2209a28",
       "paramStorage": [
         [
           "pGame",
@@ -724,7 +724,7 @@
         "GetPartiedUnitsLevelSum",
         "GetPartyId",
         "STATSEX_GetCurrentStat",
-        "FindUnitWithFilter"
+        "PARTY_IteratePartyMembersInSameLevel"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -732,7 +732,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0bab7e13",
+      "dh": "a2258097",
       "paramStorage": [
         [
           "pGame",
@@ -745,7 +745,7 @@
       ]
     },
     {
-      "name": "CountDeadPartyMembers",
+      "name": "PARTY_GetLivingPartyMemberCountInSameLevel",
       "address": "005408e0",
       "lines": [
         {
@@ -755,15 +755,15 @@
       ],
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
-        "CountDeadPartyMembers",
-        "FindUnitWithFilter"
+        "PARTY_GetLivingPartyMemberCountInSameLevel",
+        "PARTY_IteratePartyMembersInSameLevel"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e0b343a5",
+      "dh": "ee12ec1b",
       "paramStorage": [
         [
           "pGame",
@@ -787,7 +787,7 @@
       "namespace": "D2Game::UNIT::Party",
       "calledFunctions": [
         "PARTY_SplitGoldToPartyMembers",
-        "FindUnitWithFilter",
+        "PARTY_IteratePartyMembersInSameLevel",
         "GetInventoryGoldLimit",
         "STATSEX_GetCurrentStat",
         "STATLIST_AddUnitStat",
@@ -813,7 +813,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b079022a",
+      "dh": "d85eea09",
       "paramStorage": [
         [
           "pGame",

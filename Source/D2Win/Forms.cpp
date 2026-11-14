@@ -172,13 +172,13 @@ void __fastcall D2WINLIST_AddListItemFromCharName(::D2WinList * pList, char * sz
 }
 
 // Sets custom user data field 0x10 on D2WinTextBox. Validates form type FORM_TextBox (10).
-BOOL __stdcall D2WINTEXTBOX_SetCustomData(::D2WinProgressBar * pTextBox, float nCustomData) {
-    if (pTextBox->sControl.neD2FormType != FORM_ProgressBar) {
+BOOL __stdcall PROGRESSBAR_SetProgress(::D2WinProgressBar * pProgressBar, float fProgress) {
+    if (pProgressBar->sControl.neD2FormType != FORM_ProgressBar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3a);
       exit(-1);
     }
 
-    pTextBox->fCurrentProgress = nCustomData;
+    pProgressBar->fCurrentProgress = fProgress;
     return 1;
 }
 

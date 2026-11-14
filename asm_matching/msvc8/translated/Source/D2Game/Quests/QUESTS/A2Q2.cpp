@@ -218,7 +218,7 @@ bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // Skill scroll ('rt1 '). For each player who does NOT already hold the scroll and is
 // not past Step0x03, bumps a counter in A2Q2 quest-specific data so the portal-drop
 // loop knows how many scrolls to spawn. No QuestRecord writes.
-BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+BOOL __fastcall Q10_CountPlayersNeedingScroll(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
@@ -228,7 +228,7 @@ BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
       if (!bQuestState) {
         pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
         if (pQuestData) {
-          pQuestData->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+          pQuestData->pQuestSpecificData.pA2Q2->nItemDropCount++;
         }
       }
     }
@@ -239,7 +239,7 @@ BOOL __fastcall Q10_OnScrollPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
 // Q10_OnStaffOrViperPickup. Per-player iterate callback for the Amulet-of-the-Viper
 // ('msf ') drop path. For each player not yet Completed who holds neither 'msf ' nor
 // 'tsh ' (Staff of Kings), bumps the A2Q2 drop counter. No QuestRecord writes.
-BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+BOOL __fastcall Q10_CountPlayersNeedingStaff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pQuestItem;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
@@ -251,7 +251,7 @@ BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit
         if (!pPlayerData) {
           pQuestItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
           if (pQuestItem) {
-            pQuestItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+            pQuestItem->pQuestSpecificData.pA2Q2->nItemDropCount++;
           }
         }
       }
@@ -263,13 +263,13 @@ BOOL __fastcall Q10_OnStaffOrViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Q10_OnHoradricCubePickup. Per-player iterate callback for the Horadric Cube
 // ('box ') drop path. Bumps the A2Q2 drop counter for each player not already
 // holding the cube. No QuestRecord writes.
-BOOL __fastcall Q10_OnHoradricCubePickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+BOOL __fastcall Q10_CountPlayersNeedingCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pQuestData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20786f62);
     if (!pQuestData) {
       D2QuestDataStrc* pCubeItem;
       pCubeItem = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
       if (pCubeItem) {
-        pCubeItem->pQuestSpecificData.pA2Q2->nQuestItemPickupNotifyCount++;
+        pCubeItem->pQuestSpecificData.pA2Q2->nItemDropCount++;
       }
     }
 
@@ -542,17 +542,17 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOpera
       if (pQuestData) {
         D2ObjectOperateFnArg* pOperationLocal;
         pA1Q1Scratch = pQuestData->pQuestSpecificData.pA2Q2;
-        pA1Q1Scratch->nQuestItemPickupNotifyCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_OnScrollPickup);
-        if (pA1Q1Scratch->nQuestItemPickupNotifyCount > 0) {
+        pA1Q1Scratch->nItemDropCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_CountPlayersNeedingScroll);
+        if (pA1Q1Scratch->nItemDropCount > 0) {
           do {
-            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&pOperationLocal, nullptr, -1, 1);
+            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&pOperationLocal, nullptr, -1, 1);
             nDropCount++;
-          } while (nDropCount < pA1Q1Scratch->nQuestItemPickupNotifyCount);
+          } while (nDropCount < pA1Q1Scratch->nItemDropCount);
         }
       }
 
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+      Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
       uint32_t sNewSeed = D2_SeedRoll(pSeed);
       nDropCount = sNewSeed % 5 + 5;
@@ -584,11 +584,11 @@ BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperati
       if (pQuestData) {
         D2UnitStrc* pDroppedItem;
         pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
-        pA2Q2Data->nQuestItemPickupNotifyCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_OnStaffOrViperPickup);
-        if (pA2Q2Data->nQuestItemPickupNotifyCount > 0) {
+        pA2Q2Data->nItemDropCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_CountPlayersNeedingStaff);
+        if (pA2Q2Data->nItemDropCount > 0) {
           do {
-            pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&pOperationLocal, nullptr, -1, 1);
+            pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&pOperationLocal, nullptr, -1, 1);
             if (pDroppedItem) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDroppedItem, ITEMFLAG_IDENTIFIED, 1);
               pA2Q2Data->nMsfCount++;
@@ -596,11 +596,11 @@ BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperati
             }
 
             nNotifyIdx++;
-          } while (nNotifyIdx < pA2Q2Data->nQuestItemPickupNotifyCount);
+          } while (nNotifyIdx < pA2Q2Data->nItemDropCount);
         }
       }
 
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+      Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
       uint32_t sNewSeed = D2_SeedRoll(pSeed);
       int nGoldDropsLeft = sNewSeed % 5 + 5;
@@ -632,22 +632,22 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperati
       if (pQuestData) {
         D2UnitStrc* pDroppedItem;
         pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
-        pA2Q2Data->nQuestItemPickupNotifyCount = 0;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_OnHoradricCubePickup);
-        if (pA2Q2Data->nQuestItemPickupNotifyCount > 0) {
+        pA2Q2Data->nItemDropCount = 0;
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_CountPlayersNeedingCube);
+        if (pA2Q2Data->nItemDropCount > 0) {
           do {
-            pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationLocal, nullptr, -1, 1);
+            pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationLocal, nullptr, -1, 1);
             if (pDroppedItem) {
               pA2Q2Data->nBoxCount++;
               pA2Q2Data->bHasCube = true;
             }
 
             nNotifyIdx++;
-          } while (nNotifyIdx < pA2Q2Data->nQuestItemPickupNotifyCount);
+          } while (nNotifyIdx < pA2Q2Data->nItemDropCount);
         }
       }
 
-      Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+      Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
       D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
       uint32_t sNewSeed = D2_SeedRoll(pSeed);
       int nGoldDropsLeft = sNewSeed % 5 + 5;

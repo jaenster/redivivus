@@ -373,14 +373,14 @@ static uint32_t __stdcall SELECT_IsUnitBehindDoor(D2UnitStrc * pUnit, D2UnitStrc
 }
 
 static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int32_t nX2 = D2Common::Units::GetTargetX(pUnit2);
-    int32_t nX1 = D2Common::Units::GetTargetX(pUnit);
-    int32_t nY2 = D2Common::Units::GetTargetY(pUnit2);
-    int32_t nY1 = D2Common::Units::GetTargetY(pUnit);
+    int32_t nX2 = D2Common::Units::GetScreenX(pUnit2);
+    int32_t nX1 = D2Common::Units::GetScreenX(pUnit);
+    int32_t nY2 = D2Common::Units::GetScreenY(pUnit2);
+    int32_t nY1 = D2Common::Units::GetScreenY(pUnit);
     return (nY2 - nY1) * (nY2 - nY1) + (nX2 - nX1) * (nX2 - nX1);
 }
 
-int __stdcall SELECT_GetConstant13_Y_Unref_00467400() {
+int __stdcall SELECT_HasSelectedUnit() {
     return _Selection::bHasSelectedUnit;
 }
 

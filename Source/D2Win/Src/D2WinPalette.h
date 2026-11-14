@@ -24,7 +24,7 @@ uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen,
 void __fastcall D2WINPAL_CopyPalette(void * pDest);
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct);
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File);
-void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode);
+void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(uint32_t bCompactLineSpacingMode);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 // Builds the 72-entry palette pointer table on the stack and hands it to D2GFX_SetPaletteTable. The table is one contiguous array: [0..2] the three act1 palette planes, [3..51] the 49 gamma/data palettes, [52..64] the 13 transpose palettes, [65..71] act2/act5/neutral/units/index-counter/menu-in-game palettes. GetPalettePointer indexes it at +0x00..+0x11c.

@@ -167,7 +167,7 @@
       ]
     },
     {
-      "name": "BeginCutSceneAtResolutionMode0_Unref_0043b800",
+      "name": "LAUNCHER_ClearBNetCallbacksAndShutdown",
       "address": "0043b800",
       "lines": [
         {
@@ -177,10 +177,10 @@
       ],
       "namespace": "D2Launch::Launcher",
       "calledFunctions": [
-        "BeginCutSceneAtResolutionMode0_Unref_0043b800",
+        "LAUNCHER_ClearBNetCallbacksAndShutdown",
         "thunk_BNMESSQUEUE_Shutdown"
       ],
-      "dh": "f1e17f62"
+      "dh": "bc57ddfc"
     },
     {
       "name": "LAUNCHER_SetBusyFlag",
@@ -433,7 +433,7 @@
         "LAUNCHER_GetPatchDownloadFlag",
         "UIMENU_MainMenu",
         "SRegSaveValue",
-        "D2GFX_CheckVideoMode",
+        "D2GFX_ShutdownSpriteCacheAndWindow",
         "SaveAndUnload",
         "FORMS_DestroyListJmp"
       ],
@@ -442,7 +442,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c3c687fa"
+      "dh": "c711de5e"
     },
     {
       "name": "EnterEmailMessagePumper",

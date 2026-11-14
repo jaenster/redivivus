@@ -10,10 +10,10 @@
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/GAME/Clients.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/Level.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Game/Objects/Objects.h"
@@ -697,7 +697,7 @@ void __fastcall Q27_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // [A5 helper, lives in A4Q2.cpp] Enable the Harrogath (Act 5 town) waypoint for the player: resolve waypoint id from LEVEL_Harrogath and call EnableWaypoint. Fired when the Pandemonium portal grants Act5 access.
-void __stdcall Q23_UnlockHarrogathWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __stdcall Q27_EnableHarrogathWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int16_t nWaypointId;
     BOOL bWaypointFound = D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_Harrogath, &nWaypointId);
     if (!bWaypointFound) {
@@ -849,7 +849,7 @@ static void __stdcall Q27_ActivateAllSealsKillChaos(D2QuestDataA4Q2Strc * pQuest
     D2RoomStrc* pRoom;
     BOOL bMonDead;
     int32_t nMonAlignment;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     D2UnitStrc* pNextUnit;
     if (pQuestSpecificData->bAllSealsActivated) {
       return;
@@ -869,7 +869,7 @@ static void __stdcall Q27_ActivateAllSealsKillChaos(D2QuestDataA4Q2Strc * pQuest
             if (!bMonDead) {
               nMonAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
               if (!nMonAlignment) {
-                Monster::MonsterMode::SetCurrentSkill(pUnit, Death, &sMonsterKill);
+                Monster::MonsterMode::MONMODE_InitModeChange(pUnit, Death, &sMonsterKill);
                 Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
               }
             }
@@ -1048,7 +1048,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(D2ObjectOperateFnArg * pO
       return 0;
     }
 
-    D2Common::Units::SetupUpdateFlag(pVictim, 1);
+    D2Common::Units::ChangeAnimMode(pVictim, 1);
     D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;
     GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 7) + pGame->dwGameFrame, 0, 0);
@@ -1177,7 +1177,7 @@ BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOpera
 
     PLAYER::PlayerMsg::LoadAreaOrSpawnPortal(pOperation->sArg.pGame, pOperation->pAttacker, LEVEL_Harrogath, 5);
     QUEST_SendQuestInfoToUnit(pOperation->sArg.pGame, pOperation->pAttacker);
-    Q23_UnlockHarrogathWaypoint(pOperation->sArg.pGame, pOperation->pAttacker);
+    Q27_EnableHarrogathWaypoint(pOperation->sArg.pGame, pOperation->pAttacker);
     return 0;
 }
 

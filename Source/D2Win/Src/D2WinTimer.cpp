@@ -35,7 +35,7 @@ void __fastcall FORMS_DestroyD2WinTimer(::D2WinTimer * pTimer) {
     D2WinMain::FORMS_DestroyControl(&pTimer->sControl);
 }
 
-void __fastcall D2WINTIMER_Start(int * pTimer) {
+void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer) {
     if (*pTimer != 8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b);
       exit(-1);
@@ -70,9 +70,9 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     return 0;
 }
 
-int __fastcall D2WINTIMER_GetElapsed(::D2WinTimer * pTimer) {
+int __fastcall D2WINTIMER_UpdateRepeating(::D2WinTimer * pTimer) {
     // Static local variables (originally global data)
-    static uint32_t gnTimerNextFireTick; D2_STATIC_GUARD_BSS(gnTimerNextFireTick, "D2Win::Src::D2WinTimer::D2WINTIMER_GetElapsed::gnTimerNextFireTick");
+    static uint32_t gnTimerNextFireTick; D2_STATIC_GUARD_BSS(gnTimerNextFireTick, "D2Win::Src::D2WinTimer::D2WINTIMER_UpdateRepeating::gnTimerNextFireTick");
 
     DWORD dwTickCount;
     D2ControlMsg pCallbackArg;
@@ -145,7 +145,7 @@ void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer) {
       exit(-1);
     }
 
-    pTimer->sControl.fpDrawEx = (::DrawEx)D2WINTIMER_GetElapsed;
+    pTimer->sControl.fpDrawEx = (::DrawEx)D2WINTIMER_UpdateRepeating;
 }
 
 } // namespace D2Win::Src::D2WinTimer

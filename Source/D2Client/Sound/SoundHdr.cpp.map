@@ -84,7 +84,7 @@
       "dh": "2516c1b8"
     },
     {
-      "name": "SOUNDHDR_GetGlobal0_Unref_004817d0",
+      "name": "SOUNDHDR_GetTxtSoundsSize",
       "address": "004817d0",
       "lines": [
         {
@@ -94,12 +94,12 @@
       ],
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
-        "SOUNDHDR_GetGlobal0_Unref_004817d0"
+        "SOUNDHDR_GetTxtSoundsSize"
       ],
-      "dh": "a1dcc02c"
+      "dh": "1d2c280e"
     },
     {
-      "name": "SOUNDHDR_GetGlobal0_Unref_004817e0",
+      "name": "SOUNDHDR_GetTxtSoundEnvironSize",
       "address": "004817e0",
       "lines": [
         {
@@ -109,9 +109,9 @@
       ],
       "namespace": "D2Client::Sound::SoundHdr",
       "calledFunctions": [
-        "SOUNDHDR_GetGlobal0_Unref_004817e0"
+        "SOUNDHDR_GetTxtSoundEnvironSize"
       ],
-      "dh": "e355cbcb"
+      "dh": "2cf25061"
     },
     {
       "name": "SOUNDHDR_GetGlobal0",

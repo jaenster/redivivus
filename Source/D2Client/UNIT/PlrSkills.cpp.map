@@ -1270,7 +1270,7 @@
         "OVERLAYTBLS_Get1ofN",
         "RANDOM_RandomNumberSelector",
         "SetState",
-        "STATES_HasHideState",
+        "STATES_HasAuraFlagState",
         "GFX_AddOverlayToUnit"
       ],
       "usedTypes": [
@@ -1281,7 +1281,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b05ee22",
+      "dh": "da27e38f",
       "paramStorage": [
         [
           "pUnit",
@@ -1338,11 +1338,11 @@
         "UNIT_GetUnitState",
         "SOUND_PlaySound",
         "GetStatsByState",
-        "STATLIST_FreeChildStatLists",
+        "STATLIST_RemoveAllStats",
         "STATES_UpdateColorShiftAndLight",
         "STATES_AddStateOverlays",
         "IsActive",
-        "STATES_HasLightState",
+        "STATES_HasHideFlagState",
         "STATES_ResetUnitGfxAndMode"
       ],
       "usedTypes": [
@@ -1350,7 +1350,7 @@
         "D2UnitStrc",
         "eD2States"
       ],
-      "dh": "bc0e964c",
+      "dh": "306ae692",
       "paramStorage": [
         [
           "pUnit",
@@ -1568,7 +1568,7 @@
       ]
     },
     {
-      "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
+      "name": "PLRSKILLS_GetParticleFromUnit_Thunk",
       "address": "004da070",
       "lines": [
         {
@@ -1578,13 +1578,13 @@
       ],
       "namespace": "D2Client::UNIT::PlrSkills",
       "calledFunctions": [
-        "PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070",
+        "PLRSKILLS_GetParticleFromUnit_Thunk",
         "GetParticleFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "8af2cd0f",
+      "dh": "1877112a",
       "paramStorage": [
         [
           "pUnit",
@@ -1593,7 +1593,7 @@
       ]
     },
     {
-      "name": "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
+      "name": "PLRSKILLS_DrawUnitShadow_Thunk",
       "address": "004dca20",
       "lines": [
         {
@@ -1603,13 +1603,13 @@
       ],
       "namespace": "D2Client::UNIT::PlrSkills",
       "calledFunctions": [
-        "PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20",
+        "PLRSKILLS_DrawUnitShadow_Thunk",
         "GFX_DrawUnitShadow"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "443076ae",
+      "dh": "bf3c49be",
       "paramStorage": [
         [
           "pUnit",

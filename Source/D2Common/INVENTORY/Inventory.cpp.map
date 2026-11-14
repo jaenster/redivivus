@@ -123,18 +123,17 @@
         "D2InventoryGridInfoStrc",
         "D2UnitStrc *",
         "int32_t",
-        "uint32_t",
         "uint8_t"
       ],
-      "dh": "d41bc646",
+      "dh": "bb44ae38",
       "paramStorage": [
         [
-          "nRow",
+          "nStartRow",
           "ECX:4"
         ],
         [
-          "nCol",
-          "EDX:4"
+          "byWidth",
+          "DL:1"
         ],
         [
           "nStartCol",
@@ -387,7 +386,7 @@
       ]
     },
     {
-      "name": "ItemBelongsToInventoryOfPlayer",
+      "name": "INVENTORY_RemoveItem",
       "address": "0063ad90",
       "lines": [
         {
@@ -397,7 +396,7 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "INVENTORY_CheckDoItemBelongToInventory",
         "INVENTORY_RemoveItemFromInventory"
       ],
@@ -405,14 +404,14 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "4cf07dd7",
+      "dh": "739494d1",
       "paramStorage": [
         [
           "pInventory",
           "Stack[0x4]:4"
         ],
         [
-          "pUnit",
+          "pItem",
           "Stack[0x8]:4"
         ]
       ]
@@ -564,7 +563,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "70077721",
+      "dh": "1e96ca8b",
       "paramStorage": [
         [
           "nnX",
@@ -701,7 +700,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "54fc5053",
+      "dh": "1df0354a",
       "paramStorage": [
         [
           "dwUnused",
@@ -795,7 +794,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "037e232e",
+      "dh": "c8ae3f19",
       "paramStorage": [
         [
           "ppnOutX",
@@ -839,7 +838,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "41b7b8fb",
+      "dh": "6906bf1a",
       "paramStorage": [
         [
           "pnOutX",
@@ -933,7 +932,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6febbf34",
+      "dh": "b4427f5b",
       "paramStorage": [
         [
           "ppnOutX",
@@ -977,7 +976,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "27b14707",
+      "dh": "de2a23ce",
       "paramStorage": [
         [
           "pnOutX",
@@ -1892,7 +1891,7 @@
       ]
     },
     {
-      "name": "CopyInventoryOfPlayerOrFree",
+      "name": "INVENTORY_SetCursorItem",
       "address": "0063c180",
       "lines": [
         {
@@ -1902,7 +1901,7 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_RemoveItemFromInventory"
       ],
       "usedTypes": [
@@ -1910,14 +1909,14 @@
         "D2ItemInventoryNodeStrc",
         "D2UnitStrc"
       ],
-      "dh": "3d86e5e8",
+      "dh": "1785f0ad",
       "paramStorage": [
         [
           "pInventory",
           "Stack[0x4]:4"
         ],
         [
-          "pItemUnit",
+          "pItem",
           "Stack[0x8]:4"
         ]
       ]
@@ -1948,7 +1947,7 @@
       ]
     },
     {
-      "name": "INVENTORY_FindSocketableItemInStash",
+      "name": "INVENTORY_FindBackpackItemForStack",
       "address": "0063c200",
       "lines": [
         {
@@ -1958,11 +1957,11 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_FindSocketableItemInStash",
-        "GetInventoryPage",
+        "INVENTORY_FindBackpackItemForStack",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "ReinitializeInventoryGrid",
-        "IsItemSocketable",
+        "ITEMS_AreStackablesEqual",
         "STATSEX_GetCurrentStat",
         "ITEM_GetMaxStack"
       ],
@@ -1974,7 +1973,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "e9dedf44",
+      "dh": "973c2a1d",
       "paramStorage": [
         [
           "pInventory",
@@ -1991,7 +1990,7 @@
       ]
     },
     {
-      "name": "INVENTORY_FindSocketableItemInMain",
+      "name": "INVENTORY_FindEquippedItemForStack",
       "address": "0063c2f0",
       "lines": [
         {
@@ -2001,9 +2000,9 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_FindSocketableItemInMain",
+        "INVENTORY_FindEquippedItemForStack",
         "ReinitializeInventoryGrid",
-        "IsItemSocketable",
+        "ITEMS_AreStackablesEqual",
         "STATSEX_GetCurrentStat",
         "ITEM_GetMaxStack"
       ],
@@ -2014,7 +2013,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0054976d",
+      "dh": "0be40af5",
       "paramStorage": [
         [
           "pInventory",
@@ -2042,7 +2041,7 @@
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
         "INVENTORY_FindMatchingScrollBook",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "ReinitializeInventoryGrid",
         "ITEM_GetItemData_wType",
@@ -2059,7 +2058,7 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "8d94af92",
+      "dh": "93bb2670",
       "paramStorage": [
         [
           "pInventory",
@@ -2745,7 +2744,7 @@
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
         "INVENTORY_FindItemByType",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "ReinitializeInventoryGrid",
         "INVENTORY_GetItemInventoryNode",
@@ -2761,7 +2760,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c7ab3b4",
+      "dh": "2e431e9e",
       "paramStorage": [
         [
           "pInventory",
@@ -2778,7 +2777,7 @@
       ]
     },
     {
-      "name": "INVENTORY_FindItemOfTypeInMain",
+      "name": "INVENTORY_GetEquippedItemByType",
       "address": "0063ce60",
       "lines": [
         {
@@ -2788,7 +2787,7 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_FindItemOfTypeInMain",
+        "INVENTORY_GetEquippedItemByType",
         "ReinitializeInventoryGrid",
         "ITEMS_IsA",
         "GetXPos"
@@ -2802,7 +2801,7 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "9e5f5add",
+      "dh": "aa309185",
       "paramStorage": [
         [
           "pInventory",
@@ -2899,7 +2898,7 @@
       ]
     },
     {
-      "name": "INVENTORY_CountSetItemsInMain",
+      "name": "INVENTORY_CountEquippedSetItems",
       "address": "0063d0f0",
       "lines": [
         {
@@ -2909,7 +2908,7 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_CountSetItemsInMain",
+        "INVENTORY_CountEquippedSetItems",
         "ReinitializeInventoryGrid",
         "GetItemQuality",
         "ITEM_GetItemData_nFileIndex",
@@ -2923,14 +2922,14 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cab1997d",
+      "dh": "32f3d555",
       "paramStorage": [
         [
           "pInventory",
           "Stack[0x4]:4"
         ],
         [
-          "nSetIndex",
+          "nItemFileIndex",
           "Stack[0x8]:4"
         ]
       ]
@@ -3101,7 +3100,7 @@
       ]
     },
     {
-      "name": "INVENTORY_GetCursorItemGUID",
+      "name": "INVENTORY_GetOwnerGUID",
       "address": "0063d450",
       "lines": [
         {
@@ -3111,13 +3110,13 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_GetCursorItemGUID"
+        "INVENTORY_GetOwnerGUID"
       ],
       "usedTypes": [
         "D2InventoryStrc",
         "int32_t"
       ],
-      "dh": "0ef0aad7",
+      "dh": "29bcf74e",
       "paramStorage": [
         [
           "pInventory",
@@ -3647,8 +3646,8 @@
         "INVENTORY_GetEquipSwapAction",
         "IsTwoHanded",
         "INVENTORY_CanDualWieldItems",
-        "IsItemSocketable",
-        "GetInventoryPage",
+        "ITEMS_AreStackablesEqual",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_CanMoveEquippedToPage"
       ],
       "usedTypes": [
@@ -3657,7 +3656,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "121638c8",
+      "dh": "ba0dce94",
       "paramStorage": [
         [
           "pUnit",
@@ -3894,7 +3893,7 @@
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
         "CopyInventory",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "ReinitializeInventoryGrid",
         "memcpy"
@@ -3906,7 +3905,7 @@
         "D2UnitStrc",
         "uint8_t"
       ],
-      "dh": "bfccddb6",
+      "dh": "9d2a3e92",
       "paramStorage": [
         [
           "pInventory",
@@ -3930,7 +3929,7 @@
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
         "INVENTORY_ReserveGridCells",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "ReinitializeInventoryGrid",
         "INVENTORY_FindItemGridPosition",
@@ -3944,7 +3943,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "026bfe8d",
+      "dh": "ae985f26",
       "paramStorage": [
         [
           "pInventory",
@@ -3961,7 +3960,7 @@
       ]
     },
     {
-      "name": "INVENTORY_CanTransferMercItems",
+      "name": "INVENTORY_CanTradeItemsFit",
       "address": "0063e2e0",
       "lines": [
         {
@@ -3971,7 +3970,7 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "INVENTORY_CanTransferMercItems",
+        "INVENTORY_CanTradeItemsFit",
         "ITEM_GetContainingInventoryPage",
         "INVENTORY_ReserveGridCells"
       ],
@@ -3982,7 +3981,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "c520dc37",
+      "dh": "039dc7f9",
       "paramStorage": [
         [
           "pUnit",
@@ -3999,7 +3998,7 @@
       ]
     },
     {
-      "name": "CreateCopyOfInventoryForTrading",
+      "name": "INVENTORY_CanItemsBeTraded",
       "address": "0063e370",
       "lines": [
         {
@@ -4009,11 +4008,11 @@
       ],
       "namespace": "D2Common::INVENTORY::Inventory",
       "calledFunctions": [
-        "CreateCopyOfInventoryForTrading",
+        "INVENTORY_CanItemsBeTraded",
         "AllocServerMemory",
         "memset",
         "CopyInventory",
-        "INVENTORY_CanTransferMercItems",
+        "INVENTORY_CanTradeItemsFit",
         "STRUCT_FreeInventory"
       ],
       "usedTypes": [
@@ -4021,7 +4020,7 @@
         "D2PoolManagerStrc",
         "D2UnitStrc"
       ],
-      "dh": "d4cd56e9",
+      "dh": "8cc2412d",
       "paramStorage": [
         [
           "pMemory",
@@ -4036,7 +4035,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "pbMercIsBuyer",
+          "pnFailedSide",
           "Stack[0x10]:4"
         ]
       ]

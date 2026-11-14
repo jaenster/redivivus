@@ -1041,7 +1041,7 @@
       ]
     },
     {
-      "name": "ComputeRectanglesManhattanDistance",
+      "name": "DRLGROOM_IsRoomClearOfOthers",
       "address": "0066b900",
       "lines": [
         {
@@ -1051,14 +1051,14 @@
       ],
       "namespace": "D2Common::Drlg::DrlgRoom",
       "calledFunctions": [
-        "ComputeRectanglesManhattanDistance"
+        "DRLGROOM_IsRoomClearOfOthers"
       ],
       "usedTypes": [
         "D2DrlgLevelStrc",
         "D2RoomExStrc",
         "int32_t"
       ],
-      "dh": "32c0d219",
+      "dh": "61a97007",
       "paramStorage": [
         [
           "pLevel",

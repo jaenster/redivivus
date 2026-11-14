@@ -77,7 +77,7 @@ D2LvlSubTxt * sgpTxtLvlSub = 0; D2_GLOBAL_GUARD(sgpTxtLvlSub, "D2Common::DATATBL
 int nTxtLvlSubSize = 0; D2_GLOBAL_GUARD(nTxtLvlSubSize, "D2Common::DATATBLS::LvlTbls::nTxtLvlSubSize");
 } // namespace D2Common::DATATBLS::LvlTbls
 static int * gpnLvlSubTypeToIndex = 0; D2_STATIC_GUARD(gpnLvlSubTypeToIndex, "gpnLvlSubTypeToIndex");
-static D2ExpansionLvlTblsTxt * pExpansionLvlTbls = 0; D2_STATIC_GUARD(pExpansionLvlTbls, "pExpansionLvlTbls");
+static D2LvlTypeTileLibrariesStrc * gpLvlTypeTileLibraries = 0; D2_STATIC_GUARD(gpLvlTypeTileLibraries, "gpLvlTypeTileLibraries");
 static D2DrlgFileStrc * * pTxtLvlTbls = 0; D2_STATIC_GUARD(pTxtLvlTbls, "pTxtLvlTbls");
 static D2DrlgFileStrc * * gpaDrlgLvlSubPresetFiles = 0; D2_STATIC_GUARD(gpaDrlgLvlSubPresetFiles, "gpaDrlgLvlSubPresetFiles");
 static D2AutoMapLvlTbls * pAutoMapLvlTbls = 0; D2_STATIC_GUARD(pAutoMapLvlTbls, "pAutoMapLvlTbls");
@@ -578,7 +578,7 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
     }
 }
 
-void __stdcall thunk_UnloadBin_DataTbls() {
+void __stdcall DATATBLS_UnloadLevelTypesTxt() {
     DataTbls::UnloadBin(pTxtLvlTypes);
 }
 
@@ -969,7 +969,7 @@ void __stdcall TXT_FreeTxt_LvlSub() {
       i = 0;
       if (nTxtLvlSubSize > 0) {
         do {
-          Drlg::DRLGMAZE_FreeRoomPresetData(&sgpTxtLvlSub[i]);
+          Drlg::DRLGTILESUB_FreeDrlgFile(&sgpTxtLvlSub[i]);
           i++;
         } while (i < nTxtLvlSubSize);
       }
@@ -1004,7 +1004,7 @@ D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType) {
 
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __fastcall TXT_LoadExpansionLvlTbls(D2PoolManagerStrc * pMemory) {
+void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(D2PoolManagerStrc * pMemory) {
     char* szFilename;
     int nFileStrOffset;
     bool bCharsMatch;
@@ -1015,8 +1015,8 @@ void __fastcall TXT_LoadExpansionLvlTbls(D2PoolManagerStrc * pMemory) {
     }
 
     size_t nAllocSize = nTxtLvlTypesSize << 0xc;
-    D2ExpansionLvlTblsTxt* pExpLvlTblsRow = (D2ExpansionLvlTblsTxt*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x413);
-    pExpansionLvlTbls = pExpLvlTblsRow;
+    D2LvlTypeTileLibrariesStrc* pExpLvlTblsRow = (D2LvlTypeTileLibrariesStrc*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\LvlTbls.cpp", 0x413);
+    gpLvlTypeTileLibraries = pExpLvlTblsRow;
     memset(pExpLvlTblsRow, 0, nAllocSize);
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int i = 0;
@@ -1049,12 +1049,12 @@ void __fastcall TXT_LoadExpansionLvlTbls(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __stdcall TXT_FreeExpansionLvlTbls() {
-    if (!pExpansionLvlTbls) {
+void __stdcall LVLTBLS_FreeLvlTypeTileLibraries() {
+    if (!gpLvlTypeTileLibraries) {
       return;
     }
 
-    D2_FREE_POOL_AT(nullptr, pExpansionLvlTbls, ".\\DATATBLS\\LvlTbls.cpp", 0x43a);
+    D2_FREE_POOL_AT(nullptr, gpLvlTypeTileLibraries, ".\\DATATBLS\\LvlTbls.cpp", 0x43a);
 }
 
 // Looks up the automap level ID for a given level name string by linearly scanning a hardcoded name table (stride 0x10, ending before 0x6E7F8F). Returns the zero-based index of the matching entry, or 0 if the input starts with '0'. Halts with an internal error if the table end is exceeded.

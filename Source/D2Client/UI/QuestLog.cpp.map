@@ -57,7 +57,7 @@
         "sprintf",
         "QUESTLOG_PopulateQuestEntry",
         "GetQuestInfo",
-        "NPCMENU_GetMercHireCost",
+        "NPCMENU_GetGameQuestRecord",
         "GetQuestState",
         "GetLocaleString",
         "WSTRING_PutWideCharIntoBuffer",
@@ -81,7 +81,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6dadbe17",
+      "dh": "4d7f6184",
       "paramStorage": [
         [
           "pEntry",
@@ -1197,7 +1197,7 @@
       "calledFunctions": [
         "QUESTLOG_IsQuestAvailableForInteraction",
         "GetQuestAvailabilityByIndex",
-        "NPCMENU_GetMercHireCost",
+        "NPCMENU_GetGameQuestRecord",
         "GetQuestState",
         "GetQuestInfo",
         "QUESTLOG_PopulateQuestEntry"
@@ -1211,7 +1211,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6df6bcd2",
+      "dh": "5bf7e081",
       "paramStorage": [
         [
           "nQuestIconIndex",

@@ -583,7 +583,7 @@
         "GFX_GetUnitSpriteOffset",
         "PARTICLE_GetX",
         "PARTICLE_GetScreenZ",
-        "DRLG_WorldToScreenShift5",
+        "DRLG_ScreenToWorldShift5",
         "DRLG_MapWorldToScreenCoords"
       ],
       "usedTypes": [
@@ -594,7 +594,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a6ed0aac",
+      "dh": "57608110",
       "paramStorage": [
         [
           "pUnit",

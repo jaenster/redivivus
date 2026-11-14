@@ -18,11 +18,11 @@ typedef void (__fastcall *pfnMCPPacketCallback)(uint16_t wPacketField, char * pP
 
 namespace D2Client::McpConnect {
 
-void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b1f0(pfnMCPMessage pfnCallback) {
+void __fastcall MCPCONNECT_SetMCPCallback1(pfnMCPMessage pfnCallback) {
     g_pfnMCPCallback1 = (pfnMCPPacketCallback)pfnCallback;
 }
 
-void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b200(pfnMCPMessage pfnCallback) {
+void __fastcall MCPCONNECT_SetMCPCallback2(pfnMCPMessage pfnCallback) {
     g_pfnMCPCallback2 = (pfnMCPPacketCallback)pfnCallback;
 }
 

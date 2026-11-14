@@ -116,8 +116,8 @@ void __stdcall SortUnitListByTargetY(D2RoomStrc * pRoom) {
       }
 
       do {
-        nTargetYCur = Units::GetTargetY(pUnitCur);
-        nTargetYNext = Units::GetTargetY(pUnit);
+        nTargetYCur = Units::GetScreenY(pUnitCur);
+        nTargetYNext = Units::GetScreenY(pUnit);
         if (nTargetYCur > nTargetYNext) {
           if (pPrev) {
             pPrev->pRoomNext = pUnit;

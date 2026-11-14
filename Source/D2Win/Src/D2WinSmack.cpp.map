@@ -4,7 +4,7 @@
   "file": "Source/D2Win/Src/D2WinSmack.cpp",
   "functions": [
     {
-      "name": "D2WINSMACK_GetTitlePrefixIndexFromClass",
+      "name": "D2COMP_GetTitleFromProgress",
       "address": "005068a0",
       "lines": [
         {
@@ -14,25 +14,25 @@
       ],
       "namespace": "D2Win::Src::D2WinSmack",
       "calledFunctions": [
-        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitleFromProgress",
         "D2COMP_GetTitlePrefix"
       ],
       "usedTypes": [
         "int32_t",
         "uint32_t"
       ],
-      "dh": "378fd39f",
+      "dh": "bd267534",
       "paramStorage": [
         [
-          "pUnused",
+          "nCharClass",
           "Stack[0x4]:4"
         ],
         [
-          "nClass",
+          "nActsCompleted",
           "Stack[0x8]:4"
         ],
         [
-          "bHasModifier",
+          "bHardcore",
           "Stack[0xc]:4"
         ],
         [
@@ -176,7 +176,7 @@
       ]
     },
     {
-      "name": "D2GFX_EnableVSync_Unref_00506a80",
+      "name": "D2WINSMACK_SetKeepTempFile",
       "address": "00506a80",
       "lines": [
         {
@@ -186,9 +186,9 @@
       ],
       "namespace": "D2Win::Src::D2WinSmack",
       "calledFunctions": [
-        "D2GFX_EnableVSync_Unref_00506a80"
+        "D2WINSMACK_SetKeepTempFile"
       ],
-      "dh": "e6200200"
+      "dh": "bf622368"
     },
     {
       "name": "Draw",

@@ -1045,7 +1045,7 @@ void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
     }
     if (bIsLinkedState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-      bHideState = D2Common::DATATBLS::ItemStats::STATES_HasHideState(pUnit);
+      bHideState = D2Common::DATATBLS::ItemStats::STATES_HasAuraFlagState(pUnit);
       if (bHideState) {
         eCastOverlay = ~OVERLAY_null;
       }
@@ -1119,7 +1119,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
       if (!(*((uint8_t*)pDVar1 + 0x14) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
-        D2Common::Stats::StatsEx::STATLIST_FreeChildStatLists(pStatList);
+        D2Common::Stats::StatsEx::STATLIST_RemoveAllStats(pStatList);
       }
     } else {
       if (pDVar1->onsound >= 0) {
@@ -1135,7 +1135,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
     STATES_AddStateOverlays(pUnit, eState);
     int bIsActive = CUnit::IsActive(pUnit);
     if (bIsActive) {
-      bActive = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit);
+      bActive = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pUnit);
       if (bActive) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
         pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
@@ -1376,11 +1376,11 @@ int32_t __fastcall PLRSKILLS_CanUseSkillCheck(D2UnitStrc * pUnit, D2SkillStrc * 
     return nCanUse;
 }
 
-void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004da070(D2UnitStrc * pUnit) {
+void __fastcall PLRSKILLS_GetParticleFromUnit_Thunk(D2UnitStrc * pUnit) {
     Engine::Gfx::GetParticleFromUnit(pUnit);
 }
 
-void __fastcall PLRSKILLS_StateRemFn10_Pregnant_Unref_004dca20(D2UnitStrc * pUnit) {
+void __fastcall PLRSKILLS_DrawUnitShadow_Thunk(D2UnitStrc * pUnit) {
     Engine::Gfx::GFX_DrawUnitShadow(pUnit);
 }
 

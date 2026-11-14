@@ -29,7 +29,7 @@ namespace D2Game {
 
 // Function declarations
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
-void __fastcall GAME_SetNoSaveFlag(BOOL bResult);
+void __fastcall PLAYERSAVE_EnableSaveFileWriting(BOOL bEnable);
 struct D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -42,7 +42,7 @@ struct D2DrlgActStrc * __stdcall QSERVER_GetActFromFirstActiveGame(int32_t nActI
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __stdcall QSERVER_CountMonstersInFirstActiveGame();
 struct D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int32_t nSubtileX, int32_t nSubtileY);
-void __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790();
+void __stdcall GAME_ClearGlobalFlag_Thunk();
 void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
@@ -59,7 +59,7 @@ void __stdcall nullsub_7Arg(struct D2UnitStrc * pUnit, uint32_t dwParam2, uint32
 // about behaviour.
 void __stdcall nullsub_B(struct D2UnitStrc * pUnit, uint32_t dwParam2, char * dwParam3);
 int __stdcall QSERVER_CountClientsWithStatusFlag0x20();
-void __fastcall GAME_SetNoSaveFlag_Unref_00544090(BOOL bResult);
+void __fastcall QUESTS_SetDebugPrint(BOOL bResult);
 // Clears the global gbQuestReconnectMode flag (sets to 0), disabling quest-reconnect mode. Called during game teardown or after reconnect handling is complete.
 void __stdcall GAME_ClearGlobalFlag();
 void __stdcall TASK_InitializeClock();
@@ -73,7 +73,7 @@ void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, struct D2UnitSt
 void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
-void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
+void __fastcall MONSTER_ScheduleEventOnGetHitOrDeath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 void __fastcall SKILLSASS_StatExpireCallback_ClearState2(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);

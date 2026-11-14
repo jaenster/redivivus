@@ -181,7 +181,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/McpConnect.cpp  # 0044b1f0 (outside the module's runs), 1 run
     Source/D2Client/ClientModeInGame.cpp  # 0044b430, 5 runs
     Source/D2Client/D2ClientRoot.cpp  # 0044b550, 39 runs
-    Source/D2Client/GAME/Game/Game.cpp  # 0044b870, 27 runs
+    Source/D2Client/GAME/Game/Game.cpp  # 0044b870, 26 runs
     Source/D2Client/GAME/Server.cpp  # 0044cf20, 1 run
     Source/D2Client/GAME/stpl_SGAMEDATA.cpp  # 0044dd90, 7 runs
     Source/D2Client/GAME/Game/SGAMEDATA.cpp  # 0044fbb0, 2 runs
@@ -601,7 +601,7 @@ set(D2_MODULE_D2Game_DATA "Source/globals/D2Game.cpp")
 set(D2_MODULE_D2Game_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Game_UNITS
     Source/D2Game/Archive.cpp  # 0045c370 (outside the module's runs), 1 run
-    Source/D2Game/GAME/Server.cpp  # 0052be20, 23 runs
+    Source/D2Game/GAME/Server.cpp  # 0052be20, 24 runs
     Source/D2Game/D2GameRoot.cpp  # 0052cbb0, 19 runs
     Source/D2Game/GAME/stpl_SGAMEDATA.cpp  # 0052e470, 4 runs
     Source/D2Game/PLAYER/PlayerSave.cpp  # 00530f40, 2 runs

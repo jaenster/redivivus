@@ -22,10 +22,10 @@
         "UNIT_GetUnitState",
         "ResetEngagedCombatAndStats",
         "SetStepNum",
-        "SetCurrentSkill"
+        "MONMODE_InitModeChange"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SeedStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -33,7 +33,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a6d12d99",
+      "dh": "04d25067",
       "paramStorage": [
         [
           "pGame",

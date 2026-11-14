@@ -746,7 +746,7 @@
       ]
     },
     {
-      "name": "SErrSetBlizzardErrorFunction_Unref_0040b370",
+      "name": "FOG_SetServerMemHeap",
       "address": "0040b370",
       "lines": [
         {
@@ -756,12 +756,12 @@
       ],
       "namespace": "Fog::Memory",
       "calledFunctions": [
-        "SErrSetBlizzardErrorFunction_Unref_0040b370"
+        "FOG_SetServerMemHeap"
       ],
       "usedTypes": [
         "pfnBlizzardError"
       ],
-      "dh": "a3d5b367",
+      "dh": "69514aaa",
       "paramStorage": [
         [
           "pfnFunc",

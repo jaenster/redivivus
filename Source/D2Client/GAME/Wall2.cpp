@@ -141,9 +141,9 @@ void __fastcall WALL2_DrawDebugUnitDiamond(D2UnitStrc * pUnit) {
     nScreenXAdj = nScreenY - nErrLine + 8;
     nErrLine = UI::Path::DRAW_GetWorldOffsetX();
     D2gfx::D2GFX::D2GFX_DrawLine(nScreenX - nErrLine + 0x10, nScreenXAdj, nScreenX2, nScreenY2, dwColor2, dwColor1);
-    nErrLine = D2Common::Units::GetTargetX(pUnit);
+    nErrLine = D2Common::Units::GetScreenX(pUnit);
     int32_t nWorldOffsetX = UI::Path::DRAW_GetWorldOffsetX();
-    int32_t nWorldOffsetTmp = D2Common::Units::GetTargetY(pUnit);
+    int32_t nWorldOffsetTmp = D2Common::Units::GetScreenY(pUnit);
     int32_t nScreenYAdj = UI::Path::DRAW_GetWorldOffsetY();
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nErrLine - nWorldOffsetX, nWorldOffsetTmp - nScreenYAdj, nErrLine - nWorldOffsetX + 4, nWorldOffsetTmp - nScreenYAdj + 4, 0xff, DRAW_SOLID);
 }
@@ -282,8 +282,8 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
       nPrecisionX = UI::Path::DRAW_GetWorldOffsetY();
       nDrawY = nDrawX + nPrecisionX;
     } else {
-      nDrawLayer = D2Common::Units::GetTargetX(pUnit);
-      nDrawY = D2Common::Units::GetTargetY(pUnit);
+      nDrawLayer = D2Common::Units::GetScreenX(pUnit);
+      nDrawY = D2Common::Units::GetScreenY(pUnit);
     }
 
     nDrawX = nDrawY;
@@ -1180,8 +1180,8 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
       }
       if (!pDVar1->nTickCount) {
         for (pUnit = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFirstUnitInRoom(pRoom_00); pUnit; pUnit = pUnit->pRoomNext) {
-          nRoom2 = D2Common::Units::GetTargetX(pUnit);
-          nDrawContext2 = D2Common::Units::GetTargetY(pUnit);
+          nRoom2 = D2Common::Units::GetScreenX(pUnit);
+          nDrawContext2 = D2Common::Units::GetScreenY(pUnit);
           D2Common::Drlg::Transform::DRLG_OrthToIsoCoordsDiv160(nRoom2, nDrawContext2, (int32_t*)&nRoom, (int32_t*)&nDrawContext);
           nCellX = nRoom - pGameView->sWall2.nWall2GridOriginX;
           nCellY = nDrawContext - pGameView->sWall2.nWall2GridOriginY;

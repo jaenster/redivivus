@@ -31,7 +31,7 @@
       ]
     },
     {
-      "name": "CHATDLG_Unused2",
+      "name": "CHATDLG_OnPressDestroyAllForms",
       "address": "004403e0",
       "lines": [
         {
@@ -41,13 +41,13 @@
       ],
       "namespace": "D2Multi",
       "calledFunctions": [
-        "CHATDLG_Unused2",
+        "CHATDLG_OnPressDestroyAllForms",
         "CHATDLG_DestroyAllForms"
       ],
       "usedTypes": [
         "D2ControlMsg"
       ],
-      "dh": "9473fa91",
+      "dh": "3a41942f",
       "paramStorage": [
         [
           "pControlMsg",

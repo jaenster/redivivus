@@ -14,7 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 namespace D2Sound::Src::D2SoundFast {
-extern int gaAmbientSoundFlags;
+extern int gnAmbientSoundEntryCount;
 // Ambient sound table for area-based background audio. Array of {char* szFilename, int bPlayed} entries. Count stored in gaAmbientSoundFlags. SOUND_PlayNextAmbientSound iterates through this table, alternates with gaAmbientSoundEntryTable based on gnAmbientSoundLanguageCode flag. Reset by SOUND_ResetAmbientSoundFlags.
 extern int gAmbientSoundTable[16];
 extern int gaAmbientSoundEntryTable[16];

@@ -14,12 +14,12 @@
       ],
       "namespace": "D2Game::SKILLS::SkillDruid",
       "calledFunctions": [
-        "SKILLNEC_ReviveCorpseAsMinion",
         "Skills_SrvDoFunc_114_SummonRaven",
         "SKILLS_GetSummonMonsterClassId",
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
         "STATLIST_SetUnitStat",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs"
       ],
       "usedTypes": [
@@ -31,7 +31,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1a8bc733",
+      "dh": "eb34047f",
       "paramStorage": [
         [
           "pGame",
@@ -501,7 +501,7 @@
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
         "CreateUnitNode",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs"
       ],
       "usedTypes": [
@@ -513,7 +513,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "dee8982c",
+      "dh": "d0272714",
       "paramStorage": [
         [
           "pGame",
@@ -549,7 +549,7 @@
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
         "CreateUnitNode",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs"
       ],
       "usedTypes": [
@@ -561,7 +561,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bc036941",
+      "dh": "77efc704",
       "paramStorage": [
         [
           "pGame",
@@ -1329,7 +1329,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_DruidSummonHpAura",
+      "name": "ITEMEVENT_CycloneArmorAbsorb",
       "address": "005c87a0",
       "lines": [
         {
@@ -1339,7 +1339,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillDruid",
       "calledFunctions": [
-        "ITEMEVENT_DruidSummonHpAura",
+        "ITEMEVENT_CycloneArmorAbsorb",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
         "SKILLDRUID_GetSummonHealthBonus",
@@ -1361,7 +1361,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9e5c91b5",
+      "dh": "91db437c",
       "paramStorage": [
         [
           "pGame",

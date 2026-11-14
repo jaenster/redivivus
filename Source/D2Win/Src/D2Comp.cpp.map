@@ -1920,14 +1920,14 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f63b5b46",
+      "dh": "742d7820",
       "paramStorage": [
         [
           "nPlayerClassId",
           "Stack[0x4]:4"
         ],
         [
-          "nClassicExpansion",
+          "nAnimMode",
           "Stack[0x8]:4"
         ],
         [

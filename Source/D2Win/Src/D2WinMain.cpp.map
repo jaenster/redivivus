@@ -4,7 +4,7 @@
   "file": "Source/D2Win/Src/D2WinMain.cpp",
   "functions": [
     {
-      "name": "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020",
+      "name": "D2WINMAIN_ClearCurrentRenderedFunctions",
       "address": "004f5020",
       "lines": [
         {
@@ -14,9 +14,9 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020"
+        "D2WINMAIN_ClearCurrentRenderedFunctions"
       ],
-      "dh": "d072ff9b"
+      "dh": "62392b61"
     },
     {
       "name": "D2WINMAIN_SetBackgroundDC6",
@@ -34,7 +34,7 @@
       "usedTypes": [
         "DC6"
       ],
-      "dh": "04ee7055",
+      "dh": "f6aa1381",
       "paramStorage": [
         [
           "pBackgroundDC6",
@@ -258,7 +258,7 @@
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "7f7b8b01",
+      "dh": "b259cda9",
       "paramStorage": [
         [
           "pControl",
@@ -497,7 +497,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e43ae2b2"
+      "dh": "f26fd6f8"
     },
     {
       "name": "DrawCursorOOG",
@@ -573,7 +573,7 @@
         "DC6",
         "int32_t"
       ],
-      "dh": "10ae1180"
+      "dh": "369f23a6"
     },
     {
       "name": "WndProc",
@@ -665,7 +665,7 @@
       ]
     },
     {
-      "name": "INPUT_FormKeyUpHandler",
+      "name": "INPUT_FormKeyDownHandler",
       "address": "004f9bf0",
       "lines": [
         {
@@ -675,8 +675,8 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "INPUT_FormKeyUpHandler",
-        "D2WINEDITBOX_HandleKeyRelease",
+        "INPUT_FormKeyDownHandler",
+        "D2WINEDITBOX_HandleKeyDown",
         "SMsgBreakHandlerChain"
       ],
       "usedTypes": [
@@ -684,7 +684,7 @@
         "D2UIMouseMsgStrc",
         "D2WinEditBox"
       ],
-      "dh": "984180e5",
+      "dh": "1f561b0b",
       "paramStorage": [
         [
           "pMsg",
@@ -693,7 +693,7 @@
       ]
     },
     {
-      "name": "INPUT_FormActivate",
+      "name": "INPUT_CtrlKeyDown",
       "address": "004f9c80",
       "lines": [
         {
@@ -703,13 +703,13 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "INPUT_FormActivate",
+        "INPUT_CtrlKeyDown",
         "SMsgBreakHandlerChain"
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "f08ca232",
+      "dh": "bf13d6d7",
       "paramStorage": [
         [
           "pMsg",
@@ -718,7 +718,7 @@
       ]
     },
     {
-      "name": "INPUT_FormDeactivate",
+      "name": "INPUT_CtrlKeyUp",
       "address": "004f9ca0",
       "lines": [
         {
@@ -728,13 +728,13 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "INPUT_FormDeactivate",
+        "INPUT_CtrlKeyUp",
         "SMsgBreakHandlerChain"
       ],
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "a1f5a4d5",
+      "dh": "2bec82de",
       "paramStorage": [
         [
           "pMsg",
@@ -900,7 +900,7 @@
       "usedTypes": [
         "D2UIMouseMsgStrc"
       ],
-      "dh": "aa6254d7",
+      "dh": "ee40dd5c",
       "paramStorage": [
         [
           "pMsg",
@@ -1020,7 +1020,7 @@
       ]
     },
     {
-      "name": "D2WINMAIN_SetFormFourth",
+      "name": "CONTROL_SetEscapeButton",
       "address": "004fa450",
       "lines": [
         {
@@ -1030,21 +1030,21 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
       "usedTypes": [
         "D2ControlStrc"
       ],
-      "dh": "312a9379",
+      "dh": "d803b2a3",
       "paramStorage": [
         [
-          "pControl",
+          "pButton",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "D2WINMAIN_GetWinMainState",
+      "name": "D2WINMAIN_IsMouseButtonDown",
       "address": "004fa460",
       "lines": [
         {
@@ -1054,12 +1054,12 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "D2WINMAIN_GetWinMainState"
+        "D2WINMAIN_IsMouseButtonDown"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "00e2a9d4"
+      "dh": "d969537d"
     },
     {
       "name": "FORMS_SetGlobalFormImage",
@@ -1091,7 +1091,7 @@
       ]
     },
     {
-      "name": "D2WINMAIN_GetFirstElement",
+      "name": "CONTROL_GetType",
       "address": "004fa490",
       "lines": [
         {
@@ -1101,15 +1101,16 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "D2WINMAIN_GetFirstElement"
+        "CONTROL_GetType"
       ],
       "usedTypes": [
-        "void *"
+        "D2ControlStrc",
+        "eD2FormType"
       ],
-      "dh": "2cff8f44",
+      "dh": "43549275",
       "paramStorage": [
         [
-          "ppHead",
+          "pControl",
           "Stack[0x4]:4"
         ]
       ]
@@ -1301,7 +1302,7 @@
       ]
     },
     {
-      "name": "INPUT_FormTabKey",
+      "name": "INPUT_FormEscapeKey",
       "address": "004fa760",
       "lines": [
         {
@@ -1311,16 +1312,16 @@
       ],
       "namespace": "D2Win::Src::D2WinMain",
       "calledFunctions": [
-        "INPUT_FormTabKey",
+        "INPUT_FormEscapeKey",
         "D2WINBUTTON_InvokeClickCallback",
         "SMsgBreakHandlerChain",
-        "INPUT_FormKeyUpHandler"
+        "INPUT_FormKeyDownHandler"
       ],
       "usedTypes": [
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "7c5976bf",
+      "dh": "2df027b9",
       "paramStorage": [
         [
           "pMsg",
@@ -1396,7 +1397,7 @@
         "D2ControlStrc",
         "D2UIMouseMsgStrc"
       ],
-      "dh": "6b0b18ef",
+      "dh": "22106970",
       "paramStorage": [
         [
           "pMsg",

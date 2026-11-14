@@ -318,7 +318,7 @@
       "namespace": "D2Game::Quests::QUESTS::A1Q5",
       "calledFunctions": [
         "OBJOP_A1Q5_ReadTowerTome",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "GetQuestDataByQuestNoInternal",
@@ -331,7 +331,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "79aaf061",
+      "dh": "4a3f8181",
       "paramStorage": [
         [
           "pOperation",
@@ -963,7 +963,7 @@
       "calledFunctions": [
         "Objects_InitFn04_TowerTome",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -973,7 +973,7 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "5dab963b",
+      "dh": "28db7529",
       "paramStorage": [
         [
           "pInitArg",

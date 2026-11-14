@@ -406,7 +406,7 @@ void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 
     pSubAi->nState = 1;
-    UNIT::SUNITNPC::Init(pGame, pUnit, pTargetUnit);
+    UNIT::SUNITNPC::SUNITNPC_OnInteractHeal(pGame, pUnit, pTargetUnit);
 }
 
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {

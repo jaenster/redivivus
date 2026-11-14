@@ -32,7 +32,7 @@
       ]
     },
     {
-      "name": "RENDERER_TogglePerspective_Unref_00474140",
+      "name": "LIGHTMAP_ToggleColorEnabled",
       "address": "00474140",
       "lines": [
         {
@@ -42,9 +42,9 @@
       ],
       "namespace": "D2Client::Draw::LightMap",
       "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_00474140"
+        "LIGHTMAP_ToggleColorEnabled"
       ],
-      "dh": "083c852e"
+      "dh": "c1c3e19a"
     },
     {
       "name": "AllocLightMap",

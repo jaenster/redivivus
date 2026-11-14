@@ -352,8 +352,8 @@
         "SaveNPC",
         "GetPlayerData",
         "memset",
-        "CopyBufferToPointer",
-        "CopySizeAndPosToBuffer"
+        "PLAYERINTRO_CopyIntroToBuffer",
+        "PLAYERINTRO_CopyIntro2ToBuffer"
       ],
       "usedTypes": [
         "D2SaveFileNpcStrc",
@@ -367,7 +367,7 @@
         "uint8_t *",
         "uint8_t[8]"
       ],
-      "dh": "cf214ddf",
+      "dh": "00eafa57",
       "paramStorage": [
         [
           "pGame",
@@ -870,7 +870,7 @@
         "GetCharName",
         "SetNameInPlayerData",
         "SetSeed",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetPlayerData"
       ],
       "usedTypes": [
@@ -879,7 +879,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe50d006",
+      "dh": "f6cf7423",
       "paramStorage": [
         [
           "pGame",
@@ -992,7 +992,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d5a1677d",
+      "dh": "ac132205",
       "paramStorage": [
         [
           "pGame",
@@ -1497,7 +1497,7 @@
         "MERC_ApplyLevelStats",
         "SERVERUNIT_RemovePetFromUnit",
         "FreeCombatAndChangeAnimMode",
-        "MONSTER_StartAiAndRegenTimers",
+        "MONSTER_RemoveAiAndRegenTimers",
         "STRUCT_CreatePlayerInventory",
         "FreeServerUnit"
       ],
@@ -1510,7 +1510,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a9ab7bd4",
+      "dh": "62e5b490",
       "paramStorage": [
         [
           "pGame",
@@ -1546,7 +1546,7 @@
         "ITEMS_RecalcAndRefreshInventory",
         "ITEMMODE_ReturnZero3",
         "CheckForModeZeroDeath",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
@@ -1555,7 +1555,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "2e2646fb",
+      "dh": "f8a4db76",
       "paramStorage": [
         [
           "pGame",
@@ -1603,7 +1603,7 @@
         "ITEM_CreateFromSaveData",
         "TASK_Nop",
         "FreeServerUnit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetGUID",
         "PutItemInItem",
         "ITEM_GetItemData_eD2ItemFlag",
@@ -1623,7 +1623,7 @@
         "uint8_t",
         "uint8_t *"
       ],
-      "dh": "071f49a8",
+      "dh": "33a1819f",
       "paramStorage": [
         [
           "pGame",
@@ -1666,7 +1666,7 @@
         "SKILLS_GetSkillByEnum",
         "SetCurrentSkill",
         "CreateItemIronGolemItem",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SUNIT_GetClient",
         "SetGolem"
       ],
@@ -1679,7 +1679,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "54016e61",
+      "dh": "6cbd90dc",
       "paramStorage": [
         [
           "pGame",
@@ -1758,7 +1758,7 @@
         "GetInventoryGoldLimit",
         "STATLIST_SetUnitStat",
         "GetStashGoldLimit",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxStaminaFromUnit",
         "GetHotKey",
         "HOTKEY_GetAssignedItemGUID",
         "SetGotkeyInfo",
@@ -1776,7 +1776,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4d5b23b2",
+      "dh": "2e9211b7",
       "paramStorage": [
         [
           "pGameStrc",

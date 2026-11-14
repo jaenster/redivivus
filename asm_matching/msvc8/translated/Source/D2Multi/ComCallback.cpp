@@ -300,7 +300,7 @@ static uint32_t gnCurrentChannelContextId = -0x1; D2_STATIC_GUARD(gnCurrentChann
 static pfnComCallback gaComCallbackDispatch[24] = {
     &D2Multi::ComCallback::COMCALLBACK_ReturnTrue,
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_AddChannelUser,
-    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_Unused3,
+    (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_OnChannelUserJoinedCallback,
     (pfnComCallback)&D2Multi::ComCallback::COMCALLBACK_HandleChannelUserLeave,
     &D2Multi::ComCallback::COMCALLBACK_HandleWhisperReply,
     &D2Multi::ComCallback::COMCALLBACK_HandleWhisperMessage,
@@ -2236,7 +2236,7 @@ static void COMCALLBACK_OnChannelUserJoined(uint32_t * pCharData, uint32_t dwSta
     PrintChannelText(szNotifyMsg, 5);
 }
 
-BOOL __fastcall COMCALLBACK_Unused3(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername) {
+BOOL __fastcall COMCALLBACK_OnChannelUserJoinedCallback(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername) {
     COMCALLBACK_OnChannelUserJoined(pszUsername, dwStatusFlags, pCharData);
     return 1;
 }

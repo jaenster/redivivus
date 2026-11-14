@@ -541,7 +541,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
     }
 
-    nMercType = D2Common::Stats::StatsEx::STATLIST_HasChangedStats(pUnit);
+    nMercType = D2Common::Stats::StatsEx::STATLIST_IsOverlayPending(pUnit);
     if (nMercType) {
       SUnitMsg::PLAYER_SendOverlayToClient(pUnit, pClient);
     }

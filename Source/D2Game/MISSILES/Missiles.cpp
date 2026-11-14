@@ -20,7 +20,7 @@
 
 namespace D2Game::MISSILES::Missiles {
 
-void __fastcall FreeMissiles(::SGAMEDATA * pGame) {
+void __fastcall ITEMS_RemoveAll(::SGAMEDATA * pGame) {
     D2UnitStrc** ppUnitSlot = pGame->pUnitList[3];
     int nSlotCount = 0x80;
     do {
@@ -81,7 +81,7 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     }
 
     int nPierceStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_skill_pierce, 0);
-    int32_t nItemPierceStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_pierce, 0);
+    int32_t nItemPierceStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_pierce, 0);
     if (!(nPierceStat + nItemPierceStat)) {
       return;
     }
@@ -286,7 +286,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
     }
 
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, gaMissileSrvDoFuncTable[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     }
@@ -332,7 +332,7 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
       D2Common::Units::Missile::SetFlags(pUnit, dwFlags);
     }
 
-    Monsters::MONSTER_DispatchUModOnSkill(pGame, pArgs->pOwner, pUnit);
+    Monsters::MONSTER_DispatchUModMissile(pGame, pArgs->pOwner, pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damage_framerate, pMissileTxt->DamageRate, 0);
     return pUnit;
 }

@@ -1006,7 +1006,7 @@
         "RANDOM_RandomNumberSelector",
         "MISSILE_RollElementalDamage",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "SetOverlay",
         "IsDemon",
@@ -1021,7 +1021,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ae024b4b",
+      "dh": "7bb757a8",
       "paramStorage": [
         [
           "pGame",
@@ -2211,7 +2211,7 @@
         "GetOwnerUnit",
         "memset",
         "MISSILES_CalculateElementalDamage",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat"
       ],
@@ -2222,7 +2222,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7c269811",
+      "dh": "af1819cc",
       "paramStorage": [
         [
           "pGame",
@@ -2327,7 +2327,7 @@
         "FindUnitFromTable",
         "UNITS_GetRoom",
         "ToggleHasPortalFlagRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -2338,7 +2338,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "5ce0284c",
+      "dh": "c5624c1f",
       "paramStorage": [
         [
           "pGame",
@@ -2621,7 +2621,7 @@
         "SKILL_CalcMaxDamage",
         "RANDOM_RandomNumberSelector",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "SetOverlay",
         "STATLIST_SetUnitStat"
       ],
@@ -2633,7 +2633,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8cf42d8a",
+      "dh": "925d523d",
       "paramStorage": [
         [
           "pGame",
@@ -3851,14 +3851,14 @@
       "namespace": "D2Game::MISSILES::MissilesMode",
       "calledFunctions": [
         "MISSMODE_RedemptionHitNoMana",
-        "SKILLSOR_GetBlizzardSubMissileCount"
+        "SKILLPAL_ApplyRedemptionEffect"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "702af86b",
+      "dh": "f749862c",
       "paramStorage": [
         [
           "pGame",
@@ -3894,14 +3894,14 @@
       "namespace": "D2Game::MISSILES::MissilesMode",
       "calledFunctions": [
         "MISSMODE_RedemptionHitWithMana",
-        "SKILLSOR_GetBlizzardSubMissileCount"
+        "SKILLPAL_ApplyRedemptionEffect"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "bbc47046",
+      "dh": "fca6aa01",
       "paramStorage": [
         [
           "pGame",
@@ -4350,7 +4350,7 @@
         "Hits",
         "GetOwnerUnit",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "getDamageTarget",
         "UNIT_GetUnitState",
         "CheckUnitIfOwner",
@@ -4377,7 +4377,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f69a710a",
+      "dh": "169f00f3",
       "paramStorage": [
         [
           "pGame",
@@ -5480,7 +5480,7 @@
         "GetLevel",
         "GetRemainingFrames",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2GetSkillCalc",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -5495,7 +5495,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "537ac233",
+      "dh": "6878d922",
       "paramStorage": [
         [
           "pGame",
@@ -5525,7 +5525,7 @@
         "GetLevel",
         "GetRemainingFrames",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "D2GetSkillCalc",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -5540,7 +5540,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "44d4365c",
+      "dh": "bb0813ac",
       "paramStorage": [
         [
           "pGame",

@@ -868,7 +868,7 @@ void __fastcall SUNITPROXY_ProcessNpcItemQueue(::SGAMEDATA * pGame, D2UnitStrc *
           pInventoryItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInventoryItem);
           nGambleRefillCount = D2Common::ITEMS::Items::GetItemQuality(pCarriedItem);
           if (nGambleRefillCount == 4) {
-            SUNITNPC::SUNITNPC_FillNpcInventory(pNpcUnit, pCarriedItem, pGame, 0);
+            SUNITNPC::SUNITNPC_RemoveStoreItem(pNpcUnit, pCarriedItem, pGame, 0);
             nNpcIndex--;
           }
         }
@@ -889,8 +889,8 @@ void __fastcall SUNITPROXY_ProcessNpcItemQueue(::SGAMEDATA * pGame, D2UnitStrc *
         nGambleRefillCount = ITEMS::ItemMode::SERVER_ItemToInventory(".\\UNIT\\sunitproxy.cpp", 0x3cb, pGame, pNpcUnit, nGambleRefillCount, 0, 0, 1, 1, nullptr);
         if (!nGambleRefillCount) {
           eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pMemoryToFree->pUnit);
-          if (eInvPage == INVPAGE_CORPSE) {
-            D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pMemoryToFree->pUnit, INVPAGE_MERC);
+          if (eInvPage == INVPAGE_TRADEGRID1) {
+            D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pMemoryToFree->pUnit, INVPAGE_TRADEGRID2);
             if (!pMemoryToFree->pUnit) {
               nGambleRefillCount = -1;
               nSourceLine = 0x3d1;
@@ -906,8 +906,8 @@ void __fastcall SUNITPROXY_ProcessNpcItemQueue(::SGAMEDATA * pGame, D2UnitStrc *
             }
           } else {
             eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pMemoryToFree->pUnit);
-            if (eInvPage == INVPAGE_MERC) {
-              D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pMemoryToFree->pUnit, INVPAGE_CORPSE);
+            if (eInvPage == INVPAGE_TRADEGRID2) {
+              D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pMemoryToFree->pUnit, INVPAGE_TRADEGRID1);
               if (!pMemoryToFree->pUnit) {
                 nGambleRefillCount = -1;
               } else {
@@ -971,32 +971,32 @@ D2SeedStrc * __fastcall SUNITPROXY_GetNpcControl(::SGAMEDATA * pGame) {
 
 // Server-side: removes a player (identified by pUnit->nUnitGUID, or -1 if null) from an NPC's proxy list and interaction list. Frees inventory items and the inventory struct if a proxy inventory existed, then frees the proxy and interaction list nodes from the game memory pool.
 // @sourcefile .\UNIT\sunitproxy.cpp
-void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PoolManagerStrc * pMemory) {
+void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pNpcUnit) {
     int32_t nPlayerClassId;
     D2NpcProxyInventoryStrc* pNextProxyEntry;
     D2NpcProxyInventoryStrc* pProxyEntry;
     D2NpcProxyInventoryStrc* pProxyEntryIter;
-    int nMemory;
-    if (!pMemory) {
+    int nNpcUnit;
+    if (!pNpcUnit) {
       nPlayerClassId = -1;
     } else {
-      nPlayerClassId = (int32_t)pMemory->pSync.DebugInfo;
+      nPlayerClassId = pNpcUnit->nClassId;
     }
 
-    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nPlayerClassId, (int*)&pMemory);
+    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nPlayerClassId, (int*)&pNpcUnit);
     if (!pNpc) {
       return;
     }
-    if (!pUnit) {
-      nMemory = -1;
+    if (!pPlayer) {
+      nNpcUnit = -1;
     } else {
-      nMemory = pUnit->nUnitGUID;
+      nNpcUnit = pPlayer->nUnitGUID;
     }
     if (pNpc->flags0x0C) {
       pNextProxyEntry = pNpc->pProxyInventories;
       pProxyEntryIter = 0;
       while (pProxyEntry = pNextProxyEntry) {
-        if (pProxyEntry->nPlayerGUID == nMemory) {
+        if (pProxyEntry->nPlayerGUID == nNpcUnit) {
           if (pProxyEntryIter) {
             pProxyEntryIter->pNext = pProxyEntry->pNext;
           } else {
@@ -1022,7 +1022,7 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
 
     D2NpcPlayerInteractionStrc* pPrevInteraction = 0;
     D2NpcPlayerInteractionStrc* pInteractionEntry = pNpc->pPlayerInteractions;
-    while (pInteractionEntry->nPlayerGUID != nMemory) {
+    while (pInteractionEntry->nPlayerGUID != nNpcUnit) {
       D2NpcPlayerInteractionStrc** pInteractionIter;
       pInteractionIter = &pInteractionEntry->pNext;
       pPrevInteraction = pInteractionEntry;
@@ -1041,24 +1041,24 @@ void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, D2UnitStrc *
     D2_FREE_POOL_AT(pGame->pMemoryPool, pInteractionEntry, ".\\UNIT\\sunitproxy.cpp", 0x4a7);
 }
 
-D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pGame, D2UnitStrc * pNpcUnit, D2UnitStrc * pPlayerUnit) {
+D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pNpcUnit) {
     int nPlayerGuid;
     int32_t nNpcClassId;
     D2NpcProxyInventoryStrc* pProxyEntry;
-    if (!pPlayerUnit) {
+    if (!pNpcUnit) {
       nNpcClassId = -1;
     } else {
-      nNpcClassId = pPlayerUnit->nClassId;
+      nNpcClassId = pNpcUnit->nClassId;
     }
 
-    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nNpcClassId, (int*)&pPlayerUnit);
+    D2GameNpcStrc* pNpc = GetGameNpcbyClassId(pGame, nNpcClassId, (int*)&pNpcUnit);
     if (!(pNpc && pNpc->flags0x0C)) {
       return nullptr;
     }
-    if (!pNpcUnit) {
+    if (!pPlayer) {
       nPlayerGuid = -1;
     } else {
-      nPlayerGuid = pNpcUnit->nUnitGUID;
+      nPlayerGuid = pPlayer->nUnitGUID;
     }
 
     for (pProxyEntry = pNpc->pProxyInventories; pProxyEntry; pProxyEntry = pProxyEntry->pNext) {
@@ -1440,14 +1440,14 @@ void __fastcall IterateNpcIntroUnits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD
     }
 }
 
-void __fastcall SERVER_InitClassicTowns(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall SUNITPROXY_OnClientRemoved(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     D2LevelPlayerCountArgStrc sArgs;
     char nActByte;
     if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER) {
       return;
     }
 
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pPlayer);
     if (!pRoom) {
       return;
     }
@@ -1475,14 +1475,14 @@ void __fastcall SERVER_InitClassicTowns(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     SUNITPROXY_UpdateNpcProxiesForAct(pGame, nActByte, (uint32_t)!sArgs.nCount);
 }
 
-void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * nNpcProxy, D2ClientStrc * pClient) {
-    SendUpdatedItemsToClient(pGame, pUnit, pClient, nullptr);
-    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, nNpcProxy, pUnit);
+void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pNpc, D2UnitStrc * pPlayer, D2ClientStrc * pClient) {
+    SendUpdatedItemsToClient(pGame, pNpc, pClient, nullptr);
+    D2InventoryStrc* pInventory = SUNITPROXY_GetPlayerProxyInventory(pGame, pPlayer, pNpc);
     if (!pInventory) {
       return;
     }
 
-    SendUpdatedItemsToClient(pGame, pUnit, pClient, pInventory);
+    SendUpdatedItemsToClient(pGame, pNpc, pClient, pInventory);
 }
 
 } // namespace D2Game::UNIT::sunitproxy

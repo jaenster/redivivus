@@ -124,7 +124,7 @@
       ]
     },
     {
-      "name": "SPRITECACHE_SetMaxSize",
+      "name": "SPRITECACHE_SetFreeEntryCallback",
       "address": "005fe000",
       "lines": [
         {
@@ -134,12 +134,15 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_SetMaxSize"
+        "SPRITECACHE_SetFreeEntryCallback"
       ],
-      "dh": "f409cf0f",
+      "usedTypes": [
+        "pfnLruFreeEntry"
+      ],
+      "dh": "232a6103",
       "paramStorage": [
         [
-          "nSize",
+          "pfnFreeEntry",
           "ECX:4"
         ]
       ]
@@ -616,7 +619,7 @@
       ]
     },
     {
-      "name": "SPRITECACHE_Unlock_Unref_005fee00",
+      "name": "GFXHASH_InitIgnoreList_Thunk",
       "address": "005fee00",
       "lines": [
         {
@@ -626,13 +629,13 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_Unlock_Unref_005fee00",
+        "GFXHASH_InitIgnoreList_Thunk",
         "IGNORELIST_Initialize_Unref_0060ab70"
       ],
-      "dh": "c9fb22ea"
+      "dh": "7c5d4e6f"
     },
     {
-      "name": "SPRITECACHE_GetTotalEntries",
+      "name": "SPRITECACHE_GetMemUsage",
       "address": "005fee10",
       "lines": [
         {
@@ -642,12 +645,12 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_GetTotalEntries"
+        "SPRITECACHE_GetMemUsage"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b3277db9"
+      "dh": "15f12864"
     },
     {
       "name": "SPRITECACHE_GetCacheSize",
@@ -668,7 +671,7 @@
       "dh": "7972b651"
     },
     {
-      "name": "SPRITECACHE_Unlock_Unref_005fee50",
+      "name": "CELDATAHASH_InitIgnoreList_Thunk",
       "address": "005fee50",
       "lines": [
         {
@@ -678,13 +681,13 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_Unlock_Unref_005fee50",
+        "CELDATAHASH_InitIgnoreList_Thunk",
         "IGNORELIST_Initialize_Unref_0060b130"
       ],
-      "dh": "9397fa98"
+      "dh": "64668ca1"
     },
     {
-      "name": "SPRITECACHE_GetMaxSize",
+      "name": "CELDATACACHE_GetMemUsage",
       "address": "005fee60",
       "lines": [
         {
@@ -694,12 +697,12 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_GetMaxSize"
+        "CELDATACACHE_GetMemUsage"
       ],
-      "dh": "62fea275"
+      "dh": "8dc265d0"
     },
     {
-      "name": "SPRITECACHE_GetCurrentSize",
+      "name": "CELDATACACHE_GetMemLimit",
       "address": "005fee70",
       "lines": [
         {
@@ -709,12 +712,12 @@
       ],
       "namespace": "D2CMP::SRC::SpriteCache",
       "calledFunctions": [
-        "SPRITECACHE_GetCurrentSize"
+        "CELDATACACHE_GetMemLimit"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e02daece"
+      "dh": "81ed6ce0"
     },
     {
       "name": "Unreferenced_005fee80",

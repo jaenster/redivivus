@@ -17,7 +17,7 @@
 namespace Fog::SMem {
 
 // Function declarations
-int32_t __stdcall SMemSizeClassBucketLookup(uint32_t nAllocSize);
+int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits);
 DWORD __stdcall GetTickCount();
 uint16_t __stdcall HashForName(char * szText);
 // Module-private: no other module references these

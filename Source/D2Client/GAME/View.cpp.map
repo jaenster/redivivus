@@ -280,7 +280,7 @@
         "VIEW_FreeDC6Images",
         "DC6_FreeAndDelete"
       ],
-      "dh": "8ca2ebbc"
+      "dh": "e0de4e5a"
     },
     {
       "name": "VIEW_FreeLookupTables",
@@ -652,7 +652,7 @@
       "namespace": "D2Client::GAME::View",
       "calledFunctions": [
         "DRAW_Background_Ancients",
-        "GetTargetX",
+        "GetScreenX",
         "IMAGE_LoadDC6Ex",
         "memset",
         "D2GFX_DrawImage",
@@ -671,7 +671,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "628b3121",
+      "dh": "65650cff",
       "paramStorage": [
         [
           "pPlayerUnit",
@@ -680,7 +680,7 @@
       ]
     },
     {
-      "name": "RENDERER_TogglePerspective_Unref_004769b0",
+      "name": "VIEW_ToggleFrameDrawCounter",
       "address": "004769b0",
       "lines": [
         {
@@ -690,9 +690,9 @@
       ],
       "namespace": "D2Client::GAME::View",
       "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_004769b0"
+        "VIEW_ToggleFrameDrawCounter"
       ],
-      "dh": "312deb24"
+      "dh": "949383d7"
     },
     {
       "name": "SHAKE_UpdateShakeSoundVolume",
@@ -845,7 +845,7 @@
         "GetPlayerUnit_UI",
         "GetPrecisionX",
         "GetPrecisionY",
-        "DRLG_WorldToScreenShift5",
+        "DRLG_ScreenToWorldShift5",
         "D2GFX_SetPerspectiveScale",
         "gnRecordingIndex",
         "dLightMapUpdate",
@@ -874,7 +874,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f3f87ea",
+      "dh": "f45b2091",
       "paramStorage": [
         [
           "pGameView",

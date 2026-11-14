@@ -91,7 +91,7 @@ BOOL __fastcall Q22_IsGoldenBirdQuestActive(::SGAMEDATA * pGame) {
 }
 
 // Q22_ClearGoldenBirdQuestFlag — clears the Golden Bird quest's in-memory flag (bBloodRavenKilled alias). Cross-quest reset helper; no quest-record state calls.
-void __fastcall Q22_ClearGoldenBirdQuestFlag(::SGAMEDATA * pGame) {
+void __fastcall Q21_ClearGoldenBirdQuestFlag(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGoldenBird);
     if (!pQuestData) {
       return;
@@ -875,7 +875,7 @@ BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation)
           Monster::AI::AI_Boss_LaunchOrbAtObject(pOperation->sArg.pGame, pWeaponOrVictim);
         }
 
-        D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+        D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
         pWeaponOrVictim = pOperation->sArg.pVictim;
         if (!pWeaponOrVictim) {
           nClassId = -1;
@@ -916,7 +916,7 @@ void __fastcall Objects_InitFn53_MephistoDoor(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 // Objects_InitFn60 (BLACKENED TEMPLE) — object InitFn that spawns the Compelling-Orb amulet/guardian. If the in-memory init flag (field_0x0C) is set, marks the object updated. If the amulet hasn't been spawned yet (bHasViperAmulet false), spawns monster class 0x16e (the orb/amulet unit) Neutral, flags it, records its GUID, and marks bHasViperAmulet. No quest-record state calls.
@@ -924,7 +924,7 @@ void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
     D2QuestDataA2Q2Strc* pQuestSpecificData = (D2QuestDataA2Q2Strc*)pQuestData->pQuestSpecificData.pA2Q2;
     if ((char)pQuestSpecificData->field_0x0C != '\0') {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
     }
     if (pQuestSpecificData->bHasViperAmulet) {
       return;
@@ -968,7 +968,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
         nDropLoop = 0;
         if (pDVar1->nFlailDropPlayerCount > 0) {
           do {
-            pTargetUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_PlayerBodyPart, &nRewardItemGUID, nullptr, -1, 0);
+            pTargetUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_UNIQUE, &nRewardItemGUID, nullptr, -1, 0);
             if (pTargetUnit) {
               nKhalimsWillDropCount++;
             }
@@ -990,7 +990,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
         pDVar1->bBoxDropped = true;
         pQuestArgs->pTarget->dwDropItemCode = 0x20786f62;
         for (nDropLoop = 0; nDropLoop < pDVar1->nBoxDropPlayerCount; nDropLoop++) {
-          ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nRewardItemGUID, nullptr, -1, 0);
+          ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nRewardItemGUID, nullptr, -1, 0);
         }
       }
       if (pQuestData->bIsNotIntroduction != '\0' && pDVar1->nCouncilKillsRemaining > 0) {

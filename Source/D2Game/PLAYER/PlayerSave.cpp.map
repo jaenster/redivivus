@@ -52,7 +52,7 @@
       "calledFunctions": [
         "PLRSAVE_RestoreItemFromSaveData",
         "PLRSAVE_CreateItemFromSaveData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_GetItemsTxt_nWidthAndHeight",
         "SetXForStaticUnit",
         "SetYForStaticUnit",
@@ -61,8 +61,8 @@
         "SERVER_ItemToInventory",
         "SERVER_EquipItemToBodyLoc",
         "ITEM_TryPlaceInBelt",
-        "CopyInventoryOfPlayerOrFree",
-        "ITEMMODE_ApplyQuestReward",
+        "INVENTORY_SetCursorItem",
+        "ITEMMODE_PutItemOnCursor",
         "PutItemInItem"
       ],
       "usedTypes": [
@@ -74,7 +74,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "19bb7b48",
+      "dh": "8e119eb0",
       "paramStorage": [
         [
           "pGame",
@@ -110,15 +110,15 @@
       "namespace": "D2Game::PLAYER::PlayerSave",
       "calledFunctions": [
         "PLRSAVE_RestoreItemToUnit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "SERVER_ItemToInventory",
         "GetBodyLocation",
         "SERVER_EquipItemToBodyLoc",
         "ITEM_TryPlaceInBelt",
-        "CopyInventoryOfPlayerOrFree",
-        "ITEMMODE_ApplyQuestReward",
+        "INVENTORY_SetCursorItem",
+        "ITEMMODE_PutItemOnCursor",
         "PutItemInItem"
       ],
       "usedTypes": [
@@ -130,7 +130,7 @@
         "eD2ItemAnimMode",
         "int32_t"
       ],
-      "dh": "9da91d1b",
+      "dh": "61baea56",
       "paramStorage": [
         [
           "pGame",
@@ -163,7 +163,7 @@
       "calledFunctions": [
         "PLRSAVE_RestoreEquippedItem",
         "PLRSAVE_CreateItemFromSaveData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetXForStaticUnit",
         "SetYForStaticUnit",
         "GetYPosFromDynamicPathUnit",
@@ -191,7 +191,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d4268d56",
+      "dh": "2b0ac57c",
       "paramStorage": [
         [
           "pGame",
@@ -227,7 +227,7 @@
       "namespace": "D2Game::PLAYER::PlayerSave",
       "calledFunctions": [
         "PLRSAVE_RestoreItemToBodyLoc",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetYPos",
         "GetXPos",
         "SERVER_ItemToInventory",
@@ -252,7 +252,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0aa8582a",
+      "dh": "7c8beed5",
       "paramStorage": [
         [
           "pUnit",
@@ -652,7 +652,7 @@
       ]
     },
     {
-      "name": "PLAYERSAVE_CRC32MissileTable",
+      "name": "PLAYERSAVE_CalculateChecksum",
       "address": "00531e30",
       "lines": [
         {
@@ -662,22 +662,22 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerSave",
       "calledFunctions": [
-        "PLAYERSAVE_CRC32MissileTable",
+        "PLAYERSAVE_CalculateChecksum",
         "CRC32_Calculate"
       ],
       "usedTypes": [
-        "D2MissilesTxt",
+        "D2SaveFileHeaderStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "396896cb",
+      "dh": "7f18a74f",
       "paramStorage": [
         [
-          "pMissilesTxt",
+          "pSaveHeader",
           "ECX:4"
         ],
         [
-          "nCrcSeed",
+          "nSize",
           "EDX:4"
         ]
       ]
@@ -697,12 +697,12 @@
         "__security_check_cookie",
         "MakeSaveFile",
         "SUNIT_GetClient",
-        "GetSavePacketList",
-        "PLAYERSAVE_CRC32MissileTable",
+        "GetSaveChecksum",
+        "PLAYERSAVE_CalculateChecksum",
         "GetSaveGame",
         "GetSaveGameSize",
         "SetRealm",
-        "SetSavePacketList",
+        "SetSaveChecksum",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -716,7 +716,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b3516ee6",
+      "dh": "777b7c4d",
       "paramStorage": [
         [
           "pGame",
@@ -780,7 +780,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a4519f4",
+      "dh": "7c023af4",
       "paramStorage": [
         [
           "pGame",
@@ -922,7 +922,7 @@
         "GetCharName",
         "SetNameInPlayerData",
         "SetSeed",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetPlayerData"
       ],
       "usedTypes": [
@@ -931,7 +931,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0100dca1",
+      "dh": "df8c38f6",
       "paramStorage": [
         [
           "pGame",
@@ -1040,7 +1040,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d4126006",
+      "dh": "b87da559",
       "paramStorage": [
         [
           "pGame",
@@ -1231,9 +1231,9 @@
         "_oldSaveGameLoadingPart5",
         "STATLIST_SetUnitStat",
         "ARENA_IsArenaLevel",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina"
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -1243,7 +1243,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c150cfdb",
+      "dh": "2d7e120f",
       "paramStorage": [
         [
           "pGame",
@@ -1384,7 +1384,7 @@
         "ReadSigned",
         "TXT_Items_ConvertItemCodeToItemClassId",
         "GetNextPositon",
-        "TXT_Items_GetVersion",
+        "DATATBLS_MapOldItemIndexToCurrent",
         "TXT_Items_GetLine"
       ],
       "usedTypes": [
@@ -1394,7 +1394,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d2524c3",
+      "dh": "86355318",
       "paramStorage": [
         [
           "pItemUnknownStructure",
@@ -1817,11 +1817,11 @@
         "STRUCT_CreatePlayerInventory",
         "SERVERUNIT_RemovePetFromUnit",
         "FreeCombatAndChangeAnimMode",
-        "MONSTER_StartAiAndRegenTimers",
+        "MONSTER_RemoveAiAndRegenTimers",
         "PLRSAVE_DispatchItemLoadByFormat",
         "ITEMS_RecalcAndRefreshInventory",
         "ITEMMODE_ReturnZero3",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "SendMercPackets"
       ],
       "usedTypes": [
@@ -1834,7 +1834,7 @@
         "uint32_t *",
         "uint8_t"
       ],
-      "dh": "2afa5230",
+      "dh": "28a0f587",
       "paramStorage": [
         [
           "pUnit",
@@ -1886,7 +1886,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fa61789c",
+      "dh": "6716d0c1",
       "paramStorage": [
         [
           "pUnit",

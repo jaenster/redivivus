@@ -17,11 +17,6 @@
 
 namespace D2MCPClient { namespace McpConnect {
 
-#if 0 // ratchet: the match body of 00449bf0 (evidence 1985bb0f9) could not be re-spelled: returns , was void; parameter 0 retyped: int32_t -> ( noinline )
-void __stdcall SetD2GSJoinResult(int32_t nResult) {
-    D2GSJoinResult = nResult;
-}
-#endif
 __declspec(noinline) inline void __stdcall SetD2GSJoinResult(int32_t nResult) {
     D2GSJoinResult = nResult;
 }

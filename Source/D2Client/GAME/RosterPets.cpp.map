@@ -132,9 +132,9 @@
         "exit",
         "UNITS_FindClientSideUnit",
         "MERC_InitializeFromPacket",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "MONSTER_InitLightMap",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2MercInitArgStrc",
@@ -143,7 +143,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "057b3625",
+      "dh": "33e6a803",
       "paramStorage": [
         [
           "nRosterGUID",
@@ -411,7 +411,7 @@
       "calledFunctions": [
         "UpdateLifeAndArea",
         "UNITS_FindClientSideUnit",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
@@ -420,7 +420,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "bfb35558",
+      "dh": "1830adf1",
       "paramStorage": [
         [
           "nRosterGUID",

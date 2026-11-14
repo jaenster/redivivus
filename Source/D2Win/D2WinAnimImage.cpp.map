@@ -86,7 +86,7 @@
       ]
     },
     {
-      "name": "DrawAnim",
+      "name": "D2WINANIMIMAGE_HitTest",
       "address": "005003a0",
       "lines": [
         {
@@ -96,7 +96,7 @@
       ],
       "namespace": "D2Win::D2WinAnimImage",
       "calledFunctions": [
-        "DrawAnim",
+        "D2WINANIMIMAGE_HitTest",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -115,7 +115,7 @@
         "DC6Block",
         "int32_t"
       ],
-      "dh": "63c5997c",
+      "dh": "51d0660e",
       "paramStorage": [
         [
           "pAnimImage",
@@ -138,7 +138,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "DrawAnim",
+        "D2WINANIMIMAGE_HitTest",
         "IMAGE_GetFramesCount",
         "GetTickCount"
       ],
@@ -150,7 +150,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3a065e0d",
+      "dh": "d25109db",
       "paramStorage": [
         [
           "pAnimImage",
@@ -290,7 +290,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "84217060",
+      "dh": "b06bac3a",
       "paramStorage": [
         [
           "nPosX",

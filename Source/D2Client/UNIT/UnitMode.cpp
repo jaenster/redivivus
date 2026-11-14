@@ -304,7 +304,7 @@ static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc *
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t iVar1 = D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
+    int32_t iVar1 = D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     if (iVar1) {
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
       return 1;
@@ -319,7 +319,7 @@ void __fastcall UNITMODE_SetAnimMode(D2UnitStrc * pUnit, eD2PlayerAnimMode nAnim
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t iVar1 = D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
+    int32_t iVar1 = D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     if (!iVar1) {
       return;
     }
@@ -335,7 +335,7 @@ void __fastcall UNITMODE_SetAnimModeSilent(D2UnitStrc * pUnit, int32_t nAnimMode
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t iVar1 = D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
+    int32_t iVar1 = D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     if (!iVar1) {
       return;
     }

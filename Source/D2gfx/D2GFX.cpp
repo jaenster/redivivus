@@ -80,9 +80,9 @@ static BYTE * gaPaletteBlendEntries[72] = {}; D2_STATIC_GUARD(gaPaletteBlendEntr
 
 namespace D2gfx::D2GFX {
 
-void __stdcall RENDERER_TogglePerspective_Unref_00477be0() {
+void __stdcall RENDERING_ToggleCurrentEngineFlags() {
     // Static local variables (originally global data)
-    static uint32_t gnCurrentEngineFlags; D2_STATIC_GUARD_BSS(gnCurrentEngineFlags, "D2gfx::D2GFX::RENDERER_TogglePerspective_Unref_00477be0::gnCurrentEngineFlags");
+    static uint32_t gnCurrentEngineFlags; D2_STATIC_GUARD_BSS(gnCurrentEngineFlags, "D2gfx::D2GFX::RENDERING_ToggleCurrentEngineFlags::gnCurrentEngineFlags");
 
     gnCurrentEngineFlags = (uint32_t)!gnCurrentEngineFlags;
 }
@@ -148,7 +148,7 @@ eD2RendererMode __stdcall D2GFX_GetRendererMode() {
     return eRendererMode;
 }
 
-eD2RendererMode __stdcall D2GFX_GetRendererMode_Unref_004f5150() {
+eD2RendererMode __stdcall D2GFX_GetWindowed() {
     return bD2GFX_Windowed;
 }
 
@@ -180,7 +180,7 @@ void __stdcall D2GFX_SetPerspective(BOOL bPerspective) {
     D2GFXRenderedData.bPerspectiveEnabled = bPerspective;
 }
 
-BOOL __stdcall D2GFX_GetLowQuality_Unref_004f51f0() {
+BOOL __stdcall D2GFX_GetBlendedShadows() {
     return D2GFXRenderedData.bBlendedShadows;
 }
 

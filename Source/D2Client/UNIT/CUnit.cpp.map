@@ -509,10 +509,10 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "GetDC6OffsetX",
-        "GetTargetX",
+        "GetScreenX",
         "GetDC6Width",
         "GetDC6OffsetY",
-        "GetTargetY",
+        "GetScreenY",
         "GetDC6Height",
         "PARTICLE_GetX",
         "PARTICLE_GetY",
@@ -526,7 +526,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a4a9f49d",
+      "dh": "1351e7c7",
       "paramStorage": [
         [
           "nFrame",
@@ -723,7 +723,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetYPos",
         "GetXPos",
         "PATH_SetDirectionToTarget"
@@ -734,7 +734,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "669cac35",
+      "dh": "936df70a",
       "paramStorage": [
         [
           "pUnit",
@@ -948,7 +948,7 @@
       ]
     },
     {
-      "name": "IsAttackable",
+      "name": "CUNIT_ClearDeadSetAttackable",
       "address": "004647d0",
       "lines": [
         {
@@ -958,14 +958,14 @@
       ],
       "namespace": "D2Client::UNIT::CUnit",
       "calledFunctions": [
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "eD2UnitFlags"
       ],
-      "dh": "b230f97a",
+      "dh": "14df3b4f",
       "paramStorage": [
         [
           "pUnit",
@@ -1624,7 +1624,7 @@
         "SKILL_SetFlags",
         "PATH_SetOrClearFlag0x2000",
         "DRLGROOM_IsRoomInTown",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
@@ -1636,7 +1636,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc825605",
+      "dh": "d743d891",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -2371,7 +2371,7 @@
         "FindUnit",
         "FreeGfxInfo",
         "WALL2_InitUnitGfx",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "AllocUnit",
         "FindRoom",
         "SEED_InitDefault",
@@ -2421,7 +2421,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "244984a6",
+      "dh": "535a16b4",
       "paramStorage": [
         [
           "pCreateData",
@@ -2577,8 +2577,8 @@
         "CheckFlags",
         "GetAnimOrSeqMode",
         "SKILLS_GetStateTransformGfx",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "TXT_MonStats_GetMonStats2",
         "GFX_IsUnitInsideBounds",
         "TXT_Objects_GetLine",
@@ -2603,7 +2603,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9d7a4814",
+      "dh": "e4e78a37",
       "paramStorage": [
         [
           "pUnit",
@@ -2643,7 +2643,7 @@
         "ITEM_GetGUID",
         "CUNIT_IsItemInAnyInventory",
         "ITEM_RemoveItemStatsFromOwner",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "RemoveObject"
       ],
       "usedTypes": [
@@ -2652,7 +2652,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1e9698f",
+      "dh": "ec2643d0",
       "paramStorage": [
         [
           "pUnit",

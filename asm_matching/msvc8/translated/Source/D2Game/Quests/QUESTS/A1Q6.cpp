@@ -407,7 +407,7 @@ BOOL __fastcall Q06_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     return 0;
 }
 
-void __fastcall Q6_DenOfEvil_OnComplete_ClearGUIDs(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
+void __fastcall Q06_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
     int nPlayerGUID;
     SetRewardAndFinishFlags(pQuestData, pQuestArg);
     D2QuestDataA1Q6Strc* pQuestGUID = pQuestData->pQuestSpecificData.pA1Q6;
@@ -628,7 +628,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
               pQuestSeed = GetQuestControlSeed(pQuestData->pGame);
               sNextSeed = D2_SeedRoll(pQuestSeed);
               pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q37[sNextSeed % 7];
-              ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemGUID2, nullptr, -1, 0);
+              ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nDropItemGUID2, nullptr, -1, 0);
               iQ37DropCount--;
             } while (iQ37DropCount);
 
@@ -636,7 +636,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             iQ37DropCount = 0;
             sNextSeed = D2_SeedRoll(pQuestSeed);
             pQuestArgs->pTarget->dwDropItemCode = gaNpcGossipData_Q06[sNextSeed % 7];
-            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDropItemGUID2, nullptr, -1, 0);
+            ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nDropItemGUID2, nullptr, -1, 0);
             pQuestArgs->pTarget->dwDropItemCode = 0;
           }
         }
@@ -661,7 +661,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
     pQuestSpecific->bAndarielKilled = true;
     QUEST_SetStateFlag(pQuestData, 4, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x2b0);
-    pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q6_DenOfEvil_OnComplete_ClearGUIDs;
+    pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q06_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = (QUESTCALLBACKFN)0x0;
 }
 

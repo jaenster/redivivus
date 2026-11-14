@@ -151,22 +151,22 @@ void __stdcall MONSTERTBLS_FreeTransformArrays() {
     }
 }
 
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill) {
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pnMaxChainId, int32_t * pnChainId) {
     if (nMonStatsId >= 0 && nMonStatsId < sgtDataTable.nTxtMonStatsSize) {
-      if (pUpgradeCount) {
-        *pUpgradeCount = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nMaxChainId;
+      if (pnMaxChainId) {
+        *pnMaxChainId = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nMaxChainId;
       }
-      if (eSkill) {
-        *eSkill = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
+      if (pnChainId) {
+        *pnChainId = (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
       }
 
       return (uint32_t)sgtDataTable.pTxtMonStats[nMonStatsId].nChainId;
     }
-    if (pUpgradeCount) {
-      *pUpgradeCount = 0;
+    if (pnMaxChainId) {
+      *pnMaxChainId = 0;
     }
-    if (eSkill) {
-      *eSkill = 0;
+    if (pnChainId) {
+      *pnChainId = 0;
     }
 
     return 0;
@@ -1330,7 +1330,7 @@ D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t 
     return nullptr;
 }
 
-D2ParsedTreasureClassStrc * __stdcall RollTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nLevel) {
+D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nTier) {
     uint32_t nClampedDiff = nDifficulty <= 0 ? 0 : nDifficulty;
     if ((int)nClampedDiff >= 2) {
       nClampedDiff = 2;
@@ -1341,7 +1341,7 @@ D2ParsedTreasureClassStrc * __stdcall RollTreasureClass(int32_t nDifficulty, int
       nClampedAct = 4;
     }
 
-    uint32_t nClampedChest = nLevel <= 0 ? 0 : nLevel;
+    uint32_t nClampedChest = nTier <= 0 ? 0 : nTier;
     if ((int)nClampedChest >= 2) {
       nClampedChest = 2;
     }
@@ -1357,7 +1357,7 @@ void __stdcall MONSTERTBLS_Unused_HaltLine1710() {
 }
 
 // Compile body locations txt - monster hit location armor percentages
-void __fastcall DATATBLS_CompileBodyLocsTxt(D2PoolManagerStrc * pMemory) {
+void __fastcall DATATBLS_LoadMonItemPercentTxt(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFields[5] = {
       {"HeartPercent", FIELDTYPE_CHAR, 0, 0, 0},
       {"BodyPartPercent", FIELDTYPE_CHAR, 0, 1, 0},
@@ -1365,27 +1365,27 @@ void __fastcall DATATBLS_CompileBodyLocsTxt(D2PoolManagerStrc * pMemory) {
       {"ComponentPercent", FIELDTYPE_CHAR, 0, 3, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    pMonItemPercentTxt = (D2MonItemPercentTxt*)DataTbls::CompileTxt(pMemory, "monitempercent", aFields, (int*)&gnTreasureClassArraySize, 4);
+    pMonItemPercentTxt = (D2MonItemPercentTxt*)DataTbls::CompileTxt(pMemory, "monitempercent", aFields, (int*)&gnMonItemPercentTxtRecordCount, 4);
 }
 
-void __stdcall thunk_UnloadBin_MonStats() {
+void __stdcall DATATBLS_UnloadMonItemPercentTxt() {
     DataTbls::UnloadBin(pMonItemPercentTxt);
 }
 
-D2MonItemPercentTxt * __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx) {
-    if (!(nTCArrayIdx < (int)gnTreasureClassArraySize && nTCArrayIdx != -1)) {
+D2MonItemPercentTxt * __stdcall DATATBLS_GetMonItemPercentTxtRecord(int32_t nRecordId) {
+    if (!(nRecordId < (int)gnMonItemPercentTxtRecordCount && nRecordId != -1)) {
       return nullptr;
     }
     if (!pMonItemPercentTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6dc);
       exit(-1);
     } else {
-      if (!(pMonItemPercentTxt + nTCArrayIdx)) {
+      if (!(pMonItemPercentTxt + nRecordId)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6dd);
         exit(-1);
       }
 
-      return pMonItemPercentTxt + nTCArrayIdx;
+      return pMonItemPercentTxt + nRecordId;
     }
 
     return nullptr;
@@ -1818,7 +1818,7 @@ void __fastcall TXT_AllocTxt_npc(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtNpc = (D2NpcTxt*)DataTbls::CompileTxt(pMemory, "npc", aNpcFieldDefs, &sgtDataTable.nTxtNpcSize, 0x4c);
 }
 
-void __stdcall thunk_UnloadBin_MonStats_Unref_006568f0() {
+void __stdcall DATATBLS_UnloadNpcTxt() {
     DataTbls::UnloadBin(sgtDataTable.pTxtNpc);
 }
 
@@ -1890,7 +1890,7 @@ void __fastcall TXT_AllocTxt_monsounds(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonSounds = (D2MonSoundsTxt*)DataTbls::CompileTxt(pMemory, "monsounds", monsounds, &sgtDataTable.nTxtMonSoundsSize, 0x94);
 }
 
-void __stdcall TXT_FreeTxt_sounds_Unref_00656f60() {
+void __stdcall DATATBLS_UnloadMonSoundsTxt() {
     if (!sgtDataTable.pTxtMonSounds) {
       return;
     }
@@ -1921,16 +1921,16 @@ D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId
 }
 
 // Parses one comma-separated component-code field of a MonSeq/monster txt row into the row's compiled code table. For sequence slot nSeqSlot (<0x10) it clears the slot's count byte and three code entries, strips surrounding quotes, then tokenizes the input string on commas; each <=4-char token is packed into a 4-char code (space-padded), resolved to a class id via Excel GetClassIdFromName against pTxtCompCodeLink, and stored as a byte. Writes the resolved code count back to offset 0x15+nSeqSlot (max 12 codes). On the final slot (0xf) it sums frame counts across the parsed component groups and stores the clamped (<=0xfe) total at offset 0x25. Pure table-build side effects; no return.
-void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint32_t nSeqSlot, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3) {
+void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char * pRecord, uint32_t nComponent, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3) {
     int32_t nClassId;
     uint32_t dwCodeBuf;
     char cChar2;
-    if (!(pRecord && nSeqSlot <= 0xf)) {
+    if (!(pRecord && nComponent <= 0xf)) {
       return;
     }
 
-    pRecord[nSeqSlot + 0x15] = '\0';
-    char* pSeqCodes = pRecord + nSeqSlot * 0xc + 0x26;
+    pRecord[nComponent + 0x15] = '\0';
+    char* pSeqCodes = pRecord + nComponent * 0xc + 0x26;
     pSeqCodes[0] = -1;
     pSeqCodes[1] = -1;
     pSeqCodes[2] = -1;
@@ -2013,8 +2013,8 @@ void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint
       }
     }
 
-    pRecord[nSeqSlot + 0x15] = (char)nCodeLen;
-    if (nSeqSlot != 0xf) {
+    pRecord[nComponent + 0x15] = (char)nCodeLen;
+    if (nComponent != 0xf) {
       return;
     }
 
@@ -2059,22 +2059,22 @@ void __fastcall TXT_AllocTxt_monstats2(D2PoolManagerStrc * pMemory) {
       {"MeleeRng", FIELDTYPE_CHAR, 0, 0xe, 0},
       {"BaseW", FIELDTYPE_RAW4, 0, 0x10, 0},
       {"HitClass", FIELDTYPE_CHAR, 0, 0x14, 0},
-      {"HDv", FIELDTYPE_LINKER_BIT, 0, 0, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"TRv", FIELDTYPE_LINKER_BIT, 0, 1, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"LGv", FIELDTYPE_LINKER_BIT, 0, 2, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"Rav", FIELDTYPE_LINKER_BIT, 0, 3, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"Lav", FIELDTYPE_LINKER_BIT, 0, 4, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"RHv", FIELDTYPE_LINKER_BIT, 0, 5, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"LHv", FIELDTYPE_LINKER_BIT, 0, 6, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"SHv", FIELDTYPE_LINKER_BIT, 0, 7, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S1v", FIELDTYPE_LINKER_BIT, 0, 8, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S2v", FIELDTYPE_LINKER_BIT, 0, 9, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S3v", FIELDTYPE_LINKER_BIT, 0, 10, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S4v", FIELDTYPE_LINKER_BIT, 0, 0xb, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S5v", FIELDTYPE_LINKER_BIT, 0, 0xc, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S6v", FIELDTYPE_LINKER_BIT, 0, 0xd, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S7v", FIELDTYPE_LINKER_BIT, 0, 0xe, (void*)MONSTERTBLS_ParseMonSeqField},
-      {"S8v", FIELDTYPE_LINKER_BIT, 0, 0xf, (void*)MONSTERTBLS_ParseMonSeqField},
+      {"HDv", FIELDTYPE_LINKER_BIT, 0, 0, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"TRv", FIELDTYPE_LINKER_BIT, 0, 1, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"LGv", FIELDTYPE_LINKER_BIT, 0, 2, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"Rav", FIELDTYPE_LINKER_BIT, 0, 3, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"Lav", FIELDTYPE_LINKER_BIT, 0, 4, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"RHv", FIELDTYPE_LINKER_BIT, 0, 5, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"LHv", FIELDTYPE_LINKER_BIT, 0, 6, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"SHv", FIELDTYPE_LINKER_BIT, 0, 7, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S1v", FIELDTYPE_LINKER_BIT, 0, 8, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S2v", FIELDTYPE_LINKER_BIT, 0, 9, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S3v", FIELDTYPE_LINKER_BIT, 0, 10, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S4v", FIELDTYPE_LINKER_BIT, 0, 0xb, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S5v", FIELDTYPE_LINKER_BIT, 0, 0xc, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S6v", FIELDTYPE_LINKER_BIT, 0, 0xd, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S7v", FIELDTYPE_LINKER_BIT, 0, 0xe, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
+      {"S8v", FIELDTYPE_LINKER_BIT, 0, 0xf, (void*)MONSTERTBLS_ParseMonStats2ComponentVariants},
       {"HD", FIELDTYPE_BIT, 0, 0xe8, 0},
       {"TR", FIELDTYPE_BIT, 1, 0xe8, 0},
       {"LG", FIELDTYPE_BIT, 2, 0xe8, 0},
@@ -2190,7 +2190,7 @@ void Unreferenced_00658440() {
 }
 
 // Breadth-first traversal of the monstypes.txt equiv1/equiv2/equiv3 parent-type hierarchy to test whether monster type nMonTypeId belongs to type nCheckTypeId. Returns 1 if found, 0 if not found, out-of-range, or stack depth exceeds 124. Despite its name, behaves as a monster-type membership test (analogous to ITEMTBLS_CheckItemTypeRecursive but for MonType with three equiv slots).
-BOOL __fastcall MONSTERTBLS_GetMonSeqFrameCount(int32_t nMonTypeId, int32_t nCheckTypeId) {
+BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t nCheckTypeId) {
     int nNewStackSize;
     int32_t typeStack[128];
     short int wEquiv3;
@@ -2269,7 +2269,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
       nBitIdx = 0;
       if (nMonTypeTotal > 0) {
         do {
-          bIsSubType = MONSTERTBLS_GetMonSeqFrameCount(nRowTypeIdx, nBitIdx);
+          bIsSubType = MONSTERTBLS_CheckNestedMonsterTypes(nRowTypeIdx, nBitIdx);
           if (bIsSubType) {
             *(uint32_t*)(pBitArray + ((int)nBitIdx >> 5) * 4 + nTypeIdx * 4) |= Fog::BitBuffer::gadwBitMasks[nBitIdx & 0x1f];
             nMonTypeTotal = sgtDataTable.nTxtMonTypeSize;
@@ -2283,7 +2283,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     } while (nRowTypeIdx < nMonTypeTotal);
 }
 
-void __stdcall MONSTERTBLS_FreeMonPlaceTxt() {
+void __stdcall DATATBLS_UnloadMonTypeTxt() {
     if (!sgtDataTable.pTxtMonType) {
       return;
     }
@@ -2560,7 +2560,7 @@ D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * p
     return nullptr;
 }
 
-int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nType, int32_t nSuperUniqueId) {
+int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId) {
     switch (nType) {
       case 0:
         {
@@ -2639,7 +2639,7 @@ void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
     } while (i < sgtDataTable.nTxtMonSeqSize);
 }
 
-void __stdcall MONSTERTBLS_FreeMonPropTxt() {
+void __stdcall DATATBLS_UnloadMonSeqTxt() {
     if (sgtDataTable.pTxtMonSeq) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonSeq);
       Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonSeqLink);
@@ -2753,7 +2753,7 @@ void Unreferenced_0065a170() {
 }
 
 // Frees all monster-related data tables from sgtDataTable. Unloads MonEquip, Npc, MonLvl, MonPreset, SuperUniques (+ txt link), MonUmod (+ txt link), MonStats (+ txt link), MonStats2 (+ txt link), MonProp (+ txt link), MonSounds (+ txt link), then delegates to MONSTERTBLS_FreeMonPropTxt, FreeParsedTC, and TXT_UnloadUniqueMonsterNameTables. Called during game shutdown or data table reload.
-void __stdcall MONSTERTBLS_FreeMonUModTxt() {
+void __stdcall MONSTERTBLS_UnloadMonsterTxts() {
     if (sgtDataTable.pTxtMonEquip) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonEquip);
       sgtDataTable.nTxtMonEquipSize = 0;
@@ -2803,7 +2803,7 @@ void __stdcall MONSTERTBLS_FreeMonUModTxt() {
       sgtDataTable.nTxtMonSoundsSize = 0;
     }
 
-    MONSTERTBLS_FreeMonPropTxt();
+    DATATBLS_UnloadMonSeqTxt();
     FreeParsedTC();
     if (sgtDataTable.pTxtMonLvl) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonLvl);
@@ -2864,7 +2864,7 @@ void __stdcall TXT_AllocItemDropData(D2PoolManagerStrc * pMemory) {
     exit(-1);
 }
 
-void __fastcall ClearScreen_Unref_0065a3f0(D2PoolManagerStrc * bPartial) {
+void __fastcall TXT_AllocItemDropData_Thunk(D2PoolManagerStrc * bPartial) {
     TXT_AllocItemDropData(bPartial);
 }
 

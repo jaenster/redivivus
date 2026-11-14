@@ -464,9 +464,9 @@ void __fastcall SendAllPlayersPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)SendPlayerPartyInfo, pUnit);
 }
 
-eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nActionIndex, uint32_t dwTargetUnitId, uint32_t dwArg) {
+eD2ServerIncomingStatus __fastcall PARTYSCREEN_DispatchAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nActionIndex, uint32_t dwTargetUnitId, uint32_t dwArg) {
     // Static local variables (originally global data)
-    static pfnPartyScreenAction g_PlayerScreenActionTable[10] = {
+    static pfnPartyScreenAction gaPartyScreenActionTable[10] = {
     nullptr,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
@@ -477,23 +477,23 @@ eD2ServerIncomingStatus __fastcall PlayerScreen_DispatchAction(::SGAMEDATA * pGa
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_CancelPartyInvite,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_AcceptPartyInvite,
     (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_LeaveParty
-}; D2_STATIC_GUARD(g_PlayerScreenActionTable, "D2Game::PLAYER::PlayerScreen::PlayerScreen_DispatchAction::g_PlayerScreenActionTable");
+}; D2_STATIC_GUARD(gaPartyScreenActionTable, "D2Game::PLAYER::PlayerScreen::PARTYSCREEN_DispatchAction::gaPartyScreenActionTable");
 
     int nError = 0;
     D2UnitStrc* pActingUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwTargetUnitId);
     if (!pActingUnit) {
       return SERVERSTATUS_OK;
     }
-    if (!g_PlayerScreenActionTable[nActionIndex]) {
+    if (!gaPartyScreenActionTable[nActionIndex]) {
       return SERVERSTATUS_OK;
     }
 
-    BOOL bIsBadCode = IsBadCodePtr((FARPROC)g_PlayerScreenActionTable[nActionIndex]);
+    BOOL bIsBadCode = IsBadCodePtr((FARPROC)gaPartyScreenActionTable[nActionIndex]);
     if (bIsBadCode) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    (*g_PlayerScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, (uintptr_t)&nError);
+    (*gaPartyScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, (uintptr_t)&nError);
     if (nError) {
       return SERVERSTATUS_BAD_PARAMS;
     }

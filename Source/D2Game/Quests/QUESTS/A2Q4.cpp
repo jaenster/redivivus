@@ -209,7 +209,7 @@ static void __stdcall Q12_OnJournalActivate(D2QuestDataA2Q4Strc * pQuestData, D2
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 2);
+    D2Common::Units::ChangeAnimMode(pUnit, 2);
     D2Common::Units::RemoveCollision_Vector(pUnit);
 }
 
@@ -550,12 +550,12 @@ void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
 }
 
 // A2Q4 - StubNoop1. Empty quest-table slot stub (returns nothing). No quest-state effect.
-void __stdcall A2Q4_OnMonsterDeathClass201_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
+void __stdcall A2Q4_OnJerhynCreated_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
 
 }
 
 // A2Q4 - StubNoop2. Empty quest-table slot stub. No quest-state effect.
-void __stdcall A2Q4_OnMonsterDeathClass331_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
+void __stdcall A2Q4_OnAct2Guard2Created_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
 
 }
 
@@ -623,7 +623,7 @@ void __fastcall Objects_InitFn30_HaremBlocker(D2ObjectInitFnArg * pInitArg) {
     }
 
     D2QuestDataA2Q4Strc* pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)pDVar1->nPortalPlacedState);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, (uint32_t)pDVar1->nPortalPlacedState);
     if (!pInitArg->pObject) {
       nObjectGUID = -1;
     } else {
@@ -639,7 +639,7 @@ void __fastcall Objects_InitFn30_HaremBlocker(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A2Q4 (A2Q6/Duriel-related) - Q14_CheckDurielProximity. Per-player iterator: if The Seven Tombs (Duriel) is not Completed(0)/RewardAwaits(1) and the player is within ~31 units of the tracked Duriel-quest coords, sets the proximity flag and records the player GUID. Reads A2Q4 quest data block (shared union) for the coords. Returns 1 on trigger.
-BOOL __fastcall Q14_CheckDurielProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+BOOL __fastcall Q12_CheckDistanceToHaremBlocker(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
@@ -656,8 +656,8 @@ BOOL __fastcall Q14_CheckDurielProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2QuestDataA2Q4Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
     uint32_t nDist = Monster::AI::MONSTERAI_GetDistanceToCoords(pUnit, pA2Q4Data->nHaremBlockerX, pA2Q4Data->nHaremBlockerY);
     if (nDist <= 0x1e) {
-      pA2Q4Data->bDurielProximity = 1;
-      pA2Q4Data->nDurielProximityPlayerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
+      pA2Q4Data->bPlayerNearHaremBlocker = 1;
+      pA2Q4Data->nPlayerNearHaremBlockerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
       return 1;
     }
 
@@ -718,7 +718,7 @@ BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(D2ObjectOperateFnArg * pOperation
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2ObjectsTxt* pTxtObjects;
-      D2Common::Units::SetupUpdateFlag(pUnit, 1);
+      D2Common::Units::ChangeAnimMode(pUnit, 1);
       pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
@@ -757,7 +757,7 @@ void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInit
     D2QuestDataA2Q4Strc* pA1Q4Data;
     pA1Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
     if (eLevelId == LEVEL_ArcaneSanctuary) {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)(uint16_t)pA1Q4Data->nObjectOperateState1);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, (uint32_t)(uint16_t)pA1Q4Data->nObjectOperateState1);
       if (pA1Q4Data->nObjectOperateState1 != 1) {
         return;
       }
@@ -773,7 +773,7 @@ void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInit
         return;
       }
 
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)(uint16_t)pA1Q4Data->nObjectOperateState2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, (uint32_t)(uint16_t)pA1Q4Data->nObjectOperateState2);
       if (pA1Q4Data->nObjectOperateState2 != 1) {
         return;
       }

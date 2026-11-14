@@ -638,7 +638,7 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     /* local8 become D2UnitStrc* here */ if (pQuestSpecificData->bBridgeObjectValid) {
       uSlot8.pBridgeObject = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pQuestSpecificData->nBridgeObjectGUID);
       if (uSlot8.pBridgeObject) {
-        D2Common::Units::SetupUpdateFlag(uSlot8.pBridgeObject, 1);
+        D2Common::Units::ChangeAnimMode(uSlot8.pBridgeObject, 1);
         pBridgeObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(uSlot8.pBridgeObject->nClassId);
         GAME::Event::SetEvent(pQuestData->pGame, uSlot8.pBridgeObject, 1, (pBridgeObjectTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
       }
@@ -649,7 +649,7 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     /* local8 become int here */ uSlot8.pBridgeObject = 0;
     if (pQuestSpecificData->nPlayerCount > 0) {
       do {
-        pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDroppedItemGUID, nullptr, -1, 0);
+        pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nDroppedItemGUID, nullptr, -1, 0);
         if (pDroppedUnit) {
           pQuestSpecificData->nMephistoSoulstoneCount++;
           pQuestSpecificData->bMephistoSoulstoneDropped = true;
@@ -690,10 +690,10 @@ void __fastcall Q23_TimerCallback_MephistoApproach(D2QuestDataStrc * pQuestData,
           if (nDist < 0x12) {
             if (eAnimMode == Death) {
               pA3Q6Data->nMephistoAnimMode = 2;
-              D2Common::Units::SetupUpdateFlag(pUnit, eD2MonsterAnimMode_ns::Neutral);
+              D2Common::Units::ChangeAnimMode(pUnit, eD2MonsterAnimMode_ns::Neutral);
             } else if (eAnimMode == eD2MonsterAnimMode_ns::Neutral) {
               pA3Q6Data->nMephistoAnimMode = 2;
-              D2Common::Units::SetupUpdateFlag(pUnit, Walk);
+              D2Common::Units::ChangeAnimMode(pUnit, Walk);
               D2Common::Units::RemoveCollision_Vector(pUnit);
             }
 
@@ -727,7 +727,7 @@ void __fastcall Objects_InitFn45_MephistoBridge(D2ObjectInitFnArg * pInitArg) {
     }
 
     pDVar1->nBridge2ObjectGUID = nObjectGUID;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nMephistoAnimMode);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pDVar1->nMephistoAnimMode);
     if (pDVar1->nMephistoAnimMode == 2) {
       return;
     }
@@ -742,7 +742,7 @@ void __fastcall Objects_InitFn44_HellGatePortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheGuardian);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     if (eLevelId == LEVEL_OuterSteppes) {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
       return;
     }
     if (!pDVar2) {
@@ -752,7 +752,7 @@ void __fastcall Objects_InitFn44_HellGatePortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataA3Q6Strc* pDVar1 = pDVar2->pQuestSpecificData.pA3Q6;
     pDVar1->bBridgeObjectValid = true;
     pDVar1->nBridgeObjectGUID = !pInitArg->pObject ? -1 : pInitArg->pObject->nUnitGUID;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nMephistoApproachMode);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pDVar1->nMephistoApproachMode);
 }
 
 // [The Guardian (Q23)] fpSequenceFilter: when the player has the intro done (bIsNotIntroduction) but no

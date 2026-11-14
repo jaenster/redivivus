@@ -272,7 +272,7 @@ struct __attribute__((packed)) D2GSPacketClt0x1B_UnequipItem {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1C_SwapEquippedItem {
+struct __attribute__((packed)) D2GSPacketClt0x1C_UnequipToCursor {
     /* 0x00 */ uint8_t nCmd; // 0x1C
     /* 0x01 */ uint16_t nBodyLoc;
 };
@@ -295,17 +295,17 @@ struct __attribute__((packed)) D2GSPacketClt0x1E_RemoveItemFromBelt {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1F_UseItem {
+struct __attribute__((packed)) D2GSPacketClt0x1F_SwapCursorAndGridItem {
     /* 0x00 */ uint8_t nCmd; // 0x1F
     /* 0x01 */ uint32_t dwCursorItemGUID;
-    /* 0x05 */ uint32_t dwTargetItemGUID;
-    /* 0x09 */ uint32_t dwTargetUnitGUID;
-    /* 0x0D */ int nArg;
+    /* 0x05 */ uint32_t dwGridItemGUID;
+    /* 0x09 */ int32_t nGridX;
+    /* 0x0D */ int32_t nGridY;
 };
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x20_StackItem {
+struct __attribute__((packed)) D2GSPacketClt0x20_UseItemAtLocation {
     /* 0x00 */ uint8_t nCmd; // 0x20
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ int nX;
@@ -314,7 +314,7 @@ struct __attribute__((packed)) D2GSPacketClt0x20_StackItem {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x21_RemoveStackItem {
+struct __attribute__((packed)) D2GSPacketClt0x21_MergeStackables {
     /* 0x00 */ uint8_t nCmd; // 0x21
     /* 0x01 */ uint32_t dwItemGUID1;
     /* 0x05 */ uint32_t dwItemGUID2;
@@ -329,7 +329,7 @@ struct __attribute__((packed)) D2GSPacketClt0x22_ItemToBelt {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x23_ItemFromBelt {
+struct __attribute__((packed)) D2GSPacketClt0x23_ItemToBelt {
     /* 0x00 */ uint8_t nCmd; // 0x23
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t nBeltSlotOrIndex;
@@ -337,14 +337,14 @@ struct __attribute__((packed)) D2GSPacketClt0x23_ItemFromBelt {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x24_SwapBeltItem {
+struct __attribute__((packed)) D2GSPacketClt0x24_ItemFromBelt {
     /* 0x00 */ uint8_t nCmd; // 0x24
     /* 0x01 */ uint32_t dwItemGUID;
 };
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x25_UseScroll {
+struct __attribute__((packed)) D2GSPacketClt0x25_SwapBeltItem {
     /* 0x00 */ uint8_t nCmd; // 0x25
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwTargetGUID;
@@ -352,7 +352,7 @@ struct __attribute__((packed)) D2GSPacketClt0x25_UseScroll {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x26_ItemToCube {
+struct __attribute__((packed)) D2GSPacketClt0x26_UseItemAtPlayerCoords {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ int nArg;
@@ -417,7 +417,7 @@ struct D2GSPacketClt0x2E_DeadStub {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x2F_NpcRepair {
+struct __attribute__((packed)) D2GSPacketClt0x2F_NpcInteract {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwUnused;
     /* 0x05 */ uint32_t dwNpcGUID;
@@ -470,7 +470,7 @@ struct __attribute__((packed)) D2GSPacketClt0x34_CainIdentify {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x35_NpcGamble {
+struct __attribute__((packed)) D2GSPacketClt0x35_NpcRepair {
     /* 0x00 */ uint8_t nCmd; // opcode 0x35
     /* 0x01 */ uint32_t dwNpcGUID; // gamble NPC GUID
     /* 0x05 */ uint32_t dwItemGUID; // gamble item GUID
@@ -597,7 +597,7 @@ struct __attribute__((packed)) D2GSPacketClt0x47_CommandMercenary {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct D2GSPacketClt0x48_TransmogrifyItem {
+struct D2GSPacketClt0x48_CutsceneOver {
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd;
@@ -655,7 +655,7 @@ struct __attribute__((packed)) D2GSPacketClt0x50_DropGold {
 struct __attribute__((packed)) D2GSPacketClt0x51_SetHotkey {
     /* 0x00 */ uint8_t nCmd; // opcode 0x51
     /* 0x01 */ uint32_t nSkillAndHotkeyIndex; // bits[14:0]=skill id, bits[20:16]=hotkey slot index (must be <0x10)
-    /* 0x05 */ int32_t nSkillLevel; // skill level / charge level for skill lookup
+    /* 0x05 */ int32_t nItemGUID; // skill level / charge level for skill lookup
 };
 
 #endif // D2_MODULE_D2Game
@@ -668,7 +668,7 @@ struct D2GSPacketClt0x52_Unused {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct D2GSPacketClt0x53_GamepadInput {
+struct D2GSPacketClt0x53_StartRunning {
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd; // opcode 0x53 — gamepad run toggle; 1B op-only, no payload
@@ -676,7 +676,7 @@ struct D2GSPacketClt0x53_GamepadInput {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct D2GSPacketClt0x54_StackMerge {
+struct D2GSPacketClt0x54_StopRunning {
     operator uint8_t() const { return *reinterpret_cast<const uint8_t*>(this); }
 
     /* 0x00 */ uint8_t nCmd;
@@ -701,7 +701,7 @@ struct __attribute__((packed)) D2GSPacketClt0x59_CommandNPC {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x5D_CubeRecipeCheck {
+struct __attribute__((packed)) D2GSPacketClt0x5D_PartyScreenToggle {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint8_t nActionIndex;
     /* 0x02 */ uint8_t nParam1;
@@ -710,7 +710,7 @@ struct __attribute__((packed)) D2GSPacketClt0x5D_CubeRecipeCheck {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x5E_CubeApply {
+struct __attribute__((packed)) D2GSPacketClt0x5E_PartyScreenAction {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint8_t nActionIndex;
     /* 0x02 */ uint32_t dwPlayerGUID;
@@ -733,9 +733,9 @@ struct __attribute__((packed)) D2GSPacketClt0x61_MercEquipItem {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x62_NpcSellExpansion {
+struct __attribute__((packed)) D2GSPacketClt0x62_ResurrectMerc {
     /* 0x00 */ uint8_t nCmd; // opcode 0x62 — expansion NPC sell
-    /* 0x01 */ uint32_t nItemGUID; // item GUID passed to SUNITNPC_HandleSellAction
+    /* 0x01 */ uint32_t dwNpcGUID; // item GUID passed to SUNITNPC_HandleSellAction
 };
 
 #endif // D2_MODULE_D2Game
@@ -939,7 +939,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1B_EquipToSwapSlot(::SGAMEDATA * pGame
 // C->S 0x1C Unequip to Inventory (3 bytes)
 // [op:1][bodyLoc:u16]
 // Removes equipped item at bodyLoc directly into inventory. Belt(8) checks trade state.
-eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x1C_SwapEquippedItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToCursor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x1C_UnequipToCursor * pPacket, uint32_t nSize);
 // Server handler for client packet 0x1D (9 bytes): swap the cursor item with an equipped body-location slot. Validates packet size, confirms the item identified by dwItemGUID is on the cursor (SERVER_IsItemOnCursor), validates bodyLoc is in [1..9], then retrieves the currently equipped item at that slot. For bodyLoc 8 (two-hand weapon slot), checks trade restrictions via PLAYERTRADE_CheckNoEquippedTradeItems. Calls SERVER_Swap2HandItem to perform the actual swap; returns SERVERSTATUS_BAD_PARAMS if the swap produces an unexpected secondary output item. Returns SERVERSTATUS_OK on success.
 eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x1D_Swap2HandItem * pPacket, uint32_t nSize);
 // C->S 0x1E Weapon Swap Slot (9 bytes)
@@ -949,31 +949,31 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1E_EquipToWeaponSwap(::SGAMEDATA * pGa
 // C->S 0x1F Use Item (17 bytes)
 // [op:1][cursorItemGUID:u32][targetItemGUID:u32][targetUnitGUID:u32][arg:u32]
 // Uses cursor item on target item/unit. Rejects corpse/merc pages.
-eD2ServerIncomingStatus __fastcall SCMD_0x1F_UseItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x1F_UseItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x1F_SwapCursorAndGridItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x1F_SwapCursorAndGridItem * pPacket, uint32_t nSize);
 // C->S 0x20 Use Item (13 bytes)
 // [op:1][itemGUID:u32][x:u32][y:u32]
 // Books, scrolls, quest items. Hardcoded: ass=+1skill, xyz=+20HP, tr2=resist, toa=respec.
-eD2ServerIncomingStatus __fastcall SCMD_0x20_UseItemAtLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x20_StackItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x20_UseItemAtLocation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x20_UseItemAtLocation * pPacket, uint32_t nSize);
 // C->S 0x27 Apply Scroll to Item (9B). Packet: [op:1][itemGUID:u32][scrollGUID:u32]. Identify scroll on item, or merge stackables.
 eD2ServerIncomingStatus __fastcall SCMD_0x27_UseItemOnItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x27_UseItemOnItem * pPacket, uint32_t nSize);
 // C->S 0x21 Stack Items (9 bytes)
 // [op:1][srcGUID:u32][dstGUID:u32]
 // Merges stackable items (arrows, scrolls).
-eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x21_RemoveStackItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x21_MergeStackables * pPacket, uint32_t nSize);
 // C->S 0x22 Unstack Item - STUB (5 bytes)
 // [op:1][itemGUID:u32]
 // RemoveStackItem returns 0 - dead code in 1.14d.
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x22_ItemToBelt * pPacket, uint32_t nSize);
 // C->S 0x23 Item to Belt (9B). Packet: [op:1][itemGUID:u32][beltSlot:u32]. Cursor item to belt slot.
-eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x23_ItemFromBelt * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x23_ItemToBelt * pPacket, uint32_t nSize);
 // C->S 0x24 Item from Belt (5B). Packet: [op:1][itemGUID:u32]. Belt item to cursor.
-eD2ServerIncomingStatus __fastcall SCMD_0x24_ItemFromBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x24_SwapBeltItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x24_ItemFromBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x24_ItemFromBelt * pPacket, uint32_t nSize);
 // C->S 0x25 Swap Belt Item (9B). Packet: [op:1][cursorGUID:u32][beltGUID:u32]. Swap cursor with belt item.
-eD2ServerIncomingStatus __fastcall SCMD_0x25_SwapBeltItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x25_UseScroll * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x25_SwapBeltItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x25_SwapBeltItem * pPacket, uint32_t nSize);
 // C->S 0x26 Use Item at Player Coords (13 bytes)
 // [op:1][itemGUID:u32][arg:u32][unk0x09:u32]
 // Uses item at player's current X/Y (range check 50). arg forwarded to SERVER_UseItemAtCoords.
-eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x26_ItemToCube * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x26_UseItemAtPlayerCoords * pPacket, uint32_t nSize);
 // C->S 0x28 Socket Item (9B). Packet: [op:1][gemGUID:u32][socketableGUID:u32]. Insert gem/rune/jewel into sockets. Handles runeword logic.
 eD2ServerIncomingStatus __fastcall SCMD_0x28_SocketItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x28_SocketItem * pPacket, uint32_t nSize);
 // C->S 0x29 Split Stack (9B). Packet: [op:1][stackGUID:u32][targetGUID:u32]. Remove item from stack.
@@ -994,7 +994,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, 
 // C->S 0x2F NPC Repair/Interact (9 bytes)
 // [op:1][unk0x01:u32][npcGUID:u32]
 // Validates NPC target, range <=10, triggers NPC AI state change.
-eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2F_NpcRepair * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x2F_NpcInteract * pPacket, uint32_t nSize);
 // C->S 0x30 NPC Cancel Dialog (9B). Packet: [op:1][pad:u32][npcGUID:u32]. Close NPC dialog, frees AI state, triggers quest callback.
 eD2ServerIncomingStatus __fastcall SCMD_0x30_NpcCancelDialog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x30_NpcCancelDialog * pPacket, uint32_t nSize);
 // C->S 0x31 handler for NPC gossip interaction packet; validates length and forwards NPC GUID + gossip option id to QUEST_OnNpcGossip.
@@ -1004,12 +1004,12 @@ eD2ServerIncomingStatus __fastcall SCMD_0x32_NpcBuyConfirm(::SGAMEDATA * pGame, 
 // C->S 0x33 handler for NPC sell transaction packet; validates packet length and forwards GUIDs/mode/param to SUNITNPC_SellItem.
 eD2ServerIncomingStatus __fastcall SCMD_0x33_NpcSell(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x33_NpcSell * pBytes, uint32_t nSize);
 // C->S 0x35 NPC Repair (17B). Packet: [op:1][npcGUID:u32][itemGUID:u32][params:8B]. Repair item at smithy. Checks durability, ethereal.
-eD2ServerIncomingStatus __fastcall SCMD_0x35_NpcGamble(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x35_NpcGamble * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x35_NpcRepair(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x35_NpcRepair * pPacket, uint32_t nSize);
 // C->S 0x34 NPC Identify Items (5B). Packet: [op:1][npcGUID:u32]. Batch identify at Cain. Iterates inventory, charges gold.
 eD2ServerIncomingStatus __fastcall SCMD_0x34_CainIdentify(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x34_CainIdentify * pPacket, uint32_t nSize);
 // C->S 0x36 Hire Mercenary (9B). Packet: [op:1][npcGUID:u32][mercId:u32]. Hire merc, rolls stats, checks gold.
 eD2ServerIncomingStatus __fastcall SCMD_0x36_HireMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x36_HireMerc * pPacket, uint32_t nSize);
-eD2ServerIncomingStatus __fastcall SCMD_0x62_NpcSellExpansion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x62_NpcSellExpansion * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x62_ResurrectMerc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x62_ResurrectMerc * pPacket, uint32_t nSize);
 // C->S 0x37 Gamble Confirm (5B). Packet: [op:1][itemGUID:u32]. Reveal gambled item.
 eD2ServerIncomingStatus __fastcall SCMD_0x37_GambleConfirm(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x37_GambleConfirm * pPacket, uint32_t nSize);
 // C->S 0x38 NPC Menu Select (13B). Packet: [op:1][npcGUID:u32][menuId:u32][params:4B]. Select NPC menu option (trade/identify/repair/gamble/hire/quest).
@@ -1034,9 +1034,9 @@ eD2ServerIncomingStatus __fastcall SCMD_0x40_RefreshQuestData(::SGAMEDATA * pGam
 // @sourcefile .\PLAYER\PlrMsg.cpp
 eD2ServerIncomingStatus __fastcall SCMD_0x41_Resurrect(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x41_Resurrect * pPacket, uint32_t nSize);
 // Client packet 0x5D handler: Cube recipe check/preview. Validates packet size (7 bytes), checks arena "no cube" flag, validates action parameter (<=10), and dispatches to PlayerScreen action table. Used to preview if a cube recipe is valid before applying it.
-eD2ServerIncomingStatus __fastcall SCMD_0x5D_CubeRecipeCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5D_CubeRecipeCheck * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x5D_PartyScreenToggle(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5D_PartyScreenToggle * pPacket, uint32_t nSize);
 // Client packet 0x5E handler: Apply cube transmutation. Validates packet size (6 bytes), checks arena "no cube" flag, validates action parameter (<=10), and dispatches to PlayerScreen action table with arg=0. Triggers the actual cube transmutation process.
-eD2ServerIncomingStatus __fastcall SCMD_0x5E_CubeApply(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5E_CubeApply * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x5E_PartyScreenAction(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2GSPacketClt0x5E_PartyScreenAction * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x42_StaffInOrifice1(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x43_StaffInOrifice2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x44_StaffInOrifice(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x44_StaffInOrifice * pPacket, uint32_t nSize);
@@ -1045,7 +1045,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame
 // C2S packet 0x47 handler (13 bytes): [opcode:1][mercGUID:u32][targetX:u16][pad:2][targetY:u16][pad:2]. Issues an AI command to the player's mercenary. Validates the unit is the player's hired merc (PETTYPE_hireable), player is within 50 units of target coords, then resets AI state and injects a new command with the target coordinates. Sent when player directs their merc to a location.
 eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x47_CommandMercenary * pPacket, uint32_t nSize);
 // C2S 0x48 (1 byte), sent by the client's ExitGamePlayCutScene 0x00482ef0 when an act cutscene ends; clears the cutscene-pending flag at player data +0x4c that the server set before S2C 0x61.
-eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x48_TransmogrifyItem * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x48_CutsceneOver * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x49_TakeWaypoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x49_TakeWaypoint * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x4D_ResetNpcIntroFlag(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4D_ResetNpcIntroFlag * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4B_ForceUnitUpdate * pPacket, uint32_t nSize);
@@ -1056,16 +1056,16 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4C_TransmogrifyItem2(::SGAMEDATA * pGa
 // C->S 0x4F Click Button (7 bytes)
 // [op:1][buttonId:u16][param:u32]
 // Dispatches to PlayerTrade::ClickButton. buttonId 0x18 triggers cube transmute (PreCubeSetup).
-eD2ServerIncomingStatus __fastcall SCMD_0x4F_GoToTownFolk(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4F_ClickButton * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x4F_ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x4F_ClickButton * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x50_DropGold * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x51_SetHotkey * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x52_Unused(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x52_Unused * pPacket, uint32_t nSize);
 // C->S 0x53 Gamepad Run Toggle (1B). Packet: [op:1]. No data payload. If player is walking and has stamina (stat 10 > 0), switches to run mode. Partially implemented gamepad support — no retail client sends this packet.
-eD2ServerIncomingStatus __fastcall SCMD_0x53_GamepadInput(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x53_GamepadInput * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x53_StartRunning(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x53_StartRunning * pPacket, uint32_t nSize);
 // C->S 0x54 Stack Merge (1 byte)
 // [op:1]
 // If player running, sets update flag 2.
-eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x54_StackMerge * pPacket, uint32_t nSize);
+eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x54_StopRunning * pPacket, uint32_t nSize);
 eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x58_MarkQuestDone * pPacket, uint32_t nSize);
 // C->S 0x59 Command NPC (17 bytes): [op:1][unitType:u32][unitGUID:u32][x:u32][y:u32]. Finds target unit within distance 0x32, verifies it is an interactable NPC (MonStats interact+npc flags), clears its path, fires AITHINK event, schedules next AI tick at gameFrame+1, and sets AI args 1/2/3 to 0x28/Y/X to direct the NPC toward the requested coordinates.
 eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2GSPacketClt0x59_CommandNPC * pPacket, uint32_t nSize);

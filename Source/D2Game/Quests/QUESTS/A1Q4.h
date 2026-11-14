@@ -84,7 +84,7 @@ void __fastcall Q04_SendQuestStatePacket(struct D2UnitStrc * pUnit);
 // if it still has an AI sub, clear it (graceful); otherwise force a Death
 // lifecycle transition. On kill, marks the quest sub-flag 0x61 (guards cleared).
 // Driven by Q04_TimerDespawnRogueGuards.
-BOOL __fastcall Q04_DespawnRogueGuards(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q04_RemoveCainFromTristram(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A1Q4 — Q04_MarkCannotComplete (per-player iterate callback).
 // If a player has NOT yet Completed and has no RewardAwaits, mark their quest record
 // CannotCompleteQuestInGame (they were not present when the quest was force-progressed,
@@ -162,7 +162,7 @@ BOOL __fastcall Q04_RegisterTristramVisitor(::SGAMEDATA * pGame, struct D2UnitSt
 // A1Q4 — Q04_TimerDespawnRogueGuards: quest-timer entry that iterates all monsters
 // running Q04_DespawnRogueGuards (kills/clears the Rogue guards), then clears the
 // "despawn scheduled" flag (0x46).
-uint8_t __fastcall Q04_TimerDespawnRogueGuards(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
+uint8_t __fastcall Q04_TimerRemoveCainFromTristram(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
 // A1Q4 — MakeTownPortalFromScroolTree: the Tree-of-Inifuss "rescue Cain" sequence.
 // On the rescue event (quest begun, not already done): spawns Deckard Cain (monster
 // 0x92) next to the player; if that fails, falls back to a spawnable nearby tile and,
@@ -262,7 +262,7 @@ void __fastcall Objects_InitFn61_CainPortal(struct D2ObjectInitFnArg * pInitArg)
 // binary. Q33_UpdateFrozenAnyaNpcState: drives the frozen-Anya NPC animation state in
 // Rogue Encampment (counts arrivals, flips to thawed anim once enough players present).
 // No A1Q4 quest-state transitions.
-void __fastcall Q33_UpdateFrozenAnyaNpcState(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
+void __fastcall Q04_UpdateCainPortalInTown(struct D2QuestDataStrc * pQuestData, struct D2UnitStrc * pUnit);
 // A1Q4 — Q04_GetCainPortalCoordinates: outputs the saved Cain-area portal coords
 // (field 0xA8/0xAC) into pOutCoords if the quest is active, the portal-placed flag is
 // set, and not suppressed. Returns 1 on success, 0 otherwise. Getter.

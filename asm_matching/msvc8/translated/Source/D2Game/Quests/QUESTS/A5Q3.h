@@ -149,7 +149,7 @@ void __fastcall Objects_InitFn67_DrehyaStartOutsideTown(struct D2ObjectInitFnArg
 void __fastcall Objects_InitFn68_NihlathakStartInTown(struct D2ObjectInitFnArg * pInitArg);
 // Objects_InitFn69 (PrisonOfIce object init): once Anya-extra-state is set, spawns the SuperUnique boss (Frozenstein,
 // SuperUniques row 0x3c -> preset act value) via SpawnMonster, recording its GUID. Guards Anya's prison.
-void __fastcall Objects_InitFn69_SpawnFrozenstein(struct D2ObjectInitFnArg * pInitArg);
+void __fastcall Objects_InitFn69_NihlathakStartOutsideTown(struct D2ObjectInitFnArg * pInitArg);
 // Q33_AnyaTimerCallback (PrisonOfIce): per-frame anim driver for the rescued Anya NPC walking to/within Harrogath.
 // Neutral->Walk; while Walk in Harrogath counts ticks until bAnyaCanRun (then Run), elsewhere waits for bAnyaReachable;
 // Run->GetHit. Re-arms itself each frame (+0x19). Animates Anya's escort back to town.

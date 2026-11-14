@@ -2,6 +2,7 @@
 
 #include "Source/D2Game/Quests/QUESTS/A2Q3.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
@@ -316,7 +317,7 @@ void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2ObjectInit
       }
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pA2Q3Data->nViperAmuletUpdateFlag);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pA2Q3Data->nViperAmuletUpdateFlag);
 }
 
 // A2Q3 - fpSequenceFilter (Q11_SequenceFilter): chains to the next quest in the sequence. When this quest's
@@ -489,7 +490,7 @@ BOOL __fastcall Q11_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // A2Q3 - per-unit iterator cb (Q11_OnStaffViperPickup): counts players eligible for a body-part reward drop.
 // For a player NOT holding the 'vip ' or 'hst ' quest item and whose Horadric-Staff quest isn't Completed,
 // increments the A2Q3 nQuestItemCount (drives how many reward items the altar drops). Read of HoradricStaff only.
-BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
+BOOL __fastcall Q11_CountPlayersNeedingViperAmulet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pPlayerData;
     D2UnitStrc* pQuestData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20706976);
     if (!pQuestData) {
@@ -550,7 +551,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
           pDVar1->pAltarRoom = pRoom;
           eAltarLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
           pDVar1->nAltarLevelId = eAltarLevelId;
-          D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+          D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
           pDVar1->nViperAmuletUpdateFlag = 2;
           pDVar1->bViperAmuletInitialized = true;
           pPlayerData = pOperation->sArg.pVictim;
@@ -576,7 +577,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
           }
 
           pDVar1->nViperAmuletDropCount = 0;
-          UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q11_OnStaffViperPickup);
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q11_CountPlayersNeedingViperAmulet);
           if (pTaintedSunQuestData->bIsNotIntroduction != '\0') {
             /* GetQuestState(buf, A2Q3, 0=Completed) - only write completion if not already
                          Completed */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Completed);
@@ -602,7 +603,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
           if (pDVar1->nViperAmuletDropCount > 0) {
             iDropLoop = 0;
             do {
-              pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&eLevelId, nullptr, -1, 0);
+              pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&eLevelId, nullptr, -1, 0);
               if (pPlayerData) {
                 D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pPlayerData, ITEMFLAG_IDENTIFIED, 1);
                 nDroppedItemCount++;
@@ -618,7 +619,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
             *ppDroppedBodyPartCount += nDroppedItemCount;
           }
 
-          Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+          Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
           pQuestSeed = GetQuestControlSeed(pOperation->sArg.pGame);
           seedNext = D2_SeedRoll(pQuestSeed);
           iDropLoop = seedNext % 5 + 5;
@@ -635,19 +636,19 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
           return 0;
         }
 
-        D2Common::Units::SetupUpdateFlag(pPlayerData, 1);
+        D2Common::Units::ChangeAnimMode(pPlayerData, 1);
         pDVar1->nViperAmuletUpdateFlag = 2;
         iDropLoop = 0;
         pDVar1->nViperAmuletDropCount = 0;
         pDVar1->bTaintedSunStartedFailed = true;
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q11_OnStaffViperPickup);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q11_CountPlayersNeedingViperAmulet);
         pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
         pGame3 = (::SGAMEDATA*)D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
         pOperation->sArg.pVictim->dwDropItemCode = 0x20706976;
         nDroppedItemCount = 0;
         if (pDVar1->nViperAmuletDropCount > 0) {
           do {
-            pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_PlayerBodyPart, (int32_t*)&pGame3, nullptr, -1, 0);
+            pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&pGame3, nullptr, -1, 0);
             if (pPlayerData) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pPlayerData, ITEMFLAG_IDENTIFIED, 1);
               nDroppedItemCount++;
@@ -657,7 +658,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
           } while (iDropLoop < pDVar1->nViperAmuletDropCount);
         }
 
-        Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+        Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
         pQuestSeed = GetQuestControlSeed(pOperation->sArg.pGame);
         seedNext = D2_SeedRoll(pQuestSeed);
         iDropLoop = seedNext % 5 + 5;

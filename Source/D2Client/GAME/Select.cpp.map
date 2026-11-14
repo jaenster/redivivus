@@ -328,14 +328,14 @@
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
         "SELECT_GetDistanceSquared",
-        "GetTargetX",
-        "GetTargetY"
+        "GetScreenX",
+        "GetScreenY"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0c2a49cc",
+      "dh": "2ceccb3b",
       "paramStorage": [
         [
           "pUnit",
@@ -348,7 +348,7 @@
       ]
     },
     {
-      "name": "SELECT_GetConstant13_Y_Unref_00467400",
+      "name": "SELECT_HasSelectedUnit",
       "address": "00467400",
       "lines": [
         {
@@ -358,9 +358,9 @@
       ],
       "namespace": "D2Client::GAME::Select",
       "calledFunctions": [
-        "SELECT_GetConstant13_Y_Unref_00467400"
+        "SELECT_HasSelectedUnit"
       ],
-      "dh": "e2e8f633"
+      "dh": "3f2e3ac2"
     },
     {
       "name": "SELECT_SetPetSeedTimestamp",

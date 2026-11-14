@@ -153,18 +153,18 @@
         "Q33_OnFrozenAnyaKilled",
         "HasAiSub",
         "ClearAISub",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "GetQuestDataByQuestNoInternal"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonsterAiStrc",
-        "D2MonsterKillStrc",
         "D2QuestDataStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "2c31bfa0",
+      "dh": "650bd02f",
       "paramStorage": [
         [
           "pGame",
@@ -272,17 +272,17 @@
         "ZeroPathPointsSize",
         "EVENT_RemoveUnitTimersByType",
         "STATLIST_SetUnitStat",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "ROOM_LinkUnitToUpdateList"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonsterAiStrc",
-        "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA *"
       ],
-      "dh": "4398083e",
+      "dh": "3456f04c",
       "paramStorage": [
         [
           "pUnitStrc",
@@ -310,7 +310,7 @@
         "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
         "HasAiSub",
         "ClearAISub",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "UNITS_GetRoom",
         "AllocDrlgDelete",
@@ -320,8 +320,8 @@
         "SetEvent"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonsterAiStrc",
-        "D2MonsterKillStrc",
         "D2QuestDataA5Q3Strc",
         "D2QuestDataStrc",
         "D2RoomStrc",
@@ -329,7 +329,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e0af3dac",
+      "dh": "a7f27d6e",
       "paramStorage": [
         [
           "pQuestData",
@@ -518,7 +518,7 @@
         "Q33_Callback00_NpcActivate",
         "GetPlayerData",
         "GetQuestState",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "HasQuestItem",
         "AddGossipMessageOnMonster",
@@ -526,7 +526,7 @@
       ],
       "usedTypes": [
         "D2BitBufferStrc",
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2QuestArgStrc",
         "D2QuestDataA5Q3Strc",
         "D2QuestDataStrc",
@@ -537,7 +537,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3613f33a",
+      "dh": "684e9c93",
       "paramStorage": [
         [
           "pQuestData",
@@ -1070,7 +1070,7 @@
       ]
     },
     {
-      "name": "Objects_InitFn69_SpawnFrozenstein",
+      "name": "Objects_InitFn69_NihlathakStartOutsideTown",
       "address": "0058a6c0",
       "lines": [
         {
@@ -1080,9 +1080,9 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q3",
       "calledFunctions": [
-        "Objects_InitFn69_SpawnFrozenstein",
+        "Objects_InitFn69_NihlathakStartOutsideTown",
         "GetQuestDataByQuestNoInternal",
-        "MONSTERTBLS_GetPresetActValue",
+        "MONSTERTBLS_MapSuperUniqueId",
         "SpawnMonster"
       ],
       "usedTypes": [
@@ -1092,7 +1092,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "516ed372",
+      "dh": "f0daa98f",
       "paramStorage": [
         [
           "pInitArg",
@@ -1114,7 +1114,7 @@
         "Q33_AnyaTimerCallback",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
@@ -1125,7 +1125,7 @@
         "eD2LevelId",
         "eD2MonsterAnimMode"
       ],
-      "dh": "255c0b9b",
+      "dh": "d7f6a5d3",
       "paramStorage": [
         [
           "pQuestData",
@@ -1455,7 +1455,7 @@
       "calledFunctions": [
         "Q33_TransformFrozenAnya",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector",
         "UNITS_GetRoom",
         "QUEST_SpawnMonsterNearCoords",
@@ -1477,7 +1477,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fbf9c04f",
+      "dh": "0a061c88",
       "paramStorage": [
         [
           "pGame",

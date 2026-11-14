@@ -40,7 +40,7 @@
       ]
     },
     {
-      "name": "PANEL_GetBeltSlotHoverFlag_Unref_0047ec40",
+      "name": "PANEL_GetMiniPanelClickedButtonFlag",
       "address": "0047ec40",
       "lines": [
         {
@@ -50,15 +50,15 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_GetBeltSlotHoverFlag_Unref_0047ec40"
+        "PANEL_GetMiniPanelClickedButtonFlag"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a35ecbcb"
+      "dh": "f7f2e277"
     },
     {
-      "name": "PANEL_SetBottomPanelGlobals1_Unref_004880f0",
+      "name": "PANEL_ClearInvMousePosition",
       "address": "004880f0",
       "lines": [
         {
@@ -68,12 +68,12 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_SetBottomPanelGlobals1_Unref_004880f0"
+        "PANEL_ClearInvMousePosition"
       ],
-      "dh": "2a3f8512"
+      "dh": "a5d20e5a"
     },
     {
-      "name": "PANEL_GetBeltSlotHoverFlag_Unref_0048a690",
+      "name": "INV_HasItemToDescribe",
       "address": "0048a690",
       "lines": [
         {
@@ -83,12 +83,12 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_GetBeltSlotHoverFlag_Unref_0048a690"
+        "INV_HasItemToDescribe"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "81666a91"
+      "dh": "2736712b"
     },
     {
       "name": "LoadPanelImages",
@@ -257,9 +257,9 @@
         "PANEL_GetSmoothedStatValue",
         "GetPlayerUnit_UI",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "GetEntryIndex"
       ],
       "usedTypes": [
@@ -268,7 +268,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f8abe7d3",
+      "dh": "a893b29d",
       "paramStorage": [
         [
           "eUnitStat",
@@ -290,7 +290,7 @@
         "PANEL_DrawHealthOrb",
         "GetPlayerUnit_UI",
         "PANEL_GetSmoothedStatValue",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "memset",
         "UNIT_GetUnitState",
         "STATSEX_GetCurrentStat",
@@ -307,7 +307,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "72aea20a"
+      "dh": "27209adf"
     },
     {
       "name": "PANEL_DrawManaOrb",
@@ -323,7 +323,7 @@
         "PANEL_DrawManaOrb",
         "GetPlayerUnit_UI",
         "PANEL_GetSmoothedStatValue",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "memset",
         "UNIT_GetUnitState",
         "STATSEX_GetCurrentStat",
@@ -340,10 +340,10 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "61c6522a"
+      "dh": "92fd9839"
     },
     {
-      "name": "thunk_D2GFX_GetColorFromPalette_A",
+      "name": "PANEL_InitStaminaColorLow",
       "address": "00497250",
       "lines": [
         {
@@ -353,13 +353,13 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "thunk_D2GFX_GetColorFromPalette_A",
+        "PANEL_InitStaminaColorLow",
         "D2GFX_GetColorFromCurrentPallete"
       ],
-      "dh": "be694ade"
+      "dh": "d08c43cf"
     },
     {
-      "name": "PANEL_InitGoldColor",
+      "name": "PANEL_InitStaminaColorNormal",
       "address": "00497270",
       "lines": [
         {
@@ -369,13 +369,13 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_InitGoldColor",
+        "PANEL_InitStaminaColorNormal",
         "D2GFX_GetColorFromCurrentPallete"
       ],
-      "dh": "e3a3076f"
+      "dh": "936b5dad"
     },
     {
-      "name": "thunk_D2GFX_GetColorFromPalette_B",
+      "name": "PANEL_InitStaminaColorBlue",
       "address": "00497290",
       "lines": [
         {
@@ -385,10 +385,10 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "thunk_D2GFX_GetColorFromPalette_B",
+        "PANEL_InitStaminaColorBlue",
         "D2GFX_GetColorFromCurrentPallete"
       ],
-      "dh": "293aca9c"
+      "dh": "754c9ad6"
     },
     {
       "name": "PANEL_InitBeltColors",
@@ -482,7 +482,7 @@
       "usedTypes": [
         "D2GfxDataStrc"
       ],
-      "dh": "23ed9c43"
+      "dh": "8b3c377a"
     },
     {
       "name": "PANEL_DrawStaminaBar",
@@ -498,7 +498,7 @@
         "PANEL_DrawStaminaBar",
         "GetPlayerUnit_UI",
         "PANEL_GetSmoothedStatValue",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxStaminaFromUnit",
         "D2GFX_GetColorFromCurrentPallete",
         "ITEMSTATS_CheckUnitHasStateFlagIndex",
         "D2GFX_DrawSolidRectExBySize",
@@ -515,7 +515,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a196ed91"
+      "dh": "a7f3a885"
     },
     {
       "name": "PANEL_IsMouseInMenuButton",
@@ -831,7 +831,7 @@
         "INVENTORY_GetItemByGridOffset",
         "ITEM_CheckIfItemHasDurability",
         "IsStackable",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATSEX_GetCurrentStat",
         "ITEMS_IsA",
         "ITEM_GetTxtItemTypes_quiver",
@@ -843,7 +843,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b8fc00f0"
+      "dh": "b23d8450"
     },
     {
       "name": "PANEL_DrawPanelLayout",
@@ -861,20 +861,20 @@
         "GetMouseX",
         "GetMouseY",
         "PANEL_GetSmoothedStatValue",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "GetLocaleString",
         "UNICODE_FormatWideString",
         "AppendToBuffer",
         "DRAW_text0",
         "DRAW_text",
-        "GetTxtMaxMana"
+        "STATLIST_GetMaxManaFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "WCHAR",
         "int32_t"
       ],
-      "dh": "a2e683b1"
+      "dh": "c819a4e2"
     },
     {
       "name": "Unreferenced_00498310",
@@ -1164,7 +1164,7 @@
         "CLIENT_CheckExpansion",
         "INVENTORY_GetHandItem",
         "GetUIFlag",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetGridDimensions",
         "INVENTORY_GetItemInBeltSlot",
         "TXT_Items_GetLine",
@@ -1190,7 +1190,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79bfc0c2",
+      "dh": "0b908b61",
       "paramStorage": [
         [
           "nBeltSlot",
@@ -1231,7 +1231,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7d57a69f"
+      "dh": "4d69b4aa"
     },
     {
       "name": "CMD_UseBeltSlot2",
@@ -1254,7 +1254,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6725ec82"
+      "dh": "83eb4a73"
     },
     {
       "name": "CMD_UseBeltSlot3",
@@ -1277,7 +1277,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4e17a12a"
+      "dh": "1926d537"
     },
     {
       "name": "CMD_UseBeltSlot4",
@@ -1300,10 +1300,10 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "72646038"
+      "dh": "abab491c"
     },
     {
-      "name": "PANEL_SetBeltSlotHoverFlag",
+      "name": "PANEL_SetBeltSlotHasItem",
       "address": "00498d50",
       "lines": [
         {
@@ -1313,19 +1313,19 @@
       ],
       "namespace": "D2Client::UI::Panel",
       "calledFunctions": [
-        "PANEL_SetBeltSlotHoverFlag"
+        "PANEL_SetBeltSlotHasItem"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "3d651f80",
+      "dh": "6f8f40ca",
       "paramStorage": [
         [
           "nIndex",
           "ECX:4"
         ],
         [
-          "byValue",
+          "bHasItem",
           "EDX:4"
         ]
       ]
@@ -1579,7 +1579,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e3b192f5",
+      "dh": "c6b25617",
       "paramStorage": [
         [
           "pMsg",
@@ -1621,7 +1621,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d2add3d2",
+      "dh": "bb25e677",
       "paramStorage": [
         [
           "pMsg",

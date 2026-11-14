@@ -29,6 +29,10 @@ struct _CONTEXT;
 #define RECON_FPTD_pfnCelPixelDataFree
 typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 #endif
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 #ifndef RECON_FPTD_pfnTilecmpPixelCallback
 #define RECON_FPTD_pfnTilecmpPixelCallback
 typedef void (__stdcall *pfnTilecmpPixelCallback)(uint32_t dwPixel);
@@ -52,7 +56,7 @@ int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
 void __stdcall DeleteCellFile(struct DC6 * pDC6);
 int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
-void __stdcall GFX_SetSpriteCacheMaxSize(size_t nSize);
+void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 uint32_t __stdcall CELCMP_GetDirectionFrameTableIndex(int32_t nFrameIndex, uint32_t dwDirectionMask);

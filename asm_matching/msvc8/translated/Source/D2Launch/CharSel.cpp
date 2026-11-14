@@ -454,7 +454,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
             pwszLocaleStr += 2;
           }
 
-          pcSrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
+          pcSrc = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress((uint32_t)ePlayerClass, pCharSel->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharSel->nCharacterFlags & 0x20);
           pDVar2 = pCharSel;
           if (pcSrc) {
             D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], pcSrc, 4 + (uVar1 & 4 ? -3 : 0));
@@ -646,7 +646,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               pwszLocaleStr += 2;
             }
 
-            pcCopySrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)pCharEntry->ePlayerClassID, pCharEntry->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharEntry->nCharacterFlags & 0x20);
+            pcCopySrc = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress((uint32_t)pCharEntry->ePlayerClassID, pCharEntry->nCharacterFlags >> 8 & 0x1f, wCharFlags & 4, pCharEntry->nCharacterFlags & 0x20);
             pcSrc = pcCopySrc;
             pCharNameSrc = pCharEntry;
             if (pcCopySrc) {
@@ -1821,7 +1821,7 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
         ::D2WinTimer* pTimerForm;
         if (nRealmCount) {
           pTimerForm = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
-          D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerForm);
+          D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)pTimerForm);
           D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimerForm);
           gpCharSelStatusTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x94);
           gnCharSelScrollOffset = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x95);
@@ -2336,7 +2336,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetCustomData(gpCharSelScreenControl, 0x58ca);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetCustomData(gpCtlCharSelDownArrow, 0x5524);
     gpCtlCharSelScrollbar = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0xa7);
-    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarCallbackA(gpCtlCharSelScrollbar, nullptr);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarLinkedTextBox(gpCtlCharSelScrollbar, nullptr);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarCallbackB(gpCtlCharSelScrollbar, (fpD2WinScrollbarOnChange)MAINMENU_CharSelScrollbarCallback);
     memset(gaCharSelScreenSlotControls, 0, 8 * sizeof(gaCharSelScreenSlotControls[0]));
     gnCharSelScreenSlotCount = 8;
@@ -2349,10 +2349,10 @@ void __stdcall CHARSEL_InitCharSelScreen() {
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(pExpansionIcon, " ");
       }
 
-      D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(1);
+      D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(1);
       pExpansionIcon = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(nSlotIndex + 0x84);
       gaCharSelScreenSlotControls[nSlotIndex] = pExpansionIcon;
-      D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(0);
+      D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(0);
       gnCharSlotYPositions[nSlotIndex] = nSlotIndex / 2 * 0x5d + 0xb2;
       nSlotIndex++;
     } while (nSlotIndex < gnCharSelScreenSlotCount);
@@ -2429,7 +2429,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     gnCharSelBNetLoadState = 0;
     ::D2WinTimer* pTimerControl;
     pTimerControl = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
-    D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimerControl);
+    D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)pTimerControl);
     D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimerControl);
     MainMenus::D2IniData_launcher->nDifficulty = 0;
     gpCharSelExitButton = MainMenus::FORMS_CreateAnyFormFromListExEx(0x7c);
@@ -2451,10 +2451,10 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       gnCharSelScreenSlotCount = 4;
       nSlotY = 0xf6;
       do {
-        D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(1);
+        D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(1);
         pSlotControl = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(nSlotIndex + 0x80);
         gaCharSelScreenSlotControls[nSlotIndex] = pSlotControl;
-        D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(0);
+        D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(0);
         gnCharSlotYPositions[nSlotIndex] = nSlotY;
         nSlotIndex++;
         nSlotY += 0x5d;
@@ -2499,10 +2499,10 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       gnCharSelScreenSlotCount = 5;
       nSlotY = 0x99;
       do {
-        D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(1);
+        D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(1);
         pSlotControl = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(nSlotIndex + 0x7f);
         gaCharSelScreenSlotControls[nSlotIndex] = pSlotControl;
-        D2Win::Src::D2WinPalette::D2WINPAL_SetGammaRamp(0);
+        D2Win::Src::D2WinPalette::D2WINTEXTBOX_SetCompactLineSpacing(0);
         gnCharSlotYPositions[nSlotIndex] = nSlotY;
         nSlotIndex++;
         nSlotY += 0x5d;

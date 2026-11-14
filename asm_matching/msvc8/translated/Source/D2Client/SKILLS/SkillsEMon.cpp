@@ -796,7 +796,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_HomingToOwner(D2UnitStrc * pUnit, eD2Skill
       return 0;
     }
 
-    D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwnerUnit);
+    D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwnerUnit);
     return 1;
 }
 

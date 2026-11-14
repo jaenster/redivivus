@@ -1184,7 +1184,7 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
         }
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, nNewAnimMode);
+    D2Common::Units::ChangeAnimMode(pUnit, nNewAnimMode);
     rearm_timer:
     GAME::Event::SetEvent(pQuestData->pGame, pUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
 }

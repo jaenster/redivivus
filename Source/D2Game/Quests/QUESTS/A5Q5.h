@@ -114,7 +114,7 @@ BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(struct D2ObjectOperateFnArg * p
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_WorldstonePortalActivate: operate handler for the Worldstone Keep portal. Only opens (TakeStairs to next level) if RiteOfPassage is Completed or RewardAwaits AND the Ancients are dead; otherwise plays the locked sound. Read-only on quest record (GetQuestState only).
 BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(struct D2ObjectOperateFnArg * pOperation);
 // [A5Q5 = Rite of Passage] ResurrectAncients: per-player callback — counts living players still on the Arreat Summit (field_0x54). Used to decide whether to reset the arena when everyone leaves. No quest-state writes.
-BOOL __fastcall ResurrectAncients(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q35_CountLivingPlayersOnSummit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // [A5Q5 = Rite of Passage] Q35_OnPlayerLeavesSummit: when a player leaves the summit mid-fight, recounts players present (ResurrectAncients); if none remain, resets the Ancients arena so the fight restarts fresh next entry. No quest-state writes.
 void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.

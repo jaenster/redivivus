@@ -17,27 +17,8 @@
 // Forward declarations
 struct D2UnitStrc;
 struct SGAMEDATA;
-typedef uint32_t eD2MonsterAnimMode;
 typedef uint32_t eD2TimerTypeDWORD;
 
-// Data types
-#ifndef D2_DEFINED_D2MonsterKillStrc
-#define D2_DEFINED_D2MonsterKillStrc
-struct __attribute__((packed)) D2MonsterKillStrc {
-    /* 0x00 */ eD2MonsterAnimMode nUnitMode;
-    /* 0x04 */ struct D2UnitStrc * pVictim;
-    /* 0x08 */ struct D2UnitStrc * pAttacker;
-    /* 0x0C */ int nTargetX;
-    /* 0x10 */ int nTargetY;
-    /* 0x14 */ uint8_t nAnimatedMode1;
-    /* 0x15 */ uint8_t nAnimatedMode2;
-    /* 0x16 */ uint8_t nUnknown1;
-    /* 0x17 */ uint8_t nUnknown2;
-    /* 0x18 */ int nMonType1; // value: zeroed by SetCurrentSkill/ReviveCorpse, passed as an int argument
-    /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
-};
-
-#endif // D2_DEFINED_D2MonsterKillStrc
 namespace D2Game::GAME::Event::Dispatch::Monster {
 
 // Function declarations
@@ -56,14 +37,14 @@ void __fastcall BarbFindItemSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 // Clears uninterruptable state and resets to neutral on completion
 void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Kills a monster via a system-generated (non-player) kill. Clears the monster's current skill, builds a D2MonsterKillStrc (attacker from GetTargetEx, death anim mode 'e' for ghosts/non-solid else 'd'), and calls MONSTERAI_ExecuteLifecycleTransition. If the unit is frozen but not in mode-zero-death, returns early; otherwise triggers MONSTERAI_ExecuteAiFunction to process death AI.
-void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
-void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall MONMODE_ProcessWalkWithTrails(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall MONMODE_ProcessRunMovement(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Processes the get-hit recovery event for a monster. Restores path velocity, checks monster's GetHit stat flag; if absent, schedules a delayed re-event instead. Special-cases monster base ID 0x4E (Diablo) with longer stun-dependent recovery delays. Otherwise clears current skill and transitions the monster to GetHit mode via MONSTERAI_ExecuteLifecycleTransition.
-void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-BOOL __fastcall MONSTER_UpdateGetHitAnimation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONMODE_EndKnockback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+BOOL __fastcall MONMODE_UpdateKnockback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Game
 

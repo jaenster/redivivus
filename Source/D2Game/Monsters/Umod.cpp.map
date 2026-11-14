@@ -49,7 +49,7 @@
       "namespace": "D2Game::Monsters::Monsters::Umod",
       "calledFunctions": [
         "UMOD_IncreaseMonsterHp",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "_alldiv",
         "STATLIST_SetUnitStat"
       ],
@@ -58,7 +58,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "7a561e13",
+      "dh": "0c8a15aa",
       "paramStorage": [
         [
           "nUmodConstant",
@@ -193,7 +193,7 @@
       ]
     },
     {
-      "name": "MONUMOD_ApplyColdEnchant",
+      "name": "MONUMOD_ApplyGhostly",
       "address": "005a1080",
       "lines": [
         {
@@ -204,7 +204,7 @@
       "namespace": "D2Game::Monsters::Monsters::Umod",
       "calledFunctions": [
         "GetUmodConstant",
-        "MONUMOD_ApplyColdEnchant",
+        "MONUMOD_ApplyGhostly",
         "GetGamePointer",
         "STATLIST_SetUnitStat",
         "MONUMOD_ApplyChampionStats",
@@ -221,7 +221,7 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "10ab87ba",
+      "dh": "aafea34c",
       "paramStorage": [
         [
           "pUnit",
@@ -238,7 +238,7 @@
       ]
     },
     {
-      "name": "MONUMOD_ApplyBerserker",
+      "name": "MONUMOD_ApplyFanatic",
       "address": "005a11f0",
       "lines": [
         {
@@ -248,7 +248,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters::Umod",
       "calledFunctions": [
-        "MONUMOD_ApplyBerserker",
+        "MONUMOD_ApplyFanatic",
         "STATLIST_SetUnitStat",
         "MONUMOD_ApplyChampionStats"
       ],
@@ -256,7 +256,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9192c60d",
+      "dh": "1aedcdf5",
       "paramStorage": [
         [
           "pUnit",
@@ -309,7 +309,7 @@
       ]
     },
     {
-      "name": "MONUMOD_ApplyFanatic",
+      "name": "MONUMOD_ApplyBerserk",
       "address": "005a1280",
       "lines": [
         {
@@ -319,7 +319,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters::Umod",
       "calledFunctions": [
-        "MONUMOD_ApplyFanatic",
+        "MONUMOD_ApplyBerserk",
         "GetGamePointer",
         "UMOD_IncreaseMonsterHp",
         "GetDifficultyLevels",
@@ -333,7 +333,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "103e343f",
+      "dh": "9dcc153d",
       "paramStorage": [
         [
           "pUnit",

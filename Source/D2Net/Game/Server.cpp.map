@@ -17,7 +17,7 @@
         "CreateThreadClientSocketOrSingleplayer",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
       ],
-      "dh": "4fe01b6d"
+      "dh": "2e4b1b35"
     },
     {
       "name": "HandleIncomingPacketBuffer",
@@ -215,7 +215,7 @@
       ]
     },
     {
-      "name": "_NullSub_Unref_0052b270",
+      "name": "QSERVER_GetConnectedClients",
       "address": "0052b270",
       "lines": [
         {
@@ -225,10 +225,10 @@
       ],
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
-        "_NullSub_Unref_0052b270",
+        "QSERVER_GetConnectedClients",
         "GetConnectedClients"
       ],
-      "dh": "0e5c8fc5"
+      "dh": "008a5dfa"
     },
     {
       "name": "NET_HACK_SetUseQServerHack",
@@ -743,7 +743,7 @@
       ]
     },
     {
-      "name": "NET_SendPacketWithFlags",
+      "name": "NET_EnqueueClientPacket",
       "address": "0052b640",
       "lines": [
         {
@@ -753,17 +753,17 @@
       ],
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
-        "NET_SendPacketWithFlags",
+        "NET_EnqueueClientPacket",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SendPacketToClient"
+        "QSERVER_EnqueueClientPacket"
       ],
       "usedTypes": [
         "int32_t",
         "uint16_t"
       ],
-      "dh": "88cecca6",
+      "dh": "0d3b1eb9",
       "paramStorage": [
         [
           "szText",
@@ -774,13 +774,13 @@
           "DX:2"
         ],
         [
-          "nFlags",
+          "nClientId",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "NET_SendPacketToClient",
+      "name": "NET_EnqueueLocalClientPacket",
       "address": "0052b690",
       "lines": [
         {
@@ -790,21 +790,21 @@
       ],
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
-        "NET_SendPacketToClient",
+        "NET_EnqueueLocalClientPacket",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SendPacketToClient"
+        "QSERVER_EnqueueClientPacket"
       ],
       "usedTypes": [
         "int32_t",
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "21eaca91",
+      "dh": "84af8127",
       "paramStorage": [
         [
-          "szText",
+          "pPacket",
           "ECX:4"
         ],
         [
@@ -925,7 +925,7 @@
       "namespace": "D2Net::Game::Server",
       "calledFunctions": [
         "NET_D2GS_CLIENT_Send_0x70",
-        "SendPacketToClient"
+        "QSERVER_EnqueueClientPacket"
       ],
       "usedTypes": [
         "D2QServerStrc",
@@ -933,7 +933,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1a584ae8",
+      "dh": "c104fa0b",
       "paramStorage": [
         [
           "pQServer",

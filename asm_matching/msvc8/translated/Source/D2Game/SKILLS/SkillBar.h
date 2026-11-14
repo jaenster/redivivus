@@ -47,7 +47,7 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, struct D2Un
 void __fastcall SKILLBAR_ApplyWarCryBuff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pCaster, eD2Skills eSkill, int32_t nSkillLevel);
 BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+BOOL __fastcall SKILLBAR_Callback_FindTargetForTaunt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server do-func 71: Taunt (Barbarian). Reads the skill's aura stats and target state from skills.txt, applies them to the target via SKILLNEC_ApplyCurseToUnit and forces the target monster's AI to re-evaluate.
 // Slot from skills.txt srvdofunc 71.
 BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -63,7 +63,7 @@ BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, struct D2UnitStrc
 // Server-side Frenzy skill stack accumulator. Each hit: allocates or retrieves the aura state stat list, resets its expiry timer (auralencalc frames from now), fires a game event, increments UNITSTAT_skill_frenzy capped at nSkillLvl, then recalculates aura stats via D2SetAurastatsFromSkills. No-ops if skill has no param1 or aurastate is invalid.
 void __fastcall SKILLBAR_ApplyFrenzyStack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLBAR_OnWarCryExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
+void __fastcall SKILLBAR_StateCallback_Whirlwind(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
 // Server-side skill "start" function (srvstfunc 38): a charge/leap-to-target movement skill (e.g. War Cry / charge class). Validates eSkill against skills.txt and that the unit has the skill; resolves target/cursor position. If a melee target is already in range, queues client packet 0xA5 and force-attacks it. Otherwise sets the unit's dynamic path collision pattern/type, calculates a path toward the cursor, applies walk velocities, lands the unit at the final path point, registers collision there, sets uninterruptable + skill_move state, and stores the destination into the skill's Param1-4. Finally applies the skill's aurastate (if valid): updates state, sets an expiry-timed state via SetStateWithExpiryTime (OnWarCryExpire callback), copies aura/passive stats and the modifier skill/level stats, and fires up to 3 auraevent handlers. Returns 1 on success, 0 on any validation/path failure (queuing 0xA5 to the client on failure).
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Cleans up a transport/charge-type skill on the caster: clears skill flags, removes the uninterruptable state, broadcasts packet 0xA5 (skill end), removes the temporary collision footprint at (nCollideX, nCollideY), and resets the dynamic path's collision type and pattern to the normal player/monster defaults. Also removes and frees any aura stat-list associated with the skill's aurastate.

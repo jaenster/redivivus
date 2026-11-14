@@ -293,13 +293,13 @@
         "QUEST_SetStateFlag",
         "QUEST_SetStateAndBroadcast",
         "FindUnitFromTable",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestDataA1Q3Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "3b9fd12a",
+      "dh": "ad33a1a2",
       "paramStorage": [
         [
           "pQuestData",
@@ -479,7 +479,7 @@
       "calledFunctions": [
         "OBJOP_A1Q3_UseMalus",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetupUpdateEvent_AttachEventSound",
         "GetPlayerData",
         "GetQuestState",
@@ -497,7 +497,7 @@
         "eD2ObjectAnimMode",
         "int32_t"
       ],
-      "dh": "5adefa01",
+      "dh": "79343ddf",
       "paramStorage": [
         [
           "pOperation",

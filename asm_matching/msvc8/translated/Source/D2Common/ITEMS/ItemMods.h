@@ -58,7 +58,7 @@ namespace D2Common { namespace ITEMS { namespace ItemMods {
 int __stdcall ITEMMOD_FindChargedSkill(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, uint32_t * pnCharges, struct D2StatListExStrc * * ppStatList);
 // Sets the current charge count of a charged skill on an item. Searches stat lists (flag 0x40) for UNITSTAT_item_charged_skill keyed by nSkillId+nChargeSlot. Clamps nNewChargeCount to [0, maxCharges], packs as (maxCharges*0x100 | newCharges), and writes back via STATLIST_SetStatValueInBaseArraySafe. Recurses into socketed/carried items if not found on the item directly.
 BOOL __stdcall ITEMMOD_SetChargedSkillCharges(struct D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nChargeSlot, uint32_t nNewChargeCount);
-int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
+int32_t __stdcall ITEMMODS_GetByTimeAdjustment(int nPackedByTime, uint32_t nPeriodOfDay, int32_t nTimeOfDay, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
 void __stdcall ITEMMOD_ApplyEtherealBonus(struct D2UnitStrc * pUnit);
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.
 BOOL __stdcall ITEMMOD_CanApplyAutomod(struct D2UnitStrc * pUnit, struct D2MagicAffixTxt * pMagicAffixTxt);
@@ -76,12 +76,12 @@ int __stdcall RollRunewordMostlikely(struct D2UnitStrc * pUnit, struct D2UnitStr
 void __stdcall ITEMMOD_ApplyRunewordProperties(struct D2UnitStrc * pUnit, struct D2SetsTxtFStrc * pProperty, int32_t bExpansion);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel);
-void __stdcall ITEMMODS_GetQualityAllFields(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4);
-int32_t __stdcall ITEMMODS_GetQualityField1(int32_t nParam1, int32_t nParam2);
-void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance);
-int32_t __stdcall ITEMMODS_GetQualityField2(int32_t nParam1, int32_t nParam2, int32_t nParam3);
-void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
+void __stdcall ITEMMODS_UnpackSkillAndLevel(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel);
+void __stdcall ITEMMODS_UnpackChargedSkill(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnParam3, uint32_t * pnParam4);
+int32_t __stdcall ITEMMODS_PackSkillAndLevel(int32_t nParam1, int32_t nParam2);
+void __stdcall ITEMMODS_UnpackSkillLevelChance(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance);
+int32_t __stdcall ITEMMODS_PackSkillLevelChance(int32_t nParam1, int32_t nParam2, int32_t nParam3);
+void __stdcall ITEMMODS_UnpackSkillTab(uint32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels);
 int32_t __stdcall ITEMMODS_GetQualityField3(int32_t nPlayerClass, int32_t nSkillTab, int32_t nSkillLevels);
 // Property-to-stat conversion with additional context parameter for situational stat application. Reads scaled value from pPropData+4, optionally maximizes enhanced-damage stats, gets or creates the stat list (using pUnit as context for ITEMMOD_GetOrCreateStatList), then adds or negates the stat value. Halts on stat list failure.
 int32_t __fastcall PropertyFunc_SimpleStatWithContext(int32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit, struct D2SetsTxtFStrc * pProperty, eD2UnitStat eStatCode, int32_t bClearStat, int32_t nState, uint32_t dwStatListFlags, struct D2UnitStrc * pContextUnit);
@@ -317,7 +317,7 @@ uint32_t __fastcall ITEMPROP_AddEnhancedDamage(uint32_t nType, struct D2UnitStrc
 uint32_t __fastcall ITEMPROP_AddStat_Simple(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
 uint32_t __fastcall ITEMPROP_AddSkillBonus(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
 uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
-uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
+uint32_t __fastcall ITEMPROP_AddSkillTabBonus(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
 // Properties func 11 (att-skill/hit-skill/gethit-skill/kill-skill/death-skill/levelup-skill): resolves the skill level (derived from item level vs. skill req level when <= 0, clamped to max), takes the chance (default 5), and adds the stat with param skill<<6 | level via ITEMMOD_AddStatToItem. No RNG draw.
 uint32_t __fastcall ITEMPROP_AddSkillOnEvent(uint32_t nType, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, struct D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, uint32_t nRolledValue, int32_t nState, uint32_t dwFlags, struct D2UnitStrc * pContextUnit);
 // Sets the socket count on an item unit. Computes the socket cap from the item's grid dimensions (width*height, max 6) and the item's own max socket limit, rolls a random socket count if none supplied, clamps to [1, cap], then sets ITEMFLAG_SOCKETED and UNITSTAT_item_numsockets on the item. Returns the final socket count, or 0 if the item is invalid or has zero area.

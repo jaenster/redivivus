@@ -151,7 +151,7 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
       pbSerializedData += nItemDataSize;
       nBytesRemaining -= nItemDataSize;
       D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pSocketedItem, 1);
-      ITEMS::ItemMode::ITEMMODE_IsItemOnCursor(pGame, pSocketedItem, pUnit);
+      ITEMS::ItemMode::ITEMMODE_ApplyItemStats(pGame, pSocketedItem, pUnit);
       iSocket++;
     } while (iSocket < nSocketCount);
 
@@ -195,7 +195,7 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGa
         while (pSocketedItem) {
           pNextSocketedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pSocketedItem);
           pSocketedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pSocketedItem);
-          D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pSocketedItem);
+          D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventory, pSocketedItem);
           SUnit::FreeServerUnit(pGame, pSocketedItem);
           pSocketedItem = pNextSocketedItem;
         }
@@ -637,7 +637,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
 
     nTmpVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
     pInactiveRec->nExperience = nTmpVal;
-    nAlignment = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    nAlignment = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     pInactiveRec->nMaxHp = nAlignment;
     nTmpVal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     pInactiveRec->nHitpoints = nTmpVal;
@@ -806,7 +806,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
                 }
               case '\x02':
                 {
-                  pSpawnedMonster = (D2UnitStrc*)Monsters::MONSTER_SpawnWithUniqueModifiers(pGame, pRoom, uSlotC.nPosX, nAlignmentVal, uSlot18.nClassId, pInactiveMonRec->nUnitGUID, pInactiveMonRec->nMonUMods);
+                  pSpawnedMonster = Monsters::MONSTER_SpawnWithUniqueModifiers(pGame, pRoom, uSlotC.nPosX, nAlignmentVal, uSlot18.nClassId, pInactiveMonRec->nUnitGUID, pInactiveMonRec->nMonUMods);
                   break;
                 }
             }
@@ -1036,7 +1036,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                   exit(-1);
                 }
 
-                D2Common::Units::SetupUpdateFlag(pUnit, 0x11);
+                D2Common::Units::ChangeAnimMode(pUnit, 0x11);
                 break;
               }
             case UNIT_OBJECT:
@@ -1241,9 +1241,9 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
               _Dst->eAnimMode = pUnit->eAnimMode;
               BVar7 = D2Common::Units::IsShrine(pUnit);
               if (BVar7) {
-                uVar8 = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
+                uVar8 = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
                 _Dst->nUnitGUID = uVar8 >> 0x10;
-                uVar8 = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
+                uVar8 = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE);
                 _Dst->nDropItemCode = (uint16_t)uVar8;
               } else {
                 iVar5 = pUnit->nClassId;
@@ -1387,7 +1387,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     bIsDead = SUnit::CheckForModeZeroDeath(pUnit);
     bool bIsDeadBool;
     bIsDeadBool = bIsDead != 0;
-    D2UnitDataPlayerPetsStrc* pPetRecord;
+    int pPetRecord;
     pPetRecord = 0;
     eD2LevelId eLevelId;
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pUnitRoom);
@@ -1412,7 +1412,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     }
     if (bIsDeadBool) {
       int32_t nAlignment;
-      nMonStatsExIdx = D2Common::DATATBLS::ItemStats::STATES_HasPassiveState(pUnit);
+      nMonStatsExIdx = D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
       if (nMonStatsExIdx) {
         bShouldSave = false;
       }
@@ -1446,7 +1446,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
       if (!pOwnerUnit || pOwnerUnit->eUnitType != UNIT_PLAYER) {
         bShouldSave = false;
       } else {
-        pPetRecord = PLAYER::PlayerPets::PETS_HandleDeadPet(pGame, pOwnerUnit, (D2MonsterKillStrc*)pUnit);
+        pPetRecord = PLAYER::PlayerPets::PETS_HandleDeadPet(pGame, pOwnerUnit, pUnit);
         bShouldSave = false;
       }
     }

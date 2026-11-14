@@ -323,7 +323,7 @@ static bool __stdcall MallusHandler(D2QuestDataStrc * pQuestData) {
 
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pA1Q3Data->nMalusGUID);
     if (pUnit && pUnit->nClassId == 0x6c) {
-      D2Common::Units::SetupUpdateFlag(pUnit, 0);
+      D2Common::Units::ChangeAnimMode(pUnit, 0);
       return true;
     }
 
@@ -419,7 +419,7 @@ BOOL __fastcall OBJOP_A1Q3_UseMalus(D2ObjectOperateFnArg * pOperation) {
       ePlayerAnimMode = pDVar1->eAnimMode.ePlayerMode;
     }
     if (pQuestData->bIsNotIntroduction == '\0') {
-      D2Common::Units::SetupUpdateFlag(pDVar1, 2);
+      D2Common::Units::ChangeAnimMode(pDVar1, 2);
       UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
       return 0;
     }
@@ -445,10 +445,10 @@ BOOL __fastcall OBJOP_A1Q3_UseMalus(D2ObjectOperateFnArg * pOperation) {
       }
 
       pOperation->sArg.pVictim->dwDropItemCode = 0x206d6468;
-      pDVar1 = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationLocal, nullptr, -1, 0);
+      pDVar1 = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationLocal, nullptr, -1, 0);
       if (pDVar1) {
         int32_t nUnitGUID;
-        D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 2);
+        D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 2);
         pA1Q3Data = pQuestData->pQuestSpecificData.pA1Q3;
         pA1Q3Data->bMalusTaken = '\x01';
         pA1Q3Data->nMalusMode = 2;

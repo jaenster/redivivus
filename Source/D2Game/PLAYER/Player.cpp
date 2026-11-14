@@ -265,7 +265,7 @@ static uint32_t __stdcall PLAYER_PlaceItemInBelt(::SGAMEDATA * pGame, int32_t bA
     }
 }
 
-static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * nGamePtr, int32_t bNoSkill, int32_t nItemClassId, D2CharStatsTxt * pTemplateTxt, D2UnitStrc * pUnit) {
+static D2UnitStrc * __stdcall PLAYER_CreateStartItemUnit(::SGAMEDATA * pGame, int32_t nItemIndex, int32_t nItemClassId, D2CharStatsTxt * pTemplateTxt, D2UnitStrc * pUnit) {
     BOOL bIsStackable;
     int nValue;
     if (!pUnit) {
@@ -273,7 +273,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
     }
 
     int32_t nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, nGamePtr, 4, QUALITY_NORMAL, 1, 1, nItemLevel, 0, 0, 0);
+    D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, nItemClassId, pGame, 4, QUALITY_NORMAL, 1, 1, nItemLevel, 0, 0, 0);
     if (pCreatedItem) {
       D2StatListExStrc* pStatList;
       pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
@@ -281,7 +281,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pCreatedItem, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
       }
-      if (!bNoSkill && pTemplateTxt->StartSkill >= 0 && (int)pTemplateTxt->StartSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+      if (!nItemIndex && pTemplateTxt->StartSkill >= 0 && (int)pTemplateTxt->StartSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         pStatList = D2Common::Stats::StatsEx::GetStatList(pCreatedItem, STATE_none, 0x40);
         if (!pStatList) {
           pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pCreatedItem->pMemory, 0x40, 0, UNIT_ITEM, pCreatedItem->nUnitGUID);
@@ -302,7 +302,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateRewardItemFromTemplate(::SGAMEDATA * 
 }
 
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
-void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2CharStatsTxt * eClassId, int32_t nDifficulty, D2CharItemStrc * pCharItem) {
+void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2CharStatsTxt * pCharStatsTxt, int32_t nItemIndex, D2CharItemStrc * pCharItem) {
     // Frame slots -20..-4 are ONE object: &dwBeltSlotOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -333,7 +333,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     do {
       __frame0.pGameSaved = pGame;
-      pNewItem = PLAYER_CreateRewardItemFromTemplate(__frame0.pGameSaved, nDifficulty, __frame0.nItemTxtLine, eClassId, pUnit);
+      pNewItem = PLAYER_CreateStartItemUnit(__frame0.pGameSaved, nItemIndex, __frame0.nItemTxtLine, pCharStatsTxt, pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pNewItem, ITEMFLAG_BEGINNER, 1);
       D2Common::ITEMS::Items::SetBodyLoc(pNewItem, pCharItem->nBodyLoc);
       nLine = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_beltable(pNewItem);
@@ -376,7 +376,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
             wLayer = 0;
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_quantity, nLine, wLayer);
           } else {
-            nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
+            nLine = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pNewItem);
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_durability, nLine, wLayer);
           }
         } else {
@@ -388,7 +388,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_quantity, nLine, wLayer);
           } else {
             wLayer = 0;
-            nLine = D2Common::Stats::StatsEx::GetTxtMaxDurability(pNewItem);
+            nLine = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pNewItem);
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pNewItem, UNITSTAT_durability, nLine, wLayer);
           }
 
@@ -506,7 +506,7 @@ void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           Quests::QUESTS::A5Q5::Q35_OnPlayerLeavesSummit(pGame, pUnit);
           return;
           case UNIT_PLAYER:
-            PlayerTrade::thunk_TRADE_CompleteTrade(pGame, pUnit);
+            PlayerTrade::thunk_PLRTRADE_AbortTrade(pGame, pUnit);
           Quests::QUESTS::A5Q5::Q35_OnPlayerLeavesSummit(pGame, pUnit);
           return;
           case UNIT_ITEM:
@@ -590,14 +590,14 @@ void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWOR
 
     D2Common::PATH::Path::PATH_GetCollisionTypeAt(pUnit->pPath.pDynamicPath, pUnit, pRoom, pPoint->x, pPoint->y);
     pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
-    D2Common::Units::SetupUpdateFlag(pUnit, 0x11);
+    D2Common::Units::ChangeAnimMode(pUnit, 0x11);
     pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_playerbody, 1);
     pUnit->eUnitFlags |= UNITFLAG_INITSEEDSET;
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_TRAP, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_FREEHOVER, 0);
-    nLine = D2Common::INVENTORY::Inventory::INVENTORY_GetCursorItemGUID(pUnit->pInventory);
+    nLine = D2Common::INVENTORY::Inventory::INVENTORY_GetOwnerGUID(pUnit->pInventory);
     if (nLine == -1) {
       return;
     }
@@ -781,13 +781,13 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // NOTE: Register params: pGame (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\PLAYER\Player.cpp
-int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, uint32_t dwSkillTxt) {
+int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x2f3);
     if (!pClient) {
       return 0;
     }
 
-    GAME::Clients::SetGotkeyInfo(pClient, nHotkey, wSkillId, byHand, dwSkillTxt);
+    GAME::Clients::SetGotkeyInfo(pClient, nHotkey, wSkillId, byHand, nItemGUID);
     return 1;
 }
 
@@ -816,7 +816,7 @@ int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2Leve
     return sArgs.nCount;
 }
 
-void __fastcall CountModeZeroDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount) {
+void __fastcall PLAYER_CountLivingPlayersCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount) {
     BOOL _hasModeZero;
     bool hasModeZero;
     DWORD PlayerCountRelated;
@@ -839,7 +839,7 @@ void __fastcall COMMAND_playersX(DWORD count) {
 int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
     int PlayerCountFixed;
     int ModeZeroCount = 0;
-    UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)CountModeZeroDeath, &ModeZeroCount);
+    UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayersCallback, &ModeZeroCount);
     if (!((uint8_t)(pGame->nGameType - SGAMETYPE_OBNET_HOST) > 2 || (PlayerCountFixed = PlayerCountOverride , PlayerCountOverride <= ModeZeroCount))) {
       return PlayerCountFixed;
     }
@@ -1001,7 +1001,7 @@ static void __stdcall EXP_ApplyDeathExpPenalty(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x3c4);
-    GAME::Clients::SetExperience(pClient, nExpPenalty);
+    GAME::Clients::SetExperienceLoss(pClient, nExpPenalty);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nNewExp, 0);
 }
 
@@ -1031,10 +1031,10 @@ void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     pbHostile->bHostile = 1;
 }
 
-DWORD __fastcall PLAYER_CountPlayersWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pnFilter) {
-    if (pGame && pnFilter && pnFilter->eUnitType == UNIT_PLAYER) {
+BOOL __fastcall PLAYER_HasHostilePlayer(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
+    if (pGame && pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
       D2PlayerHostileCheckArgStrc sHostileArgs = {0};
-      sHostileArgs.pPlayer = pnFilter;
+      sHostileArgs.pPlayer = pPlayer;
       UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CheckIsHostileToPlayer, &sHostileArgs);
       return sHostileArgs.bHostile;
     }

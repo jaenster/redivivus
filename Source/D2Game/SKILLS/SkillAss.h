@@ -30,9 +30,9 @@ typedef uint32_t eMissilesId;
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MindBlastArgStrc {
     /* 0x00 */ struct D2DamageStrc * pDamage;
-    /* 0x04 */ int32_t nStunLength;
-    /* 0x08 */ int32_t nConvertChance;
-    /* 0x0C */ int32_t nStunChance;
+    /* 0x04 */ int32_t nConvertChance;
+    /* 0x08 */ int32_t nConvertLength;
+    /* 0x0C */ int32_t nConvertLengthRange;
 };
 
 #endif // D2_MODULE_D2Game
@@ -90,7 +90,7 @@ void __stdcall SKILLASS_ApplyChargeUpDamage(struct D2UnitStrc * pUnit, struct D2
 void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
 // Iterates all active charge-up states on pUnit (sgptDataTable->pAllStatesDataTblFlag0x04) and, for each that is active and has a valid skill, dispatches to the appropriate handler based on pSkillTxt->prgdam: 2=AddChargeUpDamageRange, 3=ApplyChargeUpDamage, 4=ApplyChargeUpConvertDamage. Only runs if pDamage result-flag bit 0 is set.
 void __fastcall SKILLASS_DispatchChargeUpDamage(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage);
-uint32_t __fastcall SKILLBAR_ApplyWarCryDamage(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pUnit);
+uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pUnit);
 int32_t __fastcall SKILLASS_GetChargeUpMissile(struct D2UnitStrc * pUnit, int32_t nSkillId);
 // Returns the charge-level-indexed prgcalc value for a charge-up skill. If the skill has the charge-up flag (bit 2) and a valid aurastate with an active stat list, selects prgcalc[0..2] by clamped charge level (1/2/3); otherwise falls back to prgcalc[0]. Returns 0 if skill id is out of range.
 uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -150,7 +150,7 @@ BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, struct D2Unit
 BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // State-expire callback for the Assassin conversion (Mind Blast convert) effect. Resets the unit's alignment to hostile, clears the conversion state, frees monster target nodes, then restores pre-conversion level/HP from the STATE_conversion_save stat list (scaling current HP proportionally). Removes all flag-8 stat lists (the conversion buff layers).
 void __fastcall SKILLASS_OnConversionExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
-uint32_t __fastcall SKILLAMZ_HandleStrafeDamageAndNextDelay(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pUnit);
+uint32_t __fastcall SKILLASSN_AuraCallback_MindBlast(struct D2SkillCallbackContextStrc * pContext, struct D2UnitStrc * pUnit);
 // Mind Blast / Psychic Hammer SrvDoFunc. Gets target/cursor position, computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct with random skill damage + SetDamageOnEvent + skill ResultFlags/HitFlags, then applies area effect using SKILLAMZ_HandleStrafeDamageAndNextDelay as the per-unit callback. Returns 1 on success.
 // @sourcefile .\SKILLS\SkillAss.cpp
 BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

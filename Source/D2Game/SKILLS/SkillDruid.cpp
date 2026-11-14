@@ -68,7 +68,7 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
         nSummonLvl = 1;
       }
 
-      SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGameSaved, pUnit, pSummon, nSummonLvl, nSkillLvl);
+      SkillNec::SKILLS_SetSummonBaseStats(pGameSaved, pUnit, pSummon, nSummonLvl, nSkillLvl);
       SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkill, nSkillLvl, 0);
       return 1;
     }
@@ -503,7 +503,7 @@ BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitS
         nLevel = 1;
       }
 
-      SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGameSaved, pUnit, pSummon, nLevel, nSkillLvl);
+      SkillNec::SKILLS_SetSummonBaseStats(pGameSaved, pUnit, pSummon, nLevel, nSkillLvl);
       SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkill, nSkillLvl, 0);
       return 1;
     }
@@ -555,7 +555,7 @@ uint32_t __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pU
         nReviveLevel = 1;
       }
 
-      SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGameSaved, pUnit, pSummon, nReviveLevel, nSkillLvl2);
+      SkillNec::SKILLS_SetSummonBaseStats(pGameSaved, pUnit, pSummon, nReviveLevel, nSkillLvl2);
       SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkill, nSkillLvl2, 0);
       return 1;
     }
@@ -1214,7 +1214,7 @@ static int32_t SKILLDRUID_GetSummonHealthBonus(int * pnAbsorb, int32_t nAbsorbDe
 }
 
 // Item-event / aura-tick callback for the Druid summon HP-sharing aura (Heart of Wolverine / Spirit of Barbs style). Reads the aura's stat list from the caster, sums health contributions from up to three summon slots in pParam via SKILLDRUID_GetSummonHealthBonus, converts the total to a percentage of the reference value (aurastat[1]), and compares against the previous cached percentage (UNITSTAT_unsentparam1). If the change exceeds 4 percentage points it refreshes the aura GFX and updates the cached value. If the computed absorption drops to zero, deactivates the state, removes and frees the stat list entirely. Returns 1 on any handled path, 0 on invalid inputs.
-BOOL __fastcall ITEMEVENT_DruidSummonHpAura(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_CycloneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bPctChanged;
     bool bPctChanged;
     int32_t nAbsorbCtx0;

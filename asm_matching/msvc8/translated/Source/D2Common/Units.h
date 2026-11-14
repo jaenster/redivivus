@@ -57,11 +57,11 @@ void __stdcall SetXForStaticUnit(struct D2UnitStrc * pUnit, int32_t nX);
 void __stdcall SetYForStaticUnit(struct D2UnitStrc * pUnit, int32_t nY);
 int32_t __stdcall GetUnitSizeX(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetUnitSizeY(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTargetX(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTargetY(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetScreenX(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetScreenY(struct D2UnitStrc * pUnit);
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
 void __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
-void __stdcall GetTargetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
+void __stdcall GetScreenCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 // Returns nothing: every exit leaves AddCollision_Vector's or GetUnitSizeY's EAX, and none of the 17 call sites reads it.
 void __stdcall BlockCollisionPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __stdcall InitializeStaticPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
@@ -71,10 +71,10 @@ void __stdcall SetTargetUnitForDynamicUnit(struct D2UnitStrc * pUnit, struct D2U
 void __stdcall GetRunAndWalkVelocityForPlayer(struct D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);
 void __stdcall SetAnimData(struct D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassId, int32_t nMode);
 uint32_t __stdcall NeedsRoomUpdate(struct D2UnitStrc * pUnit);
-void __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);
+void __stdcall SetCurrentRoomInvalid(struct D2UnitStrc * pUnit, int32_t bInvalid);
 void __stdcall RefreshInventory(struct D2UnitStrc * pUnit, BOOL bHasInventory);
 // Returns the eInventoryPage for a given unit and page index. For players, maps nInvPage (1-4) to trade/transmog/bank pages, or performs a class-specific lookup. For monsters, always returns INVPAGE_Monster. For objects, recognises Guild Vault (0x152) and Trophy Case (0x153). Returns INVPAGE_None on mismatch or null input (halts on null). RETURN WIDTH: every exit writes the whole of EAX (MOV EAX,imm32 / LEA EAX,[EAX*4+8] / MOV EAX,[ECX*8+0x744548]) and InitializeiInventoryPages takes it with MOV ESI,EAX - no MOVZX anywhere.
-int32_t __stdcall GetInventoryPage(struct D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD);
+int32_t __stdcall UNITS_GetInventoryRecordId(struct D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD);
 struct D2LightMapStrc * __stdcall GetLightMap(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetAnimOrSeqMode(struct D2UnitStrc * pUnit);
 void __stdcall InitializeSequence(struct D2UnitStrc * pUnit);
@@ -128,7 +128,7 @@ BOOL __stdcall IsInMeleeRange(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTa
 // Returns TRUE if the unit is currently in a movement animation mode. For players, checks GetAnimOrSeqMode result: modes 2, 3, or 6. For monsters, checks for Walk or Skill3 mode, plus special-cases base ID 0x6E (Oblivion Knight with Decrepify walk). Returns FALSE for missiles (halts) and all other types.
 BOOL __stdcall IsInMovingMode(struct D2UnitStrc * pUnit);
 BOOL __stdcall IsInMovingModeEx(struct D2UnitStrc * pUnit);
-uint32_t __stdcall CalcRecoveryPriority(struct D2UnitStrc * nMpDeficit);
+uint32_t __stdcall UNITS_GetHealingCost(struct D2UnitStrc * nMpDeficit);
 uint32_t __stdcall GetInventoryGoldLimit(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitRightSkill(struct D2UnitStrc * pUnit);
@@ -167,7 +167,7 @@ uint8_t __stdcall PATH_GetCurrentDirection(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetWeaponBySkill(struct D2UnitStrc * pUnit, int32_t nParam);
 // Returns the weapon animation-class field used to drive a player unit's attack/cast animation selection. Resolves the unit's effective type/class/anim-mode through SKILLS_GetStateTransformGfx (handling shape-shift transforms). Only meaningful for players in Attack1/Attack2 or (when dual-wield capable) Skill3/Skill4 modes: fetches the relevant weapon via GetWeaponBySkill, reads its weapon anim class (ITEM_GetWeaponAnimClass), and indexes gdwUnitStrucFieldMask by (transformed-class * 7 + animclass) to return the field mask/value. Returns 0 for non-players or other modes. pUnit = the unit being animated.
 // @sourcefile .\UNITS\Units.cpp
-uint32_t __stdcall GetWeaponAnimClass(struct D2UnitStrc * pUnit);
+uint32_t __stdcall UNITS_GetFrameBonus(struct D2UnitStrc * pUnit);
 uint32_t __fastcall GetHitClassForPlayerOrMonster(struct D2UnitStrc * pUnit);
 uint32_t __fastcall GetWeaponClass(struct D2UnitStrc * pUnit);
 // Returns the visual component index for an item equipped on a unit. For arm-slot items (L_ARM/R_ARM), checks both arm slots for non-broken items; if both slots are occupied with one-handed weapons and the unit can dual-wield, returns component 6 for the secondary weapon. Falls back to ITEM_GetItemsTxt_bComponent for the default component from ItemsTxt.
@@ -181,15 +181,15 @@ void __stdcall UpdateAnimSpeed(struct D2UnitStrc * pUnit, char * szFile, int32_t
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitAnimMode(struct D2UnitStrc * pUnitArg);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-int32_t __stdcall SetupUpdateFlag(struct D2UnitStrc * pUnit, int32_t nAnimMode);
+int32_t __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 void __stdcall Return_Unref_005fe100(struct D2UnitStrc * pUnit, int32_t nParam);
 void __fastcall UNITS_SetWarpStaticPathCoords(struct D2UnitStrc * pUnit, int32_t nPosX, int32_t nPosY, int32_t nUnkX, int32_t nUnkY);
 int32_t __stdcall GetAbsoluteXDistance(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 int32_t __stdcall GetAbsoluteYDistance(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
-void __stdcall SetTargetX(struct D2UnitStrc * pUnit, int32_t nTargetX);
-void __stdcall SetTargetY(struct D2UnitStrc * pUnit, int32_t nTargetY);
+void __stdcall SetScreenX(struct D2UnitStrc * pUnit, int32_t nTargetX);
+void __stdcall SetScreenY(struct D2UnitStrc * pUnit, int32_t nTargetY);
 void __fastcall SetTargetXYForWarp(struct D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY);
 int32_t __fastcall GetCollisionType(struct D2UnitStrc * pUnit);
 void __stdcall ResetRoom(struct D2UnitStrc * pUnit);
@@ -200,7 +200,7 @@ void __stdcall SetAnimSpeedForMonster(struct D2UnitStrc * pUnit);
 void __stdcall SetAnimOrSeqMode(struct D2UnitStrc * pUnit, int32_t nAnimMode);
 // Returns non-zero if the unit's current animation mode triggers at frame-end. Checks offset [3] of the anim-table entry for unconditional frame-end; if offset [2] is set, also checks the current skill's SkillsTxt nFlags bit 3 (animate-at-end flag). Dispatches per unit type (player vs monster) to the appropriate table (gaPlayerAnimModeCheckTable / gaAnimTableClassic / gaAnimTableExpansion).
 // @sourcefile .\UNITS\Units.cpp
-uint32_t __fastcall UNITS_CheckAnimateAtFrameEnd(int32_t nAnimMode, eD2UnitType eUnitType, struct D2UnitStrc * pUnit, int32_t nClassId);
+uint32_t __fastcall UNITS_CanAnimModeUseAttackRate(int32_t nAnimMode, eD2UnitType eUnitType, struct D2UnitStrc * pUnit, int32_t nClassId);
 void __stdcall GetFrameMetrics(struct D2UnitStrc * pUnit, int * pCurrentFrame, int * pFrameCount);
 void __stdcall SetAnimActionFrame(struct D2UnitStrc * pUnit, int32_t nFrame);
 int32_t __stdcall GetEventFrameInfo(struct D2UnitStrc * pUnit, int32_t nFrame);

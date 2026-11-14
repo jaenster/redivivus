@@ -370,7 +370,7 @@
       ]
     },
     {
-      "name": "thunk_UnloadBin_DataTbls",
+      "name": "DATATBLS_UnloadLevelTypesTxt",
       "address": "0061ea90",
       "lines": [
         {
@@ -380,10 +380,10 @@
       ],
       "namespace": "D2Common::DATATBLS::LvlTbls",
       "calledFunctions": [
-        "thunk_UnloadBin_DataTbls",
+        "DATATBLS_UnloadLevelTypesTxt",
         "UnloadBin"
       ],
-      "dh": "d7391861"
+      "dh": "8fd7a09b"
     },
     {
       "name": "TXT_LvlTypes_GetLine",
@@ -795,14 +795,14 @@
         "TXT_FreeTxt_LvlSub",
         "DRLGPRESET_ReleaseDrlgFile",
         "FreeClientMemory",
-        "DRLGMAZE_FreeRoomPresetData",
+        "DRLGTILESUB_FreeDrlgFile",
         "UnloadBin",
         "FreeServerMemory"
       ],
       "usedTypes": [
         "D2DrlgFileStrc *"
       ],
-      "dh": "5d2343de"
+      "dh": "0888d044"
     },
     {
       "name": "TXT_LvlSub_GetLineFromSubType",
@@ -833,7 +833,7 @@
       ]
     },
     {
-      "name": "TXT_LoadExpansionLvlTbls",
+      "name": "LVLTBLS_LoadLvlTypeTileLibraries",
       "address": "0061fae0",
       "lines": [
         {
@@ -843,7 +843,7 @@
       ],
       "namespace": "D2Common::DATATBLS::LvlTbls",
       "calledFunctions": [
-        "TXT_LoadExpansionLvlTbls",
+        "LVLTBLS_LoadLvlTypeTileLibraries",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -853,11 +853,11 @@
         "TILEPROJECT_AllocSlot"
       ],
       "usedTypes": [
-        "D2ExpansionLvlTblsTxt",
+        "D2LvlTypeTileLibrariesStrc",
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "1ffbd500",
+      "dh": "01929c5d",
       "paramStorage": [
         [
           "pMemory",
@@ -866,7 +866,7 @@
       ]
     },
     {
-      "name": "TXT_FreeExpansionLvlTbls",
+      "name": "LVLTBLS_FreeLvlTypeTileLibraries",
       "address": "0061fbf0",
       "lines": [
         {
@@ -876,10 +876,10 @@
       ],
       "namespace": "D2Common::DATATBLS::LvlTbls",
       "calledFunctions": [
-        "TXT_FreeExpansionLvlTbls",
+        "LVLTBLS_FreeLvlTypeTileLibraries",
         "FreeServerMemory"
       ],
-      "dh": "40901d90"
+      "dh": "74d01001"
     },
     {
       "name": "LVLTBLS_GetAutomapLevelId",

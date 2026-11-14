@@ -344,7 +344,7 @@ void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int
     pCodeField[3] = -1;
 }
 
-D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00611d10() {
+D2AnimDataStrc * __stdcall TXT_GetCharStatsTable() {
     return (D2AnimDataStrc*)MonsterTbls::sgtDataTable.pTxtCharStats;
 }
 
@@ -565,13 +565,13 @@ char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId
     return szResult;
 }
 
-void __stdcall StoreDataTables(char * szFileName, D2InventoryToBeUpdatedStrc * pInventoryToBeUpdated, size_t nSize, uint32_t dwVersion) {
+void __stdcall StoreDataTables(char * szFileName, void * pWriteBuffer, size_t nSize, uint32_t nRecordCount) {
     char szFilePath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s", "DATA\\GLOBAL\\EXCEL", szFileName);
     FILE* _File = fopen(szFilePath, "wb");
     if (_File) {
-      fwrite(&dwVersion, 4, 1, _File);
-      fwrite(pInventoryToBeUpdated, nSize, 1, _File);
+      fwrite(&nRecordCount, 4, 1, _File);
+      fwrite(pWriteBuffer, nSize, 1, _File);
       fclose(_File);
     }
 }
@@ -632,10 +632,10 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       } while (pNameEnd[1] != '\0');
 
       memcpy(pNameEnd + 1, ".bin", 5);
-      StoreDataTables(szTableNameBuf, (D2InventoryToBeUpdatedStrc*)pDataTable, nBinAllocSize, nTxtLineCount);
+      StoreDataTables(szTableNameBuf, pDataTable, nBinAllocSize, nTxtLineCount);
       D2_FREE_POOL_AT(nullptr, pDataTable, ".\\DATATBLS\\DataTbls.cpp", 0x8d6);
     }
-    if (gpaMiscTxtTables) {
+    if (gbTxtAllocCountHeader) {
       nErrorLine = 0x8de;
       szEffectiveName = ".bin";
     } else {
@@ -655,7 +655,7 @@ void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2B
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8e7);
       exit(-1);
     }
-    if (gpaMiscTxtTables) {
+    if (gbTxtAllocCountHeader) {
       nRecordCount = (int32_t)pArchive2->pPrevLink;
       pParsedData = &pArchive2->pNext;
     } else {
@@ -682,7 +682,7 @@ void __stdcall UnloadBin(void * pTxtTable) {
     if (!pTxtTable) {
       return;
     }
-    if (gpaMiscTxtTables) {
+    if (gbTxtAllocCountHeader) {
       D2_FREE_POOL_AT(nullptr, (void*)((char*)pTxtTable - 4), ".\\DATATBLS\\DataTbls.cpp", 0x924);
       return;
     }
@@ -862,7 +862,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
     int32_t nTmp;
     if (MonsterTbls::sgtDataTable.pTxtCompCode) {
       D2CompCodeTxt* pMemoryToFree;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree = MonsterTbls::sgtDataTable.pTxtCompCode - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -878,7 +878,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
       return;
     }
     if (MonsterTbls::sgtDataTable.pTxtPlayerClass) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_00 = MonsterTbls::sgtDataTable.pTxtPlayerClass - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_00, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -891,7 +891,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtPlayerClassLink);
     if (MonsterTbls::sgtDataTable.pTxtBodyLocs) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_01 = MonsterTbls::sgtDataTable.pTxtBodyLocs - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_01, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -904,7 +904,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtBodyLocsLink);
     if (MonsterTbls::sgtDataTable.pTxtStorePage) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_02 = MonsterTbls::sgtDataTable.pTxtStorePage - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_02, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -917,7 +917,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtStorePageLink);
     if (MonsterTbls::sgtDataTable.pTxtElemTypes) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_03 = MonsterTbls::sgtDataTable.pTxtElemTypes - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_03, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -930,7 +930,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtElemTypesLink);
     if (MonsterTbls::sgtDataTable.pTxtHitClass) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_04 = MonsterTbls::sgtDataTable.pTxtHitClass - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_04, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -943,7 +943,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtHitClassLink);
     if (MonsterTbls::sgtDataTable.pTxtColors) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_05 = MonsterTbls::sgtDataTable.pTxtColors - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_05, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -956,7 +956,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtColorsLink);
     if (MonsterTbls::sgtDataTable.pTxtHireDesc) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_06 = MonsterTbls::sgtDataTable.pTxtHireDesc - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_06, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -969,7 +969,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtHireDescLink);
     if (MonsterTbls::sgtDataTable.pTxtMonMode) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_07 = MonsterTbls::sgtDataTable.pTxtMonMode - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_07, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -982,7 +982,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtMonModeLink);
     if (MonsterTbls::sgtDataTable.pTxtPlrMode) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_08 = MonsterTbls::sgtDataTable.pTxtPlrMode - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_08, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -995,7 +995,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtPlrModeLink);
     if (MonsterTbls::sgtDataTable.pTxtMonAi) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_09 = MonsterTbls::sgtDataTable.pTxtMonAi - 2;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_09, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1008,7 +1008,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtMonAiLink);
     if (MonsterTbls::sgtDataTable.pTxtMonPlace) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_10 = MonsterTbls::sgtDataTable.pTxtMonPlace - 2;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_10, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1021,7 +1021,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtMonPlaceLink);
     if (MonsterTbls::sgtDataTable.pTxtSkillCalc) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_11 = MonsterTbls::sgtDataTable.pTxtSkillCalc - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_11, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1034,7 +1034,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtSkillCalcLink);
     if (MonsterTbls::sgtDataTable.pTxtMissCalc) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_12 = MonsterTbls::sgtDataTable.pTxtMissCalc - 1;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_12, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1047,7 +1047,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtMissCalcLink);
     if (MonsterTbls::sgtDataTable.pTxtSkillsHeader) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_13 = MonsterTbls::sgtDataTable.pTxtSkillsHeader - 2;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_13, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1060,7 +1060,7 @@ void __stdcall DATATBLS_FreeMiscTxtTables() {
 
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtSkillsHeaderLink);
     if (MonsterTbls::sgtDataTable.pTxtEvents) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_14 = MonsterTbls::sgtDataTable.pTxtEvents - 2;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_14, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1777,7 +1777,7 @@ void __stdcall DATATBLS_FreeSkillsTxtTables() {
     MonsterTbls::sgtDataTable.nSkillDescCodeCapacity = 0;
     if (MonsterTbls::sgtDataTable.pTxtSkills) {
       D2SkillsTxt* pMemoryToFree;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree = (D2SkillsTxt*)&MonsterTbls::sgtDataTable.pTxtSkills[-1].costadd;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1791,7 +1791,7 @@ void __stdcall DATATBLS_FreeSkillsTxtTables() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtSkillsLink);
     MonsterTbls::sgtDataTable.nTxtSkillsCount = 0;
     if (MonsterTbls::sgtDataTable.pTxtSkillDesc) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nTmp = 0x924;
         pMemoryToFree_00 = (D2SkillDescTxt*)(MonsterTbls::sgtDataTable.pTxtSkillDesc[-1].dsc3calcb + 6);
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_00, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -1973,7 +1973,7 @@ void __stdcall DATATBLS_FreeStatesTxtTables() {
     memset(MonsterTbls::sgtDataTable.pSingleStateDataTbl, 0, 0xa0);
     if (MonsterTbls::sgtDataTable.pTxtStates) {
       D2StatesTxt* pMemoryToFree;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         pMemoryToFree = (D2StatesTxt*)&MonsterTbls::sgtDataTable.pTxtStates[-1].skill;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\DATATBLS\\DataTbls.cpp", 0x924);
       } else {
@@ -2030,7 +2030,7 @@ void __fastcall TXT_AllocTxt_pettype(D2PoolManagerStrc * pMemory) {
 void __stdcall DATATBLS_FreePetTypeTxtTables() {
     if (MonsterTbls::sgtDataTable.pTxtPetType) {
       D2PetTypeTxt* pMemoryToFree;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         pMemoryToFree = (D2PetTypeTxt*)(MonsterTbls::sgtDataTable.pTxtPetType[-1].nSkillId + 0xe);
         D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\DATATBLS\\DataTbls.cpp", 0x924);
       } else {
@@ -2051,7 +2051,7 @@ void __stdcall FreeTables() {
     DATATBLS_FreeMiscTxtTables();
     if (MonsterTbls::sgtDataTable.pTxtCharStats) {
       D2CharStatsTxt* pMemoryToFree;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nLineNum = 0x924;
         pMemoryToFree = (D2CharStatsTxt*)(MonsterTbls::sgtDataTable.pTxtCharStats[-1].Skill + 9);
         D2_FREE_POOL_AT(nullptr, pMemoryToFree, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -2068,7 +2068,7 @@ void __stdcall FreeTables() {
     ItemTbls::ITEMTBLS_FreeItemStatCost();
     DATATBLS_FreeStatesTxtTables();
     if (MonsterTbls::sgtDataTable.pTxtPetType) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nLineNum = 0x924;
         pMemoryToFree_00 = (D2PetTypeTxt*)(MonsterTbls::sgtDataTable.pTxtPetType[-1].nSkillId + 0xe);
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_00, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -2086,17 +2086,17 @@ void __stdcall FreeTables() {
     ItemTbls::ITEMTBLS_FreeRareAffixes();
     ItemTbls::ITEMTBLS_FreeUniqueItems();
     ItemTbls::ITEMTBLS_FreeSetsAndSetItems();
-    ItemTbls::thunk_UnloadBin_Lvl();
-    ItemTbls::thunk_UnloadBin_LvlPrest();
-    ItemTbls::thunk_UnloadBin_LvlType();
-    ItemTbls::thunk_UnloadBin_LvlWarp();
-    ItemTbls::thunk_UnloadBin_LvlMaze();
+    ItemTbls::DATATBLS_UnloadQualityItemsTxt();
+    ItemTbls::DATATBLS_UnloadLowQualityItemsTxt();
+    ItemTbls::DATATBLS_UnloadGemsTxt();
+    ItemTbls::DATATBLS_UnloadBooksTxt();
+    ItemTbls::DATATBLS_UnloadItemRatioTxt();
     ItemTbls::FreeGambleTable();
     ItemTbls::ITEMTBLS_FreeItemTypes();
-    MonsterTbls::MONSTERTBLS_FreeMonPlaceTxt();
+    MonsterTbls::DATATBLS_UnloadMonTypeTxt();
     TokTbls::FreeTokenTables();
     if (MonsterTbls::sgtDataTable.pTxtExperience) {
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         nLineNum = 0x924;
         pMemoryToFree_01 = (D2ExperienceTxt*)&MonsterTbls::sgtDataTable.pTxtExperience[-1].ExpRatio;
         D2_FREE_POOL_AT(nullptr, pMemoryToFree_01, ".\\DATATBLS\\DataTbls.cpp", 0x924);
@@ -2108,14 +2108,14 @@ void __stdcall FreeTables() {
     }
 
     AnimTbls::ANIMDATA_FreeAnimDataRecord(MonsterTbls::sgtDataTable.pAnimTbls);
-    MonsterTbls::MONSTERTBLS_FreeMonUModTxt();
+    MonsterTbls::MONSTERTBLS_UnloadMonsterTxts();
     LvlTbls::LVLTBLS_FreeLevelsTxt();
     LvlTbls::LVLTBLS_FreeLevelDefsTxt();
-    LvlTbls::thunk_UnloadBin_DataTbls();
+    LvlTbls::DATATBLS_UnloadLevelTypesTxt();
     LvlTbls::TXT_LvlTbls_Free();
     LvlTbls::TXT_LvlWarp_Free();
     LvlTbls::TXT_FreeTxt_LvlMaze();
-    LvlTbls::TXT_FreeExpansionLvlTbls();
+    LvlTbls::LVLTBLS_FreeLvlTypeTileLibraries();
     LvlTbls::TXT_FreeTxt_LvlSub();
     LvlTbls::FreeAutoMapLvlTbls();
     ObjectTbls::TXT_FreeTxt_Objects();
@@ -2125,7 +2125,7 @@ void __stdcall FreeTables() {
     ItemTbls::ITEMTBLS_FreeRunes();
     FieldTbls::FIELDTBLS_FreeFieldData();
     BeltsTbls::FreeBeltsTxt();
-    MonsterTbls::thunk_UnloadBin_MonStats();
+    MonsterTbls::DATATBLS_UnloadMonItemPercentTxt();
     ArenaTbls::FreeArenaTxt();
     Txt::Cube::CUBE_FreeCubeMainTable();
     ArenaTbls::FreeCharTemplateTxt();
@@ -2133,7 +2133,7 @@ void __stdcall FreeTables() {
     if (!MonsterTbls::sgtDataTable.pTxtDifficultyLevels) {
       return;
     }
-    if (gpaMiscTxtTables) {
+    if (gbTxtAllocCountHeader) {
       D2_FREE_POOL_AT(nullptr, &MonsterTbls::sgtDataTable.pTxtDifficultyLevels[-1].GambleUltra, ".\\DATATBLS\\DataTbls.cpp", 0x924);
       return;
     }
@@ -2181,7 +2181,7 @@ void __stdcall TXT_InitTxtFiles(D2PoolManagerStrc * pMemory, int32_t nZero2, int
     LvlTbls::TXT_AllocTxt_leveldefs(pMemory);
     LvlTbls::TXT_AllocTxt_lvltypes(pMemory);
     if (nZero2) {
-      LvlTbls::TXT_LoadExpansionLvlTbls(pMemory);
+      LvlTbls::LVLTBLS_LoadLvlTypeTileLibraries(pMemory);
     }
 
     LvlTbls::TXT_AllocTxt_lvlprest(pMemory, nZero2);
@@ -2195,14 +2195,14 @@ void __stdcall TXT_InitTxtFiles(D2PoolManagerStrc * pMemory, int32_t nZero2, int
     TokTbls::TXT_AllocTxt_inventory(pMemory);
     FieldTbls::FIELDTBLS_LoadExpFieldFile(pMemory);
     BeltsTbls::LoadBeltsTxt(pMemory);
-    MonsterTbls::DATATBLS_CompileBodyLocsTxt(pMemory);
+    MonsterTbls::DATATBLS_LoadMonItemPercentTxt(pMemory);
     Txt::Cube::FIELDTBLS_InitTxtFiles_NoOp(pMemory);
     Txt::Cube::CUBE_LoadCubeMainTable(pMemory);
     TXT_AllocTxt_difficultylevels(pMemory);
     MonsterTbls::TXT_FreeTxt_sounds();
 }
 
-D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00624710() {
+D2AnimDataStrc * __stdcall LOGGING_GetLogFile() {
     return (D2AnimDataStrc*)Logging::pLOGFILE;
 }
 

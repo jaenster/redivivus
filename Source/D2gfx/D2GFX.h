@@ -423,11 +423,11 @@ BOOL __stdcall D2GFX_DrawTransWallTile(struct D2TileLibraryEntryStrc * pTile, in
 BOOL __stdcall D2GFX_DrawShadowTile(struct D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2gfx)
-void __stdcall RENDERER_TogglePerspective_Unref_00477be0();
+void __stdcall RENDERING_ToggleCurrentEngineFlags();
 void thunk_D2GFX_ResetViewport();
 int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3);
-eD2RendererMode __stdcall D2GFX_GetRendererMode_Unref_004f5150();
-BOOL __stdcall D2GFX_GetLowQuality_Unref_004f51f0();
+eD2RendererMode __stdcall D2GFX_GetWindowed();
+BOOL __stdcall D2GFX_GetBlendedShadows();
 void __stdcall HideOSCursor();
 void __stdcall ShowOSCursor();
 BOOL __stdcall D2GFX_ActivateWindow(BOOL bActive);

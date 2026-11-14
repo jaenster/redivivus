@@ -20,17 +20,20 @@ struct D2GemsTxt;
 struct D2ItemRatioTxt;
 struct D2ItemsTableStrc;
 struct D2ItemsTxt;
+struct D2LowQualityItemsTableStrc;
+struct D2LowQualityItemsTxt;
 struct D2MagicAffixTableStrc;
 struct D2MagicAffixTxt;
 struct D2PoolManagerStrc;
 struct D2RareAffixTableStrc;
 struct D2RareAffixTxt;
+struct D2RunesTxt;
+struct D2RunesTxtTableStrc;
 struct D2SetItemsTxt;
 struct D2SetsTxt;
 struct D2UniqueItemsTxt;
 
 struct D2BooksTxt;
-struct D2LowQualityItemsTxt;
 struct D2QualityItemsTxt;
 
 // Data types
@@ -79,22 +82,6 @@ struct D2ItemStatCostDescPriorityStrc {
 };
 
 #endif // D2_MODULE_D2Common
-#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
-#define D2_DEFINED_D2LowQualityItemsTableStrc
-struct D2LowQualityItemsTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
-};
-
-#endif // D2_DEFINED_D2LowQualityItemsTableStrc
-#ifndef D2_DEFINED_D2LowQualityItemsTxt
-#define D2_DEFINED_D2LowQualityItemsTxt
-struct D2LowQualityItemsTxt {
-    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x20 */ uint16_t wNameStringId;
-};
-
-#endif // D2_DEFINED_D2LowQualityItemsTxt
 #ifndef D2_DEFINED_D2QualityItemsTableStrc
 #define D2_DEFINED_D2QualityItemsTableStrc
 struct D2QualityItemsTableStrc {
@@ -128,70 +115,6 @@ struct __attribute__((packed)) D2QualityItemsTxt {
 };
 
 #endif // D2_DEFINED_D2QualityItemsTxt
-#ifndef D2_DEFINED_D2RunesTxt
-#define D2_DEFINED_D2RunesTxt
-struct D2RunesTxt {
-    /* 0x000 */ char name[64]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x040 */ char rune_name[64]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x080 */ char complete; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x081 */ char server; // d2bs binfields FIELDTYPE_CHAR
-    /* 0x082 */ uint16_t field4_0x82;
-    /* 0x084 */ uint8_t field_0x84;
-    /* 0x085 */ uint8_t field_0x85;
-    /* 0x086 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x088 */ short itype2; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08A */ short itype3; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08C */ short itype4; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x08E */ short itype5; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x090 */ short itype6; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x092 */ short etype1; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x094 */ short etype2; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x096 */ short etype3; // d2bs binfields FIELDTYPE_CODE_SHORT
-    /* 0x098 */ int rune1; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x09C */ int rune2; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A0 */ int rune3; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A4 */ int rune4; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0A8 */ int rune5; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0AC */ int rune6; // d2bs binfields FIELDTYPE_CODE_INT
-    /* 0x0B0 */ int t1code1; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0B4 */ int t1param1; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0B8 */ int t1min1; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0BC */ int t1max1; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0C0 */ int t1code2; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0C4 */ int t1param2; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0C8 */ int t1min2; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0CC */ int t1max2; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0D0 */ int t1code3; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0D4 */ int t1param3; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0D8 */ int t1min3; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0DC */ int t1max3; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0E0 */ int t1code4; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0E4 */ int t1param4; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0E8 */ int t1min4; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0EC */ int t1max4; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0F0 */ int t1code5; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x0F4 */ int t1param5; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x0F8 */ int t1min5; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x0FC */ int t1max5; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x100 */ int t1code6; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x104 */ int t1param6; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x108 */ int t1min6; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x10C */ int t1max6; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x110 */ int t1code7; // d2bs binfields FIELDTYPE_NAME_INT
-    /* 0x114 */ int t1param7; // d2bs binfields FIELDTYPE_LINKER_INT
-    /* 0x118 */ int t1min7; // d2bs binfields FIELDTYPE_SIGNEDINT
-    /* 0x11C */ int t1max7; // d2bs binfields FIELDTYPE_SIGNEDINT
-};
-
-#endif // D2_DEFINED_D2RunesTxt
-#ifndef D2_DEFINED_D2RunesTxtTableStrc
-#define D2_DEFINED_D2RunesTxtTableStrc
-struct D2RunesTxtTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ struct D2RunesTxt * pTable;
-};
-
-#endif // D2_DEFINED_D2RunesTxtTableStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 union TXT_AllocTxt_itemstatcost_Slotm8 {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
@@ -201,16 +124,6 @@ union TXT_AllocTxt_itemstatcost_Slotm8 {
 };
 
 #endif // D2_MODULE_D2Common
-// =============================================================================
-// Global data (co-located with struct definitions)
-// =============================================================================
-
-namespace D2Common::DATATBLS::ItemTbls {
-
-extern D2RunesTxtTableStrc nTxtRunesSize;
-
-} // namespace D2Common::DATATBLS::ItemTbls
-
 namespace D2Common::DATATBLS::ItemTbls {
 
 // Function declarations
@@ -220,7 +133,7 @@ __attribute__((noinline)) inline struct D2UniqueItemsTxt * __fastcall INV_GetUni
 // Returns the items.txt table record - the 32 bytes at 0096ca58 holding {nSize, pItems, pWeapons, nWeaponsSize, pArmor, nArmorSize, pMisc, nMiscSize}, not a lone int.
 // Callers index the whole record off the return: ITEMDROP_RollNormalItemClass at 00555fcc reads [ESI+8], [ESI+4] and [ESI+0x10]; SUNITPROXY_BuildNpcItemTables at 00536d79 reads [EDI] and [EDI+4]. With only nSize named the emitter produced eight independent globals whose relative layout the linker chooses, so every member past the first was garbage - and this record drives which items a vendor's stock is built from.
 struct D2ItemsTableStrc * __stdcall TXT_Items_GetSize();
-uint32_t __stdcall TXT_Items_GetVersion(int32_t nItemClassId);
+uint32_t __stdcall DATATBLS_MapOldItemIndexToCurrent(int32_t nOldItemIndex);
 struct D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId);
 struct D2ItemsTxt * __stdcall ConvertItemCodeToClassIdAndGetItemsTxtLine(uint32_t dwItemCode, int * pClassId);
 int32_t __stdcall TXT_Items_ConvertItemCodeToItemClassId(uint32_t szTag);
@@ -284,20 +197,20 @@ void __fastcall TXT_AllocTxt_setitems(struct D2PoolManagerStrc * pMemory);
 void __stdcall ITEMTBLS_FreeSetsAndSetItems();
 // Compiles QualityItems.txt into the in-memory pTxtQualityItems table during data-table init. Declares the column schema (nummods, mod1/2 code+param+min+max, effect1/effect2 strings, and the per-equipment-type applicability flags armor/weapon/shield/scepter/wand/staff/bow/boots/gloves/belt) with field types and struct offsets, linking mod codes to the Properties table, then calls DataTbls::CompileTxt (record size 0x70). Post-process: for each row resolves the effect1/effect2 string-table keys via STRTABLE_LookupString and writes the looked-up string indices back into the record. Side effect: sets the global pTxtQualityItems / nTxtQualityItemsSize. Allocates from pMemory.
 void __fastcall TXT_AllocTxt_qualityitems(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_Lvl();
+void __stdcall DATATBLS_UnloadQualityItemsTxt();
 // Compiles the gems.txt data table into the runtime pTxtGems array via CompileTxt with a 42-field schema (gem name/letter/code plus weapon/helm/shield mod triplets). For each row, resolves the 3-char gem letter code to a string-table index (STRTABLE_LookupString) stored at +0x2c, and links each gem to its owning item record: writes 0xFFFFFFFF placeholder gem-offset into the item's szCode area (+0x70) and sets sgpTxtItems[code].dwGemOffset to the gem's row index. Called once during item data-table init.
 void __fastcall TXT_AllocTxt_gems(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_LvlType();
-struct D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo_Unref_006372b0();
+void __stdcall DATATBLS_UnloadGemsTxt();
+void * __stdcall DATATBLS_GetGemDataTables();
 // Defines the binary field schema for books.txt (name/KEY_WORD, scrollspellcode/RAW4, bookspellcode/RAW4, pSpell/INT, scrollskill/NAME_INT, bookskill/NAME_INT, spellicon/CHAR, basecost/INT, costpercharge/INT) and calls CompileTxt to parse it into pTxtBooks. In: pMemory pool.
 void __fastcall TXT_AllocTxt_books(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_LvlWarp();
+void __stdcall DATATBLS_UnloadBooksTxt();
 void __fastcall TXT_AllocTxt_lowqualityitems(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_LvlPrest();
+void __stdcall DATATBLS_UnloadLowQualityItemsTxt();
 // Loads and compiles the ItemRatio.txt data table. Builds a D2BinFieldInputStrc field-definition array (Version, Uber, Class Specific, then Unique/Rare/Set/Magic/HiQuality/Normal drop-chance + Divisor + Min columns at their struct offsets) and passes it to DataTbls::CompileTxt with row size 0x44, storing the parsed table into the global pTxtItemRatio and its row count into nTxtItemRatioSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
 void __fastcall TXT_AllocTxt_itemratio(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_LvlMaze();
-struct D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo_Unref_00637900();
+void __stdcall DATATBLS_UnloadItemRatioTxt();
+void * __stdcall DATATBLS_GetItemRatioDataTables();
 int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2);
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
@@ -327,10 +240,10 @@ void __fastcall TXT_AllocTxt_runes(struct D2PoolManagerStrc * pMemory);
 void __stdcall ITEMTBLS_FreeRunes();
 struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize();
 struct D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId);
-struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_00654fd0();
-struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b450();
-struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b460();
-struct D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b470();
+void * __stdcall DATATBLS_GetMonItemPercentDataTables();
+void * __stdcall DATATBLS_GetPlrTypeModeDataTables();
+void * __stdcall DATATBLS_GetMonModeDataTables();
+void * __stdcall DATATBLS_GetObjTypeModeDataTables();
 #endif // D2_MODULE_D2Common
 // 1 internal function (defined in .cpp)
 

@@ -61,9 +61,9 @@ void __stdcall thunk_CMD_UseBeltSlot3();
 // Thunk to CMD_UseBeltSlot4 (00498d10). This is the address installed in the key-command
 // handler table.
 void __stdcall thunk_CMD_UseBeltSlot4();
-uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0047ec40();
-void __stdcall PANEL_SetBottomPanelGlobals1_Unref_004880f0();
-uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0048a690();
+uint32_t __stdcall PANEL_GetMiniPanelClickedButtonFlag();
+void __stdcall PANEL_ClearInvMousePosition();
+uint32_t __stdcall INV_HasItemToDescribe();
 void __stdcall LoadPanelImages();
 void __stdcall FreePanelImages();
 void __stdcall PANEL_DrawHostileIndicator();
@@ -71,9 +71,9 @@ void __fastcall SPELLSEL_DrawSkillIcon(struct D2UnitStrc * pUnit, struct D2Skill
 void __stdcall PANEL_DrawSkillIcons();
 void __stdcall PANEL_DrawHealthOrb();
 void __stdcall PANEL_DrawManaOrb();
-void __stdcall thunk_D2GFX_GetColorFromPalette_A();
-void __stdcall PANEL_InitGoldColor();
-void __stdcall thunk_D2GFX_GetColorFromPalette_B();
+void __stdcall PANEL_InitStaminaColorLow();
+void __stdcall PANEL_InitStaminaColorNormal();
+void __stdcall PANEL_InitStaminaColorBlue();
 void __stdcall PANEL_InitBeltColors();
 void __stdcall PANEL_ShowRunButtonTooltip();
 void __stdcall PANEL_DrawRunButton();
@@ -112,7 +112,7 @@ void __stdcall CMD_UseBeltSlot3();
 // It reads no colour and returns nothing.
 // The gbPanelStat*Color globals it tests are likewise misnamed belt-slot flags.
 void __stdcall CMD_UseBeltSlot4();
-void __fastcall PANEL_SetBeltSlotHoverFlag(uint32_t nIndex, int byValue);
+void __fastcall PANEL_SetBeltSlotHasItem(uint32_t nIndex, int bHasItem);
 void __stdcall PANEL_ClearBeltSlotHover();
 // Stores nState in gnBeltPanelState; halts (panel.cpp line 2823) when nState is negative.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.

@@ -65,7 +65,7 @@ BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame);
 // Sets eDrawMode (+0x44) to DRAW_SOLID; the second argument is never read (the only caller passes DRAW_LIGHTTRANSPARENT, Mac 1.14d also stores 5); halts unless the control type is 2 (image); returns TRUE.
 // The asm stores the constant 5 to [EAX+0x44] (004fd19a).
 BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDrawModeIgnored);
-int __stdcall D2WINIMAGE_StopAnimation(::D2WinImage * pImage);
+int __stdcall D2WINIMAGE_GetFrameCount(::D2WinImage * pImage);
 BOOL __fastcall Draw(::D2WinImage * pImage);
 BOOL __fastcall Draw(struct D2WinImageEx * pImageEx);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);

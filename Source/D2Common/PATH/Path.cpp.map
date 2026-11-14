@@ -84,7 +84,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7b0914eb",
+      "dh": "5cd8013e",
       "paramStorage": [
         [
           "pPathData",
@@ -352,7 +352,7 @@
       ]
     },
     {
-      "name": "PATH_CalculateDistance",
+      "name": "PATH_ComputeDirectionFromPreciseCoords",
       "address": "0064fe10",
       "lines": [
         {
@@ -362,13 +362,13 @@
       ],
       "namespace": "D2Common::PATH::Path",
       "calledFunctions": [
-        "PATH_CalculateDistance",
+        "PATH_ComputeDirectionFromPreciseCoords",
         "DRLGPATH_CalcDirectionVector"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7f892829",
+      "dh": "df6e45cd",
       "paramStorage": [
         [
           "nFromXfp",
@@ -450,7 +450,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "19ff112c",
+      "dh": "7eae441a",
       "paramStorage": [
         [
           "nPackedNewPos",
@@ -627,7 +627,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "eaac6c6e",
+      "dh": "dbc216c7",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -743,7 +743,7 @@
       ]
     },
     {
-      "name": "PATH_SetPathTarget",
+      "name": "PATH_MoveUnitToUnitPosition",
       "address": "006505e0",
       "lines": [
         {
@@ -753,7 +753,7 @@
       ],
       "namespace": "D2Common::PATH::Path",
       "calledFunctions": [
-        "PATH_SetPathTarget",
+        "PATH_MoveUnitToUnitPosition",
         "DRLGPATH_SetPathPosition",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -764,7 +764,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b3673b91",
+      "dh": "3234cf66",
       "paramStorage": [
         [
           "pUnit",
@@ -933,7 +933,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "533bcfd9",
+      "dh": "c7205e71",
       "paramStorage": [
         [
           "pRoom",
@@ -979,7 +979,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "d7d54756",
+      "dh": "6b2ce7ef",
       "paramStorage": [
         [
           "pRoom",
@@ -1084,7 +1084,7 @@
       ]
     },
     {
-      "name": "PATH_CheckCollisionFlags",
+      "name": "PATH_MoveUnitToRoomPosition",
       "address": "00650c60",
       "lines": [
         {
@@ -1094,7 +1094,7 @@
       ],
       "namespace": "D2Common::PATH::Path",
       "calledFunctions": [
-        "PATH_CheckCollisionFlags",
+        "PATH_MoveUnitToRoomPosition",
         "PATH_MoveUnitToPosition"
       ],
       "usedTypes": [
@@ -1103,7 +1103,7 @@
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "147de013",
+      "dh": "f62de938",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -1153,7 +1153,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "3003d869",
+      "dh": "f785fb17",
       "paramStorage": [
         [
           "pDynamicPath",

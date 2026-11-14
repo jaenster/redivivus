@@ -58,7 +58,7 @@
         "GetSetItemsLine",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
-        "STATLIST_FreeChildStatLists",
+        "STATLIST_RemoveAllStats",
         "AllocStatList",
         "STATLIST_AttachStatListToUnit",
         "SetState",
@@ -74,7 +74,7 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "80091d13",
+      "dh": "a8c96193",
       "paramStorage": [
         [
           "pUnit",

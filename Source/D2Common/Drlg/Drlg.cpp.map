@@ -1623,7 +1623,7 @@
       ]
     },
     {
-      "name": "DRLGMAZE_FreeRoomPresetData",
+      "name": "DRLGTILESUB_FreeDrlgFile",
       "address": "00670630",
       "lines": [
         {
@@ -1633,7 +1633,7 @@
       ],
       "namespace": "D2Common::Drlg",
       "calledFunctions": [
-        "DRLGMAZE_FreeRoomPresetData",
+        "DRLGTILESUB_FreeDrlgFile",
         "DRLGGRID_FreeGrid",
         "DRLGPRESET_ReleaseDrlgFile"
       ],
@@ -1641,10 +1641,10 @@
         "D2DrlgGridStrc",
         "D2LvlSubTxt"
       ],
-      "dh": "a3958a2f",
+      "dh": "d317f924",
       "paramStorage": [
         [
-          "pData",
+          "pLvlSubTxtRecord",
           "ECX:4"
         ]
       ]

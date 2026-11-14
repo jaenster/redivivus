@@ -25,7 +25,7 @@ namespace D2Game { namespace MISSILES { namespace Missiles {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void __fastcall FreeMissiles(::SGAMEDATA * pGame);
+void __fastcall ITEMS_RemoveAll(::SGAMEDATA * pGame);
 void __fastcall STRUCT_FillDataMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t dwUnitGUID);
 void __fastcall ClearMissileUnitData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Core server-side missile spawner: creates and initialises a UNIT_MISSILE from a D2SkillArgStrc. Validates owner (must be player/monster) and the missiles.txt row, resolves spawn position (explicit X/Y or from a source missile), finds a valid nearby room, and computes the target point (absolute, relative, or unit-targeted per nFlags). Derives launch velocity from missiles.txt Vel/VelLev scaled by skill level, applies the slow-missiles state modifier and a fixed 0x4b/100 factor, and bails if the straight-line distance to target exceeds 99 subtiles. Then CreateUnit and configures: total/current/activate frames (range from txt or override), dynamic-path velocities, target unit or SP1 destination, collision type/pattern from txt, acceleration, max velocity, optional homing frame count, stat list, skill/level, damage stats (MISSILES_EvalDamageAndSetStats), pierce, and UMod-on-skill dispatch. Invokes the optional fpFunction callback. Returns the new missile unit, or null on any validation/creation failure.

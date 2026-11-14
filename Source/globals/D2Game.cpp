@@ -135,7 +135,7 @@ D2TimerTypeMethodsStrc pTimerMethods = {
         nullptr,
         nullptr,
         nullptr,
-        &D2Game::ITEMS::ItemMode::ITEMMODE_ValidateTradeItem,
+        &D2Game::ITEMS::ItemMode::ITEMMODE_ReplenishItem,
         &D2Game::ITEMS::ItemMode::ITEMMODE_NullSub,
         nullptr,
         nullptr,
@@ -168,11 +168,11 @@ D2PlayerModeFnPairStrc gaPlayerModeMoveFuncs[20] = {
         /* .pfnStartMode = */ nullptr
     },
     {
-        /* .pfnMoveToLocation = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
+        /* .pfnMoveToLocation = */ (PFN_PlayerModeMoveFn)&D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
         /* .pfnStartMode = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetTargetAndStartPath
     },
     {
-        /* .pfnMoveToLocation = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
+        /* .pfnMoveToLocation = */ (PFN_PlayerModeMoveFn)&D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
         /* .pfnStartMode = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetTargetAndStartPath
     },
     {
@@ -184,7 +184,7 @@ D2PlayerModeFnPairStrc gaPlayerModeMoveFuncs[20] = {
         /* .pfnStartMode = */ nullptr
     },
     {
-        /* .pfnMoveToLocation = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
+        /* .pfnMoveToLocation = */ (PFN_PlayerModeMoveFn)&D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
         /* .pfnStartMode = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetTargetAndStartPath
     },
     {
@@ -236,7 +236,7 @@ D2PlayerModeFnPairStrc gaPlayerModeMoveFuncs[20] = {
         /* .pfnStartMode = */ &D2Game::PLAYER::PlayerModes::PLRMODES_StartCastAtEntity
     },
     {
-        /* .pfnMoveToLocation = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
+        /* .pfnMoveToLocation = */ (PFN_PlayerModeMoveFn)&D2Game::PLAYER::PlayerModes::PLRMODES_SetMoveTargetPosition,
         /* .pfnStartMode = */ &D2Game::PLAYER::PlayerModes::PLRMODES_SetTargetAndStartPath
     }
 }; D2_GLOBAL_GUARD(gaPlayerModeMoveFuncs, "D2Game::PLAYER::PlayerModes::gaPlayerModeMoveFuncs");
@@ -438,14 +438,14 @@ namespace D2Game::GAME::Event::Dispatch::Monster {
 
 D2TimerTypeMethodsExStrc pTimerMethods = {
     /* .fpFunctionExByType = */ {
-        (fpTimerFunctionEx)&D2Game::Monster::MonsterMode::MONMODE_DispatchDeathDrop,
-        (fpTimerFunctionEx)&D2Game::Monster::MonsterMode::ExecuteDropHandlerFn3,
+        (fpTimerFunctionEx)&D2Game::Monster::MonsterMode::MONMODE_EventModeUpdate,
+        (fpTimerFunctionEx)&D2Game::Monster::MonsterMode::MONMODE_EventEndAnimation,
         (fpTimerFunctionEx)&D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction,
         (fpTimerFunctionEx)&D2Game::Monster::MonsterMode::RegenAndPsnDecreaser,
         nullptr,
         (fpTimerFunctionEx)&D2Game::SKILLS::SkillsServer::SKILLS_DispatchStateActiveFunc,
         (fpTimerFunctionEx)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_UpdateHoverTextExpiry,
-        (fpTimerFunctionEx)&D2Game::Monsters::MONSTER_DispatchUModOnHit,
+        (fpTimerFunctionEx)&D2Game::Monsters::MONSTER_DispatchUModEvent,
         (fpTimerFunctionEx)&D2Game::SKILLS::SkillsServer::SKILLS_PeriodicSkillsCallback,
         (fpTimerFunctionEx)&D2Game::SKILLS::SkillsServer::SKILLS_PeriodicStatsCallback,
         (fpTimerFunctionEx)&D2Game::GAME::Event::Dispatch::Monster::AI_ClearSwitchAiTargetParamsCallback,
@@ -711,7 +711,7 @@ namespace D2Game::PLAYER::PlayerSave {
 // Initialized scalars
 // =============================================================================
 
-BOOL DontNoSafeGameBool = 0x1; D2_GLOBAL_GUARD(DontNoSafeGameBool, "D2Game::PLAYER::PlayerSave::DontNoSafeGameBool");
+BOOL gbSaveFileWritingEnabled = 0x1; D2_GLOBAL_GUARD(gbSaveFileWritingEnabled, "D2Game::PLAYER::PlayerSave::gbSaveFileWritingEnabled");
 
 } // namespace D2Game::PLAYER::PlayerSave
 

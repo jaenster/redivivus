@@ -903,7 +903,7 @@ BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(D2DrlgCoordsStrc * pDrlgCoord
     return 0;
 }
 
-BOOL __fastcall ComputeRectanglesManhattanDistance(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance) {
+BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance) {
     int nDistX;
     int nDistY;
     int nPosY2;

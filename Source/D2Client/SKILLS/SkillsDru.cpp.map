@@ -43,7 +43,7 @@
       ]
     },
     {
-      "name": "SKILLSDRU_CltCreateShapeShiftMissile",
+      "name": "SKILLSDRU_CltCreateElementalMissiles",
       "address": "004f16f0",
       "lines": [
         {
@@ -53,7 +53,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsDru",
       "calledFunctions": [
-        "SKILLSDRU_CltCreateShapeShiftMissile",
+        "SKILLSDRU_CltCreateElementalMissiles",
         "GetCooordinates",
         "MakeMissileAtSkillTarget",
         "SetUnsetFlags0x40",
@@ -71,7 +71,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "cd07290c",
+      "dh": "2fd7a569",
       "paramStorage": [
         [
           "pUnit",
@@ -108,7 +108,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
+      "name": "Skills_CltDoFunc_Dru_Firestorm",
       "address": "004f1850",
       "lines": [
         {
@@ -118,10 +118,10 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsDru",
       "calledFunctions": [
-        "Skills_CltDoFunc_Dru_ShapeShift_FwdArc",
+        "Skills_CltDoFunc_Dru_Firestorm",
         "SKILLSASS_GetCltMissileByAuraLevel",
         "D2GetSkillCalc",
-        "SKILLSDRU_CltCreateShapeShiftMissile"
+        "SKILLSDRU_CltCreateElementalMissiles"
       ],
       "usedTypes": [
         "D2SkillsTxt",
@@ -130,7 +130,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "4b6c4aa1",
+      "dh": "c120429c",
       "paramStorage": [
         [
           "pUnit",
@@ -147,7 +147,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
+      "name": "Skills_CltDoFunc_Dru_Twister",
       "address": "004f18f0",
       "lines": [
         {
@@ -157,10 +157,10 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsDru",
       "calledFunctions": [
-        "Skills_CltDoFunc_Dru_ShapeShift_SideArc",
+        "Skills_CltDoFunc_Dru_Twister",
         "SKILLSASS_GetCltMissileByAuraLevel",
         "D2GetSkillCalc",
-        "SKILLSDRU_CltCreateShapeShiftMissile"
+        "SKILLSDRU_CltCreateElementalMissiles"
       ],
       "usedTypes": [
         "D2SkillsTxt",
@@ -169,7 +169,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "5bc504d2",
+      "dh": "4c5b720a",
       "paramStorage": [
         [
           "pUnit",
@@ -186,7 +186,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
+      "name": "Skills_CltDoFunc_Dru_Tornado",
       "address": "004f1990",
       "lines": [
         {
@@ -196,10 +196,10 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsDru",
       "calledFunctions": [
-        "Skills_CltDoFunc_Dru_ShapeShift_BackArc",
+        "Skills_CltDoFunc_Dru_Tornado",
         "SKILLSASS_GetCltMissileByAuraLevel",
         "D2GetSkillCalc",
-        "SKILLSDRU_CltCreateShapeShiftMissile"
+        "SKILLSDRU_CltCreateElementalMissiles"
       ],
       "usedTypes": [
         "D2SkillsTxt",
@@ -208,7 +208,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "1773d3da",
+      "dh": "12aa93c2",
       "paramStorage": [
         [
           "pUnit",

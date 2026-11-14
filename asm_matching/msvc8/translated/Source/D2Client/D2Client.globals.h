@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/globals/globals.h"
 
 // Forward declarations
 struct ButtonWrapper;
@@ -125,6 +126,9 @@ extern char s___AUSGAMEDATA___0070f56c[16];
 namespace D2Client { namespace NPC {
 extern struct D2NpcMenuOptions D2NpcMenuOptions[48];
 }} // namespace D2Client::NPC
+namespace D2Client { namespace UI { namespace Chat {
+extern int gnLanguageCode;
+}}} // namespace D2Client::UI::Chat
 namespace D2Client { namespace UI { namespace Inv {
 extern uint32_t nScreenMode;
 }}} // namespace D2Client::UI::Inv
@@ -195,7 +199,7 @@ extern uint32_t gnAlwaysRun;
 // three of its accesses are dword: CLIENT_LoadLNG stores LoadAcceleratorsA(ghLngLibrary,0x64) here,
 // FreeLanguage clears it, and MessageGameLoop passes it to TranslateAcceleratorA. Retyped HACCEL on
 // the operand width.
-extern HACCEL gbLanguageDllLoaded;
+extern HACCEL ghAccelTable;
 }}} // namespace D2Client::GAME::Game
 namespace D2Client { namespace GAME { namespace Record {
 extern char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56];
@@ -254,7 +258,6 @@ namespace D2Client { namespace UI { namespace Button { namespace ButtonWrapper {
 extern void * vftable[13];
 }}}} // namespace D2Client::UI::Button::ButtonWrapper
 namespace D2Client { namespace UI { namespace Chat {
-extern int gaIMECompositionBuffer;
 // wchar16[257] - the chat input line. Was typed LPCWSTR (4 bytes). Size proven three ways: CHAT_ClearInput (0047bdc0) does memset(this, 0, 0x202) = 514 bytes = 257 wide chars; CHAT_* callers pass it to WSTRING_PutWideCharIntoBuffer with a 0x100 char limit and to WideCharToMultiByte with cbMultiByte 0x100 (256 chars + terminator); INPUT_HandleChatCharInput indexes it as *(uint16_t*)(base + i*2). Next symbol gaChatHistoryBuffer is 520 bytes away, so 514 fits. Declared as 4 bytes, every keystroke in the chat box wrote past the symbol.
 extern uint16_t gwszChatInputText[257];
 }}} // namespace D2Client::UI::Chat

@@ -102,7 +102,7 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
 
     switch (pItem->eAnimMode.ePlayerMode) {
       case Death:
-        D2Common::Units::SetupUpdateFlag(pItem, 4);
+        D2Common::Units::ChangeAnimMode(pItem, 4);
       nX = pSavedItemData->nPosX;
       nY = pSavedItemData->nPosY;
       D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, &byItemWidth, (char*)((intptr_t)&pItemUnknownStructure + 3), ".\\PLAYER\\PlrSave.cpp", 0xe1);
@@ -114,22 +114,22 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
       default:
         return 0xc;
       case eD2PlayerAnimMode_ns::Neutral:
-        D2Common::Units::SetupUpdateFlag(pItem, 4);
+        D2Common::Units::ChangeAnimMode(pItem, 4);
       bRestored = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nEquipLoc, 1, (uint32_t*)&pItemUnknownStructure);
       break;
       case Walk:
-        D2Common::Units::SetupUpdateFlag(pItem, 4);
+        D2Common::Units::ChangeAnimMode(pItem, 4);
       D2Common::Units::SetXForStaticUnit(pItem, pSavedItemData->nPosX);
       D2Common::Units::SetYForStaticUnit(pItem, pSavedItemData->nPosY);
       bRestored = ITEMS::ItemMode::ITEM_TryPlaceInBelt(pGame, pUnit, pItem->nUnitGUID, pSavedItemData->nPosX, 0, (uint32_t*)&pItemUnknownStructure);
       break;
       case eD2PlayerAnimMode_ns::GetHit:
-        D2Common::Units::SetupUpdateFlag(pItem, 4);
-      D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pUnit->pInventory, pItem);
-      bRestored = ITEMS::ItemMode::ITEMMODE_ApplyQuestReward(pGame, pUnit, pItem);
+        D2Common::Units::ChangeAnimMode(pItem, 4);
+      D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pUnit->pInventory, pItem);
+      bRestored = ITEMS::ItemMode::ITEMMODE_PutItemOnCursor(pGame, pUnit, pItem);
       break;
       case TownWalk:
-        D2Common::Units::SetupUpdateFlag(pItem, 4);
+        D2Common::Units::ChangeAnimMode(pItem, 4);
       if (!*ppItemOut) {
         return 0xc;
       }
@@ -180,7 +180,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     switch (eAnimMode) {
       default:
-        D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
+        D2Common::Units::ChangeAnimMode(pSourceItem, 4);
       if (!pUnit_00) {
         nSourceItem3 = -1;
       } else {
@@ -190,7 +190,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrSave.cpp", 0x13f, pGame, pUnit, nSourceItem3, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit_00), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit_00), 0, 1, 0);
       break;
       case Equipment:
-        D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
+        D2Common::Units::ChangeAnimMode(pSourceItem, 4);
       if (!pUnit_00) {
         nSourceItem2 = -1;
       } else {
@@ -201,7 +201,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       nPlaceResult = ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, nSourceItem2, D2Common::ITEMS::Items::GetBodyLocation(pUnit_00), 1, (uint32_t*)pBodyLocParam);
       break;
       case Belt:
-        D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
+        D2Common::Units::ChangeAnimMode(pSourceItem, 4);
       if (!pUnit_00) {
         nSourceItem = -1;
       } else {
@@ -216,12 +216,12 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       case Dropped:
         return 0xc;
       case Cursor:
-        D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
-      D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pUnit->pInventory, pUnit_00);
-      nPlaceResult = ITEMS::ItemMode::ITEMMODE_ApplyQuestReward(pGame, pUnit, pUnit_00);
+        D2Common::Units::ChangeAnimMode(pSourceItem, 4);
+      D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pUnit->pInventory, pUnit_00);
+      nPlaceResult = ITEMS::ItemMode::ITEMMODE_PutItemOnCursor(pGame, pUnit, pUnit_00);
       break;
       case InItem:
-        D2Common::Units::SetupUpdateFlag(pSourceItem, 4);
+        D2Common::Units::ChangeAnimMode(pSourceItem, 4);
       if (!eBodyLocation) {
         return 0xc;
       }
@@ -269,7 +269,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
     switch (eItemMode) {
       case Container:
         {
-          D2Common::Units::SetupUpdateFlag(pItem, 4);
+          D2Common::Units::ChangeAnimMode(pItem, 4);
           nBodyLocId = pItemUnknownStructure->nPosY;
           D2Common::Units::SetXForStaticUnit(pItem, pItemUnknownStructure->nPosX);
           D2Common::Units::SetYForStaticUnit(pItem, nBodyLocId);
@@ -298,7 +298,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
 
           D2Common::ITEMS::Items::SetBodyLoc(pItem, eBodyLoc);
           pItem->eUnitFlags &= ~UNITFLAG_TARGETABLE;
-          D2Common::Units::SetupUpdateFlag(pItem, 1);
+          D2Common::Units::ChangeAnimMode(pItem, 1);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pItem, INVPAGE_None);
           D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_PUT_ITEM, 1);
           pItem->eUnitFlags &= ~UNITFLAG_ISRESURRECT;
@@ -317,7 +317,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
             return 0xd;
           }
 
-          D2Common::Units::SetupUpdateFlag(pItem, 4);
+          D2Common::Units::ChangeAnimMode(pItem, 4);
           if (!*pGame2) {
             dwContainerGUID = -1;
           } else {
@@ -363,7 +363,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
     switch (eAnimMode) {
       case Container:
         {
-          D2Common::Units::SetupUpdateFlag(pUnit, 4);
+          D2Common::Units::ChangeAnimMode(pUnit, 4);
           eUnitType = pUnit->eUnitType;
           if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
             nPlaceResult = pUnit->pPath.pStaticPath->nPosY;
@@ -409,7 +409,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
             pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
           }
 
-          D2Common::Units::SetupUpdateFlag(pUnit, 1);
+          D2Common::Units::ChangeAnimMode(pUnit, 1);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, INVPAGE_None);
           D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, ITEMCMD_BODYLOC_PUT_ITEM, 1);
           if (pUnit) {
@@ -431,7 +431,7 @@ static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDAT
             return 0xd;
           }
 
-          D2Common::Units::SetupUpdateFlag(pUnit, 4);
+          D2Common::Units::ChangeAnimMode(pUnit, 4);
           if (!pUnit) {
             dwItemGUID = -1;
           } else {
@@ -744,35 +744,29 @@ uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * 
 }
 
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
-uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(D2MissilesTxt * pMissilesTxt, int32_t nCrcSeed) {
-    uint32_t nFieldCount = *(uint32_t*)((uint8_t*)pMissilesTxt + 0x4);
+uint32_t __fastcall PLAYERSAVE_CalculateChecksum(D2SaveFileHeaderStrc * pSaveHeader, int32_t nSize) {
+    uint32_t nFieldCount = pSaveHeader->dwFileVersion;
     uint32_t savedFuncIds = 0;
-    uint32_t savedCltHitSubs = 0;
-    uint32_t savedProgSounds = 0;
-    uint32_t savedHitFlagsExtra = 0;
+    int savedCltHitSubs = 0;
+    int savedProgSounds = 0;
+    int savedHitFlagsExtra = 0;
     if (nFieldCount > 0x5b) {
-      savedCltHitSubs = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile3 | (uint32_t)(uint16_t)pMissilesTxt->CltHitSubMissile4 << 16);
-      savedFuncIds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->nSrvDoFunc | (uint32_t)(uint16_t)pMissilesTxt->nSrvHitFunc << 16);
-      savedProgSounds = (uint32_t)((uint32_t)(uint16_t)pMissilesTxt->ProgSound | (uint32_t)(uint16_t)pMissilesTxt->ProgOverlay << 16);
-      savedHitFlagsExtra = *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3);
-      pMissilesTxt->nSrvDoFunc = 0;
-      pMissilesTxt->nSrvHitFunc = 0;
-      pMissilesTxt->CltHitSubMissile3 = 0;
-      pMissilesTxt->CltHitSubMissile4 = 0;
-      pMissilesTxt->ProgSound = 0;
-      pMissilesTxt->ProgOverlay = 0;
-      *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3) = 0;
+      savedCltHitSubs = pSaveHeader->nTime32;
+      savedFuncIds = pSaveHeader->dwChecksum;
+      savedProgSounds = pSaveHeader->nTimeEx;
+      savedHitFlagsExtra = pSaveHeader->nInitSeed;
+      pSaveHeader->dwChecksum = 0;
+      pSaveHeader->nTime32 = 0;
+      pSaveHeader->nTimeEx = 0;
+      pSaveHeader->nInitSeed = 0;
     }
 
-    uint32_t dwCrc = D2Hell::CRC32_Calculate((uint8_t*)pMissilesTxt, nCrcSeed);
+    uint32_t dwCrc = D2Hell::CRC32_Calculate((uint8_t*)pSaveHeader, nSize);
     if (nFieldCount > 0x5b) {
-      pMissilesTxt->CltHitSubMissile3 = (uint16_t)savedCltHitSubs;
-      pMissilesTxt->CltHitSubMissile4 = (uint16_t)((uint32_t)savedCltHitSubs >> 16);
-      pMissilesTxt->nSrvDoFunc = (short int)savedFuncIds;
-      pMissilesTxt->nSrvHitFunc = (short int)((uint32_t)savedFuncIds >> 0x10);
-      pMissilesTxt->ProgSound = (uint16_t)savedProgSounds;
-      pMissilesTxt->ProgOverlay = (uint16_t)((uint32_t)savedProgSounds >> 16);
-      *(uint32_t*)((intptr_t)&pMissilesTxt->HitFlags + 3) = savedHitFlagsExtra;
+      pSaveHeader->nTime32 = savedCltHitSubs;
+      pSaveHeader->dwChecksum = savedFuncIds;
+      pSaveHeader->nTimeEx = savedProgSounds;
+      pSaveHeader->nInitSeed = savedHitFlagsExtra;
     }
 
     return dwCrc;
@@ -812,7 +806,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
     int savedInitSeed;
     int savedTime32;
     bool bSaveUnchanged;
-    if (!DontNoSafeGameBool) {
+    if (!gbSaveFileWritingEnabled) {
       return 0;
     }
 
@@ -831,9 +825,9 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
     D2ClientStrc* pClient;
     pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave.cpp", 0xa3b);
     int nSaveSize;
-    nSaveSize = ITEMS::ItemMode::GetSavePacketList(pClient);
+    nSaveSize = ITEMS::ItemMode::GetSaveChecksum(pClient);
     int nExistingCrc;
-    nExistingCrc = PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)__frame0.saveTempBuffer, nSaveFileBytes);
+    nExistingCrc = PLAYERSAVE_CalculateChecksum((D2SaveFileHeaderStrc*)__frame0.saveTempBuffer, nSaveFileBytes);
     if (nExistingCrc == nSaveSize) {
       D2SaveFileHeaderStrc* pSaveBuffer;
       pSaveBuffer = GAME::Clients::GetSaveGame(pClient);
@@ -927,7 +921,7 @@ BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, D2Unit
 
     nCompareByteIdx = (int)pClient;
     GAME::Clients::SetRealm(pClient, nRealmId);
-    ITEMS::ItemMode::SetSavePacketList((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
+    ITEMS::ItemMode::SetSaveChecksum((D2ClientStrc*)nCompareByteIdx, nExistingCrc);
     if (BattleNetServerService && BattleNetServerService->fpSaveDatabaseCharacter) {
       /* FARPROC lpfn for IsBadCodePtr */ _bLockResult = IsBadCodePtr((FARPROC)BattleNetServerService->fpSaveDatabaseCharacter);
       if (_bLockResult) {
@@ -952,7 +946,7 @@ static void __fastcall SaveToFile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int n
     char szFilePath[500];
     uint32_t nSecurityCookie;
     size_t nBytesWritten;
-    if (DontNoSafeGameBool) {
+    if (gbSaveFileWritingEnabled) {
       FILE* pFile;
       Fog::Source::SFile::GetAndCreateSavePath(szSaveDir, 0x400);
       sprintf(szFilePath, "%s%s.d2s", szSaveDir, pCharName);
@@ -1046,7 +1040,7 @@ static void __stdcall SERVER_InitPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     char* szName = GAME::Clients::GetCharName(pClient);
     D2Common::Units::SetNameInPlayerData(pUnit, szName);
     UNIT::SUnit::SetSeed(pUnit, &pGame->pGameSeed);
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     pPlayerData->pTradeCopyInventory = 0;
     pPlayerData->dwTradeState = 0;
@@ -1415,13 +1409,13 @@ int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
     uint32_t bIsArena = GAME::Arena::ARENA_IsArenaLevel(pGame);
     if (bIsArena) {
-      nStatValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nStatValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nStatValue, 0);
-      nStatValue = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+      nStatValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nStatValue, 0);
     }
 
-    nStatValue = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+    nStatValue = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nStatValue, 0);
     *pnBytesConsumed = nStatValueCount * 4 + 5;
     return 0;
@@ -1626,7 +1620,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
     dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
     pItemUnknownStructure->pageMaybe = (char)dwReadValue;
     if (nItemClassIdTmp >= 0) {
-      dwReadValue = D2Common::DATATBLS::ItemTbls::TXT_Items_GetVersion(nItemClassIdTmp);
+      dwReadValue = D2Common::DATATBLS::ItemTbls::DATATBLS_MapOldItemIndexToCurrent(nItemClassIdTmp);
       pItemUnknownStructure->nItemClassid = dwReadValue;
       pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(dwReadValue);
       if (pItemsTxt) {
@@ -2186,7 +2180,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
             PlayerPets::SERVERUNIT_RemovePetFromUnit(pGame, pUnit, pMercUnit);
             pMercUnit->eUnitFlags |= UNITFLAG_ISDEAD;
             UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMercUnit, 0xc);
-            Monster::MONSTER_StartAiAndRegenTimers(pGame, pMercUnit);
+            Monster::MONSTER_RemoveAiAndRegenTimers(pGame, pMercUnit);
           }
 
           pbVar4 = pdwReadPos;
@@ -2194,7 +2188,7 @@ static int32_t __stdcall _oldSaveGameLoadingPart8(D2UnitStrc * pUnit, uint8_t * 
           if (!nErrorLine) {
             ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pMercUnit, 0, 0);
             ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pMercUnit, 0);
-            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pMercUnit), 0);
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMercUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pMercUnit), 0);
             Monster::MonsterAI::SendMercPackets(pGame, pUnit, 1);
             *ppnBytesConsumed = (uint32_t*)(pbVar4 + ((intptr_t)pdwReadPos - (intptr_t)pbVar3));
             nErrorLine = 0;

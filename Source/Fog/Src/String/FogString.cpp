@@ -55,7 +55,7 @@ void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen) {
     uint8_t cCurChar = *szText;
     uint8_t* pEnd = (uint8_t*)(szText + nMaxLen);
     while (cCurChar && szText < (char*)pEnd) {
-      *szText = g_SMemSizeClassTable.aUppercaseTable[*szText];
+      *szText = gaLowestSetBitIndex.aUppercaseTable[*szText];
       szText++;
       cCurChar = *szText;
     }

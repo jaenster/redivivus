@@ -389,7 +389,7 @@ __pragma(pack(push, 1)) struct D2SLogStrc {
 #ifndef D2_DEFINED_D2SMemTablesStrc
 #define D2_DEFINED_D2SMemTablesStrc
 struct D2SMemTablesStrc {
-    /* 0x000 */ uint32_t aSizeClassTable[256]; // size class per 16-byte request granule (SMemSizeClassBucketLookup)
+    /* 0x000 */ uint32_t aLowestSetBitIndex[256]; // size class per 16-byte request granule (SMemSizeClassBucketLookup)
     /* 0x400 */ uint8_t aUppercaseTable[256]; // case-fold table SMemStringToUppercase indexes with a SIGNED char: bytes 0x80-0xff read the last 128 bytes of aSizeClassTable
 };
 #endif // D2_DEFINED_D2SMemTablesStrc

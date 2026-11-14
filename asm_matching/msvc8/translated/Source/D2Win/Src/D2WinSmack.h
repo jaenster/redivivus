@@ -26,7 +26,7 @@ namespace D2Win { namespace Src { namespace D2WinSmack {
 
 // Function declarations
 // Calculates title prefix index based on character class and gender. Used for cinematics and titles. Class < 4 maps to index 0, < 8 to 1, < 12 to 2, else 3. If bIsExpansion non-zero and index > 0, adds 3.
-char * __stdcall D2WINSMACK_GetTitlePrefixIndexFromClass(int pUnused, int32_t nClass, int32_t bHasModifier, int32_t bIsExpansion);
+char * __stdcall D2COMP_GetTitleFromProgress(int nCharClass, int32_t nActsCompleted, int32_t bHardcore, int32_t bIsExpansion);
 // Loads and decodes Smacker video file into D2WinSmack control. Copies file path to field 0x40, closes previous smacker context, decodes new smacker to field 0x140. Stores path in global gpSmackerVideoBuffer and flags in gbSmackerVideoFlags.
 BOOL __stdcall D2WINSMACK_LoadAndDecodeSmacker(::D2WinSmack * pSmack, char * szFilePath, int32_t nFlags);
 // Closes smacker context and optionally deletes temporary file. Checks form type is FORM_Smack (9), closes smacker context at pContext field, deletes file at field 0x40 if gbSmackerKeepTempFile is zero.
@@ -40,7 +40,7 @@ BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // Sets the smacker control's position: nPosX/nPosY go to the control header's dwPosX/dwPosY (+0x0C/+0x10) and to the smacker frame's draw position (+0x148/+0x14C). The size is not touched. Validates form type is FORM_Smack.
 BOOL __stdcall D2WINSMACK_SetPosition(::D2WinSmack * pSmack, int32_t nPosX, int32_t nPosY);
 void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack);
-void __stdcall D2GFX_EnableVSync_Unref_00506a80();
+void __stdcall D2WINSMACK_SetKeepTempFile();
 #endif // D2_MODULE_D2Win
 
 }}} // namespace D2Win::Src::D2WinSmack

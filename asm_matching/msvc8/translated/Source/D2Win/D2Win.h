@@ -50,10 +50,6 @@ struct FORMS_PredefinedFormStrc;
 #define RECON_FPTD_Draw
 typedef BOOL (__fastcall *Draw)(struct D2ControlStrc * pControl);
 #endif
-#ifndef RECON_FPTD_DrawAnim
-#define RECON_FPTD_DrawAnim
-typedef BOOL (__fastcall *DrawAnim)(struct D2ControlStrc * pControl);
-#endif
 #ifndef RECON_FPTD_DrawEx
 #define RECON_FPTD_DrawEx
 typedef BOOL (__fastcall *DrawEx)(struct D2ControlStrc * pControl);
@@ -325,7 +321,6 @@ namespace D2Win {
 int32_t __fastcall D2WINANIMIMAGE_GetCurrentState(::D2WinAnimImage * pAnimImage);
 // Attempts to transition animation from state 3 (loaded) to state 4 (playing). Resets frame counter and updates tick timestamp. Returns 1 if transitioned, 0 if already playing or stopped.
 BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage);
-BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage);
 BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // Sets bAnimate (+0x5c): while it is 0, Draw keeps nCurrentFrame where it is. Returns 1; halts if the control is not FORM_Image.
@@ -338,7 +333,7 @@ namespace D2Win { namespace D2GFX {
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB);
 BOOL __stdcall UI_Init();
-BOOL __stdcall D2GFX_CheckVideoMode();
+BOOL __stdcall D2GFX_ShutdownSpriteCacheAndWindow();
 // The whole body is two instructions - MOV dword ptr [gnResolutionMode],0x0 then
 // JMP 004f5d60 - i.e. it forces resolution mode 0 and tail-calls the dispatcher. It is the
 // entry point the cutscene players use (PlaysBlizzardNorthCutScene, UIMENU_PlayCutScene,
@@ -368,7 +363,7 @@ void __stdcall D2COMP_SetScreenY(struct D2CharSelCompStrc * pCompUnit, int32_t n
 uint32_t __stdcall D2COMP_GetFlags(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags);
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);
-struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nClassicExpansion, uint8_t * pbyEquipSlots, char * szText);
+struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
 }}} // namespace D2Win::Src::D2Comp
 namespace D2Win { namespace Src { namespace D2WinAccountList {
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
@@ -422,7 +417,7 @@ void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2Wi
 // Halts (lines 0x1B3/0x1B5) unless pEditBox is a non-null FORM_EditBox. It clears no text.
 void __fastcall D2WINEDITBOX_SelectAll(::D2WinEditBox * pEditBox);
 // MISNAMED: writes D2WinEditBox+0x48 (nMaxLength), not a password flag. Callers pass character counts (0xd, 0x10, 0x20).
-void __fastcall D2WINEDITBOX_SetPasswordMode(::D2WinEditBox * pEditBox, uint32_t nMaxLength);
+void __fastcall D2WINEDITBOX_SetMaxLength(::D2WinEditBox * pEditBox, uint32_t nMaxLength);
 uint16_t * __fastcall FORMS_TextInput_GetValue(struct D2ControlStrc * pControl);
 // Links two edit boxes in tab order: pEditBox->pNextTabEditBox = pNextEditBox, pNextEditBox->pPrevTabEditBox = pEditBox. Halts unless both are non-null edit-box controls (eType 1).
 // @provenance 1.14d asm 004fddd0..004fde22; was named D2WINEDITBOX_SetText, which it does not do.
@@ -448,7 +443,7 @@ uint32_t __stdcall D2WINFONT_GetCurrentFontHeight();
 void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX, uint32_t nY, int32_t nUnused, int32_t nCropStartY, int32_t nCropHeight);
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag);
 // Sets tooltip attributes (text, position, size, alignment) and custom field 0x810. Wrapper around TEXT_TooltipSetAttributes.
-void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField);
+void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill);
 void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t dwColor, BOOL bMultiLineCenter);
 // Draws text with background rectangle. Calculates text dimensions, clamps to screen bounds, draws solid rect, then renders centered text. Used for tooltips and popups.
 void __fastcall D2WINFONT_DrawTextWithBackgroundRect(uint16_t * wszText, uint32_t nX, int32_t nY, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette);
@@ -474,7 +469,7 @@ BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame);
 // Sets eDrawMode (+0x44) to DRAW_SOLID; the second argument is never read (the only caller passes DRAW_LIGHTTRANSPARENT, Mac 1.14d also stores 5); halts unless the control type is 2 (image); returns TRUE.
 // The asm stores the constant 5 to [EAX+0x44] (004fd19a).
 BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDrawModeIgnored);
-int __stdcall D2WINIMAGE_StopAnimation(::D2WinImage * pImage);
+int __stdcall D2WINIMAGE_GetFrameCount(::D2WinImage * pImage);
 BOOL __fastcall Draw(::D2WinImage * pImage);
 BOOL __fastcall Draw(struct D2WinImageEx * pImageEx);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
@@ -518,10 +513,10 @@ void __stdcall RENDERER_DrawOutOfGameScene();
 void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible);
 void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t bSet);
 // Sets pFormFourth global to the specified control
-void __stdcall D2WINMAIN_SetFormFourth(struct D2ControlStrc * pControl);
+void __stdcall CONTROL_SetEscapeButton(struct D2ControlStrc * pButton);
 BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t nInitialFormState);
 // Returns first element from linked list (dereferences pointer if non-null)
-void * __stdcall D2WINMAIN_GetFirstElement(void * * ppHead);
+eD2FormType __stdcall CONTROL_GetType(struct D2ControlStrc * pControl);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();
 void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
@@ -536,7 +531,7 @@ uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen,
 void __fastcall D2WINPAL_CopyPalette(void * pDest);
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct);
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File);
-void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode);
+void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(uint32_t bCompactLineSpacingMode);
 }}} // namespace D2Win::Src::D2WinPalette
 namespace D2Win { namespace Src { namespace D2WinPopup {
 BOOL __fastcall DrawEx(::D2WinPopup * pPopup);
@@ -555,7 +550,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar);
 }}} // namespace D2Win::Src::D2WinScrollbar
 namespace D2Win { namespace Src { namespace D2WinSmack {
 // Calculates title prefix index based on character class and gender. Used for cinematics and titles. Class < 4 maps to index 0, < 8 to 1, < 12 to 2, else 3. If bIsExpansion non-zero and index > 0, adds 3.
-char * __stdcall D2WINSMACK_GetTitlePrefixIndexFromClass(int pUnused, int32_t nClass, int32_t bHasModifier, int32_t bIsExpansion);
+char * __stdcall D2COMP_GetTitleFromProgress(int nCharClass, int32_t nActsCompleted, int32_t bHardcore, int32_t bIsExpansion);
 // Loads and decodes Smacker video file into D2WinSmack control. Copies file path to field 0x40, closes previous smacker context, decodes new smacker to field 0x140. Stores path in global gpSmackerVideoBuffer and flags in gbSmackerVideoFlags.
 BOOL __stdcall D2WINSMACK_LoadAndDecodeSmacker(::D2WinSmack * pSmack, char * szFilePath, int32_t nFlags);
 // Closes smacker context and optionally deletes temporary file. Checks form type is FORM_Smack (9), closes smacker context at pContext field, deletes file at field 0x40 if gbSmackerKeepTempFile is zero.
@@ -591,7 +586,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pTextBox, uin
 int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pTextBox);
 void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int32_t nPosition);
 // MISNAMED: not a callback setter. Forwards its second argument verbatim to D2WINSCROLLBAR_SetLinkedTextBox(D2WinScrollbar*, D2WinTextBox*), so it is a D2WinTextBox pointer, not an int.
-void __fastcall D2WINTEXTBOX_SetScrollbarCallbackA(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox);
+void __fastcall D2WINTEXTBOX_SetScrollbarLinkedTextBox(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox);
 // Forwards its second argument verbatim to D2WINSCROLLBAR_SetChangeCallback(pScrollbar, fpD2WinScrollbarOnChange*), so it is a code pointer, not an int. Only caller CHARSEL_InitCharSelScreen @0043af40 passes MAINMENU_CharSelScrollbarCallback (0x439df0).
 void __fastcall D2WINTEXTBOX_SetScrollbarCallbackB(::D2WinTextBox * pTextBox, fpD2WinScrollbarOnChange fpOnChange);
 void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pTextBox, int32_t nStyle);
@@ -607,7 +602,7 @@ void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, ch
 void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle);
 }}} // namespace D2Win::Src::D2WinTextBox
 namespace D2Win { namespace Src { namespace D2WinTimer {
-void __fastcall D2WINTIMER_Start(int * pTimer);
+void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer);
 BOOL __fastcall DrawEx(::D2WinTimer * pTimer);
 BOOL __stdcall Key(struct D2ControlMsg * pTimer);
 // @sourcefile .\Src\D2WinTimer.cpp
@@ -619,5 +614,4 @@ void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer);
 namespace D2Win { namespace Src { namespace D2WinMain {
 extern int nPosX;
 extern int nPosY;
-extern D2ControlStrc * pFormFourth;
 }}} // namespace D2Win::Src::D2WinMain

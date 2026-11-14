@@ -354,7 +354,7 @@ BOOL __fastcall OBJOP_A3Q2_PullSewerLever(D2ObjectOperateFnArg * pOperation) {
         if (pQuestSpecific->bSewerStairsInitialized == '\x01') {
           pOrbUnit = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pQuestSpecific->nSewerStairsGUID);
           if (pOrbUnit) {
-            D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+            D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
             pKhalimsWillQuest = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
             pGameInner = pOperation->sArg.pGame;
             GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 1, (pKhalimsWillQuest->FrameCnt[1] >> 8) + pGameInner->dwGameFrame, 0, 0);
@@ -384,7 +384,7 @@ void __fastcall Q19_UpdateSewerStairsObject(D2QuestDataStrc * pQuestData, D2Unit
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, pA1Q2Data->nSewerStairsUpdateMode);
+    D2Common::Units::ChangeAnimMode(pUnit, pA1Q2Data->nSewerStairsUpdateMode);
     if (pA1Q2Data->nSewerStairsUpdateMode == 2) {
       return;
     }
@@ -414,11 +414,11 @@ void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
 
     pDVar1->nSewerStairsGUID = nObjectGUID;
     if (pDVar2->bIsNotIntroduction == '\0') {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nSewerStairsUpdateMode);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pDVar1->nSewerStairsUpdateMode);
 }
 
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
@@ -428,7 +428,7 @@ void __fastcall Objects_InitFn42_SewerLever(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 // Q19_OnPlayerCubeKhalimsWill (Khalim's Will). Callback when a player has the assembled Khalim's Will (transmuting relics in the cube). Reads Completed (and RewardAwaits when not complete) and updates the quest GUID per-player counters tracking who has assembled the Will. State reads only; no SetQuestState.
@@ -539,7 +539,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsHeart);
       if (pDVar1->nKhalimsEyeCount > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsBrainCount++;
             pDVar1->bKhalimsBrainDropped = 1;
@@ -550,7 +550,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
       }
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
     return 0;
 }
 
@@ -583,7 +583,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsEye);
       if (pDVar1->nKhalimsEyeCount > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsFlailCount++;
             pDVar1->bKhalimsFlailDropped = 1;
@@ -594,7 +594,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
       }
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
     return 0;
 }
 
@@ -627,7 +627,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOpera
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q19_CheckPlayerHasKhalimsBrain);
       if (pDVar1->nKhalimsEyeCount > 0) {
         do {
-          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pOperationArg, nullptr, -1, 1);
+          pDroppedUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 1);
           if (pDroppedUnit) {
             pDVar1->nKhalimsHeartCount++;
             pDVar1->bKhalimsHeartDropped = 1;
@@ -638,7 +638,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOpera
       }
     }
 
-    Objects::ObjectsMode::RollChestDrops(pOperation, ITEMTYPE_Gold);
+    Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
     return 0;
 }
 

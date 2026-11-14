@@ -1086,9 +1086,9 @@
       "calledFunctions": [
         "GFXUTIL_GetUnitCofDirectionOnScreen",
         "D2GFX_IsPerspectiveActive",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "GetPrecisionY",
         "GetPrecisionX",
@@ -1112,7 +1112,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c29f3006",
+      "dh": "3f865c8b",
       "paramStorage": [
         [
           "pUnit",
@@ -1393,7 +1393,7 @@
         "SPRITECACHE_GetOrLoadSprite",
         "GetDC6OffsetY",
         "DRAW_GetWorldOffsetY",
-        "GetTargetY"
+        "GetScreenY"
       ],
       "usedTypes": [
         "D2GfxDataStrc",
@@ -1402,7 +1402,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d13aa944",
+      "dh": "1c4ee72b",
       "paramStorage": [
         [
           "pUnit",

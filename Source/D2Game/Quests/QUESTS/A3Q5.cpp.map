@@ -92,7 +92,7 @@
       ]
     },
     {
-      "name": "Q22_ClearGoldenBirdQuestFlag",
+      "name": "Q21_ClearGoldenBirdQuestFlag",
       "address": "005bad40",
       "lines": [
         {
@@ -102,14 +102,14 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A3Q5",
       "calledFunctions": [
-        "Q22_ClearGoldenBirdQuestFlag",
+        "Q21_ClearGoldenBirdQuestFlag",
         "GetQuestDataByQuestNoInternal"
       ],
       "usedTypes": [
         "D2QuestDataStrc",
         "SGAMEDATA"
       ],
-      "dh": "89359c9f",
+      "dh": "5e1c7e0f",
       "paramStorage": [
         [
           "pGame",
@@ -833,7 +833,7 @@
         "FindUnitFromTable",
         "MONSTERAI_CommandSkillAtPosition",
         "AI_Boss_LaunchOrbAtObject",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "NotifyPlayersAboutEvent",
@@ -857,7 +857,7 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "b303d84c",
+      "dh": "b80ee026",
       "paramStorage": [
         [
           "pOperation",
@@ -878,13 +878,13 @@
       "calledFunctions": [
         "Objects_InitFn53_MephistoDoor",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "065d9280",
+      "dh": "68c58b5b",
       "paramStorage": [
         [
           "pInitArg",
@@ -905,7 +905,7 @@
       "calledFunctions": [
         "Objects_InitFn60_CompellingOrb",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SpawnMonsterAtRoomPosSimple"
       ],
       "usedTypes": [
@@ -914,7 +914,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "7c420965",
+      "dh": "608ede6e",
       "paramStorage": [
         [
           "pInitArg",
@@ -950,7 +950,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "32c1410a",
+      "dh": "67fa9ca1",
       "paramStorage": [
         [
           "pQuestData",

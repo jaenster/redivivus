@@ -1769,7 +1769,7 @@
         "GetSkillByIdAndOwner",
         "GetSkillLevel",
         "SKILL_GetMaxLevelForSkill",
-        "SpendSkillPointOnSkill",
+        "SKILLS_CheckRequiredAttributes",
         "D2GetSkillCalc",
         "SKILLTREE_DrawSkillNode"
       ],
@@ -1783,7 +1783,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b523788"
+      "dh": "5a367a12"
     },
     {
       "name": "SKILLTREE_DrawAllSkillNodes",

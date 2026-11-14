@@ -46,7 +46,6 @@ namespace D2Win {
 int32_t __fastcall D2WINANIMIMAGE_GetCurrentState(::D2WinAnimImage * pAnimImage);
 // Attempts to transition animation from state 3 (loaded) to state 4 (playing). Resets frame counter and updates tick timestamp. Returns 1 if transitioned, 0 if already playing or stopped.
 BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage);
-BOOL __fastcall DrawAnim(::D2WinAnimImage * pAnimImage);
 BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 // Sets bAnimate (+0x5c): while it is 0, Draw keeps nCurrentFrame where it is. Returns 1; halts if the control is not FORM_Image.
@@ -57,6 +56,7 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 void __fastcall FORMS_DestroyD2WinAnimImage(::D2WinAnimImage * pWinAnimImage);
+BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage);
 #endif // D2_MODULE_D2Win
 // 1 internal function (defined in .cpp)
 

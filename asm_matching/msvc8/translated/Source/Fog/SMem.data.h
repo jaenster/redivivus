@@ -17,5 +17,5 @@
 struct D2SMemTablesStrc;
 struct SMemHeapStatsStrc;
 
-extern D2SMemTablesStrc g_SMemSizeClassTable;
+extern D2SMemTablesStrc gaLowestSetBitIndex;
 extern SMemHeapStatsStrc gaSMemHeapStats[4096];

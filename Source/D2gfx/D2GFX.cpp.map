@@ -4,7 +4,7 @@
   "file": "Source/D2gfx/D2GFX.cpp",
   "functions": [
     {
-      "name": "RENDERER_TogglePerspective_Unref_00477be0",
+      "name": "RENDERING_ToggleCurrentEngineFlags",
       "address": "00477be0",
       "lines": [
         {
@@ -14,9 +14,9 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "RENDERER_TogglePerspective_Unref_00477be0"
+        "RENDERING_ToggleCurrentEngineFlags"
       ],
-      "dh": "21709478"
+      "dh": "f2b4079e"
     },
     {
       "name": "D2GFX_GetPerspectiveCapable_ForPerspectiveItem",
@@ -109,7 +109,7 @@
       "dh": "1d5c3c6e"
     },
     {
-      "name": "D2GFX_GetRendererMode_Unref_004f5150",
+      "name": "D2GFX_GetWindowed",
       "address": "004f5150",
       "lines": [
         {
@@ -119,12 +119,12 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "D2GFX_GetRendererMode_Unref_004f5150"
+        "D2GFX_GetWindowed"
       ],
       "usedTypes": [
         "eD2RendererMode"
       ],
-      "dh": "b18e67fe"
+      "dh": "43649f6f"
     },
     {
       "name": "D2GFX_GetResolutionMode",
@@ -250,7 +250,7 @@
       ]
     },
     {
-      "name": "D2GFX_GetLowQuality_Unref_004f51f0",
+      "name": "D2GFX_GetBlendedShadows",
       "address": "004f51f0",
       "lines": [
         {
@@ -260,9 +260,9 @@
       ],
       "namespace": "D2gfx::D2GFX",
       "calledFunctions": [
-        "D2GFX_GetLowQuality_Unref_004f51f0"
+        "D2GFX_GetBlendedShadows"
       ],
-      "dh": "9da754df"
+      "dh": "141e9635"
     },
     {
       "name": "D2GFX_SetBlendedShadows",

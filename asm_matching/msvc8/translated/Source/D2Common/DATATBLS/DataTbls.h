@@ -21,7 +21,6 @@ struct D2ArchiveStrc;
 struct D2BinFieldInputStrc;
 struct D2CharStatsTxt;
 struct D2DifficultyLevelsTxt;
-struct D2InventoryToBeUpdatedStrc;
 struct D2PoolManagerStrc;
 struct D2StatesDataTbls;
 struct D2StatesTxt;
@@ -63,7 +62,7 @@ int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex);
 int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber);
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn);
-struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00611d10();
+struct D2AnimDataStrc * __stdcall TXT_GetCharStatsTable();
 struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get();
 void __fastcall DATATBLS_BuildStatesDataBitMask(struct D2StatesDataTbls * pStatesData, uint32_t nFlagBit);
 // @sourcefile .\DATATBLS\DataTbls.cpp
@@ -72,7 +71,7 @@ void __fastcall DATATBLS_BuildStatesDataList(struct D2AllStatesDataTbl * * ppAll
 void __fastcall TXT_States_AllocItemTypesStateDataTable(struct D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, int32_t nOffset);
 char * __stdcall GetUnitClassIdToName(struct D2UnitStrc * pUnit, char * szResult, size_t nSize);
 char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, size_t nSize);
-void __stdcall StoreDataTables(char * szFileName, struct D2InventoryToBeUpdatedStrc * pInventoryToBeUpdated, size_t nSize, uint32_t dwVersion);
+void __stdcall StoreDataTables(char * szFileName, void * pWriteBuffer, size_t nSize, uint32_t nRecordCount);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 struct D2ArchiveStrc * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine);
 // Loads and compiles a DataTbls .txt/.bin table into a parsed binary struct array. If sgtDataTable.bUseTxt is set, loads the .txt via ARCHIVE_LoadDataTables (mapping "leveldefs"->"levels"), parses each line into nEndOffset-sized records via Fog Excel, and writes a ".bin" cache through StoreDataTables. Then loads the table for use (.bin if gpaMiscTxtTables else freshly parsed .txt), returns the record buffer and writes the row count to *nTxtTableSize. Halts via ErrorManager on load failure.
@@ -110,7 +109,7 @@ void __stdcall DATATBLS_FreeStatesTxtTables();
 void __fastcall TXT_AllocTxt_pettype(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall DATATBLS_FreePetTypeTxtTables();
-struct D2AnimDataStrc * __stdcall TXT_AnimTbls_Get_Unref_00624710();
+struct D2AnimDataStrc * __stdcall LOGGING_GetLogFile();
 #endif // D2_MODULE_D2Common
 // 7 internal functions (defined in .cpp)
 

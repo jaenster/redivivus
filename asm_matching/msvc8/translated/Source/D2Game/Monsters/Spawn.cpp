@@ -407,7 +407,7 @@ static inline int dummy_ClampIndex(int nIndex) {
     return nIndex;
 }
 
-static BOOL SPAWN_IsExcludedMonsterClass(int32_t nClassId) {
+static BOOL SPAWN_CanRetrySpawn(int32_t nClassId) {
     switch (dummy_ClampIndex(nClassId)) {
       case 0xe5:
 
@@ -460,7 +460,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
 
     D2UnitStrc* pMonster = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, nX, nY, nClassId, eAnimMode, -1, nSpawnFlags);
     if (!pMonster) {
-      _bObjColFlag = SPAWN_IsExcludedMonsterClass(nClassId);
+      _bObjColFlag = SPAWN_CanRetrySpawn(nClassId);
       if (!_bObjColFlag) {
         return nullptr;
       }

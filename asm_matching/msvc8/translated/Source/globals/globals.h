@@ -28,7 +28,6 @@ struct BnMessQueue;
 struct CELLIST;
 struct CMDPARAMS;
 struct D2Act5SpecialPresetStrc;
-struct D2AiDispatchCallbacksStrc;
 struct D2AiListStrc;
 struct D2AiParamStrc;
 struct D2AllStatesDataTbl;
@@ -105,7 +104,6 @@ struct D2EscMenuHeaderStrc;
 struct D2EscMenuItemStrc;
 struct D2EscMenuUIFlagStrc;
 struct D2EventsTxt;
-struct D2ExpansionLvlTblsTxt;
 struct D2ExperienceTxt;
 struct D2FontCacheEntryStrc;
 struct D2FontGlyphStrc;
@@ -162,6 +160,7 @@ struct D2LobbyControlsStrc;
 struct D2LowQualityItemsTableStrc;
 struct D2LowQualityItemsTxt;
 struct D2LvlPrestTxt;
+struct D2LvlTypeTileLibrariesStrc;
 struct D2MagicAffixTableStrc;
 struct D2MagicAffixTxt;
 struct D2McpGameInfoStrc;
@@ -180,10 +179,12 @@ struct D2Missile032SpreadStrc;
 struct D2Missile036SpreadStrc;
 struct D2MissileSrvDoFuncData;
 struct D2MissilesTxt;
+struct D2ModeChangeStrc;
 struct D2MonAiTxt;
 struct D2MonEquipTxt;
 struct D2MonItemPercentTxt;
 struct D2MonLvlTxt;
+struct D2MonModeTableRowStrc;
 struct D2MonModeTxt;
 struct D2MonModeTxtSmall;
 struct D2MonPlaceTxt;
@@ -200,7 +201,6 @@ struct D2MonUModTxt;
 struct D2MonsterAiParameterStruct;
 struct D2MonsterAnimModeFlagsStrc;
 struct D2MonsterForEachStruct;
-struct D2MonsterKillStrc;
 struct D2MonsterPalShiftSlotStrc;
 struct D2MonsterUModHandlerRowStrc;
 struct D2NET_CLIENT_D2GS_ServerToClient;
@@ -382,7 +382,7 @@ typedef BOOL (__fastcall *D2SkillCltStFunc)(D2UnitStrc * pUnit, eD2Skills eD2Ski
 typedef BOOL (__fastcall *D2SkillSrvStFunc)(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *fnCacheReadData)(char * szKey, int * pCrc, void * ppBuf, int * pSize);
 typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t nSize, int * pTime, uint32_t nExp, int nCacheExp);
-typedef BOOL (__fastcall *fnD2DropHandler)(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill);
+typedef BOOL (__fastcall *fnD2DropHandler)(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill);
 typedef BOOL (__fastcall *fnGetEnterChatFlags)(uint32_t * pFlags);
 typedef BOOL (__fastcall *fnSendChangeEmail)(char * szAcct, char * szOld, char * szNew);
 typedef BOOL (__fastcall *fnSendResetPassword)(char * szAcct, char * szEmail);
@@ -1992,6 +1992,8 @@ namespace D2Common { namespace Txt { namespace Cube {
 // Globals recovered from multi-function body references
 // (classified static-local by xref count, but named in other bodies too)
 // =============================================================================
+
+extern int gnLanguageCode;
 
 namespace D2Client { namespace UNIT { namespace CUnit {
 

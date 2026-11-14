@@ -232,7 +232,7 @@
       "dh": "4b3a2a33"
     },
     {
-      "name": "SID_GetReadyFlag_Unref_00520af0",
+      "name": "SID_GetRealmLogonResult",
       "address": "00520af0",
       "lines": [
         {
@@ -242,12 +242,12 @@
       ],
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
-        "SID_GetReadyFlag_Unref_00520af0"
+        "SID_GetRealmLogonResult"
       ],
-      "dh": "483b3fab"
+      "dh": "b34d2c67"
     },
     {
-      "name": "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00",
+      "name": "NET_SID_CLIENT_GetCDKeyInUseByUsernamePtr",
       "address": "00520b00",
       "lines": [
         {
@@ -257,9 +257,9 @@
       ],
       "namespace": "Bnclient::_net_sid",
       "calledFunctions": [
-        "NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00"
+        "NET_SID_CLIENT_GetCDKeyInUseByUsernamePtr"
       ],
-      "dh": "b32a07cf"
+      "dh": "693143f2"
     },
     {
       "name": "NET_SID_CLIENT_GetResponseCount2",

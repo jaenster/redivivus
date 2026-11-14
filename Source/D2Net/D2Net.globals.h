@@ -24,6 +24,6 @@ namespace D2Net::SRC::Client {
 extern uint32_t CLIENT_SocketToServer;
 // lpThreadId parameter of CreateThread
 extern LPDWORD lpThreadId_00882b30;
-extern int gnNetConnectionTimeoutMs;
+extern int gbClientConnected;
 } // namespace D2Net::SRC::Client
 #endif // D2_MODULE_D2Net

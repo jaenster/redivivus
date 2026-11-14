@@ -426,7 +426,7 @@ void __fastcall RENDERER_WINDOWED_GetFramebufferInfo(uint32_t * ppvBitsOut, uint
     }
 }
 
-HBITMAP __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006c8240() {
+HBITMAP __stdcall RENDERER_WINDOWED_GetInitFunctionsStrc() {
     return (HBITMAP)D2GfxRendereInitFunctionsStrc;
 }
 
@@ -1475,7 +1475,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
         if (iVar2 && nImgWidth == 0x1d4 && nImgHeight == 0x3c && nImgBitDepth == 8) {
           iVar2 = 0;
           do {
-            bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)aPaletteBuf[iVar2 * 4], (uint32_t)aPaletteBuf[iVar2 * 4 + 1], (uint32_t)aPaletteBuf[iVar2 * 4 + 2]);
+            bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)aPaletteBuf[iVar2 * 4], (uint32_t)aPaletteBuf[iVar2 * 4 + 1], (uint32_t)aPaletteBuf[iVar2 * 4 + 2]);
             gnSmackerGlideYOffset.aPaletteLUT[iVar2] = bVar1;
             iVar2++;
           } while (iVar2 < 0x100);
@@ -1512,7 +1512,7 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
             bSmackWait = 0;
             pbPalEntry = hSmack->Palette + 1;
             do {
-              bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)pbPalEntry[-1], (uint32_t)*pbPalEntry, (uint32_t)pbPalEntry[1]);
+              bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)pbPalEntry[-1], (uint32_t)*pbPalEntry, (uint32_t)pbPalEntry[1]);
               gnSmackerGlideYOffset.aPaletteLUT[bSmackWait] = bVar1;
               bSmackWait++;
               pbPalEntry += 3;

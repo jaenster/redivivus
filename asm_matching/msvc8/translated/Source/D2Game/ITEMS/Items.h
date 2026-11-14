@@ -22,7 +22,7 @@ namespace D2Game { namespace ITEMS { namespace Items {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-void __fastcall FreeItems(::SGAMEDATA * pGame);
+void __fastcall MISSILES_RemoveAll(::SGAMEDATA * pGame);
 #endif // D2_MODULE_D2Game
 
 }}} // namespace D2Game::ITEMS::Items

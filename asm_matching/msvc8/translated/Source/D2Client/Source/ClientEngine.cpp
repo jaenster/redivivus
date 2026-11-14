@@ -2185,23 +2185,23 @@ DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {
     return -1;
 }
 
-void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_00477690() {
+void RENDERING_TogglePerspective_Thunk() {
     D2gfx::D2GFX::RENDERER_TogglePerspective();
 }
 
-void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776a0() {
+void RENDERING_ToggleBlendedShadows_Thunk() {
     D2gfx::D2GFX::RENDERER_ToggleBlendedShadows();
 }
 
-void thunk_DRAW_Overlay_SecondsLeftToGame_Unref_004776b0() {
+void RENDERING_ToggleLowQuality_Thunk() {
     D2gfx::D2GFX::D2GFX_ToggleLowQuality();
 }
 
-void __fastcall thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047f940(LPVOID * ppWardenModule) {
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(LPVOID * ppWardenModule) {
     Warden::WARDEN_FreeModuleLibraries(ppWardenModule);
 }
 
-void __fastcall thunk_DRAW_Overlay_SecondsLeftToGame_Unref_0047fbe0(LPVOID * ppWardenModule) {
+void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(LPVOID * ppWardenModule) {
     Warden::WARDEN_FreeModuleLibraries(ppWardenModule);
 }
 

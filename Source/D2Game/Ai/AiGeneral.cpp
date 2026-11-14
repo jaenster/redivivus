@@ -374,17 +374,17 @@ void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
     pAiGeneral->pGame = pGame;
 }
 
-void __fastcall GetMonsterNameAndAi(D2UnitStrc * pUnit, uint32_t * pMonsterName, int * pMonsterAi) {
+void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc * pUnit, uint32_t * pnOwnerGUID, int * peOwnerType) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       D2AiGeneralStrc* pMonsterData = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
       if (pMonsterData->pGame) {
-        *pMonsterName = pMonsterData->nOwnerGUIDEx;
-        *pMonsterAi = pMonsterData->eOwnerTypeEx;
+        *pnOwnerGUID = pMonsterData->nOwnerGUIDEx;
+        *peOwnerType = pMonsterData->eOwnerTypeEx;
         return;
       }
     }
 
-    *pMonsterName = -1;
+    *pnOwnerGUID = -1;
 }
 
 // Returns the owner unit for a monster. Walks pMonsterData->pAiGeneral->pGame to call FindUnitFromTable with the owner's type and GUID.

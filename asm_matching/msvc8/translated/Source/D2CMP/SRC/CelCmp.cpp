@@ -37,6 +37,10 @@ typedef void (__stdcall *pfnTilecmpPixelCallback)(uint32_t dwPixel);
 #define RECON_FPTD_pfnCelPixelDataFree
 typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 #endif
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 
 static fpCelDrawFrameByFormat gaaCelDrawFuncTable[2] = { (fpCelDrawFrameByFormat)&D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEDispatcher, nullptr }; D2_STATIC_GUARD(gaaCelDrawFuncTable, "gaaCelDrawFuncTable");
 static uint32_t gaCelCmpDirectionLookupByDirectionAndFrame[512] = {
@@ -2532,8 +2536,8 @@ uint32_t __stdcall CELCMP_RoundUpToMultiple_Unreferenced(uint32_t nValue, uint32
     return nValue;
 }
 
-void __stdcall GFX_SetSpriteCacheMaxSize(size_t nSize) {
-    SpriteCache::SPRITECACHE_SetMaxSize(nSize);
+void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry) {
+    SpriteCache::SPRITECACHE_SetFreeEntryCallback(pfnFreeEntry);
 }
 
 static void __stdcall BITSTREAM_InitWriter(uint32_t * pBitStream, int32_t nByteSize, D2CodecBitStateStrc * pBitState) {

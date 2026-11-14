@@ -179,8 +179,8 @@ int __stdcall isServerDown();
 void Unreferenced_0043dce0();
 void __stdcall UIMENU_CantTestItBeacuseItCrash();
 void __stdcall CHATDLG_DestroyLobbyChatForms();
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230();
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240();
+void __stdcall CHATDLG_InitializeCriticalSection();
+void __stdcall CHATDLG_DeleteCriticalSection();
 struct D2ChatDlgUnknown_0x10 * Unreferenced_0043e370();
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages();

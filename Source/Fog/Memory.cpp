@@ -917,7 +917,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
     return nErrAddress;
 }
 
-void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc) {
+void __fastcall FOG_SetServerMemHeap(pfnBlizzardError pfnFunc) {
     gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
 }
 

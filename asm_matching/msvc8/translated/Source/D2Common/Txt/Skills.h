@@ -1312,7 +1312,7 @@ void __stdcall SKILL_SetFlags(struct D2SkillStrc * pSkill, int32_t nFlags);
 int32_t __stdcall SKILL_GetFlags(struct D2SkillStrc * pSkill);
 // Returns 1 if pUnit meets all prerequisites to skill-point-invest in eSkill, 0 otherwise. Checks: skill index in range and txt entry valid; unit level >= required level; up to three prerequisite skills (reqskill[0..2]) each owned and at level >= 1. Used by the skill tree UI/server to gate skill point allocation.
 BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill);
-uint32_t __stdcall SpendSkillPointOnSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill);
+uint32_t __stdcall SKILLS_CheckRequiredAttributes(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 uint32_t __stdcall SKILLS_CalcToHit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel);
 int32_t __stdcall SKILLS_GetTotalSkillLevel(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 // SKILLCALC VM: Evaluates Skills.txt calc[0-5] expressions.
@@ -1358,8 +1358,8 @@ uint32_t __stdcall SKILL_FindTeleportPosition(struct D2UnitStrc * pUnit, struct 
 // Returns the arrow-modifier skill ID active on pUnit (player or monster with bow/xbow): checks UNITSTAT_item_magicarrow and UNITSTAT_item_explosivearrow stats; writes the stat level to *pnParam if provided. Returns 0x1b (Magic Arrow), 0x29 (Explosive Arrow), 0x1f (default), or 0/–1 if no bow or not applicable.
 int __stdcall SKILL_GetArrowModifierSkill(struct D2UnitStrc * pUnit, int * pnStatLevel);
 uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId);
-// Strips all progressive (stackable/timed) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (states with flag 0x10 set), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
-BOOL __stdcall STATES_RemoveAllProgressiveStates(struct D2UnitStrc * pUnit);
+// Removes the disguise (shapeshift) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (the list built with bit index 0x10, the disguise states), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
+BOOL __stdcall STATES_RemoveDisguiseStates(struct D2UnitStrc * pUnit);
 eD2Skills __stdcall SKILLS_GetClassSkillByIndex(uint32_t nClassId, int32_t nSkillIndex);
 int32_t __stdcall AmountOfSkillsByClassId(uint32_t nClassId);
 int32_t __stdcall SKILL_GetConcentrationDamageBonus(struct D2UnitStrc * pUnit, int32_t nSkillId);
@@ -1408,7 +1408,7 @@ struct D2LightMapStrc * __stdcall SKILLS_GetUnitField0xa8_0x14(struct D2UnitStrc
 // Frees the entire skill list on a unit. Iterates through pFirstSkill linked list, freeing each D2SkillStrc, then frees the D2SkillListStrc itself. Sets pUnit->pSkillsList to NULL. Called by FreeUnit.
 // @sourcefile .\SKILLS\Skills.cpp
 void __stdcall SKILLS_FreeSkillList(struct D2UnitStrc * pUnit);
-uint32_t __stdcall SKILLS_SetTimerFlag(struct D2SkillStrc * pSkill, int32_t nTimerValue);
+uint32_t __stdcall SKILLS_SetCharges(struct D2SkillStrc * pSkill, int32_t nCharges);
 uint32_t __fastcall GetSequenceId(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 int32_t __stdcall GetShrineBonus(struct D2UnitStrc * pUnit);
 int __stdcall SKILLS_GetField0x10(struct D2SkillStrc * pSkill);

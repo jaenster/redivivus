@@ -301,7 +301,7 @@
         "INV_GetCharStatsTxtLine",
         "SKILLDESC_GetStatNameString",
         "DRLGENV_GetPeriodOfDayFromAct",
-        "ITEMMODS_CalculateRepairCost",
+        "ITEMMODS_GetByTimeAdjustment",
         "GetMonTypeLine",
         "TXT_MonStats_GetLine",
         "SKILLS_GetCharClassFromSkillId_Validated",
@@ -322,7 +322,7 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "5eaf0ec5",
+      "dh": "2b5bbda3",
       "paramStorage": [
         [
           "pUnit",
@@ -456,13 +456,13 @@
         "SKILLDESC_BuildChargeSkillDesc",
         "GetStatList",
         "AllocStatList",
-        "CopyStatListEx",
+        "STATLIST_MergeBaseStats",
         "INVENTORY_GetFirstItem",
         "GetCarriedItem",
         "INVENTORY_GetNextItem",
         "GetLocaleString",
         "ITEMS_IsA",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "DamageToUndeadText",
         "AppendToBuffer",
         "SKILLDESC_BuildStatListDesc",
@@ -472,7 +472,7 @@
         "STATLIST_GetBaseStatValue",
         "TXT_Items_GetLine",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "FreeStatList"
       ],
       "usedTypes": [
@@ -492,7 +492,7 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "44e06979",
+      "dh": "3eb145f6",
       "paramStorage": [
         [
           "pUnit",
@@ -2165,9 +2165,9 @@
         "SKILLDESC_GetAuraBonusDamage",
         "ITEM_GetItemsTxt_wStrBonus",
         "ITEM_GetItemsTxt_wDexBonus",
-        "ITEM_GetMinimalStatValueShifted",
-        "STATES_HasAttackSpeedState",
-        "STATES_HasAuraState"
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATES_HasDamBlueFlagState",
+        "STATES_HasDamRedFlagState"
       ],
       "usedTypes": [
         "D2InventoryStrc",
@@ -2178,7 +2178,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "49c2ad37",
+      "dh": "931bf11d",
       "paramStorage": [
         [
           "pUnit",
@@ -2238,8 +2238,8 @@
         "_alldiv",
         "GetSkillsTxt",
         "SKILLDESC_AccumulateAuraBonusDmg",
-        "STATES_HasAttackSpeedState",
-        "STATES_HasAuraState"
+        "STATES_HasDamBlueFlagState",
+        "STATES_HasDamRedFlagState"
       ],
       "usedTypes": [
         "D2SkillStrc",
@@ -2248,7 +2248,7 @@
         "int64_t",
         "uint32_t"
       ],
-      "dh": "2e7d2796",
+      "dh": "039f4dd2",
       "paramStorage": [
         [
           "pUnit",
@@ -2328,11 +2328,11 @@
         "GetEquipedWeapon",
         "ITEM_GetItemData_wType",
         "SKILLS_GetItemBonusDamage",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLS_CalcToHit",
         "STATSEX_GetCurrentStat",
-        "STATES_HasResistState",
-        "STATES_HasArmorState"
+        "STATES_HasAttBlueFlagState",
+        "STATES_HasAttRedFlagState"
       ],
       "usedTypes": [
         "D2SkillStrc",
@@ -2342,7 +2342,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "29aaf91f",
+      "dh": "16042a57",
       "paramStorage": [
         [
           "pnAttackRate",
@@ -2503,11 +2503,11 @@
         "SEVER_ITEM_GetOwner",
         "STATLIST_SetItemStatActive",
         "STATLIST_RemoveFromOwnerAndRecalc",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLS_CalcToHit",
         "STATSEX_GetCurrentStat",
-        "STATES_HasResistState",
-        "STATES_HasArmorState"
+        "STATES_HasAttBlueFlagState",
+        "STATES_HasAttRedFlagState"
       ],
       "usedTypes": [
         "D2SkillStrc",
@@ -2516,7 +2516,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7830f858",
+      "dh": "7d3bdaba",
       "paramStorage": [
         [
           "pUnit",
@@ -2570,10 +2570,10 @@
         "ITEM_GetItemData_wType",
         "UNIT_GetUnitState",
         "SKILLS_GetItemBonusDamage",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLS_CalcToHit",
-        "STATES_HasResistState",
-        "STATES_HasArmorState"
+        "STATES_HasAttBlueFlagState",
+        "STATES_HasAttRedFlagState"
       ],
       "usedTypes": [
         "D2SkillStrc",
@@ -2583,7 +2583,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bfa42067",
+      "dh": "cad6d465",
       "paramStorage": [
         [
           "pnAttackRate",
@@ -3637,7 +3637,7 @@
       "namespace": "D2Client::UI::SkillDesc",
       "calledFunctions": [
         "SKILLDESC_DrawSkillDmgBasic",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLDESC_DrawDamageNumbers"
       ],
       "usedTypes": [
@@ -3646,7 +3646,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "eaca74ab",
+      "dh": "0ac7f787",
       "paramStorage": [
         [
           "pUnit",
@@ -4364,8 +4364,8 @@
         "ITEM_GetItemsTxt_wStrBonus",
         "STATSEX_GetCurrentStat",
         "ITEM_GetItemsTxt_wDexBonus",
-        "STATES_HasAttackSpeedState",
-        "STATES_HasAuraState",
+        "STATES_HasDamBlueFlagState",
+        "STATES_HasDamRedFlagState",
         "SKILLDESC_DrawDamageNumbers"
       ],
       "usedTypes": [
@@ -4377,7 +4377,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bceb112d",
+      "dh": "ba33a306",
       "paramStorage": [
         [
           "pUnit",

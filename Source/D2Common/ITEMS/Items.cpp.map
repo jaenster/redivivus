@@ -29,7 +29,7 @@
       ]
     },
     {
-      "name": "ITEMS_SearchItemCodeTable",
+      "name": "ITEMMODS_EvaluateItemFormula",
       "address": "00627c20",
       "lines": [
         {
@@ -39,22 +39,22 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEMS_SearchItemCodeTable",
-        "SKILLS_CompileSkillFormula"
+        "ITEMMODS_EvaluateItemFormula",
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2ItemCalcContextStrc",
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e369e9a0",
+      "dh": "ad09f4a8",
       "paramStorage": [
         [
           "pUnit",
           "Stack[0x4]:4"
         ],
         [
-          "dwContext",
+          "pItem",
           "Stack[0x8]:4"
         ],
         [
@@ -1061,7 +1061,7 @@
       ]
     },
     {
-      "name": "ITEM_GetPlayerNameAkaNamedString",
+      "name": "ITEMS_SetPlayerName",
       "address": "00628370",
       "lines": [
         {
@@ -1071,19 +1071,19 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEM_GetPlayerNameAkaNamedString"
+        "ITEMS_SetPlayerName"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "79a59355",
+      "dh": "1f6345ba",
       "paramStorage": [
         [
-          "pUnit",
+          "pItem",
           "Stack[0x4]:4"
         ],
         [
-          "pCustomName",
+          "szName",
           "Stack[0x8]:4"
         ]
       ]
@@ -1196,7 +1196,7 @@
       ]
     },
     {
-      "name": "ITEMTYPE_IsShoots",
+      "name": "ITEMS_GetAmmoTypeFromItemType",
       "address": "00628440",
       "lines": [
         {
@@ -1206,12 +1206,12 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEMTYPE_IsShoots"
+        "ITEMS_GetAmmoTypeFromItemType"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "801cb5e0",
+      "dh": "d53db157",
       "paramStorage": [
         [
           "nItemType",
@@ -2077,7 +2077,7 @@
         "ITEM_AddStatCostsToPrices",
         "STATLIST_CopyStatsToBuffer",
         "STATLIST_GetStatBonusFromLists",
-        "ITEMMODS_CalculateRepairCost"
+        "ITEMMODS_GetByTimeAdjustment"
       ],
       "usedTypes": [
         "D2ItemStatCostTxt",
@@ -2088,7 +2088,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a5689d3",
+      "dh": "0740718b",
       "paramStorage": [
         [
           "pItem",
@@ -2581,7 +2581,7 @@
       "calledFunctions": [
         "ITEM_CheckIfItemHasDurability",
         "TXT_Items_GetLine",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
@@ -2590,7 +2590,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14ce1086",
+      "dh": "0f0f7053",
       "paramStorage": [
         [
           "pUnit",
@@ -3472,7 +3472,7 @@
       "calledFunctions": [
         "ITEM_ValidateItemQuantity",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetMaxStack",
         "STATLIST_SetUnitStat"
       ],
@@ -3480,7 +3480,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "76fbe999",
+      "dh": "16b131cc",
       "paramStorage": [
         [
           "pUnit",
@@ -3642,7 +3642,7 @@
       ]
     },
     {
-      "name": "ITEMS_ModifyPotionValueByDifficulty",
+      "name": "ITEMS_GetBonusLifeBasedOnClass",
       "address": "0062a5d0",
       "lines": [
         {
@@ -3652,16 +3652,16 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEMS_ModifyPotionValueByDifficulty"
+        "ITEMS_GetBonusLifeBasedOnClass"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "57dc01e1",
+      "dh": "63c5fa6d",
       "paramStorage": [
         [
-          "pNpc",
+          "pPlayer",
           "Stack[0x4]:4"
         ],
         [
@@ -3671,7 +3671,7 @@
       ]
     },
     {
-      "name": "ITEMS_ModifyPotionSellValueByDifficulty",
+      "name": "ITEMS_GetBonusManaBasedOnClass",
       "address": "0062a620",
       "lines": [
         {
@@ -3681,16 +3681,16 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "ITEMS_ModifyPotionSellValueByDifficulty"
+        "ITEMS_GetBonusManaBasedOnClass"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5e883eaf",
+      "dh": "894fd9b7",
       "paramStorage": [
         [
-          "pNpc",
+          "pPlayer",
           "Stack[0x4]:4"
         ],
         [
@@ -3778,7 +3778,7 @@
         "COMPOSIT_BuildCofPath",
         "ANIMDATA_GetFramesSpeedAndTrigger",
         "__security_check_cookie",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -3789,7 +3789,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d28a3f10",
+      "dh": "9fe2df61",
       "paramStorage": [
         [
           "pUnit",
@@ -3902,7 +3902,7 @@
         "ITEM_SetItemData_wItemVersion",
         "SetXForStaticUnit",
         "SetYForStaticUnit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Items_ConvertItemCodeToItemClassId",
         "ITEMS_IsA",
         "STATLIST_SetUnitStat",
@@ -3930,7 +3930,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3aa6fdeb",
+      "dh": "241ca49b",
       "paramStorage": [
         [
           "bIsOnGround",
@@ -4126,7 +4126,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "fbaceac8",
+      "dh": "8755ed61",
       "paramStorage": [
         [
           "pItem",
@@ -4903,7 +4903,7 @@
       ]
     },
     {
-      "name": "IsItemSocketable",
+      "name": "ITEMS_AreStackablesEqual",
       "address": "0062c850",
       "lines": [
         {
@@ -4913,7 +4913,7 @@
       ],
       "namespace": "D2Common::ITEMS::Items",
       "calledFunctions": [
-        "IsItemSocketable",
+        "ITEMS_AreStackablesEqual",
         "ITEM_GetItemData_nFileIndex",
         "IsStackable",
         "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
@@ -4928,14 +4928,14 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e73f80d0",
+      "dh": "2e1e3b0f",
       "paramStorage": [
         [
-          "pUnit",
+          "pItem1",
           "Stack[0x4]:4"
         ],
         [
-          "pUnit2",
+          "pItem2",
           "Stack[0x8]:4"
         ]
       ]
@@ -4995,7 +4995,7 @@
         "ITEM_SetItemData_wItemVersion",
         "SetXForStaticUnit",
         "SetYForStaticUnit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Items_ConvertItemCodeToItemClassId",
         "InitSeed_Param_666",
         "TXT_MagicAffixes_GetTableInfo",
@@ -5029,12 +5029,12 @@
         "D2AddStatToStatsListEx",
         "ITEM_ResolvePercentStatToBaseValue",
         "STATLIST_SetStatValue",
-        "ITEMMODS_GetQualityMinMax",
+        "ITEMMODS_UnpackSkillAndLevel",
         "TXT_ItemStatCost_GetLine",
         "SKILLS_ValidateSkillDescIndex",
-        "ITEMMODS_GetQualityFields1_2_3",
-        "ITEMMODS_GetQualityFields2_3_4",
-        "ITEMMODS_GetQualityAllFields",
+        "ITEMMODS_UnpackSkillTab",
+        "ITEMMODS_UnpackSkillLevelChance",
+        "ITEMMODS_UnpackChargedSkill",
         "STATLIST_GetBaseStatValue"
       ],
       "usedTypes": [
@@ -5057,7 +5057,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "be88b211",
+      "dh": "bcf9bcd1",
       "paramStorage": [
         [
           "pUnit",
@@ -5601,7 +5601,7 @@
       "calledFunctions": [
         "ITEM_CheckEquipRequirements",
         "TXT_Items_GetLine",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "D2ApplyPercent",
         "STATSEX_GetCurrentStat",
         "SEVER_ITEM_GetOwner",
@@ -5621,7 +5621,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "da714f5a",
+      "dh": "f9fed232",
       "paramStorage": [
         [
           "pUnit",
@@ -5770,7 +5770,7 @@
         "TXT_ItemTypes_CheckClass",
         "ITEM_GetItemData_eD2ItemFlag_IsEthereal",
         "ITEM_CheckIfItemHasDurability",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "ITEM_GetTxtItemTypes_throwable",
         "TXT_npc_GetLine",
         "GetQuestState",
@@ -5797,7 +5797,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0f27e68f",
+      "dh": "b1aa4c3f",
       "paramStorage": [
         [
           "pUnit",
@@ -5915,7 +5915,7 @@
         "INVENTORY_GetItemByGridOffset",
         "ITEM_CanBeRepaired",
         "ITEM_CheckIfItemHasDurability",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATSEX_GetCurrentStat",
         "ITEM_IsReplenishable",
         "ITEM_GetMaxStack",
@@ -5931,7 +5931,7 @@
         "pfnItemTransactionCb",
         "uint32_t"
       ],
-      "dh": "05d01fe9",
+      "dh": "d0719c8f",
       "paramStorage": [
         [
           "unk",
@@ -6055,7 +6055,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1ee8acdb",
+      "dh": "2f2f9484",
       "paramStorage": [
         [
           "pItemUnit",

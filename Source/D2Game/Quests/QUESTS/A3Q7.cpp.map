@@ -82,7 +82,7 @@
         "Q24_HandleKhalimsWillCompletion",
         "GetQuestDataByQuestNoInternal",
         "FindUnitFromTable",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestDataA3Q6Strc",
@@ -90,7 +90,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f095e30b",
+      "dh": "ae9c1ad6",
       "paramStorage": [
         [
           "pGame",

@@ -23,7 +23,7 @@ namespace D2Multi {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
 BOOL __stdcall CHATDLG_DestroyFormsAndShowLadder(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall CHATDLG_Unused2(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall CHATDLG_OnPressDestroyAllForms(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall CHATDLG_ShowGatewaySelectTitle(struct D2ControlMsg * pControlMsg);
 // OnPress of the chat-lobby CHANNEL button gpCtlLobbyChannelButton (gaPredefinedForms_b[7], string 0x14c2): releases the JOIN, LADDER and CREATE buttons, destroys the lobby side forms and opens the Create/Join Channels dialog (OOGUTIL_OpenChannelDialog); returns 1.
 // Provenance: asm 00442370; fpOnPressCallback of record 0070cfa0.

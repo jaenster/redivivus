@@ -3,6 +3,7 @@
 #include "Source/D2Game/Objects/ObjectsRgn.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
@@ -77,7 +78,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
         memset(pLevelObjRng, 0, 0x90);
         pLevelObjRng->nMonClassId = -1;
         pLevelObjRng->nAct = *(uint8_t*)((char*)pLevelsTxt + 3);
-        pLevelObjRng->nMinDistance = 0x7fffffff;
+        pLevelObjRng->nLevelRooms = 0x7fffffff;
         *uSlot8.ppLevelRngIter = pLevelObjRng;
         uSlot8.ppLevelRngIter++;
         eLevel += LEVEL_RogueEncampment;
@@ -296,7 +297,7 @@ void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
         if (pSub0x1110->pRoom == pInitArg->pRoom || pInitArg->pRoom && (nCoord = pSub0x1110->sCoords.x , nCoord >= pInitArg->pRoom->sCoords.dwXStart) && nCoord < pInitArg->pRoom->sCoords.dwXSize + pInitArg->pRoom->sCoords.dwXStart && (nCoord = pSub0x1110->sCoords.y , nCoord >= pInitArg->pRoom->sCoords.dwYStart && nCoord < pInitArg->pRoom->sCoords.dwYSize + pInitArg->pRoom->sCoords.dwYStart)) {
           pUnit = pInitArg->pObject;
           if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-            D2Common::Units::SetupUpdateFlag(pUnit, 1);
+            D2Common::Units::ChangeAnimMode(pUnit, 1);
             if (!pInitArg->pObject) {
               dwUnitClassId = -1;
             } else {
@@ -321,15 +322,15 @@ void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
-bool __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel) {
+bool __fastcall OBJECTRGN_CheckPoints2Capacity(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize2;
     if (iVar2 != 4) {
       int iVar3;
-      iVar3 = pDVar1->nMinDistance;
+      iVar3 = pDVar1->nLevelRooms;
       if (iVar2 <= iVar3 / 8) {
         return false;
       }
@@ -340,7 +341,7 @@ bool __fastcall QUEST_GetLevelQuestStatus(::SGAMEDATA * pGame, eD2LevelId eLevel
 
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
-    if (pLevelRng->nMinDistance > 0 && (pLevelRng->pad_0x4 << 7) / pLevelRng->nMinDistance > 0x60 && !pLevelRng->pad_0x10) {
+    if (pLevelRng->nLevelRooms > 0 && (pLevelRng->pad_0x4 << 7) / pLevelRng->nLevelRooms > 0x60 && !pLevelRng->pad_0x10) {
       return 1;
     }
 
@@ -352,7 +353,7 @@ bool __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eL
     int iVar2 = pDVar1->nPointsSize1;
     if (iVar2 != 10) {
       int iVar3;
-      iVar3 = pDVar1->nMinDistance;
+      iVar3 = pDVar1->nLevelRooms;
       if (iVar2 <= iVar3 / 8) {
         return false;
       }
@@ -365,7 +366,7 @@ void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId 
     pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10++;
 }
 
-bool __fastcall OBJECT_IsPositionNearSpawnPoint2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
+bool __fastcall OBJECTRGN_IsPositionClearOfPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize2;
     int i = 0;
@@ -408,7 +409,7 @@ void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLeve
     pRng->nPointsSize2++;
 }
 
-bool __fastcall OBJECT_IsPositionNearSpawnPoint1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
+bool __fastcall OBJECTRGN_IsPositionClearOfPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize1;
     int i = 0;
@@ -452,7 +453,7 @@ void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLeve
 }
 
 // Resolves the monster class ID to use for object-mode spawns in a given room/level. If the level's cached nMonClassId is invalid, builds an act-specific table of valid skeleton/zombie base IDs, searches the room's monster region entries for a matching class range, caches the result in pLevelRng->nMonClassId, and returns it. Falls back to 0xEA (default skeleton) if no region match is found.
-int32_t __fastcall OBJECT_HandleObjectMode(D2ObjectModeArg * pObjectModeArg) {
+int32_t __fastcall OBJECTRGN_GetTrapMonsterClassId(D2ObjectModeArg * pObjectModeArg) {
     // Frame slots -16..-4 are ONE object: &nAct2MonId is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {

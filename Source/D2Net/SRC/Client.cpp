@@ -38,19 +38,19 @@ static uint32_t gbClientConnectionShutdown = 0; D2_STATIC_GUARD(gbClientConnecti
 namespace D2Net::SRC::Client {
 
 // Sets client connection timeout value in gnNetConnectionTimeoutMs. Thread-safe update via critical section. Only applies to non-singleplayer modes.
-void __fastcall NET_CLIENT_SetConnectionTimeout(int32_t nTimeoutMs) {
+void __fastcall NET_CLIENT_SetConnected(int32_t bConnected) {
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
       return;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-    ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = nTimeoutMs;
+    ::D2Net::SRC::Client::gbClientConnected = bConnected;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882ce8);
 }
 
 // Gets client connection timeout value from gnNetConnectionTimeoutMs. Thread-safe read via critical section. Returns 1 for singleplayer, 0 if no packet buffer.
-int32_t __stdcall NET_CLIENT_GetConnectionTimeout() {
+int32_t __stdcall NET_CLIENT_IsConnected() {
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
       return 1;
@@ -60,7 +60,7 @@ int32_t __stdcall NET_CLIENT_GetConnectionTimeout() {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-    int nTimeoutMs = ::D2Net::SRC::Client::gnNetConnectionTimeoutMs;
+    int nTimeoutMs = ::D2Net::SRC::Client::gbClientConnected;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882ce8);
     return nTimeoutMs;
 }
@@ -253,7 +253,7 @@ void Unreferenced_0052aaa0() {
     }
 
     EnterCriticalSection(&lpCriticalSection_00882ce8);
-    ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+    ::D2Net::SRC::Client::gbClientConnected = 0;
     LeaveCriticalSection(&lpCriticalSection_00882ce8);
 }
 
@@ -264,7 +264,7 @@ void Unreferenced_0052aad0() {
     }
 
     EnterCriticalSection(&lpCriticalSection_00882ce8);
-    ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+    ::D2Net::SRC::Client::gbClientConnected = 0;
     LeaveCriticalSection(&lpCriticalSection_00882ce8);
 }
 
@@ -309,7 +309,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
           BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
           if (!BVar1) {
             /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gbClientConnected = 0;
             LeaveCriticalSection(&lpCriticalSection_00882ce8);
           }
         }
@@ -373,7 +373,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gbClientConnected = 0;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
@@ -384,7 +384,7 @@ DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
         BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gbClientConnected = 0;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
@@ -403,7 +403,7 @@ void __fastcall NET_CLIENT_SendPacketToServer(void * pUnused, uint16_t nPacketSi
       exit(-1);
     }
 
-    ::D2Net::Game::Server::NET_SendPacketToClient(pPacket, nPacketSize);
+    ::D2Net::Game::Server::NET_EnqueueLocalClientPacket(pPacket, nPacketSize);
 }
 
 static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t nSize) {
@@ -414,7 +414,7 @@ static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t nSize) {
       BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
       if (!BVar1) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gnNetConnectionTimeoutMs = 0;
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ ::D2Net::SRC::Client::gbClientConnected = 0;
         LeaveCriticalSection(&lpCriticalSection_00882ce8);
       }
 
@@ -437,7 +437,7 @@ uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t U
         exit(-1);
       }
 
-      nSendResult = ::D2Net::Game::Server::NET_SendPacketToClient(pBytes, (uint16_t)nSize);
+      nSendResult = ::D2Net::Game::Server::NET_EnqueueLocalClientPacket(pBytes, (uint16_t)nSize);
       return nSendResult;
     }
 

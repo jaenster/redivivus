@@ -171,7 +171,7 @@
         "OverwriteDistanceAndMaxDistance",
         "SetTotalFrames",
         "SetCurrentFrame",
-        "SKILLASSN_GetShadowHealthBonus",
+        "SKILLS_SetInfernoFrame",
         "SKILL_GetParam1",
         "UNIT_GetUnitState",
         "EVENT_RemoveUnitTimersByType",
@@ -188,7 +188,7 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "4d58587b",
+      "dh": "5f4bfc3c",
       "paramStorage": [
         [
           "pGame",
@@ -272,7 +272,7 @@
         "DAMAGE_FindCombatEntry",
         "GetOwnerUnit",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2GetSkillCalc",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -286,7 +286,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "0f1337ec",
+      "dh": "3753eb64",
       "paramStorage": [
         [
           "pGame",
@@ -699,7 +699,7 @@
         "MONSTER_GetMonsterClassByDifficulty",
         "MONSTER_TransformMonsterClass",
         "AttachCorrectAiFunctionToMonster",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "SetState",
         "AllocStatList",
@@ -709,7 +709,7 @@
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SkillsTxt",
         "D2StatListExStrc",
         "D2UnitStrc",
@@ -717,7 +717,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "87a1ed4d",
+      "dh": "766ae0ad",
       "paramStorage": [
         [
           "pUnit",
@@ -833,7 +833,7 @@
       ]
     },
     {
-      "name": "SKILLSOR_GetFrozenOrbBoltCount",
+      "name": "SKILLMONST_CanImpregnateTarget",
       "address": "005d2140",
       "lines": [
         {
@@ -843,7 +843,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillEMonst",
       "calledFunctions": [
-        "SKILLSOR_GetFrozenOrbBoltCount",
+        "SKILLMONST_CanImpregnateTarget",
         "CheckForModeZeroDeath",
         "TXT_MonStats_GetBaseId",
         "UNIT_GetUnitState",
@@ -853,14 +853,14 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f7d2d822",
+      "dh": "f7518d34",
       "paramStorage": [
         [
-          "pUnitStrc",
+          "pUnit",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pTarget",
           "EDX:4"
         ]
       ]
@@ -923,7 +923,7 @@
       "calledFunctions": [
         "Skills_SrvDoFunc_133_SetDeathSpawnState",
         "GetTargetEx",
-        "SKILLSOR_GetFrozenOrbBoltCount",
+        "SKILLMONST_CanImpregnateTarget",
         "SetStateWithExpiryTime"
       ],
       "usedTypes": [
@@ -933,7 +933,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "3ddbf639",
+      "dh": "186a92af",
       "paramStorage": [
         [
           "pGame",
@@ -1358,7 +1358,7 @@
       "calledFunctions": [
         "Skills_SrvDoFunc_147_ReturnToOwner",
         "GetOwnerUnit",
-        "PATH_SetPathTarget"
+        "PATH_MoveUnitToUnitPosition"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -1366,7 +1366,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "e236927e",
+      "dh": "03033ad4",
       "paramStorage": [
         [
           "pGame",

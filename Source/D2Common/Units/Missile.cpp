@@ -426,7 +426,7 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
       return 1;
     }
 
-    int32_t nItemBonusDamage = Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pItem, UNITSTAT_item_deadlystrike, 0);
+    int32_t nItemBonusDamage = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_deadlystrike, 0);
     if (nItemBonusDamage) {
       DVar1 = D2_SeedRoll(&pItem->sSeed);
       if ((int)(DVar1 % 100) < nItemBonusDamage) {
@@ -1040,7 +1040,7 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
     sCalcCtx.pMissile = pMissile;
     sCalcCtx.pOwner = pOwner;
     sCalcCtx.nMissileId = nMissileId;
-    uint32_t nResult = Fog::Skills::SKILLS_CompileSkillFormula((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pMissCode + nCalcExpression), ITEMS::Items::sgptDataTable->nMissCodeSize - nCalcExpression, (fnSkillCalcMethod)MISSILE_CalcVMCallback_GetSpecialParam, gaMissileCalcMethods, gnMissileCalcMethodCount, &sCalcCtx);
+    uint32_t nResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pMissCode + nCalcExpression), ITEMS::Items::sgptDataTable->nMissCodeSize - nCalcExpression, (fnSkillCalcMethod)MISSILE_CalcVMCallback_GetSpecialParam, gaMissileCalcMethods, gnMissileCalcMethodCount, &sCalcCtx);
     return nResult;
 }
 

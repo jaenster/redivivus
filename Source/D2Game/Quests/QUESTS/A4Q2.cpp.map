@@ -567,12 +567,12 @@
         "Q27_SpawnDiablo"
       ],
       "usedTypes": [
-        "D2QuestDataA1Q1Strc",
+        "D2QuestDataA4Q2Strc",
         "D2QuestDataStrc",
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "b5dad755",
+      "dh": "2debe50a",
       "paramStorage": [
         [
           "pGame",
@@ -804,7 +804,7 @@
       ]
     },
     {
-      "name": "Q23_UnlockHarrogathWaypoint",
+      "name": "Q27_EnableHarrogathWaypoint",
       "address": "005b4ff0",
       "lines": [
         {
@@ -814,7 +814,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A4Q2",
       "calledFunctions": [
-        "Q23_UnlockHarrogathWaypoint",
+        "Q27_EnableHarrogathWaypoint",
         "FindWaypointIdByLevelId",
         "GetPlayerData",
         "EnableWaypoint"
@@ -824,7 +824,7 @@
         "SGAMEDATA",
         "int16_t"
       ],
-      "dh": "98efba61",
+      "dh": "038c7e69",
       "paramStorage": [
         [
           "pGame",
@@ -989,18 +989,18 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "CheckForModeZeroDeath",
         "STATSEX_GetAlignment",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2QuestDataA4Q2Strc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "93de8d10",
+      "dh": "97d53146",
       "paramStorage": [
         [
           "pQuestSpecificData",
@@ -1146,7 +1146,7 @@
       "calledFunctions": [
         "Q27_ActivateAllSealsKillChaos",
         "OBJOP_A4Q2_DiabloSealActivateKillChaos",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "GetQuestDataByQuestNoInternal",
@@ -1157,7 +1157,7 @@
         "D2ObjectsTxt",
         "D2UnitStrc"
       ],
-      "dh": "a8add388",
+      "dh": "a25042ca",
       "paramStorage": [
         [
           "pOperation",
@@ -1217,7 +1217,7 @@
         "NET_D2GS_SERVER_Send_0x61_CanGoToAct",
         "LoadAreaOrSpawnPortal",
         "QUEST_SendQuestInfoToUnit",
-        "Q23_UnlockHarrogathWaypoint"
+        "Q27_EnableHarrogathWaypoint"
       ],
       "usedTypes": [
         "D2BitBufferStrc",
@@ -1231,7 +1231,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "9bb70f37",
+      "dh": "91b6c83b",
       "paramStorage": [
         [
           "pOperation",

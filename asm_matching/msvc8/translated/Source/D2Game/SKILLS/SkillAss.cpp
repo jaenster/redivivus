@@ -9,7 +9,6 @@
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/MISSILES/Missiles.h"
 #include "Source/D2Game/Monster/AI/AI.h"
@@ -531,7 +530,7 @@ void __fastcall SKILLASS_DispatchChargeUpDamage(D2UnitStrc * pUnit, D2DamageStrc
     } while (nChargeStateIdx < (short int)D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
 }
 
-uint32_t __fastcall SKILLBAR_ApplyWarCryDamage(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
+uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nWordsLeft;
     D2DamageStrc sDamage;
     uint32_t* pSrcDamage = (uint32_t*)pContext->pCallbackArg;
@@ -646,7 +645,7 @@ BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * p
     SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkillSaved, nSkillLvl);
     sDamage.wResultFlags |= 1;
     sDamage.dwHitFlags |= 1;
-    SkillsServer::SKILLS_ApplyAreaEffect(pGameCopy, pUnit, nTargetX, nTargetY, eSkill, pSkillTxt->aurafilter, SKILLBAR_ApplyWarCryDamage, &sDamage, 0, ".\\SKILLS\\SkillAss.cpp", 0x304);
+    SkillsServer::SKILLS_ApplyAreaEffect(pGameCopy, pUnit, nTargetX, nTargetY, eSkill, pSkillTxt->aurafilter, SKILLS_AreaCallback_ApplyCopiedDamage, &sDamage, 0, ".\\SKILLS\\SkillAss.cpp", 0x304);
     return 1;
 }
 
@@ -1445,11 +1444,11 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
       }
     }
 
-    D2Common::DATATBLS::ItemStats::STATES_MoveTransformToGfx(pUnit);
+    D2Common::DATATBLS::ItemStats::STATES_MovePgsvToGfx(pUnit);
 }
 
 // Server-side per-hit damage application for the Assassin's dual-wield Whirlwind-style melee attack (also used by other dual-weapon skills). Args (custom calling convention): nParam=SGAMEDATA*, pDamage (in/out D2DamageStrc), pUnit=target, eSkill, pUnit1=skill-context unit, pUnit2(EBX)=attacker. Applies progressive charge-up damage, sets hit flags 3, computes skill min/max damage scaled by the damage struct's enhanced-damage percent (with 64-bit overflow-safe paths), adds kick damage similarly, rolls a uniform value in [min,max] from the attacker seed, and accumulates into pDamage->dwPhysDamage. Then, for each equipped weapon (main + offhand in BODYLOC_R_ARM slot), validates it is an unbroken usable weapon with an owner, toggles its item stats active, calls DAMAGE_CalculateOffensiveDamage and SKILLASS_DispatchChargeUpDamage so both weapons contribute, then restores the main weapon's stat-active flag.
-static void __stdcall SKILLBAR_ApplyWhirlwindDamage(::SGAMEDATA * pGame, D2DamageStrc * pDamage, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pUnit1, D2UnitStrc * pUnit2) {
+static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc * pDamage, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pUnit1, D2UnitStrc * pUnit2) {
     uint32_t nMinDmg;
     int nEnhKickDmg;
     D2UnitStrc* pMainWeapon;
@@ -1625,7 +1624,7 @@ static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
 
       sDamage.dwEnDmgPct = dwEnDmgPctValue;
-      SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pUnit, eSkill, nSkillLvl, pAttacker);
+      SKILLASS_FillKickDamage(pGame, &sDamage, pUnit, eSkill, nSkillLvl, pAttacker);
     }
 
     *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
@@ -1863,7 +1862,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
     bool bHasPos;
     D2UnitStrc* pUnit_00;
     uint32_t nAlignmentBits;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     eD2MonsterAnimMode eAnimMode;
     eD2UnitType eUnitType;
     uint32_t nY;
@@ -1929,10 +1928,10 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
           sSummonArgs.nSkillCalc = nSkillCalcResult;
           pUnit_00 = SkillsServer::SKILL_CreateSummon(pGame, (D2MonsterCastPetStrc*)&sSummonArgs);
           if (pUnit_00) {
-            SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pUnit_00, 0, nSkillLvl);
+            SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pUnit_00, 0, nSkillLvl);
             SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pUnit_00, eSkill, nSkillLvl, 0);
             UNIT::SUnit::SetAlignment(pUnit_00, '\x02', 1);
-            Monster::MonsterMode::SetCurrentSkill(pUnit_00, eAnimMode, &sMonsterKill);
+            Monster::MonsterMode::MONMODE_InitModeChange(pUnit_00, eAnimMode, &sMonsterKill);
             Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
             return pUnit_00;
           }
@@ -2096,7 +2095,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
     uint32_t aStateBitWords[8];
     eD2States eState;
     D2UnitStrc* pUnitAlias = pUnit;
-    _bHasChargeUpState = D2Common::DATATBLS::ItemStats::STATES_HasBlueState(pUnit);
+    _bHasChargeUpState = D2Common::DATATBLS::ItemStats::STATES_HasRemHitFlagState(pUnit);
     if (!_bHasChargeUpState) {
       return;
     }
@@ -2115,7 +2114,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
     do {
       uint32_t nStateBits;
       nStateBits = *pStateWord;
-      nStateWordCount = Fog::SMem::SMemSizeClassBucketLookup(nStateBits);
+      nStateWordCount = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
       if (nStateWordCount >= 0) {
         do {
           eState = nStateWordCount + nStateIdBitBase;
@@ -2131,7 +2130,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
             pUnit = pUnitAlias;
           }
 
-          nStateWordCount = Fog::SMem::SMemSizeClassBucketLookup(nStateBits);
+          nStateWordCount = Fog::SMem::FOG_GetLowestSetBitIndex(nStateBits);
         } while (nStateWordCount >= 0);
 
         *pStateWord = nStateBits;
@@ -2186,7 +2185,7 @@ uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextS
 
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       D2AiGeneralStrc* pAiGeneral;
-      bCheckResult = SkillsServer::D2CheckCorpseConsumed(pUnit, 10);
+      bCheckResult = SkillsServer::SKILLS_CanSwitchAi(pUnit, 10);
       if (bCheckResult) {
         if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
           pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
@@ -2539,7 +2538,7 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
       nHpBonusPerLevelPct = pSkillsTxt2->Param[0];
     }
 
-    int32_t nValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int32_t nHpBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, (nSkillLvl - 1) * nHpBonusPerLevelPct, 100);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nValue + nHpBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nValue + nHpBonus, 0);
@@ -2700,7 +2699,7 @@ BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
+    SKILLASS_FillKickDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
     *(uint8_t*)(char*)&nSkillLvl = pDVar1->SrcDam;
     if (!(uint8_t)nSkillLvl) {
       *(uint8_t*)(char*)&nSkillLvl = 0x80;
@@ -2758,7 +2757,7 @@ BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGam
     return 1;
 }
 
-static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(D2UnitStrc * pCaster, int32_t nChancePct, D2UnitStrc * pUnit) {
+static uint32_t __stdcall SKILLASS_RollMindBlastConversion(D2UnitStrc * pCaster, int32_t nChancePct, D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
@@ -2773,7 +2772,7 @@ static uint32_t __stdcall SKILLAMZ_GetGuidedArrowPiercingBonus(D2UnitStrc * pCas
       return 0;
     }
 
-    BOOL bConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xb);
+    BOOL bConsumed = SkillsServer::SKILLS_CanSwitchAi(pUnit, 0xb);
     if (!bConsumed) {
       return 0;
     }
@@ -2797,7 +2796,7 @@ void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState
       int nConvLevel;
       nConvLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_conversion_level, 0);
       nConvMaxHp = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_conversion_maxhp, 0);
-      nMaxHpShifted = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxHpShifted = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       nMaxHpShifted >>= 8;
       nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nConvMaxHp, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8, nMaxHpShifted);
       nHpResult = nHpShifted;
@@ -2834,13 +2833,13 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     int nHpScaledFull;
     uint32_t nAlignment;
     int nHpFinal;
-    uint32_t nConvertRoll = SKILLAMZ_GetGuidedArrowPiercingBonus(pUnit2, nParam->nStunLength, pUnit);
+    uint32_t nConvertRoll = SKILLASS_RollMindBlastConversion(pUnit2, nParam->nConvertChance, pUnit);
     if (!nConvertRoll) {
       return 0;
     }
 
-    nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nStunChance);
-    int nExpireFrame = nConvertRoll + pGame->dwGameFrame + nParam->nConvertChance;
+    nConvertRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit2->sSeed, nParam->nConvertLengthRange);
+    int nExpireFrame = nConvertRoll + pGame->dwGameFrame + nParam->nConvertLength;
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_conversion);
     if (!pStatList) {
       if (!pUnit2) {
@@ -2899,7 +2898,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
       D2Common::Stats::StatsEx::SetState(pStatList, STATE_conversion_save);
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
       nHpScaledFull = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      nMaxHpShifted = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxHpShifted = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_level, nExpireFrame, 0);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_conversion_maxhp, nMaxHpShifted >> 8, 0);
       nHpShifted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpScaledFull >> 8, nCasterLevel, nExpireFrame);
@@ -2931,7 +2930,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     return 1;
 }
 
-uint32_t __fastcall SKILLAMZ_HandleStrafeDamageAndNextDelay(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
+uint32_t __fastcall SKILLASSN_AuraCallback_MindBlast(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nCopyDwords;
     D2DamageStrc* pDamageDst;
     D2DamageStrc sDamage;
@@ -2982,7 +2981,7 @@ BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc *
     sDamage.wResultFlags |= pSkillTxt->ResultFlags;
     sDamage.dwHitFlags |= pSkillTxt->HitFlags;
     sMindBlastArgs.pDamage = &sDamage;
-    sMindBlastArgs.nStunLength = D2Common::Skills::SKILLS_GetParam45WithDiminishing(nSkillLvlOrig, eSkill);
+    sMindBlastArgs.nConvertChance = D2Common::Skills::SKILLS_GetParam45WithDiminishing(nSkillLvlOrig, eSkill);
     D2SkillsTxt* pSkillsTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     int32_t nConvertChanceValue;
     if (!pSkillsTxt) {
@@ -2991,7 +2990,7 @@ BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc *
       nConvertChanceValue = pSkillsTxt->Param[2];
     }
 
-    sMindBlastArgs.nConvertChance = nConvertChanceValue;
+    sMindBlastArgs.nConvertLength = nConvertChanceValue;
     D2SkillsTxt* pSkillsTxt2 = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     int32_t nStunChanceValue;
     if (!pSkillsTxt2) {
@@ -3000,8 +2999,8 @@ BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc *
       nStunChanceValue = pSkillsTxt2->Param[3];
     }
 
-    sMindBlastArgs.nStunChance = nStunChanceValue;
-    SkillsServer::SKILLS_ApplyAreaEffect(pGameCopy, pUnitCopy, nCursorX, nCursorY, nSkillLvl, pSkillTxt->aurafilter, SKILLAMZ_HandleStrafeDamageAndNextDelay, &sMindBlastArgs, 0, ".\\SKILLS\\SkillAss.cpp", 0xb43);
+    sMindBlastArgs.nConvertLengthRange = nStunChanceValue;
+    SkillsServer::SKILLS_ApplyAreaEffect(pGameCopy, pUnitCopy, nCursorX, nCursorY, nSkillLvl, pSkillTxt->aurafilter, SKILLASSN_AuraCallback_MindBlast, &sMindBlastArgs, 0, ".\\SKILLS\\SkillAss.cpp", 0xb43);
     return 1;
 }
 
@@ -3064,7 +3063,7 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
       sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nSkillToHit, 0);
       if (sDamage.wResultFlags & 1U) {
         sDamage.dwEnDmgPct = D2Common::Skills::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
-        SKILLBAR_ApplyWhirlwindDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
+        SKILLASS_FillKickDamage(pGame, &sDamage, pTarget, eSkill, nSkillLvl, pUnit);
       }
 
       bySrcDamFinal = pDVar1->SrcDam;
@@ -3154,7 +3153,7 @@ BOOL __fastcall Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse(::SGAMEDATA * p
       sDamage.dwHitClass = pSkillTxt->HitClass;
     }
 
-    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, eSkill, pSkillTxt->aurafilter, SKILLBAR_ApplyWarCryDamage, &sDamage, 0, ".\\SKILLS\\SkillAss.cpp", 0xbfa);
+    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, eSkill, pSkillTxt->aurafilter, SKILLS_AreaCallback_ApplyCopiedDamage, &sDamage, 0, ".\\SKILLS\\SkillAss.cpp", 0xbfa);
     return 1;
 }
 

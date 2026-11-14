@@ -397,7 +397,7 @@ void __fastcall SetFrozenArmorState(D2UnitStrc * pUnit, eD2States eState, D2Stat
     BOOL bIsModeZeroDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsModeZeroDead) {
       uint32_t bIsStateActive;
-      bIsStateActive = D2Common::DATATBLS::ItemStats::STATES_IsStateActive(pUnit, eState);
+      bIsStateActive = D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState);
       if (bIsStateActive) {
         return;
       }
@@ -496,7 +496,7 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
     }
     if (pDmgEvent[2]) {
       int32_t nMaxHpThreshold;
-      nMaxHpThreshold = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxHpThreshold = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       nMaxHpThreshold = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpThreshold >> 8, pDmgEvent[2], 100);
       if (nHp <= nMaxHpThreshold) {
         return 0;

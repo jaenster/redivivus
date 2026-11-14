@@ -34,7 +34,7 @@ void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
 static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
     int nHpBonus;
     uint32_t nBaseHp;
-    nBaseHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    nBaseHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if ((int)nBaseHp > 0x100000) {
       if ((int)(nBaseHp & -16) >= 0x640) {
         nHpBonus = (int)nBaseHp / 100 * nUmodConstant;
@@ -192,7 +192,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
 }
 
 // Applies the Cold Enchanted monster modifier (umod) to pUnit. Validates the unit is a live UNIT_MONSTER with a game pointer and that bUnknown (apply flag) is set, then ORs 0x40 into the monster-data type flags, sets a 80% (0x50) damage-resist stat, applies champion stats, and adds cold min/max damage scaled from monlvl.txt DM[] by difficulty (clamped 0-2) using GetUmodConstant(diff+0x16/+0x19) percentages, plus a fixed 150-frame (0x96) cold length. No-op if unit/game null or apply flag clear. Server-side monster spawn modifier.
-void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
+void __fastcall MONUMOD_ApplyGhostly(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int nLvlDmgBase;
     if (!pUnit) {
       return;
@@ -263,7 +263,7 @@ void __fastcall MONUMOD_ApplyColdEnchant(D2UnitStrc * pUnit, int32_t nIndex, BOO
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, 0x96, 0);
 }
 
-void __fastcall MONUMOD_ApplyBerserker(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
+void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnique)) {
       return;
     }
@@ -286,7 +286,7 @@ void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL 
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnique);
 }
 
-void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
+void __fastcall MONUMOD_ApplyBerserk(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }

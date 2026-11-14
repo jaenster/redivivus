@@ -233,7 +233,7 @@
       "calledFunctions": [
         "DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0"
       ],
-      "dh": "c99d669d",
+      "dh": "4c532fc4",
       "paramStorage": [
         [
           "nAnimIndex",
@@ -242,7 +242,7 @@
       ]
     },
     {
-      "name": "DRLGANIM_GetOrientationFromIndex",
+      "name": "DRLGPRESET_MapTileType",
       "address": "0066d7f0",
       "lines": [
         {
@@ -252,9 +252,9 @@
       ],
       "namespace": "D2Common::Drlg::DrlgAnim",
       "calledFunctions": [
-        "DRLGANIM_GetOrientationFromIndex"
+        "DRLGPRESET_MapTileType"
       ],
-      "dh": "e293d347",
+      "dh": "841883c8",
       "paramStorage": [
         [
           "nAnimIndex",

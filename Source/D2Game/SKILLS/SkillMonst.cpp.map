@@ -32,7 +32,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "41f89865",
+      "dh": "71dd8ed5",
       "paramStorage": [
         [
           "pGame",
@@ -335,7 +335,7 @@
         "GetShiftedFrameMetrics",
         "D2GetSkillCalc",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat"
       ],
@@ -346,7 +346,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "afb43e7b",
+      "dh": "fd9b10ab",
       "paramStorage": [
         [
           "pGame",
@@ -549,7 +549,7 @@
         "SetDamageOnEvent",
         "DAMAGE_CalculateAndApplyDamage",
         "SKILL_SetParam3",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type",
         "SetUninterruptableState",
         "SKILL_SetParam1",
@@ -567,7 +567,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "abe0487c",
+      "dh": "39c3138d",
       "paramStorage": [
         [
           "pGame",
@@ -615,11 +615,11 @@
         "SetSequenceFrame",
         "SKILL_SetFlags",
         "SetUninterruptableState",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "RemoveCollision_Type",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "PATH_SnapPositionToTile",
         "OverwriteDistanceAndMaxDistance",
@@ -643,7 +643,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "28cd96dd",
+      "dh": "1bad6941",
       "paramStorage": [
         [
           "pGame",
@@ -1165,7 +1165,7 @@
       ]
     },
     {
-      "name": "SKILLASSN_GetTrapHealthBonus",
+      "name": "SKILLMONST_UpdateInfernoAnimationParameters",
       "address": "005cc2e0",
       "lines": [
         {
@@ -1175,7 +1175,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
-        "SKILLASSN_GetTrapHealthBonus",
+        "SKILLMONST_UpdateInfernoAnimationParameters",
         "D2GetSkillCalc",
         "OverwriteDistanceAndMaxDistance",
         "SetAnimationSpeed",
@@ -1188,7 +1188,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ba5a8547",
+      "dh": "4a616b24",
       "paramStorage": [
         [
           "eSkill",
@@ -1241,7 +1241,7 @@
       ]
     },
     {
-      "name": "SKILLASSN_GetShadowHealthBonus",
+      "name": "SKILLS_SetInfernoFrame",
       "address": "005cc440",
       "lines": [
         {
@@ -1251,7 +1251,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
-        "SKILLASSN_GetShadowHealthBonus",
+        "SKILLS_SetInfernoFrame",
         "SetSequenceFrame"
       ],
       "usedTypes": [
@@ -1259,7 +1259,7 @@
         "D2SkillsTxt",
         "D2UnitStrc"
       ],
-      "dh": "c832dffa",
+      "dh": "bec7ebff",
       "paramStorage": [
         [
           "pSkillsTxt",
@@ -1272,7 +1272,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_095_SpawnTrapMissile",
+      "name": "Skills_SrvDoFunc_095_MonInferno",
       "address": "005cc4e0",
       "lines": [
         {
@@ -1282,7 +1282,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
-        "Skills_SrvDoFunc_095_SpawnTrapMissile",
+        "Skills_SrvDoFunc_095_MonInferno",
         "GetCurrentSkill",
         "GetMissleById",
         "memset",
@@ -1290,8 +1290,8 @@
         "GetYPosFromDynamicPathUnit",
         "SKILLS_GetTargetOrCursorPos",
         "CreatingMissile",
-        "SKILLASSN_GetTrapHealthBonus",
-        "SKILLASSN_GetShadowHealthBonus",
+        "SKILLMONST_UpdateInfernoAnimationParameters",
+        "SKILLS_SetInfernoFrame",
         "SKILL_GetParam1",
         "UNIT_GetUnitState",
         "D2GetSkillCalc",
@@ -1308,7 +1308,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "62a5a2bd",
+      "dh": "b1ec1d8b",
       "paramStorage": [
         [
           "pGame",
@@ -1329,7 +1329,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_152_SpawnTrapMissileVariant",
+      "name": "Skills_SrvDoFunc_152_DiabLight",
       "address": "005cc690",
       "lines": [
         {
@@ -1339,7 +1339,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
-        "Skills_SrvDoFunc_152_SpawnTrapMissileVariant",
+        "Skills_SrvDoFunc_152_DiabLight",
         "GetCurrentSkill",
         "GetMissleById",
         "memset",
@@ -1347,8 +1347,8 @@
         "GetYPosFromDynamicPathUnit",
         "SKILLS_GetTargetOrCursorPos",
         "CreatingMissile",
-        "SKILLASSN_GetTrapHealthBonus",
-        "SKILLASSN_GetShadowHealthBonus",
+        "SKILLMONST_UpdateInfernoAnimationParameters",
+        "SKILLS_SetInfernoFrame",
         "SKILL_GetParam1",
         "UNIT_GetUnitState",
         "D2GetSkillCalc",
@@ -1365,7 +1365,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "ea3342c4",
+      "dh": "31f6d38b",
       "paramStorage": [
         [
           "pGame",
@@ -1400,7 +1400,7 @@
         "GetTargetEx",
         "D2GetSkillCalc",
         "RANDOM_RandomNumberSelector",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2ApplyPercent",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat"
@@ -1413,7 +1413,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bde366a",
+      "dh": "82351216",
       "paramStorage": [
         [
           "pGame",
@@ -1448,14 +1448,14 @@
         "UNITS_GetRoom",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "DecreaseMonKillCount",
         "AttachToUnit",
         "PATH_ChangeCollisionType",
         "PATH_UpdateCollisionWidth",
         "GetYPos",
         "GetXPos",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type"
       ],
       "usedTypes": [
@@ -1466,7 +1466,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a4790a3c",
+      "dh": "4eec43ee",
       "paramStorage": [
         [
           "pGame",
@@ -1492,21 +1492,21 @@
         "Skills_SrvDoFunc_097_ResurrectDeadMonster",
         "GetTargetEx",
         "CheckIfMonsterIsDead",
-        "STATES_HasLightState",
+        "STATES_HasHideFlagState",
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
         "UNITS_GetRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockPlayer_Type",
         "SetTarget",
         "SKILLMONST_ResurrectUnit",
-        "MONSTERAI_SetSpecialAttackSkill",
-        "SetCurrentSkill",
+        "MONSTERAI_GetResurrectMode",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "SetOverlay"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2RoomStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
@@ -1518,7 +1518,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "a66f7bad",
+      "dh": "f49060e1",
       "paramStorage": [
         [
           "pGame",
@@ -2161,7 +2161,7 @@
         "D2GetSkillCalc",
         "D2ApplyPercent",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation",
@@ -2179,7 +2179,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "44a70d06",
+      "dh": "9b39717d",
       "paramStorage": [
         [
           "pGame",
@@ -2213,7 +2213,7 @@
         "Skills_SrvDoFunc_108_DevourMinionForHP",
         "GetTargetEx",
         "MONSTER_GetMercType",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "FreeServerUnit",
@@ -2232,7 +2232,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "262d041a",
+      "dh": "5dd780c8",
       "paramStorage": [
         [
           "pGame",
@@ -2253,7 +2253,7 @@
       ]
     },
     {
-      "name": "SKILLPAL_GetHolyBoltTargetCount",
+      "name": "SKILLMONST_GetMonFrenzySequenceFrame",
       "address": "005cdd30",
       "lines": [
         {
@@ -2263,7 +2263,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillMonst",
       "calledFunctions": [
-        "SKILLPAL_GetHolyBoltTargetCount",
+        "SKILLMONST_GetMonFrenzySequenceFrame",
         "MERC_GetSequenceTxt",
         "GetCounter1",
         "ANIM_GetEventFrame"
@@ -2275,7 +2275,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f7f25c7",
+      "dh": "892e7ad8",
       "paramStorage": [
         [
           "pUnit",
@@ -2395,7 +2395,7 @@
         "GetCurrentSkill",
         "GetTargetEx",
         "DAMAGE_RemoveDamageListEntry",
-        "SKILLPAL_GetHolyBoltTargetCount",
+        "SKILLMONST_GetMonFrenzySequenceFrame",
         "SKILLS_SrvStartSkill",
         "SKILLMONST_SingleTargetSkillAttack",
         "SKILL_GetParam1",
@@ -2409,7 +2409,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a8beb27",
+      "dh": "acb68c05",
       "paramStorage": [
         [
           "pGame",

@@ -108,17 +108,17 @@ D2RoomStrc * __fastcall FindBestSpotToSpawnItem(D2RoomStrc * pRoom, POINT * pPoi
 
 // Returns 1 when ItemsTxt row pItemsTxt may drop in level eLevel: spawnable, not a quest item, nLevel <= eLevel, wType == nItemTypeFilter (-1 = any) and, unless bSkipRarityRoll, a RANDOM_RandomNumberSelector(pSeed, nRarity - act) roll of 0.
 // Called by ITEMDROP_RollNormal/Exceptional/EliteItemClass; 1.14d asm 00555e00.
-static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t bSkipRarityRoll, eD2LevelId eLevel, D2ItemsTxt * pItemsTxt, int32_t nItemTypeFilter) {
+static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t bSkipRarityRoll, int32_t nItemLevel, D2ItemsTxt * pItemsTxt, int32_t nItemTypeFilter) {
     uint32_t nActDelta;
-    if ((int)eLevel <= 0) {
-      eLevel = LEVEL_RogueEncampment;
+    if (nItemLevel <= 0) {
+      nItemLevel = LEVEL_RogueEncampment;
     }
-    if (!((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= (int)eLevel)) {
+    if (!((uint8_t)pItemsTxt->bSpawnable > '\0' && pItemsTxt->bQuest == '\0' && (int)(uint32_t)(uint8_t)pItemsTxt->nLevel <= nItemLevel)) {
       return 0;
     }
     if (!bSkipRarityRoll) {
       eAct neAct;
-      neAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
+      neAct = D2Common::Drlg::GetActNoFromLevelNumber(nItemLevel);
       nActDelta = (uint32_t)(uint8_t)pItemsTxt->nRarity - (uint32_t)neAct;
       if ((int)nActDelta > 0) {
         nActDelta = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nActDelta);
@@ -135,7 +135,7 @@ static BOOL __stdcall ITEMDROP_IsItemClassEligible(D2SeedStrc * pSeed, int32_t b
 }
 
 // Selects a random exceptional-tier item class index for a drop roll. Iterates the exceptional slice of the Items txt table (between the exceptional and elite size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify.
-int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, eD2LevelId eLevel, int32_t nTCFilter, int32_t nMonsterLevel) {
+int32_t __fastcall ITEMDROP_RollArmorItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
     BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
@@ -148,8 +148,8 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
     pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     D2ItemsTxt* pItemTxt;
     pItemTxt = pItemsTxtSizeArr->pArmor;
-    int nExceptionalStartIdx;
-    nExceptionalStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
+    int nArmorStartIdx;
+    nArmorStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
     int nItemCount;
     nItemCount = ((intptr_t)pItemsTxtSizeArr->pMisc - (intptr_t)pItemTxt) / 0x1a8;
     uint32_t nCandidateIdx;
@@ -163,10 +163,10 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
     if (nItemCount > 0) {
       uint32_t seedNext;
       do {
-        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
+        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
           aiCandidateIdxs[nCandidateIdx * 2 + 1] = (int)pItemTxt;
-          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nExceptionalStartIdx;
+          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nArmorStartIdx;
           nCandidateIdx++;
         }
 
@@ -196,7 +196,7 @@ int32_t __fastcall ITEMDROP_RollExceptionalItemClass(::SGAMEDATA * pGame, D2Seed
 }
 
 // Selects a random normal-tier item class index for a drop roll. Iterates the normal slice of the Items txt table (between the normal-start and exceptional-start size offsets), filters candidates via MONSTER_ShouldSpawnSuperUnique against level/TC constraints, respects the expansion flag, then picks one uniformly at random using the D2SeedStrc PRNG (power-of-two fast path or modulo). Returns the Items txt index of the chosen class, or -1 if none qualify. Structurally identical to ITEMDROP_RollExceptionalItemClass but over the normal tier.
-int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nMonsterLevel, int32_t nTCFilter, int32_t nLevelFilter) {
+int32_t __fastcall ITEMDROP_RollWeaponItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
     BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
@@ -209,8 +209,8 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
     pItemsTxtSizeArr = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
     D2ItemsTxt* pItemTxt;
     pItemTxt = pItemsTxtSizeArr->pWeapons;
-    int nNormalStartIdx;
-    nNormalStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
+    int nWeaponStartIdx;
+    nWeaponStartIdx = ((intptr_t)pItemTxt - (intptr_t)pItemsTxtSizeArr->pItems) / 0x1a8;
     int nItemCount;
     nItemCount = ((intptr_t)pItemsTxtSizeArr->pArmor - (intptr_t)pItemTxt) / 0x1a8;
     uint32_t nCandidateIdx;
@@ -224,10 +224,10 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
     if (nItemCount > 0) {
       uint32_t seedNext;
       do {
-        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, nLevelFilter, nMonsterLevel, pItemTxt, nTCFilter);
+        _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeedLocal, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
         if (_bPassesFilter && (pGameLocal->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
           aiCandidateIdxs[nCandidateIdx * 2 + 1] = (int)pItemTxt;
-          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nNormalStartIdx;
+          aiCandidateIdxs[nCandidateIdx * 2] = nLoopIdx + nWeaponStartIdx;
           nCandidateIdx++;
         }
 
@@ -257,7 +257,7 @@ int32_t __fastcall ITEMDROP_RollNormalItemClass(::SGAMEDATA * pGame, D2SeedStrc 
 }
 
 // Rolls a random elite item class index for a drop. Iterates all elite-tier ItemsTxt entries (from the elite start offset), filtering candidates via MONSTER_ShouldSpawnSuperUnique using the monster level, area level, and TC filter; also excludes non-expansion items when not in expansion. Picks a random candidate from the eligible list using the RNG seed and returns its ItemsTxt index, or -1 if none qualify.
-int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, eD2LevelId eLevel, int32_t nTCFilter, int32_t nMonsterLevel, int32_t bIsMonsterDrop) {
+int32_t __fastcall ITEMDROP_RollMiscItemClass(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemLevel, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, int32_t bIsMonsterDrop) {
     BOOL _bPassesFilter;
     bool bPassesFilter;
     uint32_t nRandIndex;
@@ -284,7 +284,7 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
       uint32_t seedNext;
       do {
         if (bIsMonsterDrop || pItemTxt->wType != 0x28) {
-          _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, nMonsterLevel, eLevel, pItemTxt, nTCFilter);
+          _bPassesFilter = ITEMDROP_IsItemClassEligible(pSeed, bSkipRarityRoll, nItemLevel, pItemTxt, nItemTypeFilter);
           nCandidateCount = nCandidateIdx;
           if (_bPassesFilter && (pGame->bExpansion || (uint16_t)pItemTxt->wVersion < 100) && (int)nCandidateIdx < 0x3ff) {
             aiCandidateArr[nCandidateIdx].pItemsTxt = pItemTxt;
@@ -320,13 +320,13 @@ int32_t __fastcall ITEMDROP_RollEliteItemClass(::SGAMEDATA * pGame, D2SeedStrc *
 }
 
 // Rolls the broad item quality tier (gold, exceptional, normal, or elite) for a monster drop at a given area level. Uses a 0-100 RNG roll with level-scaled thresholds: low levels skew toward gold; mid levels can yield normal/exceptional; high levels (≥0x42) halt. Delegates to ITEMDROP_RollExceptionalItemClass, RollNormalItemClass, or RollEliteItemClass based on the roll. One-time initializes the gold item class ID.
-static int32_t __stdcall ITEMDROP_RollItemClassByLevel(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nTCFilter, int32_t nMonsterLevel, int32_t bIsMonsterDrop, uint32_t nLevel) {
+static int32_t __stdcall ITEMDROP_RollItemClassByLevel(::SGAMEDATA * pGame, D2SeedStrc * pSeed, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, int32_t bIsMonsterDrop, uint32_t nItemLevel) {
     // Static local variables (originally global data)
     static uint32_t gnItemClassIdGold; D2_STATIC_GUARD_BSS(gnItemClassIdGold, "D2Game::ITEMS::Items::Drop::ITEMDROP_RollItemClassByLevel::gnItemClassIdGold");
 
-    int nExceptionalChance;
+    int nArmorChance;
     int32_t nRoll;
-    int nNormalChance;
+    int nWeaponChance;
     uint32_t nLevelOddBit;
     if (!(gUniqueCandidatePool.nGoldCodeInitFlag & 1)) {
       gUniqueCandidatePool.nGoldCodeInitFlag |= 1;
@@ -338,32 +338,32 @@ static int32_t __stdcall ITEMDROP_RollItemClassByLevel(::SGAMEDATA * pGame, D2Se
     } else if (!gnItemClassIdGold) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17f);
       exit(-1);
-    } else if ((int)nLevel > 0x41) {
+    } else if ((int)nItemLevel > 0x41) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x180);
       exit(-1);
     } else {
-      nExceptionalChance = (int)nLevel >> 1;
-      nLevelOddBit = (int)nLevel % 2;
-      nNormalChance = nExceptionalChance + 10;
+      nArmorChance = (int)nItemLevel >> 1;
+      nLevelOddBit = (int)nItemLevel % 2;
+      nWeaponChance = nArmorChance + 10;
       if (nLevelOddBit) {
-        nNormalChance = nExceptionalChance + 0xb;
+        nWeaponChance = nArmorChance + 0xb;
       }
 
-      nExceptionalChance = nExceptionalChance + 5 + (0x41 - nLevel);
+      nArmorChance = nArmorChance + 5 + (0x41 - nItemLevel);
       nRoll = Seed::RollBetweenMinAndMax(pSeed, 0, 100);
-      if (nRoll < (int)(0x41 - nLevel)) {
+      if (nRoll < (int)(0x41 - nItemLevel)) {
         return gnItemClassIdGold;
       }
-      if (nRoll < nExceptionalChance) {
-        nRoll = ITEMDROP_RollExceptionalItemClass(pGame, pSeed, nLevel, nTCFilter, nMonsterLevel);
+      if (nRoll < nArmorChance) {
+        nRoll = ITEMDROP_RollArmorItemClass(pGame, pSeed, nItemLevel, nItemTypeFilter, bSkipRarityRoll);
         return nRoll;
       }
-      if (nRoll < nExceptionalChance + nNormalChance) {
-        nRoll = ITEMDROP_RollNormalItemClass(pGame, pSeed, nLevel, nTCFilter, nMonsterLevel);
+      if (nRoll < nArmorChance + nWeaponChance) {
+        nRoll = ITEMDROP_RollWeaponItemClass(pGame, pSeed, nItemLevel, nItemTypeFilter, bSkipRarityRoll);
         return nRoll;
       }
       if (nRoll < 100) {
-        nRoll = ITEMDROP_RollEliteItemClass(pGame, pSeed, nLevel, nTCFilter, nMonsterLevel, bIsMonsterDrop);
+        nRoll = ITEMDROP_RollMiscItemClass(pGame, pSeed, nItemLevel, nItemTypeFilter, bSkipRarityRoll, bIsMonsterDrop);
         return nRoll;
       }
 
@@ -1760,12 +1760,12 @@ static void INVENTORY_RemoveItemFromOwner(D2InventoryStrc * pInventory, D2UnitSt
           return;
         }
 
-        D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
+        D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, nullptr);
         return;
       }
     }
 
-    D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pUnit);
+    D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventory, pUnit);
 }
 
 // IterateAllUnits per-unit callback: removes pItem from this unit's inventory.
@@ -1862,7 +1862,7 @@ D2UnitStrc * __fastcall HasQuestItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
       nItemClassId = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pCarriedItem);
       if (dwItemCode == nItemClassId) {
         pCarriedItemLocation = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCarriedItem);
-        if (pCarriedItemLocation != INVPAGE_CORPSE) {
+        if (pCarriedItemLocation != INVPAGE_TRADEGRID1) {
           if (!pCarriedItem) {
             nItemClassId = -1;
           } else {
@@ -2106,7 +2106,7 @@ void __fastcall RefreshDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    BOOL bTimerExists = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN);
+    int32_t bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN);
     if (bTimerExists) {
       return;
     }
@@ -2120,7 +2120,7 @@ void __fastcall RefreshQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    BOOL bTimerExists = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN);
+    int32_t bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN);
     if (bTimerExists) {
       return;
     }
@@ -2133,10 +2133,10 @@ static int32_t ITEM_GetTotalMagicFind(D2UnitStrc * pUnit) {
     int32_t nOwnerMagicFind;
     if (pUnit && pUnit->eUnitType <= UNIT_MONSTER) {
       int32_t nMagicFind;
-      nMagicFind = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_magicbonus, 0);
+      nMagicFind = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_magicbonus, 0);
       pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
       if (pOwner) {
-        nOwnerMagicFind = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_magicbonus, 0);
+        nOwnerMagicFind = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_magicbonus, 0);
         nMagicFind += nOwnerMagicFind;
       }
 
@@ -2155,7 +2155,7 @@ int32_t __fastcall ITEMDROP_AdjustDrop(int32_t nMagicFind, int32_t nDiminishFact
 }
 
 // Item quality selector. QualityRatio.txt cascading rolls: Unique(128/idx) -> Set(128/idx) -> Rare(128/idx if allowed) -> Magic(128/idx) -> Superior(128/idx) else Normal. MF applies diminishing returns via ITEMDROP_AdjustDrop. The quality modifiers in pMagicFindUnit ([0]=magic, [1]=rare, [2]=set, [3]=unique, in 1024ths) reduce each roll chance. Returns eD2ItemTypes quality enum.
-static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVictimLevel, ::SGAMEDATA * pAttacker, D2UnitStrc * pGame, D2UnitStrc * pVictim, uint16_t * pMagicFindUnit) {
+static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVictimLevel, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint16_t * pQualityMods) {
     bool bHasMF;
     bHasMF = false;
     D2ItemsTxt* pItemTxt;
@@ -2189,7 +2189,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     D2ItemRatioTxt* pQualityRatio;
-    pQualityRatio = D2Common::DATATBLS::ItemTbls::TXT_QualityRatio_GetLine(nItemClassId, (uint32_t)pAttacker->nDifficulty, 100);
+    pQualityRatio = D2Common::DATATBLS::ItemTbls::TXT_QualityRatio_GetLine(nItemClassId, (uint32_t)pGame->nDifficulty, 100);
     if (!pQualityRatio) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe8d);
       exit(-1);
@@ -2198,7 +2198,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     int nLevelDiff;
     nLevelDiff = nVictimLevel - (uint32_t)(uint8_t)pItemTxt->nLevel;
     int32_t nAdjustedChance;
-    nAdjustedChance = ITEM_GetTotalMagicFind(pVictim);
+    nAdjustedChance = ITEM_GetTotalMagicFind(pAttacker);
     if (nAdjustedChance) {
       if (nAdjustedChance <= -100) {
         goto roll_superior;
@@ -2224,12 +2224,12 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
     }
 
     uint32_t nRoll;
-    nRoll = nScaledRollChance - (int)((uint32_t)pMagicFindUnit[3] * nScaledRollChance) / 1024;
+    nRoll = nScaledRollChance - (int)((uint32_t)pQualityMods[3] * nScaledRollChance) / 1024;
     if ((int)nRoll <= 0) {
       return 7;
     }
 
-    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
     if (nRoll < 0x80) {
       return 7;
     }
@@ -2246,12 +2246,12 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       nScaledRollChance = pQualityRatio->SetMin;
     }
 
-    nRoll = nScaledRollChance - (int)((uint32_t)pMagicFindUnit[2] * nScaledRollChance) / 1024;
+    nRoll = nScaledRollChance - (int)((uint32_t)pQualityMods[2] * nScaledRollChance) / 1024;
     if ((int)nRoll <= 0) {
       return 5;
     }
 
-    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
     if (nRoll < 0x80) {
       return 5;
     }
@@ -2268,12 +2268,12 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
         nScaledRollChance = pQualityRatio->RareMin;
       }
 
-      nRoll = nScaledRollChance - (int)((uint32_t)pMagicFindUnit[1] * nScaledRollChance) / 1024;
+      nRoll = nScaledRollChance - (int)((uint32_t)pQualityMods[1] * nScaledRollChance) / 1024;
       if ((int)nRoll <= 0) {
         return 6;
       }
 
-      nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+      nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
       if (nRoll < 0x80) {
         return 6;
       }
@@ -2291,12 +2291,12 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       nScaledRollChance = pQualityRatio->MagicMin;
     }
 
-    nRoll = nScaledRollChance - (int)((uint32_t)*pMagicFindUnit * nScaledRollChance) / 1024;
+    nRoll = nScaledRollChance - (int)((uint32_t)*pQualityMods * nScaledRollChance) / 1024;
     if ((int)nRoll <= 0) {
       return 4;
     }
 
-    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
     if (nRoll < 0x80) {
       return 4;
     }
@@ -2307,7 +2307,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       return 3;
     }
 
-    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
     if (nRoll < 0x80) {
       return 3;
     }
@@ -2317,7 +2317,7 @@ static int32_t __stdcall GAME_GetItemQuality(uint32_t nItemClassId, int32_t nVic
       return 2;
     }
 
-    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pGame->sSeed, nRoll);
+    nRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nRoll);
     return nRoll < 0x80 ? 2 : 1;
 }
 
@@ -2331,11 +2331,11 @@ static void ITEM_ApplyGoldBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       return;
     }
 
-    int32_t nGoldBonusPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_goldbonus, 0);
+    int32_t nGoldBonusPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_goldbonus, 0);
     int nTotalGoldBonusPct = nGoldBonusPct + 100;
     D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit2);
     if (pOwner) {
-      nGoldBonusPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_goldbonus, 0);
+      nGoldBonusPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_goldbonus, 0);
       nTotalGoldBonusPct += nGoldBonusPct;
     }
 
@@ -2394,7 +2394,7 @@ void __fastcall DropItem(::SGAMEDATA * pGame, D2UnitStrc * pSourceUnit, D2UnitSt
       pUnit->eUnitFlags |= UNITFLAG_SENDREFRESHMSG | UNITFLAG_TARGETABLE;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 3);
+    D2Common::Units::ChangeAnimMode(pUnit, 3);
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit, INVPAGE_None);
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_ISRESURRECT;
@@ -2640,7 +2640,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
     eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItem);
     if (eItemType == ITEMTYPE_PlayerBodyPart) {
       if (pItemGenCtx->bFromCustomData) {
-        D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, pItemGenCtx->szCustomName);
+        D2Common::ITEMS::Items::ITEMS_SetPlayerName(pItem, pItemGenCtx->szCustomName);
         D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pItem, pItemGenCtx->bGrade);
         bHasFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemGenCtx->neD2ItemFlag, ITEMFLAG_HARDCORE);
       } else {
@@ -2650,7 +2650,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
           return nullptr;
         }
 
-        D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, pPlayerData->szCharName);
+        D2Common::ITEMS::Items::ITEMS_SetPlayerName(pItem, pPlayerData->szCharName);
         bInitBaseStatsOk = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItemGenCtx->pUnit, UNITSTAT_level, 0);
         D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pItem, (uint8_t)bInitBaseStatsOk);
         pClient = UNIT::SUnit::SUNIT_GetClient(pItemGenCtx->pUnit, ".\\ITEMS\\Items.cpp", 0x880);
@@ -2678,7 +2678,7 @@ D2UnitStrc * __fastcall ITEM_CreateItemInstance(::SGAMEDATA * pGame, D2ItemGenCo
         }
       }
 
-      D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pItem, szCustomName);
+      D2Common::ITEMS::Items::ITEMS_SetPlayerName(pItem, szCustomName);
     }
 
     RefreshDurability(pGame, pItem);
@@ -2807,7 +2807,7 @@ void __fastcall DROP_SpawnGoldInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 }
 
 // Spawns an exceptional-tier item drop at the given map coordinates. Derives effective item level from the room's difficulty-adjusted monster level, rolls a class ID via ITEMDROP_RollExceptionalItemClass, finds the best free spawn tile near the coordinates, and calls ITEM_CreateItemInstance with the constructed D2ItemGenContextStrc.
-void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, D2UnitStrc * pUnit) {
+void __fastcall DROP_SpawnArmorItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, D2UnitStrc * pUnit) {
     POINT ptSpawnPos;
     POINT ptCandidatePos;
     D2SeedStrc* pRoomSeed;
@@ -2817,7 +2817,7 @@ void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoo
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     int32_t nEffectiveItemLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId, pGame->nDifficulty, pGame->bExpansion);
     if (nEffectiveItemLevel > 1) {
-      nEffectiveItemLevel -= LEVEL_RogueEncampment;
+      nEffectiveItemLevel--;
     }
     if (pRoom) {
       pRoomSeed = &pRoom->sSeed;
@@ -2825,7 +2825,7 @@ void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoo
       pRoomSeed = 0;
     }
 
-    int32_t nRolledClassId = ITEMDROP_RollExceptionalItemClass(pGame, pRoomSeed, nEffectiveItemLevel, nTCFilter, nMonsterLevel);
+    int32_t nRolledClassId = ITEMDROP_RollArmorItemClass(pGame, pRoomSeed, nEffectiveItemLevel, nItemTypeFilter, bSkipRarityRoll);
     if (nRolledClassId >= 0) {
       D2RoomStrc* pSpawnRoom;
       ptCandidatePos = *pCoordsIn;
@@ -2852,7 +2852,7 @@ void __fastcall DROP_SpawnExceptionalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoo
 }
 
 // Spawns a normal-quality item drop in the world. Rolls an item class from the treasure-class system (up to 6 retries) using the room seed and effective monster level, finds a free collision-clear tile near the requested coordinates, populates a D2ItemGenContextStrc, and calls ITEM_CreateItemInstance. Silently returns (no item) if no valid class rolls or no free tile is found.
-void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, D2UnitStrc * pUnit) {
+void __fastcall DROP_SpawnWeaponItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, D2UnitStrc * pUnit) {
     uint32_t _bIsSpawnable;
     bool bIsSpawnable;
     uint32_t nItemClassId;
@@ -2876,7 +2876,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 
     uint32_t nRollRetry = 0;
     do {
-      nItemClassId = ITEMDROP_RollNormalItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nTCFilter, nMonsterLevel);
+      nItemClassId = ITEMDROP_RollWeaponItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nItemTypeFilter, bSkipRarityRoll);
       if ((int)nItemClassId >= 0) {
         _bIsSpawnable = D2Common::ITEMS::Items::TXT_Items_GetBitFieldAnd0x02(nItemClassId);
         if (_bIsSpawnable) {
@@ -2925,7 +2925,7 @@ void __fastcall DROP_SpawnNormalItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, PO
 }
 
 // Spawns a single elite/special drop item into the world near pCoords in pRoom. Derives an effective item level from the room's level id (clamped, monster-level-for-difficulty, or 1 in town/no level), then rolls an item class via ITEMDROP_RollEliteItemClass (using the room seed, treasure-class filter nTCFilter, monster level, and whether pUnit is a monster). Finds a nearby better room and a free collision-clear coordinate (GetFreeCoordinates_WithFieldCoords); if a valid spawn spot is found, fills a D2ItemGenContextStrc (mode 3, quality invalid/auto, the rolled class id and item level) and creates the item instance via ITEM_CreateItemInstance. Uses Fog GuardStack as the tail epilogue. No return; side effect is the new world item.
-void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nTCFilter, int32_t nMonsterLevel, D2UnitStrc * pUnit) {
+void __fastcall DROP_SpawnMiscItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POINT * pCoords, int32_t nItemTypeFilter, int32_t bSkipRarityRoll, D2UnitStrc * pUnit) {
     BOOL _bIsTown;
     bool bIsTown;
     int32_t bIsMonsterFlag;
@@ -2963,7 +2963,7 @@ void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POI
       bIsMonsterFlag = 1;
     }
 
-    int32_t nRolledClassId = ITEMDROP_RollEliteItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nTCFilter, nMonsterLevel, bIsMonsterFlag);
+    int32_t nRolledClassId = ITEMDROP_RollMiscItemClass(pGame, pRoomSeed, nEffectiveMonLevel, nItemTypeFilter, bSkipRarityRoll, bIsMonsterFlag);
     ptCandidatePos = *pCoordsIn;
     int nOffsetX = ptCandidatePos.x + 2;
     LONG nCoordsIn = ptCandidatePos.y + 3;
@@ -2998,7 +2998,7 @@ void __fastcall DROP_SpawnEliteItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, POI
 }
 
 // Server-side: rolls and creates a reward/drop item instance to be dropped near a unit. Determines item level from the source unit (monster level, player level, or level-table mon level by difficulty/expansion; min 2) and writes it to *pnParam. If the unit carries a forced drop code, converts it to a class id; otherwise rolls an item class by level (for gold drops, retries up to 11 times until an Items.txt entry with the gold bitfield is found, then falls back to a normal class roll). Finds the best passable spawn spot in the unit's room, fills a D2ItemGenContextStrc (quality, position, level, class id) and calls ITEM_CreateItemInstance. If ppUnit is non-null, copies the 0x84-byte context out to it. Returns the created item unit (NULL on spawn-spot failure); halts with unrecoverable error on bad game ptr or bad item code.
-D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2ItemTypes eItemType, int32_t * pnItemLevel, D2UnitStrc * * ppUnit, int32_t nTCFilter, int32_t nParam2) {
+D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2ItemQuality eQuality, int32_t * pnItemLevel, D2UnitStrc * * ppUnit, int32_t nItemTypeFilter, int32_t bSkipRarityRoll) {
     ::SGAMEDATA* pGameFromUnit;
     uint32_t nItemClassId;
     D2ItemsTxt* pItemsTxtLine;
@@ -3039,17 +3039,17 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
 
     *pnItemLevel = nItemClassId;
     if (!pUnit->dwDropItemCode) {
-      nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nTCFilter, nParam2, bIsMonster, nItemClassId);
-      if (eItemType == ITEMTYPE_Gold) {
+      nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nItemTypeFilter, bSkipRarityRoll, bIsMonster, nItemClassId);
+      if (eQuality == QUALITY_MAGIC) {
         nRollRetry = 0;
         pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
         while (!pItemsTxtLine || !(pItemsTxtLine->dwBitfield1 & 1)) {
           if (nRollRetry > 0xa) {
-            nItemClassId = ITEMDROP_RollNormalItemClass(pGame, &pUnit->sSeed, *pnItemLevel, nTCFilter, nParam2);
+            nItemClassId = ITEMDROP_RollWeaponItemClass(pGame, &pUnit->sSeed, *pnItemLevel, nItemTypeFilter, bSkipRarityRoll);
             pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
             nRollRetry++;
           } else {
-            nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nTCFilter, nParam2, bIsMonster, *pnItemLevel);
+            nItemClassId = ITEMDROP_RollItemClassByLevel(pGame, &pUnit->sSeed, nItemTypeFilter, bSkipRarityRoll, bIsMonster, *pnItemLevel);
             pItemsTxtLine = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
             nRollRetry++;
           }
@@ -3074,7 +3074,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
       sItemGenCtx.nPosY = pPosition.y;
       sItemGenCtx.nPosX = pPosition.x;
       sItemGenCtx.nItemLevel = *pnItemLevel;
-      sItemGenCtx.eQuality = eItemType;
+      sItemGenCtx.eQuality = eQuality;
       sItemGenCtx.pSeed = 0;
       sItemGenCtx.dwMode = 3;
       sItemGenCtx.usually_one = 1;
@@ -3201,9 +3201,9 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     int nCurDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItemUnit, UNITSTAT_durability, 0);
     bIsArmor = nCurDurability - 1;
     if ((int)bIsArmor > 0) {
-      _bIsThrowable = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit);
+      _bIsThrowable = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit);
       if (_bIsThrowable <= (int)bIsArmor) {
-        bIsArmor = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit);
+        bIsArmor = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit);
       }
 
       RefreshDurability(pGame, pItemUnit);
@@ -3214,7 +3214,7 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       if (!bIsWeapon) {
         _bDurabilityBelowOne = D2Common::ITEMS::Items::CheckItemFlag(pItemUnit, ITEMFLAG_BROKEN, 0xc5f, ".\\ITEMS\\Items.cpp");
         if (!_bDurabilityBelowOne) {
-          ItemMode::ITEMMODE_SendItemUpdate(pGame, pUnit, pItemUnit);
+          ItemMode::ITEMMODE_BreakItem(pGame, pUnit, pItemUnit);
           return;
         }
       }
@@ -3228,7 +3228,7 @@ void __fastcall ITEMS_ReduceDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           wStatLayer = 0;
           _bIsThrowable = 0x46;
           GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\Items.cpp", 0xc70), pItemUnit, true, _bIsThrowable, bIsArmor, wStatLayer);
-          bIsArmor = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit);
+          bIsArmor = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit);
           D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, bIsArmor, 0);
           wStatLayer = 0;
           _bIsThrowable = 0x48;
@@ -3387,10 +3387,10 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
     bool bPutItemSuccess;
     D2UnitStrc* pSocketedGem;
     int nReplenishRate;
+    int32_t bTimerExists;
     D2UnitDataItemDetailsStrc stItemDetails;
     int32_t nSocketPosY;
     int32_t nSocketPosX;
-    int32_t nSocketIdx;
     int32_t nSocketSlot;
     int32_t* pInventoryBuf;
     __frame0.pUnitSaved = pUnit;
@@ -3417,13 +3417,13 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
 
             __frame0.pSocketDataCursor += __frame0.nBytesConsumed;
             nSerializedSize -= __frame0.nBytesConsumed;
-            D2Common::Units::SetupUpdateFlag(pSocketedGem, 4);
+            D2Common::Units::ChangeAnimMode(pSocketedGem, 4);
             nSocketPosY = 0;
             nSocketPosX = 0;
             nSocketSlot = 1;
-            nSocketIdx = 0;
+            bTimerExists = 0;
             pInventoryBuf = &__frame0.stInventoryBuf;
-            _bPutItemSuccess = ItemMode::PutItemInItem(__frame0.pGameSaved, pClonedItem, pSocketedGem->nUnitGUID, D2Common::Units::GetGUID(pClonedItem), pInventoryBuf, nSocketIdx, nSocketSlot, nSocketPosX, nSocketPosY);
+            _bPutItemSuccess = ItemMode::PutItemInItem(__frame0.pGameSaved, pClonedItem, pSocketedGem->nUnitGUID, D2Common::Units::GetGUID(pClonedItem), pInventoryBuf, bTimerExists, nSocketSlot, nSocketPosX, nSocketPosY);
             if (!_bPutItemSuccess) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd4);
               exit(-1);
@@ -3441,16 +3441,16 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(__frame0.pUnitSaved, ITEMFLAG_MAGICAL, 1);
       nReplenishRate = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pClonedItem, UNITSTAT_item_replenish_durability, 0);
       if (nReplenishRate) {
-        _bPutItemSuccess = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pClonedItem, UNITEVENTCALLBACK_STATREGEN);
-        if (!_bPutItemSuccess) {
+        bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pClonedItem, UNITEVENTCALLBACK_STATREGEN);
+        if (!bTimerExists) {
           GAME::Event::SetEvent(pGame, pClonedItem, 3, (int)(0x9c4 / nReplenishRate) + 1 + pGame->dwGameFrame, 0, 0);
         }
       }
 
       nReplenishRate = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pClonedItem, UNITSTAT_item_replenish_quantity, 0);
       if (nReplenishRate) {
-        _bPutItemSuccess = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pClonedItem, UNITEVENTCALLBACK_STATREGEN);
-        if (!_bPutItemSuccess) {
+        bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pClonedItem, UNITEVENTCALLBACK_STATREGEN);
+        if (!bTimerExists) {
           GAME::Event::SetEvent(pGame, pClonedItem, 3, (int)(0x9c4 / nReplenishRate) + 1 + pGame->dwGameFrame, 0, 0);
         }
       }
@@ -3464,7 +3464,7 @@ D2UnitStrc * __fastcall ITEM_CloneFromSerializedData(::SGAMEDATA * pGame, D2Unit
 }
 
 // Three explicit GuardStack tails: GuardStack(0) on two early-out failure paths, GuardStack((int)pNewItem) on success. Matches its own doc comment: "Returns D2UnitStrc* or NULL on failure."
-static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nItemClassId, eD2ItemTypes eD2ItemType, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t eItemType, int32_t dwFileIndex, int32_t nFlags) {
+static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nItemClassId, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, eD2ItemQuality eQuality, int32_t dwFileIndex, int32_t nFlags) {
     eD2LevelId eLevelId;
     ::SGAMEDATA* pUnitGame;
     D2UnitStrc* pNewItem;
@@ -3498,7 +3498,7 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
     sItemGenCtx.nPosX = ptSpawnPos.x;
     sItemGenCtx.nPosY = ptSpawnPos.y;
     sItemGenCtx.usually_one = 1;
-    sItemGenCtx.eQuality = eItemType;
+    sItemGenCtx.eQuality = eQuality;
     sItemGenCtx.pUnit = pUnit;
     sItemGenCtx.nItemClassid = nItemClassId;
     sItemGenCtx.pDrlgRoom = pItemRoom;
@@ -3532,7 +3532,7 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
 }
 
 // TC iteration engine. 64-deep stack for nested TCs. NoDrop scales exponentially with party size (ratio^players). Classic: linear weight scan. Expansion: binary search on cumulative weights. Quality modifiers propagate through nesting (max of parent/child). Handles gold (0x01), quiver (0x02), nested TC (0x04) flags. Item generation via ITEMGEN_CreateItemFromClassIdAndQuality.
-void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, D2ParsedTreasureClassStrc * pTreasure, eD2ItemTypes eItemType, int32_t nVictimLevel, int32_t bIsItemFindDrop, D2UnitStrc * * pUnitTable, int * pUnitIndex, int32_t nItemsCountToGenerate) {
+void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, D2ParsedTreasureClassStrc * pTreasure, eD2ItemQuality eQuality, int32_t nVictimLevel, int32_t bIsItemFindDrop, D2UnitStrc * * pUnitTable, int * pUnitIndex, int32_t nItemsCountToGenerate) {
     D2ParsedTreasureClassEntriesStrc* pDVar1;
     D2UnitStrc* pAttackerOwner;
     uint32_t nNearbyPlayerCount;
@@ -3563,7 +3563,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
     ::SGAMEDATA* pGamePtr;
     int32_t* pStackEntryData;
     int32_t nDropFlags;
-    eD2ItemTypes eRolledQuality;
+    eD2ItemQuality eRolledQuality;
     uint32_t nRolledItemClassId;
     int32_t nTotalWeight;
     D2TCStackEntryStrc pTCStack[64];
@@ -3649,7 +3649,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   if (pAttacker->eUnitType != UNIT_PLAYER) {
                     pAttackerOwner = Ai::AiGeneral::GetOwnerUnit(pAttacker);
                   }
-                  if (!pAttackerOwner || pAttackerOwner->eUnitType != UNIT_PLAYER || (nNearbyPlayerCount = UNIT::Party::CountDeadPartyMembers(pGame, pAttackerOwner) , (int)nNearbyPlayerCount <= 1)) {
+                  if (!pAttackerOwner || pAttackerOwner->eUnitType != UNIT_PLAYER || (nNearbyPlayerCount = UNIT::Party::PARTY_GetLivingPartyMemberCountInSameLevel(pGame, pAttackerOwner) , (int)nNearbyPlayerCount <= 1)) {
                     nNearbyPlayerCount = 1;
                   } else {
                     if ((int)nNearbyPlayerCount >= 8) {
@@ -3870,15 +3870,15 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
                     nQuantity = 0;
                     if (pEntry[nEntryIdx].nFlags & TC_0x01) {
-                      eRolledQuality = ITEMTYPE_PlayerBodyPart;
+                      eRolledQuality = QUALITY_UNIQUE;
                       nQuantity = (uint16_t)pEntry[nEntryIdx].nItemLinkNodeId + 1;
                     } else {
                       if (pEntry[nEntryIdx].nFlags & TC_0x02) {
-                        eRolledQuality = ITEMTYPE_BowQuiver;
+                        eRolledQuality = QUALITY_SET;
                         nQuantity = (uint16_t)pEntry[nEntryIdx].nItemLinkNodeId + 1;
                       } else {
-                        eRolledQuality = eItemType;
-                        if (eItemType == ITEMTYPE_None1) {
+                        eRolledQuality = eQuality;
+                        if (eQuality == QUALITY_INVALID) {
                           eRolledQuality = GAME_GetItemQuality(nRolledItemClassId, nVictimLevel, pGame, pUnit, pAttacker, (uint16_t*)((char*)pTCStack[0].aQualityRatios + nStackOffset));
                         }
                       }
@@ -3920,7 +3920,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
                       }
                     }
 
-                    pCreatedItem = ITEMGEN_CreateItemFromClassIdAndQuality(nRolledItemClassId, eRolledQuality, pUnit, pGame, eRolledQuality, nQuantity, nDropFlags);
+                    pCreatedItem = ITEMGEN_CreateItemFromClassIdAndQuality(nRolledItemClassId, pUnit, pGame, eRolledQuality, nQuantity, nDropFlags);
                     if (pCreatedItem) {
                       nNearbyPlayerCount = D2Common::ITEMS::Items::ITEMS_IsA(pCreatedItem, ITEMTYPE_Gold);
                       if (nNearbyPlayerCount && pNestedTC->pEntries[nEntryIdx].nItemLinkNodeId) {
@@ -3955,7 +3955,7 @@ void __fastcall SERVER_ITEM_RollItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * pUn
     } while (true);
 }
 
-void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint16_t nSelectedTC, eD2ItemTypes eItemType, int32_t nVictimLevel, BOOL bIsItemFindDrop, D2UnitStrc * * pUnitTable, int * pUnitIndex, int32_t nItemsCountToGenerate) {
+void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint16_t nSelectedTC, eD2ItemQuality eQuality, int32_t nVictimLevel, BOOL bIsItemFindDrop, D2UnitStrc * * pUnitTable, int * pUnitIndex, int32_t nItemsCountToGenerate) {
     int pnMonsterLevel = 0;
     if (pGame->bExpansion && pGame->nDifficulty > 0 && pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       D2MonStatsTxt* pMonStatsTxt;
@@ -3970,7 +3970,7 @@ void __fastcall SERVER_ITEM_RollItemAndGetTreasureClass(::SGAMEDATA * pGame, D2U
       return;
     }
 
-    SERVER_ITEM_RollItemToDrop(pGame, pUnit, pAttacker, pTreasure, eItemType, nVictimLevel, bIsItemFindDrop, pUnitTable, pUnitIndex, nItemsCountToGenerate);
+    SERVER_ITEM_RollItemToDrop(pGame, pUnit, pAttacker, pTreasure, eQuality, nVictimLevel, bIsItemFindDrop, pUnitTable, pUnitIndex, nItemsCountToGenerate);
 }
 
 void __fastcall DROP_SpawnGoldOnGround(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nGoldAmount) {

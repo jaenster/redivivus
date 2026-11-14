@@ -359,7 +359,7 @@
         "MONSTER_SendNpcHealthUpdate",
         "STATES_HasAnyGfxFlag",
         "PLAYER_SendStateUpdate",
-        "STATLIST_HasChangedStats",
+        "STATLIST_IsOverlayPending",
         "PLAYER_SendOverlayToClient",
         "MONSTER_SendNpcEnchantsToClient"
       ],
@@ -372,7 +372,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c698858a",
+      "dh": "035ec5e3",
       "paramStorage": [
         [
           "pGame",

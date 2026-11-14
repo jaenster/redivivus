@@ -4,7 +4,7 @@
   "file": "Source/D2Client/Engine.cpp",
   "functions": [
     {
-      "name": "LOADER_SetConnectionLostFlag_Unref_0045ae50",
+      "name": "LOADER_SetScreenResolutionTableIndex",
       "address": "0045ae50",
       "lines": [
         {
@@ -14,9 +14,9 @@
       ],
       "namespace": "D2Client::Engine",
       "calledFunctions": [
-        "LOADER_SetConnectionLostFlag_Unref_0045ae50"
+        "LOADER_SetScreenResolutionTableIndex"
       ],
-      "dh": "8b8a8148",
+      "dh": "cfb4f49a",
       "paramStorage": [
         [
           "bConnectionLost",
@@ -25,7 +25,7 @@
       ]
     },
     {
-      "name": "LOADER_SetConnectionLostFlag_Unref_0045ae70",
+      "name": "LOADER_SetScreenResolutionMode",
       "address": "0045ae70",
       "lines": [
         {
@@ -35,9 +35,9 @@
       ],
       "namespace": "D2Client::Engine",
       "calledFunctions": [
-        "LOADER_SetConnectionLostFlag_Unref_0045ae70"
+        "LOADER_SetScreenResolutionMode"
       ],
-      "dh": "4fa6c098",
+      "dh": "fef435fd",
       "paramStorage": [
         [
           "bConnectionLost",
@@ -952,7 +952,7 @@
       ]
     },
     {
-      "name": "LOADER_SetConnectionLostFlag_Unref_00468000",
+      "name": "CURSOR_SetInitialized",
       "address": "00468000",
       "lines": [
         {
@@ -962,9 +962,9 @@
       ],
       "namespace": "D2Client::Engine",
       "calledFunctions": [
-        "LOADER_SetConnectionLostFlag_Unref_00468000"
+        "CURSOR_SetInitialized"
       ],
-      "dh": "08b5fa78",
+      "dh": "fb94156b",
       "paramStorage": [
         [
           "bConnectionLost",

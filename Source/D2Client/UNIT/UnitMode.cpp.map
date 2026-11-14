@@ -257,14 +257,14 @@
       "calledFunctions": [
         "UNITMODE_SetModeAndLoadCof",
         "UTILS_OnUnitModeChange_NoOp",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "dbed2698",
+      "dh": "2fe4ba5a",
       "paramStorage": [
         [
           "nAnimMode",
@@ -289,7 +289,7 @@
       "calledFunctions": [
         "UNITMODE_SetAnimMode",
         "UTILS_OnUnitModeChange_NoOp",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "UNITMODE_ShowElementalHitOverlay",
         "UNITSND_DispatchModeChangeSound"
@@ -298,7 +298,7 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "d6f09557",
+      "dh": "1e67e551",
       "paramStorage": [
         [
           "pUnit",
@@ -323,14 +323,14 @@
       "calledFunctions": [
         "UNITMODE_SetAnimModeSilent",
         "UTILS_OnUnitModeChange_NoOp",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b6815421",
+      "dh": "d83e0dab",
       "paramStorage": [
         [
           "pUnit",

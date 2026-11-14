@@ -53,14 +53,14 @@
       "namespace": "D2Game::PLAYER::PlayerModes",
       "calledFunctions": [
         "PLRMODES_HasAnimEventLastOrComing5Frames",
-        "EVENT_TimerTypeExistsOnUnit"
+        "EVENT_GetTimerFrame"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "5b5847a7",
+      "dh": "b29bf3e0",
       "paramStorage": [
         [
           "pGame",
@@ -86,15 +86,16 @@
         "PLRMODES_HasEndAnimEventAndSeqInput",
         "GetCurrentSkill",
         "GetSkillsTxt",
-        "EVENT_TimerTypeExistsOnUnit"
+        "EVENT_GetTimerFrame"
       ],
       "usedTypes": [
         "D2SkillStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
-        "SGAMEDATA"
+        "SGAMEDATA",
+        "int32_t"
       ],
-      "dh": "493fc453",
+      "dh": "0dff2460",
       "paramStorage": [
         [
           "pGame",
@@ -440,9 +441,10 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
+        "eD2PlayerAnimMode",
         "int32_t"
       ],
-      "dh": "5456491e",
+      "dh": "178a4a1b",
       "paramStorage": [
         [
           "pGame",
@@ -453,7 +455,7 @@
           "EDX:4"
         ],
         [
-          "nLevel",
+          "eMode",
           "Stack[0x4]:4"
         ],
         [
@@ -482,7 +484,7 @@
         "DRLGROOM_IsRoomInTown",
         "INVENTORY_GetItemByGridOffset",
         "TXT_Items_GetLine",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATLIST_AddUnitStat",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat"
@@ -493,7 +495,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "5a363090",
+      "dh": "8ddcd009",
       "paramStorage": [
         [
           "pUnit",
@@ -604,7 +606,7 @@
         "PLRMODES_UnequipAndPrepareItemForDrop",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEM_GetItemData_wType",
         "ITEMMODE_RemoveItemFromBelt",
@@ -626,7 +628,7 @@
         "eD2ItemTypes",
         "int32_t"
       ],
-      "dh": "5360cc55",
+      "dh": "d62335a7",
       "paramStorage": [
         [
           "pGame",
@@ -660,7 +662,7 @@
         "PLRMODES_ClearCursorAndDeleteItem",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory"
@@ -670,7 +672,7 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "8832c833",
+      "dh": "84f62d2e",
       "paramStorage": [
         [
           "pUnit",
@@ -698,7 +700,7 @@
         "INVENTORY_GetItemByGridOffset",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -727,7 +729,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "677e1761",
+      "dh": "05a3b812",
       "paramStorage": [
         [
           "pGame",
@@ -799,12 +801,12 @@
         "GetCharName",
         "SetNameInPlayerData",
         "SetSeed",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetState",
-        "GetExperience",
+        "GetExperienceLoss",
         "_allmul",
         "_alldiv",
-        "SetExperience",
+        "SetExperienceLoss",
         "STATLIST_SetUnitStat",
         "INVENTORY_AddCorpse",
         "INVENTORY_SetOwnerGUID",
@@ -814,7 +816,7 @@
         "PLRMODES_UnequipAndPrepareItemForDrop",
         "ITEM_SetItemData_ePage",
         "ITEM_CloneFromSerializedData",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_AutoPlaceItemInGrid",
         "PutItemInInventory",
         "ITEM_EditItemData_eD2ItemCmd",
@@ -844,7 +846,7 @@
         "int32_t",
         "int64_t"
       ],
-      "dh": "9937bb89",
+      "dh": "a34baafb",
       "paramStorage": [
         [
           "pGame",
@@ -880,7 +882,7 @@
       "namespace": "D2Game::PLAYER::PlayerModes",
       "calledFunctions": [
         "PLRMODES_IsCorpseOwnedByPlayer",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "FindUnitFromTable",
         "PLAYERLIST_GetFlagsMasked",
         "GetInstructionPointer",
@@ -893,7 +895,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "12791a9c",
+      "dh": "1a8e44f9",
       "paramStorage": [
         [
           "pGame",
@@ -923,7 +925,7 @@
         "PLRMODES_PickupCorpse",
         "UNIT_GetUnitState",
         "PLRMODES_IsCorpseOwnedByPlayer",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "DAMAGE_AwardKillExperience",
@@ -944,7 +946,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d23d836",
+      "dh": "e1cecf8e",
       "paramStorage": [
         [
           "pGame",
@@ -1175,14 +1177,14 @@
         "InitAnimFrame",
         "UNITS_ClearAnimTimerEvents",
         "UNITS_SetupAnimTimerEvents",
-        "SKILLS_OnModeComplete"
+        "SKILLS_StartCurrentSkill"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9d241b4a",
+      "dh": "7075150c",
       "paramStorage": [
         [
           "pGame",
@@ -1226,14 +1228,14 @@
         "InitAnimFrame",
         "UNITS_ClearAnimTimerEvents",
         "UNITS_SetupAnimTimerEvents",
-        "SKILLS_OnModeComplete"
+        "SKILLS_StartCurrentSkill"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "6ad6043b",
+      "dh": "64886b4e",
       "paramStorage": [
         [
           "pGame",
@@ -1274,7 +1276,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "ITEMMODE_ProcessItemBuy",
+        "ITEMMODE_EquipStoredItem",
         "SetWeaponGUID"
       ],
       "usedTypes": [
@@ -1285,7 +1287,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8f4be718",
+      "dh": "f7e0cf5d",
       "paramStorage": [
         [
           "pGame",
@@ -1315,7 +1317,7 @@
         "PLRMODES_HandleDepletedAmmoOrThrowable",
         "IsStackable",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "ITEMS_IsA",
@@ -1324,16 +1326,16 @@
         "ITEM_GetItemData_wType",
         "GetBodyLocation",
         "ITEM_GetTxtItemTypes_reequip",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEMMODE_TakeItemFromBodyLoc",
         "ITEM_EditItemData_eD2ItemCmd",
         "INVENTORY_FindItemByType",
         "GetClassId",
         "CheckItemFlag",
         "INVENTORY_GetItemByGridOffset",
-        "ITEMMODE_ProcessItemBuy",
+        "ITEMMODE_EquipStoredItem",
         "PLRMODES_ReequipWeaponAfterThrow",
-        "ITEMMODE_SendItemUpdate"
+        "ITEMMODE_BreakItem"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -1343,7 +1345,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ce7ae4db",
+      "dh": "71bac7ff",
       "paramStorage": [
         [
           "pGame",
@@ -1483,15 +1485,15 @@
         "ITEM_CheckIfItemHasDurability",
         "STATSEX_GetCurrentStat",
         "CheckItemFlag",
-        "SetupUpdateFlag",
-        "ITEMMODE_SendItemUpdate"
+        "ChangeAnimMode",
+        "ITEMMODE_BreakItem"
       ],
       "usedTypes": [
         "D2InventoryStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "38f49684",
+      "dh": "18a8c597",
       "paramStorage": [
         [
           "pGame",
@@ -1564,7 +1566,7 @@
       "calledFunctions": [
         "PLRMODES_RecoverStamina",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxStaminaFromUnit",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
@@ -1573,7 +1575,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2e09b03b",
+      "dh": "622cf2f8",
       "paramStorage": [
         [
           "pUnit",
@@ -1594,14 +1596,14 @@
       "calledFunctions": [
         "PLRMODES_GetHpPercent128",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp"
+        "STATLIST_GetMaxLifeFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4013b9d5",
+      "dh": "6fbfe15a",
       "paramStorage": [
         [
           "pUnit",
@@ -1622,7 +1624,7 @@
       "calledFunctions": [
         "PLRMODES_RegenHp",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "GetStatsByState",
         "STATLIST_RemoveAndRecalc",
         "FreeStatList",
@@ -1635,7 +1637,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1e4050c9",
+      "dh": "3806b20c",
       "paramStorage": [
         [
           "pUnit",
@@ -1656,7 +1658,7 @@
       "calledFunctions": [
         "PLRMODES_RegenMana",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "UNIT_GetUnitState",
         "D2ApplyPercent",
         "GetStatsByState",
@@ -1669,7 +1671,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "374e1d98",
+      "dh": "80b48252",
       "paramStorage": [
         [
           "pUnit",
@@ -1783,7 +1785,7 @@
         "UpgradeLifeAndHitClass",
         "STATES_HasAnyGfxFlag",
         "PLAYER_SendStateUpdate",
-        "STATLIST_HasChangedStats",
+        "STATLIST_IsOverlayPending",
         "PLAYER_SendOverlayToClient",
         "STATLIST_DispatchUnchangedStatToCallback"
       ],
@@ -1794,7 +1796,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "55e9be20",
+      "dh": "d565bf1a",
       "paramStorage": [
         [
           "pGame",
@@ -2087,7 +2089,7 @@
       "namespace": "D2Game::PLAYER::PlayerModes",
       "calledFunctions": [
         "PLRMODES_Death",
-        "STATES_RemoveAllProgressiveStates",
+        "STATES_RemoveDisguiseStates",
         "INVENTORY_GetHandItem",
         "PLRMODES_SetIdleMode",
         "GetInstructionPointer",
@@ -2114,7 +2116,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "2a7f2800",
+      "dh": "0facdab0",
       "paramStorage": [
         [
           "pGame",

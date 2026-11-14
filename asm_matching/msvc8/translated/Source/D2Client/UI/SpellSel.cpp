@@ -2211,7 +2211,7 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
               bCanSkill = 0;
             }
 
-            nClassId = D2Common::Skills::SpendSkillPointOnSkill(pUnit, eSkill);
+            nClassId = D2Common::Skills::SKILLS_CheckRequiredAttributes(pUnit, eSkill);
             if (!nClassId) {
               bCanSkill = 0;
             }

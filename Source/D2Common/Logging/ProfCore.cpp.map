@@ -109,7 +109,7 @@
       "dh": "fc2a7c61"
     },
     {
-      "name": "CloseProfCore_Unref_00654ef0",
+      "name": "TXT_FreeParsedTC_Thunk",
       "address": "00654ef0",
       "lines": [
         {
@@ -119,10 +119,10 @@
       ],
       "namespace": "D2Common::Logging::ProfCore",
       "calledFunctions": [
-        "CloseProfCore_Unref_00654ef0",
+        "TXT_FreeParsedTC_Thunk",
         "FreeParsedTC"
       ],
-      "dh": "f46d6214"
+      "dh": "67ddfdca"
     }
   ]
 }

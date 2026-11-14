@@ -1374,7 +1374,7 @@
       ]
     },
     {
-      "name": "SendPacketToClient",
+      "name": "QSERVER_EnqueueClientPacket",
       "address": "006bf370",
       "lines": [
         {
@@ -1384,7 +1384,7 @@
       ],
       "namespace": "Fog::Src::QServer::QServer",
       "calledFunctions": [
-        "SendPacketToClient",
+        "QSERVER_EnqueueClientPacket",
         "AllocClientMemory",
         "memcpy",
         "GetTickCount"
@@ -1395,7 +1395,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b9f2637",
+      "dh": "1cdeb5de",
       "paramStorage": [
         [
           "pQServer",

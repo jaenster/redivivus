@@ -204,7 +204,7 @@ static D2SkillCltDoFunc SKILLCLTDOFUNCS[130] = {
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsAma::Skills_CltDoFunc_Ama_PiercingShot,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_LinearMissileCount,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_Inferno,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_HomingMissileVelocity,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Nova,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_FireWall,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_MissileWithChargeCount,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_CollisionCheckedMissile,
@@ -214,7 +214,7 @@ static D2SkillCltDoFunc SKILLCLTDOFUNCS[130] = {
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsNec::Skills_CltDoFunc_Nec_CorpseExplosion,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsNec::Skills_CltDoFunc_Nec_PoisonExplosion,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_Sacrifice,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_ChargePathMissile,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_BlessedHammer,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_FistOfHeavens,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_Charge,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsBar::Skills_CltDoFunc_Bar_BloodParticlesOnTarget,
@@ -246,9 +246,9 @@ static D2SkillCltDoFunc SKILLCLTDOFUNCS[130] = {
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_QueenDeath,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_CurseCenter_StreamRange,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_ShapeShift_FwdArc,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_ShapeShift_SideArc,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_ShapeShift_BackArc,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_Firestorm,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_Twister,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsDru::Skills_CltDoFunc_Dru_Tornado,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsEMon::Skills_CltDoFunc_EMon_PerpendicularMissile,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsEMon::Skills_CltDoFunc_EMon_FallingMissileWithZ,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsEMon::Skills_CltDoFunc_EMon_MissileAtOwnerWithZ,
@@ -264,7 +264,7 @@ static D2SkillCltDoFunc SKILLCLTDOFUNCS[130] = {
     (D2SkillCltDoFunc)&D2Client::SKILLS::Skills_CltDoFunc_BaalCorpseExplosion,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_ThunderStormBolt,
-    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_RateThrottledBloodParticles,
+    (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_State_OpenWounds,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_RandomRadiusMissileField,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsSor::Skills_CltDoFunc_Sor_RandomRadiusMissile,
     (D2SkillCltDoFunc)&D2Client::SKILLS::SkillsEMon::Skills_CltDoFunc_EMon_HomingToOwner,
@@ -503,7 +503,7 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
       bWeaponIsAmmo = 0;
       eSkillId = D2Common::Skills::GetSkillId(D2Common::Units::GetCurrentSkill(pUnit), szName, nShoots);
       if (eSkillId == SKILL_Attack) {
-        nShoots = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pWeapon, UNITSTAT_item_magicarrow, 0);
+        nShoots = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_magicarrow, 0);
         if (nShoots) {
           return 1;
         }
@@ -518,7 +518,7 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
     D2UnitStrc* pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
     if (pAmmoItem && (!bWeaponIsAmmo || pAmmoItem == pWeapon)) {
       nMagicArrowStat = D2Common::ITEMS::Items::IsStackable(pAmmoItem);
-      if (nMagicArrowStat || (nShoots = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) , nShoots || (nShoots = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAmmoItem, UNITSTAT_item_throwable, 0) , nShoots != 0))) {
+      if (nMagicArrowStat || (nShoots = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) , nShoots || (nShoots = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0) , nShoots != 0))) {
         nQuantity = D2Common::ITEMS::Items::ITEM_ValidateItemQuantity(pAmmoItem);
         return nQuantity;
       }
@@ -533,7 +533,7 @@ BOOL __fastcall SKILLS_CltCheckThrowableAmmo(D2UnitStrc * pUnit) {
     if (!nMagicArrowStat) {
       nShoots = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem);
       if (!nShoots) {
-        nShoots = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pAmmoItem, UNITSTAT_item_throwable, 0);
+        nShoots = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0);
         if (!nShoots) {
           return 0;
         }
@@ -2041,7 +2041,7 @@ void __fastcall SKILL_ProcessActiveStateEffects(D2UnitStrc * pUnit) {
     eD2Skills eD2Skill;
     short int nActiveFuncIdx;
     D2StatesTxt* pStatesTxt;
-    BOOL bHasDmgState = D2Common::DATATBLS::ItemStats::STATES_HasDamageState(pUnit);
+    BOOL bHasDmgState = D2Common::DATATBLS::ItemStats::STATES_HasActiveFlagState(pUnit);
     if (!bHasDmgState) {
       return;
     }

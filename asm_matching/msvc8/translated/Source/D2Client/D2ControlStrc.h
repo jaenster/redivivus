@@ -70,7 +70,7 @@ __pragma(pack(push, 1)) struct D2ControlStrc {
     /* 0x2C */ BOOL (__stdcall *fpListCheck)(struct D2ControlMsg *);
     /* 0x30 */ BOOL (__stdcall *fpKey)(struct D2ControlMsg *);
     /* 0x34 */ BOOL (__stdcall *fpOnPress)(struct D2ControlMsg *);
-    /* 0x38 */ BOOL (__fastcall *fpDrawAnim)(struct D2ControlStrc *);
+    /* 0x38 */ BOOL (__fastcall *fpHitTest)(struct D2ControlStrc *);
     /* 0x3C */ struct D2ControlStrc * pNext;
 }; __pragma(pack(pop))
 

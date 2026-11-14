@@ -146,11 +146,11 @@ uint32_t __stdcall GetSoundEnv() {
     return (uint32_t)pLevelsTxt->SoundEnv;
 }
 
-int __stdcall SOUNDHDR_GetGlobal0_Unref_004817d0() {
+int __stdcall SOUNDHDR_GetTxtSoundsSize() {
     return nTxtSoundsSize;
 }
 
-int __stdcall SOUNDHDR_GetGlobal0_Unref_004817e0() {
+int __stdcall SOUNDHDR_GetTxtSoundEnvironSize() {
     return nTxtSoundEnvironSize;
 }
 

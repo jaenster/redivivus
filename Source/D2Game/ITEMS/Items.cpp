@@ -10,7 +10,7 @@
 
 namespace D2Game::ITEMS::Items {
 
-void __fastcall FreeItems(::SGAMEDATA * pGame) {
+void __fastcall MISSILES_RemoveAll(::SGAMEDATA * pGame) {
     D2UnitStrc* pNextUnit;
     D2UnitStrc** ppUnitSlot = pGame->pUnitList[4];
     int nRemainingSlots = 0x80;

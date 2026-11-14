@@ -8,7 +8,6 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/AI/AI.h"
@@ -132,7 +131,7 @@ void __fastcall SetUnsetSummonerFlags(D2UnitStrc * pUnit, uint16_t nSummonerFlag
 void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, uint32_t dwParam) {
     D2MonStatsTxt* pMonStatsTxt;
     eD2MonsterAnimMode nUnitMode;
-    D2MonsterKillStrc killData;
+    D2ModeChangeStrc killData;
     if (!pUnit) {
       nUnitMode = Death;
     } else {
@@ -149,7 +148,7 @@ void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, D2UnitStrc
     set_velocity_and_transition:
     D2Common::PATH::DynamicPath::SetVelocities(pUnit->pPath.pDynamicPath, (int)pMonStatsTxt->Velocity << 8, ".\\MONSTER\\Monster.cpp", 0x17f);
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\MONSTER\\Monster.cpp", 0x180);
-    MonsterMode::SetCurrentSkill(pUnit, nUnitMode, &killData);
+    MonsterMode::MONMODE_InitModeChange(pUnit, nUnitMode, &killData);
     killData.nTargetX = nTargetX;
     killData.nTargetY = nTargetY;
     MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killData, 1);
@@ -215,7 +214,7 @@ static inline int dummy_ClampIndex(int nIndex) {
     return nIndex;
 }
 
-void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONSTERAI_RescheduleThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     if (!pUnit) {
       return;
@@ -248,7 +247,7 @@ void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 }
 
-void __fastcall MONSTER_StartAiAndRegenTimers(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONSTER_RemoveAiAndRegenTimers(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
 }
@@ -427,7 +426,7 @@ void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::GetTxtMaxDurability(pItemUnit), 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pItemUnit, UNITSTAT_durability, D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItemUnit), 0);
 }
 
 // Force-kills all living, non-boss, neutral-alignment monsters of class nAltMonClassId or nAltMonClassId2 in the specified level (or all rooms of the act if eLevel==LEVEL_None). For each match, sets the Death skill and executes the lifecycle transition via MONSTERAI_ExecuteLifecycleTransition.
@@ -435,7 +434,7 @@ void __fastcall MONSTER_KillAllInLevel(::SGAMEDATA * pGame, int32_t nAltMonClass
     bool bIsDead;
     D2RoomStrc* pRoom;
     int32_t nMonAlignment;
-    D2MonsterKillStrc killData;
+    D2ModeChangeStrc killData;
     BOOL BVar1;
     D2UnitStrc* pNextUnit;
     D2UnitStrc* pUnit;
@@ -457,7 +456,7 @@ void __fastcall MONSTER_KillAllInLevel(::SGAMEDATA * pGame, int32_t nAltMonClass
             if (!BVar1) {
               nMonAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
               if (!nMonAlignment) {
-                MonsterMode::SetCurrentSkill(pUnit, Death, &killData);
+                MonsterMode::MONMODE_InitModeChange(pUnit, Death, &killData);
                 MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameSaved, &killData, 1);
               }
             }
@@ -787,7 +786,7 @@ BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * 
     MONSTER_FreeAllResources(pGame, pUnit);
     pUnit->nClassId = nMonStatId;
     STRUCT_FillDataMonster(pGame, pRoom, pUnit, dwUnitGUID);
-    D2Common::Units::SetupUpdateFlag(pUnit, nUpdateFlags);
+    D2Common::Units::ChangeAnimMode(pUnit, nUpdateFlags);
     return 1;
 }
 

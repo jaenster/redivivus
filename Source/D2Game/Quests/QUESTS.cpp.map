@@ -452,7 +452,7 @@
         "QUEST_OnMonsterKilled",
         "GetFirstClientOfGame",
         "CLIENTS_GetControlUnit",
-        "GetMonsterNameAndAi",
+        "AIGENERAL_GetOwnerData",
         "FindUnitFromTable",
         "CheckMonsterType",
         "GetBossNo",
@@ -466,7 +466,7 @@
         "int16_t",
         "uint32_t"
       ],
-      "dh": "7f3913c0",
+      "dh": "b689b147",
       "paramStorage": [
         [
           "pGame",
@@ -945,8 +945,8 @@
         "ITEMMODE_DeleteItemFromInventory",
         "INVENTORY_GetItemXPosition",
         "ITEMMODE_TakeItemFromBodyLoc",
-        "ToCursorItem",
-        "CopyInventoryOfPlayerOrFree"
+        "ITEMMODE_RemoveItemIfOnCursor",
+        "INVENTORY_SetCursorItem"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -958,7 +958,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "74c8f07e",
+      "dh": "711b59d1",
       "paramStorage": [
         [
           "pInventory",
@@ -1483,7 +1483,7 @@
       ]
     },
     {
-      "name": "QUEST_DispatchMonsterDeathToQ12",
+      "name": "QUEST_DispatchMonsterCreateToA2Q4",
       "address": "005447a0",
       "lines": [
         {
@@ -1493,16 +1493,16 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "QUEST_DispatchMonsterDeathToQ12",
-        "A2Q4_OnMonsterDeathClass201_NoOp",
-        "A2Q4_OnMonsterDeathClass331_NoOp"
+        "QUEST_DispatchMonsterCreateToA2Q4",
+        "A2Q4_OnJerhynCreated_NoOp",
+        "A2Q4_OnAct2Guard2Created_NoOp"
       ],
       "usedTypes": [
         "D2RoomStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "50655978",
+      "dh": "53ce449a",
       "paramStorage": [
         [
           "pGame",
@@ -1578,7 +1578,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "b5cf4d4a",
+      "dh": "bcac7963",
       "paramStorage": [
         [
           "pGame",
@@ -1589,7 +1589,7 @@
           "EDX:4"
         ],
         [
-          "nQuestItemCode",
+          "dwItemGUID",
           "Stack[0x4]:4"
         ]
       ]
@@ -1661,7 +1661,7 @@
       "calledFunctions": [
         "Objects_InitFn20_TaintedSunAltar",
         "Q11_OnViperAmuletInit",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -1669,7 +1669,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "9808f3e3",
+      "dh": "393444d3",
       "paramStorage": [
         [
           "pInitArg",
@@ -1690,7 +1690,7 @@
       "calledFunctions": [
         "Objects_InitFn15_Malus",
         "Q04_UpdateCainNpcAnimState",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -1698,7 +1698,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "f983dadb",
+      "dh": "7ec60c84",
       "paramStorage": [
         [
           "pInitArg",
@@ -1719,7 +1719,7 @@
       "calledFunctions": [
         "Objects_InitFn07_CainGibbet",
         "Q04_InitializeCainGibbetObject",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -1727,7 +1727,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "163b7aff",
+      "dh": "326f020e",
       "paramStorage": [
         [
           "pInitArg",
@@ -1736,7 +1736,7 @@
       ]
     },
     {
-      "name": "SetTimerByMonsterId",
+      "name": "QUESTS_DispatchObjectEvent",
       "address": "005449e0",
       "lines": [
         {
@@ -1746,19 +1746,19 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "SetTimerByMonsterId",
+        "QUESTS_DispatchObjectEvent",
         "UNITS_GetRoom",
         "Q19_UpdateSewerStairsObject",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
-        "Q33_UpdateFrozenAnyaNpcState",
+        "Q04_UpdateCainPortalInTown",
         "Q33_AnyaTimerCallback",
         "Q32_PrisonerTimerCallback",
         "MakeTownPortalFromScroolTree",
         "BlockHaremRoomForPlayerAccess",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SpawnMonsterAtUnit",
-        "Q35_SpawnAncientsWave",
+        "Q27_SpawnSealBoss",
         "Q04_DropShieldRewards",
         "Q23_TimerCallback_MephistoApproach",
         "Q05_TriggerCountessDeathEffect",
@@ -1776,14 +1776,14 @@
         "eAct",
         "eD2LevelId"
       ],
-      "dh": "88483b34",
+      "dh": "1be493e2",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pObject",
           "EDX:4"
         ]
       ]
@@ -1936,7 +1936,7 @@
       ]
     },
     {
-      "name": "QUEST_GrantActTransitionReward",
+      "name": "QUEST_SetActNpcIntroFlags",
       "address": "00544fa0",
       "lines": [
         {
@@ -1946,7 +1946,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "QUEST_GrantActTransitionReward",
+        "QUEST_SetActNpcIntroFlags",
         "GetPlayerData",
         "INTRONPC_SetSpokenWithNPC_Intro2"
       ],
@@ -1957,7 +1957,7 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "6a0d02f4",
+      "dh": "a467d6d9",
       "paramStorage": [
         [
           "pGame",
@@ -2666,7 +2666,7 @@
         "QUESTS_OpenQuestChest",
         "GetCoords",
         "TXT_Objects_GetLine",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
@@ -2676,7 +2676,7 @@
         "POINT",
         "eD2UnitFlags"
       ],
-      "dh": "25d5e8f2",
+      "dh": "10aa1d75",
       "paramStorage": [
         [
           "pOperation",
@@ -2902,10 +2902,10 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
+        "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "822f9669",
+      "dh": "d3c44955",
       "paramStorage": [
         [
           "pGame",
@@ -2916,11 +2916,11 @@
           "EDX:4"
         ],
         [
-          "eLevelId",
+          "eSourceLevelId",
           "Stack[0x4]:4"
         ],
         [
-          "nEventId",
+          "eDestLevelId",
           "Stack[0x8]:4"
         ]
       ]
@@ -2937,7 +2937,7 @@
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
         "QUEST_SpawnSuperUniqueAtPoint",
-        "MONSTERTBLS_GetPresetActValue",
+        "MONSTERTBLS_MapSuperUniqueId",
         "UNITS_GetRoom",
         "DRLGROOM_FindBetterNearbyRoom",
         "SpawnMonster"
@@ -2949,7 +2949,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "622b0b18",
+      "dh": "3c9b7711",
       "paramStorage": [
         [
           "pGame",
@@ -2964,7 +2964,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "nAct",
+          "nType",
           "Stack[0x8]:4"
         ],
         [
@@ -3307,12 +3307,12 @@
         "ConvertItemCodeToClassIdAndGetItemsTxtLine",
         "GetLevel",
         "ITEM_CreateFromTemplate",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATLIST_SetUnitStat",
         "ITEM_SetItemData_ePage",
         "SERVER_ItemToInventory",
         "CheckItemFlag",
-        "ITEMMODE_ProcessItemSell",
+        "ITEMMODE_IdentifyItem",
         "GetCoords",
         "UNITS_GetRoom",
         "FindSpawnableLocation",
@@ -3330,7 +3330,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c35a5def",
+      "dh": "e43d9cde",
       "paramStorage": [
         [
           "pGame",
@@ -3376,7 +3376,7 @@
         "QUEST_SendQuestInfoToUnit",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x61_CanGoToAct",
-        "QUEST_GrantActTransitionReward",
+        "QUEST_SetActNpcIntroFlags",
         "ForceStartQuest",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -3396,7 +3396,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f894c226",
+      "dh": "920ae84d",
       "paramStorage": [
         [
           "pGame",
@@ -3421,7 +3421,7 @@
       ]
     },
     {
-      "name": "QUEST_HandleKhalimsWillCompletion",
+      "name": "QUEST_HellPortalActChange",
       "address": "00546ac0",
       "lines": [
         {
@@ -3432,13 +3432,13 @@
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
         "Q24_HandleKhalimsWillCompletion",
-        "QUEST_HandleKhalimsWillCompletion",
+        "QUEST_HellPortalActChange",
         "GetPlayerData",
         "GetQuestState",
         "SetQuestState",
         "HasQuestItem",
         "QUEST_RemoveItemFromInventory",
-        "QUEST_GrantActTransitionReward",
+        "QUEST_SetActNpcIntroFlags",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo",
         "NET_D2GS_SERVER_Send_0x61_CanGoToAct"
@@ -3449,11 +3449,11 @@
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "int32_t",
+        "eD2LevelId",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "537acbc3",
+      "dh": "e1e51a7e",
       "paramStorage": [
         [
           "pGame",
@@ -3468,7 +3468,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "nEventCode",
+          "pObject",
           "Stack[0x8]:4"
         ]
       ]
@@ -3827,7 +3827,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "17e1cfc8",
+      "dh": "11e50b9b",
       "paramStorage": [
         [
           "pGame",

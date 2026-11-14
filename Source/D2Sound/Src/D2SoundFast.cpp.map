@@ -23,7 +23,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "f6ad2ed3",
+      "dh": "ef2c5112",
       "paramStorage": [
         [
           "nIndex",
@@ -70,7 +70,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "0da6331d"
+      "dh": "1631157f"
     },
     {
       "name": "SOUND_SetMusicEnabled",
@@ -181,7 +181,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "346893e4"
+      "dh": "567eaca1"
     },
     {
       "name": "SOUND_LoadRegistrySettings",

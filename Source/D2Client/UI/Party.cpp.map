@@ -496,7 +496,7 @@
         "UI_DrawPartyButtons",
         "GetPlayerUnit_UI",
         "memset",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "D2GFX_DrawImage",
         "UNITS_GetRoom",
         "DRLGROOM_IsRoomInTown",
@@ -515,7 +515,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65a26059",
+      "dh": "6defaf64",
       "paramStorage": [
         [
           "pUiParty",
@@ -831,7 +831,7 @@
         "GetLocaleString",
         "STRING_CopyWideString",
         "UNICODE_FormatWideString",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "DRAW_text0",
         "D2GFX_DrawSolidRectExBySize",
         "DRAW_text"
@@ -843,7 +843,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1f80566c",
+      "dh": "9ced29fb",
       "paramStorage": [
         [
           "pRoster",
@@ -879,7 +879,7 @@
         "UI_CalculateCenteredTextXPosition",
         "ROSTER_GetHostileFlag",
         "UI_DrawPartyButtonTextWithTooltip",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "ROSTER_GetLootFlag",
         "ROSTER_GetListenFlag",
         "ROSTER_GetMuteFlag",
@@ -895,7 +895,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0268c6f6"
+      "dh": "4907216e"
     },
     {
       "name": "ClickParty_II",
@@ -911,14 +911,14 @@
         "ClickParty_II",
         "ROSTER_ToggleHostileAndSend",
         "ROSTER_GetHostileFlag",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "ROSTER_ToggleLootAndSend",
         "ROSTER_GetLootFlag",
         "ROSTER_ToggleListenAndSend",
         "ROSTER_GetListenFlag",
         "ROSTER_ToggleMuteAndSend",
         "ROSTER_GetMuteFlag",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "GetRosterName"
       ],
       "usedTypes": [
@@ -927,7 +927,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0174e125",
+      "dh": "aadcec70",
       "paramStorage": [
         [
           "eButtonType",

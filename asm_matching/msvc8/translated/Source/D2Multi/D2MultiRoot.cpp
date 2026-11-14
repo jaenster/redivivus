@@ -23,7 +23,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndShowLadder(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-BOOL __stdcall CHATDLG_Unused2(D2ControlMsg * pControlMsg) {
+BOOL __stdcall CHATDLG_OnPressDestroyAllForms(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_DestroyAllForms();
     return 1;
 }

@@ -38,7 +38,7 @@ void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, struct D2UnitStrc * pU
 int32_t __fastcall PLRMODES_ModeCallback_DeathDead(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 int32_t __fastcall PLRMODES_ModeCallback_Neutral(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2);
 void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nModeIndex, struct D2UnitStrc * pTargetUnit);
-void __fastcall PLRMODES_SetMoveTargetPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nLevel, int32_t nPosX, int32_t nPosY);
+void __fastcall PLRMODES_SetMoveTargetPosition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2PlayerAnimMode eMode, int32_t nPosX, int32_t nPosY);
 void __fastcall SERVERUNIT_GoldAmmountForDeadBody(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pDeadBody, uint32_t nGoldAmmount, uint32_t nGoldPileCount);
 // @sourcefile .\PLAYER\PlrModes.cpp
 struct D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nX, int32_t nY, struct D2UnitStrc * pRoom);

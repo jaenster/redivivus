@@ -219,14 +219,14 @@
         "Q12_OnJournalActivate",
         "IteratePlayerOrMonsterUnits",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector"
       ],
       "usedTypes": [
         "D2QuestDataA2Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "009fc336",
+      "dh": "c0e4a046",
       "paramStorage": [
         [
           "pQuestData",
@@ -523,7 +523,7 @@
       ]
     },
     {
-      "name": "A2Q4_OnMonsterDeathClass201_NoOp",
+      "name": "A2Q4_OnJerhynCreated_NoOp",
       "address": "0059b6c0",
       "lines": [
         {
@@ -533,9 +533,9 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "A2Q4_OnMonsterDeathClass201_NoOp"
+        "A2Q4_OnJerhynCreated_NoOp"
       ],
-      "dh": "da4cb2d3",
+      "dh": "a4395a80",
       "paramStorage": [
         [
           "dwArg1",
@@ -548,7 +548,7 @@
       ]
     },
     {
-      "name": "A2Q4_OnMonsterDeathClass331_NoOp",
+      "name": "A2Q4_OnAct2Guard2Created_NoOp",
       "address": "0059b6d0",
       "lines": [
         {
@@ -558,9 +558,9 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "A2Q4_OnMonsterDeathClass331_NoOp"
+        "A2Q4_OnAct2Guard2Created_NoOp"
       ],
-      "dh": "1b2398d0",
+      "dh": "45e69b40",
       "paramStorage": [
         [
           "dwArg1",
@@ -648,14 +648,14 @@
       "calledFunctions": [
         "Objects_InitFn30_HaremBlocker",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
       ],
-      "dh": "37c67feb",
+      "dh": "b576c4be",
       "paramStorage": [
         [
           "pInitArg",
@@ -664,7 +664,7 @@
       ]
     },
     {
-      "name": "Q14_CheckDurielProximity",
+      "name": "Q12_CheckDistanceToHaremBlocker",
       "address": "0059b820",
       "lines": [
         {
@@ -674,7 +674,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
-        "Q14_CheckDurielProximity",
+        "Q12_CheckDistanceToHaremBlocker",
         "GetPlayerData",
         "GetQuestState",
         "GetQuestDataByQuestNoInternal",
@@ -688,7 +688,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "17cdab50",
+      "dh": "3f7600fb",
       "paramStorage": [
         [
           "pGame",
@@ -806,7 +806,7 @@
       "namespace": "D2Game::Quests::QUESTS::A2Q4",
       "calledFunctions": [
         "OBJOP_A2Q4_ReadHorazonsJournal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "GetQuestDataByQuestNoInternal",
@@ -821,7 +821,7 @@
         "D2QuestDataA2Q4Strc",
         "D2RoomStrc"
       ],
-      "dh": "121ba271",
+      "dh": "74654e3b",
       "paramStorage": [
         [
           "pOperation",
@@ -843,7 +843,7 @@
         "Objects_InitFn29_ArcaneSanctuaryPortal",
         "GetQuestDataByQuestNoInternal",
         "DRLGROOM_GetLevelIdFromRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -855,7 +855,7 @@
         "D2UnitStrc",
         "eD2LevelId"
       ],
-      "dh": "b398e8eb",
+      "dh": "4e232f3b",
       "paramStorage": [
         [
           "pInitArg",

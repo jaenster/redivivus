@@ -68,7 +68,7 @@ void __stdcall LoadingsScreen() {
       sprintf(szPath, "%s\\UI\\Loading\\Loadingscreen", "DATA\\GLOBAL");
     }
 
-    gnLoadedActIndex = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
+    gpLoadingScreenDC6 = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
     gnLoadScreenAnimFrame = 0;
     gnLastOpenPanelId = 1;
     GAME::Msg::LOADING_SetProgressRatio(0, 0);
@@ -95,9 +95,9 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
       D2Win::Src::D2WinPalette::DRAW_SetOrReloadPalleteMain();
       bSceneBegun = D2gfx::D2GFX::D2GFX_BeginScene(1, 0, 0, 0);
       if (bSceneBegun) {
-        if (!gnLoadedActIndex) {
+        if (!gpLoadingScreenDC6) {
           LoadingsScreen();
-          if (!gnLoadedActIndex) {
+          if (!gpLoadingScreenDC6) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19c2);
             exit(-1);
           }
@@ -117,12 +117,12 @@ void __fastcall Draw_UI_LoadGame(int32_t bAdvanceFrame) {
           }
         }
 
-        nResult = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(gnLoadedActIndex);
+        nResult = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(gpLoadingScreenDC6);
         if (gnLoadScreenAnimFrame >= nResult) {
           gnLoadScreenAnimFrame = nResult - 1;
         }
 
-        sLoadGfx.pDC6 = gnLoadedActIndex;
+        sLoadGfx.pDC6 = gpLoadingScreenDC6;
         sLoadGfx.nFrameNumber = gnLoadScreenAnimFrame;
         sLoadGfx.nDirection = 0;
         D2gfx::D2GFX::D2GFX_DrawImage(&sLoadGfx, ui::ScreenSizeX / 2 - 0x80, Inv::ScreenSizeY / 2 + 0x80, -1, DRAW_SOLID, nullptr);

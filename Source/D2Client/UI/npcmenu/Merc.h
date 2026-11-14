@@ -104,7 +104,7 @@ namespace D2Client::UI::npcmenu::Merc {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __fastcall AddMercForHireToGlobalList(struct D2GSPacketSrv0x4E * pPacket);
 void __fastcall NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST(char * pBytes);
-struct D2BitBufferStrc * __stdcall NPCMENU_GetMercHireCost();
+struct D2BitBufferStrc * __stdcall NPCMENU_GetGameQuestRecord();
 void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId);
 void __fastcall NPCMENU_MercItemFoundCb(struct D2UnitStrc * pUnit);
 void __fastcall NPCMENU_HandleMercListPacket(struct D2GSPacketSrv0x8A * pPacket);

@@ -320,14 +320,14 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
     return 1;
 }
 
-BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+BOOL __fastcall SKILLBAR_Callback_FindTargetForTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int eMonsterUnitType;
     uint32_t eMonsterQuestId;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
-    BOOL bCorpseConsumed = SkillsServer::D2CheckCorpseConsumed(pUnit, 0xc);
+    BOOL bCorpseConsumed = SkillsServer::SKILLS_CanSwitchAi(pUnit, 0xc);
     if (!bCorpseConsumed) {
       return 0;
     }
@@ -337,7 +337,7 @@ BOOL __fastcall SKILL_CheckCorpseCanBeConsumed(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    Ai::AiGeneral::GetMonsterNameAndAi(pUnit, &eMonsterQuestId, &eMonsterUnitType);
+    Ai::AiGeneral::AIGENERAL_GetOwnerData(pUnit, &eMonsterQuestId, &eMonsterUnitType);
     if (!(eMonsterQuestId == -1 || eMonsterUnitType)) {
       return 0;
     }
@@ -374,8 +374,8 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
     ::SGAMEDATA* pGame2 = pGame;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2UnitStrc* pTargetUnit = pTarget;
-    if (!pTarget || (nAuraStatIdx = SKILL_CheckCorpseCanBeConsumed(pGame2, pTarget) , !nAuraStatIdx) || (_bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame2, pUnit, pTarget) , !_bCanAttack)) {
-      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit(pGame2, pUnit, 0x14, SKILL_CheckCorpseCanBeConsumed);
+    if (!pTarget || (nAuraStatIdx = SKILLBAR_Callback_FindTargetForTaunt(pGame2, pTarget) , !nAuraStatIdx) || (_bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame2, pUnit, pTarget) , !_bCanAttack)) {
+      pTarget = SkillsServer::SKILLS_ApplyAreaHitAtUnit(pGame2, pUnit, 0x14, SKILLBAR_Callback_FindTargetForTaunt);
       pTargetUnit = pTarget;
     }
     if (!pTarget) {
@@ -428,7 +428,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 
     Monster::AI::SetDwArgsIfNotNeg0x29a(pMonsterAi, -0x29a, -0x29a, -0x29a);
-    Monster::AI::MONSTERAI_SetTargetUnit(pTarget, nullptr);
+    Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pTarget, nullptr);
     ::SGAMEDATA* pGameCopy = pGame2;
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame2, pTarget, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGameCopy, pTarget, 2, pGameCopy->dwGameFrame + 1, 0, 0);
@@ -754,14 +754,14 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
     return bHitResult;
 }
 
-void __fastcall SKILLBAR_OnWarCryExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
+void __fastcall SKILLBAR_StateCallback_Whirlwind(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int32_t nRemoveFlag = 1;
     eD2States eExpireState = eState;
     UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nRemoveFlag, eExpireState);
     BOOL bIsAlive = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsAlive) {
       uint32_t bStateActive;
-      bStateActive = D2Common::DATATBLS::ItemStats::STATES_IsStateActive(pUnit, eState);
+      bStateActive = D2Common::DATATBLS::ItemStats::STATES_DoesStateStayOnDeath(pUnit, eState);
       if (bStateActive) {
         return;
       }
@@ -823,30 +823,30 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     uSlot18.nCollisionPattern = eUnitType == UNIT_PLAYER ? 0x1c09 : 0x3c01;
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, 0xc01);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, 0xc01);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 7);
     uint32_t bPathOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     if (!bPathOk) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, uSlot18.nCollisionPattern);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, uSlot18.nCollisionPattern);
       return 0;
     }
 
     int32_t nLine = 0x3d9;
     char* pSkillAssTable = ".\\SKILLS\\SkillBar.cpp";
     D2Common::PATH::DynamicPath::SetVelocities(pDynPath, SkillsServer::SKILLS_GetUnitWalkVelocity(pUnit), pSkillAssTable, nLine);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, 0x401);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, 0x401);
     int32_t nCalcResult = D2Common::PATH::DynamicPath::GetPathPoint(pDynPath, &pPathPoints);
     if (nCalcResult <= 0) {
       UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynPath, uSlot18.nCollisionPattern);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, uSlot18.nCollisionPattern);
       return 0;
     }
 
     nTargetX = (uint32_t)pPathPoints[nCalcResult - 1].nX;
     nTargetY = (uint32_t)pPathPoints[nCalcResult - 1].nY;
     int eCollisionFlag = eUnitType == UNIT_PLAYER ? 0x80 : 0x100;
-    eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
+    eD2CollisionShapeType nType = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
     uint32_t nCollideX = nTargetX;
     uint32_t nCollideY = nTargetY;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -874,7 +874,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     sStateArgs.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
     sStateArgs.eStat = ~UNITSTAT_strength;
     sStateArgs.eAuraState = (eD2States)pSkillsTxt->aurastate;
-    sStateArgs.pFunction = SKILLBAR_OnWarCryExpire;
+    sStateArgs.pFunction = SKILLBAR_StateCallback_Whirlwind;
     D2StatListExStrc* pStatsEx = SkillsServer::SetStateWithExpiryTime(&sStateArgs);
     if (!pStatsEx) {
       return 0;
@@ -994,11 +994,11 @@ void __fastcall SKILL_DeactivateAndRestoreCollision(::SGAMEDATA * pGameStrc, D2U
     bool bIsPlayerUnit = pUnit->eUnitType == UNIT_PLAYER;
     int eCollisionFlag = bIsPlayerUnit ? 0x80 : 0x100;
     if (nCollideX && nCollideY) {
-      D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nCollideX, nCollideY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), eCollisionFlag);
+      D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nCollideX, nCollideY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), eCollisionFlag);
     }
 
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, eCollisionFlag);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, bIsPlayerUnit ? 0x1c09 : 0x3c01);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, bIsPlayerUnit ? 0x1c09 : 0x3c01);
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
@@ -1271,7 +1271,7 @@ static BOOL __stdcall SKILLBAR_FindValidLeapTarget(D2UnitStrc * pUnit, int32_t n
       nY = sCandidatePos.y;
       LVar1 = sCandidatePos.x;
       if (pRoom) {
-        nRange = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, LVar1, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x1c09);
+        nRange = D2Common::Collision::CheckCollision_BlockPlayer_Type(pRoom, LVar1, nY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x1c09);
         if (!nRange) {
           bHasLOS = D2Common::Skills::SKILLS_HasLineOfSight(nSrcX, nSrcY, LVar1, nY, pRoom, 0x804);
           if (bHasLOS) {
@@ -1312,7 +1312,7 @@ static void __stdcall SKILLBAR_InitChargeTarget(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    Monsters::MONSTER_RecalculateCombatStats(pUnit, 4);
+    Monsters::MONSTER_RecalculateCombatStats(pUnit, eD2MonsterAnimMode_ns::Attack1);
     Monsters::MONSTER_AttackTarget(pUnit, pGame);
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pUnit2, 0);
     D2Common::Skills::SKILL_SetParam3(pSkill, pUnit2->eUnitType);
@@ -1441,7 +1441,7 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
     uint32_t nDestYSaved = nDestY;
     pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), eSkill, nDestYSaved);
-    D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
+    D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x80);
     UNIT::SUnit::SetUninterruptableState(pUnit, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 1);
     D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
@@ -1468,7 +1468,7 @@ static BOOL __stdcall SKILL_InitTransportPath(D2SkillStrc * pSkill, D2UnitStrc *
     }
 
     D2Common::Skills::SKILL_SetFlags(pSkill, 0x1101);
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0);
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
     int32_t nDestX = D2Common::Skills::SKILL_GetParam1(pSkill);
     int32_t nDestY = D2Common::Skills::SKILL_GetParam2(pSkill);
@@ -1541,7 +1541,7 @@ static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
 }
 
 // Called each server tick while a charging unit (player or monster) is en route to its charge destination. Reads target (nX, nY) from skill params 1/2. If the unit has reached the target: removes old collision, restores normal collision type and path type, fires UNITEVENTCALLBACK_ENDANIM, schedules a follow-up event, and sends a 0xA5 packet with the current skill ID. Special cases: Baal (monBaseId 0x4E) calls SKILLBAR_CalculateChargePath instead; Iron Golem (0x21C) adjusts sequence frame based on remaining distance. If not yet at target, advances the sequence frame (monsters) or resets the anim timer (players). Returns 1 when arrival is processed, 0 otherwise.
-static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
+static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
     int nUnitX;
     int32_t nCollisionWidth;
     uint32_t nDist;
@@ -1576,9 +1576,9 @@ static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2Skill
       nCollisionWidth = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       if (nCollisionWidth == nY) {
         if (!bIsNotMonster) {
-          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x100);
+          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x100);
           D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x100);
-          D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0x3c01);
+          D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0x3c01);
           D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 2);
           if (nMonBaseId == 0x4e) {
             SKILLBAR_CalculateChargePath(pGame, nX, nY, pUnit, pSkill);
@@ -1587,9 +1587,9 @@ static BOOL __stdcall SKILLBAR_ArriveAtChargeTarget(::SGAMEDATA * pGame, D2Skill
             pUnit->nFrameCount = (pUnit->nFrameCount & 0xffffff00U) - 0x100;
           }
         } else {
-          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x80);
+          D2Common::Collision::RemoveCollision_Type(pRoom, nX, nY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x80);
           D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0x80);
-          D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0x1c09);
+          D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0x1c09);
           D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 7);
           D2Common::Skills::SKILL_SetFlags(pSkill, 0x200);
           GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
@@ -1643,7 +1643,7 @@ BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUni
     uint32_t nFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (nFlags & 0x100) {
       int32_t nAoeRange;
-      bArrived = SKILLBAR_ArriveAtChargeTarget(pGame, pSkill, pUnit);
+      bArrived = SKILLBAR_UpdateLeap(pGame, pSkill, pUnit);
       if (bArrived && eUnitType != UNIT_MONSTER) {
         memset(&sDamage, 0, 0x70);
         sDamage.wResultFlags = 9;
@@ -1731,7 +1731,7 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
       D2RoomStrc* pRoom;
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
       if (pRoom) {
-        nWidth = D2Common::PATH::DynamicPath::GetUnitWidth(pUnit);
+        nWidth = D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit);
         D2Common::Collision::AddCollision_Type(pRoom, eSkill, nDestY, nWidth, 0x80);
         UNIT::SUnit::SetUninterruptableState(pUnit, 1);
         D2Common::Skills::SKILL_SetParam1(pSkill, eSkill);
@@ -1830,7 +1830,7 @@ BOOL __fastcall Skills_SrvDoFunc_078_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc 
     uint32_t nFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (nFlags & 0x100) {
       D2UnitStrc* pNextTarget;
-      bArrived = SKILLBAR_ArriveAtChargeTarget(pGame, pSkill, pUnit);
+      bArrived = SKILLBAR_UpdateLeap(pGame, pSkill, pUnit);
       if (bArrived) {
         pNextTarget = SKILLBAR_AcquireNextTarget(pGame, pUnit, pSkill);
         if (!pNextTarget) {

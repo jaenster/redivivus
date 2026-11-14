@@ -3,6 +3,7 @@
 #include "Source/D2Game/Quests/QUESTS/A2Q6.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Game/D2ObjectInitFnArg.h"
@@ -758,7 +759,7 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     if (pDurielRoom->bTyraelObjectPresent) {
       pUnit = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pDurielRoom->nTyraelObjectGUID);
       if (pUnit) {
-        D2Common::Units::SetupUpdateFlag(pUnit, 1);
+        D2Common::Units::ChangeAnimMode(pUnit, 1);
         int t2_c13 = pUnit->nClassId;
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(t2_c13);
         GAME::Event::SetEvent(pQuestData->pGame, pUnit, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
@@ -1146,9 +1147,9 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
           nObjectsReady = 1;
           if (pDVar1->eAnimMode.ePlayerMode == Death) {
             if (pQuestSpecific->nStateResumeFlag) {
-              D2Common::Units::SetupUpdateFlag(pDVar1, 2);
+              D2Common::Units::ChangeAnimMode(pDVar1, 2);
             } else {
-              D2Common::Units::SetupUpdateFlag(pDVar1, 1);
+              D2Common::Units::ChangeAnimMode(pDVar1, 1);
               pOrificeTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pDVar1->nClassId);
               GAME::Event::SetEvent(pQuestData->pGame, pDVar1, 1, (pOrificeTxt->FrameCnt[1] >> 8) + pQuestData->pGame->dwGameFrame, 0, 0);
             }
@@ -1166,9 +1167,9 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
             if (pUnit) {
               nObjectsReady++;
               if (pQuestSpecific->nStateResumeFlag) {
-                D2Common::Units::SetupUpdateFlag(pUnit, 2);
+                D2Common::Units::ChangeAnimMode(pUnit, 2);
               } else {
-                D2Common::Units::SetupUpdateFlag(pUnit, 1);
+                D2Common::Units::ChangeAnimMode(pUnit, 1);
                 D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pDVar1), 1);
                 D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pNearbyRoom, 1);
               }
@@ -1231,21 +1232,21 @@ void __fastcall Objects_InitFn37(D2ObjectInitFnArg * pInitArg) {
 
       pA2Q6Data->nChamberObjectGUID = nObjectGUID;
       if (pQuestData->bIsNotIntroduction == '\0') {
-        D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+        D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
         return;
       }
       if (pA2Q6Data->bPortalCreated != 1) {
         if (pA2Q6Data->field_0xD == 1) {
-          D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+          D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
           return;
         }
 
-        D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 0);
+        D2Common::Units::ChangeAnimMode(pInitArg->pObject, 0);
         return;
       }
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 // Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
@@ -1266,11 +1267,11 @@ void __fastcall Objects_InitFn38_TyraelsDoor(D2ObjectInitFnArg * pInitArg) {
 
     pDVar1->nTyraelObjectGUID = nObjectGUID;
     if (pDVar2->bIsNotIntroduction == '\0') {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pDVar1->nDurielState);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pDVar1->nDurielState);
 }
 
 // Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
@@ -1307,11 +1308,11 @@ void __fastcall Objects_InitFn21_HoradricOrifice(D2ObjectInitFnArg * pInitArg) {
     } else if (!pQuestSpecificData->bPortalCreated) {
       AddQuestTimer(pQuestData, Q14_TimerCreatePortal, 1);
       pQuestSpecificData->bPortalTimerArmed = 1;
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
@@ -1373,7 +1374,7 @@ BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation)
       }
 
       UNIT::SUnit::ClearInteractInfo(pOperation->pAttacker);
-      D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 2);
+      D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 2);
       return 0;
     }
 
@@ -1397,7 +1398,7 @@ BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation)
     }
 
     UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nOrificeGUID);
-    D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+    D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
     pInteractedNpc = pOperation->sArg.pVictim;
     sPacket.nPacketId = 'X';
     uint32_t nUnitGUIDValue;
@@ -1449,7 +1450,7 @@ void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       pA2Q4Data->bPortalTimerArmed = 1;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit2, 1);
+    D2Common::Units::ChangeAnimMode(pUnit2, 1);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x686);

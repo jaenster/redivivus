@@ -112,7 +112,7 @@
       ]
     },
     {
-      "name": "UpdateGameInfo",
+      "name": "PLAYERSTATS_LevelUp",
       "address": "00570880",
       "lines": [
         {
@@ -122,15 +122,15 @@
       ],
       "namespace": "D2Game::UNIT::SUnitMsg",
       "calledFunctions": [
-        "UpdateGameInfo",
+        "PLAYERSTATS_LevelUp",
         "SERVER_GetUnitStat",
         "STATSEX_GetCurrentStat",
         "DATATBLS_GetLevelFromExperience",
         "STATLIST_SetUnitStat",
         "TXT_Experience_GetLineLevel",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "STATLIST_AddUnitStat",
         "SUNITPROXY_RefreshGambleForAllNpcs",
         "SetupUpdateEvent_AttachEventSound",
@@ -148,7 +148,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "928038f4",
+      "dh": "bc2e3e80",
       "paramStorage": [
         [
           "pGame",
@@ -311,7 +311,7 @@
         "thunk_UNIT_GetStateList_StateFlags",
         "memcpy",
         "InitBitBuffer",
-        "SMemSizeClassBucketLookup",
+        "FOG_GetLowestSetBitIndex",
         "GetNextPositon",
         "WriteValueToBitBuffer",
         "GetStatsByState",
@@ -333,7 +333,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e3c0ac2a",
+      "dh": "7e6d2bc5",
       "paramStorage": [
         [
           "pUnit",
@@ -359,7 +359,7 @@
         "PLAYER_SendStateDeltaToClient",
         "STATES_AssertGetGfxFlags",
         "memcpy",
-        "SMemSizeClassBucketLookup",
+        "FOG_GetLowestSetBitIndex",
         "UNIT_GetUnitState",
         "NET_D2GS_SERVER_Send_0xA9_UNITSTATE_OFF_EX",
         "GetStatsByState",
@@ -386,7 +386,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "53bd2265",
+      "dh": "d201ba2a",
       "paramStorage": [
         [
           "pUnit",
@@ -1060,7 +1060,7 @@
         "CLIENTS_GetControlUnit",
         "NET_D2GS_SERVER_Send_0x59_AssignPlayer",
         "CheckForModeZeroDeath",
-        "STATES_HasLightState",
+        "STATES_HasHideFlagState",
         "NET_D2GS_SERVER_Send_0xAC_AddMonster",
         "STATLIST_SetUnitStat",
         "MONSTER_GetUnitData_AiGeneral_Offset0x3C",
@@ -1084,7 +1084,7 @@
         "SendInitUpdateAttributes",
         "UNIT_GetUnitState",
         "PLAYER_SendAllItemsToClient",
-        "INVENTORY_GetCursorItemGUID",
+        "INVENTORY_GetOwnerGUID",
         "FindUnitFromTable",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -1108,7 +1108,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2cb012bc",
+      "dh": "4105ec69",
       "paramStorage": [
         [
           "pGame",

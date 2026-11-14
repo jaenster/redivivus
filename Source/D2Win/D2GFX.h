@@ -26,7 +26,7 @@ namespace D2Win::D2GFX {
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode);
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB);
 BOOL __stdcall UI_Init();
-BOOL __stdcall D2GFX_CheckVideoMode();
+BOOL __stdcall D2GFX_ShutdownSpriteCacheAndWindow();
 // The whole body is two instructions - MOV dword ptr [gnResolutionMode],0x0 then
 // JMP 004f5d60 - i.e. it forces resolution mode 0 and tail-calls the dispatcher. It is the
 // entry point the cutscene players use (PlaysBlizzardNorthCutScene, UIMENU_PlayCutScene,

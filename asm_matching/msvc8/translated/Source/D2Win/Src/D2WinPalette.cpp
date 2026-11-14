@@ -114,7 +114,7 @@ void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
 }
 
 uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
-    uint8_t bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)nRed, (uint32_t)nGreen, (uint32_t)nBlue);
+    uint8_t bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)nRed, (uint32_t)nGreen, (uint32_t)nBlue);
     return bVar1;
 }
 
@@ -224,9 +224,9 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
         uAlphaR = 0xff;
       }
 
-      bVar2 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, nText1 & 0xff, (uint8_t)uAlphaG, (uint8_t)uAlphaR);
+      bVar2 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex(MostLikelyCurrentPalletePtr, 0x100, nText1 & 0xff, (uint8_t)uAlphaG, (uint8_t)uAlphaR);
       gPaletteMenuInGame[nPaletteIdx] = bVar2;
-      bVar2 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)((PALETTEENTRY*)(pSrcBytes - 2))->peRed, 0, 0);
+      bVar2 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)((PALETTEENTRY*)(pSrcBytes - 2))->peRed, 0, 0);
       gPaletteDataMenuInGame[nPaletteIdx] = bVar2;
       nPaletteIdx++;
       pSrcBytes += 4;
@@ -269,7 +269,7 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
     return 1;
 }
 
-void __fastcall D2WINPAL_SetGammaRamp(uint32_t bCompactLineSpacingMode) {
+void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(uint32_t bCompactLineSpacingMode) {
     D2WinTextBox::gbCompactLineSpacingMode = bCompactLineSpacingMode;
 }
 

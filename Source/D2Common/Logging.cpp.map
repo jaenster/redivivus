@@ -4,7 +4,7 @@
   "file": "Source/D2Common/Logging.cpp",
   "functions": [
     {
-      "name": "SPRITECACHE_SetMaxSize_Unref_00624700",
+      "name": "D2COMMON_Set_gpItemTypeTableContext",
       "address": "00624700",
       "lines": [
         {
@@ -14,9 +14,9 @@
       ],
       "namespace": "D2Common::Logging::Logging",
       "calledFunctions": [
-        "SPRITECACHE_SetMaxSize_Unref_00624700"
+        "D2COMMON_Set_gpItemTypeTableContext"
       ],
-      "dh": "544eec17",
+      "dh": "e0b4be4c",
       "paramStorage": [
         [
           "nSize",

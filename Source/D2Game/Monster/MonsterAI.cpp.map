@@ -352,7 +352,7 @@
       "namespace": "D2Game::Monster::MonsterAI",
       "calledFunctions": [
         "NpcState_MoveState0To1",
-        "Init"
+        "SUNITNPC_OnInteractHeal"
       ],
       "usedTypes": [
         "D2MonsterAiStrc",
@@ -360,7 +360,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "1cf02285",
+      "dh": "17795a7a",
       "paramStorage": [
         [
           "pGame",

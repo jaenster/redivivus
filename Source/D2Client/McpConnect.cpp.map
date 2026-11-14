@@ -4,7 +4,7 @@
   "file": "Source/D2Client/McpConnect.cpp",
   "functions": [
     {
-      "name": "MCPCONNECT_SetMessageCallback_Unref_0044b1f0",
+      "name": "MCPCONNECT_SetMCPCallback1",
       "address": "0044b1f0",
       "lines": [
         {
@@ -14,12 +14,12 @@
       ],
       "namespace": "D2Client::McpConnect",
       "calledFunctions": [
-        "MCPCONNECT_SetMessageCallback_Unref_0044b1f0"
+        "MCPCONNECT_SetMCPCallback1"
       ],
       "usedTypes": [
         "pfnMCPMessage"
       ],
-      "dh": "eb061320",
+      "dh": "832df37a",
       "paramStorage": [
         [
           "pfnCallback",
@@ -28,7 +28,7 @@
       ]
     },
     {
-      "name": "MCPCONNECT_SetMessageCallback_Unref_0044b200",
+      "name": "MCPCONNECT_SetMCPCallback2",
       "address": "0044b200",
       "lines": [
         {
@@ -38,12 +38,12 @@
       ],
       "namespace": "D2Client::McpConnect",
       "calledFunctions": [
-        "MCPCONNECT_SetMessageCallback_Unref_0044b200"
+        "MCPCONNECT_SetMCPCallback2"
       ],
       "usedTypes": [
         "pfnMCPMessage"
       ],
-      "dh": "4541c110",
+      "dh": "e641d7f3",
       "paramStorage": [
         [
           "pfnCallback",

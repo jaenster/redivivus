@@ -349,7 +349,7 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName, wszText);
 }
 
-uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
+uint32_t __fastcall MONSTER_CanBeInTown(D2UnitStrc * pUnit) {
     D2MonStatsTxt* pMonStatsTxt = nullptr;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       int pMonData = pUnit->nClassId;
@@ -370,7 +370,7 @@ uint32_t __fastcall MONSTER_IsBossOrChampion(D2UnitStrc * pUnit) {
     return (uint32_t)((int)pUnit->eUnitFlags < 0);
 }
 
-BOOL __stdcall MONSTER_IsAndarielNormal(D2UnitStrc * pUnit, int32_t nParam) {
+BOOL __stdcall MONSTER_IsSandLeaper(D2UnitStrc * pUnit, int32_t nParam) {
     int nBaseId;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       nBaseId = -1;

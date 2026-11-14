@@ -546,7 +546,7 @@ char s___AUSGAMEDATA___0070f56c[16] = {
 // also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
 _RTL_CRITICAL_SECTION gHostGameStateCs = {0}; D2_GLOBAL_GUARD(gHostGameStateCs, "D2Client::GAME::Game::gHostGameStateCs");
 
-HACCEL gbLanguageDllLoaded = nullptr; D2_GLOBAL_GUARD(gbLanguageDllLoaded, "D2Client::GAME::Game::gbLanguageDllLoaded");
+HACCEL ghAccelTable = nullptr; D2_GLOBAL_GUARD(ghAccelTable, "D2Client::GAME::Game::ghAccelTable");
 
 // =============================================================================
 // Initialized scalars

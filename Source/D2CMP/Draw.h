@@ -70,7 +70,7 @@ struct __attribute__((packed)) tagRGBQUAD {
 namespace D2CMP::Draw {
 
 // Function declarations
-uint8_t __stdcall D2GFX_GetColorWithAlphaFromPallete(LPPALETTEENTRY pPallete, uint32_t nAlpha, int32_t nRed, int32_t Green, int32_t nBlue);
+uint8_t __stdcall D2GFX_FindNearestPaletteIndex(LPPALETTEENTRY pPallete, uint32_t nPaletteSize, int32_t nRed, int32_t nGreen, int32_t nBlue);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 void __fastcall DRAW_ConvertPaletteRGBtoHSL(struct D2HSLColorStrc * pHSLOut, uint8_t * pRGBIn);

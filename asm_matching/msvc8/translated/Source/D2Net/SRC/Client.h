@@ -1349,7 +1349,7 @@ namespace D2Net { namespace SRC { namespace Client {
 
 // Function declarations
 // Gets client connection timeout value from gnNetConnectionTimeoutMs. Thread-safe read via critical section. Returns 1 for singleplayer, 0 if no packet buffer.
-int32_t __stdcall NET_CLIENT_GetConnectionTimeout();
+int32_t __stdcall NET_CLIENT_IsConnected();
 // @sourcefile .\SRC\Client.cpp
 void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType, char * szIpAddress);
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
@@ -1361,7 +1361,7 @@ uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t U
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Net)
 // Sets client connection timeout value in gnNetConnectionTimeoutMs. Thread-safe update via critical section. Only applies to non-singleplayer modes.
-void __fastcall NET_CLIENT_SetConnectionTimeout(int32_t nTimeoutMs);
+void __fastcall NET_CLIENT_SetConnected(int32_t bConnected);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadParam);
 // @sourcefile .\SRC\Client.cpp

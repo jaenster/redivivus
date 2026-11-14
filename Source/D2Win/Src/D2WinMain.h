@@ -20,6 +20,7 @@ struct D2UIMouseMsgStrc;
 struct D2WinEditBox;
 struct DC6;
 struct FORMS_PredefinedFormStrc;
+typedef uint32_t eD2FormType;
 typedef uint32_t eD2RendererMode;
 #ifndef RECON_FPTD_pfnFramePump
 #define RECON_FPTD_pfnFramePump
@@ -114,10 +115,10 @@ void __stdcall RENDERER_DrawOutOfGameScene();
 void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible);
 void __stdcall SetUnsetFlag0x08(struct D2ControlStrc * pControl, int32_t bSet);
 // Sets pFormFourth global to the specified control
-void __stdcall D2WINMAIN_SetFormFourth(struct D2ControlStrc * pControl);
+void __stdcall CONTROL_SetEscapeButton(struct D2ControlStrc * pButton);
 BOOL __stdcall FORMS_SetGlobalFormImage(struct D2ControlStrc * pControl, int32_t nInitialFormState);
 // Returns first element from linked list (dereferences pointer if non-null)
-void * __stdcall D2WINMAIN_GetFirstElement(void * * ppHead);
+eD2FormType __stdcall CONTROL_GetType(struct D2ControlStrc * pControl);
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression);
 BOOL __stdcall FreeInGameGFX();
 void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
@@ -125,7 +126,7 @@ void __stdcall MessagePump(pfnFramePump pfnFrameCallback);
 void __stdcall TakeScreenshot();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
-BOOL __stdcall D2WINMAIN_ClearMessageLoopFlag_Unref_004f5020();
+BOOL __stdcall D2WINMAIN_ClearCurrentRenderedFunctions();
 ::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox();
 BOOL __stdcall FORMS_AddControlToGlobalList(struct D2ControlStrc * pControl);
 BOOL __fastcall FORMS_AppendFormToDestroyQueue(struct D2ControlStrc * pControl);
@@ -141,9 +142,9 @@ void __stdcall DRAW_UI_Sprites();
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam);
 int __fastcall Unreferenced_004f9b30(struct D2ControlStrc * param_1);
 void __stdcall INPUT_FormKeyHandler(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall INPUT_FormKeyUpHandler(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall INPUT_FormActivate(struct D2UIMouseMsgStrc * pMsg);
-void __stdcall INPUT_FormDeactivate(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INPUT_FormKeyDownHandler(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INPUT_CtrlKeyDown(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INPUT_CtrlKeyUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_HandleSystemCommand(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_HandleActivation(struct D2UIMouseMsgStrc * pMsg);
 // @sourcefile .\Src\D2WinMain.cpp
@@ -152,13 +153,13 @@ void __stdcall D2WIN_ToggleMusicOptions(struct D2UIMouseMsgStrc * pMsg);
 struct D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(struct D2ControlStrc * pControl1, struct D2ControlStrc * pControl2);
 void __stdcall INPUT_FormMouseWheel(struct D2UIMouseMsgStrc * pMsg);
 // Returns gnWinMainState global value
-uint32_t __stdcall D2WINMAIN_GetWinMainState();
+uint32_t __stdcall D2WINMAIN_IsMouseButtonDown();
 // Returns pFormImage global control pointer
 struct D2ControlStrc * __stdcall D2WINMAIN_GetFormImage();
 void __stdcall D2WIN_HandleCursorHide(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_HandleMouseLeave(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall MOUSE_CaptureMousePosition(struct D2UIMouseMsgStrc * phWnd);
-void __stdcall INPUT_FormTabKey(struct D2UIMouseMsgStrc * pMsg);
+void __stdcall INPUT_FormEscapeKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall D2WIN_TakeScreenshotMsgHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_FormMouseHandler(struct D2UIMouseMsgStrc * pMsg);
 #endif // D2_MODULE_D2Win

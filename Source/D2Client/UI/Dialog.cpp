@@ -20,7 +20,6 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Dialog.data.h"
@@ -136,7 +135,7 @@ uint32_t gnDialogCounter_b = 0; D2_GLOBAL_GUARD(gnDialogCounter_b, "D2Client::UI
 
 namespace D2Client::UI::Dialog {
 
-D2DialogStrc * __stdcall GetDialogCounter_Unref_004b70f0() {
+D2DialogStrc * __stdcall DIALOG_GetActualDialog() {
     return gpDialogActual;
 }
 
@@ -986,7 +985,7 @@ void __fastcall FreeDialogStrc(D2DialogStrc * pDialog) {
 
 void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
     // Static local variables (originally global data)
-    static int32_t gpDialogBackgroundDC6; D2_STATIC_GUARD_BSS(gpDialogBackgroundDC6, "D2Client::UI::Dialog::DIALOG_DrawBackground::gpDialogBackgroundDC6");
+    static int32_t gnDialogBackgroundFrame; D2_STATIC_GUARD_BSS(gnDialogBackgroundFrame, "D2Client::UI::Dialog::DIALOG_DrawBackground::gnDialogBackgroundFrame");
 
     int nBottom;
     int32_t* piStringData;
@@ -1047,10 +1046,10 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
             }
             if (pDialog->nHighlightStyle == 2) {
               sGfxData.pDC6 = ui::UI_GetCursorIconDC6();
-              sGfxData.nFrameNumber = gpDialogBackgroundDC6 % 7;
+              sGfxData.nFrameNumber = gnDialogBackgroundFrame % 7;
               D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBottom - 0x18, nColor_lcl + 4, -1, DRAW_SOLID, nullptr);
               D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, piStringData[-2] + 2 + nBottom, nColor_lcl + 4, -1, DRAW_SOLID, nullptr);
-              gpDialogBackgroundDC6++;
+              gnDialogBackgroundFrame++;
             }
           }
 
@@ -1310,7 +1309,7 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
     }
 }
 
-void __stdcall DIALOG_InitializeSystem_Unref_004b9200() {
+void __stdcall DIALOG_ClearReceivedQuestAvailabilityPacket() {
     bReceivedQuestAvailabilityPacket = 0;
 }
 

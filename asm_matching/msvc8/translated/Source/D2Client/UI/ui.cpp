@@ -53,7 +53,6 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Client/GAME/Game/Game.data.h"
@@ -2892,7 +2891,7 @@ DC6 * pUi_Panel_buysellbtn = 0; D2_GLOBAL_GUARD(pUi_Panel_buysellbtn, "pUi_Panel
 namespace D2Client { namespace UI { namespace ui {
 DC6 * gpDC6CursorIcon = 0; D2_GLOBAL_GUARD(gpDC6CursorIcon, "D2Client::UI::ui::gpDC6CursorIcon");
 }}} // namespace D2Client::UI::ui
-DC6 * gnLoadedActIndex = 0; D2_GLOBAL_GUARD(gnLoadedActIndex, "gnLoadedActIndex");
+DC6 * gpLoadingScreenDC6 = 0; D2_GLOBAL_GUARD(gpLoadingScreenDC6, "gpLoadingScreenDC6");
 static int nLoadedActNo = 0; D2_STATIC_GUARD(nLoadedActNo, "nLoadedActNo");
 static DC6 * gpDC6YouDiedHardcoreImage = 0; D2_STATIC_GUARD(gpDC6YouDiedHardcoreImage, "gpDC6YouDiedHardcoreImage");
 static DC6 * gpDC6DeathInstructionImage = 0; D2_STATIC_GUARD(gpDC6DeathInstructionImage, "gpDC6DeathInstructionImage");
@@ -3030,10 +3029,10 @@ void __stdcall InitializeGlobalsWithColors() {
     Party::SetPartyColors();
     Party::SetRedToBlack();
     SpellSel::thunk_D2GFX_GetColorFromPalette_C();
-    Panel::thunk_D2GFX_GetColorFromPalette_A();
-    Panel::PANEL_InitGoldColor();
+    Panel::PANEL_InitStaminaColorLow();
+    Panel::PANEL_InitStaminaColorNormal();
     Panel::PANEL_InitBeltColors();
-    Panel::thunk_D2GFX_GetColorFromPalette_B();
+    Panel::PANEL_InitStaminaColorBlue();
 }
 
 void * __fastcall MoveArgumentToEAX(void * pParam) {
@@ -3207,8 +3206,8 @@ void __fastcall UI_StoreGlobalTooltipText(uint16_t * wszText, int32_t nScreenX, 
     gnTooltipHpBarValue = nHpBarValue;
 }
 
-void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField) {
-    D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(wszText, nFontId, nX, nY, nAlignment, nCustomField);
+void __fastcall UI_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill) {
+    D2Win::Src::D2WinFont::D2WINFONT_SetTooltipAttributesWithCustomField(wszText, nX, nY, nColor, nAlignment, nBarFill);
 }
 
 void __fastcall UI_StoreGlobalUIText(uint16_t * wszText, DWORD dwTextColor) {
@@ -3284,7 +3283,7 @@ int32_t __fastcall UI_GetMonsterHpBarValue(D2UnitStrc * pUnit) {
     compute_hp_bar_value:
     nMaxHp = GAME::RosterPets::GetRosterPerHPPercent(pUnit->nUnitGUID);
     if (bIsInteractable || nMaxHp <= 0) {
-      nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       if (!nMaxHp) {
         return 0x80;
       }
@@ -3664,10 +3663,10 @@ void __stdcall UI_DrawMercenaryHealthBar() {
 
     eBorderType = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     if (!eBorderType) {
-      nCoord = D2Common::Units::GetTargetX(pMercUnit);
+      nCoord = D2Common::Units::GetScreenX(pMercUnit);
       nWorldOffset = Path::DRAW_GetWorldOffsetX();
       nHealthBarScreenX = nCoord - nWorldOffset;
-      nCoord = D2Common::Units::GetTargetY(pMercUnit);
+      nCoord = D2Common::Units::GetScreenY(pMercUnit);
       nWorldOffset = Path::DRAW_GetWorldOffsetY();
       gnMercenaryHealthBarScreenY = nCoord - nWorldOffset;
       UI_ShowMonsterNameBar(1, pMercUnit);
@@ -3840,7 +3839,7 @@ void __stdcall DRAW_UI_DeathMessage() {
     }
 
     uint32_t nIngameUIFlags;
-    nIngameUIFlags = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+    nIngameUIFlags = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
     if (nIngameUIFlags) {
       pDwFill = D2Lang::StrTable::strtable::GetLocaleString(0x13e8);
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDeathMessage, pDwFill);
@@ -3865,7 +3864,7 @@ void __stdcall DRAW_UI_DeathMessage() {
       return;
     }
 
-    nIngameUIFlags = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+    nIngameUIFlags = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
     if (nIngameUIFlags) {
       return;
     }
@@ -3905,7 +3904,7 @@ void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &nViewLeft, &nViewTop, &nViewRight, &nViewBottom);
     GAME::View::GetCenterXY(GAME::Game::D2GameView, &nCenterX, &nCenterY);
     /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcView, nCenterX, nCenterY, nViewRight - nViewLeft + nCenterX, nViewBottom - nViewTop + nCenterY);
-    D2Common::Units::GetTargetCoords(pUnit, &ptScreen);
+    D2Common::Units::GetScreenCoords(pUnit, &ptScreen);
     ptScreen.x -= rcView.left;
     ptScreen.y += -0x46 - rcView.top;
     switch (eBorderType) {
@@ -4203,14 +4202,14 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
           return 0;
         }
         if (pPlayerUnit_lcl->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
-          UNIT::CUnit::IsAttackable(pPlayerUnit_lcl);
+          UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pPlayerUnit_lcl);
           GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x41);
-          bTextScrolling = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+          bTextScrolling = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
           if (bTextScrolling) {
             GAME::Msg::NET_D2GS_CLIENT_Send_0x69();
             GAME::Game::ServerLoadingComplete = 0;
             D2GS_Connected = 0;
-            ClientModeInGame::CLIENTMODE_ClearIngameUIFlag();
+            ClientModeInGame::CLIENTMODE_SetCharacterDied();
             ClientModeInGame::D2CLIENT_SetExitVar1(0);
             GAME::Game::D2CLIENT_SetExitVar3ToTrue();
             return 0;
@@ -4872,7 +4871,7 @@ void __fastcall SetActNo(int32_t nActNo) {
     nLoadedActNo = nActNo;
 }
 
-int32_t __stdcall DRAW_GetLastPanelId_Unref_004547a0() {
+int32_t __stdcall DRAW_GetLoadedActNo() {
     return nLoadedActNo;
 }
 
@@ -4880,9 +4879,9 @@ void __stdcall CleanupAfterLoadingAct() {
     // Static local variables (originally global data)
     static BOOL gbCleanupAfterLoadingActFlag; D2_STATIC_GUARD_BSS(gbCleanupAfterLoadingActFlag, "D2Client::UI::ui::CleanupAfterLoadingAct::gbCleanupAfterLoadingActFlag");
 
-    if (gnLoadedActIndex) {
-      Core::Archive::DC6_FreeAndDelete(gnLoadedActIndex);
-      gnLoadedActIndex = 0;
+    if (gpLoadingScreenDC6) {
+      Core::Archive::DC6_FreeAndDelete(gpLoadingScreenDC6);
+      gpLoadingScreenDC6 = 0;
       D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette((uint8_t)nLoadedActNo);
       D2CMP::Pallete::PALETTE_SetAct(nLoadedActNo);
       Automap::AUTOMAP_InitPaletteColors();
@@ -4890,16 +4889,16 @@ void __stdcall CleanupAfterLoadingAct() {
       Party::SetPartyColors();
       Party::SetRedToBlack();
       SpellSel::thunk_D2GFX_GetColorFromPalette_C();
-      Panel::thunk_D2GFX_GetColorFromPalette_A();
-      Panel::PANEL_InitGoldColor();
+      Panel::PANEL_InitStaminaColorLow();
+      Panel::PANEL_InitStaminaColorNormal();
       Panel::PANEL_InitBeltColors();
-      Panel::thunk_D2GFX_GetColorFromPalette_B();
+      Panel::PANEL_InitStaminaColorBlue();
       D2Client::Draw::Weather::MISC_PrepareWeatherOverlay(GAME::Game::gnWeatherOverlayActId);
       GAME::Game::GAMEDATA_ExtendTimeout(2000);
     }
 
     gbCleanupAfterLoadingActFlag = 0;
-    gnLoadedActIndex = 0;
+    gpLoadingScreenDC6 = 0;
     gnLastOpenPanelId = 0;
 }
 
@@ -5283,10 +5282,10 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
       gnMercenaryHealthBarScreenY = (int)__frame0.pLevelTxtResult.pLevelsTxt->MonLvl;
       nHealthBarScreenX = __frame0.nScreenX;
     } else {
-      nX = D2Common::Units::GetTargetX(pUnit);
+      nX = D2Common::Units::GetScreenX(pUnit);
       nY = Path::DRAW_GetWorldOffsetX();
       nHealthBarScreenX = nX - nY;
-      nX = D2Common::Units::GetTargetY(pUnit);
+      nX = D2Common::Units::GetScreenY(pUnit);
       nY = Path::DRAW_GetWorldOffsetY();
       gnMercenaryHealthBarScreenY = nX - nY;
     }
@@ -6307,7 +6306,7 @@ void * __fastcall MoveArgumentToEAX_Unref_0045ba90(void * pParam) {
     return pParam;
 }
 
-uint32_t __stdcall DRAW_IsDialogActive_Unref_0045fdd0() {
+uint32_t __stdcall DRAW_IsCharScreenOkPressed() {
     return (uint32_t)(Engine::gbCharScreenOkPressed != 0);
 }
 
@@ -6382,7 +6381,7 @@ void __stdcall UI_ToggleBeltRows() {
     SetUIFlag(UI_BELTROWS, UI_TOGGLE, 0);
 }
 
-int __stdcall TRADE_GetTradeStatus_Unref_00486d80() {
+int __stdcall INV_IsCurrentInventoryPage1Or2() {
     if (Inv::g_nCurrentInventoryPage != 1 && Inv::g_nCurrentInventoryPage != 2) {
       return 0;
     }
@@ -9597,12 +9596,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             default:
               goto apply_resist_penalty;
             case 0x27:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasLifeState(pPlayer);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRfBlueFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasGoldState(pPlayer);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRfRedFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -9610,12 +9609,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxfireresist;
             break;
             case 0x29:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasStaminaState(pPlayer);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRlBlueFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasSkillState(pPlayer);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRlRedFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -9623,12 +9622,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxlightresist;
             break;
             case 0x2b:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasManaState(pPlayer);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRcBlueFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasMagicFindState(pPlayer);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRcRedFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -9636,12 +9635,12 @@ void __stdcall DRAW_UI_StatWindow_I() {
             eMaxResStat = UNITSTAT_maxcoldresist;
             break;
             case 0x2d:
-              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasDefenseState(pPlayer);
+              bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRpBlueFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 3;
             }
 
-            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasAbsorbState(pPlayer);
+            bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasRpRedFlagState(pPlayer);
             if (bExpansion) {
               nColorIdx = 1;
             }
@@ -9707,7 +9706,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
           break;
           case 0x1f:
             nDisplayVal = D2Common::Units::GetDefense(pPlayer);
-          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasFireState(pPlayer);
+          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasArmBlueFlagState(pPlayer);
           if (bExpansion) {
             nColorIdx = 3;
           }
@@ -9721,7 +9720,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
             }
           }
 
-          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasExpState(pPlayer);
+          bExpansion = D2Common::DATATBLS::ItemStats::STATES_HasArmRedFlagState(pPlayer);
           if (bExpansion) {
             nColorIdx = 1;
           }
@@ -10029,14 +10028,14 @@ void __stdcall DRAW_UI_CASH() {
       }
 
       Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pUnit, 0, 0, &nItemWidth, &nItemHeightPx);
-      D2Common::Units::SetupUpdateFlag(pUnit, 0);
+      D2Common::Units::ChangeAnimMode(pUnit, 0);
       nYOffset = 0;
       if (nItemHeightPx < 0x70) {
         nYOffset = 0x72 - nItemHeightPx >> 1;
       }
 
       Engine::Gfx::DrawItemGfx(pUnit, 0xa7 - (nItemWidth >> 1), nYOffset + 0x6a);
-      D2Common::Units::SetupUpdateFlag(pUnit, 4);
+      D2Common::Units::ChangeAnimMode(pUnit, 4);
       return;
     }
 
@@ -10196,7 +10195,7 @@ void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket) {
       return;
       case '\x05':
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pPlayerUnit_lcl->pInventory, nullptr);
+      D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pPlayerUnit_lcl->pInventory, nullptr);
       nSoundId = SOUND_CURSOR_POINT_DROP;
       if (pPacket[6] == '\0') {
         nSoundId = SOUND_CURSOR_ERROR;

@@ -2574,7 +2574,7 @@ static D2ProfilingDumpFrequency gaProfilingDumpFrequency[23] = {
 namespace D2Common { namespace ITEMS { namespace Items {
 D2DataTableTxtStrc * sgptDataTable = (D2DataTableTxtStrc *)&D2Common::DATATBLS::MonsterTbls::sgtDataTable; D2_GLOBAL_GUARD(sgptDataTable, "D2Common::ITEMS::Items::sgptDataTable");
 }}} // namespace D2Common::ITEMS::Items
-int gpaMiscTxtTables = 0x1; D2_GLOBAL_GUARD(gpaMiscTxtTables, "gpaMiscTxtTables");
+int gbTxtAllocCountHeader = 0x1; D2_GLOBAL_GUARD(gbTxtAllocCountHeader, "gbTxtAllocCountHeader");
 char * gaLanguageNames_0074430c[15] = {
     (char*)"English",
     (char*)"Spanish",
@@ -2648,7 +2648,7 @@ void __stdcall D2ProfileDump() {
     } while ((intptr_t)pLVar1 < (intptr_t)((char*)&gaProfilingDumpFrequency + sizeof(gaProfilingDumpFrequency) + 104));
 }
 
-void __stdcall CloseProfCore_Unref_00654ef0() {
+void __stdcall TXT_FreeParsedTC_Thunk() {
     DATATBLS::MonsterTbls::FreeParsedTC();
 }
 

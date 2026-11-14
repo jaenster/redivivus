@@ -685,10 +685,10 @@
       "calledFunctions": [
         "MISSILE_InitMissileUnit",
         "AllocMissileData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "AllocDynamicPath",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern"
+        "PATH_SetMoveTestCollisionMask"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
@@ -698,7 +698,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "14b10c7e",
+      "dh": "ec839b44",
       "paramStorage": [
         [
           "pUnit",
@@ -914,7 +914,7 @@
         "MISSILE_CalculatePierceCount",
         "GetClassId",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetPlayerUnit_UI",
         "SERVER_GetUnitStat",
         "InitSeed_Param_666",
@@ -926,7 +926,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "70ba579b",
+      "dh": "cdf58048",
       "paramStorage": [
         [
           "pUnit",
@@ -3950,7 +3950,7 @@
         "MISSILE_GetOwnerUnit",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
-        "PATH_SetPathTarget",
+        "PATH_MoveUnitToUnitPosition",
         "UpdateFrame",
         "GetTargetX",
         "SetShake",
@@ -3968,7 +3968,7 @@
         "int32_t",
         "uint64_t"
       ],
-      "dh": "79d8cbc8",
+      "dh": "819be1e4",
       "paramStorage": [
         [
           "pUnit",
@@ -4188,7 +4188,7 @@
         "MISSILE_ClientHitExplode",
         "MISSILE_GetOwnerUnit",
         "UNIT_GetUnitState",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "MISSILE_CheckAndDecrementPierce",
         "CheckUnitIfOwner",
         "SetOwner",
@@ -4229,7 +4229,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fbef10b1",
+      "dh": "14382ce1",
       "paramStorage": [
         [
           "pUnit",
@@ -4261,13 +4261,13 @@
         "MISSILE_RemoveClientSide",
         "IsActive",
         "MISSILE_ClientHitExplode",
-        "PATH_SetPathTarget",
+        "PATH_MoveUnitToUnitPosition",
         "UpdateFrame"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "41d03f69",
+      "dh": "98ff2c50",
       "paramStorage": [
         [
           "pUnit",
@@ -4344,9 +4344,9 @@
         "IsAtEndOfFrameCycle",
         "SetDeadFlag",
         "SetVelocities",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "SetCurrentFrame",
         "MISSILE_CltDoFn01_BasicMissile",
@@ -4357,7 +4357,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78cee978",
+      "dh": "980d3b5a",
       "paramStorage": [
         [
           "pUnit",
@@ -5498,7 +5498,7 @@
         "Get8FlagsFromDynamicPath",
         "GetLevel",
         "MakeMissileAtXY",
-        "PATH_SetPathTarget",
+        "PATH_MoveUnitToUnitPosition",
         "MISSILE_CltDoFn01_BasicMissile"
       ],
       "usedTypes": [
@@ -5509,7 +5509,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d7578fbb",
+      "dh": "47e77447",
       "paramStorage": [
         [
           "pUnit",

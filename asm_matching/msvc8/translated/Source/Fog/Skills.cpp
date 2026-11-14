@@ -47,7 +47,7 @@ int __fastcall SKILLS_PopValue(int * pValueStack) {
 }
 
 // Stack-based bytecode evaluator for compiled skill and missile calc formulas. The 64-entry value stack keeps its count in the 65th slot, at byte offset 0x100 from the base, which is why it is one int[65] local and not a head plus a separate counter. Consecutive SKILLS_PopValue calls reuse the stack pointer in ECX without reloading it, so that callee is typed __fastcall_ecxsafe.
-uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext) {
+uint32_t __stdcall FOG_EvaluateCalcExpression(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext) {
     uint32_t uFuncResult;
     uint32_t nOperand3;
     int uOperandB;
@@ -1102,7 +1102,7 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
     if (pbWritePtr) {
       uint32_t nConstValue;
       if (!bHasVarRef) {
-        nConstValue = SKILLS_CompileSkillFormula((uint32_t*)pbByteCodeOutput, (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput, nullptr, nullptr, 0, nullptr);
+        nConstValue = FOG_EvaluateCalcExpression((uint32_t*)pbByteCodeOutput, (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput, nullptr, nullptr, 0, nullptr);
         pbWritePtr = SKILLS_WriteValueToBuffer(pbByteCodeOutput, nConstValue, nMaxOutputSize, (D2QuestDataA5Q2Strc*)&__frame0.sOpStack, pbByteCodeOutput);
         pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, (uint8_t*)&__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
       }

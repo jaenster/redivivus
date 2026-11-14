@@ -34,6 +34,10 @@ typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 #define RECON_FPTD_fnSpriteDecodeComplete
 typedef uint32_t (__stdcall *fnSpriteDecodeComplete)(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 #endif
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 
 struct D2SpriteCacheEntryStrc;
 
@@ -108,10 +112,10 @@ void __stdcall SPRITECACHE_Unlock();
 void __stdcall GFX_InitLRUCache(struct D2PoolManagerStrc * pMemory, uint32_t pPoolManager);
 char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc);
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData);
-uint32_t __stdcall SPRITECACHE_GetTotalEntries();
+uint32_t __stdcall SPRITECACHE_GetMemUsage();
 uint32_t __stdcall SPRITECACHE_GetCacheSize();
-int __stdcall SPRITECACHE_GetMaxSize();
-uint32_t __stdcall SPRITECACHE_GetCurrentSize();
+int __stdcall CELDATACACHE_GetMemUsage();
+uint32_t __stdcall CELDATACACHE_GetMemLimit();
 // Counts the LRU cache blocks whose async load has not completed (ASYNCDATA_IsComplete == 0); halts on a block with no pAsyncData.
 // It frees nothing, it only counts (returns nPendingCount).
 int32_t __stdcall SPRITECACHE_CountPendingLoads();
@@ -132,14 +136,14 @@ BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(struct D2GfxDataStrc * pGfxData);
 void __stdcall SPRITECACHE_FreeEntry(struct D2TileLibraryEntryStrc * pTile);
 // Reads the 0x114-byte DT1 header of szFilename and returns the size of its minimal form: numTiles (dword at header offset 0x10c) * 0x60 + 0x114, or 0 when the file cannot be opened. Frame is SUB ESP,0x11c: [EBP-0x11c] holds the archive handle CheckIfFileExists writes back, [EBP-0x118..EBP-0x5] the 0x114 header buffer, [EBP-0x4] the /GS cookie. The former ESI parameter dwParam was a phantom: no instruction between 005fdf80 and 005fdff8 reads or writes ESI, so it was never an incoming argument; it only forwarded into D2FILE_ReadFile's own phantom ESI slot. Removed 2026.09.08. Return storage is pinned to EAX because the tail CALL 00681a48 (GuardStack, MSVC __security_check_cookie) preserves EAX and the computed size is the return value.
 int __fastcall SPRITECACHE_LoadFromFile(char * szFilename);
-void __fastcall SPRITECACHE_SetMaxSize(size_t nSize);
+void __fastcall SPRITECACHE_SetFreeEntryCallback(pfnLruFreeEntry pfnFreeEntry);
 void __fastcall SPRITECACHE_TouchEntry(struct D2TileLibraryHeaderStrc * pTileLibrary);
 // Sprite-cache release callback: when gpfnSpriteCacheValidateCallback is set, calls it with the entry's descriptor (pHashEntry[8], halts at line 0xb5 if NULL), then unlinks the entry from gaGfxHashTable with GFX_UnlinkCacheEntry.
 // @provenance 1.14d asm 005fe170; formerly named SPRITECACHE_Validate.
 void __fastcall SPRITECACHE_ReleaseHashEntry(struct D2GfxHashEntryStrc * pHashEntry);
 void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szText2, va_list vaArgs);
-void __stdcall SPRITECACHE_Unlock_Unref_005fee00();
-void __stdcall SPRITECACHE_Unlock_Unref_005fee50();
+void __stdcall GFXHASH_InitIgnoreList_Thunk();
+void __stdcall CELDATAHASH_InitIgnoreList_Thunk();
 int __fastcall Unreferenced_005fee80(int param_1);
 // @sourcefile .\SRC\SpriteCache.cpp
 void __fastcall GFX_AllocSpriteCache(struct D2GfxMemoryStrc * pGfxMemory, struct D2PoolManagerStrc * pMemory, uint32_t pMaxMemory, fnSpriteCacheEntryRelease pfnReleaseEntry);

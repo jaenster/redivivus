@@ -211,7 +211,7 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray1(eD2States eState) {
     return 0;
 }
 
-BOOL __stdcall STATES_HasHideState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasAuraFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[1]);
     return BVar1;
 }
@@ -224,12 +224,12 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray4(eD2States eState) {
     return 0;
 }
 
-BOOL __stdcall STATES_HasTransformState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasPgsvFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[4]);
     return BVar1;
 }
 
-void __stdcall STATES_MoveTransformToGfx(D2UnitStrc * pUnit) {
+void __stdcall STATES_MovePgsvToGfx(D2UnitStrc * pUnit) {
     STATES_MoveToGfxFlags(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[4]->nStateBitmask);
 }
 
@@ -237,37 +237,37 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray2(eD2States eState) {
     return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[2]->nStateBitmask[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
 }
 
-int __stdcall STATES_HasLightState(D2UnitStrc * pUnit) {
+int __stdcall STATES_HasHideFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[2]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasDamageState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasActiveFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[5]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasBlueState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRemHitFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[6]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasAttackSpeedState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasDamBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[7]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasAuraState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasDamRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[8]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasResistState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasAttBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[9]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasArmorState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasAttRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[10]);
     return BVar1;
 }
@@ -297,7 +297,7 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId) {
     return 0;
 }
 
-uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, int nStateId) {
+uint32_t __stdcall STATES_DoesStateStayOnDeath(D2UnitStrc * pUnit, int nStateId) {
     if (nStateId < 0 || nStateId >= ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
     }
@@ -308,67 +308,67 @@ uint32_t __stdcall STATES_IsStateActive(D2UnitStrc * pUnit, int nStateId) {
     return ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0xd]->nStateBitmask[nStateId >> 5] & Fog::BitBuffer::gadwBitMasks[nStateId & 0x1f];
 }
 
-BOOL __fastcall STATES_HasPoisonState(D2UnitStrc * pUnit) {
+BOOL __fastcall STATES_HasRestrictFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x11]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasColdState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x12]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasFireState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasArmBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x13]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasLifeState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRfBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x14]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasManaState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRcBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x15]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasStaminaState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRlBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x16]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasDefenseState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRpBlueFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x17]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasExpState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasArmRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x19]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasGoldState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRfRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1a]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasMagicFindState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRcRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1b]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasSkillState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRlRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1c]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasAbsorbState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasRpRedFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1d]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasCurseState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasExpFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1e]);
     return BVar1;
 }
@@ -381,7 +381,7 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray30(uint32_t nStateId) {
     return 0;
 }
 
-BOOL __stdcall STATES_HasMaxState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasShatterFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x1f]);
     return BVar1;
 }
@@ -394,17 +394,17 @@ uint32_t __stdcall ITEMSTATS_CheckStateFlagArray31(uint32_t nStateId) {
     return 0;
 }
 
-BOOL __stdcall STATES_HasProgressiveState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasLifeFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x20]);
     return BVar1;
 }
 
-int __stdcall STATES_HasPassiveState(D2UnitStrc * pUnit) {
+int __stdcall STATES_HasUdeadFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x21]);
     return BVar1;
 }
 
-BOOL __stdcall STATES_HasDisguiseState(D2UnitStrc * pUnit) {
+BOOL __stdcall STATES_HasGreenFlagState(D2UnitStrc * pUnit) {
     BOOL BVar1 = STATES_HasMatchingStateFlag(pUnit, ITEMS::Items::sgptDataTable->pSingleStateDataTbl[0x22]);
     return BVar1;
 }

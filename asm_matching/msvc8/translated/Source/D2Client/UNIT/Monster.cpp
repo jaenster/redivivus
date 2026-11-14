@@ -748,8 +748,8 @@ static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
         case 0x9e:
 
         case 0x13f:
-          D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
-        D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0);
+          D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 5);
+        D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pUnit->pPath.pDynamicPath, 0);
         return;
         case 0x96:
           UI::npcmenu::gnMonsterSpecialType = (uint32_t)(uintptr_t)pUnit;
@@ -904,12 +904,12 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
       pUnit->pInventory = pInventory;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
+    D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     BOOL bResult;
     bResult = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
     if (bResult && !(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
       D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pUnit, 1);
-      D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
+      D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 5);
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x8000);
     }
 
@@ -1111,7 +1111,7 @@ void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId)
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_poisonresist, (int)pMonStatsTxtNew->aResPo[bVar2], 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, 0x8000, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0x8000, 0);
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
     uint32_t nRandStartFrame;
     nRandStartFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount);
     pUnit->nGfxCurrentFrame = nRandStartFrame;
@@ -1515,7 +1515,7 @@ static D2ClientMonAnimModeEntryStrc * MONSTER_GetAnimModeDataEntry(D2UnitStrc * 
       return gMonsterAnimModeDataGap + pUnit->eAnimMode.ePlayerMode;
     }
 
-    BOOL nClassId = D2Common::Monsters::MONSTERS::MONSTER_IsAndarielNormal(pUnit, 0);
+    BOOL nClassId = D2Common::Monsters::MONSTERS::MONSTER_IsSandLeaper(pUnit, 0);
     if (nClassId) {
       return gaMonsterAnimModeData;
     }
@@ -1768,7 +1768,7 @@ void __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, int nDefaultCoun
       }
     }
 
-    int nMonStats2Idx = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_extrablood, 0);
+    int nMonStats2Idx = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_extrablood, 0);
     int nBloodSpawnCount = nDefaultCount;
     if (nMonStats2Idx) {
       nBloodSpawnCount = nMonStats2Idx;
@@ -2000,8 +2000,8 @@ static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nMsgType)
       }
 
       D2Common::Collision::RemoveCollision(D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, 0x100);
-      D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0);
+      D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 5);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pUnit->pPath.pDynamicPath, 0);
       nPosY = Engine::Particle::PARTICLE_GetScreenZ(pUnit);
       if (!nPosY) {
         Engine::Particle::AllocParticle(pUnit);
@@ -2056,8 +2056,8 @@ static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nMsgType)
 
       eAddCollisionFlag = COLLIDE_MONSTER;
       D2Common::Collision::AddCollision(D2Common::Units::UNITS_GetRoom(pUnit), nPosX, nPosY, eAddCollisionFlag);
-      D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 1);
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0x3c01);
+      D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 1);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pUnit->pPath.pDynamicPath, 0x3c01);
       nPosY = Engine::Particle::PARTICLE_GetScreenZ(pUnit);
       if (nPosY) {
         Engine::Particle::PARTICLE_SetStoppedWithFade(pUnit);
@@ -2164,7 +2164,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
     pAnimModeEntry = gaMonMsgAnimModeTable + nMsgType;
     if (false) {
       default_case:
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       goto fall_back_to_neutral;
     }
 
@@ -2176,7 +2176,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6e2);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 1);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 1);
       bPathCalcResult = MONSTER_GetNameModifierStringId(pUnit, 1);
       if (!bPathCalcResult) {
         bPathCalcResult = Path::PATH_SetTargetAndCalculate(pUnit, pMessage->nSkillId, pMessage->nItemId);
@@ -2196,7 +2196,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6f7);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 1);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 1);
       eUnitType = pMessage->nSkillId;
       CUnit::SetTargetByTypeAndGUID(pUnit, eUnitType, pMessage->nItemId);
       bPathCalcResult = MONSTER_GetNameModifierStringId(pUnit, 1);
@@ -2232,7 +2232,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x70f);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       eUnitType = pMessage->nSkillId;
       if (nClassId == 0xe7) {
         break;
@@ -2293,7 +2293,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x741);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, nullptr);
       if (pMessage->nSkillId || pMessage->nItemId) {
         nBaseId = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -2330,7 +2330,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
             }
           }
 
-          D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+          D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
           pUnit->dwLastHitClass = pMessage->nTargetX;
           D2Common::PATH::Path::PATH_SnapPositionToTile(pDynPath);
           UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Run);
@@ -2373,7 +2373,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       }
 
       pUnit->dwLastHitClass = pMessage->nTargetX;
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       pDynPathCur = pDynPath;
       D2Common::PATH::Path::PATH_SnapPositionToTile(pDynPath);
       D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPathCur, 0xb);
@@ -2387,14 +2387,14 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b0);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       D2Common::PATH::Path::PATH_SnapPositionToTile(pDynPath);
       CUnit::SetTargetByTypeAndGUID(pUnit, pMessage->nSkillId, pMessage->nItemId);
       CUnit::FaceTarget(pUnit, 0);
       UnitMode::UNITMODE_SetAnimMode(pUnit, TownWalk);
       break;
       case 8:
-        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       pUnit->dwLastHitClass = pMessage->nTargetX;
       pPlayerUnit_lcl = GAME::Select::GetSelectedUnit();
       if (pPlayerUnit_lcl == pUnit) {
@@ -2408,13 +2408,13 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       }
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0, 0);
-      nClassId = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit);
+      nClassId = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pUnit);
       if (nClassId) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
         pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
       }
 
-      bHasMaxState = D2Common::DATATBLS::ItemStats::STATES_HasMaxState(pUnit);
+      bHasMaxState = D2Common::DATATBLS::ItemStats::STATES_HasShatterFlagState(pUnit);
       if (bHasMaxState) {
         MONSTER_SpawnDeathEffectMissiles(pUnit);
         pUnit->dwLastHitClass = pUnit->dwLastHitClass & 0xf | 0xa0;
@@ -2623,7 +2623,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       CUnit::FreeLightMap(pUnit);
       break;
       case 9:
-        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
       if (!(*((uint8_t*)pMonStats2 + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
         D2Common::PATH::DynamicPath::PATH_SetCorpseCollision(pUnit, 0);
@@ -2664,7 +2664,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       }
 
       pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_TARGETABLE | UNITFLAG_DRAWSHADOW;
-      nClassId = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit);
+      nClassId = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pUnit);
       if (nClassId) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
         pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_CANBEATTACKED | UNITFLAG_DRAWSHADOW;
@@ -2673,7 +2673,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       CUnit::FreeLightMap(pUnit);
       break;
       case 7:
-        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+        D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       if (pMessage && pMessage->nTargetUnitType) {
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, pMessage->nTargetUnitType << 8, 0);
       }
@@ -2686,7 +2686,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
       }
 
       SetMonsterFlags(pUnit, UNITFLAG_DRAWSHADOW, (uint32_t)!(*((uint8_t*)pMonStats2 + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6]));
-      CUnit::IsAttackable(pUnit);
+      CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
       if (pMessage) {
         Path::PATH_MoveUnitToPoint(pUnit, *(uint16_t*)&pMessage->nSkillId, (uint32_t)*(uint16_t*)&pMessage->nItemId, 0, 0, 0);
         nBaseId = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -2729,7 +2729,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x911);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       eDeathSkill = pMessage->nSkillId;
       D2Common::Skills::AddSkill(pUnit, eDeathSkill, pMessage->nSkillLvl, 0, ".\\UNIT\\Monster.cpp", 0x914);
       pCurrentSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eDeathSkill);
@@ -2748,7 +2748,7 @@ void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Serve
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x924);
           exit(-1);
         }
-      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pUnit, 0);
+      D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pUnit, 0);
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, nullptr);
       eDeathSkill = pMessage->nSkillId;
       D2Common::Skills::AddSkill(pUnit, eDeathSkill, pMessage->nSkillLvl, 0, ".\\UNIT\\Monster.cpp", 0x929);
@@ -2922,7 +2922,7 @@ int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
     return 1;
 }
 
-void __fastcall NPCMENU_HandleQuestUpdate(D2GSPacketSrv0x98 * pPacket) {
+void __fastcall CMONSTERS_SetSpawnerMonsterClass(D2GSPacketSrv0x98 * pPacket) {
     uint32_t nNecroPetGUID;
     D2UnitStrc* pMonsterUnit = CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, UNIT_MONSTER);
     if (!pMonsterUnit) {
@@ -3152,7 +3152,7 @@ void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
       }
     }
 
-    bIsCritter = D2Common::DATATBLS::ItemStats::STATES_HasDamageState(pDynamicPath);
+    bIsCritter = D2Common::DATATBLS::ItemStats::STATES_HasActiveFlagState(pDynamicPath);
     if (bIsCritter) {
       SKILLS::Skills::SKILL_ProcessActiveStateEffects(pDynamicPath);
     }

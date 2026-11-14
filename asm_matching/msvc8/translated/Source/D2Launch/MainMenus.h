@@ -118,8 +118,8 @@ BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
-void __fastcall FORMS_DestroyListJmp_Unref_0041f930(uint32_t * pEncoder);
-void __fastcall FORMS_DestroyListJmp_Unref_0041f940(uint32_t * pEncoder);
+void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f930(uint32_t * pEncoder);
+void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEncoder);
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue);
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount);
 uint16_t * __fastcall CRYPTO_ByteSwap32Array(uint16_t * pwOut, int, uint16_t wValue);
@@ -128,7 +128,7 @@ int __fastcall Unreferenced_0042e630(uint16_t * param_1);
 void __fastcall CRYPTO_ByteSwap64Array(uint16_t * pwIn, int, uint16_t * pwOut);
 void __fastcall MAINMENU_SetGlobalValue1(pfnUIMenuInstance pfnMenuInstance);
 void __stdcall MAINMENU_SetGlobalFlag();
-BOOL __stdcall MAINMENU_GetGlobalValue2_Unref_0042e6c0();
+BOOL __stdcall MAINMENU_GetMainMenuUIActive();
 // Loads all predefined DC6 image resources for main menus and UI elements. Constructs file paths using wsprintfA into a stack buffer, then loads 40+ DC6 images (buttons, backgrounds, popups) via IMAGE_LoadDC6. Expansion detection switches between classic and expansion asset paths for 8 conditional images.
 void __stdcall IMAGE_LoadPredefinedImages();
 void __stdcall IMAGE_FreePredefinedImages();
@@ -273,7 +273,7 @@ BOOL __stdcall MAINMENU_OnPressGotoCharacterSelect_Unref_00432040(struct D2Contr
 BOOL __stdcall MAINMENU_OnPressInvokeCurrentMenuInstance(struct D2ControlMsg * pControlMsg);
 // Shows password change UI. Sets gbPasswordChangeInProgress flag, creates form with old/new password fields, email input. Validates Battle.net connectivity before showing.
 void __stdcall UIMENU_ChangePassword();
-BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2_Unref_00432300(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressChangePassword_Unref_00432300(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressSaveAccountNameAndShowDisconnected(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressShowDisconnectedFromBattleNet2(struct D2ControlMsg * pControlMsg);
 uint32_t __stdcall MAINMENU_PollMCPThreadStatus();
@@ -340,7 +340,7 @@ void __stdcall UIMENU_MainMenuAgain();
 void __stdcall UIMENU_CreateHeroSinglePlayer();
 int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(struct D2IniConfigStrc * pD2IniData);
 BOOL __stdcall MAINMENU_OnPressSinglePlayer(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_Unused10(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_OnPressSelectOpenBattleNet(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressSelectBattleNet(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressRealmList(struct D2ControlMsg * pMsg);
 uint32_t __stdcall thunk_UIMENU_CreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
@@ -350,7 +350,7 @@ BOOL __stdcall MAINMENU_Unused13(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_Unused14(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressDestroyListAndReturnToMainMenuAgain(struct D2ControlMsg * pControlMsg);
-BOOL __stdcall MAINMENU_OnPressSelectBattleNet_Unref_00436320(struct D2ControlMsg * pControlMsg);
+BOOL __stdcall MAINMENU_SetUIActiveAndMainMenuAgain(struct D2ControlMsg * pControlMsg);
 int __stdcall Unreferenced_00436340(int param_1);
 BOOL __stdcall MAINMENU_OnPressCommitNewCharacterAndStartGame(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressCreateHeroSinglePlayer(struct D2ControlMsg * pControlMsg);
@@ -358,7 +358,7 @@ void __stdcall UIMENU_ConfirmCreateCharacter();
 // BNet account creation handler. Validates username/password from gbPasswordChangeInProgress inputs (2-15 chars, matching confirmation), shows please-read dialog on success or error popup on validation failure.
 BOOL __stdcall MAINMENU_OnSubmitCreateBattleNetAccount(struct D2ControlStrc * pControl);
 BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(struct D2ControlStrc * pControl);
-void __stdcall UI_ClearCursorAnimationState_Unref_00436ac0();
+void __stdcall MAINMENU_ClearBnetProgressBarAndTimer();
 void __stdcall MAINMENU_BnetConnectionProgress();
 BOOL __stdcall MAINMENU_OnPressConfirmSkipEmailPopup(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_OnPressAcceptEmailAddress(struct D2ControlMsg * pControlMsg);

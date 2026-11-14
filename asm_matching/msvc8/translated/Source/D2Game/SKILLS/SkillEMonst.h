@@ -56,7 +56,7 @@ BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, struc
 // SrvDoFunc 131: on a living monster target with base id 0x1C5, rolls a random percent against calc[0] and, if the target lacks auratargetstate, calls SKILLEMONST_TransformMonsterClass; otherwise falls through to SKILLEMONST_ApplyAuraBuff. Returns FALSE if target is dead or skill record invalid.
 BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(struct D2UnitStrc * pUnitStrc, struct D2UnitStrc * pUnit);
+BOOL __fastcall SKILLMONST_CanImpregnateTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 void __fastcall SKILLEMONST_OnDeathSpawnExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * nStatListParam);
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

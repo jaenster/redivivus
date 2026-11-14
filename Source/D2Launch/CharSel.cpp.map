@@ -340,7 +340,7 @@
         "D2COMP_SetScreenY",
         "GetLocaleString",
         "SetText",
-        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitleFromProgress",
         "D2WINTEXTBOX_SetTextFromAnsi",
         "sprintf",
         "CHARSEL_GetClassNameString",
@@ -360,7 +360,7 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "06fd169c"
+      "dh": "d19b2e70"
     },
     {
       "name": "DRAW_LocalCharsInSelectionScreen0",
@@ -390,7 +390,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitleFromProgress",
         "sprintf",
         "D2WINTEXTBOX_SetTextFromAnsi",
         "CHARSEL_GetClassNameString",
@@ -410,7 +410,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "39ef6f9a"
+      "dh": "13f34267"
     },
     {
       "name": "SAVEFILE_ParseSaveData",
@@ -1175,7 +1175,7 @@
         "MAINMENU_GetRealmCount",
         "LAUNCHER_DisconnectFromBnet",
         "FORMS_CreateAnyFormFromListExEx",
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating",
         "GetLocaleString",
         "SetText",
@@ -1195,7 +1195,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "f810e352"
+      "dh": "b99437d3"
     },
     {
       "name": "CHARSEL_CreateCharEntry",
@@ -1619,11 +1619,11 @@
         "D2GFX_SetPaletteForDraw",
         "FORMS_CreateAnyFormFromListExEx",
         "D2WINBUTTON_SetCustomData",
-        "D2WINTEXTBOX_SetScrollbarCallbackA",
+        "D2WINTEXTBOX_SetScrollbarLinkedTextBox",
         "D2WINTEXTBOX_SetScrollbarCallbackB",
         "D2CheckExpansionGame",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
-        "D2WINPAL_SetGammaRamp",
+        "D2WINTEXTBOX_SetCompactLineSpacing",
         "CHARSEL_InitRealmSelection",
         "D2WINMAIN_SetControlVisible",
         "CHARSEL_LoadCharList",
@@ -1635,7 +1635,7 @@
         "D2WinTextBox",
         "uint32_t"
       ],
-      "dh": "155e8eb8"
+      "dh": "7844f2cb"
     },
     {
       "name": "UIMENU_CharacterSelectAllGameTypes",
@@ -1660,11 +1660,11 @@
         "GetLocaleString",
         "MAINMENU_ShowPopupWithCancel",
         "FORMS_CreateAnyFormFromListExEx",
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating",
         "D2WINMAIN_SetControlVisible",
         "D2WINMAIN_SetControlActive",
-        "D2WINPAL_SetGammaRamp",
+        "D2WINTEXTBOX_SetCompactLineSpacing",
         "D2WINBUTTON_SetBounds",
         "SetText",
         "SRegLoadString",
@@ -1684,7 +1684,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "1f941bf0"
+      "dh": "ce848aa4"
     },
     {
       "name": "StaticInit_pBetaRealmNames",

@@ -116,7 +116,7 @@
       "dh": "86febc80"
     },
     {
-      "name": "GetCurrentEngine_Unref_00477740",
+      "name": "RENDERING_GetCurrentEngineIndex",
       "address": "00477740",
       "lines": [
         {
@@ -126,9 +126,9 @@
       ],
       "namespace": "D2Client::GAME::Rendering",
       "calledFunctions": [
-        "GetCurrentEngine_Unref_00477740"
+        "RENDERING_GetCurrentEngineIndex"
       ],
-      "dh": "ec3a1399"
+      "dh": "377fd0c3"
     },
     {
       "name": "IsWindowMode",
@@ -190,14 +190,14 @@
         "GetPing",
         "D2GFX_GetRendererMode",
         "sprintf",
-        "GFX_GetCofCacheFlags",
-        "GFX_GetGfxSystemFlags",
+        "GFX_GetGfxMemory",
+        "GFX_GetCofCacheMemLimit",
         "GFX_GetCofCacheMemUsage",
         "SPRITECACHE_GetCacheSize",
-        "SPRITECACHE_GetTotalEntries",
+        "SPRITECACHE_GetMemUsage",
         "FOG_GetAsyncFileCount_ReturnZero",
-        "SPRITECACHE_GetCurrentSize",
-        "SPRITECACHE_GetMaxSize",
+        "CELDATACACHE_GetMemLimit",
+        "CELDATACACHE_GetMemUsage",
         "SOUNDHDR_Nop",
         "DrawRenderStats"
       ],
@@ -206,7 +206,7 @@
         "eD2RendererMode",
         "int32_t"
       ],
-      "dh": "9dc7d00d"
+      "dh": "2d21e7f1"
     },
     {
       "name": "ResetStats",

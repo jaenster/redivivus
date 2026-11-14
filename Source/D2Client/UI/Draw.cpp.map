@@ -25,7 +25,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "8936d09d"
+      "dh": "d5734db8"
     },
     {
       "name": "Draw_UI_LoadGame",
@@ -64,7 +64,7 @@
         "eD2GSGameType",
         "int32_t"
       ],
-      "dh": "9c4118fe",
+      "dh": "9bab83f3",
       "paramStorage": [
         [
           "bAdvanceFrame",

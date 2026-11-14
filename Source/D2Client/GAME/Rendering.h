@@ -27,7 +27,7 @@ void __stdcall RENDERER_SetOpenGL();
 void __stdcall RENDERER_SetMode6();
 void __stdcall RENDERER_SetMode7();
 int __stdcall GetCurrentEngine();
-int __stdcall GetCurrentEngine_Unref_00477740();
+int __stdcall RENDERING_GetCurrentEngineIndex();
 uint32_t __stdcall IsWindowMode();
 // Debug overlay that queries sprite-cache and floor/subtile/sprite-cache render statistics and prints them as formatted strings to the screen via D2GFX_DrawString. Displays tile cache KB size, miss rate, and percent utilization; floor cache, subtile cache, and three sprite cache tiers if their sizes are nonzero.
 void __stdcall DrawRenderStats();

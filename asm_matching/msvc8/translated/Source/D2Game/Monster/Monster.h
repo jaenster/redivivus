@@ -77,8 +77,8 @@ void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, struct D2U
 void __fastcall FreeMonsters(::SGAMEDATA * pGame);
 void __fastcall MONSTER_FreeAllResources(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall MONSTER_ClearTargetIfMatch(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
-void __fastcall MONSTERAI_TriggerMageThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall MONSTER_StartAiAndRegenTimers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONSTERAI_RescheduleThink(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall MONSTER_RemoveAiAndRegenTimers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int32_t __fastcall PlayerMultiplyer2(int32_t nPlayerCount);
 // Initialises a D2MonsterLevelDataStrc with player-count and difficulty multipliers for a monster. Queries the current player count (SERVER_GAME_CountPlayers), computes PlayerMultiplyer/2/3, and reads MonsterSkillBonus from the DifficultyLevels txt. Skips scaling for boss/special-aligned monsters (Align != 0) and sets nPlayerMultiplyer3=1 for them instead.
 void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, struct D2MonsterLevelDataStrc * pMonsterLevelData, struct D2RoomStrc * pRoom, struct D2UnitStrc * pUnit);

@@ -218,6 +218,10 @@ typedef void (__stdcall *grGlideInit)();
 #define RECON_FPTD_grGlideShutdown
 typedef void (__stdcall *grGlideShutdown)();
 #endif
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 #ifndef RECON_FPTD_fnBinkFrameCallback
 #define RECON_FPTD_fnBinkFrameCallback
 typedef void (__stdcall *fnBinkFrameCallback)();
@@ -1233,7 +1237,7 @@ BOOL __stdcall RENDERER_GLIDE_IsPerspectiveMode() {
     return gbGlidePerspectiveMode;
 }
 
-void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode) {
+void __fastcall GLIDE_SetPerspectiveMode(uint32_t bCompactLineSpacingMode) {
     gbGlidePerspectiveMode = bCompactLineSpacingMode;
 }
 
@@ -1360,7 +1364,7 @@ BOOL __stdcall RENDERER_GLIDE_InitTextureMemory() {
     }
 
     RENDERER_GLIDE_InitSpriteCache();
-    D2CMP::SRC::CelCmp::GFX_SetSpriteCacheMaxSize((size_t)(uintptr_t)glBlocks::GLBLOCKS_ReleaseTileTextures);
+    D2CMP::SRC::CelCmp::GFX_SetSpriteCacheFreeCallback((pfnLruFreeEntry)glBlocks::GLBLOCKS_ReleaseTileTextures);
     return 1;
 }
 

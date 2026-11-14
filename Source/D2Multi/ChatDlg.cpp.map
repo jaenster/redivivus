@@ -322,10 +322,10 @@
       "calledFunctions": [
         "LAUNCHER_DestroyLauncherForms",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "D2WINMAIN_SetFocusedControl"
       ],
-      "dh": "c976c362"
+      "dh": "76a08b14"
     },
     {
       "name": "isServerDown",
@@ -438,7 +438,7 @@
         "UIMENU_CantTestItBeacuseItCrash",
         "FORMS_CreateAnyForm",
         "D2WINMAIN_SetControlVisible",
-        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitleFromProgress",
         "D2WINTEXTBOX_SetTextFromAnsi",
         "LAUNCHER_GetDifficultyNameStringId",
         "sprintf",
@@ -459,7 +459,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a761eecc"
+      "dh": "333ac441"
     },
     {
       "name": "CHATDLG_DestroyLobbyChatForms",
@@ -519,7 +519,7 @@
       ]
     },
     {
-      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e230",
+      "name": "CHATDLG_InitializeCriticalSection",
       "address": "0043e230",
       "lines": [
         {
@@ -529,12 +529,12 @@
       ],
       "namespace": "D2Multi::ChatDlg",
       "calledFunctions": [
-        "SERR_InternalLeaveCriticalSection_Unref_0043e230"
+        "CHATDLG_InitializeCriticalSection"
       ],
-      "dh": "f9e1acd3"
+      "dh": "a61c66ad"
     },
     {
-      "name": "SERR_InternalLeaveCriticalSection_Unref_0043e240",
+      "name": "CHATDLG_DeleteCriticalSection",
       "address": "0043e240",
       "lines": [
         {
@@ -544,9 +544,9 @@
       ],
       "namespace": "D2Multi::ChatDlg",
       "calledFunctions": [
-        "SERR_InternalLeaveCriticalSection_Unref_0043e240"
+        "CHATDLG_DeleteCriticalSection"
       ],
-      "dh": "93338e4c"
+      "dh": "b3a05220"
     },
     {
       "name": "StoreChatMsg",
@@ -1047,12 +1047,12 @@
       "calledFunctions": [
         "FORMS_DestroyListEx",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
       "usedTypes": [
         "D2ControlStrc *"
       ],
-      "dh": "59dd760c"
+      "dh": "2f831a56"
     },
     {
       "name": "UIMENU_DrawTitleAndSubtitleOnCenterScreen",
@@ -1154,14 +1154,14 @@
         "FORMS_CreateAnyFormFromListEx",
         "GetLocaleString",
         "D2WINTEXTBOX_SetTextW",
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
       "usedTypes": [
         "D2ControlStrc",
         "D2WinTextBox",
         "WCHAR"
       ],
-      "dh": "972f541a"
+      "dh": "c31e097a"
     },
     {
       "name": "CHATDLG_UpdateButtonVisibility",
@@ -2094,7 +2094,7 @@
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINMAIN_SetFocusedControl",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "COMCALLBACK_ClearChannelUserList",
         "SetUnsetFlag0x08",
         "D2WinButton",
@@ -2105,7 +2105,7 @@
         "D2WinButton",
         "D2WinButton *"
       ],
-      "dh": "537a1dcf"
+      "dh": "cccca7fd"
     },
     {
       "name": "OOGMENU_CreateGame",
@@ -2446,7 +2446,7 @@
         "D2WINTEXTBOX_SetLineColor",
         "_itoa",
         "D2WINTEXTBOX_SetLineCellTextA",
-        "D2WINSMACK_GetTitlePrefixIndexFromClass",
+        "D2COMP_GetTitleFromProgress",
         "STRTABLE_FormatUInt64WithAbbrev",
         "D2WINTEXTBOX_SetLineCellTextWDirect"
       ],
@@ -2457,7 +2457,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "798e99a0",
+      "dh": "6e746878",
       "paramStorage": [
         [
           "nStartRank",
@@ -2495,7 +2495,7 @@
         "UIMENU_LadderBoard_PrintClassesAndTableHeaders",
         "UIMENU_LadderBoard_PrintClassButtonLabels",
         "FORMS_CreateAnyFormFromListEx",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "MISC_GetLanguageCode",
         "GetLocaleString",
         "D2WINTEXTBOX_SetTextW",
@@ -2505,7 +2505,7 @@
         "D2WINTEXTBOX_SetColumnWidth",
         "D2WINTEXTBOX_SetColumnAlignment",
         "CHATDLG_ClearLadderBoard",
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "D2WINTIMER_SetRepeating"
       ],
       "usedTypes": [
@@ -2516,7 +2516,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "8747a792"
+      "dh": "84966de9"
     },
     {
       "name": "CHATDLG_OpenLadderClassicSoftcore",
@@ -2810,7 +2810,7 @@
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINMAIN_SetFocusedControl",
-        "D2WINEDITBOX_SetPasswordMode",
+        "D2WINEDITBOX_SetMaxLength",
         "COMCALLBACK_ClearChannelUserList",
         "SetUnsetFlag0x08",
         "D2WinButton",
@@ -2823,7 +2823,7 @@
         "NET_MCP_CLIENT_Send_0x12_MOTD",
         "CHATDLG_RefreshGameNameDisplay",
         "D2WINMAIN_SetControlVisible",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "SOUND_InitSoundEffectBuffers",
         "SOUND_LoadWavFile",
         "SOUND_GetOptionsMusic",
@@ -2855,7 +2855,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8b3edd8d",
+      "dh": "c4220b81",
       "paramStorage": [
         [
           "pD2IniConfig",

@@ -55,7 +55,7 @@ extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_00726600[16];
 extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007266f0[12];
 extern D2SpeechBankStrc D2SpeechBankStrc_ARRAY_007267a8[11];
 extern D2NPCSpeechStrc D2NPCSpeech[46];
-extern D2BitBufferStrc * gpNpcMenuDialogOptions;
+extern D2BitBufferStrc * gpGameQuestRecord;
 extern ::ListBoxWrapper * gpNpcMenuMercListBox;
 extern DC6 * gpNpcMenuShopInventoryDC6;
 

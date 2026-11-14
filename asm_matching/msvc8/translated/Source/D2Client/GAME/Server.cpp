@@ -55,7 +55,7 @@ DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
           goto idle_sleep;
         }
         /* DWORD dwMilliseconds for Sleep */ Sleep(0x1e);
-        pGameVersionInfo = ClientModeInGame::CLIENT_GetGameVersionInfo();
+        pGameVersionInfo = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
         if (pGameVersionInfo) {
           nCurrentGameCount = D2Game::GAME::Server::GetUnitCountByServerId(1);
           if (nCurrentGameCount != nLastGameCount) {

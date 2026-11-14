@@ -85,22 +85,22 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "957cfeab",
+      "dh": "7fd8be44",
       "paramStorage": [
         [
           "nY2",
           "ECX:4"
         ],
         [
-          "nY1",
+          "nX1",
           "Stack[0x4]:4"
         ],
         [
-          "nX2",
+          "nY1",
           "Stack[0x8]:4"
         ],
         [
-          "nX1",
+          "nX2",
           "EAX:4"
         ]
       ]
@@ -152,18 +152,18 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f3e65e1a",
+      "dh": "efd42d8f",
       "paramStorage": [
         [
-          "nY1",
+          "nX1",
           "ECX:4"
         ],
         [
-          "nX2",
+          "nY1",
           "EDX:4"
         ],
         [
-          "nX1",
+          "nX2",
           "Stack[0x4]:4"
         ],
         [
@@ -219,18 +219,18 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fc79e8c9",
+      "dh": "f8c6461d",
       "paramStorage": [
         [
-          "nY1",
+          "nX1",
           "ECX:4"
         ],
         [
-          "nX2",
+          "nY1",
           "EDX:4"
         ],
         [
-          "nX1",
+          "nX2",
           "Stack[0x4]:4"
         ],
         [
@@ -286,22 +286,22 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3f109410",
+      "dh": "f4723c99",
       "paramStorage": [
         [
-          "nParam1",
+          "nX1",
           "ECX:4"
         ],
         [
-          "nParam2",
+          "nY1",
           "EDX:4"
         ],
         [
-          "nY1",
+          "nX2",
           "Stack[0x4]:4"
         ],
         [
-          "nX2",
+          "nY2",
           "Stack[0x8]:4"
         ],
         [
@@ -362,22 +362,22 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "06b8c4cf",
+      "dh": "aff9e2f8",
       "paramStorage": [
         [
-          "nParam1",
+          "nX1",
           "ECX:4"
         ],
         [
-          "nParam2",
+          "nY1",
           "EDX:4"
         ],
         [
-          "nY1",
+          "nX2",
           "Stack[0x4]:4"
         ],
         [
-          "nX2",
+          "nY2",
           "Stack[0x8]:4"
         ],
         [
@@ -496,7 +496,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4c1532ed",
+      "dh": "2560fb20",
       "paramStorage": [
         [
           "pPathTypeArg",
@@ -528,15 +528,15 @@
         "exit"
       ],
       "usedTypes": [
-        "D2UnitStrc",
+        "D2DynamicPathStrc",
         "int32_t",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e4e73cbc",
+      "dh": "6b137d94",
       "paramStorage": [
         [
-          "pMissileStrc",
+          "pDynamicPath",
           "ECX:4"
         ]
       ]
@@ -563,20 +563,21 @@
         "exit"
       ],
       "usedTypes": [
+        "D2DynamicPathStrc",
         "D2UnitStrc",
         "eD2UnitType",
         "int32_t",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2506de28",
+      "dh": "c86a3dd3",
       "paramStorage": [
         [
           "pOutPos",
           "ECX:4"
         ],
         [
-          "pMissileStrc",
+          "pDynamicPath",
           "EDX:4"
         ]
       ]
@@ -634,7 +635,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "35059b2c",
+      "dh": "4db1da99",
       "paramStorage": [
         [
           "nPackedPos",
@@ -680,7 +681,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fad7094c",
+      "dh": "c4bbeae3",
       "paramStorage": [
         [
           "pVelocity",
@@ -723,7 +724,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "4516bf87",
+      "dh": "bba6512e",
       "paramStorage": [
         [
           "nPackedSrc",
@@ -1178,7 +1179,7 @@
         "D2RoomStrc",
         "int32_t"
       ],
-      "dh": "c42b8906",
+      "dh": "9d639f2b",
       "paramStorage": [
         [
           "pPathTypeArgs",
@@ -1360,7 +1361,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "eaeb2485",
+      "dh": "e4feaea1",
       "paramStorage": [
         [
           "nMaxCost",
@@ -1751,7 +1752,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "731f9255",
+      "dh": "b428e4b2",
       "paramStorage": [
         [
           "pCurNodeCoords",
@@ -1824,7 +1825,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "deea813e",
+      "dh": "76b763a2",
       "paramStorage": [
         [
           "pPathTypeArg",
@@ -1990,7 +1991,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "2358f86e",
+      "dh": "b417919d",
       "paramStorage": [
         [
           "pPathTypeArg",
@@ -2171,7 +2172,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "76fde0fa",
+      "dh": "dd2c833a",
       "paramStorage": [
         [
           "pPathTypeArg",

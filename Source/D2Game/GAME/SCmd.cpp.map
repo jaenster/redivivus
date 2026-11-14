@@ -1766,7 +1766,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "687bff5a",
+      "dh": "e46c5d08",
       "paramStorage": [
         [
           "pClient",
@@ -1793,19 +1793,19 @@
           "Stack[0x10]:1"
         ],
         [
-          "nMaxLife",
+          "nX",
           "Stack[0x14]:2"
         ],
         [
-          "nMaxMana",
+          "nY",
           "Stack[0x18]:2"
         ],
         [
-          "bMaxLifePercent",
+          "nDeltaX",
           "Stack[0x1c]:1"
         ],
         [
-          "bMaxManaPercent",
+          "nDeltaY",
           "Stack[0x20]:1"
         ]
       ]
@@ -2618,7 +2618,7 @@
       ]
     },
     {
-      "name": "SCMD_DetectPositionDesync",
+      "name": "SCMD_ShouldSendLifeUpdate",
       "address": "0053cc10",
       "lines": [
         {
@@ -2628,26 +2628,26 @@
       ],
       "namespace": "D2Game::GAME::SCmd",
       "calledFunctions": [
-        "SCMD_DetectPositionDesync"
+        "SCMD_ShouldSendLifeUpdate"
       ],
       "usedTypes": [
         "D2PartyDataStrc",
         "int32_t"
       ],
-      "dh": "a22dba5b",
+      "dh": "a1e7eeeb",
       "paramStorage": [
         [
-          "pState",
+          "pLifeState",
           "EAX:4"
         ],
         [
-          "nNewPos",
+          "nLifePercent",
           "EDX:4"
         ]
       ]
     },
     {
-      "name": "SCMD_CheckMonsterPositionDesync",
+      "name": "SCMD_ShouldSendPetLifeUpdate",
       "address": "0053cc40",
       "lines": [
         {
@@ -2657,32 +2657,32 @@
       ],
       "namespace": "D2Game::GAME::SCmd",
       "calledFunctions": [
-        "SCMD_CheckMonsterPositionDesync",
+        "SCMD_ShouldSendPetLifeUpdate",
         "GetOwnerUnit",
-        "SCMD_DetectPositionDesync"
+        "SCMD_ShouldSendLifeUpdate"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cfade3f7",
+      "dh": "05660052",
       "paramStorage": [
         [
-          "pUnit",
+          "pRecipient",
           "Stack[0x4]:4"
         ],
         [
-          "pUnit2",
+          "pPet",
           "EAX:4"
         ],
         [
-          "nNewPos",
+          "nLifePercent",
           "EDI:4"
         ]
       ]
     },
     {
-      "name": "PLAYERDATA_AllocPartyData",
+      "name": "SCMD_ShouldSendPartyLifeUpdate",
       "address": "0053cc90",
       "lines": [
         {
@@ -2692,12 +2692,12 @@
       ],
       "namespace": "D2Game::GAME::SCmd",
       "calledFunctions": [
-        "PLAYERDATA_AllocPartyData",
+        "SCMD_ShouldSendPartyLifeUpdate",
         "GetGamePointer",
         "GetPartyIdFromUnit",
         "GetPlayerData",
         "AllocServerMemory",
-        "SCMD_DetectPositionDesync"
+        "SCMD_ShouldSendLifeUpdate"
       ],
       "usedTypes": [
         "D2PartyDataStrc",
@@ -2708,14 +2708,14 @@
         "int16_t",
         "int32_t"
       ],
-      "dh": "60a525e9",
+      "dh": "78429e59",
       "paramStorage": [
         [
-          "pUnit",
+          "pTarget",
           "Stack[0x4]:4"
         ],
         [
-          "nUnitLife",
+          "nLifePercent",
           "Stack[0x8]:4"
         ],
         [
@@ -2723,7 +2723,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "pUnit2",
+          "pRecipient",
           "EAX:4"
         ]
       ]
@@ -2740,8 +2740,8 @@
       "namespace": "D2Game::GAME::SCmd",
       "calledFunctions": [
         "SCMD_DispatchUnitPartyData",
-        "PLAYERDATA_AllocPartyData",
-        "SCMD_CheckMonsterPositionDesync",
+        "SCMD_ShouldSendPartyLifeUpdate",
+        "SCMD_ShouldSendPetLifeUpdate",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -2751,7 +2751,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "13c6ee58",
+      "dh": "aff27284",
       "paramStorage": [
         [
           "pUnit",
@@ -5250,7 +5250,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0149d1f9",
+      "dh": "0171006e",
       "paramStorage": [
         [
           "pClient",
@@ -5261,7 +5261,7 @@
           "EDX:4"
         ],
         [
-          "wWaypointData",
+          "wSpawnClassId",
           "Stack[0x4]:2"
         ]
       ]

@@ -9,7 +9,6 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/MISSILES/Missiles.h"
@@ -82,10 +81,10 @@ fpUmodInit aUmodInitTable[43] = {
     nullptr,
     nullptr,
     nullptr,
-    &D2Game::Monsters::Umod::MONUMOD_ApplyColdEnchant,
-    &D2Game::Monsters::Umod::MONUMOD_ApplyBerserker,
-    &D2Game::Monsters::Umod::MONUMOD_ApplyPossessed,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyGhostly,
     &D2Game::Monsters::Umod::MONUMOD_ApplyFanatic,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyPossessed,
+    &D2Game::Monsters::Umod::MONUMOD_ApplyBerserk,
     nullptr,
     &D2Game::Monsters::Umod::MONUMOD_SetEventTimer,
     nullptr
@@ -152,7 +151,7 @@ static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
         /* .pfnHandler0 = */ nullptr,
         /* .pfnHandler1 = */ nullptr,
         /* .pfnHandler2 = */ nullptr,
-        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_OnDeathAmplifyDamageAura,
+        /* .pfnHandler3 = */ &D2Game::Monsters::MONSTER_CastAmplifyDamageOnHit,
         /* .pfnHandler4 = */ nullptr,
         /* .pfnHandlerInit = */ nullptr
     },
@@ -230,10 +229,10 @@ static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     },
     {
         /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_ScheduleEventIfRunning,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_LightningUniqueDeathBolts,
+        /* .pfnHandler1 = */ &D2Game::Monsters::MONSTER_LightningEnchantedModeChange,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBolts,
         /* .pfnHandler3 = */ nullptr,
-        /* .pfnHandler4 = */ &D2Game::Monsters::MONSTER_LightningDeathIfNotRunning,
+        /* .pfnHandler4 = */ &D2Game::Monsters::MONSTER_CastLightningUniqueBoltsIfNotGetHit,
         /* .pfnHandlerInit = */ nullptr
     },
     {
@@ -254,7 +253,7 @@ static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     },
     {
         /* .pfnHandler0 = */ nullptr,
-        /* .pfnHandler1 = */ &D2Game::MONSTER_ScheduleDeathIfRunningOrDead,
+        /* .pfnHandler1 = */ &D2Game::MONSTER_ScheduleEventOnGetHitOrDeath,
         /* .pfnHandler2 = */ (fpMonsterUModHandler)&D2Game::Monsters::MONSTER_BugLightningDeathBolts,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
@@ -423,7 +422,7 @@ static D2MonsterUModHandlerRowStrc g_MonsterUModHandlerTable[43] = {
     {
         /* .pfnHandler0 = */ nullptr,
         /* .pfnHandler1 = */ nullptr,
-        /* .pfnHandler2 = */ &D2Game::Monsters::MONSTER_PeriodicMageThink,
+        /* .pfnHandler2 = */ &D2Game::Monsters::MONUMOD_TickAlwaysRunAi,
         /* .pfnHandler3 = */ nullptr,
         /* .pfnHandler4 = */ nullptr,
         /* .pfnHandlerInit = */ nullptr
@@ -1065,12 +1064,12 @@ static D2UnitStrc * __stdcall SERVER_SpawnMonsterInternal(int32_t nClassId, ::SG
     return pSpawnedUnitCoord;
 }
 
-static int32_t MONSTER_GetMinion1MonstatId(D2UnitDataMonsterStrc * pMonData) {
-    if (!pMonData) {
+static int32_t MONSTER_GetMinion1MonstatId(D2UnitStrc * pUnit) {
+    if (!pUnit) {
       return -1;
     }
 
-    int nClassId = *(int*)pMonData->Components;
+    int nClassId = pUnit->nClassId;
     D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       short int nMinion1Id;
@@ -1093,7 +1092,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
       return;
     }
 
-    int32_t nMinion1ClassId = MONSTER_GetMinion1MonstatId((D2UnitDataMonsterStrc*)pUnit);
+    int32_t nMinion1ClassId = MONSTER_GetMinion1MonstatId(pUnit);
     if (!(nMinion1ClassId >= 0 && nMinion1ClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
@@ -1113,7 +1112,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
         eUnitType = UNIT_MONSTER;
         Ai::AiGeneral::AssignMinionOwner(pGame, pMinion, D2Common::Units::GetGUID(pUnit), eUnitType, bAddToList, bSetOwner);
         Ai::AiGeneral::AddMinionToList(pGame, pUnit, pMinion);
-        Monster::AI::MONSTERAI_SetTargetUnit(pMinion, pUnit);
+        Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pMinion, pUnit);
         if (pMinion->eUnitType == UNIT_MONSTER && pMinion->pUnitData.pUnitDataMonster) {
           pMonType = &pMinion->pUnitData.pUnitDataMonster->eMonsterType;
           *pMonType |= MONTYPE_MINION;
@@ -1275,9 +1274,9 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
 }
 
 // Applies the Amplify Damage curse (skill 0x42) from pUnit onto pAttacker. Validates attack eligibility and skill table bounds, then builds a D2StateExArgStrc with duration and stat values derived from skills.txt aura columns, calls SetStateWithExpiryTime to attach the state, and iterates remaining aura stats to add them to the resulting stat list.
-void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, int32_t nDuration) {
+void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nSkillLevel) {
     int32_t nValue;
-    uint32_t bCanAttackTarget = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pAttacker);
+    uint32_t bCanAttackTarget = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget);
     if (!(bCanAttackTarget && 0x42 < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
       return;
     }
@@ -1289,13 +1288,13 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
 
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
-    sStateArg.pTarget = pAttacker;
+    sStateArg.pTarget = pTarget;
     sStateArg.eSkill = SKILL_AmplifyDamage;
-    sStateArg.nSkillLvl = nDuration;
+    sStateArg.nSkillLvl = nSkillLevel;
     sStateArg.pUnit = pUnit;
-    sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].auralencalc, SKILL_AmplifyDamage, nDuration);
+    sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].auralencalc, SKILL_AmplifyDamage, nSkillLevel);
     sStateArg.eStat = (eD2UnitStat)pSkillsTxt[0x42].aurastat[0];
-    sStateArg.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].aurastatcalc[0], SKILL_AmplifyDamage, nDuration);
+    sStateArg.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].aurastatcalc[0], SKILL_AmplifyDamage, nSkillLevel);
     sStateArg.eAuraState = (eD2States)pSkillsTxt[0x42].auratargetstate;
     sStateArg.pFunction = 0;
     D2StatListExStrc* pStateStats = SKILLS::SkillsServer::SetStateWithExpiryTime(&sStateArg);
@@ -1305,23 +1304,23 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
 
     short int* pAuraStat = pSkillsTxt[0x42].aurastat;
     int* pAuraStatCalcPtr = pSkillsTxt[0x42].aurastatcalc;
-    pAttacker = (D2UnitStrc*)0x5;
+    pTarget = (D2UnitStrc*)0x5;
     do {
       D2UnitStrc* pUnitSaved = pUnit;
       pAuraStat++;
       pAuraStatCalcPtr++;
       if (*pAuraStat >= 0 && (int)*pAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        nValue = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pAuraStatCalcPtr, SKILL_AmplifyDamage, nDuration);
+        nValue = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pAuraStatCalcPtr, SKILL_AmplifyDamage, nSkillLevel);
         if (nValue) {
           D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStateStats, (int)*pAuraStat, nValue, 0);
         }
       }
 
-      pAttacker = (D2UnitStrc*)((intptr_t)&pAttacker[-1].pMsgLast + 3);
-    } while (pAttacker);
+      pTarget = (D2UnitStrc*)((intptr_t)&pTarget[-1].pMsgLast + 3);
+    } while (pTarget);
 }
 
-void __fastcall MONSTER_OnDeathAmplifyDamageAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall MONSTER_CastAmplifyDamageOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     if (!bShouldTrigger) {
       return;
     }
@@ -1481,7 +1480,7 @@ void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, D2UnitStrc * pUn
 void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     int nSkillLvl;
     int32_t nLifePct;
-    eD2Skills eSkill;
+    int32_t eSkill;
     if (!bShouldTrigger) {
       return;
     }
@@ -1493,10 +1492,10 @@ void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pOwner, SKILL_ShadowWarrior);
       if (pSkill) {
         nSkillLvl = D2Common::Skills::GetSkillLevel(pOwner, pSkill, 1);
-        eSkill = nSkillLvl / 2 + SKILL_Kick;
-        if ((int)eSkill > 1) {
-          if ((int)eSkill >= 0xf) {
-            eSkill = SKILL_PoisonJavelin;
+        eSkill = nSkillLvl / 2 + 1;
+        if (eSkill > 1) {
+          if (eSkill >= 0xf) {
+            eSkill = 0xf;
           }
 
           goto fire_death_nova;
@@ -1504,21 +1503,21 @@ void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       }
     }
 
-    eSkill = SKILL_Kick;
+    eSkill = 1;
     fire_death_nova:
     nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
     if (nLifePct > 10) {
-      eSkill = SKILL_Kick;
+      eSkill = 1;
     }
 
     nLifePct = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(0x5a, 0);
-    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Nova, 0, eSkill, nLifePct);
+    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Nova, SKILL_Attack, eSkill, nLifePct);
 }
 
 // Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster (e.g. on death/trigger). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
-void __fastcall MONSTER_LightningUniqueDeathBolts(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     // Static local variables (originally global data)
-    static int gaMissileOffsets_LightningUniqueX[4] = { 0x0, 0x1, 0x0, -0x1 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueX, "D2Game::Monsters::MONSTER_LightningUniqueDeathBolts::gaMissileOffsets_LightningUniqueX");
+    static int gaMissileOffsets_LightningUniqueX[4] = { 0x0, 0x1, 0x0, -0x1 }; D2_STATIC_GUARD(gaMissileOffsets_LightningUniqueX, "D2Game::Monsters::MONSTER_CastLightningUniqueBolts::gaMissileOffsets_LightningUniqueX");
 
     int nSkillLevel;
     D2SkillArgStrc sSkillArg;
@@ -1630,12 +1629,12 @@ void __fastcall MONSTER_LightningUniqueDeathBolts(::SGAMEDATA * pGame, D2UnitStr
     }
 }
 
-void __fastcall MONSTER_LightningDeathIfNotRunning(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall MONSTER_CastLightningUniqueBoltsIfNotGetHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     if (!(bShouldTrigger && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Run))) {
       return;
     }
 
-    MONSTER_LightningUniqueDeathBolts(pGame, pUnit, dwUnused1, bShouldTrigger);
+    MONSTER_CastLightningUniqueBolts(pGame, pUnit, dwUnused1, bShouldTrigger);
 }
 
 void __fastcall MONSTER_DeathMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
@@ -1644,13 +1643,13 @@ void __fastcall MONSTER_DeathMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     }
 
     int32_t nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    eD2Skills eSkill = nLevel / 2;
-    if ((int)eSkill <= 1) {
-      eSkill = SKILL_Kick;
+    int32_t eSkill = nLevel / 2;
+    if (eSkill <= 1) {
+      eSkill = 1;
     }
 
     int32_t nMissileVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(0x77, 0);
-    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Coldunique, 0, eSkill, nMissileVelocity);
+    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Coldunique, SKILL_Attack, eSkill, nMissileVelocity);
 }
 
 void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, uint32_t dwParam2) {
@@ -1683,19 +1682,19 @@ void __fastcall MONSTER_DeathPoisonCloud(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 void __fastcall MONSTER_KillWithMinions(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t dwParam) {
-    D2MonsterKillStrc sKillStrc;
+    D2ModeChangeStrc sKillStrc;
     Ai::AiGeneral::FreeAiOfMinions(pUnit);
     Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, -1, UNIT_MONSTER, 0, 0);
     if (!(pUnit && pUnit->eAnimMode.ePlayerMode != Death)) {
       return;
     }
 
-    Monster::MonsterMode::SetCurrentSkill(pUnit, Death, &sKillStrc);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit, Death, &sKillStrc);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
 }
 
 void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
-    D2MonsterKillStrc sOwnerKillStrc;
+    D2ModeChangeStrc sOwnerKillStrc;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }
@@ -1711,7 +1710,7 @@ void __fastcall MONSTER_OnDeathKillOwnerAndMinions(::SGAMEDATA * pGame, D2UnitSt
       return;
     }
 
-    Monster::MonsterMode::SetCurrentSkill(pUnit_00, Death, &sOwnerKillStrc);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit_00, Death, &sOwnerKillStrc);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sOwnerKillStrc, 1);
 }
 
@@ -1957,7 +1956,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
             return;
           }
 
-          Monster::AI::MONSTERAI_ThinkRangedSpecial(pGame, pUnit);
+          Monster::AI::QUESTFX_BloodRavenDeath(pGame, pUnit);
           return;
         }
 
@@ -1968,7 +1967,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
                 return;
               }
 
-              Monster::AI::MONSTERAI_ThinkRangedShort(pGame, pUnit);
+              Monster::AI::QUESTFX_AndarielDeath(pGame, pUnit);
               return;
             }
           default:
@@ -1977,7 +1976,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
             if (pUnit->eAnimMode.ePlayerMode != Death) {
               return;
             }
-          Monster::AI::AI_Diablo_SpawnRingAttack(pGame, pUnit);
+          Monster::AI::QUESTFX_RadamentDeath(pGame, pUnit);
           return;
           case MonsterUnitMephisto:
             if (pUnit->eAnimMode.ePlayerMode != Death) {
@@ -1989,7 +1988,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
             if (pUnit->eAnimMode.ePlayerMode != Death) {
               return;
             }
-          Monster::AI::MONSTERAI_ThinkMeleeSkill(pGame, pUnit);
+          Monster::AI::QUESTFX_IzualDeath(pGame, pUnit);
           return;
         }
       }
@@ -2008,7 +2007,7 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
       break;
       case MonsterUnitOverSeer:
         if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-          Monster::AI::MONSTERAI_ThinkRangedNormal(pGame, pUnit);
+          Monster::AI::QUESTFX_ShenkDeath(pGame, pUnit);
           return;
         }
       break;
@@ -2180,7 +2179,7 @@ void __fastcall MONSTER_MissileSplitOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUni
     *pMonType &= 0xff7f;
 }
 
-void __fastcall MONSTER_ScheduleEventIfRunning(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
+void __fastcall MONSTER_LightningEnchantedModeChange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
     if (!(bShouldTrigger && pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run)) {
       return;
     }
@@ -2234,7 +2233,7 @@ void __fastcall MONSTER_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       return;
     }
 
-    nClassId = D2Common::DATATBLS::ItemStats::STATES_HasPassiveState(pUnit);
+    nClassId = D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
     if (!(!nClassId && (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster || !(pUnit->pUnitData.pUnitDataMonster->eMonsterType & 8)))) {
       return;
     }
@@ -2289,7 +2288,7 @@ void __fastcall MONSTER_ShatterOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
     BOOL _bIsDead;
     bool bIsDead;
-    D2MonsterKillStrc sKillStrc;
+    D2ModeChangeStrc sKillStrc;
     _bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (_bIsDead) {
       return;
@@ -2307,7 +2306,7 @@ void __fastcall MONSTER_HandleMinionDeath(::SGAMEDATA * pGame, D2UnitStrc * pUni
       return;
     }
 
-    Monster::MonsterMode::SetCurrentSkill(pUnit, Death, &sKillStrc);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit, Death, &sKillStrc);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
 }
 
@@ -2427,10 +2426,10 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
 void __fastcall MONSTER_HandleModeTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
     eD2MonsterAnimMode eAnimMode;
     if (pUnit) {
-      D2MonsterKillStrc sKillStrc;
+      D2ModeChangeStrc sKillStrc;
       eAnimMode = pUnit->eAnimMode.eMonsterMode;
       if (eAnimMode == eD2MonsterAnimMode_ns::GetHit) {
-        Monster::MonsterMode::SetCurrentSkill(pUnit, Death, &sKillStrc);
+        Monster::MonsterMode::MONMODE_InitModeChange(pUnit, Death, &sKillStrc);
         Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
         GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 4, 0, 0);
         return;
@@ -2584,13 +2583,13 @@ void __fastcall MONSTER_SpawnWormOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // MonUMod handler, only reached through g_MonsterUModHandlerTable row 41. While alive: MONSTERAI_TriggerMageThink, then event 7 in 75 frames.
-void __fastcall MONSTER_PeriodicMageThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t bUnique) {
+void __fastcall MONUMOD_TickAlwaysRunAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUModId, int32_t bUnique) {
     BOOL BVar1 = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (BVar1) {
       return;
     }
 
-    Monster::MONSTERAI_TriggerMageThink(pGame, pUnit);
+    Monster::MONSTERAI_RescheduleThink(pGame, pUnit);
     GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 0x4b, 0, 0);
 }
 
@@ -2632,15 +2631,15 @@ static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2Uni
     } while (nUModSlot < 9);
 }
 
-void __fastcall MONSTER_DispatchUModOnSpawn(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONSTER_DispatchUModModeStart(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 0, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONSTER_DispatchUModModeChange(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 1, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
+void __fastcall MONSTER_DispatchUModEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 2, pUnit);
 }
 
@@ -2648,11 +2647,11 @@ void __fastcall MONSTER_DispatchUModOnAttack(::SGAMEDATA * pGame, D2UnitStrc * p
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 3, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnSpecial(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONSTER_DispatchUModDamaged(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     MONSTER_DispatchUniqueModifiers(pGame, nullptr, 4, pUnit);
 }
 
-void __fastcall MONSTER_DispatchUModOnSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMissile) {
+void __fastcall MONSTER_DispatchUModMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMissile) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pMissile)) {
       return;
     }
@@ -2778,20 +2777,20 @@ D2UnitStrc * __fastcall SERVER_SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
 }
 
 // Spawns a monster (class nClassId) at (nPosX,nPosY) in pRoom, retrying with alternate spawn flags and a random nearby position via SPAWN_FindRandomPositionForMonster if the first attempts fail; returns NULL if no spawn succeeds. Copies 9 unique-modifier ids from pUModListSrc into the monster's MonUModList, ORs the SuperUnique/champion bit (0x10) into eMonsterType, then runs the four base unique-modifier init callbacks (ids 1..4) followed by each of the 9 copied modifiers via the aUmodInitTable dispatch. Returns the spawned D2UnitStrc*.
-int * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId, int32_t nMode, uint8_t * pUModListSrc) {
+D2UnitStrc * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId, int32_t nUnitGUID, uint8_t * pUModListSrc) {
     uint8_t* pUModList;
     int32_t anBaseUModIds[4];
     int32_t nClassIdSaved;
     uint16_t* pMonType;
-    D2UnitStrc* pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassId, eD2MonsterAnimMode_ns::Neutral, nMode, -1, 0x62);
+    D2UnitStrc* pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassId, eD2MonsterAnimMode_ns::Neutral, nUnitGUID, -1, 0x62);
     if (!pSpawnedUnit) {
       BOOL bFoundPos;
-      pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassId, eD2MonsterAnimMode_ns::Neutral, nMode, 4, 0x62);
+      pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassId, eD2MonsterAnimMode_ns::Neutral, nUnitGUID, 4, 0x62);
       nClassIdSaved = nClassId;
       if (!pSpawnedUnit) {
         bFoundPos = Spawn::SPAWN_FindRandomPositionForMonster(pGame, pRoom, nullptr, nClassId, &nPosX, &nPosY, 1);
         if (bFoundPos) {
-          pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassIdSaved, eD2MonsterAnimMode_ns::Neutral, nMode, -1, 0x62);
+          pSpawnedUnit = Monster::Create::SpawnMonsterAtRoomPosGuid(pGame, pRoom, nPosX, nPosY, nClassIdSaved, eD2MonsterAnimMode_ns::Neutral, nUnitGUID, -1, 0x62);
           if (!pSpawnedUnit) {
             return nullptr;
           }
@@ -2842,7 +2841,7 @@ int * __fastcall MONSTER_SpawnWithUniqueModifiers(::SGAMEDATA * pGame, D2RoomStr
       nUModIdx++;
     } while (nUModIdx < 9);
 
-    return (int*)pSpawnedUnit;
+    return pSpawnedUnit;
 }
 
 void __fastcall InitUmods(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nIndex, BOOL bInitType) {
@@ -3160,8 +3159,8 @@ int32_t __fastcall MONSTER_CalculateCorpseBombDamage(::SGAMEDATA * pGame, int32_
     return nPlayerCount * 8 - 0x10;
 }
 
-// Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and a scaling-mode selector (5/normal vs 6-8 vs default difficulty bands). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
-void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDifficultyScaling) {
+// Recomputes a monster unit's combat damage/to-hit stats and elemental on-hit damage from monstats.txt, scaling by monster level, difficulty, multiplayer player-count, and the monster animation mode eMode (callers pass Attack1/Attack2/Skill1; it selects which damage/to-hit columns apply). Adds pet-skill damage bonuses, applies the classic (non-expansion) difficulty damage/to-hit penalty divisors, and an expansion corpse-bomb/playercount damage multiplier. Writes mindamage/maxdamage/tohit into the unit's flag-1 stat list, then iterates the three elemental damage slots (El1/El2/El3 mode/type/chance) rolling chance from the unit seed and adding the matching elemental min/max/length stats (fire, lightning, magic, cold, poison, drains, stun, burning). Server/common monster setup; no-op for non-monster units.
+void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, eD2MonsterAnimMode eMode) {
     // Frame slots -64..-4 are ONE object: &nPetBonusMinDmg is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -3212,7 +3211,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
     __frame0.nPetBonusMinDmg = 0;
     __frame0.nPetBonusMaxDmg = 0;
     __frame0.nPetBonusToHit = 0;
-    __frame0.nScalingMode = nDifficultyScaling;
+    __frame0.nScalingMode = eMode;
     SKILLS::SkillsServer::SKILLS_CalcPetSkillDamage(pUnit, &__frame0.nPetBonusMinDmg);
     D2StatListExStrc* pStatsEx;
     pStatsEx = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 1);
@@ -3220,7 +3219,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, uint32_t nDif
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_FreeChildStatLists(pStatsEx);
+    D2Common::Stats::StatsEx::STATLIST_RemoveAllStats(pStatsEx);
     ::SGAMEDATA* pGameFromUnit;
     pGameFromUnit = UNIT::SUnit::GetGamePointer(pUnit);
     __frame0.nDifficultyIdx = (uint32_t)pGameFromUnit->nDifficulty;
@@ -3410,7 +3409,7 @@ void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);
 }
 
-void __stdcall MONSTER_CheckSpecialDeathFlag(D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
+void __stdcall MONSTER_SetSandLeaperHitResultFlag(D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
     if (!(pDamage->wResultFlags & 4 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return;
     }
@@ -3479,7 +3478,7 @@ uint8_t __fastcall MONSTER_GetHpPercent128(D2UnitStrc * pUnit) {
     }
 
     int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit) >> 8;
+    int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
     int nMaxHpShifted = nMaxHp;
     if (nMaxHpShifted > 0 && nHp < nMaxHpShifted) {
       return (uint8_t)((nHp << 7) / nMaxHpShifted);

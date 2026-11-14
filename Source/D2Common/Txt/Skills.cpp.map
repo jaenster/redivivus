@@ -627,7 +627,7 @@
         "SKILLS_GetUnitStatValue",
         "GetAttackRate",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SERVER_GetUnitStat"
       ],
       "usedTypes": [
@@ -637,7 +637,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "71a890c3",
+      "dh": "e20c46b1",
       "paramStorage": [
         [
           "eUnitStat",
@@ -1153,7 +1153,7 @@
       ]
     },
     {
-      "name": "SKILLS_SetTimerFlag",
+      "name": "SKILLS_SetCharges",
       "address": "00643b70",
       "lines": [
         {
@@ -1163,7 +1163,7 @@
       ],
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
-        "SKILLS_SetTimerFlag",
+        "SKILLS_SetCharges",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -1172,14 +1172,14 @@
         "D2SkillStrc",
         "int32_t"
       ],
-      "dh": "7d6042d2",
+      "dh": "4fbcefc5",
       "paramStorage": [
         [
           "pSkill",
           "Stack[0x4]:4"
         ],
         [
-          "nTimerValue",
+          "nCharges",
           "Stack[0x8]:4"
         ]
       ]
@@ -1375,7 +1375,7 @@
         "ITEMS_IsA",
         "CheckItemFlag",
         "ITEM_GetTxtItemTypes_shoots",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetMaxStack",
         "STATSEX_GetCurrentStat"
       ],
@@ -1385,7 +1385,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70b42ad8",
+      "dh": "e073f2dd",
       "paramStorage": [
         [
           "pUnit",
@@ -1450,7 +1450,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_CheckRestriction",
-        "STATES_HasPoisonState",
+        "STATES_HasRestrictFlagState",
         "UNIT_GetUnitState"
       ],
       "usedTypes": [
@@ -1459,7 +1459,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "89a6557f",
+      "dh": "cd37c7f2",
       "paramStorage": [
         [
           "pSkillTxt",
@@ -2323,7 +2323,7 @@
       ]
     },
     {
-      "name": "SpendSkillPointOnSkill",
+      "name": "SKILLS_CheckRequiredAttributes",
       "address": "00644920",
       "lines": [
         {
@@ -2333,7 +2333,7 @@
       ],
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
-        "SpendSkillPointOnSkill",
+        "SKILLS_CheckRequiredAttributes",
         "STATSEX_GetCurrentStat",
         "SKILL_GetRequiredLevel"
       ],
@@ -2344,7 +2344,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3edd5816",
+      "dh": "975b14b6",
       "paramStorage": [
         [
           "pUnit",
@@ -2368,7 +2368,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_CalcToHit",
-        "SKILLS_CompileSkillFormula"
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2SkillCalcContextStrc",
@@ -2378,7 +2378,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3421b4ff",
+      "dh": "30419ae2",
       "paramStorage": [
         [
           "pUnit",
@@ -2566,7 +2566,7 @@
       "calledFunctions": [
         "SERVER_MinDamage",
         "SKILLS_GetValueByLevelBreakpoints",
-        "SKILLS_CompileSkillFormula",
+        "FOG_EvaluateCalcExpression",
         "D2ApplyPercent",
         "SKILLS_ApplyElementalMasteryBonus"
       ],
@@ -2578,7 +2578,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26317225",
+      "dh": "6eb103b9",
       "paramStorage": [
         [
           "pUnit",
@@ -2611,7 +2611,7 @@
       "calledFunctions": [
         "SERVER_MaxDamage",
         "SKILLS_GetValueByLevelBreakpoints",
-        "SKILLS_CompileSkillFormula",
+        "FOG_EvaluateCalcExpression",
         "D2ApplyPercent",
         "SKILLS_ApplyElementalMasteryBonus"
       ],
@@ -2623,7 +2623,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "40c76ceb",
+      "dh": "3858cc87",
       "paramStorage": [
         [
           "pUnit",
@@ -2655,7 +2655,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_GetElementalLength",
-        "SKILLS_CompileSkillFormula",
+        "FOG_EvaluateCalcExpression",
         "D2ApplyPercent"
       ],
       "usedTypes": [
@@ -2665,7 +2665,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6536d2b5",
+      "dh": "624016e3",
       "paramStorage": [
         [
           "pUnit",
@@ -2992,7 +2992,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_CheckMonsterCorpseSelectable",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
@@ -3000,7 +3000,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "97961f7f",
+      "dh": "d6f615e4",
       "paramStorage": [
         [
           "bCheckDead",
@@ -3024,7 +3024,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "D2CheckIfCorpseIsConsumable",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
@@ -3032,7 +3032,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f304d18f",
+      "dh": "297d0da7",
       "paramStorage": [
         [
           "pUnit",
@@ -3056,7 +3056,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_IsCorpseValidForRevive",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
         "IsSoftMonster"
       ],
@@ -3064,7 +3064,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "6cf372d7",
+      "dh": "e3415667",
       "paramStorage": [
         [
           "pUnit",
@@ -3084,13 +3084,13 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_IsSelectableCorpse",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "53694dc6",
+      "dh": "37faec38",
       "paramStorage": [
         [
           "pUnit",
@@ -3110,7 +3110,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILL_CanReviveMonster",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset",
         "IsSoftMonster"
       ],
@@ -3118,7 +3118,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "17abb4fb",
+      "dh": "0c660af9",
       "paramStorage": [
         [
           "pUnit",
@@ -3138,13 +3138,13 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_IsSelectableCorpse2",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "20745c6e",
+      "dh": "059b603e",
       "paramStorage": [
         [
           "pUnit",
@@ -3164,13 +3164,13 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_IsSelectableCorpse3",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9d7c675d",
+      "dh": "79c1164b",
       "paramStorage": [
         [
           "pUnit",
@@ -3634,7 +3634,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockPlayer_Type",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
@@ -3648,7 +3648,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8d8c9d52",
+      "dh": "7fc6f5fc",
       "paramStorage": [
         [
           "pUnit",
@@ -3681,14 +3681,14 @@
       "calledFunctions": [
         "SKILL_GetArrowModifierSkill",
         "GetWeaponClass",
-        "ITEM_GetMinimalStatValueShifted"
+        "STATLIST_UnitGetStatValueUnchecked"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "25117552",
+      "dh": "5ae59d13",
       "paramStorage": [
         [
           "pUnit",
@@ -3726,7 +3726,7 @@
       ]
     },
     {
-      "name": "STATES_RemoveAllProgressiveStates",
+      "name": "STATES_RemoveDisguiseStates",
       "address": "00646020",
       "lines": [
         {
@@ -3736,7 +3736,7 @@
       ],
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
-        "STATES_RemoveAllProgressiveStates",
+        "STATES_RemoveDisguiseStates",
         "UNITS_IsShapeshifted",
         "UNIT_GetUnitState",
         "GetStatsByState",
@@ -3751,7 +3751,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a3193aff",
+      "dh": "7af5b659",
       "paramStorage": [
         [
           "pUnit",
@@ -3887,7 +3887,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILL_CalcKickDamage",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetEquipedWeapon",
         "GetBodyLocation",
         "INVENTORY_GetItemByGridOffset",
@@ -3910,7 +3910,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6111143c",
+      "dh": "092d944c",
       "paramStorage": [
         [
           "pUnit",
@@ -3968,7 +3968,7 @@
         "STATSEX_GetCurrentStat",
         "GetSkill",
         "GetSkillLevel",
-        "SKILLS_CompileSkillFormula"
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2MissilesTxt",
@@ -3982,7 +3982,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "4606eae9",
+      "dh": "c8dcf855",
       "paramStorage": [
         [
           "pUnit",
@@ -4129,7 +4129,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "D2GetSkillCalc",
-        "SKILLS_CompileSkillFormula"
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2SkillCalcContextStrc",
@@ -4138,7 +4138,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c712c209",
+      "dh": "7549b785",
       "paramStorage": [
         [
           "pUnit",
@@ -4170,7 +4170,7 @@
       "namespace": "D2Common::Skills::Skills",
       "calledFunctions": [
         "SKILLS_EvalDescCalcBytecode",
-        "SKILLS_CompileSkillFormula"
+        "FOG_EvaluateCalcExpression"
       ],
       "usedTypes": [
         "D2SkillCalcContextStrc",
@@ -4179,7 +4179,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "039ab152",
+      "dh": "24907f99",
       "paramStorage": [
         [
           "pUnit",
@@ -4606,7 +4606,7 @@
         "CanDualWield",
         "INVENTORY_GetEquippedWeaponInfo",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLS_GetWeaponByHand",
         "ITEMS_IsA"
       ],
@@ -4617,7 +4617,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "79a049d2",
+      "dh": "d1a5a018",
       "paramStorage": [
         [
           "pSkill",
@@ -4833,7 +4833,7 @@
         "STATSEX_GetCurrentStat",
         "GetWeaponBySkill",
         "INVENTORY_GetWeaponHandedness",
-        "GetTxtMinDamage",
+        "STATLIST_GetMinDamageFromUnit",
         "SKILLS_GetValueByLevelBreakpoints",
         "D2GetSkillCalc",
         "D2ApplyPercent"
@@ -4843,7 +4843,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "b7be5f65",
+      "dh": "9c5b9ed9",
       "paramStorage": [
         [
           "pUnit",
@@ -4879,7 +4879,7 @@
         "GetWeaponBySkill",
         "STATSEX_GetCurrentStat",
         "INVENTORY_GetWeaponHandedness",
-        "GetTxtMaxDamage",
+        "STATLIST_GetMaxDamageFromUnit",
         "SKILLS_GetValueByLevelBreakpoints",
         "D2GetSkillCalc",
         "D2ApplyPercent"
@@ -4889,7 +4889,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d986be30",
+      "dh": "6b3b784b",
       "paramStorage": [
         [
           "pUnit",

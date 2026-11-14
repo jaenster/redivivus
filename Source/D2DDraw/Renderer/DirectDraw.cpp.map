@@ -2261,7 +2261,7 @@
         "SFileLoadFileEx",
         "SBmpDecodeImage",
         "SMemFree",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "FreeClientMemory"
       ],
       "usedTypes": [
@@ -2270,7 +2270,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e85b020a",
+      "dh": "91b26a74",
       "paramStorage": [
         [
           "szSmacker",
@@ -2299,14 +2299,14 @@
       "calledFunctions": [
         "PlayerSmacker",
         "RENDERER_DDRAW_BlitSmackerFrame",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "CloseSmacker"
       ],
       "usedTypes": [
         "D2SmackerContextStrc",
         "uint8_t"
       ],
-      "dh": "b433556f",
+      "dh": "74ef7555",
       "paramStorage": [
         [
           "pContext",

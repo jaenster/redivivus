@@ -395,8 +395,8 @@ struct D2MapAIStrc * __fastcall DRLGPRESET_TransferMapAI(struct D2MapAIStrc * * 
 void __fastcall DRLGPRESET_FreeSpawnPointList(struct D2PoolManagerStrc * pMemory, struct D2AiGeneralStrc * pAiGeneral);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-void StaticFini_gLogMessageQueueCS_Unref_00665930();
-void StaticFini_gLogMessageQueueCS_Unref_00665940();
+void PRESET_EnterCriticalSection_0096d610();
+void PRESET_LeaveCriticalSection_0096d610();
 // Parses DS1/preset file into D2DrlgFileStrc: loads DS1 blob, reads header/version, sets layer pointers, converts tile orientation for old versions, builds preset-unit list (monsters/objects/items), optional subst-groups and paths, and populates substitution group data when present.
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall ParsePresetsOfDrlgFile(struct D2DrlgFileStrc * pFile, struct D2PoolManagerStrc * pMemory, char * pBuffer);

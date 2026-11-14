@@ -75,8 +75,8 @@ void __stdcall GetTargetTypeAndGUID(struct D2DynamicPathStrc * pDynamicPath, eD2
 struct D2UnitStrc * __stdcall GetTargetUnit(struct D2DynamicPathStrc * pDynamicPath);
 int32_t __stdcall GetCollisionType(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall PATH_ChangeCollisionType(struct D2DynamicPathStrc * pDynamicPath, int32_t eCollisionFlag);
-int32_t __stdcall PATH_GetCollisionPattern(struct D2DynamicPathStrc * pDynamicPath);
-void __stdcall PATH_SetCollisionPattern(struct D2DynamicPathStrc * pDynamicPath, int32_t nFlags);
+int32_t __stdcall PATH_GetMoveTestCollisionMask(struct D2DynamicPathStrc * pDynamicPath);
+void __stdcall PATH_SetMoveTestCollisionMask(struct D2DynamicPathStrc * pDynamicPath, int32_t nCollisionMask);
 // Sets the dynamic-path movement mode (ePathType) on a unit's D2DynamicPathStrc. Looks up the type's flag bits in PATHTYPEFLAGS: saves the previous path type when flag 0x2000 is set, snapshots current velocity when flag 0x8000 is set, merges the flag bits into nFlags (clearing the 0xfff800ff mask), stores ePathType and its PATHTYPEPOINTS direction offset. Halts fatally (ERROR_Unrecoverable) on invalid combinations: players using path type 2, a prev path type of 8/0xb, or path type 4 with nDistMax >= 0x4e. No return.
 void __stdcall PATH_SetPathType(struct D2DynamicPathStrc * pDynamicPath, int ePathType);
 void __stdcall PATH_RestoreVelocityAndPathType(struct D2DynamicPathStrc * pDynamicPath);
@@ -97,9 +97,9 @@ void __stdcall ResetSP2(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall SetStepNum(struct D2DynamicPathStrc * pDynamicPath, uint8_t nStepNum);
 int32_t __stdcall GetStepNum(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall SetDistanceWithChecks(struct D2DynamicPathStrc * pDynamicPath, uint32_t nDistance);
-int32_t __stdcall GetUnitWidth(struct D2UnitStrc * pUnit);
-void __stdcall SetUnitWidth(struct D2UnitStrc * pUnit, int32_t nWidth);
-void __stdcall PATH_SetOrClearFlag0x2000(struct D2DynamicPathStrc * pDynamicPath, int32_t bSet);
+int32_t __stdcall PATH_GetUnitCollisionPattern(struct D2UnitStrc * pUnit);
+void __stdcall PATH_SetUnitCollisionPattern(struct D2UnitStrc * pUnit, int32_t nCollisionPattern);
+void __stdcall PATH_SetOrClearFlag0x2000(struct D2UnitStrc * pUnit, int32_t bSet);
 void __stdcall PATH_PeriodicPathRecalc(struct D2UnitStrc * pUnit);
 // @wasnamed GetDistance - one name on two different functions.
 // @evidence Takes four coordinates and returns (y2-y1)^2 + (x2-x1)^2 - a SQUARED distance, so callers
@@ -131,10 +131,10 @@ int32_t __stdcall GetAcceleration(struct D2DynamicPathStrc * pDynamicPath);
 int32_t __stdcall PATH_GetPathPointIndex(struct D2DynamicPathStrc * pDynamicPath);
 int32_t __stdcall GetPrecisionX(struct D2DynamicPathStrc * pDynamicPath);
 int32_t __stdcall GetPrecisionY(struct D2DynamicPathStrc * pDynamicPath);
-LONG __stdcall GetTargetX(struct D2DynamicPathStrc * pDynamicPath);
-int32_t __stdcall GetTargetY(struct D2DynamicPathStrc * pDynamicPath);
-void __fastcall SetTargetX(struct D2DynamicPathStrc * pDynamicPath, LONG nScreenX);
-void __fastcall SetTargetY(struct D2DynamicPathStrc * pDynamicPath, LONG nScreenY);
+LONG __stdcall GetScreenX(struct D2DynamicPathStrc * pDynamicPath);
+int32_t __stdcall GetScreenY(struct D2DynamicPathStrc * pDynamicPath);
+void __fastcall SetScreenX(struct D2DynamicPathStrc * pDynamicPath, LONG nScreenX);
+void __fastcall SetScreenY(struct D2DynamicPathStrc * pDynamicPath, LONG nScreenY);
 struct D2RoomStrc * __stdcall GetRoom(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall SetRoom(struct D2DynamicPathStrc * pDynamicPath, struct D2RoomStrc * pRoom);
 void __stdcall SetSP1Shifted(struct D2DynamicPathStrc * pDynamicPath, int32_t nX, int32_t nY);

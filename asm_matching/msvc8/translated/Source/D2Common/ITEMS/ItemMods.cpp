@@ -28,7 +28,7 @@ fpProperties PROPERTIESFUNCTIONS[37] = {
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddEnhancedDamage,
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_Simple,
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillBonus,
-    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddClassSkillBonus,
+    (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillTabBonus,
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddSkillOnEvent,
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_RandLevelAsLayer,
     (fpProperties)&D2Common::ITEMS::ItemMods::ITEMPROP_AddStat_WithMaxDurabilityReset,
@@ -134,16 +134,16 @@ static intptr_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, 
     }
 }
 
-void __stdcall ITEMMODS_GetQualityMinMax(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel) {
-    *pnSkillId = nPackedQuality & 0x1ff;
-    *pnSkillLevel = (int)nPackedQuality >> 9 & 0x1f;
+void __stdcall ITEMMODS_UnpackSkillAndLevel(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel) {
+    *pnSkillId = nPackedValue & 0x1ff;
+    *pnSkillLevel = (int)nPackedValue >> 9 & 0x1f;
 }
 
-void __stdcall ITEMMODS_GetQualityAllFields(uint32_t nPackedQuality, uint32_t * pnParam1, uint32_t * pnParam2, uint32_t * pnParam3, uint32_t * pnParam4) {
-    *pnParam1 = nPackedQuality & 0x1ff;
-    *pnParam2 = (int)nPackedQuality >> 9 & 0x1f;
-    *pnParam3 = (int)nPackedQuality >> 0xe & 0xff;
-    *pnParam4 = (int)nPackedQuality >> 0x16 & 0xff;
+void __stdcall ITEMMODS_UnpackChargedSkill(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnParam3, uint32_t * pnParam4) {
+    *pnSkillId = nPackedValue & 0x1ff;
+    *pnSkillLevel = (int)nPackedValue >> 9 & 0x1f;
+    *pnParam3 = (int)nPackedValue >> 0xe & 0xff;
+    *pnParam4 = (int)nPackedValue >> 0x16 & 0xff;
 }
 
 // Searches an item unit's stat lists (flag 0x40) for a charged-skill stat matching nParam1 (skill ID) and nParam2 (charge slot). Recurses into socketed/carried items via inventory. On match, writes current charge count (low byte) to *pnParam and the stat list pointer to *ppStatList. Returns 1 if found, 0 otherwise.
@@ -250,11 +250,11 @@ BOOL __stdcall ITEMMOD_SetChargedSkillCharges(D2UnitStrc * pUnit, int32_t nSkill
     return 0;
 }
 
-int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue) {
-    int nMaxRepairLevel = (nPackedRepairData >> 0xc & 0x3ffU) - 0x100;
-    int nMinRepairLevel = (nPackedRepairData >> 2 & 0x3ffU) - 0x100;
+int32_t __stdcall ITEMMODS_GetByTimeAdjustment(int nPackedByTime, uint32_t nPeriodOfDay, int32_t nTimeOfDay, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue) {
+    int nMaxRepairLevel = (nPackedByTime >> 0xc & 0x3ffU) - 0x100;
+    int nMinRepairLevel = (nPackedByTime >> 2 & 0x3ffU) - 0x100;
     if (pnTimePeriod) {
-      *pnTimePeriod = nPackedRepairData & 3U;
+      *pnTimePeriod = nPackedByTime & 3U;
     }
     if (pnMinValue) {
       *pnMinValue = nMinRepairLevel;
@@ -263,7 +263,7 @@ int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t d
       *pnMaxValue = nMaxRepairLevel;
     }
 
-    int nDurabilityDelta = nDurability + (nPackedRepairData & 3U) * -0x5a;
+    int nDurabilityDelta = nTimeOfDay + (nPackedByTime & 3U) * -0x5a;
     if (nDurabilityDelta < 0) {
       nDurabilityDelta = -nDurabilityDelta;
     }
@@ -282,25 +282,25 @@ int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t d
     return nMaxRepairLevel - (int)((nMaxRepairLevel - nMinRepairLevel) * uRepairFactor) / 0xb4;
 }
 
-int32_t __stdcall ITEMMODS_GetQualityField1(int32_t nParam1, int32_t nParam2) {
+int32_t __stdcall ITEMMODS_PackSkillAndLevel(int32_t nParam1, int32_t nParam2) {
     return nParam2 * 0x200 + nParam1;
 }
 
-void __stdcall ITEMMODS_GetQualityFields2_3_4(uint32_t nPackedQuality, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance) {
-    *pnSkillId = nPackedQuality & 0x1ff;
-    *pnSkillLevel = (int)nPackedQuality >> 9 & 0x1f;
-    *pnChance = (int)nPackedQuality >> 0xe & 0x7f;
+void __stdcall ITEMMODS_UnpackSkillLevelChance(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnChance) {
+    *pnSkillId = nPackedValue & 0x1ff;
+    *pnSkillLevel = (int)nPackedValue >> 9 & 0x1f;
+    *pnChance = (int)nPackedValue >> 0xe & 0x7f;
 }
 
-int32_t __stdcall ITEMMODS_GetQualityField2(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
+int32_t __stdcall ITEMMODS_PackSkillLevelChance(int32_t nParam1, int32_t nParam2, int32_t nParam3) {
     return (nParam3 * 0x20 + nParam2) * 0x200 + nParam1;
 }
 
-void __stdcall ITEMMODS_GetQualityFields1_2_3(uint32_t nPackedQuality, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels) {
+void __stdcall ITEMMODS_UnpackSkillTab(uint32_t nPackedValue, uint32_t * pnPlayerClass, uint32_t * pnSkillTab, uint32_t * pnSkillLevels) {
     if (pnPlayerClass && pnSkillTab && pnSkillLevels) {
-      *pnPlayerClass = (nPackedQuality & 0x1f) / 3;
-      *pnSkillTab = (nPackedQuality & 0x1f) % 3;
-      *pnSkillLevels = (int)nPackedQuality >> 5 & 0x1f;
+      *pnPlayerClass = (nPackedValue & 0x1f) / 3;
+      *pnSkillTab = (nPackedValue & 0x1f) % 3;
+      *pnSkillLevels = (int)nPackedValue >> 5 & 0x1f;
       return;
     }
 
@@ -2214,7 +2214,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithLayerFromParam4(uint32_t nType, D2UnitS
     return nResult;
 }
 
-uint32_t __fastcall ITEMPROP_AddClassSkillBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
+uint32_t __fastcall ITEMPROP_AddSkillTabBonus(uint32_t nType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2SetsTxtFStrc * pProperty, int32_t nSet, int32_t nStatId, uint32_t nVal, int32_t nRolledValue, int32_t nState, uint32_t dwFlags, D2UnitStrc * pContextUnit) {
     if (!pProperty) {
       return 0;
     }
@@ -2620,7 +2620,7 @@ uint32_t __fastcall ITEMPROP_AddStat_WithMaxDurabilityReset(int32_t nType, D2Uni
     int32_t nMaxDurability = ITEMMOD_RollRandomValue(pUnit2, nPropPtr->fmin, nPropPtr->fmax);
     uint32_t uRetVal = ITEMMOD_AddStatToItem(pUnit2, nStatLayer, pUnit, nPropPtr, nSet, (short int)nStatId, 0, nMaxDurability, nState);
     if (uRetVal) {
-      nMaxDurability = Stats::StatsEx::GetTxtMaxDurability(pUnit2);
+      nMaxDurability = Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pUnit2);
       if (nMaxDurability > 0) {
         Stats::StatsEx::STATLIST_SetUnitStat(pUnit2, UNITSTAT_durability, nMaxDurability, 0);
       }

@@ -192,11 +192,11 @@ void __fastcall Q18_InitObjectMode(D2QuestDataStrc * pQuestData, D2ObjectInitFnA
       return;
     }
     if (pQuestData->bIsNotIntroduction == '\0') {
-      D2Common::Units::SetupUpdateFlag(pObjectInitFnArg->pObject, 2);
+      D2Common::Units::ChangeAnimMode(pObjectInitFnArg->pObject, 2);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pObjectInitFnArg->pObject, pQuestData->pQuestSpecificData.pA3Q1->nTomeObjectMode);
+    D2Common::Units::ChangeAnimMode(pObjectInitFnArg->pObject, pQuestData->pQuestSpecificData.pA3Q1->nTomeObjectMode);
 }
 
 // Q18_PlayerNotifyCompleted — Lam Esen's Tome. Broadcast callback (passed to QUEST_SetStateAndBroadcast). For the given player, if the quest is Completed/FinishedInPreviousGame AND it has the JustCompleted or CannotCompleteQuestInGame transient flag set, push a quest update (msg 0xf) to that player; otherwise no-op. Read-only on the record.
@@ -586,10 +586,10 @@ BOOL __fastcall OBJOP_A3Q1_ActivateLamEsensTome(D2ObjectOperateFnArg * pOperatio
       }
 
       pOperation->sArg.pVictim->dwDropItemCode = 0x20626262;
-      pVictim = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, ITEMTYPE_Shield, (int32_t*)&pDropCountOut, nullptr, -1, 0);
+      pVictim = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pDropCountOut, nullptr, -1, 0);
       if (pVictim) {
         int32_t nVictimGUID;
-        D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 2);
+        D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 2);
         pA1Q3Data = pQuestData->pQuestSpecificData.pA3Q1;
         pA1Q3Data->nPlayersInArea++;
         pA1Q3Data->bNotifiedPlayers = '\x01';

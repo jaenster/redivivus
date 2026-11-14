@@ -1125,10 +1125,10 @@ void __stdcall INPUT_HandleIMEStartComposition(D2UIMouseMsgStrc * pMsg) {
     gaChatInputBuffer = '\x01';
     gwcIMECompositionString[0] = L'\0';
     gwcImeCompositionBuffer[0] = L'\0';
-    if (UI::Chat::gaIMECompositionBuffer == 9) {
+    if (UI::Chat::gnLanguageCode == 9) {
       gnIMEInputMode = 4;
     } else {
-      if (UI::Chat::gaIMECompositionBuffer == 8) {
+      if (UI::Chat::gnLanguageCode == 8) {
         gnIMEInputMode = 5;
       }
     }
@@ -1142,7 +1142,7 @@ void __stdcall INPUT_HandleIMEEndComposition(D2UIMouseMsgStrc * pMsg) {
     gwcIMECompositionString[0] = L'\0';
     gwcImeCompositionBuffer[0] = L'\0';
     gnChatInputTextLength = -2;
-    if (UI::Chat::gaIMECompositionBuffer == 6) {
+    if (UI::Chat::gnLanguageCode == 6) {
       gaChatInputBuffer = '\0';
     }
 

@@ -897,7 +897,7 @@ static void FreeIpRateList(D2QServerStrc * pQServer) {
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
-int __stdcall SendPacketToClient(D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId) {
+int __stdcall QSERVER_EnqueueClientPacket(D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId) {
     D2QServerModePacketNodeStrc* pModePacketNode;
     uint32_t nClassifierOuts[4];
     nClassifierOuts[2] = 0;

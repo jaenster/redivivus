@@ -56,10 +56,10 @@ void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId);
 int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, struct D2UnitStrc * pUnit);
 int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyId);
 BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, struct D2UnitStrc * pUnit, int * pLevelSum);
-void __fastcall CountModeZero(int32_t * pContext, struct D2UnitStrc * pUnit, int * pCount);
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * bExecute);
+void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, struct D2UnitStrc * pUnit, int * pCount);
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs);
 // Calls fpFilter(pGame, pMember, pDataForFunction) once for each party member of pUnit that is in the same level. Looks up pUnit's room and level ID, resolves its party ID, then iterates the party's sub-sub list; for each member found in the unit table whose room maps to the same level ID, invokes the filter callback. Also calls the callback (once, with pUnit itself) if pUnit has no room or no party, acting as a fallback. The callback is __fastcall(pGame@ECX, pUnit@EDX, pUserData@stack) - all three known implementations end in RET 0x4 - and its return value is discarded.
-void __fastcall FindUnitWithFilter(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, pfnPartyMemberFilter fpFilter, void * pDataForFunction);
+void __fastcall PARTY_IteratePartyMembersInSameLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, pfnPartyMemberFilter pfnCallback, void * pArgs);
 // @sourcefile .\UNIT\Party.cpp
 void __fastcall BroadcastAutomapAllyPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Returns the party ID for a player unit by searching the game's party control table. Resolves the search GUID from the unit (or its cursor item if pInventory is set), then walks all party sub-records and their member lists looking for a GUID match. Returns the matching nPartyId, or -1 if the unit is a player with no party. Halts if pUnit is null or not a player type.
@@ -68,7 +68,7 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * p
 // @sourcefile .\UNIT\Party.cpp
 void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 uint32_t __fastcall GetPartiedUnitsLevelSum(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-uint32_t __fastcall CountDeadPartyMembers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+uint32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Distributes a gold amount among party members in the same level, respecting each member's carry limit. If fewer than 2 alive party members are present, all gold goes to the source player. Otherwise, divides nAmount evenly among alive same-level members (via GoldCalculations/ChangeGoldForPlayer), then grants the remainder to the source player. Returns the amount that could not be deposited due to carry limits.
 DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nAmount);
 #endif // D2_MODULE_D2Game

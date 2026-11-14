@@ -38,7 +38,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A4Q3 {
 
 // A4Q3 / TerrorsEnd — spawns the Chaos Sanctuary seal boss for whichever of the three seals (Infector of Souls 0x24, Lord De Seis 0x25, Grand Vizier of Chaos 0x26) the triggering unit is standing on, matching the unit's coordinates against the three cached seal-boss spawn points in the TerrorsEnd quest-specific data. On spawn failure schedules a retry event 10 frames later. No quest-state writes.
-void __fastcall Q35_SpawnAncientsWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall Q27_SpawnSealBoss(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nSuperUnique;
     POINT sUnitCoords;
     D2Common::Units::GetCoords(pUnit, &sUnitCoords);
@@ -98,11 +98,11 @@ void __fastcall Objects_InitFn78_LastLastPortal(D2ObjectInitFnArg * pInitArg) {
     }
     if (pQuestData->pQuestSpecificData.pA4Q2->nLastPortalObjectMode != 2) {
       pQuestData->pQuestSpecificData.pA4Q2->nLastPortalObjectMode = 2;
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 1);
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 // A4Q3 Hell's Forge — Q28_PlayerNotifyCompletedForge: per-player state-broadcast callback (passed to QUEST_SetStateAndBroadcast). Sends quest-update 0x18 to the player ONLY in the transition window: Hell's Forge is Completed-or-FinishedInPreviousGame AND NOT (JustCompleted or CannotCompleteQuestInGame). I.e. notifies players who finished it in a prior game when they re-enter, suppressing duplicate "just done" notifications.
@@ -133,11 +133,11 @@ void __fastcall Objects_InitFn48_HellForge(D2ObjectInitFnArg * pInitArg) {
     uint16_t wForgeState;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_HellsForge);
     if (!pQuestData || pQuestData->bIsNotIntroduction == '\0') {
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 3);
     } else {
       uint8_t nUpdateFlag;
       wForgeState = (uint16_t)((uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->nForgeStage | (uint32_t)(uint8_t)pQuestData->pQuestSpecificData.pA4Q3->byForgeStageHigh << 8);
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, (uint32_t)wForgeState);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, (uint32_t)wForgeState);
       nUpdateFlag = pQuestData->nStateFlagPrev;
       if (nUpdateFlag != 0xd && nUpdateFlag != 2 && nUpdateFlag != 3) {
         pQuestData->nQuestPacketFlags = '\0';
@@ -280,7 +280,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
               /* HasQuestItem('mss '=0x2073736d, Mephisto's Soulstone): forge idle + player
                          carries soulstone -> place stone on anvil (internal state 2) */ pQuestItem = ITEMS::Items::Drop::HasQuestItem(pOperation->sArg.pGame, pOperation->pAttacker, 0x2073736d);
               if (pQuestItem) {
-                D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 1);
+                D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
                 pGame = pOperation->sArg.pGame;
                 GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
                 pA4Q3Data->nForgeStage = 2;
@@ -325,7 +325,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
                       return 0;
                     }
 
-                    D2Common::Units::SetupUpdateFlag(pOperation->sArg.pVictim, 3);
+                    D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 3);
                     pA4Q3Data->nForgeStage = 3;
                     pA4Q3Data->byForgeStageHigh = 0;
                     QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20686668);
@@ -743,7 +743,7 @@ void __fastcall Q28_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     /* Hellforge Hammer */ pQuestArgs->pTarget->dwDropItemCode = 0x20686668;
-    D2UnitStrc* pDroppedHammer = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, ITEMTYPE_PlayerBodyPart, &nQuestDataPtr, nullptr, -1, 0);
+    D2UnitStrc* pDroppedHammer = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, QUALITY_UNIQUE, &nQuestDataPtr, nullptr, -1, 0);
     if (!pDroppedHammer) {
       return;
     }
@@ -854,7 +854,7 @@ void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D
     uint32_t sSeedNext;
     D2QuestDataA4Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q3;
     if (pQuestSpecificData->bSetupUpdateFlag) {
-      D2Common::Units::SetupUpdateFlag(pUnit, 4);
+      D2Common::Units::ChangeAnimMode(pUnit, 4);
     }
     if (!pQuestSpecificData->bDropActive) {
       return;
@@ -898,7 +898,7 @@ void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D
       }
 
       pUnit->dwDropItemCode = aRuneCode;
-      pDroppedGem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, ITEMTYPE_Shield, (int32_t*)aGemItemCode, nullptr, -1, 0);
+      pDroppedGem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, QUALITY_NORMAL, (int32_t*)aGemItemCode, nullptr, -1, 0);
       if (pDroppedGem) {
         nDropsSucceeded++;
       }
@@ -932,7 +932,7 @@ void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D
         pSeed = GetQuestControlSeed(pGame);
         nRuneIdx = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0xb);
         pUnit->dwDropItemCode = pRuneTable[nRuneIdx];
-        ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, ITEMTYPE_Shield, (int32_t*)aGemItemCode, nullptr, -1, 0);
+        ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pUnit, QUALITY_NORMAL, (int32_t*)aGemItemCode, nullptr, -1, 0);
         return;
       }
     } else {

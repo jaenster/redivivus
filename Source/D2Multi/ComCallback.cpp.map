@@ -1535,7 +1535,7 @@
       ]
     },
     {
-      "name": "COMCALLBACK_Unused3",
+      "name": "COMCALLBACK_OnChannelUserJoinedCallback",
       "address": "004493c0",
       "lines": [
         {
@@ -1545,13 +1545,13 @@
       ],
       "namespace": "D2Multi::ComCallback",
       "calledFunctions": [
-        "COMCALLBACK_Unused3",
+        "COMCALLBACK_OnChannelUserJoinedCallback",
         "COMCALLBACK_OnChannelUserJoined"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "e7538e96",
+      "dh": "0e58ae38",
       "paramStorage": [
         [
           "dwStatusFlags",

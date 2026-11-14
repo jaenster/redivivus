@@ -88,7 +88,7 @@ void __fastcall Q27_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData,
 // [A4Q3 Terror's End] Talk-to-Tyrael handler (callback slot 0x02). When talking to Tyrael (0x16f): if bTyraelTalked, transition quest to RewardAwaits (state 1) via broadcast and clear the flag; in expansion, if bExpansionPortalCheck set and portal not yet spawned, spawn the Pandemonium portal.
 void __fastcall Q27_Callback02_NpcDeactivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // [A5 helper, lives in A4Q2.cpp] Enable the Harrogath (Act 5 town) waypoint for the player: resolve waypoint id from LEVEL_Harrogath and call EnableWaypoint. Fired when the Pandemonium portal grants Act5 access.
-void __stdcall Q23_UnlockHarrogathWaypoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __stdcall Q27_EnableHarrogathWaypoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // [A4Q3 Terror's End — expansion] Callback slot 0x0e. Cleanup: if Step0x09 (Diablo portal/go-to-act5 flag) is set but QUEST_AbleGoToAct5 not yet Completed, clear Step0x09. Keeps the portal-state flag consistent.
 void __fastcall Q27_Callback14_PlayerJoinedGame(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 // [A4Q3 Terror's End] Load/restore handler (callback slot 0x0d). Expansion: same Step0x09 vs QUEST_AbleGoToAct5 cleanup as slot 0x0e. Then, if quest not Completed/FinishedInPreviousGame, rebuild the in-memory nStateFlag/nStateFlagPrev from persisted record steps: Step0x04 -> (3,prev2); Step0x03 -> (3,prev1); Step0x02 -> (2,prev1).

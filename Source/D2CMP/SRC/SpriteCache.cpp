@@ -145,8 +145,8 @@ int __fastcall SPRITECACHE_LoadFromFile(char * szFilename) {
     return *(uint32_t*)((char*)&aFileHeader + 268) * 0x60 + 0x114;
 }
 
-void __fastcall SPRITECACHE_SetMaxSize(size_t nSize) {
-    gpfnSpriteCacheFreeEntry = (pfnLruFreeEntry)nSize;
+void __fastcall SPRITECACHE_SetFreeEntryCallback(pfnLruFreeEntry pfnFreeEntry) {
+    gpfnSpriteCacheFreeEntry = pfnFreeEntry;
 }
 
 void __stdcall SPRITECACHE_GetStats(size_t * pnSize, int * phHandle, ULONG_PTR * pnHitCount, uint32_t * pnUsedPercent) {
@@ -926,11 +926,11 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
     return;
 }
 
-void __stdcall SPRITECACHE_Unlock_Unref_005fee00() {
+void __stdcall GFXHASH_InitIgnoreList_Thunk() {
     GfxHash::IGNORELIST_Initialize_Unref_0060ab70();
 }
 
-uint32_t __stdcall SPRITECACHE_GetTotalEntries() {
+uint32_t __stdcall SPRITECACHE_GetMemUsage() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&D2GfxMemoryStrc_0089db60.lpCriticalSection);
     uint32_t nUsedMemory = D2GfxMemoryStrc_0089db60.nUsedMemory;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&D2GfxMemoryStrc_0089db60.lpCriticalSection);
@@ -941,15 +941,15 @@ uint32_t __stdcall SPRITECACHE_GetCacheSize() {
     return D2GfxMemoryStrc_0089db60.pMaxMemory;
 }
 
-void __stdcall SPRITECACHE_Unlock_Unref_005fee50() {
+void __stdcall CELDATAHASH_InitIgnoreList_Thunk() {
     CelDataHash::IGNORELIST_Initialize_Unref_0060b130();
 }
 
-int __stdcall SPRITECACHE_GetMaxSize() {
+int __stdcall CELDATACACHE_GetMemUsage() {
     return gCelDataCacheLru.nBytesUsed;
 }
 
-uint32_t __stdcall SPRITECACHE_GetCurrentSize() {
+uint32_t __stdcall CELDATACACHE_GetMemLimit() {
     return gCelDataCacheLru.dwBufSize;
 }
 

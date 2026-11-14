@@ -267,7 +267,7 @@ void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(StormLinkedListStrc * pList
     pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-void __stdcall GAME_SetMouseButtonEventPending_Unref_0044b870() {
+void __stdcall GAME_SetAppModeContinue() {
     ClientModeInGame::gdwAppMode = APPMODE_CONTINUE;
 }
 
@@ -290,7 +290,7 @@ void __fastcall SetRunKeyDown(BOOL bRunKeyDown) {
     gRunKeyDown = bRunKeyDown;
 }
 
-BOOL __stdcall GetGlobalAlwaysRun_Unref_0044be70() {
+BOOL __stdcall GAME_GetRunKeyDown() {
     return gRunKeyDown;
 }
 
@@ -306,7 +306,7 @@ void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown) {
     gClickModifierDown = bModifierDown;
 }
 
-BOOL __stdcall GetGlobalAlwaysRun_Unref_0044beb0() {
+BOOL __stdcall GAME_GetClickModifierDown() {
     return gClickModifierDown;
 }
 
@@ -338,7 +338,7 @@ int __stdcall GAME_GetMouseButtonEventState() {
     return gnMouseButtonEventState;
 }
 
-int __stdcall GAME_GetMouseButtonEventState_Unref_0044bf20() {
+int __stdcall GAME_GetQueuedSecondaryClick() {
     return gQueuedSecondaryClick;
 }
 
@@ -380,7 +380,7 @@ uint32_t __stdcall GAME_HasQueuedPrimaryClick() {
     return (uint32_t)(gnQueuedPrimaryClickX != 0);
 }
 
-uint32_t __stdcall GAME_HasQueuedPrimaryClick_Unref_0044bff0() {
+uint32_t __stdcall GAME_HasQueuedSecondaryClickX() {
     return (uint32_t)(gnQueuedSecondaryClickX != 0);
 }
 
@@ -846,9 +846,9 @@ void __fastcall InGameDraw(int32_t bSkipCursor) {
 
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     View::VIEW_GetViewRect(D2GameView, &nViewLeft, &nViewTop, &nViewRight, &nViewBottom);
-    nTmp = D2Common::Units::GetTargetX(pUnit);
+    nTmp = D2Common::Units::GetScreenX(pUnit);
     uint32_t myCenterX = nTmp - (nViewRight - nViewLeft) / 2;
-    nTmp = D2Common::Units::GetTargetY(pUnit);
+    nTmp = D2Common::Units::GetScreenY(pUnit);
     uint32_t myCenterY = nTmp - (nViewBottom - nViewTop) / 2;
     View::SHAKE_AdjustCenterByShake(&myCenterX, &myCenterY);
     if (gnLastCameraWorldX != -1 || gnLastCameraWorldY != -1) {
@@ -1098,7 +1098,7 @@ uint32_t __stdcall GAME_GetAveragePing() {
     return gClientGameData.gnAveragePing;
 }
 
-char * zlibVersion_Unref_0044ce80() {
+char * GAME_GetWardenResponseTickPart4Ptr() {
     return (char*)&gClientGameData.gdwWardenResponseTickPart4;
 }
 
@@ -1394,7 +1394,7 @@ void __fastcall SetPendingExitCutsceneId(int32_t nCutsceneId) {
     gExitCutsceneState.pendingCutsceneId = nCutsceneId;
 }
 
-D2BNetClientCallbacksStrc * __stdcall GetGameVersionInfo() {
+D2BNetClientCallbacksStrc * __stdcall GAME_GetBNetClientCallbacks() {
     return gpBNetClientCallbacks;
 }
 
@@ -1415,7 +1415,7 @@ void __fastcall ClientInit_NoSaveFlag(D2IniConfigStrc * pIniConfig) {
       return;
     }
 
-    D2Game::GAME_SetNoSaveFlag(0);
+    D2Game::PLAYERSAVE_EnableSaveFileWriting(0);
 }
 
 // Set starting act from config; validates and halts on invalid values.
@@ -1857,7 +1857,7 @@ uint32_t __stdcall GetStepsOfMissileMovement() {
     return gClientGameData.gdwSyncTickCountPrev;
 }
 
-D2PoolManagerStrc * __stdcall GetStepsOfMissileMovement_Unref_0044db20() {
+D2PoolManagerStrc * __stdcall GAME_GetClientPoolManager() {
     return gClientGameData.gpClientPoolManager;
 }
 
@@ -1924,7 +1924,7 @@ void GAMEDATA_CheckColorTxtOverride() {
     gbBloodFlag = 1;
 }
 
-void __stdcall RENDERER_TogglePerspective_Unref_0044dc40() {
+void __stdcall GAME_ToggleBloodFlag() {
     gbBloodFlag = (uint32_t)!gbBloodFlag;
 }
 
@@ -2257,7 +2257,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
       }
     }
 
-    char* pSrcChar = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)nD2PlayerClassID, nTitleIndex, nHardcoreFlag, ePlayerStatus & 0x20);
+    char* pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress((uint32_t)nD2PlayerClassID, nTitleIndex, nHardcoreFlag, ePlayerStatus & 0x20);
     if (!pSrcChar) {
       return;
     }
@@ -2455,7 +2455,7 @@ void __stdcall Client_CheckConnectionTimeouts() {
     }
 
     DWORD nowTick = GetTickCount();
-    int32_t connectOk = D2Net::SRC::Client::NET_CLIENT_GetConnectionTimeout();
+    int32_t connectOk = D2Net::SRC::Client::NET_CLIENT_IsConnected();
     if (!connectOk && !D2CLIENT_ExitVar3 && ServerLoadingComplete) {
       CLIENT_ConnectionRefused(7);
     }
@@ -3003,7 +3003,7 @@ void __stdcall FreeLanguage() {
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(Lng::ghLngLibrary);
     }
 
-    gbLanguageDllLoaded = (HACCEL)0x0;
+    ghAccelTable = (HACCEL)0x0;
     Lng::ghLngLibrary = (HMODULE)0x0;
 }
 
@@ -3021,10 +3021,6 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(StormLinkedLis
 // JMP thunk
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad() {
     ::D2Client::GAME::Game::GAMEDATA_CheckAutomapCenterOnLoad();
-}
-
-void __fastcall CLIENT_SetDifficulty_Unref_00552830(char nDifficulty) {
-    gbObjectInitTableSetup = nDifficulty;
 }
 
 void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_00602370(StormLinkedListStrc * pListHead) {

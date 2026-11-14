@@ -70,18 +70,18 @@
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
         "SKILLS_ClampHpManaStamina",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "UpdateAnimSpeed"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1a35cf95",
+      "dh": "c5a911be",
       "paramStorage": [
         [
           "pUnit",
@@ -975,7 +975,7 @@
         "RefreshQuantity",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "PLRMODES_CheckWeaponQuantityAndDurability"
       ],
       "usedTypes": [
@@ -986,7 +986,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3d587ecc",
+      "dh": "da9b79c9",
       "paramStorage": [
         [
           "pGame",
@@ -1019,7 +1019,7 @@
         "INVENTORY_GetItemByGridOffset",
         "IsStackable",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "BowDecreaseQuantity"
       ],
       "usedTypes": [
@@ -1029,7 +1029,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22489fc9",
+      "dh": "e634c36a",
       "paramStorage": [
         [
           "pGame",
@@ -1057,7 +1057,7 @@
         "GetCurrentSkill",
         "ITEM_GetTxtItemTypes_shoots",
         "GetSkillId",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "INVENTORY_GetItemByGridOffset",
         "IsStackable",
         "ITEM_GetTxtItemTypes_throwable",
@@ -1070,7 +1070,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "90e6f618",
+      "dh": "3fc776e6",
       "paramStorage": [
         [
           "pUnit",
@@ -1359,7 +1359,7 @@
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
         "SKILLS_SrvStFn01_Attack",
-        "GetWeaponAnimClass",
+        "UNITS_GetFrameBonus",
         "ITEMSTATS_CheckUnitHasStateFlagIndex",
         "SKILLDRUID_ApplyAccumulatedStateDamage",
         "COMPOSIT_HasWeaponDrawn",
@@ -1374,7 +1374,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cb39e2d9",
+      "dh": "f6f860e6",
       "paramStorage": [
         [
           "pGame",
@@ -1779,7 +1779,7 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "GetObjectPortalFlags",
         "SetObjectPortalFlags",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "LinkPortalCoords",
         "StoreOwner",
         "GetInstructionPointer",
@@ -1797,7 +1797,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "16a9baad",
+      "dh": "7db0cc5e",
       "paramStorage": [
         [
           "pGame",
@@ -1840,7 +1840,7 @@
         "GetFreeCoordinates_WithFieldCoords",
         "DRLGROOM_FindBetterNearbyRoom",
         "CreateUnit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "LinkPortal",
         "GetObjectPortalFlags",
         "SetObjectPortalFlags",
@@ -1861,7 +1861,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9ad2431c",
+      "dh": "1d950965",
       "paramStorage": [
         [
           "pGame",
@@ -2022,7 +2022,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "75652674",
+      "dh": "fc44bb81",
       "paramStorage": [
         [
           "pGame",
@@ -2037,15 +2037,15 @@
           "Stack[0x4]:4"
         ],
         [
-          "pMissileTxtNo",
+          "eMissileId",
           "Stack[0x8]:4"
         ],
         [
-          "nSkillId",
+          "eSkill",
           "Stack[0xc]:4"
         ],
         [
-          "eSkill",
+          "nSkillLevel",
           "Stack[0x10]:4"
         ],
         [
@@ -2326,7 +2326,7 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "AttachCorrectAiFunctionToMonster",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent"
       ],
@@ -2340,7 +2340,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b531ba6c",
+      "dh": "3fea60eb",
       "paramStorage": [
         [
           "pGame",
@@ -3005,19 +3005,20 @@
         "SetCurrentSkill",
         "GetSkillByIdAndOwner",
         "PLRMODES_StartModeID",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "55a22b8a",
+      "dh": "4dc5a825",
       "paramStorage": [
         [
           "pGame",
@@ -3034,7 +3035,7 @@
       ]
     },
     {
-      "name": "D2CheckCorpseConsumed",
+      "name": "SKILLS_CanSwitchAi",
       "address": "0056e2f0",
       "lines": [
         {
@@ -3044,22 +3045,22 @@
       ],
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "UNIT_GetUnitState",
-        "MONSTERAI_CanApplyDebuffState"
+        "MONSTERAI_CanSwitchAi"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "f1ef811d",
+      "dh": "aa0fcc20",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "eState",
+          "nAiSpecialState",
           "EDX:4"
         ]
       ]
@@ -3602,7 +3603,7 @@
         "GetGamePointer",
         "SUNITEVENT_RemoveEventsByQueueAndOwner",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "UpdateAnimSpeed",
         "SKILLS_UpdateAllPassiveSkills",
@@ -3616,7 +3617,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7ef20aa3",
+      "dh": "bf6b3c07",
       "paramStorage": [
         [
           "pUnit",
@@ -3719,14 +3720,14 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "4b3539fd",
+      "dh": "eb508177",
       "paramStorage": [
         [
           "pUnitStrc",
           "ECX:4"
         ],
         [
-          "pAttacker",
+          "pTarget",
           "EDX:4"
         ],
         [
@@ -4152,7 +4153,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_003_ThrowWeaponLeftHand",
+      "name": "Skills_SrvDoFunc_003_Throw",
       "address": "0056f460",
       "lines": [
         {
@@ -4164,11 +4165,11 @@
       "calledFunctions": [
         "CreatingAMissile",
         "SKILLS_CreateMissileFromUnit",
-        "Skills_SrvDoFunc_003_ThrowWeaponLeftHand",
+        "Skills_SrvDoFunc_003_Throw",
         "INVENTORY_GetEquippedWeaponInfo",
         "INVENTORY_GetItemByGridOffset",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetItemsTxt_wMissileType",
         "ITEMS_IsA",
         "SKILLS_ApplySkillToHitAndDamage"
@@ -4181,7 +4182,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "fd423956",
+      "dh": "46039ca2",
       "paramStorage": [
         [
           "pGame",
@@ -4202,7 +4203,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_005_ThrowWeaponRightHand",
+      "name": "Skills_SrvDoFunc_005_LeftHandThrow",
       "address": "0056f550",
       "lines": [
         {
@@ -4212,11 +4213,11 @@
       ],
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
-        "Skills_SrvDoFunc_005_ThrowWeaponRightHand",
+        "Skills_SrvDoFunc_005_LeftHandThrow",
         "INVENTORY_GetEquippedWeaponInfo",
         "INVENTORY_GetItemByGridOffset",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetItemsTxt_wMissileType",
         "ITEMS_IsA",
         "CreatingAMissile",
@@ -4231,7 +4232,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "f94e68bd",
+      "dh": "a4ce3a30",
       "paramStorage": [
         [
           "pGame",
@@ -4383,7 +4384,7 @@
       ]
     },
     {
-      "name": "SKILLS_OnModeComplete",
+      "name": "SKILLS_StartCurrentSkill",
       "address": "0056faf0",
       "lines": [
         {
@@ -4393,7 +4394,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
-        "SKILLS_OnModeComplete",
+        "SKILLS_StartCurrentSkill",
         "GetCurrentSkill",
         "GetSkillId",
         "SKILLS_ValidateSkillTarget",
@@ -4418,7 +4419,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bcfab0dc",
+      "dh": "838bbb80",
       "paramStorage": [
         [
           "pGame",
@@ -4792,17 +4793,18 @@
         "STATLIST_SetExpireFunction",
         "STATLIST_AttachStatListToUnit",
         "STATSEX_SetStatListTimeout",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2StatListExStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",
         "uint32_t"
       ],
-      "dh": "4867f604",
+      "dh": "44a4a133",
       "paramStorage": [
         [
           "pThis",
@@ -4917,7 +4919,7 @@
       ]
     },
     {
-      "name": "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+      "name": "SKILLS_CallD2UpdateStateWithOne",
       "address": "005c6cb0",
       "lines": [
         {
@@ -4927,14 +4929,14 @@
       ],
       "namespace": "D2Game::SKILLS::SkillsServer",
       "calledFunctions": [
-        "MAINMENU_ShowPopupWithCancel_Unref_005c6cb0",
+        "SKILLS_CallD2UpdateStateWithOne",
         "D2UpdateState"
       ],
       "usedTypes": [
         "WCHAR",
         "eD2States"
       ],
-      "dh": "4e70b5b9",
+      "dh": "46294a57",
       "paramStorage": [
         [
           "wszText",

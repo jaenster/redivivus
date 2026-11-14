@@ -28,11 +28,11 @@ void __stdcall PATH_GetScreenVelocity(struct D2UnitStrc * pUnit, int * pnVelocit
 uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int32_t nNewX, int32_t nNewY);
 void __stdcall PATH_SnapPositionToTile(struct D2DynamicPathStrc * pDynamicPath);
 uint32_t __stdcall Get8FlagsFromDynamicPath(struct D2DynamicPathStrc * pDynamicPath);
-void __stdcall PATH_SetPathTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
+void __stdcall PATH_MoveUnitToUnitPosition(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 BOOL __stdcall PATH_AdvanceUnitAlongPath(struct D2UnitStrc * pUnit, int pExternalPath);
 BOOL __stdcall PATH_GetCollisionMaskAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 int32_t __stdcall PATH_GetCollisionTypeAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, int wPosX, int wPosY);
-void __stdcall PATH_CheckCollisionFlags(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
+BOOL __stdcall PATH_MoveUnitToRoomPosition(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUnit);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -45,7 +45,7 @@ void __stdcall DRLGPATH_ClearPathPosition(struct D2DynamicPathStrc * pDynamicPat
 int __fastcall DRLGPATH_CalcDirectionVector(POINT * pPoint, uint32_t * pnDirection, uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
 // DRLGPATH_CalcPathDirection - Wrapper for DRLGPATH_CalcDirectionVector. Converts path point coordinates to fixed-point format. Called by DRLGPATH_UpdatePathVelocityAndDirection and DRLGPATH_ScaleVelocityVector.
 void __fastcall DRLGPATH_CalcPathDirection(POINT * pPoint, uint32_t * pnDirection, uint32_t nFromX, uint32_t nFromY);
-uint32_t __stdcall PATH_CalculateDistance(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
+uint32_t __stdcall PATH_ComputeDirectionFromPreciseCoords(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp);
 // Advances a dynamic path along its path points: skips points already reached, computes the direction vector and velocity toward the current point (flips the direction index when flag 0x200 is set), and returns 1 when the last point is reached or the next step lands on the target subtile.
 int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(struct D2DynamicPathStrc * pDynamicPath, int32_t bSetDirOnWaypoint, int32_t bForceDirection);
 // Re-runs A* pathfinding for a unit whose current path has become stale or blocked. If the path is not frozen (flag 0x10), marks the unit for update and resets the path point index. For walk/run/follow path types (2, 0xD, 0xF), selects ePathType 2 (restore saved target) or 0xD based on nParam, attempts PATH_CalculatePath, and falls back to type 0xF on failure. Returns the result of PATH_CalculatePath.

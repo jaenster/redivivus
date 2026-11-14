@@ -510,7 +510,7 @@ BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2ObjectsTxt* pObjectsTxt;
-      D2Common::Units::SetupUpdateFlag(pUnit, 1);
+      D2Common::Units::ChangeAnimMode(pUnit, 1);
       pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
@@ -1070,7 +1070,7 @@ void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
         return;
       }
 
-      D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 3);
+      D2Common::Units::ChangeAnimMode(pInitArg->pObject, 3);
       return;
     }
 

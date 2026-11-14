@@ -393,11 +393,11 @@ void __fastcall JoinRoomSetup(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_velocitypercent, 100, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_other_animrate, 100, 0);
     BOOL_007a5260 = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    D2Common::Units::SetupUpdateFlag(pUnit, 5);
+    D2Common::Units::ChangeAnimMode(pUnit, 5);
     pUnit->eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_DRAWSHADOW | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead || pUnit->eAnimMode.ePlayerMode == Death) {
       D2Common::PATH::DynamicPath::PATH_RemoveUnitCollision(pUnit, 1);
-      D2Common::PATH::DynamicPath::SetUnitWidth(pUnit, 5);
+      D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pUnit, 5);
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pUnit->pPath.pDynamicPath, 0x8000);
     }
 
@@ -546,7 +546,7 @@ static void CLIENT_ResolvePlayerCollision(D2UnitStrc * pUnit) {
             sTilePos.y = yValue;
             pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
             if (pRoom) {
-              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0xc01);
+              eCollideResult = D2Common::Collision::CheckCollision_BlockAll_Type(pRoom, sTilePos.x, sTilePos.y, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0xc01);
               if (eCollideResult != COLLIDE_NONE) {
                 D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, &sTilePos, D2Common::Units::GetUnitSizeX(pUnit), 0xc01, 1);
                 CUnit::CLIENT_TeleportUnitToPosition(pUnit, sTilePos.x, sTilePos.y, 0);
@@ -835,7 +835,7 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
       return 1;
       case 7:
         bIsActive = CUnit::IsActive(pUnit);
-      CUnit::IsAttackable(pUnit);
+      CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
       pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
       UnitMode::UNITMODE_SetAnimMode(pUnit, eAnimMode);
       if (!pMessage) {
@@ -2203,8 +2203,8 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
       }
 
       pDynamicPath = pKillerOrCorpse->pPath.pDynamicPath;
-      D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, 0);
-      D2Common::PATH::DynamicPath::SetUnitWidth(pKillerOrCorpse, 5);
+      D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0);
+      D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pKillerOrCorpse, 5);
       nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       nPosY = (int16_t)nTmpPos;
       nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -2230,7 +2230,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
         D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventory, pItem);
         bVar1 = PLAYER_GetWeaponTypeForAnimation(pUnit, pItem);
         Engine::Gfx::GFX_ClearAllModeFlags(pUnit, (uint32_t)bVar1);
-        pItemOwner = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pItem);
+        pItemOwner = D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventory, pItem);
         if (!pItemOwner) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xac8);
           exit(-1);
@@ -2305,7 +2305,7 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc 
       }
     }
 
-    D2Common::PATH::Path::PATH_CheckCollisionFlags(pDynamicPath, pUnit, pTargetRoom, nNewX, nNewY);
+    D2Common::PATH::Path::PATH_MoveUnitToRoomPosition(pDynamicPath, pUnit, pTargetRoom, nNewX, nNewY);
     if (!bWasMoveMode) {
       return;
     }
@@ -2651,7 +2651,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         _bHasDmgState = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
         CUnit::IsActive(pUnit);
-        CUnit::IsAttackable(pUnit);
+        CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
         pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
         UnitMode::UNITMODE_SetAnimMode(pUnit, (_bHasDmgState ? 4 : 0) + eD2PlayerAnimMode_ns::Neutral);
       }
@@ -2660,7 +2660,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     update_after_mode:
     bResult = D2Common::Units::NeedsRoomUpdate(pUnit);
     if (bResult) {
-      D2Common::Units::ChangeAnimMode(pUnit, 0);
+      D2Common::Units::SetCurrentRoomInvalid(pUnit, 0);
       pPlayerUnit_lcl = GetPlayerUnit_UI();
       if (pUnit == pPlayerUnit_lcl) {
         CLIENT_OnPlayerEnterRoom(pUnit);
@@ -2672,7 +2672,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
       CLIENT_CancelRunAndWalk(pUnit);
     }
 
-    _bHasDmgState = D2Common::DATATBLS::ItemStats::STATES_HasDamageState(pUnit);
+    _bHasDmgState = D2Common::DATATBLS::ItemStats::STATES_HasActiveFlagState(pUnit);
     if (_bHasDmgState) {
       SKILLS::Skills::SKILL_ProcessActiveStateEffects(pUnit);
     }

@@ -1,2 +1,2 @@
 // The Game.exe Ghidra database version this tree was generated from.
-extern const char g_szGhidraVersion[] = "2098";
+extern const char g_szGhidraVersion[] = "2099";

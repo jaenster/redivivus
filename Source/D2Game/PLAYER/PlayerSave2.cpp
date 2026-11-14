@@ -427,8 +427,8 @@ int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * 
     D2UnitDataPlayerInteractedNPCStrc** ppDVar4 = pPlayerData->pInteractedNPCs;
     int i = 3;
     do {
-      PlayerIntro::CopyBufferToPointer((D2BitBufferStrc*)*ppDVar4, (char*)(pDest - 3));
-      PlayerIntro::CopySizeAndPosToBuffer((D2BitBufferStrc*)*ppDVar4, *pDest);
+      PlayerIntro::PLAYERINTRO_CopyIntroToBuffer(*ppDVar4, (char*)(pDest - 3));
+      PlayerIntro::PLAYERINTRO_CopyIntro2ToBuffer(*ppDVar4, *pDest);
       ppDVar4++;
       pDest++;
       i--;
@@ -900,7 +900,7 @@ void __fastcall PLAYERSAVE_LinkPlayerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
     char* szName = GAME::Clients::GetCharName(pClient);
     D2Common::Units::SetNameInPlayerData(pUnit, szName);
     UNIT::SUnit::SetSeed(pUnit, &pGame->pGameSeed);
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     pPlayerData->pTradeCopyInventory = 0;
     pPlayerData->dwTradeState = 0;
@@ -1474,7 +1474,7 @@ D2UnitStrc * __fastcall LoadMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Merc
           PlayerPets::SERVERUNIT_RemovePetFromUnit(pGame, pUnit, pMerc);
           pMerc->eUnitFlags |= UNITFLAG_ISDEAD;
           UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMerc, 0xc);
-          Monster::MONSTER_StartAiAndRegenTimers(pGame, pMerc);
+          Monster::MONSTER_RemoveAiAndRegenTimers(pGame, pMerc);
         }
         if (!pMerc->pInventory) {
           D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pMerc);
@@ -1531,7 +1531,7 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
       ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 0);
       bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
       if (!bIsDead) {
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit), (uint16_t)bIsDead);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit), (uint16_t)bIsDead);
       }
     }
 
@@ -1594,7 +1594,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
         pReadPos += nBytesConsumed;
         GAME::Task::TASK_Nop(pSocketedItem);
-        D2Common::Units::SetupUpdateFlag(pSocketedItem, 4);
+        D2Common::Units::ChangeAnimMode(pSocketedItem, 4);
         dwSocketedItemGUID = pSocketedItem->nUnitGUID;
         nSocketSlotY = 0;
         nSocketSlotX = 0;
@@ -1661,7 +1661,7 @@ int __fastcall LoadGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, short * * ppRe
         return 0x17;
       }
 
-      D2Common::Units::SetupUpdateFlag(pEndBuf, 3);
+      D2Common::Units::ChangeAnimMode(pEndBuf, 3);
       if (!pGolem) {
         nGolemGUID = -1;
       } else {
@@ -1715,7 +1715,7 @@ void __fastcall SetStatsAndHotkeys(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, 
     int32_t nScratch;
     int nSkillId;
     uint32_t nHand;
-    uint32_t nItemGUID;
+    int nItemGUID;
     ::SGAMEDATA* pGameLocal;
     ::SGAMEDATA* pGameSaved;
     pGameSaved = pGameStrc;
@@ -1749,11 +1749,11 @@ void __fastcall SetStatsAndHotkeys(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, 
     }
 
     restore_stats_and_hotkeys:
-    nScratch = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+    nScratch = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nScratch, 0);
     iHotkey = 0;
     do {
-      GAME::Clients::GetHotKey(pClientLocal, iHotkey, &nSkillId, &nHand, (int*)&nItemGUID);
+      GAME::Clients::GetHotKey(pClientLocal, iHotkey, &nSkillId, &nHand, &nItemGUID);
       if (nItemGUID) {
         nItemGUID = HOTKEY_GetAssignedItemGUID(pGameSaved, pUnit, nItemGUID);
         GAME::Clients::SetGotkeyInfo(pClientLocal, iHotkey, (uint16_t)nSkillId, (uint8_t)nHand, nItemGUID);

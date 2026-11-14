@@ -19,7 +19,7 @@
       "dh": "7f46f4d7"
     },
     {
-      "name": "GetInteractedUnitClassId_Unref_004b1020",
+      "name": "NPCMENU_GetMonsterSpecialType",
       "address": "004b1020",
       "lines": [
         {
@@ -29,12 +29,12 @@
       ],
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
-        "GetInteractedUnitClassId_Unref_004b1020"
+        "NPCMENU_GetMonsterSpecialType"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "199d1154"
+      "dh": "056f8df8"
     },
     {
       "name": "NPCMENU_ConvertQuestId",
@@ -147,7 +147,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "be55fe99",
+      "dh": "067bd680",
       "paramStorage": [
         [
           "pSpeech",
@@ -425,7 +425,7 @@
       "calledFunctions": [
         "NPCMENU_CalculateDialogPosition",
         "UNITS_FindClientSideUnit",
-        "GetTargetCoords",
+        "GetScreenCoords",
         "VIEW_GetViewRect",
         "GetCenterXY"
       ],
@@ -434,7 +434,7 @@
         "POINT",
         "tagRECT"
       ],
-      "dh": "5c676206",
+      "dh": "1f57a383",
       "paramStorage": [
         [
           "pPoint",
@@ -476,7 +476,7 @@
       "dh": "0743b203"
     },
     {
-      "name": "NPCMENU_OpenTradeWithNpc",
+      "name": "NPCMENU_RequestMercResurrect",
       "address": "004b1dd0",
       "lines": [
         {
@@ -486,7 +486,7 @@
       ],
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
-        "NPCMENU_OpenTradeWithNpc",
+        "NPCMENU_RequestMercResurrect",
         "FreeDialogStrc",
         "NET_D2GS_CLIENT_Send_INT",
         "NPCMENU_CalculateDialogPosition",
@@ -503,7 +503,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b3f7ef83"
+      "dh": "f904b2ac"
     },
     {
       "name": "NPCMENU_HireMerc",
@@ -575,7 +575,7 @@
         "ITEM_GetItemData_wType",
         "ITEM_CanBeRepaired",
         "ITEM_CheckIfItemHasDurability",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATSEX_GetCurrentStat",
         "IsStackable",
         "ITEM_GetMaxStack",
@@ -587,7 +587,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d59c85a1",
+      "dh": "c7c36bd2",
       "paramStorage": [
         [
           "pUnit",
@@ -756,7 +756,7 @@
       "calledFunctions": [
         "NPCMENU_InitializeMenuOptions"
       ],
-      "dh": "738d494e"
+      "dh": "8fdd6aec"
     },
     {
       "name": "SubmitItem",
@@ -823,7 +823,7 @@
         "sprintf",
         "IMAGE_LoadDC6Ex"
       ],
-      "dh": "6d47a4a3"
+      "dh": "d6f7249b"
     },
     {
       "name": "NPCMENU_Cleanup",
@@ -841,7 +841,7 @@
         "DC6_FreeAndDelete",
         "FreeDialogStrc"
       ],
-      "dh": "521ce276"
+      "dh": "28371393"
     },
     {
       "name": "NPCMENU_SetTransactionMode",
@@ -874,7 +874,7 @@
       ]
     },
     {
-      "name": "QuestHandeling",
+      "name": "NPCMENU_ReadGameQuestRecord",
       "address": "004b2620",
       "lines": [
         {
@@ -884,13 +884,16 @@
       ],
       "namespace": "D2Client::UI::npcmenu",
       "calledFunctions": [
-        "QuestHandeling",
+        "NPCMENU_ReadGameQuestRecord",
         "ReadQuestRecordFromBuffer"
       ],
-      "dh": "3ea51a87",
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "bcfe3806",
       "paramStorage": [
         [
-          "szText",
+          "pQuestBits",
           "ECX:4"
         ]
       ]
@@ -2253,8 +2256,8 @@
         "AppendToBuffer",
         "GetDificulity",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
-        "CalcRecoveryPriority"
+        "STATLIST_GetMaxLifeFromUnit",
+        "UNITS_GetHealingCost"
       ],
       "usedTypes": [
         "D2NpcMenuOptionFunc *",
@@ -2268,7 +2271,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e3efb15f"
+      "dh": "57dbf7b8"
     },
     {
       "name": "NPCMENU_ShowMainMenuDialog",
@@ -2874,7 +2877,7 @@
         "D2NpcMenuOptionFunc *",
         "int32_t"
       ],
-      "dh": "72745daa",
+      "dh": "9b95a315",
       "paramStorage": [
         [
           "bAddTradeOption",

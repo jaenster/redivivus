@@ -10,7 +10,6 @@
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/AI/AI.h"
@@ -26,6 +25,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -95,7 +95,7 @@ int __fastcall Unreferenced_005a6250(int param_1) {
     return param_1 + 0x14;
 }
 
-void __fastcall SetCombatAndMonStats(D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps) {
+void __fastcall MONSTERMODE_SetPathOverrides(D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps) {
     if (nPathType) {
       pPathParam->nPathTypeOverride = nPathType;
     }
@@ -277,7 +277,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     D2Common::Stats::StatsEx::STATLIST_RecalcAfterRemove(pUnit);
     uint32_t bIsBoss = D2Common::Monsters::MONSTERS::UnitIsMarkedBoss(pMonStats, pUnit);
     D2Common::DATATBLS::ItemStats::STATES_FilterStatesByContext(pUnit, bIsBoss);
-    int nMonClassId = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit);
+    int nMonClassId = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pUnit);
     if (nMonClassId && pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
     }
@@ -289,7 +289,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     }
 
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
-    MONSTER_StartAiAndRegenTimers(pGame, pUnit);
+    MONSTER_RemoveAiAndRegenTimers(pGame, pUnit);
 }
 
 void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL bIsItemFindDrop, D2ObjectOperateFnArg * pUnitKill) {
@@ -361,7 +361,7 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           if (pAttacker) {
             if (pAttacker->eUnitType != UNIT_PLAYER) {
               pEffectiveAttacker = Ai::AiGeneral::GetOwnerUnit(pAttacker);
-              _bHasCurseState = D2Common::DATATBLS::ItemStats::STATES_HasCurseState(pAttacker);
+              _bHasCurseState = D2Common::DATATBLS::ItemStats::STATES_HasExpFlagState(pAttacker);
               if (_bHasCurseState) {
                 pStatList = D2Common::Stats::StatsEx::GetStatsByFlags(pAttacker, 0x800);
                 if (pStatList) {
@@ -392,14 +392,14 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           }
         }
 
-        ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pAttacker, nSelectedTC_00, ITEMTYPE_None1, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
+        ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pAttacker, nSelectedTC_00, QUALITY_INVALID, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
         return;
       }
     }
 }
 
 // Dead-code wrapper (marked Unused) that validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set (already processed) and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then delegates to SERVER_ITEM_DecideDrops. Not called in shipping 1.14d.
-void __fastcall DropItemForVictim_Unused(::SGAMEDATA * pGame, D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam) {
+void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam) {
     D2RoomStrc* pFreeCoordRoom;
     D2MonStatsTxt* pVictimMonStats;
     eCollisionFlags eCollisionFlag;
@@ -464,7 +464,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
     eD2States aPoisonStateSearch[2];
     ::SGAMEDATA* pGameSaved = pGame;
     int32_t nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hpregen, 0);
-    BOOL eUnitState = D2Common::DATATBLS::ItemStats::STATES_HasProgressiveState(pUnit);
+    BOOL eUnitState = D2Common::DATATBLS::ItemStats::STATES_HasLifeFlagState(pUnit);
     if (eUnitState) {
       int32_t nCurrentHpRaw;
       nCurrentHpRaw = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_hpregen, 0);
@@ -483,7 +483,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
     }
 
     int iPoisonSearch = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    aPoisonStateSearch[1] = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    aPoisonStateSearch[1] = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if (!(nHpRegen >= 0 || iPoisonSearch >= 0x100 || (pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit) , pUnitRoom && (eUnitState = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pUnitRoom) , !eUnitState)))) {
       return;
     }
@@ -767,7 +767,7 @@ BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 1;
 }
 
-BOOL __fastcall thunk_ExecuteTimerTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+BOOL __fastcall MONMODE_RemoveModeChangeTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     return 1;
 }
@@ -780,7 +780,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
-static void CalculateCollisionDamage_Unused(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+static void MONSTERMODE_ApplyDeathAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bInRange;
     bool bInRange;
     int32_t nDamage;
@@ -865,7 +865,7 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // The live monster-death dispatcher.
-BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
+BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int nClassId;
     D2UnitStrc* pUnit_00;
     D2DifficultyLevelsTxt* pDifficultyLvl;
@@ -877,16 +877,16 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
     int32_t nPosYCoord;
     int32_t nPosY;
     ::SGAMEDATA* pGameSaved;
-    D2MonsterKillStrc* pMonsterKillSaved;
+    D2ModeChangeStrc* pMonsterKillSaved;
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameCE;
     int* pScaledStatsOut;
     D2UnitStrc* pUnit;
     int32_t nVictimClassIdForStats;
-    D2UnitStrc* pVictim = pMonsterKill->pVictim;
+    D2UnitStrc* pVictim = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pVictim, 0);
     MONSTERMODE_OnDeath(pMonsterKill->nAnimatedMode1, pGame, pVictim);
-    DropItemForVictim_Unused(pGame, (D2ObjectOperateFnArg*)pMonsterKill, 0);
+    MONSTERMODE_TryDropTreasure(pGame, (D2ObjectOperateFnArg*)pMonsterKill, 0);
     MonsterRegion::IncreaseMonKillCount(pGame->pMonsterRegion, pVictim);
     if (!pVictim) {
       nClassId = -1;
@@ -918,9 +918,9 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
       if (nClassId >= 0 && nClassId < nMonStatsSize) {
         if (nClassId == 0xd4) {
           if (false || false) {
-            pMonsterKillSaved = (D2MonsterKillStrc*)pVictim->pPath.pStaticPath->nPosX;
+            pMonsterKillSaved = (D2ModeChangeStrc*)pVictim->pPath.pStaticPath->nPosX;
           } else if (pVictim->pPath.pDynamicPath) {
-            pMonsterKillSaved = (D2MonsterKillStrc*)D2Common::PATH::DynamicPath::GetXPos(pVictim->pPath.pDynamicPath);
+            pMonsterKillSaved = (D2ModeChangeStrc*)D2Common::PATH::DynamicPath::GetXPos(pVictim->pPath.pDynamicPath);
           } else {
             pMonsterKillSaved = 0;
           }
@@ -974,7 +974,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2MonsterKillStrc *
       }
     }
 
-    CalculateCollisionDamage_Unused(pGame, pVictim);
+    MONSTERMODE_ApplyDeathAreaDamage(pGame, pVictim);
     return 1;
 }
 
@@ -999,7 +999,7 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
           nMinionClassId = pMonStats->minion1;
           if (nMinionClassId >= 0 && (int)nMinionClassId <= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
             MONSTER_TransformMonsterClass(pGame, pUnit, (int)nMinionClassId, 1);
-            MONSTERAI_TriggerMageThink(pGame, pUnit);
+            MONSTERAI_RescheduleThink(pGame, pUnit);
             return;
           }
 
@@ -1017,8 +1017,8 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 }
 
-BOOL __fastcall MONMODE_ProcessBlockAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    BOOL bIsAndariel = D2Common::Monsters::MONSTERS::MONSTER_IsAndarielNormal(pUnit, 0);
+BOOL __fastcall MONMODE_UpdateDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    BOOL bIsAndariel = D2Common::Monsters::MONSTERS::MONSTER_IsSandLeaper(pUnit, 0);
     if (bIsAndariel) {
       uint32_t bAtEndOfFrame;
       UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
@@ -1033,8 +1033,8 @@ BOOL __fastcall MONMODE_ProcessBlockAnimation(::SGAMEDATA * pGame, D2UnitStrc * 
     return 1;
 }
 
-BOOL __fastcall MONMODE_CompleteCastAndReset(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartDead(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
       MONSTERMODE_OnDeath(pMonsterKill->nAnimatedMode1, pGame, pUnit);
     }
@@ -1046,13 +1046,13 @@ BOOL __fastcall MONMODE_CompleteCastAndReset(::SGAMEDATA * pGame, D2MonsterKillS
 }
 
 // Schedules the deferred death animation for a monster. Clears combat state via FreeCombatAndChangeAnimMode, then if no AITHINK timer is pending: if the unit is stunned, schedules the death event 45 frames out; otherwise reads aidel from MonStatsTxt (SP) or TreasureClass offset by difficulty (MP/BNet) as the death-animation delay, defaulting to 15 frames if zero.
-BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    BOOL _bTimerExists;
+BOOL __fastcall MONMODE_StartNeutral(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    int32_t _bTimerExists;
     bool bTimerExists;
     uint8_t byAiDel;
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 1);
-    _bTimerExists = GAME::Event::EVENT_TimerTypeExistsOnUnit(pGame, pUnit, UNITEVENTCALLBACK_AITHINK);
+    _bTimerExists = GAME::Event::EVENT_GetTimerFrame(pGame, pUnit, UNITEVENTCALLBACK_AITHINK);
     if (!(_bTimerExists <= pGame->dwGameFrame)) {
       return 1;
     }
@@ -1085,12 +1085,12 @@ BOOL __fastcall PlanExecutionOfMonster(::SGAMEDATA * pGame, D2MonsterKillStrc * 
     return 1;
 }
 
-BOOL __fastcall thunk_FreeCombatAndChangeAnimMode_A(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pVictim, 10);
+BOOL __fastcall MONMODE_StartSkill3(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pUnit, 10);
     return 1;
 }
 
-BOOL __fastcall MONMODE_RecoverToNeutral(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+BOOL __fastcall MONMODE_UpdateSkill3(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     D2Common::Units::AdvanceAnimFrame(pUnit);
     uint32_t bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
@@ -1105,15 +1105,15 @@ void __fastcall MONSTERMODE_Mode10_OnEndFrame_NoOp(::SGAMEDATA * pGame, D2UnitSt
 
 }
 
-BOOL __fastcall MONMODE_ResetToNeutralWithDelay(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartSkill4(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xb);
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 0xf, 0, 0);
     return 1;
 }
 
-BOOL __fastcall MONMODE_StartWalking(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartWalking(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     int32_t nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pUnit->pPath.pDynamicPath);
     if (!nPathPoints) {
       return 0;
@@ -1123,8 +1123,8 @@ BOOL __fastcall MONMODE_StartWalking(::SGAMEDATA * pGame, D2MonsterKillStrc * pM
     return 1;
 }
 
-BOOL __fastcall MONMODE_StartRunning(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartRunning(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     int32_t nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pUnit->pPath.pDynamicPath);
     if (!nPathPoints) {
       return 0;
@@ -1134,8 +1134,8 @@ BOOL __fastcall MONMODE_StartRunning(::SGAMEDATA * pGame, D2MonsterKillStrc * pM
     return 1;
 }
 
-BOOL __fastcall MONMODE_StartOtherAttack(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartGetHit(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if (!(pUnit && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != Kick)) {
       return 1;
     }
@@ -1149,10 +1149,10 @@ BOOL __fastcall MONMODE_StartOtherAttack(::SGAMEDATA * pGame, D2MonsterKillStrc 
     return 1;
 }
 
-BOOL __fastcall DropHandlerGeneric(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
+BOOL __fastcall MONMODE_StartAttackOrSkill(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t nPathPoints;
     int32_t nBaseId;
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     uint32_t bHasAnimSequence = MONSTER_HasAnimModeSequence(pUnit, pMonsterKill->nUnitMode);
     if (bHasAnimSequence) {
       D2DynamicPathStrc* pDynamicPath;
@@ -1175,7 +1175,7 @@ BOOL __fastcall DropHandlerGeneric(::SGAMEDATA * pGame, D2MonsterKillStrc * pMon
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, pMonsterKill->nUnitMode);
     D2SkillStrc* pCurrentSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (pCurrentSkill) {
-      SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
+      SKILLS::SkillsServer::SKILLS_StartCurrentSkill(pGame, pUnit);
     }
 
     return 1;
@@ -1252,16 +1252,16 @@ BOOL __fastcall MONMODE_ProcessSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return 1;
 }
 
-BOOL __fastcall thunk_FreeCombatAndChangeAnimMode_B(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pVictim, 6);
+BOOL __fastcall MONMODE_StartBlock(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pUnit, 6);
     return 1;
 }
 
 // Attempts to make a monster flee from its current target. Checks MonStatsTxt flags 3 and 0xD (flee-capable); if both set and unit is not in Death mode, sets path type 8 (flee), calculates flee distance (10 for classId 0x4E/Andariel, else 5), computes a new path, and transitions to Flee anim mode (0xD). Returns 1 if flee was attempted, 0 if monster cannot flee.
-BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
+BOOL __fastcall MONMODE_StartKnockback(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t nMonStatsRow;
     int nClassId;
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if (!pUnit) {
       nClassId = -1;
     } else {
@@ -1300,148 +1300,148 @@ BOOL __fastcall MONMODE_TryFleeFromTarget(::SGAMEDATA * pGame, D2MonsterKillStrc
     return 1;
 }
 
-BOOL __fastcall MONMODE_CompleteSkillSequence(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill) {
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+BOOL __fastcall MONMODE_StartSequence(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xe);
     if (pUnit) {
       pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
     }
 
-    int32_t bResult = SKILLS::SkillsServer::SKILLS_OnModeComplete(pGame, pUnit);
+    int32_t bResult = SKILLS::SkillsServer::SKILLS_StartCurrentSkill(pGame, pUnit);
     return bResult;
 }
 
 // Looks up the death/drop event-dispatch callback record for a monster. Given a UNIT_MONSTER and an event index nParam (0..0xF), returns a pointer into the global DropHandlerArray. Returns NULL for non-monsters, out-of-range class ids, or nParam>0xF. Most monsters map directly (DropHandlerArray + nParam), but special bosses override specific events by class id: Diablo / DiabloClone / UberDiablo and Baal variants (Throne/Uber) redirect their death/drop events to dedicated handler slots (e.g. +7, +0x10, +0x11), TrappedSoul to +0x12/+0x13, and Warrior/Master act-boss minions event 0xB to +0x14. Used by the monster event dispatcher to pick the correct on-death behavior.
-D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32_t nAnimMode) {
+D2MonModeTableRowStrc * __fastcall MONMODE_GetModeTableRow(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     // Static local variables (originally global data)
-    static D2AiDispatchCallbacksStrc DropHandlerArray[21] = {
+    static D2MonModeTableRowStrc gaMonModeTable[21] = {
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONSTER_OnDeathDispatch,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessBlockAnimation,
-        /* .pFn3 = */ &D2Game::Monster::MonsterMode::MONMODE_HandleSpecialEndDeath,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONSTER_OnDeathDispatch,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_UpdateDeath,
+        /* .pfnEnd = */ &D2Game::Monster::MonsterMode::MONMODE_HandleSpecialEndDeath,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::PlanExecutionOfMonster,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::thunk_ExecuteTimerTrigger,
-        /* .pFn3 = */ nullptr,
-        /* .bBool = */ 0x0
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartNeutral,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RemoveModeChangeTimer,
+        /* .pfnEnd = */ nullptr,
+        /* .bScheduleEvents = */ 0x0
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_StartWalking,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_ProcessWalkWithTrails,
-        /* .pFn3 = */ nullptr,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartWalking,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_ProcessWalkWithTrails,
+        /* .pfnEnd = */ nullptr,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_StartOtherAttack,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::thunk_ExecuteTimerTrigger,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartGetHit,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RemoveModeChangeTimer,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::thunk_FreeCombatAndChangeAnimMode_B,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::thunk_ExecuteTimerTrigger,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartBlock,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RemoveModeChangeTimer,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::thunk_FreeCombatAndChangeAnimMode_A,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RecoverToNeutral,
-        /* .pFn3 = */ &D2Game::Monster::MonsterMode::MONSTERMODE_Mode10_OnEndFrame_NoOp,
-        /* .bBool = */ 0x0
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartSkill3,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_UpdateSkill3,
+        /* .pfnEnd = */ &D2Game::Monster::MonsterMode::MONSTERMODE_Mode10_OnEndFrame_NoOp,
+        /* .bScheduleEvents = */ 0x0
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_ResetToNeutralWithDelay,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::thunk_ExecuteTimerTrigger,
-        /* .pFn3 = */ nullptr,
-        /* .bBool = */ 0x0
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartSkill4,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RemoveModeChangeTimer,
+        /* .pfnEnd = */ nullptr,
+        /* .bScheduleEvents = */ 0x0
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_CompleteCastAndReset,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::thunk_ExecuteTimerTrigger,
-        /* .pFn3 = */ nullptr,
-        /* .bBool = */ 0x0
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartDead,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_RemoveModeChangeTimer,
+        /* .pfnEnd = */ nullptr,
+        /* .bScheduleEvents = */ 0x0
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_TryFleeFromTarget,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONSTER_UpdateGetHitAnimation,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_ProcessGetHitRecovery,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartKnockback,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_UpdateKnockback,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONMODE_EndKnockback,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_CompleteSkillSequence,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONSTER_UpdateSkillCastAnimation,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartSequence,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONSTER_UpdateSkillCastAnimation,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::MONMODE_StartRunning,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_ProcessRunMovement,
-        /* .pFn3 = */ nullptr,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartRunning,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::GAME::Event::Dispatch::Monster::MONMODE_ProcessRunMovement,
+        /* .pfnEnd = */ nullptr,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MonsterKilledBySystem,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONMODE_EndTrappedSoulAttack,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MonsterKilledByTarget,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONMODE_EndTrappedSoulSkill,
+        /* .bScheduleEvents = */ 0x1
     },
     {
-        /* .pFn1 = */ &D2Game::Monster::MonsterMode::DropHandlerGeneric,
-        /* .pFn2 = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
-        /* .pFn3 = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
-        /* .bBool = */ 0x1
+        /* .pfnStart = */ &D2Game::Monster::MonsterMode::MONMODE_StartAttackOrSkill,
+        /* .pfnUpdate = */ (fnD2DropHandler)&D2Game::Monster::MonsterMode::MONMODE_ProcessSkillCast,
+        /* .pfnEnd = */ &D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch,
+        /* .bScheduleEvents = */ 0x1
     }
-}; D2_STATIC_GUARD(DropHandlerArray, "D2Game::Monster::MonsterMode::GetDropHandler::DropHandlerArray");
+}; D2_STATIC_GUARD(gaMonModeTable, "D2Game::Monster::MonsterMode::MONMODE_GetModeTableRow::gaMonModeTable");
 
     eD2MonsterClassId nClassId;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -1454,7 +1454,7 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
       return nullptr;
     }
     if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].SplGetModeChart == '\0') {
-      return DropHandlerArray + nAnimMode;
+      return gaMonModeTable + nAnimMode;
     }
     if ((int)nMonClassId > 0x21f) {
       switch (nMonClassId) {
@@ -1467,15 +1467,15 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
         case MonsterUnitUberDiablo:
           diablo_family:
           if (nAnimMode == 0xb) {
-            return DropHandlerArray + 0x10;
+            return gaMonModeTable + 0x10;
           }
         if (nAnimMode != 10) {
-          return DropHandlerArray + nAnimMode;
+          return gaMonModeTable + nAnimMode;
         }
 
-        return DropHandlerArray + 0x11;
+        return gaMonModeTable + 0x11;
         default:
-          return DropHandlerArray + nAnimMode;
+          return gaMonModeTable + nAnimMode;
       }
     }
     if (nMonClassId != MonsterUnitThroneBaal) {
@@ -1486,10 +1486,10 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
           goto diablo_family;
         case MonsterUnitTrappedSoul1:
           if (nAnimMode == 4 || nAnimMode == 5) {
-            return DropHandlerArray + 0x12;
+            return gaMonModeTable + 0x12;
           }
         if (nAnimMode == 9 || nAnimMode == 8) {
-          return DropHandlerArray + 0x13;
+          return gaMonModeTable + 0x13;
         }
 
         break;
@@ -1497,20 +1497,20 @@ D2AiDispatchCallbacksStrc * __fastcall GetDropHandler(D2UnitStrc * pUnit, uint32
 
         case MonsterUnitMaster:
           if (nAnimMode == 0xb) {
-            return DropHandlerArray + 0x14;
+            return gaMonModeTable + 0x14;
           }
       }
     } else {
       baal_family:
       if (nAnimMode == 10) {
-        return DropHandlerArray + 7;
+        return gaMonModeTable + 7;
       }
     }
 
-    return DropHandlerArray + nAnimMode;
+    return gaMonModeTable + nAnimMode;
 }
 
-static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
+static void __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     if (eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead) {
       BOOL bIsModeZeroDeath;
@@ -1520,53 +1520,53 @@ static void __stdcall MONSTER_InitiateDefaultDeath(::SGAMEDATA * pGame, eD2Monst
       }
     }
 
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
-    sMonsterKill.pVictim = pUnit;
-    PlanExecutionOfMonster(pGame, &sMonsterKill);
+    sMonsterKill.pUnit = pUnit;
+    MONMODE_StartNeutral(pGame, &sMonsterKill);
 }
 
-void __fastcall MONMODE_DispatchDeathDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
+void __fastcall MONMODE_EventModeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nCurrentAnimMode = !pUnit ? 0 : pUnit->eAnimMode.eMonsterMode;
-    D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, nCurrentAnimMode);
+    D2MonModeTableRowStrc* pDropHandler = MONMODE_GetModeTableRow(pUnit, nCurrentAnimMode);
     if (!pDropHandler) {
-      MONSTER_InitiateDefaultDeath(pGame, nCurrentAnimMode, pUnit);
+      MONMODE_RequestNeutral(pGame, nCurrentAnimMode, pUnit);
       return;
     }
-    if (!pDropHandler->pFn2) {
-      MONSTER_InitiateDefaultDeath(pGame, nCurrentAnimMode, pUnit);
+    if (!pDropHandler->pfnUpdate) {
+      MONMODE_RequestNeutral(pGame, nCurrentAnimMode, pUnit);
       return;
     }
 
-    pDropHandler->pFn2(pGame, (D2MonsterKillStrc*)pUnit);
+    pDropHandler->pfnUpdate(pGame, (D2ModeChangeStrc*)pUnit);
     return;
 }
 
-void __fastcall ExecuteDropHandlerFn3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
+void __fastcall MONMODE_EventEndAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     eD2MonsterAnimMode eUnitAnimMode = !pUnit ? Death : pUnit->eAnimMode.eMonsterMode;
-    D2AiDispatchCallbacksStrc* pDropHandler = GetDropHandler(pUnit, eUnitAnimMode);
+    D2MonModeTableRowStrc* pDropHandler = MONMODE_GetModeTableRow(pUnit, eUnitAnimMode);
     if (!pDropHandler) {
-      MONSTER_InitiateDefaultDeath(pGame, eUnitAnimMode, pUnit);
+      MONMODE_RequestNeutral(pGame, eUnitAnimMode, pUnit);
       return;
     }
-    if (!pDropHandler->pFn3) {
-      MONSTER_InitiateDefaultDeath(pGame, eUnitAnimMode, pUnit);
+    if (!pDropHandler->pfnEnd) {
+      MONMODE_RequestNeutral(pGame, eUnitAnimMode, pUnit);
       return;
     }
 
-    pDropHandler->pFn3(pGame, pUnit);
+    pDropHandler->pfnEnd(pGame, pUnit);
     return;
 }
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
-int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2MonsterKillStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
+int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
     bool bIsModeZeroDeath;
     BOOL BVar1;
-    D2AiDispatchCallbacksStrc* pCurrentModeHandler;
+    D2MonModeTableRowStrc* pCurrentModeHandler;
     uint32_t bHasAnimSequence;
     eD2MonsterAnimMode eActualAnimMode;
-    D2UnitStrc* pUnit = pMonsterKill->pVictim;
+    D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
@@ -1598,8 +1598,8 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
 
     D2MonsterPathParamStrc* pAiParams = 0;
     if (eTargetMode != eD2MonsterAnimMode_ns::GetHit) {
-      if (pMonsterKill->pAttacker) {
-        D2Common::PATH::DynamicPath::SetTarget(pDynPath, pMonsterKill->pAttacker);
+      if (pMonsterKill->pTargetUnit) {
+        D2Common::PATH::DynamicPath::SetTarget(pDynPath, pMonsterKill->pTargetUnit);
       } else {
         D2Common::PATH::DynamicPath::SetSP1(pDynPath, (int16_t)pMonsterKill->nTargetX, (int16_t)pMonsterKill->nTargetY);
       }
@@ -1613,12 +1613,12 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
 
       AddGamePathCount(pAiParams, (uint32_t)pMonsterKill->nAnimatedMode2, pGame, pUnit, pMonsterKill->nMonType1, (uint8_t)pMonsterKill->nMonType2);
       Monsters::MONSTER_RecalculateCombatStats(pUnit, eTargetMode);
-      Monsters::MONSTER_DispatchUModOnSpawn(pGame, pUnit);
+      Monsters::MONSTER_DispatchUModModeStart(pGame, pUnit);
     }
 
-    D2AiDispatchCallbacksStrc* pHandler = GetDropHandler(pUnit, eTargetMode);
-    if (pHandler && pHandler->pFn1) {
-      eUnitState = pHandler->pFn1(pGame, pMonsterKill);
+    D2MonModeTableRowStrc* pHandler = MONMODE_GetModeTableRow(pUnit, eTargetMode);
+    if (pHandler && pHandler->pfnStart) {
+      eUnitState = pHandler->pfnStart(pGame, pMonsterKill);
       if (!eUnitState) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
         if (eTargetMode != Death && eTargetMode != eD2MonsterAnimMode_ns::Dead) {
@@ -1628,7 +1628,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
           }
         }
 
-        PlanExecutionOfMonster(pGame, pMonsterKill);
+        MONMODE_StartNeutral(pGame, pMonsterKill);
       }
 
       pUnit->eUnitFlags |= UNITFLAG_MONMODEISCHANGING;
@@ -1637,16 +1637,16 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
         MONSTER_SetVelocityPercent(pAiParams, pUnit);
       }
 
-      Monsters::MONSTER_DispatchUModOnDeath(pGame, pUnit);
+      Monsters::MONSTER_DispatchUModModeChange(pGame, pUnit);
       eActualAnimMode = pUnit->eAnimMode.eMonsterMode;
       if (bResetSkillOnSameMode && eTargetMode == eActualAnimMode) {
         D2Common::Units::SetCurrentSkill(pUnit, nullptr);
       }
 
       UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
-      pCurrentModeHandler = GetDropHandler(pUnit, eActualAnimMode);
+      pCurrentModeHandler = MONMODE_GetModeTableRow(pUnit, eActualAnimMode);
       if (pCurrentModeHandler) {
-        if (pCurrentModeHandler->bBool) {
+        if (pCurrentModeHandler->bScheduleEvents) {
           bHasAnimSequence = MONSTER_HasAnimModeSequence(pUnit, eActualAnimMode);
           if (bHasAnimSequence) {
             UNIT::SUnit::UNITS_ClearAnimAndTriggerEndAnim(pGame, pUnit);
@@ -1663,27 +1663,27 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
       }
     }
 
-    MONSTER_InitiateDefaultDeath(pGame, eTargetMode, pUnit);
+    MONMODE_RequestNeutral(pGame, eTargetMode, pUnit);
     return 0;
 }
 
-void __stdcall SetCurrentSkill(D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode, D2MonsterKillStrc * pMonsterKill) {
+void __stdcall MONMODE_InitModeChange(D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode, D2ModeChangeStrc * pModeChange) {
     if ((int)nUnitMode >= 0x10) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b8);
       exit(-1);
     }
 
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    memset(pMonsterKill, 0, sizeof(*pMonsterKill));
-    pMonsterKill->nUnitMode = nUnitMode;
-    pMonsterKill->pVictim = pUnit;
+    memset(pModeChange, 0, sizeof(*pModeChange));
+    pModeChange->nUnitMode = nUnitMode;
+    pModeChange->pUnit = pUnit;
     uint32_t bHasSequence = MONSTER_HasAnimModeSequence(pUnit, nUnitMode);
     if (bHasSequence) {
-      pMonsterKill->nAnimatedMode2 = 'e';
+      pModeChange->nAnimatedMode2 = 'e';
       return;
     }
 
-    pMonsterKill->nAnimatedMode2 = 'd';
+    pModeChange->nAnimatedMode2 = 'd';
 }
 
 static void * keep_005a61b0 = (0 ? (MONSTERMODE_ConsumeStoredPosition(*(int * *)0, *(int * *)0, *(char * *)0, *(D2MonsterPathParamStrc * *)0), (void *)0) : (void *)0);

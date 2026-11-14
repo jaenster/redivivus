@@ -39,7 +39,7 @@ extern DC6 * pDC6_Frame;
 extern uint32_t gnLastOpenPanelId;
 extern DC6 * gpUiCursorFocus16DC6;
 extern DC6 * pUi_Panel_buysellbtn;
-extern DC6 * gnLoadedActIndex;
+extern DC6 * gpLoadingScreenDC6;
 extern uint16_t gU16ImmunityStringBuffer1[256];
 extern DC6 * gpUIStatLevelUpPanelImages;
 extern DC6 * gpUIStatLevelUpButtonImages;

@@ -100,7 +100,7 @@ static D2UIFlagInitStrc g_UIFlagInitChatPanel[7] = {
 }; D2_STATIC_GUARD(g_UIFlagInitChatPanel, "g_UIFlagInitChatPanel");
 static uint32_t gnChatHistoryScrollIndex = 0; D2_STATIC_GUARD(gnChatHistoryScrollIndex, "gnChatHistoryScrollIndex");
 namespace D2Client::UI::Chat {
-int gaIMECompositionBuffer = 0; D2_GLOBAL_GUARD(gaIMECompositionBuffer, "D2Client::UI::Chat::gaIMECompositionBuffer");
+int gnLanguageCode = 0; D2_GLOBAL_GUARD(gnLanguageCode, "D2Client::UI::Chat::gnLanguageCode");
 } // namespace D2Client::UI::Chat
 char gaChatInputBuffer = 0; D2_GLOBAL_GUARD(gaChatInputBuffer, "gaChatInputBuffer");
 static uint8_t gbChatInputEnabled = 0; D2_STATIC_GUARD(gbChatInputEnabled, "gbChatInputEnabled");
@@ -167,15 +167,15 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
       BOOL bImeStatus;
       switch (pUnderMouseLocal->nWParam) {
         case 8:
-          if (gaIMECompositionBuffer == 6) {
+          if (gnLanguageCode == 6) {
             /* HIMC param_1 for ImmGetOpenStatus */ bImeStatus = ImmGetOpenStatus(hImc);
             if (bImeStatus) {
               gaChatInputBuffer = '\x01';
               gnIMEInputMode = 3;
               goto cleanup;
             }
-          } else if (gaIMECompositionBuffer != 8) {
-            if (gaIMECompositionBuffer != 9) {
+          } else if (gnLanguageCode != 8) {
+            if (gnLanguageCode != 9) {
               goto cleanup;
             }
 
@@ -199,7 +199,7 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
         goto cleanup;
         case 6:
           /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hImc, (LPDWORD)&pMsg, &dwSentence);
-        if (gaIMECompositionBuffer != 7 && gaIMECompositionBuffer != 0xc) {
+        if (gnLanguageCode != 7 && gnLanguageCode != 0xc) {
           goto cleanup;
         }
         if ((uintptr_t)pMsg & 1) {
@@ -212,12 +212,12 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
         default:
           goto cleanup;
         case 5:
-          if (gaIMECompositionBuffer == 9) {
+          if (gnLanguageCode == 9) {
             CHAT_HandleIMECandidateList(hImc);
             pUnderMouseLocal->bHandled = 1;
             pUnderMouseLocal->dwResult = 0;
           }
-        if (gaIMECompositionBuffer != 8) {
+        if (gnLanguageCode != 8) {
           goto cleanup;
         }
 
@@ -225,7 +225,7 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
         break;
         case 4:
           pMemoryToFree = gpIMECandidateList;
-        if (gaIMECompositionBuffer == 9) {
+        if (gnLanguageCode == 9) {
           if (gpIMECandidateList) {
             D2_FREE_AT(gpIMECandidateList, ".\\UI\\chat.cpp", 0x160);
             gpIMECandidateList = (LPCANDIDATELIST)0x0;
@@ -235,7 +235,7 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
           pUnderMouseLocal->bHandled = 1;
           pUnderMouseLocal->dwResult = 0;
         }
-        if (gaIMECompositionBuffer != 8) {
+        if (gnLanguageCode != 8) {
           goto cleanup;
         }
         if (pMemoryToFree) {
@@ -245,13 +245,13 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
 
         break;
         case 3:
-          if (gaIMECompositionBuffer != 9) {
+          if (gnLanguageCode != 9) {
             goto cleanup;
           }
         CHAT_HandleIMECandidateList(hImc);
         break;
         case 2:
-          if (gaIMECompositionBuffer != 9) {
+          if (gnLanguageCode != 9) {
             goto cleanup;
           }
         /* DWORD idThread for GetKeyboardLayout */ hKbLayout = GetKeyboardLayout(0);
@@ -272,14 +272,14 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
 uint8_t __stdcall CHAT_CheckIMELanguage() {
     LANGID nLangId;
     BOOL bIsIme;
-    if (gaIMECompositionBuffer == 9) {
+    if (gnLanguageCode == 9) {
       nLangId = GetSystemDefaultLangID();
       if (nLangId != 0x404 && nLangId != 0xc04) {
         return 0;
       }
     } else {
       HKL hKbLayout;
-      if (gaIMECompositionBuffer != 8) {
+      if (gnLanguageCode != 8) {
         /* DWORD idThread for GetKeyboardLayout */ hKbLayout = GetKeyboardLayout(0);
         /* HKL param_1 for ImmIsIME */ bIsIme = ImmIsIME(hKbLayout);
         return bIsIme != 0;
@@ -305,8 +305,8 @@ void __stdcall CHAT_InitIME() {
     DWORD dwSentenceMode;
     int32_t nEventCount;
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
-    gaIMECompositionBuffer = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    if (gaIMECompositionBuffer != 6 && gaIMECompositionBuffer != 9 && gaIMECompositionBuffer != 8 && gaIMECompositionBuffer != 7 && gaIMECompositionBuffer != 0xc) {
+    gnLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+    if (gnLanguageCode != 6 && gnLanguageCode != 9 && gnLanguageCode != 8 && gnLanguageCode != 7 && gnLanguageCode != 0xc) {
       return;
     }
 
@@ -331,7 +331,7 @@ void __stdcall CHAT_InitIME() {
     gwcImeCompositionBuffer[0] = L'\0';
     if (!false) {
       HKL hKeyboardLayout;
-      switch (gaIMECompositionBuffer) {
+      switch (gnLanguageCode) {
         case 6:
           if (langId == 0x411) {
             nEventCount = 7;
@@ -421,7 +421,7 @@ void __stdcall CHAT_ShutdownIME() {
     if (hIMC) {
       DWORD dwConversionMode;
       /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 0);
-      if (gaIMECompositionBuffer == 7 || gaIMECompositionBuffer == 0xc) {
+      if (gnLanguageCode == 7 || gnLanguageCode == 0xc) {
         /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
         /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 0, dwSentenceMode);
       }
@@ -965,7 +965,7 @@ void __stdcall CHAT_ProcessBattleNetMessage() {
     char cScanChar;
     uint16_t* pwszSenderLine;
     D2BNetClientCallbacksStrc* pCallbacks;
-    pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
+    pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
     if (!pCallbacks) {
       return;
     }
@@ -1108,7 +1108,7 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
       } while (pScan);
 
       if (nCopyCount == 1) {
-        pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
+        pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
         if (pCallbacks) {
           pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         }
@@ -1186,7 +1186,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
                 nTokenCount++;
               } while (cScanChar != '\0');
 
-              sWhisperPacket.nIMEMode = (uint8_t)gaIMECompositionBuffer;
+              sWhisperPacket.nIMEMode = (uint8_t)gnLanguageCode;
               sWhisperPacket.nMsgType = '\x02';
               sWhisperPacket.nCmd = '\x15';
               GAME::Msg::NET_D2GS_CLIENT_Send_Chat(&sWhisperPacket);
@@ -1195,7 +1195,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
           }
         }
         sprintf(szInput, "%s %s %s", szCommandName, szTargetName, szMessageText);
-        pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
+        pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
         if (pCallbacks) {
           pCallbacks->pfnSendChatCommand((uint8_t*)szInput);
         }
@@ -1247,7 +1247,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     memset(sChatPacket.szMsg, 0, 0x100);
     char* pszInput;
     pszInput = pszInputBase + nInputOffset;
-    sChatPacket.nIMEMode = (uint8_t)gaIMECompositionBuffer;
+    sChatPacket.nIMEMode = (uint8_t)gnLanguageCode;
     char* pInputOffset;
     pInputOffset = pszInput;
     int nCompareResult;
@@ -1295,7 +1295,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
 
     sChatPacket.nMsgType = '\x01';
     sChatPacket.nCmd = '\x15';
-    sChatPacket.nIMEMode = (uint8_t)gaIMECompositionBuffer;
+    sChatPacket.nIMEMode = (uint8_t)gnLanguageCode;
     if (!gbChatInputEnabled || (nCmpResult = CHAT_IsWideStringASCII(pwInputMessage) , (char)nCmpResult != '\0')) {
       BVar1 = CHAT_ParseCommand((char**)&pInputOffset, &sChatPacket.nMsgType, sChatPacket.szTarget);
       pszInput = pInputOffset;
@@ -1372,7 +1372,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
                           if (!BVar1) {
                             BVar1 = CHAT_HandleResignCommand("/\?", pszInput);
                             if (!BVar1) {
-                              pBNetCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
+                              pBNetCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
                               if (pBNetCallbacks) {
                                 pBNetCallbacks->pfnSendChatCommand((uint8_t*)pszInput);
                               }

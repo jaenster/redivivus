@@ -907,7 +907,7 @@
       "namespace": "D2Game::Quests::QUESTS::A5Q2",
       "calledFunctions": [
         "Q32_PrisonerTimerCallback",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
@@ -917,7 +917,7 @@
         "eD2MonsterAnimMode",
         "int32_t"
       ],
-      "dh": "a50ce096",
+      "dh": "54b34011",
       "paramStorage": [
         [
           "pQuestData",

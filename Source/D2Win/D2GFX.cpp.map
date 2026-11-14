@@ -22,7 +22,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "ba3c29cf",
+      "dh": "10f1fb3b",
       "paramStorage": [
         [
           "bWindowed",
@@ -84,7 +84,7 @@
       "dh": "aa47b7fa"
     },
     {
-      "name": "D2GFX_CheckVideoMode",
+      "name": "D2GFX_ShutdownSpriteCacheAndWindow",
       "address": "004f9030",
       "lines": [
         {
@@ -94,11 +94,11 @@
       ],
       "namespace": "D2Win::D2GFX",
       "calledFunctions": [
-        "D2GFX_CheckVideoMode",
+        "D2GFX_ShutdownSpriteCacheAndWindow",
         "SPRITECACHE_Shutdown",
         "D2GFX_DestroyWindow"
       ],
-      "dh": "cde7de95"
+      "dh": "598bcadf"
     },
     {
       "name": "BeginCutSceneAtResolutionMode0",

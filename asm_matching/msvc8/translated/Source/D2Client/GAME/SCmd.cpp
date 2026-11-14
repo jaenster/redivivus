@@ -1605,7 +1605,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x15_WarpXY(D2GSPacketSrv0x15 * pBytes) 
         BOOL bIsDead;
         if (pUnit->eUnitType == UNIT_PLAYER) {
           D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);
-          D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pUnit->pPath.pDynamicPath, 0x1c09);
+          D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pUnit->pPath.pDynamicPath, 0x1c09);
         } else if (pUnit->eUnitType == UNIT_MONSTER) {
           bIsDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
           if (!bIsDead) {
@@ -1696,7 +1696,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP(D2GSPacketSrv0x62 
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD(D2GSPacketSrv0x29 * pBytes) {
-    UI::npcmenu::QuestHandeling((char*)pBytes->szQuestBits);
+    UI::npcmenu::NPCMENU_ReadGameQuestRecord(pBytes->szQuestBits);
 }
 
 // Constructs a fake S2C 0x47 packet from a unit's type/GUID and feeds it directly to ITEM_CltRecalcAllEquippedItems. Used client-side when stat changes are detected locally (e.g., level-up via SCMD_HandleStatChangeEffect) without waiting for the server packet.
@@ -1768,7 +1768,7 @@ static void __stdcall SCMD_HandleStatChangeEffect(D2UnitStrc * pUnit, eD2UnitSta
       case UNITSTAT_hitpoints:
         if (nValue && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
           UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, TownNeutral);
-          UNIT::CUnit::IsAttackable(pUnit);
+          UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
           return;
         }
       break;
@@ -2017,7 +2017,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * p
     }
 
     UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, TownNeutral);
-    UNIT::CUnit::IsAttackable(pUnit);
+    UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
 }
 
 static void __stdcall DecodeIncoming0x95(D2GSPacket0x95Decoded * pDest, char * pBytes) {
@@ -2068,7 +2068,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char 
     }
 
     UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, TownNeutral);
-    UNIT::CUnit::IsAttackable(pUnit);
+    UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
 }
 
 static void __stdcall DecodeIncoming0x96(D2GSPacket0x96Decoded * pDest, char * pBytes) {
@@ -2195,7 +2195,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER(char * pBytes) {
     sPayload.dwData0 = *(uint32_t*)pBytes;
     sPayload.wData4 = *(uint16_t*)(pBytes + 4);
     sPayload.nData6 = pBytes[6];
-    UNIT::Monster::NPCMENU_HandleQuestUpdate((D2GSPacketSrv0x98*)&sPayload);
+    UNIT::Monster::CMONSTERS_SetSpawnerMonsterClass((D2GSPacketSrv0x98*)&sPayload);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID(char * pBytes) {

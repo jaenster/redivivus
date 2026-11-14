@@ -850,7 +850,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
             } else {
               dwState = pTextBox->sListState.dwStyleFlags;
               if (dwState & 0x40) {
-                D2WinFont::D2WINFONT_DrawWideStringRightToLeft(pCurLine->apwszCells[nColIndex], nColDrawX, nCurY, pCurLine->nLineStyle, pTextBox->nExtraLineSpacingA, uFontHeight);
+                D2WinFont::D2WINFONT_DrawTickerText(pCurLine->apwszCells[nColIndex], nColDrawX, nCurY, pCurLine->nLineStyle, pTextBox->nExtraLineSpacingA, uFontHeight);
               } else {
                 dwColor = pCurLine->nLineStyle;
                 if (dwState & 0x80) {
@@ -1138,7 +1138,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int
 }
 
 // MISNAMED: not a callback setter. Forwards its second argument verbatim to D2WINSCROLLBAR_SetLinkedTextBox(D2WinScrollbar*, D2WinTextBox*), so it is a D2WinTextBox pointer, not an int.
-void __fastcall D2WINTEXTBOX_SetScrollbarCallbackA(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox) {
+void __fastcall D2WINTEXTBOX_SetScrollbarLinkedTextBox(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a0);
       exit(-1);

@@ -692,7 +692,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "af5aa6de",
+      "dh": "a7f3f51e",
       "paramStorage": [
         [
           "pQuestData",
@@ -755,7 +755,7 @@
       "calledFunctions": [
         "Objects_InitFn25_Gidbinn",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "Q20_SpawnUniqueSerpent"
       ],
       "usedTypes": [
@@ -763,7 +763,7 @@
         "D2QuestDataA3Q3Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "b90ad299",
+      "dh": "d3ab7e57",
       "paramStorage": [
         [
           "pInitArg",
@@ -786,7 +786,7 @@
         "GetPlayerData",
         "GetQuestState",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "AddQuestTimer",
@@ -801,7 +801,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a2c8beef",
+      "dh": "1e3ee4fa",
       "paramStorage": [
         [
           "pOperation",
@@ -913,7 +913,7 @@
         "Q20_ActivateSerpentObject",
         "GetQuestDataByQuestNoInternal",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -924,7 +924,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "38cb9fd4",
+      "dh": "257d06e2",
       "paramStorage": [
         [
           "pGame",
@@ -945,7 +945,7 @@
       "calledFunctions": [
         "Objects_InitFn39_GidbinnAltar",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -953,7 +953,7 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "3b30bc94",
+      "dh": "d1819c59",
       "paramStorage": [
         [
           "pInitArg",

@@ -33,7 +33,7 @@ struct D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(struct D2UnitSt
 BOOL __fastcall Skills_CltDoFunc_Sor_Inferno(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side StFunc that checks whether the caster's confirmed target unit falls within the aura's range. Computes squared distance between caster and target (handling static/dynamic paths), compares against (aurarangecalc)^2, and additionally verifies neither unit is in town and that CanInteractWith returns true for non-monster targets. Returns TRUE if in range.
 BOOL __fastcall Skills_CltStFunc_CheckTargetInAuraRange(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nTargetY);
-BOOL __fastcall Skills_CltDoFunc_Sor_HomingMissileVelocity(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Nova(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client do-func 26: Fire Wall and its monster copies. Resolves the primary and sub-missile from skills.txt, validates the caster's collision and room, then spawns two missiles running perpendicular to the caster-to-target vector plus a centred sub-missile.
 // Slot from skills.txt cltdofunc 26.
 BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

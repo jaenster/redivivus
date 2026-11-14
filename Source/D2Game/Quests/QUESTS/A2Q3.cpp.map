@@ -376,7 +376,7 @@
         "Q11_BeginTaintedSun",
         "Q11_OnViperAmuletInit",
         "QUEST_SetStateAndBroadcast",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -384,7 +384,7 @@
         "D2QuestDataStrc",
         "int32_t"
       ],
-      "dh": "85554e54",
+      "dh": "38041e87",
       "paramStorage": [
         [
           "pQuestData",
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "name": "Q11_OnStaffViperPickup",
+      "name": "Q11_CountPlayersNeedingViperAmulet",
       "address": "0059a770",
       "lines": [
         {
@@ -620,7 +620,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q3",
       "calledFunctions": [
-        "Q11_OnStaffViperPickup",
+        "Q11_CountPlayersNeedingViperAmulet",
         "HasQuestItem",
         "GetPlayerData",
         "GetQuestState",
@@ -633,7 +633,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f1aa164d",
+      "dh": "2bb3176c",
       "paramStorage": [
         [
           "pGame",
@@ -668,7 +668,7 @@
         "SetupUpdateEvent_AttachEventSound",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "DRLGENV_TaintedSunEnd",
         "IteratePlayerOrMonsterUnits",
         "QUEST_DebugPrint",
@@ -695,7 +695,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "966fdad7",
+      "dh": "7f688018",
       "paramStorage": [
         [
           "pOperation",

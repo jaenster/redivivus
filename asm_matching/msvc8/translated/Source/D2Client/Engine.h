@@ -33,8 +33,8 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused);
 BOOL fpRequiredUserAction();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae50(BOOL bConnectionLost);
-void __fastcall LOADER_SetConnectionLostFlag_Unref_0045ae70(BOOL bConnectionLost);
+void __fastcall LOADER_SetScreenResolutionTableIndex(BOOL bConnectionLost);
+void __fastcall LOADER_SetScreenResolutionMode(BOOL bConnectionLost);
 void __stdcall DrawPopupOk(int32_t bDiscPrompt);
 void __stdcall LOADER_CheckForInsertedDiscs();
 void __stdcall DrawOkCancel(int32_t nFrameNumber);
@@ -67,7 +67,7 @@ int __fastcall Unreferenced_00460810(struct D2UnitStrc * param_1);
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms();
 void __fastcall CLIENT_UpdateUnitLightRadius(struct D2UnitStrc * pUnit, int32_t nRadiusBonus);
 void __fastcall CLIENT_SetUnitLightColor(struct D2UnitStrc * pUnit, int32_t dwRGB);
-void __fastcall LOADER_SetConnectionLostFlag_Unref_00468000(BOOL bConnectionLost);
+void __fastcall CURSOR_SetInitialized(BOOL bConnectionLost);
 #endif // D2_MODULE_D2Client
 // 2 internal functions (defined in .cpp)
 

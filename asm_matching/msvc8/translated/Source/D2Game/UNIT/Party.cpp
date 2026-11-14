@@ -410,7 +410,7 @@ BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, D2UnitStrc * pUnit, in
     return bIsDead;
 }
 
-void __fastcall CountModeZero(int32_t * pContext, D2UnitStrc * pUnit, int * pCount) {
+void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, D2UnitStrc * pUnit, int * pCount) {
     if (!pUnit) {
       return;
     }
@@ -423,7 +423,7 @@ void __fastcall CountModeZero(int32_t * pContext, D2UnitStrc * pUnit, int * pCou
     (*pCount)++;
 }
 
-void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * bExecute) {
+void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs) {
     D2UnitStrc* pUnit;
     D2UnitPartyControlSubSub* pSubSub;
     if (!pGame->pPartyControl) {
@@ -450,26 +450,26 @@ void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, int16_t 
     for (pSubSub = pFoundSub->pSub; pSubSub; pSubSub = pSubSub->pNext) {
       pUnit = SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, pSubSub->nUnitGUID);
       if (pUnit) {
-        (*fpFunction)(pGame, pUnit, bExecute);
+        (*fpFunction)(pGame, pUnit, pArgs);
       }
     }
 }
 
 // Calls fpFilter(pGame, pMember, pDataForFunction) once for each party member of pUnit that is in the same level. Looks up pUnit's room and level ID, resolves its party ID, then iterates the party's sub-sub list; for each member found in the unit table whose room maps to the same level ID, invokes the filter callback. Also calls the callback (once, with pUnit itself) if pUnit has no room or no party, acting as a fallback. The callback is __fastcall(pGame@ECX, pUnit@EDX, pUserData@stack) - all three known implementations end in RET 0x4 - and its return value is discarded.
-void __fastcall FindUnitWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPartyMemberFilter fpFilter, void * pDataForFunction) {
+void __fastcall PARTY_IteratePartyMembersInSameLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPartyMemberFilter pfnCallback, void * pArgs) {
     D2RoomStrc* pOtherRoom;
     eD2LevelId eOtherLevelId;
     D2UnitPartyControlSubSub* pSubSub;
     D2RoomStrc* pRoom1 = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom1) {
-      (*fpFilter)(pGame, pUnit, pDataForFunction);
+      (*pfnCallback)(pGame, pUnit, pArgs);
       return;
     }
 
     eD2LevelId dwLevelNo = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom1);
     uint16_t nPartyId = SUnit::GetPartyId(pUnit);
     if (nPartyId == 0xffff) {
-      (*fpFilter)(pGame, pUnit, pDataForFunction);
+      (*pfnCallback)(pGame, pUnit, pArgs);
       return;
     }
 
@@ -486,7 +486,7 @@ void __fastcall FindUnitWithFilter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnP
         if (pOtherRoom) {
           eOtherLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pOtherRoom);
           if (eOtherLevelId == dwLevelNo) {
-            (*fpFilter)(pGame, pOtherUnit, pDataForFunction);
+            (*pfnCallback)(pGame, pOtherUnit, pArgs);
           }
         }
       }
@@ -539,7 +539,7 @@ int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       nSearchGUID = pUnit->nUnitGUID;
     }
     if (pUnit->pInventory) {
-      nSearchGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetCursorItemGUID(pUnit->pInventory);
+      nSearchGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetOwnerGUID(pUnit->pInventory);
     }
     if (pUnit->eUnitType != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x27b);
@@ -634,13 +634,13 @@ uint32_t __fastcall GetPartiedUnitsLevelSum(::SGAMEDATA * pGame, D2UnitStrc * pU
       return nLevel;
     }
 
-    FindUnitWithFilter(pGame, pUnit, (pfnPartyMemberFilter)CountAliveUnitsLevelSum, &nLevelSum);
+    PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, (pfnPartyMemberFilter)CountAliveUnitsLevelSum, &nLevelSum);
     return nLevelSum;
 }
 
-uint32_t __fastcall CountDeadPartyMembers(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+uint32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     DWORD dwCount = 0;
-    FindUnitWithFilter(pGame, pUnit, (pfnPartyMemberFilter)CountModeZero, &dwCount);
+    PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, (pfnPartyMemberFilter)PARTY_CountLivingUnitsCallback, &dwCount);
     return dwCount;
 }
 
@@ -659,7 +659,7 @@ DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, D2UnitStrc *
     int nGoldDelta;
     D2UnitPartyControlSubSub* pSubSub;
     DWORD nAlivePartyMembers = 0;
-    FindUnitWithFilter(pGame, pUnit, (pfnPartyMemberFilter)CountModeZero, &nAlivePartyMembers);
+    PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, (pfnPartyMemberFilter)PARTY_CountLivingUnitsCallback, &nAlivePartyMembers);
     if ((int)nAlivePartyMembers <= 1) {
       nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
       nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);

@@ -147,7 +147,7 @@
         "DAMAGE_ApplyHealingToUnit",
         "CheckForModeZeroDeath",
         "UNIT_GetUnitState",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat"
       ],
@@ -155,7 +155,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9d7dec83",
+      "dh": "2cab58e1",
       "paramStorage": [
         [
           "nHealAmount",
@@ -179,7 +179,7 @@
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
         "DAMAGE_ApplyManaToUnit",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat"
       ],
@@ -187,7 +187,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "3fd3143c",
+      "dh": "76a249bd",
       "paramStorage": [
         [
           "nManaAmount",
@@ -377,7 +377,7 @@
       "calledFunctions": [
         "DAMAGE_OnColdExpire",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "UpdateAnimSpeed"
       ],
@@ -387,7 +387,7 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "0a637402",
+      "dh": "3fc58598",
       "paramStorage": [
         [
           "pUnit",
@@ -456,7 +456,7 @@
       ]
     },
     {
-      "name": "DAMAGE_GetMonsterDelayByDifficulty",
+      "name": "DAMAGE_GetMonsterColdEffect",
       "address": "0057af30",
       "lines": [
         {
@@ -466,14 +466,14 @@
       ],
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
-        "DAMAGE_GetMonsterDelayByDifficulty"
+        "DAMAGE_GetMonsterColdEffect"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8bbf5c45",
+      "dh": "7d37f8a7",
       "paramStorage": [
         [
           "pGame",
@@ -507,7 +507,7 @@
         "STATLIST_AttachStatListToUnit",
         "STATLIST_SetStatValue",
         "UpdateAnimSpeed",
-        "STATLIST_GetFullListFromStatList",
+        "STATLIST_GetExpireFrame",
         "SetTimeout_WithFlag",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
       ],
@@ -520,7 +520,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b87fed12",
+      "dh": "7b89aef8",
       "paramStorage": [
         [
           "pUnit",
@@ -549,7 +549,7 @@
       "calledFunctions": [
         "SUNITDMG_StatExpireCallback_ResumeAI",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "GetGamePointer",
         "FreeCombatAndChangeAnimMode",
@@ -565,7 +565,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1e89ecd1",
+      "dh": "9ef0b443",
       "paramStorage": [
         [
           "pUnit",
@@ -602,13 +602,13 @@
         "MONSTER_GetMercType",
         "GetStatsByState",
         "GetGamePointer",
-        "DAMAGE_GetMonsterDelayByDifficulty",
+        "DAMAGE_GetMonsterColdEffect",
         "GetDifficultyLevels",
         "SetState",
         "AllocStatList",
         "STATLIST_SetExpireFunction",
         "STATLIST_AttachStatListToUnit",
-        "STATLIST_GetFullListFromStatList",
+        "STATLIST_GetExpireFrame",
         "SetTimeout_WithFlag",
         "SetEvent",
         "GetInstructionPointer",
@@ -626,7 +626,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "31e95c0c",
+      "dh": "6b36b4cd",
       "paramStorage": [
         [
           "pUnit",
@@ -658,7 +658,7 @@
         "PLAYER_GetActiveWeaponForSkill",
         "STATSEX_GetCurrentStat",
         "INVENTORY_GetWeaponHandedness",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "ITEM_GetItemsTxt_wStrBonus",
         "ITEM_GetItemsTxt_wDexBonus",
         "SKILLS_GetItemBonusDamage",
@@ -671,7 +671,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f148ab8d",
+      "dh": "4245961b",
       "paramStorage": [
         [
           "pUnit",
@@ -720,7 +720,7 @@
       "calledFunctions": [
         "DAMAGE_ApplyDemonBonus",
         "IsDemon",
-        "ITEM_GetMinimalStatValueShifted"
+        "STATLIST_UnitGetStatValueUnchecked"
       ],
       "usedTypes": [
         "D2DamageStrc",
@@ -728,7 +728,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2af74858",
+      "dh": "b70688e6",
       "paramStorage": [
         [
           "pUnit",
@@ -759,7 +759,7 @@
         "MONSTER_IsMonsterUndead",
         "PLAYER_GetActiveWeaponForSkill",
         "ITEMS_IsA",
-        "ITEM_GetMinimalStatValueShifted"
+        "STATLIST_UnitGetStatValueUnchecked"
       ],
       "usedTypes": [
         "D2DamageStrc",
@@ -767,7 +767,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26ac5a6c",
+      "dh": "4eb6fdd4",
       "paramStorage": [
         [
           "pDamage",
@@ -835,7 +835,7 @@
         "DAMAGE_CalculateOffensiveDamage",
         "EQUIPMENT_RecalcDualWieldWeaponStats",
         "STATSEX_GetAlignment",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "IsDemon",
@@ -865,7 +865,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94c3a04d",
+      "dh": "def6c468",
       "paramStorage": [
         [
           "pGame",
@@ -1044,14 +1044,14 @@
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
         "DAMAGE_ProcessFreezeAndPoisonImmunity",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "UNIT_GetUnitState"
       ],
       "usedTypes": [
         "D2DamageContext",
         "int32_t"
       ],
-      "dh": "94a4fb21",
+      "dh": "94ac4695",
       "paramStorage": [
         [
           "pCtx",
@@ -1156,7 +1156,7 @@
         "SKILLS_GetStateTransformGfx",
         "STATSEX_GetCurrentStat",
         "D2ApplyPercent",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_AddUnitStat",
         "GetGamePointer",
         "GetDifficultyLevels",
@@ -1177,7 +1177,7 @@
         "uD2UnitMode",
         "uint32_t"
       ],
-      "dh": "bb8ac72e",
+      "dh": "b64429f4",
       "paramStorage": [
         [
           "pGame",
@@ -1375,7 +1375,7 @@
       ]
     },
     {
-      "name": "DAMAGE_CheckKnockbackThreshold",
+      "name": "DAMAGE_ShouldSkipHitRecovery",
       "address": "0057cb00",
       "lines": [
         {
@@ -1385,31 +1385,30 @@
       ],
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
-        "DAMAGE_CheckKnockbackThreshold",
+        "DAMAGE_ShouldSkipHitRecovery",
         "UNIT_GetUnitState",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "RNG_GetRandomInRange",
         "GetSomeMonsterStatFlag"
       ],
       "usedTypes": [
         "D2DamageStrc",
         "D2UnitStrc",
-        "eD2ElementalDamageTypeDWORD",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "de492b4b",
+      "dh": "123eb26c",
       "paramStorage": [
         [
           "pUnit",
           "Stack[0x4]:4"
         ],
         [
-          "pDamage1",
+          "pDamage",
           "Stack[0x8]:4"
         ],
         [
-          "pDamage2",
+          "nHitClass",
           "Stack[0xc]:4"
         ]
       ]
@@ -1428,7 +1427,7 @@
         "DAMAGE_RemoveObjectAtSameCoords",
         "UNITS_GetRoom",
         "GetCoords",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector"
       ],
       "usedTypes": [
@@ -1437,7 +1436,7 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "d36e0355",
+      "dh": "abba4edd",
       "paramStorage": [
         [
           "nClassId",
@@ -1467,7 +1466,7 @@
         "SERVER_AwardKillExperience",
         "SERVER_ARENA_KillHandler",
         "nullsub",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetDirection",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
@@ -1478,13 +1477,13 @@
         "DAMAGE_RemoveObjectAtSameCoords"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "814a8f20",
+      "dh": "24c35f4d",
       "paramStorage": [
         [
           "pGame",
@@ -1555,7 +1554,7 @@
         "STATLIST_SetUnitStat",
         "PLRMODES_StartModeID",
         "GetStatsByState",
-        "DAMAGE_CheckKnockbackThreshold",
+        "DAMAGE_ShouldSkipHitRecovery",
         "ROOM_LinkUnitToUpdateList",
         "STATLIST_GetBaseStatValue",
         "SKILLS_GetSkillByEnum",
@@ -1564,19 +1563,19 @@
         "SKILL_GetFlags",
         "SKILL_SetFlags",
         "GetSomeMonsterStatFlag",
-        "MONSTER_CheckSpecialDeathFlag",
+        "MONSTER_SetSandLeaperHitResultFlag",
         "SERVER_KillMonster",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "MONSTER_GetHpPercent128",
-        "MONSTER_DispatchUModOnSpecial",
+        "MONSTER_DispatchUModDamaged",
         "SetAiState",
         "SetState"
       ],
       "usedTypes": [
         "D2DamageStrc",
+        "D2ModeChangeStrc",
         "D2MonStatsTxt",
-        "D2MonsterKillStrc",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2SkillsTxt",
@@ -1590,7 +1589,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0628ad52",
+      "dh": "ab497df5",
       "paramStorage": [
         [
           "pGameIn",
@@ -1783,7 +1782,7 @@
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
         "DAMAGE_CheckPreventHealAndSetState",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SetStateWithExpiryTime"
       ],
       "usedTypes": [
@@ -1791,7 +1790,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "0c42d497",
+      "dh": "27f88f4f",
       "paramStorage": [
         [
           "pDefender",
@@ -1815,7 +1814,7 @@
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
         "DAMAGE_ApplyIgnoreAndFractionalAC",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "CheckMonsterType",
         "UnitIsMarkedBoss",
         "MONSTER_GetMercType",
@@ -1828,7 +1827,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8103512e",
+      "dh": "d81300bc",
       "paramStorage": [
         [
           "pnHitChance",
@@ -1866,7 +1865,7 @@
         "DAMAGE_ApplyIgnoreAndFractionalAC",
         "PLAYER_GetActiveWeaponForSkill",
         "SKILLS_GetItemBonusDamage",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "TXT_MonStats_GetLine",
         "STATLIST_GetItemStatBonusValues",
         "DAMAGE_CheckMonsterTypeVsMonsterType",
@@ -1884,7 +1883,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9a0981b6",
+      "dh": "57b1c8d9",
       "paramStorage": [
         [
           "pUnit",
@@ -1954,7 +1953,7 @@
       ]
     },
     {
-      "name": "DAMAGE_GetSkillDamageBonus",
+      "name": "DAMAGE_GetPassiveWeaponBlock",
       "address": "0057dca0",
       "lines": [
         {
@@ -1964,7 +1963,7 @@
       ],
       "namespace": "D2Game::UNIT::SUnitDmg",
       "calledFunctions": [
-        "DAMAGE_GetSkillDamageBonus",
+        "DAMAGE_GetPassiveWeaponBlock",
         "INVENTORY_GetItemByGridOffset",
         "STATLIST_GetItemStatBonusValues",
         "ITEMS_IsA"
@@ -1977,7 +1976,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7bb76f2a",
+      "dh": "3ce2bb50",
       "paramStorage": [
         [
           "pUnit",
@@ -2000,7 +1999,7 @@
         "STATSEX_GetCurrentStat",
         "GetGamePointer",
         "SUNITDMG_DebugTraceAvoidRoll",
-        "DAMAGE_GetSkillDamageBonus",
+        "DAMAGE_GetPassiveWeaponBlock",
         "COMPOSIT_GetWeaponClassWithTransform",
         "UNIT_GetModuloFromSeed"
       ],
@@ -2010,7 +2009,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dd2440da",
+      "dh": "458aa904",
       "paramStorage": [
         [
           "bIsMissile",
@@ -2457,7 +2456,7 @@
         "TXT_Experience_GetLineLevel",
         "STATLIST_SetUnitStat",
         "DATATBLS_GetLevelFromExperience",
-        "UpdateGameInfo",
+        "PLAYERSTATS_LevelUp",
         "UNITEVENT_DispatchEventsByType"
       ],
       "usedTypes": [
@@ -2467,7 +2466,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f05396f",
+      "dh": "8906457f",
       "paramStorage": [
         [
           "pGame",
@@ -2544,7 +2543,7 @@
       "calledFunctions": [
         "SERVER_PartyShareExperience",
         "memset",
-        "FindUnitWithFilter",
+        "PARTY_IteratePartyMembersInSameLevel",
         "SERVER_CalculateExperienceForUnit",
         "SERVER_PlayerUpdateExperience"
       ],
@@ -2556,7 +2555,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "9e203baf",
+      "dh": "c06ae4e3",
       "paramStorage": [
         [
           "nBaseExperience",
@@ -2597,7 +2596,7 @@
       "calledFunctions": [
         "SERVER_GetOwnerFromMonsterUnit",
         "GetOwnerUnit",
-        "STATES_HasCurseState",
+        "STATES_HasExpFlagState",
         "GetStatsByFlags",
         "GetOwnerType",
         "GetOwnerGUID",
@@ -2610,7 +2609,7 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "aaa7d218",
+      "dh": "f31cde1d",
       "paramStorage": [
         [
           "pGame",

@@ -34,7 +34,7 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(struct D2UnitStrc * pUnit, 
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection);
 void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffsetX, int * pnOffsetY);
 void __fastcall SetSuperUniqueName(struct D2UnitStrc * pUnit, uint16_t * wszText);
-BOOL __stdcall MONSTER_IsAndarielNormal(struct D2UnitStrc * pUnit, int32_t nParam);
+BOOL __stdcall MONSTER_IsSandLeaper(struct D2UnitStrc * pUnit, int32_t nParam);
 uint32_t __stdcall IsDemon(struct D2UnitStrc * pUnit);
 BOOL __stdcall MONSTER_IsMonsterUndead(struct D2UnitStrc * pUnit);
 uint32_t __stdcall UnitIsMarkedBoss(struct D2MonStatsTxt * pMonStatsTxt, struct D2UnitStrc * pUnit);
@@ -62,7 +62,7 @@ void __stdcall MONSTERS_OnInitMonster_NoOp_Unref_0063e050(struct D2UnitStrc * pU
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam);
 // Returns the byte value at index bParam in gaMonsterGfxOffsetTable1 (the third monster graphics direction-offset table). Used to map an animation direction index to a table-specific graphics offset byte.
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable3(uint8_t bParam);
-uint32_t __fastcall MONSTER_IsBossOrChampion(struct D2UnitStrc * pUnit);
+uint32_t __fastcall MONSTER_CanBeInTown(struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Common
 
 }}} // namespace D2Common::Monsters::MONSTERS

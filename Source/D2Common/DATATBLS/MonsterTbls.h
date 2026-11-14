@@ -93,7 +93,7 @@ __attribute__((noinline)) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlags
 __attribute__((noinline)) inline int32_t __fastcall ValidateClassId(int32_t nClassId);
 __attribute__((noinline)) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 __attribute__((noinline)) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill);
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pnMaxChainId, int32_t * pnChainId);
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, struct D2MonStatsInitStrc * pOutStats);
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(struct D2UnitStrc * pUnit);
@@ -101,7 +101,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniqueSuffix(struct D2UnitStrc * pUnit);
 uint16_t * __fastcall MONSTER_GetRandomUniqueAppelation(struct D2UnitStrc * pUnit);
 // TC level-variant selector. TCs with same nGroup form a chain, select best match where TC.nLevel <= nLevel. Linear scan through variants, returns highest applicable TC or base TC if no variants.
 struct D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t nTreasureClassId, int32_t nLevel);
-struct D2ParsedTreasureClassStrc * __stdcall RollTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nLevel);
+struct D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nTier);
 struct D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique);
 int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount();
 struct D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel);
@@ -109,7 +109,7 @@ struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t 
 struct D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, int32_t nDifficulty, struct D2HirelingTxt * pHirelingTxt);
 struct D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId);
 struct D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nType, int32_t nSuperUniqueId);
+int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 // Post-processes all MonStats entries after TXT load: for each monster resolves its base MonStats ID (fixing out-of-range back-references), then queries AnimData to compute and store the scaled walk-anim frame count (offset +0x26) and run-anim frame count (offset +0x28), clamped to 0x7FFF, accounting for Velocity/Run speed overrides from the base monster.
@@ -140,9 +140,9 @@ struct D2ParsedTreasureClassStrc * __stdcall TC_LookupTreasureClassByName(char *
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 void __stdcall MONSTERTBLS_Unused_HaltLine1710();
 // Compile body locations txt - monster hit location armor percentages
-void __fastcall DATATBLS_CompileBodyLocsTxt(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_MonStats();
-struct D2MonItemPercentTxt * __stdcall TC_GetTreasureClassArrayEntry(int32_t nTCArrayIdx);
+void __fastcall DATATBLS_LoadMonItemPercentTxt(struct D2PoolManagerStrc * pMemory);
+void __stdcall DATATBLS_UnloadMonItemPercentTxt();
+struct D2MonItemPercentTxt * __stdcall DATATBLS_GetMonItemPercentTxtRecord(int32_t nRecordId);
 // Defines and compiles the MonUMod.txt field schema into the global data table. Sets up 16 D2BinFieldInputStrc entries (uniquemod, version, enabled, xfer, champion, fpick, exclude1/2, cpick/upick per difficulty, constants), calls CompileTxt to parse the file, allocates the MonUMod link table, and caps nTxtMonUmodSize at 256.
 void __fastcall TXT_AllocTxt_monumod(struct D2PoolManagerStrc * pMemory);
 void Unreferenced_006552a0();
@@ -156,21 +156,21 @@ struct D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uin
 struct D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, int32_t pPrevEntry);
 // Loads and compiles the npc.txt data table (vendor pricing). Builds a D2BinFieldInputStrc field-definition array (npc name linked to MonStats, sell/buy/rep mult, questflag A/B/C, per-quest sell/buy/rep multipliers, and max buy gold per difficulty) and passes it to DataTbls::CompileTxt with row size 0x4C, storing the result into sgtDataTable.pTxtNpc and the row count into sgtDataTable.nTxtNpcSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
 void __fastcall TXT_AllocTxt_npc(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_MonStats_Unref_006568f0();
+void __stdcall DATATBLS_UnloadNpcTxt();
 struct D2NpcTxt * __stdcall TXT_npc_GetLine(int32_t nNpc);
 // Table loader for monsounds.txt. Builds a stack array of D2BinFieldInputStrc column descriptors (Id, Attack1/2 + delay/prob, Weapon1/2 + delay/vol, HitSound, DeathSound, footsteps, Neutral, Init, Taunt, Flee, CvtMo/CvtSk/CvtTgt 1-3, etc., each with field type/offset into a 0x94-byte record), creates the linker strc, then calls CompileTxt to parse the txt into sgtDataTable.pTxtMonSounds and store the row count in sgtDataTable.nTxtMonSoundsSize. pMemory = pool for the compiled table. Pure data-table init; no game-state side effects.
 void __fastcall TXT_AllocTxt_monsounds(struct D2PoolManagerStrc * pMemory);
-void __stdcall TXT_FreeTxt_sounds_Unref_00656f60();
+void __stdcall DATATBLS_UnloadMonSoundsTxt();
 // Parses one comma-separated component-code field of a MonSeq/monster txt row into the row's compiled code table. For sequence slot nSeqSlot (<0x10) it clears the slot's count byte and three code entries, strips surrounding quotes, then tokenizes the input string on commas; each <=4-char token is packed into a 4-char code (space-padded), resolved to a class id via Excel GetClassIdFromName against pTxtCompCodeLink, and stored as a byte. Writes the resolved code count back to offset 0x15+nSeqSlot (max 12 codes). On the final slot (0xf) it sums frame counts across the parsed component groups and stores the clamped (<=0xfe) total at offset 0x25. Pure table-build side effects; no return.
-void __fastcall MONSTERTBLS_ParseMonSeqField(char * szText, char * pRecord, uint32_t nSeqSlot, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3);
+void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char * pRecord, uint32_t nComponent, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3);
 // Builds the field-descriptor table for monstats2.txt and compiles it into the in-memory MonStatsEx binary table. Fills a 126-entry D2BinFieldInputStrc array mapping every monstats2 column (Height, sizes, gfx component vectors mode-link bits HD/TR/.../S8 with MONSTERTBLS_ParseMonSeqField linkers, selection/collision flags, light/transform, Heart/BodyPart, Inferno, ResurrectMode/Skill), creates the txt link strc, then calls DataTbls::CompileTxt to allocate sgtDataTable.pTxtMonStatsEx (record size 0x134) and store its row count. __fastcall, pMemory(ECX)=pool allocator; no return.
 void __fastcall TXT_AllocTxt_monstats2(struct D2PoolManagerStrc * pMemory);
 void Unreferenced_00658440();
 // Breadth-first traversal of the monstypes.txt equiv1/equiv2/equiv3 parent-type hierarchy to test whether monster type nMonTypeId belongs to type nCheckTypeId. Returns 1 if found, 0 if not found, out-of-range, or stack depth exceeds 124. Despite its name, behaves as a monster-type membership test (analogous to ITEMTBLS_CheckItemTypeRecursive but for MonType with three equiv slots).
-BOOL __fastcall MONSTERTBLS_GetMonSeqFrameCount(int32_t nMonTypeId, int32_t nCheckTypeId);
+BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t nCheckTypeId);
 // Loads and compiles the montype.txt data table into sgtDataTable.pTxtMonType. Defines 7 field descriptors (type, equiv1-3, strsing, strplur, end), calls CompileTxt, then allocates and populates a bitfield matrix (nTxtMonTypeSize x ceil(nTxtMonTypeSize/32) words) encoding the transitive type-membership graph by calling MONSTERTBLS_GetMonSeqFrameCount for every (row, col) type pair.
 void __fastcall TXT_AllocTxt_montype(struct D2PoolManagerStrc * pMemory);
-void __stdcall MONSTERTBLS_FreeMonPlaceTxt();
+void __stdcall DATATBLS_UnloadMonTypeTxt();
 // Builds the field-descriptor table for monprop.txt and compiles it into sgtDataTable.pTxtMonProp (record stride 0x138). Declares an Id link field plus 6 property groups (prop/par/chance/min/max) for each of Normal, Nightmare (N), and Hell (H) difficulties, each prop field linked via the property linker (0x96bcd8) and an Id link strc created by STRUCT_CreateTxtLinkStrc. Allocates from gTxtCompilationMemPool; sets sgtDataTable.pTxtMonPropLink and nTxtMonPropSize as side effects.
 void __fastcall TXT_AllocTxt_monprop(struct D2PoolManagerStrc * pMemory);
 void Unreferenced_006594d0();
@@ -186,18 +186,18 @@ void __fastcall TXT_AllocTxt_sounds(struct D2PoolManagerStrc * pMemory);
 void __stdcall TXT_FreeTxt_sounds();
 // Loads and compiles the MonSeq.txt data table into sgtDataTable. Defines the six binary field descriptors (sequence, mode, frame, dir, event, end), compiles the TXT via CompileTxt, then builds the pMonSeqMonsterTbls lookup array indexed by sequence ID, setting each entry's pMonSeqTxt pointer and counting rows per sequence. Called once at startup during data-table initialization.
 void __fastcall TXT_AllocTxt_monseq(struct D2PoolManagerStrc * pMemory);
-void __stdcall MONSTERTBLS_FreeMonPropTxt();
+void __stdcall DATATBLS_UnloadMonSeqTxt();
 // 2022.01.09 - dzik
 struct D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTableByIndex(int32_t nIndex);
 // Loads and compiles the MonEquip.txt data table at startup. Declares the column schema (monster link, level, oninit, three item/loc/mod triplets with BodyLocs/Items excel linkers) and calls CompileTxt to allocate sgtDataTable.pTxtMonEquip (record size 0x1c). Halts with fatal error 0xd1c if the row count overflows 0x7fff. Post-processes: back-links each MonStats row to its first MonEquip row (nMonEquipId) and validates each equipment slot's loc and item code (blanks slots whose item name isn't a valid excel class id). Side effects only; no return.
 void __fastcall TXT_AllocTxt_MonEquip(struct D2PoolManagerStrc * pMemory);
 void Unreferenced_0065a170();
 // Frees all monster-related data tables from sgtDataTable. Unloads MonEquip, Npc, MonLvl, MonPreset, SuperUniques (+ txt link), MonUmod (+ txt link), MonStats (+ txt link), MonStats2 (+ txt link), MonProp (+ txt link), MonSounds (+ txt link), then delegates to MONSTERTBLS_FreeMonPropTxt, FreeParsedTC, and TXT_UnloadUniqueMonsterNameTables. Called during game shutdown or data table reload.
-void __stdcall MONSTERTBLS_FreeMonUModTxt();
+void __stdcall MONSTERTBLS_UnloadMonsterTxts();
 // Populates sgtDataTable.pParsedTreasureClassDiffActChestABC by looking up each "Act N&lt;diff&gt; Chest &lt;A|B|C&gt;" TreasureClass name (formatted via sprintf) in the treasure-class link table for all 3 difficulties × 5 acts × 3 chest types (A/B/C). Stores a pointer to the resolved D2ParsedTreasureClassStrc or NULL for each slot.
 void __stdcall TXT_AllocParsedTreasureClassDiffActChestABC();
 void __stdcall TXT_AllocItemDropData(struct D2PoolManagerStrc * pMemory);
-void __fastcall ClearScreen_Unref_0065a3f0(struct D2PoolManagerStrc * bPartial);
+void __fastcall TXT_AllocItemDropData_Thunk(struct D2PoolManagerStrc * bPartial);
 // Allocates and compiles all monster-related TXT data tables into the given memory pool. Loads uniquetitle/uniqueprefix/uniquesuffix/uniqueappellation (each keyed on the 'Name' column via DATATBLS_LookupStringId), then delegates to per-table alloc helpers for monlvl, monstats/monstats2, monprop, monsounds, monseq, monumod, superuniques, monpreset, hireling, npc, and MonEquip. Called once at startup during data-table initialization.
 void __fastcall TXT_AllocMonsterTables(struct D2PoolManagerStrc * pMemory);
 #endif // D2_MODULE_D2Common

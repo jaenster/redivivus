@@ -19,6 +19,7 @@
 // Forward declarations
 struct D2RoomStrc;
 struct D2UnitStrc;
+typedef uint32_t eD2CollisionShapeType;
 
 // Data types
 #ifndef D2_DEFINED_D2DynamicPathCoordsUnion
@@ -52,9 +53,9 @@ struct D2DynamicPathStrc {
     /* 0x03C */ int ePathType; // eD2PathTypes - current path type
     /* 0x040 */ int dwPrevPathType; // eD2PathTypes - previous path type
     /* 0x044 */ int nUnitSize; // Unit collision size (from GetUnitSizeX)
-    /* 0x048 */ int nUnitWidth; // Unit interaction width
+    /* 0x048 */ eD2CollisionShapeType nCollisionPattern; // Unit interaction width
     /* 0x04C */ int nCollisionFlag; // Collision flag for this unit type (0x80=player, 0x100=monster)
-    /* 0x050 */ int nCollisionPattern; // Collision check pattern / AI flags
+    /* 0x050 */ int nMoveTestCollisionMask; // Collision check pattern / AI flags
     /* 0x054 */ short eCollisionFlag; // Result collision flags from movement
     /* 0x056 */ short _pad56; // Alignment padding
     /* 0x058 */ struct D2UnitStrc * pTargetUnit; // Unit being targeted

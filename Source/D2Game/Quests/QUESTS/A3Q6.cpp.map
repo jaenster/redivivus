@@ -651,7 +651,7 @@
         "AddQuestTimer",
         "QUEST_SetQuestRecordState",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "ITEM_RewardItemToDrop",
@@ -669,7 +669,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a69938d0",
+      "dh": "5a3f3758",
       "paramStorage": [
         [
           "pQuestData",
@@ -695,7 +695,7 @@
         "Q23_TimerCallback_MephistoApproach",
         "UNITS_GetRoom",
         "GetDistanceBetweenUnits",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector",
         "SetEvent"
       ],
@@ -707,7 +707,7 @@
         "eD2MonsterAnimMode",
         "uint32_t"
       ],
-      "dh": "e372a1ec",
+      "dh": "37dbc125",
       "paramStorage": [
         [
           "pQuestData",
@@ -732,14 +732,14 @@
       "calledFunctions": [
         "Objects_InitFn45_MephistoBridge",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetEvent"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
       ],
-      "dh": "a84b82e3",
+      "dh": "f5dd6950",
       "paramStorage": [
         [
           "pInitArg",
@@ -761,13 +761,13 @@
         "Objects_InitFn44_HellGatePortal",
         "GetQuestDataByQuestNoInternal",
         "DRLGROOM_GetLevelIdFromRoom",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "eD2LevelId"
       ],
-      "dh": "987b2046",
+      "dh": "5b795228",
       "paramStorage": [
         [
           "pInitArg",

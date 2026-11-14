@@ -29,7 +29,7 @@
       ]
     },
     {
-      "name": "D2WINTIMER_Start",
+      "name": "D2WINTIMER_DisableSpaceKey",
       "address": "004fd830",
       "lines": [
         {
@@ -39,7 +39,7 @@
       ],
       "namespace": "D2Win::Src::D2WinTimer",
       "calledFunctions": [
-        "D2WINTIMER_Start",
+        "D2WINTIMER_DisableSpaceKey",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -47,7 +47,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "dbf04672",
+      "dh": "61fe9b7a",
       "paramStorage": [
         [
           "pTimer",
@@ -87,7 +87,7 @@
       ]
     },
     {
-      "name": "D2WINTIMER_GetElapsed",
+      "name": "D2WINTIMER_UpdateRepeating",
       "address": "004fd8f0",
       "lines": [
         {
@@ -97,7 +97,7 @@
       ],
       "namespace": "D2Win::Src::D2WinTimer",
       "calledFunctions": [
-        "D2WINTIMER_GetElapsed",
+        "D2WINTIMER_UpdateRepeating",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -109,7 +109,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ce629f2",
+      "dh": "7e27c90d",
       "paramStorage": [
         [
           "pTimer",
@@ -201,7 +201,7 @@
         "D2WinTimer",
         "int32_t"
       ],
-      "dh": "09eda102",
+      "dh": "72e7f6f7",
       "paramStorage": [
         [
           "pTimer",

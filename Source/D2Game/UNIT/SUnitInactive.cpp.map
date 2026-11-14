@@ -100,7 +100,7 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "PutItemInInventory",
-        "ITEMMODE_IsItemOnCursor"
+        "ITEMMODE_ApplyItemStats"
       ],
       "usedTypes": [
         "D2InactiveItemRecordStrc",
@@ -113,7 +113,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0bff569a",
+      "dh": "74455209",
       "paramStorage": [
         [
           "pGame",
@@ -186,7 +186,7 @@
         "INVENTORY_GetFirstItem",
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "FreeServerUnit",
         "__security_check_cookie"
       ],
@@ -201,7 +201,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "663905a3",
+      "dh": "02618d77",
       "paramStorage": [
         [
           "pGame",
@@ -497,7 +497,7 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "GetMonsterArea",
         "GetMonUModList",
         "GetAndRemoveMinionList",
@@ -525,7 +525,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "592e3114",
+      "dh": "5e6ac97f",
       "paramStorage": [
         [
           "pGame",
@@ -595,7 +595,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b22c1f8a",
+      "dh": "a23adbcc",
       "paramStorage": [
         [
           "pGame",
@@ -724,7 +724,7 @@
         "SetShrineTxtRecordInObjectData",
         "FindUnitFromTable",
         "UNITS_RelocateUnitToRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "FreeServerMemory"
       ],
       "usedTypes": [
@@ -739,7 +739,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "92baef37",
+      "dh": "dec73c88",
       "paramStorage": [
         [
           "pGame",
@@ -775,14 +775,14 @@
         "GetYPos",
         "TXT_Objects_GetLine",
         "IsShrine",
-        "EVENT_TimerTypeExistsOnUnit"
+        "EVENT_GetTimerFrame"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "bf0800b4",
+      "dh": "2badb67d",
       "paramStorage": [
         [
           "pGame",
@@ -882,7 +882,7 @@
         "CheckForModeZeroDeath",
         "DRLGROOM_GetLevelIdFromRoom",
         "TXT_LevelDefs_GetSaveMonsters",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "STATSEX_GetAlignment",
         "SetAlignment",
         "MONSTER_FreeUnitNodes",
@@ -896,7 +896,6 @@
       "usedTypes": [
         "D2RoomStrc",
         "D2SeedStrc",
-        "D2UnitDataPlayerPetsStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2LevelId",
@@ -905,7 +904,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "21f866bd",
+      "dh": "98d4a26f",
       "paramStorage": [
         [
           "pGame",

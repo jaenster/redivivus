@@ -3631,7 +3631,7 @@ static uint32_t gnNpcMenuPreviousGold = 0; D2_STATIC_GUARD(gnNpcMenuPreviousGold
 namespace D2Client::UI::npcmenu {
 D2BitBufferStrc * gpNpcMenuBitBuffer = 0; D2_GLOBAL_GUARD(gpNpcMenuBitBuffer, "D2Client::UI::npcmenu::gpNpcMenuBitBuffer");
 } // namespace D2Client::UI::npcmenu
-D2BitBufferStrc * gpNpcMenuDialogOptions = 0; D2_GLOBAL_GUARD(gpNpcMenuDialogOptions, "gpNpcMenuDialogOptions");
+D2BitBufferStrc * gpGameQuestRecord = 0; D2_GLOBAL_GUARD(gpGameQuestRecord, "gpGameQuestRecord");
 static int gnNpcMenuPendingUnk = 0; D2_STATIC_GUARD(gnNpcMenuPendingUnk, "gnNpcMenuPendingUnk");
 static int gnNpcMenuPendingItemCost = 0; D2_STATIC_GUARD(gnNpcMenuPendingItemCost, "gnNpcMenuPendingItemCost");
 static uint32_t gnNpcMenuCurrentNpcClassId = 0; D2_STATIC_GUARD(gnNpcMenuCurrentNpcClassId, "gnNpcMenuCurrentNpcClassId");
@@ -3686,7 +3686,7 @@ int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_00486e00() {
     return 0;
 }
 
-int32_t __stdcall GetInteractedUnitClassId_Unref_004b1020() {
+int32_t __stdcall NPCMENU_GetMonsterSpecialType() {
     return gnMonsterSpecialType;
 }
 
@@ -3759,7 +3759,7 @@ void __stdcall NPCMENU_SelectRandomDialogOption(D2NPCSpeechStrc * pSpeech) {
               return;
             }
 
-            BVar2 = D2Common::QuestRecord::GetQuestState(gpNpcMenuDialogOptions, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
+            BVar2 = D2Common::QuestRecord::GetQuestState(gpGameQuestRecord, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
             if (BVar2 != 1) {
               return;
             }
@@ -4013,7 +4013,7 @@ static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
         pNpcUnit = 0;
       }
 
-      D2Common::Units::GetTargetCoords(pNpcUnit, pPoint);
+      D2Common::Units::GetScreenCoords(pNpcUnit, pPoint);
       GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &nViewOriginX, &nViewOriginY, &nViewWidth, &nViewHeight);
       GAME::View::GetCenterXY(GAME::Game::D2GameView, &nViewCenterY, &nViewCenterX);
       /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcViewport, nViewCenterY, nViewCenterX, nViewWidth - nViewOriginX + nViewCenterY, nViewHeight - nViewOriginY + nViewCenterX);
@@ -4058,7 +4058,7 @@ int __stdcall NPCMENU_EmptyDialogDrawHandler() {
     return 0;
 }
 
-int __stdcall NPCMENU_OpenTradeWithNpc() {
+int __stdcall NPCMENU_RequestMercResurrect() {
     POINT ptDialogPos;
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -4126,7 +4126,7 @@ static int NPCMENU_CanItemBeRepaired(D2UnitStrc * pUnit) {
     bCanRepair = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
     if (bCanRepair) {
       int32_t nMaxDurability;
-      nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pUnit);
+      nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pUnit);
       if (nMaxDurability) {
         nCurrentDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_durability, 0);
         if (nCurrentDurability < nMaxDurability) {
@@ -4274,7 +4274,7 @@ void __stdcall NPCMENU_InitializeMenuOptions() {
     NPC::D2NpcMenuOptions[0x2b].nOptionsCount = 2;
     NPC::D2NpcMenuOptions[0x2b].nOptionStringId[2] = 0;
     NPC::D2NpcMenuOptions[0x2b].nOptionCallback[2] = 0;
-    if (NPC::D2NpcMenuOptions[0x2b].nOptionCallback[1] == NPCMENU_OpenTradeWithNpc) {
+    if (NPC::D2NpcMenuOptions[0x2b].nOptionCallback[1] == NPCMENU_RequestMercResurrect) {
       NPC::D2NpcMenuOptions[0x2b].nOptionsCount = 3;
     }
 
@@ -4353,7 +4353,7 @@ void __stdcall NPCMENU_Initialize() {
     memset(&gbNpcMenuTransactionMode2, 0, sizeof(gbNpcMenuTransactionMode2));
     memset(&gnNpcMenuPreviousGold, 0, sizeof(gnNpcMenuPreviousGold));
     memset(&gpNpcMenuBitBuffer, 0, sizeof(gpNpcMenuBitBuffer));
-    memset(&gpNpcMenuDialogOptions, 0, sizeof(gpNpcMenuDialogOptions));
+    memset(&gpGameQuestRecord, 0, sizeof(gpGameQuestRecord));
     memset(&gnNpcMenuPendingUnk, 0, sizeof(gnNpcMenuPendingUnk));
     memset(&gnNpcMenuPendingItemCost, 0, sizeof(gnNpcMenuPendingItemCost));
     memset(&gnNpcMenuCurrentNpcClassId, 0, sizeof(gnNpcMenuCurrentNpcClassId));
@@ -4380,7 +4380,7 @@ void __stdcall NPCMENU_Initialize() {
     memset(&gnNpcMenuDialogY, 0, sizeof(gnNpcMenuDialogY));
     memset(&gnNpcMenuDialogWidth, 0, sizeof(gnNpcMenuDialogWidth));
     gpNpcMenuBitBuffer = D2Common::QuestRecord::CreateBitBuffer(nullptr);
-    gpNpcMenuDialogOptions = D2Common::QuestRecord::CreateBitBuffer(nullptr);
+    gpGameQuestRecord = D2Common::QuestRecord::CreateBitBuffer(nullptr);
     _Interaction::geNpcUiState = NPCUI_NONE;
     sprintf(szDc6Path, "%s\\ui\\panel\\buysell", "DATA\\GLOBAL");
     gpNpcMenuShopInventoryDC6 = Core::Archive::IMAGE_LoadDC6Ex(szDc6Path, 0);
@@ -4394,9 +4394,9 @@ void __stdcall NPCMENU_Initialize() {
 
 void __stdcall NPCMENU_Cleanup() {
     D2Common::QuestRecord::FreeQuestRecordPool(nullptr, gpNpcMenuBitBuffer);
-    D2Common::QuestRecord::FreeQuestRecordPool(nullptr, gpNpcMenuDialogOptions);
+    D2Common::QuestRecord::FreeQuestRecordPool(nullptr, gpGameQuestRecord);
     gpNpcMenuBitBuffer = 0;
-    gpNpcMenuDialogOptions = 0;
+    gpGameQuestRecord = 0;
     if (gpNpcMenuShopInventoryDC6) {
       Core::Archive::DC6_FreeAndDelete(gpNpcMenuShopInventoryDC6);
       gpNpcMenuShopInventoryDC6 = 0;
@@ -4463,8 +4463,8 @@ void __fastcall NPCMENU_SetTransactionMode(D2GSPacketSrv0x50 * pMsg) {
     gbNpcMenuTransactionMode2 = pMsg->nMessageType;
 }
 
-void __fastcall QuestHandeling(char * szText) {
-    D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpNpcMenuDialogOptions, szText, 0x60, 0);
+void __fastcall NPCMENU_ReadGameQuestRecord(uint8_t * pQuestBits) {
+    D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpGameQuestRecord, (char*)pQuestBits, 0x60, 0);
 }
 
 // JMP thunk
@@ -6109,10 +6109,10 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
               eUnitStat = UNITSTAT_hitpoints;
               nPlayerHitpoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nOptionStringId);
               pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-              nCloseOptionEnabled = D2Common::Stats::StatsEx::GetTxtMaxHp(pNpcUnit);
+              nCloseOptionEnabled = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pNpcUnit);
               if (nPlayerHitpoints < nCloseOptionEnabled) {
                 pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-                dwFontArg = D2Common::Units::CalcRecoveryPriority(pNpcUnit);
+                dwFontArg = D2Common::Units::UNITS_GetHealingCost(pNpcUnit);
                 if (!dwFontArg) {
                   dwFontArg = 1;
                 }
@@ -7168,7 +7168,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
           if (nOptionsCount > 0) {
             ppfnCallback = NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback;
             do {
-              if (*ppfnCallback == NPCMENU_OpenTradeWithNpc) {
+              if (*ppfnCallback == NPCMENU_RequestMercResurrect) {
                 return 1;
               }
 
@@ -7197,7 +7197,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
                 }
 
                 NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionsCount++;
-                NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionIdx] = NPCMENU_OpenTradeWithNpc;
+                NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionIdx] = NPCMENU_RequestMercResurrect;
                 NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionIdx] = 0x1507;
                 return 1;
               }
@@ -7220,7 +7220,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
           } while (nOptionIdx);
 
           NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionsCount++;
-          NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount] = NPCMENU_OpenTradeWithNpc;
+          NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount] = NPCMENU_RequestMercResurrect;
           NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionsCount] = 0x1507;
         } else {
           nOptionsCount = NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionsCount;
@@ -7228,7 +7228,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
           if (nOptionsCount > 0) {
             ppfnCallback = NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback;
             do {
-              if (*ppfnCallback == NPCMENU_OpenTradeWithNpc) {
+              if (*ppfnCallback == NPCMENU_RequestMercResurrect) {
                 if (nOptionIdx < nOptionsCount - 1) {
                   pnOptionStringIdSlot = &NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionIdx];
                   pnCallbackSlot = &NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionIdx];

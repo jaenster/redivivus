@@ -201,7 +201,7 @@ int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
     return 1;
 }
 
-void __stdcall BeginCutSceneAtResolutionMode0_Unref_0043b800() {
+void __stdcall LAUNCHER_ClearBNetCallbacksAndShutdown() {
     gpBNetCallbacks = 0;
     Bnclient::thunk_BNMESSQUEUE_Shutdown();
 }
@@ -595,7 +595,7 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
         bSkipToOpen = MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET_OPEN_Unsure;
         Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 1);
         Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, (uint32_t)bSkipToOpen);
-        D2Win::D2GFX::D2GFX_CheckVideoMode();
+        D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
         gpBNetCallbacks->pfnDisconnect();
         gnBNetConnectInProgress = 0;
         pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();

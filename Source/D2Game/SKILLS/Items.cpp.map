@@ -888,7 +888,7 @@
       ]
     },
     {
-      "name": "ITEMMOD_GenerateUniqueItem",
+      "name": "ITEMMOD_GenerateLegacySetItem",
       "address": "005c2740",
       "lines": [
         {
@@ -898,7 +898,7 @@
       ],
       "namespace": "D2Game::SKILLS::Items",
       "calledFunctions": [
-        "ITEMMOD_GenerateUniqueItem",
+        "ITEMMOD_GenerateLegacySetItem",
         "TXT_Items_GetLine",
         "GetItemSeed",
         "GetSeed_nSeedLow",
@@ -918,7 +918,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "edaadb38",
+      "dh": "25e0e98a",
       "paramStorage": [
         [
           "pItem",
@@ -940,14 +940,14 @@
         "ITEMMOD_GenerateSetOrUniqueVersioned",
         "ITEM_GetItemData_wItemVersion",
         "ITEMMOD_GenerateSetItem",
-        "ITEMMOD_GenerateUniqueItem"
+        "ITEMMOD_GenerateLegacySetItem"
       ],
       "usedTypes": [
         "D2ItemGenContextStrc",
         "D2UnitStrc",
         "uint16_t"
       ],
-      "dh": "e9ccc870",
+      "dh": "b9215f0b",
       "paramStorage": [
         [
           "pUnit",
@@ -1057,7 +1057,7 @@
         "ITEMS_IsA",
         "SERVER_GetUnitStat",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLITEMS_ApplyPercentWithMinimum"
       ],
       "usedTypes": [
@@ -1069,7 +1069,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "504b0491",
+      "dh": "7753d32f",
       "paramStorage": [
         [
           "pUnit",
@@ -1100,7 +1100,7 @@
         "ITEMS_IsA",
         "SERVER_GetUnitStat",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "SKILLITEMS_ApplyPercentWithMinimum",
         "StaffMod"
       ],
@@ -1114,7 +1114,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6a8f34e1",
+      "dh": "8d815495",
       "paramStorage": [
         [
           "pUnit",

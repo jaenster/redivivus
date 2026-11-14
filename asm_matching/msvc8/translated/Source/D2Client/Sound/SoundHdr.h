@@ -27,8 +27,8 @@ namespace D2Client { namespace Sound { namespace SoundHdr {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 eD2LevelId __stdcall SOUND_GetCurrentLevelId();
 uint32_t __stdcall GetSoundEnv();
-int __stdcall SOUNDHDR_GetGlobal0_Unref_004817d0();
-int __stdcall SOUNDHDR_GetGlobal0_Unref_004817e0();
+int __stdcall SOUNDHDR_GetTxtSoundsSize();
+int __stdcall SOUNDHDR_GetTxtSoundEnvironSize();
 int __stdcall SOUNDHDR_GetGlobal0();
 int __stdcall SOUNDHDR_GetGlobal1();
 int * __stdcall SOUNDHDR_GetGlobal2();

@@ -464,7 +464,7 @@
         "GetGamePointer",
         "SUNITEVENT_RemoveEventsByQueueAndOwner",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "UpdateAnimSpeed",
         "SKILLS_UpdatePassivesAndPets"
@@ -477,7 +477,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9f162d49",
+      "dh": "25262356",
       "paramStorage": [
         [
           "pUnit",
@@ -599,7 +599,7 @@
         "Skills_SrvDoFunc_020_Static",
         "SKILLSOR_ApplyStaticFieldToUnit",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2ApplyPercent",
         "memset",
         "SERVER_AppendDamageToUnitEvent",
@@ -615,7 +615,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fd633071",
+      "dh": "09c4f46a",
       "paramStorage": [
         [
           "pContext",

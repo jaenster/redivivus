@@ -20,7 +20,7 @@
 
 
 static HWND ghwndD2GFX_CachedWindow = 0; D2_STATIC_GUARD(ghwndD2GFX_CachedWindow, "ghwndD2GFX_CachedWindow");
-DC6 * gnWindowInitState = 0; D2_GLOBAL_GUARD(gnWindowInitState, "gnWindowInitState");
+DC6 * gpOutOfGameBackgroundDC6 = 0; D2_GLOBAL_GUARD(gpOutOfGameBackgroundDC6, "gpOutOfGameBackgroundDC6");
 BOOL gbWindowed = 0; D2_GLOBAL_GUARD(gbWindowed, "gbWindowed");
 static int gnResolutionMode = 0; D2_STATIC_GUARD(gnResolutionMode, "gnResolutionMode");
 
@@ -35,12 +35,12 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
 
     D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(nullptr, 0x800000, 0x7d000, 0);
     ghwndD2GFX_CachedWindow = D2gfx::D2GFX::GetHwnd();
-    gnWindowInitState = 0;
+    gpOutOfGameBackgroundDC6 = 0;
     Src::D2WinMain::pFormsList = 0;
     Src::D2WinMain::pFormUnknown = 0;
     Src::D2WinButton::gnFormControlCount = 0;
     Src::D2WinMain::pFormTextAndEditBox = 0;
-    Src::D2WinMain::pFormFourth = 0;
+    Src::D2WinMain::gpEscapeButton = 0;
     Src::D2WinMain::pFormSecond = 0;
     pWndProcB = 0;
     Src::D2WinMain::pFormImage = 0;
@@ -70,7 +70,7 @@ BOOL __stdcall UI_Init() {
     return 1;
 }
 
-BOOL __stdcall D2GFX_CheckVideoMode() {
+BOOL __stdcall D2GFX_ShutdownSpriteCacheAndWindow() {
     gbGfxWindowCreated = 0;
     ghwndD2GFX_CachedWindow = (HWND)0x0;
     D2CMP::SRC::SpriteCache::SPRITECACHE_Shutdown(1);

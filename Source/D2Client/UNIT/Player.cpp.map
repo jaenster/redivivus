@@ -122,9 +122,9 @@
         "AllocStatListEx",
         "STATLIST_SetUnitStat",
         "DRLGROOM_IsRoomInTown",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "PATH_RemoveUnitCollision",
-        "SetUnitWidth",
+        "PATH_SetUnitCollisionPattern",
         "PATH_ChangeCollisionType",
         "GetPlayerUnit_UI",
         "Return0",
@@ -144,7 +144,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "490bda3e",
+      "dh": "7b8ecdfe",
       "paramStorage": [
         [
           "pUnit",
@@ -289,7 +289,7 @@
         "GetXPos",
         "GetYPos",
         "UNITS_GetRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockAll_Type",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
@@ -304,7 +304,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2fd11228",
+      "dh": "496bdbb8",
       "paramStorage": [
         [
           "pUnit",
@@ -522,7 +522,7 @@
         "UNITMODE_SetAnimMode",
         "PATH_MoveUnitToPoint",
         "IsActive",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "UNITMODE_SendWalkToPosition",
         "UI_CloseActivePanels",
         "GetSelectedUnit",
@@ -557,7 +557,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ad0e3e31",
+      "dh": "d2bfdecf",
       "paramStorage": [
         [
           "nMessageType",
@@ -1526,8 +1526,8 @@
         "IsActive",
         "UNITMODE_SetAnimMode",
         "GetPlayerUnit_UI",
-        "PATH_SetCollisionPattern",
-        "SetUnitWidth",
+        "PATH_SetMoveTestCollisionMask",
+        "PATH_SetUnitCollisionPattern",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UNITS_GetRoom",
@@ -1544,7 +1544,7 @@
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
         "PLAYER_GetWeaponTypeForAnimation",
         "GFX_ClearAllModeFlags",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEM_RemoveItemStatsFromOwner",
         "GetBodyLocation",
         "NullSub_2Arg",
@@ -1564,7 +1564,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "246fcb7b",
+      "dh": "35fcf9fb",
       "paramStorage": [
         [
           "pDeathMsg",
@@ -1648,7 +1648,7 @@
         "CLIENT_WarpPlayerAndContinueMove",
         "GetConfirmedTargetUnit",
         "GetCooordinates",
-        "PATH_CheckCollisionFlags",
+        "PATH_MoveUnitToRoomPosition",
         "PlayerMessage"
       ],
       "usedTypes": [
@@ -1660,7 +1660,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "291c3424",
+      "dh": "34724240",
       "paramStorage": [
         [
           "pUnit",
@@ -1764,13 +1764,13 @@
         "UNITMODE_SetAnimMode",
         "PATH_MoveUnitToPoint",
         "IsActive",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "NeedsRoomUpdate",
-        "ChangeAnimMode",
+        "SetCurrentRoomInvalid",
         "CLIENT_OnPlayerEnterRoom",
         "PATH_InterpolateDirection",
         "CLIENT_CancelRunAndWalk",
-        "STATES_HasDamageState",
+        "STATES_HasActiveFlagState",
         "SKILL_ProcessActiveStateEffects",
         "CLIENT_ResolvePlayerCollision"
       ],
@@ -1786,7 +1786,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "52072c94",
+      "dh": "2ffbe38c",
       "paramStorage": [
         [
           "pUnit",

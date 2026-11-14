@@ -547,7 +547,7 @@
       "dh": "caa86a58"
     },
     {
-      "name": "D2WINPAL_SetGammaRamp_Unref_00509660",
+      "name": "GLIDE_SetPerspectiveMode",
       "address": "00509660",
       "lines": [
         {
@@ -557,9 +557,9 @@
       ],
       "namespace": "D2Glide::Renderer::Glide",
       "calledFunctions": [
-        "D2WINPAL_SetGammaRamp_Unref_00509660"
+        "GLIDE_SetPerspectiveMode"
       ],
-      "dh": "a94a99ef",
+      "dh": "2755333b",
       "paramStorage": [
         [
           "bCompactLineSpacingMode",
@@ -585,7 +585,7 @@
         "GLFLOOR_Initialize",
         "GLSUBTILE_Initialize",
         "RENDERER_GLIDE_InitSpriteCache",
-        "GFX_SetSpriteCacheMaxSize",
+        "GFX_SetSpriteCacheFreeCallback",
         "LOGFILE_WriteStringToFile"
       ],
       "usedTypes": [
@@ -593,7 +593,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0ff636d4"
+      "dh": "fb78bef4"
     },
     {
       "name": "Unreferenced_00509a70",

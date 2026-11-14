@@ -266,7 +266,7 @@
       "dh": "ca0e36b5"
     },
     {
-      "name": "IsRecording_Unref_00451960",
+      "name": "RECORD_GetSettedUp",
       "address": "00451960",
       "lines": [
         {
@@ -276,9 +276,9 @@
       ],
       "namespace": "D2Client::GAME::Record",
       "calledFunctions": [
-        "IsRecording_Unref_00451960"
+        "RECORD_GetSettedUp"
       ],
-      "dh": "b62b27ff"
+      "dh": "73ce1dcd"
     },
     {
       "name": "RECORD_SetPlaybackActive",

@@ -85,7 +85,7 @@ uint32_t __stdcall D2WINFONT_GetCurrentFontHeight();
 void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX, uint32_t nY, int32_t nUnused, int32_t nCropStartY, int32_t nCropHeight);
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag);
 // Sets tooltip attributes (text, position, size, alignment) and custom field 0x810. Wrapper around TEXT_TooltipSetAttributes.
-void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField);
+void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill);
 void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t dwColor, BOOL bMultiLineCenter);
 // Draws text with background rectangle. Calculates text dimensions, clamps to screen bounds, draws solid rect, then renders centered text. Used for tooltips and popups.
 void __fastcall D2WINFONT_DrawTextWithBackgroundRect(uint16_t * wszText, uint32_t nX, int32_t nY, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette);
@@ -105,7 +105,7 @@ struct D2FontGlyphStrc * __fastcall FONT_GetCharWidthCallback(uint16_t wCharCode
 struct D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode);
 int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t nSize);
 // Right-to-left text renderer (for RTL languages). Draws glyphs from right edge backwards with horizontal bounds checking. Processes color codes, newlines. Returns pointer to last glyph data.
-void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nLeftBound, uint32_t nRightBound);
+void __fastcall D2WINFONT_DrawTickerText(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nScrollOffsetX, uint32_t nClipWidth);
 // Draws text with optional background box. If bDrawBackground is non-zero, calculates text width and adds 8px padding. Forwards to DrawWideStringWithDrawMode.
 void __fastcall D2WINFONT_DrawTextWithOptionalBackground(uint16_t * wszText, int32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, int32_t bDrawBackground, DRAWMODE eDrawMode);
 // Thunk/wrapper for DrawWideStringSimple. Direct passthrough.

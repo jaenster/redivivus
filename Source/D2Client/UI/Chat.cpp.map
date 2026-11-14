@@ -67,7 +67,7 @@
         "HKL",
         "LPCANDIDATELIST"
       ],
-      "dh": "4c975859",
+      "dh": "9703a00b",
       "paramStorage": [
         [
           "pMsg",
@@ -93,7 +93,7 @@
         "LANGID",
         "uint8_t"
       ],
-      "dh": "0a5bbac7"
+      "dh": "78744eb2"
     },
     {
       "name": "CHAT_ResetIMEState",
@@ -142,7 +142,7 @@
         "LANGID",
         "int32_t"
       ],
-      "dh": "b70ad180"
+      "dh": "05421668"
     },
     {
       "name": "CHAT_ShutdownIME",
@@ -164,7 +164,7 @@
         "HIMC",
         "int32_t"
       ],
-      "dh": "83b8379b"
+      "dh": "bf5ba7c6"
     },
     {
       "name": "CHAT_CompareCaseInsensitive",
@@ -633,7 +633,7 @@
       "namespace": "D2Client::UI::Chat",
       "calledFunctions": [
         "CHAT_ProcessBattleNetMessage",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "CONTAINER_InitializeBuffer",
         "MISC_GetIgnorelist",
         "STRING_ConvertCharToWchar",
@@ -655,7 +655,7 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "6b259d90"
+      "dh": "c0e70a67"
     },
     {
       "name": "CHAT_HandleResignCommand",
@@ -671,7 +671,7 @@
         "CHAT_HandleResignCommand",
         "CHAT_CompareCaseInsensitive",
         "strtok",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "sprintf",
         "TEXT_ProcessChatMessage"
       ],
@@ -680,7 +680,7 @@
         "MessageStrc",
         "int32_t"
       ],
-      "dh": "cc8f5b43",
+      "dh": "cff53b8a",
       "paramStorage": [
         [
           "szCommandName",
@@ -712,7 +712,7 @@
         "strncpy",
         "NET_D2GS_CLIENT_Send_Chat",
         "sprintf",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "TEXT_ProcessChatMessage"
       ],
       "usedTypes": [
@@ -722,7 +722,7 @@
         "MessageStrc",
         "int32_t"
       ],
-      "dh": "415b2b37",
+      "dh": "72d163bd",
       "paramStorage": [
         [
           "bInGame",
@@ -806,7 +806,7 @@
         "SStrCmpI",
         "CHAT_HandleWhisperCommand",
         "CHAT_HandleResignCommand",
-        "CLIENT_GetGameVersionInfo",
+        "CLIENT_GetBNetClientCallbacks",
         "STRING_GetWideStringLength",
         "NET_D2GS_CLIENT_Send_Chat",
         "UNICODE_FormatWideString",
@@ -823,7 +823,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "bf57932a",
+      "dh": "e56b3498",
       "paramStorage": [
         [
           "pwInputMessage",

@@ -761,7 +761,7 @@ void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     }
 
     pQuestArgs->pTarget->dwDropItemCode = 0x2034336a;
-    D2UnitStrc* pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, ITEMTYPE_Shield, &nDroppedItemGUID, nullptr, -1, 0);
+    D2UnitStrc* pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestData->pGame, pQuestArgs->pTarget, QUALITY_NORMAL, &nDroppedItemGUID, nullptr, -1, 0);
     if (pPlayerData) {
       pQuestData->sStateFunctions.fpQuestStateHandler[8] = (QUESTCALLBACKFN)0x0;
       pQuestSpecificDataA3Q5->nBirdItemCount++;

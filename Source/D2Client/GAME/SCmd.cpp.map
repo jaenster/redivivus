@@ -1267,7 +1267,7 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
         "PATH_UpdateCollisionWidth",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "CheckIfMonsterIsDead",
         "PATH_ChangeCollisionType",
         "GetPlayerUnit_UI",
@@ -1284,7 +1284,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "68a5b4fa",
+      "dh": "276b3994",
       "paramStorage": [
         [
           "pBytes",
@@ -1422,12 +1422,12 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD",
-        "QuestHandeling"
+        "NPCMENU_ReadGameQuestRecord"
       ],
       "usedTypes": [
         "D2GSPacketSrv0x29"
       ],
-      "dh": "15c94c58",
+      "dh": "a4b4d9bb",
       "paramStorage": [
         [
           "pBytes",
@@ -1510,7 +1510,7 @@
       "calledFunctions": [
         "SCMD_HandleStatChangeEffect",
         "UNITMODE_SetAnimMode",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "GetPlayerUnit_UI",
         "ITEM_CltRecalcEquippedFromUnit",
         "SCMD_RecalcInventoryItemStats",
@@ -1521,7 +1521,7 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "412e5c43",
+      "dh": "bf6aa7bc",
       "paramStorage": [
         [
           "pUnit",
@@ -1808,14 +1808,14 @@
         "STATLIST_SetUnitStat",
         "PATH_MoveUnitToPoint",
         "UNITMODE_SetAnimMode",
-        "IsAttackable"
+        "CUNIT_ClearDeadSetAttackable"
       ],
       "usedTypes": [
         "D2GSPacket0x18Decoded",
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e3aea3eb",
+      "dh": "ef8ca17c",
       "paramStorage": [
         [
           "pBytes",
@@ -1872,14 +1872,14 @@
         "STATLIST_SetUnitStat",
         "PATH_MoveUnitToPoint",
         "UNITMODE_SetAnimMode",
-        "IsAttackable"
+        "CUNIT_ClearDeadSetAttackable"
       ],
       "usedTypes": [
         "D2GSPacket0x95Decoded",
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "33bb5111",
+      "dh": "f7da858c",
       "paramStorage": [
         [
           "pBytes",
@@ -2110,12 +2110,12 @@
       "namespace": "D2Client::GAME::SCmd",
       "calledFunctions": [
         "NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER",
-        "NPCMENU_HandleQuestUpdate"
+        "CMONSTERS_SetSpawnerMonsterClass"
       ],
       "usedTypes": [
         "D2SCmdPayload_u32_u16_u"
       ],
-      "dh": "04b2959c",
+      "dh": "5cd0b88f",
       "paramStorage": [
         [
           "pBytes",

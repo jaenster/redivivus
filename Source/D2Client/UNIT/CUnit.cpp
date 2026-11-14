@@ -36,7 +36,6 @@
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Client/Draw/LightMap.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -371,12 +370,12 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
       }
 
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetX(spriteParams.pDC6Block);
-      nOffset += (int32_t)D2Common::Units::GetTargetX(pUnit);
+      nOffset += (int32_t)D2Common::Units::GetScreenX(pUnit);
       *pBoundsRect = nOffset - 0xc;
       nOffset = D2CMP::SRC::CelCmp::GetDC6Width(spriteParams.pDC6Block);
       pBoundsRect[2] = nOffset + 0x18 + *pBoundsRect;
       nOffset = D2CMP::SRC::CelCmp::GetDC6OffsetY(spriteParams.pDC6Block);
-      iVar1 = D2Common::Units::GetTargetY(pUnit);
+      iVar1 = D2Common::Units::GetScreenY(pUnit);
       nScreenTop = nOffset + 0xc + iVar1;
       pBoundsRect[1] = nScreenTop;
       nOffset = D2CMP::SRC::CelCmp::GetDC6Height(__frame0.pDC6Block2);
@@ -494,7 +493,7 @@ void __fastcall FacePlayer(D2UnitStrc * pUnit) {
       exit(-1);
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
     eD2UnitType eUnitType = pPlayer->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nTargetY = pPlayer->pPath.pStaticPath->nPosY;
@@ -729,7 +728,7 @@ void __fastcall SetServerCmd(D2UnitStrc * pUnit, D2ServerCmdStrc * pServerCmd) {
     pUnit->pServerCmd = pServerCmd;
 }
 
-void __fastcall IsAttackable(D2UnitStrc * pUnit) {
+void __fastcall CUNIT_ClearDeadSetAttackable(D2UnitStrc * pUnit) {
     eD2UnitFlags eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_ISDEAD;
     pUnit->eUnitFlags = eUnitFlags;
     if (pUnit->eUnitType == UNIT_MONSTER) {
@@ -1389,7 +1388,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
                   nSkillFlagsLocal = D2Common::Skills::SKILL_GetFlags(pSkill);
                   if (nSkillFlagsLocal & 1) {
                     D2Common::Skills::SKILL_SetFlags(pSkill, nSkillFlagsLocal | 2);
-                    D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
+                    D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pDynamicPath, 0);
                     return;
                   }
                 }
@@ -1402,9 +1401,9 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
           }
 
           LAB_004653bb:
-          D2Common::Units::SetupUpdateFlag(pDynamicPath, nAnimMode);
+          D2Common::Units::ChangeAnimMode(pDynamicPath, nAnimMode);
           clear_path_flag:
-          D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000((D2DynamicPathStrc*)pDynamicPath, 0);
+          D2Common::PATH::DynamicPath::PATH_SetOrClearFlag0x2000(pDynamicPath, 0);
           return;
         }
     }
@@ -2224,7 +2223,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
       if (pUnit) {
         Engine::Gfx::FreeGfxInfo(pUnit);
         GAME::Wall2::WALL2_InitUnitGfx(pUnit);
-        D2Common::Units::SetupUpdateFlag(pUnit, pCreateData->eUnitType);
+        D2Common::Units::ChangeAnimMode(pUnit, pCreateData->eUnitType);
         return pUnit;
       }
     }
@@ -2527,9 +2526,9 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimOrSeqMode, ".\\UNIT\\CUnit.cpp", 0x6ed);
     pObjectsTxt = 0;
     int32_t nScreenX;
-    nScreenX = D2Common::Units::GetTargetX(pUnit);
+    nScreenX = D2Common::Units::GetScreenX(pUnit);
     int32_t nOriginY;
-    nOriginY = D2Common::Units::GetTargetY(pUnit);
+    nOriginY = D2Common::Units::GetScreenY(pUnit);
     switch (eUnitType) {
       case UNIT_PLAYER:
         goto check_gfx_bounds;
@@ -2686,7 +2685,7 @@ void __fastcall CleanupInventory(D2UnitStrc * pUnit, int32_t bCheckInventory) {
           }
           if (!bCheckInventory || (bInInventory = CUNIT_IsItemInAnyInventory(pUnit, pHashItem) , !bInInventory)) {
             ITEM_RemoveItemStatsFromOwner(pHashItem, pUnit, 0, 0);
-            pNextItem = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pHashItem);
+            pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventory, pHashItem);
             if (!pNextItem) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa92);
               exit(-1);
@@ -2694,7 +2693,7 @@ void __fastcall CleanupInventory(D2UnitStrc * pUnit, int32_t bCheckInventory) {
 
             CUnit::RemoveObject(pHashItem->nUnitGUID, pHashItem->eUnitType, ServerSideUnitHashTables[pHashItem->eUnitType], pHashItem->nUnitGUID & 0x7f);
           } else {
-            pHashItem = D2Common::INVENTORY::Inventory::ItemBelongsToInventoryOfPlayer(pInventory, pHashItem);
+            pHashItem = D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventory, pHashItem);
             if (!pHashItem) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa96);
               exit(-1);

@@ -56,9 +56,9 @@ void __fastcall Q12_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 // A2Q4 - OnHoradricStaffAssembled. Entry point fired when the Horadric Staff is assembled (the prerequisite that unlocks the Arcane Sanctuary). If quest not yet introduced -> OnJournalActivate (open the Sanctuary entrance). Otherwise set stateFlag 1 if zero, and if no prior progress broadcast quest state 1 via QUEST_SetStateAndBroadcast(NotifyArcaneComplete).
 void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame);
 // A2Q4 - StubNoop1. Empty quest-table slot stub (returns nothing). No quest-state effect.
-void __stdcall A2Q4_OnMonsterDeathClass201_NoOp(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall A2Q4_OnJerhynCreated_NoOp(uint32_t dwArg1, uint32_t dwArg2);
 // A2Q4 - StubNoop2. Empty quest-table slot stub. No quest-state effect.
-void __stdcall A2Q4_OnMonsterDeathClass331_NoOp(uint32_t dwArg1, uint32_t dwArg2);
+void __stdcall A2Q4_OnAct2Guard2Created_NoOp(uint32_t dwArg1, uint32_t dwArg2);
 // A2Q4 - CheckJerhynGateOpen. One-shot edge detector: returns 1 the first time Jerhyn's initial-talk flag is set and the gate has not yet been opened (then latches bJerhynGateOpened). Used to open the Lut Gholein palace harem gate once Jerhyn has been spoken to.
 BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame);
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.
@@ -66,7 +66,7 @@ void __fastcall BlockHaremRoomForPlayerAccess(struct D2QuestDataStrc * pQuestDat
 // A2Q4 - Objects_InitFn30. Object init fn: syncs a quest object's visual/update flag to the portal substate (sSub.nPortalGUID), records its GUID, and removes its collision once the portal substate == 2 (portal active). No quest-record writes.
 void __fastcall Objects_InitFn30_HaremBlocker(struct D2ObjectInitFnArg * pInitArg);
 // A2Q4 (A2Q6/Duriel-related) - Q14_CheckDurielProximity. Per-player iterator: if The Seven Tombs (Duriel) is not Completed(0)/RewardAwaits(1) and the player is within ~31 units of the tracked Duriel-quest coords, sets the proximity flag and records the player GUID. Reads A2Q4 quest data block (shared union) for the coords. Returns 1 on trigger.
-BOOL __fastcall Q14_CheckDurielProximity(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q12_CheckDistanceToHaremBlocker(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A2Q4 - IsSanctuaryComplete. Returns true if the Sanctuary objective is "done enough": true if quest data missing; else if the Summoner is neither killed nor in coords-fallback, returns whether the portal-placed substate field (0x40/0x41) == 2. Used as a completion predicate.
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall Q12_IsSanctuaryComplete(::SGAMEDATA * pGame);

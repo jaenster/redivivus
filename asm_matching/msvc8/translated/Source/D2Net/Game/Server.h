@@ -55,15 +55,15 @@ int32_t __fastcall NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect(uint8_t * pbPacket
 void __stdcall WaitForEmptyEvent(DWORD dwTimeout);
 void __stdcall NET_Thunk_QServerSwapWorkerSlotValue(int nWorkerIndex, int nNewSlotValueOrZero);
 void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken, uint32_t nMaskTableIndex);
-void __stdcall _NullSub_Unref_0052b270();
+void __stdcall QSERVER_GetConnectedClients();
 void __stdcall GetIpFromToken(uint32_t nToken);
 void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken);
 void __stdcall NET_HACK_CloseAndBanHackerIP(in_addr addr, char * szFile, int32_t nLine);
 void __stdcall NET_HACK_UnlistIP(in_addr addr, char * dwDuration, uint32_t dwFlags);
 void __stdcall NET_DisconnectIP(in_addr addr, char * szText, int32_t nFlags);
 void __stdcall NET_Thunk_QServerSetHacklistAddLineHook(fpD2QServerLineHook pfnHook);
-void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nSize, int32_t nFlags);
-uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize);
+void __fastcall NET_EnqueueClientPacket(char * szText, uint16_t nSize, int32_t nClientId);
+uint32_t __fastcall NET_EnqueueLocalClientPacket(char * pPacket, uint16_t nSize);
 void __stdcall NET_WaitForEmptyEvent(DWORD dwTimeout);
 void __stdcall _NullSub();
 // @wasnamed _NullSub - one name on two different functions.

@@ -196,11 +196,11 @@ void __stdcall DRAW_AltItems() {
 
               nItemX = nItemPosX;
             } else {
-              nWorldOffsetX = D2Common::Units::GetTargetX(pItem);
+              nWorldOffsetX = D2Common::Units::GetScreenX(pItem);
               nCoordTemp = Path::DRAW_GetWorldOffsetX();
               nItemX = nWorldOffsetX - nCoordTemp;
               nWorldOffsetX = Path::DRAW_GetWorldOffsetY();
-              nCoordTemp = D2Common::Units::GetTargetY(pCurrentItem);
+              nCoordTemp = D2Common::Units::GetScreenY(pCurrentItem);
               nColorIdx = nCoordTemp + (-0x10 - nWorldOffsetX);
               pItem = pCurrentItem;
             }

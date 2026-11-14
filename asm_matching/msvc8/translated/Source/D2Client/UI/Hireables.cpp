@@ -45,8 +45,8 @@ uint8_t HealthBarYellowish = 0; D2_GLOBAL_GUARD(HealthBarYellowish, "D2Client::U
 uint8_t HealthBarRed = 0; D2_GLOBAL_GUARD(HealthBarRed, "D2Client::UI::Hireables::HealthBarRed");
 bool HealthBarColorsInitialized = 0; D2_GLOBAL_GUARD(HealthBarColorsInitialized, "D2Client::UI::Hireables::HealthBarColorsInitialized");
 }}} // namespace D2Client::UI::Hireables
-static int gpHireHoverUnit = 0; D2_STATIC_GUARD(gpHireHoverUnit, "gpHireHoverUnit");
-static uint32_t gnHireIconDrawX = 0; D2_STATIC_GUARD(gnHireIconDrawX, "gnHireIconDrawX");
+static int gnHireIconDrawX = 0; D2_STATIC_GUARD(gnHireIconDrawX, "gnHireIconDrawX");
+static uint32_t gnHireIconDrawY = 0; D2_STATIC_GUARD(gnHireIconDrawY, "gnHireIconDrawY");
 static uint32_t gnHireIconHoverX = 0; D2_STATIC_GUARD(gnHireIconHoverX, "gnHireIconHoverX");
 static uint32_t gnHireIconHoverY = 0; D2_STATIC_GUARD(gnHireIconHoverY, "gnHireIconHoverY");
 static uint8_t gbHireIconsVisible = 0; D2_STATIC_GUARD(gbHireIconsVisible, "gbHireIconsVisible");
@@ -529,7 +529,7 @@ void __stdcall INPUT_HireableHireClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     pMsg->bHandled = 0;
-    if (bIsCombatMode || (int)nMouseX < gpHireHoverUnit || (int)nMouseX > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
+    if (bIsCombatMode || (int)nMouseX < gnHireIconDrawX || (int)nMouseX > gnHireIconDrawX + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
       gnHireIconHoverIndex = 0;
       return;
     }
@@ -557,7 +557,7 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
     bool bIsCombatMode = gnHireDisplayMode == 2;
     pMsg->bHandled = 0;
     gnHireIconHoverY = 0;
-    if (bIsCombatMode || (int)nMouseX < gpHireHoverUnit || (int)nMouseX > gpHireHoverUnit + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
+    if (bIsCombatMode || (int)nMouseX < gnHireIconDrawX || (int)nMouseX > gnHireIconDrawX + 0x2e || (uint32_t)(nMouseY - 0x18) > 0x24) {
       gnHireIconHoverX = 0;
       gnHireIconHoverIndex = 0;
       return;
@@ -640,7 +640,7 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
     uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     bool bNotCombatMode = gnHireDisplayMode != 2;
     pMsg->bHandled = 0;
-    if (bNotCombatMode && (int)nMouseX >= gpHireHoverUnit && (int)nMouseX <= gpHireHoverUnit + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
+    if (bNotCombatMode && (int)nMouseX >= gnHireIconDrawX && (int)nMouseX <= gnHireIconDrawX + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
       DWORD dwNow;
       if (!gnHireIconHoverIndex) {
         gnHireIconHoverIndex = GetTickCount();
@@ -835,8 +835,8 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
       *pnY += 10;
     }
 
-    gpHireHoverUnit = *pnX;
-    gnHireIconDrawX = *pnY;
+    gnHireIconDrawX = *pnX;
+    gnHireIconDrawY = *pnY;
     if (gnHireIconHoverY && gnHireIconHoverIndex) {
       DWORD dwNow;
       dwNow = GetTickCount();
@@ -1042,7 +1042,7 @@ void __stdcall UI_DrawHireableIcons() {
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszTooltip, pwszStr2, pwszKeyDesc);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pwszStr3);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltip, pwszStr1);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, gpHireHoverUnit, gnHireIconDrawX + 0x24, 0, 0);
+    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, gnHireIconDrawX, gnHireIconDrawY + 0x24, 0, 0);
 }
 
 }}} // namespace D2Client::UI::Hireables

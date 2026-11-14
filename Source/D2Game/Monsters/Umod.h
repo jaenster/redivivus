@@ -28,10 +28,10 @@ void __fastcall MONUMOD_ApplyChampionLevelBonus(struct D2UnitStrc * pUnit, int32
 // Applies champion-tier stat bonuses to a monster unit. Decrements level by 1, reduces XP by 40%, then adds difficulty-scaled damage percent (MonUmod[11].constants) and to-hit percent (MonUmod[10].constants) bonuses. Also adds a velocity bonus based on nIndex: 0x24 subtracts speed, 0x25 computes a formula from base Velocity, other values add a flat +20%. Skips Griswold (classId 0x76) with halved damage bonus.
 void __fastcall MONUMOD_ApplyChampionStats(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
 // Applies the Cold Enchanted monster modifier (umod) to pUnit. Validates the unit is a live UNIT_MONSTER with a game pointer and that bUnknown (apply flag) is set, then ORs 0x40 into the monster-data type flags, sets a 80% (0x50) damage-resist stat, applies champion stats, and adds cold min/max damage scaled from monlvl.txt DM[] by difficulty (clamped 0-2) using GetUmodConstant(diff+0x16/+0x19) percentages, plus a fixed 150-frame (0x96) cold length. No-op if unit/game null or apply flag clear. Server-side monster spawn modifier.
-void __fastcall MONUMOD_ApplyColdEnchant(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
-void __fastcall MONUMOD_ApplyBerserker(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
-void __fastcall MONUMOD_ApplyPossessed(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
+void __fastcall MONUMOD_ApplyGhostly(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);
 void __fastcall MONUMOD_ApplyFanatic(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
+void __fastcall MONUMOD_ApplyPossessed(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
+void __fastcall MONUMOD_ApplyBerserk(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique);
 void __fastcall MONUMOD_SetEventTimer(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnused);
 // Monster unique-modifier handler that grants resistances. For a monster unit (when bUnknown is set), dispatched by nIndex (modifier id): index 0x1c doubles armorclass and adds 0x32 to damageresist; 8 ("Stone Skin") and 0x1b raise cold/fire/light resist (+0x28 / +0x14) but bail once two or more resists are already capped (>99); single-element mods 9/0x12/0x11/0x17 add +0x4b to fire/cold/light/poison resist, 0x19 adds +0x14 magicresist. Modifies the unit's resist stats in place via STATLIST_SetUnitStat.
 void __fastcall MagicResist(struct D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown);

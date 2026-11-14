@@ -48,10 +48,10 @@ struct D2TradeItemUidPairStrc {
 #ifndef D2_DEFINED_D2TradeRecordStrc
 #define D2_DEFINED_D2TradeRecordStrc
 struct D2TradeRecordStrc {
-    /* 0x00 */ int32_t pCopyInventory;
+    /* 0x00 */ int32_t nSaveSize;
     /* 0x04 */ void * pSaveBuffer;
     /* 0x08 */ struct D2TradeItemUidPairStrc * pUidPairList;
-    /* 0x0C */ uint32_t nTradeStatus;
+    /* 0x0C */ uint32_t nGoldOffered;
     /* 0x10 */ uint32_t nGold;
     /* 0x14 */ uint32_t dwAcceptLockEndTick;
 };
@@ -126,8 +126,8 @@ void __thiscall TRADE_SendTradeCompleteToPlayers(struct D2UnitStrc * pThis, stru
 void __fastcall CUBE_OnCubeInteractionEnd(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);
 // Server-side handler for a player picking up an item from the trade screen. Validates that the interact partner is a player; sends 0x77/0x0C error if not. Calls SERVER_TakeItemToCursor to move the item to the cursor slot. On success, resets the 10-second trade acceptance timer for both parties and sends 0x77/0x0E (unaccept) to both clients. If either party had committed gold (dwTradeState==4), zeroes out both gold totals via 0x79 packets and finalises the trade via TRADE_SendTradeCompleteToPlayers.
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitDataPlayerStrc * pPlayerData);
-int32_t __fastcall CopyInventory(struct D2UnitStrc * pUnit, uint8_t * pUnit2, int32_t nBufSize);
+void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
+int32_t __fastcall CopyInventory(struct D2UnitStrc * pUnit, uint8_t * pBuffer, int32_t nBufSize);
 // Server-side guard and initiator for a player-to-player trade session. Verifies both parties are alive (flag 0x800000 clear), Diablo has not been killed (classic trade restriction), the other player's trade inventory exists, and no prohibited item (monster-dropped or quest item with the "box" cube exception) is being offered. On success sets both players' dwTradeState to 7, fires event 0xD on the next frame for each, and sends NET packet 0x77 opcode 6 (TradeAccepted) to both clients. Returns 1 if the offered item needs re-validation, 0 if trade is blocked, or <5 trade-state guard on early-out paths.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItemUnit);
@@ -142,8 +142,8 @@ void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, struct D2Uni
 eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t nGoldAmount);
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall thunk_TRADE_CompleteTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall PLRTRADE_AbortTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall thunk_PLRTRADE_AbortTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Server-side trade handler: places pItem (held by pUnit) into the trade partner's trade window. Validates pUnit is interacting with another player and resolves the partner unit by interact GUID; on failure sends trade-action error 0xc (NET_D2GS_SERVER_Send_0x77). Clones the item, copies its tile coords, marks the clone and sets its page to the corpse/trade page, then inserts it into the partner inventory via SERVER_ItemToInventory at the same coords. On success records the trade item link (CreateStructure0xc), and if either side had locked gold (dwTradeState==4) re-syncs both sides' gold and resends trade-complete; on placement failure deletes the clone and cancels the trade (PLRTRADE_CancelTradeAndCleanup reason 9).
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall PLRTRADE_AddItemToTrade(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);

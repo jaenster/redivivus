@@ -2262,9 +2262,9 @@ static uint32_t gbTextEventHandlersRegistered = 0; D2_STATIC_GUARD(gbTextEventHa
 
 namespace D2Client { namespace UI { namespace Text {
 
-void __fastcall TEXT_SetScrollCompleteCallback_Unref_0045afe0(pfnTextScrollComplete pfnCallback, void * pUserParam) {
-    Path::MouseXOffset = (uint32_t)(uintptr_t)pfnCallback;
-    Path::MouseYOffset = (uint32_t)(uintptr_t)pUserParam;
+void __fastcall DRAW_SetMouseWorldOffsets(int nXOffset, int nYOffset) {
+    Path::MouseXOffset = nXOffset;
+    Path::MouseYOffset = nYOffset;
 }
 
 // JMP thunk
@@ -2272,7 +2272,7 @@ void __stdcall thunk_TEXT_ClearChatMessages() {
     ::D2Client::UI::Text::TEXT_ClearChatMessages();
 }
 
-void __fastcall TEXT_SetScrollCompleteCallback_Unref_004776d0(pfnTextScrollComplete pfnCallback, void * pUserParam) {
+void __fastcall RENDERING_SetCurrentEngineAndIndex(pfnTextScrollComplete pfnCallback, void * pUserParam) {
     GAME::Rendering::CurrentRendingEngine = (int)pfnCallback;
     GAME::Rendering::gnCurrentEngineIndex = (uint32_t)(uintptr_t)pUserParam;
 }
@@ -2285,7 +2285,7 @@ void __stdcall TEXT_OnPanelUnregister_NoOp_Unref_00496980() {
 
 }
 
-D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049c160() {
+D2GSPacketSrv0x27_TextStrc * __stdcall PARTY_GetPanelInvGoldBtn() {
     return (D2GSPacketSrv0x27_TextStrc*)Party::pPanel_inv_goldbtn;
 }
 
@@ -3374,7 +3374,7 @@ void Unreferenced_0049e860() {
     gpTextScrollBoxBuffer = 0;
 }
 
-uint32_t __stdcall TEXT_GetOverheadGlobalPointer_Unref_0049e8a0() {
+uint32_t __stdcall TEXT_GetTextDisplayMode() {
     return gnTextDisplayMode;
 }
 
@@ -6961,7 +6961,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
       return;
     }
 
-    D2Common::Units::GetTargetCoords(pUnit, &ptScreenPos2);
+    D2Common::Units::GetScreenCoords(pUnit, &ptScreenPos2);
     ptScreenPos2.x -= lprcTextOverheadRect.left;
     ptScreenPos2.y += -0x1e - lprcTextOverheadRect.top;
     nBorderType = Path::DRAW_GetTypeOfBorder();
@@ -7035,7 +7035,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
       return;
     }
 
-    D2Common::Units::GetTargetCoords(pUnit, &ptScreenPos);
+    D2Common::Units::GetScreenCoords(pUnit, &ptScreenPos);
     ptScreenPos.x -= lprcTextOverheadRect.left;
     ptScreenPos.y += -10 - lprcTextOverheadRect.top;
     nBorderType = Path::DRAW_GetTypeOfBorder();

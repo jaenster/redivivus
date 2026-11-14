@@ -177,7 +177,7 @@ static void __fastcall MONSTER_OnCreateAttachQuests(D2UnknownCreateMonsterStrc *
       return;
       case 0xaf:
         nUmodId = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0xaf ? -1 : 0xaf;
-      Quests::QUESTS::QUEST_DispatchMonsterDeathToQ12(pGame, pRoom, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
+      Quests::QUESTS::QUEST_DispatchMonsterCreateToA2Q4(pGame, pRoom, D2Common::Units::GetXPosFromDynamicPathUnit(pMonster), D2Common::Units::GetYPosFromDynamicPathUnit(pMonster), nUmodId);
       return;
       case 0xfa:
         Quests::QUESTS::QUEST_AttachToUnitByQuestId(pGame, pMonster, QUESTINT_TheSummoner);

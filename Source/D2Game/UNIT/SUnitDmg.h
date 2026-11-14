@@ -19,7 +19,6 @@
 struct D2StatListExStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
-typedef uint32_t eD2ElementalDamageTypeDWORD;
 typedef uint32_t eD2Skills;
 typedef uint32_t eD2States;
 typedef uint32_t eD2UnitStat;
@@ -120,7 +119,7 @@ namespace D2Game::UNIT::SUnitDmg {
 uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int32_t nMonTypeB);
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall DAMAGE_OnColdExpire(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * dwParam);
-int32_t __fastcall DAMAGE_GetMonsterDelayByDifficulty(::SGAMEDATA * pGame, struct D2UnitStrc * pMonster);
+int32_t __fastcall DAMAGE_GetMonsterColdEffect(::SGAMEDATA * pGame, struct D2UnitStrc * pMonster);
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(struct D2UnitStrc * pUnit, eD2States eState, struct D2StatListExStrc * pStatList);
 // Computes the physical damage total in nParam throughout the body; the only caller (DAMAGE_CalculateOffensiveDamage) assigns the never-set local nPhysDmgResult straight from this call's result into pDmgStrc->dwPhysDamage, proving the value is meant to flow back. The final D2ApplyPercent(nParam,...) call (when bParam!=0x80) also drops its own int32_t return, which is this function's true final value.
 uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(struct D2UnitStrc * pUnit, int32_t bUseWeaponStats, struct D2UnitStrc * pWeapon, int32_t nMinDmg, int32_t nMaxDmg, int32_t nBonusPercent, uint32_t nFlatDamage, uint8_t byScale);
@@ -146,7 +145,7 @@ void __fastcall FreeCombat(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pUnit2);
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
-BOOL __stdcall DAMAGE_CheckKnockbackThreshold(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage1, eD2ElementalDamageTypeDWORD pDamage2);
+BOOL __stdcall DAMAGE_ShouldSkipHitRecovery(struct D2UnitStrc * pUnit, struct D2DamageStrc * pDamage, int32_t nHitClass);
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.
 void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker, BOOL bRemoveFromOwner);
 // Server-side post-hit reaction dispatcher: given the resolved D2DamageStrc result flags, drives the victim's response. Early-outs if the victim is in town (unless attacker is an inTown monster) or has STATE_uninterruptable (only setting death_delay if the hit was lethal). For players, maps result flags to dodge/avoid/evade/block/gethit/knockback: sets the corresponding state, plays the avoid/evade skill sound, and starts the matching player mode (PLRMODES_StartModeID/MoveToLocation), honoring faster-block-rate timing. For monsters, kills the victim on a lethal flag (SERVER_KillMonster), or dispatches Knockback/GetHit/Block/death-special transitions through the monster AI lifecycle (SetCurrentSkill + MONSTERAI_ExecuteLifecycleTransition) and flags HP-percent resync. __fastcall(pGame,pUnit attacker,pVictim,pDamage); no return value, all effects are side-effects on pVictim.

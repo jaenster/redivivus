@@ -30,7 +30,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SoundWavCacheEntryStrc) == 0x60, 
 
 
 namespace D2Sound::Src::D2SoundFast {
-int gaAmbientSoundFlags = 0x8; D2_GLOBAL_GUARD(gaAmbientSoundFlags, "D2Sound::Src::D2SoundFast::gaAmbientSoundFlags");
+int gnAmbientSoundEntryCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundEntryCount, "D2Sound::Src::D2SoundFast::gnAmbientSoundEntryCount");
 int gAmbientSoundTable[16] = {
     (int)(uintptr_t)(char*)"data\\global\\music\\common\\options.wav",
     0x0,
@@ -94,14 +94,14 @@ static int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
       gbAmbientSoundLangInitialized = 1;
       gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
     }
-    if (gaAmbientSoundFlags != gnAmbientSoundCount) {
+    if (gnAmbientSoundEntryCount != gnAmbientSoundCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
       exit(-1);
     }
 
     {
       int* pAmbientEntry;
-      if (!(nIndex < gaAmbientSoundFlags)) {
+      if (!(nIndex < gnAmbientSoundEntryCount)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
         exit(-1);
       }
@@ -131,8 +131,8 @@ BOOL __stdcall SOUND_IsAmbientStreaming() {
 void __stdcall SOUND_ResetAmbientSoundFlags() {
     int i = 0;
     DWORD dwLangCode = gnAmbientSoundLanguageCode;
-    int nCount = gaAmbientSoundFlags;
-    if (gaAmbientSoundFlags <= 0) {
+    int nCount = gnAmbientSoundEntryCount;
+    if (gnAmbientSoundEntryCount <= 0) {
       return;
     }
 
@@ -141,7 +141,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
       if (!gbAmbientSoundLangInitialized) {
         gbAmbientSoundLangInitialized = 1;
         dwLangCode = SOUND_GetLanguageCode();
-        nCount = gaAmbientSoundFlags;
+        nCount = gnAmbientSoundEntryCount;
         gnAmbientSoundLanguageCode = dwLangCode;
       }
       if (nCount != gnAmbientSoundCount) {
@@ -222,7 +222,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
     bool bResetDone;
     bResetDone = false;
     int nAmbientCount;
-    nAmbientCount = gaAmbientSoundFlags;
+    nAmbientCount = gnAmbientSoundEntryCount;
     do {
       nAmbientIdx = 0;
       if (nAmbientCount > 0) {
@@ -233,7 +233,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
           }
 
           nAmbientIdx++;
-        } while (nAmbientIdx < gaAmbientSoundFlags);
+        } while (nAmbientIdx < gnAmbientSoundEntryCount);
       }
       if (bResetDone) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnMusicEnabled = 0;
@@ -246,14 +246,14 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       play_unplayed_track:
       if (!gbSoundFastPathActive) {
         nRandIdx = rand();
-        nRandIdx %= gaAmbientSoundFlags;
-        nAmbientCount = gaAmbientSoundFlags;
+        nRandIdx %= gnAmbientSoundEntryCount;
+        nAmbientCount = gnAmbientSoundEntryCount;
         dwLanguageCode = gnAmbientSoundLanguageCode;
         while (true) {
           if (!gbAmbientSoundLangInitialized) {
             gbAmbientSoundLangInitialized = 1;
             dwLanguageCode = SOUND_GetLanguageCode();
-            nAmbientCount = gaAmbientSoundFlags;
+            nAmbientCount = gnAmbientSoundEntryCount;
             gnAmbientSoundLanguageCode = dwLanguageCode;
           }
           if (nAmbientCount != gnAmbientSoundCount) {
@@ -283,22 +283,22 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       } else {
         pAmbientEntry = SOUND_GetAmbientSoundEntry(0);
         gbSoundFastPathActive = 0;
-        nAmbientCount = gaAmbientSoundFlags;
+        nAmbientCount = gnAmbientSoundEntryCount;
       }
       bHasStreamBuffer = gpMusicStreamBuffer != 0;
       szSoundFile = (char*)*pAmbientEntry;
       pAmbientEntry[1] = 1;
       if (bHasStreamBuffer) {
         dwVolume = D2SoundSmp::SOUNDSMP_GetEffectiveVolume();
-        nAmbientCount = gaAmbientSoundFlags;
+        nAmbientCount = gnAmbientSoundEntryCount;
         if (dwVolume) {
           dwVolume = D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer);
-          nAmbientCount = gaAmbientSoundFlags;
+          nAmbientCount = gnAmbientSoundEntryCount;
           if (!dwVolume && szSoundFile) {
             D2SoundSmp::SOUNDSMP_Reset(gpMusicStreamBuffer);
             D2SoundSmp::SOUNDSMP_SetVolume(gpMusicStreamBuffer, 0x6e);
             BVar1 = D2SoundSmp::SOUNDSMP_OpenAndStreamFile((int**)gpMusicStreamBuffer, szSoundFile, 0, 0);
-            nAmbientCount = gaAmbientSoundFlags;
+            nAmbientCount = gnAmbientSoundEntryCount;
             if (BVar1) {
               /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
               return 1;

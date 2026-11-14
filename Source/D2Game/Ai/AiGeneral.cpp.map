@@ -471,7 +471,7 @@
       ]
     },
     {
-      "name": "GetMonsterNameAndAi",
+      "name": "AIGENERAL_GetOwnerData",
       "address": "0058f090",
       "lines": [
         {
@@ -481,25 +481,25 @@
       ],
       "namespace": "D2Game::Ai::AiGeneral",
       "calledFunctions": [
-        "GetMonsterNameAndAi"
+        "AIGENERAL_GetOwnerData"
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "993abc3f",
+      "dh": "bbc82e57",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "pMonsterName",
+          "pnOwnerGUID",
           "EDX:4"
         ],
         [
-          "pMonsterAi",
+          "peOwnerType",
           "Stack[0x4]:4"
         ]
       ]

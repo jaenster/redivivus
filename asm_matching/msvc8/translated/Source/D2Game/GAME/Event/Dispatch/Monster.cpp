@@ -252,7 +252,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       }
     }
     if (UnknownModeValueArray[eAnimMode]) {
-      D2Common::Units::SetupUpdateFlag(pUnit, 1);
+      D2Common::Units::ChangeAnimMode(pUnit, 1);
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
       if ((!eUnitState || (eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , eUnitState != 0)) && true) {
         D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
@@ -269,28 +269,28 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       }
 
       D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-      D2MonsterKillStrc sMonsterKill;
+      D2ModeChangeStrc sMonsterKill;
       memset(&sMonsterKill, 0, sizeof(sMonsterKill));
       sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
       sMonsterKill.nAnimatedMode1 = '\0';
       sMonsterKill.nAnimatedMode2 = 'd';
       sMonsterKill.nUnknown1 = '\0';
       sMonsterKill.nUnknown2 = '\0';
-      sMonsterKill.pVictim = pUnit;
-      sMonsterKill.pAttacker = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+      sMonsterKill.pUnit = pUnit;
+      sMonsterKill.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
       D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     }
 }
 
 // Kills a monster via a system-generated (non-player) kill. Clears the monster's current skill, builds a D2MonsterKillStrc (attacker from GetTargetEx, death anim mode 'e' for ghosts/non-solid else 'd'), and calls MONSTERAI_ExecuteLifecycleTransition. If the unit is frozen but not in mode-zero-death, returns early; otherwise triggers MONSTERAI_ExecuteAiFunction to process death AI.
-void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
-    sMonsterKill.pVictim = pUnit;
+    sMonsterKill.pUnit = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
@@ -301,7 +301,7 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     sMonsterKill.nAnimatedMode2 = byAnimMode2;
-    sMonsterKill.pAttacker = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    sMonsterKill.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
     if (eState) {
@@ -315,14 +315,14 @@ void __fastcall MonsterKilledBySystem(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
-void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     bool bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2MonsterKillStrc killStrc;
+    D2ModeChangeStrc killStrc;
     memset(&killStrc, 0, sizeof(killStrc));
     killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     uint8_t byAnimMode2 = 'd';
-    killStrc.pVictim = pUnit;
+    killStrc.pUnit = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
@@ -333,7 +333,7 @@ void __fastcall MonsterKilledByTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 
     killStrc.nAnimatedMode2 = byAnimMode2;
-    killStrc.pAttacker = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    killStrc.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killStrc, 1);
     BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
     if (eState) {
@@ -377,9 +377,9 @@ BOOL __fastcall MONMODE_ProcessRunMovement(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Processes the get-hit recovery event for a monster. Restores path velocity, checks monster's GetHit stat flag; if absent, schedules a delayed re-event instead. Special-cases monster base ID 0x4E (Diablo) with longer stun-dependent recovery delays. Otherwise clears current skill and transitions the monster to GetHit mode via MONSTERAI_ExecuteLifecycleTransition.
-void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall MONMODE_EndKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int pDelayFrame;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     D2Common::PATH::DynamicPath::PATH_RestoreVelocityAndPathType(pUnit->pPath.pDynamicPath);
     int32_t nMonClassId = pUnit->nClassId;
     uint32_t bHasGetHitFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nMonClassId, 3);
@@ -407,7 +407,7 @@ void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    sMonsterKill.pAttacker = 0;
+    sMonsterKill.pTargetUnit = 0;
     sMonsterKill.nTargetX = 0;
     sMonsterKill.nTargetY = 0;
     sMonsterKill.nMonType1 = 0;
@@ -418,16 +418,16 @@ void __fastcall MONSTER_ProcessGetHitRecovery(::SGAMEDATA * pGame, D2UnitStrc * 
     sMonsterKill.nUnknown1 = '\0';
     sMonsterKill.nUnknown2 = '\0';
     pUnit->dwLastHitClass = 0xa0;
-    sMonsterKill.pVictim = pUnit;
+    sMonsterKill.pUnit = pUnit;
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
 }
 
-BOOL __fastcall MONSTER_UpdateGetHitAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+BOOL __fastcall MONMODE_UpdateKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     D2Common::Units::AdvanceAnimFrame(pUnit);
     uint32_t bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
     if (bAtEndOfCycle) {
-      MONSTER_ProcessGetHitRecovery(pGame, pUnit);
+      MONMODE_EndKnockback(pGame, pUnit);
       return 2;
     }
 

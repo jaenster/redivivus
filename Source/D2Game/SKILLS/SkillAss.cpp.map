@@ -579,7 +579,7 @@
       ]
     },
     {
-      "name": "SKILLBAR_ApplyWarCryDamage",
+      "name": "SKILLS_AreaCallback_ApplyCopiedDamage",
       "address": "005d3cb0",
       "lines": [
         {
@@ -589,7 +589,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "SKILLBAR_ApplyWarCryDamage",
+        "SKILLS_AreaCallback_ApplyCopiedDamage",
         "SKILLS_ApplyDamageToTarget"
       ],
       "usedTypes": [
@@ -598,7 +598,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "d886b820",
+      "dh": "835bde5c",
       "paramStorage": [
         [
           "pContext",
@@ -714,7 +714,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a1ecb591",
+      "dh": "db26e92a",
       "paramStorage": [
         [
           "pGame",
@@ -1284,7 +1284,7 @@
         "SERVER_SendUnitMessagePacket",
         "STATLIST_RemoveAndRecalc",
         "FreeStatList",
-        "STATES_MoveTransformToGfx"
+        "STATES_MovePgsvToGfx"
       ],
       "usedTypes": [
         "D2DamageStrc",
@@ -1297,7 +1297,7 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "71a66b85",
+      "dh": "19533653",
       "paramStorage": [
         [
           "pGame",
@@ -1314,7 +1314,7 @@
       ]
     },
     {
-      "name": "SKILLBAR_ApplyWhirlwindDamage",
+      "name": "SKILLASS_FillKickDamage",
       "address": "005d54b0",
       "lines": [
         {
@@ -1324,7 +1324,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "SKILLBAR_ApplyWhirlwindDamage",
+        "SKILLASS_FillKickDamage",
         "SKILLASS_ApplyProgressiveDamageToTarget",
         "SKILL_CalcMinDamage",
         "SKILL_CalcMaxDamage",
@@ -1354,7 +1354,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "937ac615",
+      "dh": "6d2dd855",
       "paramStorage": [
         [
           "pGame",
@@ -1398,7 +1398,7 @@
         "STATSEX_GetCurrentStat",
         "memset",
         "DAMAGE_CalculateHitCheck",
-        "SKILLBAR_ApplyWhirlwindDamage",
+        "SKILLASS_FillKickDamage",
         "DAMAGE_CalculateAndApplyDamage"
       ],
       "usedTypes": [
@@ -1410,7 +1410,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "282ac2ce",
+      "dh": "4e7a1f9b",
       "paramStorage": [
         [
           "pGame",
@@ -1681,16 +1681,16 @@
         "DRLGROOM_FindBetterNearbyRoom",
         "DRLGROOM_IsRoomInTown",
         "SKILL_CreateSummon",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs",
         "SetAlignment",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "GetOwnerUnit"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonsterCastPetHeadStrc",
-        "D2MonsterKillStrc",
         "D2RoomStrc",
         "D2SkillsTxt",
         "D2UnitStrc",
@@ -1701,7 +1701,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d06e3351",
+      "dh": "c921cec1",
       "paramStorage": [
         [
           "pGame",
@@ -1984,10 +1984,10 @@
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
         "SKILLASS_ClearAllChargeUpStates",
-        "STATES_HasBlueState",
+        "STATES_HasRemHitFlagState",
         "thunk_UNIT_GetStateList_StateFlags",
         "memcpy",
-        "SMemSizeClassBucketLookup",
+        "FOG_GetLowestSetBitIndex",
         "GetStatsByState",
         "STATLIST_RemoveAndRecalc",
         "FreeStatList",
@@ -1999,7 +1999,7 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "4161c77d",
+      "dh": "6f71d1b5",
       "paramStorage": [
         [
           "pUnit",
@@ -2022,7 +2022,7 @@
         "CheckForModeZeroDeath",
         "SetStateWithExpiryTime",
         "D2AddStatToStatsListEx",
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "AttachCorrectAiFunctionToMonster"
       ],
       "usedTypes": [
@@ -2034,7 +2034,7 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "fa6a5832",
+      "dh": "c19caaf5",
       "paramStorage": [
         [
           "pContext",
@@ -2314,7 +2314,7 @@
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
         "SKILLASS_ApplyLevelScaledBuffs",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
         "AllocStatList",
@@ -2332,7 +2332,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e46a7eeb",
+      "dh": "b9094c23",
       "paramStorage": [
         [
           "pGame",
@@ -2431,7 +2431,7 @@
         "STATSEX_GetCurrentStat",
         "memset",
         "DAMAGE_CalculateHitCheck",
-        "SKILLBAR_ApplyWhirlwindDamage",
+        "SKILLASS_FillKickDamage",
         "DAMAGE_CalculateAndApplyDamage"
       ],
       "usedTypes": [
@@ -2442,7 +2442,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d75a9f44",
+      "dh": "da951720",
       "paramStorage": [
         [
           "pGame",
@@ -2517,7 +2517,7 @@
       ]
     },
     {
-      "name": "SKILLAMZ_GetGuidedArrowPiercingBonus",
+      "name": "SKILLASS_RollMindBlastConversion",
       "address": "005d72b0",
       "lines": [
         {
@@ -2527,10 +2527,10 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "SKILLAMZ_GetGuidedArrowPiercingBonus",
+        "SKILLASS_RollMindBlastConversion",
         "MONSTER_GetMercType",
         "STATSEX_GetAlignment",
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "UNIT_GetModuloFromSeed"
       ],
       "usedTypes": [
@@ -2538,7 +2538,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c1e36810",
+      "dh": "684bd35f",
       "paramStorage": [
         [
           "pCaster",
@@ -2572,7 +2572,7 @@
         "MONSTER_FreeUnitNodes",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -2587,7 +2587,7 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "2105ea3b",
+      "dh": "1834ff5e",
       "paramStorage": [
         [
           "pUnit",
@@ -2615,7 +2615,7 @@
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
         "SKILLASS_ApplyConversionToUnit",
-        "SKILLAMZ_GetGuidedArrowPiercingBonus",
+        "SKILLASS_RollMindBlastConversion",
         "UNIT_GetModuloFromSeed",
         "GetStatsByState",
         "AllocStatList",
@@ -2632,7 +2632,7 @@
         "FreeStatList",
         "SetTargetUnitForDynamicUnit",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2AddStatToStatsListEx",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat"
@@ -2646,7 +2646,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "16e6f097",
+      "dh": "a74fb18a",
       "paramStorage": [
         [
           "pUnit",
@@ -2667,7 +2667,7 @@
       ]
     },
     {
-      "name": "SKILLAMZ_HandleStrafeDamageAndNextDelay",
+      "name": "SKILLASSN_AuraCallback_MindBlast",
       "address": "005d7680",
       "lines": [
         {
@@ -2677,7 +2677,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAss",
       "calledFunctions": [
-        "SKILLAMZ_HandleStrafeDamageAndNextDelay",
+        "SKILLASSN_AuraCallback_MindBlast",
         "SKILLASS_ApplyConversionToUnit",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation"
@@ -2689,7 +2689,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "e0b6e564",
+      "dh": "2aa6deb5",
       "paramStorage": [
         [
           "pContext",
@@ -2732,7 +2732,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b6c0966f",
+      "dh": "b1297f8a",
       "paramStorage": [
         [
           "pGame",
@@ -2770,7 +2770,7 @@
         "STATSEX_GetCurrentStat",
         "DAMAGE_CalculateHitCheck",
         "TXT_Skills_GetSkillRange",
-        "SKILLBAR_ApplyWhirlwindDamage",
+        "SKILLASS_FillKickDamage",
         "DAMAGE_CalculateAndApplyDamage",
         "DAMAGE_FindCombatEntry",
         "SKILLASS_ReleaseChargeUpAttack",
@@ -2794,7 +2794,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8480ef22",
+      "dh": "9349ae63",
       "paramStorage": [
         [
           "pGame",
@@ -2890,7 +2890,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "0afa8ecc",
+      "dh": "3c5f5192",
       "paramStorage": [
         [
           "pGame",

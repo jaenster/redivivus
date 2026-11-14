@@ -375,7 +375,7 @@
         "OBJOP_A3Q2_PullSewerLever",
         "GetQuestDataByQuestNoInternal",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -387,7 +387,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "3faf35f3",
+      "dh": "84152ce1",
       "paramStorage": [
         [
           "pOperation",
@@ -408,7 +408,7 @@
       "calledFunctions": [
         "Q19_UpdateSewerStairsObject",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -418,7 +418,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "bf1cf05f",
+      "dh": "e369b79e",
       "paramStorage": [
         [
           "pQuestData",
@@ -443,13 +443,13 @@
       "calledFunctions": [
         "Objects_InitFn41_SewerStairs",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "int32_t"
       ],
-      "dh": "95b9d6f5",
+      "dh": "02e88419",
       "paramStorage": [
         [
           "pInitArg",
@@ -470,13 +470,13 @@
       "calledFunctions": [
         "Objects_InitFn42_SewerLever",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "14668fba",
+      "dh": "8527efce",
       "paramStorage": [
         [
           "pInitArg",
@@ -680,7 +680,7 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "bf39adf2",
+      "dh": "fe7d54a0",
       "paramStorage": [
         [
           "pOperation",
@@ -714,7 +714,7 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "f0d11c0e",
+      "dh": "8cc4691c",
       "paramStorage": [
         [
           "pOperation",
@@ -748,7 +748,7 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "1c66b731",
+      "dh": "9793bde9",
       "paramStorage": [
         [
           "pOperation",

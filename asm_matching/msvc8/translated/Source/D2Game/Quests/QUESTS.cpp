@@ -384,7 +384,7 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     if (!pEffectiveKiller || (questArg2.pPlayer = pEffectiveKiller , pEffectiveKiller->eUnitType != UNIT_PLAYER)) {
       questArg2.pPlayer = 0;
       if (pEffectiveKiller && pEffectiveKiller->eUnitType == UNIT_MONSTER) {
-        Ai::AiGeneral::GetMonsterNameAndAi(pEffectiveKiller, &eMonQuestId, (int*)&pKiller);
+        Ai::AiGeneral::AIGENERAL_GetOwnerData(pEffectiveKiller, &eMonQuestId, (int*)&pKiller);
         if (!pKiller) {
           questArg2.pPlayer = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, eMonQuestId);
         }
@@ -752,8 +752,8 @@ static void __stdcall QUEST_RemoveItemFromInventory(D2InventoryStrc * pInventory
         }
       case Cursor:
         {
-          ITEMS::ItemMode::ToCursorItem(pGame, pUnit, pItem);
-          D2Common::INVENTORY::Inventory::CopyInventoryOfPlayerOrFree(pInventory, nullptr);
+          ITEMS::ItemMode::ITEMMODE_RemoveItemIfOnCursor(pGame, pUnit, pItem);
+          D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, nullptr);
           return;
         }
     }
@@ -1057,7 +1057,7 @@ int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId
     return bQuestState;
 }
 
-void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
+void __fastcall QUEST_DispatchMonsterCreateToA2Q4(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
     if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
     }
@@ -1065,12 +1065,12 @@ void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, D2RoomStrc 
     switch (nMonsterClassId) {
       case 0xc9:
         {
-          A2Q4::A2Q4_OnMonsterDeathClass201_NoOp(nX, nY);
+          A2Q4::A2Q4_OnJerhynCreated_NoOp(nX, nY);
           break;
         }
       case 0x14b:
         {
-          A2Q4::A2Q4_OnMonsterDeathClass331_NoOp(nX, nY);
+          A2Q4::A2Q4_OnAct2Guard2Created_NoOp(nX, nY);
           return;
         }
     }
@@ -1094,10 +1094,10 @@ uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGa
     exit(-1);
 }
 
-void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nQuestItemCode) {
+void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwItemGUID) {
     BOOL _bHoldingItem;
     bool bHoldingItem;
-    D2UnitStrc* pItemUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, nQuestItemCode);
+    D2UnitStrc* pItemUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwItemGUID);
     if (!pItemUnit) {
       return;
     }
@@ -1170,7 +1170,7 @@ void __fastcall Objects_InitFn20_TaintedSunAltar(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 2);
+    D2Common::Units::ChangeAnimMode(pUnit, 2);
 }
 
 void __fastcall Objects_InitFn15_Malus(D2ObjectInitFnArg * pInitArg) {
@@ -1190,7 +1190,7 @@ void __fastcall Objects_InitFn15_Malus(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 2);
+    D2Common::Units::ChangeAnimMode(pUnit, 2);
 }
 
 void __fastcall Objects_InitFn07_CainGibbet(D2ObjectInitFnArg * pInitArg) {
@@ -1210,41 +1210,41 @@ void __fastcall Objects_InitFn07_CainGibbet(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 2);
+    D2Common::Units::ChangeAnimMode(pUnit, 2);
 }
 
 // Quest dispatcher keyed on a unit's monster/object class id. Given pGame and the triggering pUnit, looks up the unit's nClassId and routes to the matching act-quest timer/callback (e.g. Khalim's Will compelling orb 0x16f, Cain/Tower 0xbd by level, Countess 0x173, Hell's Forge 0x178, Anya/Nihlathak act-5 0x1cb-0x1cd, Ancients 0x1da-0x1dc). Walks pGame->pQuestControl->pQuestData list to find the relevant quest record before invoking its handler. No return; pure side-effecting quest progression.
-void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall QUESTS_DispatchObjectEvent(::SGAMEDATA * pGame, D2UnitStrc * pObject) {
     eD2LevelId eLevelId;
     D2QuestDataStrc* pQuestData;
     D2QuestDataStrc* pQuestDataB;
-    int nMonsterId = !pUnit ? -1 : pUnit->nClassId;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (nMonsterId <= 0x16f) {
+    int nObjectClassId = !pObject ? -1 : pObject->nClassId;
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pObject);
+    if (nObjectClassId <= 0x16f) {
       eAct eActNo;
-      if (nMonsterId != 0x16f) {
-        if (nMonsterId <= 0xbd) {
-          if (nMonsterId != 0xbd) {
-            if (nMonsterId == 0x1a) {
-              A1Q4::MakeTownPortalFromScroolTree(pGame, pUnit);
+      if (nObjectClassId != 0x16f) {
+        if (nObjectClassId <= 0xbd) {
+          if (nObjectClassId != 0xbd) {
+            if (nObjectClassId == 0x1a) {
+              A1Q4::MakeTownPortalFromScroolTree(pGame, pObject);
               return;
             }
-            if (nMonsterId != 0x7a) {
-              if (nMonsterId == 0x83 && pRoom) {
-                if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
-                  D2Common::Units::SetupUpdateFlag(pUnit, 2);
+            if (nObjectClassId != 0x7a) {
+              if (nObjectClassId == 0x83 && pRoom) {
+                if (pObject && pObject->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
+                  D2Common::Units::ChangeAnimMode(pObject, 2);
                 }
 
                 eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
                 switch (eLevelId) {
                   case LEVEL_SpiderForest:
                     {
-                      Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
+                      Monster::Create::SpawnMonsterAtUnit(pGame, pObject, 0x12d, eD2MonsterAnimMode_ns::Neutral, -1, 0);
                       return;
                     }
                   case LEVEL_ChaosSanctuary:
                     {
-                      A4Q3::Q35_SpawnAncientsWave(pGame, pUnit);
+                      A4Q3::Q27_SpawnSealBoss(pGame, pObject);
                       return;
                     }
                 }
@@ -1255,7 +1255,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
                 if (pQuestData) {
                   do {
                     if (pQuestData->nQuestNoInternal == QUESTINT_TheArcaneSanctuary) {
-                      A2Q4::BlockHaremRoomForPlayerAccess(pQuestData, pUnit);
+                      A2Q4::BlockHaremRoomForPlayerAccess(pQuestData, pObject);
                       return;
                     }
 
@@ -1275,7 +1275,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
                 if (pQuestData) {
                   do {
                     if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
-                      A1Q4::Q33_UpdateFrozenAnyaNpcState(pQuestData, pUnit);
+                      A1Q4::Q04_UpdateCainPortalInTown(pQuestData, pObject);
                       return;
                     }
 
@@ -1291,7 +1291,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
                 if (pQuestData) {
                   do {
                     if (pQuestData->nQuestNoInternal == QUESTINT_PrisonOfIce) {
-                      A5Q3::Q33_AnyaTimerCallback(pQuestData, pUnit);
+                      A5Q3::Q33_AnyaTimerCallback(pQuestData, pObject);
                       return;
                     }
 
@@ -1304,7 +1304,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
             } else if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
               do {
                 if (pQuestData->nQuestNoInternal == QUESTINT_RescueOnMountArreat) {
-                  A5Q2::Q32_PrisonerTimerCallback(pQuestData, pUnit);
+                  A5Q2::Q32_PrisonerTimerCallback(pQuestData, pObject);
                   return;
                 }
 
@@ -1314,11 +1314,11 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
               return;
             }
           }
-        } else if (nMonsterId != 0x10c) {
-          if (nMonsterId == 0x155 && pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
+        } else if (nObjectClassId != 0x10c) {
+          if (nObjectClassId == 0x155 && pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
             do {
               if (pQuestData->nQuestNoInternal == QUESTINT_TheGuardian) {
-                A3Q6::Q23_TimerCallback_MephistoApproach(pQuestData, pUnit);
+                A3Q6::Q23_TimerCallback_MephistoApproach(pQuestData, pObject);
                 return;
               }
 
@@ -1333,7 +1333,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
             if (pQuestData) {
               do {
                 if (pQuestData->nQuestNoInternal == QUESTINT_TheSearchForCain) {
-                  A1Q4::Q04_DropShieldRewards(pQuestData, pUnit);
+                  A1Q4::Q04_DropShieldRewards(pQuestData, pObject);
                   return;
                 }
 
@@ -1350,7 +1350,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           if (pQuestData) {
             do {
               if (pQuestData->nQuestNoInternal == QUESTINT_KhalimsWill) {
-                A3Q2::Q19_UpdateSewerStairsObject(pQuestData, pUnit);
+                A3Q2::Q19_UpdateSewerStairsObject(pQuestData, pObject);
                 return;
               }
 
@@ -1362,12 +1362,12 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         }
       }
     } else {
-      switch (nMonsterId) {
+      switch (nObjectClassId) {
         case 0x178:
           if (pGame->pQuestControl && (pQuestDataB = pGame->pQuestControl->pQuestData , pQuestDataB != 0)) {
             do {
               if (pQuestDataB->nQuestNoInternal == QUESTINT_HellsForge) {
-                A4Q3::Q28_TimerCallback_DropForgeRunes(pQuestDataB, pUnit);
+                A4Q3::Q28_TimerCallback_DropForgeRunes(pQuestDataB, pObject);
                 return;
               }
 
@@ -1385,7 +1385,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
             do {
               if (pQuestData->nQuestNoInternal == QUESTINT_RiteOfPassage) {
-                A5Q5::Q35_SpawnAncientTimer(pQuestData, pUnit);
+                A5Q5::Q35_SpawnAncientTimer(pQuestData, pObject);
                 return;
               }
 
@@ -1399,10 +1399,10 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
           /* FanaticMinion */ A5Q3::Q33_KillAnyaMonsterTimer(pGame);
         return;
         case 0x1cb:
-          A5Q4::Q34_SpawnNihlathakPortalTimer(pGame, pUnit);
+          A5Q4::Q34_SpawnNihlathakPortalTimer(pGame, pObject);
         return;
         case 0x1cc:
-          /* GreaterIceSpawn */ A5Q3::SpawnFrozenAnya(pGame, pUnit);
+          /* GreaterIceSpawn */ A5Q3::SpawnFrozenAnya(pGame, pObject);
         return;
         case 0x173:
           if (pGame->pQuestControl && (pQuestData = pGame->pQuestControl->pQuestData , pQuestData != 0)) {
@@ -1413,7 +1413,7 @@ void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
               }
             }
 
-            A1Q5::Q05_TriggerCountessDeathEffect(pQuestData, pUnit);
+            A1Q5::Q05_TriggerCountessDeathEffect(pQuestData, pObject);
           }
         break;
       }
@@ -1496,7 +1496,7 @@ static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * 
 }
 
 // Marks all NPCs in the destination act as already-introduced (spoken-with) for pUnit when an act transition occurs. Switches on eActNo (ACT_I through ACT_V; ACT_IV is a no-op) and iterates the corresponding NPCINTRO_ListActN table, calling INTRONPC_SetSpokenWithNPC_Intro2 for each entry. Ensures the player does not see first-meeting NPC intros upon entering the new act.
-static void QUEST_GrantActTransitionReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct eActNo) {
+static void QUEST_SetActNpcIntroFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct eActNo) {
     D2UnitDataPlayerStrc* pPlayerData;
     int* pNpcListIter;
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs;
@@ -1960,11 +1960,11 @@ BOOL __fastcall QUESTS_OpenQuestChest(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDVar1 = pOperation->sArg.pVictim;
     if (pObjectsTxt->Mode[1]) {
       ::SGAMEDATA* pGame;
-      D2Common::Units::SetupUpdateFlag(pDVar1, 1);
+      D2Common::Units::ChangeAnimMode(pDVar1, 1);
       pGame = pOperation->sArg.pGame;
       GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
     } else {
-      D2Common::Units::SetupUpdateFlag(pDVar1, 2);
+      D2Common::Units::ChangeAnimMode(pDVar1, 2);
     }
 
     pDVar1 = pOperation->sArg.pVictim;
@@ -2120,25 +2120,25 @@ void __fastcall QUEST_OnUniqueMonsterSpawned(::SGAMEDATA * pGame, D2UnitStrc * p
     A5Q5::Q35_Noop();
 }
 
-uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t eLevelId, int32_t nEventId) {
+uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eSourceLevelId, eD2LevelId eDestLevelId) {
     uint32_t nCheckResult;
     uint32_t nResult;
-    switch (nEventId) {
-      case 0x49:
+    switch (eDestLevelId) {
+      case LEVEL_DurielsLair:
         nResult = A2Q6::Q14_IsPortalNotCreated(pGame);
       return nResult;
-      case 100:
+      case LEVEL_DuranceOfHateLevel1:
         nResult = A3Q6::Q23_CheckDuranceOfHateLevel2(pGame, pUnit);
       return nResult;
-      case 0x76:
+      case LEVEL_AncientsWay:
 
-      case 0x80:
-        if (eLevelId == LEVEL_ArreatSummit) {
-          nCheckResult = A5Q5::Q35_CheckQuestNotStarted(pGame, pUnit, nEventId);
+      case LEVEL_TheWorldstoneKeepLevel1:
+        if (eSourceLevelId == LEVEL_ArreatSummit) {
+          nCheckResult = A5Q5::Q35_CheckQuestNotStarted(pGame, pUnit, eDestLevelId);
           return nCheckResult;
         }
       break;
-      case 0x84:
+      case LEVEL_TheWorldstoneChamber:
         nResult = A5Q6::Q36_IsBaalAlive(pGame);
       return nResult;
     }
@@ -2146,8 +2146,8 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2Unit
     return 0;
 }
 
-D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique) {
-    int32_t nMonstatClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(nAct, nSuperUnique);
+D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint, int32_t nType, int32_t nSuperUnique) {
+    int32_t nMonstatClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_MapSuperUniqueId(nType, nSuperUnique);
     D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pPoint->x, pPoint->y);
     if (pRoom) {
       D2UnitStrc* pSpawnedMonster;
@@ -2745,7 +2745,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
       return nullptr;
     }
 
-    int32_t nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pRewardItem);
+    int32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pRewardItem);
     if (nMaxDurability > 0) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRewardItem, UNITSTAT_durability, nMaxDurability, 0);
     }
@@ -2756,7 +2756,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
       BOOL bIsIdentified;
       bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
       if (!bIsIdentified) {
-        ITEMS::ItemMode::ITEMMODE_ProcessItemSell(pGame, pUnit, pRewardItem);
+        ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pRewardItem);
       }
 
       return pRewardItem;
@@ -2813,7 +2813,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
               GAME::SCmd::NET_D2GS_SERVER_Send_0x61_CanGoToAct(pClient, 2);
             }
 
-            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_I);
+            QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_I);
           }
 
           bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
@@ -2868,7 +2868,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct3, QUESTSTATE_JustCompleted);
-            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_II);
+            QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb0f);
             if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
@@ -2886,7 +2886,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
           if (!bQuestState && pGame->bExpansion) {
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_Completed);
             D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct5, QUESTSTATE_JustCompleted);
-            QUEST_GrantActTransitionReward(pGame, pUnit, ACT_II);
+            QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_II);
             QUEST_SendQuestInfoToUnit(pGame, pUnit);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xb1f);
             if (__frame0.pPlayerDataSaved->bCutscenePending != 1) {
@@ -2904,15 +2904,15 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 }
 
-// Handles the two completion paths for A3Q7 Khalim's Will. For event code 0x66 (player assembled the flail): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other code delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
+// Act change through the Act 4 portal. For level 0x66 (Durance of Hate level 3): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other level delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
 // @sourcefile .\QUESTS\QUESTS.CPP
-void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nLevelId, D2UnitStrc * nEventCode) {
+void __fastcall QUEST_HellPortalActChange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId nLevelId, D2UnitStrc * pObject) {
     D2UnitStrc* pQuestItem;
     D2ClientStrc* pClient;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2UnitDataPlayerStrc* pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
-    if (nLevelId == 0x66) {
+    if (nLevelId == LEVEL_DuranceOfHateLevel3) {
       BOOL bQuestState;
       bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_AbleGoToAct4, QUESTSTATE_Completed);
       if (!bQuestState) {
@@ -2948,7 +2948,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
 
         D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct4, QUESTSTATE_Completed);
         D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_AbleGoToAct4, QUESTSTATE_JustCompleted);
-        QUEST_GrantActTransitionReward(pGame, pUnit, ACT_III);
+        QUEST_SetActNpcIntroFlags(pGame, pUnit, ACT_III);
         pPlayerData2 = D2Common::Units::GetPlayerData(pUnit);
         pBitBuffer = pPlayerData2->pQuestRecord[pGame->nDifficulty];
         GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
@@ -2960,7 +2960,7 @@ void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStr
         }
       }
     } else {
-      A3Q7::Q24_HandleKhalimsWillCompletion(pGame, nEventCode);
+      A3Q7::Q24_HandleKhalimsWillCompletion(pGame, pObject);
     }
 }
 
@@ -3318,10 +3318,10 @@ void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
       }
       if (pA2Q4Data->bJerhynWalkPending == 1) {
         if (!pA2Q4Data->bJerhynWalkIssued || pA2Q4Data->bJerhynInitial != '\0') {
-          pA2Q4Data->bDurielProximity = 0;
-          pA2Q4Data->nDurielProximityPlayerGUID = 0;
-          UNIT::SUnit::IteratePlayerOrMonsterUnits(pArcaneSanctuaryQuest->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q14_CheckDurielProximity);
-          if (pA2Q4Data->bDurielProximity) {
+          pA2Q4Data->bPlayerNearHaremBlocker = 0;
+          pA2Q4Data->nPlayerNearHaremBlockerGUID = 0;
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pArcaneSanctuaryQuest->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A2Q4::Q12_CheckDistanceToHaremBlocker);
+          if (pA2Q4Data->bPlayerNearHaremBlocker) {
             Monster::AI::WalkToCoords(pGame, pJerhynUnit, pA2Q4Data->nHaremBlockerX, pA2Q4Data->nHaremBlockerY);
             pA2Q4Data->bJerhynWalkIssued = 1;
             pA2Q4Data->bJerhynWalkPending = 0;

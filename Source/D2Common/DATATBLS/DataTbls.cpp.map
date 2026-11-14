@@ -502,7 +502,7 @@
       ]
     },
     {
-      "name": "TXT_AnimTbls_Get_Unref_00611d10",
+      "name": "TXT_GetCharStatsTable",
       "address": "00611d10",
       "lines": [
         {
@@ -512,12 +512,12 @@
       ],
       "namespace": "D2Common::DATATBLS::DataTbls",
       "calledFunctions": [
-        "TXT_AnimTbls_Get_Unref_00611d10"
+        "TXT_GetCharStatsTable"
       ],
       "usedTypes": [
         "D2AnimDataStrc"
       ],
-      "dh": "78bcc648"
+      "dh": "fa45b047"
     },
     {
       "name": "TXT_AnimTbls_Get",
@@ -944,18 +944,17 @@
         "__security_check_cookie"
       ],
       "usedTypes": [
-        "D2InventoryToBeUpdatedStrc",
         "FILE",
         "uint32_t"
       ],
-      "dh": "95b9af14",
+      "dh": "cf46dc35",
       "paramStorage": [
         [
           "szFileName",
           "Stack[0x4]:4"
         ],
         [
-          "pInventoryToBeUpdated",
+          "pWriteBuffer",
           "Stack[0x8]:4"
         ],
         [
@@ -963,7 +962,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "dwVersion",
+          "nRecordCount",
           "Stack[0x10]:4"
         ]
       ]
@@ -1053,7 +1052,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a54a53c7",
+      "dh": "b9b35384",
       "paramStorage": [
         [
           "pMemory",
@@ -1115,7 +1114,7 @@
         "UnloadBin",
         "FreeServerMemory"
       ],
-      "dh": "e8932617",
+      "dh": "b10bb901",
       "paramStorage": [
         [
           "pTxtTable",
@@ -1239,7 +1238,7 @@
         "D2StorePageTxt",
         "int32_t"
       ],
-      "dh": "ddc85e64"
+      "dh": "865a4bfc"
     },
     {
       "name": "TXT_AllocTxt_charstats",
@@ -1428,7 +1427,7 @@
         "D2SkillsTxt",
         "int32_t"
       ],
-      "dh": "d83873c0"
+      "dh": "66a873ca"
     },
     {
       "name": "TXT_AllocTxt_difficultylevels",
@@ -1518,7 +1517,7 @@
         "D2StatesTxt",
         "int32_t"
       ],
-      "dh": "c13bb641"
+      "dh": "8eb9e17a"
     },
     {
       "name": "TXT_AllocTxt_pettype",
@@ -1570,7 +1569,7 @@
         "D2PetTypeTxt",
         "int32_t"
       ],
-      "dh": "8c069133"
+      "dh": "444d000b"
     },
     {
       "name": "FreeTables",
@@ -1598,24 +1597,24 @@
         "ITEMTBLS_FreeRareAffixes",
         "ITEMTBLS_FreeUniqueItems",
         "ITEMTBLS_FreeSetsAndSetItems",
-        "thunk_UnloadBin_Lvl",
-        "thunk_UnloadBin_LvlPrest",
-        "thunk_UnloadBin_LvlType",
-        "thunk_UnloadBin_LvlWarp",
-        "thunk_UnloadBin_LvlMaze",
+        "DATATBLS_UnloadQualityItemsTxt",
+        "DATATBLS_UnloadLowQualityItemsTxt",
+        "DATATBLS_UnloadGemsTxt",
+        "DATATBLS_UnloadBooksTxt",
+        "DATATBLS_UnloadItemRatioTxt",
         "FreeGambleTable",
         "ITEMTBLS_FreeItemTypes",
-        "MONSTERTBLS_FreeMonPlaceTxt",
+        "DATATBLS_UnloadMonTypeTxt",
         "FreeTokenTables",
         "ANIMDATA_FreeAnimDataRecord",
-        "MONSTERTBLS_FreeMonUModTxt",
+        "MONSTERTBLS_UnloadMonsterTxts",
         "LVLTBLS_FreeLevelsTxt",
         "LVLTBLS_FreeLevelDefsTxt",
-        "thunk_UnloadBin_DataTbls",
+        "DATATBLS_UnloadLevelTypesTxt",
         "TXT_LvlTbls_Free",
         "TXT_LvlWarp_Free",
         "TXT_FreeTxt_LvlMaze",
-        "TXT_FreeExpansionLvlTbls",
+        "LVLTBLS_FreeLvlTypeTileLibraries",
         "TXT_FreeTxt_LvlSub",
         "FreeAutoMapLvlTbls",
         "TXT_FreeTxt_Objects",
@@ -1625,7 +1624,7 @@
         "ITEMTBLS_FreeRunes",
         "FIELDTBLS_FreeFieldData",
         "FreeBeltsTxt",
-        "thunk_UnloadBin_MonStats",
+        "DATATBLS_UnloadMonItemPercentTxt",
         "FreeArenaTxt",
         "CUBE_FreeCubeMainTable",
         "FreeCharTemplateTxt",
@@ -1637,7 +1636,7 @@
         "D2PetTypeTxt",
         "int32_t"
       ],
-      "dh": "d291c813"
+      "dh": "75c2c9ef"
     },
     {
       "name": "TXT_InitTxtFiles",
@@ -1688,7 +1687,7 @@
         "TXT_AllocTxt_levels",
         "TXT_AllocTxt_leveldefs",
         "TXT_AllocTxt_lvltypes",
-        "TXT_LoadExpansionLvlTbls",
+        "LVLTBLS_LoadLvlTypeTileLibraries",
         "TXT_AllocTxt_lvlprest",
         "TXT_AllocTxt_lvlwarp",
         "TXT_AllocTxt_lvlmaze",
@@ -1700,7 +1699,7 @@
         "TXT_AllocTxt_inventory",
         "FIELDTBLS_LoadExpFieldFile",
         "LoadBeltsTxt",
-        "DATATBLS_CompileBodyLocsTxt",
+        "DATATBLS_LoadMonItemPercentTxt",
         "FIELDTBLS_InitTxtFiles_NoOp",
         "CUBE_LoadCubeMainTable",
         "TXT_AllocTxt_difficultylevels",
@@ -1710,7 +1709,7 @@
         "D2PoolManagerStrc",
         "int32_t"
       ],
-      "dh": "a8953eff",
+      "dh": "2ae5ebd3",
       "paramStorage": [
         [
           "pMemory",
@@ -1727,7 +1726,7 @@
       ]
     },
     {
-      "name": "TXT_AnimTbls_Get_Unref_00624710",
+      "name": "LOGGING_GetLogFile",
       "address": "00624710",
       "lines": [
         {
@@ -1737,12 +1736,12 @@
       ],
       "namespace": "D2Common::DATATBLS::DataTbls",
       "calledFunctions": [
-        "TXT_AnimTbls_Get_Unref_00624710"
+        "LOGGING_GetLogFile"
       ],
       "usedTypes": [
         "D2AnimDataStrc"
       ],
-      "dh": "8cc6b2c9"
+      "dh": "db1b0159"
     }
   ]
 }

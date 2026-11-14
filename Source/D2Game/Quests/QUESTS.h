@@ -237,18 +237,18 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, struct D2UnitStr
 // Sets a quest record state in the game quest tracking system. Validates quest control pointer and updates the quest state via the quest record interface.
 void __fastcall QUEST_SetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuest, eD2QuestState eState);
 int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId, int32_t nUnused);
-void __fastcall QUEST_DispatchMonsterDeathToQ12(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId);
+void __fastcall QUEST_DispatchMonsterCreateToA2Q4(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId);
 // Finds the QUESTINT_SistersToTheSlaughter entry in pGame's quest list (pPrev chain) and returns Q06_GetQuestSpecificFlag for it; halts (line 2140) when there is none.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGame);
-void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nQuestItemCode);
+void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD dwItemGUID);
 void __fastcall Objects_InitFn18_JerhynPosition(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn19_JerhynPosition(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn20_TaintedSunAltar(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn15_Malus(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall Objects_InitFn07_CainGibbet(struct D2ObjectInitFnArg * pInitArg);
 // Quest dispatcher keyed on a unit's monster/object class id. Given pGame and the triggering pUnit, looks up the unit's nClassId and routes to the matching act-quest timer/callback (e.g. Khalim's Will compelling orb 0x16f, Cain/Tower 0xbd by level, Countess 0x173, Hell's Forge 0x178, Anya/Nihlathak act-5 0x1cb-0x1cd, Ancients 0x1da-0x1dc). Walks pGame->pQuestControl->pQuestData list to find the relevant quest record before invoking its handler. No return; pure side-effecting quest progression.
-void __fastcall SetTimerByMonsterId(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall QUESTS_DispatchObjectEvent(::SGAMEDATA * pGame, struct D2UnitStrc * pObject);
 void __fastcall Objects_InitFn23_LamEsenTome(struct D2ObjectInitFnArg * pInitArg);
 void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
@@ -296,8 +296,8 @@ void __fastcall QUEST_StubEmpty(struct D2QuestDataStrc * pQuestData, struct D2Qu
 // Quest helper that spawns a monster (nMonstatClassId) at or near a desired tile (nSpawnX,nSpawnY) in pRoom. First nudges the point inward if it lies outside the room's DRLG bounds (up to 0x15 diagonal steps), then FindSpawnableLocation searches for a collision-free spot (COLLIDE_MONSTER) and SpawnMonsters as Neutral. On failure it retries with a wider search radius, optionally relocating to a better nearby room (DRLGROOM_FindBetterNearbyRoom), up to ~0x14 attempts, finally falling back to the original coords. If bSetResurrectFlag is set, ORs UNITFLAG_ISRESURRECT|UNITFLAG_ISINIT onto the spawned monster. No return; side effect is the created monster unit.
 struct D2UnitStrc * __fastcall QUEST_SpawnMonsterNearCoords(::SGAMEDATA * pGame, int32_t nSpawnX, int32_t nSpawnY, struct D2RoomStrc * pRoom, int32_t bSetResurrectFlag, uint32_t nMonstatClassId);
 void __fastcall QUEST_OnUniqueMonsterSpawned(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t eLevelId, int32_t nEventId);
-struct D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, POINT * pPoint, int32_t nAct, int32_t nSuperUnique);
+uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2LevelId eSourceLevelId, eD2LevelId eDestLevelId);
+struct D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, POINT * pPoint, int32_t nType, int32_t nSuperUnique);
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MapAIStrc * pMapAI);
 void __fastcall AttachToUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, BOOL bExpectedResult);
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
@@ -315,9 +315,9 @@ struct D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, s
 // Server-side act-travel gate triggered when a player talks to a caravan/escort NPC. Branches on the NPC monster class: Warriv (Act1->2) marks QUEST_AbleGoToAct2 Completed+JustCompleted, sends quest info, and pushes SCMD 0x61 CanGoToAct(2); if Sisters quest just completed it also fires that quest's handler[3] (with IsBadCodePtr guard) and force-starts A1Q4. Meshif (Act2->3) completes The Horadric Staff (removing 'msf '/'vip ' staff items), marks AbleGoToAct3, grants Act II reward, sends CanGoToAct(3). Tyrael (Act4->5, expansion only) marks AbleGoToAct5, grants reward, sends quest-state 0x5D then CanGoToAct(5). Guarded by dwTradeTick so each transition packet sends once.
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pMonster, int32_t nDestinationAct, int32_t nUnused);
-// Handles the two completion paths for A3Q7 Khalim's Will. For event code 0x66 (player assembled the flail): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other code delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
+// Act change through the Act 4 portal. For level 0x66 (Durance of Hate level 3): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other level delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
 // @sourcefile .\QUESTS\QUESTS.CPP
-void __fastcall QUEST_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nLevelId, struct D2UnitStrc * nEventCode);
+void __fastcall QUEST_HellPortalActChange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2LevelId nLevelId, struct D2UnitStrc * pObject);
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnitFallback);
 // A2Q4 - Callback_03 (quest state 3 handler). Index 0x4a: advance stateFlag to 4 (if <4) and broadcast state 4 via QUEST_SetStateAndBroadcast, then persist via UpdateQuestRecord. Index 0x32: directly set record Step0x08+Step0x07. For the Jerhyn (0x28) path: tear down/respawn Jerhyn's monster AI, optionally ReplaceJerhyn at his location, remove player from the participation list, and if not Completed(0)/RewardAwaits(1) and stateFlag==3 advance to 4 + persist.
 void __fastcall Q12_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);

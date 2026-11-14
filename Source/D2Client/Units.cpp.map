@@ -42,14 +42,14 @@
       "calledFunctions": [
         "IsUnitDistanceLowerThan700",
         "GetPlayerUnit_UI",
-        "GetTargetCoords",
+        "GetScreenCoords",
         "CalculateHypotenusePowered"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "POINT"
       ],
-      "dh": "2b21d090",
+      "dh": "e0d76380",
       "paramStorage": [
         [
           "pUnit",

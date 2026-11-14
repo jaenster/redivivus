@@ -60,7 +60,7 @@ void __fastcall CreateAiCmdAndFill(::SGAMEDATA * pGame, struct D2UnitStrc * pmon
 struct D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int nId, int32_t nId2);
 struct D2MapAIStrc * * __stdcall GetMonsterMapAi(struct D2UnitStrc * pMonster);
 void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2UnitType eOwnerType, int32_t nParam, BOOL bTransferBoss);
-void __fastcall GetMonsterNameAndAi(struct D2UnitStrc * pUnit, uint32_t * pMonsterName, int * pMonsterAi);
+void __fastcall AIGENERAL_GetOwnerData(struct D2UnitStrc * pUnit, uint32_t * pnOwnerGUID, int * peOwnerType);
 // Returns the owner unit for a monster. Walks pMonsterData->pAiGeneral->pGame to call FindUnitFromTable with the owner's type and GUID.
 struct D2UnitStrc * __fastcall GetOwnerUnit(struct D2UnitStrc * pUnit);
 // @sourcefile .\Ai\AiGeneral.cpp

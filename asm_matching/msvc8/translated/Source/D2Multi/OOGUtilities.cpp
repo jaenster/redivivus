@@ -356,9 +356,9 @@ void __stdcall OOGUTIL_OpenChannelDialog() {
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpCtlChannelListLabel, pwszLabel);
     gpCtlChannelOkButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3f);
     gpCtlChannelDlgCancelButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 100);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpCtlChannelDlgCancelButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpCtlChannelDlgCancelButton);
     gpCtlChannelNameEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3c);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCtlChannelNameEditBox, 0x20);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCtlChannelNameEditBox, 0x20);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlChannelNameEditBox, EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpCtlChannelNameEditBox, ChatDlg::EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState);
     gpCtlChannelList = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x3e);
@@ -1211,7 +1211,7 @@ void __stdcall UIMENU_DestroyLobbyAndJoinGameForms() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&pUIGameUsername);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&pUIGamePassword);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&pUIGamePlayers);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
 }
 
 // Loads the MAX_PLAYER registry value (key "Diablo II", default 4) into gUIGameListMaxPlayersEditBox. If the value is missing it saves the default. Only a value in 1..8 is printed into the edit box.
@@ -1272,7 +1272,7 @@ void __stdcall OOGUTIL_UpdateGameListFilter() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gUIGameListLevelRestrictionInactiveArrowButton);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gUIGameListMaxPlayersInactiveImage);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gUIGameListMaxPlayersInactiveArrowButton);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     ChatDlg::LAUNCHER_RestoreFocusToControl();
 }
 
@@ -1488,7 +1488,7 @@ void __stdcall OOGUTIL_SetJoinGameError() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlGameListStatus, bHasPassword);
 }
 
-int __stdcall OOGUTIL_Unused11(int nFrameIndex) {
+int __stdcall OOGUTIL_EnterChatPumpCallback(int nFrameIndex) {
     uint32_t bTmp;
     BOOL nResult = pNetworkUnknown->pfnGetEnterChatResponseFlags(&bTmp);
     if (nResult) {
@@ -1821,7 +1821,7 @@ void __stdcall OOGUTIL_CloseProfileDialog() {
       D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gUIPlayerProfilePlaytimeLabel);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     ChatDlg::LAUNCHER_RestoreFocusToControl();
 }
 
@@ -2216,7 +2216,7 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
     }
 
     gpChatCommandsOKButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070ea70);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpChatCommandsOKButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpChatCommandsOKButton);
     gnGameListFilterState = 1;
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpChatCommandsTextBox, 0);
     return 1;
@@ -2230,7 +2230,7 @@ int __stdcall OOGUTIL_DestroyChatCommandsDialog() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpChatCommandsTextBox);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpChatCommandsOKButton);
     gnGameListFilterState = 0;
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     return 1;
 }
 
@@ -2592,7 +2592,7 @@ void __stdcall UIMENU_WaitInLine() {
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszMessageBuffer, wszPositionString);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpCtlGameNameLabelOrQueueStatus, wszMessageBuffer);
     gpCtlCreateGameDlgCancelButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070eb30);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpCtlCreateGameDlgCancelButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpCtlCreateGameDlgCancelButton);
     gUIGameListCreateButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070eb60);
     ChatDlg::LAUNCHER_SetGameListCacheActive(0);
 }
@@ -2743,7 +2743,7 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
           pNetworkUnknown->pfnSendStartAdvEx3(sGameCreatePacket.szGameName, sGameCreatePacket.szGamePassword, szDifficultyAndDescription, nFlags);
           /* Please Wait */ pwszGameName = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
           ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(pwszGameName, nullptr);
-          D2Win::Src::D2WinMain::MessagePump(OOGUTIL_Unused11);
+          D2Win::Src::D2WinMain::MessagePump(OOGUTIL_EnterChatPumpCallback);
           ChatDlg::FORMS_DestroyListEx();
           pNetworkUnknown->pfnGetEnterChatResponseFlags((uint32_t*)szTempBuffer);
           if (!*(uint32_t*)(char*)&szTempBuffer) {
@@ -2882,15 +2882,15 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpProfileEditAccountName, pszLastAccount);
     gpProfileEditSex = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e6e0);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpProfileEditSex, szSex);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpProfileEditSex, 8);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpProfileEditSex, 8);
     gpProfileEditLocation = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e710);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpProfileEditLocation, szLocation);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpProfileEditLocation, 0x28);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpProfileEditLocation, 0x28);
     gpProfileEditDescription = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e740);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gpProfileEditDescription, szDescription);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpProfileEditDescription, 200);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpProfileEditDescription, 200);
     gpProfileCloseButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e920);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpProfileCloseButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpProfileCloseButton);
     gpProfileOKButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e950);
     if (!gbIsChannelScreen) {
       gpProfileLadderButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e980);
@@ -3010,7 +3010,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     }
 
     gpProfileOKButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e950);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpProfileOKButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpProfileOKButton);
     if (!gbIsChannelScreen) {
       gpProfileLadderButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(&FORMS_PredefinedFormStrc_0070e980);
     }
@@ -3047,13 +3047,13 @@ void __stdcall UIMENU_JoinGame() {
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pUIGamePlayers, pwszLocale);
     gpCtlGameListStatus = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x32);
     gpOOGLobbyControl2 = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 100);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpOOGLobbyControl2);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpOOGLobbyControl2);
     gpOogGamePasswordEditControl = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x2f);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpOogGamePasswordEditControl, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpOogGamePasswordEditControl, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpOogGamePasswordEditControl, (fpD2WinEditBoxFilter)OOGUTIL_SendGamePassword);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpOogGamePasswordEditControl, EDITBOX_Cb_OOGUTIL_SetJoinGameError);
     gpCtlGameListTop = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x30);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpCtlGameListTop, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpCtlGameListTop, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpCtlGameListTop, (fpD2WinEditBoxFilter)OOGUTIL_FilterPrintableAsciiChar);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpOogGamePasswordEditControl, gpCtlGameListTop);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_LinkTabOrder(gpCtlGameListTop, gpOogGamePasswordEditControl);
@@ -3117,16 +3117,16 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
 
     gUIGameListCreateButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4d);
     gpCtlCreateGameDlgCancelButton = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 100);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpCtlCreateGameDlgCancelButton);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpCtlCreateGameDlgCancelButton);
     gpOogGameNameEditControl = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x48);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpOogGameNameEditControl, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpOogGameNameEditControl, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpOogGameNameEditControl, (fpD2WinEditBoxFilter)OOGUTIL_SendPasswordPacket);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpOogGameNameEditControl, EDITBOX_Cb_OOGUTIL_RefreshGameList);
     gUIGameListGameNameEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x49);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListGameNameEditBox, 0x10);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gUIGameListGameNameEditBox, 0x10);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGameNameEditBox, (fpD2WinEditBoxFilter)OOGUTIL_FilterPrintableAsciiChar);
     gUIGameListGamePasswordEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4a);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListGamePasswordEditBox, 0x20);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gUIGameListGamePasswordEditBox, 0x20);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListGamePasswordEditBox, (fpD2WinEditBoxFilter)OOGUTIL_IsFirstCharPrintableAscii);
     sprintf(gszOogLevelRestrictionText, "%d", 4);
     sprintf(gszOogMaxPlayersText, "%d", 4);
@@ -3134,7 +3134,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
     if (bHasPeerName) {
       gUIGameListMaxPlayersEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4b);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, gszOogMaxPlayersText);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUIGameListMaxPlayersEditBox, 3);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gUIGameListMaxPlayersEditBox, 3);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUIGameListMaxPlayersEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gUIGameListMaxPlayersEditBox, OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers);
       gUIGameListLevelRestrictionCheckbox = (::D2WinButton*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4e);
@@ -3142,7 +3142,7 @@ void __stdcall OOGUTIL_OpenCreateGameDialog() {
       gUIGameListLevelRestrictionInactiveImage = D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4f);
       gUILevelRestrictionEditBox = (::D2WinEditBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(gaPredefinedForms_b + 0x4c);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUILevelRestrictionEditBox, gszOogLevelRestrictionText);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gUILevelRestrictionEditBox, 3);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gUILevelRestrictionEditBox, 3);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gUILevelRestrictionEditBox, (fpD2WinEditBoxFilter)D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gUILevelRestrictionEditBox, OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction);
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gUILevelRestrictionEditBox->sControl, 0);

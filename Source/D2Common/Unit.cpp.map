@@ -91,7 +91,7 @@
       "calledFunctions": [
         "SortUnitListByTargetY",
         "DRLGROOM_GetUnitListFromRoom",
-        "GetTargetY"
+        "GetScreenY"
       ],
       "usedTypes": [
         "D2RoomStrc",
@@ -99,7 +99,7 @@
         "D2UnitStrc *",
         "int32_t"
       ],
-      "dh": "d012bb43",
+      "dh": "765b6825",
       "paramStorage": [
         [
           "pRoom",

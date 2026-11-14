@@ -33,7 +33,6 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 namespace D2Client::UNIT::CUnit {
 
 // Function declarations
-void __fastcall IsAttackable(struct D2UnitStrc * pUnit);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 struct D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType);
@@ -63,6 +62,7 @@ struct D2RoomStrc * __stdcall GetCurrentRoom();
 void __stdcall UpdateObjectAutoLightOnPeriodChange();
 struct D2ServerCmdStrc * __fastcall GetServerCmd(struct D2UnitStrc * pUnit);
 void __fastcall SetServerCmd(struct D2UnitStrc * pUnit, struct D2ServerCmdStrc * pServerCmd);
+void __fastcall CUNIT_ClearDeadSetAttackable(struct D2UnitStrc * pUnit);
 void __fastcall SetDeadFlag(struct D2UnitStrc * pUnit);
 int __fastcall IsActive(struct D2UnitStrc * pUnit);
 // Returns true if the unit is in a "dead/dying" animation state, per unit type: player=Dead anim, monster=Kick anim (unless unflatDead flag set), object=DrawUnder flags or Walk+flag, missile=UNITFLAG_ISDEAD, item=Run anim. Returns false for null unit or no match.

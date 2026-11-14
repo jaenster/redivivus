@@ -89,8 +89,8 @@ D2MonsterCofStatusEntryStrc * g_pMonsterSpriteCofStatusTable = 0; D2_GLOBAL_GUAR
 } // namespace D2Client::Engine::Gfx
 static D2CofCacheStrc gPlayerCofCache = {}; D2_STATIC_GUARD(gPlayerCofCache, "gPlayerCofCache");
 static int gnGfxThrottleUpdateFrame = 0; D2_STATIC_GUARD(gnGfxThrottleUpdateFrame, "gnGfxThrottleUpdateFrame");
-static uint32_t gbCofCacheLRUEnabled = 0; D2_STATIC_GUARD(gbCofCacheLRUEnabled, "gbCofCacheLRUEnabled");
-static int gnGfxSystemFlags = 0; D2_STATIC_GUARD(gnGfxSystemFlags, "gnGfxSystemFlags");
+static uint32_t gnCofCacheMemUsage = 0; D2_STATIC_GUARD(gnCofCacheMemUsage, "gnCofCacheMemUsage");
+static int gnCofCacheMemLimit = 0; D2_STATIC_GUARD(gnCofCacheMemLimit, "gnCofCacheMemLimit");
 static int gnGfxThrottleUpdateFrameCountDynamic = 0; D2_STATIC_GUARD(gnGfxThrottleUpdateFrameCountDynamic, "gnGfxThrottleUpdateFrameCountDynamic");
 
 namespace D2Client::Engine::Gfx {
@@ -215,7 +215,7 @@ static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * s
       nHash = GFX_HashTextureName(szFilename);
       pEntry->pNext = pTextureCache->apBuckets[nHash];
       pTextureCache->apBuckets[nHash] = pEntry;
-      gbCofCacheLRUEnabled = gbCofCacheLRUEnabled + 0x1c + pEntry->nFileSize;
+      gnCofCacheMemUsage = gnCofCacheMemUsage + 0x1c + pEntry->nFileSize;
       return pEntry;
     }
 
@@ -242,7 +242,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
     }
 
     int nRemaining = pCache->nCacheEntryCount;
-    gbCofCacheLRUEnabled += nRemaining;
+    gnCofCacheMemUsage += nRemaining;
     unsigned char* pRecordCursor;
     pRecordCursor = (unsigned char*)pEntry;
     for (; nRemaining; nRemaining += -0x18 - *puVar1) {
@@ -311,7 +311,7 @@ static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, 
       D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     }
 
-    _bHasHideState = D2Common::DATATBLS::ItemStats::STATES_HasHideState(pUnit);
+    _bHasHideState = D2Common::DATATBLS::ItemStats::STATES_HasAuraFlagState(pUnit);
     if (!_bHasHideState) {
       pOverlay->nValue0 = 0;
       if (eOldState) {
@@ -580,10 +580,10 @@ void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t 
       return;
     }
     if (!bPerspective || pUnit && pUnit->eUnitType == UNIT_ITEM && (nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit) , nAnimMode != 3)) {
-      nTargetX = D2Common::Units::GetTargetX(pUnit);
+      nTargetX = D2Common::Units::GetScreenX(pUnit);
       nOffset = UI::Path::DRAW_GetWorldOffsetX();
       nDrawX = nTargetX - nOffset;
-      nTargetY = D2Common::Units::GetTargetY(pUnit);
+      nTargetY = D2Common::Units::GetScreenY(pUnit);
       nOffset = UI::Path::DRAW_GetWorldOffsetY();
       nDrawY = nTargetY - nOffset;
       if (pUnit && pUnit->eUnitType == UNIT_ITEM && nScreenX != -1 && nScreenY != -1) {
@@ -1138,7 +1138,7 @@ static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
       return gbHealthBarColorBlue;
     }
 
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if (!nMaxHp) {
       return gbHealthBarColorGreen;
     }
@@ -1414,7 +1414,7 @@ static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
       while (pMemoryToFree = pNextEntry) {
         pNextEntry = pMemoryToFree->pNext;
         if (pMemoryToFree->dwFlags & 1) {
-          gbCofCacheLRUEnabled += -0x1c - pMemoryToFree->nFileSize;
+          gnCofCacheMemUsage += -0x1c - pMemoryToFree->nFileSize;
           D2_FREE_AT(pMemoryToFree->pFileData, ".\\ENGINE\\Gfx.cpp", 0xe3c);
           D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0xe3d);
         }
@@ -1428,7 +1428,7 @@ static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_FreePlayerCofCache(int32_t nParam) {
     GFX_FreeUnusedCofEntries(&gPlayerCofCache);
-    gbCofCacheLRUEnabled -= gPlayerCofCache.nCacheEntryCount;
+    gnCofCacheMemUsage -= gPlayerCofCache.nCacheEntryCount;
     if (gPlayerCofCache.pCacheMemory) {
       D2_FREE_AT(gPlayerCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe50);
     }
@@ -1439,7 +1439,7 @@ void __fastcall GFX_FreePlayerCofCache(int32_t nParam) {
 // @sourcefile .\ENGINE\Gfx.cpp
 void GFX_FreeMonsterCofCache() {
     GFX_FreeUnusedCofEntries(&gMonsterCofCache);
-    gbCofCacheLRUEnabled -= gMonsterCofCache.nCacheEntryCount;
+    gnCofCacheMemUsage -= gMonsterCofCache.nCacheEntryCount;
     if (gMonsterCofCache.pCacheMemory) {
       D2_FREE_AT(gMonsterCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe61);
     }
@@ -1646,19 +1646,19 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
     } while (nIndex < gnMonsterModePrecacheCount);
 }
 
-int __stdcall GFX_GetCofCacheFlags() {
+int __stdcall GFX_GetGfxMemory() {
     // Static local variables (originally global data)
-    static int gnGfxCofCacheFlags; D2_STATIC_GUARD_BSS(gnGfxCofCacheFlags, "D2Client::Engine::Gfx::GFX_GetCofCacheFlags::gnGfxCofCacheFlags");
+    static int gnGfxCofCacheFlags; D2_STATIC_GUARD_BSS(gnGfxCofCacheFlags, "D2Client::Engine::Gfx::GFX_GetGfxMemory::gnGfxCofCacheFlags");
 
     return gnGfxCofCacheFlags;
 }
 
 int __stdcall GFX_GetCofCacheMemUsage() {
-    return gbCofCacheLRUEnabled;
+    return gnCofCacheMemUsage;
 }
 
-int __stdcall GFX_GetGfxSystemFlags() {
-    return gnGfxSystemFlags;
+int __stdcall GFX_GetCofCacheMemLimit() {
+    return gnCofCacheMemLimit;
 }
 
 D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId) {
@@ -1701,7 +1701,7 @@ static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
-D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_t nAnimMode, int nWeaponClass) {
+D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_t nWeaponClass, int nAnimMode) {
     D2GfxInfoUnkStrc* pGfxInfo;
     int nClassId;
     eD2UnitType eUnitType = UNIT_COUNT;
@@ -1712,30 +1712,30 @@ D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_
       nClassId = -1;
     }
 
-    uint32_t pWeaponClassDefault = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, (int*)&pWeaponClassDefault, ".\\ENGINE\\Gfx.cpp", 0x502);
-    uint32_t pWeaponClassEff = nWeaponClass;
-    if (nWeaponClass == -1) {
-      pWeaponClassEff = pWeaponClassDefault;
+    uint32_t nModeDefault = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, (int*)&nModeDefault, ".\\ENGINE\\Gfx.cpp", 0x502);
+    uint32_t nModeEff = nAnimMode;
+    if (nAnimMode == -1) {
+      nModeEff = nModeDefault;
     }
     if (eUnitType == UNIT_MONSTER) {
-      GFX_LoadMonsterModeCofByState(pUnit, pWeaponClassEff);
-      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nAnimMode, pWeaponClassEff);
+      GFX_LoadMonsterModeCofByState(pUnit, nModeEff);
+      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nWeaponClass, nModeEff);
       return pGfxInfo;
     }
     if (eUnitType == UNIT_PLAYER) {
       uint8_t* bLoaded;
-      bLoaded = GFX_LoadCompositCof((uint8_t**)&nWeaponClass, pWeaponClassEff, pUnit);
+      bLoaded = GFX_LoadCompositCof((uint8_t**)&nAnimMode, nModeEff, pUnit);
       if (bLoaded) {
-        GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, pWeaponClassEff, '\x01');
+        GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nModeEff, '\x01');
       }
 
-      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nAnimMode, -1);
+      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nWeaponClass, -1);
       return pGfxInfo;
     }
     if (eUnitType == UNIT_OBJECT) {
-      GFX_LoadObjectModeCof(pUnit, pWeaponClassEff);
-      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nAnimMode, -1);
+      GFX_LoadObjectModeCof(pUnit, nModeEff);
+      pGfxInfo = GFX_FindGfxInfoByModeAndWeapon(pUnit, nWeaponClass, -1);
       return pGfxInfo;
     }
 
@@ -2044,9 +2044,9 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
-void __fastcall GFX_InitCofSystem(int nSystemFlags) {
+void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit) {
     gnGfxThrottleUpdateFrame = 0;
-    gnGfxSystemFlags = nSystemFlags;
+    gnCofCacheMemLimit = nCofCacheMemLimit;
     memset(&gPlayerCofCache, 0, 0x80c);
     memset(&gMonsterCofCache, 0, 0x80c);
     memset(gaSpriteLoadStatusTable, 0, 0x460);
@@ -2060,14 +2060,14 @@ void __fastcall GFX_InitCofSystem(int nSystemFlags) {
 // @sourcefile .\ENGINE\Gfx.cpp
 void GFX_ShutdownCofSystem() {
     GFX_FreeUnusedCofEntries(&gPlayerCofCache);
-    gbCofCacheLRUEnabled -= gPlayerCofCache.nCacheEntryCount;
+    gnCofCacheMemUsage -= gPlayerCofCache.nCacheEntryCount;
     if (gPlayerCofCache.pCacheMemory) {
       D2_FREE_AT(gPlayerCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe50);
     }
 
     memset(&gPlayerCofCache, 0, 0x80c);
     GFX_FreeUnusedCofEntries(&gMonsterCofCache);
-    gbCofCacheLRUEnabled -= gMonsterCofCache.nCacheEntryCount;
+    gnCofCacheMemUsage -= gMonsterCofCache.nCacheEntryCount;
     if (gMonsterCofCache.pCacheMemory) {
       D2_FREE_AT(gMonsterCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe61);
     }
@@ -2851,7 +2851,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
               }
 
               bApplyItemColor = 1;
-              bPerspectiveCapable = D2Common::DATATBLS::ItemStats::STATES_HasDisguiseState(pUnit);
+              bPerspectiveCapable = D2Common::DATATBLS::ItemStats::STATES_HasGreenFlagState(pUnit);
               if (bPerspectiveCapable) {
                 pUnitTmp = UNIT::Player::GetPlayerUnit_UI();
                 if (pUnit != pUnitTmp || (nCofFrameCount = GAME::Rendering::IsWindowMode() , !nCofFrameCount)) {
@@ -3029,12 +3029,12 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     }
 
     int32_t nWorldOffsetX = UI::Path::DRAW_GetWorldOffsetX();
-    int32_t nTargetX = D2Common::Units::GetTargetX(pUnit);
+    int32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
     int32_t nDrawX = Particle::PARTICLE_GetPosXShifted(pUnit);
     nDrawX = nDrawX + nTargetX + (nOffsetX - nWorldOffsetX);
     int32_t nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
     nOffsetX = nOffsetY - nWorldOffsetY;
-    nOffsetY = D2Common::Units::GetTargetY(pUnit);
+    nOffsetY = D2Common::Units::GetScreenY(pUnit);
     nOffsetY += nOffsetX;
     int32_t nParticleY = Particle::PARTICLE_GetPosYShifted(pUnit);
     int32_t nShadowY = nParticleY + nOffsetY;
@@ -3179,9 +3179,9 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       nScreenY = nScreenY + 0x10 + nTmp;
     } else {
       nTmp = Particle::PARTICLE_GetScreenZ(pUnit);
-      nCoordTmp = D2Common::Units::GetTargetX(pUnit);
+      nCoordTmp = D2Common::Units::GetScreenX(pUnit);
       nScreenX = nCoordTmp + nTmp / 2;
-      nCoordTmp = D2Common::Units::GetTargetY(pUnit);
+      nCoordTmp = D2Common::Units::GetScreenY(pUnit);
       nScreenY = nCoordTmp + nTmp / 2;
     }
     if (bPerspToggled) {
@@ -3368,11 +3368,11 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
     int32_t nWorldOffsetX;
     nWorldOffsetX = UI::Path::DRAW_GetWorldOffsetX();
     int32_t nDrawX;
-    nDrawX = D2Common::Units::GetTargetX(pUnit);
+    nDrawX = D2Common::Units::GetScreenX(pUnit);
     nDrawX += nDrawY - nWorldOffsetX;
     nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
     nOffsetY -= nWorldOffsetY;
-    nTargetY = D2Common::Units::GetTargetY(pUnit);
+    nTargetY = D2Common::Units::GetScreenY(pUnit);
     nDrawY = nTargetY + nOffsetY;
     if (nPerspActive) {
       nBorderType = UI::Path::DRAW_GetTypeOfBorder();
@@ -3487,11 +3487,11 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
       nParticleOffset = Particle::PARTICLE_GetY(pUnit);
     } else {
       int32_t nWorldOffsetVal;
-      nCoord = D2Common::Units::GetTargetX(pUnit);
+      nCoord = D2Common::Units::GetScreenX(pUnit);
       nWorldOffsetVal = UI::Path::DRAW_GetWorldOffsetX();
       nParticleXY = Particle::PARTICLE_GetX(pUnit);
       __frame0.nScreenX = nParticleXY + (nCoord - nWorldOffsetVal);
-      nCoord = D2Common::Units::GetTargetY(pUnit);
+      nCoord = D2Common::Units::GetScreenY(pUnit);
       nWorldOffsetVal = UI::Path::DRAW_GetWorldOffsetY();
       nParticleXY = Particle::PARTICLE_GetY(pUnit);
       __frame0.nScreenY = nParticleXY + (nCoord - nWorldOffsetVal);
@@ -3770,7 +3770,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
     return 1;
 }
 
-int __stdcall GFX_GetGfxSystemFlags_Unref_004723f0() {
+int __stdcall GFX_GetWeatherCurrentTransitionState() {
     return gnWeatherCurrentTransitionState;
 }
 

@@ -4,7 +4,7 @@
   "file": "Source/D2Client/UI/Path.cpp",
   "functions": [
     {
-      "name": "DRAW_GetTypeOfBorder_Unref_0045ae60",
+      "name": "LOADER_GetScreenResolutionTableIndex",
       "address": "0045ae60",
       "lines": [
         {
@@ -14,15 +14,15 @@
       ],
       "namespace": "D2Client::UI::Path",
       "calledFunctions": [
-        "DRAW_GetTypeOfBorder_Unref_0045ae60"
+        "LOADER_GetScreenResolutionTableIndex"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "b8ab2945"
+      "dh": "a0813877"
     },
     {
-      "name": "DRAW_GetTypeOfBorder_Unref_0045ae80",
+      "name": "LOADER_GetScreenResolutionMode",
       "address": "0045ae80",
       "lines": [
         {
@@ -32,12 +32,12 @@
       ],
       "namespace": "D2Client::UI::Path",
       "calledFunctions": [
-        "DRAW_GetTypeOfBorder_Unref_0045ae80"
+        "LOADER_GetScreenResolutionMode"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "014c3c7e"
+      "dh": "d5faade3"
     },
     {
       "name": "DRAW_GetTypeOfBorder",
@@ -163,12 +163,12 @@
       "calledFunctions": [
         "ConvertCoordToPerspectiveView",
         "D2GFX_IsPerspectiveActive",
-        "DRLG_WorldToScreenShift5"
+        "DRLG_ScreenToWorldShift5"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "a27a9a92",
+      "dh": "2d027650",
       "paramStorage": [
         [
           "pX",
@@ -193,8 +193,8 @@
       "calledFunctions": [
         "DRAW_DrawRoomUnits",
         "DRLGROOM_GetAdjacentRoomsList",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "D2GFX_DrawSolidRectEx",
         "D2GFX_DrawLine"
       ],
@@ -206,7 +206,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3f2a0d12",
+      "dh": "22431bfc",
       "paramStorage": [
         [
           "pRoom",
@@ -321,15 +321,15 @@
       "calledFunctions": [
         "DRAW_UpdateMouseWorldOffsets",
         "GetPlayerUnit_UI",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "SHAKE_GetShake"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c4d4cd89"
+      "dh": "d938f679"
     },
     {
       "name": "DRAW_DrawRoomCollisionGrid",

@@ -75,10 +75,10 @@
         "GetMouseY",
         "DRLGROOM_GetAdjacentRoomsList",
         "D2GFX_GetColorFromCurrentPallete",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
         "DRAW_GetWorldOffsetY",
-        "GetTargetY",
+        "GetScreenY",
         "GetPrecisionX",
         "GetPrecisionY",
         "D2GFX_IsInPerspectiveBounds",
@@ -106,7 +106,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ce335c8a"
+      "dh": "722bf46e"
     },
     {
       "name": "StaticInit_gaGroundItemLabels",

@@ -462,7 +462,7 @@
       "calledFunctions": [
         "GetHPRegen",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "GetStatsByState",
         "GetGamePointer",
         "STATLIST_GetFullListPtr",
@@ -475,7 +475,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bbdc8859",
+      "dh": "22f0cf08",
       "paramStorage": [
         [
           "pUnit",
@@ -496,7 +496,7 @@
       "calledFunctions": [
         "GetMPRegen",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "GetStatsByState",
         "GetGamePointer",
         "STATLIST_GetFullListPtr"
@@ -508,7 +508,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "367effc7",
+      "dh": "a252d78b",
       "paramStorage": [
         [
           "pUnit",
@@ -531,7 +531,7 @@
         "SUNIT_GetClient",
         "CLIENT_GetPlayerBasicsData",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "GetXPosFromDynamicPathUnit",
         "GetYPosFromDynamicPathUnit",
         "GetXSP1",
@@ -554,7 +554,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "89bd2a62",
+      "dh": "aea1b5ac",
       "paramStorage": [
         [
           "pUnit",
@@ -1287,14 +1287,14 @@
         "CheckIfCanBeSkilled",
         "IsSkillBoundToClass",
         "SkillCalculateIfWeCanSkillThisSkill",
-        "SpendSkillPointOnSkill"
+        "SKILLS_CheckRequiredAttributes"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2d0956b6",
+      "dh": "6747519d",
       "paramStorage": [
         [
           "pUnit",
@@ -3083,7 +3083,7 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "9b5a3822",
+      "dh": "92d77d93",
       "paramStorage": [
         [
           "pGame",
@@ -3189,7 +3189,7 @@
       ]
     },
     {
-      "name": "SCMD_0x1C_UnequipToInventory",
+      "name": "SCMD_0x1C_UnequipToCursor",
       "address": "0054aec0",
       "lines": [
         {
@@ -3199,21 +3199,21 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x1C_UnequipToInventory",
+        "SCMD_0x1C_UnequipToCursor",
         "INVENTORY_GetItemByGridOffset",
         "CheckItemMovePermission",
         "PLAYERTRADE_CheckNoEquippedTradeItems",
         "ITEMMODE_TakeItemFromBodyLoc"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x1C_SwapEquippedItem",
+        "D2GSPacketClt0x1C_UnequipToCursor",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "7518e11d",
+      "dh": "69557951",
       "paramStorage": [
         [
           "pGame",
@@ -3324,7 +3324,7 @@
       ]
     },
     {
-      "name": "SCMD_0x1F_UseItem",
+      "name": "SCMD_0x1F_SwapCursorAndGridItem",
       "address": "0054b0f0",
       "lines": [
         {
@@ -3334,7 +3334,7 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x1F_UseItem",
+        "SCMD_0x1F_SwapCursorAndGridItem",
         "SERVER_IsItemOnCursor",
         "IsPlayerTheOwner",
         "FindUnitFromTable",
@@ -3343,14 +3343,15 @@
         "ITEMMODE_ExchangeInventoryItem"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x1F_UseItem",
+        "D2GSPacketClt0x1F_SwapCursorAndGridItem",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "eInventoryPage",
+        "int32_t",
         "uint32_t"
       ],
-      "dh": "7127d330",
+      "dh": "236ca135",
       "paramStorage": [
         [
           "pGame",
@@ -3388,14 +3389,14 @@
         "FindUnitFromTable"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x20_StackItem",
+        "D2GSPacketClt0x20_UseItemAtLocation",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5a1e018f",
+      "dh": "82705513",
       "paramStorage": [
         [
           "pGame",
@@ -3473,13 +3474,13 @@
         "StackItem"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x21_RemoveStackItem",
+        "D2GSPacketClt0x21_MergeStackables",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "4409d2dd",
+      "dh": "eac9f06a",
       "paramStorage": [
         [
           "pGame",
@@ -3557,13 +3558,13 @@
         "ITEM_TryPlaceInBelt"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x23_ItemFromBelt",
+        "D2GSPacketClt0x23_ItemToBelt",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "3e580ab7",
+      "dh": "2215049d",
       "paramStorage": [
         [
           "pGame",
@@ -3601,13 +3602,13 @@
         "SERVER_BeltTakeItem"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x24_SwapBeltItem",
+        "D2GSPacketClt0x24_ItemFromBelt",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "a42986fe",
+      "dh": "321108e5",
       "paramStorage": [
         [
           "pGame",
@@ -3644,13 +3645,13 @@
         "SERVER_BeltSwapItem"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x25_UseScroll",
+        "D2GSPacketClt0x25_SwapBeltItem",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "805e8c2a",
+      "dh": "b39d82e4",
       "paramStorage": [
         [
           "pGame",
@@ -3689,7 +3690,7 @@
         "SERVER_UseItemAtCoords"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x26_ItemToCube",
+        "D2GSPacketClt0x26_UseItemAtPlayerCoords",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
@@ -3697,7 +3698,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "db7ee2ef",
+      "dh": "41c4f365",
       "paramStorage": [
         [
           "pGame",
@@ -3820,7 +3821,7 @@
         "SCMD_0x2A_ItemToCube",
         "IsAccessableCheck",
         "IsPlayerTheOwner",
-        "ITEMMODE_HandleItemRepair"
+        "ITEMMODE_PlaceItemInCube"
       ],
       "usedTypes": [
         "D2GSPacketClt0x2A_ItemToCube",
@@ -3829,7 +3830,7 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "3fe06ff2",
+      "dh": "6f4cf95b",
       "paramStorage": [
         [
           "pGame",
@@ -4040,7 +4041,7 @@
         "NpcState_MoveState0To1"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x2F_NpcRepair",
+        "D2GSPacketClt0x2F_NpcInteract",
         "D2MonsterAiStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -4048,7 +4049,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "435600b0",
+      "dh": "a0782b6d",
       "paramStorage": [
         [
           "pGame",
@@ -4236,7 +4237,7 @@
       ]
     },
     {
-      "name": "SCMD_0x35_NpcGamble",
+      "name": "SCMD_0x35_NpcRepair",
       "address": "0054bb60",
       "lines": [
         {
@@ -4246,17 +4247,17 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x35_NpcGamble",
-        "SUNITNPC_ProcessGamble"
+        "SCMD_0x35_NpcRepair",
+        "SUNITNPC_ProcessRepair"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x35_NpcGamble",
+        "D2GSPacketClt0x35_NpcRepair",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "d1b1cd17",
+      "dh": "7e4d9d09",
       "paramStorage": [
         [
           "pGame",
@@ -4359,7 +4360,7 @@
       ]
     },
     {
-      "name": "SCMD_0x62_NpcSellExpansion",
+      "name": "SCMD_0x62_ResurrectMerc",
       "address": "0054bc00",
       "lines": [
         {
@@ -4369,17 +4370,17 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x62_NpcSellExpansion",
-        "SUNITNPC_HandleSellAction"
+        "SCMD_0x62_ResurrectMerc",
+        "SUNITNPC_ResurrectMerc"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x62_NpcSellExpansion",
+        "D2GSPacketClt0x62_ResurrectMerc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "75f28010",
+      "dh": "e6c709de",
       "paramStorage": [
         [
           "pGame",
@@ -4863,9 +4864,9 @@
         "SERVER_DisconnectClient",
         "NullSub",
         "SKILLS_ApplyAllPassiveStates",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "STATLIST_SetUnitStat",
         "SendAttributeUpdate",
         "SetState",
@@ -4893,7 +4894,7 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "ffde1fca",
+      "dh": "a49d9f49",
       "paramStorage": [
         [
           "pGame",
@@ -4914,7 +4915,7 @@
       ]
     },
     {
-      "name": "SCMD_0x5D_CubeRecipeCheck",
+      "name": "SCMD_0x5D_PartyScreenToggle",
       "address": "0054c2a0",
       "lines": [
         {
@@ -4924,18 +4925,18 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x5D_CubeRecipeCheck",
+        "SCMD_0x5D_PartyScreenToggle",
         "ARENA_IsNoCubeRecipes",
-        "PlayerScreen_DispatchAction"
+        "PARTYSCREEN_DispatchAction"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x5D_CubeRecipeCheck",
+        "D2GSPacketClt0x5D_PartyScreenToggle",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "7b041e23",
+      "dh": "e4985bd8",
       "paramStorage": [
         [
           "pGame",
@@ -4956,7 +4957,7 @@
       ]
     },
     {
-      "name": "SCMD_0x5E_CubeApply",
+      "name": "SCMD_0x5E_PartyScreenAction",
       "address": "0054c300",
       "lines": [
         {
@@ -4966,18 +4967,18 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x5E_CubeApply",
+        "SCMD_0x5E_PartyScreenAction",
         "ARENA_IsNoCubeRecipes",
-        "PlayerScreen_DispatchAction"
+        "PARTYSCREEN_DispatchAction"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x5E_CubeApply",
+        "D2GSPacketClt0x5E_PartyScreenAction",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "c919ad2d",
+      "dh": "14f30056",
       "paramStorage": [
         [
           "pGame",
@@ -5315,14 +5316,14 @@
         "PLAYER_ClearCutsceneFlag"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x48_TransmogrifyItem",
+        "D2GSPacketClt0x48_CutsceneOver",
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "2fd8497b",
+      "dh": "a202fe04",
       "paramStorage": [
         [
           "pGame",
@@ -5520,7 +5521,7 @@
       ]
     },
     {
-      "name": "SCMD_0x4F_GoToTownFolk",
+      "name": "SCMD_0x4F_ClickButton",
       "address": "0054c7c0",
       "lines": [
         {
@@ -5530,7 +5531,7 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x4F_GoToTownFolk",
+        "SCMD_0x4F_ClickButton",
         "ClickButton"
       ],
       "usedTypes": [
@@ -5540,7 +5541,7 @@
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "57c75a1c",
+      "dh": "71efe486",
       "paramStorage": [
         [
           "pGame",
@@ -5629,7 +5630,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "761121f0",
+      "dh": "cc78000d",
       "paramStorage": [
         [
           "pGame",
@@ -5690,7 +5691,7 @@
       ]
     },
     {
-      "name": "SCMD_0x53_GamepadInput",
+      "name": "SCMD_0x53_StartRunning",
       "address": "0054c940",
       "lines": [
         {
@@ -5700,18 +5701,18 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
-        "SCMD_0x53_GamepadInput",
+        "SCMD_0x53_StartRunning",
         "STATSEX_GetCurrentStat",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x53_GamepadInput",
+        "D2GSPacketClt0x53_StartRunning",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "ee5c4067",
+      "dh": "08fffe7a",
       "paramStorage": [
         [
           "pGame",
@@ -5743,16 +5744,16 @@
       "namespace": "D2Game::PLAYER::PlayerMsg",
       "calledFunctions": [
         "SCMD_0x54_StopRunning",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
-        "D2GSPacketClt0x54_StackMerge",
+        "D2GSPacketClt0x54_StopRunning",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ServerIncomingStatus",
         "uint32_t"
       ],
-      "dh": "dce43ca5",
+      "dh": "2d44c903",
       "paramStorage": [
         [
           "pGame",
@@ -5880,13 +5881,13 @@
         "UNITS_GetRoom",
         "DRLGROOM_FindBetterNearbyRoom",
         "UNIT_GetUnitState",
-        "PATH_GetCollisionPattern",
+        "PATH_GetMoveTestCollisionMask",
         "GetPathType",
         "GetMaxDistance",
         "GetTargetEx",
         "GetXSP1",
         "GetYSP1",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "OverwriteDistanceAndMaxDistance",
         "SetSP1",
@@ -5904,7 +5905,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "51212d24",
+      "dh": "8321ec71",
       "paramStorage": [
         [
           "pGame",
@@ -6127,16 +6128,16 @@
         "INVENTORY_GetItemByGridOffset",
         "ITEMS_IsA",
         "ITEM_CloneFromSerializedData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "EVENT_RemoveUnitTimersByType",
         "SERVER_EquipItemToBodyLoc",
-        "ToCursorItem",
-        "CopyInventoryOfPlayerOrFree",
-        "ITEMMODE_ApplyQuestReward",
+        "ITEMMODE_RemoveItemIfOnCursor",
+        "INVENTORY_SetCursorItem",
+        "ITEMMODE_PutItemOnCursor",
         "ITEMS_RecalcAndRefreshInventory",
         "ITEMMODE_ReturnZero3",
         "SetEvent",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEMMODE_UnequipItemStats",
         "ITEM_CheckEquipRequirements",
@@ -6157,7 +6158,7 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "2707ccf2",
+      "dh": "240cf2ba",
       "paramStorage": [
         [
           "pUnit",
@@ -6190,15 +6191,15 @@
       "calledFunctions": [
         "EquipOrUnequipMercItem",
         "INVENTORY_GetItemByGridOffset",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEMMODE_UnequipItemStats",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
         "ITEM_CloneFromSerializedData",
-        "CopyInventoryOfPlayerOrFree",
-        "ITEMMODE_ApplyQuestReward",
+        "INVENTORY_SetCursorItem",
+        "ITEMMODE_PutItemOnCursor",
         "ITEM_EditItemData_eItemFlag",
         "ITEMS_RecalcAndRefreshInventory",
         "ITEMMODE_RecalcAllEquippedStats",
@@ -6211,7 +6212,7 @@
         "eD2ServerIncomingStatus",
         "int32_t"
       ],
-      "dh": "3ec3c460",
+      "dh": "0b924b55",
       "paramStorage": [
         [
           "pUnit",
@@ -6246,8 +6247,8 @@
         "CheckItemFlag",
         "ITEMS_IsA",
         "SKILLITEM_DispatchItemSpell",
-        "ToCursorItem",
-        "CopyInventoryOfPlayerOrFree",
+        "ITEMMODE_RemoveItemIfOnCursor",
+        "INVENTORY_SetCursorItem",
         "IsTwoHanded",
         "ITEM_CheckEquipRequirements",
         "MERC_SwapEquippedItem",
@@ -6260,7 +6261,7 @@
         "eD2ItemTypes",
         "uint32_t"
       ],
-      "dh": "e433cffd",
+      "dh": "607200fd",
       "paramStorage": [
         [
           "pUnit",
@@ -6355,8 +6356,8 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "ItemBelongsToInventoryOfPlayer",
-        "GetInventoryPage",
+        "INVENTORY_RemoveItem",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
@@ -6364,7 +6365,7 @@
         "ITEM_SetItemData_ePage",
         "SUNIT_GetClient",
         "Send0x9DRemoveItemFromContainer",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_GetItemsTxt_nWidthAndHeight",
         "INVENTORY_CanPlaceItemInBelt",
         "PutItemInInventory",
@@ -6384,7 +6385,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5829fac5",
+      "dh": "cff4fe4b",
       "paramStorage": [
         [
           "pGame",

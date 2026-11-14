@@ -15,7 +15,6 @@
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"

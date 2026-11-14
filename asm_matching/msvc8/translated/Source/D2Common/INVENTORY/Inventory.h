@@ -138,7 +138,7 @@ struct D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(struct D2PoolMan
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall STRUCT_FreeInventory(struct D2InventoryStrc * pInventory);
 BOOL __stdcall INVENTORY_CheckDoItemBelongToInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-struct D2UnitStrc * __stdcall ItemBelongsToInventoryOfPlayer(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
+struct D2UnitStrc * __stdcall INVENTORY_RemoveItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 BOOL __stdcall PutItemInInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t dwParam);
 struct D2UnitStrc * __stdcall INVENTORY_GetFirstItem(struct D2InventoryStrc * pInventory);
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
@@ -169,13 +169,13 @@ struct D2UnitStrc * __stdcall GetPrimaryWeapon(struct D2InventoryStrc * pInvento
 struct D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(struct D2InventoryStrc * pInventory, uint32_t nItemType);
 uint32_t __stdcall INVENTORY_IsItemLocationValid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 int32_t __stdcall INVENTORY_GetItemXPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-void __stdcall CopyInventoryOfPlayerOrFree(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItemUnit);
+void __stdcall INVENTORY_SetCursorItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 // @blizzard INVENTORYGetHandItem
 struct D2UnitStrc * __stdcall INVENTORY_GetHandItem(struct D2InventoryStrc * pInventory);
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
-struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
+struct D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
-struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
+struct D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
 struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
 // @sourcefile .\INVENTORY\Inventory.cpp
@@ -209,7 +209,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(struct D2InventoryStrc * pIn
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.
 int __stdcall INVENTORY_GetWeaponHandedness(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory);
 void __stdcall INVENTORY_SetOwnerGUID(struct D2InventoryStrc * pInventory, int32_t nUnitGUID);
-int32_t __stdcall INVENTORY_GetCursorItemGUID(struct D2InventoryStrc * pInventory);
+int32_t __stdcall INVENTORY_GetOwnerGUID(struct D2InventoryStrc * pInventory);
 // @sourcefile .\INVENTORY\Inventory.cpp
 // Appends a D2CorpseStrc {eUnitType, nUnitGUID, dwFlags, pNext} to pInventory->pCorpse/pCorpseLast and counts non-player corpses. The first arg carries the 0x1020304 inventory signature.
 void __stdcall INVENTORY_AddCorpse(struct D2InventoryStrc * pInventory, int32_t nUnitGUID, uint32_t dwFlags, eD2UnitType eUnitType);
@@ -234,7 +234,7 @@ int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(struct D2UnitStrc * pUni
 void __stdcall FreeRecursiveInventorysWithChilds(struct D2InventoryStrc * pInventory);
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall CreateCopyOfInventoryForTrading(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, BOOL * pbMercIsBuyer);
+BOOL __stdcall INVENTORY_CanItemsBeTraded(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, BOOL * pnFailedSide);
 void __stdcall GetCurrentItemOnBodyLocation(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, struct D2UnitStrc * * ppUnit, uint32_t bodyLoc);
 // Walks pUnit's inventory and builds the visual appearance arrays (pArray1=component gfx indices, pArray2=colors) from equipped items. Handles head/arms (circlet check) and torso (body-component transform loop). Used to snapshot a character's look for encoding into a packet or save record.
 void __stdcall SaveCharAppearance(struct D2UnitStrc * pUnit, char * pArray1, char * pArray2);
@@ -253,13 +253,13 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(struct D2InventoryStrc * pInventory, st
 uint32_t __stdcall INVENTORY_CheckHasArmorEquipped(struct D2InventoryStrc * pInventory);
 BOOL __stdcall SERVER_IsInToBeUpdatedList(struct D2InventoryStrc * pInventory, int32_t nUnitGuid);
 // Iterates the main inventory grid linked list to find the first item of the given eD2ItemTypes, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL. Only searches items with X position &lt; 11 (main grid) and validates the page signature (0x1020304) first.
-struct D2UnitStrc * __stdcall INVENTORY_FindItemOfTypeInMain(struct D2InventoryStrc * pInventory, eD2ItemTypes nItemTypeToFind, struct D2UnitStrc * pAfterItem);
+struct D2UnitStrc * __stdcall INVENTORY_GetEquippedItemByType(struct D2InventoryStrc * pInventory, eD2ItemTypes nItemTypeToFind, struct D2UnitStrc * pAfterItem);
 // Searches the player's main inventory grid (page 0, grid index 0x4F) for an item matching nItemCode (4-char item code). Converts the code to a class id via ConvertItemCodeToClassIdAndGetItemsTxtLine, then walks the item linked list starting after pAfterItem (NULL = from the beginning). Returns the first matching D2UnitStrc* whose nClassId matches and whose X position is below column 11, or NULL if not found.
 struct D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
 // Same logic as INVENTORY_FindItemByCodeInMain but targets the stash grid (page index 2, grid 0x4F). Searches the stash item linked list for the first item whose class id matches nItemCode and X position is below column 11, optionally starting after pAfterItem. Returns the matching D2UnitStrc* or NULL.
 struct D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(struct D2InventoryStrc * pInventory, uint32_t nItemCode, struct D2UnitStrc * pAfterItem);
 // Counts how many items belonging to a specific set (nSetIndex) are present in the player's main inventory grid (not belt/cube). Iterates the inventory's first-item linked list, checking item quality == 5 (set) and nFileIndex == nSetIndex; only counts items whose X position is ≤ 10 (main grid columns). Returns 0 if the inventory is null or has an invalid signature.
-int32_t __stdcall INVENTORY_CountSetItemsInMain(struct D2InventoryStrc * pInventory, int32_t nSetIndex);
+int32_t __stdcall INVENTORY_CountEquippedSetItems(struct D2InventoryStrc * pInventory, int32_t nItemFileIndex);
 void __fastcall INVENTORY_SetOrClearCursorItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, BOOL bSet);
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall INVENTORY_FreeNotifications(struct D2InventoryStrc * pInventory);

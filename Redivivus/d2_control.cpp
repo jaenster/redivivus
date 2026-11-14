@@ -1534,8 +1534,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             "{\"screen\":[%d,%d],\"world\":[%d,%d],\"self\":[%d,%d],"
             "\"caninterrupt\":%d,\"skill\":%08X,\"id\":%d,\"owner\":%d}",
             sx, sy, wx, wy,
-            (int)D2Common::Units::GetTargetX(pPl),
-            (int)D2Common::Units::GetTargetY(pPl),
+            (int)D2Common::Units::GetScreenX(pPl),
+            (int)D2Common::Units::GetScreenY(pPl),
             (int)D2Client::UNIT::UnitMode::UNITMODE_CanInterruptSkill_Extern(pPl),
             (unsigned)(uintptr_t)pSk,
             pSk ? (int)D2Common::Skills::GetSkillId(pSk, "", 0) : -1,
@@ -2372,8 +2372,8 @@ static int UnitsReply(char* out, int outMax, int nWantType) {
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
                 if (used > outMax - 260) { nFound++; continue; }
-                const int nX = D2Common::Units::GetTargetX(pUnit) - nOffX;
-                const int nY = D2Common::Units::GetTargetY(pUnit) - nOffY;
+                const int nX = D2Common::Units::GetScreenX(pUnit) - nOffX;
+                const int nY = D2Common::Units::GetScreenY(pUnit) - nOffY;
                 // For a monster, the MonStats row says whether it is a shopkeeper. `interact`
                 // is the bit that decides whether a click opens a menu at all, so it is the
                 // one a "can I buy something" test has to see.
@@ -2471,8 +2471,8 @@ static void WalkerScanForShop(void) {
                 }
                 g_foundCls  = (int)pUnit->nClassId;
                 g_foundGuid = (int)pUnit->nUnitGUID;
-                g_foundX = D2Common::Units::GetTargetX(pUnit);
-                g_foundY = D2Common::Units::GetTargetY(pUnit);
+                g_foundX = D2Common::Units::GetScreenX(pUnit);
+                g_foundY = D2Common::Units::GetScreenY(pUnit);
                 const uint16_t* pwsz = D2Lang::StrTable::strtable::GetLocaleString(pRow->NameStr);
                 int k = 0; if (pwsz) for (; k < 32 && pwsz[k]; k++) g_foundName[k] = (char)(pwsz[k] & 0x7f);
                 g_foundName[k] = 0;
@@ -2615,8 +2615,8 @@ extern "C" void D2CONTROL_Pump(void) {
                 // centre of the 800x600 client. Running CoordsMapToScreen on top of that
                 // (as d2bs does against the real D2COMMON export) double-converts and lands
                 // the click at -1292608,560644.
-                int32_t cx = D2Common::Units::GetTargetX(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetX();
-                int32_t cy = D2Common::Units::GetTargetY(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetY();
+                int32_t cx = D2Common::Units::GetScreenX(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetX();
+                int32_t cy = D2Common::Units::GetScreenY(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetY();
                 D2Client::GAME::Select::SetSelectedUnit_I(pTarget);
                 D2Client::UNIT::Player::ClickMap(a.x, cx, cy, 0);
                 D2TraceFmt("CLICKUNIT t=%d guid=%d -> screen %d,%d type=%d",

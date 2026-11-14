@@ -1289,7 +1289,7 @@
       ]
     },
     {
-      "name": "GFX_SetSpriteCacheMaxSize",
+      "name": "GFX_SetSpriteCacheFreeCallback",
       "address": "00604a30",
       "lines": [
         {
@@ -1299,13 +1299,16 @@
       ],
       "namespace": "D2CMP::SRC::CelCmp",
       "calledFunctions": [
-        "GFX_SetSpriteCacheMaxSize",
-        "SPRITECACHE_SetMaxSize"
+        "GFX_SetSpriteCacheFreeCallback",
+        "SPRITECACHE_SetFreeEntryCallback"
       ],
-      "dh": "4fc5534b",
+      "usedTypes": [
+        "pfnLruFreeEntry"
+      ],
+      "dh": "f9260d95",
       "paramStorage": [
         [
-          "nSize",
+          "pfnFreeEntry",
           "Stack[0x4]:4"
         ]
       ]

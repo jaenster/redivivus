@@ -71,7 +71,7 @@ void __stdcall D2COMP_SetScreenY(struct D2CharSelCompStrc * pCompUnit, int32_t n
 uint32_t __stdcall D2COMP_GetFlags(struct D2CharSelCompStrc * pCompUnit);
 void __stdcall D2COMP_SetFlags(struct D2CharSelStrc * pCharSel, uint32_t dwFlags);
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion);
-struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nClassicExpansion, uint8_t * pbyEquipSlots, char * szText);
+struct D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 void __fastcall D2COMP_PopulateComponentFromCOF(struct D2CharSelCompStrc * pCOFData, struct D2GfxDataStrc * pGfxData);

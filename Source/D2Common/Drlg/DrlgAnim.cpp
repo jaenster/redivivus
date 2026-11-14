@@ -27,7 +27,7 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgAnimTileGridStrc) == 0x14, "D2_NEW_AT(D2DrlgAnimTileGridStrc): the 32-bit layout must be the 0x14 bytes 1.14d allocates");
 
 
-static int gnDrlgAnimFrameCounter[42] = {
+static int gaDs1TileTypeConversion[42] = {
     0x0,
     0x1,
     0x2,
@@ -70,7 +70,7 @@ static int gnDrlgAnimFrameCounter[42] = {
     0x12,
     0x13,
     0x14
-}; D2_STATIC_GUARD(gnDrlgAnimFrameCounter, "gnDrlgAnimFrameCounter");
+}; D2_STATIC_GUARD(gaDs1TileTypeConversion, "gaDs1TileTypeConversion");
 
 namespace D2Common::Drlg::DrlgAnim {
 
@@ -322,12 +322,12 @@ void __fastcall DRLGROOMTILE_AllocAnimTiles(D2RoomExStrc * pRoomEx, int nFrameSt
 }
 
 int __fastcall DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0(int nAnimIndex) {
-    return gnDrlgAnimFrameCounter[nAnimIndex + 0x1a];
+    return gaDs1TileTypeConversion[nAnimIndex + 0x1a];
 }
 
 // Returns the tile orientation value for a given animation index by indexing the static gnDrlgAnimFrameCounter lookup table. Maps DS1 animation indices to their corresponding DRLG orientation constants.
-int __fastcall DRLGANIM_GetOrientationFromIndex(int nAnimIndex) {
-    return gnDrlgAnimFrameCounter[nAnimIndex];
+int __fastcall DRLGPRESET_MapTileType(int nAnimIndex) {
+    return gaDs1TileTypeConversion[nAnimIndex];
 }
 
 } // namespace D2Common::Drlg::DrlgAnim

@@ -49,7 +49,7 @@ void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2Wi
 // Halts (lines 0x1B3/0x1B5) unless pEditBox is a non-null FORM_EditBox. It clears no text.
 void __fastcall D2WINEDITBOX_SelectAll(::D2WinEditBox * pEditBox);
 // MISNAMED: writes D2WinEditBox+0x48 (nMaxLength), not a password flag. Callers pass character counts (0xd, 0x10, 0x20).
-void __fastcall D2WINEDITBOX_SetPasswordMode(::D2WinEditBox * pEditBox, uint32_t nMaxLength);
+void __fastcall D2WINEDITBOX_SetMaxLength(::D2WinEditBox * pEditBox, uint32_t nMaxLength);
 uint16_t * __fastcall FORMS_TextInput_GetValue(struct D2ControlStrc * pControl);
 // Links two edit boxes in tab order: pEditBox->pNextTabEditBox = pNextEditBox, pNextEditBox->pPrevTabEditBox = pEditBox. Halts unless both are non-null edit-box controls (eType 1).
 // @provenance 1.14d asm 004fddd0..004fde22; was named D2WINEDITBOX_SetText, which it does not do.
@@ -68,15 +68,15 @@ void __fastcall D2WINEDITBOX_SetTextFromAnsi(::D2WinEditBox * pEditBox, char * s
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 uint32_t __fastcall D2WINEDITBOX_GetTextLength(uint16_t * pwChar);
 void __fastcall FORMS_DestroyD2WinEditBox(::D2WinEditBox * pWinEditBox);
-char * __stdcall D2WINEDITBOX_GetTextBuffer();
-BOOL __fastcall D2WINEDITBOX_ValidateInput(char * szText);
+char * __stdcall D2WINEDITBOX_GetClipboardText();
+BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText);
 // Clears the selection: nSelAnchor = -1, nSelCursor = 0. Halts (lines 0x1A4/0x1A6) unless
 // pEditBox is a non-null FORM_EditBox. It does not touch focus.
 void __fastcall D2WINEDITBOX_ClearSelection(::D2WinEditBox * pEditBox);
-BOOL __stdcall D2WINEDITBOX_CreateControl(struct D2ControlMsg * pControl, int eFormType, int pDC6);
+BOOL __stdcall D2WINEDITBOX_PlaceCaretAtPoint(struct D2ControlMsg * pMsg, int nX, int nY);
 uint32_t __stdcall D2WINEDITBOX_FilterLetterChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText);
 BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t byKeyChar);
-BOOL __fastcall D2WINEDITBOX_HandleKeyRelease(::D2WinEditBox * pEditBox, char cVirtualKey);
+BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirtualKey);
 BOOL __stdcall PushFlag0x8(struct D2ControlMsg * pControlMsg);
 BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox);
 #endif // D2_MODULE_D2Win

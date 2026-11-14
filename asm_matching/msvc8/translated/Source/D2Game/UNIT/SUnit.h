@@ -76,7 +76,7 @@ void __fastcall SetClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClie
 struct D2ClientStrc * __fastcall SUNIT_GetClient(struct D2UnitStrc * pUnit, char * szFile, int32_t nLine);
 void __fastcall UNITS_SendUnitUpdateToClient(struct D2UnitStrc * pUnit, struct D2ClientStrc * pClient);
 // Prepares a unit for reuse/recycling after removal from the game. Clears changed-stat flags, frees queued packets, clears animation mode and selected unit flags, processes pending inventory updates, and frees child stat lists. Per-type cleanup: resets player last-exp and arena dirty; for monsters clears summoner flags and teleport flag; for items clears REMOVED and NEW item flags. Halts if pUnit is null.
-void __fastcall UNITS_ResetUnitForReuse(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
+void __fastcall UNITS_ClearUpdateData(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall SetupUpdateEvent_AttachEventSound(struct D2UnitStrc * pUnit, eD2TimerTypeDWORD nUpdateType, struct D2UnitStrc * pUpdateUnit);
 // @sourcefile .\UNIT\SUnit.cpp
 void __fastcall InitAnimFrame(struct D2UnitStrc * pUnit);
@@ -126,7 +126,7 @@ void __stdcall SetInteractInfo(struct D2UnitStrc * pUnit, eD2UnitType eInteractU
 void __stdcall ClearInteractInfo(struct D2UnitStrc * pUnit);
 BOOL __fastcall CheckForModeZeroDeath(struct D2UnitStrc * pUnit);
 // Determines whether pAttacker may attack pUnit, resolving owner chains for monsters and reflected missiles. If both resolved units are players, delegates to PLAYERLIST_GetFlagsMasked with the hostile flag (bit 3). Otherwise calls Path::IsAllyOf; returns 0 if allied, 1 if hostile. Returns 0 for self-attack.
-uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pAttacker);
+uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill);
 // Sets the alignment stat (good/neutral/evil, values 0-2) on a unit via the STATE_alignment stat list. Allocates and attaches the stat list if absent, stores the alignment value, toggles the alignment GFX state (0x69), and calls UNITS_OnAlignmentChanged with old and new values. Skips the change for revived units with alignment 0 (neutral). Certain monster class IDs (0x15F/0x160/0x161) always bypass the revive check. The alignment argument is a single byte: callers set only DL and the prologue does MOVZX EBX, DL, so the upper 24 bits of EDX are dead.
 void __fastcall SetAlignment(struct D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOldAlignment);

@@ -25,8 +25,8 @@ namespace D2Client { namespace McpConnect {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b1f0(pfnMCPMessage pfnCallback);
-void __fastcall MCPCONNECT_SetMessageCallback_Unref_0044b200(pfnMCPMessage pfnCallback);
+void __fastcall MCPCONNECT_SetMCPCallback1(pfnMCPMessage pfnCallback);
+void __fastcall MCPCONNECT_SetMCPCallback2(pfnMCPMessage pfnCallback);
 #endif // D2_MODULE_D2Client
 
 }} // namespace D2Client::McpConnect

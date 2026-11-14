@@ -860,7 +860,7 @@ BOOL __fastcall Q36_IsBaalAlive(::SGAMEDATA * pGame) {
 void __fastcall Objects_InitFn75_BaalsPortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_EveOfDestruction);
     D2QuestDataA5Q6Strc* pA5Q6SpecificData = pQuestData->pQuestSpecificData.pA5Q6;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pA5Q6SpecificData->nField_0x94);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pA5Q6SpecificData->nField_0x94);
     pA5Q6SpecificData->nField_0x94 = 2;
 }
 
@@ -893,7 +893,7 @@ BOOL __fastcall OBJOP_A5Q6_WorldstoneLevelTransition(D2ObjectOperateFnArg * pOpe
 void __fastcall Objects_InitFn77_LastPortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_EveOfDestruction);
     D2QuestDataA5Q6Strc* pQuestSpecificA1Q3 = pQuestData->pQuestSpecificData.pA5Q6;
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, pQuestSpecificA1Q3->nField_0x9C);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, pQuestSpecificA1Q3->nField_0x9C);
     pQuestSpecificA1Q3->nField_0x9C = 2;
 }
 

@@ -748,7 +748,7 @@
       ]
     },
     {
-      "name": "GetTargetX",
+      "name": "GetScreenX",
       "address": "00620650",
       "lines": [
         {
@@ -758,7 +758,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "GetTargetX",
+        "GetScreenX",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -768,7 +768,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1c710494",
+      "dh": "1f9635b8",
       "paramStorage": [
         [
           "pUnit",
@@ -777,7 +777,7 @@
       ]
     },
     {
-      "name": "GetTargetY",
+      "name": "GetScreenY",
       "address": "006206b0",
       "lines": [
         {
@@ -787,7 +787,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "GetTargetY",
+        "GetScreenY",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -797,7 +797,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "cfed5cae",
+      "dh": "dc2080be",
       "paramStorage": [
         [
           "pUnit",
@@ -868,7 +868,7 @@
       ]
     },
     {
-      "name": "SetTargetX",
+      "name": "SetScreenX",
       "address": "006207f0",
       "lines": [
         {
@@ -878,7 +878,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "SetTargetX",
+        "SetScreenX",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -887,7 +887,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7b765416",
+      "dh": "a2cd18a8",
       "paramStorage": [
         [
           "pUnit",
@@ -900,7 +900,7 @@
       ]
     },
     {
-      "name": "SetTargetY",
+      "name": "SetScreenY",
       "address": "00620830",
       "lines": [
         {
@@ -910,7 +910,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "SetTargetY",
+        "SetScreenY",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -919,7 +919,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "cc04ca0f",
+      "dh": "7518fa8f",
       "paramStorage": [
         [
           "pUnit",
@@ -968,7 +968,7 @@
       ]
     },
     {
-      "name": "GetTargetCoords",
+      "name": "GetScreenCoords",
       "address": "00620900",
       "lines": [
         {
@@ -978,12 +978,12 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "GetTargetCoords",
+        "GetScreenCoords",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "GetTargetX",
-        "GetTargetY"
+        "GetScreenX",
+        "GetScreenY"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -991,7 +991,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b3ba67bb",
+      "dh": "ad0d064f",
       "paramStorage": [
         [
           "pUnit",
@@ -1415,7 +1415,7 @@
       ]
     },
     {
-      "name": "AddWalkVelocityStatIfExistToPlayer",
+      "name": "UNITS_AddRunVelocityBonus",
       "address": "00620e80",
       "lines": [
         {
@@ -1425,7 +1425,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "AddWalkVelocityStatIfExistToPlayer",
+        "UNITS_AddRunVelocityBonus",
         "AllocStatList",
         "STATLIST_SetStatValue",
         "STATLIST_AttachStatListToUnit"
@@ -1438,7 +1438,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "a15e8001",
+      "dh": "a37e8642",
       "paramStorage": [
         [
           "pUnit",
@@ -1523,7 +1523,7 @@
       ]
     },
     {
-      "name": "ChangeAnimMode",
+      "name": "SetCurrentRoomInvalid",
       "address": "00620fa0",
       "lines": [
         {
@@ -1533,7 +1533,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "ChangeAnimMode",
+        "SetCurrentRoomInvalid",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -1544,14 +1544,14 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2c5318d1",
+      "dh": "d28b22e1",
       "paramStorage": [
         [
           "pUnit",
           "Stack[0x4]:4"
         ],
         [
-          "nMode",
+          "bInvalid",
           "Stack[0x8]:4"
         ]
       ]
@@ -1586,7 +1586,7 @@
       ]
     },
     {
-      "name": "GetInventoryPage",
+      "name": "UNITS_GetInventoryRecordId",
       "address": "00621050",
       "lines": [
         {
@@ -1596,7 +1596,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -1609,7 +1609,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8ed7dff4",
+      "dh": "8775784d",
       "paramStorage": [
         [
           "pUnit",
@@ -1955,7 +1955,7 @@
       ]
     },
     {
-      "name": "CanPlayAnimMode",
+      "name": "UNITS_CanAnimModeUseVelocityModifier",
       "address": "006214a0",
       "lines": [
         {
@@ -1965,7 +1965,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "CanPlayAnimMode",
+        "UNITS_CanAnimModeUseVelocityModifier",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -1979,7 +1979,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "864bde1c",
+      "dh": "6170d90d",
       "paramStorage": [
         [
           "pUnit",
@@ -2000,7 +2000,7 @@
       ]
     },
     {
-      "name": "UNITS_CheckAnimateAtFrameEnd",
+      "name": "UNITS_CanAnimModeUseAttackRate",
       "address": "00621580",
       "lines": [
         {
@@ -2010,7 +2010,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "UNITS_CheckAnimateAtFrameEnd",
+        "UNITS_CanAnimModeUseAttackRate",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -2027,7 +2027,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5043eb26",
+      "dh": "f88e8cba",
       "paramStorage": [
         [
           "nAnimMode",
@@ -2048,7 +2048,7 @@
       ]
     },
     {
-      "name": "UNITS_GetAnimFrameSkip",
+      "name": "UNITS_IsAnimModeSpeedFixed",
       "address": "00621630",
       "lines": [
         {
@@ -2058,13 +2058,13 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "UNITS_GetAnimFrameSkip"
+        "UNITS_IsAnimModeSpeedFixed"
       ],
       "usedTypes": [
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "27898147",
+      "dh": "5d13376f",
       "paramStorage": [
         [
           "nAnimMode",
@@ -2081,7 +2081,7 @@
       ]
     },
     {
-      "name": "HasSequenceTransition",
+      "name": "UNITS_IsAnimSpeedSetByCastRate",
       "address": "006216e0",
       "lines": [
         {
@@ -2091,7 +2091,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "HasSequenceTransition",
+        "UNITS_IsAnimSpeedSetByCastRate",
         "GetCurrentSkill",
         "GetSkillId",
         "TXT_Skills_GetLine"
@@ -2104,7 +2104,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "9585b94d",
+      "dh": "b3b3abfd",
       "paramStorage": [
         [
           "pUnit",
@@ -2132,13 +2132,13 @@
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
         "GetDiminishedStat",
-        "ITEM_GetMinimalStatValueShifted"
+        "STATLIST_UnitGetStatValueUnchecked"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "9584aaf8",
+      "dh": "d3aae9e7",
       "paramStorage": [
         [
           "pUnit",
@@ -2804,7 +2804,7 @@
         "GetStatsByFlags",
         "AllocStatList",
         "STATLIST_AttachStatListToUnit",
-        "STATLIST_ClearOverlayFlags",
+        "STATLIST_SetOverlayPending",
         "STATLIST_SetStatValueSimple",
         "ROOM_LinkUnitToUpdateList"
       ],
@@ -2816,7 +2816,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "04aa34f4",
+      "dh": "3a702f1c",
       "paramStorage": [
         [
           "pUnit",
@@ -2875,13 +2875,13 @@
       "calledFunctions": [
         "GetCurrentLifePercentage",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp"
+        "STATLIST_GetMaxLifeFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "079e669f",
+      "dh": "35b0810a",
       "paramStorage": [
         [
           "pUnit",
@@ -3305,7 +3305,7 @@
       "calledFunctions": [
         "GetDefense",
         "STATSEX_GetCurrentStat",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "UNIT_GetUnitState",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
@@ -3321,7 +3321,7 @@
         "eD2States",
         "int32_t"
       ],
-      "dh": "bb57413c",
+      "dh": "8486c7c6",
       "paramStorage": [
         [
           "pUnit",
@@ -3500,30 +3500,30 @@
         "POINT",
         "int32_t"
       ],
-      "dh": "2f7f2fa5",
+      "dh": "d34c9794",
       "paramStorage": [
         [
-          "x",
+          "nX1",
           "ECX:4"
         ],
         [
-          "size",
+          "nSize2",
           "EDX:4"
         ],
         [
-          "x2",
+          "nX2",
           "EAX:4"
         ],
         [
-          "y",
+          "nY1",
           "Stack[0x4]:4"
         ],
         [
-          "size2",
+          "nSize1",
           "Stack[0x8]:4"
         ],
         [
-          "y2",
+          "nY2",
           "Stack[0xc]:4"
         ],
         [
@@ -3761,7 +3761,7 @@
       ]
     },
     {
-      "name": "CalcRecoveryPriority",
+      "name": "UNITS_GetHealingCost",
       "address": "00622de0",
       "lines": [
         {
@@ -3771,16 +3771,16 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "CalcRecoveryPriority",
-        "GetTxtMaxHp",
-        "GetTxtMaxMana",
+        "UNITS_GetHealingCost",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "a3fd2d4e",
+      "dh": "97de9989",
       "paramStorage": [
         [
           "nMpDeficit",
@@ -4549,13 +4549,13 @@
       "calledFunctions": [
         "IsCorpseUseable",
         "TXT_MonStats_GetMonStats2",
-        "STATES_HasPassiveState"
+        "STATES_HasUdeadFlagState"
       ],
       "usedTypes": [
         "D2MonStats2Txt",
         "D2UnitStrc"
       ],
-      "dh": "886effb2",
+      "dh": "6880c271",
       "paramStorage": [
         [
           "pUnit",
@@ -4713,7 +4713,7 @@
       ]
     },
     {
-      "name": "GetWeaponAnimClass",
+      "name": "UNITS_GetFrameBonus",
       "address": "00623b10",
       "lines": [
         {
@@ -4724,7 +4724,7 @@
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
         "SKILLS_GetStateTransformGfx",
-        "GetWeaponAnimClass",
+        "UNITS_GetFrameBonus",
         "GetWeaponBySkill",
         "ITEM_GetWeaponAnimClass",
         "CanDualWield"
@@ -4736,7 +4736,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "b6ab2604",
+      "dh": "8fd4c945",
       "paramStorage": [
         [
           "pUnit",
@@ -4887,7 +4887,7 @@
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
         "AdvanceAnimFrame",
-        "GetWeaponAnimClass",
+        "UNITS_GetFrameBonus",
         "UpdateSequenceMode"
       ],
       "usedTypes": [
@@ -4895,7 +4895,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "7bab2a65",
+      "dh": "f4e64dfd",
       "paramStorage": [
         [
           "pUnit",
@@ -4917,15 +4917,15 @@
         "UpdateAnimSpeed",
         "SKILLS_GetStateTransformGfx",
         "SetAnimData",
-        "HasSequenceTransition",
+        "UNITS_IsAnimSpeedSetByCastRate",
         "GetDiminishedStat",
         "UNIT_GetUnitState",
         "UNITS_GetAnimFrameTime",
         "SetVelocities",
-        "CanPlayAnimMode",
+        "UNITS_CanAnimModeUseVelocityModifier",
         "STATSEX_GetCurrentStat",
         "UNITS_GetBaseWalkVelocity",
-        "UNITS_CheckAnimateAtFrameEnd",
+        "UNITS_CanAnimModeUseAttackRate",
         "UpdateDualWieldStats",
         "CanDualWield",
         "INVENTORY_GetItemByGridOffset",
@@ -4933,7 +4933,7 @@
         "ITEMS_IsA",
         "ITEMSTATS_CheckUnitHasStateFlagIndex",
         "SKILL_CalcAttackFrames",
-        "UNITS_GetAnimFrameSkip"
+        "UNITS_IsAnimModeSpeedFixed"
       ],
       "usedTypes": [
         "D2AnimDataRecordStrc",
@@ -4943,7 +4943,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "05568831",
+      "dh": "fc692614",
       "paramStorage": [
         [
           "pUnit",
@@ -4971,9 +4971,9 @@
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
         "InitAnimMode",
-        "GetWeaponAnimClass",
+        "UNITS_GetFrameBonus",
         "SKILLS_GetStateTransformGfx",
-        "AddWalkVelocityStatIfExistToPlayer",
+        "UNITS_AddRunVelocityBonus",
         "UpdateAnimSpeed",
         "InitializeSequence",
         "UNITS_IsShapeshifted",
@@ -4995,7 +4995,7 @@
         "uint32_t",
         "uint64_t"
       ],
-      "dh": "ba7e6757",
+      "dh": "c048c3ec",
       "paramStorage": [
         [
           "pUnitArg",
@@ -5004,7 +5004,7 @@
       ]
     },
     {
-      "name": "SetupUpdateFlag",
+      "name": "ChangeAnimMode",
       "address": "00624690",
       "lines": [
         {
@@ -5014,7 +5014,7 @@
       ],
       "namespace": "D2Common::Units::Units",
       "calledFunctions": [
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ROOM_LinkUnitToUpdateList",
         "STATLIST_MarkUnitStatsChanged",
         "InitAnimMode"
@@ -5023,14 +5023,14 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "d99ae983",
+      "dh": "c5b6743f",
       "paramStorage": [
         [
           "pUnit",
           "Stack[0x4]:4"
         ],
         [
-          "nAnimMode",
+          "nMode",
           "Stack[0x8]:4"
         ]
       ]

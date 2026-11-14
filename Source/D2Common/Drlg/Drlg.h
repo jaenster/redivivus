@@ -381,7 +381,7 @@ void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(struct D2PoolManagerStrc * pMemor
 // DRLG outdoor preset placement - place multiple preset objects without overlap checking all positions
 void __stdcall DoNotCheckAll(struct D2DrlgWallLayerGridsStrc * pRoomCtx, struct D2LvlSubTxt * pSubTxt);
 // Frees all grid and file data from a maze room's preset data.
-void __fastcall DRLGMAZE_FreeRoomPresetData(struct D2LvlSubTxt * pData);
+void __fastcall DRLGTILESUB_FreeDrlgFile(struct D2LvlSubTxt * pLvlSubTxtRecord);
 uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(struct D2RoomExStrc * pRoomEx, int32_t nSubType, int32_t nSubTheme);
 void __fastcall SubTypeWpShrine(struct D2DrlgWallLayerGridsStrc * pWallLayerGrids);
 // Returns whether the room's selected preset is a single-file type.

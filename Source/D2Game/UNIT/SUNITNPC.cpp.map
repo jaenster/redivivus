@@ -49,7 +49,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_UpdateNpcInventory",
+      "name": "SUNITNPC_RepairItem",
       "address": "005761c0",
       "lines": [
         {
@@ -59,7 +59,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_UpdateNpcInventory",
+        "SUNITNPC_RepairItem",
         "ITEM_CanBeRepaired",
         "ITEM_GetTxtItemTypes_throwable",
         "IsStackable",
@@ -67,10 +67,10 @@
         "STATLIST_SetUnitStat",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
-        "ITEMMODE_HandleCursorItem",
+        "ITEMMODE_RechargeItem",
         "CheckItemFlag",
         "ITEMMODE_ProcessItemFlags",
-        "GetTxtMaxDurability"
+        "STATLIST_GetMaxDurabilityFromUnit"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -80,7 +80,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "90f36fe6",
+      "dh": "54516151",
       "paramStorage": [
         [
           "pGame",
@@ -91,7 +91,7 @@
           "EDX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "Stack[0x4]:4"
         ]
       ]
@@ -108,13 +108,13 @@
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
         "SUNITNPC_RepairAllItemCallback",
-        "SUNITNPC_UpdateNpcInventory"
+        "SUNITNPC_RepairItem"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "0709ad55",
+      "dh": "14eb25a5",
       "paramStorage": [
         [
           "pGame",
@@ -202,7 +202,7 @@
         "ITEM_GetItemsTxt_szCode",
         "ITEM_GetTxtItemTypes_storepage",
         "ITEM_SetItemData_ePage",
-        "SUNITNPC_UpdateNpcInventory",
+        "SUNITNPC_RepairItem",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "SUNITPROXY_AddItemToNpcProxy",
@@ -223,7 +223,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d3145308",
+      "dh": "eefe6d6b",
       "paramStorage": [
         [
           "pUnit",
@@ -305,7 +305,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_FillNpcInventory",
+      "name": "SUNITNPC_RemoveStoreItem",
       "address": "005766d0",
       "lines": [
         {
@@ -315,7 +315,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_FillNpcInventory",
+        "SUNITNPC_RemoveStoreItem",
         "SERVER_TakeItemToCursor",
         "RefreshInventory",
         "UpsertToUpdateList",
@@ -330,14 +330,14 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ddb5c2b1",
+      "dh": "f6c82223",
       "paramStorage": [
         [
-          "pUnit",
+          "pNpc",
           "ECX:4"
         ],
         [
-          "pUnit2",
+          "pItem",
           "EDX:4"
         ],
         [
@@ -345,7 +345,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "bDeleteItem",
+          "bQueueDelete",
           "Stack[0x8]:4"
         ]
       ]
@@ -778,7 +778,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_DeductGoldForPurchase",
+      "name": "SUNITNPC_RemovePurchasedItemFromStore",
       "address": "00576f50",
       "lines": [
         {
@@ -788,14 +788,14 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_DeductGoldForPurchase",
+        "SUNITNPC_RemovePurchasedItemFromStore",
         "GetGameNpcByUnit",
         "INVENTORY_GetFirstItem",
         "GetCarriedItem",
         "INVENTORY_GetNextItem",
         "SUNITNPC_RefreshNpcItem",
         "SUNITNPC_CheckNpcCanSellItem",
-        "SUNITNPC_FillNpcInventory"
+        "SUNITNPC_RemoveStoreItem"
       ],
       "usedTypes": [
         "D2GameNpcStrc",
@@ -803,14 +803,14 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1086d82a",
+      "dh": "6b48e7e1",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pNpc",
           "EDX:4"
         ],
         [
@@ -818,11 +818,11 @@
           "Stack[0x4]:4"
         ],
         [
-          "pPlayerRaw",
+          "pPlayer",
           "Stack[0x8]:4"
         ],
         [
-          "nBuyMode",
+          "nTransactionType",
           "Stack[0xc]:4"
         ]
       ]
@@ -935,7 +935,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_ValidateGambleItem",
+      "name": "SUNITNPC_UpdateHirelingPosition",
       "address": "005773d0",
       "lines": [
         {
@@ -945,7 +945,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ValidateGambleItem",
+        "SUNITNPC_UpdateHirelingPosition",
         "SERVER_GetUnitPetByTypeId",
         "GetYPos",
         "GetXPos",
@@ -958,20 +958,20 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c0f492ac",
+      "dh": "49ff6960",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ]
       ]
     },
     {
-      "name": "SUNITNPC_ProcessGambleResult",
+      "name": "SUNITNPC_RefreshHirelingItemStats",
       "address": "00577470",
       "lines": [
         {
@@ -981,7 +981,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ProcessGambleResult",
+        "SUNITNPC_RefreshHirelingItemStats",
         "INVENTORY_GetFirstItem",
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
@@ -992,10 +992,10 @@
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "7c782585",
+      "dh": "68f4d173",
       "paramStorage": [
         [
-          "pUnit",
+          "pHireling",
           "ECX:4"
         ]
       ]
@@ -1149,10 +1149,10 @@
         "IsStackable",
         "ITEM_GetTxtItemTypes_autostack",
         "ITEM_GetMaxStack",
-        "INVENTORY_FindSocketableItemInMain",
-        "IsItemSocketable",
+        "INVENTORY_FindEquippedItemForStack",
+        "ITEMS_AreStackablesEqual",
         "STATSEX_GetCurrentStat",
-        "INVENTORY_FindSocketableItemInStash"
+        "INVENTORY_FindBackpackItemForStack"
       ],
       "usedTypes": [
         "D2InventoryStrc",
@@ -1160,7 +1160,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "87ea8c8a",
+      "dh": "f1bcf774",
       "paramStorage": [
         [
           "pGameStrc",
@@ -1206,27 +1206,27 @@
         "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
         "SUNITNPC_CheckNpcCanSellItem",
         "ITEMS_IsA",
-        "ITEMMODE_ValidateSocketedItems",
+        "ITEMMODE_FindBookWithSpaceForScroll",
         "ITEM_GetTxtItemTypes_autostack",
         "STATLIST_SetUnitStat",
         "GetQuestBitBuffer",
         "SUNITNPC_FindExistingStackInInventory",
         "CheckIfPlayerCanAffordCost",
-        "SUNITNPC_DeductGoldForPurchase",
+        "SUNITNPC_RemovePurchasedItemFromStore",
         "STATLIST_AddUnitStat",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
         "INVENTORY_CheckIfItemCanBeAutoBelted",
         "ITEM_CloneFromSerializedData",
         "IsStackable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetEquipedWeapon",
         "GetWeaponClass",
-        "ITEMMODE_TryPutItemInInventory",
+        "ITEMMODE_EquipItemAtBestBodyLoc",
         "ITEM_SetItemData_ePage",
         "SERVER_ItemToInventory",
         "ITEM_TryPlaceInBelt",
         "ITEM_EditItemData_eItemFlag",
-        "ITEMMODE_CheckItemEthereal",
+        "ITEMMODE_AddItemQuantity",
         "ChangeGoldForPlayer",
         "ITEM_DeleteItemAndFreeUnit"
       ],
@@ -1242,7 +1242,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b5504bc6",
+      "dh": "9d68584e",
       "paramStorage": [
         [
           "pGame",
@@ -1253,11 +1253,11 @@
           "EDX:4"
         ],
         [
-          "pBoughtItem",
+          "pNpc",
           "Stack[0x4]:4"
         ],
         [
-          "nNpcId",
+          "nItemGUID",
           "Stack[0x8]:4"
         ],
         [
@@ -1393,7 +1393,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_ProcessGamble",
+      "name": "SUNITNPC_ProcessRepair",
       "address": "00578050",
       "lines": [
         {
@@ -1403,7 +1403,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ProcessGamble",
+        "SUNITNPC_ProcessRepair",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
@@ -1417,7 +1417,7 @@
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
         "AlreadyHoldingItem",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "ITEM_CanBeRepaired",
         "IsStackable",
         "ITEMS_CheckChargedSkillFullyCharged",
@@ -1428,7 +1428,7 @@
         "CheckItemFlag",
         "STATLIST_SetUnitStat",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
-        "SUNITNPC_UpdateNpcInventory"
+        "SUNITNPC_RepairItem"
       ],
       "usedTypes": [
         "D2BitBufferStrc",
@@ -1441,7 +1441,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ddec1908",
+      "dh": "d802d808",
       "paramStorage": [
         [
           "pGame",
@@ -1496,7 +1496,7 @@
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x2A_NpcTransaction",
         "CheckItemFlag",
-        "ITEMMODE_ProcessItemSell"
+        "ITEMMODE_IdentifyItem"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -1508,7 +1508,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "47e4ec88",
+      "dh": "8ff1d595",
       "paramStorage": [
         [
           "pGame",
@@ -1569,14 +1569,14 @@
         "GetPlayerData",
         "FindUnitFromTable",
         "CheckItemFlag",
-        "ITEMMODE_ProcessItemSell"
+        "ITEMMODE_IdentifyItem"
       ],
       "usedTypes": [
         "D2UnitDataPlayerStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "092068d5",
+      "dh": "8cdf32a2",
       "paramStorage": [
         [
           "pGame",
@@ -1663,7 +1663,7 @@
         "SUNITNPC_RepairAndRecharge",
         "ITEM_CreateFromTemplate",
         "ITEM_SetItemData_ePage",
-        "SUNITNPC_UpdateNpcInventory",
+        "SUNITNPC_RepairItem",
         "ITEM_EditItemData_eItemFlag",
         "GetYPos",
         "GetXPos",
@@ -1684,7 +1684,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cff3b8e5",
+      "dh": "24af1cb8",
       "paramStorage": [
         [
           "pGame",
@@ -1790,7 +1790,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_HandleHireableAction",
+      "name": "SUNITNPC_RemoveCurableStates",
       "address": "00578c20",
       "lines": [
         {
@@ -1800,7 +1800,7 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_HandleHireableAction",
+        "SUNITNPC_RemoveCurableStates",
         "UNIT_GetUnitState",
         "ITEMSTATS_CheckStateFlagArray12",
         "GetStatsByState",
@@ -1813,7 +1813,7 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "80850249",
+      "dh": "49ac5189",
       "paramStorage": [
         [
           "pUnit",
@@ -1834,9 +1834,9 @@
       "calledFunctions": [
         "HealByPlayerPetsByNPC",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
-        "SUNITNPC_HandleHireableAction",
+        "SUNITNPC_RemoveCurableStates",
         "GetStatsByState",
         "STATLIST_RemoveAndRecalc",
         "FreeStatList"
@@ -1846,7 +1846,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "34a52b22",
+      "dh": "9adf0899",
       "paramStorage": [
         [
           "pUnit",
@@ -1871,16 +1871,16 @@
       "calledFunctions": [
         "HealByPlayerByNPC",
         "GetInteractedNpc",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "SendAttributeUpdate",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "GetStatsByState",
         "STATLIST_RemoveAndRecalc",
         "FreeStatList",
-        "SUNITNPC_HandleHireableAction",
+        "SUNITNPC_RemoveCurableStates",
         "PetsForEach",
         "SetupUpdateEvent_AttachEventSound"
       ],
@@ -1890,7 +1890,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "b4f85fba",
+      "dh": "7281db4a",
       "paramStorage": [
         [
           "pGame",
@@ -1907,7 +1907,7 @@
       ]
     },
     {
-      "name": "Init",
+      "name": "SUNITNPC_OnInteractHeal",
       "address": "00578e70",
       "lines": [
         {
@@ -1917,21 +1917,21 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "Init",
+        "SUNITNPC_OnInteractHeal",
         "HealByPlayerByNPC"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7b4f363c",
+      "dh": "92cb751c",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
@@ -1954,11 +1954,11 @@
         "ExecutePrayUnused",
         "FindUnitFromTable",
         "GetInteractedNpc",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
-        "CalcRecoveryPriority",
-        "GetTxtMaxMana",
-        "GetTxtMaxStamina",
+        "UNITS_GetHealingCost",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATLIST_GetMaxStaminaFromUnit",
         "CheckIfPlayerCanAffordCost",
         "HealByPlayerByNPC",
         "SUNIT_GetClient",
@@ -1972,7 +1972,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2f8c5743",
+      "dh": "77cee03a",
       "paramStorage": [
         [
           "pGame",
@@ -2293,7 +2293,7 @@
         "SUNITPROXY_AddPlayerInteraction",
         "SUNITNPC_CheckNpcCanSellItem",
         "ITEM_CloneFromSerializedData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_GetTxtItemTypes_storepage",
         "ITEM_DeleteItemAndFreeUnit",
         "ITEM_SetItemData_ePage",
@@ -2301,10 +2301,10 @@
         "GetXPosFromDynamicPathUnit",
         "SERVER_ItemToInventory",
         "SUNITNPC_SetItemForNpc",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATLIST_SetUnitStat",
         "ITEM_GetMaxStack",
-        "ToCursorItem",
+        "ITEMMODE_RemoveItemIfOnCursor",
         "GetBodyLocation",
         "ITEMMODE_TakeItemFromBodyLoc",
         "ITEMS_IsA",
@@ -2337,7 +2337,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5de91eea",
+      "dh": "1c474367",
       "paramStorage": [
         [
           "pGame",
@@ -2366,7 +2366,7 @@
       ]
     },
     {
-      "name": "SUNITNPC_ProcessSellConfirmation",
+      "name": "SUNITNPC_ResurrectHireling",
       "address": "00579aa0",
       "lines": [
         {
@@ -2376,20 +2376,20 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_ProcessSellConfirmation",
+        "SUNITNPC_ResurrectHireling",
         "SERVER_GetUnitPetByTypeId",
         "AssignMinionOwner",
         "RemovePetByGuidAndNotify",
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "FreeServerUnit",
-        "SetupUpdateFlag",
-        "GetTxtMaxHp",
+        "ChangeAnimMode",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
         "PETS_ResummonPetByUnit",
         "CreateUnitNode",
         "SetState",
-        "SUNITNPC_ProcessGambleResult",
+        "SUNITNPC_RefreshHirelingItemStats",
         "GetYPos",
         "GetXPos",
         "PETS_ManagePetsByType",
@@ -2403,24 +2403,24 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "6cabff2d",
+      "dh": "0035bbe6",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
-          "pMerc",
+          "pHireling",
           "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "SUNITNPC_HandleSellAction",
+      "name": "SUNITNPC_ResurrectMerc",
       "address": "00579c00",
       "lines": [
         {
@@ -2430,17 +2430,17 @@
       ],
       "namespace": "D2Game::UNIT::SUNITNPC",
       "calledFunctions": [
-        "SUNITNPC_HandleSellAction",
+        "SUNITNPC_ResurrectMerc",
         "GetInteractedNpc",
         "FindUnitFromTable",
         "STATSEX_GetCurrentStat",
         "SERVER_GetUnitPetByTypeId",
         "GetReviveCost",
         "CheckIfPlayerCanAffordCost",
-        "SetupUpdateFlag",
-        "GetTxtMaxHp",
+        "ChangeAnimMode",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATLIST_SetUnitStat",
-        "SUNITNPC_ProcessSellConfirmation",
+        "SUNITNPC_ResurrectHireling",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x9B_MercReviveCost",
         "NET_D2GS_SERVER_Send_0x2A_NpcTransaction"
@@ -2453,7 +2453,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1d30170d",
+      "dh": "9979ec69",
       "paramStorage": [
         [
           "pGame",
@@ -2499,16 +2499,16 @@
         "ITEM_GetItemData_eD2ItemFlag",
         "ITEMFLAG_CheckFlag",
         "ITEM_GetItemData_szPlayerName",
-        "ToCursorItem",
+        "ITEMMODE_RemoveItemIfOnCursor",
         "GetLevel",
         "ITEM_CreateItemInstance",
-        "SUNITNPC_UpdateNpcInventory",
-        "ITEMMODE_GetItemCursorMode",
+        "SUNITNPC_RepairItem",
+        "ITEMMODE_SetItemIdentified",
         "ITEM_SetItemData_ePage",
         "ITEM_EditItemData_eItemFlag",
-        "ITEM_GetPlayerNameAkaNamedString",
+        "ITEMS_SetPlayerName",
         "SERVER_ItemToInventory",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetCoords",
         "UNITS_GetRoom",
         "FindBestSpotToSpawnItem",
@@ -2559,7 +2559,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "03f80b44",
+      "dh": "4b46c4d8",
       "paramStorage": [
         [
           "pGame",

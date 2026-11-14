@@ -1020,10 +1020,10 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
       }
     } else {
       int32_t nWorldOffset;
-      nBais = D2Common::Units::GetTargetX(pUnit);
+      nBais = D2Common::Units::GetScreenX(pUnit);
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
       __frame0.nScreenX = nBais - nWorldOffset;
-      nBais = D2Common::Units::GetTargetY(pUnit);
+      nBais = D2Common::Units::GetScreenY(pUnit);
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
       __frame0.nScreenY = nBais - nWorldOffset;
     }
@@ -1416,7 +1416,7 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
           if (nSpriteLoaded && sGfxData.pDC6Block) {
             nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
             nDrawWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-            nSpriteY = D2Common::Units::GetTargetY(pUnit);
+            nSpriteY = D2Common::Units::GetScreenY(pUnit);
             nSpriteY += nOffsetY - nDrawWorldOffsetY;
             if (nSpriteY > *pOutMaxY) {
               *pOutMaxY = nSpriteY;

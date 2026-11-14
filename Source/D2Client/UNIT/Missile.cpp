@@ -536,7 +536,7 @@ void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     }
 
     D2Common::Units::Missile::AllocMissileData(pUnit);
-    D2Common::Units::SetupUpdateFlag(pUnit, (uint32_t)pMissileTxt->CollideType);
+    D2Common::Units::ChangeAnimMode(pUnit, (uint32_t)pMissileTxt->CollideType);
     D2Common::PATH::DynamicPath::AllocDynamicPath(nullptr, pRoom, nX, nY, pUnit, 1);
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (pMissileTxt->Collision != '\0') {
@@ -545,7 +545,7 @@ void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
       D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
     }
 
-    D2Common::PATH::DynamicPath::PATH_SetCollisionPattern(pDynamicPath, MISSILECLTCOLLIDEFUNCS[pMissileTxt->CollideType].nFlags);
+    D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, MISSILECLTCOLLIDEFUNCS[pMissileTxt->CollideType].nFlags);
     if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
       pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
     } else {
@@ -699,7 +699,7 @@ static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStr
     }
 
     int nPierceChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_skill_pierce, 0);
-    nMissileClassId = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit2, UNITSTAT_item_pierce, 0);
+    nMissileClassId = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_pierce, 0);
     nPierceChance += nMissileClassId;
     if (!nPierceChance) {
       return;
@@ -4662,7 +4662,7 @@ void __fastcall MISSILE_CltDoFn66_WorldStoneShake(D2UnitStrc * pUnit) {
         bInUberArea = true;
       }
       if (bInUberArea) {
-        D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
+        D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
         D2Common::Units::UpdateFrame(pUnit);
         nTargetX = D2Common::Units::Missile::GetTargetX(pUnit);
         if (!nTargetX || (newSeed = D2_SEED_NEXT(pUnit->sSeed) , pUnit->sSeed = newSeed , !(newSeed.nSeedLow & 0x3f))) {
@@ -5231,7 +5231,7 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
       if (pTarget) {
         if (*((uint8_t*)pMissileTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2] && pOwner->eUnitType <= UNIT_MONSTER) {
           bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pOwner, STATE_pierce);
-          if (bIsOwner || (nMissileClassId = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_pierce, 0) , nMissileClassId != 0)) {
+          if (bIsOwner || (nMissileClassId = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_pierce, 0) , nMissileClassId != 0)) {
             nPierceResult = MISSILE_CheckAndDecrementPierce(pUnit);
           }
         }
@@ -5331,7 +5331,7 @@ void __fastcall MISSILE_CltDoFn43_FollowOwner(D2UnitStrc * pUnit) {
       }
     }
 
-    D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
+    D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
     D2Common::Units::UpdateFrame(pUnit);
 }
 
@@ -5511,10 +5511,10 @@ void __fastcall MISSILE_CltDoFn02_GroundSplat(D2UnitStrc * pUnit) {
       D2Common::PATH::DynamicPath::SetVelocities(pUnit->pPath.pDynamicPath, 0, ".\\UNIT\\Missile.cpp", 0x7f);
     }
 
-    int32_t nTargetCoord = D2Common::Units::GetTargetX(pUnit);
+    int32_t nTargetCoord = D2Common::Units::GetScreenX(pUnit);
     int32_t nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
     if (nTargetCoord - nWorldOffset >= 0 && nTargetCoord - nWorldOffset <= UI::SpellSel::WindowSizeX) {
-      nTargetCoord = D2Common::Units::GetTargetY(pUnit);
+      nTargetCoord = D2Common::Units::GetScreenY(pUnit);
       nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
       if (nTargetCoord - nWorldOffset >= 0 && nTargetCoord - nWorldOffset <= UI::ui::WindowSizeY + 0x40) {
         D2Common::Units::Missile::SetCurrentFrame(pUnit, 0x80);
@@ -7214,7 +7214,7 @@ void __fastcall MISSILE_CltDoFn44_Distraction(D2UnitStrc * pUnit) {
                 MakeMissileAtXY(pUnit, (int)pMissileTxt->CltSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nMissileLevel);
               }
 
-              D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
+              D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
               MISSILE_CltDoFn01_BasicMissile(pUnit);
               return;
             }

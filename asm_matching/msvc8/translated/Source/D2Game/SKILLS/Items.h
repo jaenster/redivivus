@@ -20,9 +20,26 @@ struct D2MagicAffixTxt;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 
+struct D2LowQualityItemsTxt;
 struct D2RareAffixTxt;
 
 // Data types
+#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
+#define D2_DEFINED_D2LowQualityItemsTableStrc
+struct D2LowQualityItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
+};
+
+#endif // D2_DEFINED_D2LowQualityItemsTableStrc
+#ifndef D2_DEFINED_D2LowQualityItemsTxt
+#define D2_DEFINED_D2LowQualityItemsTxt
+struct D2LowQualityItemsTxt {
+    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ uint16_t wNameStringId;
+};
+
+#endif // D2_DEFINED_D2LowQualityItemsTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 struct D2MagicAffixCandidateStrc {
     /* 0x00 */ int32_t nAffixIndex;
@@ -119,7 +136,7 @@ int32_t __fastcall ITEMMOD_GetScrollBookIndex(struct D2UnitStrc * pUnit, int32_t
 // Body continues at 005c276a, the JNZ target of 005c2761 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'ITEMMOD_GenerateUniqueItemInternal'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'ITEMMOD_GenerateUniqueItemInternal':
 // Server-side: attempts to convert an item into a random Set item. Doubles the item's durability/maxdurability (clamped to 255), counts eligible set entries from sgptDataTable->pTxtSets (version<100), then uses the item's RNG seed to pick a set index. Iterates the set's items to find one whose base-item code matches this unit, sets that file index, marks it IDENTIFIED, and applies rune/gem stats. Restores the original seed (low=saved, high=0x29a) on failure. Returns 1 if an item was assigned, 0 otherwise.
-BOOL __stdcall ITEMMOD_GenerateUniqueItem(struct D2UnitStrc * pItem);
+BOOL __stdcall ITEMMOD_GenerateLegacySetItem(struct D2UnitStrc * pItem);
 // Called by ITEM_ApplyQualityAndAffixes for QUALITY_SET: when the item version
 // (ITEM_GetItemData_wItemVersion) is non-zero returns ITEMMOD_GenerateSetItem, otherwise
 // ITEMMOD_GenerateUniqueItem. It makes no magic item.

@@ -391,7 +391,7 @@
       ]
     },
     {
-      "name": "STATES_HasHideState",
+      "name": "STATES_HasAuraFlagState",
       "address": "0063a250",
       "lines": [
         {
@@ -401,13 +401,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasHideState",
+        "STATES_HasAuraFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9a509f4f",
+      "dh": "3fa22046",
       "paramStorage": [
         [
           "pUnit",
@@ -441,7 +441,7 @@
       ]
     },
     {
-      "name": "STATES_HasTransformState",
+      "name": "STATES_HasPgsvFlagState",
       "address": "0063a2b0",
       "lines": [
         {
@@ -451,13 +451,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasTransformState",
+        "STATES_HasPgsvFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "72e757c2",
+      "dh": "991d8ddf",
       "paramStorage": [
         [
           "pUnit",
@@ -466,7 +466,7 @@
       ]
     },
     {
-      "name": "STATES_MoveTransformToGfx",
+      "name": "STATES_MovePgsvToGfx",
       "address": "0063a2d0",
       "lines": [
         {
@@ -476,13 +476,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_MoveTransformToGfx",
+        "STATES_MovePgsvToGfx",
         "STATES_MoveToGfxFlags"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c1338c9e",
+      "dh": "5a3f4801",
       "paramStorage": [
         [
           "pUnit",
@@ -516,7 +516,7 @@
       ]
     },
     {
-      "name": "STATES_HasLightState",
+      "name": "STATES_HasHideFlagState",
       "address": "0063a320",
       "lines": [
         {
@@ -526,13 +526,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasLightState",
+        "STATES_HasHideFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "1b8e7e7a",
+      "dh": "10b5e56e",
       "paramStorage": [
         [
           "pUnit",
@@ -541,7 +541,7 @@
       ]
     },
     {
-      "name": "STATES_HasDamageState",
+      "name": "STATES_HasActiveFlagState",
       "address": "0063a340",
       "lines": [
         {
@@ -551,13 +551,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasDamageState",
+        "STATES_HasActiveFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c02128b5",
+      "dh": "511074d0",
       "paramStorage": [
         [
           "pUnit",
@@ -566,7 +566,7 @@
       ]
     },
     {
-      "name": "STATES_HasBlueState",
+      "name": "STATES_HasRemHitFlagState",
       "address": "0063a360",
       "lines": [
         {
@@ -576,13 +576,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasBlueState",
+        "STATES_HasRemHitFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e5888193",
+      "dh": "fecafac7",
       "paramStorage": [
         [
           "pUnit",
@@ -591,7 +591,7 @@
       ]
     },
     {
-      "name": "STATES_HasAttackSpeedState",
+      "name": "STATES_HasDamBlueFlagState",
       "address": "0063a380",
       "lines": [
         {
@@ -601,13 +601,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasAttackSpeedState",
+        "STATES_HasDamBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "caf85be1",
+      "dh": "ed90917a",
       "paramStorage": [
         [
           "pUnit",
@@ -616,7 +616,7 @@
       ]
     },
     {
-      "name": "STATES_HasAuraState",
+      "name": "STATES_HasDamRedFlagState",
       "address": "0063a3a0",
       "lines": [
         {
@@ -626,13 +626,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasAuraState",
+        "STATES_HasDamRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5a414fb7",
+      "dh": "c69dc944",
       "paramStorage": [
         [
           "pUnit",
@@ -641,7 +641,7 @@
       ]
     },
     {
-      "name": "STATES_HasResistState",
+      "name": "STATES_HasAttBlueFlagState",
       "address": "0063a3c0",
       "lines": [
         {
@@ -651,13 +651,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasResistState",
+        "STATES_HasAttBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "818dfc37",
+      "dh": "35c857af",
       "paramStorage": [
         [
           "pUnit",
@@ -666,7 +666,7 @@
       ]
     },
     {
-      "name": "STATES_HasArmorState",
+      "name": "STATES_HasAttRedFlagState",
       "address": "0063a3e0",
       "lines": [
         {
@@ -676,13 +676,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasArmorState",
+        "STATES_HasAttRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "47f7ee64",
+      "dh": "b15df759",
       "paramStorage": [
         [
           "pUnit",
@@ -764,7 +764,7 @@
       ]
     },
     {
-      "name": "STATES_IsStateActive",
+      "name": "STATES_DoesStateStayOnDeath",
       "address": "0063a4a0",
       "lines": [
         {
@@ -774,13 +774,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_IsStateActive"
+        "STATES_DoesStateStayOnDeath"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "3f2d81bd",
+      "dh": "bf939496",
       "paramStorage": [
         [
           "pUnit",
@@ -793,7 +793,7 @@
       ]
     },
     {
-      "name": "STATES_HasPoisonState",
+      "name": "STATES_HasRestrictFlagState",
       "address": "0063a510",
       "lines": [
         {
@@ -803,13 +803,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasPoisonState",
+        "STATES_HasRestrictFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e33c3cac",
+      "dh": "be00ecba",
       "paramStorage": [
         [
           "pUnit",
@@ -818,7 +818,7 @@
       ]
     },
     {
-      "name": "STATES_HasColdState",
+      "name": "STATES_HasBlueFlagState",
       "address": "0063a530",
       "lines": [
         {
@@ -828,13 +828,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasColdState",
+        "STATES_HasBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "5370921f",
+      "dh": "3ea2ed98",
       "paramStorage": [
         [
           "pUnit",
@@ -843,7 +843,7 @@
       ]
     },
     {
-      "name": "STATES_HasFireState",
+      "name": "STATES_HasArmBlueFlagState",
       "address": "0063a550",
       "lines": [
         {
@@ -853,13 +853,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasFireState",
+        "STATES_HasArmBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "3c757abb",
+      "dh": "8f26ba90",
       "paramStorage": [
         [
           "pUnit",
@@ -868,7 +868,7 @@
       ]
     },
     {
-      "name": "STATES_HasLifeState",
+      "name": "STATES_HasRfBlueFlagState",
       "address": "0063a570",
       "lines": [
         {
@@ -878,13 +878,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasLifeState",
+        "STATES_HasRfBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "b6ef3b34",
+      "dh": "aaac6a88",
       "paramStorage": [
         [
           "pUnit",
@@ -893,7 +893,7 @@
       ]
     },
     {
-      "name": "STATES_HasManaState",
+      "name": "STATES_HasRcBlueFlagState",
       "address": "0063a590",
       "lines": [
         {
@@ -903,13 +903,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasManaState",
+        "STATES_HasRcBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "c0b36462",
+      "dh": "ffaee11e",
       "paramStorage": [
         [
           "pUnit",
@@ -918,7 +918,7 @@
       ]
     },
     {
-      "name": "STATES_HasStaminaState",
+      "name": "STATES_HasRlBlueFlagState",
       "address": "0063a5b0",
       "lines": [
         {
@@ -928,13 +928,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasStaminaState",
+        "STATES_HasRlBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "9417478d",
+      "dh": "12baf073",
       "paramStorage": [
         [
           "pUnit",
@@ -943,7 +943,7 @@
       ]
     },
     {
-      "name": "STATES_HasDefenseState",
+      "name": "STATES_HasRpBlueFlagState",
       "address": "0063a5d0",
       "lines": [
         {
@@ -953,13 +953,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasDefenseState",
+        "STATES_HasRpBlueFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "0b9af3c5",
+      "dh": "cdeb8a8d",
       "paramStorage": [
         [
           "pUnit",
@@ -968,7 +968,7 @@
       ]
     },
     {
-      "name": "STATES_HasExpState",
+      "name": "STATES_HasArmRedFlagState",
       "address": "0063a5f0",
       "lines": [
         {
@@ -978,13 +978,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasExpState",
+        "STATES_HasArmRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "650533c8",
+      "dh": "db19da2b",
       "paramStorage": [
         [
           "pUnit",
@@ -993,7 +993,7 @@
       ]
     },
     {
-      "name": "STATES_HasGoldState",
+      "name": "STATES_HasRfRedFlagState",
       "address": "0063a610",
       "lines": [
         {
@@ -1003,13 +1003,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasGoldState",
+        "STATES_HasRfRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "40719ecc",
+      "dh": "0043cabf",
       "paramStorage": [
         [
           "pUnit",
@@ -1018,7 +1018,7 @@
       ]
     },
     {
-      "name": "STATES_HasMagicFindState",
+      "name": "STATES_HasRcRedFlagState",
       "address": "0063a630",
       "lines": [
         {
@@ -1028,13 +1028,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasMagicFindState",
+        "STATES_HasRcRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "68914dc0",
+      "dh": "d209f5e7",
       "paramStorage": [
         [
           "pUnit",
@@ -1043,7 +1043,7 @@
       ]
     },
     {
-      "name": "STATES_HasSkillState",
+      "name": "STATES_HasRlRedFlagState",
       "address": "0063a650",
       "lines": [
         {
@@ -1053,13 +1053,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasSkillState",
+        "STATES_HasRlRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "cff02ddb",
+      "dh": "935383e3",
       "paramStorage": [
         [
           "pUnit",
@@ -1068,7 +1068,7 @@
       ]
     },
     {
-      "name": "STATES_HasAbsorbState",
+      "name": "STATES_HasRpRedFlagState",
       "address": "0063a670",
       "lines": [
         {
@@ -1078,13 +1078,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasAbsorbState",
+        "STATES_HasRpRedFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "42b06156",
+      "dh": "a5aec421",
       "paramStorage": [
         [
           "pUnit",
@@ -1093,7 +1093,7 @@
       ]
     },
     {
-      "name": "STATES_HasCurseState",
+      "name": "STATES_HasExpFlagState",
       "address": "0063a690",
       "lines": [
         {
@@ -1103,13 +1103,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasCurseState",
+        "STATES_HasExpFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "311a1e98",
+      "dh": "06748e13",
       "paramStorage": [
         [
           "pUnit",
@@ -1142,7 +1142,7 @@
       ]
     },
     {
-      "name": "STATES_HasMaxState",
+      "name": "STATES_HasShatterFlagState",
       "address": "0063a6f0",
       "lines": [
         {
@@ -1152,13 +1152,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasMaxState",
+        "STATES_HasShatterFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "26b97701",
+      "dh": "6aafd9b2",
       "paramStorage": [
         [
           "pUnit",
@@ -1191,7 +1191,7 @@
       ]
     },
     {
-      "name": "STATES_HasProgressiveState",
+      "name": "STATES_HasLifeFlagState",
       "address": "0063a750",
       "lines": [
         {
@@ -1201,13 +1201,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasProgressiveState",
+        "STATES_HasLifeFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "e4474e13",
+      "dh": "4f961b83",
       "paramStorage": [
         [
           "pUnit",
@@ -1216,7 +1216,7 @@
       ]
     },
     {
-      "name": "STATES_HasPassiveState",
+      "name": "STATES_HasUdeadFlagState",
       "address": "0063a770",
       "lines": [
         {
@@ -1226,13 +1226,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "dfd4430c",
+      "dh": "c77d4ee4",
       "paramStorage": [
         [
           "pUnit",
@@ -1241,7 +1241,7 @@
       ]
     },
     {
-      "name": "STATES_HasDisguiseState",
+      "name": "STATES_HasGreenFlagState",
       "address": "0063a790",
       "lines": [
         {
@@ -1251,13 +1251,13 @@
       ],
       "namespace": "D2Common::DATATBLS::ItemStats",
       "calledFunctions": [
-        "STATES_HasDisguiseState",
+        "STATES_HasGreenFlagState",
         "STATES_HasMatchingStateFlag"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "2a3d7ea6",
+      "dh": "833581e7",
       "paramStorage": [
         [
           "pUnit",

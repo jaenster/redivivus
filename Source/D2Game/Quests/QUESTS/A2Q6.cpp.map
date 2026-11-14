@@ -734,7 +734,7 @@
         "NotifyPlayersAboutEvent",
         "IteratePlayerOrMonsterUnits",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -747,7 +747,7 @@
         "D2UnitDataPlayerStrc",
         "SGAMEDATA"
       ],
-      "dh": "cab9a01d",
+      "dh": "c0708a1e",
       "paramStorage": [
         [
           "pQuestData",
@@ -1070,7 +1070,7 @@
       "calledFunctions": [
         "Q14_TimerCreatePortal",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "GetXPosFromDynamicPathUnit",
@@ -1089,7 +1089,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "70b8811e",
+      "dh": "46220b6d",
       "paramStorage": [
         [
           "pGame",
@@ -1165,14 +1165,14 @@
       "calledFunctions": [
         "Objects_InitFn37",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA2Q6Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "6ba96904",
+      "dh": "6b7a45a2",
       "paramStorage": [
         [
           "pInitArg",
@@ -1193,12 +1193,12 @@
       "calledFunctions": [
         "Objects_InitFn38_TyraelsDoor",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg"
       ],
-      "dh": "3b08f082",
+      "dh": "3c475028",
       "paramStorage": [
         [
           "pInitArg",
@@ -1246,13 +1246,13 @@
         "Objects_InitFn21_HoradricOrifice",
         "GetQuestDataByQuestNoInternal",
         "AddQuestTimer",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA2Q6Strc"
       ],
-      "dh": "0f070b9d",
+      "dh": "806748a0",
       "paramStorage": [
         [
           "pInitArg",
@@ -1321,7 +1321,7 @@
         "GetPlayerTradeTickOrBusy",
         "HasQuestItem",
         "SetInteractInfo",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "NET_D2GS_SERVER_Send_0x58_ITEMACCEPT",
         "SetupUpdateEvent_AttachEventSound",
         "ClearInteractInfo"
@@ -1335,7 +1335,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "565128a1",
+      "dh": "cfe19962",
       "paramStorage": [
         [
           "pOperation",
@@ -1364,7 +1364,7 @@
         "NotifyPlayersAboutEvent",
         "GetQuestDataByQuestNoInternal",
         "AddQuestTimer",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "UNITS_GetRoom",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -1382,7 +1382,7 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "43e29bbe",
+      "dh": "9a16cc3a",
       "paramStorage": [
         [
           "pGame",

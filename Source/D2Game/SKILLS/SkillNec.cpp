@@ -9,7 +9,6 @@
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -51,7 +50,7 @@ void __fastcall SKILLNEC_ApplyBloodCost(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       return;
     }
 
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     memset(&sDamage, 0, 0x70);
     sDamage.dwHitFlags |= 0x1000;
     sDamage.wResultFlags |= 4;
@@ -145,7 +144,7 @@ uint32_t __fastcall SKILLNEC_ValidateCorpseTarget(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    BOOL bCheckResult = SkillsServer::D2CheckCorpseConsumed(pCorpse, 0x13);
+    BOOL bCheckResult = SkillsServer::SKILLS_CanSwitchAi(pCorpse, 0x13);
     if (!bCheckResult) {
       return 0;
     }
@@ -226,7 +225,7 @@ static BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    bIsCorpse = SkillsServer::D2CheckCorpseConsumed(pUnit, 7);
+    bIsCorpse = SkillsServer::SKILLS_CanSwitchAi(pUnit, 7);
     return (uint32_t)(bIsCorpse != 0);
 }
 
@@ -408,7 +407,7 @@ void __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStr
           }
       }
 
-      bCorpseConsumedOk = SkillsServer::D2CheckCorpseConsumed(pUnit, nCorpseConsumeType);
+      bCorpseConsumedOk = SkillsServer::SKILLS_CanSwitchAi(pUnit, nCorpseConsumeType);
       if (!bCorpseConsumedOk) {
         return;
       }
@@ -752,7 +751,7 @@ uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    bCheckResult = SkillsServer::D2CheckCorpseConsumed(pCorpse, 0xb);
+    bCheckResult = SkillsServer::SKILLS_CanSwitchAi(pCorpse, 0xb);
     return (uint32_t)(bCheckResult != 0);
 }
 
@@ -1160,7 +1159,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     uint32_t nHpPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-    uint32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pSummon);
+    uint32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pSummon);
     if ((int)nMaxHp > 0x100000) {
       if ((int)(nMaxHp & -16) < 0x640) {
         nDivResult = (int64_t)(int)nMaxHp * (int64_t)(int)nHpPct / 100;
@@ -1253,12 +1252,12 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
-void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit, int32_t nLevel, int32_t nLevelOffset) {
+BOOL __fastcall SKILLS_SetSummonBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPet, int32_t nLevel, int32_t nLevelOffset) {
     int nLevelClamped;
     uint32_t nDifficultyIndex;
     if (nLevel <= 0) {
       int nLevelScaled;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_level, 0);
       nLevelScaled = nLevel * 3 / 4 + nLevelOffset;
       nLevelClamped = nLevelScaled;
       if (nLevelScaled <= 1) {
@@ -1272,11 +1271,11 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
         }
       }
       if (nLevel) {
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCorpseUnit, UNITSTAT_level, nLevel, 0);
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pPet, UNITSTAT_level, nLevel, 0);
       }
     } else {
       set_minion_level:
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCorpseUnit, UNITSTAT_level, nLevel, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pPet, UNITSTAT_level, nLevel, 0);
     }
 
     nLevelClamped = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
@@ -1287,7 +1286,7 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
     D2MonLvlTxt* pDVar1;
     pDVar1 = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pDVar1) {
-      return;
+      return 0;
     }
 
     uint32_t byDifficulty;
@@ -1310,8 +1309,9 @@ void __fastcall SKILLNEC_ReviveCorpseAsMinion(::SGAMEDATA * pGame, D2UnitStrc * 
     } else {
       nLevelClamped = 1;
     }
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pCorpseUnit, UNITSTAT_armorclass, pDVar1->AC[nDifficultyIndex + nLevelClamped * 3], 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pCorpseUnit, UNITSTAT_tohit, pDVar1->TH[nLevelClamped * 3 + nDifficultyIndex], 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_armorclass, pDVar1->AC[nDifficultyIndex + nLevelClamped * 3], 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pPet, UNITSTAT_tohit, pDVar1->TH[nLevelClamped * 3 + nDifficultyIndex], 0);
+    return 1;
 }
 
 // Server-side cast handler for the Necromancer Revive skill (SrvDoFunc 031). Finds the targeted corpse, verifies it is consumable, applies blood cost, determines the revived monster class via SKILLS_GetSummonMonsterClassId, frees the corpse unit, spawns a new summon at the corpse position, then applies mastery/buffs/passive resistances and registers it in the node table. Returns TRUE on success.
@@ -1362,7 +1362,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     sPet.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl);
     pCorpse = SkillsServer::SKILL_CreateSummon(pGame, &sPet);
     if (pCorpse) {
-      SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pCorpse, 0, nSkillLvl);
+      SKILLS_SetSummonBaseStats(pGame, pUnit, pCorpse, 0, nSkillLvl);
       SKILLNEC_DispatchSummonMastery(pUnit, (int*)pCorpse, eSkill, nSkillLvl);
       SKILLNEC_ApplySummonBuffs(pGame, pUnit, pCorpse, eSkill, nSkillLvl, 0);
       SKILLNEC_ApplySummonResistPassive(pUnit, pCorpse);
@@ -1534,7 +1534,7 @@ BOOL __fastcall SKILLNEC_CorpseExplosionDispatch(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 void __fastcall SKILLNEC_InitializeSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSummon, eD2Skills eSkill, int32_t nSkillLvl) {
-    SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pSummon, 0, nSkillLvl);
+    SKILLS_SetSummonBaseStats(pGame, pUnit, pSummon, 0, nSkillLvl);
     SKILLNEC_ApplySummonBuffs(pGame, pUnit, pSummon, eSkill, nSkillLvl, 0);
     SKILLNEC_ApplySummonResistPassive(pUnit, pSummon);
 }
@@ -1654,7 +1654,7 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
       D2Common::Units::RemoveCollision_Vector(pTargetItem);
       D2Common::Unit::RemoveUnitFromRoom(pTargetItem);
       D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(pTargetItem, (eD2BodyLoc*)&sPetCastParams.nPetType, &byBodyLoc2Out);
-      D2Common::Units::SetupUpdateFlag(pTargetItem, 4);
+      D2Common::Units::ChangeAnimMode(pTargetItem, 4);
       pGamePostCreate = pGameSaved;
       ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGameSaved, pGolem, pTargetItem->nUnitGUID, (eD2BodyLoc)sPetCastParams.nPetType, 1, nullptr);
     }
@@ -1671,7 +1671,7 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
     int32_t nPosY;
     int32_t nX;
     D2SkillStrc* pSkill;
-    D2MonsterKillStrc sKillStrc;
+    D2ModeChangeStrc sKillStrc;
     POINT ptRevivePos;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1691,7 +1691,7 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
       nX = 0;
     }
 
-    D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nX, nPosY, D2Common::PATH::DynamicPath::GetUnitWidth(pUnit), 0x8000);
+    D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pUnit), nX, nPosY, D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pUnit), 0x8000);
     eUnitType = pUnit->eUnitType;
     long xValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1725,10 +1725,10 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     pUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
-    Monster::MONSTERAI_TriggerMageThink(pGame, pUnit);
+    Monster::MONSTERAI_RescheduleThink(pGame, pUnit);
     sKillStrc.nUnitMode = Death;
-    sKillStrc.pVictim = 0;
-    sKillStrc.pAttacker = 0;
+    sKillStrc.pUnit = 0;
+    sKillStrc.pTargetUnit = 0;
     sKillStrc.nTargetX = 0;
     sKillStrc.nTargetY = 0;
     sKillStrc.nAnimatedMode1 = '\0';
@@ -1737,7 +1737,7 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
     sKillStrc.nUnknown2 = '\0';
     sKillStrc.nMonType1 = 0;
     sKillStrc.nMonType2 = 0;
-    Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Neutral, &sKillStrc);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Neutral, &sKillStrc);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
     SkillsServer::SKILLS_FreeMonsterMinions(pUnit);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, 0);
@@ -1757,7 +1757,7 @@ static void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills
     }
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pUnit2, !pUnit ? -1 : pUnit->nUnitGUID, !pUnit ? UNIT_COUNT : pUnit->eUnitType, 0, 0);
-    Monster::AI::MONSTERAI_SetTargetUnit(pUnit2, pUnit);
+    Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pUnit2, pUnit);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pUnit2, 2, pGame->dwGameFrame + 0xf, 0, 0);
     UNIT::SUnit::SetAlignment(pUnit2, '\x02', 0);
@@ -2146,7 +2146,7 @@ static int32_t SKILLNEC_AddHitpoints(D2UnitStrc * pUnit, int32_t nHpAmount) {
     }
 
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     nCurHp += nHpAmount;
     if (nCurHp > nMaxHp) {
       nHpAmount += nMaxHp - nCurHp;
@@ -2318,7 +2318,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
     int32_t nHealCalc = D2Common::Skills::D2GetSkillCalc(pAuraCaster, pSkillTxt->calc[0], eSkill, nSkillLvlCast);
     nHealCalc = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pDamage->dwPhysDamage, nHealCalc, 100);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
-    int nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTargetUnit);
+    int nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTargetUnit);
     if (nCurHp > 0 && nMaxHp > 0) {
       int nHpMin;
       nCurHp += nHealCalc;
@@ -2346,7 +2346,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
 }
 
 // Item-event callback for Necromancer aura-based stat absorption (e.g. Life Tap / Decrepify drain effects). Looks up the skill's aura state on pUnit, reads the absorb-capacity stat (aurastat[1]) and current absorb-pool stat (aurastat[0]) from the state's stat list, subtracts incoming damage (pParam+8) from the pool, and either removes the state entirely when exhausted or updates the visual intensity via D2StatesTogglegfx when the pool percentage changes by more than 4 points.
-BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_BoneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitStat eAuraStat;
     int nAbsorbedAmt;
     int32_t nValue;
@@ -2424,7 +2424,7 @@ BOOL __fastcall ITEMEVENT_NecroAuraStatDrain(::SGAMEDATA * pGame, uint32_t nUnit
 }
 
 // Item-event callback implementing the Life Tap curse leech. Computes the leech amount from damage dealt (pParam+8), capped by the target's current HP and scaled by the monster's per-difficulty life-steal percentage. Splits the heal between the summoner (pOwnerUnit, via GetSkilParam2 ratio) and the direct attacker (pUnit) via SKILLNEC_AddHitpoints, then shows overlay 0x97 on healed units. Returns 0 if target is dead, alignment-blocked, or leech percentage is zero.
-BOOL __fastcall ITEMEVENT_LifeTap(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_BloodGolemLifeSteal(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bIsDead;
     int32_t nOwnerHealAmt;
     if (!pUnit || !pTarget || !pDamage) {
@@ -2509,7 +2509,7 @@ BOOL __fastcall ITEMEVENT_LifeTap(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2Un
 }
 
 // Item-event callback that drains life from a revived necromancer minion back to its owner. Fires when pUnit is a monster with pParam->offset_0x4c damage dealt. Looks up the owner via GetOwnerUnit, checks owner is alive and above 0xFF HP, reads the monster's Skill1 leech rate from MonStats.txt via GetSkillParam4, subtracts a percentage of the dealt damage from owner HP (floor 0x100), and reduces the tracked damage value in pParam.
-BOOL __fastcall ITEMEVENT_NecroReviveLeech(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_BloodGolemShareDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nDivisor;
     if (!(pUnit && pDamage && pUnit->eUnitType == UNIT_MONSTER && pDamage->dwDmgTotal > 0)) {
       return 0;
@@ -2554,7 +2554,7 @@ BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
       return 0;
     }
 
-    int nSlowAmount = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_slow, 0);
+    int nSlowAmount = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_slow, 0);
     if (!nSlowAmount) {
       return 0;
     }
@@ -2620,7 +2620,7 @@ int32_t __fastcall BloodGolemLifeLeech(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         return nHealAmount - nLeechAmt;
       }
     } else {
-      nLeechAmt = D2Common::Stats::StatsEx::GetTxtMaxHp(pGolem);
+      nLeechAmt = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pGolem);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pGolem, UNITSTAT_hitpoints, nLeechAmt, 0);
     }
 

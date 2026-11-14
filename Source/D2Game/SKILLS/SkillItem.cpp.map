@@ -295,7 +295,7 @@
         "IsInteractingWithPlayer",
         "CheckItemFlag",
         "SKILLITEM_FindItemInInventory",
-        "ITEMMODE_ProcessItemSell"
+        "ITEMMODE_IdentifyItem"
       ],
       "usedTypes": [
         "D2InventoryStrc",
@@ -303,7 +303,7 @@
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "be69e34c",
+      "dh": "f3b4c821",
       "paramStorage": [
         [
           "pGame",
@@ -421,11 +421,11 @@
       "calledFunctions": [
         "ITEM_ApplyConsumableEffects",
         "TXT_Items_GetLine",
-        "ITEMS_SearchItemCodeTable",
+        "ITEMMODS_EvaluateItemFormula",
         "GetStatsByState",
         "STATLIST_GetFullListPtr",
-        "ITEMS_ModifyPotionSellValueByDifficulty",
-        "ITEMS_ModifyPotionValueByDifficulty",
+        "ITEMS_GetBonusManaBasedOnClass",
+        "ITEMS_GetBonusLifeBasedOnClass",
         "STATSEX_GetCurrentStat",
         "RANDOM_RandomNumberSelector",
         "UNIT_GetModuloFromSeed",
@@ -459,7 +459,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6bfaba92",
+      "dh": "9db98d0f",
       "paramStorage": [
         [
           "pGame",
@@ -504,7 +504,7 @@
       "calledFunctions": [
         "ITEM_ApplyConsumableEffectsSimple",
         "TXT_Items_GetLine",
-        "ITEMS_SearchItemCodeTable",
+        "ITEMMODS_EvaluateItemFormula",
         "GetStatsByState",
         "STATLIST_GetFullListPtr",
         "GetType",
@@ -538,7 +538,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "78a97248",
+      "dh": "03fcbe5c",
       "paramStorage": [
         [
           "pGame",
@@ -583,7 +583,7 @@
       "calledFunctions": [
         "ITEM_ApplyPercentRestoration",
         "TXT_Items_GetLine",
-        "ITEMS_SearchItemCodeTable",
+        "ITEMMODS_EvaluateItemFormula",
         "GetStatsByState",
         "STATLIST_GetFullListPtr",
         "STATSEX_GetCurrentStat",
@@ -618,7 +618,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e927ee70",
+      "dh": "2d68be6e",
       "paramStorage": [
         [
           "pGame",
@@ -663,7 +663,7 @@
       "calledFunctions": [
         "ITEM_ApplyTimedBuffStats",
         "TXT_Items_GetLine",
-        "ITEMS_SearchItemCodeTable",
+        "ITEMMODS_EvaluateItemFormula",
         "D2UpdateState",
         "GetStatsByState",
         "STATLIST_GetFullListPtr",
@@ -691,7 +691,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "85e34390",
+      "dh": "24cbf509",
       "paramStorage": [
         [
           "pGame",
@@ -785,7 +785,7 @@
       ]
     },
     {
-      "name": "SKILLITEM_ApplyRejuvenationPotionEffect",
+      "name": "SKILLITEM_pSpell08_AddItemValueToStat",
       "address": "005bf060",
       "lines": [
         {
@@ -795,7 +795,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "SKILLITEM_ApplyRejuvenationPotionEffect",
+        "SKILLITEM_pSpell08_AddItemValueToStat",
         "ITEM_GetItemData_nFileIndex",
         "STATSEX_GetCurrentStat",
         "STATLIST_AddUnitStat"
@@ -806,7 +806,7 @@
         "eD2Skills",
         "eD2UnitStat"
       ],
-      "dh": "0267beca",
+      "dh": "fc6176da",
       "paramStorage": [
         [
           "pGame",
@@ -839,7 +839,7 @@
       ]
     },
     {
-      "name": "SKILLITEM_PersonalizeItemSpell",
+      "name": "SKILLITEM_pSpell07_OpenCube",
       "address": "005bf0c0",
       "lines": [
         {
@@ -849,11 +849,11 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "SKILLITEM_PersonalizeItemSpell",
+        "SKILLITEM_pSpell07_OpenCube",
         "GetPlayerTradeTickOrBusy",
         "GetInteractedNpc",
         "ClearInteractInfo",
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
         "SetInteractInfo"
@@ -865,7 +865,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "cf7e1f30",
+      "dh": "197f202f",
       "paramStorage": [
         [
           "pGame",
@@ -1101,7 +1101,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c1a51c60",
+      "dh": "034a6e8f",
       "paramStorage": [
         [
           "pGame",
@@ -1227,7 +1227,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_PhysDamageOnAttacked",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "memset",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation"
@@ -1239,7 +1239,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0a8a64fc",
+      "dh": "388c4d2f",
       "paramStorage": [
         [
           "pGame",
@@ -1283,7 +1283,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_LightningDamageOnAttacked",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "memset",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation"
@@ -1295,7 +1295,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "188c2c9e",
+      "dh": "15b8abac",
       "paramStorage": [
         [
           "pGame",
@@ -1339,7 +1339,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_FireDamageOnAttacked",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "memset",
         "DAMAGE_ApplyDamageToUnit",
         "SERVER_GetHitCalculation"
@@ -1351,7 +1351,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b36a009",
+      "dh": "22ab279d",
       "paramStorage": [
         [
           "pGame",
@@ -1395,7 +1395,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_ColdDamageWithFreezeLength",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "memset",
         "DAMAGE_ApplyDamageToUnit",
@@ -1408,7 +1408,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e009f86d",
+      "dh": "fb6d8867",
       "paramStorage": [
         [
           "pGame",
@@ -1441,7 +1441,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_CrushingBlowChance",
+      "name": "ITEMEVENT_Knockback",
       "address": "005bf960",
       "lines": [
         {
@@ -1451,8 +1451,8 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "ITEMEVENT_CrushingBlowChance",
-        "ITEM_GetMinimalStatValueShifted",
+        "ITEMEVENT_Knockback",
+        "STATLIST_UnitGetStatValueUnchecked",
         "TXT_MonStats_GetMonStats2"
       ],
       "usedTypes": [
@@ -1464,7 +1464,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "38c237da",
+      "dh": "e8735546",
       "paramStorage": [
         [
           "pGame",
@@ -1509,7 +1509,7 @@
       "calledFunctions": [
         "ITEMEVENT_ChanceToFear",
         "CheckMonsterType",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "RNG_GetRandomInRange",
         "MONSTERAI_ApplyTerrorToMonster"
       ],
@@ -1520,7 +1520,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "262c8e32",
+      "dh": "cccedde7",
       "paramStorage": [
         [
           "pGame",
@@ -1564,7 +1564,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_ChanceToDimVision",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "UNIT_GetModuloFromSeed",
         "SKILLNEC_ApplyDimVision"
@@ -1576,7 +1576,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9de3b922",
+      "dh": "4a4170bc",
       "paramStorage": [
         [
           "pGame",
@@ -1609,7 +1609,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_ReplenishManaOnKill",
+      "name": "ITEMEVENT_DamageToMana",
       "address": "005bfbb0",
       "lines": [
         {
@@ -1619,9 +1619,9 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "ITEMEVENT_ReplenishManaOnKill",
-        "ITEM_GetMinimalStatValueShifted",
-        "GetTxtMaxMana",
+        "ITEMEVENT_DamageToMana",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxManaFromUnit",
         "STATSEX_GetCurrentStat",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -1634,7 +1634,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed4659f9",
+      "dh": "7490070e",
       "paramStorage": [
         [
           "pGame",
@@ -1678,7 +1678,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_FreezeTarget",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
         "memset",
         "DAMAGE_ApplyDamageToUnit"
@@ -1690,7 +1690,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1b2470a6",
+      "dh": "f121cee1",
       "paramStorage": [
         [
           "pGame",
@@ -1723,7 +1723,7 @@
       ]
     },
     {
-      "name": "SKILLITEM_CalculateStaminaPotionValue",
+      "name": "SKILLITEM_CalculateOpenWoundsHpRegen",
       "address": "005bfda0",
       "lines": [
         {
@@ -1733,19 +1733,19 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "SKILLITEM_CalculateStaminaPotionValue"
+        "SKILLITEM_CalculateOpenWoundsHpRegen"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a5475348",
+      "dh": "d7445ef2",
       "paramStorage": [
         [
           "nLevel",
           "ECX:4"
         ],
         [
-          "pnBracketRates",
+          "pValues",
           "EDX:4"
         ]
       ]
@@ -1762,9 +1762,9 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_OpenWounds",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "STATSEX_GetCurrentStat",
-        "SKILLITEM_CalculateStaminaPotionValue",
+        "SKILLITEM_CalculateOpenWoundsHpRegen",
         "CheckMonsterType",
         "SetStateWithExpiryTime"
       ],
@@ -1776,7 +1776,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c050de95",
+      "dh": "e93a5d2e",
       "paramStorage": [
         [
           "pGame",
@@ -1820,7 +1820,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_CrushingBlow",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "MONSTER_GetMercType",
         "UnitIsMarkedBoss",
         "CheckMonsterType",
@@ -1837,7 +1837,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7e77acd4",
+      "dh": "98c8487d",
       "paramStorage": [
         [
           "pGame",
@@ -1881,8 +1881,8 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_ReplenishManaFlat",
-        "ITEM_GetMinimalStatValueShifted",
-        "GetTxtMaxMana",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxManaFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "SetOverlay"
@@ -1894,7 +1894,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9f908c16",
+      "dh": "620f215b",
       "paramStorage": [
         [
           "pGame",
@@ -1938,8 +1938,8 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_ReplenishLifeFlat",
-        "ITEM_GetMinimalStatValueShifted",
-        "GetTxtMaxHp",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "SetOverlay"
@@ -1951,7 +1951,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "70ee77c1",
+      "dh": "9c27a7e1",
       "paramStorage": [
         [
           "pGame",
@@ -1996,8 +1996,8 @@
       "calledFunctions": [
         "ITEMEVENT_LifeDrainDemon",
         "IsDemon",
-        "ITEM_GetMinimalStatValueShifted",
-        "GetTxtMaxHp",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "SetOverlay"
@@ -2009,7 +2009,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8ef5ec5c",
+      "dh": "d31ce93b",
       "paramStorage": [
         [
           "pGame",
@@ -2053,7 +2053,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_SlowTarget",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "CheckMonsterType",
         "UnitIsMarkedBoss",
         "MONSTER_GetMercType",
@@ -2070,7 +2070,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f489b413",
+      "dh": "22489849",
       "paramStorage": [
         [
           "pGame",
@@ -2114,7 +2114,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_CastOnAttack",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "TXT_Skills_GetLine",
         "SKILL_CastOnTargetUnit",
         "GetYSP1",
@@ -2130,7 +2130,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22eaa3e6",
+      "dh": "d328b028",
       "paramStorage": [
         [
           "pGame",
@@ -2163,7 +2163,7 @@
       ]
     },
     {
-      "name": "ITEMEVENT_CastOnStriking",
+      "name": "ITEMEVENT_SkillOnGetHit",
       "address": "005c05a0",
       "lines": [
         {
@@ -2173,8 +2173,8 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "ITEMEVENT_CastOnStriking",
-        "ITEM_GetMinimalStatValueShifted",
+        "ITEMEVENT_SkillOnGetHit",
+        "STATLIST_UnitGetStatValueUnchecked",
         "RANDOM_RandomNumberSelector",
         "TXT_Skills_GetLine",
         "GetYSP1",
@@ -2191,7 +2191,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ef4a09e0",
+      "dh": "5c9407dd",
       "paramStorage": [
         [
           "pGame",
@@ -2235,7 +2235,7 @@
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
         "ITEMEVENT_CastOnDeath",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetYSP1",
         "GetXSP1",
         "MONSTERAI_CastItemEffectSkill",
@@ -2249,7 +2249,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ddfbb269",
+      "dh": "8004025a",
       "paramStorage": [
         [
           "pGame",
@@ -2336,7 +2336,7 @@
       ]
     },
     {
-      "name": "SKILL_ReviveMonsterFromCorpse",
+      "name": "SKILLITEM_ReanimateMonsterCallback",
       "address": "005c07a0",
       "lines": [
         {
@@ -2346,7 +2346,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillItem",
       "calledFunctions": [
-        "SKILL_ReviveMonsterFromCorpse",
+        "SKILLITEM_ReanimateMonsterCallback",
         "FindUnitFromTable",
         "D2CheckIfCorpseIsConsumable",
         "GetXPosFromDynamicPathUnit",
@@ -2354,14 +2354,14 @@
         "UNITS_GetRoom",
         "DRLGROOM_FindBetterNearbyRoom",
         "TXT_MonStats_GetMonStats2",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "RemoveCollision_Type",
         "SpawnMonsterAtRoomPos",
         "GetAiGeneral",
         "AttachCorrectAiFunctionToMonster",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "AssignMinionOwner",
-        "MONSTERAI_SetTargetUnit",
+        "MONSTERAI_SetOwnerGUIDAndType",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
         "SetAlignment",
@@ -2369,25 +2369,25 @@
         "InitUmods",
         "CreateUnitNode",
         "PATH_UpdateCollisionWidth",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetSkillByIdAndOwner",
+        "SetCurrentSkill",
         "SetStepNum",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
         "D2AiGeneralStrc",
         "D2DamageStrc",
+        "D2ModeChangeStrc",
         "D2MonStats2Txt",
-        "D2MonsterKillStrc",
         "D2RoomStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2Skills",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1075425f",
+      "dh": "93bd399d",
       "paramStorage": [
         [
           "pGame",
@@ -2410,11 +2410,11 @@
           "Stack[0xc]:4"
         ],
         [
-          "eSkill",
+          "nMonsterClassId",
           "Stack[0x10]:4"
         ],
         [
-          "nSkillLvl",
+          "nOwnerGUID",
           "Stack[0x14]:4"
         ]
       ]
@@ -2432,7 +2432,7 @@
       "calledFunctions": [
         "ITEMEVENT_ReviveMonster",
         "CheckMonsterType",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "RANDOM_RandomNumberSelector",
         "SUNITEVENT_Alloc",
         "GetOwnerUnit"
@@ -2444,7 +2444,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0623db45",
+      "dh": "a3c0a545",
       "paramStorage": [
         [
           "pGame",

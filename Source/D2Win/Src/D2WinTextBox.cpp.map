@@ -730,7 +730,7 @@
         "D2WINTEXTBOX_TruncateStringToFitWidth",
         "D2WINFONT_DrawTextWithOffsetBackground",
         "DRAW_text",
-        "D2WINFONT_DrawWideStringRightToLeft",
+        "D2WINFONT_DrawTickerText",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -745,7 +745,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "82b7e184",
+      "dh": "d360d539",
       "paramStorage": [
         [
           "pTextBox",
@@ -945,7 +945,7 @@
       ]
     },
     {
-      "name": "D2WINTEXTBOX_SetScrollbarCallbackA",
+      "name": "D2WINTEXTBOX_SetScrollbarLinkedTextBox",
       "address": "004fc6a0",
       "lines": [
         {
@@ -956,7 +956,7 @@
       "namespace": "D2Win::Src::D2WinTextBox",
       "calledFunctions": [
         "D2WINSCROLLBAR_SetLinkedTextBox",
-        "D2WINTEXTBOX_SetScrollbarCallbackA",
+        "D2WINTEXTBOX_SetScrollbarLinkedTextBox",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -965,7 +965,7 @@
         "D2WinTextBox",
         "int32_t"
       ],
-      "dh": "e6193e4c",
+      "dh": "9e422200",
       "paramStorage": [
         [
           "pTextBox",

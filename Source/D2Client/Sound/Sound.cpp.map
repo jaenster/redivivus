@@ -468,14 +468,14 @@
       "calledFunctions": [
         "SOUND_CalculateUnitDirection",
         "GetPlayerUnit_UI",
-        "GetTargetCoords"
+        "GetScreenCoords"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "POINT",
         "int32_t"
       ],
-      "dh": "35d9e771",
+      "dh": "25d7439a",
       "paramStorage": [
         [
           "pUnit",

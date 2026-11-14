@@ -112,7 +112,7 @@ void __fastcall thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo(::SGAMEDATA * pG
 }
 
 // Server-side level-up handler: recomputes pUnit's level from accumulated experience, updates UNITSTAT_level and UNITSTAT_nextexp, then — if the unit gained one or more levels — scales up max HP/mana/stamina (and restores them to max), awards stat points and skill points, refreshes NPC gamble inventories, broadcasts party info (0x75) to all players, recalculates equipped item stats, and calls the BattleNet UpdateGameInformation callback. Called from the SUnitMsg message-processing layer.
-void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall PLAYERSTATS_LevelUp(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2CharStatsTxt* pCharStats;
     int nCharClassId = !pUnit ? -1 : pUnit->nClassId;
     int32_t nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
@@ -132,7 +132,7 @@ void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxhp, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxhp, nCurrentStat + (uint32_t)(uint8_t)pCharStats->LifePerLevel * nLevelDelta * 0x40, 0);
-    nCurrentStat = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    nCurrentStat = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     if (nCurHp > 0) {
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurrentStat, 0);
@@ -140,11 +140,11 @@ void __fastcall UpdateGameInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxmana, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxmana, nCurrentStat + (uint32_t)(uint8_t)pCharStats->ManaPerLevel * nLevelDelta * 0x40, 0);
-    nCurrentStat = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    nCurrentStat = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurrentStat, 0);
     nCurrentStat = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_maxstamina, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_maxstamina, nCurrentStat + (uint32_t)(uint8_t)pCharStats->StaminaPerLevel * nLevelDelta * 0x40, 0);
-    nCurrentStat = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+    nCurrentStat = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nCurrentStat, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_statpts, pCharStats->StatPerLevel * nLevelDelta, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_newskills, nLevelDelta, 0);
@@ -340,7 +340,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
         do {
           nDwordIdxSaved = nDwordIdx;
           pCurFlagDword = pFlagDword;
-          nSetBitIdx = Fog::SMem::SMemSizeClassBucketLookup(*pFlagDword);
+          nSetBitIdx = Fog::SMem::FOG_GetLowestSetBitIndex(*pFlagDword);
           while ((int)nSetBitIdx >= 0) {
             aStateFlagDwords[((int)nSetBitIdx >> 5) + nDwordIdxSaved] &= Fog::BitBuffer::gadwInvBitMasks[nSetBitIdx & 0x1f];
             eState = nSetBitIdx + nStateBaseIdx;
@@ -420,7 +420,7 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
               nFlagDwordVal = *pFlagDword;
             }
 
-            nSetBitIdx = Fog::SMem::SMemSizeClassBucketLookup(nFlagDwordVal);
+            nSetBitIdx = Fog::SMem::FOG_GetLowestSetBitIndex(nFlagDwordVal);
             nFlagDwordCount = nStateFlagDwordCount;
           }
 
@@ -489,7 +489,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
       if (nFlagDwordCount > 0) {
         pCurFlagDword = aStateFlagDwords;
         do {
-          nSetBitIdx = Fog::SMem::SMemSizeClassBucketLookup(*pCurFlagDword);
+          nSetBitIdx = Fog::SMem::FOG_GetLowestSetBitIndex(*pCurFlagDword);
           while ((int)nSetBitIdx >= 0) {
             aStateFlagDwords[((int)nSetBitIdx >> 5) + nDwordIdx] &= Fog::BitBuffer::gadwInvBitMasks[nSetBitIdx & 0x1f];
             eStateId = nSetBitIdx + nStateBaseIdx;
@@ -583,7 +583,7 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
               }
             }
 
-            nSetBitIdx = Fog::SMem::SMemSizeClassBucketLookup(nFlagDwordVal);
+            nSetBitIdx = Fog::SMem::FOG_GetLowestSetBitIndex(nFlagDwordVal);
             nFlagDwordCount = nStateFlagDwordCount;
           }
 
@@ -1195,7 +1195,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
       break;
       case UNIT_MONSTER:
         eDeathState = SUnit::CheckForModeZeroDeath(pUnit);
-      if (!eDeathState || (nSkillLevel = D2Common::DATATBLS::ItemStats::STATES_HasLightState(pUnit) , !nSkillLevel)) {
+      if (!eDeathState || (nSkillLevel = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pUnit) , !nSkillLevel)) {
         GAME::SCmd::NET_D2GS_SERVER_Send_0xAC_AddMonster(pClient, pUnit);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, (uint16_t)(ptCoords.x + ptCoords.y), 0);
         if (pUnit->nClassId == 0x210) {
@@ -1245,7 +1245,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
       if (!eDeathState || (eDeathState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_playerbody) , !eDeathState)) {
         PLAYER::Player::PLAYER_SendAllItemsToClient(pUnit, pClientSaved);
       } else {
-        dwTargetGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetCursorItemGUID(pUnit->pInventory);
+        dwTargetGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetOwnerGUID(pUnit->pInventory);
         pPlayerUnit_lcl = SUnit::FindUnitFromTable(pGameSaved, UNIT_PLAYER, dwTargetGUID);
         if (!pPlayerUnit_lcl) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb8);

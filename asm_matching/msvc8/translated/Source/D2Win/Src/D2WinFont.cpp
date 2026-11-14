@@ -12,6 +12,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Win/Src/D2WinFont.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -603,14 +604,14 @@ void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX
 }
 
 // Right-to-left text renderer (for RTL languages). Draws glyphs from right edge backwards with horizontal bounds checking. Processes color codes, newlines. Returns pointer to last glyph data.
-void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nLeftBound, uint32_t nRightBound) {
+void __fastcall D2WINFONT_DrawTickerText(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nScrollOffsetX, uint32_t nClipWidth) {
     int32_t nGlyphCmp;
     D2FontGlyphStrc* pGlyphEntry;
     uint16_t* pCurGlyph;
     D2GfxDataStrc sGfxData;
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     int nCharIdx = 0;
-    int nPositionX = nXStart + nLeftBound;
+    int nPositionX = nXStart + nScrollOffsetX;
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
@@ -618,7 +619,7 @@ void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t 
       return;
     }
 
-    int nDrawRightEdge = nXStart + nRightBound;
+    int nDrawRightEdge = nXStart + nClipWidth;
     do {
       uint16_t wCharCode;
       if (nPositionX > nDrawRightEdge) {
@@ -627,11 +628,11 @@ void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t 
 
       wCharCode = *wszText;
       pCurGlyph = wszText + 1;
-      nRightBound = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nRightBound + 2) << 16 | (uint32_t)(uint16_t)wCharCode);
+      nClipWidth = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nClipWidth + 2) << 16 | (uint32_t)(uint16_t)wCharCode);
       if ((uint16_t)*wszText < 0x100 && *wszText == L'\xff') {
-        nLeftBound = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nLeftBound + 2) << 16 | (uint32_t)(uint16_t)*pCurGlyph);
+        nScrollOffsetX = (uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nScrollOffsetX + 2) << 16 | (uint32_t)(uint16_t)*pCurGlyph);
         pCurGlyph = wszText + 2;
-        nGlyphCmp = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN((uint16_t*)&nLeftBound, gwFontHeightDefault, 1);
+        nGlyphCmp = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsN((uint16_t*)&nScrollOffsetX, gwFontHeightDefault, 1);
         if (!nGlyphCmp) {
           if (!(nCharIdx + 2 < nStrLen)) {
             eGlobalPalette = 0;
@@ -646,7 +647,7 @@ void __fastcall D2WINFONT_DrawWideStringRightToLeft(uint16_t * wszText, int32_t 
           }
         } else {
           pCurGlyph = wszText + 1;
-          pGlyphEntry = (*gpfnFontGetCharWidth)((uint16_t)nRightBound);
+          pGlyphEntry = (*gpfnFontGetCharWidth)((uint16_t)nClipWidth);
           sGfxData.nFrameNumber = (int)*(uint16_t*)(pGlyphEntry->abUnverified + 6);
           if (nPositionX > nXStart) {
             D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nPositionX, nY, -1, DRAW_SOLID, eGlobalPalette);
@@ -737,9 +738,9 @@ void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltip
 }
 
 // Sets tooltip attributes (text, position, size, alignment) and custom field 0x810. Wrapper around TEXT_TooltipSetAttributes.
-void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nFontId, int32_t nX, int32_t nY, int32_t nAlignment, int32_t nCustomField) {
-    TEXT_TooltipSetAttributes(wszText, nFontId, nX, nY, nAlignment);
-    DisplayedTooltip.nLoadProgress = nCustomField;
+void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill) {
+    TEXT_TooltipSetAttributes(wszText, nX, nY, nColor, nAlignment);
+    DisplayedTooltip.nLoadProgress = nBarFill;
 }
 
 void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t dwColor, BOOL bMultiLineCenter) {

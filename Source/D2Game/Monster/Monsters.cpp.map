@@ -721,13 +721,13 @@
         "MONSTER_GetMinion1MonstatId"
       ],
       "usedTypes": [
-        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7f313e6b",
+      "dh": "28d1c17d",
       "paramStorage": [
         [
-          "pMonData",
+          "pUnit",
           "EAX:4"
         ]
       ]
@@ -753,7 +753,7 @@
         "GetGUID",
         "AssignMinionOwner",
         "AddMinionToList",
-        "MONSTERAI_SetTargetUnit"
+        "MONSTERAI_SetOwnerGUIDAndType"
       ],
       "usedTypes": [
         "D2RoomCoordListStrc",
@@ -764,7 +764,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e2573630",
+      "dh": "c614103c",
       "paramStorage": [
         [
           "pCoordList",
@@ -946,7 +946,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "3ba7447b",
+      "dh": "52b9e33f",
       "paramStorage": [
         [
           "pGame",
@@ -957,17 +957,17 @@
           "EDX:4"
         ],
         [
-          "pAttacker",
+          "pTarget",
           "Stack[0x4]:4"
         ],
         [
-          "nDuration",
+          "nSkillLevel",
           "Stack[0x8]:4"
         ]
       ]
     },
     {
-      "name": "MONSTER_OnDeathAmplifyDamageAura",
+      "name": "MONSTER_CastAmplifyDamageOnHit",
       "address": "005a2530",
       "lines": [
         {
@@ -977,7 +977,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_OnDeathAmplifyDamageAura",
+        "MONSTER_CastAmplifyDamageOnHit",
         "STATSEX_GetCurrentStat",
         "D2GetSkillCalc",
         "SKILLS_ForEachUnitInRangeCallback"
@@ -988,7 +988,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "716c2f63",
+      "dh": "7bf35160",
       "paramStorage": [
         [
           "pGame",
@@ -1171,10 +1171,9 @@
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2Skills",
         "int32_t"
       ],
-      "dh": "dce33d7c",
+      "dh": "531c9ec6",
       "paramStorage": [
         [
           "pGame",
@@ -1195,7 +1194,7 @@
       ]
     },
     {
-      "name": "MONSTER_LightningUniqueDeathBolts",
+      "name": "MONSTER_CastLightningUniqueBolts",
       "address": "005a29a0",
       "lines": [
         {
@@ -1205,7 +1204,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_LightningUniqueDeathBolts",
+        "MONSTER_CastLightningUniqueBolts",
         "STATSEX_GetCurrentStat",
         "memset",
         "GetXPos",
@@ -1220,7 +1219,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "d38dda50",
+      "dh": "0a330c07",
       "paramStorage": [
         [
           "pGame",
@@ -1241,7 +1240,7 @@
       ]
     },
     {
-      "name": "MONSTER_LightningDeathIfNotRunning",
+      "name": "MONSTER_CastLightningUniqueBoltsIfNotGetHit",
       "address": "005a2ba0",
       "lines": [
         {
@@ -1251,15 +1250,15 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_LightningDeathIfNotRunning",
-        "MONSTER_LightningUniqueDeathBolts"
+        "MONSTER_CastLightningUniqueBoltsIfNotGetHit",
+        "MONSTER_CastLightningUniqueBolts"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "1d5ec52f",
+      "dh": "3c3a2227",
       "paramStorage": [
         [
           "pGame",
@@ -1298,10 +1297,9 @@
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2Skills",
         "int32_t"
       ],
-      "dh": "04b7a2ae",
+      "dh": "0db052a1",
       "paramStorage": [
         [
           "pGame",
@@ -1378,15 +1376,15 @@
         "MONSTER_KillWithMinions",
         "FreeAiOfMinions",
         "AssignMinionOwner",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "16691131",
+      "dh": "d6d4c888",
       "paramStorage": [
         [
           "pUnit",
@@ -1417,15 +1415,15 @@
         "GetOwnerUnit",
         "CallForEachMinion",
         "AssignMinionOwner",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7028aa47",
+      "dh": "2a8dfebb",
       "paramStorage": [
         [
           "pGame",
@@ -1719,21 +1717,21 @@
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
         "MONSTER_DispatchSpecialDeath",
-        "MONSTERAI_ThinkRangedSpecial",
-        "AI_Diablo_SpawnRingAttack",
+        "QUESTFX_BloodRavenDeath",
+        "QUESTFX_RadamentDeath",
         "AI_Mephisto_SpawnDeathMissile",
-        "MONSTERAI_ThinkMeleeSkill",
-        "MONSTERAI_ThinkRangedNormal",
+        "QUESTFX_IzualDeath",
+        "QUESTFX_ShenkDeath",
         "MONSTERAI_Noop",
         "AI_UberTristram_CheckDeathAndDropLoot",
-        "MONSTERAI_ThinkRangedShort"
+        "QUESTFX_AndarielDeath"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterClassId"
       ],
-      "dh": "6242e636",
+      "dh": "3da4ac73",
       "paramStorage": [
         [
           "pGame",
@@ -1854,7 +1852,7 @@
       ]
     },
     {
-      "name": "MONSTER_ScheduleEventIfRunning",
+      "name": "MONSTER_LightningEnchantedModeChange",
       "address": "005a37d0",
       "lines": [
         {
@@ -1864,7 +1862,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_ScheduleEventIfRunning",
+        "MONSTER_LightningEnchantedModeChange",
         "SetEvent"
       ],
       "usedTypes": [
@@ -1872,7 +1870,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "f2d20de2",
+      "dh": "99bb79d3",
       "paramStorage": [
         [
           "pGame",
@@ -1988,7 +1986,7 @@
         "MONSTER_SelfResurrect",
         "EVENT_RemoveUnitTimersByType",
         "CheckForModeZeroDeath",
-        "STATES_HasPassiveState",
+        "STATES_HasUdeadFlagState",
         "STATSEX_GetAlignment",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
@@ -2009,7 +2007,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bbc6f9b5",
+      "dh": "f476d492",
       "paramStorage": [
         [
           "pGame",
@@ -2086,15 +2084,15 @@
         "SetEvent",
         "GetOwnerUnit",
         "RemovePetByGuidAndNotify",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c9efa129",
+      "dh": "8cb451f2",
       "paramStorage": [
         [
           "pGame",
@@ -2224,17 +2222,17 @@
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
         "MONSTER_HandleModeTransition",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "SetEvent"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode"
       ],
-      "dh": "35c50abf",
+      "dh": "114c6623",
       "paramStorage": [
         [
           "pGame",
@@ -2349,7 +2347,7 @@
       ]
     },
     {
-      "name": "MONSTER_PeriodicMageThink",
+      "name": "MONUMOD_TickAlwaysRunAi",
       "address": "005a4230",
       "lines": [
         {
@@ -2359,9 +2357,9 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_PeriodicMageThink",
+        "MONUMOD_TickAlwaysRunAi",
         "CheckForModeZeroDeath",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "SetEvent"
       ],
       "usedTypes": [
@@ -2370,7 +2368,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "429f4f61",
+      "dh": "7a3943f3",
       "paramStorage": [
         [
           "pGame",
@@ -2431,7 +2429,7 @@
       ]
     },
     {
-      "name": "MONSTER_DispatchUModOnSpawn",
+      "name": "MONSTER_DispatchUModModeStart",
       "address": "005a4350",
       "lines": [
         {
@@ -2441,14 +2439,14 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_DispatchUModOnSpawn",
+        "MONSTER_DispatchUModModeStart",
         "MONSTER_DispatchUniqueModifiers"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a11f5875",
+      "dh": "60042ec7",
       "paramStorage": [
         [
           "pGame",
@@ -2461,7 +2459,7 @@
       ]
     },
     {
-      "name": "MONSTER_DispatchUModOnDeath",
+      "name": "MONSTER_DispatchUModModeChange",
       "address": "005a4360",
       "lines": [
         {
@@ -2471,14 +2469,14 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_DispatchUModOnDeath",
+        "MONSTER_DispatchUModModeChange",
         "MONSTER_DispatchUniqueModifiers"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9870a779",
+      "dh": "9d78b6d4",
       "paramStorage": [
         [
           "pGame",
@@ -2491,7 +2489,7 @@
       ]
     },
     {
-      "name": "MONSTER_DispatchUModOnHit",
+      "name": "MONSTER_DispatchUModEvent",
       "address": "005a4370",
       "lines": [
         {
@@ -2501,7 +2499,7 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_DispatchUModOnHit",
+        "MONSTER_DispatchUModEvent",
         "MONSTER_DispatchUniqueModifiers"
       ],
       "usedTypes": [
@@ -2509,7 +2507,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ba96a206",
+      "dh": "9dce26b3",
       "paramStorage": [
         [
           "pGame",
@@ -2560,7 +2558,7 @@
       ]
     },
     {
-      "name": "MONSTER_DispatchUModOnSpecial",
+      "name": "MONSTER_DispatchUModDamaged",
       "address": "005a43a0",
       "lines": [
         {
@@ -2570,14 +2568,14 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_DispatchUModOnSpecial",
+        "MONSTER_DispatchUModDamaged",
         "MONSTER_DispatchUniqueModifiers"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "803146e4",
+      "dh": "ae6368d9",
       "paramStorage": [
         [
           "pGame",
@@ -2590,7 +2588,7 @@
       ]
     },
     {
-      "name": "MONSTER_DispatchUModOnSkill",
+      "name": "MONSTER_DispatchUModMissile",
       "address": "005a43b0",
       "lines": [
         {
@@ -2600,14 +2598,14 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_DispatchUModOnSkill",
+        "MONSTER_DispatchUModMissile",
         "MONSTER_DispatchUniqueModifiers"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "f364795a",
+      "dh": "271dae2f",
       "paramStorage": [
         [
           "pGame",
@@ -2781,7 +2779,7 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e7f2a8dc",
+      "dh": "a2723b22",
       "paramStorage": [
         [
           "pGame",
@@ -2804,7 +2802,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "nMode",
+          "nUnitGUID",
           "Stack[0x10]:4"
         ],
         [
@@ -3100,7 +3098,7 @@
         "MONSTER_RecalculateCombatStats",
         "SKILLS_CalcPetSkillDamage",
         "GetStatsByFlags",
-        "STATLIST_FreeChildStatLists",
+        "STATLIST_RemoveAllStats",
         "GetGamePointer",
         "STATSEX_GetAlignment",
         "STATSEX_GetCurrentStat",
@@ -3118,19 +3116,20 @@
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2ElementalDamageType",
+        "eD2MonsterAnimMode",
         "eD2UnitStat",
         "int32_t",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3f475d1b",
+      "dh": "34c7973b",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "nDifficultyScaling",
+          "eMode",
           "EDX:4"
         ]
       ]
@@ -3215,7 +3214,7 @@
       ]
     },
     {
-      "name": "MONSTER_CheckSpecialDeathFlag",
+      "name": "MONSTER_SetSandLeaperHitResultFlag",
       "address": "005a54f0",
       "lines": [
         {
@@ -3225,14 +3224,14 @@
       ],
       "namespace": "D2Game::Monsters::Monsters",
       "calledFunctions": [
-        "MONSTER_CheckSpecialDeathFlag",
+        "MONSTER_SetSandLeaperHitResultFlag",
         "UNIT_GetUnitState"
       ],
       "usedTypes": [
         "D2DamageStrc",
         "D2UnitStrc"
       ],
-      "dh": "086fe212",
+      "dh": "bf0ad051",
       "paramStorage": [
         [
           "pUnit",
@@ -3294,14 +3293,14 @@
       "calledFunctions": [
         "MONSTER_GetHpPercent128",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp"
+        "STATLIST_GetMaxLifeFromUnit"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c4b634df",
+      "dh": "e1497929",
       "paramStorage": [
         [
           "pUnit",

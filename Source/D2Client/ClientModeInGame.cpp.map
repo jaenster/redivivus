@@ -385,7 +385,7 @@
       "dh": "6d9b822b"
     },
     {
-      "name": "CLIENT_GetGameVersionInfo",
+      "name": "CLIENT_GetBNetClientCallbacks",
       "address": "0044b7b0",
       "lines": [
         {
@@ -395,12 +395,12 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "CLIENT_GetGameVersionInfo"
+        "CLIENT_GetBNetClientCallbacks"
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"
       ],
-      "dh": "cefaf1ee"
+      "dh": "7369f3c3"
     },
     {
       "name": "CLIENTMODE_GetGamePasswordPart1",
@@ -448,7 +448,7 @@
       "dh": "7688ee55"
     },
     {
-      "name": "CLIENTMODE_GetIngameUIFlags",
+      "name": "CLIENTMODE_IsHardcoreCharacter",
       "address": "0044b850",
       "lines": [
         {
@@ -458,15 +458,15 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "CLIENTMODE_GetIngameUIFlags"
+        "CLIENTMODE_IsHardcoreCharacter"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "99e65121"
+      "dh": "b8473be6"
     },
     {
-      "name": "CLIENTMODE_ClearIngameUIFlag",
+      "name": "CLIENTMODE_SetCharacterDied",
       "address": "0044b860",
       "lines": [
         {
@@ -476,9 +476,9 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "CLIENTMODE_ClearIngameUIFlag"
+        "CLIENTMODE_SetCharacterDied"
       ],
-      "dh": "73617e1c"
+      "dh": "b3339659"
     },
     {
       "name": "D2CLIENT_SetExitVar1",
@@ -502,7 +502,7 @@
       ]
     },
     {
-      "name": "D2IniData_Getter_Unref_0044b890",
+      "name": "GAME_GetQuitGame",
       "address": "0044b890",
       "lines": [
         {
@@ -512,9 +512,9 @@
       ],
       "namespace": "D2Client::ClientModeInGame",
       "calledFunctions": [
-        "D2IniData_Getter_Unref_0044b890"
+        "GAME_GetQuitGame"
       ],
-      "dh": "52ca5a92"
+      "dh": "68773999"
     },
     {
       "name": "fAPPMODE_client_ReturnAppMode",
@@ -612,7 +612,7 @@
         "CLIENTMODE_WaitForQServerConnection",
         "D2GFX_EndCutSceneReturnSceneState",
         "GetTickCount",
-        "NET_CLIENT_GetConnectionTimeout",
+        "NET_CLIENT_IsConnected",
         "NET_D2GS_CLIENT_ExtractPacketSize_from0xAE",
         "NET_D2GS_CLIENT_PacketHandle_from0xAF",
         "CLIENT_ConnectionRefused"
@@ -622,7 +622,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "59d4032e",
+      "dh": "6933e0bc",
       "paramStorage": [
         [
           "dwUnused",

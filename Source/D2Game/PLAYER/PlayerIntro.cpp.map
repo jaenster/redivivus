@@ -175,7 +175,7 @@
       ]
     },
     {
-      "name": "CopyBufferToPointer",
+      "name": "PLAYERINTRO_CopyIntroToBuffer",
       "address": "00572520",
       "lines": [
         {
@@ -185,16 +185,16 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerIntro",
       "calledFunctions": [
-        "CopyBufferToPointer"
+        "PLAYERINTRO_CopyIntroToBuffer"
       ],
       "usedTypes": [
-        "D2BitBufferStrc",
+        "D2UnitDataPlayerInteractedNPCStrc",
         "uint32_t"
       ],
-      "dh": "70006e90",
+      "dh": "9ade2212",
       "paramStorage": [
         [
-          "pBitBuffer",
+          "pInteractedNPC",
           "ECX:4"
         ],
         [
@@ -204,7 +204,7 @@
       ]
     },
     {
-      "name": "CopySizeAndPosToBuffer",
+      "name": "PLAYERINTRO_CopyIntro2ToBuffer",
       "address": "00572530",
       "lines": [
         {
@@ -214,17 +214,17 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerIntro",
       "calledFunctions": [
-        "CopySizeAndPosToBuffer"
+        "PLAYERINTRO_CopyIntro2ToBuffer"
       ],
       "usedTypes": [
-        "D2BitBufferStrc",
+        "D2UnitDataPlayerInteractedNPCStrc",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "16a50155",
+      "dh": "12661009",
       "paramStorage": [
         [
-          "pBitBuffer",
+          "pInteractedNPC",
           "ECX:4"
         ],
         [

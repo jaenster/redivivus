@@ -16,7 +16,7 @@
       "calledFunctions": [
         "Q35_ResetAncientsStatues",
         "FindUnitFromTable",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent"
       ],
@@ -28,7 +28,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7478c4d6",
+      "dh": "be9d2f86",
       "paramStorage": [
         [
           "pGame",
@@ -125,21 +125,21 @@
         "UNIT_GetUnitState",
         "SetUninterruptableState",
         "UNITS_GetRoom",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "AllocDrlgDelete",
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2States",
         "eD2UnitType"
       ],
-      "dh": "91ad82bb",
+      "dh": "abfaa993",
       "paramStorage": [
         [
           "pGame",
@@ -166,7 +166,7 @@
         "FindUnitFromTable",
         "UNITS_GetRoom",
         "ToggleHasPortalFlagRoom",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RemoveCollision_Vector",
         "SetEvent"
       ],
@@ -176,7 +176,7 @@
         "D2RoomStrc",
         "D2UnitStrc"
       ],
-      "dh": "efb2c3e6",
+      "dh": "f32564b5",
       "paramStorage": [
         [
           "pQuestData",
@@ -203,7 +203,7 @@
         "Q35_ResetAncientsArena",
         "SUNITINACTIVE_RemoveInactiveUnitByTypeAndId",
         "FindUnitFromTable",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestDataA5Q5Strc",
@@ -211,7 +211,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "9cf58d3a",
+      "dh": "76d86343",
       "paramStorage": [
         [
           "pGame",
@@ -243,7 +243,7 @@
         "GetCoords",
         "QUEST_SpawnSuperUniqueAtPoint",
         "SetEvent",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestDataA5Q5Strc",
@@ -252,7 +252,7 @@
         "POINT",
         "uint32_t"
       ],
-      "dh": "55bd9ead",
+      "dh": "162b4138",
       "paramStorage": [
         [
           "pQuestData",
@@ -407,7 +407,7 @@
         "TXT_Experience_GetLineLevel",
         "SERVER_GetUnitStat",
         "STATLIST_SetUnitStat",
-        "UpdateGameInfo"
+        "PLAYERSTATS_LevelUp"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -415,7 +415,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "22c8e653",
+      "dh": "95165720",
       "paramStorage": [
         [
           "pQuestData",
@@ -713,7 +713,7 @@
         "QUEST_SetStateAndBroadcast",
         "IteratePlayerOrMonsterUnits",
         "FindUnitFromTable",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2QuestArgStrc",
@@ -723,7 +723,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "fe2c830d",
+      "dh": "f7e0d46d",
       "paramStorage": [
         [
           "pQuestData",
@@ -1143,14 +1143,14 @@
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
         "Q35_SetStatueAnimMode",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2UnitStrc"
       ],
-      "dh": "0a6568be",
+      "dh": "2aa2d3b0",
       "paramStorage": [
         [
           "pQuestData",
@@ -1334,13 +1334,13 @@
       "calledFunctions": [
         "Objects_InitFn72_AncientsAltar",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "ad783392",
+      "dh": "e1c7b0ac",
       "paramStorage": [
         [
           "pInitArg",
@@ -1361,13 +1361,13 @@
       "calledFunctions": [
         "Objects_InitFn73_AncientsDoor",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataStrc"
       ],
-      "dh": "50b74b3d",
+      "dh": "da5d0612",
       "paramStorage": [
         [
           "pInitArg",
@@ -1457,7 +1457,7 @@
         "QUEST_SendNpcInfoPacket",
         "QUEST_SetStateFlag",
         "QUEST_SetStateAndBroadcast",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectOperateFnArg",
@@ -1465,7 +1465,7 @@
         "D2QuestDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "995d3bd8",
+      "dh": "3815f078",
       "paramStorage": [
         [
           "pOperation",
@@ -1490,7 +1490,7 @@
         "GetQuestState",
         "SetupUpdateEvent_AttachEventSound",
         "TXT_Objects_GetLine",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "UNITS_GetRoom",
         "ToggleHasPortalFlagRoom",
         "SetEvent",
@@ -1508,7 +1508,7 @@
         "SGAMEDATA",
         "eD2ObjectAnimMode"
       ],
-      "dh": "9d00bf3a",
+      "dh": "da7b5806",
       "paramStorage": [
         [
           "pOperation",
@@ -1517,7 +1517,7 @@
       ]
     },
     {
-      "name": "ResurrectAncients",
+      "name": "Q35_CountLivingPlayersOnSummit",
       "address": "0058d510",
       "lines": [
         {
@@ -1527,7 +1527,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A5Q5",
       "calledFunctions": [
-        "ResurrectAncients",
+        "Q35_CountLivingPlayersOnSummit",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetQuestDataByQuestNoInternal"
@@ -1538,7 +1538,7 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "372550e4",
+      "dh": "b954aa37",
       "paramStorage": [
         [
           "pGame",
@@ -1580,7 +1580,7 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d602d732",
+      "dh": "dfbc5342",
       "paramStorage": [
         [
           "pGame",
@@ -1634,14 +1634,14 @@
       "calledFunctions": [
         "Objects_InitFn76_SummitDoor",
         "GetQuestDataByQuestNoInternal",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
         "D2QuestDataA5Q5Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "e4277783",
+      "dh": "759c6822",
       "paramStorage": [
         [
           "pInitArg",
@@ -1663,7 +1663,7 @@
         "OBJOP_A5Q5_WorldstoneStairPortal",
         "GetQuestDataByQuestNoInternal",
         "SetupUpdateEvent_AttachEventSound",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "TakeStairs"
       ],
       "usedTypes": [
@@ -1673,7 +1673,7 @@
         "D2UnitStrc",
         "eD2ObjectAnimMode"
       ],
-      "dh": "e5e64ada",
+      "dh": "48c29f7b",
       "paramStorage": [
         [
           "pOperation",

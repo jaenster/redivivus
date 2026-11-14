@@ -27,7 +27,7 @@ namespace D2Client::SKILLS::SkillsPal {
 // Slot from skills.txt cltdofunc 34.
 BOOL __fastcall Skills_CltDoFunc_Pal_Sacrifice(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client DoFunc for Paladin Charge skill. Sets UNITFLAG_SKSRVDOFUNC on the caster, resolves target coordinates, spawns a missile, then sets the missile path type to 0xE (charge path) and recalculates its path. Returns TRUE if the missile was created and has a valid dynamic path.
-BOOL __fastcall Skills_CltDoFunc_Pal_ChargePathMissile(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Pal_BlessedHammer(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall Skills_CltDoFunc_Pal_FistOfHeavens(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side do-function for Paladin aura skills that scatter missiles in a random radius field (e.g. Holy Fire/Freeze). Computes missile count scaled by aura radius squared, then for each missile picks a random (x,y) within the radius circle, spawns the aura's CltSubMissile there, and assigns a random direction. Returns 0 in town or if skill/missile data is invalid.
 BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
@@ -40,7 +40,7 @@ int32_t __fastcall SKILL_GetSequenceEventFrame(struct D2UnitStrc * pUnit);
 // Slot from skills.txt cltdofunc 37.
 BOOL __fastcall Skills_CltDoFunc_Pal_Charge(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 void __fastcall SKILL_StopAndClearUninterruptable(struct D2UnitStrc * pUnit, eD2Skills eSkill);
-BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_State_OpenWounds(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
 BOOL __fastcall SKILL_ExecuteItemCast(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pDoFuncData, struct D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget);
 BOOL __fastcall SKILL_ExecuteItemCastOnUnit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pSkillLevelData, struct D2UnitStrc * pTargetUnit, uint16_t bHasTarget);

@@ -424,7 +424,7 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
             if ((uint32_t)sGfxData.nFrameNumber < 0xc || (uint32_t)sGfxData.nFrameNumber > 0xf) {
               sGfxData.nFrameNumber = 0xc;
             }
-          nResult = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+          nResult = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
           if (!nResult) {
             goto mark_disabled_button;
           }
@@ -804,7 +804,7 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
       D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine1, pFormat, pSrc);
     }
 
-    uint32_t nUiFlags = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+    uint32_t nUiFlags = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
     if (nUiFlags) {
       nBoxHeight = 0x1e;
       if (bOutLoot == bInLoot) {
@@ -1031,7 +1031,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
                 }
               case 2:
                 {
-                  nFlag = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+                  nFlag = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
                   if (nFlag) {
                     nFlag = GAME::Roster::ROSTER_GetLootFlag(pRosterIter);
                     if (nFlag) {
@@ -1102,7 +1102,7 @@ uint32_t ClickParty_II(int32_t eButtonType, D2RosterStrc * pRoster) {
       nResultFlag = GAME::Roster::ROSTER_GetHostileFlag(pRoster);
       return nResultFlag;
       case 2:
-        nUiFlags = ClientModeInGame::CLIENTMODE_GetIngameUIFlags();
+        nUiFlags = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
       if (nUiFlags) {
         GAME::Roster::ROSTER_ToggleLootAndSend(pRoster);
         nResultFlag = GAME::Roster::ROSTER_GetLootFlag(pRoster);
@@ -1117,7 +1117,7 @@ uint32_t ClickParty_II(int32_t eButtonType, D2RosterStrc * pRoster) {
       case 4:
         GAME::Roster::ROSTER_ToggleMuteAndSend(pRoster);
       nResultFlag = GAME::Roster::ROSTER_GetMuteFlag(pRoster);
-      pDVar1 = ClientModeInGame::CLIENT_GetGameVersionInfo();
+      pDVar1 = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
       if (pDVar1) {
         if (nResultFlag) {
           szCommand[0] = '/';

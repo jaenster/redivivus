@@ -44,7 +44,7 @@ BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(D2UnitStrc * pUnit, eD2Ski
 }
 
 // Client-side helper for Druid shapeshifted melee skills: spawns nParam1 linear-path missiles of eMissileId at the owner's position toward cursor coordinates. If nParam4 is set, first spawns an extra lead missile and decrements the remaining count. Applies nParam3 animation speed override and optional flags0x40 clear (nParam5). Returns 1 on success, 0 if coords unavailable.
-BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t nNumMissiles, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nAnimSpeed, int32_t bSpawnLeadMissile, int32_t bClearPathFlag0x40) {
+BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t nNumMissiles, eMissilesId eMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nAnimSpeed, int32_t bSpawnLeadMissile, int32_t bClearPathFlag0x40) {
     D2UnitStrc* pLeadMissile;
     D2SkillArgStrc sSkillArg;
     int nCoordY;
@@ -123,7 +123,7 @@ BOOL __fastcall SKILLSDRU_CltCreateShapeShiftMissile(D2UnitStrc * pUnit, int32_t
     return 1;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Dru_Firestorm(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -140,14 +140,14 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_FwdArc(D2UnitStrc * pUnit, eD2Sk
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
-      bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 1, 0);
+      bResult = SKILLSDRU_CltCreateElementalMissiles(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 1, 0);
       return bResult;
     }
 
     return 0;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Dru_Twister(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -164,14 +164,14 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_SideArc(D2UnitStrc * pUnit, eD2S
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
-      bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x100, 0, 1);
+      bResult = SKILLSDRU_CltCreateElementalMissiles(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x100, 0, 1);
       return bResult;
     }
 
     return 0;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Dru_Tornado(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -188,7 +188,7 @@ BOOL __fastcall Skills_CltDoFunc_Dru_ShapeShift_BackArc(D2UnitStrc * pUnit, eD2S
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     if (nMissileCount > 0) {
       BOOL bResult;
-      bResult = SKILLSDRU_CltCreateShapeShiftMissile(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 0, 1);
+      bResult = SKILLSDRU_CltCreateElementalMissiles(pUnit, nMissileCount, eMissileId, eSkill, nSkillLvl, 0x200, 0, 1);
       return bResult;
     }
 

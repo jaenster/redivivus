@@ -65,7 +65,7 @@ void __stdcall FIELDTBLS_AllocPlayerData_NoOp_Unref_00663740(D2UnitStrc * dwUnus
 
 }
 
-int32_t __stdcall CUBE_GetRecipeCount_Unref_00665760() {
+int32_t __stdcall TXT_GetCharTemplateTxtRecordCount() {
     return nTxtCharTemplateSize;
 }
 
@@ -905,11 +905,11 @@ void __stdcall FIELDTBLS_Unused_HaltLine101() {
     exit(-1);
 }
 
-int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a490() {
+int32_t __stdcall FIELDTBLS_GetFieldDataTableWidth() {
     return gnFieldDataTableWidth;
 }
 
-int32_t __stdcall CUBE_GetRecipeCount_Unref_0066a4a0() {
+int32_t __stdcall FIELDTBLS_GetFieldDataTableHeight() {
     return gnFieldDataTableHeight;
 }
 

@@ -219,7 +219,7 @@
       ]
     },
     {
-      "name": "D2WINTEXTBOX_SetCustomData",
+      "name": "PROGRESSBAR_SetProgress",
       "address": "00507d70",
       "lines": [
         {
@@ -229,7 +229,7 @@
       ],
       "namespace": "D2Win::Forms",
       "calledFunctions": [
-        "D2WINTEXTBOX_SetCustomData",
+        "PROGRESSBAR_SetProgress",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -238,14 +238,14 @@
         "D2WinProgressBar",
         "int32_t"
       ],
-      "dh": "be8da6e2",
+      "dh": "ac6d7a78",
       "paramStorage": [
         [
-          "pTextBox",
+          "pProgressBar",
           "Stack[0x4]:4"
         ],
         [
-          "nCustomData",
+          "fProgress",
           "Stack[0x8]:4"
         ]
       ]

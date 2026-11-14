@@ -119,7 +119,7 @@
       ]
     },
     {
-      "name": "D2GFX_GetColorWithAlphaFromPallete",
+      "name": "D2GFX_FindNearestPaletteIndex",
       "address": "00605210",
       "lines": [
         {
@@ -129,7 +129,7 @@
       ],
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
@@ -137,14 +137,14 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "af8781a3",
+      "dh": "ad39b949",
       "paramStorage": [
         [
           "pPallete",
           "Stack[0x4]:4"
         ],
         [
-          "nAlpha",
+          "nPaletteSize",
           "Stack[0x8]:4"
         ],
         [
@@ -152,7 +152,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "Green",
+          "nGreen",
           "Stack[0x10]:4"
         ],
         [
@@ -457,13 +457,13 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildAlphaBlendTables",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
       ],
-      "dh": "a837fc32",
+      "dh": "c495ec95",
       "paramStorage": [
         [
           "pPalette",
@@ -483,13 +483,13 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildAdditiveBlendTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
       ],
-      "dh": "f72767ce",
+      "dh": "3dc6349e",
       "paramStorage": [
         [
           "pPalette",
@@ -538,12 +538,12 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildMultiplicativeBlendTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY"
       ],
-      "dh": "37351eec",
+      "dh": "faec192b",
       "paramStorage": [
         [
           "pPalette",
@@ -563,14 +563,14 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildScreenBlendAndDesatTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bb1b45cc",
+      "dh": "4b2e7be8",
       "paramStorage": [
         [
           "pPalette",
@@ -590,14 +590,14 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildColorTintTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "55dd58ba",
+      "dh": "e408143c",
       "paramStorage": [
         [
           "pPalette",
@@ -617,13 +617,13 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildDarkenTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t"
       ],
-      "dh": "33f800e3",
+      "dh": "219cb725",
       "paramStorage": [
         [
           "pPalette",
@@ -643,14 +643,14 @@
       "namespace": "D2CMP::Draw",
       "calledFunctions": [
         "DRAW_BuildBrightenTable",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "LPPALETTEENTRY",
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9c76bcd5",
+      "dh": "21cf9a02",
       "paramStorage": [
         [
           "pPalette",
@@ -671,7 +671,7 @@
       "calledFunctions": [
         "DRAW_BuildHSLTransformTables",
         "DRAW_ConvertPaletteHSLtoRGB",
-        "D2GFX_GetColorWithAlphaFromPallete",
+        "D2GFX_FindNearestPaletteIndex",
         "__CIsqrt"
       ],
       "usedTypes": [
@@ -680,7 +680,7 @@
         "tagRGBQUAD",
         "uint32_t"
       ],
-      "dh": "2b618ede",
+      "dh": "845db2b3",
       "paramStorage": [
         [
           "pPalette",
@@ -705,7 +705,7 @@
       "calledFunctions": [
         "DRAW_BuildBrightenLightnessTable",
         "DRAW_ConvertPaletteHSLtoRGB",
-        "D2GFX_GetColorWithAlphaFromPallete"
+        "D2GFX_FindNearestPaletteIndex"
       ],
       "usedTypes": [
         "D2HSLColorStrc",
@@ -713,7 +713,7 @@
         "tagRGBQUAD",
         "uint32_t"
       ],
-      "dh": "4eed84af",
+      "dh": "3ac9681f",
       "paramStorage": [
         [
           "pHSLPalette",

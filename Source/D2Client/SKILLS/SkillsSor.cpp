@@ -251,7 +251,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetInAuraRange(D2UnitStrc * pUnit, eD2S
     return 0;
 }
 
-BOOL __fastcall Skills_CltDoFunc_Sor_HomingMissileVelocity(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Nova(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nBonusVelocity;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {

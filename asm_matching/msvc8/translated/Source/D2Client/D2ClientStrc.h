@@ -111,7 +111,7 @@ __pragma(pack(push, 1)) struct D2ClientStrc {
     /* 0x180 */ int nSaveOpenSize; // Bytes received so far
     /* 0x184 */ int nSaveCurrentSize;
     /* 0x188 */ int nFileSize;
-    /* 0x18C */ int32_t pSavePacketList;
+    /* 0x18C */ int32_t nSaveChecksum;
     /* 0x190 */ FILETIME ftFileTime;
     /* 0x198 */ int nAttachedUnitType;
     /* 0x19C */ int dwAttachedUnitGUID;
@@ -157,7 +157,7 @@ __pragma(pack(push, 1)) struct D2ClientStrc {
     /* 0x4AC */ struct D2ClientStrc * pServerNext; // Next in server bucket by ID
     /* 0x4B0 */ struct D2ClientStrc * pNextInListByName; // Next in server bucket by name hash
     /* 0x4B4 */ D2QServerClientStrcExt tQServerExt; // QSERVER-only runtime heartbeat/ping extension block
-    /* 0x508 */ int nExp;
+    /* 0x508 */ int nExpLoss;
     /* 0x50C */ int dwLangId;
     /* 0x510 */ int unk0x510;
     /* 0x514 */ int unk0x514;

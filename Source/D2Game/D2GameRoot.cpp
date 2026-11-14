@@ -46,8 +46,8 @@ int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20() {
 }
 
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
-void __fastcall GAME_SetNoSaveFlag(BOOL bResult) {
-    PLAYER::PlayerSave::DontNoSafeGameBool = bResult;
+void __fastcall PLAYERSAVE_EnableSaveFileWriting(BOOL bEnable) {
+    PLAYER::PlayerSave::gbSaveFileWritingEnabled = bEnable;
 }
 
 D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId) {
@@ -111,7 +111,7 @@ D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int
     return pFoundRoom;
 }
 
-void __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790() {
+void __stdcall GAME_ClearGlobalFlag_Thunk() {
     GAME_ClearGlobalFlag();
 }
 
@@ -165,7 +165,7 @@ int __stdcall QSERVER_CountClientsWithStatusFlag0x20() {
     return nMatchCount;
 }
 
-void __fastcall GAME_SetNoSaveFlag_Unref_00544090(BOOL bResult) {
+void __fastcall QUESTS_SetDebugPrint(BOOL bResult) {
     Quests::QUESTS::DEBUGPRINT = bResult;
 }
 
@@ -341,7 +341,7 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
 }
 
-void __fastcall MONSTER_ScheduleDeathIfRunningOrDead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
+void __fastcall MONSTER_ScheduleEventOnGetHitOrDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
     }

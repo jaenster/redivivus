@@ -21,25 +21,25 @@ void __stdcall CoordsMapToScreen(int32_t * pX, int32_t * pY);
 void __stdcall DRLG_MapWorldToScreenCoords(int32_t * pX, int32_t * pY);
 void __stdcall CoordsMiniMapToScreen(int32_t * pX, int32_t * pY);
 // Converts orthogonal (width, height) to isometric tile coordinates divided by 160 (0xA0). Formula: isoX = (h*2 + w) / 160, isoY = (h*2 - w) / 160. Used by drawing/automap code.
-int32_t __stdcall DRLG_OrthToIsoCoordsDiv160(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
+int32_t __stdcall DRLG_OrthToIsoCoordsDiv160(int32_t nX, int32_t nY, int32_t * pX, int32_t * pY);
 // Converts orthogonal (width, height) to isometric tile coordinates divided by 32 (>>5). Formula: isoX = (h*2 + w) >> 5, isoY = (h*2 - w) >> 5. Used by rendering code.
-void __stdcall DRLG_OrthToIsoCoordsDiv32(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
+void __stdcall DRLG_OrthToIsoCoordsDiv32(int32_t nX, int32_t nY, int32_t * pX, int32_t * pY);
 // Isometric transform with >>5 shift (divide by 32).
 // Converts high-precision world coords (16-bit fixed-point) to screen pixels.
 // screenX = (worldX - worldY) >> 5, screenY = (worldX + worldY) >> 5.
 // Used for tiles, perspective adjust, particle position.
-void __stdcall DRLG_WorldToScreenShift5(int32_t * pX, int32_t * pY);
+void __stdcall DRLG_ScreenToWorldShift5(int32_t * pX, int32_t * pY);
 void __stdcall CoordsRoomToWorld(int32_t * pX, int32_t * pY);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 // Converts world coordinates to screen tile coordinates using the isometric transform. Computes pX = (2*Y + X) / 0xA0 and pY = (2*Y - X) / 0xA0. The 0xA0 (160) divisor corresponds to the tile dimension. From Drlg.cpp transform utilities.
-void __stdcall DRLG_CoordsWorldToScreenTile(int32_t * pX, int32_t * pY);
+void __stdcall DRLG_CoordsScreenToWorldTile(int32_t * pX, int32_t * pY);
 void __stdcall SizeMiniMapToScreen(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
 void __stdcall SizeMapToScreen(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
 void __stdcall SizeRoomToWorld(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
 void __stdcall SizeWorldToRoom(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
 // Converts world coordinates to screen coordinates without division. Formula: outX = y*2 + x, outY = y*2 - x. Called by SetSP1Shifted. Raw isometric transform before any tile scaling.
-void __stdcall DRLG_WorldToScreenNoShift(int32_t * pX, int32_t * pY);
+void __stdcall DRLG_ScreenToWorldNoShift(int32_t * pX, int32_t * pY);
 #endif // D2_MODULE_D2Common
 
 } // namespace D2Common::Drlg::Transform

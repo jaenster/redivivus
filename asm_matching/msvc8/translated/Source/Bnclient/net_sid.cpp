@@ -241,11 +241,11 @@ BOOL __stdcall SID_GetReadyFlag() {
     return g_bSIDProtocolReady;
 }
 
-BOOL __stdcall SID_GetReadyFlag_Unref_00520af0() {
+BOOL __stdcall SID_GetRealmLogonResult() {
     return g_nRealmLogonResult;
 }
 
-void * __stdcall NET_SID_CLIENT_GetChannelNamePtr_Unref_00520b00() {
+void * __stdcall NET_SID_CLIENT_GetCDKeyInUseByUsernamePtr() {
     return gszCDKeyInUseByUsername;
 }
 

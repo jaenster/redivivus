@@ -511,7 +511,7 @@
         "GetCarriedItem",
         "INVENTORY_GetNextItem",
         "GetItemQuality",
-        "SUNITNPC_FillNpcInventory",
+        "SUNITNPC_RemoveStoreItem",
         "SERVER_ItemToInventory",
         "ITEM_GetContainingInventoryPage",
         "ITEM_SetItemData_ePage",
@@ -526,7 +526,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "82fd91c1",
+      "dh": "1471b669",
       "paramStorage": [
         [
           "pGame",
@@ -617,23 +617,22 @@
         "D2NpcPlayerInteractionStrc",
         "D2NpcPlayerInteractionStrc *",
         "D2NpcProxyInventoryStrc",
-        "D2PoolManagerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "4018bee2",
+      "dh": "d2ffe6f6",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
-          "pMemory",
+          "pNpcUnit",
           "Stack[0x4]:4"
         ]
       ]
@@ -660,18 +659,18 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a0b25ef1",
+      "dh": "aca55b4c",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pNpcUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
-          "pPlayerUnit",
+          "pNpcUnit",
           "Stack[0x4]:4"
         ]
       ]
@@ -948,7 +947,7 @@
       ]
     },
     {
-      "name": "SERVER_InitClassicTowns",
+      "name": "SUNITPROXY_OnClientRemoved",
       "address": "00537580",
       "lines": [
         {
@@ -958,7 +957,7 @@
       ],
       "namespace": "D2Game::UNIT::sunitproxy",
       "calledFunctions": [
-        "SERVER_InitClassicTowns",
+        "SUNITPROXY_OnClientRemoved",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "IterateAllUnits",
@@ -970,14 +969,14 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "d739b2eb",
+      "dh": "2175f30c",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ]
       ]
@@ -1003,18 +1002,18 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7168e94b",
+      "dh": "bc004e14",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pNpc",
           "EDX:4"
         ],
         [
-          "nNpcProxy",
+          "pPlayer",
           "Stack[0x4]:4"
         ],
         [

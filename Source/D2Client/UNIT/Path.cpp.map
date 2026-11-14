@@ -133,15 +133,15 @@
         "GetPlayerUnit_UI",
         "GetPing",
         "GetDistanceSquaredXY",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "CoordsMapToScreen",
         "GFXUTIL_IsUnitSpriteOnScreen",
         "DRLGROOM_FindBetterNearbyRoom",
         "FindRoomBySubtileCoordinates",
         "NET_D2GS_CLIENT_Send_SHORT_SHORT",
         "CLIENT_WarpPlayerAndContinueMove",
-        "PATH_CheckCollisionFlags"
+        "PATH_MoveUnitToRoomPosition"
       ],
       "usedTypes": [
         "D2RoomStrc",
@@ -151,7 +151,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "60413702",
+      "dh": "51ac3698",
       "paramStorage": [
         [
           "pUnit",

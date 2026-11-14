@@ -83,7 +83,7 @@ namespace D2Game { namespace PLAYER { namespace PlayerModes {
 extern D2PlayerModeFnPairStrc gaPlayerModeMoveFuncs[20];
 }}} // namespace D2Game::PLAYER::PlayerModes
 namespace D2Game { namespace PLAYER { namespace PlayerSave {
-extern BOOL DontNoSafeGameBool;
+extern BOOL gbSaveFileWritingEnabled;
 }}} // namespace D2Game::PLAYER::PlayerSave
 namespace D2Game { namespace Quests { namespace QUESTS {
 extern BOOL DEBUGPRINT;

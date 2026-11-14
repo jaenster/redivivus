@@ -229,16 +229,16 @@
         "SetCurrentSkill",
         "GetTargetEx",
         "MONSTERAI_ExecuteLifecycleTransition",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonStatsTxt",
-        "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode"
       ],
-      "dh": "37f74a7f",
+      "dh": "26dba506",
       "paramStorage": [
         [
           "pGame",
@@ -251,7 +251,7 @@
       ]
     },
     {
-      "name": "MonsterKilledBySystem",
+      "name": "MONMODE_EndTrappedSoulAttack",
       "address": "005a8330",
       "lines": [
         {
@@ -261,7 +261,7 @@
       ],
       "namespace": "D2Game::GAME::Event::Dispatch::Monster",
       "calledFunctions": [
-        "MonsterKilledBySystem",
+        "MONMODE_EndTrappedSoulAttack",
         "SetCurrentSkill",
         "TXT_MonStats_GetMonStats2",
         "GetTargetEx",
@@ -271,13 +271,13 @@
         "MONSTERAI_ExecuteAiFunction"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonStats2Txt",
-        "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "f06babf3",
+      "dh": "4769afb2",
       "paramStorage": [
         [
           "pGame",
@@ -290,7 +290,7 @@
       ]
     },
     {
-      "name": "MonsterKilledByTarget",
+      "name": "MONMODE_EndTrappedSoulSkill",
       "address": "005a83e0",
       "lines": [
         {
@@ -300,7 +300,7 @@
       ],
       "namespace": "D2Game::GAME::Event::Dispatch::Monster",
       "calledFunctions": [
-        "MonsterKilledByTarget",
+        "MONMODE_EndTrappedSoulSkill",
         "SetCurrentSkill",
         "TXT_MonStats_GetMonStats2",
         "GetTargetEx",
@@ -310,13 +310,13 @@
         "MONSTERAI_ExecuteAiFunction"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonStats2Txt",
-        "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "6c1ec3ae",
+      "dh": "a848cc9c",
       "paramStorage": [
         [
           "pGame",
@@ -396,7 +396,7 @@
       ]
     },
     {
-      "name": "MONSTER_ProcessGetHitRecovery",
+      "name": "MONMODE_EndKnockback",
       "address": "005a8520",
       "lines": [
         {
@@ -406,7 +406,7 @@
       ],
       "namespace": "D2Game::GAME::Event::Dispatch::Monster",
       "calledFunctions": [
-        "MONSTER_ProcessGetHitRecovery",
+        "MONMODE_EndKnockback",
         "PATH_RestoreVelocityAndPathType",
         "GetSomeMonsterStatFlag",
         "SetEvent",
@@ -415,13 +415,13 @@
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c33d0a58",
+      "dh": "972eda51",
       "paramStorage": [
         [
           "pGame",
@@ -434,7 +434,7 @@
       ]
     },
     {
-      "name": "MONSTER_UpdateGetHitAnimation",
+      "name": "MONMODE_UpdateKnockback",
       "address": "005a8630",
       "lines": [
         {
@@ -444,18 +444,18 @@
       ],
       "namespace": "D2Game::GAME::Event::Dispatch::Monster",
       "calledFunctions": [
-        "MONSTER_UpdateGetHitAnimation",
+        "MONMODE_UpdateKnockback",
         "UNITS_ProcessUnitMovement",
         "AdvanceAnimFrame",
         "IsAtEndOfFrameCycle",
-        "MONSTER_ProcessGetHitRecovery"
+        "MONMODE_EndKnockback"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "ffc49a9d",
+      "dh": "76f10535",
       "paramStorage": [
         [
           "pGame",

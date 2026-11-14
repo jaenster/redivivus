@@ -643,7 +643,7 @@ struct __attribute__((packed)) D2ClientStrc {
     /* 0x180 */ int nSaveOpenSize; // Bytes received so far
     /* 0x184 */ int nSaveCurrentSize;
     /* 0x188 */ int nFileSize;
-    /* 0x18C */ int32_t pSavePacketList;
+    /* 0x18C */ int32_t nSaveChecksum;
     /* 0x190 */ FILETIME ftFileTime;
     /* 0x198 */ int nAttachedUnitType;
     /* 0x19C */ int dwAttachedUnitGUID;
@@ -689,7 +689,7 @@ struct __attribute__((packed)) D2ClientStrc {
     /* 0x4AC */ struct D2ClientStrc * pServerNext; // Next in server bucket by ID
     /* 0x4B0 */ struct D2ClientStrc * pNextInListByName; // Next in server bucket by name hash
     /* 0x4B4 */ D2QServerClientStrcExt tQServerExt; // QSERVER-only runtime heartbeat/ping extension block
-    /* 0x508 */ int nExp;
+    /* 0x508 */ int nExpLoss;
     /* 0x50C */ int dwLangId;
     /* 0x510 */ int unk0x510;
     /* 0x514 */ int unk0x514;
@@ -752,7 +752,7 @@ struct __attribute__((packed)) D2ControlStrc {
     /* 0x2C */ BOOL (__stdcall *fpListCheck)(struct D2ControlMsg *);
     /* 0x30 */ BOOL (__stdcall *fpKey)(struct D2ControlMsg *);
     /* 0x34 */ BOOL (__stdcall *fpOnPress)(struct D2ControlMsg *);
-    /* 0x38 */ BOOL (__fastcall *fpDrawAnim)(struct D2ControlStrc *);
+    /* 0x38 */ BOOL (__fastcall *fpHitTest)(struct D2ControlStrc *);
     /* 0x3C */ struct D2ControlStrc * pNext;
 };
 #endif // D2_DEFINED_D2ControlStrc
@@ -3960,9 +3960,6 @@ namespace D2Client::UI::ui {
 void __stdcall CONTROLCONFIG_CalculateColumnBounds();
 void __stdcall DRAW_ConfigControlsMenu();
 } // namespace D2Client::UI::ui
-namespace D2Client::UNIT::CUnit {
-void __fastcall IsAttackable(struct D2UnitStrc * pUnit);
-} // namespace D2Client::UNIT::CUnit
 namespace D2Client::Warden {
 void __thiscall SendPacket(::WardenClient * pThis, void * pData, uint32_t nLen);
 bool __thiscall CheckModule(::WardenClient * pThis, uint8_t * pModuleHash, void * pRc4Key);
@@ -3993,6 +3990,9 @@ extern struct D2MercForHire D2MercForHire[10];
 namespace D2Client::NPC {
 extern struct D2NpcMenuOptions D2NpcMenuOptions[48];
 } // namespace D2Client::NPC
+namespace D2Client::UI::Chat {
+extern int gnLanguageCode;
+} // namespace D2Client::UI::Chat
 namespace D2Client::UI::Inv {
 extern uint32_t nScreenMode;
 } // namespace D2Client::UI::Inv

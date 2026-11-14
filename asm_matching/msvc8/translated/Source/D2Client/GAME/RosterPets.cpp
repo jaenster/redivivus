@@ -7,6 +7,7 @@
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/PlayerList.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -170,9 +171,9 @@ void __fastcall AddRosterPetMerc(DWORD nRosterGUID, int32_t nOwnerGUID, int32_t 
     }
 
     UNIT::Monster::MERC_InitializeFromPacket(pUnit, &sMercInit);
-    UNIT::CUnit::IsAttackable(pUnit);
+    UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
     UNIT::Monster::MONSTER_InitLightMap(pUnit);
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
 }
 
 // Removes a pet/merc entry from the global roster pet list by nRosterGUID. For skillID 7 (merc) owned by the local player, sets a deferred-removal flag (field8_0x20=1) instead of freeing immediately. Otherwise unlinks and frees the D2RosterPetStrc via FreeClientMemory.
@@ -435,7 +436,7 @@ void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRosterUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::GetTxtMaxHp(pRosterUnit) * nHpPercent / 100, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRosterUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pRosterUnit) * nHpPercent / 100, 0);
 }
 
 int32_t __fastcall GetRosterPerHPPercent(int32_t nRosterGUID) {

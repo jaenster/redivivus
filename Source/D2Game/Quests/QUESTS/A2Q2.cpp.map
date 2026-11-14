@@ -213,7 +213,7 @@
       ]
     },
     {
-      "name": "Q10_OnScrollPickup",
+      "name": "Q10_CountPlayersNeedingScroll",
       "address": "00599700",
       "lines": [
         {
@@ -223,7 +223,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "Q10_OnScrollPickup",
+        "Q10_CountPlayersNeedingScroll",
         "GetPlayerData",
         "GetQuestState",
         "GetQuestDataByQuestNoInternal"
@@ -235,7 +235,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "44ab5a26",
+      "dh": "9a1918af",
       "paramStorage": [
         [
           "pGame",
@@ -252,7 +252,7 @@
       ]
     },
     {
-      "name": "Q10_OnStaffOrViperPickup",
+      "name": "Q10_CountPlayersNeedingStaff",
       "address": "00599750",
       "lines": [
         {
@@ -262,7 +262,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "Q10_OnStaffOrViperPickup",
+        "Q10_CountPlayersNeedingStaff",
         "GetPlayerData",
         "GetQuestState",
         "HasQuestItem",
@@ -275,7 +275,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "ba274bc3",
+      "dh": "d7cf2fce",
       "paramStorage": [
         [
           "pGame",
@@ -292,7 +292,7 @@
       ]
     },
     {
-      "name": "Q10_OnHoradricCubePickup",
+      "name": "Q10_CountPlayersNeedingCube",
       "address": "005997c0",
       "lines": [
         {
@@ -302,7 +302,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A2Q2",
       "calledFunctions": [
-        "Q10_OnHoradricCubePickup",
+        "Q10_CountPlayersNeedingCube",
         "HasQuestItem",
         "GetQuestDataByQuestNoInternal"
       ],
@@ -312,7 +312,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a943a08c",
+      "dh": "f3aa9659",
       "paramStorage": [
         [
           "pGame",
@@ -651,7 +651,7 @@
         "D2QuestDataStrc",
         "D2SeedStrc"
       ],
-      "dh": "43d3b55e",
+      "dh": "f2142e78",
       "paramStorage": [
         [
           "pOperation",
@@ -687,7 +687,7 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "603212bd",
+      "dh": "02ec5214",
       "paramStorage": [
         [
           "pOperation",
@@ -722,7 +722,7 @@
         "D2SeedStrc",
         "D2UnitStrc"
       ],
-      "dh": "7e78ae8c",
+      "dh": "5408f7d7",
       "paramStorage": [
         [
           "pOperation",

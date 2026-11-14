@@ -49,9 +49,50 @@ __pragma(pack(push, 1)) struct D2AutomapTxt {
 }; __pragma(pack(pop))
 
 #endif // D2_MODULE_D2Common
-#ifndef D2_DEFINED_D2ExpansionLvlTblsTxt
-#define D2_DEFINED_D2ExpansionLvlTblsTxt
-struct D2ExpansionLvlTblsTxt {
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
+struct D2LvlTblsTxt {
+    /* 0x00 */ uint8_t field_0x0;
+    /* 0x01 */ uint8_t field_0x1;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ uint8_t field_0x4;
+    /* 0x05 */ uint8_t field_0x5;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+    /* 0x08 */ uint8_t field_0x8;
+    /* 0x09 */ uint8_t field_0x9;
+    /* 0x0A */ uint8_t field_0xa;
+    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0C */ uint8_t field_0xc;
+    /* 0x0D */ uint8_t field_0xd;
+    /* 0x0E */ uint8_t field_0xe;
+    /* 0x0F */ uint8_t field_0xf;
+    /* 0x10 */ uint8_t field_0x10;
+    /* 0x11 */ uint8_t field_0x11;
+    /* 0x12 */ uint8_t field_0x12;
+    /* 0x13 */ uint8_t field_0x13;
+    /* 0x14 */ uint8_t field_0x14;
+    /* 0x15 */ uint8_t field_0x15;
+    /* 0x16 */ uint8_t field_0x16;
+    /* 0x17 */ uint8_t field_0x17;
+};
+
+#endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2LvlTypesTxt
+#define D2_DEFINED_D2LvlTypesTxt
+__pragma(pack(push, 1)) struct D2LvlTypesTxt {
+    /* 0x000 */ char File[32][60];
+    /* 0x780 */ uint8_t Act;
+    /* 0x781 */ uint8_t field_0x781;
+    /* 0x782 */ uint8_t field_0x782;
+    /* 0x783 */ uint8_t field_0x783;
+    /* 0x784 */ int Expansion;
+}; __pragma(pack(pop))
+
+#endif // D2_DEFINED_D2LvlTypesTxt
+#ifndef D2_DEFINED_D2LvlTypeTileLibrariesStrc
+#define D2_DEFINED_D2LvlTypeTileLibrariesStrc
+struct D2LvlTypeTileLibrariesStrc {
     /* 0x000 */ void * pTileProject[32]; // Somehing with TileProjects
     /* 0x080 */ uint8_t field_0x80;
     /* 0x081 */ uint8_t field_0x81;
@@ -4023,48 +4064,7 @@ struct D2ExpansionLvlTblsTxt {
     /* 0xFFF */ uint8_t field_0xfff;
 };
 
-#endif // D2_DEFINED_D2ExpansionLvlTblsTxt
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct D2LvlTblsTxt {
-    /* 0x00 */ uint8_t field_0x0;
-    /* 0x01 */ uint8_t field_0x1;
-    /* 0x02 */ uint8_t field_0x2;
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ uint8_t field_0x4;
-    /* 0x05 */ uint8_t field_0x5;
-    /* 0x06 */ uint8_t field_0x6;
-    /* 0x07 */ uint8_t field_0x7;
-    /* 0x08 */ uint8_t field_0x8;
-    /* 0x09 */ uint8_t field_0x9;
-    /* 0x0A */ uint8_t field_0xa;
-    /* 0x0B */ uint8_t field_0xb;
-    /* 0x0C */ uint8_t field_0xc;
-    /* 0x0D */ uint8_t field_0xd;
-    /* 0x0E */ uint8_t field_0xe;
-    /* 0x0F */ uint8_t field_0xf;
-    /* 0x10 */ uint8_t field_0x10;
-    /* 0x11 */ uint8_t field_0x11;
-    /* 0x12 */ uint8_t field_0x12;
-    /* 0x13 */ uint8_t field_0x13;
-    /* 0x14 */ uint8_t field_0x14;
-    /* 0x15 */ uint8_t field_0x15;
-    /* 0x16 */ uint8_t field_0x16;
-    /* 0x17 */ uint8_t field_0x17;
-};
-
-#endif // D2_MODULE_D2Common
-#ifndef D2_DEFINED_D2LvlTypesTxt
-#define D2_DEFINED_D2LvlTypesTxt
-__pragma(pack(push, 1)) struct D2LvlTypesTxt {
-    /* 0x000 */ char File[32][60];
-    /* 0x780 */ uint8_t Act;
-    /* 0x781 */ uint8_t field_0x781;
-    /* 0x782 */ uint8_t field_0x782;
-    /* 0x783 */ uint8_t field_0x783;
-    /* 0x784 */ int Expansion;
-}; __pragma(pack(pop))
-
-#endif // D2_DEFINED_D2LvlTypesTxt
+#endif // D2_DEFINED_D2LvlTypeTileLibrariesStrc
 // =============================================================================
 // Global data (co-located with struct definitions)
 // =============================================================================
@@ -4099,7 +4099,7 @@ void __fastcall TXT_AllocTxt_leveldefs(struct D2PoolManagerStrc * pMemory);
 void __stdcall LVLTBLS_FreeLevelDefsTxt();
 // Loads and compiles lvltypes.txt into the global pTxtLvlTypes / nTxtLvlTypesSize table. Builds a D2BinFieldInputStrc schema describing the row layout: 32 "File N" ASCII path fields (0x3b bytes each), plus Act (char) and Expansion (int), terminated by an END field; row stride 0x788. Calls CompileTxt to parse the txt via pMemory pool, then post-processes every row converting forward to back slashes in all 32 file-path strings via LVLTBLS_FixPathSlashes. Part of D2Common data-table init.
 void __fastcall TXT_AllocTxt_lvltypes(struct D2PoolManagerStrc * pMemory);
-void __stdcall thunk_UnloadBin_DataTbls();
+void __stdcall DATATBLS_UnloadLevelTypesTxt();
 struct D2LvlTypesTxt * __stdcall TXT_LvlTypes_GetLine(int32_t nLvlTypeId);
 // Loads and compiles the lvlprest.txt data table (preset-area level definitions) via CompileTxt, populating the field schema (Def, LevelId, Populate, sizes, AutoMap, Expansion flag, File1-File6 ASCII paths, Dt1Mask, etc.) into sgtDataTable.pTxtLvlPrest. When nParam!=0 also allocates pTxtLvlTbls (6 DRLG-file pointers per row) and, for each row visible in the current game mode (expansion rows skipped in classic), normalizes file path slashes and allocates a D2DrlgFileStrc for each non-empty File path. Side effects: sets global table pointers and size.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
@@ -4125,9 +4125,9 @@ void __stdcall TXT_FreeTxt_LvlSub();
 struct D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType);
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __fastcall TXT_LoadExpansionLvlTbls(struct D2PoolManagerStrc * pMemory);
+void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\LvlTbls.cpp
-void __stdcall TXT_FreeExpansionLvlTbls();
+void __stdcall LVLTBLS_FreeLvlTypeTileLibraries();
 // Loads and compiles automap.txt into the runtime AutoMap level tables. Initializes the data-table seed, declares the column schema (LevelName, TileName, Style, Start/EndSequence, Cel1-4), and compiles it via CompileTxt. Allocates a 32-byte-per-row AutoMapLvlTbls array, then per row resolves the automap level id and tile id, copies style/sequence and cel fields, and counts the valid (non -1) cels (halts if a row has zero cels). Then resets the gpaAutoMapRelated index table to -1 and builds, per level type, the start index + count of contiguous same-type rows. Side effects: allocates server memory, fills global automap tables; unrecoverable-halt on bad rows. Server-side D2Common DataTbls (LvlTbls).
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 void __fastcall TXT_AllocTxt_automap(struct D2PoolManagerStrc * pMemory);

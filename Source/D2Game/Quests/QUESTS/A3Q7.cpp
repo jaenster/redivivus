@@ -104,7 +104,7 @@ void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc 
     if (pA3Q2Data->bBridgeObjectValid) {
       pQuestData = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA3Q2Data->nBridgeObjectGUID);
       if (pQuestData) {
-        D2Common::Units::SetupUpdateFlag(pQuestData, 1);
+        D2Common::Units::ChangeAnimMode(pQuestData, 1);
       }
     }
     if (!pA3Q2Data->bBridge2Valid) {
@@ -116,7 +116,7 @@ void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pQuestData, 2);
+    D2Common::Units::ChangeAnimMode(pQuestData, 2);
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_SetupDarkWandererMapAi(pGame, pDrlgMap): stores the passed DRLG map pointer into quest data, then if the tracked "wanderer" monster exists, its map is valid, and the map hasn't been taken yet -> transfers (DRLGPRESET_TakeFileFromDrlgMap) the monster's map-AI DRLG file into quest data and marks bDrlgMapTaken. Binds the Mephisto/Act4-transition actor's generated map into the quest. No quest-state transitions.

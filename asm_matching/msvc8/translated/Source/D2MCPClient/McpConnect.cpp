@@ -82,7 +82,7 @@ uint8_t gMCPGameListBuffer[28680] = {0}; D2_GLOBAL_GUARD(gMCPGameListBuffer, "gM
 
 namespace D2MCPClient { namespace McpConnect {
 
-int16_t __stdcall GetD2GSRequestId_Unref_004166f0() {
+int16_t __stdcall SFILE_GetSearchLocale() {
     return gnSFileSearchLocale;
 }
 
@@ -199,11 +199,11 @@ void __stdcall MCPSTATE_SetListGameSuccess(uint32_t bSuccess) {
     g_bMCPListGameSuccess = bSuccess;
 }
 
-BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449ca0() {
+BOOL __stdcall MCPSTATE_GetListGameSuccess() {
     return g_bMCPListGameSuccess;
 }
 
-BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449cb0() {
+BOOL __stdcall MCPSTATE_GetCharDeleteSuccess() {
     return g_bMCPCharDeleteSuccess;
 }
 
@@ -246,7 +246,7 @@ void __stdcall MCPCONNECT_ClearCharSelectBuffer() {
     memset(&g_CharSelectBuffer, 0, 0x18c);
 }
 
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449d80() {
+uint32_t __stdcall MCPSTATE_GetCharUpgradeSuccess() {
     return g_bMCPCharUpgradeSuccess;
 }
 
@@ -254,7 +254,7 @@ void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess) {
     g_bMCPCharUpgradeSuccess = bSuccess;
 }
 
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449da0() {
+uint32_t __stdcall MCPSTATE_GetCharCreateSuccess() {
     return g_bMCPCharCreateSuccess;
 }
 
@@ -262,7 +262,7 @@ void __stdcall MCPSTATE_SetCharCreateSuccess(uint32_t bSuccess) {
     g_bMCPCharCreateSuccess = bSuccess;
 }
 
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449dc0() {
+uint32_t __stdcall MCPCONNECT_GetD2GSConnectReady() {
     return g_bMCPD2GSConnectReady;
 }
 

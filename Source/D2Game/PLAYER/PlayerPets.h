@@ -16,7 +16,6 @@
 
 // Forward declarations
 struct D2ClientStrc;
-struct D2MonsterKillStrc;
 struct D2PetListStrc;
 struct D2PetTypeTxt;
 struct D2RoomStrc;
@@ -82,7 +81,7 @@ void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit
 void __fastcall FreePets(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 int __fastcall Unreferenced_00574810(struct D2UnitStrc * param_1, int param_2);
 // @sourcefile .\PLAYER\PlayerPets.cpp
-void __fastcall SummonAndAssign(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pSummonArgs);
+void __fastcall PLAYERPETS_SendPetUpdateCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PetArgStrc * pSummonArgs);
 void __fastcall PETS_UpdatePetData(struct D2UnitStrc * pUnit, ePetType nPetType, int32_t nTargetPetGUID, struct D2PetDataStrc * pNewPetData);
 // Returns the pet-type index (1..nTxtPetTypeSize-1) that owns the monster with the given GUID in the player's pet lists, or 0 if not found. Halts fatally if player data is null. Used to classify whether a unit is a summoned pet and of which type (e.g. 7 = merc).
 int32_t __fastcall GetOwnersPetType(struct D2UnitStrc * pUnit, int32_t nUnitGUID);
@@ -103,7 +102,7 @@ void __fastcall RemovePetByGuidAndNotify(::SGAMEDATA * pGame, struct D2UnitStrc 
 // @sourcefile .\PLAYER\PlayerPets.cpp
 void __fastcall SERVERUNIT_RemovePetFromUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pPet);
 // Called when a pet dies. Looks up the dead pet's GUID from pKillData, removes it from the owner's pet list via RemovePetByGuidAndNotify (unless pet type 7), then returns non-null if the GUID still appears in the pet list (i.e. was tracked). Returns null if owner has no pet data or no pets of that type.
-struct D2UnitDataPlayerPetsStrc * __fastcall PETS_HandleDeadPet(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2MonsterKillStrc * pKillData);
+BOOL __fastcall PETS_HandleDeadPet(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pPet);
 // Iterates all TxtPetType rows (index 1..n) and dispatches per-type management: if the type has the "spawn from save" flag (bit 0), calls ROOM_SpawnPetsFromSaveData near (wPosX, wPosY); if "remove distant" (bit 1), calls PETS_RemoveDistantPets with range 0x640; otherwise frees all pets in the list. Used when a player enters a room/game.
 void __fastcall PETS_ManagePetsByType(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint16_t wPosX, uint16_t wPosY);
 // Sends ally/party automap info packets (0x7F/0x90) to the client for each pet that has the "show on automap" TxtPetType flag (bit 2) and is alive. First prunes dead pets via PETS_RemoveDeadPets. Called to refresh the client's party/automap overlay with current pet positions.

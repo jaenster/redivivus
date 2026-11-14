@@ -8,7 +8,6 @@
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/MISSILES/Missiles.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Create.h"
@@ -179,7 +178,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
         D2Common::Units::Missile::SetCurrentFrame(pUnit_00, nVelTmp);
       }
 
-      SkillMonst::SKILLASSN_GetShadowHealthBonus(pSkillRecord, pUnit);
+      SkillMonst::SKILLS_SetInfernoFrame(pSkillRecord, pUnit);
       nCalcResult = D2Common::Skills::SKILL_GetParam1(pSkill);
       if (pGame->dwGameFrame < nCalcResult) {
         eCurrentState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -271,7 +270,7 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0);
-      nValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pOwner);
+      nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner);
       nDmgHp = *(int*)(pCombatEntryPtr + 8);
       nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
       if (nDmgHp >= nTargetHp) {
@@ -561,7 +560,7 @@ static void __stdcall SKILLEMONST_ApplyAuraBuff(D2UnitStrc * pUnit, D2UnitStrc *
 static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWORD dwParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nSkillId) {
     D2AiGeneralStrc* pMonsterAiGeneral;
     eD2UnitType eUnitType;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     int32_t nDifficulty;
     D2SkillsTxt* pSkillRecord = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillRecord) {
@@ -583,7 +582,7 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
     }
 
     Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit2, pMonsterAiGeneral, 0xf);
-    Monster::MonsterMode::SetCurrentSkill(pUnit2, dwParam, &sMonsterKill);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnit2, dwParam, &sMonsterKill);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_changeclass, 1);
     if (!pUnit) {
@@ -676,18 +675,18 @@ BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGam
     return 0;
 }
 
-BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit) {
+BOOL __fastcall SKILLMONST_CanImpregnateTarget(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nAlignment;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
       return 0;
     }
 
-    BOOL bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
+    BOOL bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTarget);
     if (bIsDead) {
       return 0;
     }
 
-    int nBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
+    int nBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTarget);
     if (nBaseId < 0 || nBaseId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       nBaseId = -1;
     }
@@ -695,9 +694,9 @@ BOOL __fastcall SKILLSOR_GetFrozenOrbBoltCount(D2UnitStrc * pUnitStrc, D2UnitStr
     switch (nBaseId) {
       default:
         {
-          bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_pregnant);
+          bIsDead = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_pregnant);
           if (!bIsDead) {
-            nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
+            nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pTarget);
             return (uint32_t)(nAlignment != 2);
           }
         }
@@ -757,7 +756,7 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
       return 0;
     }
 
-    _bCanSpawn = SKILLSOR_GetFrozenOrbBoltCount(pUnit, sStateArg.pTarget);
+    _bCanSpawn = SKILLMONST_CanImpregnateTarget(pUnit, sStateArg.pTarget);
     if (!_bCanSpawn) {
       return 0;
     }
@@ -1086,7 +1085,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitSt
 BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     if (pOwner) {
-      D2Common::PATH::Path::PATH_SetPathTarget(pUnit, pOwner);
+      D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
     }
 
     return 1;

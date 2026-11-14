@@ -82,7 +82,7 @@ namespace D2Client::Draw::LightMap {
 void __fastcall ACTCALLBACKFN(struct D2RoomStrc * pRoom);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __stdcall RENDERER_TogglePerspective_Unref_00474140();
+void __stdcall LIGHTMAP_ToggleColorEnabled();
 struct D2LightMapStrc * __fastcall AllocLightMap(struct D2UnitStrc * pUnit, int32_t nLightType, int32_t nDiameter, uint8_t nGamma, uint8_t nRed, uint8_t nGreen, uint8_t nBlue);
 void __fastcall SetRadiusY(struct D2LightMapStrc * pLightMap, int32_t nValue);
 void __fastcall LIGHTMAP_SetRadius(struct D2LightMapStrc * pLightMap, int32_t nDiameter);

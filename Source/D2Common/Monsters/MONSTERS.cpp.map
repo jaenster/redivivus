@@ -260,7 +260,7 @@
       ]
     },
     {
-      "name": "MONSTER_IsBossOrChampion",
+      "name": "MONSTER_CanBeInTown",
       "address": "0063e860",
       "lines": [
         {
@@ -270,13 +270,13 @@
       ],
       "namespace": "D2Common::Monsters::MONSTERS",
       "calledFunctions": [
-        "MONSTER_IsBossOrChampion"
+        "MONSTER_CanBeInTown"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "af9f8866",
+      "dh": "3de516f2",
       "paramStorage": [
         [
           "pUnit",
@@ -285,7 +285,7 @@
       ]
     },
     {
-      "name": "MONSTER_IsAndarielNormal",
+      "name": "MONSTER_IsSandLeaper",
       "address": "0063e8d0",
       "lines": [
         {
@@ -295,13 +295,13 @@
       ],
       "namespace": "D2Common::Monsters::MONSTERS",
       "calledFunctions": [
-        "MONSTER_IsAndarielNormal"
+        "MONSTER_IsSandLeaper"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "c646db07",
+      "dh": "38b991f1",
       "paramStorage": [
         [
           "pUnit",

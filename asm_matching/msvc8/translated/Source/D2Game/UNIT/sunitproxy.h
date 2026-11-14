@@ -18,7 +18,6 @@
 struct D2ClientStrc;
 struct D2InventoryStrc;
 struct D2MonsterAiStrc;
-struct D2PoolManagerStrc;
 struct D2SeedStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
@@ -170,8 +169,8 @@ struct D2InventoryStrc * __fastcall SUNITPROXY_GetNpcInventory(::SGAMEDATA * pGa
 struct D2SeedStrc * __fastcall SUNITPROXY_GetNpcControl(::SGAMEDATA * pGame);
 // Server-side: removes a player (identified by pUnit->nUnitGUID, or -1 if null) from an NPC's proxy list and interaction list. Frees inventory items and the inventory struct if a proxy inventory existed, then frees the proxy and interaction list nodes from the game memory pool.
 // @sourcefile .\UNIT\sunitproxy.cpp
-void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PoolManagerStrc * pMemory);
-struct D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pNpcUnit, struct D2UnitStrc * pPlayerUnit);
+void __fastcall SUNITPROXY_RemovePlayerFromNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pNpcUnit);
+struct D2InventoryStrc * __fastcall SUNITPROXY_GetPlayerProxyInventory(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pNpcUnit);
 // Finds or creates this player's interaction node on an NPC proxy and RETURNS THE NODE. The node is the 12 bytes allocated at 00536cef with EDX = 0xc: player GUID at +0, a flag the trade path reads at +4, next at +8. On the found path the search loop at 00536cd0 jumps to the epilogue with the node still in EAX; on the allocate path the new node is in EAX and the code falls into the same epilogue, so both exits return it. It had been typed void, which left its caller SUNITNPC_OpenTradeScreen at 00579360 reading a declared-but-never-assigned local, taking the identified-item branch for the merchant's own unidentified stock and returning null - no vendor item ever reached the client.
 struct D2NpcPlayerInteractionStrc * __fastcall SUNITPROXY_AddPlayerInteraction(::SGAMEDATA * pGame, struct D2GameNpcStrc * pNpcProxy, struct D2UnitStrc * pPlayerUnit);
 void __fastcall SUNITPROXY_ResetNpcProxy(::SGAMEDATA * pGame, struct D2GameNpcStrc * pNpcProxy, struct D2UnitStrc * pUnit);
@@ -189,8 +188,8 @@ void __fastcall SUNITPROXY_RemovePlayerProxyInventory(::SGAMEDATA * pGame, struc
 void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct, BOOL bResult);
 // Called when a player enters an act town level. For the town level (eLevel), counts the players already in that level (IterateAllUnits walks pUnitList[0], the player list) and updates the NPC proxy table for the corresponding act (acts I–V). For the destination level (eLevelIdTwo), fills the intro-NPC packet for the act; also force-starts Act I quest 4, The Search for Cain (A1Q4::ForceStartQuest, a1q4.cpp), when entering Lut Gholein.
 void __fastcall IterateNpcIntroUnits(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2LevelId eLevel, eD2LevelId eLevelIdTwo);
-void __fastcall SERVER_InitClassicTowns(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * nNpcProxy, struct D2ClientStrc * pClient);
+void __fastcall SUNITPROXY_OnClientRemoved(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer);
+void __fastcall SUNITPROXY_SendProxyItemsToClient(::SGAMEDATA * pGame, struct D2UnitStrc * pNpc, struct D2UnitStrc * pPlayer, struct D2ClientStrc * pClient);
 #endif // D2_MODULE_D2Game
 // 4 internal functions (defined in .cpp)
 

@@ -18,6 +18,7 @@
 // Forward declarations
 struct D2DynamicPathStrc;
 struct D2RoomStrc;
+typedef uint32_t eD2CollisionShapeType;
 
 // Data types
 #ifndef D2_DEFINED_D2PathTypeArg
@@ -37,8 +38,8 @@ struct D2PathTypeArg {
     /* 0x1C */ int nIdaStarInitCopy; // Byte copy of D2DynamicPathStrc::nIdaStarVariable; used as A* minimum heuristic cost lower-bound in DRLGPATH_FindPathAStar
     /* 0x20 */ int ePathType; // eD2PathTypes for this search
     /* 0x24 */ int nUnitSize; // Unit collision size
-    /* 0x28 */ int nUnitWidth; // Unit interaction width
-    /* 0x2C */ int nCollisionPattern; // Collision check pattern
+    /* 0x28 */ eD2CollisionShapeType nCollisionPattern; // Unit interaction width
+    /* 0x2C */ int nCollisionMask; // Collision check pattern
     /* 0x30 */ struct D2DynamicPathStrc * pDynamicPath; // Owner dynamic path
 };
 #pragma pack(pop)

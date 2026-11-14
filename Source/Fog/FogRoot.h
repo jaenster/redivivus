@@ -53,8 +53,8 @@ int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070();
 void __stdcall Return_Unref_0040ada0();
 void __stdcall Return_Unref_0040b110();
 void __stdcall Return_Unref_0040b120();
-void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70(void * pElement);
-void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80(void * pElement);
+void __fastcall THREADING_EnterCriticalSection_Thunk(void * pElement);
+void __fastcall THREADING_LeaveCriticalSection_Thunk(void * pElement);
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca548(struct EHExceptionRecord * pExceptionRecord, struct EHRegistrationNode * pRegistrationNode, struct _CONTEXT * pContext, void * pDispatcherContext);
 #endif // D2_MODULE_Fog
 

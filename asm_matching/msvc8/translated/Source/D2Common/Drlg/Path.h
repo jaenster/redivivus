@@ -19,7 +19,6 @@ struct D2DrlgRoomCoordsStrc;
 struct D2DynamicPathStrc;
 struct D2PathTypeArg;
 struct D2SeedStrc;
-struct D2UnitStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -157,21 +156,21 @@ int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nPackedFrom, uint32_
 // Returns a single direction byte (0-7) between two points (separate coords).
 // Uses DRLGPATH_GetDirectionIndex to get the 5x5 table index, then looks up
 // the first byte of the 3-byte entry at table 0x6f1648.
-uint32_t __fastcall DRLGPATH_GetDirection(int32_t nY1, int32_t nX2, int32_t nX1, int32_t nY2);
+uint32_t __fastcall DRLGPATH_GetDirection(int32_t nX1, int32_t nY1, int32_t nX2, int32_t nY2);
 // Returns a single direction byte (0-7) between two packed coordinate points.
 // Packed variant of DRLGPATH_GetDirection, using DRLGPATH_GetDirectionIndexPacked.
 uint32_t __stdcall DRLGPATH_GetDirectionPacked(uint32_t nPackedFrom, uint32_t nPackedTo);
 // Returns the primary path direction vector (first dword of 12-byte entry) between
 // two points given as separate coordinates. Used by DRLGOUTROOM_FindPathBetweenExits
 // and DRLGOUTROOM_PathSearchStep for outdoor pathfinding.
-int __fastcall DRLGPATH_GetPathDirection(int32_t nY1, int32_t nX2, int32_t nX1, int32_t nY2);
+int __fastcall DRLGPATH_GetPathDirection(int32_t nX1, int32_t nY1, int32_t nX2, int32_t nY2);
 // Returns the primary path direction vector (first dword of 12-byte entry) between two packed coordinate points. Packed variant of DRLGPATH_GetPathDirection. Called only by the DRLG A* path search: DRLGPATH_AStarExpandNode and DRLGPATH_FindPathAStar.
 int __stdcall DRLGPATH_GetPathDirectionPacked(uint32_t nPackedFrom, uint32_t nPackedTo);
 // Returns all 3 path direction vectors (3 dwords from 12-byte table entry at 0x6f1518)
 // between two points given as separate coordinates. Writes the primary direction and
 // two alternate directions to the output array (paDirOut).
 // Separate-coords variant; fastcall with ECX=y2, EDX=x1, stack=y1, stack=x2, stack=pOut.
-void __fastcall DRLGPATH_GetPathDirectionTriplet(int32_t nParam1, int32_t nParam2, int32_t nY1, int32_t nX2, int * paDirOut);
+void __fastcall DRLGPATH_GetPathDirectionTriplet(int32_t nX1, int32_t nY1, int32_t nX2, int32_t nY2, int * paDirOut);
 // Returns all 3 path direction vectors (3 dwords from 12-byte table entry at 0x6f1518)
 // between two packed coordinate points. Writes primary + 2 alternates to output array.
 // Called by PathTypeFunc_02 and outdoor room linking functions.
@@ -179,7 +178,7 @@ void __fastcall DRLGPATH_GetPathDirectionTripletPacked(int * paDirOut, int, uint
 // Returns all 3 direction bytes (from 3-byte table at 0x6f1648) between two points
 // given as separate coordinates. Writes primary direction + 2 alternates to output
 // array as expanded uint values. Separate-coords variant of GetDirectionTripletPacked.
-void __fastcall DRLGPATH_GetDirectionTriplet(int32_t nParam1, int32_t nParam2, int32_t nY1, int32_t nX2, uint32_t * pnDirOut);
+void __fastcall DRLGPATH_GetDirectionTriplet(int32_t nX1, int32_t nY1, int32_t nX2, int32_t nY2, uint32_t * pnDirOut);
 // Returns all 3 direction bytes (from 3-byte table at 0x6f1648) between two packed
 // coordinate points. Writes primary direction + 2 alternates to output array as
 // expanded uint values. Called by collision/pathing code at 0x00648120.
@@ -205,9 +204,9 @@ void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY);
 // position is at the sentinel value -0x7FFF8000.
 uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(struct D2PathTypeArg * pPathTypeArg, uint32_t * pPathData);
 // Applies a directional offset to a missile's position based on the owner's facing direction and an offset radius. Uses sin/cos lookup tables to compute the X/Y displacement.
-void __fastcall DRLGPATH_ApplyMissileOffset(struct D2UnitStrc * pMissileStrc);
+void __fastcall DRLGPATH_ApplyMissileOffset(struct D2DynamicPathStrc * pDynamicPath);
 // Writes the effective target position (X at pOutPos[0], Y at pOutPos[1]) for a missile by reading its owner unit's position via pGfxDataCopy (static or dynamic path). If the missile carries a non-zero offset radius in uSideData[4], applies a direction-based polar offset using the sinTable, allowing missiles to spiral or orbit around their target point.
-void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, struct D2UnitStrc * pMissileStrc);
+void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, struct D2DynamicPathStrc * pDynamicPath);
 // Computes a weighted distance between two packed coordinates. Uses a lookup table for distances within 8 tiles, falls back to a simple heuristic (minor + major*2) for larger distances.
 int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nPackedPos1, uint32_t nPackedPos2);
 // Smooths a path by iterating through waypoints, choosing the best non-blocked direction at each step using direction triplets and collision checks. Builds a refined path with fewer unnecessary turns. Returns the waypoint count, which it also stores into pDynamicPath->dwPathPoints - the tail is MOV [ECX+0x28],EAX at 00679c71, so the count is live in EAX at the RET. PATH_FindPathToward tail-returns it for the nDirOffset case; typing this void made that caller return an uninitialised local, which reached PATH_CalculatePath as a waypoint count of ~2e9 and indexed PathPoints[] off the end.

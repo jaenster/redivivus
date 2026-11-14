@@ -15,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2DynamicPathStrc;
 struct D2SkillStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
@@ -47,7 +46,7 @@ void __fastcall SKILL_CreateLeapArcParticle(struct D2UnitStrc * pUnit, struct D2
 // Client-side landing handler for Barbarian Leap (and general teleport). Checks whether the unit's current collision type already matches the expected post-land type; if not, reads the destination X/Y from skill param1/param2 (or from path if no active skill), removes the stale collision at that position, teleports the unit to the destination via CLIENT_TeleportUnitToPosition, then calls SKILLS_PlaySkillSound to restore collision/path state.
 void __fastcall SKILL_HandleTeleportLanding(struct D2UnitStrc * pUnit);
 // Client-side do-function for the Barbarian Leap skill arc particle phase. Retrieves the skill and its flags; if the sound flag (0x100) is set, plays the skill sound. Depending on skill flags and the unit's current animation coord state, either sets up the leap path and creates the arc particle, sets the SKILL_SetFlags(0x1000) pending flag, or plays the landing sound using the server path target coordinates.
-BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(struct D2DynamicPathStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Client-side state function for Barbarian Leap Attack teleport targeting. For the local player, checks that the unit is not in an uninterruptable state and the skill is not already flagged active. Calls SKILL_FindTeleportPosition to locate a valid destination near the confirmed target; on success, registers the collision tile, stores destination coords in skill params 1-2, stores target type/GUID in params 3-4, sets skill flags 0x1080, and creates the active skill stat list. If already in melee range, triggers the melee hit message instead. Plays sound 0x13 when no position is found.
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

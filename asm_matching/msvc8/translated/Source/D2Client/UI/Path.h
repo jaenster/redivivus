@@ -33,8 +33,8 @@ namespace D2Client { namespace UI { namespace Path {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae60();
-uint32_t __stdcall DRAW_GetTypeOfBorder_Unref_0045ae80();
+uint32_t __stdcall LOADER_GetScreenResolutionTableIndex();
+uint32_t __stdcall LOADER_GetScreenResolutionMode();
 uint32_t __stdcall DRAW_GetTypeOfBorder();
 void __fastcall TypeOfUiOverlayOverWorld(uint32_t eBorderType);
 int __stdcall GetMouseXOffset();

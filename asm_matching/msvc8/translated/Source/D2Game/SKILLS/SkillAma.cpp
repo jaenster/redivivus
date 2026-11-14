@@ -111,7 +111,7 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChan
             return;
           }
 
-          ITEMS::ItemMode::ITEMMODE_SendItemUpdate(pGame, pUnit, pUnit2);
+          ITEMS::ItemMode::ITEMMODE_BreakItem(pGame, pUnit, pUnit2);
         }
       }
     }
@@ -369,7 +369,7 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
-uint32_t __fastcall SKILL_GetPhoenixBoltCount(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
+uint32_t __fastcall SKILLAMZ_AuraCallback_InnerSight_SlowMissiles(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pContext->pUnit;
@@ -385,7 +385,7 @@ uint32_t __fastcall SKILL_GetPhoenixBoltCount(D2SkillCallbackContextStrc * pCont
     return 1;
 }
 
-BOOL __fastcall Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_006_InnerSight_SlowMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt;
     D2SkillAuraTargetArgStrc sAuraArgs;
     pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -398,7 +398,7 @@ BOOL __fastcall Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt(::SGAMEDATA * pGame, 
       sAuraArgs.nAuraStat = (int32_t)pSkillsTxt->aurastat[0];
       sAuraArgs.nAuraStatValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[0], eSkill, nSkillLvl);
       nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
-      SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxt->aurafilter, SKILL_GetPhoenixBoltCount, &sAuraArgs, 1, ".\\SKILLS\\SkillAma.cpp", 0x20f);
+      SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, nAuraRange, pSkillsTxt->aurafilter, SKILLAMZ_AuraCallback_InnerSight_SlowMissiles, &sAuraArgs, 1, ".\\SKILLS\\SkillAma.cpp", 0x20f);
       return 1;
     }
 
@@ -428,7 +428,7 @@ BOOL __fastcall Skills_SrvDoFunc_007_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     uint32_t nToHitBonusExtra = D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkillOrig, nSkillLvl);
     if (eSkill == SKILL_Kick) {
-      Monsters::MONSTER_RecalculateCombatStats(pUnit, 8);
+      Monsters::MONSTER_RecalculateCombatStats(pUnit, eD2MonsterAnimMode_ns::Skill1);
     }
 
     sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pUnit2, nToHitBonusExtra, 0);
@@ -994,13 +994,13 @@ BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2Common::Units::StoreOwner(pSummon, pUnit);
-    int32_t nDecoyHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nDecoyHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     nDecoyHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDecoyHp, D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pSkillTxt->calc[2], eSkill, nSkillLvl), 100);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_hitpoints, nDecoyHp, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_maxhp, nDecoyHp, 0);
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_level, nLevel, 0);
-    SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pSummon, 0, nSkillLvl);
+    SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pSummon, 0, nSkillLvl);
     SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pSummon, eSkill, nSkillLvl, 0);
     int32_t nHpPct = D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pSkillTxt->calc[1], eSkill, nSkillLvl);
     GAME::Event::SetEvent(pGame, pSummon, 7, pGame->dwGameFrame + nHpPct, 0, 0);
@@ -1060,7 +1060,7 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    SkillNec::SKILLNEC_ReviveCorpseAsMinion(pGame, pUnit, pValkyrie, 0, nSkillLvl);
+    SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pValkyrie, 0, nSkillLvl);
     nSummonBuffParam = D2Common::Skills::D2GetSkillCalc(pUnit, ((int*)(sSummonParams.nPetType + 0x138))[1], eSkill, nSkillLvl);
     SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pValkyrie, eSkill, nSkillLvl, nSummonBuffParam);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pValkyrie, UNITEVENTCALLBACK_AITHINK, 0);

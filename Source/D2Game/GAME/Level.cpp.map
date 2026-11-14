@@ -185,7 +185,7 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "NET_D2GS_SERVER_Send_0x07_MapReveal",
         "DRLGROOM_AddClientToRoom",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "CLIENTS_GetControlUnit",
         "SERVER_SendInitUnitPacket",
         "GetInstructionPointer",
@@ -202,7 +202,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "77011785",
+      "dh": "d2397dfd",
       "paramStorage": [
         [
           "pGame",
@@ -232,7 +232,7 @@
         "RoomClearForClientAndHideMap",
         "SendRemoveObject",
         "DRLGROOM_RemoveClientFromRoom",
-        "MONSTER_StartAiAndRegenTimers",
+        "MONSTER_RemoveAiAndRegenTimers",
         "DRLGROOM_GetRoomCoordinates",
         "DRLGROOM_GetLevelIdFromRoom",
         "NET_D2GS_SERVER_Send_0x08_REMOVEROOM",
@@ -250,7 +250,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "335007dc",
+      "dh": "954eac9f",
       "paramStorage": [
         [
           "pGame",
@@ -395,7 +395,7 @@
         "CLIENT_SetConnectionState",
         "CLIENTS_GetControlUnit",
         "PETS_FreeAllPetsByType",
-        "STATES_RemoveAllProgressiveStates",
+        "STATES_RemoveDisguiseStates",
         "GetUnitSizeX",
         "SpawnUnit",
         "GetFreeCoordinates_WithIncrementValue",
@@ -426,7 +426,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e3d193a",
+      "dh": "dd7e8322",
       "paramStorage": [
         [
           "pGame",
@@ -546,14 +546,14 @@
         "FreeMonsters",
         "FreeObjects",
         "FreePlayers",
-        "FreeMissiles",
-        "FreeItems",
+        "ITEMS_RemoveAll",
+        "MISSILES_RemoveAll",
         "FreeWarpUnits"
       ],
       "usedTypes": [
         "SGAMEDATA"
       ],
-      "dh": "fd4b9fd1",
+      "dh": "0055c5a9",
       "paramStorage": [
         [
           "pGame",
@@ -574,7 +574,7 @@
       "calledFunctions": [
         "ProcessUnitUpdateFlags",
         "DRLGROOM_GetRoomFromAct",
-        "UNITS_ResetUnitForReuse",
+        "UNITS_ClearUpdateData",
         "ROOM_ClearUnitUpdateList",
         "ARENA_ClearUpdateFlag"
       ],
@@ -585,7 +585,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "7a4ef22a",
+      "dh": "72c224cb",
       "paramStorage": [
         [
           "pGame",

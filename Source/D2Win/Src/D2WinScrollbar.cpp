@@ -314,7 +314,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
           return 1;
         }
 
-        nGlobalTickCount = D2WinMain::D2WINMAIN_GetWinMainState();
+        nGlobalTickCount = D2WinMain::D2WINMAIN_IsMouseButtonDown();
         if (!nGlobalTickCount) {
           pScrollbar->nWheelLockFlag = 0;
         }

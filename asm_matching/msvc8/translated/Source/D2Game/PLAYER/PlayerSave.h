@@ -18,7 +18,6 @@
 // Forward declarations
 struct D2ClientStrc;
 struct D2InventoryStrc;
-struct D2MissilesTxt;
 struct D2RoomStrc;
 struct D2SaveFileHeaderStrc;
 struct D2UnitStrc;
@@ -170,7 +169,7 @@ int32_t __fastcall PLRSAVE_SerializeCorpseData(::SGAMEDATA * pGame, struct D2Uni
 void __fastcall PLAYERSAVE_ByteToHexChar(char * pszHexOut, uint8_t nByteValue);
 uint8_t * __fastcall PLAYERSAVE_ByteArrayToHexString(uint8_t * szOut, uint8_t * pbyData, int32_t nLength);
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
-uint32_t __fastcall PLAYERSAVE_CRC32MissileTable(struct D2MissilesTxt * pMissilesTxt, int32_t nCrcSeed);
+uint32_t __fastcall PLAYERSAVE_CalculateChecksum(struct D2SaveFileHeaderStrc * pSaveHeader, int32_t nSize);
 // BNet character save handler. Builds 8KB save file in temp buffer, validates against existing save in database, optionally re-locks and saves character via BNet callback if changed. Copies to safe buffer on success.
 // @sourcefile .\PLAYER\PlrSave.cpp
 BOOL __fastcall SaveToFileBnet(::SGAMEDATA * pGame, char * szAccountName, struct D2UnitStrc * pUnit, char * nUnused, int32_t nAccountFlags, uint32_t nToken, int32_t nUnused2, uint32_t nRealmId);

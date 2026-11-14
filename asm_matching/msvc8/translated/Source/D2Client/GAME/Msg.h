@@ -166,7 +166,7 @@ namespace D2Client { namespace GAME { namespace Msg {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 void __stdcall NET_SendPacket0x3f_0x1a();
-int __stdcall LOADING_GetProgressRatio_Unref_00477c90();
+int __stdcall RENDERING_GetEngineMode();
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
 void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName);
 void __stdcall NET_D2GS_CLIENT_Send_0x6B();

@@ -92,7 +92,7 @@ BOOL __fastcall Q11_PlayCompletionSound(::SGAMEDATA * pGame, struct D2UnitStrc *
 // A2Q3 - per-unit iterator cb (Q11_OnStaffViperPickup): counts players eligible for a body-part reward drop.
 // For a player NOT holding the 'vip ' or 'hst ' quest item and whose Horadric-Staff quest isn't Completed,
 // increments the A2Q3 nQuestItemCount (drives how many reward items the altar drops). Read of HoradricStaff only.
-BOOL __fastcall Q11_OnStaffViperPickup(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
+BOOL __fastcall Q11_CountPlayersNeedingViperAmulet(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 // A2Q3 Tainted Sun altar operate fn (OperateFn 24, Claw Viper Temple). If the player already finished or holds the staff/amulet items it only plays a sound. Otherwise it ends the darkening (DRLGENV_TaintedSunEnd and the sun-restored packets), sets state flag 4 and marks the players' records RewardAwaits and JustCompleted.
 // Slot from objects.txt OperateFn 24.
 BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(struct D2ObjectOperateFnArg * pOperation);

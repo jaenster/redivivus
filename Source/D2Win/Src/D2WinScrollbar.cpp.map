@@ -384,7 +384,7 @@
       "namespace": "D2Win::Src::D2WinScrollbar",
       "calledFunctions": [
         "Draw",
-        "D2WINMAIN_GetWinMainState",
+        "D2WINMAIN_IsMouseButtonDown",
         "Push",
         "memset",
         "D2GFX_DrawImage",
@@ -400,7 +400,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2b68d05c",
+      "dh": "d1b73609",
       "paramStorage": [
         [
           "pScrollbar",

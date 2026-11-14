@@ -44,7 +44,7 @@ namespace D2Game::Monster::AI::Baal {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 uint32_t __fastcall AI_Baal_IsPortalInRange(uint32_t pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * portal, struct D2MonsterAiParameterStruct * pAiParam);
 uint32_t __fastcall AI_BAAL_IsUnitInRange(struct D2UnitStrc * pUnit, int * pCandidate);
-void __fastcall AI_BAAL_CountPowerfulSkills(struct D2UnitStrc * nSkillNode, struct D2UnitStrc * * pnSelfSkillNode, int * pnPowerfulSkillCount);
+void __fastcall AI_BAAL_CountLivingMinions(struct D2UnitStrc * pMinion, struct D2UnitStrc * * ppSelf, int * pnCount);
 // Executes a specific Baal AI action. Handles Baal clone spawning, teleport positioning, and multi-skill attack selection during the boss encounter.
 // @sourcefile .\Ai\AiBaal.cpp
 void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * nParam, struct D2UnitStrc * pTarget, int nAction, struct D2MonsterAiCmdStrc * pClientSideData);

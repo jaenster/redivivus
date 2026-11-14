@@ -3,13 +3,16 @@
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Object.h"
+#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Game/D2ObjectInitFnArg.h"
 #include "Source/D2Game/GAME/Event.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Objects/ObjectsRgn.h"
 #include "Source/D2Game/Quests/QUESTS/A2Q6.h"
 #include "Source/D2Game/UNIT/SUnit.h"
+#include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -359,7 +362,7 @@ D2UnitStrc * __fastcall MakeRandomSparklyChest(::SGAMEDATA * pGame, D2RoomStrc *
 
     mark_preoperate:
     pUnit->eUnitFlags |= UNITFLAG_OBJPREOPERATE;
-    D2Common::Units::SetupUpdateFlag(pUnit, 0);
+    D2Common::Units::ChangeAnimMode(pUnit, 0);
     return pUnit;
 }
 
@@ -507,7 +510,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     &D2Game::Quests::QUESTS::Quest40::Objects_InitFn66_DrehyaStartInTown,
     &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn67_DrehyaStartOutsideTown,
     &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn68_NihlathakStartInTown,
-    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn69_SpawnFrozenstein,
+    &D2Game::Quests::QUESTS::A5Q3::Objects_InitFn69_NihlathakStartOutsideTown,
     &D2Game::Quests::QUESTS::A5Q1::Objects_InitFn70,
     &D2Game::Quests::QUESTS::A5Q1::Objects_InitFn71_LarzukStandard,
     &D2Game::Quests::QUESTS::A5Q5::Objects_InitFn72_AncientsAltar,
@@ -592,7 +595,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       if (pObjectsTxt->PreOperate && !(pUnit->eUnitFlags >> 7 & 1)) {
         nPreOpSeedRoll = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0xe);
         if (!nPreOpSeedRoll) {
-          D2Common::Units::SetupUpdateFlag(pUnit, 2);
+          D2Common::Units::ChangeAnimMode(pUnit, 2);
         }
       }
 
@@ -641,7 +644,7 @@ void __fastcall Objects_InitFn10(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0, pInitArg->pGame->dwGameFrame + 0x19, 0, 0);
 }
 
@@ -657,7 +660,7 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 2);
+    D2Common::Units::ChangeAnimMode(pUnit, 2);
     ptSpawnPos.x = pInitArg->nX;
     ptSpawnPos.y = pInitArg->nY;
     D2SeedStrc* pDVar1 = pInitArg->pSeed;
@@ -770,7 +773,7 @@ void __fastcall Objects_InitFn22_Fire(D2ObjectInitFnArg * pInitArg) {
       D2UnitStrc* pUnit;
       pUnit = pInitArg->pObject;
       if ((!pUnit || pUnit->eAnimMode.ePlayerMode == Death) && !pInitArg->pObjectTxt->Mode[0]) {
-        D2Common::Units::SetupUpdateFlag(pUnit, 2);
+        D2Common::Units::ChangeAnimMode(pUnit, 2);
       }
     }
 
@@ -854,7 +857,7 @@ void __fastcall Objects_InitFn59_VileDogAfterglow(D2ObjectInitFnArg * pInitArg) 
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, 1);
+    D2Common::Units::ChangeAnimMode(pUnit, 1);
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 7, pInitArg->pGame->dwGameFrame + 0x1b, 0, 0);
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pInitArg->pObjectTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
 }
@@ -867,7 +870,7 @@ void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pUnit;
     pUnit = pInitArg->pObject;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-      D2Common::Units::SetupUpdateFlag(pUnit, 1);
+      D2Common::Units::ChangeAnimMode(pUnit, 1);
       D2Common::Units::BlockCollisionPath(pInitArg->pObject, pInitArg->pRoom, pInitArg->nX, pInitArg->nY);
       GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pInitArg->pObjectTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
     }
@@ -946,15 +949,15 @@ void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
 }
 
 void __fastcall Objects_InitFn08_Torch(D2ObjectInitFnArg * pInitArg) {
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
 void __fastcall Objects_InitFn14(D2ObjectInitFnArg * pInitArg) {
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 1);
 }
 
 void __fastcall Objects_InitFn26(D2ObjectInitFnArg * pInitArg) {
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 1);
 }
 
 void __fastcall Objects_InitFn34_HellBrazier(D2ObjectInitFnArg * pInitArg) {
@@ -964,7 +967,7 @@ void __fastcall Objects_InitFn34_HellBrazier(D2ObjectInitFnArg * pInitArg) {
       return;
     }
 
-    D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 1);
+    D2Common::Units::ChangeAnimMode(pInitArg->pObject, 1);
 }
 
 void __fastcall Objects_InitFn05_Door(D2ObjectInitFnArg * pInitArg) {
@@ -1197,7 +1200,7 @@ void __fastcall Objects_InitFn46(D2ObjectInitFnArg * pInitArg) {
         pDVar1->nSeedLow = sSeedRoll.nSeedLow;
         pSpawnedMon = Monster::Create::SpawnMonsterAtRoomPos(pInitArg->pGame, pInitArg->pRoom, pInitArg->nX, pInitArg->nY, sSeedRoll.nSeedLow & 1 ? 0x194 : 0x193, eD2MonsterAnimMode_ns::Neutral, -1, 0);
         if (pSpawnedMon) {
-          D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+          D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
           nRemainingToSpawn--;
         }
 
@@ -1269,7 +1272,7 @@ void __fastcall Objects_InitFn46(D2ObjectInitFnArg * pInitArg) {
         nChainLength++;
         pSpawnedMon = Monster::Create::SpawnMonsterAtRoomPos(pInitArg->pGame, pInitArg->pRoom, nCurX, nCurY, nMonClassId, eD2MonsterAnimMode_ns::Neutral, -1, 0);
         if (pSpawnedMon) {
-          D2Common::Units::SetupUpdateFlag(pInitArg->pObject, 2);
+          D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
           nRemainingToSpawn--;
         }
 
@@ -1595,7 +1598,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn1(::SGAMEDATA * pGame, D2RoomStrc * pR
     return pLastSpawnedUnit;
 }
 
-void __stdcall OBJECT_SpawnBonusChest(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __stdcall OBJECTS_SpawnFliesOnCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     POINT ptUnitPos;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
@@ -1700,7 +1703,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D
 
       __frame0.pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nRandVal, __frame0.nOffsetX, __frame0.nOffsetY, __frame0.pGameSave, __frame0.pRoomSave, 1, 0, 0);
       if (__frame0.pSpawnedUnit) {
-        OBJECT_SpawnBonusChest(pGameLocal, __frame0.pSpawnedUnit);
+        OBJECTS_SpawnFliesOnCorpse(pGameLocal, __frame0.pSpawnedUnit);
       }
     }
 
@@ -1792,7 +1795,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn9_TrappedSoul(::SGAMEDATA * pGame, D2R
 D2UnitStrc * __fastcall Objects_PopulateFn6_Corpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
     D2UnitStrc* pUnit = Objects_PopulateFn3(pGame, pRoom, nDensity, nObjectClassId, nChancePercent);
     if (pUnit) {
-      OBJECT_SpawnBonusChest(pGame, pUnit);
+      OBJECTS_SpawnFliesOnCorpse(pGame, pUnit);
     }
 
     return pUnit;
@@ -1815,7 +1818,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
     eD2UnitType eUnitType;
     ::SGAMEDATA* pGameSave = pGame;
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
-    bool bQuestComplete = ObjectsRgn::QUEST_GetLevelQuestStatus(pGame, eLevelId);
+    bool bQuestComplete = ObjectsRgn::OBJECTRGN_CheckPoints2Capacity(pGame, eLevelId);
     if (bQuestComplete) {
       return nullptr;
     }
@@ -1843,7 +1846,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn8(::SGAMEDATA * pGame, D2RoomStrc * pR
       return nullptr;
     }
 
-    D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECT_IsPositionNearSpawnPoint2);
+    D2UnitStrc* pSpawnedUnit = OBJECT_PlaceWithCallback(pGameSave, nObjectClassId, nObjSizeX * 2 + 1, nObjSizeY * 2 + 1, pRoom, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECTRGN_IsPositionClearOfPoints2);
     if (pSpawnedUnit) {
       if (pObjectsTxt->Selectable[GetAnimModeInline(pSpawnedUnit)]) {
         pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
@@ -2284,10 +2287,10 @@ int32_t __fastcall OBJECT_PopulateGridItems(::SGAMEDATA * pGame, D2RoomStrc * pR
 }
 
 // Populates a room region with armor/weapon rack objects of the given nRackType. Uses the game's control seed to pick a rack variant (even/odd), looks up the Objects.txt entry for size, then sweeps the DRLG coordinate space (horizontally for even variant, vertically for odd) calling ROOM_CheckSpawnCollision and CreateUnit at each valid grid position. Aborts with a fatal error if pRoom is null at spawn time.
-static void __stdcall Roll(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pDrlgCoords, int32_t nRackType) {
+static void __stdcall OBJECTS_SpawnArmorStandOrWeaponRack(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pDrlgCoords, int32_t nRackType) {
     // Static local variables (originally global data)
-    static int RackType[4] = { 0x68, 0x69, 0x6a, 0x6b }; D2_STATIC_GUARD(RackType, "D2Game::Objects::Roll::RackType");
-    static int RackTypeCount = 0x2; D2_STATIC_GUARD(RackTypeCount, "D2Game::Objects::Roll::RackTypeCount");
+    static int RackType[4] = { 0x68, 0x69, 0x6a, 0x6b }; D2_STATIC_GUARD(RackType, "D2Game::Objects::OBJECTS_SpawnArmorStandOrWeaponRack::RackType");
+    static int RackTypeCount = 0x2; D2_STATIC_GUARD(RackTypeCount, "D2Game::Objects::OBJECTS_SpawnArmorStandOrWeaponRack::RackTypeCount");
 
     BOOL nCollisionResultX;
     D2CoordStrc sSpawnCoord;
@@ -2350,12 +2353,12 @@ static void __stdcall Roll(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCo
 }
 
 int32_t __fastcall RollArmorStand(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pDrlgCoords) {
-    Roll(pGame, pRoom, pDrlgCoords, 0);
+    OBJECTS_SpawnArmorStandOrWeaponRack(pGame, pRoom, pDrlgCoords, 0);
     return 1;
 }
 
 int32_t __fastcall RollWeaponRack(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pDrlgCoords) {
-    Roll(pGame, pRoom, pDrlgCoords, 1);
+    OBJECTS_SpawnArmorStandOrWeaponRack(pGame, pRoom, pDrlgCoords, 1);
     return 1;
 }
 
@@ -2363,16 +2366,16 @@ int32_t __fastcall RollWeaponRack(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2Drl
 static int32_t __stdcall OBJECT_RollAndDispatchPopulateFn(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint32_t dwPopulateMask, D2ObjectRngStrc * pObjRng) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     int nEnabledPopTypes[8];
-    if (!(pObjRng->nMinDistance < pObjRng->pad_0xC * 10)) {
+    if (!(pObjRng->nLevelRooms < pObjRng->pad_0xC * 10)) {
       D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
       uint32_t newSeed = D2_SeedRoll(pCtrlSeed);
       nEnabledPopTypes[7] = newSeed % 100;
       int nDensityPct = 0;
-      if (pObjRng->pad_0x4 > pObjRng->nMinDistance / 2) {
+      if (pObjRng->pad_0x4 > pObjRng->nLevelRooms / 2) {
         nDensityPct = 5;
       }
 
-      int nRoomArea = pObjRng->nMinDistance;
+      int nRoomArea = pObjRng->nLevelRooms;
       if (pObjRng->pad_0x4 > nRoomArea - nRoomArea / 4) {
         nDensityPct += 5;
       }
@@ -2434,9 +2437,9 @@ static BOOL __stdcall OBJECT_PopulateRoomSpecialObjects(::SGAMEDATA * pGame, D2L
     if (bResult) {
       return 0;
     }
-    if (pObjRng->nMinDistance == 0x7fffffff) {
+    if (pObjRng->nLevelRooms == 0x7fffffff) {
       nPopResult = D2Common::DUNGEON::Dungeon::GetNumberOfPopulatedRoomsInLevel(pGame->pAct[pObjRng->nAct], eLevelId);
-      pObjRng->nMinDistance = nPopResult;
+      pObjRng->nLevelRooms = nPopResult;
     }
 
     pObjRng->pad_0x4++;
@@ -2492,7 +2495,7 @@ void __fastcall OBJECT_PopulateRoomObjects(::SGAMEDATA * pGame, D2RoomStrc * pRo
       nGrpEntryIdx = DVar1 % 100;
       eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
       pObjRng = ObjectsRgn::GetObjectLevelRng(pGame, eLevelId);
-      if (pObjRng->nMinDistance > 0 && 0x60 < (pObjRng->pad_0x4 << 7) / pObjRng->nMinDistance && !pObjRng->pad_0x10) {
+      if (pObjRng->nLevelRooms > 0 && 0x60 < (pObjRng->pad_0x4 << 7) / pObjRng->nLevelRooms && !pObjRng->pad_0x10) {
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjGrpId);
         if (pObjectsTxt->SubClass != '\0') {
           nGrpEntryIdx = 100;
@@ -2748,7 +2751,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn2_WaypointShrine(::SGAMEDATA * pGame, 
     for (; nMaxRetries > 0; nMaxRetries--) {
       D2ObjectsTxt* pObjectsTxtSave;
       pObjectsTxtSave = pObjectsTxt;
-      pUnit = OBJECT_PlaceAtBiasedPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom, (uint32_t)(uint8_t)pObjectsTxtSave->Orientation, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECT_IsPositionNearSpawnPoint1);
+      pUnit = OBJECT_PlaceAtBiasedPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom, (uint32_t)(uint8_t)pObjectsTxtSave->Orientation, eLevelId, (pfnObjectPlaceTestCallback)ObjectsRgn::OBJECTRGN_IsPositionClearOfPoints1);
       if (pUnit) {
         if (pObjectsTxtSave->Selectable[pUnit->eAnimMode.ePlayerMode]) {
           pUnit->eUnitFlags |= UNITFLAG_TARGETABLE;

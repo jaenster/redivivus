@@ -4,7 +4,7 @@
   "file": "Source/D2MCPClient/McpConnect.cpp",
   "functions": [
     {
-      "name": "GetD2GSRequestId_Unref_004166f0",
+      "name": "SFILE_GetSearchLocale",
       "address": "004166f0",
       "lines": [
         {
@@ -14,12 +14,12 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "GetD2GSRequestId_Unref_004166f0"
+        "SFILE_GetSearchLocale"
       ],
       "usedTypes": [
         "int16_t"
       ],
-      "dh": "5a8f8177"
+      "dh": "2aad2aa2"
     },
     {
       "name": "NET_MCP_CLIENT_IncomingReturn_Unref_0043f840",
@@ -429,7 +429,7 @@
       ]
     },
     {
-      "name": "MCPSTATE_GetCreateGameSuccess_Unref_00449ca0",
+      "name": "MCPSTATE_GetListGameSuccess",
       "address": "00449ca0",
       "lines": [
         {
@@ -439,12 +439,12 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "MCPSTATE_GetCreateGameSuccess_Unref_00449ca0"
+        "MCPSTATE_GetListGameSuccess"
       ],
-      "dh": "6de60b4d"
+      "dh": "9d47ca70"
     },
     {
-      "name": "MCPSTATE_GetCreateGameSuccess_Unref_00449cb0",
+      "name": "MCPSTATE_GetCharDeleteSuccess",
       "address": "00449cb0",
       "lines": [
         {
@@ -454,9 +454,9 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "MCPSTATE_GetCreateGameSuccess_Unref_00449cb0"
+        "MCPSTATE_GetCharDeleteSuccess"
       ],
-      "dh": "042b1243"
+      "dh": "e493e03c"
     },
     {
       "name": "MCPSTATE_SetCharDeleteSuccess",
@@ -571,7 +571,7 @@
       "dh": "560edf88"
     },
     {
-      "name": "MCPCONNECT_GetD2GSGameHash_Unref_00449d80",
+      "name": "MCPSTATE_GetCharUpgradeSuccess",
       "address": "00449d80",
       "lines": [
         {
@@ -581,12 +581,12 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "MCPCONNECT_GetD2GSGameHash_Unref_00449d80"
+        "MCPSTATE_GetCharUpgradeSuccess"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "2f70644e"
+      "dh": "1c940373"
     },
     {
       "name": "MCPSTATE_SetCharUpgradeSuccess",
@@ -610,7 +610,7 @@
       ]
     },
     {
-      "name": "MCPCONNECT_GetD2GSGameHash_Unref_00449da0",
+      "name": "MCPSTATE_GetCharCreateSuccess",
       "address": "00449da0",
       "lines": [
         {
@@ -620,12 +620,12 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "MCPCONNECT_GetD2GSGameHash_Unref_00449da0"
+        "MCPSTATE_GetCharCreateSuccess"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "c538cee7"
+      "dh": "8bea795b"
     },
     {
       "name": "MCPSTATE_SetCharCreateSuccess",
@@ -649,7 +649,7 @@
       ]
     },
     {
-      "name": "MCPCONNECT_GetD2GSGameHash_Unref_00449dc0",
+      "name": "MCPCONNECT_GetD2GSConnectReady",
       "address": "00449dc0",
       "lines": [
         {
@@ -659,12 +659,12 @@
       ],
       "namespace": "D2MCPClient::McpConnect",
       "calledFunctions": [
-        "MCPCONNECT_GetD2GSGameHash_Unref_00449dc0"
+        "MCPCONNECT_GetD2GSConnectReady"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "fea7e9b8"
+      "dh": "5680e835"
     },
     {
       "name": "MCPSTATE_SetD2GSConnectReady",

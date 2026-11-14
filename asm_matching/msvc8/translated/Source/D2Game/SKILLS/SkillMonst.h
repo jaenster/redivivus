@@ -60,11 +60,11 @@ BOOL __fastcall SKILLMONST_SrvStFn51_Submerge(::SGAMEDATA * pGame, struct D2Unit
 BOOL __fastcall Skills_SrvDoFunc_094_ResetAnimFrame(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLMONST_SrvStFn52_Emerge(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLMONST_SrvStFn53_MonInferno(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
-void __fastcall SKILLASSN_GetShadowHealthBonus(struct D2SkillsTxt * pSkillsTxt, struct D2UnitStrc * pUnit);
+void __fastcall SKILLS_SetInfernoFrame(struct D2SkillsTxt * pSkillsTxt, struct D2UnitStrc * pUnit);
 // SrvDoFunc #95: server-side trap/sentry skill handler that spawns one missile from the caster unit toward the target cursor. Looks up srvmissilea from the skill's txt row, computes velocity from VelLev×level/8+Vel, builds a D2SkillArgStrc, and calls CreatingMissile. On success, applies trap health bonuses, checks the inferno state to optionally reschedule the next fire frame via SetEvent, otherwise triggers a mode-change. Returns 0 if the skill, missile id, or target position is invalid.
-BOOL __fastcall Skills_SrvDoFunc_095_SpawnTrapMissile(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_SrvDoFunc_095_MonInferno(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // SrvDoFunc #152: alternate trap/sentry missile spawner, functionally identical to SrvDoFunc_095 (same body: srvmissilea lookup, velocity calculation, CreatingMissile, health bonus, inferno-state rescheduling, mode-change). Likely mapped to a different skill row that shares the same fire mechanics but differs in txt-table parameters (e.g. Lightning Sentry vs Death Sentry variant).
-BOOL __fastcall Skills_SrvDoFunc_152_SpawnTrapMissileVariant(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
+BOOL __fastcall Skills_SrvDoFunc_152_DiabLight(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // SrvDoFunc 96: heals the target by a random percentage between calc[0] and calc[1] of its max HP (clamped 0-100%), adds the result to current HP, and clamps to max HP. Sets UNITFLAG_SKSRVDOFUNC on caster. Returns FALSE if no valid target or skill record.
 BOOL __fastcall Skills_SrvDoFunc_096_HealTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Resurrects a dead monster or player unit: restores HP to max, sets ISVALIDTARGET/CANBEATTACKED/TARGETABLE flags, and re-registers collision in the room. For monsters also sets NOXP+NOTC flags, triggers AI think, decrements kill count, attaches quest hooks, and sets monster collision type. Returns 1 on success, 0 if the unit has no room.
@@ -97,7 +97,7 @@ BOOL __fastcall Skills_SrvDoFunc_107_LeechMeleeMultiHit(::SGAMEDATA * pGame, str
 // Monster skill server do-func: devours a friendly non-mercenary minion that is in the Kick anim-mode to restore caster HP. Deletes the target monster from the room and frees its server unit, then adds a calc[0]% of the target's max HP to the caster's current HP (clamped to caster max HP).
 BOOL __fastcall Skills_SrvDoFunc_108_DevourMinionForHP(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Returns the first non-zero animation event value from the current frame onward in the caster's anim data, used to determine how many Holy Bolt targets to hit. Handles both sequenced (merc) and non-sequenced monsters. Returns 0 if no event found before the animation ends.
-uint32_t __fastcall SKILLPAL_GetHolyBoltTargetCount(struct D2UnitStrc * pUnit);
+uint32_t __fastcall SKILLMONST_GetMonFrenzySequenceFrame(struct D2UnitStrc * pUnit);
 // Performs a single-target melee/ranged skill attack for monsters. Sets target on caster, runs to-hit calculation and hit-check, builds D2DamageStrc with ResultFlags/HitFlags/HitClass and EnDmgPct (calc[1]) on hit, applies damage, processes combat queue, and stores hit/miss result in skill Param1.
 BOOL __fastcall SKILLMONST_SingleTargetSkillAttack(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl);
 BOOL __fastcall SKILLMONST_SrvStFn64_MonFrenzy(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);

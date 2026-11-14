@@ -1285,7 +1285,7 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
           }
 
           nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-          nHealAmount = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+          nHealAmount = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
           nValue = nCurrentHp + nSkillLevel;
           if (nCurrentHp + nSkillLevel >= nHealAmount) {
             nValue = nHealAmount;
@@ -2770,7 +2770,7 @@ BOOL __fastcall Missiles_SrvHitFunc_LeechHpToOwner(::SGAMEDATA * pGame, D2UnitSt
       uint32_t uTotalDamage;
       memset(&sDamage, 0, 0x70);
       uTotalDamage = MISSILES_CalculateElementalDamage(pGame, pUnit, pTarget, &sDamage);
-      nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit_00);
+      nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit_00);
       nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit_00, UNITSTAT_hitpoints, 0);
       nClassId += (int)uTotalDamage < 0 ? 0 : uTotalDamage;
       if (nClassId >= nMaxHp) {
@@ -2836,7 +2836,7 @@ BOOL __fastcall Missiles_SrvHitFunc_ActivateObjectOnWallHit(::SGAMEDATA * pGame,
     }
     if (pUnit_00->eAnimMode.ePlayerMode == Death) {
       D2ObjectsTxt* pObjTxt;
-      D2Common::Units::SetupUpdateFlag(pUnit_00, 1);
+      D2Common::Units::ChangeAnimMode(pUnit_00, 1);
       pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(GetClassIdInline(pUnit_00));
       if (pObjTxt) {
         GAME::Event::SetEvent(pGame, pUnit_00, 1, (pObjTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
@@ -3039,7 +3039,7 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTargetRandom(::SGAMEDATA * pGame, D2Unit
     nMaxHp = D2Common::Skills::SKILL_CalcMaxDamage(UNIT::SUnit::GetOwnerUnit(pGame, pUnit), eSkill, nMaxHp, 1);
     uint32_t uRandHeal = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxHp - nMinHeal);
     nClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-    nMaxHp = D2Common::Stats::StatsEx::GetTxtMaxHp(pTarget);
+    nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
     if (nClassId != nMaxHp && pMissileTxt->ProgOverlay > 0) {
       D2Common::Units::SetOverlay(pTarget, (int)pMissileTxt->ProgOverlay, 0);
     }
@@ -3957,12 +3957,12 @@ void __fastcall MISSMODE_ApplyMissileHitDamage(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 BOOL __fastcall MISSMODE_RedemptionHitNoMana(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nEvent, uint32_t dwReserved) {
-    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 0);
+    BOOL BVar1 = SKILLS::SkillPal::SKILLPAL_ApplyRedemptionEffect(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 0);
     return BVar1;
 }
 
 BOOL __fastcall MISSMODE_RedemptionHitWithMana(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nEvent, uint32_t dwReserved) {
-    BOOL BVar1 = SKILLS::SkillPal::SKILLSOR_GetBlizzardSubMissileCount(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 1);
+    BOOL BVar1 = SKILLS::SkillPal::SKILLPAL_ApplyRedemptionEffect(pGame, pUnit, pTarget, SKILL_Redemption, nEvent, 1);
     return BVar1;
 }
 
@@ -4349,7 +4349,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
         if (pTarget) {
           if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
             nPierce = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_skill_pierce, 0);
-            if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
+            if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
               nHitResult = getDamageTarget(pUnit);
             }
           }
@@ -4389,7 +4389,7 @@ int __fastcall Hits(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarge
           if (pTarget) {
             if (*((uint8_t*)pMissilesTxt + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
               nPierce = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_skill_pierce, 0);
-              if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
+              if (nPierce || (nToHitThenStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pOwner, UNITSTAT_item_pierce, 0) , nToHitThenStat != 0)) {
                 nHitResult = getDamageTarget(pUnit);
               }
             }
@@ -5865,7 +5865,7 @@ int __fastcall MISSILESMODE_SrvDoFn29_RecyclerDelay(::SGAMEDATA * pGame, D2UnitS
         nMissileId = D2Common::Units::Missile::GetRemainingFrames(pUnit);
         if (nMissileId == pMissileTxt->Param1) {
           nMissileClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0);
-          nMissileId = D2Common::Stats::StatsEx::GetTxtMaxHp(pOwner);
+          nMissileId = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner);
           nMaxHpShifted = nMissileId >> 8;
           if (nMissileClassId >> 8 < nMaxHpShifted) {
             nSkillLevel = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt[eSkill].calc[0], eSkill, nSkillLevel), 100);
@@ -5933,7 +5933,7 @@ int __fastcall MISSILESMODE_SrvDoFn33_VineRecyclerDelay(::SGAMEDATA * pGame, D2U
         nMissileId = D2Common::Units::Missile::GetRemainingFrames(pUnit);
         if (nMissileId == pMissileTxt->Param1) {
           nMissileClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_mana, 0);
-          nMissileId = D2Common::Stats::StatsEx::GetTxtMaxMana(pOwner);
+          nMissileId = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pOwner);
           nValue = nMissileId >> 8;
           if (nMissileClassId >> 8 < nValue) {
             nSkillLevel = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLevel), 100);

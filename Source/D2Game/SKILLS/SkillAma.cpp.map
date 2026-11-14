@@ -143,7 +143,6 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAma",
       "calledFunctions": [
-        "ITEMMODE_SendItemUpdate",
         "UseQuanityAndDurability",
         "ITEMS_IsA",
         "IsStackable",
@@ -152,6 +151,7 @@
         "STATLIST_SetUnitStat",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
+        "ITEMMODE_BreakItem",
         "RemoveQuanityOnUse"
       ],
       "usedTypes": [
@@ -163,7 +163,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6cdcd9ee",
+      "dh": "1c7fd2eb",
       "paramStorage": [
         [
           "pGame",
@@ -447,7 +447,7 @@
       ]
     },
     {
-      "name": "SKILL_GetPhoenixBoltCount",
+      "name": "SKILLAMZ_AuraCallback_InnerSight_SlowMissiles",
       "address": "005db150",
       "lines": [
         {
@@ -457,7 +457,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAma",
       "calledFunctions": [
-        "SKILL_GetPhoenixBoltCount",
+        "SKILLAMZ_AuraCallback_InnerSight_SlowMissiles",
         "SetStateWithExpiryTime"
       ],
       "usedTypes": [
@@ -467,7 +467,7 @@
         "eD2Skills",
         "uint32_t"
       ],
-      "dh": "0bae5ff3",
+      "dh": "b1e46fd7",
       "paramStorage": [
         [
           "pContext",
@@ -480,7 +480,7 @@
       ]
     },
     {
-      "name": "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
+      "name": "Skills_SrvDoFunc_006_InnerSight_SlowMissiles",
       "address": "005db1c0",
       "lines": [
         {
@@ -490,7 +490,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillAma",
       "calledFunctions": [
-        "Skills_SrvDoFunc_006_PhoenixStrikeAreaBolt",
+        "Skills_SrvDoFunc_006_InnerSight_SlowMissiles",
         "D2GetSkillCalc",
         "SKILLS_ApplyAreaEffect"
       ],
@@ -502,7 +502,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "18b754ed",
+      "dh": "d677dead",
       "paramStorage": [
         [
           "pGame",
@@ -552,7 +552,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "52a4737d",
+      "dh": "d0de6dc0",
       "paramStorage": [
         [
           "pGame",
@@ -960,11 +960,11 @@
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
         "StoreOwner",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
         "STATSEX_GetCurrentStat",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs",
         "SetEvent",
         "InitUmods",
@@ -980,7 +980,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b803fa3b",
+      "dh": "53bb6d4c",
       "paramStorage": [
         [
           "pGame",
@@ -1015,7 +1015,7 @@
         "SKILLS_GetSummonMonsterClassId",
         "D2GetSkillCalc",
         "SKILL_CreateSummon",
-        "SKILLNEC_ReviveCorpseAsMinion",
+        "SKILLS_SetSummonBaseStats",
         "SKILLNEC_ApplySummonBuffs",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
@@ -1032,7 +1032,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "74f7ac61",
+      "dh": "266bef63",
       "paramStorage": [
         [
           "pGame",

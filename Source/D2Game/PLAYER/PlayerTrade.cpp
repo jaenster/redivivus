@@ -79,7 +79,7 @@ BOOL __fastcall Objects_OperateFn32_OpenStash(D2ObjectOperateFnArg * pOperation)
               UNIT::SUnit::SetInteractInfo(pOperation->pAttacker, UNIT_OBJECT, nStashGUID);
               pClient = UNIT::SUnit::SUNIT_GetClient(pOperation->pAttacker, ".\\PLAYER\\PlrTrade.cpp", 0x65);
               GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0x10);
-              ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pOperation->sArg.pGame, pOperation->pAttacker);
+              ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pOperation->sArg.pGame, pOperation->pAttacker);
             }
           }
         }
@@ -162,7 +162,7 @@ static void __stdcall GOLD_HandleStashGoldTransaction(int32_t nGoldAmount, ::SGA
         UNIT::SUnit::ClearInteractInfo(pUnit);
       }
 
-      ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+      ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     }
 }
 
@@ -928,7 +928,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
       if (wFlagsAndUpgrade & 1) {
         pDVar2 = pMatchedItemsLocal->entry[nOutputSlotIndex].pUnit1;
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDVar2, INVPAGE_None);
-        D2Common::Units::SetupUpdateFlag(pDVar2, 4);
+        D2Common::Units::ChangeAnimMode(pDVar2, 4);
         apDStack_c8[3] = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameTmp, pDVar2, nullptr, (uint32_t)!aOutputMeta[nOutputSlotIndex]);
         byOutputType = pOutput->nType;
         pSourceItem = 0;
@@ -964,17 +964,17 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
         ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGameTmp, apDStack_c8 + 3, nullptr, 0);
         pClonedOutput = apDStack_c8[3];
         apDStack_c8[nOutputSlotIndex] = apDStack_c8[3];
-        D2Common::Units::SetupUpdateFlag(pClonedOutput, 4);
+        D2Common::Units::ChangeAnimMode(pClonedOutput, 4);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDVar2, INVPAGE_CUBE);
       } else {
         byOutputType = pOutputEntry->nType;
         if (byOutputType == 0xfe) {
           pDVar2 = pMatchedItemsLocal->entry[nOutputSlotIndex].pUnit1;
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDVar2, INVPAGE_None);
-          D2Common::Units::SetupUpdateFlag(pDVar2, 4);
+          D2Common::Units::ChangeAnimMode(pDVar2, 4);
           pClonedOutput = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameTmp, pDVar2, nullptr, (uint32_t)!aOutputMeta[nAffixIdx]);
           apDStack_c8[nOutputSlotIndex] = pClonedOutput;
-          D2Common::Units::SetupUpdateFlag(pClonedOutput, 4);
+          D2Common::Units::ChangeAnimMode(pClonedOutput, 4);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pDVar2, INVPAGE_CUBE);
           if (pOutput->nQuality == 9) {
             wMagicPrefixId = SKILLS::Items::ITEMMOD_SelectMagicAffixVersioned(pClonedOutput, 1);
@@ -1086,7 +1086,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
                     pClonedSocketItem2 = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameLocal, pExtractedItem, nullptr, 1);
                     if (pClonedSocketItem2) {
                       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedSocketItem2, INVPAGE_None);
-                      D2Common::Units::SetupUpdateFlag(pClonedSocketItem2, 4);
+                      D2Common::Units::ChangeAnimMode(pClonedSocketItem2, 4);
                       apExtractedItems[nExtractedItemCount] = pClonedSocketItem2;
                       nExtractedItemCount++;
                     }
@@ -1143,7 +1143,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
           }
         }
         if (pOutputEntry->wFlagsAndUpgrade & 0x400) {
-          ITEMS::ItemMode::ITEMMODE_HandleCursorItem(pGameLocal, pPlayer, pDVar2);
+          ITEMS::ItemMode::ITEMMODE_RechargeItem(pGameLocal, pPlayer, pDVar2);
         }
         if (!(pOutputEntry->wFlagsAndUpgrade & 2)) {
           if (pOutputEntry->nQuantity) {
@@ -1560,7 +1560,7 @@ static void CUBE_HandleTransmuteButtonClick(D2UnitStrc * pPlayer, uint16_t nButt
             UNIT::SUnit::ClearInteractInfo(pPlayer);
           }
 
-          ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pPlayer);
+          ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
           break;
         }
       case 0x18:
@@ -1579,14 +1579,14 @@ static bool InitCopyInventoryForTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnitStr
       void* pSaveBuffer = D2_ALLOC_POOL_AT(pGame->pMemoryPool, 0x2000, ".\\PLAYER\\PlrTrade.cpp", 0x807);
       pCopy->pSaveBuffer = pSaveBuffer;
       int32_t pCopyInventory = PlayerSave::GetCopyInventory(pGame, pUnitStrc, (uint16_t*)pSaveBuffer, 0x2000, 0, 0, 0);
-      pCopy->pCopyInventory = pCopyInventory;
+      pCopy->nSaveSize = pCopyInventory;
       if (pCopyInventory <= 0) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x809);
         exit(-1);
       }
 
       pCopy->pUidPairList = 0;
-      pCopy->nTradeStatus = 0;
+      pCopy->nGoldOffered = 0;
       pCopy->dwAcceptLockEndTick = 0;
       uint32_t nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnitStrc, UNITSTAT_gold, 0);
       pCopy->nGold = nCurrentGold;
@@ -1813,7 +1813,7 @@ static void __stdcall SetStatsOnEar(BOOL bHardcore, D2UnitStrc * pUnit, D2UnitSt
     eD2ItemTypes eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pOther);
     if (eItemType == ITEMTYPE_PlayerBodyPart) {
       szPlayerName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
-      D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pOther, szPlayerName);
+      D2Common::ITEMS::Items::ITEMS_SetPlayerName(pOther, szPlayerName);
       D2Common::ITEMS::Items::ITEM_SetItemData_nEarLevel(pOther, D2Common::ITEMS::Items::ITEM_GetItemData_nEarLevel(pUnit));
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pOther, ITEMFLAG_HARDCORE, bHardcore);
       return;
@@ -1825,7 +1825,7 @@ static void __stdcall SetStatsOnEar(BOOL bHardcore, D2UnitStrc * pUnit, D2UnitSt
     }
 
     szPlayerName = D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit);
-    D2Common::ITEMS::Items::ITEM_GetPlayerNameAkaNamedString(pOther, szPlayerName);
+    D2Common::ITEMS::Items::ITEMS_SetPlayerName(pOther, szPlayerName);
 }
 
 // Trade/corpse-recovery helper: iterates all items in pUnit's inventory, clones each INVPAGE_MERC item via ITEM_CloneFromSerializedData, sets ear stats if applicable, marks it for update, moves it to INVPAGE_INVENTORY, and places it into pUnit2's inventory via SERVER_ItemToInventory. Also iterates INVPAGE_CORPSE items: strips them from pUnit's inventory (sends 0x9D remove packet) and deletes them. Sends trade-action packet 0x77 opcode 10 (fail) to both parties and returns 0 on any placement failure; returns 1 on full success.
@@ -1860,10 +1860,10 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
         pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItemNode);
         eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pCorpseItem);
         pOwner = pUnit;
-      } while (eInvPage != INVPAGE_MERC || (pClonedItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pCorpseItem, nullptr, 0) , pOwner = pUnit , !pClonedItem));
+      } while (eInvPage != INVPAGE_TRADEGRID2 || (pClonedItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pCorpseItem, nullptr, 0) , pOwner = pUnit , !pClonedItem));
 
       SetStatsOnEar(bHardcore_00, pCorpseItem, pClonedItem);
-      D2Common::Units::SetupUpdateFlag(pClonedItem, 4);
+      D2Common::Units::ChangeAnimMode(pClonedItem, 4);
       D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, INVPAGE_INVENTORY);
       nPlaceResult = ITEMS::ItemMode::SERVER_ItemToInventory(".\\PLAYER\\PlrTrade.cpp", 0x9cf, pGame, pUnit2, pClonedItem->nUnitGUID, 0, 0, 1, 1, nullptr);
       if (!nPlaceResult) {
@@ -1904,12 +1904,12 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
     eItemPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pClonedItem);
     pUnit2 = (D2UnitStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&pUnit2 + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eItemPage);
     pItemNode = pCorpseItem;
-    if (eItemPage == INVPAGE_CORPSE) {
+    if (eItemPage == INVPAGE_TRADEGRID1) {
       goto remove_source_item;
     }
-    if (eItemPage == INVPAGE_MERC) {
+    if (eItemPage == INVPAGE_TRADEGRID2) {
       eD2ItemFlag nUnit;
-      ITEMS::ItemMode::ITEMMODE_SetItemFlags(pOwner, pClonedItem);
+      ITEMS::ItemMode::ITEMMODE_ResetBookScrollSkillQuantity(pOwner, pClonedItem);
       remove_source_item:
       nUnit = 0x0;
       D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&nUnit, 0x20, 1);
@@ -1935,7 +1935,7 @@ static BOOL __stdcall HasMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2U
       pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pItemNode);
       pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItemNode);
       eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem);
-    } while (eInvPage != INVPAGE_MERC || (nPickable = ITEMS::ItemMode::SERVER_CheckIfPickable(pGame, pUnit, pItem) , nPickable != 0));
+    } while (eInvPage != INVPAGE_TRADEGRID2 || (nPickable = ITEMS::ItemMode::SERVER_CheckIfPickable(pGame, pUnit, pItem) , nPickable != 0));
 
     return 0;
 }
@@ -1943,7 +1943,7 @@ static BOOL __stdcall HasMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2U
 // Called when player ends interaction with the Horadric Cube item. Clears the interact info and performs item level check. Ensures proper cleanup when cube UI is closed.
 void __fastcall CUBE_OnCubeInteractionEnd(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     UNIT::SUnit::ClearInteractInfo(pPlayer);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pPlayer);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
@@ -1984,13 +1984,13 @@ static bool __stdcall SetUidOther(int * pnUIDOther, int32_t szText, D2UnitStrc *
 
 // Server-side handler for a player picking up an item from the trade screen. Validates that the interact partner is a player; sends 0x77/0x0C error if not. Calls SERVER_TakeItemToCursor to move the item to the cursor slot. On success, resets the 10-second trade acceptance timer for both parties and sends 0x77/0x0E (unaccept) to both clients. If either party had committed gold (dwTradeState==4), zeroes out both gold totals via 0x79 packets and finalises the trade via TRADE_SendTradeCompleteToPlayers.
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitDataPlayerStrc * pPlayerData) {
+void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2TradeRecordStrc* pDVar2;
     bool bUidSet;
     D2ClientStrc* pClient;
     D2UnitDataPlayerStrc* pDataSelf;
     DWORD dwTick;
-    int32_t szOtherName;
+    int32_t nItemGUID;
     eD2UnitType eInteractType2;
     uint32_t nInteractGUID;
     D2TradeRecordStrc* pTradeCopyOther;
@@ -2009,15 +2009,15 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     D2TradeItemUidPairStrc* pDVar1;
-    if (!pPlayerData) {
-      szOtherName = -1;
+    if (!pItem) {
+      nItemGUID = -1;
     } else {
-      szOtherName = *(int32_t*)(pPlayerData->szCharName + 0xc);
+      nItemGUID = pItem->nUnitGUID;
     }
 
-    bUidSet = SetUidOther((int*)&nInteractGUID, szOtherName, pUnit);
+    bUidSet = SetUidOther((int*)&nInteractGUID, nItemGUID, pUnit);
     if (bUidSet) {
-      bHasInteract = ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pOtherUnit, nInteractGUID, (uint32_t*)&pPlayerData, 1, 1, nullptr, 1);
+      bHasInteract = ITEMS::ItemMode::SERVER_TakeItemToCursor(pGame, pOtherUnit, nInteractGUID, (uint32_t*)&pItem, 1, 1, nullptr, 1);
       if (bHasInteract) {
         pDataSelf = D2Common::Units::GetPlayerData(pUnit);
         if (pDataSelf && pDataSelf->pTradeCopyInventory) {
@@ -2027,9 +2027,9 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     pDataSelf = D2Common::Units::GetPlayerData(pUnit);
-    pPlayerData = D2Common::Units::GetPlayerData(pOtherUnit);
+    pItem = (D2UnitStrc*)D2Common::Units::GetPlayerData(pOtherUnit);
     pDVar2 = pDataSelf->pTradeCopyInventory;
-    pTradeCopyOther = pPlayerData->pTradeCopyInventory;
+    pTradeCopyOther = ((D2UnitDataPlayerStrc*)pItem)->pTradeCopyInventory;
     dwTick = GetTickCount();
     pDVar2->dwAcceptLockEndTick = dwTick + 10000;
     pTradeCopyOther->dwAcceptLockEndTick = dwTick + 10000;
@@ -2037,7 +2037,7 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xe);
     pClient = UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xcfa);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xe);
-    if (!(pDataSelf->dwTradeState == 4 || pPlayerData->dwTradeState == 4)) {
+    if (!(pDataSelf->dwTradeState == 4 || pItem->pAnimData == (D2AnimDataRecordStrc*)0x4)) {
       return;
     }
 
@@ -2045,23 +2045,23 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd00), 0, '\x01');
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd01), 0, '\0');
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0xd02), 0, '\x01');
-    TRADE_SendTradeCompleteToPlayers(pUnit, pOtherUnit, pDataSelf, pPlayerData);
+    TRADE_SendTradeCompleteToPlayers(pUnit, pOtherUnit, pDataSelf, (D2UnitDataPlayerStrc*)pItem);
     return;
 }
 
-int32_t __fastcall CopyInventory(D2UnitStrc * pUnit, uint8_t * pUnit2, int32_t nBufSize) {
+int32_t __fastcall CopyInventory(D2UnitStrc * pUnit, uint8_t * pBuffer, int32_t nBufSize) {
     D2TradeRecordStrc* pTradeCopy2;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2TradeRecordStrc* pTradeCopy = pPlayerData->pTradeCopyInventory;
     if (!pTradeCopy) {
       return 0;
     }
-    if (!(nBufSize >= pTradeCopy->pCopyInventory)) {
+    if (!(nBufSize >= pTradeCopy->nSaveSize)) {
       return 0;
     }
 
-    memcpy(pUnit2, pTradeCopy->pSaveBuffer, pTradeCopy->pCopyInventory);
-    return pTradeCopy->pCopyInventory;
+    memcpy(pBuffer, pTradeCopy->pSaveBuffer, pTradeCopy->nSaveSize);
+    return pTradeCopy->nSaveSize;
 }
 
 // Server-side guard and initiator for a player-to-player trade session. Verifies both parties are alive (flag 0x800000 clear), Diablo has not been killed (classic trade restriction), the other player's trade inventory exists, and no prohibited item (monster-dropped or quest item with the "box" cube exception) is being offered. On success sets both players' dwTradeState to 7, fires event 0xD on the next frame for each, and sends NET packet 0x77 opcode 6 (TradeAccepted) to both clients. Returns 1 if the offered item needs re-validation, 0 if trade is blocked, or <5 trade-state guard on early-out paths.
@@ -2217,7 +2217,7 @@ void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
       pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pItemNode);
       if (pCarriedItem && pCarriedItem->eUnitType == UNIT_ITEM) {
         if (pCarriedItem->eAnimMode.ePlayerMode == Death) {
-          ITEMS::ItemMode::ITEMMODE_SetItemFlags(pUnit, pCarriedItem);
+          ITEMS::ItemMode::ITEMMODE_ResetBookScrollSkillQuantity(pUnit, pCarriedItem);
         }
 
         D2Common::INVENTORY::Inventory::UpsertToUpdateList(pUnit->pInventory, pCarriedItem);
@@ -2231,7 +2231,7 @@ void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
       D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItemNode, ITEMCMD_DELETE, 1);
     }
 
-    ITEMS::ItemMode::ITEMMODE_ProcessItemDropLogic(pGame, pUnit);
+    ITEMS::ItemMode::ITEMMODE_RemoveEquippedItemsAndStats(pGame, pUnit);
     TRADE_RestoreInventoryFromBackup(pGame, pUnit);
 }
 
@@ -2254,8 +2254,8 @@ void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, D2UnitStrc *
     PLRTRADE_FreeTradeCopyInventory(pGame, pUnit2);
     pPlayerData->dwTradeState = dwTradeStateForUnit;
     pPlayerData2->dwTradeState = 9;
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit2);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x969);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xc);
     D2ClientStrc* pClient_00 = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0x96a);
@@ -2269,8 +2269,8 @@ void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, D2UnitStrc *
 // Cancels/resets an active trade between two players: refreshes both inventories, checks item levels, clears trade status to 0 on both sides, calls RemoveTradeItemMaybe for each, sends gold-in-trade packets zeroing both sides (side 0 and 1) for both clients, sends trade-action 6 (cancel) to both clients, sets dwTradeState=5 on both, and schedules an update event for the next game frame.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerData1, D2UnitDataPlayerStrc * pPlayerData2, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame) {
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit2);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     D2Common::Units::RefreshInventory(pUnit2, 1);
     D2Common::Units::RefreshInventory(pUnit, 1);
     if (pUnit2) {
@@ -2280,8 +2280,8 @@ static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerDat
       pUnit->eUnitFlagsEx |= 0x800000;
     }
 
-    pPlayerData1->pTradeCopyInventory->nTradeStatus = 0;
-    pPlayerData2->pTradeCopyInventory->nTradeStatus = 0;
+    pPlayerData1->pTradeCopyInventory->nGoldOffered = 0;
+    pPlayerData2->pTradeCopyInventory->nGoldOffered = 0;
     RemoveTradeItemMabye(pGame, pUnit2, 1);
     RemoveTradeItemMabye(pGame, pUnit, 1);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0x991), 0, '\0');
@@ -2294,8 +2294,8 @@ static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerDat
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
     pPlayerData1->dwTradeState = 5;
     pPlayerData2->dwTradeState = 5;
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit2);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     GAME::Event::SetEvent(pGame, pUnit2, 0xd, pGame->dwGameFrame + 1, 0, 0);
     GAME::Event::SetEvent(pGame, pUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
 }
@@ -2308,15 +2308,15 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2ClientStrc* pClient;
     int nGold2;
     D2TradeRecordStrc* pTradeCopy = pPlayerData1->pTradeCopyInventory;
-    if (pTradeCopy->nTradeStatus) {
+    if (pTradeCopy->nGoldOffered) {
       nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_gold, 0);
-      if (nGold < (int)pTradeCopy->nTradeStatus) {
+      if (nGold < (int)pTradeCopy->nGoldOffered) {
         PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
         return;
       }
 
       nGold2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nGold = pTradeCopy->nTradeStatus;
+      nGold = pTradeCopy->nGoldOffered;
       nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
       if ((uint32_t)(nGold2 + nGold) > nGoldLimit) {
         PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
@@ -2329,15 +2329,15 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     pTradeCopy = pPlayerData2->pTradeCopyInventory;
-    if (pTradeCopy->nTradeStatus) {
+    if (pTradeCopy->nGoldOffered) {
       nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      if (nGold < (int)pTradeCopy->nTradeStatus) {
+      if (nGold < (int)pTradeCopy->nGoldOffered) {
         PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
         return;
       }
 
       nGold2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_gold, 0);
-      nGold = pTradeCopy->nTradeStatus;
+      nGold = pTradeCopy->nGoldOffered;
       nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit2);
       if ((uint32_t)(nGold2 + nGold) > nGoldLimit) {
         PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
@@ -2350,10 +2350,10 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     BOOL bInventoryFitOk = 0;
-    BOOL nCheckVal = D2Common::INVENTORY::Inventory::CreateCopyOfInventoryForTrading(pGame->pMemoryPool, pUnit2, pUnit, &bInventoryFitOk);
+    BOOL nCheckVal = D2Common::INVENTORY::Inventory::INVENTORY_CanItemsBeTraded(pGame->pMemoryPool, pUnit2, pUnit, &bInventoryFitOk);
     if (!nCheckVal) {
-      pPlayerData1->pTradeCopyInventory->nTradeStatus = 0;
-      pPlayerData2->pTradeCopyInventory->nTradeStatus = 0;
+      pPlayerData1->pTradeCopyInventory->nGoldOffered = 0;
+      pPlayerData2->pTradeCopyInventory->nGoldOffered = 0;
       if (bInventoryFitOk) {
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0xa51);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 9);
@@ -2396,33 +2396,33 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
         bTransferOk = LoopsOverAllItemsAndPutInInventory(pUnit, pUnit2, pGame);
         if (bTransferOk != '\0') {
           pTradeCopy = pPlayerData1->pTradeCopyInventory;
-          if (pTradeCopy->nTradeStatus) {
-            nGold = pTradeCopy->nTradeStatus;
+          if (pTradeCopy->nGoldOffered) {
+            nGold = pTradeCopy->nGoldOffered;
             nGold2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_gold, 0);
             if (nGold2 >= nGold) {
               UNIT::Party::ChangeGoldForPlayer(pUnit2, UNITSTAT_gold, -nGold);
             }
 
-            ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, pTradeCopy->nTradeStatus);
+            ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit, pTradeCopy->nGoldOffered);
           }
 
           pTradeCopy = pPlayerData2->pTradeCopyInventory;
-          if (pTradeCopy->nTradeStatus) {
-            nGold = pTradeCopy->nTradeStatus;
+          if (pTradeCopy->nGoldOffered) {
+            nGold = pTradeCopy->nGoldOffered;
             nGold2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
             if (nGold2 >= nGold) {
               UNIT::Party::ChangeGoldForPlayer(pUnit, UNITSTAT_gold, -nGold);
             }
 
-            ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit2, pTradeCopy->nTradeStatus);
+            ITEMS::Items::Drop::ITEM_GiveGoldOrDrop(pGame, pUnit2, pTradeCopy->nGoldOffered);
           }
 
           UNIT::SUnit::ClearInteractInfo(pUnit2);
           UNIT::SUnit::ClearInteractInfo(pUnit);
           PLRTRADE_FreeTradeCopyInventory(pGame, pUnit2);
           PLRTRADE_FreeTradeCopyInventory(pGame, pUnit);
-          ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit2);
-          ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+          ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
+          ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
           pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0xa9c);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0xd);
           pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xa9d);
@@ -2617,7 +2617,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
         }
         if (pPlayerData->pTradeCopyInventory) {
           byGoldSide = '\0';
-          pPlayerData->pTradeCopyInventory->nTradeStatus = nGoldAmount;
+          pPlayerData->pTradeCopyInventory->nGoldOffered = nGoldAmount;
           GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pTradePartner, ".\\PLAYER\\PlrTrade.cpp", 0xbc3), nGoldAmount, byGoldSide);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x79_TRADEGOLD(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xbc4), nGoldAmount, '\x01');
         }
@@ -2685,7 +2685,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
-void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+void __fastcall PLRTRADE_AbortTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bValid;
     bool bValid;
     uint32_t nSelfGUID;
@@ -2731,8 +2731,8 @@ void __fastcall TRADE_CompleteTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // JMP thunk
-void __fastcall thunk_TRADE_CompleteTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    ::D2Game::PLAYER::PlayerTrade::TRADE_CompleteTrade(pGame, pUnit);
+void __fastcall thunk_PLRTRADE_AbortTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    ::D2Game::PLAYER::PlayerTrade::PLRTRADE_AbortTrade(pGame, pUnit);
 }
 
 // Server-side trade handler: places pItem (held by pUnit) into the trade partner's trade window. Validates pUnit is interacting with another player and resolves the partner unit by interact GUID; on failure sends trade-action error 0xc (NET_D2GS_SERVER_Send_0x77). Clones the item, copies its tile coords, marks the clone and sets its page to the corpse/trade page, then inserts it into the partner inventory via SERVER_ItemToInventory at the same coords. On success records the trade item link (CreateStructure0xc), and if either side had locked gold (dwTradeState==4) re-syncs both sides' gold and resends trade-complete; on placement failure deletes the clone and cancels the trade (PLRTRADE_CancelTradeAndCleanup reason 9).
@@ -2783,8 +2783,8 @@ void __fastcall PLRTRADE_AddItemToTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       nClonePosY = 0;
     }
 
-    D2Common::Units::SetupUpdateFlag(pClonedItem, 4);
-    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, INVPAGE_CORPSE);
+    D2Common::Units::ChangeAnimMode(pClonedItem, 4);
+    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pClonedItem, INVPAGE_TRADEGRID1);
     if (!pClonedItem) {
       nCloneGUID = -1;
     } else {

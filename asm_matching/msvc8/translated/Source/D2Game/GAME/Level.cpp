@@ -163,7 +163,7 @@ void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * 
           switch (eUnitType) {
             case UNIT_MONSTER:
               {
-                Monster::MONSTERAI_TriggerMageThink(pGameSave, pRoomUnit);
+                Monster::MONSTERAI_RescheduleThink(pGameSave, pRoomUnit);
                 break;
               }
           }
@@ -211,7 +211,7 @@ void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * p
           switch (eUnitType) {
             case UNIT_MONSTER:
               {
-                Monster::MONSTER_StartAiAndRegenTimers(pGameSave, pRoomUnit);
+                Monster::MONSTER_RemoveAiAndRegenTimers(pGameSave, pRoomUnit);
                 break;
               }
           }
@@ -322,7 +322,7 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
         PLAYER::PlayerPets::PETS_FreeAllPetsByType(pGameSave, pUnit);
       }
 
-      D2Common::Skills::STATES_RemoveAllProgressiveStates(pUnit);
+      D2Common::Skills::STATES_RemoveDisguiseStates(pUnit);
       bIsArena = D2Common::Units::GetUnitSizeX(pUnit);
       pSpawnRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*ppDVar1, eLevel, nSpawnTypeOrMode, &nSpawnX, &nSpawnY, bIsArena);
       if (!pSpawnRoom) {
@@ -425,8 +425,8 @@ void __fastcall FreeAllUnits(::SGAMEDATA * pGame) {
     Monster::FreeMonsters(pGame);
     Objects::FreeObjects(pGame);
     PLAYER::Player::FreePlayers(pGame);
-    MISSILES::Missiles::FreeMissiles(pGame);
-    ITEMS::Items::FreeItems(pGame);
+    MISSILES::Missiles::ITEMS_RemoveAll(pGame);
+    ITEMS::Items::MISSILES_RemoveAll(pGame);
     UNIT::SUnit::FreeWarpUnits(pGame);
 }
 
@@ -441,7 +441,7 @@ void __fastcall ProcessUnitUpdateFlags(::SGAMEDATA * pGame) {
       if (pDrlgAct && pDrlgAct->eLevelIdFirst != LEVEL_None) {
         for (pRoom = D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomFromAct(pDrlgAct); pRoom; pRoom = pRoom->pDrlgRoomNext) {
           for (pUnit = pRoom->pUnitUpdate; pUnit; pUnit = pUnit->pChangeNextUnit) {
-            UNIT::SUnit::UNITS_ResetUnitForReuse(pGame, pUnit);
+            UNIT::SUnit::UNITS_ClearUpdateData(pGame, pUnit);
           }
 
           D2Common::Unit::ROOM_ClearUnitUpdateList(pRoom);

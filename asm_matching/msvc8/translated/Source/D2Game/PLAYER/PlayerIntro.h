@@ -15,7 +15,6 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
-struct D2BitBufferStrc;
 struct D2UnitDataPlayerInteractedNPCStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
@@ -30,8 +29,8 @@ BOOL __fastcall PLAYER_CheckIfSpokenWithNPC(struct D2UnitStrc * pUnit, ::SGAMEDA
 void __fastcall INTRONPC_SetSpokenWithNPC_Intro2(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId);
 BOOL __fastcall INTRONPC_CheckIfSpokenWithNPC_Intro2(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId);
 void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nMonStatsId);
-void __fastcall CopyBufferToPointer(struct D2BitBufferStrc * pBitBuffer, char * pDest);
-void __fastcall CopySizeAndPosToBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pDest);
+void __fastcall PLAYERINTRO_CopyIntroToBuffer(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, char * pDest);
+void __fastcall PLAYERINTRO_CopyIntro2ToBuffer(struct D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, uint8_t * pDest);
 void __fastcall PLAYERINTRO_CopyIntroData8Bytes(struct D2UnitDataPlayerInteractedNPCStrc * pdwParam1, uint32_t * pdwSrc);
 void __fastcall PLAYERINTRO_CopyIntroDataIndirect(struct D2UnitDataPlayerInteractedNPCStrc * pSrc, uint32_t * pdwIntroData);
 // @sourcefile .\PLAYER\PlrIntro.cpp

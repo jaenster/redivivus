@@ -50,7 +50,7 @@
       ]
     },
     {
-      "name": "SKILLS_CompileSkillFormula",
+      "name": "FOG_EvaluateCalcExpression",
       "address": "006c0bc0",
       "lines": [
         {
@@ -60,7 +60,7 @@
       ],
       "namespace": "Fog::Skills",
       "calledFunctions": [
-        "SKILLS_CompileSkillFormula",
+        "FOG_EvaluateCalcExpression",
         "SKILLS_PopValue",
         "SKILLS_PushValue"
       ],
@@ -71,7 +71,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "96745083",
+      "dh": "f4cad570",
       "paramStorage": [
         [
           "pFormula",
@@ -336,7 +336,7 @@
         "SKILLS_EmitFormulaBytecode",
         "SKILLS_WriteValueToBuffer",
         "SKILLS_WriteValueToBuffer2",
-        "SKILLS_CompileSkillFormula",
+        "FOG_EvaluateCalcExpression",
         "__security_check_cookie"
       ],
       "usedTypes": [
@@ -348,7 +348,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "08831b51",
+      "dh": "79e059a0",
       "paramStorage": [
         [
           "szExpressionString",

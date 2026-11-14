@@ -111,7 +111,7 @@ namespace D2Client::UI::npcmenu {
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_00486e00();
-int32_t __stdcall GetInteractedUnitClassId_Unref_004b1020();
+int32_t __stdcall NPCMENU_GetMonsterSpecialType();
 void __thiscall NPCMENU_ConvertQuestId(short * nInput, uint16_t * pResult);
 struct D2UnitStrc * __stdcall GetInteractedUnit();
 int32_t __stdcall GetInteractedUnitClassId();
@@ -126,7 +126,7 @@ int __stdcall NPCMENU_ShowGossipDialog();
 int __stdcall NPCMENU_ShowIntroduceDialog();
 BOOL __stdcall CheckSpeachVersusInteractedUnit();
 int __stdcall NPCMENU_EmptyDialogDrawHandler();
-int __stdcall NPCMENU_OpenTradeWithNpc();
+int __stdcall NPCMENU_RequestMercResurrect();
 void __stdcall NPCMENU_HireMerc();
 int __stdcall NPCMENU_EmptyDialogDrawHandler_Unref_004b2010();
 // Cain's "Identify Items" (4020 NPCIdentify1) option callback: slot 1 of the Cain rows 16, 17, 18, 19 and 38 (cain2, cain5, cain3, cain4, cain6); installed by NPCMENU_InitializeMenuOptions and NPCMENU_EnableCainIdentifyOption.
@@ -139,7 +139,7 @@ void __fastcall NPCMENU_ValidateNpcForShop(struct D2UnitStrc * pUnit);
 void __stdcall NPCMENU_Initialize();
 void __stdcall NPCMENU_Cleanup();
 void __fastcall NPCMENU_SetTransactionMode(struct D2GSPacketSrv0x50 * pMsg);
-void __fastcall QuestHandeling(char * szText);
+void __fastcall NPCMENU_ReadGameQuestRecord(uint8_t * pQuestBits);
 void __stdcall thunk_SetInventoryNeedsRefresh();
 void __stdcall NPCMENU_ExecuteShopTransaction(int32_t bSkipConfirm, uint8_t byMode);
 void __stdcall NPCMENU_CancelShopTransaction();

@@ -216,7 +216,7 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
         BVar1 = NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
         if (!BVar1) {
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ SRC::Client::gnNetConnectionTimeoutMs = 1;
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ SRC::Client::gbClientConnected = 1;
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
@@ -299,7 +299,7 @@ void __stdcall NET_SetPlayersCount(int32_t nCount) {
     Fog::Src::SetPerIpConnectionLimit(gpQServer, nCount);
 }
 
-void __stdcall _NullSub_Unref_0052b270() {
+void __stdcall QSERVER_GetConnectedClients() {
     Fog::Src::GetConnectedClients(gpQServer);
 }
 
@@ -439,22 +439,22 @@ uint32_t __stdcall QSERVER_GetClientGameToken(uint32_t nClientId) {
     return gnDefaultClientGameToken;
 }
 
-void __fastcall NET_SendPacketWithFlags(char * szText, uint16_t nSize, int32_t nFlags) {
+void __fastcall NET_EnqueueClientPacket(char * szText, uint16_t nSize, int32_t nClientId) {
     if (nSize > 0x204) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x209);
       exit(-1);
     }
 
-    Fog::Src::SendPacketToClient(gpQServer, szText, (uint32_t)nSize, nFlags);
+    Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, szText, (uint32_t)nSize, nClientId);
 }
 
-uint32_t __fastcall NET_SendPacketToClient(char * szText, uint16_t nSize) {
+uint32_t __fastcall NET_EnqueueLocalClientPacket(char * pPacket, uint16_t nSize) {
     if (nSize > 0x204) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x217);
       exit(-1);
     }
 
-    int nSendResult = Fog::Src::SendPacketToClient(gpQServer, szText, (uint32_t)nSize, 0);
+    int nSendResult = Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, pPacket, (uint32_t)nSize, 0);
     return (uint32_t)(nSendResult != 0);
 }
 
@@ -486,7 +486,7 @@ int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t 
     uint8_t aPacketFrame[4];
     d2_store24((char*)&aPacketFrame, (uint32_t)((uint32_t)(uintptr_t)pQServer & 0xffffffu));
     aPacketFrame[3] = 0x70;
-    Fog::Src::SendPacketToClient(gpQServer, (char*)(aPacketFrame + 3), 1, nClientId);
+    Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, (char*)(aPacketFrame + 3), 1, nClientId);
     return 1;
 }
 

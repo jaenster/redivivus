@@ -563,11 +563,11 @@ _RTL_CRITICAL_SECTION lpCriticalSection_0096d610 = {0}; D2_GLOBAL_GUARD(lpCritic
 
 namespace D2Common { namespace Drlg { namespace Preset {
 
-void StaticFini_gLogMessageQueueCS_Unref_00665930() {
+void PRESET_EnterCriticalSection_0096d610() {
     EnterCriticalSection(&lpCriticalSection_0096d610);
 }
 
-void StaticFini_gLogMessageQueueCS_Unref_00665940() {
+void PRESET_LeaveCriticalSection_0096d610() {
     LeaveCriticalSection(&lpCriticalSection_0096d610);
 }
 
@@ -695,7 +695,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           if (eUnitType > 0) {
             szItemCode = eUnitType;
             do {
-              nStrLen = DrlgAnim::DRLGANIM_GetOrientationFromIndex(*pPathEntry);
+              nStrLen = DrlgAnim::DRLGPRESET_MapTileType(*pPathEntry);
               *pPathEntry = nStrLen;
               pPathEntry++;
               szItemCode--;

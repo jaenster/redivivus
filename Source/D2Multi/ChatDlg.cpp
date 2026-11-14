@@ -1197,7 +1197,7 @@ FORMS_PredefinedFormStrc gaPredefinedForms_b[129] = {
         /* .nExtraParam = */ 0x0,
         /* .nLabelAsLocaleStringId = */ 0x678,
         /* .pDC6 = */ &gpDC6WideButtonBlank,
-        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_Unused2,
+        /* .fpOnPressCallback = */ &D2Multi::CHATDLG_OnPressDestroyAllForms,
         /* .pTypeArg1 = */ nullptr,
         /* .pTypeArg2 = */ nullptr,
         /* .nFlagsOrType = */ 0x0
@@ -2123,7 +2123,7 @@ void __stdcall LAUNCHER_DestroyLauncherForms() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlChannelDlgCancelButton);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelNameEditBox);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlChannelList);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     if (!gpChatDlgInputEditBox) {
       return;
     }
@@ -2261,7 +2261,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
 
     sLevelLineText.szNameAndTitle[0] = '\0';
     eD2PlayerStatus ePlayerStatus = OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerStatus;
-    char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass((uint32_t)OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
+    char* pszTitlePrefix = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress((uint32_t)OOGUtilities::D2IniData_multiplayer->eCTEMP_eD2PlayerClassID, ePlayerStatus >> 8 & 0x1f, ePlayerStatus & 4, ePlayerStatus & 0x20);
     char* pszDst = pszTitlePrefix;
     if (pszTitlePrefix) {
       pszDst = pszDst + strlen(pszDst) + 1;
@@ -2422,11 +2422,11 @@ static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_
     }
 }
 
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e230() {
+void __stdcall CHATDLG_InitializeCriticalSection() {
     InitializeCriticalSection(&lpCriticalSection_0077ae28);
 }
 
-void __stdcall SERR_InternalLeaveCriticalSection_Unref_0043e240() {
+void __stdcall CHATDLG_DeleteCriticalSection() {
     DeleteCriticalSection(&lpCriticalSection_0077ae28);
 }
 
@@ -2815,7 +2815,7 @@ void __stdcall FORMS_DestroyListEx() {
     }
 
     FORMS_nListExCount = 0;
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     gdwGameJoinRequestTick = 0;
 }
 
@@ -2859,7 +2859,7 @@ void __stdcall CHATDLG_OpenLadderTypeMenu() {
     FORMS_CreateAnyFormFromListEx(0x62);
     FORMS_CreateAnyFormFromListEx(99);
     D2ControlStrc* pControl = FORMS_CreateAnyFormFromListEx(100);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pControl);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pControl);
 }
 
 int __stdcall CHATDLG_UpdateButtonVisibility() {
@@ -3497,7 +3497,7 @@ void __stdcall CHATDLG_CreateAllForms() {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpChatDlgInputEditBox, (fpD2WinEditBoxFilter)CHATDLG_HandleTabCompletion);
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpChatDlgInputEditBox, ComCallback::EDITBOX_Cb_COMCALLBACK_ClearChannelUserList);
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpChatDlgInputEditBox, 200);
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpChatDlgInputEditBox, 200);
     ComCallback::COMCALLBACK_ClearChannelUserList();
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevPageButton, 1);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextPageButton, 1);
@@ -3861,7 +3861,7 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
       _itoa(nNextRank, szNumBuf, 10);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, szNumBuf, nStartRank, 0);
       sRowBuf.szName[0] = '\0';
-      pbCopySrc = D2Win::Src::D2WinSmack::D2WINSMACK_GetTitlePrefixIndexFromClass(dwCharStats & 0xf, dwCharStats >> 8 & 0x1f, dwCharStats & 0x20, dwCharStats & 0x40);
+      pbCopySrc = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(dwCharStats & 0xf, dwCharStats >> 8 & 0x1f, dwCharStats & 0x20, dwCharStats & 0x40);
       pbName = pbEntry;
       pbCopyDst = pbCopySrc;
       if (pbCopySrc) {
@@ -3890,7 +3890,7 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
 void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     UIMENU_LadderBoard_PrintClassButtonLabels();
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x6d);
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(pForm);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pForm);
     ::D2WinTextBox* pHeaderBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x67);
     uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     uint16_t nStrId = 0x2b54;
@@ -3926,7 +3926,7 @@ void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetColumnAlignment(g_pLadderBoardTextBox, 4, 0x10);
     CHATDLG_ClearLadderBoard();
     ::D2WinTimer* pTimer = (::D2WinTimer*)FORMS_CreateAnyFormFromListEx(0x80);
-    D2Win::Src::D2WinTimer::D2WINTIMER_Start((int*)pTimer);
+    D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)pTimer);
     D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimer);
     gszLadderCharNameFilter[0] = '\0';
 }
@@ -4231,7 +4231,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetFilterCallback(gpChatDlgInputEditBox, (fpD2WinEditBoxFilter)CHATDLG_HandleTabCompletion);
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetChangeCallback(gpChatDlgInputEditBox, ComCallback::EDITBOX_Cb_COMCALLBACK_ClearChannelUserList);
       D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
-      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetPasswordMode(gpChatDlgInputEditBox, 200);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetMaxLength(gpChatDlgInputEditBox, 200);
       ComCallback::COMCALLBACK_ClearChannelUserList();
       D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListPrevPageButton, 1);
       D2Win::Src::D2WinMain::SetUnsetFlag0x08(gpLobbyForm0.pCtlLobbyUserListNextPageButton, 1);
@@ -4273,7 +4273,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpLobbyForm0.pCtlLobbyJoinButton->sControl, 0);
     }
 
-    D2Win::Src::D2WinMain::D2WINMAIN_SetFormFourth(gpLobbyForm0.pCtlLobbyGameModePanel);
+    D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(gpLobbyForm0.pCtlLobbyGameModePanel);
     gnLobbyTabCompletionIndex = '\0';
     gnOogReplyCommandIndex = 0;
     D2Sound::Src::D2SoundFast::SOUND_InitSoundEffectBuffers();

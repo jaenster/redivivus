@@ -252,7 +252,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Sor_HomingMissileVelocity",
+      "name": "Skills_CltDoFunc_Nova",
       "address": "004e34e0",
       "lines": [
         {
@@ -262,7 +262,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsSor",
       "calledFunctions": [
-        "Skills_CltDoFunc_Sor_HomingMissileVelocity",
+        "Skills_CltDoFunc_Nova",
         "SKILLSASS_GetCltMissileByAuraLevel",
         "MISSILETBLS_CalculateVelocity",
         "D2GetSkillCalc",
@@ -275,7 +275,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "a9e60116",
+      "dh": "39e49ff4",
       "paramStorage": [
         [
           "pUnit",

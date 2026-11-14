@@ -205,7 +205,7 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
         nExistingSetId = Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_value, 0);
         if (nSetId == nExistingSetId) {
           if (!nMode) {
-            Stats::StatsEx::STATLIST_FreeChildStatLists(pStatList);
+            Stats::StatsEx::STATLIST_RemoveAllStats(pStatList);
           }
 
           goto apply_or_remove_set_bonus;

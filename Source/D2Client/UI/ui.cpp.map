@@ -423,12 +423,12 @@
         "SetPartyColors",
         "SetRedToBlack",
         "thunk_D2GFX_GetColorFromPalette_C",
-        "thunk_D2GFX_GetColorFromPalette_A",
-        "PANEL_InitGoldColor",
+        "PANEL_InitStaminaColorLow",
+        "PANEL_InitStaminaColorNormal",
         "PANEL_InitBeltColors",
-        "thunk_D2GFX_GetColorFromPalette_B"
+        "PANEL_InitStaminaColorBlue"
       ],
-      "dh": "3c618b20"
+      "dh": "650ce2db"
     },
     {
       "name": "MoveArgumentToEAX",
@@ -674,22 +674,22 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "770aac66",
+      "dh": "0dee71f8",
       "paramStorage": [
         [
           "wszText",
           "ECX:4"
         ],
         [
-          "nFontId",
+          "nX",
           "EDX:4"
         ],
         [
-          "nX",
+          "nY",
           "Stack[0x4]:4"
         ],
         [
-          "nY",
+          "nColor",
           "Stack[0x8]:4"
         ],
         [
@@ -697,7 +697,7 @@
           "Stack[0xc]:4"
         ],
         [
-          "nCustomField",
+          "nBarFill",
           "Stack[0x10]:4"
         ]
       ]
@@ -811,7 +811,7 @@
         "GetPlayerUnit_UI",
         "CanInteractWith",
         "GetRosterPerHPPercent",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
@@ -819,7 +819,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b982abec",
+      "dh": "b8164008",
       "paramStorage": [
         [
           "pUnit",
@@ -1064,9 +1064,9 @@
         "GetSeed",
         "UNITS_FindClientSideUnit",
         "D2GFX_IsPerspectiveActive",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "UI_ShowMonsterNameBar",
         "GetPrecisionX",
@@ -1080,7 +1080,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7fb9a689"
+      "dh": "f55ea3f6"
     },
     {
       "name": "DRAW_Direct_RectFrame",
@@ -1151,7 +1151,7 @@
         "sprintf",
         "IMAGE_LoadDC6Ex",
         "IMAGE_DrawDC6ImageOnScreen",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "STATSEX_GetCurrentStat",
         "GetLocaleString",
         "UNICODE_FormatWideString",
@@ -1168,7 +1168,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "087042a3"
+      "dh": "2afc3c38"
     },
     {
       "name": "UI_DrawPlayerNameOverhead",
@@ -1186,7 +1186,7 @@
         "GetPlayerUnit_UI",
         "VIEW_GetViewRect",
         "GetCenterXY",
-        "GetTargetCoords",
+        "GetScreenCoords",
         "CONTAINER_InitializeBuffer",
         "UI_FormatPlayerNameAndStatus"
       ],
@@ -1197,7 +1197,7 @@
         "tagRECT",
         "uint32_t"
       ],
-      "dh": "8b8e5eab",
+      "dh": "91f71ab3",
       "paramStorage": [
         [
           "pUnit",
@@ -1389,11 +1389,11 @@
         "GetDialogCounter",
         "GetTickCount",
         "GetPlayerUnit_UI",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "NET_D2GS_CLIENT_Send_CMD",
-        "CLIENTMODE_GetIngameUIFlags",
+        "CLIENTMODE_IsHardcoreCharacter",
         "NET_D2GS_CLIENT_Send_0x69",
-        "CLIENTMODE_ClearIngameUIFlag",
+        "CLIENTMODE_SetCharacterDied",
         "D2CLIENT_SetExitVar1",
         "D2CLIENT_SetExitVar3ToTrue",
         "TEXT_IsScrollingTextActive",
@@ -1407,7 +1407,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c100e286",
+      "dh": "1b694bfe",
       "paramStorage": [
         [
           "nKeyAction",
@@ -2025,7 +2025,7 @@
       ]
     },
     {
-      "name": "DRAW_GetLastPanelId_Unref_004547a0",
+      "name": "DRAW_GetLoadedActNo",
       "address": "004547a0",
       "lines": [
         {
@@ -2035,12 +2035,12 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "DRAW_GetLastPanelId_Unref_004547a0"
+        "DRAW_GetLoadedActNo"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "da0266fe"
+      "dh": "0c8eee7c"
     },
     {
       "name": "CleanupAfterLoadingAct",
@@ -2062,14 +2062,14 @@
         "SetPartyColors",
         "SetRedToBlack",
         "thunk_D2GFX_GetColorFromPalette_C",
-        "thunk_D2GFX_GetColorFromPalette_A",
-        "PANEL_InitGoldColor",
+        "PANEL_InitStaminaColorLow",
+        "PANEL_InitStaminaColorNormal",
         "PANEL_InitBeltColors",
-        "thunk_D2GFX_GetColorFromPalette_B",
+        "PANEL_InitStaminaColorBlue",
         "MISC_PrepareWeatherOverlay",
         "GAMEDATA_ExtendTimeout"
       ],
-      "dh": "aef32dce"
+      "dh": "0a714263"
     },
     {
       "name": "DRAW_GetLastPanelId",
@@ -2365,9 +2365,9 @@
         "GetPlayerUnit_UI",
         "GetCollisionDistance",
         "D2GFX_IsPerspectiveActive",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "GetPrecisionX",
         "GetPrecisionY",
@@ -2420,7 +2420,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "e601e967",
+      "dh": "f900f9f1",
       "paramStorage": [
         [
           "pUnit",
@@ -2702,7 +2702,7 @@
       ]
     },
     {
-      "name": "DRAW_IsDialogActive_Unref_0045fdd0",
+      "name": "DRAW_IsCharScreenOkPressed",
       "address": "0045fdd0",
       "lines": [
         {
@@ -2712,12 +2712,12 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "DRAW_IsDialogActive_Unref_0045fdd0"
+        "DRAW_IsCharScreenOkPressed"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "7b959f75"
+      "dh": "72b29b3f"
     },
     {
       "name": "UI_ShowPopupDialog",
@@ -2824,7 +2824,7 @@
       "dh": "d59697a5"
     },
     {
-      "name": "TRADE_GetTradeStatus_Unref_00486d80",
+      "name": "INV_IsCurrentInventoryPage1Or2",
       "address": "00486d80",
       "lines": [
         {
@@ -2834,9 +2834,9 @@
       ],
       "namespace": "D2Client::UI::ui",
       "calledFunctions": [
-        "TRADE_GetTradeStatus_Unref_00486d80"
+        "INV_IsCurrentInventoryPage1Or2"
       ],
-      "dh": "544c6006"
+      "dh": "f78ddc7d"
     },
     {
       "name": "UI_ReadLineFromShortArray",
@@ -5122,21 +5122,21 @@
         "TXT_Experience_GetMaxLevel",
         "TXT_Experience_GetLineLevel",
         "GetDefense",
-        "STATES_HasFireState",
+        "STATES_HasArmBlueFlagState",
         "INVENTORY_GetEquippedShield",
         "UNIT_GetUnitState",
-        "STATES_HasExpState",
+        "STATES_HasArmRedFlagState",
         "MISC_GetLanguageCode",
         "GetDificulity",
         "GetDifficultyLevels",
-        "STATES_HasLifeState",
-        "STATES_HasGoldState",
-        "STATES_HasStaminaState",
-        "STATES_HasSkillState",
-        "STATES_HasManaState",
-        "STATES_HasMagicFindState",
-        "STATES_HasDefenseState",
-        "STATES_HasAbsorbState",
+        "STATES_HasRfBlueFlagState",
+        "STATES_HasRfRedFlagState",
+        "STATES_HasRlBlueFlagState",
+        "STATES_HasRlRedFlagState",
+        "STATES_HasRcBlueFlagState",
+        "STATES_HasRcRedFlagState",
+        "STATES_HasRpBlueFlagState",
+        "STATES_HasRpRedFlagState",
         "CLIENT_CheckExpansion",
         "TEXT_CalcTextDimensions"
       ],
@@ -5153,7 +5153,7 @@
         "uint8_t",
         "wchar_t"
       ],
-      "dh": "a3ab64f6"
+      "dh": "a126e145"
     },
     {
       "name": "CHAR_FreePanelAssets_NoOp_Unref_004b3330",
@@ -5402,7 +5402,7 @@
         "DC6_AssignParams",
         "SPRITECACHE_GetOrLoadSprite",
         "GFXUTIL_GetOverlayDimensions",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "DrawItemGfx",
         "UI_CloseHoradricCubeWindow"
       ],
@@ -5412,7 +5412,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "73c7de46"
+      "dh": "ca577788"
     },
     {
       "name": "NPCSHOP_IsRepairTabActive",
@@ -5557,7 +5557,7 @@
         "UI_ShowHoradricCubeTransmuteDialog",
         "FreeDialogStrc",
         "GetPlayerUnit_UI",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "SOUND_PlaySound",
         "UI_CloseHoradricCubeWindow",
         "NPCMENU_CloseCubeUI",
@@ -5571,7 +5571,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "6d54039a",
+      "dh": "967f3df2",
       "paramStorage": [
         [
           "pPacket",

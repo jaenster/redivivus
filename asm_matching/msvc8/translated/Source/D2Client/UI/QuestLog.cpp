@@ -1086,7 +1086,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     D2BitBufferStrc* pBitBuffer;
     pBitBuffer = npcmenu::GetQuestInfo();
     D2BitBufferStrc* pBitBuffer_00;
-    pBitBuffer_00 = npcmenu::Merc::NPCMENU_GetMercHireCost();
+    pBitBuffer_00 = npcmenu::Merc::NPCMENU_GetGameQuestRecord();
     uint8_t bQuestActive;
     bQuestActive = gQuestLog.anQuestStepArray1[nActIndex];
     pEntry->bQuestActive = bQuestActive;
@@ -2942,13 +2942,13 @@ BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex)
       return 0;
     }
 
-    D2BitBufferStrc* nMercHireCost = npcmenu::Merc::NPCMENU_GetMercHireCost();
+    D2BitBufferStrc* nMercHireCost = npcmenu::Merc::NPCMENU_GetGameQuestRecord();
     if (!nMercHireCost) {
       return 0;
     }
 
     eD2QuestState eQuestStateArg = QUESTSTATE_JustCompleted;
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(npcmenu::Merc::NPCMENU_GetMercHireCost(), eQuestIdFromIcon, eQuestStateArg);
+    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(npcmenu::Merc::NPCMENU_GetGameQuestRecord(), eQuestIdFromIcon, eQuestStateArg);
     if (bQuestState) {
       return 0;
     }

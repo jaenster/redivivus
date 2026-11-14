@@ -852,14 +852,14 @@
       "calledFunctions": [
         "Skills_CltDoFunc_EMon_HomingToOwner",
         "MISSILE_GetOwnerUnit",
-        "PATH_SetPathTarget"
+        "PATH_MoveUnitToUnitPosition"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "dff30088",
+      "dh": "a42f397e",
       "paramStorage": [
         [
           "pUnit",

@@ -156,7 +156,7 @@ void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode);
 void __fastcall RENDERER_GLIDE_SetTextureFiltering(int32_t nFilteringMode);
 int * __fastcall GetRenderStatistics();
 BOOL __stdcall RENDERER_GLIDE_IsPerspectiveMode();
-void __fastcall D2WINPAL_SetGammaRamp_Unref_00509660(uint32_t bCompactLineSpacingMode);
+void __fastcall GLIDE_SetPerspectiveMode(uint32_t bCompactLineSpacingMode);
 BOOL __stdcall RENDERER_GLIDE_InitTextureMemory();
 void Unreferenced_00509a70();
 BOOL __stdcall RENDERER_GLIDE_DestroyWindow();

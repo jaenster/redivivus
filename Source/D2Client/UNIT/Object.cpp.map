@@ -4,7 +4,7 @@
   "file": "Source/D2Client/UNIT/Object.cpp",
   "functions": [
     {
-      "name": "TEXT_CleanupMessageLog_Unref_004b1d50",
+      "name": "DIALOG_FreeNpcInteractionDialog",
       "address": "004b1d50",
       "lines": [
         {
@@ -14,10 +14,10 @@
       ],
       "namespace": "D2Client::UNIT::Object",
       "calledFunctions": [
-        "TEXT_CleanupMessageLog_Unref_004b1d50",
+        "DIALOG_FreeNpcInteractionDialog",
         "FreeDialogStrc"
       ],
-      "dh": "296b6ab4"
+      "dh": "1e8dad50"
     },
     {
       "name": "OBJECT_SetLightRGB",
@@ -335,7 +335,7 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
@@ -351,7 +351,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "94ca8ede",
+      "dh": "9f870942",
       "paramStorage": [
         [
           "bTargetable",
@@ -379,7 +379,7 @@
       "namespace": "D2Client::UNIT::Object",
       "calledFunctions": [
         "OBJECT_UpdateModeAndProperties",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "GFX_AddOverlayToUnit",
         "RemoveCollision_Vector",
@@ -392,7 +392,7 @@
         "D2ServerMessageHandleStrc",
         "D2UnitStrc"
       ],
-      "dh": "5fcb67b3",
+      "dh": "6235d885",
       "paramStorage": [
         [
           "pUnit",
@@ -834,7 +834,7 @@
         "OBJECT_ClientFn_TimedSpecial1_7to12s",
         "GetTickCount",
         "SEED_RollRange",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "UpdateUnitSfxOnModeChange"
       ],
@@ -842,7 +842,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7584b8e9",
+      "dh": "9c0956cf",
       "paramStorage": [
         [
           "pUnit",
@@ -864,7 +864,7 @@
         "OBJECT_ClientFn_TimedSpecial1Or2_23to33s",
         "GetTickCount",
         "SEED_RollRange",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "UpdateUnitSfxOnModeChange"
       ],
@@ -872,7 +872,7 @@
         "D2UnitStrc",
         "eD2PlayerAnimMode"
       ],
-      "dh": "3a687187",
+      "dh": "8d8b04b9",
       "paramStorage": [
         [
           "pUnit",
@@ -894,7 +894,7 @@
         "OBJECT_ClientFn_TimedSpecial1_20to30s",
         "GetTickCount",
         "SEED_RollRange",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "UpdateUnitSfxOnModeChange"
       ],
@@ -902,7 +902,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "594b6049",
+      "dh": "9add5123",
       "paramStorage": [
         [
           "pUnit",
@@ -923,7 +923,7 @@
       "calledFunctions": [
         "OBJECT_ClientFn_OperateCycle_10s",
         "GetTickCount",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "SEED_RollRange"
       ],
@@ -931,7 +931,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "45ea4e66",
+      "dh": "1c3b5131",
       "paramStorage": [
         [
           "pUnit",
@@ -976,7 +976,7 @@
       "calledFunctions": [
         "OBJECT_ClientFn_OperateCycle_3s",
         "GetTickCount",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof",
         "SEED_RollRange"
       ],
@@ -984,7 +984,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1b1f5417",
+      "dh": "8ed120a6",
       "paramStorage": [
         [
           "pUnit",
@@ -1088,7 +1088,7 @@
         "GetQuestState",
         "GetCollisionDistance",
         "ZeroPathPointsSize",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GFX_LoadUnitModeCof"
       ],
       "usedTypes": [
@@ -1098,7 +1098,7 @@
         "eD2Quests",
         "int32_t"
       ],
-      "dh": "cfd3e3f3",
+      "dh": "b469a1b4",
       "paramStorage": [
         [
           "pUnit",

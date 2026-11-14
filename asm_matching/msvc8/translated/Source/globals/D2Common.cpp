@@ -4072,7 +4072,7 @@ D2DataTableTxtStrc sgtDataTable = {0}; D2_GLOBAL_GUARD(sgtDataTable, "D2Common::
 // Initialized scalars
 // =============================================================================
 
-unsigned int gnTreasureClassArraySize = {0}; D2_GLOBAL_GUARD(gnTreasureClassArraySize, "D2Common::DATATBLS::MonsterTbls::gnTreasureClassArraySize");
+unsigned int gnMonItemPercentTxtRecordCount = {0}; D2_GLOBAL_GUARD(gnMonItemPercentTxtRecordCount, "D2Common::DATATBLS::MonsterTbls::gnMonItemPercentTxtRecordCount");
 
 }}} // namespace D2Common::DATATBLS::MonsterTbls
 

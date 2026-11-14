@@ -712,12 +712,12 @@ void __stdcall SAVEFILE_WriteEncodedInt14Bit(uint8_t * pBuffer, uint32_t nValue)
 } // namespace Fog::Save
 namespace Fog::Skills {
 // Stack-based bytecode evaluator for compiled skill and missile calc formulas. The 64-entry value stack keeps its count in the 65th slot, at byte offset 0x100 from the base, which is why it is one int[65] local and not a head plus a separate counter. Consecutive SKILLS_PopValue calls reuse the stack pointer in ECX without reloading it, so that callee is typed __fastcall_ecxsafe.
-uint32_t __stdcall SKILLS_CompileSkillFormula(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, struct D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext);
+uint32_t __stdcall FOG_EvaluateCalcExpression(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, struct D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext);
 // Parse calc expression from skill desc into bytecode formula
 int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pbByteCodeOutput, int nMaxOutputSize, CalcGetKeyWordToNumber_t pDescTable, CalcGetFunctionParameterCount_t pOpcodeInfo, CalcGetLinkerIndex_t pfnGetLinkerIndex);
 } // namespace Fog::Skills
 namespace Fog::SMem {
-int32_t __stdcall SMemSizeClassBucketLookup(uint32_t nAllocSize);
+int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits);
 DWORD __stdcall GetTickCount();
 uint16_t __stdcall HashForName(char * szText);
 } // namespace Fog::SMem
@@ -781,7 +781,7 @@ void __stdcall SetReservedHook(struct D2QServerStrc * pQServer, void * pfnHook);
 void __stdcall SetClientServerTokenByClientId(struct D2QServerStrc * pQServer, int nClientId, uint32_t nServerToken);
 uint32_t __stdcall GetClientServerTokenByClientId(struct D2QServerStrc * pQServer, uint32_t nClientId);
 // @sourcefile .\Src\QServer\QServer.cpp
-int __stdcall SendPacketToClient(struct D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId);
+int __stdcall QSERVER_EnqueueClientPacket(struct D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId);
 void __stdcall SetHackMode(struct D2QServerStrc * pQServer, BOOL bUseQServerHack);
 // The body here is RET 0x4 (bytes c2 04 00) - a __stdcall
 // no-op that pops one dword of arguments. Sole caller is D2Game::Game::Server::_NullSub

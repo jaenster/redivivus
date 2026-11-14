@@ -146,7 +146,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "5ce44aee",
+      "dh": "ffbc142d",
       "paramStorage": [
         [
           "pGame",
@@ -267,7 +267,7 @@
         "STATLIST_GetBaseStatValue",
         "D2StatesTogglegfx",
         "GetGamePointer",
-        "DAMAGE_GetMonsterDelayByDifficulty",
+        "DAMAGE_GetMonsterColdEffect",
         "D2AddStatToStatsListEx",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
@@ -288,7 +288,7 @@
         "eD2UnitStat",
         "int32_t"
       ],
-      "dh": "00d3947a",
+      "dh": "fc66b6b6",
       "paramStorage": [
         [
           "pContext",
@@ -351,7 +351,7 @@
       ]
     },
     {
-      "name": "SKILLPAL_HandleFistOfHeavensLightningBolt",
+      "name": "SKILLPAL_AuraCallback_OffensiveAura",
       "address": "005cf2a0",
       "lines": [
         {
@@ -361,7 +361,7 @@
       ],
       "namespace": "D2Game::SKILLS::SkillPal",
       "calledFunctions": [
-        "SKILLPAL_HandleFistOfHeavensLightningBolt",
+        "SKILLPAL_AuraCallback_OffensiveAura",
         "memset",
         "SKILLPAL_ApplyAuraStateToTarget",
         "DAMAGE_ApplyDamageToUnit",
@@ -374,7 +374,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "02a1ad03",
+      "dh": "534c2988",
       "paramStorage": [
         [
           "pContext",
@@ -425,7 +425,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "e8309031",
+      "dh": "e947cae1",
       "paramStorage": [
         [
           "pGame",
@@ -465,6 +465,7 @@
         "SetCurrentSkill",
         "TXT_MonStats_GetBaseId",
         "ValidateClassId",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition",
         "UNIT_GetUnitState",
         "SKILL_SetParam1",
@@ -485,8 +486,8 @@
       "usedTypes": [
         "D2CharStatsTxt",
         "D2DynamicPathStrc",
+        "D2ModeChangeStrc",
         "D2MonStatsTxt",
-        "D2MonsterKillStrc",
         "D2SkillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -494,7 +495,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "34fa235f",
+      "dh": "1c1c06c2",
       "paramStorage": [
         [
           "pGame",
@@ -596,7 +597,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "1835f9e3",
+      "dh": "6eac6caa",
       "paramStorage": [
         [
           "pGame",
@@ -728,7 +729,6 @@
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2SkillArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -737,7 +737,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2958d0f8",
+      "dh": "d7dd8be6",
       "paramStorage": [
         [
           "pGame",
@@ -815,7 +815,7 @@
         "MONSTER_FreeUnitNodes",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -831,7 +831,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e35e122f",
+      "dh": "0ccd2d1e",
       "paramStorage": [
         [
           "pUnit",
@@ -861,7 +861,7 @@
         "SKILLPAL_CanConvertTarget",
         "MONSTER_GetMercType",
         "STATSEX_GetAlignment",
-        "D2CheckCorpseConsumed",
+        "SKILLS_CanSwitchAi",
         "D2GetSkillCalc",
         "UNIT_GetModuloFromSeed"
       ],
@@ -872,7 +872,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9215626c",
+      "dh": "10cf6c88",
       "paramStorage": [
         [
           "pUnit",
@@ -927,7 +927,7 @@
         "STATLIST_RemoveAndRecalc",
         "FreeStatList",
         "STATSEX_GetCurrentStat",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "D2AddStatToStatsListEx",
         "D2ApplyPercent",
         "STATLIST_SetUnitStat",
@@ -944,7 +944,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "58588ce2",
+      "dh": "2587809f",
       "paramStorage": [
         [
           "pGame",
@@ -1028,7 +1028,7 @@
       "calledFunctions": [
         "SKILLPAL_OnFreezeExpire",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "UpdateAnimSpeed"
       ],
@@ -1037,7 +1037,7 @@
         "eD2States",
         "uint32_t"
       ],
-      "dh": "599be9ed",
+      "dh": "b2621527",
       "paramStorage": [
         [
           "pUnit",
@@ -1153,7 +1153,7 @@
       ]
     },
     {
-      "name": "SKILLSOR_GetBlizzardSubMissileCount",
+      "name": "SKILLPAL_ApplyRedemptionEffect",
       "address": "005d0c40",
       "lines": [
         {
@@ -1163,14 +1163,14 @@
       ],
       "namespace": "D2Game::SKILLS::SkillPal",
       "calledFunctions": [
-        "SKILLSOR_GetBlizzardSubMissileCount",
+        "SKILLPAL_ApplyRedemptionEffect",
         "SKILLS_IsSelectableCorpse3",
         "D2GetSkillCalc",
         "UNIT_GetModuloFromSeed",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "SetState"
       ],
       "usedTypes": [
@@ -1181,7 +1181,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6be7b503",
+      "dh": "784e62d9",
       "paramStorage": [
         [
           "pGame",
@@ -1210,7 +1210,7 @@
       ]
     },
     {
-      "name": "SKILLSOR_IsValidBlizzardTargetType",
+      "name": "SKILLPAL_AuraCallback_Redemption",
       "address": "005d0d70",
       "lines": [
         {
@@ -1220,14 +1220,14 @@
       ],
       "namespace": "D2Game::SKILLS::SkillPal",
       "calledFunctions": [
-        "SKILLSOR_IsValidBlizzardTargetType",
+        "SKILLPAL_AuraCallback_Redemption",
         "SKILLS_IsSelectableCorpse3",
         "D2GetSkillCalc",
         "UNIT_GetModuloFromSeed",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
-        "GetTxtMaxMana",
+        "STATLIST_GetMaxManaFromUnit",
         "SetState"
       ],
       "usedTypes": [
@@ -1238,7 +1238,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e1e26571",
+      "dh": "601dd4ab",
       "paramStorage": [
         [
           "pContext",
@@ -1286,7 +1286,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3afedbfc",
+      "dh": "4b03c361",
       "paramStorage": [
         [
           "pGame",

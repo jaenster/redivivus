@@ -38,6 +38,10 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NEW_AT(D2RendererCoreStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 
+#ifndef RECON_FPTD_pfnLruFreeEntry
+#define RECON_FPTD_pfnLruFreeEntry
+typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
+#endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
 typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext);
@@ -1088,11 +1092,11 @@ void __fastcall DIRECTD3D_LogError(char * szErrorMessage, DWORD nResult) {
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("***** DirectDraw error: %s - %s (0x%x)", szErrorMessage, "< unknown >", nResult);
 }
 
-uint32_t __stdcall RENDERER_WINDOWED_GetBitmapHandle_Unref_006b2f20() {
+uint32_t __stdcall DIRECT3D_GetPerspectiveMode() {
     return g_bPerspectiveMode;
 }
 
-void __fastcall SPRITECACHE_SetMaxSize_Unref_006b2f30(size_t nSize) {
+void __fastcall DIRECT3D_SetPerspectiveMode(size_t nSize) {
     g_bPerspectiveMode = nSize;
 }
 
@@ -1196,7 +1200,7 @@ void __stdcall RENDERER_D3D_AllocateTextureCaches() {
     d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
     gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes * g_nBytesPerPixel * 0x400;
     RENDERER_D3D_InitializeTexturePools();
-    D2CMP::SRC::CelCmp::GFX_SetSpriteCacheMaxSize((size_t)(uintptr_t)d3dFloorCache::D3D_InvalidateTileCachesForEntry);
+    D2CMP::SRC::CelCmp::GFX_SetSpriteCacheFreeCallback((pfnLruFreeEntry)d3dFloorCache::D3D_InvalidateTileCachesForEntry);
 }
 
 void __stdcall RENDERER_D3D_FreeTextureCaches() {

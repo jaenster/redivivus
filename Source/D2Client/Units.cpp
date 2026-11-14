@@ -26,8 +26,8 @@ BOOL __fastcall IsUnitDistanceLowerThan700(D2UnitStrc * pUnit) {
     POINT ptPlayer;
     POINT ptUnit;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    D2Common::Units::GetTargetCoords(pPlayerUnit_lcl, &ptPlayer);
-    D2Common::Units::GetTargetCoords(pUnit, &ptUnit);
+    D2Common::Units::GetScreenCoords(pPlayerUnit_lcl, &ptPlayer);
+    D2Common::Units::GetScreenCoords(pUnit, &ptUnit);
     int nDeltaY = ptUnit.y - ptPlayer.y;
     float fVar1 = _Utils::CalculateHypotenusePowered((float)(ptUnit.x - ptPlayer.x), (float)nDeltaY + (float)nDeltaY);
     if (fVar1 < 490000.0 != (fVar1 == 490000.0)) {

@@ -38,7 +38,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "3557f7aa",
+      "dh": "b169c6fe",
       "paramStorage": [
         [
           "pGame",
@@ -333,8 +333,8 @@
       ],
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
-        "SetupUpdateFlag",
         "Objects_InitFn17_Waypoint",
+        "ChangeAnimMode",
         "TXT_Objects_GetLine",
         "SetEvent",
         "FreeServerMemory",
@@ -349,7 +349,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "8f4973f3",
+      "dh": "48f280f8",
       "paramStorage": [
         [
           "pInitArg",
@@ -358,7 +358,7 @@
       ]
     },
     {
-      "name": "QUEST_GetLevelQuestStatus",
+      "name": "OBJECTRGN_CheckPoints2Capacity",
       "address": "00547300",
       "lines": [
         {
@@ -368,13 +368,13 @@
       ],
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
-        "QUEST_GetLevelQuestStatus"
+        "OBJECTRGN_CheckPoints2Capacity"
       ],
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "3f0054db",
+      "dh": "752b3866",
       "paramStorage": [
         [
           "pGame",
@@ -405,7 +405,7 @@
         "eD2LevelId",
         "uint8_t"
       ],
-      "dh": "07674ae9",
+      "dh": "5838ff28",
       "paramStorage": [
         [
           "pGame",
@@ -434,7 +434,7 @@
         "SGAMEDATA",
         "eD2LevelId"
       ],
-      "dh": "d163bbf9",
+      "dh": "61220cd8",
       "paramStorage": [
         [
           "pGame",
@@ -476,7 +476,7 @@
       ]
     },
     {
-      "name": "OBJECT_IsPositionNearSpawnPoint2",
+      "name": "OBJECTRGN_IsPositionClearOfPoints2",
       "address": "005473a0",
       "lines": [
         {
@@ -486,14 +486,14 @@
       ],
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
-        "OBJECT_IsPositionNearSpawnPoint2"
+        "OBJECTRGN_IsPositionClearOfPoints2"
       ],
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "6209c354",
+      "dh": "3a696576",
       "paramStorage": [
         [
           "pGame",
@@ -553,7 +553,7 @@
       ]
     },
     {
-      "name": "OBJECT_IsPositionNearSpawnPoint1",
+      "name": "OBJECTRGN_IsPositionClearOfPoints1",
       "address": "00547430",
       "lines": [
         {
@@ -563,14 +563,14 @@
       ],
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
-        "OBJECT_IsPositionNearSpawnPoint1"
+        "OBJECTRGN_IsPositionClearOfPoints1"
       ],
       "usedTypes": [
         "SGAMEDATA",
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "c0118b5b",
+      "dh": "3799fb22",
       "paramStorage": [
         [
           "pGame",
@@ -630,7 +630,7 @@
       ]
     },
     {
-      "name": "OBJECT_HandleObjectMode",
+      "name": "OBJECTRGN_GetTrapMonsterClassId",
       "address": "005474c0",
       "lines": [
         {
@@ -640,7 +640,7 @@
       ],
       "namespace": "D2Game::Objects::ObjectsRgn",
       "calledFunctions": [
-        "OBJECT_HandleObjectMode",
+        "OBJECTRGN_GetTrapMonsterClassId",
         "UNITS_GetRoom",
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
@@ -656,7 +656,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "a7cc6689",
+      "dh": "1077d03e",
       "paramStorage": [
         [
           "pObjectModeArg",

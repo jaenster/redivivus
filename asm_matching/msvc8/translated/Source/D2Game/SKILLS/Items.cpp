@@ -1494,7 +1494,7 @@ static BOOL __stdcall ITEMMOD_GenerateSetItem(D2ItemGenContextStrc * pItemGenCon
 // Body continues at 005c276a, the JNZ target of 005c2761 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'ITEMMOD_GenerateUniqueItemInternal'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'ITEMMOD_GenerateUniqueItemInternal':
 // Server-side: attempts to convert an item into a random Set item. Doubles the item's durability/maxdurability (clamped to 255), counts eligible set entries from sgptDataTable->pTxtSets (version<100), then uses the item's RNG seed to pick a set index. Iterates the set's items to find one whose base-item code matches this unit, sets that file index, marks it IDENTIFIED, and applies rune/gem stats. Restores the original seed (low=saved, high=0x29a) on failure. Returns 1 if an item was assigned, 0 otherwise.
-BOOL __stdcall ITEMMOD_GenerateUniqueItem(D2UnitStrc * pItem) {
+BOOL __stdcall ITEMMOD_GenerateLegacySetItem(D2UnitStrc * pItem) {
     uint32_t nItemClassId;
     int32_t nResult;
     D2SetItemsTxt** ppDVar5;
@@ -1594,7 +1594,7 @@ BOOL __fastcall ITEMMOD_GenerateSetOrUniqueVersioned(D2UnitStrc * pUnit, D2ItemG
       return BVar1;
     }
 
-    BVar1 = ITEMMOD_GenerateUniqueItem(pUnit);
+    BVar1 = ITEMMOD_GenerateLegacySetItem(pUnit);
     return BVar1;
 }
 
@@ -1758,9 +1758,9 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit) {
         return 1;
       }
 
-      nStatValue = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_mindamage, 0), 2, 0x4b);
+      nStatValue = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_mindamage, 0), 2, 0x4b);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nStatValue, 0);
-      nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
+      nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nScaledStat, 0);
     } else {
       nClassId = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
@@ -1865,9 +1865,9 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, nScaledStat, 0);
       nStatValue = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit);
       if (nStatValue) {
-        nStatValue = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_mindamage, 0), 2, 0x4b);
+        nStatValue = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_mindamage, 0), 2, 0x4b);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nStatValue, 0);
-        nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
+        nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
         eUnitStat = UNITSTAT_item_throw_maxdamage;
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nScaledStat, 0);
       }

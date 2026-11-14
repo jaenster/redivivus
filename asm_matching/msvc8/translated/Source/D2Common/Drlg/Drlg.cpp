@@ -1854,26 +1854,26 @@ void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * 
 }
 
 // Frees all grid and file data from a maze room's preset data.
-void __fastcall DRLGMAZE_FreeRoomPresetData(D2LvlSubTxt * pData) {
+void __fastcall DRLGTILESUB_FreeDrlgFile(D2LvlSubTxt * pLvlSubTxtRecord) {
     int i;
-    if (!pData->pDrlgFile) {
+    if (!pLvlSubTxtRecord->pDrlgFile) {
       return;
     }
-    if (pData->pDrlgFile->nWallLayers > 0) {
+    if (pLvlSubTxtRecord->pDrlgFile->nWallLayers > 0) {
       D2DrlgGridStrc* pCurrentGrid;
-      pCurrentGrid = pData->pTileTypeGrid;
+      pCurrentGrid = pLvlSubTxtRecord->pTileTypeGrid;
       i = 0;
       do {
         DrlgGrid::DRLGGRID_FreeGrid(nullptr, pCurrentGrid + 4);
         DrlgGrid::DRLGGRID_FreeGrid(nullptr, pCurrentGrid);
         i++;
         pCurrentGrid++;
-      } while (i < pData->pDrlgFile->nWallLayers);
+      } while (i < pLvlSubTxtRecord->pDrlgFile->nWallLayers);
     }
 
-    DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pData->pFloorGrid);
-    DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pData->pShadowGrid);
-    Preset::DRLGPRESET_ReleaseDrlgFile(&pData->pDrlgFile);
+    DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pLvlSubTxtRecord->pFloorGrid);
+    DrlgGrid::DRLGGRID_FreeGrid(nullptr, &pLvlSubTxtRecord->pShadowGrid);
+    Preset::DRLGPRESET_ReleaseDrlgFile(&pLvlSubTxtRecord->pDrlgFile);
 }
 
 uint32_t __fastcall DRLGROOMEX_RollLevelSubstitutionMask(D2RoomExStrc * pRoomEx, int32_t nSubType, int32_t nSubTheme) {

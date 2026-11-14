@@ -137,21 +137,21 @@ void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCall
 void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-int16_t __stdcall GetD2GSRequestId_Unref_004166f0();
+int16_t __stdcall SFILE_GetSearchLocale();
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_0043f840(char * pBytes, size_t nSize);
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004473f0(char * pBytes, size_t nSize);
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, size_t nSize);
 void __stdcall MCPSTATE_SetListGameSuccess(uint32_t bSuccess);
-BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449ca0();
-BOOL __stdcall MCPSTATE_GetCreateGameSuccess_Unref_00449cb0();
+BOOL __stdcall MCPSTATE_GetListGameSuccess();
+BOOL __stdcall MCPSTATE_GetCharDeleteSuccess();
 void __stdcall MCPSTATE_SetCharDeleteSuccess(uint32_t bSuccess);
 uint32_t __stdcall MCPCONNECT_GetGameNameAndPassword(int32_t pGameNameOut, int32_t pPasswordOut);
 void __stdcall MCPCONNECT_SetGameNameAndPassword(uint32_t nDifficulty, char * szGameName, char * szPassword);
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449d80();
+uint32_t __stdcall MCPSTATE_GetCharUpgradeSuccess();
 void __stdcall MCPSTATE_SetCharUpgradeSuccess(uint32_t bSuccess);
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449da0();
+uint32_t __stdcall MCPSTATE_GetCharCreateSuccess();
 void __stdcall MCPSTATE_SetCharCreateSuccess(uint32_t bSuccess);
-uint32_t __stdcall MCPCONNECT_GetD2GSGameHash_Unref_00449dc0();
+uint32_t __stdcall MCPCONNECT_GetD2GSConnectReady();
 void __stdcall MCPSTATE_SetD2GSConnectReady(uint32_t bReady);
 void __stdcall MCPSTATE_SetJoinTimestamp(uint32_t nJoinTimestamp);
 void __stdcall McpConnectionLoop(int * pnParam);

@@ -50,7 +50,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Pal_ChargePathMissile",
+      "name": "Skills_CltDoFunc_Pal_BlessedHammer",
       "address": "004c95e0",
       "lines": [
         {
@@ -60,7 +60,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsPal",
       "calledFunctions": [
-        "Skills_CltDoFunc_Pal_ChargePathMissile",
+        "Skills_CltDoFunc_Pal_BlessedHammer",
         "SKILLSASS_GetCltMissileByAuraLevel",
         "GetCooordinates",
         "memset",
@@ -76,7 +76,7 @@
         "eMissilesId",
         "int32_t"
       ],
-      "dh": "3bef2d18",
+      "dh": "537042dc",
       "paramStorage": [
         [
           "pUnit",
@@ -200,8 +200,8 @@
       "calledFunctions": [
         "SKILL_DrawChargeTrail",
         "GetCurrentSkill",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "PATH_GetScreenVelocity",
         "D2GFX_IsPerspectiveActive",
         "SKILL_GetParam3",
@@ -219,7 +219,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "72312591",
+      "dh": "9c48e76d",
       "paramStorage": [
         [
           "pUnit",
@@ -454,7 +454,7 @@
       ]
     },
     {
-      "name": "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
+      "name": "Skills_CltDoFunc_State_OpenWounds",
       "address": "004ca030",
       "lines": [
         {
@@ -464,7 +464,7 @@
       ],
       "namespace": "D2Client::SKILLS::SkillsPal",
       "calledFunctions": [
-        "Skills_CltDoFunc_Pal_RateThrottledBloodParticles",
+        "Skills_CltDoFunc_State_OpenWounds",
         "GetEntryIndex",
         "MONSTER_SpawnBloodParticles"
       ],
@@ -474,7 +474,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "a67e41db",
+      "dh": "64203df8",
       "paramStorage": [
         [
           "pUnit",

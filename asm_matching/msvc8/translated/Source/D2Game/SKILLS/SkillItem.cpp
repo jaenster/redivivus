@@ -9,7 +9,6 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Targets.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
@@ -136,11 +135,11 @@ static D2ItemSpellStrc ITEMSPELLFUNCS[31] = {
     },
     {
         /* .pSpellInit = */ nullptr,
-        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_PersonalizeItemSpell
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_pSpell07_OpenCube
     },
     {
         /* .pSpellInit = */ nullptr,
-        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_ApplyRejuvenationPotionEffect
+        /* .pSpellDestroy = */ &D2Game::SKILLS::SkillItem::SKILLITEM_pSpell08_AddItemValueToStat
     },
     {
         /* .pSpellInit = */ nullptr,
@@ -640,7 +639,7 @@ BOOL __fastcall SKILLITEM_IdentifyScrollSpell(::SGAMEDATA * pGame, D2UnitStrc * 
       return 0;
     }
 
-    ITEMS::ItemMode::ITEMMODE_ProcessItemSell(pGame, pUnit, pTarget);
+    ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pTarget);
     return 1;
 }
 
@@ -741,7 +740,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
       return 0;
     }
 
-    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
+    nItemClassId = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState;
     eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList;
@@ -775,20 +774,20 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 
       pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
-        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
+        nStatValue = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         switch (eUnitStat) {
           default:
             goto apply_stat_value;
           case UNITSTAT_hpregen:
             nStatValue <<= 8;
           case UNITSTAT_hitpoints:
-            nStatValue = D2Common::ITEMS::Items::ITEMS_ModifyPotionValueByDifficulty(pUnit, nStatValue);
+            nStatValue = D2Common::ITEMS::Items::ITEMS_GetBonusLifeBasedOnClass(pUnit, nStatValue);
           eMaxStatId = UNITSTAT_vitality;
           break;
           case UNITSTAT_manarecovery:
             nStatValue <<= 8;
           case UNITSTAT_mana:
-            nStatValue = D2Common::ITEMS::Items::ITEMS_ModifyPotionSellValueByDifficulty(pUnit, nStatValue);
+            nStatValue = D2Common::ITEMS::Items::ITEMS_GetBonusManaBasedOnClass(pUnit, nStatValue);
           eMaxStatId = UNITSTAT_energy;
           break;
         }
@@ -911,7 +910,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
       return 0;
     }
 
-    nItemClassId = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
+    nItemClassId = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState;
     eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList;
@@ -945,7 +944,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
       pStatCost = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat;
       if (pStatCost) {
-        nStatValue = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
+        nStatValue = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatEntry * 4 + 0x44));
         if (eUnitStat == UNITSTAT_manarecovery || eUnitStat == UNITSTAT_hpregen) {
           nStatValue <<= 8;
         }
@@ -1056,7 +1055,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
+    nItemDuration = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, pItemTxt->dwLen);
     eD2States eState = (eD2States)pItemTxt->wState;
     D2StatListExStrc* pActiveStatList = 0;
     int nBuffRemainingFrames = 0;
@@ -1081,7 +1080,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + iStatSlot * 2 + 0x3e);
       pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (pStatCost && (int)(uint32_t)pStatCost->maxstat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        nPercent = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
+        nPercent = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, *(uint32_t*)(pItemTxt->szSetInvFile + iStatSlot * 4 + 0x44));
         if ((int)nPercent > 0) {
           pExpireFrame = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)pStatCost->maxstat, 0);
           nStatScaled = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pExpireFrame, nPercent, 100);
@@ -1188,7 +1187,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return 0;
     }
 
-    nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, pItemTxt->dwLen);
+    nItemDuration = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, pItemTxt->dwLen);
     if ((int)nItemDuration <= 0) {
       return 0;
     }
@@ -1235,7 +1234,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       if ((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         pStatCost = D2Common::DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(eUnitStat);
         if (pStatCost) {
-          nItemDuration = D2Common::ITEMS::Items::ITEMS_SearchItemCodeTable(pUnit, pItem, *pCalcPtr);
+          nItemDuration = D2Common::ITEMS::Items::ITEMMODS_EvaluateItemFormula(pUnit, pItem, *pCalcPtr);
           if (nItemDuration) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, eUnitStat, nItemDuration, 0);
             if (eUnitStat == UNITSTAT_staminarecoverybonus && (int)nItemDuration > 0) {
@@ -1306,7 +1305,7 @@ BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     return bRefreshApplied;
 }
 
-BOOL __fastcall SKILLITEM_ApplyRejuvenationPotionEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
+BOOL __fastcall SKILLITEM_pSpell08_AddItemValueToStat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     eD2UnitStat eUnitStat = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItem);
     if (!((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
       return 0;
@@ -1323,7 +1322,7 @@ BOOL __fastcall SKILLITEM_ApplyRejuvenationPotionEffect(::SGAMEDATA * pGame, D2U
 
 // Handles the Personalize item spell (Ear/Charsi imbue interaction). Verifies pUnit is a player, checks if they are trading with an Inscriber object (classId 0x10B). If so, clears interact info and sends TradeAction 0x11. Sets interact info to mode 4 with the target item GUID, then sends TradeAction 0x15 and calls ITEMMODE_CheckItemLevel.
 // @sourcefile .\SKILLS\SkillItem.cpp
-BOOL __fastcall SKILLITEM_PersonalizeItemSpell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
+BOOL __fastcall SKILLITEM_pSpell07_OpenCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     D2ClientStrc* pClient;
     int32_t nInteractGUID;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
@@ -1345,7 +1344,7 @@ BOOL __fastcall SKILLITEM_PersonalizeItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
       }
 
       UNIT::SUnit::ClearInteractInfo(pUnit);
-      ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+      ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x3b3);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0x11);
     }
@@ -1358,7 +1357,7 @@ BOOL __fastcall SKILLITEM_PersonalizeItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
     UNIT::SUnit::SetInteractInfo(pUnit, UNIT_ITEM, nInteractGUID);
     pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillItem.cpp", 0x3c1);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0x15);
-    ITEMS::ItemMode::ITEMMODE_CheckItemLevel(pGame, pUnit);
+    ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     return 0;
 }
 
@@ -1496,8 +1495,8 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
     int nQuantity;
     int32_t iVar1;
     DWORD dwItemGUID;
+    eD2Skills* peVar2;
     int32_t bUseMerc;
-    eD2Skills* bResult;
     if (!pUnit->pInventory) {
       return 0;
     }
@@ -1538,8 +1537,8 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
                   }
 
                   bUseMerc = 0;
-                  pInvItem = (D2UnitStrc*)&eSkill;
-                  ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), pInvItem, bUseMerc);
+                  peVar2 = &eSkill;
+                  ITEMS::ItemMode::SERVER_UseItemAtCoords(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (int32_t*)peVar2, bUseMerc);
                   return 1;
                 }
               case 1:
@@ -1550,8 +1549,8 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
                     dwItemGUID = pItem->nUnitGUID;
                   }
 
-                  bResult = &eSkill;
-                  ITEMS::ItemMode::SpecialItemsBonuses(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (BOOL*)bResult);
+                  peVar2 = &eSkill;
+                  ITEMS::ItemMode::SpecialItemsBonuses(pGame, pUnit, dwItemGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pItem), D2Common::Units::GetYPosFromDynamicPathUnit(pItem), (BOOL*)peVar2);
                   return 1;
                 }
             }
@@ -1615,7 +1614,7 @@ BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
       return 0;
     }
 
-    int32_t nMinDmg = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nMinDmg = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nMinDmg <= 0) {
       return 0;
     }
@@ -1635,7 +1634,7 @@ BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_
       return 0;
     }
 
-    int32_t nMinDmg = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nMinDmg = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nMinDmg <= 0) {
       return 0;
     }
@@ -1655,7 +1654,7 @@ BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
       return 0;
     }
 
-    int32_t nMinStatValue = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nMinStatValue = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nMinStatValue <= 0) {
       return 0;
     }
@@ -1676,7 +1675,7 @@ BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32
       return 0;
     }
 
-    int32_t nMinDmg = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nMinDmg = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nMinDmg <= 0) {
       return 0;
     }
@@ -1698,12 +1697,12 @@ BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32
     return 1;
 }
 
-BOOL __fastcall ITEMEVENT_CrushingBlowChance(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && pTarget && pDamage)) {
       return 0;
     }
 
-    int32_t nCrushChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nCrushChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nCrushChance <= 0) {
       return 0;
     }
@@ -1744,7 +1743,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    int32_t nChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nChance <= 0) {
       return 0;
     }
@@ -1764,7 +1763,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    int32_t nChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (!nChance) {
       return 0;
     }
@@ -1801,17 +1800,17 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     return 1;
 }
 
-BOOL __fastcall ITEMEVENT_ReplenishManaOnKill(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_DamageToMana(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pDamage && pDamage->dwDmgTotal > 0)) {
       return 0;
     }
 
-    int32_t nStatPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nStatPct <= 0) {
       return 0;
     }
 
-    uint32_t nMaxMana = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    uint32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     if (nCurMana >= (int)nMaxMana) {
       return 0;
@@ -1835,7 +1834,7 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    int32_t nStatLvl = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nStatLvl = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nStatLvl <= 0) {
       return 0;
     }
@@ -1881,24 +1880,24 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     return 1;
 }
 
-int32_t __fastcall SKILLITEM_CalculateStaminaPotionValue(int32_t nLevel, int * pnBracketRates) {
-    if (nLevel <= 1 || !pnBracketRates) {
+int32_t __fastcall SKILLITEM_CalculateOpenWoundsHpRegen(int32_t nLevel, int * pValues) {
+    if (nLevel <= 1 || !pValues) {
       return 0;
     }
     if (nLevel > 0x3c) {
-      return (pnBracketRates[3] + pnBracketRates[2] + pnBracketRates[1]) * 0xf + (nLevel - 0x3c) * pnBracketRates[4] + *pnBracketRates * 0xe;
+      return (pValues[3] + pValues[2] + pValues[1]) * 0xf + (nLevel - 0x3c) * pValues[4] + *pValues * 0xe;
     }
     if (nLevel > 0x2d) {
-      return (pnBracketRates[2] + pnBracketRates[1]) * 0xf + (nLevel - 0x2d) * pnBracketRates[3] + *pnBracketRates * 0xe;
+      return (pValues[2] + pValues[1]) * 0xf + (nLevel - 0x2d) * pValues[3] + *pValues * 0xe;
     }
     if (nLevel > 0x1e) {
-      return (nLevel - 0x1e) * pnBracketRates[2] + pnBracketRates[1] * 0xf + *pnBracketRates * 0xe;
+      return (nLevel - 0x1e) * pValues[2] + pValues[1] * 0xf + *pValues * 0xe;
     }
     if (nLevel > 0xf) {
-      return (nLevel - 0xf) * pnBracketRates[1] + *pnBracketRates * 0xe;
+      return (nLevel - 0xf) * pValues[1] + *pValues * 0xe;
     }
 
-    return (nLevel - 1) * *pnBracketRates;
+    return (nLevel - 1) * *pValues;
 }
 
 // Item-event handler that applies the Open Wounds on-hit effect. Reads the proc chance from ITEM_GetMinimalStatValueShifted, rolls the unit's seed against it, then computes a level-scaled HP-regen-drain magnitude (via SKILLITEM_CalculateStaminaPotionValue with a 5-tier table). Halves damage for players (non-attack hit) or undead monsters. Applies STATE_openwounds via SetStateWithExpiryTime with UNITSTAT_hpregen as the drain stat for 200 frames.
@@ -1912,7 +1911,7 @@ BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
 
     nDmgTable[5] = nUnitEvent;
     int32_t nWoundsChance;
-    nWoundsChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    nWoundsChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nWoundsChance <= 0) {
       return 0;
     }
@@ -1933,7 +1932,7 @@ BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
     nDmgTable[2] = 0x1b;
     nDmgTable[3] = 0x24;
     nDmgTable[4] = 0x2d;
-    nWoundsChance = SKILLITEM_CalculateStaminaPotionValue(nWoundsChance, nDmgTable);
+    nWoundsChance = SKILLITEM_CalculateOpenWoundsHpRegen(nWoundsChance, nDmgTable);
     sStateArg.nSkillCalc = nWoundsChance + 0x28;
     if (pTarget->eUnitType == UNIT_PLAYER) {
       sStateArg.nSkillCalc = sStateArg.nSkillCalc / 4;
@@ -1968,7 +1967,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     }
 
     int32_t nChance;
-    nChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    nChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nChance <= 0) {
       return 0;
     }
@@ -2041,12 +2040,12 @@ BOOL __fastcall ITEMEVENT_ReplenishManaFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    int32_t nStatPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (!nStatPct) {
       return 0;
     }
 
-    uint32_t nMaxMana = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    uint32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nCurMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     if (nCurMana >= (int)nMaxMana) {
       return 0;
@@ -2068,12 +2067,12 @@ BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    int32_t nStatPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (!nStatPct) {
       return 0;
     }
 
-    uint32_t nMaxLife = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    uint32_t nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     if (nCurLife >= (int)nMaxLife) {
       return 0;
@@ -2101,12 +2100,12 @@ BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEven
     uint32_t bIsDemon = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
     if (bIsDemon) {
       int32_t nStatPct;
-      nStatPct = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+      nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
       if (!nStatPct) {
         return 0;
       }
 
-      nMaxLife = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
       if (nCurLife >= (int)nMaxLife) {
         return 0;
@@ -2133,7 +2132,7 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
       return 0;
     }
 
-    int nSlowAmount = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int nSlowAmount = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (!nSlowAmount) {
       return 0;
     }
@@ -2208,7 +2207,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
       return 0;
     }
 
-    int32_t nProcChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nProcChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nProcChance <= 0) {
       return 0;
     }
@@ -2250,12 +2249,12 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 }
 
 // Item hit-event handler for "Cast when Striking" procs. Reads proc chance and proc skill/level from the item stat encoding. Only fires when pParam bit 0x4 (striking flag) is set. Rolls unit seed against chance; on success casts the proc skill on pTarget via SKILL_CastOnTargetUnit, or at the caster's position via MONSTERAI_CastItemEffectSkill if no target. Returns 1 if the skill was cast.
-BOOL __fastcall ITEMEVENT_CastOnStriking(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
+BOOL __fastcall ITEMEVENT_SkillOnGetHit(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit) {
       return 0;
     }
 
-    int32_t nProcChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nProcChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nProcChance <= 0) {
       return 0;
     }
@@ -2295,7 +2294,7 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
       return 0;
     }
 
-    int32_t nProcChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    int32_t nProcChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nProcChance <= 0) {
       return 0;
     }
@@ -2329,15 +2328,15 @@ BOOL __fastcall ITEMEVENT_SetRestInPeace(::SGAMEDATA * pGame, uint32_t nUnitEven
     return 0;
 }
 
-// Server-side Necromancer Revive handler: validates the corpse (consumable check, MonStats bounds), removes its collision, spawns a monster of class eSkill in a nearby room, sets ISREVIVE flags and STATE_revive, attaches minion AI, assigns the owner (GUID in nSkillLvl) and schedules AI-think and expiry events. Returns 1 on success, 0 on any validation failure.
-BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
+// Item reanimate event callback (not the Necromancer Revive skill): validates the corpse (consumable check, MonStats bounds), removes its collision, spawns a monster of class nMonsterClassId in a nearby room, sets ISREVIVE flags and STATE_revive, attaches minion AI, assigns the owner (GUID in nOwnerGUID) and schedules AI-think and expiry events. Returns 1 on success, 0 on any validation failure.
+BOOL __fastcall SKILLITEM_ReanimateMonsterCallback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, int32_t nMonsterClassId, int32_t nOwnerGUID) {
     uint32_t dwAlignPad = nUnitEvent;
-    D2MonsterKillStrc sKillStrc;
+    D2ModeChangeStrc sKillStrc;
     if ((pAttacker ? pAttacker->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
     }
 
-    D2UnitStrc* pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nSkillLvl);
+    D2UnitStrc* pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, nOwnerGUID);
     if (!pOwnerUnit) {
       return 0;
     }
@@ -2346,10 +2345,10 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
     if (!bCorpseUsable) {
       return 0;
     }
-    if ((int)eSkill < 0) {
+    if (nMonsterClassId < 0) {
       return 0;
     }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
+    if (!(nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return 0;
     }
 
@@ -2362,22 +2361,22 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
       return 0;
     }
 
-    D2MonStats2Txt* pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(eSkill);
+    D2MonStats2Txt* pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nMonsterClassId);
     if (!pMonStats2) {
       return 0;
     }
 
-    D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pAttacker), D2Common::Units::GetXPosFromDynamicPathUnit(pAttacker), D2Common::Units::GetYPosFromDynamicPathUnit(pAttacker), D2Common::PATH::DynamicPath::GetUnitWidth(pAttacker), 0x8000);
-    D2UnitStrc* pRevived = Monster::Create::SpawnMonsterAtRoomPos(pGame, pTargetRoom, nCorpseSpawnX, nCorpseY, eSkill, eD2MonsterAnimMode_ns::Neutral, -1, 0x4a);
+    D2Common::Collision::RemoveCollision_Type(D2Common::Units::UNITS_GetRoom(pAttacker), D2Common::Units::GetXPosFromDynamicPathUnit(pAttacker), D2Common::Units::GetYPosFromDynamicPathUnit(pAttacker), D2Common::PATH::DynamicPath::PATH_GetUnitCollisionPattern(pAttacker), 0x8000);
+    D2UnitStrc* pRevived = Monster::Create::SpawnMonsterAtRoomPos(pGame, pTargetRoom, nCorpseSpawnX, nCorpseY, nMonsterClassId, eD2MonsterAnimMode_ns::Neutral, -1, 0x4a);
     if (!pRevived) {
       return 0;
     }
 
     pRevived->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pRevived, UNIT::Monster::GetAiGeneral(pRevived), 0);
-    Monster::MONSTERAI_TriggerMageThink(pGame, pRevived);
+    Monster::MONSTERAI_RescheduleThink(pGame, pRevived);
     Ai::AiGeneral::AssignMinionOwner(pGame, pRevived, pOwnerUnit->nUnitGUID, pOwnerUnit->eUnitType, 0, 0);
-    Monster::AI::MONSTERAI_SetTargetUnit(pRevived, pOwnerUnit);
+    Monster::AI::MONSTERAI_SetOwnerGUIDAndType(pRevived, pOwnerUnit);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pRevived, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pRevived, 2, pGame->dwGameFrame + 0x19, 0, 0);
     UNIT::SUnit::SetAlignment(pRevived, '\x02', 0);
@@ -2389,11 +2388,11 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
     D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pRevived);
     if (pMonStats2->byResurrectMode == '\x0e') {
       D2SkillStrc* pSkill;
-      Monster::MonsterMode::SetCurrentSkill(pRevived, eD2MonsterAnimMode_ns::Sequence, &sKillStrc);
+      Monster::MonsterMode::MONMODE_InitModeChange(pRevived, eD2MonsterAnimMode_ns::Sequence, &sKillStrc);
       pSkill = D2Common::Skills::GetSkillByIdAndOwner(pRevived, SKILL_SkeletonRaise, -1);
       D2Common::Units::SetCurrentSkill(pRevived, pSkill);
       D2Common::PATH::DynamicPath::SetStepNum(pRevived->pPath.pDynamicPath, 1);
-      sKillStrc.pAttacker = 0;
+      sKillStrc.pTargetUnit = 0;
       sKillStrc.nTargetX = nCorpseSpawnX;
       sKillStrc.nTargetY = nCorpseY;
       Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 0);
@@ -2404,6 +2403,7 @@ BOOL __fastcall SKILL_ReviveMonsterFromCorpse(::SGAMEDATA * pGame, uint32_t nUni
     return 1;
 }
 
+// Takes the address of a function whose signature changed in the 1167 issue batch.
 BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
@@ -2416,7 +2416,7 @@ BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent
     }
 
     int32_t nChance;
-    nChance = D2Common::Stats::StatsEx::ITEM_GetMinimalStatValueShifted(pUnit, eSkill >> 0x10, eSkill);
+    nChance = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
     if (nChance <= 0) {
       return 0;
     }
@@ -2431,7 +2431,7 @@ BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent
 
     do {
       if (pUnit->eUnitType == UNIT_PLAYER) {
-        UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pTarget, 0xd, (uint16_t)eSkill, pUnit->nUnitGUID, (D2ItemStatCostItemEventFunc)SKILL_ReviveMonsterFromCorpse, 0, pUnit->nUnitGUID);
+        UNIT::SUnitEvent::SUNITEVENT_Alloc(pGame, pTarget, 0xd, (uint16_t)eSkill, pUnit->nUnitGUID, (D2ItemStatCostItemEventFunc)SKILLITEM_ReanimateMonsterCallback, 0, pUnit->nUnitGUID);
         return 1;
       }
 

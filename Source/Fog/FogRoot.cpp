@@ -615,11 +615,11 @@ void __fastcall THREADING_DeleteCriticalSection_Thunk(void * pElement) {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection((LPCRITICAL_SECTION)pElement);
 }
 
-void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb70(void * pElement) {
+void __fastcall THREADING_EnterCriticalSection_Thunk(void * pElement) {
     EnterCriticalSection((LPCRITICAL_SECTION)pElement);
 }
 
-void __fastcall THREADING_DeleteCriticalSection_Thunk_Unref_0040eb80(void * pElement) {
+void __fastcall THREADING_LeaveCriticalSection_Thunk(void * pElement) {
     LeaveCriticalSection((LPCRITICAL_SECTION)pElement);
 }
 

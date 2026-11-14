@@ -13,7 +13,6 @@
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Cursor.data.h"
@@ -214,7 +213,7 @@ void __fastcall CURSOR_SetCursorItem(D2UnitStrc * pUnit, int32_t nAnimFrame) {
     ItemTypeOnHand = 6;
 }
 
-int32_t __stdcall GetCursorItem_Unref_00468030() {
+int32_t __stdcall CURSOR_GetAnimationFrame() {
     return gCursorAnimationFrame;
 }
 

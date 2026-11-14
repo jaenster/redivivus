@@ -303,7 +303,7 @@ namespace D2Net { namespace SRC { namespace Client {
 
 uint32_t CLIENT_SocketToServer = -0x1; D2_GLOBAL_GUARD(CLIENT_SocketToServer, "D2Net::SRC::Client::CLIENT_SocketToServer");
 LPDWORD lpThreadId_00882b30 = 0; D2_GLOBAL_GUARD(lpThreadId_00882b30, "D2Net::SRC::Client::lpThreadId_00882b30");
-int gnNetConnectionTimeoutMs = 0; D2_GLOBAL_GUARD(gnNetConnectionTimeoutMs, "D2Net::SRC::Client::gnNetConnectionTimeoutMs");
+int gbClientConnected = 0; D2_GLOBAL_GUARD(gbClientConnected, "D2Net::SRC::Client::gbClientConnected");
 
 }}} // namespace D2Net::SRC::Client
 

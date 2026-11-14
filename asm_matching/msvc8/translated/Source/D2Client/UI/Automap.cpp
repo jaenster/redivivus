@@ -705,8 +705,8 @@ void __stdcall AUTOMAP_AddCellByCoords(int16_t nCellNo, int16_t nPixelX, int16_t
 
 static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc * * pAutomapCell, D2UnitStrc * pUnit) {
     D2AutomapCellStrc* pAutomapCell1 = AUTOMAP_AllocCell();
-    int32_t nTargetX = D2Common::Units::GetTargetX(pUnit);
-    int32_t nTargetY = D2Common::Units::GetTargetY(pUnit);
+    int32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
+    int32_t nTargetY = D2Common::Units::GetScreenY(pUnit);
     if (nTargetX / 10 + 0x8001U <= 0xffff) {
       if (nTargetY / 10 + 0x7ffdU <= 0xffff) {
         if (nCellNo + 0x8000U <= 0xffff) {
@@ -1459,8 +1459,8 @@ void __stdcall AUTOMAP_Update() {
 
     {
       int nDeltaX;
-      nAutoMapPlayerTargetX = D2Common::Units::GetTargetX(pUnit);
-      nAutoMapPlayerTargetY = D2Common::Units::GetTargetY(pUnit);
+      nAutoMapPlayerTargetX = D2Common::Units::GetScreenX(pUnit);
+      nAutoMapPlayerTargetY = D2Common::Units::GetScreenY(pUnit);
       nDeltaX = nAutoMapLastPlayerX - nAutoMapPlayerTargetX;
       if (nDeltaX < 0) {
         nDeltaX = -nDeltaX;
@@ -2053,7 +2053,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
             return 1;
           }
           if (pUnit->pInventory) {
-            nCursorItemGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetCursorItemGUID(pUnit->pInventory);
+            nCursorItemGUID = D2Common::INVENTORY::Inventory::INVENTORY_GetOwnerGUID(pUnit->pInventory);
             if (nCursorItemGUID == pUnit->nUnitGUID) {
               *pbColorOut = nAutoMapColorCorpse;
               return 1;
@@ -2708,8 +2708,8 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
       return;
     }
 
-    nTargetX = D2Common::Units::GetTargetX(pUnit);
-    nTargetY = D2Common::Units::GetTargetY(pUnit);
+    nTargetX = D2Common::Units::GetScreenX(pUnit);
+    nTargetY = D2Common::Units::GetScreenY(pUnit);
     xLocation = nTargetX / nAutoMapZoomDivisor - nAutoMapScrollX + 8;
     nTemp = nTargetY / nAutoMapZoomDivisor - nAutoMapScrollY;
     yLocation = nTemp - 8;

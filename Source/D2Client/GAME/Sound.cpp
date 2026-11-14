@@ -210,7 +210,7 @@ uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel)
     return nProgress;
 }
 
-void __stdcall SOUND_ShutdownAudio_Thunk_Unref_004df910() {
+void __stdcall SOUND_GetSoundMixer_Thunk() {
     D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
 }
 
@@ -1078,7 +1078,7 @@ int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMod
     return nCycleIdx;
 }
 
-BOOL __stdcall SOUND_IsInitializedDup_Unref_004e0680() {
+BOOL __stdcall SOUND_GetDialogDataInitialized() {
     return gnDialogDataInitialized;
 }
 

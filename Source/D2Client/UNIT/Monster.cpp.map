@@ -683,8 +683,8 @@
         "GetPlayerUnit_UI",
         "SetUnsetFlags0x40",
         "SetDirectionAndNewDirection",
-        "SetUnitWidth",
-        "PATH_SetCollisionPattern",
+        "PATH_SetUnitCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "SetTargetUnitForDynamicUnit",
         "FaceTarget",
         "GetYPosFromDynamicPathUnit",
@@ -699,7 +699,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "8211a389",
+      "dh": "bd960d23",
       "paramStorage": [
         [
           "pUnit",
@@ -779,10 +779,10 @@
         "AllocDynamicPath",
         "SetVelocities",
         "STRUCT_CreatePlayerInventory",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "CheckIfMonsterIsDead",
         "PATH_RemoveUnitCollision",
-        "SetUnitWidth",
+        "PATH_SetUnitCollisionPattern",
         "PATH_ChangeCollisionType",
         "RANDOM_RandomNumberSelector",
         "MONSTER_SetMonStatsTxtAndType",
@@ -814,7 +814,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ba3df52f",
+      "dh": "7bc988f8",
       "paramStorage": [
         [
           "pUnit",
@@ -901,7 +901,7 @@
         "AllocStatListEx",
         "STATLIST_SetUnitStat",
         "GetDificulity",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "RANDOM_RandomNumberSelector",
         "MONSTER_SetMonStatsTxtAndType",
         "MONSTER_InitSpecialMonster",
@@ -928,7 +928,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "d0325943",
+      "dh": "eefa3d26",
       "paramStorage": [
         [
           "pUnit",
@@ -1037,7 +1037,7 @@
       "calledFunctions": [
         "MONSTER_GetAnimModeDataEntry",
         "TXT_MonStats_GetMonStats2",
-        "MONSTER_IsAndarielNormal"
+        "MONSTER_IsSandLeaper"
       ],
       "usedTypes": [
         "D2ClientMonAnimModeEntryStrc",
@@ -1045,7 +1045,7 @@
         "D2UnitStrc",
         "eD2MonsterAnimMode"
       ],
-      "dh": "c5eea2a5",
+      "dh": "ae7ae5fd",
       "paramStorage": [
         [
           "pUnit",
@@ -1146,7 +1146,7 @@
       "namespace": "D2Client::UNIT::Monster",
       "calledFunctions": [
         "MONSTER_SpawnBloodParticles",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "GetVelocity",
         "GetDirection",
         "UNITS_GetRoom",
@@ -1167,7 +1167,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6a0021c5",
+      "dh": "65731f48",
       "paramStorage": [
         [
           "pUnit",
@@ -1294,8 +1294,8 @@
         "GetXPos",
         "UNITS_GetRoom",
         "RemoveCollision",
-        "SetUnitWidth",
-        "PATH_SetCollisionPattern",
+        "PATH_SetUnitCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PARTICLE_GetScreenZ",
         "AllocParticle",
         "PARTICLE_SetStoppedWithFade",
@@ -1311,7 +1311,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "7d52c3dd",
+      "dh": "079e5df7",
       "paramStorage": [
         [
           "pUnit",
@@ -1374,7 +1374,7 @@
         "MONUNIQUE_DispatchModDeath",
         "CheckFlags",
         "SetMonsterFlags",
-        "IsAttackable",
+        "CUNIT_ClearDeadSetAttackable",
         "PATH_MoveUnitToPoint",
         "UNIT_GetUnitState",
         "GetSomeMonsterStatFlag",
@@ -1385,8 +1385,8 @@
         "ClearSelectedUnit",
         "UI_ResetInputState",
         "SELECT_UpdateUnitSelection",
-        "STATES_HasLightState",
-        "STATES_HasMaxState",
+        "STATES_HasHideFlagState",
+        "STATES_HasShatterFlagState",
         "MONSTER_SpawnDeathEffectMissiles",
         "PATH_SetCorpseCollision",
         "TXT_MonStats_GetLine",
@@ -1441,7 +1441,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "81995621",
+      "dh": "cb54b25c",
       "paramStorage": [
         [
           "nMessageType",
@@ -1590,7 +1590,7 @@
       ]
     },
     {
-      "name": "NPCMENU_HandleQuestUpdate",
+      "name": "CMONSTERS_SetSpawnerMonsterClass",
       "address": "004b1240",
       "lines": [
         {
@@ -1600,7 +1600,7 @@
       ],
       "namespace": "D2Client::UNIT::Monster",
       "calledFunctions": [
-        "NPCMENU_HandleQuestUpdate",
+        "CMONSTERS_SetSpawnerMonsterClass",
         "UNITS_FindClientSideUnit"
       ],
       "usedTypes": [
@@ -1608,7 +1608,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "eea08c12",
+      "dh": "e9a63b45",
       "paramStorage": [
         [
           "pPacket",
@@ -1689,7 +1689,7 @@
         "PATH_InterpolateDirection",
         "MONSTER_HandleSkillAnimEnd",
         "CreateMissileOrMonster",
-        "STATES_HasDamageState",
+        "STATES_HasActiveFlagState",
         "SKILL_ProcessActiveStateEffects",
         "UpdateUnitSfxOnModeChange",
         "PlayUnitFootstepSound"
@@ -1704,7 +1704,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "2f4d7cc6",
+      "dh": "50631081",
       "paramStorage": [
         [
           "pDynamicPath",

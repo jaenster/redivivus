@@ -617,7 +617,7 @@ D2ControlStrc * pFormsList = 0; D2_GLOBAL_GUARD(pFormsList, "D2Win::Src::D2WinMa
 D2ControlStrc * pFormUnknown = 0; D2_GLOBAL_GUARD(pFormUnknown, "D2Win::Src::D2WinMain::pFormUnknown");
 D2ControlStrc * pFormSecond = 0; D2_GLOBAL_GUARD(pFormSecond, "D2Win::Src::D2WinMain::pFormSecond");
 ::D2WinEditBox * pFormTextAndEditBox = 0; D2_GLOBAL_GUARD(pFormTextAndEditBox, "D2Win::Src::D2WinMain::pFormTextAndEditBox");
-D2ControlStrc * pFormFourth = 0; D2_GLOBAL_GUARD(pFormFourth, "D2Win::Src::D2WinMain::pFormFourth");
+D2ControlStrc * gpEscapeButton = 0; D2_GLOBAL_GUARD(gpEscapeButton, "D2Win::Src::D2WinMain::gpEscapeButton");
 D2ControlStrc * pFormImage = 0; D2_GLOBAL_GUARD(pFormImage, "D2Win::Src::D2WinMain::pFormImage");
 
 }}} // namespace D2Win::Src::D2WinMain

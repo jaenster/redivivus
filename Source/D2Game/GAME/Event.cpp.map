@@ -607,7 +607,7 @@
       ]
     },
     {
-      "name": "EVENT_TimerTypeExistsOnUnit",
+      "name": "EVENT_GetTimerFrame",
       "address": "005415a0",
       "lines": [
         {
@@ -617,16 +617,17 @@
       ],
       "namespace": "D2Game::GAME::Event",
       "calledFunctions": [
-        "EVENT_TimerTypeExistsOnUnit",
+        "EVENT_GetTimerFrame",
         "GetTimerList"
       ],
       "usedTypes": [
         "D2TimerStrc",
         "D2UnitStrc",
         "SGAMEDATA",
-        "eD2TimerTypeDWORD"
+        "eD2TimerTypeDWORD",
+        "int32_t"
       ],
-      "dh": "8df2a0c2",
+      "dh": "8ac2c5f3",
       "paramStorage": [
         [
           "pGame",

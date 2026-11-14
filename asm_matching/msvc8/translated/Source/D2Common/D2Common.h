@@ -180,6 +180,7 @@ struct D2RoomExStrc;
 struct D2RoomStrc;
 struct D2RuneTableStrc;
 struct D2RunesTxt;
+struct D2RunesTxtTableStrc;
 struct D2SUnitEventStrc;
 struct D2SeedStrc;
 struct D2SetItemsTxt;
@@ -1368,9 +1369,9 @@ struct D2DynamicPathStrc {
     /* 0x03C */ int ePathType; // eD2PathTypes - current path type
     /* 0x040 */ int dwPrevPathType; // eD2PathTypes - previous path type
     /* 0x044 */ int nUnitSize; // Unit collision size (from GetUnitSizeX)
-    /* 0x048 */ int nUnitWidth; // Unit interaction width
+    /* 0x048 */ eD2CollisionShapeType nCollisionPattern; // Unit interaction width
     /* 0x04C */ int nCollisionFlag; // Collision flag for this unit type (0x80=player, 0x100=monster)
-    /* 0x050 */ int nCollisionPattern; // Collision check pattern / AI flags
+    /* 0x050 */ int nMoveTestCollisionMask; // Collision check pattern / AI flags
     /* 0x054 */ short eCollisionFlag; // Result collision flags from movement
     /* 0x056 */ short _pad56; // Alignment padding
     /* 0x058 */ struct D2UnitStrc * pTargetUnit; // Unit being targeted
@@ -1421,9 +1422,748 @@ struct D2EventsTxt {
     /* 0x00 */ uint16_t event;
 };
 #endif // D2_DEFINED_D2EventsTxt
-#ifndef D2_DEFINED_D2ExpansionLvlTblsTxt
-#define D2_DEFINED_D2ExpansionLvlTblsTxt
-struct D2ExpansionLvlTblsTxt {
+#ifndef D2_DEFINED_D2ExperienceTxt
+#define D2_DEFINED_D2ExperienceTxt
+struct D2ExperienceTxt {
+    /* 0x00 */ int Class[7];
+    /* 0x1C */ int ExpRatio;
+};
+#endif // D2_DEFINED_D2ExperienceTxt
+#ifndef D2_DEFINED_D2fpSkillFuncArg
+#define D2_DEFINED_D2fpSkillFuncArg
+struct D2fpSkillFuncArg {
+    /* 0x00 */ struct D2UnitStrc * pUnit;
+    /* 0x04 */ int32_t nSize;
+    /* 0x08 */ struct D2fpSkillFuncSub * pSub;
+    /* 0x0C */ int32_t nRadiusSq; // Squared radius for distance check (param_2 * param_2)
+    /* 0x10 */ int32_t bAvoidTownRooms; // Flag: skip town rooms (nParam & 0x2000)
+    /* 0x14 */ int32_t nRoomCount; // Number of rooms from GetAdjacentRoomsList
+    /* 0x18 */ struct D2UnitStrc * pUnit2;
+    /* 0x1C */ struct D2RoomStrc * * ppRoomList; // struct D2RoomStrc** array from GetAdjacentRoomsList
+};
+#endif // D2_DEFINED_D2fpSkillFuncArg
+#ifndef D2_DEFINED_D2fpSkillFuncSub
+#define D2_DEFINED_D2fpSkillFuncSub
+__pragma(pack(push, 1)) struct D2fpSkillFuncSub {
+    /* 0x00 */ struct D2UnitStrc * pOwner;
+    /* 0x04 */ struct D2UnitStrc * pMissile;
+    /* 0x08 */ eD2Skills eSkillNo;
+    /* 0x0C */ int32_t nSkillLevel;
+    /* 0x10 */ int nTargetLimit; // missile callbacks: hit limit (MISSILE_CltHitFn25 sets it from cHitPar2, clamped to >= 1; CreateAtTarget compares it with the hit count)
+    /* 0x14 */ eMissilesId nMissileTxtNo;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2fpSkillFuncSub
+#ifndef D2_DEFINED_D2GambleTableStrc
+#define D2_DEFINED_D2GambleTableStrc
+struct D2GambleTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ int * pTable; // rows of the gamble item list (item code per row)
+    /* 0x08 */ int anLevelLimit[100]; // per item level, the number of gamble rows whose level is at most that
+};
+#endif // D2_DEFINED_D2GambleTableStrc
+#ifndef D2_DEFINED_D2GfxInfoStrc
+#define D2_DEFINED_D2GfxInfoStrc
+struct D2GfxInfoStrc {
+    /* 0x00 */ uint8_t nComponentFlags[40]; // Per-component flags/state, 20 entries x 2 bytes each. Stride-2 byte access via GFXUTIL_GetGfxInfoComponent(nParam) = [nParam*2]
+    /* 0x28 */ struct D2GfxInfoUnkStrc * pGfxInfoUnk; // Head of linked list of COF/mode cache entries
+    /* 0x2C */ struct D2GfxUnknown_0xa8 * pOverlayList; // Head of overlay linked list (nodes freed via FreeClientMemory in GFX_RemoveOverlayFromUnit)
+    /* 0x30 */ struct D2ParticleStrc * pParticle; // Particle system attachment
+    /* 0x34 */ uint32_t dwCofDataFlags; // COF data flags, initialized to 2 in AllocGfxInfo. Accessed via GFX_GetGfxInfoField34/GFX_SetGfxInfoField34
+    /* 0x38 */ int nPalShiftIndex; // Palette shift/gamma index
+};
+#endif // D2_DEFINED_D2GfxInfoStrc
+#ifndef D2_DEFINED_D2GridScreenCoordinates
+#define D2_DEFINED_D2GridScreenCoordinates
+struct D2GridScreenCoordinates {
+    /* 0x00 */ uint8_t nGridCols; // Grid column count (low byte of former nGridX int)
+    /* 0x01 */ uint8_t nGridRows; // Grid row count (high byte of former nGridX int)
+    /* 0x02 */ short pad_02; // Padding
+    /* 0x04 */ int nPixelLeft; // Grid left pixel edge (screen X)
+    /* 0x08 */ int nRight;
+    /* 0x0C */ int nTop;
+    /* 0x10 */ int nBottom;
+    /* 0x14 */ uint8_t nCellWidth; // Cell pixel width
+    /* 0x15 */ uint8_t nCellHeight; // Cell pixel height
+    /* 0x16 */ short pad_16; // Padding to maintain size 24
+};
+#endif // D2_DEFINED_D2GridScreenCoordinates
+#ifndef D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
+#define D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
+struct D2GSPacketSrv0x27_EntryStrc {
+    /* 0x00 */ short nMessage;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ int nType;
+    /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pPrev;
+};
+#endif // D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
+#ifndef D2_DEFINED_D2GSPacketSrv0x27_TextStrc
+#define D2_DEFINED_D2GSPacketSrv0x27_TextStrc
+struct D2GSPacketSrv0x27_TextStrc {
+    /* 0x00 */ struct D2PoolManagerStrc * pMemory;
+    /* 0x04 */ short nCount;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+    /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pMessage;
+};
+#endif // D2_DEFINED_D2GSPacketSrv0x27_TextStrc
+#ifndef D2_DEFINED_D2HireDescTxt
+#define D2_DEFINED_D2HireDescTxt
+struct D2HireDescTxt {
+    /* 0x00 */ char code[4];
+};
+#endif // D2_DEFINED_D2HireDescTxt
+#ifndef D2_DEFINED_D2HirelingTxt
+#define D2_DEFINED_D2HirelingTxt
+__pragma(pack(push, 1)) struct D2HirelingTxt {
+    /* 0x000 */ short version;
+    /* 0x002 */ uint8_t field_0x2;
+    /* 0x003 */ uint8_t field_0x3;
+    /* 0x004 */ int id;
+    /* 0x008 */ int classId;
+    /* 0x00C */ int act;
+    /* 0x010 */ int difficulty;
+    /* 0x014 */ int seller;
+    /* 0x018 */ int gold;
+    /* 0x01C */ int level;
+    /* 0x020 */ int expPerLvl;
+    /* 0x024 */ int hp;
+    /* 0x028 */ int hpPerlvl;
+    /* 0x02C */ int defense;
+    /* 0x030 */ int defPerlvl;
+    /* 0x034 */ int str;
+    /* 0x038 */ int strPerlvl;
+    /* 0x03C */ int dex;
+    /* 0x040 */ int dexPerlvl;
+    /* 0x044 */ int ar;
+    /* 0x048 */ int arPerlvl;
+    /* 0x04C */ int share;
+    /* 0x050 */ int dmgMin;
+    /* 0x054 */ int dmgMax;
+    /* 0x058 */ int dmgPerlvl;
+    /* 0x05C */ int resist;
+    /* 0x060 */ int resistPerlvl;
+    /* 0x064 */ int defaultchance;
+    /* 0x068 */ int head;
+    /* 0x06C */ int torso;
+    /* 0x070 */ int weapon;
+    /* 0x074 */ int shield;
+    /* 0x078 */ int nSkillId[6];
+    /* 0x090 */ int nSkillChance[6];
+    /* 0x0A8 */ int nSkillChanceRerLvl[6];
+    /* 0x0C0 */ uint8_t nSkillMode[6];
+    /* 0x0C6 */ uint8_t nSkillLevel[6];
+    /* 0x0CC */ uint8_t nSkillLvlPerLvl[6];
+    /* 0x0D2 */ uint8_t hiredesc;
+    /* 0x0D3 */ char namefirst[32];
+    /* 0x0F3 */ char namelast[32];
+    /* 0x113 */ uint8_t field_0x113;
+    /* 0x114 */ uint16_t nNameFirst;
+    /* 0x116 */ uint16_t nNameLast;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2HirelingTxt
+#ifndef D2_DEFINED_D2HitClassTxt
+#define D2_DEFINED_D2HitClassTxt
+struct D2HitClassTxt {
+    /* 0x00 */ char code[4];
+};
+#endif // D2_DEFINED_D2HitClassTxt
+#ifndef D2_DEFINED_D2HoverTextStrc
+#define D2_DEFINED_D2HoverTextStrc
+struct D2HoverTextStrc {
+    /* 0x00 */ int nStartFrame; // Base frame value computed from message length (len*8+0x7d), used as creation anchor
+    /* 0x04 */ int nExpireFrame;
+    /* 0x08 */ uint8_t nLanguageCode;
+    /* 0x09 */ uint8_t field_0x9;
+    /* 0x0A */ uint8_t field_0xa;
+    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0C */ void * pTextLineList; // Pointer to word-wrapped text line list (44 bytes), freed in TEXT_FreeHoverText via TEXT_FreeTextLineList
+    /* 0x10 */ char szMessage[256];
+};
+#endif // D2_DEFINED_D2HoverTextStrc
+#ifndef D2_DEFINED_D2InventoryEntryStrc
+#define D2_DEFINED_D2InventoryEntryStrc
+struct D2InventoryEntryStrc {
+    /* 0x00 */ int nLeft;
+    /* 0x04 */ int nRight;
+    /* 0x08 */ int nTop;
+    /* 0x0C */ int nBottom;
+    /* 0x10 */ uint8_t nWidth;
+    /* 0x11 */ uint8_t nHeight;
+    /* 0x12 */ uint16_t wPad; // Copied as an opaque 16-bit value in GetBodyDimensions; purpose unknown
+};
+#endif // D2_DEFINED_D2InventoryEntryStrc
+#ifndef D2_DEFINED_D2InventoryBodyStrc
+#define D2_DEFINED_D2InventoryBodyStrc
+__pragma(pack(push, 1)) struct D2InventoryBodyStrc {
+    /* 0x00 */ D2InventoryEntryStrc rArm;
+    /* 0x14 */ D2InventoryEntryStrc torso;
+    /* 0x28 */ D2InventoryEntryStrc lArm;
+    /* 0x3C */ D2InventoryEntryStrc head;
+    /* 0x50 */ D2InventoryEntryStrc neck;
+    /* 0x64 */ D2InventoryEntryStrc rHand;
+    /* 0x78 */ D2InventoryEntryStrc lHand;
+    /* 0x8C */ D2InventoryEntryStrc belt;
+    /* 0xA0 */ D2InventoryEntryStrc feet;
+    /* 0xB4 */ D2InventoryEntryStrc gloves;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2InventoryBodyStrc
+#ifndef D2_DEFINED_D2InventoryGridInfoStrc
+#define D2_DEFINED_D2InventoryGridInfoStrc
+struct D2InventoryGridInfoStrc {
+    /* 0x00 */ struct D2UnitStrc * pFirstItem; // First item in this grid page
+    /* 0x04 */ struct D2UnitStrc * pLastItem; // Last item in this grid page
+    /* 0x08 */ uint8_t bWidth;
+    /* 0x09 */ uint8_t bHeight;
+    /* 0x0A */ short nPad;
+    /* 0x0C */ struct D2UnitStrc * * pGridCells; // Width*Height flat array of struct D2UnitStrc* cells (one per grid square), indexed [bWidth*y + x]
+};
+#endif // D2_DEFINED_D2InventoryGridInfoStrc
+#ifndef D2_DEFINED_D2InventoryGridStrc
+#define D2_DEFINED_D2InventoryGridStrc
+struct D2InventoryGridStrc {
+    /* 0x00 */ struct D2UnitStrc * pItem;
+    /* 0x04 */ struct D2UnitStrc * pHeadItem;
+    /* 0x08 */ struct D2UnitStrc * pNeckItem;
+    /* 0x0C */ struct D2UnitStrc * pTorsoItem;
+    /* 0x10 */ struct D2UnitStrc * pRightArmItem;
+    /* 0x14 */ struct D2UnitStrc * pLeftArmItem;
+    /* 0x18 */ struct D2UnitStrc * pRightRingItem;
+    /* 0x1C */ struct D2UnitStrc * pLeftRingItem;
+    /* 0x20 */ struct D2UnitStrc * pBeltItem;
+    /* 0x24 */ struct D2UnitStrc * pFeetItem;
+    /* 0x28 */ struct D2UnitStrc * pGlovesItem;
+    /* 0x2C */ struct D2UnitStrc * pSwappedRightArmItem;
+    /* 0x30 */ struct D2UnitStrc * pSwappedLeftArmItem;
+};
+#endif // D2_DEFINED_D2InventoryGridStrc
+#ifndef D2_DEFINED_D2InventorySizesStrc
+#define D2_DEFINED_D2InventorySizesStrc
+struct D2InventorySizesStrc {
+    operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
+
+    /* 0x00 */ uint8_t Width;
+    /* 0x01 */ uint8_t Height;
+};
+#endif // D2_DEFINED_D2InventorySizesStrc
+#ifndef D2_DEFINED_D2InventoryStrc
+#define D2_DEFINED_D2InventoryStrc
+struct D2InventoryStrc {
+    /* 0x00 */ int nSignatureMagic; // Always 0x01020304
+    /* 0x04 */ struct D2PoolManagerStrc * pMemory;
+    /* 0x08 */ struct D2UnitStrc * pOwner;
+    /* 0x0C */ struct D2UnitStrc * pFirstItem;
+    /* 0x10 */ struct D2UnitStrc * pLastItem;
+    /* 0x14 */ struct D2InventoryGridInfoStrc * pGrids; // Array of grid info entries
+    /* 0x18 */ int nGridCount;
+    /* 0x1C */ int dwPrimaryWeaponGUID;
+    /* 0x20 */ struct D2UnitStrc * pCursorItem; // Item held on cursor
+    /* 0x24 */ int nOwnerGUID;
+    /* 0x28 */ int nItemCount;
+    /* 0x2C */ struct D2InventoryToBeUpdatedStrc * pUpdates; // Linked list of pending updates
+    /* 0x30 */ struct D2InventoryToBeUpdatedStrc * pUpdatesLast;
+    /* 0x34 */ struct D2CorpseStrc * pCorpse; // Corpse linked list head
+    /* 0x38 */ struct D2CorpseStrc * pCorpseLast;
+    /* 0x3C */ int nCorpseCount;
+};
+#endif // D2_DEFINED_D2InventoryStrc
+#ifndef D2_DEFINED_D2InventoryToBeUpdatedStrc
+#define D2_DEFINED_D2InventoryToBeUpdatedStrc
+struct D2InventoryToBeUpdatedStrc {
+    /* 0x00 */ uint32_t nUnitGuid;
+    /* 0x04 */ struct D2InventoryToBeUpdatedStrc * pNext;
+};
+#endif // D2_DEFINED_D2InventoryToBeUpdatedStrc
+#ifndef D2_DEFINED_D2InventoryTxt
+#define D2_DEFINED_D2InventoryTxt
+__pragma(pack(push, 1)) struct D2InventoryTxt {
+    /* 0x00 */ int invLeft;
+    /* 0x04 */ int invRight;
+    /* 0x08 */ int nTop;
+    /* 0x0C */ int invBottom;
+    /* 0x10 */ D2GridScreenCoordinates sGrid;
+    /* 0x28 */ D2InventoryBodyStrc pBody;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2InventoryTxt
+#ifndef D2_DEFINED_D2ItemCalcContextStrc
+#define D2_DEFINED_D2ItemCalcContextStrc
+struct D2ItemCalcContextStrc {
+    /* 0x00 */ struct D2UnitStrc * pUnit;
+    /* 0x04 */ struct D2UnitStrc * nContext;
+};
+#endif // D2_DEFINED_D2ItemCalcContextStrc
+#ifndef D2_DEFINED_D2ItemInventoryNodeStrc
+#define D2_DEFINED_D2ItemInventoryNodeStrc
+__pragma(pack(push, 1)) struct D2ItemInventoryNodeStrc {
+    /* 0x00 */ struct D2InventoryStrc * pInventory; // Socketed items inventory
+    /* 0x04 */ struct D2UnitStrc * pPrevItem; // Previous item in linked list
+    /* 0x08 */ struct D2UnitStrc * pNextItem; // Next item in linked list
+    /* 0x0C */ eD2InventoryGrid eInventoryGrid; // Grid type
+    /* 0x0D */ eD2InventoryGridType eInventoryGridType; // Grid subtype
+    /* 0x0E */ uint8_t unk0xE;
+    /* 0x0F */ uint8_t unk0xF;
+    /* 0x10 */ struct D2UnitStrc * pPrevItemInPage; // Previous item in page linked list
+    /* 0x14 */ struct D2UnitStrc * pNextItemInPage; // Next item in page linked list
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2ItemInventoryNodeStrc
+#ifndef D2_DEFINED_D2ItemStatCostOpRelationStrc
+#define D2_DEFINED_D2ItemStatCostOpRelationStrc
+struct D2ItemStatCostOpRelationStrc {
+    /* 0x00 */ short nOpBaseStat;
+    /* 0x02 */ short nSourceStat;
+    /* 0x04 */ uint8_t nSourceOp;
+    /* 0x05 */ uint8_t nSourceOpParam;
+};
+#endif // D2_DEFINED_D2ItemStatCostOpRelationStrc
+#ifndef D2_DEFINED_D2ItemStatCostTxt
+#define D2_DEFINED_D2ItemStatCostTxt
+__pragma(pack(push, 1)) struct D2ItemStatCostTxt {
+    /* 0x000 */ uint16_t stat;
+    /* 0x002 */ uint16_t pad_02;
+    /* 0x004 */ D2ItemStatCostFlags dwItemStatFlags;
+    /* 0x008 */ uint8_t sendBits;
+    /* 0x009 */ uint8_t sendParamBits;
+    /* 0x00A */ char csvbits;
+    /* 0x00B */ char csvparam;
+    /* 0x00C */ int divide;
+    /* 0x010 */ int multiply;
+    /* 0x014 */ int add;
+    /* 0x018 */ char valshift;
+    /* 0x019 */ uint8_t saveBits[2]; // [0] = Save Bits, [1] = Save Bits 109 (1.09 save format); indexed by the save-version flag
+    /* 0x01B */ uint8_t pad_1B;
+    /* 0x01C */ int saveAdd[2]; // [0] = Save Add, [1] = Save Add 109 (1.09 save format); indexed by the save-version flag
+    /* 0x024 */ int saveParamBits;
+    /* 0x028 */ int unused_28;
+    /* 0x02C */ int minaccr;
+    /* 0x030 */ uint8_t encode;
+    /* 0x031 */ uint8_t pad_31;
+    /* 0x032 */ uint16_t maxstat;
+    /* 0x034 */ short descpriority;
+    /* 0x036 */ char descfunc;
+    /* 0x037 */ char descval;
+    /* 0x038 */ uint16_t descstrpos;
+    /* 0x03A */ uint16_t descstrneg;
+    /* 0x03C */ uint16_t descstr2;
+    /* 0x03E */ short dgrp;
+    /* 0x040 */ char dgrpfunc;
+    /* 0x041 */ char dgrpval;
+    /* 0x042 */ short dgrpstrpos;
+    /* 0x044 */ short dgrpstrneg;
+    /* 0x046 */ short dgrpstr2;
+    /* 0x048 */ short itemevent1;
+    /* 0x04A */ short itemevent2;
+    /* 0x04C */ short itemeventfunc1;
+    /* 0x04E */ short itemeventfunc2;
+    /* 0x050 */ char keepzero;
+    /* 0x051 */ uint8_t bHasOpBaseDependencies;
+    /* 0x052 */ uint8_t bReferencedByOpStat;
+    /* 0x053 */ uint8_t bHasOp4Or5Dependency;
+    /* 0x054 */ uint8_t op;
+    /* 0x055 */ uint8_t opParam;
+    /* 0x056 */ uint16_t opBase;
+    /* 0x058 */ short opStat1;
+    /* 0x05A */ short opStat2;
+    /* 0x05C */ short opStat3;
+    /* 0x05E */ short aOpBaseDependents[64];
+    /* 0x0DE */ D2ItemStatCostOpRelationStrc aOpRelations[16];
+    /* 0x13E */ uint16_t pad_13E;
+    /* 0x140 */ int nChargedSkillLevelBits;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2ItemStatCostTxt
+#ifndef D2_DEFINED_D2ItemsTxt
+#define D2_DEFINED_D2ItemsTxt
+struct D2ItemsTxt {
+    /* 0x000 */ char szFlippyFile[32];
+    /* 0x020 */ char szInvFile[32];
+    /* 0x040 */ char szUniqueInvFile[32];
+    /* 0x060 */ char szSetInvFile[32];
+    /* 0x080 */ int dwCode; // item code fourcc (e.g. 'box '), compared as a dword like dwNormCode/dwUberCode/dwUltraCode
+    /* 0x084 */ int dwNormCode;
+    /* 0x088 */ int dwUberCode;
+    /* 0x08C */ int dwUltraCode;
+    /* 0x090 */ int dwAlternateGfx;
+    /* 0x094 */ int dwPSpell;
+    /* 0x098 */ short wState;
+    /* 0x09A */ short wCState1;
+    /* 0x09C */ short wCState2;
+    /* 0x09E */ short wStat1;
+    /* 0x0A0 */ short wStat2;
+    /* 0x0A2 */ short wStat3;
+    /* 0x0A4 */ int dwCalc1;
+    /* 0x0A8 */ int dwCalc2;
+    /* 0x0AC */ int dwCalc3;
+    /* 0x0B0 */ int dwLen;
+    /* 0x0B4 */ uint8_t nSpellDesc; // spelldesc column, TXT field type 4 (byte) at +0xb4 in TXT_AllocTxt_items; INV_FormatItemSpellDescText switches on it
+    /* 0x0B5 */ uint8_t pad_0xB5; // not written by the items.txt parser
+    /* 0x0B6 */ short wSpellDescStr;
+    /* 0x0B8 */ int dwSpellDescCalc;
+    /* 0x0BC */ int dwBetterGem;
+    /* 0x0C0 */ int dwWClass;
+    /* 0x0C4 */ int dw2HandedWClass;
+    /* 0x0C8 */ int dwTMogType;
+    /* 0x0CC */ int dwMinAc;
+    /* 0x0D0 */ int dwMaxAc;
+    /* 0x0D4 */ int dwGambleCost;
+    /* 0x0D8 */ int dwSpeed;
+    /* 0x0DC */ int dwBitfield1;
+    /* 0x0E0 */ int dwCost;
+    /* 0x0E4 */ int dwMinStack;
+    /* 0x0E8 */ int dwMaxStack;
+    /* 0x0EC */ int dwSpawnStack;
+    /* 0x0F0 */ int dwGemOffset;
+    /* 0x0F4 */ short wNameStr;
+    /* 0x0F6 */ short wVersion;
+    /* 0x0F8 */ short wAutoPrefix;
+    /* 0x0FA */ uint16_t wMissileType;
+    /* 0x0FC */ char nRarity;
+    /* 0x0FD */ char nLevel;
+    /* 0x0FE */ uint8_t nMinDam;
+    /* 0x0FF */ uint8_t nMaxDam;
+    /* 0x100 */ uint8_t nMinMisDam;
+    /* 0x101 */ uint8_t nMaxMisDam;
+    /* 0x102 */ uint8_t n2HandMinDam;
+    /* 0x103 */ uint8_t n2HandMaxDam;
+    /* 0x104 */ short nRangeAdder;
+    /* 0x106 */ short nStrBonus;
+    /* 0x108 */ short nDexBonus;
+    /* 0x10A */ uint16_t nReqStr;
+    /* 0x10C */ uint16_t wReqDex;
+    /* 0x10E */ char bAbsorbs;
+    /* 0x10F */ char bInvWidth;
+    /* 0x110 */ char bInvHeight;
+    /* 0x111 */ uint8_t bBlock;
+    /* 0x112 */ uint8_t bDurability;
+    /* 0x113 */ char bNoDurability;
+    /* 0x114 */ char bMissile;
+    /* 0x115 */ char bComponent;
+    /* 0x116 */ uint8_t bRArm;
+    /* 0x117 */ uint8_t bLArm;
+    /* 0x118 */ uint8_t bTorso;
+    /* 0x119 */ uint8_t bLegs;
+    /* 0x11A */ uint8_t bRSPad;
+    /* 0x11B */ uint8_t bLSPad;
+    /* 0x11C */ bool b2Handed;
+    /* 0x11D */ uint8_t bUseable;
+    /* 0x11E */ short wType;
+    /* 0x120 */ short wType2;
+    /* 0x122 */ short bSubType;
+    /* 0x124 */ short wDropSound;
+    /* 0x126 */ short wUseSound;
+    /* 0x128 */ char bDropSfxFrame;
+    /* 0x129 */ uint8_t bUnique;
+    /* 0x12A */ uint8_t bQuest;
+    /* 0x12B */ char bQuestDiffCheck;
+    /* 0x12C */ char bTransparent;
+    /* 0x12D */ uint8_t bTransTbl;
+    /* 0x12E */ char pad0x12E;
+    /* 0x12F */ char bLightRadius;
+    /* 0x130 */ uint8_t bBelt;
+    /* 0x131 */ char bAutoBelt;
+    /* 0x132 */ bool bStackable;
+    /* 0x133 */ char bSpawnable;
+    /* 0x134 */ char bSpellIcon;
+    /* 0x135 */ bool bDurWarning;
+    /* 0x136 */ bool bQntWarning;
+    /* 0x137 */ bool bHasInv;
+    /* 0x138 */ bool bGemSockets;
+    /* 0x139 */ uint8_t bTransmogrify;
+    /* 0x13A */ uint8_t bTMogMin;
+    /* 0x13B */ char bTMogMax;
+    /* 0x13C */ uint8_t bHitClass;
+    /* 0x13D */ bool b1or2Handed;
+    /* 0x13E */ bool bGemApplyType;
+    /* 0x13F */ char bLevelReq;
+    /* 0x140 */ uint8_t bMagicLvl;
+    /* 0x141 */ uint8_t bTransform;
+    /* 0x142 */ uint8_t bInvTrans;
+    /* 0x143 */ uint8_t bCompactSave;
+    /* 0x144 */ char bSkipName;
+    /* 0x145 */ bool bNameable;
+    /* 0x146 */ char bAkaraMin;
+    /* 0x147 */ char bGheedMin;
+    /* 0x148 */ char bCharsiMin;
+    /* 0x149 */ char bFaraMin;
+    /* 0x14A */ char bLysanderMin;
+    /* 0x14B */ char bDrognanMin;
+    /* 0x14C */ char bHraltiMin;
+    /* 0x14D */ char bAlkorMin;
+    /* 0x14E */ char bOrmusMin;
+    /* 0x14F */ char bElzixMin;
+    /* 0x150 */ char bAshearaMin;
+    /* 0x151 */ char bCainMin;
+    /* 0x152 */ char bHalbuMin;
+    /* 0x153 */ char bJamellaMin;
+    /* 0x154 */ char bMalahMin;
+    /* 0x155 */ char bLarzukMin;
+    /* 0x156 */ char bDrehyaMin;
+    /* 0x157 */ char bAkaraMax;
+    /* 0x158 */ char bGheedMax;
+    /* 0x159 */ char bCharsiMax;
+    /* 0x15A */ char bFaraMax;
+    /* 0x15B */ char bLysanderMax;
+    /* 0x15C */ char bDrognanMax;
+    /* 0x15D */ char bHraltiMax;
+    /* 0x15E */ char bAlkorMax;
+    /* 0x15F */ char bOrmusMax;
+    /* 0x160 */ char bElzixMax;
+    /* 0x161 */ char bAshearaMax;
+    /* 0x162 */ char bCainMax;
+    /* 0x163 */ char bHalbuMax;
+    /* 0x164 */ char bJamellaMax;
+    /* 0x165 */ char bMalahMax;
+    /* 0x166 */ char bLarzukMax;
+    /* 0x167 */ char bDrehyaMax;
+    /* 0x168 */ char bAkaraMagicMin;
+    /* 0x169 */ char bGheedMagicMin;
+    /* 0x16A */ char bCharsiMagicMin;
+    /* 0x16B */ char bFaraMagicMin;
+    /* 0x16C */ char bLysanderMagicMin;
+    /* 0x16D */ char bDrognanMagicMin;
+    /* 0x16E */ char bHraltiMagicMin;
+    /* 0x16F */ char bAlkorMagicMin;
+    /* 0x170 */ char bOrmusMagicMin;
+    /* 0x171 */ char bElzixMagicMin;
+    /* 0x172 */ char bAshearaMagicMin;
+    /* 0x173 */ char bCainMagicMin;
+    /* 0x174 */ char bHalbuMagicMin;
+    /* 0x175 */ char bJamellaMagicMin;
+    /* 0x176 */ char bMalahMagicMin;
+    /* 0x177 */ char bLarzukMagicMin;
+    /* 0x178 */ char bDrehyaMagicMin;
+    /* 0x179 */ char bAkaraMagicMax;
+    /* 0x17A */ char bGheedMagicMax;
+    /* 0x17B */ char bCharsiMagicMax;
+    /* 0x17C */ char bFaraMagicMax;
+    /* 0x17D */ char bLysanderMagicMax;
+    /* 0x17E */ char bDrognanMagicMax;
+    /* 0x17F */ char bHraltiMagicMax;
+    /* 0x180 */ char bAlkorMagicMax;
+    /* 0x181 */ char bOrmusMagicMax;
+    /* 0x182 */ char bElzixMagicMax;
+    /* 0x183 */ char bAshearaMagicMax;
+    /* 0x184 */ char bCainMagicMax;
+    /* 0x185 */ char bHalbuMagicMax;
+    /* 0x186 */ char bJamellaMagicMax;
+    /* 0x187 */ char bMalahMagicMax;
+    /* 0x188 */ char bLarzukMagicMax;
+    /* 0x189 */ char bDrehyaMagicMax;
+    /* 0x18A */ char bAkaraMagicLvl;
+    /* 0x18B */ char bGheedMagicLvl;
+    /* 0x18C */ char bCharsiMagicLvl;
+    /* 0x18D */ char bFaraMagicLvl;
+    /* 0x18E */ char bLysanderMagicLvl;
+    /* 0x18F */ char bDrognanMagicLvl;
+    /* 0x190 */ char bHraltiMagicLvl;
+    /* 0x191 */ char bAlkorMagicLvl;
+    /* 0x192 */ char bOrmusMagicLvl;
+    /* 0x193 */ char bElzixMagicLvl;
+    /* 0x194 */ char bAshearaMagicLvl;
+    /* 0x195 */ char bCainMagicLvl;
+    /* 0x196 */ char bHalbuMagicLvl;
+    /* 0x197 */ char bJamellaMagicLvl;
+    /* 0x198 */ char bMalahMagicLvl;
+    /* 0x199 */ char bLarzukMagicLvl;
+    /* 0x19A */ char bDrehyaMagicLvl;
+    /* 0x19B */ char pad0x19B;
+    /* 0x19C */ int dwNightmareUpgrade;
+    /* 0x1A0 */ int dwHellUpgrade;
+    /* 0x1A4 */ char bPermStoreItem;
+    /* 0x1A5 */ char bMultibuy;
+    /* 0x1A6 */ int16_t pad422; // padding
+};
+#endif // D2_DEFINED_D2ItemsTxt
+#ifndef D2_DEFINED_D2ItemTypesTxt
+#define D2_DEFINED_D2ItemTypesTxt
+__pragma(pack(push, 1)) struct D2ItemTypesTxt {
+    /* 0x00 */ char code[4];
+    /* 0x04 */ short equiv1;
+    /* 0x06 */ short equiv2;
+    /* 0x08 */ char repair;
+    /* 0x09 */ uint8_t body;
+    /* 0x0A */ uint8_t bodyloc1;
+    /* 0x0B */ uint8_t bodyloc2;
+    /* 0x0C */ short shoots;
+    /* 0x0E */ short quiver;
+    /* 0x10 */ uint8_t throwable;
+    /* 0x11 */ uint8_t reload;
+    /* 0x12 */ uint8_t reequip;
+    /* 0x13 */ uint8_t autostack;
+    /* 0x14 */ char magic;
+    /* 0x15 */ char rare;
+    /* 0x16 */ uint8_t normal;
+    /* 0x17 */ char charm;
+    /* 0x18 */ char gem;
+    /* 0x19 */ uint8_t beltable;
+    /* 0x1A */ uint8_t maxsock1;
+    /* 0x1B */ uint8_t maxsock25;
+    /* 0x1C */ char maxsock40;
+    /* 0x1D */ char treasureclass;
+    /* 0x1E */ char rarity;
+    /* 0x1F */ uint8_t staffmods;
+    /* 0x20 */ char costformula;
+    /* 0x21 */ char _class;
+    /* 0x22 */ char storepage;
+    /* 0x23 */ char varinvgfx;
+    /* 0x24 */ char invgfx[6][32];
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2ItemTypesTxt
+#ifndef D2_DEFINED_D2LevelDefsColor
+#define D2_DEFINED_D2LevelDefsColor
+struct D2LevelDefsColor {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ char Intensity;
+    /* 0x01 */ char Red;
+    /* 0x02 */ char Green;
+    /* 0x03 */ char Blue;
+};
+#endif // D2_DEFINED_D2LevelDefsColor
+#ifndef D2_DEFINED_D2LevelDefsTxt
+#define D2_DEFINED_D2LevelDefsTxt
+__pragma(pack(push, 1)) struct D2LevelDefsTxt {
+    /* 0x00 */ int QuestFlag;
+    /* 0x04 */ int QuestFlagEx;
+    /* 0x08 */ int Layer;
+    /* 0x0C */ int SizeX[3];
+    /* 0x18 */ int SizeY[3];
+    /* 0x24 */ int OffsetX;
+    /* 0x28 */ int OffsetY;
+    /* 0x2C */ int Depend;
+    /* 0x30 */ eD2DrlgType DrlgType;
+    /* 0x34 */ int LevelType;
+    /* 0x38 */ int SubType;
+    /* 0x3C */ int SubTheme;
+    /* 0x40 */ int SubWaypoint;
+    /* 0x44 */ int SubShrine;
+    /* 0x48 */ int Vis[8];
+    /* 0x68 */ int Warp[8];
+    /* 0x88 */ D2LevelDefsColor ColorInfo;
+    /* 0x8C */ int Portal;
+    /* 0x90 */ int Position;
+    /* 0x94 */ int SaveMonsters;
+    /* 0x98 */ int LOSDraw;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LevelDefsTxt
+#ifndef D2_DEFINED_D2LevelsTxt
+#define D2_DEFINED_D2LevelsTxt
+__pragma(pack(push, 1)) struct D2LevelsTxt {
+    /* 0x000 */ uint16_t Id; // wLevelNo - level id (u16)
+    /* 0x002 */ char Pal;
+    /* 0x003 */ char Act;
+    /* 0x004 */ char Teleport;
+    /* 0x005 */ char Rain;
+    /* 0x006 */ char Mud;
+    /* 0x007 */ char NoPer;
+    /* 0x008 */ char IsInside;
+    /* 0x009 */ char DrawEdges;
+    /* 0x00A */ uint16_t unk0x0A; // unknown u16
+    /* 0x00C */ int WarpDist;
+    /* 0x010 */ short MonLvl[3];
+    /* 0x016 */ short MonLvlEx[3];
+    /* 0x01C */ int MonDen[3];
+    /* 0x028 */ char MonUMin[3];
+    /* 0x02B */ char MonUMax[3];
+    /* 0x02E */ char MonWndr;
+    /* 0x02F */ char MonSpcWalk;
+    /* 0x030 */ char Quest;
+    /* 0x031 */ char rangedspawn;
+    /* 0x032 */ uint8_t NumMon;
+    /* 0x033 */ uint8_t nValidMonCount;
+    /* 0x034 */ uint8_t nValinNMonCount;
+    /* 0x035 */ char nValidUMonCount;
+    /* 0x036 */ short mon[25];
+    /* 0x068 */ short nmon[25];
+    /* 0x09A */ short umon[25];
+    /* 0x0CC */ short cmon[4];
+    /* 0x0D4 */ short cpct[4];
+    /* 0x0DC */ short camt[4];
+    /* 0x0E4 */ uint8_t Waypoint;
+    /* 0x0E5 */ char ObjGrp[8];
+    /* 0x0ED */ char ObjPrb[8];
+    /* 0x0F5 */ char LevelName[40];
+    /* 0x11D */ char LevelWarp[40];
+    /* 0x145 */ char EntryFile[40];
+    /* 0x16D */ uint8_t pad0x16D; // alignment pad before wszLevelName
+    /* 0x16E */ uint16_t wszLevelName[40];
+    /* 0x1BE */ uint16_t wszLevelWarp[40];
+    /* 0x20E */ uint16_t pad0x20E; // alignment pad before Themes
+    /* 0x210 */ int Themes;
+    /* 0x214 */ int FloorFilter;
+    /* 0x218 */ int BlankScreen;
+    /* 0x21C */ uint8_t SoundEnv;
+    /* 0x21D */ uint8_t field_0x21d;
+    /* 0x21E */ uint8_t field_0x21e;
+    /* 0x21F */ uint8_t field_0x21f;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LevelsTxt
+#ifndef D2_DEFINED_D2LvlMazeTxt
+#define D2_DEFINED_D2LvlMazeTxt
+__pragma(pack(push, 1)) struct D2LvlMazeTxt {
+    /* 0x00 */ eD2LevelId Level; // ID from D2LevelsTxt
+    /* 0x04 */ int Rooms[3]; // the minimum number of .ds1 map sections that will make up the maze in Normal, Nightmare and Hell difficulties.
+    /* 0x10 */ int SizeX; // The size in the X\Y direction of any component ds1 map section.
+    /* 0x14 */ int SizeY; // The size in the X\Y direction of any component ds1 map section.
+    /* 0x18 */ int Merge; // Possibly related to how adjacent .ds1s are connected with each other, but what the different values are for is unknown.
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LvlMazeTxt
+#ifndef D2_DEFINED_D2LvlPrestTxt
+#define D2_DEFINED_D2LvlPrestTxt
+__pragma(pack(push, 1)) struct D2LvlPrestTxt {
+    /* 0x000 */ int Def;
+    /* 0x004 */ eD2LevelId LevelId;
+    /* 0x008 */ int Populate;
+    /* 0x00C */ int Logicals;
+    /* 0x010 */ int Outdoors;
+    /* 0x014 */ int Animate;
+    /* 0x018 */ int KillEdge;
+    /* 0x01C */ int FillBlanks;
+    /* 0x020 */ int Expansion;
+    /* 0x024 */ int nFrameStep; // animated-tile frame step (8.8) passed to DRLGROOMTILE_AllocAnimTiles, 0x50 when zero; TXT_AllocTxt_lvlprest parses no column into it
+    /* 0x028 */ int SizeX;
+    /* 0x02C */ int SizeY;
+    /* 0x030 */ int AutoMap;
+    /* 0x034 */ int Scan;
+    /* 0x038 */ int Pops;
+    /* 0x03C */ int PopPad;
+    /* 0x040 */ int Files;
+    /* 0x044 */ char File[6][60];
+    /* 0x1AC */ int Dt1Mask;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LvlPrestTxt
+#ifndef D2_DEFINED_D2LvlSubTxt
+#define D2_DEFINED_D2LvlSubTxt
+__pragma(pack(push, 1)) struct D2LvlSubTxt {
+    /* 0x000 */ int Type;
+    /* 0x004 */ char File[60];
+    /* 0x040 */ int CheckAll;
+    /* 0x044 */ int BordType;
+    /* 0x048 */ int Dt1Mask;
+    /* 0x04C */ int GridSize;
+    /* 0x050 */ struct D2DrlgFileStrc * pDrlgFile;
+    /* 0x054 */ D2DrlgGridStrc pTileTypeGrid[4];
+    /* 0x0A4 */ D2DrlgGridStrc pWallGrid[4];
+    /* 0x0F4 */ D2DrlgGridStrc pFloorGrid;
+    /* 0x108 */ D2DrlgGridStrc pShadowGrid;
+    /* 0x11C */ int Prob[5];
+    /* 0x130 */ int Trials[5];
+    /* 0x144 */ int Max[5];
+    /* 0x158 */ int Expansion;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LvlSubTxt
+#ifndef D2_DEFINED_D2LvlTypesTxt
+#define D2_DEFINED_D2LvlTypesTxt
+__pragma(pack(push, 1)) struct D2LvlTypesTxt {
+    /* 0x000 */ char File[32][60];
+    /* 0x780 */ uint8_t Act;
+    /* 0x781 */ uint8_t field_0x781;
+    /* 0x782 */ uint8_t field_0x782;
+    /* 0x783 */ uint8_t field_0x783;
+    /* 0x784 */ int Expansion;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2LvlTypesTxt
+#ifndef D2_DEFINED_D2LvlTypeTileLibrariesStrc
+#define D2_DEFINED_D2LvlTypeTileLibrariesStrc
+struct D2LvlTypeTileLibrariesStrc {
     /* 0x000 */ void * pTileProject[32]; // Somehing with TileProjects
     /* 0x080 */ uint8_t field_0x80;
     /* 0x081 */ uint8_t field_0x81;
@@ -5394,760 +6134,7 @@ struct D2ExpansionLvlTblsTxt {
     /* 0xFFE */ uint8_t field_0xffe;
     /* 0xFFF */ uint8_t field_0xfff;
 };
-#endif // D2_DEFINED_D2ExpansionLvlTblsTxt
-#ifndef D2_DEFINED_D2ExperienceTxt
-#define D2_DEFINED_D2ExperienceTxt
-struct D2ExperienceTxt {
-    /* 0x00 */ int Class[7];
-    /* 0x1C */ int ExpRatio;
-};
-#endif // D2_DEFINED_D2ExperienceTxt
-#ifndef D2_DEFINED_D2fpSkillFuncArg
-#define D2_DEFINED_D2fpSkillFuncArg
-struct D2fpSkillFuncArg {
-    /* 0x00 */ struct D2UnitStrc * pUnit;
-    /* 0x04 */ int32_t nSize;
-    /* 0x08 */ struct D2fpSkillFuncSub * pSub;
-    /* 0x0C */ int32_t nRadiusSq; // Squared radius for distance check (param_2 * param_2)
-    /* 0x10 */ int32_t bAvoidTownRooms; // Flag: skip town rooms (nParam & 0x2000)
-    /* 0x14 */ int32_t nRoomCount; // Number of rooms from GetAdjacentRoomsList
-    /* 0x18 */ struct D2UnitStrc * pUnit2;
-    /* 0x1C */ struct D2RoomStrc * * ppRoomList; // struct D2RoomStrc** array from GetAdjacentRoomsList
-};
-#endif // D2_DEFINED_D2fpSkillFuncArg
-#ifndef D2_DEFINED_D2fpSkillFuncSub
-#define D2_DEFINED_D2fpSkillFuncSub
-__pragma(pack(push, 1)) struct D2fpSkillFuncSub {
-    /* 0x00 */ struct D2UnitStrc * pOwner;
-    /* 0x04 */ struct D2UnitStrc * pMissile;
-    /* 0x08 */ eD2Skills eSkillNo;
-    /* 0x0C */ int32_t nSkillLevel;
-    /* 0x10 */ int nTargetLimit; // missile callbacks: hit limit (MISSILE_CltHitFn25 sets it from cHitPar2, clamped to >= 1; CreateAtTarget compares it with the hit count)
-    /* 0x14 */ eMissilesId nMissileTxtNo;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2fpSkillFuncSub
-#ifndef D2_DEFINED_D2GambleTableStrc
-#define D2_DEFINED_D2GambleTableStrc
-struct D2GambleTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ int * pTable; // rows of the gamble item list (item code per row)
-    /* 0x08 */ int anLevelLimit[100]; // per item level, the number of gamble rows whose level is at most that
-};
-#endif // D2_DEFINED_D2GambleTableStrc
-#ifndef D2_DEFINED_D2GfxInfoStrc
-#define D2_DEFINED_D2GfxInfoStrc
-struct D2GfxInfoStrc {
-    /* 0x00 */ uint8_t nComponentFlags[40]; // Per-component flags/state, 20 entries x 2 bytes each. Stride-2 byte access via GFXUTIL_GetGfxInfoComponent(nParam) = [nParam*2]
-    /* 0x28 */ struct D2GfxInfoUnkStrc * pGfxInfoUnk; // Head of linked list of COF/mode cache entries
-    /* 0x2C */ struct D2GfxUnknown_0xa8 * pOverlayList; // Head of overlay linked list (nodes freed via FreeClientMemory in GFX_RemoveOverlayFromUnit)
-    /* 0x30 */ struct D2ParticleStrc * pParticle; // Particle system attachment
-    /* 0x34 */ uint32_t dwCofDataFlags; // COF data flags, initialized to 2 in AllocGfxInfo. Accessed via GFX_GetGfxInfoField34/GFX_SetGfxInfoField34
-    /* 0x38 */ int nPalShiftIndex; // Palette shift/gamma index
-};
-#endif // D2_DEFINED_D2GfxInfoStrc
-#ifndef D2_DEFINED_D2GridScreenCoordinates
-#define D2_DEFINED_D2GridScreenCoordinates
-struct D2GridScreenCoordinates {
-    /* 0x00 */ uint8_t nGridCols; // Grid column count (low byte of former nGridX int)
-    /* 0x01 */ uint8_t nGridRows; // Grid row count (high byte of former nGridX int)
-    /* 0x02 */ short pad_02; // Padding
-    /* 0x04 */ int nPixelLeft; // Grid left pixel edge (screen X)
-    /* 0x08 */ int nRight;
-    /* 0x0C */ int nTop;
-    /* 0x10 */ int nBottom;
-    /* 0x14 */ uint8_t nCellWidth; // Cell pixel width
-    /* 0x15 */ uint8_t nCellHeight; // Cell pixel height
-    /* 0x16 */ short pad_16; // Padding to maintain size 24
-};
-#endif // D2_DEFINED_D2GridScreenCoordinates
-#ifndef D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
-#define D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
-struct D2GSPacketSrv0x27_EntryStrc {
-    /* 0x00 */ short nMessage;
-    /* 0x02 */ uint8_t field_0x2;
-    /* 0x03 */ uint8_t field_0x3;
-    /* 0x04 */ int nType;
-    /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pPrev;
-};
-#endif // D2_DEFINED_D2GSPacketSrv0x27_EntryStrc
-#ifndef D2_DEFINED_D2GSPacketSrv0x27_TextStrc
-#define D2_DEFINED_D2GSPacketSrv0x27_TextStrc
-struct D2GSPacketSrv0x27_TextStrc {
-    /* 0x00 */ struct D2PoolManagerStrc * pMemory;
-    /* 0x04 */ short nCount;
-    /* 0x06 */ uint8_t field_0x6;
-    /* 0x07 */ uint8_t field_0x7;
-    /* 0x08 */ struct D2GSPacketSrv0x27_EntryStrc * pMessage;
-};
-#endif // D2_DEFINED_D2GSPacketSrv0x27_TextStrc
-#ifndef D2_DEFINED_D2HireDescTxt
-#define D2_DEFINED_D2HireDescTxt
-struct D2HireDescTxt {
-    /* 0x00 */ char code[4];
-};
-#endif // D2_DEFINED_D2HireDescTxt
-#ifndef D2_DEFINED_D2HirelingTxt
-#define D2_DEFINED_D2HirelingTxt
-__pragma(pack(push, 1)) struct D2HirelingTxt {
-    /* 0x000 */ short version;
-    /* 0x002 */ uint8_t field_0x2;
-    /* 0x003 */ uint8_t field_0x3;
-    /* 0x004 */ int id;
-    /* 0x008 */ int classId;
-    /* 0x00C */ int act;
-    /* 0x010 */ int difficulty;
-    /* 0x014 */ int seller;
-    /* 0x018 */ int gold;
-    /* 0x01C */ int level;
-    /* 0x020 */ int expPerLvl;
-    /* 0x024 */ int hp;
-    /* 0x028 */ int hpPerlvl;
-    /* 0x02C */ int defense;
-    /* 0x030 */ int defPerlvl;
-    /* 0x034 */ int str;
-    /* 0x038 */ int strPerlvl;
-    /* 0x03C */ int dex;
-    /* 0x040 */ int dexPerlvl;
-    /* 0x044 */ int ar;
-    /* 0x048 */ int arPerlvl;
-    /* 0x04C */ int share;
-    /* 0x050 */ int dmgMin;
-    /* 0x054 */ int dmgMax;
-    /* 0x058 */ int dmgPerlvl;
-    /* 0x05C */ int resist;
-    /* 0x060 */ int resistPerlvl;
-    /* 0x064 */ int defaultchance;
-    /* 0x068 */ int head;
-    /* 0x06C */ int torso;
-    /* 0x070 */ int weapon;
-    /* 0x074 */ int shield;
-    /* 0x078 */ int nSkillId[6];
-    /* 0x090 */ int nSkillChance[6];
-    /* 0x0A8 */ int nSkillChanceRerLvl[6];
-    /* 0x0C0 */ uint8_t nSkillMode[6];
-    /* 0x0C6 */ uint8_t nSkillLevel[6];
-    /* 0x0CC */ uint8_t nSkillLvlPerLvl[6];
-    /* 0x0D2 */ uint8_t hiredesc;
-    /* 0x0D3 */ char namefirst[32];
-    /* 0x0F3 */ char namelast[32];
-    /* 0x113 */ uint8_t field_0x113;
-    /* 0x114 */ uint16_t nNameFirst;
-    /* 0x116 */ uint16_t nNameLast;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2HirelingTxt
-#ifndef D2_DEFINED_D2HitClassTxt
-#define D2_DEFINED_D2HitClassTxt
-struct D2HitClassTxt {
-    /* 0x00 */ char code[4];
-};
-#endif // D2_DEFINED_D2HitClassTxt
-#ifndef D2_DEFINED_D2HoverTextStrc
-#define D2_DEFINED_D2HoverTextStrc
-struct D2HoverTextStrc {
-    /* 0x00 */ int nStartFrame; // Base frame value computed from message length (len*8+0x7d), used as creation anchor
-    /* 0x04 */ int nExpireFrame;
-    /* 0x08 */ uint8_t nLanguageCode;
-    /* 0x09 */ uint8_t field_0x9;
-    /* 0x0A */ uint8_t field_0xa;
-    /* 0x0B */ uint8_t field_0xb;
-    /* 0x0C */ void * pTextLineList; // Pointer to word-wrapped text line list (44 bytes), freed in TEXT_FreeHoverText via TEXT_FreeTextLineList
-    /* 0x10 */ char szMessage[256];
-};
-#endif // D2_DEFINED_D2HoverTextStrc
-#ifndef D2_DEFINED_D2InventoryEntryStrc
-#define D2_DEFINED_D2InventoryEntryStrc
-struct D2InventoryEntryStrc {
-    /* 0x00 */ int nLeft;
-    /* 0x04 */ int nRight;
-    /* 0x08 */ int nTop;
-    /* 0x0C */ int nBottom;
-    /* 0x10 */ uint8_t nWidth;
-    /* 0x11 */ uint8_t nHeight;
-    /* 0x12 */ uint16_t wPad; // Copied as an opaque 16-bit value in GetBodyDimensions; purpose unknown
-};
-#endif // D2_DEFINED_D2InventoryEntryStrc
-#ifndef D2_DEFINED_D2InventoryBodyStrc
-#define D2_DEFINED_D2InventoryBodyStrc
-__pragma(pack(push, 1)) struct D2InventoryBodyStrc {
-    /* 0x00 */ D2InventoryEntryStrc rArm;
-    /* 0x14 */ D2InventoryEntryStrc torso;
-    /* 0x28 */ D2InventoryEntryStrc lArm;
-    /* 0x3C */ D2InventoryEntryStrc head;
-    /* 0x50 */ D2InventoryEntryStrc neck;
-    /* 0x64 */ D2InventoryEntryStrc rHand;
-    /* 0x78 */ D2InventoryEntryStrc lHand;
-    /* 0x8C */ D2InventoryEntryStrc belt;
-    /* 0xA0 */ D2InventoryEntryStrc feet;
-    /* 0xB4 */ D2InventoryEntryStrc gloves;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2InventoryBodyStrc
-#ifndef D2_DEFINED_D2InventoryGridInfoStrc
-#define D2_DEFINED_D2InventoryGridInfoStrc
-struct D2InventoryGridInfoStrc {
-    /* 0x00 */ struct D2UnitStrc * pFirstItem; // First item in this grid page
-    /* 0x04 */ struct D2UnitStrc * pLastItem; // Last item in this grid page
-    /* 0x08 */ uint8_t bWidth;
-    /* 0x09 */ uint8_t bHeight;
-    /* 0x0A */ short nPad;
-    /* 0x0C */ struct D2UnitStrc * * pGridCells; // Width*Height flat array of struct D2UnitStrc* cells (one per grid square), indexed [bWidth*y + x]
-};
-#endif // D2_DEFINED_D2InventoryGridInfoStrc
-#ifndef D2_DEFINED_D2InventoryGridStrc
-#define D2_DEFINED_D2InventoryGridStrc
-struct D2InventoryGridStrc {
-    /* 0x00 */ struct D2UnitStrc * pItem;
-    /* 0x04 */ struct D2UnitStrc * pHeadItem;
-    /* 0x08 */ struct D2UnitStrc * pNeckItem;
-    /* 0x0C */ struct D2UnitStrc * pTorsoItem;
-    /* 0x10 */ struct D2UnitStrc * pRightArmItem;
-    /* 0x14 */ struct D2UnitStrc * pLeftArmItem;
-    /* 0x18 */ struct D2UnitStrc * pRightRingItem;
-    /* 0x1C */ struct D2UnitStrc * pLeftRingItem;
-    /* 0x20 */ struct D2UnitStrc * pBeltItem;
-    /* 0x24 */ struct D2UnitStrc * pFeetItem;
-    /* 0x28 */ struct D2UnitStrc * pGlovesItem;
-    /* 0x2C */ struct D2UnitStrc * pSwappedRightArmItem;
-    /* 0x30 */ struct D2UnitStrc * pSwappedLeftArmItem;
-};
-#endif // D2_DEFINED_D2InventoryGridStrc
-#ifndef D2_DEFINED_D2InventorySizesStrc
-#define D2_DEFINED_D2InventorySizesStrc
-struct D2InventorySizesStrc {
-    operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
-
-    /* 0x00 */ uint8_t Width;
-    /* 0x01 */ uint8_t Height;
-};
-#endif // D2_DEFINED_D2InventorySizesStrc
-#ifndef D2_DEFINED_D2InventoryStrc
-#define D2_DEFINED_D2InventoryStrc
-struct D2InventoryStrc {
-    /* 0x00 */ int nSignatureMagic; // Always 0x01020304
-    /* 0x04 */ struct D2PoolManagerStrc * pMemory;
-    /* 0x08 */ struct D2UnitStrc * pOwner;
-    /* 0x0C */ struct D2UnitStrc * pFirstItem;
-    /* 0x10 */ struct D2UnitStrc * pLastItem;
-    /* 0x14 */ struct D2InventoryGridInfoStrc * pGrids; // Array of grid info entries
-    /* 0x18 */ int nGridCount;
-    /* 0x1C */ int dwPrimaryWeaponGUID;
-    /* 0x20 */ struct D2UnitStrc * pCursorItem; // Item held on cursor
-    /* 0x24 */ int nOwnerGUID;
-    /* 0x28 */ int nItemCount;
-    /* 0x2C */ struct D2InventoryToBeUpdatedStrc * pUpdates; // Linked list of pending updates
-    /* 0x30 */ struct D2InventoryToBeUpdatedStrc * pUpdatesLast;
-    /* 0x34 */ struct D2CorpseStrc * pCorpse; // Corpse linked list head
-    /* 0x38 */ struct D2CorpseStrc * pCorpseLast;
-    /* 0x3C */ int nCorpseCount;
-};
-#endif // D2_DEFINED_D2InventoryStrc
-#ifndef D2_DEFINED_D2InventoryToBeUpdatedStrc
-#define D2_DEFINED_D2InventoryToBeUpdatedStrc
-struct D2InventoryToBeUpdatedStrc {
-    /* 0x00 */ uint32_t nUnitGuid;
-    /* 0x04 */ struct D2InventoryToBeUpdatedStrc * pNext;
-};
-#endif // D2_DEFINED_D2InventoryToBeUpdatedStrc
-#ifndef D2_DEFINED_D2InventoryTxt
-#define D2_DEFINED_D2InventoryTxt
-__pragma(pack(push, 1)) struct D2InventoryTxt {
-    /* 0x00 */ int invLeft;
-    /* 0x04 */ int invRight;
-    /* 0x08 */ int nTop;
-    /* 0x0C */ int invBottom;
-    /* 0x10 */ D2GridScreenCoordinates sGrid;
-    /* 0x28 */ D2InventoryBodyStrc pBody;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2InventoryTxt
-#ifndef D2_DEFINED_D2ItemCalcContextStrc
-#define D2_DEFINED_D2ItemCalcContextStrc
-struct D2ItemCalcContextStrc {
-    /* 0x00 */ struct D2UnitStrc * pUnit;
-    /* 0x04 */ struct D2UnitStrc * nContext;
-};
-#endif // D2_DEFINED_D2ItemCalcContextStrc
-#ifndef D2_DEFINED_D2ItemInventoryNodeStrc
-#define D2_DEFINED_D2ItemInventoryNodeStrc
-__pragma(pack(push, 1)) struct D2ItemInventoryNodeStrc {
-    /* 0x00 */ struct D2InventoryStrc * pInventory; // Socketed items inventory
-    /* 0x04 */ struct D2UnitStrc * pPrevItem; // Previous item in linked list
-    /* 0x08 */ struct D2UnitStrc * pNextItem; // Next item in linked list
-    /* 0x0C */ eD2InventoryGrid eInventoryGrid; // Grid type
-    /* 0x0D */ eD2InventoryGridType eInventoryGridType; // Grid subtype
-    /* 0x0E */ uint8_t unk0xE;
-    /* 0x0F */ uint8_t unk0xF;
-    /* 0x10 */ struct D2UnitStrc * pPrevItemInPage; // Previous item in page linked list
-    /* 0x14 */ struct D2UnitStrc * pNextItemInPage; // Next item in page linked list
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2ItemInventoryNodeStrc
-#ifndef D2_DEFINED_D2ItemStatCostOpRelationStrc
-#define D2_DEFINED_D2ItemStatCostOpRelationStrc
-struct D2ItemStatCostOpRelationStrc {
-    /* 0x00 */ short nOpBaseStat;
-    /* 0x02 */ short nSourceStat;
-    /* 0x04 */ uint8_t nSourceOp;
-    /* 0x05 */ uint8_t nSourceOpParam;
-};
-#endif // D2_DEFINED_D2ItemStatCostOpRelationStrc
-#ifndef D2_DEFINED_D2ItemStatCostTxt
-#define D2_DEFINED_D2ItemStatCostTxt
-__pragma(pack(push, 1)) struct D2ItemStatCostTxt {
-    /* 0x000 */ uint16_t stat;
-    /* 0x002 */ uint16_t pad_02;
-    /* 0x004 */ D2ItemStatCostFlags dwItemStatFlags;
-    /* 0x008 */ uint8_t sendBits;
-    /* 0x009 */ uint8_t sendParamBits;
-    /* 0x00A */ char csvbits;
-    /* 0x00B */ char csvparam;
-    /* 0x00C */ int divide;
-    /* 0x010 */ int multiply;
-    /* 0x014 */ int add;
-    /* 0x018 */ char valshift;
-    /* 0x019 */ uint8_t saveBits[2]; // [0] = Save Bits, [1] = Save Bits 109 (1.09 save format); indexed by the save-version flag
-    /* 0x01B */ uint8_t pad_1B;
-    /* 0x01C */ int saveAdd[2]; // [0] = Save Add, [1] = Save Add 109 (1.09 save format); indexed by the save-version flag
-    /* 0x024 */ int saveParamBits;
-    /* 0x028 */ int unused_28;
-    /* 0x02C */ int minaccr;
-    /* 0x030 */ uint8_t encode;
-    /* 0x031 */ uint8_t pad_31;
-    /* 0x032 */ uint16_t maxstat;
-    /* 0x034 */ short descpriority;
-    /* 0x036 */ char descfunc;
-    /* 0x037 */ char descval;
-    /* 0x038 */ uint16_t descstrpos;
-    /* 0x03A */ uint16_t descstrneg;
-    /* 0x03C */ uint16_t descstr2;
-    /* 0x03E */ short dgrp;
-    /* 0x040 */ char dgrpfunc;
-    /* 0x041 */ char dgrpval;
-    /* 0x042 */ short dgrpstrpos;
-    /* 0x044 */ short dgrpstrneg;
-    /* 0x046 */ short dgrpstr2;
-    /* 0x048 */ short itemevent1;
-    /* 0x04A */ short itemevent2;
-    /* 0x04C */ short itemeventfunc1;
-    /* 0x04E */ short itemeventfunc2;
-    /* 0x050 */ char keepzero;
-    /* 0x051 */ uint8_t bHasOpBaseDependencies;
-    /* 0x052 */ uint8_t bReferencedByOpStat;
-    /* 0x053 */ uint8_t bHasOp4Or5Dependency;
-    /* 0x054 */ uint8_t op;
-    /* 0x055 */ uint8_t opParam;
-    /* 0x056 */ uint16_t opBase;
-    /* 0x058 */ short opStat1;
-    /* 0x05A */ short opStat2;
-    /* 0x05C */ short opStat3;
-    /* 0x05E */ short aOpBaseDependents[64];
-    /* 0x0DE */ D2ItemStatCostOpRelationStrc aOpRelations[16];
-    /* 0x13E */ uint16_t pad_13E;
-    /* 0x140 */ int nChargedSkillLevelBits;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2ItemStatCostTxt
-#ifndef D2_DEFINED_D2ItemsTxt
-#define D2_DEFINED_D2ItemsTxt
-struct D2ItemsTxt {
-    /* 0x000 */ char szFlippyFile[32];
-    /* 0x020 */ char szInvFile[32];
-    /* 0x040 */ char szUniqueInvFile[32];
-    /* 0x060 */ char szSetInvFile[32];
-    /* 0x080 */ int dwCode; // item code fourcc (e.g. 'box '), compared as a dword like dwNormCode/dwUberCode/dwUltraCode
-    /* 0x084 */ int dwNormCode;
-    /* 0x088 */ int dwUberCode;
-    /* 0x08C */ int dwUltraCode;
-    /* 0x090 */ int dwAlternateGfx;
-    /* 0x094 */ int dwPSpell;
-    /* 0x098 */ short wState;
-    /* 0x09A */ short wCState1;
-    /* 0x09C */ short wCState2;
-    /* 0x09E */ short wStat1;
-    /* 0x0A0 */ short wStat2;
-    /* 0x0A2 */ short wStat3;
-    /* 0x0A4 */ int dwCalc1;
-    /* 0x0A8 */ int dwCalc2;
-    /* 0x0AC */ int dwCalc3;
-    /* 0x0B0 */ int dwLen;
-    /* 0x0B4 */ uint8_t nSpellDesc; // spelldesc column, TXT field type 4 (byte) at +0xb4 in TXT_AllocTxt_items; INV_FormatItemSpellDescText switches on it
-    /* 0x0B5 */ uint8_t pad_0xB5; // not written by the items.txt parser
-    /* 0x0B6 */ short wSpellDescStr;
-    /* 0x0B8 */ int dwSpellDescCalc;
-    /* 0x0BC */ int dwBetterGem;
-    /* 0x0C0 */ int dwWClass;
-    /* 0x0C4 */ int dw2HandedWClass;
-    /* 0x0C8 */ int dwTMogType;
-    /* 0x0CC */ int dwMinAc;
-    /* 0x0D0 */ int dwMaxAc;
-    /* 0x0D4 */ int dwGambleCost;
-    /* 0x0D8 */ int dwSpeed;
-    /* 0x0DC */ int dwBitfield1;
-    /* 0x0E0 */ int dwCost;
-    /* 0x0E4 */ int dwMinStack;
-    /* 0x0E8 */ int dwMaxStack;
-    /* 0x0EC */ int dwSpawnStack;
-    /* 0x0F0 */ int dwGemOffset;
-    /* 0x0F4 */ short wNameStr;
-    /* 0x0F6 */ short wVersion;
-    /* 0x0F8 */ short wAutoPrefix;
-    /* 0x0FA */ uint16_t wMissileType;
-    /* 0x0FC */ char nRarity;
-    /* 0x0FD */ char nLevel;
-    /* 0x0FE */ uint8_t nMinDam;
-    /* 0x0FF */ uint8_t nMaxDam;
-    /* 0x100 */ uint8_t nMinMisDam;
-    /* 0x101 */ uint8_t nMaxMisDam;
-    /* 0x102 */ uint8_t n2HandMinDam;
-    /* 0x103 */ uint8_t n2HandMaxDam;
-    /* 0x104 */ short nRangeAdder;
-    /* 0x106 */ short nStrBonus;
-    /* 0x108 */ short nDexBonus;
-    /* 0x10A */ uint16_t nReqStr;
-    /* 0x10C */ uint16_t wReqDex;
-    /* 0x10E */ char bAbsorbs;
-    /* 0x10F */ char bInvWidth;
-    /* 0x110 */ char bInvHeight;
-    /* 0x111 */ uint8_t bBlock;
-    /* 0x112 */ uint8_t bDurability;
-    /* 0x113 */ char bNoDurability;
-    /* 0x114 */ char bMissile;
-    /* 0x115 */ char bComponent;
-    /* 0x116 */ uint8_t bRArm;
-    /* 0x117 */ uint8_t bLArm;
-    /* 0x118 */ uint8_t bTorso;
-    /* 0x119 */ uint8_t bLegs;
-    /* 0x11A */ uint8_t bRSPad;
-    /* 0x11B */ uint8_t bLSPad;
-    /* 0x11C */ bool b2Handed;
-    /* 0x11D */ uint8_t bUseable;
-    /* 0x11E */ short wType;
-    /* 0x120 */ short wType2;
-    /* 0x122 */ short bSubType;
-    /* 0x124 */ short wDropSound;
-    /* 0x126 */ short wUseSound;
-    /* 0x128 */ char bDropSfxFrame;
-    /* 0x129 */ uint8_t bUnique;
-    /* 0x12A */ uint8_t bQuest;
-    /* 0x12B */ char bQuestDiffCheck;
-    /* 0x12C */ char bTransparent;
-    /* 0x12D */ uint8_t bTransTbl;
-    /* 0x12E */ char pad0x12E;
-    /* 0x12F */ char bLightRadius;
-    /* 0x130 */ uint8_t bBelt;
-    /* 0x131 */ char bAutoBelt;
-    /* 0x132 */ bool bStackable;
-    /* 0x133 */ char bSpawnable;
-    /* 0x134 */ char bSpellIcon;
-    /* 0x135 */ bool bDurWarning;
-    /* 0x136 */ bool bQntWarning;
-    /* 0x137 */ bool bHasInv;
-    /* 0x138 */ bool bGemSockets;
-    /* 0x139 */ uint8_t bTransmogrify;
-    /* 0x13A */ uint8_t bTMogMin;
-    /* 0x13B */ char bTMogMax;
-    /* 0x13C */ uint8_t bHitClass;
-    /* 0x13D */ bool b1or2Handed;
-    /* 0x13E */ bool bGemApplyType;
-    /* 0x13F */ char bLevelReq;
-    /* 0x140 */ uint8_t bMagicLvl;
-    /* 0x141 */ uint8_t bTransform;
-    /* 0x142 */ uint8_t bInvTrans;
-    /* 0x143 */ uint8_t bCompactSave;
-    /* 0x144 */ char bSkipName;
-    /* 0x145 */ bool bNameable;
-    /* 0x146 */ char bAkaraMin;
-    /* 0x147 */ char bGheedMin;
-    /* 0x148 */ char bCharsiMin;
-    /* 0x149 */ char bFaraMin;
-    /* 0x14A */ char bLysanderMin;
-    /* 0x14B */ char bDrognanMin;
-    /* 0x14C */ char bHraltiMin;
-    /* 0x14D */ char bAlkorMin;
-    /* 0x14E */ char bOrmusMin;
-    /* 0x14F */ char bElzixMin;
-    /* 0x150 */ char bAshearaMin;
-    /* 0x151 */ char bCainMin;
-    /* 0x152 */ char bHalbuMin;
-    /* 0x153 */ char bJamellaMin;
-    /* 0x154 */ char bMalahMin;
-    /* 0x155 */ char bLarzukMin;
-    /* 0x156 */ char bDrehyaMin;
-    /* 0x157 */ char bAkaraMax;
-    /* 0x158 */ char bGheedMax;
-    /* 0x159 */ char bCharsiMax;
-    /* 0x15A */ char bFaraMax;
-    /* 0x15B */ char bLysanderMax;
-    /* 0x15C */ char bDrognanMax;
-    /* 0x15D */ char bHraltiMax;
-    /* 0x15E */ char bAlkorMax;
-    /* 0x15F */ char bOrmusMax;
-    /* 0x160 */ char bElzixMax;
-    /* 0x161 */ char bAshearaMax;
-    /* 0x162 */ char bCainMax;
-    /* 0x163 */ char bHalbuMax;
-    /* 0x164 */ char bJamellaMax;
-    /* 0x165 */ char bMalahMax;
-    /* 0x166 */ char bLarzukMax;
-    /* 0x167 */ char bDrehyaMax;
-    /* 0x168 */ char bAkaraMagicMin;
-    /* 0x169 */ char bGheedMagicMin;
-    /* 0x16A */ char bCharsiMagicMin;
-    /* 0x16B */ char bFaraMagicMin;
-    /* 0x16C */ char bLysanderMagicMin;
-    /* 0x16D */ char bDrognanMagicMin;
-    /* 0x16E */ char bHraltiMagicMin;
-    /* 0x16F */ char bAlkorMagicMin;
-    /* 0x170 */ char bOrmusMagicMin;
-    /* 0x171 */ char bElzixMagicMin;
-    /* 0x172 */ char bAshearaMagicMin;
-    /* 0x173 */ char bCainMagicMin;
-    /* 0x174 */ char bHalbuMagicMin;
-    /* 0x175 */ char bJamellaMagicMin;
-    /* 0x176 */ char bMalahMagicMin;
-    /* 0x177 */ char bLarzukMagicMin;
-    /* 0x178 */ char bDrehyaMagicMin;
-    /* 0x179 */ char bAkaraMagicMax;
-    /* 0x17A */ char bGheedMagicMax;
-    /* 0x17B */ char bCharsiMagicMax;
-    /* 0x17C */ char bFaraMagicMax;
-    /* 0x17D */ char bLysanderMagicMax;
-    /* 0x17E */ char bDrognanMagicMax;
-    /* 0x17F */ char bHraltiMagicMax;
-    /* 0x180 */ char bAlkorMagicMax;
-    /* 0x181 */ char bOrmusMagicMax;
-    /* 0x182 */ char bElzixMagicMax;
-    /* 0x183 */ char bAshearaMagicMax;
-    /* 0x184 */ char bCainMagicMax;
-    /* 0x185 */ char bHalbuMagicMax;
-    /* 0x186 */ char bJamellaMagicMax;
-    /* 0x187 */ char bMalahMagicMax;
-    /* 0x188 */ char bLarzukMagicMax;
-    /* 0x189 */ char bDrehyaMagicMax;
-    /* 0x18A */ char bAkaraMagicLvl;
-    /* 0x18B */ char bGheedMagicLvl;
-    /* 0x18C */ char bCharsiMagicLvl;
-    /* 0x18D */ char bFaraMagicLvl;
-    /* 0x18E */ char bLysanderMagicLvl;
-    /* 0x18F */ char bDrognanMagicLvl;
-    /* 0x190 */ char bHraltiMagicLvl;
-    /* 0x191 */ char bAlkorMagicLvl;
-    /* 0x192 */ char bOrmusMagicLvl;
-    /* 0x193 */ char bElzixMagicLvl;
-    /* 0x194 */ char bAshearaMagicLvl;
-    /* 0x195 */ char bCainMagicLvl;
-    /* 0x196 */ char bHalbuMagicLvl;
-    /* 0x197 */ char bJamellaMagicLvl;
-    /* 0x198 */ char bMalahMagicLvl;
-    /* 0x199 */ char bLarzukMagicLvl;
-    /* 0x19A */ char bDrehyaMagicLvl;
-    /* 0x19B */ char pad0x19B;
-    /* 0x19C */ int dwNightmareUpgrade;
-    /* 0x1A0 */ int dwHellUpgrade;
-    /* 0x1A4 */ char bPermStoreItem;
-    /* 0x1A5 */ char bMultibuy;
-    /* 0x1A6 */ int16_t pad422; // padding
-};
-#endif // D2_DEFINED_D2ItemsTxt
-#ifndef D2_DEFINED_D2ItemTypesTxt
-#define D2_DEFINED_D2ItemTypesTxt
-__pragma(pack(push, 1)) struct D2ItemTypesTxt {
-    /* 0x00 */ char code[4];
-    /* 0x04 */ short equiv1;
-    /* 0x06 */ short equiv2;
-    /* 0x08 */ char repair;
-    /* 0x09 */ uint8_t body;
-    /* 0x0A */ uint8_t bodyloc1;
-    /* 0x0B */ uint8_t bodyloc2;
-    /* 0x0C */ short shoots;
-    /* 0x0E */ short quiver;
-    /* 0x10 */ uint8_t throwable;
-    /* 0x11 */ uint8_t reload;
-    /* 0x12 */ uint8_t reequip;
-    /* 0x13 */ uint8_t autostack;
-    /* 0x14 */ char magic;
-    /* 0x15 */ char rare;
-    /* 0x16 */ uint8_t normal;
-    /* 0x17 */ char charm;
-    /* 0x18 */ char gem;
-    /* 0x19 */ uint8_t beltable;
-    /* 0x1A */ uint8_t maxsock1;
-    /* 0x1B */ uint8_t maxsock25;
-    /* 0x1C */ char maxsock40;
-    /* 0x1D */ char treasureclass;
-    /* 0x1E */ char rarity;
-    /* 0x1F */ uint8_t staffmods;
-    /* 0x20 */ char costformula;
-    /* 0x21 */ char _class;
-    /* 0x22 */ char storepage;
-    /* 0x23 */ char varinvgfx;
-    /* 0x24 */ char invgfx[6][32];
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2ItemTypesTxt
-#ifndef D2_DEFINED_D2LevelDefsColor
-#define D2_DEFINED_D2LevelDefsColor
-struct D2LevelDefsColor {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
-
-    /* 0x00 */ char Intensity;
-    /* 0x01 */ char Red;
-    /* 0x02 */ char Green;
-    /* 0x03 */ char Blue;
-};
-#endif // D2_DEFINED_D2LevelDefsColor
-#ifndef D2_DEFINED_D2LevelDefsTxt
-#define D2_DEFINED_D2LevelDefsTxt
-__pragma(pack(push, 1)) struct D2LevelDefsTxt {
-    /* 0x00 */ int QuestFlag;
-    /* 0x04 */ int QuestFlagEx;
-    /* 0x08 */ int Layer;
-    /* 0x0C */ int SizeX[3];
-    /* 0x18 */ int SizeY[3];
-    /* 0x24 */ int OffsetX;
-    /* 0x28 */ int OffsetY;
-    /* 0x2C */ int Depend;
-    /* 0x30 */ eD2DrlgType DrlgType;
-    /* 0x34 */ int LevelType;
-    /* 0x38 */ int SubType;
-    /* 0x3C */ int SubTheme;
-    /* 0x40 */ int SubWaypoint;
-    /* 0x44 */ int SubShrine;
-    /* 0x48 */ int Vis[8];
-    /* 0x68 */ int Warp[8];
-    /* 0x88 */ D2LevelDefsColor ColorInfo;
-    /* 0x8C */ int Portal;
-    /* 0x90 */ int Position;
-    /* 0x94 */ int SaveMonsters;
-    /* 0x98 */ int LOSDraw;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LevelDefsTxt
-#ifndef D2_DEFINED_D2LevelsTxt
-#define D2_DEFINED_D2LevelsTxt
-__pragma(pack(push, 1)) struct D2LevelsTxt {
-    /* 0x000 */ uint16_t Id; // wLevelNo - level id (u16)
-    /* 0x002 */ char Pal;
-    /* 0x003 */ char Act;
-    /* 0x004 */ char Teleport;
-    /* 0x005 */ char Rain;
-    /* 0x006 */ char Mud;
-    /* 0x007 */ char NoPer;
-    /* 0x008 */ char IsInside;
-    /* 0x009 */ char DrawEdges;
-    /* 0x00A */ uint16_t unk0x0A; // unknown u16
-    /* 0x00C */ int WarpDist;
-    /* 0x010 */ short MonLvl[3];
-    /* 0x016 */ short MonLvlEx[3];
-    /* 0x01C */ int MonDen[3];
-    /* 0x028 */ char MonUMin[3];
-    /* 0x02B */ char MonUMax[3];
-    /* 0x02E */ char MonWndr;
-    /* 0x02F */ char MonSpcWalk;
-    /* 0x030 */ char Quest;
-    /* 0x031 */ char rangedspawn;
-    /* 0x032 */ uint8_t NumMon;
-    /* 0x033 */ uint8_t nValidMonCount;
-    /* 0x034 */ uint8_t nValinNMonCount;
-    /* 0x035 */ char nValidUMonCount;
-    /* 0x036 */ short mon[25];
-    /* 0x068 */ short nmon[25];
-    /* 0x09A */ short umon[25];
-    /* 0x0CC */ short cmon[4];
-    /* 0x0D4 */ short cpct[4];
-    /* 0x0DC */ short camt[4];
-    /* 0x0E4 */ uint8_t Waypoint;
-    /* 0x0E5 */ char ObjGrp[8];
-    /* 0x0ED */ char ObjPrb[8];
-    /* 0x0F5 */ char LevelName[40];
-    /* 0x11D */ char LevelWarp[40];
-    /* 0x145 */ char EntryFile[40];
-    /* 0x16D */ uint8_t pad0x16D; // alignment pad before wszLevelName
-    /* 0x16E */ uint16_t wszLevelName[40];
-    /* 0x1BE */ uint16_t wszLevelWarp[40];
-    /* 0x20E */ uint16_t pad0x20E; // alignment pad before Themes
-    /* 0x210 */ int Themes;
-    /* 0x214 */ int FloorFilter;
-    /* 0x218 */ int BlankScreen;
-    /* 0x21C */ uint8_t SoundEnv;
-    /* 0x21D */ uint8_t field_0x21d;
-    /* 0x21E */ uint8_t field_0x21e;
-    /* 0x21F */ uint8_t field_0x21f;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LevelsTxt
-#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
-#define D2_DEFINED_D2LowQualityItemsTableStrc
-struct D2LowQualityItemsTableStrc {
-    /* 0x00 */ int nSize;
-    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
-};
-#endif // D2_DEFINED_D2LowQualityItemsTableStrc
-#ifndef D2_DEFINED_D2LowQualityItemsTxt
-#define D2_DEFINED_D2LowQualityItemsTxt
-struct D2LowQualityItemsTxt {
-    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
-    /* 0x20 */ uint16_t wNameStringId;
-};
-#endif // D2_DEFINED_D2LowQualityItemsTxt
-#ifndef D2_DEFINED_D2LvlMazeTxt
-#define D2_DEFINED_D2LvlMazeTxt
-__pragma(pack(push, 1)) struct D2LvlMazeTxt {
-    /* 0x00 */ eD2LevelId Level; // ID from D2LevelsTxt
-    /* 0x04 */ int Rooms[3]; // the minimum number of .ds1 map sections that will make up the maze in Normal, Nightmare and Hell difficulties.
-    /* 0x10 */ int SizeX; // The size in the X\Y direction of any component ds1 map section.
-    /* 0x14 */ int SizeY; // The size in the X\Y direction of any component ds1 map section.
-    /* 0x18 */ int Merge; // Possibly related to how adjacent .ds1s are connected with each other, but what the different values are for is unknown.
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LvlMazeTxt
-#ifndef D2_DEFINED_D2LvlPrestTxt
-#define D2_DEFINED_D2LvlPrestTxt
-__pragma(pack(push, 1)) struct D2LvlPrestTxt {
-    /* 0x000 */ int Def;
-    /* 0x004 */ eD2LevelId LevelId;
-    /* 0x008 */ int Populate;
-    /* 0x00C */ int Logicals;
-    /* 0x010 */ int Outdoors;
-    /* 0x014 */ int Animate;
-    /* 0x018 */ int KillEdge;
-    /* 0x01C */ int FillBlanks;
-    /* 0x020 */ int Expansion;
-    /* 0x024 */ int nFrameStep; // animated-tile frame step (8.8) passed to DRLGROOMTILE_AllocAnimTiles, 0x50 when zero; TXT_AllocTxt_lvlprest parses no column into it
-    /* 0x028 */ int SizeX;
-    /* 0x02C */ int SizeY;
-    /* 0x030 */ int AutoMap;
-    /* 0x034 */ int Scan;
-    /* 0x038 */ int Pops;
-    /* 0x03C */ int PopPad;
-    /* 0x040 */ int Files;
-    /* 0x044 */ char File[6][60];
-    /* 0x1AC */ int Dt1Mask;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LvlPrestTxt
-#ifndef D2_DEFINED_D2LvlSubTxt
-#define D2_DEFINED_D2LvlSubTxt
-__pragma(pack(push, 1)) struct D2LvlSubTxt {
-    /* 0x000 */ int Type;
-    /* 0x004 */ char File[60];
-    /* 0x040 */ int CheckAll;
-    /* 0x044 */ int BordType;
-    /* 0x048 */ int Dt1Mask;
-    /* 0x04C */ int GridSize;
-    /* 0x050 */ struct D2DrlgFileStrc * pDrlgFile;
-    /* 0x054 */ D2DrlgGridStrc pTileTypeGrid[4];
-    /* 0x0A4 */ D2DrlgGridStrc pWallGrid[4];
-    /* 0x0F4 */ D2DrlgGridStrc pFloorGrid;
-    /* 0x108 */ D2DrlgGridStrc pShadowGrid;
-    /* 0x11C */ int Prob[5];
-    /* 0x130 */ int Trials[5];
-    /* 0x144 */ int Max[5];
-    /* 0x158 */ int Expansion;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LvlSubTxt
-#ifndef D2_DEFINED_D2LvlTypesTxt
-#define D2_DEFINED_D2LvlTypesTxt
-__pragma(pack(push, 1)) struct D2LvlTypesTxt {
-    /* 0x000 */ char File[32][60];
-    /* 0x780 */ uint8_t Act;
-    /* 0x781 */ uint8_t field_0x781;
-    /* 0x782 */ uint8_t field_0x782;
-    /* 0x783 */ uint8_t field_0x783;
-    /* 0x784 */ int Expansion;
-}; __pragma(pack(pop))
-#endif // D2_DEFINED_D2LvlTypesTxt
+#endif // D2_DEFINED_D2LvlTypeTileLibrariesStrc
 #ifndef D2_DEFINED_D2LvlWarpTxt
 #define D2_DEFINED_D2LvlWarpTxt
 struct D2LvlWarpTxt {
@@ -8236,37 +8223,37 @@ int * __stdcall STATES_AssertGetGfxFlags(struct D2UnitStrc * pUnit);
 void __stdcall STATES_FilterStatesByContext(struct D2UnitStrc * pUnit, int32_t bIsBoss);
 int * __stdcall thunk_UNIT_GetStateList_StateFlags(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray1(eD2States eState);
-BOOL __stdcall STATES_HasHideState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasTransformState(struct D2UnitStrc * pUnit);
-void __stdcall STATES_MoveTransformToGfx(struct D2UnitStrc * pUnit);
-int __stdcall STATES_HasLightState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasDamageState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasBlueState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasAttackSpeedState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasAuraState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasResistState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasArmorState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasAuraFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasPgsvFlagState(struct D2UnitStrc * pUnit);
+void __stdcall STATES_MovePgsvToGfx(struct D2UnitStrc * pUnit);
+int __stdcall STATES_HasHideFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasActiveFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRemHitFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasDamBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasDamRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasAttBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasAttRedFlagState(struct D2UnitStrc * pUnit);
 // Returns (pUnit->eUnitFlagsEx >> 3) & 1, the UNITFLAGEX_ISSHAPESHIFTED bit; 0 for a NULL unit. Evidence: 0063a40e MOV EAX,[EAX+0xc8]; SHR 3; AND 1.
 BOOL __stdcall UNITS_IsShapeshifted(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray11(eD2States eState);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray12(uint32_t nStateId);
-uint32_t __stdcall STATES_IsStateActive(struct D2UnitStrc * pUnit, int nStateId);
-BOOL __stdcall STATES_HasFireState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasLifeState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasManaState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasStaminaState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasDefenseState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasExpState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasGoldState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasMagicFindState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasSkillState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasAbsorbState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasCurseState(struct D2UnitStrc * pUnit);
+uint32_t __stdcall STATES_DoesStateStayOnDeath(struct D2UnitStrc * pUnit, int nStateId);
+BOOL __stdcall STATES_HasArmBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRfBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRcBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRlBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRpBlueFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasArmRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRfRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRcRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRlRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasRpRedFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasExpFlagState(struct D2UnitStrc * pUnit);
 uint32_t __stdcall ITEMSTATS_CheckStateFlagArray30(uint32_t nStateId);
-BOOL __stdcall STATES_HasMaxState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasProgressiveState(struct D2UnitStrc * pUnit);
-int __stdcall STATES_HasPassiveState(struct D2UnitStrc * pUnit);
-BOOL __stdcall STATES_HasDisguiseState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasShatterFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasLifeFlagState(struct D2UnitStrc * pUnit);
+int __stdcall STATES_HasUdeadFlagState(struct D2UnitStrc * pUnit);
+BOOL __stdcall STATES_HasGreenFlagState(struct D2UnitStrc * pUnit);
 BOOL __stdcall ITEMSTATS_CheckUnitHasStateFlagIndex(struct D2UnitStrc * pUnit, uint32_t nFlagArrayIdx);
 }}} // namespace D2Common::DATATBLS::ItemStats
 namespace D2Common { namespace DATATBLS { namespace ItemTbls {
@@ -8276,7 +8263,7 @@ __declspec(noinline) inline struct D2UniqueItemsTxt * __fastcall INV_GetUniqueIt
 // Returns the items.txt table record - the 32 bytes at 0096ca58 holding {nSize, pItems, pWeapons, nWeaponsSize, pArmor, nArmorSize, pMisc, nMiscSize}, not a lone int.
 // Callers index the whole record off the return: ITEMDROP_RollNormalItemClass at 00555fcc reads [ESI+8], [ESI+4] and [ESI+0x10]; SUNITPROXY_BuildNpcItemTables at 00536d79 reads [EDI] and [EDI+4]. With only nSize named the emitter produced eight independent globals whose relative layout the linker chooses, so every member past the first was garbage - and this record drives which items a vendor's stock is built from.
 struct D2ItemsTableStrc * __stdcall TXT_Items_GetSize();
-uint32_t __stdcall TXT_Items_GetVersion(int32_t nItemClassId);
+uint32_t __stdcall DATATBLS_MapOldItemIndexToCurrent(int32_t nOldItemIndex);
 struct D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId);
 struct D2ItemsTxt * __stdcall ConvertItemCodeToClassIdAndGetItemsTxtLine(uint32_t dwItemCode, int * pClassId);
 int32_t __stdcall TXT_Items_ConvertItemCodeToItemClassId(uint32_t szTag);
@@ -8335,7 +8322,7 @@ __declspec(noinline) inline BOOL __fastcall TXT_MonStats_MonStats2_GetFlagsByBit
 __declspec(noinline) inline int32_t __fastcall ValidateClassId(int32_t nClassId);
 __declspec(noinline) inline uint32_t __fastcall GetSomeMonsterStatFlag(int32_t nMonsterClassId, uint32_t nStatBitIndex);
 __declspec(noinline) inline int32_t __fastcall CheckMonStatId(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pUpgradeCount, int32_t * eSkill);
+int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pnMaxChainId, int32_t * pnChainId);
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, struct D2MonStatsInitStrc * pOutStats);
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(struct D2UnitStrc * pUnit);
@@ -8343,7 +8330,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniqueSuffix(struct D2UnitStrc * pUnit);
 uint16_t * __fastcall MONSTER_GetRandomUniqueAppelation(struct D2UnitStrc * pUnit);
 // TC level-variant selector. TCs with same nGroup form a chain, select best match where TC.nLevel <= nLevel. Linear scan through variants, returns highest applicable TC or base TC if no variants.
 struct D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t nTreasureClassId, int32_t nLevel);
-struct D2ParsedTreasureClassStrc * __stdcall RollTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nLevel);
+struct D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nTier);
 struct D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique);
 int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount();
 struct D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel);
@@ -8351,7 +8338,7 @@ struct D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t 
 struct D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, int32_t nDifficulty, struct D2HirelingTxt * pHirelingTxt);
 struct D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId);
 struct D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId);
-int32_t __stdcall MONSTERTBLS_GetPresetActValue(int32_t nType, int32_t nSuperUniqueId);
+int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId);
 }}} // namespace D2Common::DATATBLS::MonsterTbls
 namespace D2Common { namespace DATATBLS { namespace ObjectTbls {
 struct D2ObjectsTxt * __stdcall TXT_Objects_GetLine(int32_t nClassId);
@@ -8409,14 +8396,14 @@ void __stdcall CoordsMapToScreen(int32_t * pX, int32_t * pY);
 void __stdcall DRLG_MapWorldToScreenCoords(int32_t * pX, int32_t * pY);
 void __stdcall CoordsMiniMapToScreen(int32_t * pX, int32_t * pY);
 // Converts orthogonal (width, height) to isometric tile coordinates divided by 160 (0xA0). Formula: isoX = (h*2 + w) / 160, isoY = (h*2 - w) / 160. Used by drawing/automap code.
-int32_t __stdcall DRLG_OrthToIsoCoordsDiv160(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
+int32_t __stdcall DRLG_OrthToIsoCoordsDiv160(int32_t nX, int32_t nY, int32_t * pX, int32_t * pY);
 // Converts orthogonal (width, height) to isometric tile coordinates divided by 32 (>>5). Formula: isoX = (h*2 + w) >> 5, isoY = (h*2 - w) >> 5. Used by rendering code.
-void __stdcall DRLG_OrthToIsoCoordsDiv32(int32_t nWidth, int32_t nHeight, int32_t * pX, int32_t * pY);
+void __stdcall DRLG_OrthToIsoCoordsDiv32(int32_t nX, int32_t nY, int32_t * pX, int32_t * pY);
 // Isometric transform with >>5 shift (divide by 32).
 // Converts high-precision world coords (16-bit fixed-point) to screen pixels.
 // screenX = (worldX - worldY) >> 5, screenY = (worldX + worldY) >> 5.
 // Used for tiles, perspective adjust, particle position.
-void __stdcall DRLG_WorldToScreenShift5(int32_t * pX, int32_t * pY);
+void __stdcall DRLG_ScreenToWorldShift5(int32_t * pX, int32_t * pY);
 void __stdcall CoordsRoomToWorld(int32_t * pX, int32_t * pY);
 }}} // namespace D2Common::Drlg::Transform
 namespace D2Common { namespace DUNGEON { namespace Dungeon {
@@ -8534,7 +8521,7 @@ struct D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(struct D2PoolMan
 // @sourcefile .\INVENTORY\Inventory.cpp
 void __stdcall STRUCT_FreeInventory(struct D2InventoryStrc * pInventory);
 BOOL __stdcall INVENTORY_CheckDoItemBelongToInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-struct D2UnitStrc * __stdcall ItemBelongsToInventoryOfPlayer(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
+struct D2UnitStrc * __stdcall INVENTORY_RemoveItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 BOOL __stdcall PutItemInInventory(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, uint32_t dwParam);
 struct D2UnitStrc * __stdcall INVENTORY_GetFirstItem(struct D2InventoryStrc * pInventory);
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
@@ -8565,13 +8552,13 @@ struct D2UnitStrc * __stdcall GetPrimaryWeapon(struct D2InventoryStrc * pInvento
 struct D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(struct D2InventoryStrc * pInventory, uint32_t nItemType);
 uint32_t __stdcall INVENTORY_IsItemLocationValid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 int32_t __stdcall INVENTORY_GetItemXPosition(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit);
-void __stdcall CopyInventoryOfPlayerOrFree(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItemUnit);
+void __stdcall INVENTORY_SetCursorItem(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pItem);
 // @blizzard INVENTORYGetHandItem
 struct D2UnitStrc * __stdcall INVENTORY_GetHandItem(struct D2InventoryStrc * pInventory);
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
-struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInStash(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
+struct D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
-struct D2UnitStrc * __stdcall INVENTORY_FindSocketableItemInMain(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
+struct D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit1, struct D2UnitStrc * pUnit2);
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
 struct D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pScrollItem, struct D2UnitStrc * pStartAfterItem);
 // @sourcefile .\INVENTORY\Inventory.cpp
@@ -8605,7 +8592,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(struct D2InventoryStrc * pIn
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.
 int __stdcall INVENTORY_GetWeaponHandedness(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory);
 void __stdcall INVENTORY_SetOwnerGUID(struct D2InventoryStrc * pInventory, int32_t nUnitGUID);
-int32_t __stdcall INVENTORY_GetCursorItemGUID(struct D2InventoryStrc * pInventory);
+int32_t __stdcall INVENTORY_GetOwnerGUID(struct D2InventoryStrc * pInventory);
 // @sourcefile .\INVENTORY\Inventory.cpp
 // Appends a D2CorpseStrc {eUnitType, nUnitGUID, dwFlags, pNext} to pInventory->pCorpse/pCorpseLast and counts non-player corpses. The first arg carries the 0x1020304 inventory signature.
 void __stdcall INVENTORY_AddCorpse(struct D2InventoryStrc * pInventory, int32_t nUnitGUID, uint32_t dwFlags, eD2UnitType eUnitType);
@@ -8630,7 +8617,7 @@ int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(struct D2UnitStrc * pUni
 void __stdcall FreeRecursiveInventorysWithChilds(struct D2InventoryStrc * pInventory);
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
-BOOL __stdcall CreateCopyOfInventoryForTrading(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, BOOL * pbMercIsBuyer);
+BOOL __stdcall INVENTORY_CanItemsBeTraded(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, BOOL * pnFailedSide);
 void __stdcall GetCurrentItemOnBodyLocation(struct D2UnitStrc * pUnit, struct D2InventoryStrc * pInventory, struct D2UnitStrc * * ppUnit, uint32_t bodyLoc);
 // Walks pUnit's inventory and builds the visual appearance arrays (pArray1=component gfx indices, pArray2=colors) from equipped items. Handles head/arms (circlet check) and torso (body-component transform loop). Used to snapshot a character's look for encoding into a packet or save record.
 void __stdcall SaveCharAppearance(struct D2UnitStrc * pUnit, char * pArray1, char * pArray2);
@@ -8640,7 +8627,7 @@ namespace D2Common { namespace ITEMS { namespace ItemMods {
 int __stdcall ITEMMOD_FindChargedSkill(struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLevel, uint32_t * pnCharges, struct D2StatListExStrc * * ppStatList);
 // Sets the current charge count of a charged skill on an item. Searches stat lists (flag 0x40) for UNITSTAT_item_charged_skill keyed by nSkillId+nChargeSlot. Clamps nNewChargeCount to [0, maxCharges], packs as (maxCharges*0x100 | newCharges), and writes back via STATLIST_SetStatValueInBaseArraySafe. Recurses into socketed/carried items if not found on the item directly.
 BOOL __stdcall ITEMMOD_SetChargedSkillCharges(struct D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nChargeSlot, uint32_t nNewChargeCount);
-int32_t __stdcall ITEMMODS_CalculateRepairCost(int nPackedRepairData, uint32_t dwParam, int32_t nDurability, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
+int32_t __stdcall ITEMMODS_GetByTimeAdjustment(int nPackedByTime, uint32_t nPeriodOfDay, int32_t nTimeOfDay, uint32_t * pnTimePeriod, int * pnMinValue, int * pnMaxValue);
 void __stdcall ITEMMOD_ApplyEtherealBonus(struct D2UnitStrc * pUnit);
 // Returns 1 if the given automod entry (nParam points to an AutomagicTxt record) can be applied to pUnit. Rejects stackable items, throwables, items without inventory slots, and items whose type matches the automod's exclusion list; passes only if the item type matches at least one inclusion entry.
 BOOL __stdcall ITEMMOD_CanApplyAutomod(struct D2UnitStrc * pUnit, struct D2MagicAffixTxt * pMagicAffixTxt);
@@ -8658,7 +8645,7 @@ int __stdcall RollRunewordMostlikely(struct D2UnitStrc * pUnit, struct D2UnitStr
 void __stdcall ITEMMOD_ApplyRunewordProperties(struct D2UnitStrc * pUnit, struct D2SetsTxtFStrc * pProperty, int32_t bExpansion);
 }}} // namespace D2Common::ITEMS::ItemMods
 namespace D2Common { namespace ITEMS { namespace Items {
-uint32_t __stdcall ITEMS_SearchItemCodeTable(struct D2UnitStrc * pUnit, struct D2UnitStrc * dwContext, uint32_t nOffset);
+uint32_t __stdcall ITEMMODS_EvaluateItemFormula(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint32_t nOffset);
 // @sourcefile .\ITEMS\Items.cpp
 void __stdcall STRUCT_CreateDataItem(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit);
 // @sourcefile .\ITEMS\Items.cpp
@@ -8697,7 +8684,7 @@ void __stdcall ITEM_SetItemData_eExchangePage(struct D2UnitStrc * pUnit, uint8_t
 uint8_t __stdcall ITEM_GetItemData_ePreviousPage(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_ePreviousPage(struct D2UnitStrc * pUnit, uint8_t ePreviousPage);
 char * __stdcall ITEM_GetItemData_szPlayerName(struct D2UnitStrc * pUnit);
-void __stdcall ITEM_GetPlayerNameAkaNamedString(struct D2UnitStrc * pUnit, char * pCustomName);
+void __stdcall ITEMS_SetPlayerName(struct D2UnitStrc * pItem, char * szName);
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_nEarLevel(struct D2UnitStrc * pUnit, uint8_t nEarLevel);
 uint8_t __stdcall ITEM_GetItemData_bVariant(struct D2UnitStrc * pUnit);
@@ -8763,8 +8750,8 @@ struct D2SetItemsTxt * __stdcall GetSetItemsLine(struct D2UnitStrc * pUnit);
 BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(struct D2UnitStrc * pUnit);
 // Counts unidentified items in a player's inventory and equipped slots. Iterates all inventory slots; counts carried items on INVENTORY_GRID_TYPE_INVENTORY pages (INVPAGE_INVENTORY or INVPAGE_CUBE) and body-loc slots whose ITEMFLAG_IDENTIFIED is not set. Returns the count.
 int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(struct D2UnitStrc * pUnit);
-int32_t __stdcall ITEMS_ModifyPotionValueByDifficulty(struct D2UnitStrc * pNpc, int32_t nValue);
-int32_t __stdcall ITEMS_ModifyPotionSellValueByDifficulty(struct D2UnitStrc * pNpc, int32_t nValue);
+int32_t __stdcall ITEMS_GetBonusLifeBasedOnClass(struct D2UnitStrc * pPlayer, int32_t nValue);
+int32_t __stdcall ITEMS_GetBonusManaBasedOnClass(struct D2UnitStrc * pPlayer, int32_t nValue);
 uint16_t __stdcall ITEM_GetItemData_wItemVersion(struct D2UnitStrc * pUnit);
 void __stdcall ITEM_SetItemData_wItemVersion(struct D2UnitStrc * pUnit, int16_t wItemVersion);
 // Calculates frames-per-attack for a weapon held by pUnit. Builds the COF path from unit/inventory state, looks up frame count and animation speed via ANIMDATA, then computes (frames&lt;&lt;8) / (((IAS+baseAttackRate+100)*animSpeed)/100). Halts with internal error if item is not a weapon or COF data is missing.
@@ -8804,7 +8791,7 @@ BOOL __stdcall ITEM_CheckIfItemCanBeNamed(struct D2UnitStrc * pUnit);
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(struct D2UnitStrc * pUnit);
 // Tests whether two item units are "identical enough" to be socketed/stacked together. Returns TRUE only if both items match on: class id, item quality (defaulting to 2 if not an item or no item data), file index (variant), stackable flag (must be stackable), ethereal flag, both qualities can-have-sockets, all damage stats (min/max, secondary min/max, throw min/max), and both have zero sockets. Returns FALSE on any mismatch. Pure comparison predicate, no side effects.
-BOOL __stdcall IsItemSocketable(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
+BOOL __stdcall ITEMS_AreStackablesEqual(struct D2UnitStrc * pItem1, struct D2UnitStrc * pItem2);
 void __stdcall ExtractItemDetails(uint8_t * pBytesAfterId, size_t size, BOOL isSave, struct D2UnitDataItemDetailsStrc * itemData);
 // Deserialises an item unit from a binary save-data bit buffer into pUnit. Validates the 0x4D4A ("JM") magic header when nParam1 is set, reads the 32-bit item flags word, strips invalid flags, resets all affix/prefix/suffix fields on the unit to clean state, then delegates to ITEM_DeserializeFromBitBuffer (full items) or ITEMS_DeserializeItemHeader (compact items). Returns the number of bits consumed.
 int32_t __stdcall ITEM_LoadFromSaveData(struct D2UnitStrc * pUnit, uint8_t * pSaveData, size_t nSize, uint32_t bCheckHeader, uint32_t * pnSocketedItemCount, uint32_t nVersion, int * pUnitDataItemDetails);
@@ -8870,7 +8857,7 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(struct D2UnitStrc * pUnit, 
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection);
 void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffsetX, int * pnOffsetY);
 void __fastcall SetSuperUniqueName(struct D2UnitStrc * pUnit, uint16_t * wszText);
-BOOL __stdcall MONSTER_IsAndarielNormal(struct D2UnitStrc * pUnit, int32_t nParam);
+BOOL __stdcall MONSTER_IsSandLeaper(struct D2UnitStrc * pUnit, int32_t nParam);
 uint32_t __stdcall IsDemon(struct D2UnitStrc * pUnit);
 BOOL __stdcall MONSTER_IsMonsterUndead(struct D2UnitStrc * pUnit);
 uint32_t __stdcall UnitIsMarkedBoss(struct D2MonStatsTxt * pMonStatsTxt, struct D2UnitStrc * pUnit);
@@ -8928,8 +8915,8 @@ void __stdcall GetTargetTypeAndGUID(struct D2DynamicPathStrc * pDynamicPath, eD2
 struct D2UnitStrc * __stdcall GetTargetUnit(struct D2DynamicPathStrc * pDynamicPath);
 int32_t __stdcall GetCollisionType(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall PATH_ChangeCollisionType(struct D2DynamicPathStrc * pDynamicPath, int32_t eCollisionFlag);
-int32_t __stdcall PATH_GetCollisionPattern(struct D2DynamicPathStrc * pDynamicPath);
-void __stdcall PATH_SetCollisionPattern(struct D2DynamicPathStrc * pDynamicPath, int32_t nFlags);
+int32_t __stdcall PATH_GetMoveTestCollisionMask(struct D2DynamicPathStrc * pDynamicPath);
+void __stdcall PATH_SetMoveTestCollisionMask(struct D2DynamicPathStrc * pDynamicPath, int32_t nCollisionMask);
 // Sets the dynamic-path movement mode (ePathType) on a unit's D2DynamicPathStrc. Looks up the type's flag bits in PATHTYPEFLAGS: saves the previous path type when flag 0x2000 is set, snapshots current velocity when flag 0x8000 is set, merges the flag bits into nFlags (clearing the 0xfff800ff mask), stores ePathType and its PATHTYPEPOINTS direction offset. Halts fatally (ERROR_Unrecoverable) on invalid combinations: players using path type 2, a prev path type of 8/0xb, or path type 4 with nDistMax >= 0x4e. No return.
 void __stdcall PATH_SetPathType(struct D2DynamicPathStrc * pDynamicPath, int ePathType);
 void __stdcall PATH_RestoreVelocityAndPathType(struct D2DynamicPathStrc * pDynamicPath);
@@ -8950,9 +8937,9 @@ void __stdcall ResetSP2(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall SetStepNum(struct D2DynamicPathStrc * pDynamicPath, uint8_t nStepNum);
 int32_t __stdcall GetStepNum(struct D2DynamicPathStrc * pDynamicPath);
 void __stdcall SetDistanceWithChecks(struct D2DynamicPathStrc * pDynamicPath, uint32_t nDistance);
-int32_t __stdcall GetUnitWidth(struct D2UnitStrc * pUnit);
-void __stdcall SetUnitWidth(struct D2UnitStrc * pUnit, int32_t nWidth);
-void __stdcall PATH_SetOrClearFlag0x2000(struct D2DynamicPathStrc * pDynamicPath, int32_t bSet);
+int32_t __stdcall PATH_GetUnitCollisionPattern(struct D2UnitStrc * pUnit);
+void __stdcall PATH_SetUnitCollisionPattern(struct D2UnitStrc * pUnit, int32_t nCollisionPattern);
+void __stdcall PATH_SetOrClearFlag0x2000(struct D2UnitStrc * pUnit, int32_t bSet);
 void __stdcall PATH_PeriodicPathRecalc(struct D2UnitStrc * pUnit);
 // @wasnamed GetDistance - one name on two different functions.
 // @evidence Takes four coordinates and returns (y2-y1)^2 + (x2-x1)^2 - a SQUARED distance, so callers
@@ -8981,11 +8968,11 @@ void __stdcall PATH_GetScreenVelocity(struct D2UnitStrc * pUnit, int * pnVelocit
 uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int32_t nNewX, int32_t nNewY);
 void __stdcall PATH_SnapPositionToTile(struct D2DynamicPathStrc * pDynamicPath);
 uint32_t __stdcall Get8FlagsFromDynamicPath(struct D2DynamicPathStrc * pDynamicPath);
-void __stdcall PATH_SetPathTarget(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
+void __stdcall PATH_MoveUnitToUnitPosition(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit);
 BOOL __stdcall PATH_AdvanceUnitAlongPath(struct D2UnitStrc * pUnit, int pExternalPath);
 BOOL __stdcall PATH_GetCollisionMaskAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 int32_t __stdcall PATH_GetCollisionTypeAt(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, int wPosX, int wPosY);
-void __stdcall PATH_CheckCollisionFlags(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
+BOOL __stdcall PATH_MoveUnitToRoomPosition(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * dwUnused, struct D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY);
 BOOL __stdcall IsAllyOf(struct D2UnitStrc * pUnit, struct D2UnitStrc * pRosterUnit);
 }}} // namespace D2Common::PATH::Path
 namespace D2Common { namespace QuestRecord {
@@ -9061,7 +9048,7 @@ void __stdcall SKILL_SetFlags(struct D2SkillStrc * pSkill, int32_t nFlags);
 int32_t __stdcall SKILL_GetFlags(struct D2SkillStrc * pSkill);
 // Returns 1 if pUnit meets all prerequisites to skill-point-invest in eSkill, 0 otherwise. Checks: skill index in range and txt entry valid; unit level >= required level; up to three prerequisite skills (reqskill[0..2]) each owned and at level >= 1. Used by the skill tree UI/server to gate skill point allocation.
 BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill);
-uint32_t __stdcall SpendSkillPointOnSkill(struct D2UnitStrc * pUnit, eD2Skills eSkill);
+uint32_t __stdcall SKILLS_CheckRequiredAttributes(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 uint32_t __stdcall SKILLS_CalcToHit(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel);
 int32_t __stdcall SKILLS_GetTotalSkillLevel(struct D2UnitStrc * pUnit, eD2Skills eSkill);
 // SKILLCALC VM: Evaluates Skills.txt calc[0-5] expressions.
@@ -9107,8 +9094,8 @@ uint32_t __stdcall SKILL_FindTeleportPosition(struct D2UnitStrc * pUnit, struct 
 // Returns the arrow-modifier skill ID active on pUnit (player or monster with bow/xbow): checks UNITSTAT_item_magicarrow and UNITSTAT_item_explosivearrow stats; writes the stat level to *pnParam if provided. Returns 0x1b (Magic Arrow), 0x29 (Explosive Arrow), 0x1f (default), or 0/–1 if no bow or not applicable.
 int __stdcall SKILL_GetArrowModifierSkill(struct D2UnitStrc * pUnit, int * pnStatLevel);
 uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId);
-// Strips all progressive (stackable/timed) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (states with flag 0x10 set), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
-BOOL __stdcall STATES_RemoveAllProgressiveStates(struct D2UnitStrc * pUnit);
+// Removes the disguise (shapeshift) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (the list built with bit index 0x10, the disguise states), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
+BOOL __stdcall STATES_RemoveDisguiseStates(struct D2UnitStrc * pUnit);
 eD2Skills __stdcall SKILLS_GetClassSkillByIndex(uint32_t nClassId, int32_t nSkillIndex);
 int32_t __stdcall AmountOfSkillsByClassId(uint32_t nClassId);
 int32_t __stdcall SKILL_GetConcentrationDamageBonus(struct D2UnitStrc * pUnit, int32_t nSkillId);
@@ -9150,12 +9137,12 @@ int32_t __stdcall GetOwnerGUID(struct D2StatListExStrc * pStatList);
 void __stdcall SetState(struct D2StatListExStrc * pStatsEx, eD2States eState);
 eD2States __stdcall GetState(struct D2StatListExStrc * pStatList);
 void __stdcall SetTimeout_WithFlag(struct D2StatListExStrc * pStatList, int32_t nTimeout);
-int __stdcall STATLIST_GetFullListFromStatList(struct D2StatListExStrc * pStatList);
+int __stdcall STATLIST_GetExpireFrame(struct D2StatListExStrc * pStatList);
 int32_t __stdcall SERVER_GetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer);
 // Returns unsigned stat value for the given stat ID and layer from the unit's D2StatListExStrc. Uses ItemStatCost.txt minimum/shifted calculation.
 // @blizzard StatsGetCurrentStat
 int __stdcall STATSEX_GetCurrentStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer);
-int32_t __stdcall ITEM_GetMinimalStatValueShifted(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
+int32_t __stdcall STATLIST_UnitGetStatValueUnchecked(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
 int32_t __stdcall STATLIST_GetStatBonusFromLists(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer);
 struct D2StatListExStrc * __stdcall GetStatsByState(struct D2UnitStrc * pUnit, eD2States eState);
 struct D2StatListExStrc * __stdcall STATLIST_FindStatListWithFlags(struct D2StatListExStrc * pStatList, uint32_t nFlags);
@@ -9170,18 +9157,18 @@ void __stdcall STATLIST_IterateChangedStats(struct D2UnitStrc * pUnit, struct D2
 void __stdcall STATLIST_ClearChangedStatFlags(struct D2UnitStrc * pUnit);
 // @blizzard StatsGetAlignment
 int32_t __stdcall STATSEX_GetAlignment(struct D2UnitStrc * pUnit);
-uint32_t __stdcall STATLIST_HasChangedStats(struct D2UnitStrc * pUnit);
+uint32_t __stdcall STATLIST_IsOverlayPending(struct D2UnitStrc * pUnit);
 int32_t __stdcall STATLIST_GetStatByState(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat);
 int32_t __stdcall CopyStatsToBuffer(struct D2StatListExStrc * pStatListEx, struct D2StatStrc * pOutput, int32_t nOutputSize);
 void __stdcall STATLIST_SetExpireFunction(struct D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pfnExpire);
 int __stdcall STATLIST_GetBaseStatValue(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer);
-int32_t __stdcall GetTxtMaxHp(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTxtMaxMana(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTxtMaxStamina(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTxtMaxDurability(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTxtMaxDamage(struct D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage);
-int32_t __stdcall GetTxtMinDamage(struct D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage);
-int32_t __stdcall GetTxtArmorClass(struct D2UnitStrc * pUnit);
+int32_t __stdcall STATLIST_GetMaxLifeFromUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall STATLIST_GetMaxManaFromUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(struct D2UnitStrc * pUnit);
+int32_t __stdcall STATLIST_GetMaxDamageFromUnit(struct D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage);
+int32_t __stdcall STATLIST_GetMinDamageFromUnit(struct D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage);
+int32_t __stdcall STATLIST_GetDefenseFromUnit(struct D2UnitStrc * pUnit);
 int32_t __stdcall STATLIST_GetStatForDamageCalc(struct D2UnitStrc * pUnit2, struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat);
 int __stdcall STATLIST_GetFullListPtr(struct D2StatListExStrc * pStatList);
 void __stdcall STATSEX_SetStatListTimeout(struct D2StatListExStrc * pStatList, int32_t nTimeout);
@@ -9205,11 +9192,11 @@ void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnit
 void __stdcall STATLIST_AddUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int16_t nLayer);
 void __stdcall STATLIST_MarkUnitStatsChanged(struct D2UnitStrc * pUnit);
 // Iteratively removes all stats from pStatList whose value is non-zero (treating them as child-list references). For each iteration, binary-searches the base stat array for the first stat entry, removes it via STATLIST_RemoveStatFromArray, propagates the negated value through STATLIST_PropagateStatChange, and if the owner is a player notifies the stat tracking system. Loops until no stats remain. No-op on NULL input.
-void __stdcall STATLIST_FreeChildStatLists(struct D2StatListExStrc * pStatList);
-void __stdcall STATLIST_FreeUnitChildStatLists(struct D2UnitStrc * pUnit);
+void __stdcall STATLIST_RemoveAllStats(struct D2StatListExStrc * pStatList);
+void __stdcall STATLIST_RemoveAllStatsFromOverlay(struct D2UnitStrc * pUnit);
 // Walks the active child stat-list chain of pUnit and frees any timed (flag bit 2) stat lists whose timeout has expired. When nFrameNumber is 0, decrements each timeout counter by 1 and frees on reaching zero; otherwise frees all whose timeout field is <= nFrameNumber.
 void __stdcall RemoveStatListAfterTimeout(struct D2UnitStrc * pUnit, int32_t nFrameNumber);
-void __stdcall CopyStatListEx(struct D2StatListExStrc * pStatListExDest, struct D2StatListExStrc * pStatListExSource);
+void __stdcall STATLIST_MergeBaseStats(struct D2StatListExStrc * pStatListExDest, struct D2StatListExStrc * pStatListExSource);
 void __stdcall STATLIST_RecalcAfterRemove(struct D2UnitStrc * pUnit);
 // Clamps a unit's stamina, mana, and hitpoints to their respective maximum values by querying the minimum shifted stat value from ItemStatCost.txt (IDs 10, 8, 6) and calling STATLIST_AddStatValue with a negative delta when any resource exceeds its cap.
 void __stdcall UpdateResourceStats(struct D2UnitStrc * pUnit);
@@ -9283,11 +9270,11 @@ void __stdcall SetXForStaticUnit(struct D2UnitStrc * pUnit, int32_t nX);
 void __stdcall SetYForStaticUnit(struct D2UnitStrc * pUnit, int32_t nY);
 int32_t __stdcall GetUnitSizeX(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetUnitSizeY(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTargetX(struct D2UnitStrc * pUnit);
-int32_t __stdcall GetTargetY(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetScreenX(struct D2UnitStrc * pUnit);
+int32_t __stdcall GetScreenY(struct D2UnitStrc * pUnit);
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
 void __stdcall GetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
-void __stdcall GetTargetCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
+void __stdcall GetScreenCoords(struct D2UnitStrc * pUnit, POINT * pPoint);
 // Returns nothing: every exit leaves AddCollision_Vector's or GetUnitSizeY's EAX, and none of the 17 call sites reads it.
 void __stdcall BlockCollisionPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 void __stdcall InitializeStaticPath(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
@@ -9297,10 +9284,10 @@ void __stdcall SetTargetUnitForDynamicUnit(struct D2UnitStrc * pUnit, struct D2U
 void __stdcall GetRunAndWalkVelocityForPlayer(struct D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity);
 void __stdcall SetAnimData(struct D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassId, int32_t nMode);
 uint32_t __stdcall NeedsRoomUpdate(struct D2UnitStrc * pUnit);
-void __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);
+void __stdcall SetCurrentRoomInvalid(struct D2UnitStrc * pUnit, int32_t bInvalid);
 void __stdcall RefreshInventory(struct D2UnitStrc * pUnit, BOOL bHasInventory);
 // Returns the eInventoryPage for a given unit and page index. For players, maps nInvPage (1-4) to trade/transmog/bank pages, or performs a class-specific lookup. For monsters, always returns INVPAGE_Monster. For objects, recognises Guild Vault (0x152) and Trophy Case (0x153). Returns INVPAGE_None on mismatch or null input (halts on null). RETURN WIDTH: every exit writes the whole of EAX (MOV EAX,imm32 / LEA EAX,[EAX*4+8] / MOV EAX,[ECX*8+0x744548]) and InitializeiInventoryPages takes it with MOV ESI,EAX - no MOVZX anywhere.
-int32_t __stdcall GetInventoryPage(struct D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD);
+int32_t __stdcall UNITS_GetInventoryRecordId(struct D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD);
 struct D2LightMapStrc * __stdcall GetLightMap(struct D2UnitStrc * pUnit);
 int32_t __stdcall GetAnimOrSeqMode(struct D2UnitStrc * pUnit);
 void __stdcall InitializeSequence(struct D2UnitStrc * pUnit);
@@ -9354,7 +9341,7 @@ BOOL __stdcall IsInMeleeRange(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTa
 // Returns TRUE if the unit is currently in a movement animation mode. For players, checks GetAnimOrSeqMode result: modes 2, 3, or 6. For monsters, checks for Walk or Skill3 mode, plus special-cases base ID 0x6E (Oblivion Knight with Decrepify walk). Returns FALSE for missiles (halts) and all other types.
 BOOL __stdcall IsInMovingMode(struct D2UnitStrc * pUnit);
 BOOL __stdcall IsInMovingModeEx(struct D2UnitStrc * pUnit);
-uint32_t __stdcall CalcRecoveryPriority(struct D2UnitStrc * nMpDeficit);
+uint32_t __stdcall UNITS_GetHealingCost(struct D2UnitStrc * nMpDeficit);
 uint32_t __stdcall GetInventoryGoldLimit(struct D2UnitStrc * pUnit);
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitRightSkill(struct D2UnitStrc * pUnit);
@@ -9393,7 +9380,7 @@ uint8_t __stdcall PATH_GetCurrentDirection(struct D2UnitStrc * pUnit);
 struct D2UnitStrc * __stdcall GetWeaponBySkill(struct D2UnitStrc * pUnit, int32_t nParam);
 // Returns the weapon animation-class field used to drive a player unit's attack/cast animation selection. Resolves the unit's effective type/class/anim-mode through SKILLS_GetStateTransformGfx (handling shape-shift transforms). Only meaningful for players in Attack1/Attack2 or (when dual-wield capable) Skill3/Skill4 modes: fetches the relevant weapon via GetWeaponBySkill, reads its weapon anim class (ITEM_GetWeaponAnimClass), and indexes gdwUnitStrucFieldMask by (transformed-class * 7 + animclass) to return the field mask/value. Returns 0 for non-players or other modes. pUnit = the unit being animated.
 // @sourcefile .\UNITS\Units.cpp
-uint32_t __stdcall GetWeaponAnimClass(struct D2UnitStrc * pUnit);
+uint32_t __stdcall UNITS_GetFrameBonus(struct D2UnitStrc * pUnit);
 uint32_t __fastcall GetHitClassForPlayerOrMonster(struct D2UnitStrc * pUnit);
 uint32_t __fastcall GetWeaponClass(struct D2UnitStrc * pUnit);
 // Returns the visual component index for an item equipped on a unit. For arm-slot items (L_ARM/R_ARM), checks both arm slots for non-broken items; if both slots are occupied with one-handed weapons and the unit can dual-wield, returns component 6 for the secondary weapon. Falls back to ITEM_GetItemsTxt_bComponent for the default component from ItemsTxt.
@@ -9407,7 +9394,7 @@ void __stdcall UpdateAnimSpeed(struct D2UnitStrc * pUnit, char * szFile, int32_t
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitAnimMode(struct D2UnitStrc * pUnitArg);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
-int32_t __stdcall SetupUpdateFlag(struct D2UnitStrc * pUnit, int32_t nAnimMode);
+int32_t __stdcall ChangeAnimMode(struct D2UnitStrc * pUnit, int32_t nMode);
 }} // namespace D2Common::Units
 namespace D2Common { namespace Units { namespace Missile {
 // @sourcefile .\UNITS\Missile.cpp
@@ -9491,6 +9478,9 @@ void __stdcall CopyWaypoint(struct D2WaypointStrc * pWaypoint, struct D2Waypoint
 }} // namespace D2Common::Waypoints
 
 // Globals
+namespace D2Common { namespace DATATBLS { namespace ItemTbls {
+extern D2RunesTxtTableStrc nTxtRunesSize;
+}}} // namespace D2Common::DATATBLS::ItemTbls
 namespace D2Common { namespace ITEMS { namespace Items {
 extern D2DataTableTxtStrc * sgptDataTable;
 }}} // namespace D2Common::ITEMS::Items

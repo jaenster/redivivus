@@ -4,7 +4,7 @@
   "file": "Source/D2Common/Drlg/Preset.cpp",
   "functions": [
     {
-      "name": "StaticFini_gLogMessageQueueCS_Unref_00665930",
+      "name": "PRESET_EnterCriticalSection_0096d610",
       "address": "00665930",
       "lines": [
         {
@@ -14,12 +14,12 @@
       ],
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
-        "StaticFini_gLogMessageQueueCS_Unref_00665930"
+        "PRESET_EnterCriticalSection_0096d610"
       ],
-      "dh": "5005c2b9"
+      "dh": "5d812042"
     },
     {
-      "name": "StaticFini_gLogMessageQueueCS_Unref_00665940",
+      "name": "PRESET_LeaveCriticalSection_0096d610",
       "address": "00665940",
       "lines": [
         {
@@ -29,9 +29,9 @@
       ],
       "namespace": "D2Common::Drlg::Preset",
       "calledFunctions": [
-        "StaticFini_gLogMessageQueueCS_Unref_00665940"
+        "PRESET_LeaveCriticalSection_0096d610"
       ],
-      "dh": "9a9db887"
+      "dh": "b3ec1a2a"
     },
     {
       "name": "ParsePresetsOfDrlgFile",
@@ -47,7 +47,7 @@
         "ParsePresetsOfDrlgFile",
         "D2FILE_AllocAndLoadD2File",
         "SSTR_StringLength",
-        "DRLGANIM_GetOrientationFromIndex",
+        "DRLGPRESET_MapTileType",
         "MONSTERTBLS_GetMonPresetRecord",
         "MONSTERTBLS_GetSuperUniquesTxtCount",
         "CheckMonStatId",
@@ -69,7 +69,7 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "a1fd2167",
+      "dh": "c3cc4600",
       "paramStorage": [
         [
           "pFile",

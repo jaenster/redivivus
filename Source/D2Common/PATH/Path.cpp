@@ -118,8 +118,8 @@ void PATH_ExtendPathEndpoint(D2PathTypeArg * pPathData) {
       return;
     }
 
-    int32_t nType = pPathData->nUnitWidth;
-    int32_t eCollisionFlag = pPathData->nCollisionPattern;
+    int32_t nType = pPathData->nCollisionPattern;
+    int32_t eCollisionFlag = pPathData->nCollisionMask;
     int nStepX = gaPathDirectionStepDeltas[nDeltaX + nDeltaY * 9];
     nDeltaX = gaPathDirectionStepDeltas[nDeltaY + nDeltaX * 9];
     uint32_t nY = (uint32_t)pPathData->tTargetCoord.nY;
@@ -963,7 +963,7 @@ uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int3
     return nX;
 }
 
-uint32_t __stdcall PATH_CalculateDistance(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp) {
+uint32_t __stdcall PATH_ComputeDirectionFromPreciseCoords(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp) {
     DRLGPATH_CalcDirectionVector((POINT*)&nFromXfp, &nToYfp, nFromXfp, nFromYfp, nToXfp, nToYfp);
     return nToYfp;
 }
@@ -1037,19 +1037,19 @@ static BOOL __stdcall PATH_CheckCollisionOnStep(uint32_t nPackedNewPos, uint32_t
         exit(-1);
       }
 
-      Collision::UpdateCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), pDynamicPath->pRoom, nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nUnitWidth, pDynamicPath->nCollisionFlag);
+      Collision::UpdateCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), pDynamicPath->pRoom, nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag);
       return 1;
     }
 
     uint32_t nBBoxFlag = pDynamicPath->nFlags & 0x40000;
-    int nCollisionPattern = pDynamicPath->nCollisionPattern;
+    int nCollisionPattern = pDynamicPath->nMoveTestCollisionMask;
     if (nCollisionPattern == 0x3401) {
       nCollisionPattern = 0x3c01;
     }
     if (nBBoxFlag) {
       eCollResult = Collision::RemoveGetCollision_Width(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nUnitSize, pDynamicPath->nCollisionFlag, nCollisionPattern);
     } else {
-      eCollResult = Collision::RemoveGetCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nUnitWidth, pDynamicPath->nCollisionFlag, nCollisionPattern);
+      eCollResult = Collision::RemoveGetCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag, nCollisionPattern);
     }
 
     pDynamicPath->eCollisionFlag |= eCollResult;
@@ -1294,7 +1294,7 @@ static uint32_t PATH_CheckIfTargetReached(D2DynamicPathStrc * pDynamicPath) {
 
     short int nOldY = pDynamicPath->Coords.tSubtile.nPosY;
     short int nOldX = pDynamicPath->Coords.tSubtile.nPosX;
-    Drlg::Path::DRLGPATH_GetMissileTargetPosition((short int*)&sTarget, (D2UnitStrc*)pDynamicPath);
+    Drlg::Path::DRLGPATH_GetMissileTargetPosition((short int*)&sTarget, pDynamicPath);
     if (pDynamicPath->pTargetUnit) {
       int nDeltaX;
       eUnitType = pDynamicPath->pTargetUnit->eUnitType;
@@ -1374,7 +1374,7 @@ uint32_t __stdcall Get8FlagsFromDynamicPath(D2DynamicPathStrc * pDynamicPath) {
     return pDynamicPath->nFlags & 8;
 }
 
-void __stdcall PATH_SetPathTarget(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
+void __stdcall PATH_MoveUnitToUnitPosition(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     D2DynamicPathStrc* pTargetPath;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x54e);
@@ -1523,9 +1523,9 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
       nOldX = pPath->Coords.tSubtile.nPosX;
       nOldY = pPath->Coords.tSubtile.nPosY;
       if (nTargetPos || false) {
-        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitWidth, pPath->nCollisionFlag);
+        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nCollisionPattern, pPath->nCollisionFlag);
       } else {
-        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pPath->nUnitWidth, pPath->nCollisionFlag);
+        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       }
     } else if (!(short int)nTargetPos && !(nTargetPos >> 0x10)) {
       Collision::RemoveCollision_Width(pPath->pRoom, (uint32_t)(uint16_t)pPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pPath->Coords.tSubtile.nPosY, pPath->nUnitSize, pPath->nCollisionFlag);
@@ -1539,7 +1539,7 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
         pPath->nFlags &= -9;
       }
 
-      eNewCollision = Collision::UpdateGetCollision_Width(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitSize, pPath->nCollisionFlag, pPath->nCollisionPattern);
+      eNewCollision = Collision::UpdateGetCollision_Width(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitSize, pPath->nCollisionFlag, pPath->nMoveTestCollisionMask);
       pPath->eCollisionFlag = eNewCollision;
       pPath->nSaveCoordsSize = 1;
       pPath->SaveCoords[0].nX = (uint16_t)nTargetPos;
@@ -1568,9 +1568,9 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTar
     uint16_t wPosY = pPath->Coords.tSubtile.nPosY;
     if (!pPath->pOwner || pPath->pOwner->eUnitType != UNIT_MISSILE) {
       if (nTargetPos || false) {
-        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitWidth, pPath->nCollisionFlag);
+        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nCollisionPattern, pPath->nCollisionFlag);
       } else {
-        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nUnitWidth, pPath->nCollisionFlag);
+        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       }
     } else if (!(short int)nTargetPos && !(nTargetPos >> 0x10)) {
       Collision::RemoveCollision_Width(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nUnitSize, pPath->nCollisionFlag);
@@ -1613,15 +1613,16 @@ int32_t __stdcall PATH_GetCollisionTypeAt(D2DynamicPathStrc * pDynamicPath, D2Un
     return 1;
 }
 
-void __stdcall PATH_CheckCollisionFlags(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
+BOOL __stdcall PATH_MoveUnitToRoomPosition(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
     uint32_t _wPosX;
     _wPosX = (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)wPosX);
     BOOL bMoved = PATH_MoveUnitToPosition(pRoom, _wPosX, pDynamicPath);
     if (!bMoved) {
-      return;
+      return 0;
     }
 
     pDynamicPath->nSavedPathPoints = 0xf;
+    return 1;
 }
 
 uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
@@ -1636,7 +1637,7 @@ uint32_t __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * 
     }
 
     uint16_t eCollisionResult2;
-    eCollisionResult2 = Collision::UpdateGetCollision_Type(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pRoom, nTargetX, nTargetY, pDynamicPath->nUnitWidth, pDynamicPath->nCollisionFlag, pDynamicPath->nCollisionPattern);
+    eCollisionResult2 = Collision::UpdateGetCollision_Type(pDynamicPath->pRoom, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pDynamicPath->Coords.tSubtile.nPosY, pRoom, nTargetX, nTargetY, pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag, pDynamicPath->nMoveTestCollisionMask);
     if (eCollisionResult2) {
       return 0;
     }

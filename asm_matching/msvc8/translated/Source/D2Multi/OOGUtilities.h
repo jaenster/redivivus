@@ -146,7 +146,7 @@ BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2,
 BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText);
 void __stdcall OOGUTIL_RefreshGameList();
 void __stdcall OOGUTIL_SetJoinGameError();
-int __stdcall OOGUTIL_Unused11(int nFrameIndex);
+int __stdcall OOGUTIL_EnterChatPumpCallback(int nFrameIndex);
 int __stdcall UIMENU_TitleClickCallback(void * pUnused);
 int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex);
 // OnPress handler of the wait-in-line dialog button (form record 0070eb30, FORM_Button, string 0x13ef, created by UIMENU_WaitInLine): restores the lobby buttons (CHATDLG_UpdateButtonVisibility), sends MCP 0x13 CancelGameCreate (CHATDLG_CancelGameCreate) and destroys the create-game/wait forms (OOGUTIL_UpdateGameListFilter); returns 1.

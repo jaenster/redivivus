@@ -147,7 +147,7 @@
         "InitUmods",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
-        "QUEST_DispatchMonsterDeathToQ12",
+        "QUEST_DispatchMonsterCreateToA2Q4",
         "SetUnsetSummonerFlags",
         "SetState"
       ],
@@ -156,7 +156,7 @@
         "D2UnknownCreateMonsterStrc",
         "int32_t"
       ],
-      "dh": "f1a0dd1f",
+      "dh": "58363b63",
       "paramStorage": [
         [
           "pQuestEventArg",

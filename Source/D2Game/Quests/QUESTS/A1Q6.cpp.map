@@ -299,7 +299,7 @@
       ]
     },
     {
-      "name": "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+      "name": "Q06_Callback10_PlayerLeavesGame",
       "address": "005961c0",
       "lines": [
         {
@@ -309,7 +309,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS::A1Q6",
       "calledFunctions": [
-        "Q6_DenOfEvil_OnComplete_ClearGUIDs",
+        "Q06_Callback10_PlayerLeavesGame",
         "SetRewardAndFinishFlags",
         "QUESTGUID_RemovePlayerFromList"
       ],
@@ -317,7 +317,7 @@
         "D2QuestArgStrc",
         "D2QuestDataStrc"
       ],
-      "dh": "7a4b2a63",
+      "dh": "17ef6018",
       "paramStorage": [
         [
           "pQuestData",
@@ -665,7 +665,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "4aa3c252",
+      "dh": "9ccc6dee",
       "paramStorage": [
         [
           "pQuestData",

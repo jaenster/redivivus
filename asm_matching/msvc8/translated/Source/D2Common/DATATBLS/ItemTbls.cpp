@@ -40,11 +40,12 @@ static unsigned int gItemCommon_i_ItemTypeId = 0x646461; D2_STATIC_GUARD(gItemCo
 unsigned int gszTxtColName_lvl = 0x6c766c; D2_GLOBAL_GUARD(gszTxtColName_lvl, "gszTxtColName_lvl");
 static D2ItemsTableStrc gsItemsTable = {0}; D2_STATIC_GUARD(gsItemsTable, "gsItemsTable");
 static D2ItemsTableStrc sgpTxtItems = {0}; D2_STATIC_GUARD(sgpTxtItems, "sgpTxtItems");
-static short * pTxtItemsVersion = 0; D2_STATIC_GUARD(pTxtItemsVersion, "pTxtItemsVersion");
+static uint16_t * gpItemIndexOldToCurrent = 0; D2_STATIC_GUARD(gpItemIndexOldToCurrent, "gpItemIndexOldToCurrent");
 namespace D2Common { namespace DATATBLS { namespace ItemTbls {
 D2MagicAffixTableStrc gsMagicAffixTable = {0}; D2_GLOBAL_GUARD(gsMagicAffixTable, "D2Common::DATATBLS::ItemTbls::gsMagicAffixTable");
 D2MagicAffixTableStrc pTxtMagicAffixes = {0}; D2_GLOBAL_GUARD(pTxtMagicAffixes, "D2Common::DATATBLS::ItemTbls::pTxtMagicAffixes");
 D2GemsTableStrc nTxtGemsSize = {0}; D2_GLOBAL_GUARD(nTxtGemsSize, "D2Common::DATATBLS::ItemTbls::nTxtGemsSize");
+D2RunesTxtTableStrc nTxtRunesSize = {0}; D2_GLOBAL_GUARD(nTxtRunesSize, "D2Common::DATATBLS::ItemTbls::nTxtRunesSize");
 }}} // namespace D2Common::DATATBLS::ItemTbls
 static D2RareAffixTableStrc gsRareAffixTable = {0}; D2_STATIC_GUARD(gsRareAffixTable, "gsRareAffixTable");
 static D2RareAffixTableStrc pTxtRareAffixes = {0}; D2_STATIC_GUARD(pTxtRareAffixes, "pTxtRareAffixes");
@@ -342,8 +343,8 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
       }
     }
 
-    pTxtItemsVersion = (short*)D2_ALLOC_POOL_AT(nullptr, gsItemsTable.nSize * 2, ".\\DATATBLS\\ItemTbls.cpp", 0x1af);
-    memset(pTxtItemsVersion, 0, gsItemsTable.nSize * 2);
+    gpItemIndexOldToCurrent = (uint16_t*)D2_ALLOC_POOL_AT(nullptr, gsItemsTable.nSize * 2, ".\\DATATBLS\\ItemTbls.cpp", 0x1af);
+    memset(gpItemIndexOldToCurrent, 0, gsItemsTable.nSize * 2);
     i = 0;
     if (gsItemsTable.nSize <= 0) {
       return;
@@ -353,7 +354,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
     short int* pItemVersion = &gsItemsTable.pItems->wVersion;
     do {
       if (!*pItemVersion) {
-        *(short int*)(nTxtByteOffset + (char*)pTxtItemsVersion) = (short int)i;
+        *(short int*)(nTxtByteOffset + (char*)gpItemIndexOldToCurrent) = (short int)i;
         nTxtByteOffset += 2;
       }
 
@@ -368,8 +369,8 @@ void __stdcall TXT_FreeTxt_Items() {
     if (gsItemsTable.pItems) {
       D2_FREE_POOL_AT(nullptr, gsItemsTable.pItems, ".\\DATATBLS\\ItemTbls.cpp", 0x1c8);
     }
-    if (pTxtItemsVersion) {
-      D2_FREE_POOL_AT(nullptr, pTxtItemsVersion, ".\\DATATBLS\\ItemTbls.cpp", 0x1cb);
+    if (gpItemIndexOldToCurrent) {
+      D2_FREE_POOL_AT(nullptr, gpItemIndexOldToCurrent, ".\\DATATBLS\\ItemTbls.cpp", 0x1cb);
     }
 
     gsItemsTable.pItems = 0;
@@ -381,19 +382,19 @@ D2ItemsTableStrc * __stdcall TXT_Items_GetSize() {
     return &gsItemsTable;
 }
 
-uint32_t __stdcall TXT_Items_GetVersion(int32_t nItemClassId) {
-    if (!(nItemClassId < gsItemsTable.nSize)) {
+uint32_t __stdcall DATATBLS_MapOldItemIndexToCurrent(int32_t nOldItemIndex) {
+    if (!(nOldItemIndex < gsItemsTable.nSize)) {
       return -1;
     }
-    if (nItemClassId < 0) {
+    if (nOldItemIndex < 0) {
       return -1;
     }
-    if (!pTxtItemsVersion) {
+    if (!gpItemIndexOldToCurrent) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e2);
       exit(-1);
     }
 
-    return (uint32_t)(uint16_t)pTxtItemsVersion[nItemClassId];
+    return (uint32_t)gpItemIndexOldToCurrent[nOldItemIndex];
 }
 
 D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId) {
@@ -1032,7 +1033,7 @@ void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
     } while (nIdx < nTxtQualityItemsSize.nSize);
 }
 
-void __stdcall thunk_UnloadBin_Lvl() {
+void __stdcall DATATBLS_UnloadQualityItemsTxt() {
     DataTbls::UnloadBin(nTxtQualityItemsSize.pTable);
 }
 
@@ -1154,12 +1155,12 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     } while (nGemsSize < nTxtGemsSize.nSize);
 }
 
-void __stdcall thunk_UnloadBin_LvlType() {
+void __stdcall DATATBLS_UnloadGemsTxt() {
     DataTbls::UnloadBin(nTxtGemsSize.pTable);
 }
 
-D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo_Unref_006372b0() {
-    return (D2BooksTableStrc*)&nTxtGemsSize;
+void * __stdcall DATATBLS_GetGemDataTables() {
+    return &nTxtGemsSize;
 }
 
 // Returns gem/rune table line for given index (192 bytes/entry). Used for socketed item property application.
@@ -1199,7 +1200,7 @@ void __fastcall TXT_AllocTxt_books(D2PoolManagerStrc * pMemory) {
     gsBooksTable.pTable = (D2BooksTxt*)DataTbls::CompileTxt(pMemory, "books", books, &gsBooksTable.nSize, 0x20);
 }
 
-void __stdcall thunk_UnloadBin_LvlWarp() {
+void __stdcall DATATBLS_UnloadBooksTxt() {
     DataTbls::UnloadBin(gsBooksTable.pTable);
 }
 
@@ -1249,7 +1250,7 @@ void __fastcall TXT_AllocTxt_lowqualityitems(D2PoolManagerStrc * pMemory) {
     } while (nIdx < nTxtLowQualityItemsSize.nSize);
 }
 
-void __stdcall thunk_UnloadBin_LvlPrest() {
+void __stdcall DATATBLS_UnloadLowQualityItemsTxt() {
     DataTbls::UnloadBin(nTxtLowQualityItemsSize.pTable);
 }
 
@@ -1305,12 +1306,12 @@ void __fastcall TXT_AllocTxt_itemratio(D2PoolManagerStrc * pMemory) {
     pTxtItemRatio = (D2ItemRatioTxt*)DataTbls::CompileTxt(pMemory, "itemratio", aFieldDefs, &nTxtItemRatioSize, 0x44);
 }
 
-void __stdcall thunk_UnloadBin_LvlMaze() {
+void __stdcall DATATBLS_UnloadItemRatioTxt() {
     DataTbls::UnloadBin(pTxtItemRatio);
 }
 
-D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo_Unref_00637900() {
-    return (D2LowQualityItemsTableStrc*)&nTxtItemRatioSize;
+void * __stdcall DATATBLS_GetItemRatioDataTables() {
+    return &nTxtItemRatioSize;
 }
 
 // QualityRatio.txt row lookup. Returns quality upgrade chance ratios for treasure class calculations. Used by ITEM_RollItemQuality to apply TC quality bonuses during quality cascade.
@@ -1861,7 +1862,7 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
     };
     MonsterTbls::sgtDataTable.pTxtItemTypesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x884);
     MonsterTbls::sgtDataTable.pTxtItemTypes = (D2ItemTypesTxt*)DataTbls::CompileTxt(pMemory, "itemtypes", aFieldDefs, &MonsterTbls::sgtDataTable.nTxtItemTypesSize, 0xe4);
-    if (!MonsterTbls::sgtDataTable.bUseTxt && gpaMiscTxtTables) {
+    if (!MonsterTbls::sgtDataTable.bUseTxt && gbTxtAllocCountHeader) {
       nTypeCount = 0;
       if (MonsterTbls::sgtDataTable.nTxtItemTypesSize > 0) {
         do {
@@ -2031,13 +2032,13 @@ void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRe
       size_t nNewAllocSize;
       nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;
       pDstRecord = nTxtRunesSize.pTable;
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         pDstRecord = (D2RunesTxt*)&nTxtRunesSize.pTable[-1].t1max7;
         nNewAllocSize += 4;
       }
 
       nTxtRunesSize.pTable = (D2RunesTxt*)D2_REALLOC_POOL_AT(nullptr, pDstRecord, nNewAllocSize, ".\\DATATBLS\\ItemTbls.cpp", 0x95b);
-      if (gpaMiscTxtTables) {
+      if (gbTxtAllocCountHeader) {
         *(int32_t*)nTxtRunesSize.pTable->name = nRunewordId + 1;
         nTxtRunesSize.pTable = (D2RunesTxt*)(nTxtRunesSize.pTable->name + 4);
       }
@@ -2063,32 +2064,20 @@ D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId) {
     exit(-1);
 }
 
-D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_00654fd0() {
-    return (D2RunesTxtTableStrc*)&MonsterTbls::gnTreasureClassArraySize;
+void * __stdcall DATATBLS_GetMonItemPercentDataTables() {
+    return &MonsterTbls::gnMonItemPercentTxtRecordCount;
 }
 
-D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b450() {
-    return (D2RunesTxtTableStrc*)&nTxtPlrTypeModeSize;
+void * __stdcall DATATBLS_GetPlrTypeModeDataTables() {
+    return &nTxtPlrTypeModeSize;
 }
 
-D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b460() {
-    return (D2RunesTxtTableStrc*)&TokTbls::nTxtMonModeSize;
+void * __stdcall DATATBLS_GetMonModeDataTables() {
+    return &TokTbls::nTxtMonModeSize;
 }
 
-D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize_Unref_0065b470() {
-    return (D2RunesTxtTableStrc*)&nTxtObjTypeModeSize;
+void * __stdcall DATATBLS_GetObjTypeModeDataTables() {
+    return &nTxtObjTypeModeSize;
 }
-
-}}} // namespace D2Common::DATATBLS::ItemTbls
-
-// =============================================================================
-// Co-located global data definitions
-// =============================================================================
-
-namespace D2Common { namespace DATATBLS { namespace ItemTbls {
-
-// Initialized data
-
-D2RunesTxtTableStrc nTxtRunesSize = {0}; D2_GLOBAL_GUARD(nTxtRunesSize, "D2Common::DATATBLS::ItemTbls::nTxtRunesSize");
 
 }}} // namespace D2Common::DATATBLS::ItemTbls

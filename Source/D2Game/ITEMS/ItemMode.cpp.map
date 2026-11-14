@@ -4,7 +4,7 @@
   "file": "Source/D2Game/ITEMS/ItemMode.cpp",
   "functions": [
     {
-      "name": "GetSavePacketList",
+      "name": "GetSaveChecksum",
       "address": "00538350",
       "lines": [
         {
@@ -14,7 +14,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "GetSavePacketList",
+        "GetSaveChecksum",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -23,7 +23,7 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "63a59a9c",
+      "dh": "5a6a00c3",
       "paramStorage": [
         [
           "pClient",
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "name": "SetSavePacketList",
+      "name": "SetSaveChecksum",
       "address": "00538380",
       "lines": [
         {
@@ -42,7 +42,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "SetSavePacketList",
+        "SetSaveChecksum",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -51,14 +51,14 @@
         "D2ClientStrc",
         "int32_t"
       ],
-      "dh": "de136df2",
+      "dh": "2d296697",
       "paramStorage": [
         [
           "pClient",
           "ECX:4"
         ],
         [
-          "pSavePacketList",
+          "nSaveChecksum",
           "EDX:4"
         ]
       ]
@@ -928,7 +928,7 @@
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "ITEM_SetItemData_ePage",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "SetupUpdateEvent_AttachEventSound"
       ],
       "usedTypes": [
@@ -937,7 +937,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "646855ea",
+      "dh": "b3dc8566",
       "paramStorage": [
         [
           "nUpdateType",
@@ -1018,7 +1018,7 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "65924c01",
+      "dh": "3feead71",
       "paramStorage": [
         [
           "pUnit",
@@ -1114,8 +1114,8 @@
         "PickingGold",
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEM_SetItemData_ePage",
         "RefreshInventory",
@@ -1136,7 +1136,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "02178540",
+      "dh": "ab8f5bac",
       "paramStorage": [
         [
           "pGame",
@@ -1171,9 +1171,9 @@
         "STATSEX_GetCurrentStat",
         "ITEM_GetTxtItemTypes_autostack",
         "ITEM_GetTxtItemTypes_quiver",
-        "INVENTORY_FindSocketableItemInMain",
-        "INVENTORY_FindSocketableItemInStash",
-        "IsItemSocketable",
+        "INVENTORY_FindEquippedItemForStack",
+        "INVENTORY_FindBackpackItemForStack",
+        "ITEMS_AreStackablesEqual",
         "ITEM_GetMaxStack",
         "ITEM_CheckIfItemHasDurability",
         "STATLIST_SetUnitStat",
@@ -1186,7 +1186,7 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "ITEM_DeleteItemAndFreeUnit",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -1203,7 +1203,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "0a8e5c02",
+      "dh": "076c9522",
       "paramStorage": [
         [
           "pGame",
@@ -1243,7 +1243,7 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "ITEM_DeleteItemAndFreeUnit",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -1259,7 +1259,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6e44a004",
+      "dh": "dec2b061",
       "paramStorage": [
         [
           "pGame",
@@ -1293,14 +1293,14 @@
         "ITEMS_IsA",
         "IsTwoHanded",
         "ITEM_GetTxtItemTypes_throwable",
-        "ITEM_GetMinimalStatValueShifted"
+        "STATLIST_UnitGetStatValueUnchecked"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "244a941b",
+      "dh": "de04d869",
       "paramStorage": [
         [
           "pOwner",
@@ -1563,7 +1563,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ValidateItemQuality",
+      "name": "ITEMMODE_RestoreSelectedSkills",
       "address": "0055da70",
       "lines": [
         {
@@ -1573,7 +1573,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ValidateItemQuality",
+        "ITEMMODE_RestoreSelectedSkills",
         "GetSkillByIdAndOwner",
         "GetLeftSkill",
         "SKILLS_CanUseSkill",
@@ -1585,7 +1585,7 @@
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "7c0c15f2",
+      "dh": "3325f88a",
       "paramStorage": [
         [
           "pUnit",
@@ -1691,7 +1691,7 @@
         "INVENTORY_UpdatePrimaryWeapon",
         "ITEMMODE_AddStatsList",
         "GetItemQuality",
-        "ITEMMODE_ValidateItemQuality",
+        "ITEMMODE_RestoreSelectedSkills",
         "RefreshInventory",
         "GetOwnerUnit",
         "SUNIT_GetClient",
@@ -1706,7 +1706,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5c0ef8e3",
+      "dh": "3a9e93d8",
       "paramStorage": [
         [
           "pGame",
@@ -1773,9 +1773,9 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "ITEMMODE_DeleteItemFromInventory",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEM_GetContainingInventoryPage",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
@@ -1796,7 +1796,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "863810ca",
+      "dh": "a2f7797c",
       "paramStorage": [
         [
           "pGame",
@@ -1890,7 +1890,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_CastItemSkill",
+      "name": "ITEMMODE_DecrementBookSkillQuantity",
       "address": "0055e0d0",
       "lines": [
         {
@@ -1900,7 +1900,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_CastItemSkill",
+        "ITEMMODE_DecrementBookSkillQuantity",
         "GetSkillByIdAndOwner",
         "SKILL_GetQuantity",
         "GetRightSkill",
@@ -1920,7 +1920,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "e2390f55",
+      "dh": "65c516ad",
       "paramStorage": [
         [
           "eSkill",
@@ -1968,7 +1968,7 @@
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
         "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
-        "ITEMMODE_CastItemSkill",
+        "ITEMMODE_DecrementBookSkillQuantity",
         "GetSkillByIdAndOwner",
         "SKILL_GetQuantity",
         "GetRightSkill",
@@ -1993,7 +1993,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "bc592a94",
+      "dh": "91b30376",
       "paramStorage": [
         [
           "pGame",
@@ -2033,7 +2033,7 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "ITEMMODE_MergeStackableItems",
-        "IsItemSocketable",
+        "ITEMS_AreStackablesEqual",
         "STATSEX_GetCurrentStat",
         "ITEM_GetMaxStack",
         "STATLIST_SetUnitStat",
@@ -2043,7 +2043,7 @@
         "ITEMMODE_UpdateBookSkillQuantity",
         "ITEM_EditItemData_eItemFlag",
         "ITEM_CheckIfItemHasDurability",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
         "ITEM_DeleteItemAndFreeUnit",
         "GetInstructionPointer",
@@ -2060,7 +2060,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "e71b4abf",
+      "dh": "49055589",
       "paramStorage": [
         [
           "pGame",
@@ -2095,7 +2095,7 @@
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_GetContainingInventoryPage",
-        "IsItemSocketable",
+        "ITEMS_AreStackablesEqual",
         "ITEMMODE_MergeStackableItems",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
@@ -2110,7 +2110,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "4cc168b9",
+      "dh": "d8a8248f",
       "paramStorage": [
         [
           "pGame",
@@ -2228,11 +2228,11 @@
         "ITEM_SetItemData_ePage",
         "INVENTORY_PlacePotionInBelt",
         "PutItemInInventory",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "RefreshInventory",
         "UpsertToUpdateList",
@@ -2247,7 +2247,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5e02aea4",
+      "dh": "e9caf21d",
       "paramStorage": [
         [
           "pGame",
@@ -2290,13 +2290,13 @@
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_GetTxtItemTypes_beltable",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetXPosFromDynamicPathUnit",
         "INVENTORY_OnBeltChanged_NoOp",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_RemoveItemStates",
         "ITEMMODE_UnequipItemStats",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "INVENTORY_CanPlaceItemInBelt",
@@ -2319,7 +2319,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e21efaf7",
+      "dh": "49080629",
       "paramStorage": [
         [
           "pGame",
@@ -2344,7 +2344,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_DeleteItemFromCorpse",
+      "name": "ITEMMODE_RemoveInventoryItem",
       "address": "0055ed30",
       "lines": [
         {
@@ -2354,8 +2354,8 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_DeleteItemFromCorpse",
-        "ItemBelongsToInventoryOfPlayer",
+        "ITEMMODE_RemoveInventoryItem",
+        "INVENTORY_RemoveItem",
         "GetXPos",
         "INVENTORY_OnBeltChanged_NoOp",
         "ITEM_DeleteItemAndFreeUnit",
@@ -2370,18 +2370,18 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b05ed7b6",
+      "dh": "8f70d5cf",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pCorpseUnit",
+          "pOwnerUnit",
           "EDX:4"
         ],
         [
-          "pUnit",
+          "pItem",
           "Stack[0x4]:4"
         ]
       ]
@@ -2430,7 +2430,7 @@
       ]
     },
     {
-      "name": "ToCursorItem",
+      "name": "ITEMMODE_RemoveItemIfOnCursor",
       "address": "0055eea0",
       "lines": [
         {
@@ -2440,12 +2440,12 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ToCursorItem",
+        "ITEMMODE_RemoveItemIfOnCursor",
         "INVENTORY_GetHandItem",
         "SUNIT_GetClient",
         "ITEM_SetServerSideFlag",
         "NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_DeleteItemAndFreeUnit"
       ],
       "usedTypes": [
@@ -2455,14 +2455,14 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "a4ed749f",
+      "dh": "1ea5ec6d",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
@@ -2490,13 +2490,13 @@
         "GetMagicSuffix",
         "STATSEX_GetCurrentStat",
         "ITEM_GetMaxStack",
-        "ToCursorItem",
+        "ITEMMODE_RemoveItemIfOnCursor",
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "ITEM_DeleteItemAndFreeUnit",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "STATLIST_AddUnitStat",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
@@ -2516,7 +2516,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "401b547e",
+      "dh": "3b94e863",
       "paramStorage": [
         [
           "pGame",
@@ -2600,7 +2600,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_CheckEquipRestrictions",
+      "name": "ITEMMODE_ConsumeKey",
       "address": "0055f140",
       "lines": [
         {
@@ -2610,7 +2610,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_CheckEquipRestrictions",
+        "ITEMMODE_ConsumeKey",
         "SERVER_ITEM_SendStackableUsagePackets",
         "INVENTORY_GetFirstItem",
         "GetCarriedItem",
@@ -2635,7 +2635,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "dd62f791",
+      "dh": "3e2bef6f",
       "paramStorage": [
         [
           "pGame",
@@ -2812,7 +2812,7 @@
         "SEVER_ITEM_GetOwner",
         "STATLIST_RemoveFromOwnerAndRecalc",
         "STATLIST_SetItemStatActive",
-        "ITEMMODE_ValidateItemQuality"
+        "ITEMMODE_RestoreSelectedSkills"
       ],
       "usedTypes": [
         "D2InventoryStrc",
@@ -2820,7 +2820,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c15396f2",
+      "dh": "e356e2ce",
       "paramStorage": [
         [
           "pGameStrc",
@@ -2902,7 +2902,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ValidateSocketedItems",
+      "name": "ITEMMODE_FindBookWithSpaceForScroll",
       "address": "0055f640",
       "lines": [
         {
@@ -2912,7 +2912,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ValidateSocketedItems",
+        "ITEMMODE_FindBookWithSpaceForScroll",
         "ITEMS_IsA",
         "INVENTORY_GetFirstItem",
         "GetCarriedItem",
@@ -2930,7 +2930,7 @@
         "eInventoryPage",
         "uint32_t"
       ],
-      "dh": "ff059baa",
+      "dh": "3c3b5970",
       "paramStorage": [
         [
           "pGameStrc",
@@ -2951,7 +2951,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_CheckItemEthereal",
+      "name": "ITEMMODE_AddItemQuantity",
       "address": "0055f6e0",
       "lines": [
         {
@@ -2961,7 +2961,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_CheckItemEthereal",
+        "ITEMMODE_AddItemQuantity",
         "STATLIST_AddUnitStat",
         "STATSEX_GetCurrentStat",
         "SUNIT_GetClient",
@@ -2977,7 +2977,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "3dd2033f",
+      "dh": "19037b44",
       "paramStorage": [
         [
           "pGameStrc",
@@ -2992,7 +2992,7 @@
           "Stack[0x4]:4"
         ],
         [
-          "bForce",
+          "nAmount",
           "Stack[0x8]:4"
         ]
       ]
@@ -3054,7 +3054,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_SendItemUpdate",
+      "name": "ITEMMODE_BreakItem",
       "address": "0055f850",
       "lines": [
         {
@@ -3064,7 +3064,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_SendItemUpdate",
+        "ITEMMODE_BreakItem",
         "ITEM_EditItemData_eItemFlag",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
         "GetAnimOrSeqMode",
@@ -3087,7 +3087,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "5d901092",
+      "dh": "c29bd446",
       "paramStorage": [
         [
           "pGame",
@@ -3120,7 +3120,7 @@
         "ITEMS_RecalcEquippedItemStates",
         "UpsertToUpdateList",
         "RefreshInventory",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATLIST_SetUnitStat",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x3E_UpdateItemStats",
@@ -3136,7 +3136,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "6cf18794",
+      "dh": "d79ce6b7",
       "paramStorage": [
         [
           "pGame",
@@ -3153,7 +3153,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_SetItemFlags",
+      "name": "ITEMMODE_ResetBookScrollSkillQuantity",
       "address": "0055f9c0",
       "lines": [
         {
@@ -3163,7 +3163,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_SetItemFlags",
+        "ITEMMODE_ResetBookScrollSkillQuantity",
         "ITEMMODE_GetItemSkillId",
         "STATSEX_GetCurrentStat",
         "GetSkillByIdAndOwner",
@@ -3180,20 +3180,20 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fe59970a",
+      "dh": "ef1f65b8",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "pUnit2",
+          "pItem",
           "EDX:4"
         ]
       ]
     },
     {
-      "name": "ITEMMODE_CheckItemLevel",
+      "name": "ITEMMODE_RebuildBookScrollSkillQuantities",
       "address": "0055fa40",
       "lines": [
         {
@@ -3203,11 +3203,11 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "INVENTORY_GetFirstItem",
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
-        "ITEMMODE_SetItemFlags",
+        "ITEMMODE_ResetBookScrollSkillQuantity",
         "ITEM_GetContainingInventoryPage",
         "ITEMMODE_UpdateItemSkill"
       ],
@@ -3218,7 +3218,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "31e09ebc",
+      "dh": "54627149",
       "paramStorage": [
         [
           "pGameStrc",
@@ -3231,7 +3231,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ApplyQuestReward",
+      "name": "ITEMMODE_PutItemOnCursor",
       "address": "0055fb10",
       "lines": [
         {
@@ -3241,8 +3241,8 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ApplyQuestReward",
-        "SetupUpdateFlag",
+        "ITEMMODE_PutItemOnCursor",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -3255,7 +3255,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "96e1d8ca",
+      "dh": "0a26e960",
       "paramStorage": [
         [
           "pGameStrc",
@@ -3322,7 +3322,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ProcessItemDropLogic",
+      "name": "ITEMMODE_RemoveEquippedItemsAndStats",
       "address": "0055fcc0",
       "lines": [
         {
@@ -3332,7 +3332,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ProcessItemDropLogic",
+        "ITEMMODE_RemoveEquippedItemsAndStats",
         "INVENTORY_GetFirstItem",
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
@@ -3340,7 +3340,7 @@
         "ITEM_IsActiveCharm",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "INVENTORY_IsItemLocationValid",
         "NullSub_2Arg",
         "ITEMMODE_UnequipItemStats",
@@ -3357,7 +3357,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ff480a02",
+      "dh": "697ea9c2",
       "paramStorage": [
         [
           "pGame",
@@ -3406,7 +3406,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_GetItemCursorMode",
+      "name": "ITEMMODE_SetItemIdentified",
       "address": "0055fe00",
       "lines": [
         {
@@ -3416,7 +3416,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_GetItemCursorMode",
+        "ITEMMODE_SetItemIdentified",
         "ITEM_EditItemData_eItemFlag",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
@@ -3428,7 +3428,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "21acf3a9",
+      "dh": "28d1592e",
       "paramStorage": [
         [
           "pGame",
@@ -3445,7 +3445,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_IsItemOnCursor",
+      "name": "ITEMMODE_ApplyItemStats",
       "address": "0055fe60",
       "lines": [
         {
@@ -3455,14 +3455,14 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_IsItemOnCursor",
+        "ITEMMODE_ApplyItemStats",
         "ITEMMODE_AddStatsList"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "25b2c451",
+      "dh": "88966346",
       "paramStorage": [
         [
           "pGame",
@@ -3479,7 +3479,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_HandleCursorItem",
+      "name": "ITEMMODE_RechargeItem",
       "address": "0055fe80",
       "lines": [
         {
@@ -3489,7 +3489,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_HandleCursorItem",
+        "ITEMMODE_RechargeItem",
         "SUNIT_GetClient",
         "STATLIST_GetItemStatBonusValues",
         "ITEMMOD_SetChargedSkillCharges",
@@ -3503,7 +3503,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "875324ed",
+      "dh": "06a86082",
       "paramStorage": [
         [
           "pGame",
@@ -3614,18 +3614,18 @@
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
         "ITEMMODE_PlaceItemInInventoryPage",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_AutoPlaceItemInGrid",
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "PutItemInInventory",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -3645,7 +3645,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8c83d7db",
+      "dh": "3f8fc6db",
       "paramStorage": [
         [
           "pGame",
@@ -3692,15 +3692,15 @@
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_GetContainingInventoryPage",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_PlaceItemAtCoords",
         "INVENTORY_AutoPlaceItemInGrid",
         "PutItemInInventory",
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
@@ -3718,7 +3718,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "418ead2f",
+      "dh": "583530ca",
       "paramStorage": [
         [
           "szSourceFile",
@@ -3779,20 +3779,20 @@
         "GetPlayerTradeTickOrBusy",
         "ITEM_GetContainingInventoryPage",
         "SERVER_ITEM_SendStackableUsagePackets",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEMMODE_UnequipItemStats",
         "ITEM_IsActiveCharm",
         "ITEMS_RecalcEquippedItemStates",
         "RefreshInventory",
         "ITEMMODE_RemoveItemStates",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
         "ITEM_SetItemData_ePreviousPage",
         "ITEM_SetItemData_ePage",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eItemFlag",
         "SERVER_TradeTransferItemToCursor",
         "ITEM_EditItemData_eD2ItemCmd",
@@ -3811,7 +3811,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7e1046b0",
+      "dh": "c8f58e08",
       "paramStorage": [
         [
           "pGame",
@@ -3870,8 +3870,8 @@
         "SetBodyLoc",
         "INVENTORY_UpdatePrimaryWeapon",
         "ITEMMODE_AddStatsList",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEM_EditItemData_eItemFlag",
@@ -3891,7 +3891,7 @@
         "eD2BodyLoc",
         "int32_t"
       ],
-      "dh": "8a082d3d",
+      "dh": "177b675c",
       "paramStorage": [
         [
           "pGame",
@@ -3940,22 +3940,22 @@
         "ITEM_SetServerSideFlag",
         "SUNIT_GetClient",
         "Send0x9CItemRemoveFromBelt",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetXPos",
         "INVENTORY_OnBeltChanged_NoOp",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEMMODE_RemoveItemStates",
         "ITEM_SetItemData_ePage",
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_GetContainingInventoryPage",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_AutoPlaceItemInGrid",
         "PutItemInInventory",
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
@@ -3986,7 +3986,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0ba69e31",
+      "dh": "f43860a7",
       "paramStorage": [
         [
           "pGame",
@@ -4021,14 +4021,14 @@
         "GetCurrentItemOnBodyLocation",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEM_GetItemData_wType",
         "ITEMMODE_RemoveItemFromBelt",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_EditItemData_eItemFlag",
         "ITEMMODE_UnequipItemStats",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "CheckItemFlag",
@@ -4049,7 +4049,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c8e834c5",
+      "dh": "a0a9f506",
       "paramStorage": [
         [
           "pGame",
@@ -4101,10 +4101,10 @@
         "ITEMMODE_RemoveItemFromBelt",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eItemFlag",
         "ITEM_EditItemData_eD2ItemCmd",
         "CheckItemFlag",
@@ -4129,7 +4129,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "863a2698",
+      "dh": "7f3a4eb9",
       "paramStorage": [
         [
           "pGame",
@@ -4173,26 +4173,26 @@
         "INVENTORY_GetEquipActionForBodySlot",
         "ITEM_CheckEquipRequirements",
         "SERVER_ITEM_SendStackableUsagePackets",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_GetItemByGridOffset",
         "INVENTORY_CanMoveEquippedToPage",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEMMODE_UnequipItemStats",
         "INVENTORY_AutoPlaceItemInGrid",
         "PutItemInInventory",
         "ITEM_SetItemData_ePage",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
         "CheckItemFlag",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "ITEMMODE_AddStatsList",
-        "ITEMMODE_ApplyQuestReward",
+        "ITEMMODE_PutItemOnCursor",
         "SetupUpdateEvent_AttachEventSound",
         "RefreshInventory",
         "INVENTORY_GetItemAtBodyLoc",
@@ -4212,7 +4212,7 @@
         "eD2BodyLocDWORD",
         "int32_t"
       ],
-      "dh": "2e4c647e",
+      "dh": "d33d22cc",
       "paramStorage": [
         [
           "pGame",
@@ -4258,7 +4258,7 @@
         "GetCurrentItemOnBodyLocation",
         "ITEMMODE_UnequipItemStats",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEM_SetItemData_ePage",
         "ITEM_EditItemData_eD2ItemCmd",
@@ -4270,7 +4270,7 @@
         "SetBodyLoc",
         "INVENTORY_UpdatePrimaryWeapon",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEMMODE_ValidateWeaponSkills",
         "ITEMS_RecalcEquippedItemStates",
         "GetSkillByIdAndOwner",
@@ -4303,7 +4303,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec699bfc",
+      "dh": "3925b53e",
       "paramStorage": [
         [
           "pGame",
@@ -4335,17 +4335,17 @@
         "FindUnitFromTable",
         "ITEM_GetContainingInventoryPage",
         "ConvertItemCodeToClassIdAndGetItemsTxtLine",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEMMODE_UnequipItemStats",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
         "ITEM_SetItemData_ePage",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_RemoveItemStates",
         "ITEM_SetItemData_eExchangePage",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
@@ -4374,7 +4374,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "442adfc3",
+      "dh": "bfd55c79",
       "paramStorage": [
         [
           "pGame",
@@ -4385,11 +4385,11 @@
           "EDX:4"
         ],
         [
-          "nItemGUID",
+          "nCursorItemGUID",
           "Stack[0x4]:4"
         ],
         [
-          "nX",
+          "nGridItemGUID",
           "Stack[0x8]:4"
         ],
         [
@@ -4421,7 +4421,7 @@
         "SUNIT_GetClient",
         "ITEM_SetServerSideFlag",
         "Send0x9CItemRemoveFromBelt",
-        "ITEMMODE_DeleteItemFromCorpse"
+        "ITEMMODE_RemoveInventoryItem"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -4429,7 +4429,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "e869cf97",
+      "dh": "f3d76981",
       "paramStorage": [
         [
           "pGame",
@@ -4474,7 +4474,7 @@
         "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
         "SKILLITEM_DispatchItemSpell",
         "ITEMMODE_GetItemCastSkill",
-        "ITEMMODE_CastItemSkill",
+        "ITEMMODE_DecrementBookSkillQuantity",
         "STATLIST_AddUnitStat",
         "ITEMMODE_ConsumeItem"
       ],
@@ -4488,7 +4488,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "c91468d9",
+      "dh": "26e5d617",
       "paramStorage": [
         [
           "pGame",
@@ -4528,12 +4528,12 @@
         "FindUnitFromTable",
         "SERVER_ITEM_SendStackableUsagePackets",
         "GetXPosFromDynamicPathUnit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "INVENTORY_OnBeltChanged_NoOp",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_RemoveItemStates",
         "ITEMMODE_UnequipItemStats",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "RefreshInventory",
         "UpsertToUpdateList",
@@ -4549,7 +4549,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "42a80c59",
+      "dh": "ec884b31",
       "paramStorage": [
         [
           "pGame",
@@ -4613,7 +4613,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "3b6ff1c6",
+      "dh": "7ce7af5a",
       "paramStorage": [
         [
           "pGame",
@@ -4628,15 +4628,15 @@
           "Stack[0x4]:4"
         ],
         [
-          "nTargetGUID",
+          "nX",
           "Stack[0x8]:4"
         ],
         [
-          "nTargetX",
+          "nY",
           "Stack[0xc]:4"
         ],
         [
-          "pTargetUnit",
+          "pbBadItem",
           "Stack[0x10]:4"
         ],
         [
@@ -4646,7 +4646,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ProcessItemSell",
+      "name": "ITEMMODE_IdentifyItem",
       "address": "00562590",
       "lines": [
         {
@@ -4656,13 +4656,13 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ProcessItemSell",
+        "ITEMMODE_IdentifyItem",
         "CheckItemFlag",
         "ITEM_CheckItemData_eD2ItemCmd",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "ITEMMODE_GetItemCursorMode",
+        "ITEMMODE_SetItemIdentified",
         "ITEM_EditItemData_eItemFlag",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -4674,7 +4674,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "15fa53e9",
+      "dh": "f87a7093",
       "paramStorage": [
         [
           "pGame",
@@ -4714,15 +4714,15 @@
         "ITEM_GetSocketsCount",
         "ITEM_ItemsInItem",
         "PutItemInInventory",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_AddStatsList",
         "ItemUpdateStatsAfterSocketing",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "CalculateRunewordByItem",
         "RollRunewordMostlikely",
         "RefreshDurability",
         "RefreshQuantity",
-        "ITEMMODE_HandleCursorItem",
+        "ITEMMODE_RechargeItem",
         "ITEM_EditItemData_eItemFlag",
         "RefreshInventory",
         "UpsertToUpdateList"
@@ -4735,7 +4735,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ffdb97ff",
+      "dh": "2ac93577",
       "paramStorage": [
         [
           "pGame",
@@ -4776,7 +4776,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_HandleItemRepair",
+      "name": "ITEMMODE_PlaceItemInCube",
       "address": "005628c0",
       "lines": [
         {
@@ -4786,7 +4786,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_HandleItemRepair",
+        "ITEMMODE_PlaceItemInCube",
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_GetItemsTxt_szCode",
@@ -4806,7 +4806,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "54c4c55c",
+      "dh": "36f4e7a2",
       "paramStorage": [
         [
           "pGame",
@@ -4831,7 +4831,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_ProcessItemBuy",
+      "name": "ITEMMODE_EquipStoredItem",
       "address": "00562a30",
       "lines": [
         {
@@ -4841,12 +4841,12 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ProcessItemBuy",
+        "ITEMMODE_EquipStoredItem",
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
         "ITEM_CheckEquipRequirements",
-        "ItemBelongsToInventoryOfPlayer",
-        "GetInventoryPage",
+        "INVENTORY_RemoveItem",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
@@ -4856,10 +4856,10 @@
         "NullSub_2Arg",
         "SetBodyLoc",
         "INVENTORY_UpdatePrimaryWeapon",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMS_IsA",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
@@ -4881,10 +4881,10 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e7636b92",
+      "dh": "04c58ed6",
       "paramStorage": [
         [
-          "ppUnit",
+          "pGame",
           "ECX:4"
         ],
         [
@@ -4902,7 +4902,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_HandleItemGamble",
+      "name": "ITEMMODE_ReplenishItemStat",
       "address": "00562c40",
       "lines": [
         {
@@ -4912,7 +4912,7 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_HandleItemGamble",
+        "ITEMMODE_ReplenishItemStat",
         "STATSEX_GetCurrentStat",
         "STATLIST_SetUnitStat",
         "ITEM_GetItemData_nPlayerGUID",
@@ -4931,32 +4931,32 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ed714e87",
+      "dh": "85f3edbd",
       "paramStorage": [
         [
           "pGame",
           "Stack[0x4]:4"
         ],
         [
-          "pUnit",
+          "pItem",
           "EDI:4"
         ],
         [
-          "eStat",
+          "eRateStat",
           "EAX:4"
         ],
         [
-          "eUnitStat",
+          "eValueStat",
           "EBX:4"
         ],
         [
-          "nStatMax",
+          "nMaxValue",
           "Stack[0x8]:4"
         ]
       ]
     },
     {
-      "name": "ITEMMODE_ValidateTradeItem",
+      "name": "ITEMMODE_ReplenishItem",
       "address": "00562d30",
       "lines": [
         {
@@ -4966,11 +4966,11 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_ValidateTradeItem",
+        "ITEMMODE_ReplenishItem",
         "CheckItemFlag",
         "ITEM_CheckIfItemHasDurability",
-        "GetTxtMaxDurability",
-        "ITEMMODE_HandleItemGamble",
+        "STATLIST_GetMaxDurabilityFromUnit",
+        "ITEMMODE_ReplenishItemStat",
         "IsStackable",
         "ITEM_GetMaxStack"
       ],
@@ -4980,14 +4980,14 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7a97d0c0",
+      "dh": "54dd1f8d",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pItem",
           "EDX:4"
         ]
       ]
@@ -5031,7 +5031,7 @@
       ]
     },
     {
-      "name": "ITEMMODE_TryPutItemInInventory",
+      "name": "ITEMMODE_EquipItemAtBestBodyLoc",
       "address": "00562e00",
       "lines": [
         {
@@ -5041,15 +5041,15 @@
       ],
       "namespace": "D2Game::ITEMS::ItemMode",
       "calledFunctions": [
-        "ITEMMODE_TryPutItemInInventory",
+        "ITEMMODE_EquipItemAtBestBodyLoc",
         "ITEMMODE_FindBestBodyLocForItem",
         "INVENTORY_GetItemAtBodyLoc",
         "PutItemInInventory",
         "SetBodyLoc",
         "INVENTORY_UpdatePrimaryWeapon",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -5066,7 +5066,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "bc5d753e",
+      "dh": "351f530e",
       "paramStorage": [
         [
           "pGameStrc",
@@ -5106,13 +5106,13 @@
         "RefreshDurability",
         "RefreshQuantity",
         "ITEM_EditItemData_eItemFlag",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "INVENTORY_GetItemAtBodyLoc",
         "PutItemInInventory",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "SetBodyLoc",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
@@ -5126,7 +5126,7 @@
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
         "SERVER_CheckIfPickable",
-        "ITEMMODE_TryPutItemInInventory",
+        "ITEMMODE_EquipItemAtBestBodyLoc",
         "ITEM_GetTxtItemTypes_beltable",
         "INVENTORY_PlacePotionInBelt",
         "GetInstructionPointer",
@@ -5144,7 +5144,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1d2b6c15",
+      "dh": "c6a00a01",
       "paramStorage": [
         [
           "pGame",
@@ -5177,7 +5177,7 @@
         "INVENTORY_GetNextItem",
         "GetCarriedItem",
         "ITEM_CloneFromSerializedData",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "GetXPos",
         "SetXForStaticUnit",
         "GetYPos",
@@ -5191,7 +5191,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "2bebff93",
+      "dh": "94b0a01c",
       "paramStorage": [
         [
           "pGame",
@@ -5235,7 +5235,7 @@
         "ITEMMODE_DeleteItemFromInventory",
         "INVENTORY_GetItemXPosition",
         "ITEMMODE_TakeItemFromBodyLoc",
-        "ToCursorItem"
+        "ITEMMODE_RemoveItemIfOnCursor"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -5245,7 +5245,7 @@
         "eInventoryPage",
         "int32_t"
       ],
-      "dh": "14100ef7",
+      "dh": "b8a66052",
       "paramStorage": [
         [
           "pGame",
@@ -5293,18 +5293,18 @@
         "RemoveCollision_Vector",
         "RemoveUnitFromRoom",
         "PutItemInInventory",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "ITEM_EditItemData_eD2ItemCmd",
         "UpsertToUpdateList",
         "RefreshInventory",
         "ITEMS_RecalcEquippedItemStates",
         "INVENTORY_GetEquipActionForBodySlot",
-        "ITEMMODE_TryPutItemInInventory",
+        "ITEMMODE_EquipItemAtBestBodyLoc",
         "QUEST_OnItemPickedUp",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -5320,7 +5320,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b36176e1",
+      "dh": "cb39c9ed",
       "paramStorage": [
         [
           "pGame",
@@ -5364,13 +5364,13 @@
         "ITEM_SetItemData_ePreviousPage",
         "SUNIT_GetClient",
         "Send0x9DRemoveItemFromContainer",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEMMODE_RemoveItemsFromCube_HaltTail",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPos",
         "GetXPos",
         "UnusedDebug",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "SERVER_ITEM_SendStackableUsagePackets",
         "FindUnitFromTable",
@@ -5379,7 +5379,7 @@
         "ITEMMODE_ApplyItemToOwner",
         "ITEM_IsActiveCharm",
         "ITEMMODE_AddStatsList",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_EditItemData_eD2ItemCmd",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
@@ -5408,7 +5408,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc8201a8",
+      "dh": "bd4b78c5",
       "paramStorage": [
         [
           "pGame",
@@ -5466,7 +5466,7 @@
         "UNITS_GetRoom",
         "FindBestSpotToSpawnItem",
         "DropItem",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEMMODE_HasSocketedItems",
         "ITEM_EditItemData_eItemFlag",
         "CheckItemFlag",
@@ -5484,7 +5484,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0149c524",
+      "dh": "c744a086",
       "paramStorage": [
         [
           "pGame",
@@ -5526,12 +5526,12 @@
         "SetWeaponGUID",
         "ReturnFalse",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEM_GetItemData_wType",
         "ITEMMODE_RemoveItemFromBelt",
-        "CopyInventoryOfPlayerOrFree",
-        "SetupUpdateFlag",
+        "INVENTORY_SetCursorItem",
+        "ChangeAnimMode",
         "INVENTORY_GetItemAtBodyLoc",
         "PutItemInInventory",
         "SetBodyLoc",
@@ -5557,7 +5557,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7b32a2fe",
+      "dh": "c008c61a",
       "paramStorage": [
         [
           "pGame",

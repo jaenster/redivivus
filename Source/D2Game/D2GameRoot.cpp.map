@@ -69,7 +69,7 @@
       ]
     },
     {
-      "name": "GAME_SetNoSaveFlag",
+      "name": "PLAYERSAVE_EnableSaveFileWriting",
       "address": "00530f30",
       "lines": [
         {
@@ -79,12 +79,12 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "GAME_SetNoSaveFlag"
+        "PLAYERSAVE_EnableSaveFileWriting"
       ],
-      "dh": "a76905f3",
+      "dh": "955096a2",
       "paramStorage": [
         [
-          "bResult",
+          "bEnable",
           "ECX:4"
         ]
       ]
@@ -219,7 +219,7 @@
       ]
     },
     {
-      "name": "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
+      "name": "GAME_ClearGlobalFlag_Thunk",
       "address": "00534790",
       "lines": [
         {
@@ -229,10 +229,10 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "thunk_QSERVER_CountClientsWithStatusFlag0x20_Unref_00534790",
+        "GAME_ClearGlobalFlag_Thunk",
         "GAME_ClearGlobalFlag"
       ],
-      "dh": "37e1d7a9"
+      "dh": "a830af27"
     },
     {
       "name": "nullsub",
@@ -411,7 +411,7 @@
       "dh": "729da989"
     },
     {
-      "name": "GAME_SetNoSaveFlag_Unref_00544090",
+      "name": "QUESTS_SetDebugPrint",
       "address": "00544090",
       "lines": [
         {
@@ -421,9 +421,9 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "GAME_SetNoSaveFlag_Unref_00544090"
+        "QUESTS_SetDebugPrint"
       ],
-      "dh": "3f5b7eeb",
+      "dh": "a260251b",
       "paramStorage": [
         [
           "bResult",
@@ -686,7 +686,7 @@
       ]
     },
     {
-      "name": "MONSTER_ScheduleDeathIfRunningOrDead",
+      "name": "MONSTER_ScheduleEventOnGetHitOrDeath",
       "address": "005a2eb0",
       "lines": [
         {
@@ -696,7 +696,7 @@
       ],
       "namespace": "D2Game",
       "calledFunctions": [
-        "MONSTER_ScheduleDeathIfRunningOrDead",
+        "MONSTER_ScheduleEventOnGetHitOrDeath",
         "SetEvent"
       ],
       "usedTypes": [
@@ -705,7 +705,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "6b5bebc2",
+      "dh": "6d747d29",
       "paramStorage": [
         [
           "pGame",

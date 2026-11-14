@@ -70,7 +70,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pTextBox, uin
 int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pTextBox);
 void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int32_t nPosition);
 // MISNAMED: not a callback setter. Forwards its second argument verbatim to D2WINSCROLLBAR_SetLinkedTextBox(D2WinScrollbar*, D2WinTextBox*), so it is a D2WinTextBox pointer, not an int.
-void __fastcall D2WINTEXTBOX_SetScrollbarCallbackA(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox);
+void __fastcall D2WINTEXTBOX_SetScrollbarLinkedTextBox(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox);
 // Forwards its second argument verbatim to D2WINSCROLLBAR_SetChangeCallback(pScrollbar, fpD2WinScrollbarOnChange*), so it is a code pointer, not an int. Only caller CHARSEL_InitCharSelScreen @0043af40 passes MAINMENU_CharSelScrollbarCallback (0x439df0).
 void __fastcall D2WINTEXTBOX_SetScrollbarCallbackB(::D2WinTextBox * pTextBox, fpD2WinScrollbarOnChange fpOnChange);
 void __fastcall D2WINTEXTBOX_SetScrollbarStyle(::D2WinTextBox * pTextBox, int32_t nStyle);

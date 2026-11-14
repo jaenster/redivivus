@@ -1150,7 +1150,7 @@ int32_t __fastcall GetClientId(char * szCharName) {
     return nFoundClientId;
 }
 
-BOOL __fastcall SERVER_IsPlayerCharacterInGame(char * szCharName, char * szCharNameOut) {
+BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharNameOut) {
     int _bNotFound;
     bool bNotFound;
     _bNotFound = 1;
@@ -1213,8 +1213,8 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
         pClient->dwSave = dwSaveFlags;
         if (pClient->nSaveOpenSize == nTotalSize) {
           pClient->fClientFlags |= 8;
-          pSavePacketList = PLAYER::PlayerSave::PLAYERSAVE_CRC32MissileTable((D2MissilesTxt*)pClient->pSaveGame, pClient->nSaveOpenSize);
-          pClient->pSavePacketList = pSavePacketList;
+          pSavePacketList = PLAYER::PlayerSave::PLAYERSAVE_CalculateChecksum(pClient->pSaveGame, pClient->nSaveOpenSize);
+          pClient->nSaveChecksum = pSavePacketList;
           bComplete = 1;
         }
 
@@ -1304,7 +1304,7 @@ BOOL __fastcall CLIENT_HasSaveData(D2ClientStrc * pClient) {
     return 0;
 }
 
-void __fastcall GAMECLIENT_GetFlags0x20(D2ClientStrc * pClient) {
+void __fastcall GAMECLIENT_SetFlags0x20(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbaf);
       exit(-1);
@@ -1330,14 +1330,14 @@ D2ClientStrc * __fastcall GetNext(D2ClientStrc * pClient) {
     return pClient->pNext;
 }
 
-void __fastcall SetGotkeyInfo(D2ClientStrc * pClient, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, uint32_t dwSkillTxt) {
+void __fastcall SetGotkeyInfo(D2ClientStrc * pClient, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID) {
     if (!pClient) {
       return;
     }
 
     pClient->pHotKeys[nHotkey].wSkillId = wSkillId;
     pClient->pHotKeys[nHotkey].byHand = byHand;
-    pClient->pHotKeys[nHotkey].nItemGUID = dwSkillTxt;
+    pClient->pHotKeys[nHotkey].nItemGUID = nItemGUID;
 }
 
 void __fastcall GetHotKey(D2ClientStrc * pClient, int32_t nHotKeyIndex, int * nSkillId, uint32_t * pSkillType, int * nItemGUID) {
@@ -1394,17 +1394,17 @@ void __fastcall SetGuildInfo(D2ClientStrc * pClient, uint8_t byGuildInfo1, uint8
     pClient->nGuildInfo[2] = byGuildInfo3;
 }
 
-void __fastcall SetExperience(D2ClientStrc * pClient, int32_t nExp) {
-    if (nExp < 0) {
+void __fastcall SetExperienceLoss(D2ClientStrc * pClient, int32_t nExpLoss) {
+    if (nExpLoss < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc5e);
       exit(-1);
     }
 
-    pClient->nExp = nExp;
+    pClient->nExpLoss = nExpLoss;
 }
 
-int32_t __fastcall GetExperience(D2ClientStrc * pClient) {
-    return pClient->nExp;
+int32_t __fastcall GetExperienceLoss(D2ClientStrc * pClient) {
+    return pClient->nExpLoss;
 }
 
 BYTE __fastcall HasWeaponSwapped(D2ClientStrc * pClient) {
@@ -1554,7 +1554,7 @@ int __fastcall CLIENT_GetLangId(D2ClientStrc * pClient) {
 }
 
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t pDrlgAct, int32_t pSpawnXY) {
+void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     eD2LevelId eLevelId;
     uint32_t dwCorpseGUID;
     eD2UnitType pCorpsePlayerData;
@@ -1564,10 +1564,10 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     D2SkillStrc* pSkill;
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT ptCorpsePos;
-    int32_t pDrlgActSpawn;
+    int32_t nSpawnX;
     int32_t nErrorLine;
     eD2LevelId nRoom;
-    D2DrlgActStrc** pDrlgAct2;
+    D2DrlgActStrc** pX;
     ::SGAMEDATA* pGameOrig = pGame;
     if (!(pGame && pUnit && pClient)) {
       return;
@@ -1575,10 +1575,10 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
 
     uint8_t bActNo = GetAct(pClient);
     if (!pRoom) {
-      pDrlgAct2 = pGameOrig->pAct + bActNo;
+      pX = pGameOrig->pAct + bActNo;
       nRoom = (eD2LevelId)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGameOrig->pAct[bActNo]);
       dwCorpseGUID = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pDrlgAct2, nRoom, 0, &pDrlgActSpawn, (int*)&pGame, dwCorpseGUID);
+      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pX, nRoom, 0, &nSpawnX, (int*)&pGame, dwCorpseGUID);
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a1);
         exit(-1);
@@ -1587,14 +1587,14 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
       SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
     } else {
-      pDrlgActSpawn = pDrlgAct;
-      pGame = (::SGAMEDATA*)pSpawnXY;
+      nSpawnX = nX;
+      pGame = (::SGAMEDATA*)nY;
     }
 
     CLIENT_SetRoom(pClient, pRoom);
-    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, pDrlgActSpawn, (int32_t)pGame, pGameOrig, pRoom, 0);
+    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, nSpawnX, (int32_t)pGame, pGameOrig, pRoom, 0);
     pClient->fClientFlags &= -2;
-    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)pDrlgActSpawn, (uint16_t)(uintptr_t)pGame, '\x01');
+    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)nSpawnX, (uint16_t)(uintptr_t)pGame, '\x01');
     SCmd::NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(pClient);
     pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
     while (pRoom) {
@@ -1611,12 +1611,12 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
         pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGameOrig, UNIT_PLAYER, dwCorpseGUID);
         if (pUnit_00) {
           eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(bActNo);
-          pDrlgAct = 0;
-          pSpawnXY = 0;
+          nX = 0;
+          nY = 0;
           nSpawnUnitSizeX = D2Common::Units::GetUnitSizeX(pUnit_00);
-          pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGameOrig->pAct[bActNo], eLevelId, 0, &pDrlgAct, &pSpawnXY, nSpawnUnitSizeX);
-          ptCorpsePos.x = pDrlgAct;
-          ptCorpsePos.y = pSpawnXY;
+          pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGameOrig->pAct[bActNo], eLevelId, 0, &nX, &nY, nSpawnUnitSizeX);
+          ptCorpsePos.x = nX;
+          ptCorpsePos.y = nY;
           PLAYER::Player::PLAYER_PlaceCorpse(pGameOrig, pCorpseRoom, dwCorpseGUID, &ptCorpsePos);
         }
 
@@ -1624,7 +1624,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
       }
     }
 
-    UNIT::SUNITNPC::SUNITNPC_ValidateGambleItem(pGameOrig, pUnit);
+    UNIT::SUNITNPC::SUNITNPC_UpdateHirelingPosition(pGameOrig, pUnit);
     dwCorpseGUID = pClient->dwGolemGUID;
     if (!(dwCorpseGUID && dwCorpseGUID != -1)) {
       return;
@@ -1634,13 +1634,13 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
     if ((D2UnitStrc*)pRoom) {
       pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);
       if (pSkill) {
-        pDrlgAct = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+        nX = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
         nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetXForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
         nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         D2Common::Units::SetYForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
         D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, (D2UnitStrc*)pRoom);
-        SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGameOrig, pUnit, SKILL_IronGolem, pDrlgAct, 1, 0, 0);
+        SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGameOrig, pUnit, SKILL_IronGolem, nX, 1, 0, 0);
       }
     }
 
@@ -1842,7 +1842,7 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
 }
 
 // Serializes a client's character header/appearance block into the save/wire buffer pbParam (used in the player save & "exit game" cleanup path). Writes a 0x0E length tag, then the player's level, two SaveCharAppearance blobs (head+body, 0xFF-padded), class code (nClassId+1, wrapped), a level byte, char status (sets the death-flag bit 8 when dead and bit 4 set), guild flags, 3 guild-info bytes (0->0xFF), and the 4-byte guild tag. Returns (in the guarded value) the buffer pointer when the record is invalid (bad level/class/status or wrong length), having zeroed the first byte; otherwise null. __fastcall(pClient, pbParam).
-void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
+void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc * pClient, uint8_t * pPreview) {
     uint8_t bClassCode;
     int nClassId;
     uint32_t nCharStatus;
@@ -1854,7 +1854,7 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
     char aHeadAppearance[16];
     char aBodyAppearance2[16];
     uint16_t wCharStatusOut;
-    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer, 0xe);
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pPreview, 0xe);
     D2UnitStrc* pUnit = CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit) {
       uint8_t bLevel;
@@ -1878,7 +1878,7 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
       aHeadAppearance[0xe] = -1;
       aHeadAppearance[0xf] = -1;
       D2Common::INVENTORY::Inventory::SaveCharAppearance(pUnit, aHeadAppearance, aBodyAppearance);
-      Storm::Source::SMem::SMemCopy(pBuffer + 2, aHeadAppearance, 0xb);
+      Storm::Source::SMem::SMemCopy(pPreview + 2, aHeadAppearance, 0xb);
       byClass = (uint8_t)nClassId;
       if (byClass < 7) {
         bClassCode = byClass + 1;
@@ -1886,7 +1886,7 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
         bClassCode = 1;
       }
 
-      pBuffer[0xd] = bClassCode;
+      pPreview[0xd] = bClassCode;
       aBodyAppearance2[0] = -1;
       aBodyAppearance2[1] = -1;
       aBodyAppearance2[2] = -1;
@@ -1913,13 +1913,13 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
         nClassId++;
       } while (nClassId < 0x10);
 
-      Storm::Source::SMem::SMemCopy(pBuffer + 0xe, aBodyAppearance2, 0xb);
+      Storm::Source::SMem::SMemCopy(pPreview + 0xe, aBodyAppearance2, 0xb);
       bClassCode = bLevel - 1;
       if (bClassCode > 0x62) {
         bLevel = 1;
       }
 
-      pBuffer[0x19] = bLevel;
+      pPreview[0x19] = bLevel;
       wCharStatusOut = pClient->nCharacterStatus;
       if ((pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead || pUnit->eAnimMode.ePlayerMode == Death) && wCharStatusOut & 4) {
         nCharStatus = wCharStatusOut | 8;
@@ -1927,8 +1927,8 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
         nCharStatus = wCharStatusOut & 0xfff7;
       }
 
-      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1a, nCharStatus);
-      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pBuffer + 0x1c, (uint32_t)(uint16_t)pClient->wGuildFlags);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pPreview + 0x1a, nCharStatus);
+      Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pPreview + 0x1c, (uint32_t)(uint16_t)pClient->wGuildFlags);
       bLevel = pClient->nGuildInfo[0];
       bGuildInfo1 = pClient->nGuildInfo[1];
       bGuildInfo2 = pClient->nGuildInfo[2];
@@ -1942,13 +1942,13 @@ void __fastcall CleanUp(D2ClientStrc * pClient, uint8_t * pBuffer) {
         bGuildInfo2 = 0xff;
       }
 
-      pBuffer[0x1e] = bLevel;
-      pBuffer[0x1f] = bGuildInfo1;
-      pBuffer[0x20] = bGuildInfo2;
-      *(uint32_t*)(pBuffer + 0x21) = *(uint32_t*)pClient->szGuildTag;
-      szGuildTagLen = Storm::Source::SSTR::SStrLen((char*)pBuffer);
+      pPreview[0x1e] = bLevel;
+      pPreview[0x1f] = bGuildInfo1;
+      pPreview[0x20] = bGuildInfo2;
+      *(uint32_t*)(pPreview + 0x21) = *(uint32_t*)pClient->szGuildTag;
+      szGuildTagLen = Storm::Source::SSTR::SStrLen((char*)pPreview);
       if (0x62 < bClassCode || 6 < byClass || nCharStatus & 0x13 || szGuildTagLen != 0x21) {
-        *pBuffer = 0;
+        *pPreview = 0;
       }
     }
 }
@@ -1980,7 +1980,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
 
     D2ClientStrc* pFoundClient = SERVER_GetClientFromGmeByClientId(pGame, nClientId);
     if (pFoundClient) {
-      CleanUp(pFoundClient, (uint8_t*)&pFoundClient->nStartSkill);
+      CLIENTS_FillCharacterPreviewInfo(pFoundClient, (uint8_t*)&pFoundClient->nStartSkill);
     }
     if (bSavePlayer == 1) {
       pFoundClient = SERVER_GetClientFromGmeByClientId(pGame, nClientId);
@@ -2093,9 +2093,9 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
         nNameHashBucket &= 0xffff;
         UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
         PLAYER::PlayerPets::FreePets(pGame, pUnit);
-        UNIT::sunitproxy::SERVER_InitClassicTowns(pGame, pUnit);
+        UNIT::sunitproxy::SUNITPROXY_OnClientRemoved(pGame, pUnit);
         Quests::QUESTS::QUEST_OnPlayerDisconnect(pGame, pUnit);
-        PLAYER::PlayerTrade::TRADE_CompleteTrade(pGame, pUnit);
+        PLAYER::PlayerTrade::PLRTRADE_AbortTrade(pGame, pUnit);
         pPlayerRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         if (pPlayerRoom) {
           D2Common::DUNGEON::Dungeon::AllocDrlgDelete(pPlayerRoom, pUnit->eUnitType, pUnit->nUnitGUID);

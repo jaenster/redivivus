@@ -60,7 +60,7 @@
       ]
     },
     {
-      "name": "DRLG_CoordsWorldToScreenTile",
+      "name": "DRLG_CoordsScreenToWorldTile",
       "address": "006432c0",
       "lines": [
         {
@@ -70,12 +70,12 @@
       ],
       "namespace": "D2Common::Drlg::Drlg::Transform",
       "calledFunctions": [
-        "DRLG_CoordsWorldToScreenTile"
+        "DRLG_CoordsScreenToWorldTile"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "3bf7dfba",
+      "dh": "74e5ff73",
       "paramStorage": [
         [
           "pX",
@@ -131,14 +131,14 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "35f58233",
+      "dh": "48a9c6ab",
       "paramStorage": [
         [
-          "nWidth",
+          "nX",
           "Stack[0x4]:4"
         ],
         [
-          "nHeight",
+          "nY",
           "Stack[0x8]:4"
         ],
         [
@@ -203,14 +203,14 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "fb0a01b7",
+      "dh": "0967a209",
       "paramStorage": [
         [
-          "nWidth",
+          "nX",
           "Stack[0x4]:4"
         ],
         [
-          "nHeight",
+          "nY",
           "Stack[0x8]:4"
         ],
         [
@@ -332,7 +332,7 @@
       ]
     },
     {
-      "name": "DRLG_WorldToScreenShift5",
+      "name": "DRLG_ScreenToWorldShift5",
       "address": "00643510",
       "lines": [
         {
@@ -342,12 +342,12 @@
       ],
       "namespace": "D2Common::Drlg::Drlg::Transform",
       "calledFunctions": [
-        "DRLG_WorldToScreenShift5"
+        "DRLG_ScreenToWorldShift5"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "548d2100",
+      "dh": "59515921",
       "paramStorage": [
         [
           "pX",
@@ -360,7 +360,7 @@
       ]
     },
     {
-      "name": "DRLG_WorldToScreenNoShift",
+      "name": "DRLG_ScreenToWorldNoShift",
       "address": "00643540",
       "lines": [
         {
@@ -370,12 +370,12 @@
       ],
       "namespace": "D2Common::Drlg::Drlg::Transform",
       "calledFunctions": [
-        "DRLG_WorldToScreenNoShift"
+        "DRLG_ScreenToWorldNoShift"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a6127147",
+      "dh": "0197b928",
       "paramStorage": [
         [
           "pX",

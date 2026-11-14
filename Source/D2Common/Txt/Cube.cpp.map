@@ -196,7 +196,7 @@
       ]
     },
     {
-      "name": "CUBE_GetRecipeCount_Unref_00665760",
+      "name": "TXT_GetCharTemplateTxtRecordCount",
       "address": "00665760",
       "lines": [
         {
@@ -206,12 +206,12 @@
       ],
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
-        "CUBE_GetRecipeCount_Unref_00665760"
+        "TXT_GetCharTemplateTxtRecordCount"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "00b73292"
+      "dh": "b0c76275"
     },
     {
       "name": "CUBE_PadItemCodeString",
@@ -736,7 +736,7 @@
       "dh": "e8defc9a"
     },
     {
-      "name": "CUBE_GetRecipeCount_Unref_0066a490",
+      "name": "FIELDTBLS_GetFieldDataTableWidth",
       "address": "0066a490",
       "lines": [
         {
@@ -746,15 +746,15 @@
       ],
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
-        "CUBE_GetRecipeCount_Unref_0066a490"
+        "FIELDTBLS_GetFieldDataTableWidth"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "e56822ae"
+      "dh": "07146f29"
     },
     {
-      "name": "CUBE_GetRecipeCount_Unref_0066a4a0",
+      "name": "FIELDTBLS_GetFieldDataTableHeight",
       "address": "0066a4a0",
       "lines": [
         {
@@ -764,12 +764,12 @@
       ],
       "namespace": "D2Common::Txt::Cube",
       "calledFunctions": [
-        "CUBE_GetRecipeCount_Unref_0066a4a0"
+        "FIELDTBLS_GetFieldDataTableHeight"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "a7a17397"
+      "dh": "a213dd93"
     },
     {
       "name": "FIELDTBLS_FreeTables_NoOp_Unref_0066b7f0",

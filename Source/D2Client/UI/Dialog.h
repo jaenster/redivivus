@@ -119,7 +119,7 @@ namespace D2Client::UI::Dialog {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct D2DialogStrc * __stdcall GetDialogCounter_Unref_004b70f0();
+struct D2DialogStrc * __stdcall DIALOG_GetActualDialog();
 void __stdcall INPUT_DialogClickHandler(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseUp(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INPUT_DialogMouseDown(struct D2UIMouseMsgStrc * pMsg);
@@ -149,7 +149,7 @@ struct D2DialogStringData * __fastcall Unreferenced_004b8590(struct D2DialogStrc
 void __fastcall Unreferenced_004b85b0(struct D2DialogStrc * pDialog, RECT * pRect);
 int __stdcall GetDialogCounter();
 void __fastcall AddStringData(struct D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam);
-void __stdcall DIALOG_InitializeSystem_Unref_004b9200();
+void __stdcall DIALOG_ClearReceivedQuestAvailabilityPacket();
 #endif // D2_MODULE_D2Client
 // 7 internal functions (defined in .cpp)
 

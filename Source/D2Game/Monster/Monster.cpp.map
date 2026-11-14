@@ -212,19 +212,19 @@
         "MONSTER_SetVelocityAndTransition",
         "SetVelocities",
         "UpdateAnimSpeed",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
+        "D2ModeChangeStrc",
         "D2MonStatsTxt",
-        "D2MonsterKillStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2MonsterAnimMode",
         "int32_t",
         "uint32_t"
       ],
-      "dh": "497799ea",
+      "dh": "1f99d7c6",
       "paramStorage": [
         [
           "pGame",
@@ -350,7 +350,7 @@
       ]
     },
     {
-      "name": "MONSTERAI_TriggerMageThink",
+      "name": "MONSTERAI_RescheduleThink",
       "address": "00573780",
       "lines": [
         {
@@ -360,7 +360,7 @@
       ],
       "namespace": "D2Game::Monster::Monster",
       "calledFunctions": [
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
         "TXT_MonStats_GetBaseId"
@@ -371,7 +371,7 @@
         "eD2MonsterAnimMode",
         "eD2MonsterClassId"
       ],
-      "dh": "037e9a73",
+      "dh": "114f2124",
       "paramStorage": [
         [
           "pGame",
@@ -384,7 +384,7 @@
       ]
     },
     {
-      "name": "MONSTER_StartAiAndRegenTimers",
+      "name": "MONSTER_RemoveAiAndRegenTimers",
       "address": "005738d0",
       "lines": [
         {
@@ -394,14 +394,14 @@
       ],
       "namespace": "D2Game::Monster::Monster",
       "calledFunctions": [
-        "MONSTER_StartAiAndRegenTimers",
+        "MONSTER_RemoveAiAndRegenTimers",
         "EVENT_RemoveUnitTimersByType"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "a8efd4d2",
+      "dh": "c59b95cf",
       "paramStorage": [
         [
           "pGame",
@@ -587,7 +587,7 @@
         "GetBodyLocation",
         "SERVER_EquipItemToBodyLoc",
         "FreeServerUnit",
-        "GetTxtMaxDurability",
+        "STATLIST_GetMaxDurabilityFromUnit",
         "STATLIST_SetUnitStat"
       ],
       "usedTypes": [
@@ -601,7 +601,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "f365ad43",
+      "dh": "54a214ab",
       "paramStorage": [
         [
           "pGame",
@@ -642,11 +642,11 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "CheckForModeZeroDeath",
         "STATSEX_GetAlignment",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "MONSTERAI_ExecuteLifecycleTransition"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2RoomStrc",
         "D2UnitStrc",
         "SGAMEDATA",
@@ -654,7 +654,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "7c3d447e",
+      "dh": "88cd1e1b",
       "paramStorage": [
         [
           "pGame",
@@ -827,7 +827,7 @@
         "UNITS_GetRoom",
         "MONSTER_FreeAllResources",
         "STRUCT_FillDataMonster",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2RoomStrc",
@@ -835,7 +835,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "8a58adf9",
+      "dh": "9eaef1fc",
       "paramStorage": [
         [
           "pGame",

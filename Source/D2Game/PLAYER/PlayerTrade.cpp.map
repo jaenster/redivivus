@@ -20,7 +20,7 @@
         "SetInteractInfo",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
-        "ITEMMODE_CheckItemLevel"
+        "ITEMMODE_RebuildBookScrollSkillQuantities"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -29,7 +29,7 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "c50b5fbc",
+      "dh": "71a9a55c",
       "paramStorage": [
         [
           "pOperation",
@@ -54,7 +54,7 @@
         "DRLGROOM_IsRoomInTown",
         "GetInteractInfo",
         "ClearInteractInfo",
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "STATSEX_GetCurrentStat",
         "GetInventoryGoldLimit",
         "ITEM_GiveGoldOrDrop",
@@ -71,7 +71,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a3c85bcc",
+      "dh": "f2df8146",
       "paramStorage": [
         [
           "nGoldAmount",
@@ -449,7 +449,7 @@
         "_alldiv",
         "TXT_Experience_GetMaxLevel",
         "ITEM_SetItemData_ePage",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_CloneFromSerializedData",
         "ITEMMOD_SelectMagicAffixVersioned",
         "SetItemQuality",
@@ -473,7 +473,7 @@
         "CheckItemFlag",
         "SERVER_GetUnitStat",
         "ITEMMODE_ProcessItemFlags",
-        "ITEMMODE_HandleCursorItem",
+        "ITEMMODE_RechargeItem",
         "ITEM_GetItemData_eD2ItemFlag",
         "ITEM_GetMaxSockCount",
         "ITEM_EditItemData_eItemFlag",
@@ -508,7 +508,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7a632520",
+      "dh": "46979026",
       "paramStorage": [
         [
           "pGame",
@@ -617,7 +617,7 @@
         "CUBE_HandleTransmuteButtonClick",
         "GetInteractInfo",
         "ClearInteractInfo",
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "CUBE_MatchAndExecuteRecipe"
       ],
       "usedTypes": [
@@ -627,7 +627,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "02a50601",
+      "dh": "ef005ade",
       "paramStorage": [
         [
           "pPlayer",
@@ -671,7 +671,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "75cfc5c5",
+      "dh": "10582676",
       "paramStorage": [
         [
           "pGame",
@@ -970,7 +970,7 @@
         "SetStatsOnEar",
         "ITEM_GetItemData_wType",
         "ITEM_GetItemData_szPlayerName",
-        "ITEM_GetPlayerNameAkaNamedString",
+        "ITEMS_SetPlayerName",
         "ITEM_GetItemData_nEarLevel",
         "ITEM_SetItemData_nEarLevel",
         "ITEM_EditItemData_eItemFlag",
@@ -981,7 +981,7 @@
         "eD2ItemTypes",
         "uint8_t"
       ],
-      "dh": "5e1d733c",
+      "dh": "d794b127",
       "paramStorage": [
         [
           "bHardcore",
@@ -1017,13 +1017,13 @@
         "ITEM_GetContainingInventoryPage",
         "ITEM_CloneFromSerializedData",
         "SetStatsOnEar",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "SERVER_ItemToInventory",
         "ITEMMODE_HasSocketedItems",
         "ITEMMODE_ProcessCorpsePickup",
         "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
-        "ITEMMODE_SetItemFlags",
+        "ITEMMODE_ResetBookScrollSkillQuantity",
         "ITEM_SetServerSideFlag",
         "ITEM_SetItemData_ePreviousPage",
         "Send0x9DRemoveItemFromContainer",
@@ -1037,7 +1037,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1738ffce",
+      "dh": "7e299961",
       "paramStorage": [
         [
           "pUnit",
@@ -1076,7 +1076,7 @@
         "SGAMEDATA",
         "eInventoryPage"
       ],
-      "dh": "0029a91e",
+      "dh": "0268ecdc",
       "paramStorage": [
         [
           "pGame",
@@ -1105,13 +1105,13 @@
       "calledFunctions": [
         "CUBE_OnCubeInteractionEnd",
         "ClearInteractInfo",
-        "ITEMMODE_CheckItemLevel"
+        "ITEMMODE_RebuildBookScrollSkillQuantities"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "249d71af",
+      "dh": "bb03f48d",
       "paramStorage": [
         [
           "pGame",
@@ -1235,7 +1235,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "9bf810ae",
+      "dh": "124cd225",
       "paramStorage": [
         [
           "pGame",
@@ -1246,7 +1246,7 @@
           "EDX:4"
         ],
         [
-          "pPlayerData",
+          "pItem",
           "Stack[0x4]:4"
         ]
       ]
@@ -1273,14 +1273,14 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "cecf905f",
+      "dh": "0dedd25a",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "pUnit2",
+          "pBuffer",
           "EDX:4"
         ],
         [
@@ -1436,11 +1436,11 @@
         "INVENTORY_GetFirstItem",
         "GetCarriedItem",
         "INVENTORY_GetNextItem",
-        "ITEMMODE_SetItemFlags",
+        "ITEMMODE_ResetBookScrollSkillQuantity",
         "UpsertToUpdateList",
         "ITEM_EditItemData_eD2ItemCmd",
         "INVENTORY_GetHandItem",
-        "ITEMMODE_ProcessItemDropLogic",
+        "ITEMMODE_RemoveEquippedItemsAndStats",
         "TRADE_RestoreInventoryFromBackup"
       ],
       "usedTypes": [
@@ -1451,7 +1451,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a10d6e84",
+      "dh": "3fdc4d58",
       "paramStorage": [
         [
           "pGame",
@@ -1483,7 +1483,7 @@
         "ClearInteractInfo",
         "RemoveTradeItemMabye",
         "PLRTRADE_FreeTradeCopyInventory",
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
         "EVENT_RemoveUnitTimersByType",
@@ -1496,7 +1496,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "c3a1d401",
+      "dh": "294e4bd1",
       "paramStorage": [
         [
           "pGame",
@@ -1536,7 +1536,7 @@
       "namespace": "D2Game::PLAYER::PlayerTrade",
       "calledFunctions": [
         "PLRTRADE_ResetTradeState",
-        "ITEMMODE_CheckItemLevel",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
         "RefreshInventory",
         "RemoveTradeItemMabye",
         "SUNIT_GetClient",
@@ -1551,7 +1551,7 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "bf341983",
+      "dh": "9ecc99b8",
       "paramStorage": [
         [
           "pPlayerData1",
@@ -1592,7 +1592,7 @@
         "GetInventoryGoldLimit",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
-        "CreateCopyOfInventoryForTrading",
+        "INVENTORY_CanItemsBeTraded",
         "HasMercItems",
         "SetEvent",
         "LoopsOverAllItemsAndPutInInventory",
@@ -1600,7 +1600,7 @@
         "ITEM_GiveGoldOrDrop",
         "ClearInteractInfo",
         "PLRTRADE_FreeTradeCopyInventory",
-        "ITEMMODE_CheckItemLevel"
+        "ITEMMODE_RebuildBookScrollSkillQuantities"
       ],
       "usedTypes": [
         "D2ClientStrc",
@@ -1611,7 +1611,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "7542864b",
+      "dh": "5ea51c02",
       "paramStorage": [
         [
           "pGame",
@@ -1682,7 +1682,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8f9a8721",
+      "dh": "695371dc",
       "paramStorage": [
         [
           "pGame",
@@ -1703,7 +1703,7 @@
       ]
     },
     {
-      "name": "TRADE_CompleteTrade",
+      "name": "PLRTRADE_AbortTrade",
       "address": "00568640",
       "lines": [
         {
@@ -1713,7 +1713,7 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerTrade",
       "calledFunctions": [
-        "TRADE_CompleteTrade",
+        "PLRTRADE_AbortTrade",
         "GetInteractInfo",
         "FindUnitFromTable",
         "ClearInteractInfo",
@@ -1732,7 +1732,7 @@
         "eD2UnitType",
         "uint32_t"
       ],
-      "dh": "7bc36ba4",
+      "dh": "b4a10aef",
       "paramStorage": [
         [
           "pGame",
@@ -1745,12 +1745,12 @@
       ]
     },
     {
-      "name": "thunk_TRADE_CompleteTrade",
+      "name": "thunk_PLRTRADE_AbortTrade",
       "address": "00568760",
       "lines": [],
       "namespace": "D2Game::PLAYER::PlayerTrade",
       "calledFunctions": [
-        "TRADE_CompleteTrade"
+        "PLRTRADE_AbortTrade"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -1786,7 +1786,7 @@
         "ITEM_CloneFromSerializedData",
         "GetXPos",
         "GetYPos",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_SetItemData_ePage",
         "SERVER_ItemToInventory",
         "ITEMMODE_HasSocketedItems",
@@ -1808,7 +1808,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "13df0b02",
+      "dh": "8c45789e",
       "paramStorage": [
         [
           "pGame",

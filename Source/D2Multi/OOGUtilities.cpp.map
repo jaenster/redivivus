@@ -207,8 +207,8 @@
         "FORMS_CreateAnyForm",
         "GetLocaleString",
         "D2WINTEXTBOX_SetTextW",
-        "D2WINMAIN_SetFormFourth",
-        "D2WINEDITBOX_SetPasswordMode",
+        "CONTROL_SetEscapeButton",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
@@ -223,7 +223,7 @@
         "WCHAR",
         "uint8_t"
       ],
-      "dh": "02b39eb3"
+      "dh": "2fcff98b"
     },
     {
       "name": "OOGUTIL_JoinChannelAndDestroyForms",
@@ -850,9 +850,9 @@
       "calledFunctions": [
         "UIMENU_DestroyLobbyAndJoinGameForms",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
-      "dh": "182ba3af"
+      "dh": "9ef47463"
     },
     {
       "name": "OOGUTIL_LoadMaxPlayersSetting",
@@ -889,10 +889,10 @@
       "calledFunctions": [
         "OOGUTIL_UpdateGameListFilter",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "LAUNCHER_RestoreFocusToControl"
       ],
-      "dh": "3c08aba0"
+      "dh": "5c77938d"
     },
     {
       "name": "OOGUTIL_ParseMaxPlayersEditBox",
@@ -1185,7 +1185,7 @@
       "dh": "c17e2daa"
     },
     {
-      "name": "OOGUTIL_Unused11",
+      "name": "OOGUTIL_EnterChatPumpCallback",
       "address": "00443840",
       "lines": [
         {
@@ -1195,13 +1195,13 @@
       ],
       "namespace": "D2Multi::OOGUtilities",
       "calledFunctions": [
-        "OOGUTIL_Unused11",
+        "OOGUTIL_EnterChatPumpCallback",
         "D2WINMAIN_ClearMessageLoopFlag"
       ],
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "5774b0c2",
+      "dh": "46f0e378",
       "paramStorage": [
         [
           "nFrameIndex",
@@ -1527,13 +1527,13 @@
       "calledFunctions": [
         "OOGUTIL_CloseProfileDialog",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "LAUNCHER_RestoreFocusToControl"
       ],
       "usedTypes": [
         "D2WinTextBox *"
       ],
-      "dh": "ec3269be"
+      "dh": "4e18c636"
     },
     {
       "name": "OOGUTIL_OnPressProfileLadder",
@@ -1661,13 +1661,13 @@
         "GetLocaleString",
         "D2WINTEXTBOX_SetTextW",
         "D2WINTEXTBOX_SetTextFromAnsi",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "D2WINTEXTBOX_ScrollToLine"
       ],
       "usedTypes": [
         "WCHAR"
       ],
-      "dh": "ee8a467f"
+      "dh": "cbc1854d"
     },
     {
       "name": "OOGUTIL_DestroyChatCommandsDialog",
@@ -1683,9 +1683,9 @@
         "UIMENU_DialogWindowChatCommands",
         "OOGUTIL_DestroyChatCommandsDialog",
         "FORMS_DestroyAnyForm",
-        "D2WINMAIN_SetFormFourth"
+        "CONTROL_SetEscapeButton"
       ],
-      "dh": "7177299d"
+      "dh": "690d2bea"
     },
     {
       "name": "OOGUTIL_RequestGameListFromServer",
@@ -1894,14 +1894,14 @@
         "STRING_CopyWideString",
         "AppendToBuffer",
         "STRING_CopyCharToWCharWithSetMaxSize",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "LAUNCHER_SetGameListCacheActive"
       ],
       "usedTypes": [
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "e0bdc357"
+      "dh": "adea0cac"
     },
     {
       "name": "OOGUTIL_OnTimerRefreshWaitInLine",
@@ -2067,7 +2067,7 @@
         "int32_t",
         "mcp0x03data"
       ],
-      "dh": "f6775466",
+      "dh": "2d32ed98",
       "paramStorage": [
         [
           "pControl",
@@ -2094,8 +2094,8 @@
         "FORMS_CreateAnyForm",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
         "D2WINEDITBOX_SetTextFromAnsi",
-        "D2WINEDITBOX_SetPasswordMode",
-        "D2WINMAIN_SetFormFourth",
+        "D2WINEDITBOX_SetMaxLength",
+        "CONTROL_SetEscapeButton",
         "UIMENU_PlayerProfileLabels",
         "D2WINEDITBOX_LinkTabOrder",
         "D2WINMAIN_SetFocusedControl",
@@ -2105,7 +2105,7 @@
       "usedTypes": [
         "uint32_t"
       ],
-      "dh": "cb6eeab7",
+      "dh": "b71fc5f1",
       "paramStorage": [
         [
           "szCharacterName",
@@ -2141,7 +2141,7 @@
         "FORMS_CreateAnyForm",
         "D2WINTEXTBOX_SetTextFromAnsiSimple",
         "strtok",
-        "D2WINMAIN_SetFormFourth",
+        "CONTROL_SetEscapeButton",
         "UIMENU_PlayerProfileLabels",
         "LAUNCHER_RestoreFocusToControl",
         "OOGUTIL_SetProfileUser"
@@ -2151,7 +2151,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "73003460",
+      "dh": "f0d4a632",
       "paramStorage": [
         [
           "szUserName",
@@ -2188,8 +2188,8 @@
         "UIMENU_DrawSpecificJoinGameError",
         "FORMS_CreateAnyForm",
         "D2WINTEXTBOX_SetTextW",
-        "D2WINMAIN_SetFormFourth",
-        "D2WINEDITBOX_SetPasswordMode",
+        "CONTROL_SetEscapeButton",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "D2WINEDITBOX_LinkTabOrder",
@@ -2205,7 +2205,7 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "b50265d8"
+      "dh": "970c826b"
     },
     {
       "name": "OOGUTIL_OpenCreateGameDialog",
@@ -2227,8 +2227,8 @@
         "UIMENU_WaitInLine",
         "FORMS_CreateAnyForm",
         "D2WINTEXTBOX_SetTextW",
-        "D2WINMAIN_SetFormFourth",
-        "D2WINEDITBOX_SetPasswordMode",
+        "CONTROL_SetEscapeButton",
+        "D2WINEDITBOX_SetMaxLength",
         "D2WINEDITBOX_SetFilterCallback",
         "D2WINEDITBOX_SetChangeCallback",
         "sprintf",
@@ -2253,7 +2253,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "bfc80190"
+      "dh": "afb26c1f"
     },
     {
       "name": "OOGUTIL_StrChr",

@@ -350,7 +350,7 @@
       ]
     },
     {
-      "name": "SKILL_CheckCorpseCanBeConsumed",
+      "name": "SKILLBAR_Callback_FindTargetForTaunt",
       "address": "005d8510",
       "lines": [
         {
@@ -360,17 +360,17 @@
       ],
       "namespace": "D2Game::SKILLS::SkillBar",
       "calledFunctions": [
-        "SKILL_CheckCorpseCanBeConsumed",
-        "D2CheckCorpseConsumed",
+        "SKILLBAR_Callback_FindTargetForTaunt",
+        "SKILLS_CanSwitchAi",
         "CheckForModeZeroDeath",
-        "GetMonsterNameAndAi"
+        "AIGENERAL_GetOwnerData"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "7034094b",
+      "dh": "a4c13882",
       "paramStorage": [
         [
           "pGame",
@@ -395,7 +395,7 @@
       "calledFunctions": [
         "Skills_SrvDoFunc_071_Taunt",
         "GetTargetEx",
-        "SKILL_CheckCorpseCanBeConsumed",
+        "SKILLBAR_Callback_FindTargetForTaunt",
         "UNITS_CheckIfCanAttackTarget",
         "SKILLS_ApplyAreaHitAtUnit",
         "D2GetSkillCalc",
@@ -403,7 +403,7 @@
         "TXT_ItemStatCost_GetLine",
         "SKILLNEC_ApplyCurseToUnit",
         "SetDwArgsIfNotNeg0x29a",
-        "MONSTERAI_SetTargetUnit",
+        "MONSTERAI_SetOwnerGUIDAndType",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
         "SetTargetUnitForDynamicUnit"
@@ -417,7 +417,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "387d0d71",
+      "dh": "5695122d",
       "paramStorage": [
         [
           "pGame",
@@ -800,7 +800,7 @@
       ]
     },
     {
-      "name": "SKILLBAR_OnWarCryExpire",
+      "name": "SKILLBAR_StateCallback_Whirlwind",
       "address": "005d8ef0",
       "lines": [
         {
@@ -810,11 +810,11 @@
       ],
       "namespace": "D2Game::SKILLS::SkillBar",
       "calledFunctions": [
-        "SKILLBAR_OnWarCryExpire",
+        "SKILLBAR_StateCallback_Whirlwind",
         "GetGamePointer",
         "SUNITEVENT_RemoveEventsByQueueAndOwner",
         "CheckForModeZeroDeath",
-        "STATES_IsStateActive",
+        "STATES_DoesStateStayOnDeath",
         "SetState",
         "UpdateAnimSpeed",
         "SKILLS_UpdatePassivesAndPets"
@@ -827,7 +827,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "26709635",
+      "dh": "32891744",
       "paramStorage": [
         [
           "pUnit",
@@ -863,13 +863,13 @@
         "GetTargetEx",
         "IsInMeleeRange",
         "SKILLS_ForceAttackTarget",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "PATH_CalculatePath",
         "SKILLS_GetUnitWalkVelocity",
         "SetVelocities",
         "GetPathPoint",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "AddCollision_Type",
         "SetUninterruptableState",
@@ -905,7 +905,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "9ce1c374",
+      "dh": "227e247a",
       "paramStorage": [
         [
           "pGame",
@@ -1009,11 +1009,11 @@
         "SKILL_SetFlags",
         "SetUninterruptableState",
         "UnitQueuePacket0xA5",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "UNITS_GetRoom",
         "RemoveCollision_Type",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "SetState",
         "GetStatsByState",
         "STATLIST_RemoveAndRecalc",
@@ -1031,7 +1031,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "2d05d2ce",
+      "dh": "8659e101",
       "paramStorage": [
         [
           "pGameStrc",
@@ -1202,7 +1202,7 @@
         "DRLGROOM_FindBetterNearbyRoom",
         "GetUnitSizeX",
         "GetFreeCoordinates_WithNeighboorRooms",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "CheckCollision_BlockPlayer_Type",
         "SKILLS_HasLineOfSight"
       ],
@@ -1217,7 +1217,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d55dfeb",
+      "dh": "fbdef5dc",
       "paramStorage": [
         [
           "pUnit",
@@ -1264,7 +1264,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "365f254e",
+      "dh": "a67d4caa",
       "paramStorage": [
         [
           "pGame",
@@ -1353,7 +1353,7 @@
         "GetFreeCoordinates_WithNeighboorRooms",
         "SetCurrentSkill",
         "DRLGROOM_FindBetterNearbyRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type",
         "SetUninterruptableState",
         "SetState",
@@ -1373,7 +1373,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "4b9c029c",
+      "dh": "f81d357d",
       "paramStorage": [
         [
           "pGame",
@@ -1406,7 +1406,7 @@
       "calledFunctions": [
         "SKILL_InitTransportPath",
         "SKILL_SetFlags",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_ChangeCollisionType",
         "SKILL_GetParam1",
         "SKILL_GetParam2",
@@ -1426,7 +1426,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "8129e5ac",
+      "dh": "71d5f8ac",
       "paramStorage": [
         [
           "pSkill",
@@ -1504,7 +1504,7 @@
       ]
     },
     {
-      "name": "SKILLBAR_ArriveAtChargeTarget",
+      "name": "SKILLBAR_UpdateLeap",
       "address": "005da120",
       "lines": [
         {
@@ -1514,17 +1514,17 @@
       ],
       "namespace": "D2Game::SKILLS::SkillBar",
       "calledFunctions": [
-        "SKILLBAR_ArriveAtChargeTarget",
+        "SKILLBAR_UpdateLeap",
         "UNITS_GetRoom",
         "SKILL_GetParam1",
         "SKILL_GetParam2",
         "TXT_MonStats_GetBaseId",
         "GetXPos",
         "GetYPosFromDynamicPathUnit",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "RemoveCollision_Type",
         "PATH_ChangeCollisionType",
-        "PATH_SetCollisionPattern",
+        "PATH_SetMoveTestCollisionMask",
         "PATH_SetPathType",
         "SKILL_SetFlags",
         "EVENT_RemoveUnitTimersByType",
@@ -1548,7 +1548,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "1ce000c5",
+      "dh": "e029ed5b",
       "paramStorage": [
         [
           "pGame",
@@ -1581,7 +1581,7 @@
         "SKILL_GetFlags",
         "SKILL_InitTransportPath",
         "SKILL_SetFlags",
-        "SKILLBAR_ArriveAtChargeTarget",
+        "SKILLBAR_UpdateLeap",
         "memset",
         "D2GetSkillCalc",
         "SKILLS_ApplyAreaDamage"
@@ -1596,7 +1596,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dec33522",
+      "dh": "13b53545",
       "paramStorage": [
         [
           "pGame",
@@ -1680,7 +1680,7 @@
         "IsInMeleeRange",
         "SKILLS_ForceAttackTarget",
         "UNITS_GetRoom",
-        "GetUnitWidth",
+        "PATH_GetUnitCollisionPattern",
         "AddCollision_Type",
         "SetUninterruptableState",
         "SKILL_SetParam1",
@@ -1702,7 +1702,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "af7d3277",
+      "dh": "02e08205",
       "paramStorage": [
         [
           "pGame",
@@ -1797,7 +1797,7 @@
         "SKILL_InitTransportPath",
         "SKILLBAR_WhirlwindHitCycle",
         "SKILL_SetFlags",
-        "SKILLBAR_ArriveAtChargeTarget",
+        "SKILLBAR_UpdateLeap",
         "SKILLBAR_AcquireNextTarget",
         "EVENT_RemoveUnitTimersByType",
         "SetEvent",
@@ -1811,7 +1811,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5f4ef6dd",
+      "dh": "e4887c28",
       "paramStorage": [
         [
           "pGame",

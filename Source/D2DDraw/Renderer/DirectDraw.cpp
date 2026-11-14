@@ -2246,7 +2246,7 @@ void __fastcall DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuffer, 
         if (bDecoded && nImageHeight == 0x1d4 && nImageWidth == 0x3c && nBitDepth == 8) {
           nColorIdx = 0;
           do {
-            bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)aPaletteRgb[nColorIdx * 4], (uint32_t)aPaletteRgb[nColorIdx * 4 + 1], (uint32_t)aPaletteRgb[nColorIdx * 4 + 2]);
+            bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)aPaletteRgb[nColorIdx * 4], (uint32_t)aPaletteRgb[nColorIdx * 4 + 1], (uint32_t)aPaletteRgb[nColorIdx * 4 + 2]);
             gaSmackerPaletteRemap[nColorIdx] = bVar1;
             nColorIdx++;
           } while (nColorIdx < 0x100);
@@ -2283,7 +2283,7 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
             nWaitResult = 0;
             pPaletteEntry = (uint8_t*)((char*)nSmackHandle + 0x6d);
             do {
-              bVar1 = D2CMP::Draw::D2GFX_GetColorWithAlphaFromPallete((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)pPaletteEntry[-1], (uint32_t)*pPaletteEntry, (uint32_t)pPaletteEntry[1]);
+              bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex((LPPALETTEENTRY)gaDirectDrawDitherPaletteRemap, 0x100, (uint32_t)pPaletteEntry[-1], (uint32_t)*pPaletteEntry, (uint32_t)pPaletteEntry[1]);
               gaSmackerPaletteRemap[nWaitResult] = bVar1;
               nWaitResult++;
               pPaletteEntry += 3;

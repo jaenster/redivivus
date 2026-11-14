@@ -79,17 +79,17 @@ static uint32_t gbPanelBeltSlotHovered = 0; D2_STATIC_GUARD(gbPanelBeltSlotHover
 static uint32_t gpPanelClickedButton = 0; D2_STATIC_GUARD(gpPanelClickedButton, "gpPanelClickedButton");
 static D2UnitStrc * gpPanelBeltHoverItem = 0; D2_STATIC_GUARD(gpPanelBeltHoverItem, "gpPanelBeltHoverItem");
 static D2UnitStrc * gpPanelBeltLastHoverItem = 0; D2_STATIC_GUARD(gpPanelBeltLastHoverItem, "gpPanelBeltLastHoverItem");
-static uint8_t gaPanelStatColors[4] = {}; D2_STATIC_GUARD(gaPanelStatColors, "gaPanelStatColors");
+static uint8_t gabBeltSlotHasItem[4] = {}; D2_STATIC_GUARD(gabBeltSlotHasItem, "gabBeltSlotHasItem");
 static uint8_t gaPanelBeltArrowsNeeded[6] = {}; D2_STATIC_GUARD(gaPanelBeltArrowsNeeded, "gaPanelBeltArrowsNeeded");
-static uint8_t gbPanelStaminaColorBlue = 0; D2_STATIC_GUARD(gbPanelStaminaColorBlue, "gbPanelStaminaColorBlue");
-static uint8_t gbPanelGoldColorGreen = 0; D2_STATIC_GUARD(gbPanelGoldColorGreen, "gbPanelGoldColorGreen");
+static uint8_t gbyPanelStaminaColorLow = 0; D2_STATIC_GUARD(gbyPanelStaminaColorLow, "gbyPanelStaminaColorLow");
+static uint8_t gbyPanelStaminaColorNormal = 0; D2_STATIC_GUARD(gbyPanelStaminaColorNormal, "gbyPanelStaminaColorNormal");
 static uint32_t gpPanelMenuButton = 0; D2_STATIC_GUARD(gpPanelMenuButton, "gpPanelMenuButton");
-static uint32_t gpPanelRunButton = 0; D2_STATIC_GUARD(gpPanelRunButton, "gpPanelRunButton");
+static BOOL gbPanelRunButtonPressed = 0; D2_STATIC_GUARD(gbPanelRunButtonPressed, "gbPanelRunButtonPressed");
 namespace D2Client::UI::Panel {
 BOOL bShowHpText = 0; D2_GLOBAL_GUARD(bShowHpText, "D2Client::UI::Panel::bShowHpText");
 BOOL bShowmpText = 0; D2_GLOBAL_GUARD(bShowmpText, "D2Client::UI::Panel::bShowmpText");
 } // namespace D2Client::UI::Panel
-static uint8_t gbPanelStaminaColorRed = 0; D2_STATIC_GUARD(gbPanelStaminaColorRed, "gbPanelStaminaColorRed");
+static uint8_t gbyPanelStaminaColorBlue = 0; D2_STATIC_GUARD(gbyPanelStaminaColorBlue, "gbyPanelStaminaColorBlue");
 static int gbPanelBorderDrawn = 0; D2_STATIC_GUARD(gbPanelBorderDrawn, "gbPanelBorderDrawn");
 static uint32_t gpPanelBorderImage = 0; D2_STATIC_GUARD(gpPanelBorderImage, "gpPanelBorderImage");
 
@@ -115,16 +115,16 @@ void __stdcall thunk_CMD_UseBeltSlot4() {
     ::D2Client::UI::Panel::CMD_UseBeltSlot4();
 }
 
-uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0047ec40() {
+uint32_t __stdcall PANEL_GetMiniPanelClickedButtonFlag() {
     return (uint32_t)(gnMiniPanelClickedButton != 0);
 }
 
-void __stdcall PANEL_SetBottomPanelGlobals1_Unref_004880f0() {
+void __stdcall PANEL_ClearInvMousePosition() {
     gnInvMouseX = 0;
     gnInvMouseY = 0;
 }
 
-uint32_t __stdcall PANEL_GetBeltSlotHoverFlag_Unref_0048a690() {
+uint32_t __stdcall INV_HasItemToDescribe() {
     return (uint32_t)(Inv::pItemToDescribe != 0);
 }
 
@@ -378,14 +378,14 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
     switch (eUnitStat) {
       case UNITSTAT_hitpoints:
         {
-          nMaxValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+          nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
           nSlotOffset = 0;
           bSkipLowClamp = false;
           break;
         }
       case UNITSTAT_mana:
         {
-          nMaxValue = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+          nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
           nSlotOffset = 1;
           break;
         }
@@ -395,7 +395,7 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
         }
       case UNITSTAT_stamina:
         {
-          nMaxValue = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+          nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
           nSlotOffset = 2;
           break;
         }
@@ -475,7 +475,7 @@ void __stdcall PANEL_DrawHealthOrb() {
     uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     int32_t nValue = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if (!nMaxValue) {
       return;
     }
@@ -535,7 +535,7 @@ void __stdcall PANEL_DrawManaOrb() {
     uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     int32_t nPositionX = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     if (!nMaxValue) {
       return;
     }
@@ -578,16 +578,16 @@ void __stdcall PANEL_DrawManaOrb() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x6e, Inv::ScreenSizeY - 9, -1, DRAW_SOLID, nullptr);
 }
 
-void __stdcall thunk_D2GFX_GetColorFromPalette_A() {
-    gbPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
+void __stdcall PANEL_InitStaminaColorLow() {
+    gbyPanelStaminaColorLow = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
 }
 
-void __stdcall PANEL_InitGoldColor() {
-    gbPanelGoldColorGreen = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xf4, 0xc0, 0x4c);
+void __stdcall PANEL_InitStaminaColorNormal() {
+    gbyPanelStaminaColorNormal = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xf4, 0xc0, 0x4c);
 }
 
-void __stdcall thunk_D2GFX_GetColorFromPalette_B() {
-    gbPanelStaminaColorRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
+void __stdcall PANEL_InitStaminaColorBlue() {
+    gbyPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
 }
 
 void __stdcall PANEL_InitBeltColors() {
@@ -647,13 +647,13 @@ void __stdcall PANEL_DrawRunButton() {
     sGfxData.nDirection = 0;
     BOOL bAlwaysRun = GAME::Game::GetGlobalAlwaysRun();
     if (bAlwaysRun) {
-      if ((!gpPanelRunButton || nMouseX < ui::ScreenSizeX / 2 - 0x91) != 0 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || nMouseY > Inv::ScreenSizeY - 8) {
+      if ((!gbPanelRunButtonPressed || nMouseX < ui::ScreenSizeX / 2 - 0x91) != 0 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || nMouseY > Inv::ScreenSizeY - 8) {
         sGfxData.nFrameNumber = 2;
       } else {
         sGfxData.nFrameNumber = 3;
       }
     } else {
-      if (!gpPanelRunButton || nMouseX < ui::ScreenSizeX / 2 - 0x91 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || (sGfxData.nFrameNumber = 1 , nMouseY > Inv::ScreenSizeY - 8)) {
+      if (!gbPanelRunButtonPressed || nMouseX < ui::ScreenSizeX / 2 - 0x91 || nMouseX > ui::ScreenSizeX / 2 - 0x80 || nMouseY < Inv::ScreenSizeY - 0x1c || (sGfxData.nFrameNumber = 1 , nMouseY > Inv::ScreenSizeY - 8)) {
         sGfxData.nFrameNumber = 0;
       }
     }
@@ -675,26 +675,26 @@ void __stdcall PANEL_DrawStaminaBar() {
     int32_t nCurStamina;
     nCurStamina = PANEL_GetSmoothedStatValue(UNITSTAT_stamina);
     int32_t nMaxStamina;
-    nMaxStamina = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
-    if (!gbPanelStaminaColorBlue) {
-      gbPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
-      gbPanelGoldColorGreen = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xf4, 0xc0, 0x4c);
-      gbPanelStaminaColorRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
+    nMaxStamina = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
+    if (!gbyPanelStaminaColorLow) {
+      gbyPanelStaminaColorLow = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
+      gbyPanelStaminaColorNormal = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xf4, 0xc0, 0x4c);
+      gbyPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
     }
 
     uint8_t byBarColor;
-    byBarColor = gbPanelGoldColorGreen;
+    byBarColor = gbyPanelStaminaColorNormal;
     if (nMaxStamina + 5 < nCurStamina || (eState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x18) , eState != 0)) {
       nMaxStamina = nCurStamina;
-      byBarColor = gbPanelStaminaColorRed;
+      byBarColor = gbyPanelStaminaColorBlue;
     }
     if (nMaxStamina <= 0) {
       nMaxStamina = 0;
-      byBarColor = gbPanelStaminaColorBlue;
+      byBarColor = gbyPanelStaminaColorLow;
     } else {
       nMaxStamina = nCurStamina * 0x66 / nMaxStamina;
       if (nMaxStamina < 0x19) {
-        byBarColor = gbPanelStaminaColorBlue;
+        byBarColor = gbyPanelStaminaColorLow;
       }
     }
 
@@ -706,7 +706,7 @@ void __stdcall PANEL_DrawStaminaBar() {
     nMaxStamina = PANEL_GetSmoothedStatValue(UNITSTAT_stamina);
     int32_t nCurStaminaUnits;
     nCurStaminaUnits = nMaxStamina / 256;
-    nMaxStamina = D2Common::Stats::StatsEx::GetTxtMaxStamina(pUnit);
+    nMaxStamina = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     int32_t nMaxStaminaUnits;
     nMaxStaminaUnits = nMaxStamina / 256;
     nCurStamina = 0;
@@ -1166,7 +1166,7 @@ void __stdcall Draw_EquipmentNeedToRepairBody() {
         if (bHasDurability) {
           BVar1 = D2Common::ITEMS::Items::IsStackable(pItem);
           if (!BVar1) {
-            nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItem);
+            nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
             if (nMaxDurability) {
               nBodyLoc = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_durability, 0);
               if (nBodyLoc * 100 / nMaxDurability <= 0x14) {
@@ -1196,7 +1196,7 @@ void __stdcall Draw_EquipmentNeedToRepairBody() {
         if (bHasDurability) {
           BVar1 = D2Common::ITEMS::Items::IsStackable(pItem);
           if (!BVar1) {
-            nMaxDurability = D2Common::Stats::StatsEx::GetTxtMaxDurability(pItem);
+            nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pItem);
             bIsShield = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_AnyShield);
             bIsQuiver = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pItem);
             if (nMaxDurability) {
@@ -1258,7 +1258,7 @@ void __stdcall PANEL_DrawPanelLayout() {
       D2UnitStrc* pPlayerUnit_lcl;
       nTextWidth = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
       nStatValue = nTextWidth >> 8;
-      nTextWidth = D2Common::Stats::StatsEx::GetTxtMaxHp(pUnit);
+      nTextWidth = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
       nMouseY = nTextWidth >> 8;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER && pPlayerUnit_lcl->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead && (uint32_t)nStatValue <= 1) {
@@ -1278,7 +1278,7 @@ void __stdcall PANEL_DrawPanelLayout() {
 
     nTextWidth = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
     nMouseX = nTextWidth >> 8;
-    nTextWidth = D2Common::Stats::StatsEx::GetTxtMaxMana(pUnit);
+    nTextWidth = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     nMouseY = nTextWidth >> 8;
     D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(100, wszMpFormatted, D2Lang::StrTable::strtable::GetLocaleString(0x1046), nMouseX, nMouseY);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszMpText, wszMpFormatted);
@@ -1595,7 +1595,7 @@ void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2Inventor
     }
 
     bClickable = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nErrorLine = D2Common::Units::GetInventoryPage(pUnit, '\0', bClickable);
+    int32_t nErrorLine = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, '\0', bClickable);
     D2Common::DATATBLS::TokTbls::GetGridDimensions(nErrorLine, Inv::nScreenMode, &sGridCoords);
     pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlot);
     if (!pItem) {
@@ -1661,7 +1661,7 @@ void __stdcall CMD_UseBeltSlot1() {
     }
 
     uint32_t bIsPlayerDead = UNIT::Player::IsPlayerDead();
-    if (!(!bIsPlayerDead && gaPanelStatColors[0] == 1)) {
+    if (!(!bIsPlayerDead && gabBeltSlotHasItem[0] == 1)) {
       return;
     }
 
@@ -1682,7 +1682,7 @@ void __stdcall CMD_UseBeltSlot2() {
     }
 
     uint32_t bIsPlayerDead = UNIT::Player::IsPlayerDead();
-    if (!(!bIsPlayerDead && gaPanelStatColors[1] == 1)) {
+    if (!(!bIsPlayerDead && gabBeltSlotHasItem[1] == 1)) {
       return;
     }
 
@@ -1703,7 +1703,7 @@ void __stdcall CMD_UseBeltSlot3() {
     }
 
     uint32_t bIsPlayerDead = UNIT::Player::IsPlayerDead();
-    if (!(!bIsPlayerDead && gaPanelStatColors[2] == 1)) {
+    if (!(!bIsPlayerDead && gabBeltSlotHasItem[2] == 1)) {
       return;
     }
 
@@ -1724,7 +1724,7 @@ void __stdcall CMD_UseBeltSlot4() {
     }
 
     uint32_t bIsPlayerDead = UNIT::Player::IsPlayerDead();
-    if (!(!bIsPlayerDead && gaPanelStatColors[3] == 1)) {
+    if (!(!bIsPlayerDead && gabBeltSlotHasItem[3] == 1)) {
       return;
     }
 
@@ -1734,12 +1734,12 @@ void __stdcall CMD_UseBeltSlot4() {
     ClickBeltRight(3, pUnit, pUnit->pInventory, wShiftKeyState);
 }
 
-void __fastcall PANEL_SetBeltSlotHoverFlag(uint32_t nIndex, int byValue) {
+void __fastcall PANEL_SetBeltSlotHasItem(uint32_t nIndex, int bHasItem) {
     if (nIndex >= 4) {
       return;
     }
 
-    gaPanelStatColors[nIndex] = (uint8_t)byValue;
+    gabBeltSlotHasItem[nIndex] = (uint8_t)bHasItem;
 }
 
 void __stdcall PANEL_ClearBeltSlotHover() {
@@ -2108,7 +2108,7 @@ void __stdcall INPUT_PanelLeftClickDown(D2UIMouseMsgStrc * pMsg) {
               goto consume_panel_click;
             }
 
-            gpPanelRunButton = 1;
+            gbPanelRunButtonPressed = 1;
           }
 
           gpPanelClickedButton = 1;
@@ -2171,7 +2171,7 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
           Storm::SMsgBreakHandlerChain(pMsg);
           gpPanelClickedButton = 0;
           gpPanelMenuButton = 0;
-          gpPanelRunButton = 0;
+          gbPanelRunButtonPressed = 0;
           return;
         }
 
@@ -2182,14 +2182,14 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
             ui::SetUIFlag(UI_MINIPANEL, UI_RESET, 0);
             gpPanelClickedButton = 0;
             gpPanelMenuButton = 0;
-            gpPanelRunButton = 0;
+            gbPanelRunButtonPressed = 0;
             return;
           }
 
           ui::SetUIFlag(UI_MINIPANEL, UI_TOGGLE, 0);
           gpPanelClickedButton = 0;
           gpPanelMenuButton = 0;
-          gpPanelRunButton = 0;
+          gbPanelRunButtonPressed = 0;
           return;
         }
         if (nMouseX - 0x75U <= 0x30 && nMouseY >= Inv::ScreenSizeY - 0x30 && nMouseY <= Inv::ScreenSizeY) {
@@ -2197,7 +2197,7 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
           SpellSel::SPELLSEL_SetMouseHandFlag(1);
           gpPanelClickedButton = 0;
           gpPanelMenuButton = 0;
-          gpPanelRunButton = 0;
+          gbPanelRunButtonPressed = 0;
           return;
         }
         if (nMouseX >= ui::ScreenSizeX - 0xa5 && nMouseX <= ui::ScreenSizeX - 0x75 && nMouseY >= Inv::ScreenSizeY - 0x30 && nMouseY <= Inv::ScreenSizeY) {
@@ -2205,7 +2205,7 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
           SpellSel::SPELLSEL_SetMouseHandFlag(0);
           gpPanelClickedButton = 0;
           gpPanelMenuButton = 0;
-          gpPanelRunButton = 0;
+          gbPanelRunButtonPressed = 0;
           return;
         }
         if (nMouseX >= iVar1 - 0x91 && nMouseX <= iVar1 - 0x80 && nMouseY >= Inv::ScreenSizeY - 0x1c && nMouseY <= Inv::ScreenSizeY - 8) {
@@ -2215,7 +2215,7 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
 
         gpPanelClickedButton = 0;
         gpPanelMenuButton = 0;
-        gpPanelRunButton = 0;
+        gbPanelRunButtonPressed = 0;
         return;
       }
 
@@ -2301,13 +2301,13 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
         pMsg->dwResult = 0;
         Storm::SMsgBreakHandlerChain(pMsg);
         gpPanelMenuButton = 0;
-        gpPanelRunButton = 0;
+        gbPanelRunButtonPressed = 0;
         return;
       }
 
       pMsg->bHandled = 0;
       gpPanelMenuButton = 0;
-      gpPanelRunButton = 0;
+      gbPanelRunButtonPressed = 0;
       return;
     }
     if (nMouseX - 0x75U <= 0x30 && nMouseY >= Inv::ScreenSizeY - 0x30 && nMouseY <= Inv::ScreenSizeY || nMouseX >= ui::ScreenSizeX - 0xa5 && nMouseX <= ui::ScreenSizeX - 0x75 && nMouseY >= Inv::ScreenSizeY - 0x30 && nMouseY <= Inv::ScreenSizeY) {
@@ -2320,7 +2320,7 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
     gpPanelClickedButton = 0;
     pMsg->bHandled = 0;
     gpPanelMenuButton = 0;
-    gpPanelRunButton = 0;
+    gbPanelRunButtonPressed = 0;
     return;
 }
 

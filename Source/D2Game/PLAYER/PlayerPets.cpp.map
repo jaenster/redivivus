@@ -84,20 +84,20 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetOwnerUnit",
         "MONSTERAI_ExecuteLifecycleTransition",
         "SERVER_KillMonster",
         "IterateAllUnits"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2PetArgStrc",
         "D2UnitStrc",
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "161ff00f",
+      "dh": "a0f90c64",
       "paramStorage": [
         [
           "nUid",
@@ -157,7 +157,7 @@
         "UNITS_GetRoom",
         "AllocDrlgDelete",
         "FreeServerUnit",
-        "SetCurrentSkill",
+        "MONMODE_InitModeChange",
         "GetOwnerUnit",
         "MONSTERAI_ExecuteLifecycleTransition",
         "GetReviveCost",
@@ -167,7 +167,7 @@
       ],
       "usedTypes": [
         "D2ClientStrc",
-        "D2MonsterKillStrc",
+        "D2ModeChangeStrc",
         "D2PetArgStrc",
         "D2PetListStrc",
         "D2PetStrc",
@@ -178,7 +178,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "93551ee2",
+      "dh": "e1ae8af2",
       "paramStorage": [
         [
           "pUnit",
@@ -354,7 +354,7 @@
       ]
     },
     {
-      "name": "SummonAndAssign",
+      "name": "PLAYERPETS_SendPetUpdateCallback",
       "address": "00574930",
       "lines": [
         {
@@ -364,7 +364,7 @@
       ],
       "namespace": "D2Game::PLAYER::PlayerPets",
       "calledFunctions": [
-        "SummonAndAssign",
+        "PLAYERPETS_SendPetUpdateCallback",
         "SUNIT_GetClient",
         "NET_D2GS_SERVER_Send_0x7A_UPDATEPET",
         "NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS"
@@ -378,7 +378,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "547c0636",
+      "dh": "69f5ae76",
       "paramStorage": [
         [
           "pGame",
@@ -499,7 +499,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "33f2f976",
+      "dh": "14ade57c",
       "paramStorage": [
         [
           "pGame",
@@ -600,10 +600,10 @@
         "DRLGROOM_GetLevelIdFromRoom",
         "GetActNoFromLevelNumber",
         "PATH_GetCollisionMaskAt",
-        "ChangeAnimMode",
+        "SetCurrentRoomInvalid",
         "UNITS_UpdateRoomClientVisibility",
         "ROOM_LinkUnitToUpdateList",
-        "MONSTERAI_TriggerMageThink",
+        "MONSTERAI_RescheduleThink",
         "CheckIfMonsterIsDead",
         "PATH_ChangeCollisionType"
       ],
@@ -615,7 +615,7 @@
         "eD2LevelId",
         "uint16_t"
       ],
-      "dh": "aac5ada2",
+      "dh": "c239d74b",
       "paramStorage": [
         [
           "pUnit",
@@ -996,7 +996,6 @@
         "GetOwnersPetType"
       ],
       "usedTypes": [
-        "D2MonsterKillStrc",
         "D2PetListStrc",
         "D2PetStrc",
         "D2UnitDataPlayerPetsStrc",
@@ -1005,18 +1004,18 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "b3e7b3af",
+      "dh": "ac8c3961",
       "paramStorage": [
         [
           "pGame",
           "ECX:4"
         ],
         [
-          "pUnit",
+          "pPlayer",
           "EDX:4"
         ],
         [
-          "pKillData",
+          "pPet",
           "Stack[0x4]:4"
         ]
       ]
@@ -1519,7 +1518,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "82e688d2",
+      "dh": "7d2cc2c7",
       "paramStorage": [
         [
           "pGame",
@@ -1570,7 +1569,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "543c834a",
+      "dh": "fa5c402d",
       "paramStorage": [
         [
           "pGame",

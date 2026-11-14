@@ -234,7 +234,7 @@
         "ITEM_GetTxtItemTypes_shoots",
         "GetCurrentSkill",
         "GetSkillId",
-        "ITEM_GetMinimalStatValueShifted",
+        "STATLIST_UnitGetStatValueUnchecked",
         "INVENTORY_GetItemByGridOffset",
         "IsStackable",
         "ITEM_GetTxtItemTypes_throwable",
@@ -247,7 +247,7 @@
         "eD2Skills",
         "int32_t"
       ],
-      "dh": "62ccd0ef",
+      "dh": "d340d39a",
       "paramStorage": [
         [
           "pUnit",
@@ -1604,7 +1604,7 @@
       "namespace": "D2Client::SKILLS::Skills",
       "calledFunctions": [
         "SKILL_ProcessActiveStateEffects",
-        "STATES_HasDamageState",
+        "STATES_HasActiveFlagState",
         "UNIT_GetUnitState",
         "GetStatsByState",
         "STATLIST_GetBaseStatValue"
@@ -1616,7 +1616,7 @@
         "eD2Skills",
         "eD2States"
       ],
-      "dh": "11af7767",
+      "dh": "7a591ded",
       "paramStorage": [
         [
           "pUnit",

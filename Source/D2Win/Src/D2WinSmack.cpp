@@ -41,40 +41,40 @@ uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "D2Wi
 namespace D2Win::Src::D2WinSmack {
 
 // Calculates title prefix index based on character class and gender. Used for cinematics and titles. Class < 4 maps to index 0, < 8 to 1, < 12 to 2, else 3. If bIsExpansion non-zero and index > 0, adds 3.
-char * __stdcall D2WINSMACK_GetTitlePrefixIndexFromClass(int pUnused, int32_t nClass, int32_t bHasModifier, int32_t bIsExpansion) {
+char * __stdcall D2COMP_GetTitleFromProgress(int nCharClass, int32_t nActsCompleted, int32_t bHardcore, int32_t bIsExpansion) {
     uint32_t nTitleIndex;
     bool bSignedGreaterOrEqual;
     if (bIsExpansion) {
-      if (nClass < 5) {
+      if (nActsCompleted < 5) {
         nTitleIndex = 0;
         goto lookup_title_prefix;
       }
-      if (nClass < 10) {
+      if (nActsCompleted < 10) {
         nTitleIndex = 1;
         goto lookup_title_prefix;
       }
 
-      bSignedGreaterOrEqual = 0xf <= nClass;
+      bSignedGreaterOrEqual = 0xf <= nActsCompleted;
       nTitleIndex = bSignedGreaterOrEqual + 2;
     } else {
-      if (nClass < 4) {
+      if (nActsCompleted < 4) {
         nTitleIndex = 0;
         goto lookup_title_prefix;
       }
-      if (nClass < 8) {
+      if (nActsCompleted < 8) {
         nTitleIndex = 1;
         goto lookup_title_prefix;
       }
 
-      bSignedGreaterOrEqual = nClass >= 0xc;
+      bSignedGreaterOrEqual = nActsCompleted >= 0xc;
       nTitleIndex = bSignedGreaterOrEqual + 2;
     }
 
     lookup_title_prefix:
-    if (bHasModifier && nTitleIndex) {
+    if (bHardcore && nTitleIndex) {
       nTitleIndex += 3;
     }
-    char* pszTitlePrefix = D2Comp::D2COMP_GetTitlePrefix(pUnused, nTitleIndex, bIsExpansion);
+    char* pszTitlePrefix = D2Comp::D2COMP_GetTitlePrefix(nCharClass, nTitleIndex, bIsExpansion);
     return pszTitlePrefix;
 }
 
@@ -132,7 +132,7 @@ void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack) {
     D2WinMain::FORMS_DestroyControl(&pSmack->sControl);
 }
 
-void __stdcall D2GFX_EnableVSync_Unref_00506a80() {
+void __stdcall D2WINSMACK_SetKeepTempFile() {
     gbSmackerKeepTempFile = 1;
 }
 

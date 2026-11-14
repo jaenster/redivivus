@@ -83,7 +83,7 @@ void * __fastcall ReallocTrackedAllocation(struct D2PoolManagerStrc * pManager, 
 void __fastcall Free(struct D2PoolManagerStrc * pMemory, void * * pStruct, char * szFile, int32_t Line0);
 void * __fastcall Alloc(struct D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line);
 void * __fastcall ReAlloc(struct D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, size_t nAllocSize, char * szFile, int32_t nLine);
-void __fastcall SErrSetBlizzardErrorFunction_Unref_0040b370(pfnBlizzardError pfnFunc);
+void __fastcall FOG_SetServerMemHeap(pfnBlizzardError pfnFunc);
 void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFile, size_t nLine, uint32_t nUnused);
 #endif // D2_MODULE_Fog
 // 8 internal functions (defined in .cpp)

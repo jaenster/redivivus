@@ -87,7 +87,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_Sacrifice(D2UnitStrc * pUnit, eD2Skills eSk
 }
 
 // Client DoFunc for Paladin Charge skill. Sets UNITFLAG_SKSRVDOFUNC on the caster, resolves target coordinates, spawns a missile, then sets the missile path type to 0xE (charge path) and recalculates its path. Returns TRUE if the missile was created and has a valid dynamic path.
-BOOL __fastcall Skills_CltDoFunc_Pal_ChargePathMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_Pal_BlessedHammer(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nDestY;
     int nDestX;
@@ -271,8 +271,8 @@ void __fastcall SKILL_DrawChargeTrail(D2UnitStrc * pUnit, uint32_t nGamma, int32
       return;
     }
 
-    uint32_t nTargetX = D2Common::Units::GetTargetX(pUnit);
-    int32_t nTargetY = D2Common::Units::GetTargetY(pUnit);
+    uint32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
+    int32_t nTargetY = D2Common::Units::GetScreenY(pUnit);
     int nScreenVelX = 0;
     int nScreenVelY = 0;
     D2Common::PATH::Path::PATH_GetScreenVelocity(pUnit, &nScreenVelX, &nScreenVelY);
@@ -597,9 +597,9 @@ void __fastcall SKILL_StopAndClearUninterruptable(D2UnitStrc * pUnit, eD2Skills 
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_uninterruptable, 0);
 }
 
-BOOL __fastcall Skills_CltDoFunc_Pal_RateThrottledBloodParticles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
+BOOL __fastcall Skills_CltDoFunc_State_OpenWounds(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
-    static uint32_t gdwBloodParticleThrottleNextTick; D2_STATIC_GUARD_BSS(gdwBloodParticleThrottleNextTick, "D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_RateThrottledBloodParticles::gdwBloodParticleThrottleNextTick");
+    static uint32_t gdwBloodParticleThrottleNextTick; D2_STATIC_GUARD_BSS(gdwBloodParticleThrottleNextTick, "D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_State_OpenWounds::gdwBloodParticleThrottleNextTick");
 
     uint32_t nCurrentTick = GAME::Game::GetEntryIndex();
     if (nCurrentTick > gdwBloodParticleThrottleNextTick) {

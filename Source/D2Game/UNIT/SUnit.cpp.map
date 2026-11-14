@@ -343,7 +343,7 @@
       ]
     },
     {
-      "name": "UNITS_NotifyClientsUnitRemoved",
+      "name": "UNITS_RemoveUnitFromHashTable",
       "address": "005530f0",
       "lines": [
         {
@@ -353,7 +353,7 @@
       ],
       "namespace": "D2Game::UNIT::SUnit",
       "calledFunctions": [
-        "UNITS_NotifyClientsUnitRemoved"
+        "UNITS_RemoveUnitFromHashTable"
       ],
       "usedTypes": [
         "D2UnitStrc",
@@ -361,7 +361,7 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "3696138b",
+      "dh": "7126871b",
       "paramStorage": [
         [
           "pGame",
@@ -503,7 +503,7 @@
       ]
     },
     {
-      "name": "UNITS_ResetUnitForReuse",
+      "name": "UNITS_ClearUpdateData",
       "address": "00553220",
       "lines": [
         {
@@ -513,14 +513,14 @@
       ],
       "namespace": "D2Game::UNIT::SUnit",
       "calledFunctions": [
-        "UNITS_ResetUnitForReuse",
+        "UNITS_ClearUpdateData",
         "STATLIST_ClearChangedStatFlags",
         "SERVER_UnitQueuePacketFree",
-        "ChangeAnimMode",
+        "SetCurrentRoomInvalid",
         "STATES_ClearGfxFlags",
         "ITEM_ProcessInventoryUpdates",
-        "STATLIST_HasChangedStats",
-        "STATLIST_FreeUnitChildStatLists",
+        "STATLIST_IsOverlayPending",
+        "STATLIST_RemoveAllStatsFromOverlay",
         "STATLIST_SetUnitStat",
         "ARENA_ClearScoreDirty",
         "SetUnsetSummonerFlags",
@@ -535,7 +535,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "7d543b1c",
+      "dh": "5a45e32e",
       "paramStorage": [
         [
           "pGame",
@@ -702,13 +702,13 @@
       "calledFunctions": [
         "FreeCombatAndChangeAnimMode",
         "FreeCombat",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "ed322d0c",
+      "dh": "d2b80e2e",
       "paramStorage": [
         [
           "pGame",
@@ -1023,7 +1023,7 @@
       "namespace": "D2Game::UNIT::SUnit",
       "calledFunctions": [
         "UNITS_SetupAnimTimerEvents",
-        "GetWeaponAnimClass",
+        "UNITS_GetFrameBonus",
         "SetEvent",
         "ANIM_GetEventFrame"
       ],
@@ -1033,7 +1033,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "12199629",
+      "dh": "66cb67f0",
       "paramStorage": [
         [
           "pGame",
@@ -1526,7 +1526,7 @@
         "SGAMEDATA",
         "uint32_t"
       ],
-      "dh": "31e72cf9",
+      "dh": "73bfb4f1",
       "paramStorage": [
         [
           "pGame",
@@ -1537,7 +1537,7 @@
           "EDX:4"
         ],
         [
-          "pAttacker",
+          "pTarget",
           "Stack[0x4]:4"
         ]
       ]
@@ -1554,14 +1554,14 @@
       "namespace": "D2Game::UNIT::SUnit",
       "calledFunctions": [
         "UNITS_CheckSkillTargetAlignment",
-        "GetMonsterNameAndAi"
+        "AIGENERAL_GetOwnerData"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "SGAMEDATA",
         "eD2Skills"
       ],
-      "dh": "bab34a79",
+      "dh": "88bc1881",
       "paramStorage": [
         [
           "pGameStrc",
@@ -1924,8 +1924,8 @@
         "PLAYER_MoveToLocationWithTimeout",
         "MONSTER_SetVelocityAndTransition",
         "IsRoomOccupied",
-        "UNITS_ResetUnitForReuse",
-        "MONSTERAI_TriggerMageThink",
+        "UNITS_ClearUpdateData",
+        "MONSTERAI_RescheduleThink",
         "TXT_Objects_GetLine",
         "InitializeStaticPath",
         "BlockCollisionPath",
@@ -1934,7 +1934,7 @@
         "UNITS_InsertUnitIntoHashTable",
         "UNITS_GetRoom",
         "ROOM_LinkUnitToUpdateList",
-        "ChangeAnimMode"
+        "SetCurrentRoomInvalid"
       ],
       "usedTypes": [
         "D2ObjectsTxt",
@@ -1946,7 +1946,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "758876da",
+      "dh": "df7848d4",
       "paramStorage": [
         [
           "pUnit",
@@ -1996,12 +1996,12 @@
         "AllocDynamicPath",
         "PLAYER_MoveToLocationWithTimeout",
         "PATH_RemoveUnitCollision",
-        "SetUnitWidth",
+        "PATH_SetUnitCollisionPattern",
         "PATH_ChangeCollisionType",
         "MONSTER_SetVelocityAndTransition",
         "IsRoomOccupied",
-        "UNITS_ResetUnitForReuse",
-        "MONSTERAI_TriggerMageThink",
+        "UNITS_ClearUpdateData",
+        "MONSTERAI_RescheduleThink",
         "CheckIfMonsterIsDead",
         "TXT_Objects_GetLine",
         "InitializeStaticPath",
@@ -2009,7 +2009,8 @@
         "DRLGROOM_AddUnitToRoom",
         "ITEM_CalculateDespawnTimer",
         "UNITS_GetRoom",
-        "ROOM_LinkUnitToUpdateList"
+        "ROOM_LinkUnitToUpdateList",
+        "SetCurrentRoomInvalid"
       ],
       "usedTypes": [
         "D2DrlgActStrc",
@@ -2022,7 +2023,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87b452e5",
+      "dh": "ad1786dd",
       "paramStorage": [
         [
           "pGame",
@@ -2127,7 +2128,7 @@
       "calledFunctions": [
         "UNITS_CanUseSkillOnTarget",
         "TXT_Skills_GetLine",
-        "GetMonsterNameAndAi",
+        "AIGENERAL_GetOwnerData",
         "GetPartyId",
         "FindUnitFromTable"
       ],
@@ -2140,7 +2141,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "a6d67c09",
+      "dh": "760a5463",
       "paramStorage": [
         [
           "pGame",
@@ -2361,7 +2362,7 @@
         "ITEM_InitializeDroppedItem",
         "UNITS_PlaceUnitInRoom",
         "PATH_RemoveUnitCollision",
-        "SetUnitWidth",
+        "PATH_SetUnitCollisionPattern",
         "PATH_ChangeCollisionType",
         "CheckIfMonsterIsDead",
         "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
@@ -2378,7 +2379,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a42f530e",
+      "dh": "a489260d",
       "paramStorage": [
         [
           "eUnitType",
@@ -2440,7 +2441,7 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "c82cc3f7",
+      "dh": "7952faff",
       "paramStorage": [
         [
           "pUnit",
@@ -2467,7 +2468,7 @@
         "ClearInteractOnFreePlayer",
         "PATH_RemoveCollision",
         "RemoveUnitFromRoom",
-        "UNITS_NotifyClientsUnitRemoved",
+        "UNITS_RemoveUnitFromHashTable",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"
@@ -2477,7 +2478,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "22d164aa",
+      "dh": "fdcca97a",
       "paramStorage": [
         [
           "pUnit",
@@ -2742,11 +2743,11 @@
         "NullSub_2Arg",
         "ITEM_IsActiveCharm",
         "ITEM_GetContainingInventoryPage",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPos",
         "GetXPos",
         "UnusedDebug",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "FreeServerUnit",
         "INVENTORY_GetHandItem"
       ],
@@ -2760,7 +2761,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "bddbf90b",
+      "dh": "6a9bbd1b",
       "paramStorage": [
         [
           "pGame",

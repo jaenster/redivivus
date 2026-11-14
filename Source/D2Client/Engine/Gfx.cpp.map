@@ -155,7 +155,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "541ed0de",
+      "dh": "1e2d7616",
       "paramStorage": [
         [
           "pTextureCache",
@@ -193,7 +193,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57de7c87",
+      "dh": "f5d5f38f",
       "paramStorage": [
         [
           "szPath",
@@ -248,7 +248,7 @@
         "GFX_RemoveStateOverlayAndReprioritize",
         "UNIT_GetUnitState",
         "SetState",
-        "STATES_HasHideState"
+        "STATES_HasAuraFlagState"
       ],
       "usedTypes": [
         "D2GfxInfoStrc",
@@ -258,7 +258,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "17bd58e1",
+      "dh": "18164d5d",
       "paramStorage": [
         [
           "pUnit",
@@ -452,9 +452,9 @@
         "exit",
         "D2GFX_IsPerspectiveActive",
         "GetAnimOrSeqMode",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "GetPrecisionY",
         "GetPrecisionX",
@@ -482,7 +482,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1d467010",
+      "dh": "7ad1fb43",
       "paramStorage": [
         [
           "pUnit",
@@ -1067,7 +1067,7 @@
         "D2GFX_GetColorFromCurrentPallete",
         "GetAnimOrSeqMode",
         "SKILLS_GetStateTransformGfx",
-        "GetTxtMaxHp",
+        "STATLIST_GetMaxLifeFromUnit",
         "STATSEX_GetCurrentStat"
       ],
       "usedTypes": [
@@ -1077,7 +1077,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "af1027fb",
+      "dh": "2dc638c2",
       "paramStorage": [
         [
           "pUnit",
@@ -1571,7 +1571,7 @@
         "D2CofTextureCacheEntryStrc",
         "D2CofTextureCacheEntryStrc *"
       ],
-      "dh": "9280135d",
+      "dh": "ce068445",
       "paramStorage": [
         [
           "pCacheTable",
@@ -1598,7 +1598,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "2742ee9d",
+      "dh": "af69f5bd",
       "paramStorage": [
         [
           "nParam",
@@ -1622,7 +1622,7 @@
         "FreeClientMemory",
         "memset"
       ],
-      "dh": "199f45d1"
+      "dh": "eed82381"
     },
     {
       "name": "GFX_BuildMonsterCofPath",
@@ -1756,7 +1756,7 @@
       ]
     },
     {
-      "name": "GFX_GetCofCacheFlags",
+      "name": "GFX_GetGfxMemory",
       "address": "0046f980",
       "lines": [
         {
@@ -1766,9 +1766,9 @@
       ],
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
-        "GFX_GetCofCacheFlags"
+        "GFX_GetGfxMemory"
       ],
-      "dh": "9cfa2419"
+      "dh": "6f58831b"
     },
     {
       "name": "GFX_GetCofCacheMemUsage",
@@ -1783,10 +1783,10 @@
       "calledFunctions": [
         "GFX_GetCofCacheMemUsage"
       ],
-      "dh": "567dce30"
+      "dh": "37cf52ff"
     },
     {
-      "name": "GFX_GetGfxSystemFlags",
+      "name": "GFX_GetCofCacheMemLimit",
       "address": "0046f9a0",
       "lines": [
         {
@@ -1796,9 +1796,9 @@
       ],
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
-        "GFX_GetGfxSystemFlags"
+        "GFX_GetCofCacheMemLimit"
       ],
-      "dh": "d6493898"
+      "dh": "7844ec18"
     },
     {
       "name": "GFX_GetModeStatusEntry",
@@ -1889,18 +1889,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2d36e2ff",
+      "dh": "4175e78e",
       "paramStorage": [
         [
           "pUnit",
           "ECX:4"
         ],
         [
-          "nAnimMode",
+          "nWeaponClass",
           "EDX:4"
         ],
         [
-          "nWeaponClass",
+          "nAnimMode",
           "Stack[0x4]:4"
         ]
       ]
@@ -2131,10 +2131,10 @@
         "D2WINARCHIVE_GetArchiveHandle",
         "InitializeModeTokens"
       ],
-      "dh": "90c66526",
+      "dh": "bf6239d9",
       "paramStorage": [
         [
-          "nSystemFlags",
+          "nCofCacheMemLimit",
           "ECX:4"
         ]
       ]
@@ -2156,7 +2156,7 @@
         "memset",
         "FreeServerMemory"
       ],
-      "dh": "d113ad95"
+      "dh": "aff186bc"
     },
     {
       "name": "GFXProcessGameGfxLists",
@@ -2621,7 +2621,7 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "TXT_Objects_GetLine",
-        "STATES_HasDisguiseState",
+        "STATES_HasGreenFlagState",
         "IsWindowMode",
         "GetClassId",
         "TXT_MonStats_GetMonStats2",
@@ -2655,7 +2655,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8519eb58",
+      "dh": "d0792bf4",
       "paramStorage": [
         [
           "nWorldX",
@@ -2704,10 +2704,10 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "DRAW_GetWorldOffsetX",
-        "GetTargetX",
+        "GetScreenX",
         "PARTICLE_GetPosXShifted",
         "DRAW_GetWorldOffsetY",
-        "GetTargetY",
+        "GetScreenY",
         "PARTICLE_GetPosYShifted",
         "DRAW_GetTypeOfBorder",
         "GFX_IsUnitOnScreen",
@@ -2726,7 +2726,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8317aee8",
+      "dh": "7fd837ed",
       "paramStorage": [
         [
           "pUnit",
@@ -2755,8 +2755,8 @@
         "CLIENT_GetEffectiveUnitType",
         "D2GFX_SetPerspectiveCapable",
         "PARTICLE_GetScreenZ",
-        "GetTargetX",
-        "GetTargetY",
+        "GetScreenX",
+        "GetScreenY",
         "PARTICLE_GetPosZRaw",
         "GetPrecisionX",
         "GetPrecisionY",
@@ -2801,7 +2801,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2121eed3",
+      "dh": "0acb5c3b",
       "paramStorage": [
         [
           "pUnit",
@@ -2829,9 +2829,9 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "DRAW_GetWorldOffsetX",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetY",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetTypeOfBorder",
         "GFX_IsUnitOnScreen",
         "GFX_GetUnitHealthBarColor",
@@ -2850,7 +2850,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ebbe29c2",
+      "dh": "af072cec",
       "paramStorage": [
         [
           "pUnit",
@@ -2872,10 +2872,10 @@
         "GFX_DrawUnitSelectionShape",
         "D2GFX_IsPerspectiveActive",
         "GFX_DrawUnitColoredShape",
-        "GetTargetX",
+        "GetScreenX",
         "DRAW_GetWorldOffsetX",
         "PARTICLE_GetX",
-        "GetTargetY",
+        "GetScreenY",
         "DRAW_GetWorldOffsetY",
         "PARTICLE_GetY",
         "PARTICLE_GetScreenZ",
@@ -2916,7 +2916,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1f7309cc",
+      "dh": "9d8c7991",
       "paramStorage": [
         [
           "pUnit",
@@ -3013,7 +3013,7 @@
       ]
     },
     {
-      "name": "GFX_GetGfxSystemFlags_Unref_004723f0",
+      "name": "GFX_GetWeatherCurrentTransitionState",
       "address": "004723f0",
       "lines": [
         {
@@ -3023,9 +3023,9 @@
       ],
       "namespace": "D2Client::Engine::Gfx",
       "calledFunctions": [
-        "GFX_GetGfxSystemFlags_Unref_004723f0"
+        "GFX_GetWeatherCurrentTransitionState"
       ],
-      "dh": "0d77d0f0"
+      "dh": "b938b8a2"
     }
   ]
 }

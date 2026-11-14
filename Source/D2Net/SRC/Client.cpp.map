@@ -4,7 +4,7 @@
   "file": "Source/D2Net/SRC/Client.cpp",
   "functions": [
     {
-      "name": "NET_CLIENT_SetConnectionTimeout",
+      "name": "NET_CLIENT_SetConnected",
       "address": "0052a610",
       "lines": [
         {
@@ -14,22 +14,22 @@
       ],
       "namespace": "D2Net::SRC::Client",
       "calledFunctions": [
-        "NET_CLIENT_SetConnectionTimeout",
+        "NET_CLIENT_SetConnected",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "beab67a5",
+      "dh": "cde03ed7",
       "paramStorage": [
         [
-          "nTimeoutMs",
+          "bConnected",
           "ECX:4"
         ]
       ]
     },
     {
-      "name": "NET_CLIENT_GetConnectionTimeout",
+      "name": "NET_CLIENT_IsConnected",
       "address": "0052a640",
       "lines": [
         {
@@ -39,13 +39,13 @@
       ],
       "namespace": "D2Net::SRC::Client",
       "calledFunctions": [
-        "NET_CLIENT_GetConnectionTimeout",
+        "NET_CLIENT_IsConnected",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
       ],
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6d6bbf70"
+      "dh": "b257c0f2"
     },
     {
       "name": "CLIENT_ServerConnectionThread_lpStartAddress",
@@ -247,7 +247,7 @@
         "WSAGetLastError",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
       ],
-      "dh": "d568cafa"
+      "dh": "2ca9844e"
     },
     {
       "name": "Unreferenced_0052aad0",
@@ -263,7 +263,7 @@
         "Unreferenced_0052aad0",
         "NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer"
       ],
-      "dh": "added1ba"
+      "dh": "f3fa9825"
     },
     {
       "name": "ThreadClientToServer",
@@ -291,7 +291,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bf49af15",
+      "dh": "67f3abb0",
       "paramStorage": [
         [
           "lpThreadParam",
@@ -310,17 +310,17 @@
       ],
       "namespace": "D2Net::SRC::Client",
       "calledFunctions": [
-        "NET_SendPacketToClient",
         "NET_CLIENT_SendPacketToServer",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
+        "exit",
+        "NET_EnqueueLocalClientPacket"
       ],
       "usedTypes": [
         "int32_t",
         "uint16_t"
       ],
-      "dh": "914efb28",
+      "dh": "d8681165",
       "paramStorage": [
         [
           "pUnused",
@@ -354,7 +354,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "d696f6ed",
+      "dh": "b72e2c90",
       "paramStorage": [
         [
           "pBytes",
@@ -382,14 +382,14 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "NET_SendPacketToClient",
+        "NET_EnqueueLocalClientPacket",
         "NET_SendPacketToD2GSOnline"
       ],
       "usedTypes": [
         "int32_t",
         "uint32_t"
       ],
-      "dh": "ec75849c",
+      "dh": "c688c69b",
       "paramStorage": [
         [
           "nSize",

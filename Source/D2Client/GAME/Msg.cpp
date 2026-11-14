@@ -38,9 +38,9 @@ void __stdcall NET_SendPacket0x3f_0x1a() {
     NET_D2GS_CLIENT_Send_SHORT('?', 0x1a);
 }
 
-int __stdcall LOADING_GetProgressRatio_Unref_00477c90() {
+int __stdcall RENDERING_GetEngineMode() {
     // Static local variables (originally global data)
-    static uint32_t gnEngineMode; D2_STATIC_GUARD_BSS(gnEngineMode, "D2Client::GAME::Msg::LOADING_GetProgressRatio_Unref_00477c90::gnEngineMode");
+    static uint32_t gnEngineMode; D2_STATIC_GUARD_BSS(gnEngineMode, "D2Client::GAME::Msg::RENDERING_GetEngineMode::gnEngineMode");
 
     return gnEngineMode;
 }
@@ -200,7 +200,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x69() {
     }
 
     send_keepalive:
-    pCallbacks = ClientModeInGame::CLIENT_GetGameVersionInfo();
+    pCallbacks = ClientModeInGame::CLIENT_GetBNetClientCallbacks();
     if (!pCallbacks) {
       return;
     }
@@ -213,7 +213,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash)
     packet.nId = 0x68;
     packet.nGameHash = nGameHash;
     packet.nGameToken = nGameToken;
-    D2BNetClientCallbacksStrc* pVersionInfo = Game::GetGameVersionInfo();
+    D2BNetClientCallbacksStrc* pVersionInfo = Game::GAME_GetBNetClientCallbacks();
     packet.nVerByte = pVersionInfo->pfnGetGameVersion();
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     packet.nVersionConstant = bIsExpansion ? 0xed5dcc50 : 0x2185edd6;

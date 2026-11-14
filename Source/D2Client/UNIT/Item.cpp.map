@@ -475,7 +475,7 @@
       ]
     },
     {
-      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
+      "name": "thunk_ITEM_RecalcAllEquippedItems_Unref_004c16c0",
       "address": "004c16c0",
       "lines": [
         {
@@ -485,13 +485,13 @@
       ],
       "namespace": "D2Client::UNIT::Item",
       "calledFunctions": [
-        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c16c0",
+        "thunk_ITEM_RecalcAllEquippedItems_Unref_004c16c0",
         "ITEM_RecalcAllEquippedItems_EBX"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "98e25953",
+      "dh": "f3613a7d",
       "paramStorage": [
         [
           "pUnit",
@@ -735,13 +735,13 @@
       "namespace": "D2Client::UNIT::Item",
       "calledFunctions": [
         "ItemMessage",
-        "SetupUpdateFlag"
+        "ChangeAnimMode"
       ],
       "usedTypes": [
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "bcdd4c22",
+      "dh": "bef50f2c",
       "paramStorage": [
         [
           "eMessageType",
@@ -794,7 +794,7 @@
       ]
     },
     {
-      "name": "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
+      "name": "thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0",
       "address": "004c1be0",
       "lines": [
         {
@@ -804,13 +804,13 @@
       ],
       "namespace": "D2Client::UNIT::Item",
       "calledFunctions": [
-        "thunk_NPCSHOP_IsRepairTabActive_Unref_004c1be0",
+        "thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0",
         "ITEM_RecalcAllEquippedItems_EBX"
       ],
       "usedTypes": [
         "D2UnitStrc"
       ],
-      "dh": "31e045eb",
+      "dh": "cca5d266",
       "paramStorage": [
         [
           "pUnit",
@@ -955,7 +955,7 @@
         "GetItemComponent",
         "GFX_ClearAllModeFlags",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
@@ -968,7 +968,7 @@
         "eD2BodyLoc",
         "uint32_t"
       ],
-      "dh": "7837882a",
+      "dh": "328c3350",
       "paramStorage": [
         [
           "pItem",
@@ -1189,7 +1189,7 @@
         "UNITS_FindClientSideUnit",
         "GetPlayerUnit_UI",
         "INVENTORY_GetHandItem",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_SetItemOnHand",
         "RemoveObjectFromServerObjectTable",
         "NPCMENU_OnCursorItemRemoved"
@@ -1199,7 +1199,7 @@
         "D2InventoryStrc",
         "D2UnitStrc"
       ],
-      "dh": "130addc7",
+      "dh": "81ba9729",
       "paramStorage": [
         [
           "pbPacket",
@@ -1224,7 +1224,7 @@
         "UNITS_FindClientSideUnit",
         "RemoveObjectFromServerObjectTable",
         "ITEM_CreateItemFromGroundPacket",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "GetInstructionPointer",
@@ -1238,7 +1238,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "07681ebd",
+      "dh": "8e954acf",
       "paramStorage": [
         [
           "pBytes",
@@ -1451,7 +1451,7 @@
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
         "STATLIST_SetUnitStat",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand"
       ],
@@ -1462,7 +1462,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "a2a61d88",
+      "dh": "55bcbdd5",
       "paramStorage": [
         [
           "pBytes",
@@ -1490,7 +1490,7 @@
         "ITEM_IsActiveCharm",
         "IfPlayer",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "INVENTORY_IsItemLocationValid",
         "NullSub_2Arg",
         "ITEM_ProcessSetItemEquip",
@@ -1509,7 +1509,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "87df4854",
+      "dh": "9e380d97",
       "paramStorage": [
         [
           "pUnit",
@@ -1590,7 +1590,7 @@
         "exit",
         "ITEM_RemoveUninterruptableState",
         "CheckItemFlag",
-        "SetupUpdateFlag",
+        "ChangeAnimMode",
         "ITEM_PlayItemDropSound"
       ],
       "usedTypes": [
@@ -1599,7 +1599,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "b2eb8cbe",
+      "dh": "f3bfbd23",
       "paramStorage": [
         [
           "pBytes",
@@ -1623,7 +1623,7 @@
         "GetPlayerUnit_UI",
         "UNITS_FindClientSideUnit",
         "ITEM_CreateItemFromGroundPacket",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -1638,7 +1638,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "91010cd4",
+      "dh": "f5723b1a",
       "paramStorage": [
         [
           "pBytes",
@@ -1662,7 +1662,7 @@
         "GetPlayerUnit_UI",
         "UNITS_FindClientSideUnit",
         "INVENTORY_GetHandItem",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "ITEM_SetItemOnHand",
         "ITEMFLAG_CheckFlag",
         "RemoveObjectFromServerObjectTable",
@@ -1684,7 +1684,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "026ba910",
+      "dh": "c8fd8a29",
       "paramStorage": [
         [
           "pBytes",
@@ -1713,7 +1713,7 @@
         "GFX_ClearAllModeFlags",
         "GetBodyLocation",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "GetEquipedWeapon",
         "CheckItemFlag",
@@ -1736,7 +1736,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "d991d7f7",
+      "dh": "cb313bc6",
       "paramStorage": [
         [
           "pBuffer",
@@ -1765,12 +1765,12 @@
         "GetYPos",
         "GetXPos",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_PlaceItemAtCoords",
         "GetPlayerUnit_UI",
         "SOUND_GetIdFromUnit",
         "SOUND_PlaySound",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "TXT_Items_GetLine",
@@ -1785,7 +1785,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9471687b",
+      "dh": "27fa44bc",
       "paramStorage": [
         [
           "pUnit",
@@ -1829,10 +1829,10 @@
         "ITEM_SetAnimModeAndPlace",
         "ITEM_SetItemData_ePage",
         "ITEM_EditItemData_eItemFlag",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEM_GetContainingInventoryPage",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "UnusedDebug",
@@ -1856,7 +1856,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "2c599aab",
+      "dh": "4184794c",
       "paramStorage": [
         [
           "pBytes",
@@ -1882,10 +1882,10 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEM_GetContainingInventoryPage",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "UnusedDebug",
         "INV_ResetHoverAndContextState",
         "GetEquipedWeapon",
@@ -1896,7 +1896,7 @@
         "RemoveObjectFromServerObjectTable",
         "ITEM_CreateItemFromBodyPacket",
         "ITEM_SetItemData_ePage",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -1912,7 +1912,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "1b1edf81",
+      "dh": "8f54002a",
       "paramStorage": [
         [
           "pBytes",
@@ -1949,7 +1949,7 @@
         "GFX_ClearAllModeFlags",
         "GFX_LoadUnitModeCof",
         "ITEM_SaveWeaponHandClassId",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_ApplySocketableAndEquipStats",
@@ -1965,7 +1965,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f3240cb0",
+      "dh": "348452e7",
       "paramStorage": [
         [
           "pBytes",
@@ -1994,7 +1994,7 @@
         "GetItemComponent",
         "GFX_ClearAllModeFlags",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
@@ -2004,7 +2004,7 @@
         "ITEM_SetAnimModeAndPlace",
         "ITEM_SetItemData_ePage",
         "SetBodyLoc",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2033,7 +2033,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "a55ac605",
+      "dh": "69696834",
       "paramStorage": [
         [
           "pBytes",
@@ -2064,7 +2064,7 @@
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
         "GFX_ClearAllModeFlags",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "NullSub_2Arg",
         "ITEM_ProcessSetItemEquip",
         "GetEquipedWeapon",
@@ -2079,7 +2079,7 @@
         "ITEM_DropItemToGroundWithMode",
         "ITEM_CreateItemFromBodyPacket",
         "SetBodyLoc",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2093,7 +2093,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "b4ccb891",
+      "dh": "3c663e89",
       "paramStorage": [
         [
           "pBytes",
@@ -2174,7 +2174,7 @@
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
         "GFX_ClearAllModeFlags",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
@@ -2187,7 +2187,7 @@
         "ITEM_CreateItemFromBodyPacket",
         "INV_ResetHoverAndContextState",
         "SetBodyLoc",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2203,7 +2203,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "cc935412",
+      "dh": "9d579759",
       "paramStorage": [
         [
           "pPacketData",
@@ -2343,7 +2343,7 @@
         "GetPlayerUnit_UI",
         "ITEM_GetItemData_eD2ItemFlag",
         "ITEMFLAG_CheckFlag",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2359,7 +2359,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "80ad006f",
+      "dh": "b9827c8a",
       "paramStorage": [
         [
           "pPacket",
@@ -2384,10 +2384,10 @@
         "UNITS_FindClientSideUnit",
         "NPCMENU_IsShopActive",
         "INV_ResetHoverAndContextState",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "ITEM_GetContainingInventoryPage",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "UnusedDebug",
         "UI_SendMouseMoveMessage",
         "RemoveObjectFromServerObjectTable",
@@ -2411,7 +2411,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ead7015c",
+      "dh": "2ad3cbae",
       "paramStorage": [
         [
           "pPacket",
@@ -2443,7 +2443,7 @@
         "PutItemInInventory",
         "ITEM_GetContainingInventoryPage",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "GetYPosFromDynamicPathUnit",
         "GetXPosFromDynamicPathUnit",
         "INVENTORY_PlaceItemAtCoords",
@@ -2464,7 +2464,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "959d4859",
+      "dh": "0c7eccf2",
       "paramStorage": [
         [
           "pPacketData",
@@ -2494,16 +2494,16 @@
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "UnusedDebug",
         "INV_ResetHoverAndContextState",
         "ITEMFLAG_CheckFlag",
         "ITEM_DropItemToGroundWithMode",
         "RemoveObjectFromServerObjectTable",
         "ITEM_CreateItemFromGroundPacket",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2520,7 +2520,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bc31d7d6",
+      "dh": "08f2ed17",
       "paramStorage": [
         [
           "pPacketData",
@@ -2588,11 +2588,11 @@
         "ITEM_IsActiveCharm",
         "ITEM_ApplySocketableAndEquipStats",
         "ITEM_EditItemData_eItemFlag",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "GetXPos",
-        "PANEL_SetBeltSlotHoverFlag",
+        "PANEL_SetBeltSlotHasItem",
         "UI_SendMouseMoveMessage",
         "ITEM_RemoveUninterruptableState",
         "NPCMENU_OnItemPutInBelt",
@@ -2609,7 +2609,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0a8d8c04",
+      "dh": "ebc275cd",
       "paramStorage": [
         [
           "pPacket",
@@ -2632,16 +2632,16 @@
         "ExtractItemDetails",
         "GetPlayerUnit_UI",
         "UNITS_FindClientSideUnit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "INVENTORY_OnBeltChanged_NoOp",
         "PANEL_ClearBeltSlotHover",
-        "PANEL_SetBeltSlotHoverFlag",
+        "PANEL_SetBeltSlotHasItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
         "ITEMFLAG_CheckFlag",
         "ITEM_DropItemToGroundWithMode",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2658,7 +2658,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "fd03591d",
+      "dh": "e4cdfdd2",
       "paramStorage": [
         [
           "pPacket",
@@ -2731,12 +2731,12 @@
         "ITEM_HandleSwapBeltOldItem",
         "GetPlayerUnit_UI",
         "UNITS_FindClientSideUnit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "INVENTORY_OnBeltChanged_NoOp",
         "ITEM_DropItemToGroundWithMode",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RemoveUninterruptableState",
@@ -2751,7 +2751,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "48a30fe3",
+      "dh": "36a61e76",
       "paramStorage": [
         [
           "pBytes",
@@ -2841,13 +2841,13 @@
         "ExtractItemDetails",
         "UNITS_FindClientSideUnit",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "INVENTORY_GetItemByGridOffset",
         "IfPlayer",
         "INVENTORY_SwapPrimaryWeaponOnRemoval",
         "GFX_ClearAllModeFlags",
         "GetCurrentItemOnBodyLocation",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
@@ -2864,7 +2864,7 @@
         "INVENTORY_PlaceItemAtCoords",
         "PutItemInInventory",
         "SetBodyLoc",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RecalcAllEquippedItems_EBX",
@@ -2881,7 +2881,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "94644d05",
+      "dh": "4230c038",
       "paramStorage": [
         [
           "pPacketData",
@@ -2912,7 +2912,7 @@
         "PutItemInInventory",
         "ITEMFLAG_CheckFlag",
         "GetPlayerUnit_UI",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_ApplySocketableAndEquipStats",
@@ -2926,7 +2926,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "c204ca96",
+      "dh": "59dfa86e",
       "paramStorage": [
         [
           "pPacket",
@@ -2952,9 +2952,9 @@
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "UnusedDebug",
         "INV_ResetHoverAndContextState",
         "UI_SendMouseMoveMessage",
@@ -2983,7 +2983,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "0fb0270e",
+      "dh": "d2bb14af",
       "paramStorage": [
         [
           "pPacket",
@@ -3006,14 +3006,14 @@
         "ExtractItemDetails",
         "GetPlayerUnit_UI",
         "UNITS_FindClientSideUnit",
-        "ItemBelongsToInventoryOfPlayer",
+        "INVENTORY_RemoveItem",
         "GetEquipedWeapon",
         "CheckItemFlag",
         "STATLIST_RemoveFromOwnerAndRecalc",
         "RemoveObjectFromServerObjectTable",
         "INV_ResetHoverAndContextState",
         "CLIENT_CheckExpansion",
-        "GetInventoryPage",
+        "UNITS_GetInventoryRecordId",
         "UnusedDebug",
         "ITEM_CreateItemFromBodyPacket",
         "ITEM_PlaceItemInContainer",
@@ -3034,13 +3034,13 @@
         "GFX_SetAllGfxInfoFlags",
         "ITEM_SaveWeaponHandClassId",
         "ITEMFLAG_CheckFlag",
-        "CopyInventoryOfPlayerOrFree",
+        "INVENTORY_SetCursorItem",
         "INVENTORY_GetHandItem",
         "ITEM_SetItemOnHand",
         "ITEM_RecalcAllEquippedItems_EBX",
         "GetXPosFromDynamicPathUnit",
         "INVENTORY_OnBeltChanged_NoOp",
-        "PANEL_SetBeltSlotHoverFlag",
+        "PANEL_SetBeltSlotHasItem",
         "PANEL_ClearBeltSlotHover",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
@@ -3067,7 +3067,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "f5f9f68a",
+      "dh": "ca9f9ba5",
       "paramStorage": [
         [
           "pbPacket",

@@ -10,9 +10,9 @@
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
 #include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/GAME/Event.h"
-#include "Source/D2Game/GAME/Event/Dispatch/Monster.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
+#include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/Monster/MonsterMode.h"
 #include "Source/D2Game/Monsters/Spawn.h"
@@ -150,7 +150,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 // (kills it) and marks pA5Q3->field_0xE3=1. Used when reward is granted to despawn the captive Anya monster.
 BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2MonsterAiStrc* pMonsterAi;
-    D2MonsterKillStrc sKillInfo;
+    D2ModeChangeStrc sKillInfo;
     if (!pUnit || pUnit->nClassId != 0x20f) {
       return 0;
     }
@@ -164,7 +164,7 @@ BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     if (bHasAiSub) {
       Monster::MonsterAI::ClearAISub(pGame, pUnit, Q33_SendQuestStatePacket, false);
     } else {
-      Monster::MonsterMode::SetCurrentSkill(pUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
+      Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
       Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillInfo, 1);
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
       if (pQuestData) {
@@ -273,7 +273,7 @@ static void __stdcall Q33_SpawnAnyaAndPortal(D2QuestDataStrc * pQuestData, D2Que
 // Used to despawn quest monsters (frozen/rescued Anya placeholders).
 static void __fastcall A5Q3_KillMonsterInstantly(D2UnitStrc * pUnitStrc, ::SGAMEDATA * * pGameStrc) {
     D2MonsterAiStrc* pMonsterAi;
-    D2MonsterKillStrc sKillInfo;
+    D2ModeChangeStrc sKillInfo;
     if (!pUnitStrc || pUnitStrc->eUnitType != UNIT_MONSTER || !pUnitStrc->pUnitData.pUnitDataMonster) {
       pMonsterAi = 0;
     } else {
@@ -288,7 +288,7 @@ static void __fastcall A5Q3_KillMonsterInstantly(D2UnitStrc * pUnitStrc, ::SGAME
     D2Common::PATH::DynamicPath::ZeroPathPointsSize(pUnitStrc->pPath.pDynamicPath);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGameStrc[1], pUnitStrc, UNITEVENTCALLBACK_AITHINK, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnitStrc, UNITSTAT_hitpoints, 0, 0);
-    Monster::MonsterMode::SetCurrentSkill(pUnitStrc, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
+    Monster::MonsterMode::MONMODE_InitModeChange(pUnitStrc, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
     sKillInfo.nTargetX = 0;
     sKillInfo.nTargetY = 0;
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGameStrc[1], &sKillInfo, 1);
@@ -302,7 +302,7 @@ static void __fastcall A5Q3_KillMonsterInstantly(D2UnitStrc * pUnitStrc, ::SGAME
 static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
     D2UnitStrc* pAnyaUnit;
     BOOL bHasAiSubsystem;
-    D2MonsterKillStrc sMonsterKill;
+    D2ModeChangeStrc sMonsterKill;
     eD2UnitType eUnitType;
     D2QuestDataA5Q3Strc* pSpecificData = pQuestData->pQuestSpecificData.pA5Q3;
     if (pSpecificData->bFrozenAnyaSpawned && pSpecificData->nAnyaState != 2) {
@@ -320,7 +320,7 @@ static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
           Monster::MonsterAI::ClearAISub(pQuestData->pGame, pAnyaUnit, nullptr, false);
         }
 
-        Monster::MonsterMode::SetCurrentSkill(pAnyaUnit, eD2MonsterAnimMode_ns::Dead, &sMonsterKill);
+        Monster::MonsterMode::MONMODE_InitModeChange(pAnyaUnit, eD2MonsterAnimMode_ns::Dead, &sMonsterKill);
         Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pQuestData->pGame, &sMonsterKill, 1);
         eUnitType = pAnyaUnit->eUnitType;
         D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pAnyaUnit), eUnitType, pSpecificData->nFrozenAnyaGUID);
@@ -756,7 +756,7 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     static int32_t gdwQuestCallbackAddressQ33[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ33, "D2Game::Quests::QUESTS::A5Q3::Q33_Callback00_NpcActivate::gdwQuestCallbackAddressQ33");
 
     BOOL bQuestStateResult;
-    D2MonsterKillStrc sKillInfo;
+    D2ModeChangeStrc sKillInfo;
     int nTargetClassId;
     eD2QuestState eQuestState;
     uint32_t nGossipIndex;
@@ -785,7 +785,7 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         return;
       }
 
-      Monster::MonsterMode::SetCurrentSkill(pTargetUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
+      Monster::MonsterMode::MONMODE_InitModeChange(pTargetUnit, eD2MonsterAnimMode_ns::Dead, &sKillInfo);
       Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pQuestArgs->pGame, &sKillInfo, 1);
       return;
     }
@@ -1414,25 +1414,25 @@ void __fastcall Objects_InitFn68_NihlathakStartInTown(D2ObjectInitFnArg * pInitA
 
 // Objects_InitFn69 (PrisonOfIce object init): once Anya-extra-state is set, spawns the SuperUnique boss (Frozenstein,
 // SuperUniques row 0x3c -> preset act value) via SpawnMonster, recording its GUID. Guards Anya's prison.
-void __fastcall Objects_InitFn69_SpawnFrozenstein(D2ObjectInitFnArg * pInitArg) {
+void __fastcall Objects_InitFn69_NihlathakStartOutsideTown(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
       return;
     }
 
     D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
-    if (!(pA5Q3Data->nAnyaStateExtra == 1 && !pA5Q3Data->bFrozensteinSpawned)) {
+    if (!(pA5Q3Data->nAnyaStateExtra == 1 && !pA5Q3Data->bNihlathakSpawned)) {
       return;
     }
 
-    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetPresetActValue(2, (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
+    int32_t nMonsterClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_MapSuperUniqueId(2, (uint32_t)(uint16_t)D2Common::ITEMS::Items::sgptDataTable->aTxtSuperUniquesHardcoded[0x3c]);
     D2UnitStrc* pSpawnedMonster = Monsters::Spawn::SpawnMonster(pInitArg->pGame, pInitArg->pRoom, nMonsterClassId, pInitArg->nX, pInitArg->nY, 1);
     if (!pSpawnedMonster) {
       return;
     }
 
-    pA5Q3Data->nFrozensteinGUID = pSpawnedMonster->nUnitGUID;
-    pA5Q3Data->bFrozensteinSpawned = 1;
+    pA5Q3Data->nNihlathakGUID = pSpawnedMonster->nUnitGUID;
+    pA5Q3Data->bNihlathakSpawned = 1;
 }
 
 // Q33_AnyaTimerCallback (PrisonOfIce): per-frame anim driver for the rescued Anya NPC walking to/within Harrogath.
@@ -1492,7 +1492,7 @@ void __fastcall Q33_AnyaTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc *
         }
     }
 
-    D2Common::Units::SetupUpdateFlag(pUnit, nAnimMode);
+    D2Common::Units::ChangeAnimMode(pUnit, nAnimMode);
     rearm_timer:
     GAME::Event::SetEvent(pQuestData->pGame, pUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
 }
@@ -1685,7 +1685,7 @@ uint8_t __fastcall Q33_TransformFrozenAnya(::SGAMEDATA * pGame, D2QuestDataStrc 
     int nFrozenAnyaGUID = pA1Q4Specific->nTransformStep;
     if (!nFrozenAnyaGUID) {
       if (pFrozenAnyaObj) {
-        D2Common::Units::SetupUpdateFlag(pFrozenAnyaObj, 2);
+        D2Common::Units::ChangeAnimMode(pFrozenAnyaObj, 2);
         D2Common::Units::RemoveCollision_Vector(pFrozenAnyaObj);
       }
 

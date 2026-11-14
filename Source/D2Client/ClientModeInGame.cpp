@@ -18,7 +18,6 @@
 #include "Source/D2Net/D2Net.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2gfx/D2gfx.public.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "3rdparty/Storm/H/stpl.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -311,7 +310,7 @@ D2IniConfigStrc * __stdcall D2IniData_Getter() {
     return D2IniData_client;
 }
 
-D2BNetClientCallbacksStrc * __stdcall CLIENT_GetGameVersionInfo() {
+D2BNetClientCallbacksStrc * __stdcall CLIENT_GetBNetClientCallbacks() {
     return D2IniData_client->pBNetClientCallbacks;
 }
 
@@ -357,11 +356,11 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart3() {
     return nullptr;
 }
 
-uint32_t __stdcall CLIENTMODE_GetIngameUIFlags() {
+uint32_t __stdcall CLIENTMODE_IsHardcoreCharacter() {
     return (uint8_t)(char)D2IniData_client->eCTEMP_eD2PlayerStatus & 4;
 }
 
-void __stdcall CLIENTMODE_ClearIngameUIFlag() {
+void __stdcall CLIENTMODE_SetCharacterDied() {
     D2IniData_client->eCTEMP_eD2PlayerStatus |= PLAYERSTATUS_Died;
 }
 
@@ -369,7 +368,7 @@ void __fastcall D2CLIENT_SetExitVar1(BOOL bResult) {
     gbQuitGame = bResult;
 }
 
-BOOL __stdcall D2IniData_Getter_Unref_0044b890() {
+BOOL __stdcall GAME_GetQuitGame() {
     return gbQuitGame;
 }
 
@@ -507,7 +506,7 @@ uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused) {
       D2GS_Connected = 0;
     } else {
       size_t nSize;
-      nState = D2Net::SRC::Client::NET_CLIENT_GetConnectionTimeout();
+      nState = D2Net::SRC::Client::NET_CLIENT_IsConnected();
       if (nState) {
         process_server_packets:
         nSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE((char*)packetBuffer, 0x200);
