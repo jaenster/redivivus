@@ -454,7 +454,7 @@ static void SFILE_HandleAsyncReadError(D2StormAsyncOpStrc * pAsyncOp) {
         if (nCopyBytes >= pParentStream->nBufferSize) {
           nCopyBytes = pParentStream->nBufferSize;
         }
-        if (pAsyncOp->nChunkEndOffset - pParentStream->nDataChunkOffset + pAsyncOp->nFilePos >= nCopyBytes) {
+        if (pAsyncOp->nBytesToRead - pParentStream->nDataChunkOffset + pAsyncOp->nFilePos >= nCopyBytes) {
           This = pAsyncOp->pParentStream->pStream;
           This->lpVtbl->Play(This, 0, 0, 1);
           pAsyncOp->pParentStream->nStreamType = 2;
@@ -3747,16 +3747,16 @@ static D2StormAsyncOpStrc * __stdcall SFILE_IssueRequest(uint32_t nFileOffset, v
 
     pRequest->nSeekFilePos = nFileOffset;
     DWORD dwTickNow = GetTickCount();
-    pRequest->nState = dwTickNow + nTimeoutMs;
+    pRequest->dwDueTick = dwTickNow + nTimeoutMs;
     pRequest->pReadBufferBase = pReadBufferBase;
-    pRequest->nBytesRemaining = bUrgent;
+    pRequest->bUrgent = bUrgent;
     pRequest->pChunkWritePtr = pChunkWritePtr;
-    pRequest->nChunkEndOffset = nChunkSize;
+    pRequest->nBytesToRead = nChunkSize;
     pRequest->pStream = pStream;
     pRequest->nStreamPos = pUserCtx2;
     pRequest->pCompletion = pCompletion;
     pRequest->pParentStream = pParentStream;
-    pRequest->bQueueImmediately = bQueueImmediately;
+    pRequest->bAutoFree = bQueueImmediately;
     pMPQFile->nRefCount++;
     if (pParentStream) {
       pParentStream->nRefCount++;
@@ -4410,8 +4410,8 @@ void __stdcall SFILE_SelectAsyncRequest(D2ArchiveStrc * nFileHandle, uint32_t nC
           }
         }
 
-        nTimeRemaining = pRequest->nState - dwTickNow;
-        if (pRequest->nBytesRemaining && nTimeRemaining >= 1000) {
+        nTimeRemaining = pRequest->dwDueTick - dwTickNow;
+        if (pRequest->bUrgent && nTimeRemaining >= 1000) {
           nTimeRemaining = 1000;
         }
         if (nTimeRemaining < *ppMinTimeout) {
@@ -4511,7 +4511,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
                          call is normal
                          and expected whenever nFileOffset is not sector-aligned - it is not evidence
                          of a defect.
-                         An out-of-mapping destination has to originate in self request block. */ nBytesRead = SFILE_InternalReadUnaligned(pDVar1, pReadBuffer, gpCurrentAsyncIORequest->nChunkEndOffset, gpCurrentAsyncIORequest->nFilePos);
+                         An out-of-mapping destination has to originate in self request block. */ nBytesRead = SFILE_InternalReadUnaligned(pDVar1, pReadBuffer, gpCurrentAsyncIORequest->nBytesToRead, gpCurrentAsyncIORequest->nFilePos);
               pDVar2 = gpCurrentAsyncIORequest;
               gpCurrentAsyncIORequest->nChunkBytesRead = nBytesRead;
               pDVar1 = pDVar2->pFile;
@@ -4521,7 +4521,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
                 gpCurrentAsyncIORequest->pFile->nChecksumState = 4;
               }
             } else {
-              SFILE_SyncReadFile(pReadBuffer, gpCurrentAsyncIORequest->nChunkEndOffset, &gpCurrentAsyncIORequest->nChunkBytesRead, gpCurrentAsyncIORequest->nFilePos, pDVar1);
+              SFILE_SyncReadFile(pReadBuffer, gpCurrentAsyncIORequest->nBytesToRead, &gpCurrentAsyncIORequest->nChunkBytesRead, gpCurrentAsyncIORequest->nFilePos, pDVar1);
               pDVar2 = gpCurrentAsyncIORequest;
             }
           } else {
@@ -4532,7 +4532,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
               SFILE_HandleAsyncReadError(pDVar2);
               pDVar2 = gpCurrentAsyncIORequest;
             } else {
-              if (pDVar2->nChunkEndOffset) {
+              if (pDVar2->nBytesToRead) {
                 pDVar2->pStream->lpVtbl->Stop(pDVar2->pStream);
                 pDVar2 = gpCurrentAsyncIORequest;
                 if (gpCurrentAsyncIORequest->pParentStream) {
@@ -4554,7 +4554,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
 
           hEvent = pDVar2->hCompletionEvent;
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-          if (gpCurrentAsyncIORequest->bQueueImmediately) {
+          if (gpCurrentAsyncIORequest->bAutoFree) {
             SFILE_ReleaseAsyncRequest(gpCurrentAsyncIORequest);
             SMem::SMemFree(gpCurrentAsyncIORequest, "delete", -1, 0);
           }
@@ -4605,7 +4605,7 @@ static void SFILE_SetRequestUrgentByBuffer(void * pReadBuffer, BOOL bUrgent) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     for (pAsyncRequest = (D2StormAsyncOpStrc*)(gSFileAsyncReqQueue.head.pNext <= 0 ? 0 : gSFileAsyncReqQueue.head.pNext); (intptr_t)pAsyncRequest > 0; pAsyncRequest = pAsyncRequest->pNext) {
       if (pAsyncRequest->pReadBufferBase == pReadBuffer) {
-        pAsyncRequest->nBytesRemaining = bUrgent;
+        pAsyncRequest->bUrgent = bUrgent;
       }
     }
 

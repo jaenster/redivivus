@@ -492,17 +492,17 @@ void __fastcall Sha1_Append(D2Sha1ContextStrc * pCtx, int, uint8_t * pData, uint
     }
 }
 
-// @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
-// Was SBIG_PackTwoIntsToBytes. DESCRIPTIVE, not an oracle name. Writes 8 bytes big-endian: out[0..3] = the SECOND stack argument, out[4..7] = the first. The old parameter names (dwHighWord first) are therefore inverted with respect to the byte order it produces. This is the 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize both emit inline (cf. Sha1_Finalize's byLen0..byLen7 stack bytes and the PPC's rlwimi/stb chain at 100a2b00). Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
-uint32_t __fastcall SSIG_StoreBigEndian64(uint8_t * pbOut, int, uint32_t dwHighWord, uint32_t dwParam) {
-    pbOut[7] = (uint8_t)dwHighWord;
-    pbOut[6] = (uint8_t)(dwHighWord >> 8);
-    pbOut[5] = (uint8_t)(dwHighWord >> 0x10);
-    pbOut[4] = (uint8_t)(dwHighWord >> 0x18);
-    pbOut[3] = (uint8_t)dwParam;
-    pbOut[2] = (uint8_t)(dwParam >> 8);
-    pbOut[1] = (uint8_t)(dwParam >> 0x10);
-    *pbOut = (uint8_t)(dwParam >> 0x18);
+// Stores a 64-bit value big-endian into pbOut[0..7]: pbOut[0..3] = dwValueHigh, pbOut[4..7] = dwValueLow. The 64-bit bit-length encoder that Sha1_Finalize / Sha1::Finalize emit inline; zero callers (MSVC out-of-line COMDAT copy).
+// Descriptive name; corroborated by the Mac PPC 1.10b Storm rlwimi/stb chain at 100a2b00.
+uint32_t __fastcall SSIG_StoreBigEndian64(uint8_t * pbOut, int, uint32_t dwValueLow, uint32_t dwValueHigh) {
+    pbOut[7] = (uint8_t)dwValueLow;
+    pbOut[6] = (uint8_t)(dwValueLow >> 8);
+    pbOut[5] = (uint8_t)(dwValueLow >> 0x10);
+    pbOut[4] = (uint8_t)(dwValueLow >> 0x18);
+    pbOut[3] = (uint8_t)dwValueHigh;
+    pbOut[2] = (uint8_t)(dwValueHigh >> 8);
+    pbOut[1] = (uint8_t)(dwValueHigh >> 0x10);
+    *pbOut = (uint8_t)(dwValueHigh >> 0x18);
     return 0;
 }
 

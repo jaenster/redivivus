@@ -5184,7 +5184,7 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "e3bf773d",
+      "dh": "29710f61",
       "paramStorage": [
         [
           "nMissileId",
@@ -5195,12 +5195,12 @@
           "Stack[0x4]:4"
         ],
         [
-          "nLevel",
-          "EAX:4"
-        ],
-        [
           "pSkillsTxt",
           "EDX:4"
+        ],
+        [
+          "nLevel",
+          "EAX:4"
         ],
         [
           "wszText",
@@ -6230,7 +6230,7 @@
         "int32_t",
         "uint16_t"
       ],
-      "dh": "53f6bb38",
+      "dh": "b3f0b982",
       "paramStorage": [
         [
           "pUnit",

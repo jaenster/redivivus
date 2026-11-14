@@ -488,12 +488,8 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "078586c9",
+      "dh": "c17e2fcc",
       "paramStorage": [
-        [
-          "pOutAlpha",
-          "Stack[0x4]:4"
-        ],
         [
           "nIntensity",
           "EDI:4"
@@ -501,6 +497,10 @@
         [
           "pOutTint",
           "EAX:4"
+        ],
+        [
+          "pOutAlpha",
+          "Stack[0x4]:4"
         ]
       ]
     },
@@ -530,7 +530,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "fe8fbca6",
+      "dh": "c6491183",
       "paramStorage": [
         [
           "pSeed",

@@ -2023,19 +2023,15 @@
         "D2PathPointStrc",
         "int32_t"
       ],
-      "dh": "224e7163",
+      "dh": "20032833",
       "paramStorage": [
         [
-          "pScanNode",
-          "ECX:4"
+          "nInsertIdx",
+          "EAX:4"
         ],
         [
           "nWaypointBuf",
           "Stack[0x4]:4"
-        ],
-        [
-          "nInsertIdx",
-          "EAX:4"
         ],
         [
           "pnCurIndex",
@@ -2044,6 +2040,10 @@
         [
           "pnPointCount",
           "EDI:4"
+        ],
+        [
+          "pScanNode",
+          "ECX:4"
         ]
       ]
     },
@@ -2073,7 +2073,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "2dc0ba98",
+      "dh": "4c9dca32",
       "paramStorage": [
         [
           "pPathGrid",

@@ -16,6 +16,9 @@
 #include "Source/Fog/Src/AsyncData.h"
 
 // Data types
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2AsyncDataStrc {
     /* 0x00 */ D2AsyncDataSlotStrc aSlots[1024];
 };
+
+#endif // D2_MODULE_Storm

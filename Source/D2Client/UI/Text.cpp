@@ -6898,7 +6898,7 @@ int __stdcall TEXT_HandleEscapeKey() {
     return 0;
 }
 
-static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, D2UnitStrc * pUnit, uint16_t * wszText, int * pScreenPos) {
+static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, int * pScreenPos, D2UnitStrc * pUnit, uint16_t * wszText) {
     RECT rcBox;
     uint32_t nExpireFrame = D2Common::Chat::GetExpireFrame(pHoverText);
     if (gnTextOverheadCounter > nExpireFrame) {
@@ -7001,7 +7001,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
           }
 
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLocaleString, wszString, nSizeMaybe);
-          TEXT_DrawUnitOverheadText(pHover, pUnit, wszLocaleString, (int*)&ptScreenPos2.x);
+          TEXT_DrawUnitOverheadText(pHover, (int*)&ptScreenPos2.x, pUnit, wszLocaleString);
           return;
         }
       }
@@ -7011,7 +7011,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
       bConverted = TEXT_ConvertCharToWideWithLanguage(nConvertedLen, szMessage, (uint32_t)byLanguageCode, (uint16_t*)wszConverted);
       if (bConverted) {
         wszConverted[0xff] = L'\0';
-        TEXT_DrawUnitOverheadText(pHover, pUnit, wszConverted, (int*)&ptScreenPos2.x);
+        TEXT_DrawUnitOverheadText(pHover, (int*)&ptScreenPos2.x, pUnit, wszConverted);
       }
     }
 }
@@ -7076,7 +7076,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
           }
 
           D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLocaleString, wszString, nSizeMaybe);
-          TEXT_DrawUnitOverheadText(pHoverText, pUnit, wszLocaleString, (int*)&ptScreenPos.x);
+          TEXT_DrawUnitOverheadText(pHoverText, (int*)&ptScreenPos.x, pUnit, wszLocaleString);
         }
       }
     }

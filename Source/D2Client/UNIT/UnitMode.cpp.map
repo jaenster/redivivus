@@ -471,8 +471,16 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "e411e544",
+      "dh": "e06b7768",
       "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "nTargetGUID",
+          "EBX:4"
+        ],
         [
           "nActionType",
           "Stack[0x4]:4"
@@ -480,14 +488,6 @@
         [
           "eTargetType",
           "Stack[0x8]:4"
-        ],
-        [
-          "nTargetGUID",
-          "EBX:4"
-        ],
-        [
-          "pUnit",
-          "EAX:4"
         ]
       ]
     },
@@ -515,7 +515,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "11738de1",
+      "dh": "4e7dad51",
       "paramStorage": [
         [
           "nActionType",
@@ -567,7 +567,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "1b60631a",
+      "dh": "1bb94a95",
       "paramStorage": [
         [
           "nActionType",
@@ -612,7 +612,7 @@
         "eD2UnitType",
         "int32_t"
       ],
-      "dh": "b4b360f9",
+      "dh": "f1cde975",
       "paramStorage": [
         [
           "pUnit",

@@ -3619,15 +3619,15 @@
         "uint16_t",
         "uint8_t"
       ],
-      "dh": "71e7c83d",
+      "dh": "901614fc",
       "paramStorage": [
-        [
-          "pDest",
-          "EAX:4"
-        ],
         [
           "pSrc",
           "ECX:4"
+        ],
+        [
+          "pDest",
+          "EAX:4"
         ],
         [
           "nPitch",
@@ -3657,7 +3657,7 @@
       "usedTypes": [
         "DDSURFACEDESC"
       ],
-      "dh": "cdc6d471"
+      "dh": "94fab621"
     },
     {
       "name": "DecodeSmacker",

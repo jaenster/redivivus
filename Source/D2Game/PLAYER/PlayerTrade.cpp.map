@@ -1551,7 +1551,7 @@
         "SGAMEDATA",
         "uint8_t"
       ],
-      "dh": "9ecc99b8",
+      "dh": "d545e648",
       "paramStorage": [
         [
           "pPlayerData1",
@@ -1562,16 +1562,16 @@
           "Stack[0x8]:4"
         ],
         [
-          "pUnit",
-          "EBX:4"
-        ],
-        [
           "pUnit2",
           "EDI:4"
         ],
         [
           "pGame",
           "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EBX:4"
         ]
       ]
     },
@@ -1611,7 +1611,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5ea51c02",
+      "dh": "f839baab",
       "paramStorage": [
         [
           "pGame",

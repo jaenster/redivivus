@@ -574,7 +574,7 @@ BOOL __fastcall Q04_RemoveCainFromTristram(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // is inside the room, then retries FindSpawnableLocation + SpawnMonster up to ~0x14
 // nearby rooms until placement succeeds. On success flags Cain init/resurrect, records
 // his unit GUID into the quest sub-struct, and sets the "Cain spawned" flag (0x51).
-static void __stdcall Q04_SpawnDeckardCainNpc(D2RoomStrc * pRoom, ::SGAMEDATA * pGame, int32_t nX, int32_t nY) {
+static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT ptCainSpawnPos;
     D2QuestDataStrc* pQuestData;
@@ -1858,7 +1858,7 @@ void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg)
       return;
     }
 
-    Q04_SpawnDeckardCainNpc(pInitArg->pRoom, pInitArg->pGame, pInitArg->nX, pInitArg->nY);
+    Q04_SpawnDeckardCainNpc(pInitArg->pGame, pInitArg->pRoom, pInitArg->nX, pInitArg->nY);
 }
 
 // A1Q4 — CUBE_SpecialOutput_CowPortal: Horadric-Cube recipe output that opens the
@@ -2310,8 +2310,6 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
     int32_t nY;
-    int32_t nX;
-    D2RoomStrc* pRoom;
     int nPlayerGUID;
     D2QuestDataA1Q4Strc* pA1Q4SubCast;
     D2BitBufferStrc* pBitBuffer;
@@ -2358,9 +2356,7 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         pUnit = UNIT::SUnit::FindUnitFromTable(pQuestArgs->pGame, UNIT_OBJECT, pA1Q4SubCast->sSub.nCainSpawnObjectGUID);
         if (pUnit && pA1Q4SubCast->sSub.bPendingCairnActivation == '\x01' && pA1Q4SubCast->sSub.bCairnMonsterSaved == '\0') {
           nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-          nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          Q04_SpawnDeckardCainNpc(pRoom, pQuestArgs->pGame, nX, nY);
+          Q04_SpawnDeckardCainNpc(pQuestArgs->pGame, D2Common::Units::UNITS_GetRoom(pUnit), D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nY);
           return;
         }
       }

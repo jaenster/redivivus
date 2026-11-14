@@ -296,15 +296,15 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "c732ec26",
+      "dh": "05e2243e",
       "paramStorage": [
-        [
-          "pPathParam",
-          "ECX:4"
-        ],
         [
           "ePathTypeOrEngaged",
           "EDX:4"
+        ],
+        [
+          "byMonStat2OrDist",
+          "AL:1"
         ],
         [
           "pGame",
@@ -319,8 +319,8 @@
           "Stack[0xc]:4"
         ],
         [
-          "byMonStat2OrDist",
-          "AL:1"
+          "pPathParam",
+          "ECX:4"
         ]
       ]
     },
@@ -1681,7 +1681,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "302d4d7a",
+      "dh": "2cccc340",
       "paramStorage": [
         [
           "pGame",

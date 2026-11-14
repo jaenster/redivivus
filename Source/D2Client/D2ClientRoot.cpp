@@ -1010,7 +1010,9 @@ int Unreferenced_0047aa00() {
     return CLIENT_ArenaFlags & 0x200;
 }
 
-void __fastcall ROSTER_SetArenaKillCountGlobal(eD2PlayerClassIDDWORD dwValue) {
+// Stores the default player class id (global 0x00712f00) that CLIENT_GetDefaultCharClass returns.
+// Provenance: only writer of 0x00712f00, paired with the getter's only read; sole caller ClientInit_PlayerClassId.
+void __fastcall CLIENT_SetDefaultCharClass(eD2PlayerClassIDDWORD dwValue) {
     eD2PlayerClassIDDWORD_00712f00 = dwValue;
 }
 

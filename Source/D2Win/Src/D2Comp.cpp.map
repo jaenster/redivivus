@@ -151,23 +151,23 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "3f8afe8b",
+      "dh": "58833d7d",
       "paramStorage": [
         [
           "nPlayerClassId",
           "Stack[0x4]:4"
         ],
         [
-          "szText",
-          "Stack[0x8]:4"
+          "nAnimMode",
+          "EBX:4"
         ],
         [
           "dwWeaponClassToken",
           "EDI:4"
         ],
         [
-          "nAnimMode",
-          "EBX:4"
+          "szText",
+          "Stack[0x8]:4"
         ]
       ]
     },
@@ -314,7 +314,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dbb3c90a",
+      "dh": "6ca376c3",
       "paramStorage": [
         [
           "ppCOFList",

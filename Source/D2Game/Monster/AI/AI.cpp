@@ -4563,7 +4563,7 @@ void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nR
     SERVER_UNIT_CastSkill(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSkillMode, eSkill, 0, nTargetX, nDiameter - nRange + nPos);
 }
 
-static uint32_t MONSTERAI_CalculateTrapDamage(uint32_t nHitRoll, uint32_t nDamageMax, uint32_t nDamageMin, DWORD dwParam2, D2UnitStrc * pUnit) {
+static uint32_t MONSTERAI_CalculateTrapDamage(D2UnitStrc * pUnit, DWORD dwParam2, uint32_t nDamageMin, uint32_t nDamageMax, uint32_t nHitRoll) {
     D2ObjectsTxt* pObjTxt;
     int nClassId;
     if (nDamageMin <= nDamageMax) {
@@ -4638,7 +4638,7 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
       return;
     }
 
-    nTrapDamageRoll = MONSTERAI_CalculateTrapDamage(nHitRoll, nDmgMin, nDmgMax, (DWORD)pVictim, pUnit);
+    nTrapDamageRoll = MONSTERAI_CalculateTrapDamage(pUnit, (DWORD)pVictim, nDmgMax, nDmgMin, nHitRoll);
     if (!nTrapDamageRoll) {
       return;
     }

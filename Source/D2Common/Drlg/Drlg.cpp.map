@@ -2883,23 +2883,23 @@
         "eD2GridCellFlags",
         "int32_t"
       ],
-      "dh": "f9790576",
+      "dh": "dc95a815",
       "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
         [
           "nRow",
           "EAX:4"
-        ],
-        [
-          "peD2GridCellFlags",
-          "ESI:4"
         ],
         [
           "pDrlgGridStrc",
           "EDI:4"
         ],
         [
-          "nX",
-          "Stack[0x4]:4"
+          "peD2GridCellFlags",
+          "ESI:4"
         ]
       ]
     },
@@ -2958,7 +2958,7 @@
         "D2DrlgGridStrc",
         "D2RoomExStrc"
       ],
-      "dh": "b6d0200d",
+      "dh": "d63a42db",
       "paramStorage": [
         [
           "pLevel",

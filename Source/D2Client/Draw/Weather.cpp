@@ -597,7 +597,7 @@ void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int
     pBubbleData[3] = '\0';
 }
 
-static void __stdcall WEATHER_GetLightingTint(uint8_t * pOutAlpha, int nIntensity, uint8_t * pOutTint) {
+static void __stdcall WEATHER_GetLightingTint(int nIntensity, uint8_t * pOutTint, uint8_t * pOutAlpha) {
     // Static local variables (originally global data)
     static uint8_t gaWeatherLightTintData[7] = { 0xc8, 0x40, 0xa0, 0x20, 0x50, 0x40, 0xa0 }; D2_STATIC_GUARD(gaWeatherLightTintData, "D2Client::Draw::Weather::WEATHER_GetLightingTint::gaWeatherLightTintData");
 
@@ -695,7 +695,7 @@ static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
         exit(-1);
       }
 
-      WEATHER_GetLightingTint(&pParticleArray[nParticleSlotIndex].nColor, nLineIndex, &pParticleArray[nParticleSlotIndex].nAlpha);
+      WEATHER_GetLightingTint(nLineIndex, &pParticleArray[nParticleSlotIndex].nAlpha, &pParticleArray[nParticleSlotIndex].nColor);
       return;
     }
 

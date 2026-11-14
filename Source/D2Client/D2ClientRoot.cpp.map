@@ -1376,7 +1376,7 @@
       "dh": "6528c661"
     },
     {
-      "name": "ROSTER_SetArenaKillCountGlobal",
+      "name": "CLIENT_SetDefaultCharClass",
       "address": "0047aa10",
       "lines": [
         {
@@ -1386,12 +1386,12 @@
       ],
       "namespace": "D2Client",
       "calledFunctions": [
-        "ROSTER_SetArenaKillCountGlobal"
+        "CLIENT_SetDefaultCharClass"
       ],
       "usedTypes": [
         "eD2PlayerClassIDDWORD"
       ],
-      "dh": "71788bb4",
+      "dh": "c828110f",
       "paramStorage": [
         [
           "dwValue",

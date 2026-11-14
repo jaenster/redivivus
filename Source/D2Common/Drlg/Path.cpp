@@ -3348,7 +3348,7 @@ static BOOL DRLGPATH_TryStepWithFallbackDirections(D2PathTypeArg * pPathTypeArg,
 }
 
 // Inserts a set of waypoints from a path node into the main waypoint buffer at a given index. Uses memmove to shift existing data and memcpy to copy the new points. Updates the insertion index and total count.
-static void __stdcall DRLGPATH_InsertWaypointsIntoBuffer(D2DrlgPathScannerStrc * pScanNode, D2PathPointStrc * nWaypointBuf, int32_t nInsertIdx, int * pnCurIndex, int * pnPointCount) {
+static void __stdcall DRLGPATH_InsertWaypointsIntoBuffer(int32_t nInsertIdx, D2PathPointStrc * nWaypointBuf, int * pnCurIndex, int * pnPointCount, D2DrlgPathScannerStrc * pScanNode) {
     int nInsertCount = *pnCurIndex - nInsertIdx - 1 + pScanNode->nWaypointCount;
     int iVar1 = nInsertCount + nInsertIdx;
     memmove(nWaypointBuf + iVar1 + 1, nWaypointBuf + nInsertIdx + 1, (*pnPointCount - nInsertIdx) * 4 - 4);
@@ -3512,7 +3512,7 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(uint32_t * pPathGrid, D2PathPointSt
                 pDVar3->anWaypoints[pDVar3->nWaypointCount] = pDVar3->sCurPos;
                 pDVar3->nWaypointCount++;
                 pDVar3->anWaypoints[pDVar3->nWaypointCount].nX = 0;
-                DRLGPATH_InsertWaypointsIntoBuffer(pDVar3, nGridSize, iVar2, pStartX, pStartY);
+                DRLGPATH_InsertWaypointsIntoBuffer(iVar2, nGridSize, pStartX, pStartY, pDVar3);
                 return pScannerB->nWaypointCount;
               }
             }

@@ -733,7 +733,7 @@ void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nCompone
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
-static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t nAnimMode, int32_t nPrevDirection, D2UnitStrc * pUnit, int32_t nNewDirection) {
+static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t nAnimMode, D2UnitStrc * pUnit, int32_t nPrevDirection, int32_t nNewDirection) {
     int nClassId;
     if (!nAnimMode) {
       return;
@@ -789,7 +789,7 @@ void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimD
     *pnNumDirections = _cNumDirs;
     if (nAnimMode) {
       GFXUTIL_ConvertDirectionBits(_cNumDirs, nNumDirs, pnDirection);
-      GFXUTIL_UpdateDirectionForMode((uint8_t)*pnDirection, nAnimMode, *pnNumDirections, pUnit, nNumDirs);
+      GFXUTIL_UpdateDirectionForMode((uint8_t)*pnDirection, nAnimMode, pUnit, *pnNumDirections, nNumDirs);
     }
 
     uint32_t nFrameHandler = D2CMP::SRC::CelCmp::CELCMP_GetFrameDecodeHandlerReverse(*pnDirection, nNumDirs);

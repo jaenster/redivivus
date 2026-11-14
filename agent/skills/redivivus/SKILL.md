@@ -43,9 +43,18 @@ https://redivivus.app/agent-setup/rules.md. Read both before the first proposal.
   then ignores the tag. When your change touches a tagged function, measure the tag again on the
   changed decompile and put it in the same proposal as a `vc8form` op with `replace`.
 
-Accepted proposals are applied to Ghidra and so land in the next regeneration of the source. A new
-generator form, a filing rule, anything the generator has to learn, is an issue on
-https://github.com/jaenster/redivivus/issues with the measurements, not a proposal.
+Accepted proposals are applied to Ghidra and so land in the next regeneration of the source.
+
+Open an issue on https://github.com/jaenster/redivivus/issues instead when the checker cannot take the
+claim:
+
+- **renaming a name someone already chose**, a function, global, local, parameter or field; the checker
+  only fills in default names (below) and refuses the rest;
+- a defect no op expresses: a lost register, a truncated table, a wrong generator output;
+- a new generator form, a filing rule, anything the generator has to learn (with the measurements);
+- a disagreement with these rules or with a refusal of the checker.
+
+An issue is one claim too, with the same target, value seen and evidence.
 
 ## Structural suspicions - file, never propose
 
@@ -78,7 +87,7 @@ suspicion is reportable from xrefs, the surrounding bytes and the table you foun
 ## When to name at all
 
 - **Only default names are fair game.** Never replace a name someone already chose. If you think it is
-  wrong, propose that with the evidence and let review decide.
+  wrong, open an issue with the evidence and let review decide.
 - **Reordering parameters is not renaming them.** A `set_prototype` that only puts the existing
   parameters in another order (each keeps its name and type; same count, return type and convention;
   storage may follow the convention or be custom) leaves every chosen name alone. It changes what every
@@ -93,7 +102,8 @@ suspicion is reportable from xrefs, the surrounding bytes and the table you foun
   worse than a default one, because it reads as evidence.
 
 Default names that need a name:
-- params: `param_N`, generic `dwParam` / `nParam` / `bParam`
+- params: `param_N`, generic `dwParam` / `nParam` / `bParam` and the pointer forms `pnParam` / `pdwParam` /
+  `pbParam` / `pwParam` / `pcParam` / `ppParam`
 - locals: `local_XX`, `uVarN` `iVarN` `cVarN` `bVarN` `pVarN` and the like, `uStackN` `iStackN`,
   `extraout_*`, `in_*`, `unaff_*`
 - globals: `DAT_*`, `PTR_*`, `UNK_*`; functions: `FUN_*`, `thunk_FUN_*`
@@ -114,7 +124,13 @@ Leave alone: stack-cookie and SEH slots, and CRT/STL/Win32 runtime code (`std::*
 |`f`|float|
 |`pfn`|function pointer|
 |`a`|array|
+|`h` / `u`|Win32 handle (`hWnd`) / Win32 `UINT` (`uMsg`)|
 |`i` / `j`|loop counters only|
+
+A pointer to something that has its own prefix puts `p` (or `pp`) in front of that prefix: `pnPosition`
+(`int *`), `pdwFlags`, `pbDone`, `pwPort`, `pbyData`, `peMode`, `pfScale`, `pszName`, `pwszName`,
+`ppszList`. The checker reads these as pointers. Plain `p` stays right for a pointer to a struct or to
+memory with no prefix of its own (`pUnit`, `pBuffer`).
 
 Then PascalCase meaning: `pUnit`, `pRoom`, `nSkillId`, `dwFlags`, `szPath`, `bIsValid`. A free function
 taking a struct in ECX names that parameter for the struct (`pGame`), never `this`.

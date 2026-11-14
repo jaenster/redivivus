@@ -350,8 +350,12 @@
         "D2UnitStrc",
         "SGAMEDATA"
       ],
-      "dh": "939982d1",
+      "dh": "e2c42a58",
       "paramStorage": [
+        [
+          "pBitBuffer",
+          "ESI:4"
+        ],
         [
           "pQuestControl",
           "Stack[0x4]:4"
@@ -359,10 +363,6 @@
         [
           "pUnit",
           "Stack[0x8]:4"
-        ],
-        [
-          "pBitBuffer",
-          "ESI:4"
         ]
       ]
     },
@@ -394,7 +394,7 @@
         "eD2LevelId",
         "int32_t"
       ],
-      "dh": "0499ddba",
+      "dh": "1988ee35",
       "paramStorage": [
         [
           "pGame",
@@ -438,7 +438,7 @@
         "SGAMEDATA",
         "eAct"
       ],
-      "dh": "0497c0cf",
+      "dh": "c7c1cbd8",
       "paramStorage": [
         [
           "pGame",
@@ -665,7 +665,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "9ccc6dee",
+      "dh": "99e586cc",
       "paramStorage": [
         [
           "pQuestData",

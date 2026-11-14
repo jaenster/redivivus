@@ -5,7 +5,6 @@
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/D2AsyncDataStrc.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -13,12 +12,6 @@
 #ifndef D2_ALLOC_AT
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
-
-#ifndef D2_NEW_AT
-#define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
-#endif
-
-static_assert(sizeof(void*) != 4 || sizeof(::D2AsyncDataStrc) == 0x3000, "D2_NEW_AT(D2AsyncDataStrc): the 32-bit layout must be the 0x3000 bytes 1.14d allocates");
 
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
@@ -45,7 +38,7 @@ static int gnAsyncDataPriorityDeferDepth = 0; D2_STATIC_GUARD(gnAsyncDataPriorit
 static D2AsyncData_Line0x128 * gpAsyncDataDeferredList = 0; D2_STATIC_GUARD(gpAsyncDataDeferredList, "gpAsyncDataDeferredList");
 static uint32_t gbAsyncDataInitialized = 0; D2_STATIC_GUARD(gbAsyncDataInitialized, "gbAsyncDataInitialized");
 static uint32_t gnAsyncDataHandleBufferSize = 0; D2_STATIC_GUARD(gnAsyncDataHandleBufferSize, "gnAsyncDataHandleBufferSize");
-static D2AsyncDataStrc * pD2AsyncDataStrc = 0; D2_STATIC_GUARD(pD2AsyncDataStrc, "pD2AsyncDataStrc");
+static D2AsyncDataSlotStrc * pD2AsyncDataStrc = 0; D2_STATIC_GUARD(pD2AsyncDataStrc, "pD2AsyncDataStrc");
 
 namespace Fog { namespace Src { namespace AsyncData {
 
@@ -63,7 +56,7 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
       return;
     }
 
-    pD2AsyncDataStrc = D2_NEW_AT(D2AsyncDataStrc, ".\\Src\\AsyncData.cpp", 0x88);
+    pD2AsyncDataStrc = (D2AsyncDataSlotStrc*)D2_ALLOC_AT(0x3000, ".\\Src\\AsyncData.cpp", 0x88);
     if (!pD2AsyncDataStrc) {
       pD2AsyncDataStrc = 0;
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x89);
@@ -73,12 +66,12 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
     int nSlotOffset = 0;
     do {
       HANDLE hEvent;
-      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pSlot = (void*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nSlotOffset);
+      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pSlot = (void*)&pD2AsyncDataStrc[nSlotOffset].hEvent;
       hEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
-      nSlotOffset += 0xc;
+      nSlotOffset++;
       *(HANDLE*)pSlot = hEvent;
       *(uint32_t*)((char*)pSlot + 4) = 1;
-    } while (nSlotOffset < 0xc00);
+    } while (nSlotOffset < 256);
 
     gnAsyncDataHandleBufferSize = 0x100;
     gbAsyncDataInitialized = 1;
@@ -87,14 +80,13 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
 void __stdcall STRUCT_FreeAsyncData() {
     uint32_t nIndex;
     void* pSlot;
-    int nSlotOffset = 0;
     if (pD2AsyncDataStrc) {
-      D2AsyncDataStrc* pMemoryToFree;
+      D2AsyncDataSlotStrc* pMemoryToFree;
       nIndex = 0;
       pMemoryToFree = pD2AsyncDataStrc;
       if (gnAsyncDataHandleBufferSize > 0) {
         do {
-          pSlot = (void*)((intptr_t)&pMemoryToFree->aSlots[0].hEvent + nSlotOffset);
+          pSlot = (void*)&pMemoryToFree[nIndex].hEvent;
           if (pSlot && *(HANDLE*)pSlot) {
             /* HANDLE hObject for CloseHandle */ CloseHandle(*(HANDLE*)pSlot);
             pMemoryToFree = pD2AsyncDataStrc;
@@ -102,7 +94,6 @@ void __stdcall STRUCT_FreeAsyncData() {
           }
 
           nIndex++;
-          nSlotOffset += 0xc;
         } while (nIndex < gnAsyncDataHandleBufferSize);
       }
 
@@ -151,13 +142,12 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     DWORD dwWaitResult;
     HANDLE hEvent;
     D2AsyncDataSlotStrc* pCandidateSlot;
-    int nByteOffset = 0;
     if (!gbAsyncDataInitialized) {
       return nullptr;
     }
 
     uint32_t nSlotIndex = 0;
-    D2AsyncDataSlotStrc* pSlot = pD2AsyncDataStrc->aSlots;
+    D2AsyncDataSlotStrc* pSlot = pD2AsyncDataStrc;
     if (gnAsyncDataHandleBufferSize > 0) {
       do {
         if (pSlot->bFree) {
@@ -173,8 +163,8 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     nSlotIndex = 0;
     if (gnAsyncDataHandleBufferSize > 0) {
       do {
-        pCandidateSlot = (D2AsyncDataSlotStrc*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset);
-        /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(*(HANDLE*)((intptr_t)&pD2AsyncDataStrc->aSlots[0].hEvent + nByteOffset), 0);
+        pCandidateSlot = &pD2AsyncDataStrc[nSlotIndex];
+        /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(pD2AsyncDataStrc[nSlotIndex].hEvent, 0);
         if (!dwWaitResult) {
           ASYNCDATA_CancelAndCleanup(pCandidateSlot->pRequest);
           pCandidateSlot->bFree = 0;
@@ -182,12 +172,11 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
         }
 
         nSlotIndex++;
-        nByteOffset += 0xc;
       } while (nSlotIndex < gnAsyncDataHandleBufferSize);
     }
     if (gnAsyncDataHandleBufferSize < 0x400) {
       D2AsyncDataSlotStrc* pDVar1;
-      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pDVar1 = pD2AsyncDataStrc->aSlots + gnAsyncDataHandleBufferSize;
+      /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ pDVar1 = pD2AsyncDataStrc + gnAsyncDataHandleBufferSize;
       gnAsyncDataHandleBufferSize++;
       hEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
       pDVar1->hEvent = hEvent;

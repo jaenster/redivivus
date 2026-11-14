@@ -362,15 +362,15 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "a182f8c8",
+      "dh": "f3e50f3a",
       "paramStorage": [
-        [
-          "pRoom",
-          "ESI:4"
-        ],
         [
           "pGame",
           "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "ESI:4"
         ],
         [
           "nX",
@@ -1585,7 +1585,7 @@
         "D2QuestDataA1Q4Strc",
         "D2QuestDataStrc"
       ],
-      "dh": "8ed56c93",
+      "dh": "4d0afcb2",
       "paramStorage": [
         [
           "pInitArg",
@@ -2167,7 +2167,7 @@
         "SGAMEDATA",
         "int32_t"
       ],
-      "dh": "9a7b3827",
+      "dh": "be46e3df",
       "paramStorage": [
         [
           "pQuestData",

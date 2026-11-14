@@ -174,7 +174,7 @@ static void __stdcall SUNITINACTIVE_RestoreInactiveItemList(::SGAMEDATA * pGame,
 
 // Serializes a ground/dropped item into a bitstream (up to 1024 bytes), allocates an inactive record (serialized bytes + 0xF header) in the game memory pool, calculates a despawn timer, then frees the unit and any socketed items via FreeServerUnit. Appends the record to pInactiveList->next chain, or if pOutInactiveRecord is non-null writes the pointer there instead.
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2InactiveUnitListStrc * pInactiveList, D2InactiveItemRecordStrc * * pOutInactiveRecord) {
+static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(D2InactiveUnitListStrc * pInactiveList, D2InactiveItemRecordStrc * * pOutInactiveRecord, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pNextSocketedItem;
     D2InactiveItemRecordBufferStrc sRecord;
     D2InventoryStrc* pInventory;
@@ -1196,7 +1196,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
         LAB_00542ee9:
         eStack_8 = pUnit->eUnitType;
         if (eStack_8 == UNIT_ITEM) {
-          SUNITINACTIVE_SerializeAndDeactivateItem(pGame, pUnit, pDVar4, nullptr);
+          SUNITINACTIVE_SerializeAndDeactivateItem(pDVar4, nullptr, pGame, pUnit);
           return;
         }
 

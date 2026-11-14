@@ -1672,16 +1672,8 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "92f6e9ae",
+      "dh": "977f30ed",
       "paramStorage": [
-        [
-          "nCenterX",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nBaseY",
-          "Stack[0x8]:4"
-        ],
         [
           "byColor",
           "AL:1"
@@ -1689,6 +1681,14 @@
         [
           "szText",
           "EDI:4"
+        ],
+        [
+          "nCenterX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x8]:4"
         ]
       ]
     },
@@ -1769,7 +1769,7 @@
         "uint32_t",
         "wchar_t"
       ],
-      "dh": "73de6df4",
+      "dh": "d7f3fb01",
       "paramStorage": [
         [
           "pUnit",
@@ -1808,7 +1808,7 @@
         "eD2LevelId",
         "uint32_t"
       ],
-      "dh": "3659fe64",
+      "dh": "80d4e4a0",
       "paramStorage": [
         [
           "pRoster",

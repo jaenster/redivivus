@@ -584,7 +584,7 @@ void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2Uni
 
 // Client-side move-action callback invoked by the unit-mode system. Checks mouse-button flags: right-click (bit 3) issues message 0x18 and sends packet 4; otherwise issues message 0 and sends packet 2. Both paths call UNITMODE_CanInterruptSkill first; if the skill cannot be interrupted the pending-interact state is queued (eQueuedSkillId, eTargetUnitType, nTargetUnitGUID). Clears pending-interact on successful dispatch.
 // The whole 28-byte local area (SUB ESP,0x1c) is ONE message object, the first seven fields of D2ServerMessageHandleStrc. Both click paths zero all seven dwords and then write TWO of them before the call: MOV [EBP-0x1c],EAX = the target unit TYPE (arg at EBP+0xc) and MOV [EBP-0x18],EBX = the target GUID. Typed uint32_t[7] (the seven dwords) rather than D2ServerMessageHandleStrc because that struct is declared 32 bytes and does not fit this frame - its 8th field (nOwnerGUID) belongs to a different caller's frame.
-static void __stdcall UNITMODE_HandleMoveAction(uint32_t nActionType, eD2UnitType eTargetType, int32_t nTargetGUID, D2UnitStrc * pUnit) {
+static void __stdcall UNITMODE_HandleMoveAction(D2UnitStrc * pUnit, int32_t nTargetGUID, uint32_t nActionType, eD2UnitType eTargetType) {
     BOOL bHandled;
     uint8_t nPacketId;
     uint32_t sMsg[7];
@@ -651,7 +651,7 @@ static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType
       if (pTargetUnit && pTargetUnit->eUnitFlags >> 1 & 1) {
         BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pPlayerUnit, nActionType);
         if (BVar1) {
-          UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pPlayerUnit);
+          UNITMODE_HandleMoveAction(pPlayerUnit, nTargetGUID, nActionType, eTargetType);
           return 0;
         }
 
@@ -721,7 +721,7 @@ static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nA
 
     BOOL BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pPlayerUnit, nActionType);
     if (BVar1) {
-      UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pPlayerUnit);
+      UNITMODE_HandleMoveAction(pPlayerUnit, nTargetGUID, nActionType, eTargetType);
       return 0;
     }
 
@@ -733,7 +733,7 @@ static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, eD2Unit
       BOOL BVar1;
       BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType);
       if (BVar1) {
-        UNITMODE_HandleMoveAction(nActionType, eTargetType, nTargetGUID, pUnit);
+        UNITMODE_HandleMoveAction(pUnit, nTargetGUID, nActionType, eTargetType);
         return 0;
       }
 

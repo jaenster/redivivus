@@ -1308,7 +1308,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     return 1;
 }
 
-static BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t width, int32_t height, int32_t bottomY, int32_t leftX) {
+static BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t bottomY, int32_t leftX, int32_t width, int32_t height) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= leftX && nMouseX <= leftX + width && nMouseY >= bottomY - height && nMouseY <= bottomY) {
@@ -1690,7 +1690,7 @@ void __fastcall ClientInit_Noop15(D2IniConfigStrc * pIni) {
 
 // Apply player class selection by id.
 void __fastcall ClientInit_PlayerClassId(D2IniConfigStrc * pIniConfig) {
-    ROSTER_SetArenaKillCountGlobal((eD2PlayerClassIDDWORD)(uint8_t)pIniConfig->nCTEMP_MaybePlayerClass);
+    CLIENT_SetDefaultCharClass((eD2PlayerClassIDDWORD)(uint8_t)pIniConfig->nCTEMP_MaybePlayerClass);
 }
 
 void __fastcall GLOBAL_SetGameVersionInfo(D2IniConfigStrc * pIniConfig) {

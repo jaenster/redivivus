@@ -718,7 +718,7 @@ static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nBarEndX, 14, nX + 46, 19, 0, DRAW_SOLID);
 }
 
-static void __stdcall UI_DrawHirelingNameFromUnit(int32_t nX, int32_t nY, D2UnitStrc * pUnit) {
+static void __stdcall UI_DrawHirelingNameFromUnit(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     uint16_t wszName[32];
     if (!pUnit) {
       return;
@@ -823,10 +823,9 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
     }
 
     DrawHealthBar((uint32_t)pUnit, 7, *pnX);
-    int nY = *pnY;
-    int nX = *pnX;
-    D2UnitStrc* pMercUnit = UNIT::CUnit::UNITS_FindClientSideUnit((int32_t)pUnit, UNIT_MONSTER);
-    UI_DrawHirelingNameFromUnit(nX, nY, pMercUnit);
+    int nY_00 = *pnY;
+    int nY = *pnX;
+    UI_DrawHirelingNameFromUnit(UNIT::CUnit::UNITS_FindClientSideUnit((int32_t)pUnit, UNIT_MONSTER), nY, nY_00);
     if (*pnYToggle) {
       *pnY -= *pnYToggle;
       *pnYToggle = 0;

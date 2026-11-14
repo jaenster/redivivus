@@ -3128,19 +3128,19 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "57425685",
+      "dh": "ae3a1bc0",
       "paramStorage": [
         [
           "nToken",
           "Stack[0x4]:4"
         ],
         [
-          "nServerToken",
-          "EBX:4"
-        ],
-        [
           "szCDKey",
           "EDI:4"
+        ],
+        [
+          "nServerToken",
+          "EBX:4"
         ],
         [
           "pOutHash",
@@ -3178,7 +3178,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bdfad3b0"
+      "dh": "82563349"
     },
     {
       "name": "Unreferenced_0051e240",
@@ -3246,7 +3246,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "c6008856",
+      "dh": "9fabb9a7",
       "paramStorage": [
         [
           "pOutHash",

@@ -495,11 +495,11 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "cf03ad70",
+      "dh": "99e1c493",
       "paramStorage": [
         [
-          "nTileFlags",
-          "EDX:4"
+          "pRoomEx",
+          "ESI:4"
         ],
         [
           "nWorldX",
@@ -510,12 +510,12 @@
           "Stack[0x8]:4"
         ],
         [
-          "nWorldY",
-          "EAX:4"
+          "nTileFlags",
+          "EDX:4"
         ],
         [
-          "pRoomEx",
-          "ESI:4"
+          "nWorldY",
+          "EAX:4"
         ]
       ]
     },
@@ -546,7 +546,7 @@
         "D2RoomExStrc",
         "uint32_t"
       ],
-      "dh": "6483fb0c",
+      "dh": "49d7dd50",
       "paramStorage": [
         [
           "pRoomExStrc",
@@ -953,7 +953,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "dbcf681b",
+      "dh": "be9a205d",
       "paramStorage": [
         [
           "nFlags",

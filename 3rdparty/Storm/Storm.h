@@ -420,15 +420,15 @@ struct __attribute__((packed)) D2StormAsyncOpStrc {
     /* 0x0C */ struct D2MPQFileStrc * pFile; // file record the request reads; SFILE_ReleaseFileHandle drops its nRefCount (+0x144) and frees it at 0 (asm 0041a04a)
     /* 0x10 */ int nFilePos; // base file position / chunk start offset
     /* 0x14 */ uint32_t nSeekFilePos; // absolute file byte position used for seek-order scheduling (SFILE_SelectAsyncRequest)
-    /* 0x18 */ int nState; // 1=streaming 2=done
-    /* 0x1C */ int nBytesRemaining; // bytes left to copy
+    /* 0x18 */ int dwDueTick; // GetTickCount() + caller timeout (SFILE_IssueRequest 00419852-00419861); SFILE_SelectAsyncRequest ranks by due tick minus now (0041a514)
+    /* 0x1C */ int bUrgent; // nonzero caps the scheduler's time-to-due at 1000 ms (0041a51a); set by SFILE_IssueRequest (0041986d) and SFILE_SetRequestUrgentByBuffer (0041a919)
     /* 0x20 */ void * pChunkWritePtr; // write position of the current chunk
     /* 0x24 */ void * pReadBufferBase; // start of the caller's buffer (SFILE_IssueRequest)
     /* 0x28 */ struct IDirectSoundBuffer * pStream; // IDirectSoundBuffer; +0x2c=Lock, +0x4c=Unlock, +0x48=Stop
     /* 0x2C */ uint32_t nStreamPos; // stream read position param
     /* 0x30 */ struct D2StormAudioStreamRec * pParentStream; // owning audio stream record; index 0xf = its pStream, 0x12 byte = bIs16Bit
-    /* 0x34 */ int nChunkEndOffset; // end offset of current chunk
-    /* 0x38 */ uint32_t bQueueImmediately; // BOOL from SFILE_EnqueueAsyncRequest parameter
+    /* 0x34 */ int nBytesToRead; // requested byte count; read length passed to the read at 0041a6a1/0041a70a
+    /* 0x38 */ uint32_t bAutoFree; // nonzero: SFILE_CdThreadProc releases and SMemFrees the request after completion (0041a7e2-0041a7f9)
     /* 0x3C */ uint32_t nChunkBytesRead; // bytes read for the current chunk (SFILE_CdThreadProc)
     /* 0x40 */ struct D2StormAsyncCompletionStrc * pCompletion; // optional completion object; SFILE_IssueRequest stores its last argument here
 };

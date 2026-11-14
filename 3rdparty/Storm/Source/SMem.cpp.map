@@ -329,23 +329,23 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9d6cd0d9",
+      "dh": "b2727452",
       "paramStorage": [
         [
-          "nSourceLine",
-          "ECX:4"
+          "pBlock",
+          "EAX:4"
         ],
         [
           "bReportError",
           "EDX:4"
         ],
         [
-          "pnName",
-          "EDI:4"
+          "nSourceLine",
+          "ECX:4"
         ],
         [
-          "pBlock",
-          "EAX:4"
+          "pnName",
+          "EDI:4"
         ]
       ]
     },
@@ -427,7 +427,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "d22db92e",
+      "dh": "3ff9c431",
       "paramStorage": [
         [
           "byFlags",
@@ -442,12 +442,12 @@
           "Stack[0x4]:4"
         ],
         [
-          "nBlockSize",
-          "ESI:4"
-        ],
-        [
           "pwHeader",
           "EAX:4"
+        ],
+        [
+          "nBlockSize",
+          "ESI:4"
         ]
       ]
     },
@@ -520,15 +520,15 @@
         "D2FogHeapBlockHdrStrc",
         "uint8_t"
       ],
-      "dh": "fc799b6f",
+      "dh": "25537334",
       "paramStorage": [
-        [
-          "pnOutHeaderSize",
-          "ECX:4"
-        ],
         [
           "nBlockAddr",
           "EDX:4"
+        ],
+        [
+          "pnOutHeaderSize",
+          "ECX:4"
         ],
         [
           "pnOutDataSize",
@@ -623,23 +623,23 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "33b78281",
+      "dh": "6bf3c203",
       "paramStorage": [
         [
-          "pnFreeTotal",
-          "Stack[0x4]:4"
+          "pnUsedSize",
+          "EDI:4"
         ],
         [
           "pBlock",
           "ECX:4"
         ],
         [
-          "pnUsedSize",
-          "EDI:4"
-        ],
-        [
           "pHeap",
           "EBX:4"
+        ],
+        [
+          "pnFreeTotal",
+          "Stack[0x4]:4"
         ]
       ]
     },
@@ -809,7 +809,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "b30fde5e",
+      "dh": "cad68dfc",
       "paramStorage": [
         [
           "pBlock",
@@ -852,7 +852,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "6797c48e",
+      "dh": "1420a1d6",
       "paramStorage": [
         [
           "pBlock",
@@ -921,7 +921,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "67060657",
+      "dh": "2a613e60",
       "paramStorage": [
         [
           "nHeapId",
@@ -1003,7 +1003,7 @@
         "D2FogHeapDescStrc",
         "int32_t"
       ],
-      "dh": "c7ac3994",
+      "dh": "c221697b",
       "paramStorage": [
         [
           "pObject",
@@ -1074,7 +1074,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "5a9601b4",
+      "dh": "ccb4a7fb",
       "paramStorage": [
         [
           "pObject",
@@ -1104,7 +1104,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "0baaab38",
+      "dh": "649fb239",
       "paramStorage": [
         [
           "pObject",
@@ -1209,7 +1209,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "51a6ad39",
+      "dh": "4d400341",
       "paramStorage": [
         [
           "nHeapId",
@@ -1246,7 +1246,7 @@
         "D2FogHeapBlockHdrStrc",
         "int32_t"
       ],
-      "dh": "5bd35813",
+      "dh": "80ea0d0d",
       "paramStorage": [
         [
           "nHeapId",
@@ -1293,7 +1293,7 @@
         "uint8_t",
         "void *"
       ],
-      "dh": "2c777734",
+      "dh": "66e238da",
       "paramStorage": [
         [
           "nSize",
@@ -1379,7 +1379,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "ec906073",
+      "dh": "021c92fc",
       "paramStorage": [
         [
           "pnLockIndex",
@@ -1547,7 +1547,7 @@
         "D2FogHeapDescStrc",
         "uint32_t"
       ],
-      "dh": "3799b349",
+      "dh": "87a5416f",
       "paramStorage": [
         [
           "nHeapId",
@@ -1591,7 +1591,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "65284bc2",
+      "dh": "c21dbe59",
       "paramStorage": [
         [
           "pBlock",

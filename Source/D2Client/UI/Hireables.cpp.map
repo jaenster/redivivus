@@ -618,8 +618,12 @@
         "WCHAR",
         "int32_t"
       ],
-      "dh": "444dc999",
+      "dh": "0d9cfd54",
       "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ],
         [
           "nX",
           "Stack[0x4]:4"
@@ -627,10 +631,6 @@
         [
           "nY",
           "Stack[0x8]:4"
-        ],
-        [
-          "pUnit",
-          "EAX:4"
         ]
       ]
     },
@@ -710,7 +710,7 @@
         "D2GfxDataStrc",
         "D2UnitStrc"
       ],
-      "dh": "ac3c9b69",
+      "dh": "77c8fd3f",
       "paramStorage": [
         [
           "pUnit",

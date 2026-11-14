@@ -123,7 +123,9 @@ uint32_t __stdcall ROSTER_GetArenaKillCountGlobal();
 int Unreferenced_0047a9e0();
 int Unreferenced_0047a9f0();
 int Unreferenced_0047aa00();
-void __fastcall ROSTER_SetArenaKillCountGlobal(eD2PlayerClassIDDWORD dwValue);
+// Stores the default player class id (global 0x00712f00) that CLIENT_GetDefaultCharClass returns.
+// Provenance: only writer of 0x00712f00, paired with the getter's only read; sole caller ClientInit_PlayerClassId.
+void __fastcall CLIENT_SetDefaultCharClass(eD2PlayerClassIDDWORD dwValue);
 // Returns the default player class ID stored in global _eD2PlayerClassID_00712f00, used when creating a new character without an explicit class selection.
 eD2PlayerClassIDDWORD __stdcall CLIENT_GetDefaultCharClass();
 // Returns 1 if arena mode is active (bit 8 of CLIENT_ArenaFlags is set), indicating the game session is running in arena/PvP mode.

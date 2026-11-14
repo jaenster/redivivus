@@ -178,7 +178,7 @@ static void MONSTER_SetVelocityPercent(D2MonsterPathParamStrc * pPathParam, D2Un
 }
 
 // Updates per-game path-use counters (pGame->nPathCount[n] and nPathCountCount) after resolving the effective path type and velocity from pPathParam overrides. Calls GetPathCount to compute the path, sets nDistanceToTarget=10 if a target unit exists and the path succeeded, resets pPathParam combat/stat fields. Central accounting point for monster movement pathfinding statistics.
-static void __stdcall AddGamePathCount(D2MonsterPathParamStrc * pPathParam, int32_t ePathTypeOrEngaged, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatOrVelocity, uint8_t byMonStat2OrDist) {
+static void __stdcall AddGamePathCount(int32_t ePathTypeOrEngaged, uint8_t byMonStat2OrDist, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatOrVelocity, D2MonsterPathParamStrc * pPathParam) {
     eD2PathTypes nPathCount;
     if (pPathParam->nPathTypeOverride != PATHTYPE_IDASTAR) {
       ePathTypeOrEngaged = pPathParam->nPathTypeOverride;
@@ -1611,7 +1611,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
         pAiParams = 0;
       }
 
-      AddGamePathCount(pAiParams, (uint32_t)pMonsterKill->nAnimatedMode2, pGame, pUnit, pMonsterKill->nMonType1, (uint8_t)pMonsterKill->nMonType2);
+      AddGamePathCount((uint32_t)pMonsterKill->nAnimatedMode2, (uint8_t)pMonsterKill->nMonType2, pGame, pUnit, pMonsterKill->nMonType1, pAiParams);
       Monsters::MONSTER_RecalculateCombatStats(pUnit, eTargetMode);
       Monsters::MONSTER_DispatchUModModeStart(pGame, pUnit);
     }

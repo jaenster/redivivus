@@ -3549,7 +3549,7 @@ static void __stdcall DRLGOUTROOM_SlideGridNeighborBuffer(D2DrlgGridStrc * pGrid
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): peD2GridCellFlags (ESI): eD2GridCellFlags*, pDrlgGridStrc (EDI): D2DrlgGridStrc*
-static void __stdcall DRLGOUTROOM_InitGridNeighborBuffer(int32_t nRow, eD2GridCellFlags * peD2GridCellFlags, D2DrlgGridStrc * pDrlgGridStrc, int32_t nX) {
+static void __stdcall DRLGOUTROOM_InitGridNeighborBuffer(int32_t nX, int32_t nRow, D2DrlgGridStrc * pDrlgGridStrc, eD2GridCellFlags * peD2GridCellFlags) {
     eD2GridCellFlags nCellFlags = DrlgGrid::GetGridFlags(pDrlgGridStrc, nX - 1, nRow - 1);
     peD2GridCellFlags[2] = nCellFlags;
     nCellFlags = DrlgGrid::GetGridFlags(pDrlgGridStrc, nX - 1, nRow);
@@ -3608,7 +3608,7 @@ void __stdcall DRLGOUTROOM_ComputeWallOrientations(D2RoomExStrc * pLevel) {
       int nRow;
       eCenterNextSaved = pLevel->sCoords.WorldSize.y;
       nRow = eCenterNextSaved + 1;
-      DRLGOUTROOM_InitGridNeighborBuffer(nRow, (eD2GridCellFlags*)aNeighborFlags, pDrlgGrid, nRowOffset);
+      DRLGOUTROOM_InitGridNeighborBuffer(nRowOffset, nRow, pDrlgGrid, (eD2GridCellFlags*)aNeighborFlags);
       for (; nRow >= 1; nRow--) {
         nY = eCenterNextSaved - 1;
         if (aNeighborFlags[4]) {

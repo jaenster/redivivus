@@ -424,7 +424,7 @@ void __fastcall Q06_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // A1Q6 helper: mark Sisters-to-the-Slaughter complete + grant reward for one player. Sets JustCompleted and RewardAwaits in the player's quest record, then SetClientStatus(1, difficulty) to flag the act-progress/Act2-unlock client state. Called from Andariel-death and L4-entry paths.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
-static void __stdcall Q06_SetQuestCompletedAndReward(::SGAMEDATA * pQuestControl, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer) {
+static void __stdcall Q06_SetQuestCompletedAndReward(D2BitBufferStrc * pBitBuffer, ::SGAMEDATA * pQuestControl, D2UnitStrc * pUnit) {
     /* SetQuestState(JustCompleted): mark quest just-completed for self player
                          (drives completion sound + UI) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
     /* SetQuestState(RewardAwaits): flag reward pending so Warriv offers Act2
@@ -458,7 +458,7 @@ BOOL __fastcall Q06_OnPlayerEnterCatacombsL4(::SGAMEDATA * pGame, D2UnitStrc * p
           QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDCain, nUnitGUID);
           QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDAkara, nUnitGUID);
           QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDKashya, nUnitGUID);
-          Q06_SetQuestCompletedAndReward(pGame, pUnit, pBitBuffer);
+          Q06_SetQuestCompletedAndReward(pBitBuffer, pGame, pUnit);
         }
       }
     }
@@ -507,7 +507,7 @@ void __fastcall Q06_RegisterActIPlayerForCompletion(::SGAMEDATA * pGame, D2UnitS
     QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDCain, nPlayerGUID);
     QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDAkara, nPlayerGUID);
     QUESTGUID_AddPlayerToList(&pQuestGUID->sQuestGUIDKashya, nPlayerGUID);
-    Q06_SetQuestCompletedAndReward(pGame, pUnit, pBitBuffer);
+    Q06_SetQuestCompletedAndReward(pBitBuffer, pGame, pUnit);
 }
 
 // A1Q6 per-player callback: for players who did NOT get credit (record not Completed/RewardAwaits) when Andariel died, set CannotCompleteQuestInGame in their record and send quest-state packet (idx 6). Locks the quest as un-completable in this game for absent players.
@@ -622,7 +622,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
           if (!bQuestState) {
             pGame2 = pQuestData->pGame;
             pPlayerData2nd = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-            Q06_SetQuestCompletedAndReward(pQuestData->pGame, pQuestArgs->pPlayer, pPlayerData2nd->pQuestRecord[pGame2->nDifficulty]);
+            Q06_SetQuestCompletedAndReward(pPlayerData2nd->pQuestRecord[pGame2->nDifficulty], pQuestData->pGame, pQuestArgs->pPlayer);
             iQ37DropCount = 2;
             do {
               pQuestSeed = GetQuestControlSeed(pQuestData->pGame);

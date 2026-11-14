@@ -858,7 +858,7 @@
         "int32_t",
         "uint8_t"
       ],
-      "dh": "1d293b92",
+      "dh": "0dec92a6",
       "paramStorage": [
         [
           "nDirection",
@@ -869,12 +869,12 @@
           "Stack[0x8]:4"
         ],
         [
-          "nPrevDirection",
-          "EBX:4"
-        ],
-        [
           "pUnit",
           "ESI:4"
+        ],
+        [
+          "nPrevDirection",
+          "EBX:4"
         ],
         [
           "nNewDirection",
@@ -938,7 +938,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "20593dc7",
+      "dh": "be2107ea",
       "paramStorage": [
         [
           "pUnit",

@@ -3018,7 +3018,7 @@ BOOL __fastcall BNNEWS_DecodeCDKey26Char(char * szCDKey, uint32_t * pOutValue1, 
 }
 
 // Prepares CD key hash structure for authentication. Supports both 16-char (classic) and 26-char (expansion) CD keys. Output structure contains: key length, public value, product value, and 20-byte SHA-1 hash.
-static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, uint32_t nServerToken, char * szCDKey, D2CDKeyHashStrc * pOutHash) {
+static int32_t __stdcall BNSEND_PrepareCDKeyHash(uint32_t nToken, char * szCDKey, uint32_t nServerToken, D2CDKeyHashStrc * pOutHash) {
     int bDecodeOk;
     uint32_t aCDKeyHashInput[6];
     uint32_t nPublic2;
@@ -3092,13 +3092,13 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x42_CDKey3() {
     bIsExpansion = BnSend::D2CheckExpansionGame();
     if (bIsExpansion) {
       uVar2 = BNSEND_GetServerToken();
-      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, uVar2, szOwnerCopy, &aExpansionHashBuf);
+      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, szOwnerCopy, uVar2, &aExpansionHashBuf);
       if (!bHash1Ok) {
         return 0;
       }
 
       uVar2 = BNSEND_GetServerToken();
-      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, uVar2, szOwnerCopy2, &aClassicHashBuf);
+      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, szOwnerCopy2, uVar2, &aClassicHashBuf);
       if (!bHash1Ok) {
         return 0;
       }
@@ -3120,7 +3120,7 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x42_CDKey3() {
       aExpansionHashBuf.abHash[0xf] = 0;
       *(uint32_t*)((char*)&aExpansionHashBuf.abHash + 16) = nProductId;
       uVar2 = BNSEND_GetServerToken();
-      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, uVar2, szOwnerCopy, &aClassicHashBuf);
+      bHash1Ok = BNSEND_PrepareCDKeyHash(gnBNetCDKeyHashSize, szOwnerCopy, uVar2, &aClassicHashBuf);
       if (!bHash1Ok) {
         return 0;
       }
@@ -3193,9 +3193,9 @@ void __stdcall BNNEWS_DecodeCDKeys() {
 
 // High-level CD key hash helper. Gets server token, retrieves CD key by type (0=classic, 1=expansion), and prepares hash structure for SID_AUTH_CHECK.
 void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nToken, int32_t nCDKeyType) {
-    uint32_t nServerToken = BNSEND_GetServerToken();
-    char* szCDKey = _net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType);
-    BNSEND_PrepareCDKeyHash(nToken, nServerToken, szCDKey, pOutHash);
+    
+    
+    BNSEND_PrepareCDKeyHash(nToken, (char*)(_net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType)), (uint32_t)(BNSEND_GetServerToken()), pOutHash);
 }
 
 int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize) {

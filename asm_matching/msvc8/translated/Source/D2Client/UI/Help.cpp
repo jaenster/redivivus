@@ -301,7 +301,7 @@ void __stdcall HELP_HideMiniPanel() {
     gbMiniPanel = 0;
 }
 
-static BOOL __stdcall MouseIsInRange(int32_t nSizeX, int32_t nSizeY, int32_t nX, int32_t nY) {
+static BOOL __stdcall MouseIsInRange(int32_t nX, int32_t nY, int32_t nSizeX, int32_t nSizeY) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
     if (nMouseX >= nX && nMouseX <= nX + nSizeX && nMouseY >= nY - nSizeY && nMouseY <= nY) {

@@ -1677,7 +1677,7 @@ static uint8_t * __stdcall D2COMP_ValidateCOFLayerData(int32_t nLayerIndex, int3
     }
 }
 
-static D2CompCofCacheEntryStrc * __stdcall D2COMP_FindOrAllocCOFCacheEntry(int32_t nPlayerClassId, char * szText, uint32_t dwWeaponClassToken, int32_t nAnimMode) {
+static D2CompCofCacheEntryStrc * __stdcall D2COMP_FindOrAllocCOFCacheEntry(int32_t nPlayerClassId, int32_t nAnimMode, uint32_t dwWeaponClassToken, char * szText) {
     D2CompCofCacheEntryStrc* pDVar1;
     D2CompCofCacheEntryStrc* pCacheEntry;
     for (pDVar1 = gpCOFCacheHead; pDVar1; pDVar1 = pDVar1->pNext) {
@@ -1845,7 +1845,7 @@ static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFLi
       }
 
       memset(pCOFEntry, 0, sizeof(*pCOFEntry));
-      nCOFCacheHandle = D2COMP_FindOrAllocCOFCacheEntry(nPlayerClassId, szCOFFilePath, dwWeaponClassToken, nAnimMode);
+      nCOFCacheHandle = D2COMP_FindOrAllocCOFCacheEntry(nPlayerClassId, nAnimMode, dwWeaponClassToken, szCOFFilePath);
       if (!nCOFCacheHandle) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4dc);
         exit(-1);

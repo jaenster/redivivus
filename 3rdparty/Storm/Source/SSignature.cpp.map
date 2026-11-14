@@ -747,18 +747,18 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "bc3f8780",
+      "dh": "94e5eb8c",
       "paramStorage": [
         [
           "pbOut",
           "ECX:4"
         ],
         [
-          "dwHighWord",
+          "dwValueLow",
           "Stack[0x4]:4"
         ],
         [
-          "dwParam",
+          "dwValueHigh",
           "Stack[0x8]:4"
         ]
       ]

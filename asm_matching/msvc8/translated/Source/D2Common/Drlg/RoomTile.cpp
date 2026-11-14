@@ -474,7 +474,7 @@ static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgRoomExRoomTileNode
     }
 }
 
-static BOOL __stdcall DRLGROOMTILE_CreateExitWarp(uint32_t nTileFlags, int32_t nWorldX, int32_t nTileType, int32_t nWorldY, D2RoomExStrc * pRoomEx) {
+static BOOL __stdcall DRLGROOMTILE_CreateExitWarp(D2RoomExStrc * pRoomEx, int32_t nWorldX, int32_t nTileType, uint32_t nTileFlags, int32_t nWorldY) {
     D2LvlWarpTxt* pWarpInfo = DrlgRoom::DRLGLEVEL_GetWarpsIdIfExistsAndSetup(pRoomEx->pLevel, (uint8_t)(nTileFlags >> 0x14) & 0x3f, nTileType == 0xb ? 0x72 : 0x6c);
     if (!pWarpInfo) {
       return 0;
@@ -509,7 +509,7 @@ static void __stdcall DRLGROOMTILE_SetupWarpTile(D2RoomExStrc * pRoomExStrc, D2D
         exit(-1);
       }
       if (pWarpCacheHead->pLvlWarpTxt->Id == nWarpDest) {
-        if (!(nOrientation != '\0' && nOrientation != '\x04' || (BVar2 = DRLGROOMTILE_CreateExitWarp(nGridInfo, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, nTileType, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY, pRoomExStrc) , BVar2 != 0))) {
+        if (!(nOrientation != '\0' && nOrientation != '\x04' || (BVar2 = DRLGROOMTILE_CreateExitWarp(pRoomExStrc, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, nTileType, nGridInfo, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY) , BVar2 != 0))) {
           return;
         }
 
@@ -917,7 +917,7 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
           if (nMainIndex >= 8) {
             return;
           }
-        DRLGROOMTILE_CreateExitWarp(nFlags, nX, nTileType, nY, pRoom);
+        DRLGROOMTILE_CreateExitWarp(pRoom, nX, nTileType, nFlags, nY);
         DRLGROOMTILE_InitWarpCacheTiles(nFlags, pRoom, nX, nY, nTileType);
         return;
         case 8:

@@ -4320,27 +4320,27 @@
         "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "5c5a6530",
+      "dh": "5e5dee3a",
       "paramStorage": [
         [
-          "nHitRoll",
-          "ECX:4"
-        ],
-        [
-          "nDamageMax",
-          "EDX:4"
-        ],
-        [
-          "nDamageMin",
-          "EDI:4"
+          "pUnit",
+          "EAX:4"
         ],
         [
           "dwParam2",
           "EBX:4"
         ],
         [
-          "pUnit",
-          "EAX:4"
+          "nDamageMin",
+          "EDI:4"
+        ],
+        [
+          "nDamageMax",
+          "EDX:4"
+        ],
+        [
+          "nHitRoll",
+          "ECX:4"
         ]
       ]
     },
@@ -4381,7 +4381,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "dc386023",
+      "dh": "4452bf8b",
       "paramStorage": [
         [
           "pGame",

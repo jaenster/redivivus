@@ -323,16 +323,8 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "61e62b51",
+      "dh": "e7bd8382",
       "paramStorage": [
-        [
-          "nSizeX",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nSizeY",
-          "Stack[0x8]:4"
-        ],
         [
           "nX",
           "EAX:4"
@@ -340,6 +332,14 @@
         [
           "nY",
           "EBX:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeY",
+          "Stack[0x8]:4"
         ]
       ]
     },

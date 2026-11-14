@@ -1670,16 +1670,8 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6eefcad4",
+      "dh": "7ed8e182",
       "paramStorage": [
-        [
-          "width",
-          "Stack[0x4]:4"
-        ],
-        [
-          "height",
-          "Stack[0x8]:4"
-        ],
         [
           "bottomY",
           "EBX:4"
@@ -1687,6 +1679,14 @@
         [
           "leftX",
           "EAX:4"
+        ],
+        [
+          "width",
+          "Stack[0x4]:4"
+        ],
+        [
+          "height",
+          "Stack[0x8]:4"
         ]
       ]
     },
@@ -2669,12 +2669,12 @@
       "namespace": "D2Client::GAME::Game",
       "calledFunctions": [
         "ClientInit_PlayerClassId",
-        "ROSTER_SetArenaKillCountGlobal"
+        "CLIENT_SetDefaultCharClass"
       ],
       "usedTypes": [
         "D2IniConfigStrc"
       ],
-      "dh": "59edbf94",
+      "dh": "956a4756",
       "paramStorage": [
         [
           "pIniConfig",

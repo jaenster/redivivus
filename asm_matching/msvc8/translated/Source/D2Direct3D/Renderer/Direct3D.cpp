@@ -5557,7 +5557,7 @@ static void __fastcall RENDERER_D3D_BlitSmackerFrame(int nHeight, int, D2Smacker
     g_pD3DDevice->lpVtbl->DrawPrimitive(g_pD3DDevice, 6, 0x1c4, gaD3DSmackerVertices, 4, 0x1c);
 }
 
-static void __fastcall RENDERER_D3D_CopySmackerRowWithAlpha(uint8_t * pDest, int, uint16_t * pSrc, int nPitch) {
+static void __fastcall RENDERER_D3D_CopySmackerRowWithAlpha(uint16_t * pSrc, int, uint8_t * pDest, int nPitch) {
     int nPixelsRemaining;
     int nRowsRemaining = 0x40;
     do {
@@ -5589,7 +5589,7 @@ void __stdcall RENDERER_D3D_PresentSmackerFrame() {
       DIRECTD3D_LogError("Failed to lock memory surface", dwHResult);
     }
 
-    RENDERER_D3D_CopySmackerRowWithAlpha((uint8_t*)dwSurfDescSize.lpSurface, 0, (uint16_t*)pSmackerDecodeBuffer, dwSurfDescSize.lPitch);
+    RENDERER_D3D_CopySmackerRowWithAlpha((uint16_t*)pSmackerDecodeBuffer, 0, (uint8_t*)dwSurfDescSize.lpSurface, dwSurfDescSize.lPitch);
     dwHResult = gpD3DSmackerSystemSurface0[0]->lpVtbl->Unlock(gpD3DSmackerSystemSurface0[0], nullptr);
     if (dwHResult) {
       DIRECTD3D_LogError("Failed to unlock memory surface", dwHResult);
@@ -5604,7 +5604,7 @@ void __stdcall RENDERER_D3D_PresentSmackerFrame() {
       DIRECTD3D_LogError("Failed to lock memory surface", dwHResult);
     }
 
-    RENDERER_D3D_CopySmackerRowWithAlpha((uint8_t*)dwSurfDescSize.lpSurface, 0, (uint16_t*)(pSmackerDecodeBuffer + 0x200), dwSurfDescSize.lPitch);
+    RENDERER_D3D_CopySmackerRowWithAlpha((uint16_t*)(pSmackerDecodeBuffer + 0x200), 0, (uint8_t*)dwSurfDescSize.lpSurface, dwSurfDescSize.lPitch);
     dwHResult = gpD3DSmackerSystemSurface0[1]->lpVtbl->Unlock(gpD3DSmackerSystemSurface0[1], nullptr);
     if (!dwHResult) {
       return;

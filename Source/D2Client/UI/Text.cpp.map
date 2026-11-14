@@ -1967,11 +1967,15 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "79d37adc",
+      "dh": "d045bc10",
       "paramStorage": [
         [
           "pHoverText",
           "ECX:4"
+        ],
+        [
+          "pScreenPos",
+          "EAX:4"
         ],
         [
           "pUnit",
@@ -1980,10 +1984,6 @@
         [
           "wszText",
           "Stack[0x4]:4"
-        ],
-        [
-          "pScreenPos",
-          "EAX:4"
         ]
       ]
     },
@@ -2018,7 +2018,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "8d28b982",
+      "dh": "7950d74d",
       "paramStorage": [
         [
           "pUnit",
@@ -2055,7 +2055,7 @@
         "WCHAR",
         "uint32_t"
       ],
-      "dh": "7a0f04a2",
+      "dh": "7bf879a6",
       "paramStorage": [
         [
           "pUnit",

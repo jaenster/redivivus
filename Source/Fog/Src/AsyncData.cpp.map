@@ -25,7 +25,7 @@
       "usedTypes": [
         "int32_t"
       ],
-      "dh": "6103b9e8",
+      "dh": "75a13d60",
       "paramStorage": [
         [
           "nEnable",
@@ -52,10 +52,10 @@
         "FreeClientMemory"
       ],
       "usedTypes": [
-        "D2AsyncDataStrc",
+        "D2AsyncDataSlotStrc",
         "uint32_t"
       ],
-      "dh": "af133958"
+      "dh": "fee6a184"
     },
     {
       "name": "ASYNCDATA_CancelAndCleanup",
@@ -101,7 +101,7 @@
         "D2AsyncDataSlotStrc",
         "uint32_t"
       ],
-      "dh": "fc3d0e3a"
+      "dh": "d91ec416"
     },
     {
       "name": "STRUCT_AllocAsyncData_Line0x128",

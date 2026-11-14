@@ -34,7 +34,7 @@ struct D2AllStatesDataTbl;
 struct D2AnimDataStrc;
 struct D2ArenaTxt;
 struct D2ArmTypeTxt;
-struct D2AsyncDataStrc;
+struct D2AsyncDataSlotStrc;
 struct D2AsyncData_Line0x128;
 struct D2AttackSpeedStringStrc;
 struct D2AuraEnchantedStrc;

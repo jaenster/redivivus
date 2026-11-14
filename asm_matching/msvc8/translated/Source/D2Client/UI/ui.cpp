@@ -7290,7 +7290,7 @@ void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouse
 }
 
 // UI controls config: returns text color index for a control entry based on binding state. Returns 3 (highlighted) if selected and not in bind mode, 5 (bound) or 4 (unbound) based on whether keys are assigned via CMD_IsCommandBound.
-static int32_t UI_GetConfigControlTextColor(int32_t nColumn, int32_t nRow) {
+static int32_t UI_GetConfigControlTextColor(int32_t nRow, int32_t nColumn) {
     if (nRow == g_ControlConfigUIState && (gbUICtrlConfigKeyBindMode || nColumn == nConfigControlSelected)) {
       return 3;
     }
@@ -7504,7 +7504,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
         if (bShowKeyBind || !nConfigControlSelected) {
           nLeftEdge = (ScreenSizeX - 0x26c) / 2;
           bBold = 0;
-          nColor_lcl = UI_GetConfigControlTextColor(1, nRowIndex);
+          nColor_lcl = UI_GetConfigControlTextColor(nRowIndex, 1);
           nTmpY = (ScreenSizeX + nLeftEdge * -2 - 0x31) / 3 + 0x1e + nLeftEdge;
           nTmpWidth = nLeftEdge2;
           pwLocaleStr = CmdTbl::CMD_GetKeyNameForCommand(gpStatDescriptorTable[nTmpX].nCmdIndex, 1);
@@ -7516,7 +7516,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
 
         nLeftEdge = (ScreenSizeX - 0x26c) / 2;
         bBold = 0;
-        nColor_lcl = UI_GetConfigControlTextColor(0, nRowIndex);
+        nColor_lcl = UI_GetConfigControlTextColor(nRowIndex, 0);
         nTmpWidth = ScreenSizeX + nLeftEdge * -2;
         nTmpY = nLeftEdge + 0x1e;
         pwLocaleStr = CmdTbl::CMD_GetKeyNameForCommand(gpStatDescriptorTable[nTmpX].nCmdIndex, 0);

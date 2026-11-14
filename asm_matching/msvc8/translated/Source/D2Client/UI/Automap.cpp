@@ -2638,7 +2638,7 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
     AUTOMAP_CenterOnPlayer(1);
 }
 
-static void __stdcall AUTOMAP_DrawTextCentered(int32_t nCenterX, int32_t nBaseY, uint8_t byColor, char * szText) {
+static void __stdcall AUTOMAP_DrawTextCentered(uint8_t byColor, char * szText, int32_t nCenterX, int32_t nBaseY) {
     uint16_t wTextWide[23];
     char cCurChar;
     char* pStrScan;
@@ -2741,8 +2741,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
               return;
             }
 
-            pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-            AUTOMAP_DrawTextCentered(xLocation, yLocation, 2, pPlayerData->szCharName);
+            AUTOMAP_DrawTextCentered(2, D2Common::Units::GetPlayerData(pUnit)->szCharName, xLocation, yLocation);
             return;
           }
 
@@ -2839,7 +2838,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
     }
 
     pPlayerData = D2Common::Units::GetPlayerData(pNameUnit);
-    AUTOMAP_DrawTextCentered(xLocation, yLocation, 1, pPlayerData->szCharName);
+    AUTOMAP_DrawTextCentered(1, pPlayerData->szCharName, xLocation, yLocation);
 }
 
 static void AUTOMAP_DrawPartyMember(D2RosterStrc * pRoster) {
@@ -2875,8 +2874,7 @@ static void AUTOMAP_DrawPartyMember(D2RosterStrc * pRoster) {
 
     int nCenterX = nScreenX;
     int nBaseY = nScreenY;
-    char* szRosterName = GAME::Roster::GetRosterName(pRoster);
-    AUTOMAP_DrawTextCentered(nCenterX, nBaseY, 2, szRosterName);
+    AUTOMAP_DrawTextCentered(2, GAME::Roster::GetRosterName(pRoster), nCenterX, nBaseY);
 }
 
 void __stdcall AUTOMAP_DrawPlayersAndParty() {

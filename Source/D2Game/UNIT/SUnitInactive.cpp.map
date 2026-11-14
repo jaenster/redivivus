@@ -201,16 +201,8 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "02618d77",
+      "dh": "554f0acb",
       "paramStorage": [
-        [
-          "pGame",
-          "EBX:4"
-        ],
-        [
-          "pUnit",
-          "EDI:4"
-        ],
         [
           "pInactiveList",
           "Stack[0x4]:4"
@@ -218,6 +210,14 @@
         [
           "pOutInactiveRecord",
           "ECX:4"
+        ],
+        [
+          "pGame",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
         ]
       ]
     },
@@ -782,7 +782,7 @@
         "SGAMEDATA",
         "eD2UnitType"
       ],
-      "dh": "2badb67d",
+      "dh": "33a29274",
       "paramStorage": [
         [
           "pGame",

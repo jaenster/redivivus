@@ -113,7 +113,7 @@ static D2DrlgActEnvironmentData aENVIRONMENTDATA2[6] = {
 namespace D2Common::Environment {
 
 // Per-tick update of the environment's global light intensity (nGlobalLightIntensity). Act 3 (Hell): clamps intensity toward a level-specific cap (Pandemonium=0x80, Outer Steppes=0x40, etc.) by ±1 per tick, resets to cap if it reaches 0. Other acts: during eclipse, ramps down toward 0x20 by 8 per tick; otherwise computes a day/night cosine curve and scales between day and night light values from the environment txt, capped at 0xFF (0xAA in Act 4). Special case: Arreat Summit is fixed at 200.
-static void DRLGENV_UpdateLightIntensity(eD2LevelId eLevel, D2DrlgEnvironmentStrc * pDrlgEnvironment, int32_t nActNo) {
+static void DRLGENV_UpdateLightIntensity(D2DrlgEnvironmentStrc * pDrlgEnvironment, eD2LevelId eLevel, int32_t nActNo) {
     int32_t nLightDay;
     int32_t nLightNight;
     int32_t nLightSelected;
@@ -255,7 +255,7 @@ D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * 
 
     pEnv->nEnvironmentData = pDataTable->nEnvData;
     pEnv->nTicks = nTimeRate * pDataTable->nLenght;
-    DRLGENV_UpdateLightIntensity(LEVEL_None, pEnv, 0);
+    DRLGENV_UpdateLightIntensity(pEnv, LEVEL_None, 0);
     DRLGENV_UpdateLightColor(0, pEnv);
     pEnv->nUnused = 0;
     DWORD dwInitTick = GetTickCount();
@@ -348,7 +348,7 @@ BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * 
     *(uint8_t*)(char*)&dwActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
     dwActNo = (DWORD)(eAct)dwActNo;
     DRLGENV_UpdateEnvironmentCycle(pEnv, dwActNo);
-    DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, dwActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, dwActNo);
     DRLGENV_UpdateLightColor(dwActNo, pEnv);
     if ((D2DrlgActStrc*)nDrlgAct == (D2DrlgActStrc*)LEVEL_ArreatSummit) {
       pEnv->nGlobalLightRed = 0xf5;
@@ -460,7 +460,7 @@ void __stdcall DRLGENV_NextEnvCycle(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom
     }
 
     eAct eActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
-    DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, (uint32_t)eActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, (uint32_t)eActNo);
     DRLGENV_UpdateLightColor((uint32_t)eActNo, pEnv);
     if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
       return;
@@ -514,11 +514,11 @@ void __stdcall DRLGENV_InitializeEnvironment(D2DrlgActStrc * pDrlgAct, D2RoomStr
 
       eActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
       nActNo = (uint32_t)eActNo;
-      DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, nActNo);
+      DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, nActNo);
       pEnv->bEclipse = bEclipse;
       if (bEclipse) {
         DRLGENV_InitEnvironmentCycle(pEnv);
-        DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, nActNo);
+        DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, nActNo);
         DRLGENV_UpdateLightColor(nActNo, pEnv);
       }
       if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
@@ -576,7 +576,7 @@ void __stdcall DRLGENV_SetNextTimeRate(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pR
     }
 
     eAct eActNo = Drlg::GetActNoFromLevelNumber(nDrlgAct);
-    DRLGENV_UpdateLightIntensity(nDrlgAct, pEnv, (uint32_t)eActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, nDrlgAct, (uint32_t)eActNo);
     DRLGENV_UpdateLightColor((uint32_t)eActNo, pEnv);
     if ((D2DrlgActStrc*)nDrlgAct != (D2DrlgActStrc*)LEVEL_ArreatSummit) {
       return;
@@ -597,10 +597,10 @@ void __stdcall DRLGENV_TaintedSunBegin(D2DrlgActStrc * pDrlgAct) {
     pEnv->nEnvironmentData = aENVIRONMENTDATA2[0].nEnvData;
     eAct eActNo = Drlg::GetActNoFromLevelNumber(LEVEL_None);
     uint32_t nActNo = (uint32_t)eActNo;
-    DRLGENV_UpdateLightIntensity(LEVEL_None, pEnv, nActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, LEVEL_None, nActNo);
     pEnv->bEclipse = 1;
     DRLGENV_InitEnvironmentCycle(pEnv);
-    DRLGENV_UpdateLightIntensity(LEVEL_None, pEnv, nActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, LEVEL_None, nActNo);
     DRLGENV_UpdateLightColor(nActNo, pEnv);
 }
 
@@ -613,7 +613,7 @@ void __stdcall DRLGENV_TaintedSunEnd(D2DrlgActStrc * pDrlgAct) {
     pEnv->nTicks = 0;
     pEnv->nEnvironmentData = aENVIRONMENTDATA1[7];
     eAct eActNo = Drlg::GetActNoFromLevelNumber(LEVEL_None);
-    DRLGENV_UpdateLightIntensity(LEVEL_None, pEnv, (uint32_t)eActNo);
+    DRLGENV_UpdateLightIntensity(pEnv, LEVEL_None, (uint32_t)eActNo);
     pEnv->bEclipse = 0;
 }
 

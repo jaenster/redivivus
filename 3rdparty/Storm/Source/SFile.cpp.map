@@ -569,7 +569,7 @@
         "uint32_t",
         "void *"
       ],
-      "dh": "8e469920",
+      "dh": "850547a2",
       "paramStorage": [
         [
           "pAsyncOp",
@@ -4455,7 +4455,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "5645d523",
+      "dh": "d727b6b3",
       "paramStorage": [
         [
           "nFileOffset",
@@ -4949,7 +4949,7 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "69213809",
+      "dh": "2f81d99b",
       "paramStorage": [
         [
           "nFileHandle",
@@ -5008,7 +5008,7 @@
         "uint32_t",
         "uint8_t"
       ],
-      "dh": "876f8a81",
+      "dh": "a12d44ec",
       "paramStorage": [
         [
           "lpThreadParam",
@@ -5073,7 +5073,7 @@
       "usedTypes": [
         "D2StormAsyncOpStrc"
       ],
-      "dh": "8d43d8ab",
+      "dh": "6e65eac7",
       "paramStorage": [
         [
           "pReadBuffer",

@@ -2268,7 +2268,7 @@ void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Cancels/resets an active trade between two players: refreshes both inventories, checks item levels, clears trade status to 0 on both sides, calls RemoveTradeItemMaybe for each, sends gold-in-trade packets zeroing both sides (side 0 and 1) for both clients, sends trade-action 6 (cancel) to both clients, sets dwTradeState=5 on both, and schedules an update event for the next game frame.
 // @sourcefile .\PLAYER\PlrTrade.cpp
-static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerData1, D2UnitDataPlayerStrc * pPlayerData2, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame) {
+static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerData1, D2UnitDataPlayerStrc * pPlayerData2, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
     ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
     D2Common::Units::RefreshInventory(pUnit2, 1);
@@ -2311,7 +2311,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (pTradeCopy->nGoldOffered) {
       nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_gold, 0);
       if (nGold < (int)pTradeCopy->nGoldOffered) {
-        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
         return;
       }
 
@@ -2319,7 +2319,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
       nGold = pTradeCopy->nGoldOffered;
       nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
       if ((uint32_t)(nGold2 + nGold) > nGoldLimit) {
-        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0xa2d);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 10);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xa2e);
@@ -2332,7 +2332,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (pTradeCopy->nGoldOffered) {
       nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
       if (nGold < (int)pTradeCopy->nGoldOffered) {
-        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
         return;
       }
 
@@ -2340,7 +2340,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
       nGold = pTradeCopy->nGoldOffered;
       nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit2);
       if ((uint32_t)(nGold2 + nGold) > nGoldLimit) {
-        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\PLAYER\\PlrTrade.cpp", 0xa41);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 9);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xa42);
@@ -2359,7 +2359,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
         GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 9);
         pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xa52);
         GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 10);
-        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+        PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
         return;
       }
 
@@ -2367,7 +2367,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
       GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 10);
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0xa57);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 9);
-      PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+      PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
       return;
     }
 
@@ -2389,7 +2389,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
         GAME::Event::SetEvent(pGame, pUnit, 0xd, pGame->dwGameFrame + 1, 0, 0);
         bTransferOk = LoopsOverAllItemsAndPutInInventory(pUnit2, pUnit, pGame);
         if (bTransferOk == '\0') {
-          PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+          PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
           return;
         }
 
@@ -2432,7 +2432,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit, pUnit2, pGame);
+    PLRTRADE_ResetTradeState(pPlayerData1, pPlayerData2, pUnit2, pGame, pUnit);
 }
 
 // Several exits go through GuardStack tails with the status (0, 1 or 3) in AL.

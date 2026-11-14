@@ -3355,15 +3355,15 @@
         "int32_t",
         "uint32_t"
       ],
-      "dh": "9df3aa51",
+      "dh": "bb1e94be",
       "paramStorage": [
-        [
-          "nColumn",
-          "EDI:4"
-        ],
         [
           "nRow",
           "EAX:4"
+        ],
+        [
+          "nColumn",
+          "EDI:4"
         ]
       ]
     },
@@ -3545,7 +3545,7 @@
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "9f0f55bd"
+      "dh": "d3922165"
     },
     {
       "name": "InitConfigUiFlags",
