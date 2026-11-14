@@ -67,6 +67,14 @@ void __stdcall LIGHTMAP_ToggleColorEnabled() {
     gbLightmapColorEnabled = (uint32_t)!gbLightmapColorEnabled;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType, int32_t nDiameter, uint8_t nGamma, uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     // Static local variables (originally global data)
     static int nLightMapSize; D2_STATIC_GUARD_BSS(nLightMapSize, "D2Client::Draw::LightMap::AllocLightMap::nLightMapSize");
@@ -93,7 +101,7 @@ D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType
       }
 
       pLightMap->nUnitGUID = nUnitGUID;
-      if (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1)) {
+      if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
         pLightMap->bServerSideUnit = '\0';
       } else {
         pLightMap->bServerSideUnit = '\x01';

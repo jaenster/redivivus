@@ -3,12 +3,8 @@
 #include "Source/D2Game/PLAYER/PlayerSave2.h"
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"
 #include "Source/D2Client/D2ClientStrc.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Item.h"
-#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
-#include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -20,7 +16,6 @@
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/PLAYER/PlayerSave.h"
-#include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillsServer.h"
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
@@ -28,6 +23,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/GAME/Server.data.h"
+#include "Source/D2Game/Quests/QUESTS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -604,7 +600,7 @@ int __fastcall SaveCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t 
               pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pFirstItem);
               nCorpseGUID = D2Common::ITEMS::Items::ITEMS_IsA(pCarriedItem, ITEMTYPE_Gold);
               if (!nCorpseGUID) {
-                D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
+                D2BitBufferStrc* pQuestRecord = Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit);
                 nItemCount = D2Common::ITEMS::Items::CalculateTransactionCost_Thunk(pUnit, pCarriedItem, 3, pQuestRecord, 0x201, 0);
                 nTotalCost += nItemCount;
               }

@@ -1483,16 +1483,56 @@ void __fastcall PLRMODES_PeriodicStatRegen(::SGAMEDATA * pGame, D2UnitStrc * pUn
     PLRMODES_RegenMana(pUnit);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_16(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 16 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_11(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 11 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 10 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_8(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 8 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_15(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 15 & 1;
+}
+
 // Flushes all pending per-unit network state to a single client after a mode change. Sends ReassignPlayer if the unit is warping or is a remote player. If bSendItems is set, sends updated inventory items (0x9C packet) plus two equipped-item-recalc packets (0x47, 0x48). Dispatches the mode-change net message if DOUPDATE is flagged. Then drains the unit's packet queue, sends pending sound/hover-text/life-class/state/overlay packets, and fires attribute-update callbacks for velocity, attack-rate, level, strength, and dexterity stats that changed.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, BOOL bSendItems) {
     D2UnitStrc* pLocalPlayer;
     pLocalPlayer = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit) {
       uint8_t bIsWarping;
-      if (pUnit->eUnitFlagsEx >> 0x10 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_16(pUnit)) {
         bIsWarping = '\x01';
       } else {
-        if (!(pUnit->eUnitFlagsEx >> 0xb & 1) || pUnit == pLocalPlayer) {
+        if (!FlagBit_D2UnitStrc_eUnitFlagsEx_11(pUnit) || pUnit == pLocalPlayer) {
           goto send_items_and_mode;
         }
 
@@ -1520,13 +1560,13 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     send_unit_updates:
     UNIT::SUnitMsg::SERVER_UnitQueuePacketSend(pUnit, pClient);
     if (pUnit) {
-      if (pUnit->eUnitFlags >> 10 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
         UNIT::SUnitMsg::UNITMSG_SendSoundPacketToClient(pUnit, pClient);
       }
-      if (pUnit->eUnitFlags >> 8 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_8(pUnit)) {
         /* Is Valid Target */ UNIT::SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
       }
-      if (pUnit->eUnitFlags >> 0xf & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_15(pUnit)) {
         PlayerMsg::UpgradeLifeAndHitClass(pUnit, pClient);
       }
     }

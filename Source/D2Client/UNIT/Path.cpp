@@ -235,12 +235,36 @@ uint32_t __fastcall PATH_StepAndCreateTrailEffects(D2UnitStrc * pUnit) {
     return (uint32_t)!bPathAdvanced;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_23(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 23 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_5(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 5 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 // Per-frame client-side unit update dispatcher. Skips units with a pending-removal flag and sends packet 0x4B if flagged. For valid units: removes timed-out stat lists, updates particle position and overlay animations, then dispatches to the per-type frame handler (player mode, monster nameplate, object, missile, or item animation). After dispatch, resolves the unit via client/server hash table and flushes its incoming packet buffer.
 void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
     eD2UnitType eUnitType;
     int32_t nUnitGUID;
     D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-    if (pPlayerUnit_lcl == pDynamicPath || !pDynamicPath || !(pDynamicPath->eUnitFlags >> 0x17 & 1)) {
+    if (pPlayerUnit_lcl == pDynamicPath || !pDynamicPath || !FlagBit_D2UnitStrc_eUnitFlags_23(pDynamicPath)) {
       uint32_t bIsServerSide;
       D2Common::Stats::StatsEx::RemoveStatListAfterTimeout(pDynamicPath, 0);
       Engine::Particle::PARTICLE_UpdatePosition(pDynamicPath);
@@ -281,12 +305,12 @@ void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
         GAME::SCmd::SCMD_ProcessIncomingPacketBuffer(pPlayerUnit_lcl);
       }
     } else {
-      if (pDynamicPath->eUnitFlagsEx >> 5 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_5(pDynamicPath)) {
         GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x4b, pDynamicPath->eUnitType, pDynamicPath->nUnitGUID);
         pDynamicPath->eUnitFlags &= -8388609;
         pDynamicPath->eUnitFlagsEx &= -33;
       }
-      if (pDynamicPath->eUnitFlags >> 0x15 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_21(pDynamicPath)) {
         CUnit::UNITS_RemoveFromClientHashTable(pDynamicPath->nUnitGUID, pDynamicPath->eUnitType);
         return;
       }

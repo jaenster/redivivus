@@ -396,7 +396,8 @@ BOOL __fastcall Skills_CltStFunc_MonSummonSpawnSetCollision(D2UnitStrc * pUnit, 
     int nSpawnMode;
     int32_t nSpawnY;
     int32_t nSpawnX;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1041,7 +1042,8 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
     }
 
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
-    if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId) {
+    D2MissilesTxt* pMissilesTxt = (int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId : nullptr;
+    if (pMissilesTxt) {
       D2UnitStrc* pTarget;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -1938,6 +1940,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
     }
 
     eMissilesId eMissileId = D2Common::Skills::SKILL_GetArrowModifierSkill(pUnit, &nSkillLvl);
+    D2MissilesTxt* pMissilesTxt;
     if (eMissileId == MISSILE_Arrow || eMissileId == MISSILE_Bolt) {
       D2MissilesTxt* pMissileTxt;
       eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
@@ -1953,7 +1956,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
           return 1;
         }
       }
-    } else if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId) {
+    } else if (pMissilesTxt = (int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eMissileId : nullptr) {
       Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLvl);
       return 1;
     }

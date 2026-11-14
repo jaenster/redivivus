@@ -1654,6 +1654,14 @@ int __stdcall SKILLS_ValidateAnimModeForMonster(int32_t eAnimMode, int32_t nMonI
     return uAnimFlag;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 3 & 1;
+}
+
 // Resolves the visual transform imposed on a unit by its active transformation state (flag 0x08 on eUnitFlagsEx). Iterates the global transform-state list; for each active state with gfxtype==1 (monster form) or gfxtype==2 (player form), writes the target unit type and gfx class to the out-params, and remaps *pAnimMode for cross-type animation compatibility. Returns without writing if no transform state is active or the unit lacks the transform flag.
 void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUnitType, int * pGfxClass, int * pAnimMode, char * szFile, int32_t nLine) {
     BOOL eUnitState;
@@ -1661,7 +1669,7 @@ void __stdcall SKILLS_GetStateTransformGfx(D2UnitStrc * pUnit, eD2UnitType * pUn
     eD2States eTransformState;
     int32_t sGfxClass;
     short int nGfxClass;
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
       return;
     }
 

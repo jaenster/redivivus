@@ -433,6 +433,14 @@ BOOL __fastcall MONMODE_UpdateKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_6(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 6 & 1;
+}
+
 BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t bAtEndOfFrame = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
     if (bAtEndOfFrame) {
@@ -455,7 +463,7 @@ BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     int32_t byCurrentActionFrame = pUnit->nActionFrame;
-    if (byCurrentActionFrame == 4 || bShouldSpawnSkill && !(pUnit->eUnitFlags >> 6 & 1) && (byCurrentActionFrame == 1 || byCurrentActionFrame == 2)) {
+    if (byCurrentActionFrame == 4 || bShouldSpawnSkill && !FlagBit_D2UnitStrc_eUnitFlags_6(pUnit) && (byCurrentActionFrame == 1 || byCurrentActionFrame == 2)) {
       SKILLS::SkillsServer::SKILLS_PeriodicSkillSpawnAndTimer(pGame, pUnit);
     }
 

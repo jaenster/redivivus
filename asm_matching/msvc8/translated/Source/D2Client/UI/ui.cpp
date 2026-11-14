@@ -3256,6 +3256,14 @@ BOOL __fastcall UI_GetUniqueMonsterName(D2UnitStrc * pUnit, uint16_t nNameMode) 
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 int32_t __fastcall UI_GetMonsterHpBarValue(D2UnitStrc * pUnit) {
     uint32_t bCanInteract;
     int32_t nMaxHp;
@@ -3269,7 +3277,7 @@ int32_t __fastcall UI_GetMonsterHpBarValue(D2UnitStrc * pUnit) {
     if (nHpPercent) {
       return 0;
     }
-    if (pUnit->eUnitFlags >> 2 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_2(pUnit)) {
       D2UnitStrc* pPlayerUnit_lcl;
       pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       bCanInteract = UNIT::CUnit::CanInteractWith(pPlayerUnit_lcl, pUnit);

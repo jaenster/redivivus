@@ -40,7 +40,8 @@ BOOL __fastcall SKILLAMA_SrvStFn04_ArrowAttack(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 BOOL __fastcall SKILLAMA_SrvStFn05_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

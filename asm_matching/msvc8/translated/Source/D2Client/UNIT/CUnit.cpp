@@ -84,6 +84,14 @@ D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType 
     return pUnit;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 10 & 1;
+}
+
 D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
     uint32_t nUnitGUID;
     D2UnitStrc* pOwnerUnit;
@@ -92,7 +100,7 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);
     }
-    if (pUnit->eUnitFlagsEx >> 10 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit)) {
       eD2UnitType eUnitType;
       eUnitType = pUnit->eOwnerType;
       nUnitGUID = pUnit->nOwnerGUID;
@@ -106,6 +114,14 @@ D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
     }
 
     return nullptr;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
 }
 
 // Inserts pUnit into the appropriate global unit hash table (server-side or client-side, selected by UNITFLAG bit 0x21). Computes bucket from nUnitGUID &amp; 0x7f and inserts in ascending GUID order. Halts (ERROR_UnrecoverableInternalError_Halt) if the unit already exists in the table. Returns 1 on successful insert, 0 if the unit was already present (duplicate path).
@@ -1871,7 +1887,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
           eUnitType1 = UNIT_PLAYER;
           nUnitGUID1 = nOwnerGUID;
         }
-        if (pUnit && pUnit->eUnitFlagsEx >> 10 & 1 && pUnit2->eOwnerType == UNIT_PLAYER) {
+        if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit) && pUnit2->eOwnerType == UNIT_PLAYER) {
           nUnitGUID1 = pUnit->nOwnerGUID;
           eUnitType1 = UNIT_PLAYER;
         }
@@ -1882,7 +1898,7 @@ uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
           eUnitType2 = UNIT_PLAYER;
           nUnitGUID2 = nOwnerGUID;
         }
-        if (pUnit2 && pUnit2->eUnitFlagsEx >> 10 & 1 && pUnit2->eOwnerType == UNIT_PLAYER) {
+        if (pUnit2 && FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit2) && pUnit2->eOwnerType == UNIT_PLAYER) {
           nUnitGUID2 = pUnit2->nOwnerGUID;
           eUnitType2 = UNIT_PLAYER;
         }
@@ -2416,6 +2432,22 @@ void __fastcall CreateUnitsForMissiles(D2RoomStrc * pRoom) {
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 1 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 7 & 1;
+}
+
 // Client-side hit-test: determines whether a screen-space click at (nClickX,nClickY) lands on the given unit and whether that unit is a valid selection/interaction target for the local player. Honors split-screen border halves, skips uninteractable/hidden units, validates interactability (CanInteractWith / owned-pet / allied / active-skill select proc), then performs geometric containment using monster hit-test rectangle (monstats2 noGfxHitTest box), object collision/door sprite bounds, item run-mode + hold-alt rules, warp click areas, or per-piece sprite-bounds iteration for multi-piece gfx. Returns nonzero if the click selects the unit, 0 otherwise. pObjectsTxt out-param scratch.
 // @sourcefile .\UNIT\CUnit.cpp
 uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t nClickY, D2ObjectsTxt * pObjectsTxt) {
@@ -2462,7 +2494,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
         }
     }
 
-    if (pUnit && pUnit->eUnitFlags >> 0x15 & 1) {
+    if (pUnit && FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
       return 0;
     }
 
@@ -2484,7 +2516,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
       if (!pUnit) {
         return 0;
       }
-      if (pUnit->eUnitFlags >> 1 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_1(pUnit)) {
         bSelectable = 1;
       } else {
         if (pUnit->eUnitType == UNIT_MONSTER) {
@@ -2507,7 +2539,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
         bSelectable = 1;
       }
     }
-    if (!(pUnit->eUnitFlagsEx >> 7 & 1)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_7(pUnit)) {
       return 0;
     }
     if (!bSelectable) {

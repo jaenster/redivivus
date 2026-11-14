@@ -152,31 +152,28 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
       }
 
       memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nMissileTxtNo = eMissileIdA;
-      sSkillArg.nUnitX = nTargetX;
       sSkillArg.nFlags = 0x8020;
-      sSkillArg.nSkillLevel = nSkillLvl;
-      sSkillArg.nUnitY = nTargetY;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
+      sSkillArg.nMissileTxtNo = eMissileIdA;
       sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nSkillLevel = nSkillLvl;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
       sSkillArg.nTotalFrames = nTotalFrames;
       pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
       if (pMissile) {
         SKILLSSOR_SetInfernoFrames(pMissile, nTotalFrames);
       }
 
-      bGotCoords = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-      if (!bGotCoords) {
-        return pMissile;
+      if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno)) {
+        if (pUnit->pAnimSeq) {
+          D2Common::Units::SetSequenceFrame(pUnit, 8);
+          pUnit->nFrameCount = 0x500;
+        } else {
+          pUnit->nGfxCurrentFrame = (pUnit->nGfxCurrentFrame & 0xffffff00U) - 0x200;
+        }
       }
-      if (pUnit->pAnimSeq) {
-        D2Common::Units::SetSequenceFrame(pUnit, 8);
-        pUnit->nFrameCount = 0x500;
-        return pMissile;
-      }
-
-      pUnit->nGfxCurrentFrame = (pUnit->nGfxCurrentFrame & 0xffffff00U) - 0x200;
       return pMissile;
     }
 
@@ -425,7 +422,8 @@ BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2S
 }
 
 BOOL __fastcall Skills_CltDoFunc_Sor_CollisionCheckedMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -478,7 +476,8 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit,
 }
 
 BOOL __fastcall Skills_CltDoFunc_Sor_SimpleMakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

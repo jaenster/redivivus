@@ -2407,14 +2407,14 @@ void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo
 
 D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t dwRoomFlags, int32_t dwOutdoorFlags, int32_t dwOutdoorFlagsEx, int32_t dwDT1Mask) {
     D2RoomExStrc* pRoomEx = DrlgRoom::DRLGROOMEX_AllocRoomEx(pLevel, 1);
-    pRoomEx->sCoords.WorldSize.x = nWidth;
-    pRoomEx->sCoords.WorldSize.y = nHeight;
     pRoomEx->sCoords.WorldPosition.x = nX;
     pRoomEx->sCoords.WorldPosition.y = nY;
+    pRoomEx->sCoords.WorldSize.x = nWidth;
+    pRoomEx->sCoords.WorldSize.y = nHeight;
     DrlgRoom::AddRoomExToLevel(pLevel, pRoomEx);
-    D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     pRoomEx->eRoomExFlags = pRoomEx->eRoomExFlags | dwRoomFlags | 0x80000U;
     pRoomEx->nDT1Mask = dwDT1Mask;
+    D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     pRoomExDataOutRoom->dwFlags = dwOutdoorFlags;
     pRoomExDataOutRoom->dwFlagsEx = dwOutdoorFlagsEx;
     D2LevelDefsTxt* pTxtLevelDefsLine = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(pLevel->eD2LevelId);

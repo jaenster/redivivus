@@ -437,6 +437,14 @@ void __fastcall FrreeTimer(::SGAMEDATA * pGame, void * * ppTimerList) {
     D2_FREE_POOL_AT(pGame->pMemoryPool, ppTimerList, ".\\OBJECTS\\Objects.cpp", 0x1d1);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_7(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 7 & 1;
+}
+
 // Server-side initializer for a freshly created object unit. Looks up the unit's ObjectsTxt record, assigns its GUID, clears the sparkly-chest flag, and sets/clears CANBEATTACKED and TARGETABLE unit flags from the txt (IsAttackable / Selectable[animMode]). Validates class id < 0x23d and anim mode < 8 (halts via ErrorManager otherwise). Clears the unit's timer list, then dispatches to the per-object init function in the OBJECTSINITFN table (index = ObjectsTxt.InitFn, bounds-checked < 0x50, IsBadCodePtr-guarded) passing a D2ObjectInitFnArg with game/room/x/y/seed/txt. Rolls a 1-in-0xe seed chance to flag a PreOperate object for update, and allocates+attaches a timer arg. Inputs: pGame, pUnit, nAnimModeOrGUID (used as GUID), pRoom, nX, nY.
 void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nAnimModeOrGUID, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     // Static local variables (originally global data)
@@ -592,7 +600,7 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       } else {
         pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
       }
-      if (pObjectsTxt->PreOperate && !(pUnit->eUnitFlags >> 7 & 1)) {
+      if (pObjectsTxt->PreOperate && !FlagBit_D2UnitStrc_eUnitFlags_7(pUnit)) {
         nPreOpSeedRoll = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 0xe);
         if (!nPreOpSeedRoll) {
           D2Common::Units::ChangeAnimMode(pUnit, 2);

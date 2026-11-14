@@ -376,6 +376,22 @@ D2SkillSrvDoFunc SKILLSRVDOFUNCS[191] = {
 
 namespace D2Game::SKILLS::SkillsServer {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 3 & 1;
+}
+
 // Tests whether candidate unit pUnit2 is a valid target for caster pUnit under the skill's nTargetFlags bitmask. Returns 1 if all selected conditions pass, else 0. First gates on unit type (player/monster/object/missile/item via bits 1/2/0x10/8/0x20) and animation mode (alive vs dead/dying, with 0x1000 requiring a dead/corpse target). Then applies optional filters: undead-only (4), boss-exclude (0x4000), monstat-flag (0x40000), corpse/selectable flags, not-in-town (0x100), can-target-ally (0x10000, also rejecting NPCs), can-attack-enemy (0x8000), in-melee-range (0x20000), just-hit state (0x80000), and line-of-sight wall check (0x200). For missile casters it resolves the missile's owner before alliance/attack checks.
 uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     bool bCanTarget;
@@ -485,7 +501,7 @@ uint32_t __fastcall SKILLS_CheckTargetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUn
       break;
     }
 
-    if ((!(nTargetFlags & 0x80) || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+    if ((!(nTargetFlags & 0x80) || FlagBit_D2UnitStrc_eUnitFlags_2(pUnit2)) && (!(nTargetFlags & 0x400) || FlagBit_D2UnitStrc_eUnitFlags_3(pUnit2))) {
       D2RoomStrc* pRoom;
       if (nTargetFlags & 0x100) {
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
@@ -1620,6 +1636,14 @@ BOOL __fastcall Skills_SrvDoFunc_004_RemovePetBySkillParam(::SGAMEDATA * pGame, 
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 1 & 1;
+}
+
 static BOOL __stdcall SKILLS_ValidateSkillTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill) {
     uint32_t bCanAttack;
     BOOL nAlignmentCheck;
@@ -1632,7 +1656,7 @@ static BOOL __stdcall SKILLS_ValidateSkillTarget(::SGAMEDATA * pGame, D2UnitStrc
     if (!(pSkillTxt && (!(*((uint8_t*)pSkillTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) || (bCanAttack = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) , bCanAttack != 0) || (nAlignmentCheck = UNIT::SUnit::UNITS_CheckSkillTargetAlignment(pGame, pUnit, pTarget, eSkill) , nAlignmentCheck || (bCanAttack = UNIT::SUnit::UNITS_CanUseSkillOnTarget(pGame, pUnit, pTarget, eSkill) , bCanAttack != 0))))) {
       return 0;
     }
-    if (pTarget->eUnitFlags >> 1 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_1(pTarget)) {
       if (pTarget->eUnitType == UNIT_MONSTER && pTarget->eAnimMode.ePlayerMode == Kick) {
         if (*((uint8_t*)pSkillTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
           return 1;
@@ -1873,12 +1897,12 @@ BOOL __fastcall SERVER_SpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
 // Resolves the skill aim position into tile coordinates written to *pnOutX/*pnOutY. If the unit has a locked target, reads its static or dynamic path position. If no target, falls back to the unit's own SP1 (cursor/destination) position. Returns 1 if both coordinates are nonzero, 0 otherwise.
 BOOL __fastcall SKILLS_GetTargetOrCursorPos(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pnOutX, uint32_t * pnOutY) {
-    uint32_t nPosY;
     eD2UnitType eTargetUnitType;
     D2DynamicPathStrc* pDynamicPath;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTargetUnit) {
       uint32_t nPosX;
+      uint32_t nPosY;
       eTargetUnitType = pTargetUnit->eUnitType;
       if (eTargetUnitType == UNIT_OBJECT || (int)eTargetUnitType > 3 && (int)eTargetUnitType <= 5) {
         nPosX = pTargetUnit->pPath.pStaticPath->nPosX;
@@ -1897,15 +1921,14 @@ BOOL __fastcall SKILLS_GetTargetOrCursorPos(::SGAMEDATA * pGame, D2UnitStrc * pU
       } else {
         nPosY = 0;
       }
+      *pnOutY = nPosY;
     } else {
       pDynamicPath = pUnit->pPath.pDynamicPath;
-      nPosY = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-      *pnOutX = nPosY;
-      nPosY = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
+      *pnOutX = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
+      *pnOutY = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
     }
 
-    *pnOutY = nPosY;
-    if (*pnOutX && nPosY) {
+    if (*pnOutX && *pnOutY) {
       return 1;
     }
 
@@ -2274,6 +2297,14 @@ void __fastcall SKILLS_DispatchSrvDoFunc(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     (*SKILLSRVDOFUNCS[nSrvDoFuncIdx])(pGame, pUnit, eSkill, nSkillLvl);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_8(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 8 & 1;
+}
+
 static void ClearNecroPet(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfa8);
@@ -2506,12 +2537,10 @@ void __fastcall SKILLS_ForEachUnitBaalWave(::SGAMEDATA * pGame, D2BaalWaveParamS
       memset(&sSkillParam, 0, sizeof(sSkillParam));
       sSkillParam.nFlags = pBaalWaveParam->nUnitFindFlags;
       sSkillParam.pAttacker = pBaalWaveParam->pAttacker;
-      nX_00 = pBaalWaveParam->nX;
-      iUnit = pBaalWaveParam->nY;
-      sSkillParam.nX = nX_00;
-      sSkillParam.nY = iUnit;
+      sSkillParam.nX = pBaalWaveParam->nX;
+      sSkillParam.nY = pBaalWaveParam->nY;
       sSkillParam.nDistance = nDistance;
-      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(sSkillParam.pAttacker), nX_00, iUnit);
+      pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pBaalWaveParam->pAttacker), pBaalWaveParam->nX, pBaalWaveParam->nY);
       if (!pRoom) {
         return;
       }
@@ -2689,7 +2718,8 @@ int32_t __fastcall SetDamageOnEvent(D2UnitStrc * pUnit, D2DamageStrc * pEvent, e
 }
 
 void __fastcall SKILLS_AddRandomSkillDamage(D2UnitStrc * pUnit, int32_t * pDamageAccum, eD2Skills eSkill, int32_t nSkillLevel) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 

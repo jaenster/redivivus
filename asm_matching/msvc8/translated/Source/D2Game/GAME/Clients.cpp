@@ -243,11 +243,10 @@ static void __stdcall CLIENT_UpdatePortalFlags(D2ClientStrc * gameContext) {
     if (!(gameContext->pRoom && gameContext->pPlayer)) {
       return;
     }
-
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(gameContext->pRoom);
-    uint32_t nCurrentPortalFlags = D2Common::Units::GetPlayerPortalFlags(gameContext->pPlayer);
-    uint32_t nLevelPortalFlag = D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
-    D2Common::Units::SetPlayerPortalFlags(gameContext->pPlayer, nCurrentPortalFlags | nLevelPortalFlag);
+    uint32_t nPortalFlags = D2Common::Units::GetPlayerPortalFlags(gameContext->pPlayer);
+    nPortalFlags |= D2Common::DUNGEON::Dungeon::GetPortalFlagFromLevelId(eLevel);
+    D2Common::Units::SetPlayerPortalFlags(gameContext->pPlayer, nPortalFlags);
 }
 
 // Server-side handler invoked when a client's active room changes (pRoom = new room). If different from the client's current room, swaps room data/active-room-ex between the old and new levels, then diffs the adjacency lists: reveals and streams units for newly-adjacent rooms (CLIENT_RevealRoomAndSendUnits) and clears/hides map for rooms no longer adjacent (RoomClearForClientAndHideMap), re-resolving the client's player unit and issuing a movement/position packet update when the client's own room is cleared. Updates pClient->pRoom and OR-merges the new level's portal flag into the player's explored-portal flags. Custom calling convention: pClient in ESI, pRoom on stack.
@@ -564,6 +563,14 @@ void __fastcall GAME_CollectNearbyUnitPositions(D2ClientStrc * pClient, uint32_t
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 21 & 1;
+}
+
 // Per-frame update for one connected client. Sends remove-object packets for stale adjacent rooms, sends adjacent-room unit updates, flushes changed stats to the player, recalculates inventory if the refresh flag is set, increments the room ticker, and on a room change fires quest and NPC-intro callbacks and calls GAME_OnClientRoomChange. Finishes by linking the player unit into the update list.
 void __fastcall UpdateSingleClient(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     eD2LevelId eLevelIdTwo;
@@ -581,7 +588,7 @@ void __fastcall UpdateSingleClient(::SGAMEDATA * pGame, D2ClientStrc * pClient) 
     Level::GAME_SendRemoveObjectsForAdjacentRooms(pOldRoom, pClient);
     Level::SendAdjacentRoomUpdates(pGame, pOldRoom, pClient);
     D2Common::Stats::StatsEx::STATLIST_IterateChangedStats(pUnit, pUnit, PLAYER::PlayerMsg::SendAttributeUpdate);
-    if (pUnit->eUnitFlagsEx >> 0x15 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlagsEx_21(pUnit)) {
       ITEMS::ItemMode::ITEMS_RecalcAndRefreshInventory(pGame, pUnit, 1, 1);
       ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
     }

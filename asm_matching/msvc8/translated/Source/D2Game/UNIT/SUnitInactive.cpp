@@ -419,6 +419,22 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
     pUnit->eUnitFlags |= UNITFLAG_NOTC;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_26(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 26 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_17(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 17 & 1;
+}
+
 // Serializes a monster's transient state into an inactive-unit save record (nParam1 = destination record, pnParam = the D2UnitStrc). Writes a DEADEAD death marker + state flag masks when the corresponding mode flags are set, persists NPC/interact AI command args and any preset map-AI file reference, and stores special-case AI arguments for certain monster base ids (0x44, 0x21f) and class ids (0x10b, 0xf3). For super-unique boss types (0x137/0x138) saves a byte from the monster's extra data, else zeroes the saved arg field. Uses register-passed params (EDI/EBX/EAX).
 static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc * pInactiveMonsterRecord, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2MonStatsTxt* pAiCmd;
@@ -1369,6 +1385,14 @@ void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame,
         return;
       }
     } while (true);
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
 }
 
 // Decides the fate of a dead or inactivating monster and either saves it as an inactive unit or frees it. Determines bShouldSave from many gates: whether the unit is truly dead (CheckForModeZeroDeath), the level's saveMonsters flag, the resurrect flag, a Kick-mode seeded RNG roll (advances and writes the room seed), passive-state presence, alignment==2, low node-table index (frees AI nodes and saves when alive), special class ids 0x16b/0x16c, monster-type bit 0x18, minion ownership (delegates dead pets to PETS_HandleDeadPet), an eUnitFlags bit, and the monstats2 byRestore field (0 => don't save, 2 => force save). If a pet record resulted, marks UNITFLAGEX_HASBEENDELETED and conditionally saves then clears the room link and returns; otherwise conditionally saves and then frees the server unit. Server-side unit cleanup; custom register args (pUnit@ESI, pGame on stack).

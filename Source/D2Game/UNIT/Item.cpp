@@ -24,6 +24,22 @@
 
 namespace D2Game::UNIT {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 2 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_4(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 4 & 1;
+}
+
 // Server-side item-action dispatcher: given an item and the player that just acted on it, determines the pending item command (via ITEM_CheckItemData_eD2ItemCmd) and sends the matching 0x9C/0x9D item-state network packet to the client. Handles the full item-interaction matrix: shop buy/sell trade-screen open (0x9C with '8'/'9' when the targeted NPC matches the interacted NPC), ground pickup, copy-to-cursor, put/take in inventory container, equip/unequip/swap body-loc items, stack quantity, swap-in-container, belt put/take/swap, set-to-cursor, weapon switch, auto-unequip, and move-to-bodyloc. For broken/restored/reload item flags it instead sends a 0x7D set-item-flags or generic update-item packet, gated on the item's anim mode (Neutral/Walk/Death) and whether pUnit is the acting player. Most actions require pUnit==pPlayer. Returns 1 when a packet was sent/handled, 0 otherwise. __fastcall-style register params (pClient EBX, pUnit EDI, pItem ESI).
 // @sourcefile .\INVENTORY\InvMode.cpp
 static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
@@ -32,7 +48,7 @@ static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2U
     ::SGAMEDATA* pGame = GAME::Clients::CLIENT_GetGame(pClient);
     D2UnitStrc* pNpc = SUnit::GetInteractedNpc(pGame, pPlayer);
     if (pItem) {
-      if (pItem->eUnitFlagsEx >> 2 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_2(pItem)) {
         if (pNpc != pUnit) {
           return;
         }
@@ -45,7 +61,7 @@ static void Pre0x9DAnd0x9CPacket(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2U
         GAME::SCmd::Send0x9CItemHandleInShop(pClient, pUnit, pItem, '8');
         return;
       }
-      if (pItem->eUnitFlagsEx >> 4 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_4(pItem)) {
         if (pNpc != pUnit) {
           return;
         }
@@ -300,9 +316,25 @@ void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc *
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_22(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 22 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_23(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 23 & 1;
+}
+
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pFoundItem;
-    if (pUnit && (pUnit->eUnitFlagsEx >> 0x16 & 1 || pUnit->eUnitFlagsEx >> 0x17 & 1)) {
+    if (pUnit && (FlagBit_D2UnitStrc_eUnitFlagsEx_22(pUnit) || FlagBit_D2UnitStrc_eUnitFlagsEx_23(pUnit))) {
       return 1;
     }
 
@@ -459,6 +491,38 @@ static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2Unit
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(pClient, '\f', '\x01', pUnit->nUnitGUID, '\x13', (uint8_t)dwLastHitClass, byHpPct);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_8(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 8 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 10 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_15(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 15 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_11(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 11 & 1;
+}
+
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nIsNew) {
     int32_t wPosX;
@@ -504,7 +568,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
     SUnitMsg::SERVER_UnitQueuePacketSend(pUnit, pClient);
     if (pUnit) {
-      if (pUnit->eUnitFlags >> 8 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_8(pUnit)) {
         SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
       }
       if (pUnit->eUnitFlagsEx & UNITFLAGEX_HASINV) {
@@ -527,10 +591,10 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
 
       send_sound_and_health:
-      if (pUnit->eUnitFlags >> 10 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
         SUnitMsg::UNITMSG_SendSoundPacketToClient(pUnit, pClient);
       }
-      if (pUnit->eUnitFlags >> 0xf & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_15(pUnit)) {
         MONSTER_SendNpcHealthUpdate(pClient, pUnit);
       }
     }
@@ -545,7 +609,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     if (nMercType) {
       SUnitMsg::PLAYER_SendOverlayToClient(pUnit, pClient);
     }
-    if (!(pUnit && pUnit->eUnitFlags >> 0xb & 1)) {
+    if (!(pUnit && FlagBit_D2UnitStrc_eUnitFlags_11(pUnit))) {
       return;
     }
 

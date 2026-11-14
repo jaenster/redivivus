@@ -75,15 +75,12 @@ void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {
-    int i;
     uint32_t* pGfxFlags = (uint32_t*)Stats::StatsEx::STATLIST_GetUnitGfxFlags(pUnit);
     if (!pGfxFlags) {
       return 0;
     }
 
-    int nDwordCount = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
-    nDwordCount = nDwordCount / 32;
-    for (i = 0; i < nDwordCount; i++) {
+    for (int i = 0; i < (ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32; i++) {
       if (pGfxFlags[i]) {
         return 1;
       }

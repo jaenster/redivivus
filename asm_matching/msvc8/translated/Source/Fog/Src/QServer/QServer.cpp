@@ -1613,36 +1613,42 @@ void __fastcall CloseRemoteConnection(D2QServerStrc * pQServer, int nClientId, c
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection_00);
     nSehState = 0;
     D2QServerClientConnectionStrc* pFoundClient = FindClientByClientId(pQServer, nClientId);
-    if (pFoundClient) {
-      CRITICAL_SECTION* lpCriticalSection;
-      lpCriticalSection = &pFoundClient->clientLock;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-      if (pFoundClient->bClosePending) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-        nSehState = -1;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection_00);
-        ExceptionList = pPrevExceptionRecord;
-        return;
-      }
+    if (!pFoundClient) {
+      nSehState = -1;
+      LeaveCriticalSection(lpCriticalSection_00);
+      ExceptionList = pPrevExceptionRecord;
+      return;
+    }
 
-      pFoundClient->bClosePending = 1;
-      nCloseRc = Safesock::closeSocket(pFoundClient->socket);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pFoundClient->socket = -1;
-      LeaveCriticalSection(lpCriticalSection);
-      if (nCloseRc) {
-        nCloseResult = WSAGetLastError();
-        LogManager::LOGMANAGER_TraceToModuleLog("", "[QSrvCloseRemoteConnection] *** closesocket() err = %d ***", nCloseResult);
-      }
+    CRITICAL_SECTION* lpCriticalSection;
+    lpCriticalSection = &pFoundClient->clientLock;
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
+    if (pFoundClient->bClosePending) {
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+      nSehState = -1;
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection_00);
+      ExceptionList = pPrevExceptionRecord;
+      return;
+    }
 
-      RemoveClientAndClearLog(pQServer, pFoundClient);
-      if (nCloseRc == -1) {
-        WSAGetLastError();
-      }
+    pFoundClient->bClosePending = 1;
+    nCloseRc = Safesock::closeSocket(pFoundClient->socket);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pFoundClient->socket = -1;
+    LeaveCriticalSection(lpCriticalSection);
+    if (nCloseRc) {
+      nCloseResult = WSAGetLastError();
+      LogManager::LOGMANAGER_TraceToModuleLog("", "[QSrvCloseRemoteConnection] *** closesocket() err = %d ***", nCloseResult);
+    }
+
+    RemoveClientAndClearLog(pQServer, pFoundClient);
+    if (nCloseRc == -1) {
+      WSAGetLastError();
     }
 
     nSehState = -1;
     LeaveCriticalSection(lpCriticalSection_00);
     ExceptionList = pPrevExceptionRecord;
+    return;
 }
 
 void __stdcall BanClient(D2QServerStrc * pQServer, int nClientId, char * szFile, int nLine) {

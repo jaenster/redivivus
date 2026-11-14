@@ -3874,6 +3874,14 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
     return nPalette;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_25(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 25 & 1;
+}
+
 // Returns 1 if pUnit is a valid target for the Imbue quest reward (Charsi). Rejects: NULL (fatal error), gold, monster-dropped items (ITEMFLAG_MONSTER set), non-equippable item types. For equippable items also rejects: non-ethereal throwables, quest items (except "leg"), items with sockets or socket flag, and quality other than normal (not set/unique/magic/rare/crafted/tempered).
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
@@ -3900,7 +3908,7 @@ BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
     uint32_t nClassId = pUnit->nClassId;
     uint32_t bEquippable = TXT_Items_GetBitFieldAnd0x01(nClassId);
     if (bEquippable) {
-      if (!(pUnit->eUnitFlagsEx >> 0x19 & 1)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_25(pUnit)) {
         nErrLine = ITEM_GetTxtItemTypes_throwable(pUnit);
         if (nErrLine) {
           return 0;

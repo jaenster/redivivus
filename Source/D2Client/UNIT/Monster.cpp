@@ -1612,6 +1612,14 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 // Called when a monster's skill/action animation completes (eAnimMode is one of the Skill1-3/attack/cast modes). Looks up the monster's base MonStats id and, with per-class special-case logic, decides the next animation mode. Skill1 (non-class-0x4e) snaps the unit's dynamic path to tile, restores velocity/path type and switches to Run. Otherwise it faces the confirmed target, and depending on the current anim mode and class id either: loops the current animation (returns without change for certain classes), transitions caster class 0x88 from Cast to Throw, fires special missiles for class 0x1f1 on GetHit (MONSTER_ExplodeOwnerMissile + SpawnRandomAttachedMissile), or transitions classes 0x193/0x194 into Attack2. Default fallthrough sets Neutral and re-inits the anim (InitAnimMode). No return; mutates unit anim state.
 static void MONSTER_HandleSkillAnimEnd(D2UnitStrc * pUnit) {
     uint32_t bHasPathActive;

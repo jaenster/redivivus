@@ -1721,20 +1721,18 @@ void __fastcall UMOD_AddBaseDamageBonus(uint32_t dwUnused1, D2UnitStrc * pUnit, 
       return;
     }
 
-    int nSecondaryDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0);
-    nSecondaryDmg = nMinDmg - 1 + nSecondaryDmg;
-    nMinDmg = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0);
-    nMinDmg = nMaxDmg - 1 + nMinDmg;
-    if (nSecondaryDmg < 0) {
-      nSecondaryDmg = 0;
-    }
+    nMinDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0) - 1;
+    nMaxDmg += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_maxdamage, 0) - 1;
     if (nMinDmg < 0) {
       nMinDmg = 0;
     }
+    if (nMaxDmg < 0) {
+      nMaxDmg = 0;
+    }
 
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 1);
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_mindamage, nSecondaryDmg, 0);
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nMinDmg, 0);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_mindamage, nMinDmg, 0);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nMaxDmg, 0);
 }
 
 void __fastcall MONSTER_ScaleMissileDamageByOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, uint32_t dwUnused2) {
@@ -3124,8 +3122,16 @@ int32_t __fastcall MONSTER_IsMonsterUnit(D2UnitStrc * pUnit) {
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_26(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 26 & 1;
+}
+
 void __fastcall SERVER_AwardKillExperience(D2UnitStrc * pUnit, D2UnitStrc * pVictim, ::SGAMEDATA * pGame) {
-    if (!(pUnit && pVictim && !(pVictim->eUnitFlags >> 0x1a & 1))) {
+    if (!(pUnit && pVictim && !FlagBit_D2UnitStrc_eUnitFlags_26(pVictim))) {
       return;
     }
 

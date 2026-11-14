@@ -5545,20 +5545,18 @@ static void __stdcall SKILLDESC_DescLineD_AppendDuration(uint16_t * wszText, int
     uint8_t bVar1 = GAME::Game::GetDificulity();
     uint32_t nDifficultyIdx = (uint32_t)bVar1;
     memset(&sMonStats, 0, 0x38);
-    int nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIdx];
-    D2MonStatsInitStrc* pnScaledStats = &sMonStats;
-    BOOL BVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonStatsId, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIdx, nMonLevel, 1, pnScaledStats);
+    BOOL BVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonStatsId, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIdx, pMonStatsTxt->aLevel[nDifficultyIdx], 1, &sMonStats);
     if (!BVar2) {
       return;
     }
 
-    nMonLevel = (sMonStats.nMinHP + sMonStats.nMaxHP) / 2;
-    nMonLevel = nMonLevel + nMonLevel * nLifePercent / 100 + nLifeBonus;
-    if (!nMonLevel) {
+    int nLife = (sMonStats.nMinHP + sMonStats.nMaxHP) / 2;
+    nLife = nLife + nLife * nLifePercent / 100 + nLifeBonus;
+    if (!nLife) {
       return;
     }
 
-    SKILLDESC_FormatSignedValue(nMonLevel, 0x10c6, 0, wszText);
+    SKILLDESC_FormatSignedValue(nLife, 0x10c6, 0, wszText);
 }
 
 static void __stdcall DamgeTypeToText(int32_t eDamageType, uint16_t wDmgTypeStringId, int32_t nMinDamage, int32_t nMaxDamage, uint16_t * wszText) {

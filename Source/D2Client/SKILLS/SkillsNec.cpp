@@ -201,7 +201,8 @@ BOOL __fastcall Skills_CltStFunc_CheckCorpseSetPositionParams(D2UnitStrc * pUnit
 }
 
 BOOL __fastcall Skills_CltDoFunc_Nec_TargetedMissileAtParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -602,11 +603,11 @@ BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * p
     if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nFlags = 0x2000;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pCorpse;
       sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nMissileTxtNo = eMissileId;
       pCorpse = UNIT::Missile::MakeMissile(&sSkillArg);
       return (uint32_t)(pCorpse != 0);

@@ -394,6 +394,14 @@ static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyE
     D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pUnit2);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
+}
+
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
 static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {

@@ -3,15 +3,8 @@
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Client/D2GSPacketSrv0x27.h"
 #include "Source/D2Client/D2GSPacketSrv0x91.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
-#include "Source/D2Common/D2Common.h"
-#include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
-#include "Source/D2Game/D2ObjectInitFnArg.h"
-#include "Source/D2Game/D2ObjectOperateFnArg.h"
-#include "Source/D2Game/D2QuestDataStrc.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/GAME/Server.h"
@@ -20,9 +13,7 @@
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/Create.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
-#include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Monsters/Spawn.h"
-#include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q1.h"
@@ -52,6 +43,7 @@
 #include "Source/globals/globals.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Game/Quests/QUESTS.inline.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q0.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q3.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q7.h"
@@ -813,8 +805,7 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     sPacket.nQuestId = (uint8_t)nInternalQuestNo;
     sPacket.nPacketId = ']';
     sPacket.nAlertFlags = pQuestData->nQuestPacketFlags;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBufferEx = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBufferEx = GetQuestBitBufferInline(pGame, pUnit);
     if (!pQuestData->fpStatusFilter) {
       QUEST_GetQuestLogDisplayState(pQuestData, &sPacket.nFilterStatus, pBitBufferEx);
     } else {
@@ -1888,8 +1879,7 @@ void __fastcall QUEST_SendNpcInfoPacket(D2UnitStrc * pUnit, D2UnitStrc * pNpcUni
 BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     uint16_t wGameIdHigh = (uint16_t)((uintptr_t)pGame >> 0x10);
     D2GSPacketClt0x89 DStack_8 = d2_bits_as<D2GSPacketClt0x89>((uint16_t)((uint16_t)(uint8_t)pGame->pQuestControl->nEventId << 8 | (uint16_t)(uint8_t)0x89));
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xd0e);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x89_QUESTEVENTTRIGGER(pClient, &DStack_8);
@@ -2781,8 +2771,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2ClientStrc* pClient;
     D2QuestDataStrc* pQuestDataIter;
     D2QuestArgStrc pQuestCallback;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     if ((pMonster ? pMonster->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }

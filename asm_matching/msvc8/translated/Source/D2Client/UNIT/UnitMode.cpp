@@ -26,6 +26,14 @@
 
 namespace D2Client { namespace UNIT { namespace UnitMode {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 // Client-side: handles the local player attempting to interact with a unit identified by type+GUID. Finds the client-side target unit; dispatches by unit type: PLAYER/MONSTER face the target and send interact request 0x13 (monster throttled to 200ms); ITEM sends pickup 0x16 (with inventory-open flag). For OBJECT, clears the server path target and, if the object is interactable, faces it and either starts a melee/kick skill cast or sends interact 0x13. Special handling for object class 0x194 (uses Kick/Attack depending on equipped-weapon code and death anim) and 0x178 (sends type-2 interact when dead, attack-skill when walking). No return; communicates via NET_D2GS_CLIENT_Send_* packets.
 // @sourcefile .\UNIT\UnitMode.cpp
 void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
@@ -48,7 +56,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
       case UNIT_OBJECT:
         {
           D2Common::PATH::DynamicPath::SetTarget(pPlayerUnit_lcl->pPath.pDynamicPath, nullptr);
-          if (pTargetUnit->eUnitFlags >> 2 & 1) {
+          if (FlagBit_D2UnitStrc_eUnitFlags_2(pTargetUnit)) {
             nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit);
             D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
             nPosY = 0x20d;
@@ -637,6 +645,14 @@ static void __stdcall UNITMODE_HandleMoveAction(D2UnitStrc * pUnit, int32_t nTar
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 1 & 1;
+}
+
 static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType, eD2UnitType eTargetType, int32_t nTargetGUID, D2UnitStrc * pTargetUnit, D2UnitStrc * pPlayerUnit) {
     BOOL BVar1;
     int nResult = CUnit::IsActive(pTargetUnit);
@@ -648,7 +664,7 @@ static BOOL __stdcall UNITMODE_HandleItemOrObjectInteraction(int32_t nActionType
         return 0;
       }
     } else {
-      if (pTargetUnit && pTargetUnit->eUnitFlags >> 1 & 1) {
+      if (pTargetUnit && FlagBit_D2UnitStrc_eUnitFlags_1(pTargetUnit)) {
         BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pPlayerUnit, nActionType);
         if (BVar1) {
           UNITMODE_HandleMoveAction(pPlayerUnit, nTargetGUID, nActionType, eTargetType);
@@ -713,7 +729,7 @@ static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nA
         return 0;
       }
     } else {
-      if (!pTargetUnit || !(pTargetUnit->eUnitFlags >> 1 & 1)) {
+      if (!pTargetUnit || !FlagBit_D2UnitStrc_eUnitFlags_1(pTargetUnit)) {
         GAME::Select::SELECT_UpdateUnitSelection(nullptr);
         return 0;
       }
@@ -729,7 +745,7 @@ static BOOL __stdcall UNITMODE_HandleSkillTargetInteraction(eD2UnitModeAction nA
 }
 
 static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, eD2UnitType eTargetType, int32_t nActionType, D2UnitStrc * pTargetUnit, int32_t nTargetGUID) {
-    if (pTargetUnit && pTargetUnit->eUnitFlags >> 1 & 1) {
+    if (pTargetUnit && FlagBit_D2UnitStrc_eUnitFlags_1(pTargetUnit)) {
       BOOL BVar1;
       BVar1 = UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType);
       if (BVar1) {

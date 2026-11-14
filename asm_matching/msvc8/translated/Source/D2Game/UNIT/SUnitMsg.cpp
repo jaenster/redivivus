@@ -1135,6 +1135,14 @@ void __fastcall SERVER_UnitQueuePacketFree(D2UnitStrc * pUnit) {
     pUnit->pMsgFirst = 0;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_4(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 4 & 1;
+}
+
 // Server-side: sends the full set of init packets describing one unit (pUnit) to a single client when the unit enters that client's view. Switches on unit type: players get 0x59 AssignPlayer; monsters get 0xAC AddMonster plus seeded pierce stat, optional 0x98 EvilHut, and 0x21 oskill grants for each SendSkills bit; objects get 0x51 WorldObject and, for portals, 0x60 state and 0x82 ownership; missiles get a missile packet; ground items get 0x9C add/refresh. A second switch then sends follow-up state: player attributes/items/corpse-assign/state-list/mode/hover-text, monster updates and item lists, item drop packets. Halts via Fog ErrorManager if a player corpse's cursor item owner can't be found.
 void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     ::SGAMEDATA* pGame_00;
@@ -1168,7 +1176,7 @@ void __fastcall SERVER_SendInitUnitPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
         GAME::SCmd::NET_D2GS_SERVER_Send_0x59_AssignPlayer(pClient, pUnit->nUnitGUID, (uint8_t)pUnit->nClassId, pUnit->pUnitData.pUnitDataPlayer->szCharName, wPosX, wPosY);
       break;
       case UNIT_ITEM:
-        if (pUnit->eUnitFlags >> 4 & 1) {
+        if (FlagBit_D2UnitStrc_eUnitFlags_4(pUnit)) {
           if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run && (dwTargetGUID = D2Common::Units::CheckFlags(pUnit, UNITFLAG_SENDREFRESHMSG) , dwTargetGUID != 0)) {
             GAME::SCmd::Send0x9CItemDroppedToGround(pClient, pPlayerUnit_lcl, pUnit, ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD));
           } else {

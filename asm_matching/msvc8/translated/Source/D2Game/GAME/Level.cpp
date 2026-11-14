@@ -29,6 +29,14 @@
 
 namespace D2Game { namespace GAME { namespace Level {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_4(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 4 & 1;
+}
+
 // Routes a per-frame unit visibility update to the appropriate type-specific packet handler. If the unit's "new" flag is set and it is not the client's own player, sends an init-unit packet first (skipping missiles). Then dispatches by eUnitType: UNIT_PLAYER to PlayerModes::PacketUpdateForClient, UNIT_MONSTER to Item::PacketUpdateForClient, UNIT_OBJECT to ObjectsMode::PacketUpdateForClient, UNIT_ITEM to ItemMode::PacketUpdateForClient. Halts fatally if pUnit is null.
 static void __stdcall DispatchUnitUpdate(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     D2UnitStrc* pPlayerUnit_lcl;

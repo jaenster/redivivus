@@ -206,6 +206,14 @@ static uint32_t __stdcall DRAW_WORLD_IsUnitInLineOfSight(D2UnitStrc * pOtherUnit
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_18(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 18 & 1;
+}
+
 // Client-side world-render entry for a single unit. Performs visibility culling first: skips drawing if the no-draw flag is set, a dead player whose body has no playerbody state, or a player/merc with attached/invis state; honors perspective bounds and a line-of-sight check. Computes screen X/Y (perspective-scaled with world offsets, or target X/Y otherwise) then dispatches by unit type to the gfx draw routine DRAW_WORLD_Unit_1: players run the whip/leap skill-trail pre/post hooks; monsters pass an IsMonsterGhostly palette-shift flag and run charge-trail hooks; missiles apply the MissilesTxt x/y/z offsets. On a successful draw sets UNITFLAG_AUTOMAP on the unit. Restores the default perspective factor on exit when perspective was active.
 void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nDrawLayer) {
     uint32_t bInViewBounds;
@@ -220,7 +228,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
     bPerspective = nDrawLayer;
     if (!nDrawLayer) {
       if (pUnit) {
-        if (pUnit->eUnitFlagsEx >> 0x12 & 1) {
+        if (FlagBit_D2UnitStrc_eUnitFlagsEx_18(pUnit)) {
           return;
         }
 
@@ -1087,6 +1095,22 @@ static void __stdcall WALL2_InsertUnitShadowDraw(D2Wall2CellStrc * pWall2Cell, D
     pDVar2->pNext = pDVar1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_20(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 20 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 7 & 1;
+}
+
 // Client-side draw-list builder for a single dungeon room within the wall2 (low-perspective wall/roof culling) view. Given pRoom and pnParam (game-view ptr + screen cull rectangle), early-rejects rooms outside the minimap rect, then walks the room's wall tiles and roof tiles: for each on-screen tile it computes iso grid coords (DRLG_OrthToIsoCoordsDiv160), clears the grid cell's dwFlags, and dispatches to WALL2_AddShadowPassTile/AddRoofTile/AddLowerWallTile/AddWallTile by tile type/flags. Then (when pnParam[6]==0) inserts each unit in the room into its grid cell (draw/draw-below/shadow) based on alive state and unit flags. Halts via Fog error if a unit's grid index is out of range. Always returns 1.
 BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawContextStrc * pDrawContext) {
     int nRoofHeightIdx2;
@@ -1204,9 +1228,9 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
               if (nLine) {
                 WALL2_InsertUnitDraw(pGridCellVoid, pUnit, pAllocBase);
               } else {
-                if (!pUnit || !(pUnit->eUnitFlags >> 0x14 & 1)) {
+                if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_20(pUnit)) {
                   WALL2_InsertUnitDrawBelow(pAllocBase, pUnit, pGridCellVoid);
-                  if (pUnit && pUnit->eUnitFlagsEx >> 7 & 1) {
+                  if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_7(pUnit)) {
                     WALL2_InsertUnitShadowDraw(pGridCellVoid, pUnit, pAllocBase);
                   }
                 } else {

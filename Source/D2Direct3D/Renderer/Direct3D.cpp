@@ -2900,14 +2900,12 @@ void __fastcall EndCutScene(HWND hWnd, int nResolutionMode, int nWindowState) {
     if (nWindowState) {
       gnRenderState = 1;
       RENDERER_D3D_ReleaseDevice();
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnGlideWindowHandle = (HWND)0x0;
-      LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-      return;
+      gnGlideWindowHandle = (HWND)0x0;
+    } else {
+      gnRenderState = 0;
+      Renderer::CreateWindow(hWnd, nResolutionMode);
     }
-
-    gnRenderState = 0;
-    Renderer::CreateWindow(hWnd, nResolutionMode);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+    LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
 }
 
 void __fastcall PlayCutScene(char * szFile, int nResolutionMode, void * fpFrame) {

@@ -717,6 +717,22 @@ uint32_t __fastcall SKILLS_GetTargetTypeForSkill(D2UnitStrc * pUnit, D2UnitStrc 
     return (uint32_t)(bInSameParty != 0);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 3 & 1;
+}
+
 // Tests whether pUnit2 is a legal skill target for caster pUnit under the skill's target-flags bitmask (nTargetFlags). Switches on the target's unit type, requiring the matching allow-bit (player/monster/object/missile/item) and checking liveness/anim-mode (e.g. dead/death rejected unless the corpse-target bit 0x1000 is set). Applies optional filters per bit: undead-only (0x4), exclude-boss (0x4000), monster-stat flag (0x40000), not-in-town (0x100), skill-target-type & non-NPC (0x10000), CanInteractWith (0x8000), in-melee-range (0x20000), not just-hit (0x80000), and line-of-sight wall collision (0x200). Returns 1 if the target passes all applicable checks, 0 otherwise.
 uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     D2MissilesTxt* pMissileTxt;
@@ -826,7 +842,7 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
       break;
     }
 
-    if ((!(nTargetFlags & 0x80) || pUnit2->eUnitFlags >> 2 & 1) && (!(nTargetFlags & 0x400) || pUnit2->eUnitFlags >> 3 & 1)) {
+    if ((!(nTargetFlags & 0x80) || FlagBit_D2UnitStrc_eUnitFlags_2(pUnit2)) && (!(nTargetFlags & 0x400) || FlagBit_D2UnitStrc_eUnitFlags_3(pUnit2))) {
       D2RoomStrc* pCasterRoom;
       if (nTargetFlags & 0x100) {
         pCasterRoom = D2Common::Units::UNITS_GetRoom(pUnit2);

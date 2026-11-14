@@ -172,12 +172,20 @@ D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnit
     return pUnit;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 10 & 1;
+}
+
 // Returns the owner unit (parent) of the given unit. Checks eUnitFlagsEx bit 10 (has owner flag), then looks up eOwnerType/nOwnerGUID via FindUnitFromTable.
 D2UnitStrc * __fastcall GetOwnerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
     }
-    if (!(pUnit->eUnitFlagsEx >> 10 & 1)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit)) {
       return nullptr;
     }
 
@@ -319,15 +327,31 @@ D2ClientStrc * __fastcall SUNIT_GetClient(D2UnitStrc * pUnit, char * szFile, int
     return nullptr;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_4(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 4 & 1;
+}
+
 void __fastcall UNITS_SendUnitUpdateToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
     _bNeedsRoomUpdate = D2Common::Units::NeedsRoomUpdate(pUnit);
-    if (!(_bNeedsRoomUpdate && (!pUnit || !(pUnit->eUnitFlags >> 4 & 1)))) {
+    if (!(_bNeedsRoomUpdate && (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_4(pUnit)))) {
       return;
     }
 
     GAME::Clients::InitUnitForClient(pClient, pUnit);
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_11(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 11 & 1;
 }
 
 // Prepares a unit for reuse/recycling after removal from the game. Clears changed-stat flags, frees queued packets, clears animation mode and selected unit flags, processes pending inventory updates, and frees child stat lists. Per-type cleanup: resets player last-exp and arena dirty; for monsters clears summoner flags and teleport flag; for items clears REMOVED and NEW item flags. Halts if pUnit is null.
@@ -369,7 +393,7 @@ void __fastcall UNITS_ClearUpdateData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         return;
         case UNIT_MONSTER:
           pUnit->eUnitFlags &= ~UNITFLAG_HASTXTMSG;
-        if (pUnit->eUnitFlags >> 0xb & 1) {
+        if (FlagBit_D2UnitStrc_eUnitFlags_11(pUnit)) {
           pUnit->eUnitFlags &= ~UNITFLAG_SUMMONER;
           D2Game::Monster::SetUnsetSummonerFlags(pUnit, 1, 0);
         }
@@ -1115,7 +1139,7 @@ uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc
       if (pUnit->eUnitType == UNIT_MONSTER) {
         pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
       } else {
-        if (pUnit->eUnitType != UNIT_MISSILE || !(pUnit->eUnitFlagsEx >> 10 & 1)) {
+        if (pUnit->eUnitType != UNIT_MISSILE || !FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit)) {
           goto resolve_attacker_and_check_hostility;
         }
 
@@ -1215,7 +1239,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
     }
 
     int nClassId = pUnit->nClassId;
-    if (!(nClassId == 0x15f || nClassId == 0x160 || nClassId == 0x161 || nAlignment != '\0' || (_bIsRevive = D2Common::Units::CheckFlags(pUnit, UNITFLAG_ISREVIVE) , !_bIsRevive))) {
+    if (!(nClassId == 0x15f || nClassId == 0x160 || nClassId == 0x161 || nValue_00 != 0 || (_bIsRevive = D2Common::Units::CheckFlags(pUnit, UNITFLAG_ISREVIVE) , !_bIsRevive))) {
       return;
     }
 

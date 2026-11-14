@@ -63,6 +63,14 @@ void __fastcall Send0x7aSummonLog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Pet
     GAME::SCmd::NET_D2GS_SERVER_Send_0x7A_UPDATEPET(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlayerPets.cpp", 0x43), '\0', byIndexId, nPetGUID, nNameId, nPetType);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_8(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 8 & 1;
+}
+
 static void KillHandlerPet(DWORD nUid, ::SGAMEDATA * pGame) {
     D2ModeChangeStrc killData;
     D2PetArgStrc sPetArgs;

@@ -2371,7 +2371,8 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorNearMinion(::SGAMEDATA * pGame, D
     int32_t nDistSq;
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nRange = D2Common::Units::Missile::GetLevel(pUnit);
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (pSkillsTxt) {
       D2UnitStrc* pOwner;
       pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       if (pOwner && pTarget && pTarget->eUnitType == UNIT_MONSTER) {
@@ -3036,7 +3037,8 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTargetRandom(::SGAMEDATA * pGame, D2Unit
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nMaxHp = D2Common::Units::Missile::GetLevel(pUnit);
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 1;
     }
 
@@ -3639,12 +3641,9 @@ void __fastcall Missiles_SrvDmgFunc_ConvertColdLengthToFreezeLength(::SGAMEDATA 
 
 // MISSILESSRVDMGFUNCS entry (Hits passes the D2DamageStrc that MISSILE_SetDamage filled). For a valid missile class, copies pDamage->dwColdLength (+0x30) into dwFrzLength (+0x34); the cold length is kept.
 void __fastcall Missiles_SrvDmgFunc_CopyColdLengthToFreezeLength(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
-    if (!pUnit) {
-      return;
-    }
-
-    int nClassId = pUnit->nClassId;
-    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId)) {
+    int nClassId;
+    D2MissilesTxt* pMissilesTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!pMissilesTxt) {
       return;
     }
 
@@ -3684,9 +3683,17 @@ void __fastcall Missiles_SrvDmgFunc_ElementalBonusVsUndeadDemon(::SGAMEDATA * pG
     MISSILES_AddElementalDamageBonus(pGame, pUnit, pTarget, pDamage, nElemDamage);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
+}
+
 void __fastcall Missiles_SrvDmgFunc_SetTargetNotControlled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage) {
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!(pOwner && !(pOwner->eUnitFlags >> 9 & 1) && pTarget)) {
+    if (!(pOwner && !FlagBit_D2UnitStrc_eUnitFlags_9(pOwner) && pTarget)) {
       return;
     }
 

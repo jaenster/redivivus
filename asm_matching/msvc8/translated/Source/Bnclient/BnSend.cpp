@@ -677,29 +677,31 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
     char abPacketBuf[280];
     char abHashInput[28];
     char cPasswordCh;
-    if (szRealmName) {
-      uint32_t uVar1;
-      gnBNetRealmClientToken++;
-      *(uint32_t*)((char*)&abHashInput + 4) = g_nBNetServerToken;
-      int nLen = (int)strlen(szPassword);
-      *(uint32_t*)(char*)&abHashInput = gnBNetRealmClientToken;
-      _net_sid::XSHA1((D2XSHA1Strc*)(abHashInput + 8), szPassword, nLen);
-      abPacketBuf[0] = (uint8_t)gnBNetRealmClientToken;
-      abPacketBuf[1] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 1);
-      abPacketBuf[2] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 2);
-      abPacketBuf[3] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 3);
-      _net_sid::XSHA1((D2XSHA1Strc*)(abPacketBuf + 4), abHashInput, 0x1c);
-      uVar1 = Storm::Source::SSTR::SStrCopy(abPacketBuf + 0x18, szRealmName, 0x100);
-      _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x3e);
-      nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, uVar1 + 0x19);
-      if (nSendLen >= 0) {
-        _net_sid::NET_SID_CLIENT_WaitForPacketId(0x3e);
-        pUserData = gpBNetWriteUserData;
-        return pUserData;
-      }
+    if (!szRealmName) {
+      return nullptr;
     }
 
-    return nullptr;
+    uint32_t uVar1;
+    gnBNetRealmClientToken++;
+    *(uint32_t*)((char*)&abHashInput + 4) = g_nBNetServerToken;
+    int nLen = (int)strlen(szPassword);
+    *(uint32_t*)(char*)&abHashInput = gnBNetRealmClientToken;
+    _net_sid::XSHA1((D2XSHA1Strc*)(abHashInput + 8), szPassword, nLen);
+    abPacketBuf[0] = (uint8_t)gnBNetRealmClientToken;
+    abPacketBuf[1] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 1);
+    abPacketBuf[2] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 2);
+    abPacketBuf[3] = *(uint8_t*)((char*)&gnBNetRealmClientToken + 3);
+    _net_sid::XSHA1((D2XSHA1Strc*)(abPacketBuf + 4), abHashInput, 0x1c);
+    uVar1 = Storm::Source::SSTR::SStrCopy(abPacketBuf + 0x18, szRealmName, 0x100);
+    _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x3e);
+    nSendLen = NET_SID_CLIENT_Send(0x3e, abPacketBuf, uVar1 + 0x19);
+    if (nSendLen < 0) {
+      return nullptr;
+    }
+
+    _net_sid::NET_SID_CLIENT_WaitForPacketId(0x3e);
+    pUserData = gpBNetWriteUserData;
+    return pUserData;
 }
 
 void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {

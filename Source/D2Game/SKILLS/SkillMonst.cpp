@@ -382,7 +382,8 @@ BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * 
 BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2MonsterAnimMode eAnimMode;
     int nOffsetY;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1104,35 +1105,38 @@ BOOL __fastcall Skills_SrvDoFunc_095_MonInferno(::SGAMEDATA * pGame, D2UnitStrc 
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (eStateCheck) {
-      D2UnitStrc* pMissileUnit;
-      pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      if (pMissileUnit) {
-        SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
-        SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
-        nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
-        if (pGame->dwGameFrame < nNextFireFrame) {
-          eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eStateCheck) {
-            nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
-            if (nNextFireFrame < 1) {
-              nNextFireFrame = 1;
-            }
+    if (!eStateCheck) {
+      SKILLMONST_TriggerModeChange(pUnit, pGame);
+      return 0;
+    }
 
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-            GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + nNextFireFrame, 0, 0);
-            return 1;
-          }
+    D2UnitStrc* pMissileUnit;
+    pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (!pMissileUnit) {
+      SKILLMONST_TriggerModeChange(pUnit, pGame);
+      return 0;
+    }
+
+    SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
+    SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
+    nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
+    if (pGame->dwGameFrame < nNextFireFrame) {
+      eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+      if (eStateCheck) {
+        nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
+        if (nNextFireFrame < 1) {
+          nNextFireFrame = 1;
         }
 
-        SKILLMONST_TriggerModeChange(pUnit, pGame);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
+        GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + nNextFireFrame, 0, 0);
         return 1;
       }
     }
 
     SKILLMONST_TriggerModeChange(pUnit, pGame);
-    return 0;
+    return 1;
 }
 
 // SrvDoFunc #152: alternate trap/sentry missile spawner, functionally identical to SrvDoFunc_095 (same body: srvmissilea lookup, velocity calculation, CreatingMissile, health bonus, inferno-state rescheduling, mode-change). Likely mapped to a different skill row that shares the same fire mechanics but differs in txt-table parameters (e.g. Lightning Sentry vs Death Sentry variant).
@@ -1166,35 +1170,38 @@ BOOL __fastcall Skills_SrvDoFunc_152_DiabLight(::SGAMEDATA * pGame, D2UnitStrc *
     sSkillArg.nVelocityOverride = nVelCalc / 8 + (uint32_t)pMissileTxt->Vel;
     sSkillArg.nMissileTxtNo = nMissileId;
     BOOL eStateCheck = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&sSkillArg.nUnitX, (uint32_t*)&sSkillArg.nUnitY);
-    if (eStateCheck) {
-      D2UnitStrc* pMissileUnit;
-      pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-      if (pMissileUnit) {
-        SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
-        SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
-        nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
-        if (pGame->dwGameFrame < nNextFireFrame) {
-          eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eStateCheck) {
-            nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
-            if (nNextFireFrame < 1) {
-              nNextFireFrame = 1;
-            }
+    if (!eStateCheck) {
+      SKILLMONST_TriggerModeChange(pUnit, pGame);
+      return 0;
+    }
 
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-            GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + nNextFireFrame, 0, 0);
-            return 1;
-          }
+    D2UnitStrc* pMissileUnit;
+    pMissileUnit = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (!pMissileUnit) {
+      SKILLMONST_TriggerModeChange(pUnit, pGame);
+      return 0;
+    }
+
+    SKILLMONST_UpdateInfernoAnimationParameters(eSkill, pUnit, nSkillLvl, pMissileUnit);
+    SKILLS_SetInfernoFrame(pSkillsTxt, pUnit);
+    nNextFireFrame = D2Common::Skills::SKILL_GetParam1(pSkill);
+    if (pGame->dwGameFrame < nNextFireFrame) {
+      eStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+      if (eStateCheck) {
+        nNextFireFrame = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[2], eSkill, nSkillLvl);
+        if (nNextFireFrame < 1) {
+          nNextFireFrame = 1;
         }
 
-        SKILLMONST_TriggerModeChange(pUnit, pGame);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
+        GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + nNextFireFrame, 0, 0);
         return 1;
       }
     }
 
     SKILLMONST_TriggerModeChange(pUnit, pGame);
-    return 0;
+    return 1;
 }
 
 // SrvDoFunc 96: heals the target by a random percentage between calc[0] and calc[1] of its max HP (clamped 0-100%), adds the result to current HP, and clamps to max HP. Sets UNITFLAG_SKSRVDOFUNC on caster. Returns FALSE if no valid target or skill record.
@@ -1564,7 +1571,8 @@ BOOL __fastcall Skills_SrvDoFunc_101_FireDirectionalMissile(::SGAMEDATA * pGame,
     }
 
     eMissilesId eSrvMissileId = (eMissilesId)pSkillsTxt->srvmissile[1];
-    if ((int)eSrvMissileId >= 0 && (int)eSrvMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eSrvMissileId) {
+    D2MissilesTxt* pMissilesTxt = (int)eSrvMissileId >= 0 && (int)eSrvMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + eSrvMissileId : nullptr;
+    if (pMissilesTxt) {
       D2UnitStrc* pUnit_00;
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -1822,7 +1830,8 @@ BOOL __fastcall Skills_SrvDoFunc_103_ChargeAndMeleeStrike(::SGAMEDATA * pGame, D
 // Monster skill server do-func: spawns a predefined monster class at a target unit (or object resolved from path SP1). Resolves spawn class via SKILLS_GetSummonMonsterClassId, verifies target room is not a town, then calls MONSTER_SpawnPredefinedAtUnit.
 BOOL __fastcall Skills_SrvDoFunc_104_SpawnPredefinedAtTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DynamicPathStrc* pDynamicPath;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

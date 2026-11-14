@@ -289,7 +289,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
     int nTargetY;
     int nTargetX;
     int32_t nTargetMode;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
     if (pUnit) {
@@ -479,7 +480,8 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
 BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInMeleeRange;
     int nExcludeGUID;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -556,12 +558,12 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(D2UnitStrc * pUnit, eD2Skills 
 
     nSearchRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.pOwner = pUnit;
-    sSkillArg.nMissileTxtNo = eCltMissileId;
     sSkillArg.nFlags = 0x20;
+    sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pConfirmedTarget;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eCltMissileId;
     sSkillArg.nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pSecondaryTarget);
     sSkillArg.nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pSecondaryTarget);
     pConfirmedTarget = UNIT::Missile::MakeMissile(&sSkillArg);

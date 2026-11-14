@@ -12,6 +12,22 @@
 
 namespace D2Game { namespace MISSILES { namespace MissilesMode { namespace SrvDoFunc {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 3 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     bool bIsOwner;
     BOOL eState;

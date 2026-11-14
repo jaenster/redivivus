@@ -156,16 +156,20 @@ void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, 
     if (!pRecord) {
       return;
     }
-    if (pSrc) {
-      nCalcCodeSize = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
-      if ((int)nCalcCodeSize > 0) {
-        nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pMissCode, &MonsterTbls::sgtDataTable.nMissCodeSize, &MonsterTbls::sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
-        *(int32_t*)(nOffset + (char*)pRecord) = nParsedLen;
-        return;
-      }
+    if (!pSrc) {
+      *(uint32_t*)(nOffset + (char*)pRecord) = -1;
+      return;
     }
 
-    *(uint32_t*)(nOffset + (char*)pRecord) = -1;
+    nCalcCodeSize = Fog::Skills::SKILLS_ParseCalcExpression(pSrc, byCalcBuf, 0x400, (CalcGetKeyWordToNumber_t)MapMissilesTxtKeywordToNumber, nullptr, MISSILETBLS_ValidateCalcCode);
+    if ((int)nCalcCodeSize <= 0) {
+      *(uint32_t*)(nOffset + (char*)pRecord) = -1;
+      return;
+    }
+
+    nParsedLen = DataTbls::DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pMissCode, &MonsterTbls::sgtDataTable.nMissCodeSize, &MonsterTbls::sgtDataTable.nMissCodeCapacity, byCalcBuf, nCalcCodeSize);
+    *(int32_t*)(nOffset + (char*)pRecord) = nParsedLen;
+    return;
 }
 
 // Validates a single field of a D2MissilesTxt row (indexed by nMissileIdx) against [nMinVal, nMaxVal] and clamps it in-place if out of range. Reads the field via eFieldType (0=signed byte, 1=unsigned byte, 2=signed short, 3=unsigned short, 4=uint32) at nFieldOffset into the Missile sub-struct. On violation, walks pFieldDescArray to find the matching descriptor, then writes back the clamped value at the same offset and width.

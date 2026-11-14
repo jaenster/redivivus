@@ -94,13 +94,13 @@ BigData * __fastcall SHA1_FromBigIntBytes(void * pData, uint32_t nByteCount) {
 }
 
 uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, uint8_t * pOutBuf, uint32_t nBufSize) {
-    uint32_t nOrigBufSize = nBufSize;
-    Storm::Source::SBig::SBigToBinaryBuffer(pBigNum, pOutBuf, nBufSize, &nBufSize);
-    if (nBufSize < nOrigBufSize) {
-      Storm::Source::SMem::SMemZero(pOutBuf + nBufSize, nOrigBufSize - nBufSize);
+    uint32_t nWritten;
+    Storm::Source::SBig::SBigToBinaryBuffer(pBigNum, pOutBuf, nBufSize, &nWritten);
+    if (nWritten < nBufSize) {
+      Storm::Source::SMem::SMemZero(pOutBuf + nWritten, nBufSize - nWritten);
     }
 
-    return nBufSize;
+    return nWritten;
 }
 
 int32_t __fastcall SHA1_CompareBigInt(BigData * pBigA, BigData * pBigB) {

@@ -1325,13 +1325,21 @@ static uint32_t PATH_CheckIfTargetReached(D2DynamicPathStrc * pDynamicPath) {
     return bResult;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 uint32_t __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStrc * pDynamicPath) {
     eD2UnitType eOwnerType = UNIT_COUNT;
     if (pUnit) {
       eOwnerType = pUnit->eUnitType;
     }
     if (eOwnerType != UNIT_PLAYER) {
-      if (eOwnerType == UNIT_MONSTER && pDynamicPath->nFlags & 0x10 && (!pUnit || !(pUnit->eUnitFlags >> 0x15 & 1))) {
+      if (eOwnerType == UNIT_MONSTER && pDynamicPath->nFlags & 0x10 && (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit))) {
         return 0;
       }
     } else {

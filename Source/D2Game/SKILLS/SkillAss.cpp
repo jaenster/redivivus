@@ -1271,13 +1271,8 @@ BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDAT
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
     ::SGAMEDATA* pGameCopy = pGame;
     D2Common::Seed::InitSeed_Param_666(&sSeedCopy, DVar1);
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

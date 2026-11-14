@@ -358,19 +358,23 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     int32_t nPetGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
-    if (nPetGUID == -1) {
-      D2UnitStrc* pPetUnit;
-      pPetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(-1, UNIT_MONSTER);
-      if (pPetUnit) {
-        GAME::Select::SELECT_SetPetSeedTimestamp(pPlayer, pPetUnit, 1);
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-        return;
-      }
+    if (nPetGUID != -1) {
+      pMsg->bHandled = 0;
+      return;
     }
 
-    pMsg->bHandled = 0;
+    D2UnitStrc* pPetUnit;
+    pPetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(-1, UNIT_MONSTER);
+    if (!pPetUnit) {
+      pMsg->bHandled = 0;
+      return;
+    }
+
+    GAME::Select::SELECT_SetPetSeedTimestamp(pPlayer, pPetUnit, 1);
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
+    Storm::SMsgBreakHandlerChain(pMsg);
+    return;
 }
 
 D2UnitStrc * Unreferenced_004934b0() {

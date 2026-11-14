@@ -3127,7 +3127,8 @@ void __fastcall DAMAGE_AddSkillBonusDamage(D2UnitStrc * pUnit, eD2Skills eSkill,
 }
 
 void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 

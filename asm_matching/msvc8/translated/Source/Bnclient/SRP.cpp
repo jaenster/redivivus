@@ -362,22 +362,25 @@ BOOL __fastcall SRP_ClientKeyExchange(D2Srp * * pThis, int, D2SrpCredentialsStrc
     BigData* pSharedSecret = SHA::SHA1_FromBigIntBytes(pServerPublicBytes, 0x20);
     BigData* pClientPublicA = pSharedSecret;
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pSharedSecret, 0);
-    if (nCompareResult == 1) {
-      vc8_thiscall(SRP_ComputePasswordHash)(*pThis, pSalt, pContext->szUsername, pContext->szPassword, &pPasswordHash);
-      pSharedSecret = SHA::SHA1_BigIntFromUnsigned(0);
-      pSharedSecretOut = pSharedSecret;
-      pServerPublicB = SHA::SHA1_FromBigIntBytes(pContext->aClientPrivateKey_a, 0x20);
-      bSharedSecretOk = vc8_thiscall(SRP_ClientComputeSharedSecret)(*pThis, &pServerPublicB, &pClientPublicA, &pPasswordHash, &pSharedSecretOut);
-      SHA::SHA1_BigIntFree(pServerPublicB);
-      SHA::SHA1_BigIntFree(pClientPublicA);
-      SHA::SHA1_BigIntFree(pPasswordHash);
-      if (bSharedSecretOk) {
-        nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
-        SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)sessionKeyBytes, nSecretByteLen);
-        SHA::SHA1_BigIntFree(pSharedSecretOut);
-        vc8_thiscall(SRP_ComputeClientProof)(*pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, pContext->aClientProof_M1);
-        return 1;
-      }
+    if (nCompareResult != 1) {
+      SHA::SHA1_BigIntFree(pSharedSecret);
+      return 0;
+    }
+
+    vc8_thiscall(SRP_ComputePasswordHash)(*pThis, pSalt, pContext->szUsername, pContext->szPassword, &pPasswordHash);
+    pSharedSecret = SHA::SHA1_BigIntFromUnsigned(0);
+    pSharedSecretOut = pSharedSecret;
+    pServerPublicB = SHA::SHA1_FromBigIntBytes(pContext->aClientPrivateKey_a, 0x20);
+    bSharedSecretOk = vc8_thiscall(SRP_ClientComputeSharedSecret)(*pThis, &pServerPublicB, &pClientPublicA, &pPasswordHash, &pSharedSecretOut);
+    SHA::SHA1_BigIntFree(pServerPublicB);
+    SHA::SHA1_BigIntFree(pClientPublicA);
+    SHA::SHA1_BigIntFree(pPasswordHash);
+    if (bSharedSecretOk) {
+      nSecretByteLen = SHA::SHA1_ToBigIntBytes(pSharedSecret, sessionKeyBytes, 0x20);
+      SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)sessionKeyBytes, nSecretByteLen);
+      SHA::SHA1_BigIntFree(pSharedSecretOut);
+      vc8_thiscall(SRP_ComputeClientProof)(*pThis, pContext->szUsername, pSalt, pContext->aClientPublicKey_A, pServerPublicBytes, pContext->aSessionKey_K, pContext->aClientProof_M1);
+      return 1;
     }
 
     SHA::SHA1_BigIntFree(pSharedSecret);

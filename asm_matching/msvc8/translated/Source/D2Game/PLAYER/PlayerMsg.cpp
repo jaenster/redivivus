@@ -2,12 +2,8 @@
 
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
 #include "Source/D2Client/D2ClientStrc.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Player.h"
-#include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
-#include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Arena.h"
 #include "Source/D2Game/GAME/Clients.h"
@@ -17,18 +13,15 @@
 #include "Source/D2Game/GAME/Server.h"
 #include "Source/D2Game/ITEMS/ItemMode.h"
 #include "Source/D2Game/ITEMS/Items/Drop.h"
-#include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/Monster/MonsterAI.h"
-#include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Objects/ObjectsMode.h"
 #include "Source/D2Game/PLAYER/Player.h"
 #include "Source/D2Game/PLAYER/PlayerIntro.h"
 #include "Source/D2Game/PLAYER/PlayerModes.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
 #include "Source/D2Game/PLAYER/PlayerScreen.h"
-#include "Source/D2Game/PLAYER/PlayerTrade.h"
-#include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/SKILLS/SkillItem.h"
+#include "Source/D2Game/SKILLS/SkillsServer.h"
 #include "Source/D2Game/UNIT/PlayerList.h"
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Game/UNIT/SUnit.h"
@@ -38,6 +31,7 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.data.h"
+#include "Source/D2Game/Quests/QUESTS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -3813,6 +3807,14 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3E_QuestItemPickup(::SGAMEDATA * pGame
     return (eD2ServerIncomingStatus)eVar1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 10 & 1;
+}
+
 // C->S 0x3F Play Emote (3B). Packet: [op:1][emoteId:u16]. Values 0x19-0x20 only. Blocked if unit has flag bit 10.
 eD2ServerIncomingStatus __fastcall SCMD_0x3F_PlayEmote(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3F_PlayEmote * pPacket, uint32_t nSize) {
     eD2ServerIncomingStatus eResult = SERVERSTATUS_BAD_PARAMS;
@@ -3820,7 +3822,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3F_PlayEmote(::SGAMEDATA * pGame, D2Un
       return eResult;
     }
     if ((uint32_t)(pPacket->nEmoteId - 0x19) <= 7) {
-      if (pUnit && pUnit->eUnitFlags >> 10 & 1) {
+      if (pUnit && FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
         return SERVERSTATUS_BAD_TARGET;
       }
 

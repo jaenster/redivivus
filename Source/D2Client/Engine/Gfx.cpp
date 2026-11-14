@@ -95,9 +95,17 @@ static int gnGfxThrottleUpdateFrameCountDynamic = 0; D2_STATIC_GUARD(gnGfxThrott
 
 namespace D2Client::Engine::Gfx {
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 3 & 1;
+}
+
 D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, int * pUnit2) {
     D2UnitStrc* pOwnerUnit;
-    if (pUnit && pUnit->eUnitFlagsEx >> 3 & 1) {
+    if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
       BOOL bHasStateFlag;
       bHasStateFlag = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25);
       if (bHasStateFlag) {
@@ -1269,7 +1277,9 @@ void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int3
     if (!pGfxInfo) {
       return;
     }
-    if (nOverlayId < 0 || nOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId)) {
+
+    D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
+    if (!pOverlayTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca9);
       exit(-1);
     }
@@ -1773,7 +1783,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlock
     uint8_t* pCofData;
     int* pFrameResult;
     __frame0.pRetVal = (D2GfxInfoUnkStrc*)0x1;
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (nCallResult = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nCallResult) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (nCallResult = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nCallResult) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
     } else {
       pInventoryUsed = pOwnerUnit->pInventory;
@@ -2103,6 +2113,14 @@ void __fastcall GFXProcessGameGfxLists(int32_t bShowLoadingUi) {
     gnGfxThrottleUpdateFrame = GetTickCount();
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_18(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 18 & 1;
+}
+
 // @sourcefile .\ENGINE\Gfx.cpp
 void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, int32_t nOverlayType, int32_t nColorScale, uint32_t nValue0, int32_t nValue1, int32_t nValue2, int32_t nRandomMod) {
     D2LightMapStrc* pLightMap;
@@ -2121,7 +2139,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit) {
-      if (pUnit->eUnitFlagsEx >> 0x12 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_18(pUnit)) {
         return;
       }
       if (pUnit->eUnitType == UNIT_MONSTER) {
@@ -2306,7 +2324,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
     int nClassId = pUnit->nClassId;
     int32_t pSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &pSeqMode, ".\\ENGINE\\Gfx.cpp", 0xd4d);
-    if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (nFrameShifted = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nFrameShifted) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (nFrameShifted = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nFrameShifted) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
     } else {
       pInventoryUsed = pOwnerUnit->pInventory;
@@ -2375,7 +2393,7 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
     D2InventoryStrc* pInventoryUsed;
     void* pBounds;
     int32_t nTransformGfx;
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (nCofIdentity = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nCofIdentity) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (nCofIdentity = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nCofIdentity) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
     } else {
       pInventoryUsed = pOwnerUnit->pInventory;
@@ -2436,7 +2454,7 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
     D2InventoryStrc* pInventoryUsed;
     int32_t nTransformGfx;
     int32_t nOriginXAdj = nOriginX;
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (pCofIdentity = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !pCofIdentity) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (pCofIdentity = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !pCofIdentity) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
     } else {
       pInventoryUsed = pOwnerUnit->pInventory;
@@ -2802,7 +2820,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
       if (nCallResult) {
         pPalShift = (D2GamePalShiftGreenBloodStrc*)D2Win::Src::D2WinPalette::D2WINPAL_GetActPalettePointer(nCallResult - 1);
       }
-      if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (bPerspectiveCapable = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bPerspectiveCapable) || (pUnitTmp = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pUnitTmp)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (bPerspectiveCapable = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bPerspectiveCapable) || (pUnitTmp = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pUnitTmp)) {
         pInventory = pUnit->pInventory;
       } else {
         pInventory = pUnitTmp->pInventory;
@@ -2980,6 +2998,14 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
     return nullptr;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_5(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 5 & 1;
+}
+
 // @sourcefile .\ENGINE\Gfx.cpp
 BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     uint32_t nBorderType;
@@ -2989,7 +3015,7 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     int32_t nFrameMetricX;
     int dwClassId;
     int nOffsetX = 0;
-    if (pUnit && pUnit->eUnitFlags >> 5 & 1) {
+    if (pUnit && FlagBit_D2UnitStrc_eUnitFlags_5(pUnit)) {
       return 0;
     }
 
@@ -3119,7 +3145,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
     int nDrawX;
     int nScreenX;
     int nScreenY;
-    if (pUnit && pUnit->eUnitFlags >> 5 & 1) {
+    if (pUnit && FlagBit_D2UnitStrc_eUnitFlags_5(pUnit)) {
       return 0;
     }
 
@@ -3244,7 +3270,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
       nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
       D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitTypeGfx, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x926);
       D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&nFrameMetricX, aFrameMetrics);
-      if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !eUnitState) || (pPlayerOrOwner = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pPlayerOrOwner)) {
+      if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (eUnitState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !eUnitState) || (pPlayerOrOwner = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pPlayerOrOwner)) {
         pInventoryUsed = pUnit->pInventory;
       } else {
         pInventoryUsed = pPlayerOrOwner->pInventory;
@@ -3515,7 +3541,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     byLayerComponent = D2Common::Units::GetDirection(pUnit);
     nDirection = (uint32_t)byLayerComponent;
     D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&nFrameMetricX, &nFrameMetricY);
-    if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (pGfxInfoUnk = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !pGfxInfoUnk) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (pGfxInfoUnk = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !pGfxInfoUnk) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
     } else {
       pInventoryUsed = pOwnerUnit->pInventory;

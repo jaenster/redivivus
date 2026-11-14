@@ -281,7 +281,9 @@ BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -303,18 +305,21 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     bool bIsFirstHit = !((pUnit->nSeqFrame >> 8) % 2);
-    if (!bIsFirstHit) {
-      int32_t nMeleeRange;
-      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-      nMeleeRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
-      pTargetUnit = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, pTargetUnit->nUnitGUID, nullptr);
-      if (!pTargetUnit) {
-        return 0;
-      }
-
-      D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
+    if (bIsFirstHit) {
+      SKILLBAR_SrvStFn32_StrikeWithAuraState(pGame, pUnit, eSkill, nSkillLvl);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTargetUnit, 0);
+      return 1;
     }
 
+    int32_t nMeleeRange;
+    pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+    nMeleeRange = SkillsServer::GetMeleeRangePlusFour(pUnit);
+    pTargetUnit = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, nMeleeRange, 0x20003, pTargetUnit->nUnitGUID, nullptr);
+    if (!pTargetUnit) {
+      return 0;
+    }
+
+    D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
     SKILLBAR_SrvStFn32_StrikeWithAuraState(pGame, pUnit, eSkill, nSkillLvl);
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTargetUnit, 0);
     return 1;

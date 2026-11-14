@@ -533,20 +533,20 @@ void __fastcall NET_D2GS_SERVER_Send_0x15_WarpXY(D2ClientStrc * pClient, uint8_t
 // Server-to-client map reveal. Opcode 0x07, 6 bytes. Reveals automap area around tile coordinate.
 void __fastcall NET_D2GS_SERVER_Send_0x07_MapReveal(D2ClientStrc * pClient, int nAreaId, uint16_t nTileX, uint16_t nTileY) {
     D2GSPacketSrv0x07 aPacket;
-    aPacket.nLevelId = (uint8_t)nAreaId;
     aPacket.nTileX = nTileX;
     aPacket.nPacketId = '\a';
     aPacket.nTileY = nTileY;
+    aPacket.nLevelId = (uint8_t)nAreaId;
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
 // Server-to-client map hide. Opcode 0x08, 6 bytes.
 void __fastcall NET_D2GS_SERVER_Send_0x08_REMOVEROOM(D2ClientStrc * pClient, int nLevelId, uint16_t nTileX, uint16_t nTileY) {
     D2GSPacketSrv0x08 aPacket;
-    aPacket.nLevelId = (uint8_t)nLevelId;
     aPacket.nTileX = nTileX;
     aPacket.nPacketId = '\b';
     aPacket.nTileY = nTileY;
+    aPacket.nLevelId = (uint8_t)nLevelId;
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
@@ -757,12 +757,12 @@ void __fastcall NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(D2ClientStrc * pClie
     memset(&byOpcode, 0, sizeof(byOpcode));
     byOpcode.wSkillId = nSkillId;
     byOpcode.nParam2 = bParam1;
-    byOpcode.nCasterType = nCasterType;
     byOpcode.wSkillLevel = nSkillLevel;
-    byOpcode.nTargetType = nTargetType;
+    byOpcode.nCasterType = nCasterType;
     byOpcode.dwValue1 = dwValue1;
-    byOpcode.dwValue3 = dwValue3;
+    byOpcode.nTargetType = nTargetType;
     byOpcode.dwValue2 = dwValue2;
+    byOpcode.dwValue3 = dwValue3;
     byOpcode.nPacketId = 0xa3;
     byOpcode.dwValue4 = dwValue4;
     SCMD_QueuePacketForClient(pClient, &byOpcode.nPacketId, 0x18);
@@ -2215,6 +2215,22 @@ void __thiscall SCMD_WriteBooleanToBitBuffer(void * pThis, int32_t nBoolValue) {
     Fog::BitBuffer::WriteValueToBitBuffer((D2BitBufferStrc*)pThis, (uint32_t)(nBoolValue != 0), 1);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 10 & 1;
+}
+
 // Server-to-client packet builder/sender for D2GS message 0xAC (spawn/add a monster on the client). For a UNIT_MONSTER, bit-packs into a temp BitBuffer: animation mode (clamped to Attack2/Block/Kick/Death/Neutral), component/equipment indices, boss/champion/unique/superunique/minion/ghostly type flags, superunique boss number, the UMod list, the monster name seed, pet ownership (owner GUID when the owner is a player whose pet type==7), an optional owner GUID for player-owned units, and the network-visible stat list (only stats flagged ITEMSTATCOSTFLAG_SEND_OTHER, written using each stat's sendBits/sendParamBits). Prepends the 0xAC header (id, GUID, classId, X/Y, hp%, total size) and dispatches via NET_D2GS_SERVER_SendPacket_Helper to the given client. No-op for null/non-monster units. Stack-guarded.
 void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     bool bHasComponents;
@@ -2313,7 +2329,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       }
 
       nComponentIdx = Monsters::CheckMonUModList(pUnit);
-      if (!nComponentIdx && !(pUnit->eUnitFlags >> 9 & 1)) {
+      if (!nComponentIdx && !FlagBit_D2UnitStrc_eUnitFlags_9(pUnit)) {
         nScratch = 1;
         nIndex = 0;
       } else {
@@ -2361,7 +2377,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       }
 
       Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nIndex, nScratch);
-      if (!(pUnit->eUnitFlagsEx >> 10 & 1) || pUnit->eOwnerType != UNIT_PLAYER) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_10(pUnit) || pUnit->eOwnerType != UNIT_PLAYER) {
         nScratch = 1;
         nStatIndex = 0;
         Fog::BitBuffer::WriteValueToBitBuffer(&bitBuffer, nStatIndex, 1);

@@ -183,7 +183,8 @@ void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * 
     do {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)*pAuraStatCursor;
-      if ((int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize && pDataTable->pTxtItemStatCost + eUnitStat) {
+      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      if (pItemStatCostTxt) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nSkillLvl);
         pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nValue) {
@@ -218,7 +219,8 @@ void __fastcall D2SetPassiveStatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc
     do {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)*psPassiveStat;
-      if ((int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize && pDataTable->pTxtItemStatCost + eUnitStat) {
+      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      if (pItemStatCostTxt) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *piPassiveCalc, eSkill, nSkillLvl);
         pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nValue) {
@@ -933,7 +935,8 @@ BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * p
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
     uint32_t nTargetX;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1316,7 +1319,8 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
       do {
         eState = (eD2States)(short int)D2Common::ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nStateIdx];
         eStateType = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState);
-        if (eStateType != STATE_none && (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize && D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState) {
+        D2StatesTxt* pStatesTxt;
+        if (eStateType != STATE_none && (pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr)) {
           pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
           if (pStatList) {
             eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);

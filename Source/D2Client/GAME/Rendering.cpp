@@ -244,12 +244,8 @@ void __stdcall ResetStats() {
       pRenderStats[4] = 0;
       pRenderStats[5] = 0;
       memset(pRenderStats + 9, 0, 6 * sizeof(pRenderStats[0]));
-      pRenderStats[0x12] = 0;
-      pRenderStats[0x13] = 0;
-      pRenderStats[0x14] = 0;
-      pRenderStats[0x18] = 0;
-      pRenderStats[0x19] = 0;
-      pRenderStats[0x1a] = 0;
+      memset(pRenderStats + 0x12, 0, 3 * sizeof(pRenderStats[0]));
+      memset(pRenderStats + 0x18, 0, 3 * sizeof(pRenderStats[0]));
     }
 
     D2CMP::SRC::SpriteCache::SPRITECACHE_Lock();

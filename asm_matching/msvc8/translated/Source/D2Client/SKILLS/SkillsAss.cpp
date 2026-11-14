@@ -357,13 +357,9 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget(D2UnitStrc * pUn
     if (!pTargetUnit) {
       return 0;
     }
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-    if (!(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

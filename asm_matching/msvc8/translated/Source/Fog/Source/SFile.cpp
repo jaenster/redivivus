@@ -211,31 +211,35 @@ int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) 
     uint32_t nDstPathLen;
     char cAppDataPath[260];
     int nFolderResult = SHGetFolderPathA(0, 0x1c, 0, 0, cAppDataPath);
-    if (nFolderResult >= 0) {
-      uint32_t nSrcPathLen;
-      Storm::Source::SSTR::SStrPack(cAppDataPath, "\\Blizzard Entertainment", 0x7fffffff);
-      if (nMaxLen) {
-        nSrcPathLen = Storm::Source::SSTR::SStrLen(cAppDataPath);
-        if (nSrcPathLen <= 0 || cAppDataPath[nSrcPathLen - 1] != '\\') {
-          if (nSrcPathLen + 1 == nMaxLen) {
-            return 0;
-          }
-
-          cAppDataPath[nSrcPathLen] = '\\';
-          cAppDataPath[nSrcPathLen + 1] = '\0';
-        }
-
-        nFolderResult = SafeCreateDirectoryTree(cAppDataPath);
-        if (nFolderResult) {
-          Storm::Source::SSTR::SStrCopy(szOutPath, cAppDataPath, nMaxLen);
-          nSrcPathLen = Storm::Source::SSTR::SStrLen(szOutPath);
-          nDstPathLen = Storm::Source::SSTR::SStrLen(cAppDataPath);
-          return (uint32_t)(nSrcPathLen == nDstPathLen);
-        }
-      }
+    if (nFolderResult < 0) {
+      return 0;
     }
 
-    return 0;
+    uint32_t nSrcPathLen;
+    Storm::Source::SSTR::SStrPack(cAppDataPath, "\\Blizzard Entertainment", 0x7fffffff);
+    if (!nMaxLen) {
+      return 0;
+    }
+
+    nSrcPathLen = Storm::Source::SSTR::SStrLen(cAppDataPath);
+    if (nSrcPathLen <= 0 || cAppDataPath[nSrcPathLen - 1] != '\\') {
+      if (nSrcPathLen + 1 == nMaxLen) {
+        return 0;
+      }
+
+      cAppDataPath[nSrcPathLen] = '\\';
+      cAppDataPath[nSrcPathLen + 1] = '\0';
+    }
+
+    nFolderResult = SafeCreateDirectoryTree(cAppDataPath);
+    if (!nFolderResult) {
+      return 0;
+    }
+
+    Storm::Source::SSTR::SStrCopy(szOutPath, cAppDataPath, nMaxLen);
+    nSrcPathLen = Storm::Source::SSTR::SStrLen(szOutPath);
+    nDstPathLen = Storm::Source::SSTR::SStrLen(cAppDataPath);
+    return (uint32_t)(nSrcPathLen == nDstPathLen);
 }
 
 BOOL __stdcall GetUseDirectCommand() {

@@ -426,6 +426,14 @@ static int32_t GFXUTIL_GetOverlayNumDirections(int32_t nOverlayId) {
     return (uint32_t)pOverlayTxt->NumDirections;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 3 & 1;
+}
+
 static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUnit) {
     D2UnitStrc* pWeaponUnit;
     D2UnitStrc* pQuiverItem;
@@ -436,7 +444,7 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
     if (nBodyLoc >= 0x10) {
       return 0x2074696c;
     }
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
       pInventory = pUnit->pInventory;
     } else {
       int nWeaponClass;
@@ -870,7 +878,7 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nCom
     if (eUnitType != UNIT_PLAYER) {
       return 0;
     }
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (_bIsEthereal = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !_bIsEthereal || (pDVar1 = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pDVar1))) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (_bIsEthereal = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !_bIsEthereal || (pDVar1 = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pDVar1))) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pDVar1->pInventory;
@@ -943,7 +951,7 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t 
     if (eUnitType != UNIT_PLAYER) {
       return pDefaultColor;
     }
-    if (!(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
+    if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (bHasState = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit))) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pOwnerUnit->pInventory;
@@ -1032,7 +1040,7 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
     if (!pGfxInfo) {
       return 0;
     }
-    if (!pUnit || !(pUnit->eUnitFlagsEx >> 3 & 1) || (bHasState0x25 = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState0x25) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
+    if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (bHasState0x25 = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !bHasState0x25) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventory = pUnit->pInventory;
     } else {
       pInventory = pOwnerUnit->pInventory;

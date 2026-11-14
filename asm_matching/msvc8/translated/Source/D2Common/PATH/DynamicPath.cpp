@@ -1205,10 +1205,26 @@ void __stdcall PATH_SetOrClearFlag0x2000(D2UnitStrc * pUnit, int32_t bSet) {
     pServerPath->nSavedPathPoints = 0;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_13(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 13 & 1;
+}
+
 void __stdcall PATH_PeriodicPathRecalc(D2UnitStrc * pUnit) {
     BOOL _bHasReachedTarget;
     bool bHasReachedTarget;
-    if (!(pUnit && !(pUnit->eUnitFlags >> 0x15 & 1) && pUnit->eUnitFlagsEx >> 0xd & 1)) {
+    if (!(pUnit && !FlagBit_D2UnitStrc_eUnitFlags_21(pUnit) && FlagBit_D2UnitStrc_eUnitFlagsEx_13(pUnit))) {
       return;
     }
 

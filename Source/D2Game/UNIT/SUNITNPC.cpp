@@ -2,12 +2,8 @@
 
 #include "Source/D2Game/UNIT/SUNITNPC.h"
 #include "Source/D2Client/D2GSPacketSrv0x4E.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/GAME/SCmd.h"
 #include "Source/D2Client/UI/npcmenu.h"
-#include "Source/D2Common/D2Common.h"
-#include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Unit.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/GAME/Clients.h"
 #include "Source/D2Game/GAME/SCmd.h"
@@ -18,23 +14,19 @@
 #include "Source/D2Game/Monster/MonsterAI.h"
 #include "Source/D2Game/PLAYER/PlayerMsg.h"
 #include "Source/D2Game/PLAYER/PlayerPets.h"
-#include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q1.h"
 #include "Source/D2Game/Quests/QUESTS/A1Q3.h"
 #include "Source/D2Game/Quests/QUESTS/A5Q1.h"
 #include "Source/D2Game/Quests/QUESTS/A5Q4.h"
-#include "Source/D2Game/SKILLS/Items.h"
 #include "Source/D2Game/SKILLS/SkillsServer.h"
-#include "Source/D2Game/Seed.h"
 #include "Source/D2Game/UNIT/Party.h"
 #include "Source/D2Game/UNIT/SUnit.h"
-#include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Game/UNIT/SUnitMsg.h"
 #include "Source/D2Game/UNIT/sunitproxy.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
-#include "Source/D2Game/Seed.inline.h"
+#include "Source/D2Game/Quests/QUESTS.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -882,7 +874,6 @@ void __fastcall ResetNpcHireListIfEmpty(::SGAMEDATA * pGame, int32_t nNpcClassId
 void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNPC, uint16_t nMarcNameId) {
     BOOL bCheckPassed;
     int nPlayerGold;
-    uint32_t nNameId;
     D2MercForHire* pHireSlot;
     D2MonsterAiStrc* pNpcMonsterAi;
     D2ClientStrc* pClientSend;
@@ -904,10 +895,8 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
     nGameNpcPtr = SUNITNPC_GetActCappedLevel(pGame, pNPC, nPlayerLevel);
     D2Common::Units::GetPlayerData(pUnit);
     if (pNPC) {
-      D2UnitDataPlayerStrc* pPlayerData;
       /* Qualkehk */ if (pNPC->nClassId == 0x203) {
-        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        bCheckPassed = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_RescueOnMountArreat, QUESTSTATE_Completed);
+        bCheckPassed = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_RescueOnMountArreat, QUESTSTATE_Completed);
         if (!bCheckPassed) {
           nUnitGUID = -1;
           nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -918,8 +907,7 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
         }
       }
       if (pNPC->nClassId == 0x96 && nGameNpcPtr < 8) {
-        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        bCheckPassed = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_SistersBurialGrounds, QUESTSTATE_Completed);
+        bCheckPassed = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_SistersBurialGrounds, QUESTSTATE_Completed);
         if (!bCheckPassed) {
           nUnitGUID = -1;
           nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -942,6 +930,7 @@ void __fastcall NPC_ProcessMercHire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
       nResult = 9;
       nLineNum = 0x66c;
     } else {
+      uint32_t nNameId;
       if (!pNPC) {
         nNcpClassId = -1;
       } else {
@@ -1138,6 +1127,14 @@ D2UnitStrc * __fastcall CreateMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     return pNewMerc;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_4(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 4 & 1;
+}
+
 D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(D2UnitStrc * pNpcUnit, int32_t nTargetClassId) {
     int nItemClassId;
     if (!pNpcUnit->pInventory) {
@@ -1154,7 +1151,7 @@ D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(D2UnitStrc * pNpcUnit, int3
       } else {
         nItemClassId = pCarriedItem->nClassId;
       }
-      if (nItemClassId == nTargetClassId && (!pCarriedItem || !(pCarriedItem->eUnitFlagsEx >> 4 & 1))) {
+      if (nItemClassId == nTargetClassId && (!pCarriedItem || !FlagBit_D2UnitStrc_eUnitFlagsEx_4(pCarriedItem))) {
         return pCarriedItem;
       }
     }
@@ -1812,7 +1809,6 @@ void __fastcall SUNITNPC_ProcessRepair(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nNpcGUID) {
     int32_t nUnidentifiedCount;
     int32_t nPlayerGold;
-    D2UnitDataPlayerStrc* pPlayerData;
     BOOL BVar6;
     D2UnitStrc* pFirstItem;
     D2UnitStrc* pNextItem;
@@ -1856,11 +1852,9 @@ void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         nTransactionResult = 9;
         nSourceLine = 0xa81;
       } else {
-        pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-        BVar6 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheSearchForCain, QUESTSTATE_Completed);
+        BVar6 = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_Completed);
         if (BVar6 != 1) {
-          pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-          BVar6 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
+          BVar6 = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
           if (BVar6 != 1) {
             BVar6 = CheckIfPlayerCanAffordCost(pGame, pUnit, nUnidentifiedCount * 100);
             if (!BVar6) {

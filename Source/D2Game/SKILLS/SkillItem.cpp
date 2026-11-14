@@ -1608,9 +1608,17 @@ void __fastcall SKILL_DeactivateAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && pTarget->eUnitFlags >> 2 & 1)) {
+    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
       return 0;
     }
 
@@ -1630,7 +1638,7 @@ BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
 
 BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && pTarget->eUnitFlags >> 2 & 1)) {
+    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
       return 0;
     }
 
@@ -1650,7 +1658,7 @@ BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_
 
 BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if (!(pUnit && pTarget && pTarget->eUnitFlags >> 2 & 1)) {
+    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
       return 0;
     }
 
@@ -1671,7 +1679,7 @@ BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
 BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2UnitStrc* pAttacker = pUnit;
-    if (!(pUnit && pTarget && pTarget->eUnitFlags >> 2 & 1)) {
+    if (!(pUnit && pTarget && FlagBit_D2UnitStrc_eUnitFlags_2(pTarget))) {
       return 0;
     }
 
@@ -2302,7 +2310,12 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
     eD2Skills eProcSkill = (int)(uint16_t)eSkill >> D2_SHIFT_COUNT(D2Common::ITEMS::Items::sgptDataTable->nChargedSkillLevelBits);
     uint32_t eSkillLevel = (uint16_t)(D2Common::ITEMS::Items::sgptDataTable->dwChargedSkillLevelMask & eSkill);
     uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if (!((int)(DVar1 % 100) < nProcChance && (int)eProcSkill >= 0 && (int)eProcSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eProcSkill)) {
+    if (!((int)(DVar1 % 100) < nProcChance)) {
+      return 0;
+    }
+
+    D2SkillsTxt* pSkillsTxt = (int)eProcSkill >= 0 && (int)eProcSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eProcSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -2477,11 +2490,11 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     if (*((uint8_t*)pMissileTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nSkillLevel = nUnit;
       sSkillArg.nFlags = 0x20;
       sSkillArg.pOwner = pUnitSaved;
       sSkillArg.pMissile = pUnitSaved;
       sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nSkillLevel = nUnit;
       sSkillArg.nMissileTxtNo = eMissileIdA;
       sSkillArg.nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pOwner);
       sSkillArg.nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pOwner);

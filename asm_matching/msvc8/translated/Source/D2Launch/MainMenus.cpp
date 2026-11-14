@@ -6560,22 +6560,25 @@ uint32_t __stdcall MAINMENU_PollMCPThreadStatus() {
     }
 
     HANDLE hHandle = D2MCPClient::McpConnect::GetMCPThread();
-    if (hHandle) {
-      int32_t nJoinResult;
-      /* DWORD dwMilliseconds for WaitForSingleObject */ dwWaitResult = 0;
-      hHandle = D2MCPClient::McpConnect::GetMCPThread();
-      /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(hHandle, dwWaitResult);
-      if (!dwWaitResult) {
-        nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
-        bRecoverable = MAINMENU_IsD2GSJoinErrorRecoverable(nJoinResult);
-        return bRecoverable ? 2 : 0;
-      }
-      if (dwWaitResult == 0x102) {
-        return 3;
-      }
+    if (!hHandle) {
+      return 2;
     }
 
-    return 2;
+    int32_t nJoinResult;
+    /* DWORD dwMilliseconds for WaitForSingleObject */ dwWaitResult = 0;
+    hHandle = D2MCPClient::McpConnect::GetMCPThread();
+    /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(hHandle, dwWaitResult);
+    if (dwWaitResult) {
+      if (dwWaitResult != 0x102) {
+        return 2;
+      }
+
+      return 3;
+    }
+
+    nJoinResult = D2MCPClient::McpConnect::GetD2GSJoinResult();
+    bRecoverable = MAINMENU_IsD2GSJoinErrorRecoverable(nJoinResult);
+    return bRecoverable ? 2 : 0;
 }
 
 int __stdcall MAINMENU_PollMCPThreadStatusPump(int nFrameIndex) {

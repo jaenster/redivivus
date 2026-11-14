@@ -1267,9 +1267,9 @@ void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint3
       size_t nStrLen;
       pDialog->nSubCounter = nIndex + 1;
       pDialog->aStringData[nIndex].nYPos = nYPos;
-      pDialog->aStringData[nIndex].nFont = nFont;
       pDialog->aStringData[nIndex].nXOffset = 0;
       pDialog->aStringData[nIndex].nColor = nColor;
+      pDialog->aStringData[nIndex].nFont = nFont;
       if (!(nLineType != 3 || pDialog->nHighlightStyle != 1)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x55e);
         exit(-1);

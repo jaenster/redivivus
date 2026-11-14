@@ -261,23 +261,25 @@ LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExce
     D2CrashReportStrc sCrashReport;
     char aMessageBuffer[512];
     char szExceptionName[256];
-    if (gpCurrentExceptionFilter) {
-      CRASH_GetExceptionName(szExceptionName, pExceptionPointers->ExceptionRecord->ExceptionCode);
-      sCrashReport.pszMessage = aMessageBuffer;
-      aMessageBuffer[0] = '\0';
-      sCrashReport.pszExceptionName = szExceptionName;
-      sCrashReport.dwThreadId = GetCurrentThreadId();
-      sCrashReport.pExceptionPointers = pExceptionPointers;
-      sCrashReport.apFrameAddrs = 0;
-      sCrashReport.nNumFrames = 0;
-      sCrashReport.nSkipFrames = 0;
-      nFilterResult = (*gpCurrentExceptionFilter)(&sCrashReport, gpCurrentExceptionContext);
-      if (nFilterResult) {
-        return nFilterResult != 1 ? 0x1U : 0xffffffff;
-      }
+    if (!gpCurrentExceptionFilter) {
+      return 0;
     }
 
-    return 0;
+    CRASH_GetExceptionName(szExceptionName, pExceptionPointers->ExceptionRecord->ExceptionCode);
+    sCrashReport.pszMessage = aMessageBuffer;
+    aMessageBuffer[0] = '\0';
+    sCrashReport.pszExceptionName = szExceptionName;
+    sCrashReport.dwThreadId = GetCurrentThreadId();
+    sCrashReport.pExceptionPointers = pExceptionPointers;
+    sCrashReport.apFrameAddrs = 0;
+    sCrashReport.nNumFrames = 0;
+    sCrashReport.nSkipFrames = 0;
+    nFilterResult = (*gpCurrentExceptionFilter)(&sCrashReport, gpCurrentExceptionContext);
+    if (!nFilterResult) {
+      return 0;
+    }
+
+    return nFilterResult != 1 ? 0x1U : 0xffffffff;
 }
 
 void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void * pContext, uint32_t nUnused) {
@@ -503,16 +505,18 @@ bool __stdcall FILETOOLS_CheckIfFileExists_UTF8(LPCSTR lpMultiByteStr) {
     _WIN32_FIND_DATAW findData;
     uint16_t wszPath[262];
     int nConverted = MultiByteToWideChar(0xfde9, 0, lpMultiByteStr, -1, (LPWSTR)wszPath, 0x104);
-    if (nConverted) {
-      HANDLE hFindFile;
-      /* LPWIN32_FIND_DATAW lpFindFileData for FindFirstFileW */ /* LPCWSTR lpFileName for FindFirstFileW */ hFindFile = FindFirstFileW((LPCWSTR)wszPath, &findData);
-      if (hFindFile != (HANDLE)-1) {
-        /* HANDLE hFindFile for FindClose */ FindClose(hFindFile);
-        return true;
-      }
+    if (!nConverted) {
+      return false;
     }
 
-    return false;
+    HANDLE hFindFile;
+    /* LPWIN32_FIND_DATAW lpFindFileData for FindFirstFileW */ /* LPCWSTR lpFileName for FindFirstFileW */ hFindFile = FindFirstFileW((LPCWSTR)wszPath, &findData);
+    if (hFindFile == (HANDLE)-1) {
+      return false;
+    }
+
+    /* HANDLE hFindFile for FindClose */ FindClose(hFindFile);
+    return true;
 }
 
 FILE * __stdcall FILETOOLS_OpenFile_WriteMode_UTF8(LPCSTR lpMultiByteStr) {
@@ -520,15 +524,17 @@ FILE * __stdcall FILETOOLS_OpenFile_WriteMode_UTF8(LPCSTR lpMultiByteStr) {
     uint16_t wszPath[260];
     uint16_t wszMode[32];
     int nConverted = MultiByteToWideChar(0xfde9, 0, lpMultiByteStr, -1, (LPWSTR)wszPath, 0x104);
-    if (nConverted) {
-      /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ nConverted = MultiByteToWideChar(0xfde9, 0, "w", -1, (LPWSTR)wszMode, 0x20);
-      if (nConverted) {
-        pFVar1 = _wfopen(wszPath, wszMode);
-        return pFVar1;
-      }
+    if (!nConverted) {
+      return nullptr;
     }
 
-    return nullptr;
+    /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ nConverted = MultiByteToWideChar(0xfde9, 0, "w", -1, (LPWSTR)wszMode, 0x20);
+    if (!nConverted) {
+      return nullptr;
+    }
+
+    pFVar1 = _wfopen(wszPath, wszMode);
+    return pFVar1;
 }
 
 void __stdcall FILETOOLS_CopyFile_UTF8(LPCSTR szSrcPath, LPCSTR szDestPath) {

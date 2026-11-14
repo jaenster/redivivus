@@ -6564,42 +6564,46 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
     int nCurMouseY;
     int nScreenHalfWidth;
     int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
-    if (nMercGuid != -1) {
-      D2UnitStrc* pUnit;
-      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
-      if (pUnit) {
-        pMsg->bHandled = 0;
-        nScreenBottom = ScreenSizeY - 0x31;
-        nScreenHalfWidth = ui::ScreenSizeX / 2;
-        nMouseX = Cursor::GetMouseX();
-        nMouseY = Cursor::GetMouseY();
-        if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
-          return;
-        }
-
-        nMouseY = gnPanelOffsetY - 0x3f + ScreenSizeY;
-        nScreenBottom = gnPanelOffsetX + 0x130;
-        nScreenHalfWidth = gnPanelOffsetY - 0x5f + ScreenSizeY;
-        nMouseX = gnPanelOffsetX + 0x110;
-        nCurMouseX = Cursor::GetMouseX();
-        nCurMouseY = Cursor::GetMouseY();
-        if (nCurMouseX >= nMouseX && nCurMouseX <= nScreenBottom && nCurMouseY >= nScreenHalfWidth && nCurMouseY <= nMouseY) {
-          gnInvMercBodySlot2 = 1;
-          pMsg->bHandled = 1;
-          pMsg->dwResult = 0;
-          Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-          Storm::SMsgBreakHandlerChain(pMsg);
-          return;
-        }
-
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-        return;
-      }
+    if (nMercGuid == -1) {
+      ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+      return;
     }
 
-    ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+    D2UnitStrc* pUnit;
+    pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+    if (!pUnit) {
+      ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+      return;
+    }
+
+    pMsg->bHandled = 0;
+    nScreenBottom = ScreenSizeY - 0x31;
+    nScreenHalfWidth = ui::ScreenSizeX / 2;
+    nMouseX = Cursor::GetMouseX();
+    nMouseY = Cursor::GetMouseY();
+    if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
+      return;
+    }
+
+    nMouseY = gnPanelOffsetY - 0x3f + ScreenSizeY;
+    nScreenBottom = gnPanelOffsetX + 0x130;
+    nScreenHalfWidth = gnPanelOffsetY - 0x5f + ScreenSizeY;
+    nMouseX = gnPanelOffsetX + 0x110;
+    nCurMouseX = Cursor::GetMouseX();
+    nCurMouseY = Cursor::GetMouseY();
+    if (nCurMouseX >= nMouseX && nCurMouseX <= nScreenBottom && nCurMouseY >= nScreenHalfWidth && nCurMouseY <= nMouseY) {
+      gnInvMercBodySlot2 = 1;
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
+    }
+
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
+    Storm::SMsgBreakHandlerChain(pMsg);
+    return;
 }
 
 // Handles left-click events in mercenary inventory UI. Checks for close button click, then iterates through mercenary equipment slots to handle item equipping/unequipping. Validates item compatibility with mercenary, removes items client-side, sends 0x61 packet to server, and plays appropriate success/failure sounds.
@@ -6723,65 +6727,69 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     int nScreenHalfWidth;
     D2InventoryStrc* pInventory;
     int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
-    if (nMercGuid != -1) {
-      D2UnitStrc* pUnit;
-      pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
-      if (pUnit) {
-        pMsg->bHandled = 0;
-        nScreenBottom = ScreenSizeY - 0x31;
-        nScreenHalfWidth = ui::ScreenSizeX / 2;
-        nMouseX = Cursor::GetMouseX();
-        nMouseY = Cursor::GetMouseY();
-        if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
-          return;
-        }
-        if (gnInvMercBodySlot2) {
-          BVar1 = INV_IsMouseInRectLTRB(gnPanelOffsetX + 0x110, gnPanelOffsetY - 0x5f + ScreenSizeY, gnPanelOffsetX + 0x130, gnPanelOffsetY - 0x3f + ScreenSizeY);
-          if (!BVar1) {
-            gnInvMercBodySlot2 = 0;
-          }
-        }
+    if (nMercGuid == -1) {
+      ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+      return;
+    }
 
-        pInventory = pUnit->pInventory;
-        if (!pInventory) {
-          return;
-        }
+    D2UnitStrc* pUnit;
+    pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMercGuid, UNIT_MONSTER);
+    if (!pUnit) {
+      ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+      return;
+    }
 
-        INV_ResetHoverAndContextState();
-        pUnit = UNIT::Player::GetPlayerUnit_UI();
-        pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-        if (pUnit) {
-          return;
-        }
-
-        nMouseX = 0;
-        do {
-          if ((int)(uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft > 0) {
-            BVar1 = INV_IsMouseInRectLTRB((uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nTop, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nRight, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nBottom);
-            if (BVar1) {
-              pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nMouseX);
-              if (pUnit) {
-                gbInvBodySlotUnderCursorExists = 1;
-                if (pUnit != gpInvHoveredItem) {
-                  gaInventoryState = (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nTop;
-                  gaInventoryItemSlots = (int)((uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nRight + (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft) / 2;
-                  pInventoryContextUi = (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nBottom;
-                  nInventoryContextMode = gaInventoryItemSlots;
-                  pItemToDescribe = pUnit;
-                  gpInvHoveredItem = pUnit;
-                }
-              }
-            }
-          }
-
-          nMouseX++;
-        } while ((intptr_t)(uint32_t*)&gaHirelingBodySlotScreenCoords[nMouseX].nLeft < (intptr_t)((char*)&gaHirelingBodySlotScreenCoords + sizeof(gaHirelingBodySlotScreenCoords)));
-
-        return;
+    pMsg->bHandled = 0;
+    nScreenBottom = ScreenSizeY - 0x31;
+    nScreenHalfWidth = ui::ScreenSizeX / 2;
+    nMouseX = Cursor::GetMouseX();
+    nMouseY = Cursor::GetMouseY();
+    if (!(nMouseX >= 0 && nMouseX <= nScreenHalfWidth && nMouseY >= 0 && nMouseY <= nScreenBottom)) {
+      return;
+    }
+    if (gnInvMercBodySlot2) {
+      BVar1 = INV_IsMouseInRectLTRB(gnPanelOffsetX + 0x110, gnPanelOffsetY - 0x5f + ScreenSizeY, gnPanelOffsetX + 0x130, gnPanelOffsetY - 0x3f + ScreenSizeY);
+      if (!BVar1) {
+        gnInvMercBodySlot2 = 0;
       }
     }
 
-    ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
+    pInventory = pUnit->pInventory;
+    if (!pInventory) {
+      return;
+    }
+
+    INV_ResetHoverAndContextState();
+    pUnit = UNIT::Player::GetPlayerUnit_UI();
+    pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
+    if (pUnit) {
+      return;
+    }
+
+    nMouseX = 0;
+    do {
+      if ((int)(uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft > 0) {
+        BVar1 = INV_IsMouseInRectLTRB((uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nTop, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nRight, (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nBottom);
+        if (BVar1) {
+          pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nMouseX);
+          if (pUnit) {
+            gbInvBodySlotUnderCursorExists = 1;
+            if (pUnit != gpInvHoveredItem) {
+              gaInventoryState = (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nTop;
+              gaInventoryItemSlots = (int)((uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nRight + (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nLeft) / 2;
+              pInventoryContextUi = (uint32_t)gaHirelingBodySlotScreenCoords[nMouseX].nBottom;
+              nInventoryContextMode = gaInventoryItemSlots;
+              pItemToDescribe = pUnit;
+              gpInvHoveredItem = pUnit;
+            }
+          }
+        }
+      }
+
+      nMouseX++;
+    } while ((intptr_t)(uint32_t*)&gaHirelingBodySlotScreenCoords[nMouseX].nLeft < (intptr_t)((char*)&gaHirelingBodySlotScreenCoords + sizeof(gaHirelingBodySlotScreenCoords)));
+
+    return;
 }
 
 void __thiscall CloseScrollOfWhatever(uint16_t * pThis, int32_t nColor) {

@@ -2728,19 +2728,15 @@ ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(ScreenMessage_t * ppwszText
 }
 
 void __fastcall TEXT_InsertScreenMessage(ScreenMessage_t * ppwszText) {
-    ScreenMessage_t* pNext;
-    ScreenMessage_t* pNextNext;
     ScreenMessage_t* pPrev;
     ScreenMessage_t* pNewMessage = TEXT_AllocScreenMessage(ppwszText);
     if (AllMessagesMaybe.nCount >= 0x80 && AllMessagesMaybe.pHead) {
       ScreenMessage_t* pCurrent;
-      pNextNext = AllMessagesMaybe.pHead->pNext;
       pPrev = 0;
       pCurrent = AllMessagesMaybe.pHead;
-      while (pNext = pNextNext) {
+      while (pCurrent->pNext) {
         pPrev = pCurrent;
-        pCurrent = pNext;
-        pNextNext = pNext->pNext;
+        pCurrent = pCurrent->pNext;
       }
 
       TEXT_FreeScreenMessage(pCurrent);

@@ -498,6 +498,14 @@ int __fastcall UnitIsOfTypeMonster(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 // Scans the direction-offset table (gnGameSelectPathState/gnGameSelectGameState) starting from the player's current facing direction to find an interactable unit (monster, object, or NPC) in that direction. Checks collision, unit type, MonStats2 flags (e.g. selectable), and CanInteractWith. Returns the first matching D2UnitStrc* and registers it as the player's dynamic-path target, or null if none found within the table bounds.
 static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pPlayerUnit_lcl, D2SkillsTxt * pSkillsTxt) {
     // Static local variables (originally global data)
@@ -543,7 +551,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
       eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nOffsetX + nUnitX, nOffsetY + nUnitY, COLLISION_UNIT_SIZE_POINT, 0x180);
       if (eCollision != COLLIDE_NONE) {
         pTargetUnit = D2Common::Collision::CallCollisionFunction(pRoom, nOffsetX + nUnitX, nOffsetY + nUnitY, (fpMissileSrvDoFuncData)UnitIsOfTypeMonster, nullptr, 1);
-        if (pTargetUnit && pTargetUnit->eUnitFlags >> 2 & 1) {
+        if (pTargetUnit && FlagBit_D2UnitStrc_eUnitFlags_2(pTargetUnit)) {
           if (!(*((uint8_t*)pSkillsTxt + 0x6) & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
             break;
           }

@@ -408,56 +408,60 @@ void __fastcall PARTYSCREEN_ToggleHostile(::SGAMEDATA * pGame, D2UnitStrc * pUni
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint32_t bIsHostile = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pTarget, 8);
-    if (bIsHostile != bWantHostile) {
-      uint16_t nTargetPartyIdShort;
-      bIsHostile = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pTarget, 8);
-      if (!bIsHostile) {
-        nTargetLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
-        if (nTargetLevel < 9) {
-          return;
-        }
-      }
-      if (!bWantHostile) {
-        PARTYSCREEN_ClearHostileRelation(pGame, pUnit, pTarget);
-        if (!pUnit) {
-          bIsHostile = -1;
-        } else {
-          bIsHostile = pUnit->nUnitGUID;
-        }
-
-        SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x216), bIsHostile, '\x04');
-        return;
-      }
-
-      dwHostileDelay = UNIT::PlayerList::GetHostileDelay(pUnit, pTarget);
-      dwNow = GetTickCount();
-      if (dwHostileDelay <= dwNow) {
-        dwHostileDelay = GetTickCount();
-        dwHostileDelay += 60000;
-        UNIT::PlayerList::PLAYERLIST_SetHostileDelay(pUnit, pTarget, dwHostileDelay);
-        PARTYSCREEN_SetHostileWithParty(pGame, pTarget, pUnit);
-        Player::PLAYER_DestroyPortalPair(pGame, pUnit);
-        nTargetPartyIdShort = UNIT::SUnit::GetPartyId(pUnit);
-        bWantHostile = (uint32_t)nTargetPartyIdShort;
-        if (nTargetPartyIdShort == 0xffff) {
-          return;
-        }
-
-        nTargetPartyIdShort = UNIT::SUnit::GetPartyId(pTarget);
-        if ((uint16_t)bWantHostile != nTargetPartyIdShort) {
-          return;
-        }
-
-        PARTYSCREEN_LeaveParty(pGame, pUnit, nullptr, 0, (int*)&bWantHostile);
-        return;
-      }
-
-      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x13, pUnit);
-      PlayerTrade::SendEventMsg(pUnit, '\x10', nullptr);
+    if (bIsHostile == bWantHostile) {
+      UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pUnit, pTarget);
+      UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pTarget, pUnit);
+      return;
     }
 
-    UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pUnit, pTarget);
-    UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pTarget, pUnit);
+    uint16_t nTargetPartyIdShort;
+    bIsHostile = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pUnit, pTarget, 8);
+    if (!bIsHostile) {
+      nTargetLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
+      if (nTargetLevel < 9) {
+        return;
+      }
+    }
+    if (bWantHostile) {
+      dwHostileDelay = UNIT::PlayerList::GetHostileDelay(pUnit, pTarget);
+      dwNow = GetTickCount();
+      if (!(dwHostileDelay <= dwNow)) {
+        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x13, pUnit);
+        PlayerTrade::SendEventMsg(pUnit, '\x10', nullptr);
+        UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pUnit, pTarget);
+        UNIT::PlayerList::PARTY_SendRelationshipForPlayer(pGame, pTarget, pUnit);
+        return;
+      }
+
+      dwHostileDelay = GetTickCount();
+      dwHostileDelay += 60000;
+      UNIT::PlayerList::PLAYERLIST_SetHostileDelay(pUnit, pTarget, dwHostileDelay);
+      PARTYSCREEN_SetHostileWithParty(pGame, pTarget, pUnit);
+      Player::PLAYER_DestroyPortalPair(pGame, pUnit);
+      nTargetPartyIdShort = UNIT::SUnit::GetPartyId(pUnit);
+      bWantHostile = (uint32_t)nTargetPartyIdShort;
+      if (nTargetPartyIdShort == 0xffff) {
+        return;
+      }
+
+      nTargetPartyIdShort = UNIT::SUnit::GetPartyId(pTarget);
+      if ((uint16_t)bWantHostile != nTargetPartyIdShort) {
+        return;
+      }
+
+      PARTYSCREEN_LeaveParty(pGame, pUnit, nullptr, 0, (int*)&bWantHostile);
+      return;
+    }
+
+    PARTYSCREEN_ClearHostileRelation(pGame, pUnit, pTarget);
+    if (!pUnit) {
+      bIsHostile = -1;
+    } else {
+      bIsHostile = pUnit->nUnitGUID;
+    }
+
+    SendPlayerEvent(UNIT::SUnit::SUNIT_GetClient(pTarget, ".\\PLAYER\\PartyScreen.cpp", 0x216), bIsHostile, '\x04');
+    return;
 }
 
 void __fastcall SendAllPlayersPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

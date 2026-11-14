@@ -108,44 +108,29 @@ int32_t __stdcall GMT(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
 
 char * __stdcall Name(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     char* pEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
-    if (*pEntry == '\0') {
-      return pEntry;
+    if (*pEntry) {
+      pEntry += Storm::Source::SSTR::SStrLen(pEntry) + 1;
+      if (*pEntry) {
+        pEntry += Storm::Source::SSTR::SStrLen(pEntry) + 1;
+      }
     }
-
-    uint32_t nFirstFieldLen = Storm::Source::SSTR::SStrLen(pEntry);
-    char* szZoneField = pEntry + nFirstFieldLen + 1;
-    pEntry = pEntry + nFirstFieldLen + 1;
-    if (*szZoneField != '\0') {
-      nFirstFieldLen = Storm::Source::SSTR::SStrLen(pEntry);
-      return pEntry + nFirstFieldLen + 1;
-    }
-
     return pEntry;
 }
 
 char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex) {
-    uint32_t nRealmStrLen;
-    char* szRealmNext;
     char* pGatewayEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
     char* szRealmsCursor = (char*)pGatewayAccess->pRealmsData;
-    char cRealmChar = *szRealmsCursor;
-    while (cRealmChar != '\0') {
-      int32_t nRealmCmp;
-      nRealmCmp = Storm::Source::SSTR::SStrCmpI(szRealmsCursor, pGatewayEntry, 0x7fffffff);
-      if (!nRealmCmp) {
-        nRealmStrLen = Storm::Source::SSTR::SStrLen(szRealmsCursor);
-        return szRealmsCursor + nRealmStrLen + 1;
+    while (*szRealmsCursor != '\0') {
+      if (!Storm::Source::SSTR::SStrCmpI(szRealmsCursor, pGatewayEntry, 0x7fffffff)) {
+        return szRealmsCursor + Storm::Source::SSTR::SStrLen(szRealmsCursor) + 1;
       }
 
-      nRealmStrLen = Storm::Source::SSTR::SStrLen(szRealmsCursor);
-      szRealmNext = szRealmsCursor + nRealmStrLen + 1;
-      if (szRealmsCursor[nRealmStrLen + 1] == '\0') {
+      szRealmsCursor += Storm::Source::SSTR::SStrLen(szRealmsCursor) + 1;
+      if (*szRealmsCursor == '\0') {
         break;
       }
 
-      nRealmStrLen = Storm::Source::SSTR::SStrLen(szRealmNext);
-      szRealmsCursor = szRealmNext + nRealmStrLen + 1;
-      cRealmChar = szRealmNext[nRealmStrLen + 1];
+      szRealmsCursor += Storm::Source::SSTR::SStrLen(szRealmsCursor) + 1;
     }
 
     return "";

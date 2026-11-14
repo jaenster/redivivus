@@ -596,7 +596,8 @@ BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);
       exit(-1);
     }
-    if (pTxtLvlTypes + nLvlTypeId && pTxtLvlTypes[nLvlTypeId].Act == (uint8_t)nAct) {
+    D2LvlTypesTxt* pRecord = &pTxtLvlTypes[nLvlTypeId];
+    if (pRecord && pRecord->Act == (uint8_t)nAct) {
       return 1;
     }
 

@@ -449,6 +449,22 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
     return gnLightmapQualityLastCheck;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 3 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
 static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     BOOL bIsOwner;
     bool bIsValidTarget;
@@ -647,6 +663,14 @@ static int MISSILE_CheckAndDecrementPierce(D2UnitStrc * pUnit) {
     return nResult;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 void __fastcall MISSILE_RemoveClientSide(D2UnitStrc * pUnit) {
     short int sTravelSound;
     if (!pUnit) {
@@ -670,7 +694,7 @@ void __fastcall MISSILE_RemoveClientSide(D2UnitStrc * pUnit) {
     if (pLightMap) {
       Draw::LightMap::LIGHTMAP_ValidateAndReset(pLightMap);
     }
-    if (pUnit->eUnitFlags >> 0x15 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
       CUnit::UNITS_RemoveFromClientHashTable(pUnit->nUnitGUID, pUnit->eUnitType);
       return;
     }
@@ -1138,13 +1162,13 @@ D2UnitStrc * __fastcall MISSILE_CreateAtOwnerCoords(D2UnitStrc * pUnit, eMissile
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nUnitX = nTargetX;
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.nFlags = 0x420;
-    sSkillArg.nUnitY = nTargetY;
-    sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.pOwner = pOwner;
     sSkillArg.pMissile = pUnit;
+    sSkillArg.nUnitX = nTargetX;
+    sSkillArg.nUnitY = nTargetY;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nMissileTxtNo = nMissileId;
     pOwner = Missile::MakeMissile(&sSkillArg);
     return pOwner;
@@ -2574,13 +2598,13 @@ BOOL __fastcall MISSILE_SkillFuncCreateAtTarget(D2fpSkillFuncArg * pArg, D2UnitS
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.pMissile = pSub->pMissile;
+    sSkillArg.nFlags = 0x20;
     sSkillArg.pOwner = pSub->pOwner;
+    sSkillArg.pMissile = pSub->pMissile;
     sSkillArg.eSkillNo = pSub->eSkillNo;
+    sSkillArg.nSkillLevel = pSub->nSkillLevel;
     sSkillArg.nMissileTxtNo = pSub->nMissileTxtNo;
     eD2UnitType eUnitType = pUnit->eUnitType;
-    sSkillArg.nSkillLevel = pSub->nSkillLevel;
-    sSkillArg.nFlags = 0x20;
     int nUnitXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nUnitXValue = pUnit->pPath.pStaticPath->nPosX;
@@ -2693,13 +2717,13 @@ BOOL __fastcall MISSILE_SkillFuncCreateAtTargetB(D2fpSkillFuncArg * pArg, D2Unit
     }
 
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.pMissile = pSub->pMissile;
+    sSkillArg.nFlags = 0x20;
     sSkillArg.pOwner = pSub->pOwner;
+    sSkillArg.pMissile = pSub->pMissile;
     sSkillArg.eSkillNo = pSub->eSkillNo;
+    sSkillArg.nSkillLevel = pSub->nSkillLevel;
     sSkillArg.nMissileTxtNo = pSub->nMissileTxtNo;
     eD2UnitType eUnitType = pUnit->eUnitType;
-    sSkillArg.nSkillLevel = pSub->nSkillLevel;
-    sSkillArg.nFlags = 0x20;
     int nUnitXValue;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nUnitXValue = pUnit->pPath.pStaticPath->nPosX;
@@ -5211,7 +5235,7 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
       }
 
       D2Common::Units::Missile::SetOwner(pUnit, pTarget);
-      if (!(pTarget->eUnitFlags >> 2 & 1)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
         return nullptr;
       }
       if (pOwner) {
@@ -5311,7 +5335,7 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
     if (!(nPierceResult & 1)) {
       return pExplosion;
     }
-    if (pUnit->eUnitFlags >> 0x15 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
       CUnit::UNITS_RemoveFromClientHashTable(pUnit->nUnitGUID, pUnit->eUnitType);
       return pExplosion;
     }

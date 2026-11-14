@@ -1103,11 +1103,19 @@ BOOL __fastcall DRLGROOM_HasUniqueClient(D2RoomStrc * pRoom1, D2RoomStrc * pRoom
     return 0;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_22(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 22 & 1;
+}
+
 // @sourcefile .\DUNGEON\Dungeon.cpp
 void __fastcall FreeRoom(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom) {
     D2UnitStrc* pUnit = pRoom->pUnitList;
     while (pUnit) {
-      if (!(pUnit->eUnitFlags >> 0x16 & 1)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlags_22(pUnit)) {
         pUnit->eUnitFlagsEx |= 0x20;
       }
 

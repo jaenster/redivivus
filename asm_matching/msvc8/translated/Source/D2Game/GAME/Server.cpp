@@ -3137,20 +3137,18 @@ void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile
       bIsInGame = Clients::IsClientInGame(pGame, nClientId);
       if (!bIsInGame) {
         Server::Unlock(pGame);
-        D2Net::Game::Server::NET_HACK_AddClientToHackList(nClientId, szFile, nLine);
-        return;
-      }
+      } else {
+        bIsInGame = Clients::IsClientInGame(pGame, nClientId);
+        if (bIsInGame) {
+          Clients::CleanUpClient(pGame, nClientId, 1);
+        }
+        if (!pGame->lpCriticalSection) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
+          exit(-1);
+        }
 
-      bIsInGame = Clients::IsClientInGame(pGame, nClientId);
-      if (bIsInGame) {
-        Clients::CleanUpClient(pGame, nClientId, 1);
+        LeaveCriticalSection(pGame->lpCriticalSection);
       }
-      if (!pGame->lpCriticalSection) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
-        exit(-1);
-      }
-
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
     }
 
     D2Net::Game::Server::NET_HACK_AddClientToHackList(nClientId, szFile, nLine);

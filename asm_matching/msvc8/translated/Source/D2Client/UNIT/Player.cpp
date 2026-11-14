@@ -668,6 +668,14 @@ uint32_t __stdcall PLAYER_ValidateSkillMessage_Extern(int * pnUsabilityCode, D2U
     return ::D2Client::UNIT::Player::PLAYER_ValidateSkillMessage(pnUsabilityCode, pUnit, pServerMessageHandle);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_6(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 6 & 1;
+}
+
 static void __stdcall PLAYER_ApplyCurrentSkillFlags(int32_t bIsLocalPlayer, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -680,7 +688,7 @@ static void __stdcall PLAYER_ApplyCurrentSkillFlags(int32_t bIsLocalPlayer, D2Un
       SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
       return;
     }
-    if (!(!bIsLocalPlayer && (!pUnit || !(pUnit->eUnitFlags >> 6 & 1)))) {
+    if (!(!bIsLocalPlayer && (!pUnit || !FlagBit_D2UnitStrc_eUnitFlags_6(pUnit)))) {
       return;
     }
 
@@ -2398,6 +2406,14 @@ static void CLIENT_CancelRunAndWalk(D2UnitStrc * pUnit) {
     CLIENT_SetAnimModeAndMoveToCurrentPos(eNeutralMode, 1, pUnit);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_14(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 14 & 1;
+}
+
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
 void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
@@ -2548,7 +2564,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
         }
 
         byActionFrame = pUnit->nActionFrame;
-        if (bSkillStepDone && !(pUnit->eUnitFlags >> 6 & 1) && (byActionFrame == 1 || byActionFrame == 2 || byActionFrame == 3)) {
+        if (bSkillStepDone && !FlagBit_D2UnitStrc_eUnitFlags_6(pUnit) && (byActionFrame == 1 || byActionFrame == 2 || byActionFrame == 3)) {
           SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
         }
       }
@@ -2578,7 +2594,7 @@ void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
       pUnit->nAnimSpeed = 0;
     }
 
-    if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence && pUnit->eUnitFlags >> 0xe & 1) {
+    if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence && FlagBit_D2UnitStrc_eUnitFlags_14(pUnit)) {
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
     }
     if (gaPlayerModeAttribs[pUnit->eAnimMode.ePlayerMode].nCompleteMode != 1) {

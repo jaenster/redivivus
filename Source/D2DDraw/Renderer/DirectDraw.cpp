@@ -1050,7 +1050,7 @@ void __fastcall EndCutScene(HWND hWnd, int32_t nResolutionMode, int32_t nWindowS
       exit(-1);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+    EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
     if (nWindowState) {
       gnRenderState = 1;
       InternalReleaseWindow();
@@ -1058,15 +1058,12 @@ void __fastcall EndCutScene(HWND hWnd, int32_t nResolutionMode, int32_t nWindowS
         pDirectDrawPalette->lpVtbl->Release(pDirectDrawPalette);
         pDirectDrawPalette = 0;
       }
-
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnGlideWindowHandle = (HWND)0x0;
-      LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-      return;
+      gnGlideWindowHandle = (HWND)0x0;
+    } else {
+      gnRenderState = 0;
+      DirectDraw::CreateWindow(hWnd, nResolutionMode);
     }
-
-    gnRenderState = 0;
-    DirectDraw::CreateWindow(hWnd, nResolutionMode);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
+    LeaveCriticalSection(&RENDERER_SelectedRendererCore->sLock);
 }
 
 // JMP thunk

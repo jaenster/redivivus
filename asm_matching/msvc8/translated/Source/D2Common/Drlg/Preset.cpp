@@ -1166,7 +1166,6 @@ static void __stdcall CreateMonsterPreset(D2PoolManagerStrc * pMemory, D2DrlgMap
 
 // Frees all tile grids associated with a preset room's D2DrlgPresetRoomStrc. The room data arrives in EAX and the pool manager in EDI; EAX was modelled as a local, so the reconstruction freed grids off an uninitialised pointer.
 static void DRLGPRESET_FreePresetRoomGrids(D2RoomExStrc * pRoomExData, D2PoolManagerStrc * pPoolManagerStrc) {
-    D2DrlgGridStrc* pGrid;
     D2DrlgPresetRoomStrc* pPresetRoomDataRaw = pRoomExData->pRoomExData.pRoomExDataPreset;
     if (!(pPresetRoomDataRaw && pPresetRoomDataRaw->pMap)) {
       return;
@@ -1177,25 +1176,15 @@ static void DRLGPRESET_FreePresetRoomGrids(D2RoomExStrc * pRoomExData, D2PoolMan
       return;
     }
 
-    int nFloorCount = pDVar1->nWallLayers;
-    if (nFloorCount > 0) {
-      pGrid = pPresetRoomDataRaw->pWallGrid;
-      do {
-        DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, pGrid + 4);
-        DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, pGrid);
-        pGrid++;
-        nFloorCount--;
-      } while (nFloorCount);
+    int nWallLayers = pDVar1->nWallLayers;
+    for (int i = 0; i < nWallLayers; i++) {
+      DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, &pPresetRoomDataRaw->pOrientationGrid[i]);
+      DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, &pPresetRoomDataRaw->pWallGrid[i]);
     }
 
-    nFloorCount = pDVar1->nFloorLayers;
-    if (nFloorCount > 0) {
-      pGrid = pPresetRoomDataRaw->pFloorGrid;
-      do {
-        DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, pGrid);
-        pGrid++;
-        nFloorCount--;
-      } while (nFloorCount);
+    int nFloorLayers = pDVar1->nFloorLayers;
+    for (int i = 0; i < nFloorLayers; i++) {
+      DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, &pPresetRoomDataRaw->pFloorGrid[i]);
     }
 
     DrlgGrid::DRLGGRID_FreeGrid(pPoolManagerStrc, &pPresetRoomDataRaw->pCellGrid);
@@ -1659,12 +1648,13 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     if (!pLvlPrestTxt->SizeX || !pLvlPrestTxt->SizeY) {
       pDrlgMap->nSizeX = pDrlgCoord->nWidth;
       nSizeY = pDrlgCoord->nHeight;
+      pDrlgMap->nSizeY = nSizeY;
     } else {
       pDrlgMap->nSizeX = pLvlPrestTxt->SizeX;
       nSizeY = pLvlPrestTxt->SizeY;
+      pDrlgMap->nSizeY = nSizeY;
     }
 
-    pDrlgMap->nSizeY = nSizeY;
     pDrlgMap->bInited = 1;
     pDrlgMap->pNext = pLevel->pDrlgMapFirst;
     pLevel->pDrlgMapFirst = pDrlgMap;

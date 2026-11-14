@@ -105,6 +105,14 @@ BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, in
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 7 & 1;
+}
+
 // @sourcefile .\UI\showitems.cpp
 void __stdcall DRAW_AltItems() {
     uint16_t* wszText;
@@ -165,7 +173,7 @@ void __stdcall DRAW_AltItems() {
       if (pItem) {
         for (; pItem; pItem = pItem->pRoomNext , nItemSlotIdx = nDrawCount) {
           nDrawCount = nItemSlotIdx;
-          if (pItem && pItem->eUnitFlagsEx >> 7 & 1 && pItem->eUnitType == UNIT_ITEM && nItemSlotIdx < 0x20) {
+          if (pItem && FlagBit_D2UnitStrc_eUnitFlagsEx_7(pItem) && pItem->eUnitType == UNIT_ITEM && nItemSlotIdx < 0x20) {
             gaGroundItemLabels[nItemSlotIdx].pItem = pItem;
             pCurrentItem = pItem;
             if (bPerspectiveActive) {

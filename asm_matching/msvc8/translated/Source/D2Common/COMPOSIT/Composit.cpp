@@ -261,6 +261,14 @@ uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnit
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 3 & 1;
+}
+
 // @sourcefile .\COMPOSIT\Composit.cpp
 uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t * pnWeaponClassIndex, int32_t nMode, int32_t bIgnoreTransform) {
     D2UnitStrc* pOrigUnit = pUnit;
@@ -276,7 +284,7 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
 
     int32_t nAnimMode = nMode;
     nMode = nAnimMode;
-    if (pOrigUnit->eUnitFlagsEx >> 3 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlagsEx_3(pOrigUnit)) {
       Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
       if (!bIgnoreTransform) {
         nMode = nAnimMode;
@@ -304,7 +312,7 @@ BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     int32_t nAnimMode = -1;
     int32_t nUnit = pUnit->nClassId;
     nAnimMode = Units::GetAnimOrSeqMode(pOrigUnit);
-    if (pOrigUnit->eUnitFlagsEx >> 3 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlagsEx_3(pOrigUnit)) {
       Skills::SKILLS_GetStateTransformGfx(pOrigUnit, &eUnitType, (int*)&nUnit, &nAnimMode, ".\\COMPOSIT\\Composit.cpp", 0x236);
     }
 

@@ -2469,7 +2469,8 @@ uint32_t __fastcall ITEMPROP_AddTimedStat(uint32_t nType, D2UnitStrc * pUnit, D2
     }
 
     int nStatId = (int)(short int)nStatCode;
-    if (!(nStatId >= 0 && nStatId < Items::sgptDataTable->nTxtItemStatCostSize && Items::sgptDataTable->pTxtItemStatCost + nStatId)) {
+    D2ItemStatCostTxt* pItemStatCostTxt = nStatId >= 0 && nStatId < Items::sgptDataTable->nTxtItemStatCostSize ? Items::sgptDataTable->pTxtItemStatCost + nStatId : nullptr;
+    if (!pItemStatCostTxt) {
       return 0;
     }
 

@@ -1296,6 +1296,14 @@ D2AutomapLayerStrc * AUTOMAP_AddLayer(int32_t nLayer) {
     return pLayer;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_29(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 29 & 1;
+}
+
 void __stdcall AUTOMAP_RevealUnitsInRoom(D2RoomStrc * pRoom, D2AutomapCellStrc * * pAutomapCell) {
     eAct neAct;
     D2ObjectsTxt* pObjectTxt;
@@ -1309,7 +1317,7 @@ void __stdcall AUTOMAP_RevealUnitsInRoom(D2RoomStrc * pRoom, D2AutomapCellStrc *
           if (!pUnit) {
             goto add_unit_cell;
           }
-          if (!(pUnit->eUnitFlags >> 0x1d & 1)) {
+          if (!FlagBit_D2UnitStrc_eUnitFlags_29(pUnit)) {
             goto mark_on_automap;
           }
         }
@@ -2004,6 +2012,14 @@ void __stdcall AUTOMAP_DrawMap() {
     AUTOMAP_DrawCellTree(sgpAutomapLayerEx->pExtras, &pDC6);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 21 & 1;
+}
+
 // AUTOMAP_GetUnitColor - Determines the automap marker color for a unit.
 // Players: blue=self, green=party, red=hostile, magenta=corpse.
 // Monsters: white=NPC, teal=own pet/merc, dark green=ally pet, red=hostile transformed.
@@ -2068,7 +2084,7 @@ static uint32_t AUTOMAP_GetUnitColor(D2UnitStrc * pUnit, uint8_t * pbColorOut) {
             if (pUnit->eAnimMode.ePlayerMode == Kick) {
               return 0;
             }
-            if (pUnit->eUnitFlags >> 0x15 & 1) {
+            if (FlagBit_D2UnitStrc_eUnitFlags_21(pUnit)) {
               return 0;
             }
 
@@ -2325,11 +2341,8 @@ void __stdcall AUTOMAP_DrawDifficulty() {
       wText[nY] = L'\0';
     }
 
-    uint16_t* pZeroFill = D2Lang::StrTable::strtable::GetLocaleString(nDiffStringId);
-    int32_t nTextWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pZeroFill);
-    pZeroFill = D2Lang::StrTable::strtable::GetLocaleString(0x1057);
-    int32_t nFormatLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pZeroFill);
-    if (nTextWidth + 3 + nFormatLen >= 300) {
+    uint16_t* pZeroFill;
+    if (D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(D2Lang::StrTable::strtable::GetLocaleString(nDiffStringId)) + D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(D2Lang::StrTable::strtable::GetLocaleString(0x1057)) + 3 >= 300) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb2a);
       exit(-1);
     }

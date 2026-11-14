@@ -1732,6 +1732,11 @@ void __stdcall CELCMP_ValidateCelFilePointer(int32_t hFile, uint32_t dwParam) {
     exit(-1);
 }
 
+// The original's header inline: CELCMP_AllocateDecodedCelFile 00600f10 multiplies the counts through it.
+static __inline int CELCMP_GetCellCountInl(DC6* pFile) {
+    return pFile->nDirections * pFile->nFrames;
+}
+
 uint32_t __stdcall CELCMP_AllocateDecodedCelFile(DC6 * pFile, uint32_t * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2) {
     // Static local variables (originally global data)
     static fpCelAllocDecodedByFormat gapfnCelAllocDecodedByFormat[2] = { (fpCelAllocDecodedByFormat)&D2CMP::SRC::FastCmp::FASTCMP_ConvertDCCWithPaletteRemap, nullptr }; D2_STATIC_GUARD(gapfnCelAllocDecodedByFormat, "D2CMP::SRC::CelCmp::CELCMP_AllocateDecodedCelFile::gapfnCelAllocDecodedByFormat");
@@ -1741,7 +1746,7 @@ uint32_t __stdcall CELCMP_AllocateDecodedCelFile(DC6 * pFile, uint32_t * ppDecod
       exit(-1);
     }
 
-    DC6* pDecodedBlock = (DC6*)D2_ALLOC_AT(pFile->nDirections * pFile->nFrames * 4 + 0x18, ".\\SRC\\CelCmp.cpp", 0x2b1);
+    DC6* pDecodedBlock = (DC6*)D2_ALLOC_AT(CELCMP_GetCellCountInl(pFile) * 4 + 0x18, ".\\SRC\\CelCmp.cpp", 0x2b1);
     pDecodedBlock->nVersion = 6;
     pDecodedBlock->nFlags = pFile->nFlags & -8;
     pDecodedBlock->nDirections = pFile->nDirections;

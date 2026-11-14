@@ -599,7 +599,6 @@ int32_t __fastcall DRLGPATH_GetApproxDistance(int32_t nY1, int32_t nY2, int32_t 
 // Each uint32 encodes x in low 16 bits and y in high 16 bits.
 // Same heuristic as DRLGPATH_GetApproxDistance: min(|dx|,|dy|) + max(|dx|,|dy|) * 2.
 int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint32_t nPackedCoord2) {
-    int nResult;
     int nDx = (uint16_t)nPackedCoord2 - (uint16_t)nPackedCoord1;
     if (nDx < 0) {
       nDx = -nDx;
@@ -610,13 +609,9 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
       nDy = -nDy;
     }
 
-    int nMin = nDx;
-    if (!(nDx < nDy || (nResult = nDy + nDx * 2 , nMin = nDy , nDx <= nDy))) {
-      return nResult;
-    }
-
-    nResult = nMin + nDy * 2;
-    return nResult;
+    int nMin = nDx < nDy ? nDx : nDy;
+    int nMax = nDx > nDy ? nDx : nDy;
+    return nMin + nMax * 2;
 }
 
 // Core direction index computation from two points given as separate coordinates.
@@ -2117,24 +2112,19 @@ uint32_t __fastcall DRLGPATH_ValidateFullPath(D2PathTypeArg * pPathTypeArgs) {
 
 // Computes a simple distance heuristic between two packed coordinates: min(dx,dy) + max(dx,dy)*2. This is equivalent to a simple diagonal distance estimation.
 int32_t __stdcall DRLGPATH_GetSimpleDistancePacked(uint32_t nPackedPosA, uint32_t nPackedPosB) {
-    int nResult;
     int nDX = (uint16_t)nPackedPosB - (uint16_t)nPackedPosA;
     if (nDX < 0) {
       nDX = -nDX;
     }
 
-    int nMinDelta = (nPackedPosB >> 0x10) - (nPackedPosA >> 0x10);
-    if (nMinDelta < 0) {
-      nMinDelta = -nMinDelta;
+    int nDY = (nPackedPosB >> 0x10) - (nPackedPosA >> 0x10);
+    if (nDY < 0) {
+      nDY = -nDY;
     }
 
-    int nDY = nDX;
-    if (!(nDX < nMinDelta || (nResult = nMinDelta + nDX * 2 , nDY = nMinDelta , nDX <= nMinDelta))) {
-      return nResult;
-    }
-
-    nResult = nDY + nMinDelta * 2;
-    return nResult;
+    int nMin = nDX < nDY ? nDX : nDY;
+    int nMax = nDX > nDY ? nDX : nDY;
+    return nMin + nMax * 2;
 }
 
 // Returns a pointer into the direction delta lookup table based on the difference between two direction indices. Each entry in the table provides directional offsets for path exploration. Trivial helper function.

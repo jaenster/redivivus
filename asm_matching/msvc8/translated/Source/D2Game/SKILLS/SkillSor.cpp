@@ -282,7 +282,8 @@ BOOL __fastcall SKILLSOR_SrvStFn12_TargetInAuraRange(::SGAMEDATA * pGame, D2Unit
 }
 
 BOOL __fastcall SKILLSOR_SrvStFn13_ThunderStorm(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl) {
-    if (!((int)eD2Skill >= 0 && (int)eD2Skill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eD2Skill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eD2Skill >= 0 && (int)eD2Skill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eD2Skill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 

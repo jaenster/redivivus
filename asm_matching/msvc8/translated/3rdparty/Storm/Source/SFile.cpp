@@ -509,19 +509,21 @@ BOOL __stdcall SFILE_CheckForCdRom(char * szText) {
     DWORD dwFsFlags = 0;
     SMem::SMemZero(szFsName, 0x104);
     BOOL bApiOk = GetVolumeInformationA(szRootPath, (LPSTR)0x0, 0, (LPDWORD)0x0, (LPDWORD)0x0, &dwFsFlags, szFsName, 0x104);
+    if (!bApiOk) {
+      return 0;
+    }
+
+    uint32_t nChecksum;
+    /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ dwSectorsPerCluster = (LPDWORD)0x0;
+    dwBytesPerSector = 0;
+    dwFreeClusters = 0;
+    dwTotalClusters = 0;
+    bApiOk = GetDiskFreeSpaceA(szRootPath, (LPDWORD)&dwSectorsPerCluster, &dwBytesPerSector, &dwFreeClusters, &dwTotalClusters);
     if (bApiOk) {
-      uint32_t nChecksum;
-      /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ dwSectorsPerCluster = (LPDWORD)0x0;
-      dwBytesPerSector = 0;
-      dwFreeClusters = 0;
-      dwTotalClusters = 0;
-      bApiOk = GetDiskFreeSpaceA(szRootPath, (LPDWORD)&dwSectorsPerCluster, &dwBytesPerSector, &dwFreeClusters, &dwTotalClusters);
-      if (bApiOk) {
-        nChecksum = dwFsFlags & 4 ^ *(uint32_t*)(char*)&szFsName ^ dwFreeClusters ^ dwBytesPerSector ^ nDriveType;
-        nFoldedChecksum = (uint16_t)(nChecksum >> 0x10) ^ (uint16_t)nChecksum;
-        if (nFoldedChecksum == 0x1f00 || nFoldedChecksum == 0x805) {
-          return 1;
-        }
+      nChecksum = dwFsFlags & 4 ^ *(uint32_t*)(char*)&szFsName ^ dwFreeClusters ^ dwBytesPerSector ^ nDriveType;
+      nFoldedChecksum = (uint16_t)(nChecksum >> 0x10) ^ (uint16_t)nChecksum;
+      if (nFoldedChecksum == 0x1f00 || nFoldedChecksum == 0x805) {
+        return 1;
       }
     }
 
@@ -1078,22 +1080,19 @@ int __stdcall SFileGetArchiveInfo(D2ArchiveStrc * pArchive, int * pnArchiveType,
 // Copies an open archive's name into the caller's buffer, bounded by nBufferSize.
 int __stdcall SFileGetArchiveName(D2ArchiveStrc * pArchive, char * szOutBuffer, int32_t nBufferSize) {
     char* szOutBufferSlot;
-    if (szOutBuffer) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szOutBuffer = '\0';
-      EnterCriticalSection(&lpCriticalSection_00779068);
-      int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&szOutBufferSlot);
-      if (!bValid) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-        return 0;
-      }
-
-      SSTR::SStrCopy(szOutBuffer, szOutBufferSlot + 8, nBufferSize);
+    D2_CHECKS_BEGIN;
+    D2_CHECK_BLANK(szOutBuffer, *szOutBuffer = '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    int bValid = SFILE_CheckArchiveHandle(pArchive, (D2ArchiveStrc**)&szOutBufferSlot);
+    if (!bValid) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      return 1;
+      return 0;
     }
 
-    SErr::SErrSetLastError(0x57);
-    return 0;
+    SSTR::SStrCopy(szOutBuffer, szOutBufferSlot + 8, nBufferSize);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    return 1;
 }
 
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileGetBasePath"
@@ -1112,22 +1111,19 @@ int32_t __stdcall SFileGetBasePath(char * szText, int32_t nMaxLength) {
 
 int32_t __stdcall SFILE_GetFileTime(D2MPQFileStrc * pArchive, void * pFileTime) {
     void* pFileTimeSlot;
-    if (pFileTime) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *(uint32_t*)pFileTime = 0;
-      EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!bIsValidHandle) {
-        LeaveCriticalSection(&lpCriticalSection_00779068);
-        return 0;
-      }
-
-      *(uint32_t*)pFileTime = *(uint32_t*)((char*)pFileTimeSlot + 0x114);
+    D2_CHECKS_BEGIN;
+    D2_CHECK_BLANK(pFileTime, *(uint32_t*)pFileTime = 0);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!bIsValidHandle) {
       LeaveCriticalSection(&lpCriticalSection_00779068);
-      return 1;
+      return 0;
     }
 
-    SErr::SErrSetLastError(0x57);
-    return 0;
+    *(uint32_t*)pFileTime = *(uint32_t*)((char*)pFileTimeSlot + 0x114);
+    LeaveCriticalSection(&lpCriticalSection_00779068);
+    return 1;
 }
 
 int32_t __stdcall SFILE_GetFileLocale(D2ArchiveStrc * pArchive) {
@@ -1186,22 +1182,19 @@ int __stdcall SFILE_GetFilePlatform(D2ArchiveStrc * pArchive, uint32_t * pPlatfo
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 int __stdcall SFileGetFileName(D2MPQFileStrc * pFile, char * szText, int32_t nBufferSize) {
     char* szTextSlot;
-    if (szText) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szText = '\0';
-      EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pFile, (D2MPQFileStrc**)&szTextSlot);
-      if (!bIsValidHandle) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-        return 0;
-      }
-
-      SSTR::SStrCopy(szText, szTextSlot + 8, nBufferSize);
+    D2_CHECKS_BEGIN;
+    D2_CHECK_BLANK(szText, *szText = '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    int bIsValidHandle = SFILE_CheckFileHandle(pFile, (D2MPQFileStrc**)&szTextSlot);
+    if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      return 1;
+      return 0;
     }
 
-    SErr::SErrSetLastError(0x57);
-    return 0;
+    SSTR::SStrCopy(szText, szTextSlot + 8, nBufferSize);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    return 1;
 }
 
 // @oracle-basis PARTIAL - the old name is disproved, the new one is descriptive and makes no Storm API
@@ -1216,27 +1209,24 @@ int __stdcall SFileGetFileName(D2MPQFileStrc * pFile, char * szText, int32_t nBu
 int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, char * szOutName, int32_t nBufferOutputLength) {
     char* szBufferInput;
     char* szOutNameSlot;
-    if (szOutName) {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ *szOutName = '\0';
-      EnterCriticalSection(&lpCriticalSection_00779068);
-      int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&szOutNameSlot);
-      if (!bIsValidHandle) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-        return 0;
-      }
-      if (*(int*)(szOutNameSlot + 0x10c)) {
-        szBufferInput = *(char**)(szOutNameSlot + 0x10c);
-      } else {
-        szBufferInput = szOutNameSlot + 8;
-      }
-
-      SSTR::SStrCopy(szOutName, szBufferInput, nBufferOutputLength);
+    D2_CHECKS_BEGIN;
+    D2_CHECK_BLANK(szOutName, *szOutName = '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&szOutNameSlot);
+    if (!bIsValidHandle) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      return 1;
+      return 0;
+    }
+    if (*(int*)(szOutNameSlot + 0x10c)) {
+      szBufferInput = *(char**)(szOutNameSlot + 0x10c);
+    } else {
+      szBufferInput = szOutNameSlot + 8;
     }
 
-    SErr::SErrSetLastError(0x57);
-    return 0;
+    SSTR::SStrCopy(szOutName, szBufferInput, nBufferOutputLength);
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    return 1;
 }
 
 // @oracle PPC Mac Storm 1.10b export table: SFileGetFileArchive

@@ -2136,9 +2136,17 @@ D2OverlayTxt * __fastcall Unreferenced_0046d9c0(int param_1) {
     return nullptr;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 3 & 1;
+}
+
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
     if (pUnit) {
-      if (!(pUnit->eUnitFlagsEx >> 3 & 1)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
         return pUnit->eUnitType;
       }
 
@@ -2155,7 +2163,7 @@ eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
 int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
     int nClassId;
     int32_t pnEffectiveAnimMode;
-    if (pUnit && pUnit->eUnitFlagsEx >> 3 & 1) {
+    if (pUnit && FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
       eD2UnitType eUnitType;
       eUnitType = pUnit->eUnitType;
       nClassId = pUnit->nClassId;
@@ -2170,7 +2178,7 @@ int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
 
 DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {
     if (pUnit) {
-      if (!(pUnit->eUnitFlagsEx >> 3 & 1)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
         return pUnit->nClassId;
       }
 

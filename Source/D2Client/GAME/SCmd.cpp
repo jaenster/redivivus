@@ -3073,6 +3073,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX(D2GSPacketSrv0xAA 
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
+}
+
 void __fastcall NET_D2GS_CLIENT_Incoming0xAB(D2GSPacketSrv0xAB * pBytes) {
     D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
@@ -3080,7 +3088,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAB(D2GSPacketSrv0xAB * pBytes) {
     }
 
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
-    if (!(pUnit != pPlayerUnit_lcl && !(pUnit->eUnitFlags >> 9 & 1))) {
+    if (!(pUnit != pPlayerUnit_lcl && !FlagBit_D2UnitStrc_eUnitFlags_9(pUnit))) {
       return;
     }
     if (pUnit->eUnitType == UNIT_MONSTER) {

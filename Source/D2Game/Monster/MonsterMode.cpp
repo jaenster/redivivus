@@ -398,6 +398,14 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_17(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 17 & 1;
+}
+
 // Dead-code wrapper (marked Unused) that validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set (already processed) and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then delegates to SERVER_ITEM_DecideDrops. Not called in shipping 1.14d.
 void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam) {
     D2RoomStrc* pFreeCoordRoom;
@@ -409,7 +417,7 @@ void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ObjectOperate
       exit(-1);
     } else {
       eCollisionFlags eCollision;
-      if (pVictim->eUnitFlags >> 0x11 & 1) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_17(pVictim)) {
         return;
       }
       /* bonewall */ if (pVictim->nClassId == 0x158) {
@@ -743,6 +751,14 @@ void __stdcall MISSILE_SpawnFromMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     D2Common::PATH::DynamicPath::SetTarget(pDynPath, pTarget);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static inline uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 9 & 1;
+}
+
 BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillLevel) {
     if (!pUnit) {
       return 0;
@@ -755,7 +771,7 @@ BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
     D2DifficultyLevelsTxt* pDifficultyLvl = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
     int32_t nSkillBonus = pDifficultyLvl->MonsterSkillBonus + 1;
-    if (pUnit->eUnitFlags >> 9 & 1) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_9(pUnit)) {
       nSkillBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     }
 
